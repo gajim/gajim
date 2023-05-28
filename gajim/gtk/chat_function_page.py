@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from enum import Enum
 from pathlib import Path
 
@@ -66,13 +64,13 @@ class ChatFunctionPage(Gtk.Box):
         self.set_valign(Gtk.Align.CENTER)
         self.get_style_context().add_class('padding-18')
 
-        self._client: Optional[types.Client] = None
-        self._contact: Optional[types.ChatContactT] = None
-        self._mode: Optional[FunctionMode] = None
-        self._data: Optional[str] = None
+        self._client: types.Client | None = None
+        self._contact: types.ChatContactT | None = None
+        self._mode: FunctionMode | None = None
+        self._data: str | None = None
         self._ready_state = True
 
-        self._widget: Optional[Gtk.Widget] = None
+        self._widget: Gtk.Widget | None = None
 
         self._heading = Gtk.Label()
         self._heading.set_max_width_chars(30)
@@ -136,8 +134,8 @@ class ChatFunctionPage(Gtk.Box):
     def set_mode(self,
                  contact: types.ChatContactT,
                  mode: FunctionMode,
-                 data: Optional[str] = None,
-                 files: Optional[list[str]] = None
+                 data: str | None = None,
+                 files: list[str] | None = None
                  ) -> None:
 
         self._reset()
@@ -392,7 +390,7 @@ class InputWidget(Gtk.Box):
     def __init__(self,
                  contact: types.ChatContactT,
                  mode: FunctionMode,
-                 data: Optional[str] = None
+                 data: str | None = None
                  ) -> None:
 
         Gtk.Box.__init__(self,
@@ -468,8 +466,8 @@ class InputWidget(Gtk.Box):
 
 class ErrorWidget(Gtk.Box):
     def __init__(self,
-                 mode: Optional[FunctionMode] = None,
-                 error_text: Optional[str] = None
+                 mode: FunctionMode | None = None,
+                 error_text: str | None = None
                  ) -> None:
 
         Gtk.Box.__init__(self,

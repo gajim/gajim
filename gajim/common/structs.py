@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
 from typing import TypeVar
 
 import time
@@ -55,8 +54,8 @@ class MUCData:
     def __init__(self,
                  room_jid: str,
                  nick: str,
-                 password: Optional[str],
-                 config: Optional[dict[str, Any]] = None
+                 password: str | None,
+                 config: dict[str, Any] | None = None
                  ) -> None:
 
         self._room_jid = JID.from_string(room_jid)
@@ -65,12 +64,12 @@ class MUCData:
         self.password = password
         self.state = MUCJoinedState.NOT_JOINED
         # Message id of the captcha challenge
-        self.captcha_id: Optional[str] = None
-        self.captcha_form: Optional[SimpleDataForm] = None
-        self.error: Optional[str] = None
-        self.error_text: Optional[str] = None
-        self.subject: Optional[MucSubject] = None
-        self.last_subject_timestamp: Optional[float] = None
+        self.captcha_id: str | None = None
+        self.captcha_form: SimpleDataForm | None = None
+        self.error: str | None = None
+        self.error_text: str | None = None
+        self.subject: MucSubject | None = None
+        self.last_subject_timestamp: float | None = None
 
     @property
     def jid(self) -> JID:
@@ -81,7 +80,7 @@ class MUCData:
         return self._room_jid.new_with(resource=self.nick)
 
     @property
-    def config(self) -> Optional[dict[str, Any]]:
+    def config(self) -> dict[str, Any] | None:
         return self._config
 
 
@@ -89,20 +88,20 @@ class OutgoingMessage:
     def __init__(self,
                  account: str,
                  contact: types.ChatContactT,
-                 message: Optional[str],
+                 message: str | None,
                  type_: str,
-                 subject: Optional[str] = None,
-                 chatstate: Optional[Chatstate] = None,
-                 marker: Optional[tuple[str, str]] = None,
-                 resource: Optional[str] = None,
-                 user_nick: Optional[str] = None,
-                 label: Optional[SecurityLabel] = None,
-                 control: Optional[Any] = None,
-                 attention: Optional[bool] = None,
-                 correct_id: Optional[str] = None,
-                 oob_url: Optional[str] = None,
-                 xhtml: Optional[str] = None,
-                 nodes: Optional[Any] = None,
+                 subject: str | None = None,
+                 chatstate: Chatstate | None = None,
+                 marker: tuple[str, str] | None = None,
+                 resource: str | None = None,
+                 user_nick: str | None = None,
+                 label: SecurityLabel | None = None,
+                 control: Any | None = None,
+                 attention: bool | None = None,
+                 correct_id: str | None = None,
+                 oob_url: str | None = None,
+                 xhtml: str | None = None,
+                 nodes: Any | None = None,
                  play_sound: bool = True
                  ) -> None:
 
@@ -210,7 +209,7 @@ class PresenceData:
     show: PresenceShow
     status: str
     priority: int
-    idle_time: Optional[float]
+    idle_time: float | None
     available: bool
 
     @classmethod
@@ -233,11 +232,11 @@ UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
 class MUCPresenceData:
     show: PresenceShow
     status: str
-    idle_time: Optional[float]
+    idle_time: float | None
     available: bool
     affiliation: Affiliation
     role: Role
-    real_jid: Optional[JID]
+    real_jid: JID | None
 
     @classmethod
     def from_presence(cls, properties: PresenceProperties) -> MUCPresenceData:

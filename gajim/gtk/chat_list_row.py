@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import pickle
 from datetime import datetime
@@ -96,8 +95,8 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self.contact_name: str = self.contact.name
         self.timestamp: float = 0
-        self.stanza_id: Optional[str] = None
-        self.message_id: Optional[str] = None
+        self.stanza_id: str | None = None
+        self.message_id: str | None = None
 
         self._unread_count: int = 0
         self._needs_muc_highlight: bool = False
@@ -224,14 +223,14 @@ class ChatListRow(Gtk.ListBoxRow):
         self._update_unread()
         self.emit('unread-changed')
 
-    def get_header_type(self) -> Optional[RowHeaderType]:
+    def get_header_type(self) -> RowHeaderType | None:
         header = self.get_header()
         if header is None:
             return None
         assert isinstance(header, RowHeader)
         return header.type
 
-    def set_header_type(self, header_type: Optional[RowHeaderType]) -> None:
+    def set_header_type(self, header_type: RowHeaderType | None) -> None:
         if header_type == self.get_header_type():
             return
 
@@ -256,9 +255,9 @@ class ChatListRow(Gtk.ListBoxRow):
 
     def set_message_text(self,
                          text: str,
-                         nickname: Optional[str] = None,
-                         icon_name: Optional[str] = None,
-                         additional_data: Optional[AdditionalDataDict] = None
+                         nickname: str | None = None,
+                         icon_name: str | None = None,
+                         additional_data: AdditionalDataDict | None = None
                          ) -> None:
 
         draft = app.storage.drafts.get(self.contact)

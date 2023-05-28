@@ -17,7 +17,6 @@ from __future__ import annotations
 import typing
 from typing import Any
 from typing import Callable
-from typing import Optional
 from typing import Union
 
 from dataclasses import dataclass
@@ -116,10 +115,10 @@ class Notification(ApplicationEvent):
     type: str
     title: str
     text: str
-    jid: Optional[Union[JID, str]] = None
-    sub_type: Optional[str] = None
-    sound: Optional[str] = None
-    icon_name: Optional[str] = None
+    jid: JID | str | None = None
+    sub_type: str | None = None
+    sound: str | None = None
+    icon_name: str | None = None
 
 
 @dataclass
@@ -153,13 +152,13 @@ class SignedIn(ApplicationEvent):
 @dataclass
 class LocationChanged(ApplicationEvent):
     name: str = field(init=False, default='location-changed')
-    info: Optional[LocationData]
+    info: LocationData | None
 
 
 @dataclass
 class MusicTrackChanged(ApplicationEvent):
     name: str = field(init=False, default='music-track-changed')
-    info: Optional[TuneData]
+    info: TuneData | None
 
 
 @dataclass
@@ -169,12 +168,12 @@ class MessageSent(ApplicationEvent):
     jid: JID
     message: str
     message_id: str
-    msg_log_id: Optional[int]
-    chatstate: Optional[str]
+    msg_log_id: int | None
+    chatstate: str | None
     timestamp: float
     additional_data: AdditionalDataDict
-    label: Optional[SecurityLabel]
-    correct_id: Optional[str]
+    label: SecurityLabel | None
+    correct_id: str | None
     play_sound: bool
 
 
@@ -374,7 +373,7 @@ class MessageUpdated(ApplicationEvent):
     account: str
     jid: JID
     msgtxt: str
-    nickname: Optional[str]
+    nickname: str | None
     properties: Any
     correct_id: str
 
@@ -415,9 +414,9 @@ class MessageReceived(ApplicationEvent):
     stanza_id: str
     fjid: str
     resource: str | None
-    delayed: Optional[float]
-    msg_log_id: Optional[int]
-    displaymarking: Optional[Displaymarking]
+    delayed: float | None
+    msg_log_id: int | None
+    displaymarking: Displaymarking | None
 
 
 @dataclass
@@ -502,8 +501,8 @@ class CallUpdated(ApplicationEvent):
     jingle_type: str
     audio_state: JingleState
     video_state: JingleState
-    audio_sid: Optional[str]
-    video_sid: Optional[str]
+    audio_sid: str | None
+    video_sid: str | None
 
 
 @dataclass
@@ -564,7 +563,7 @@ class MucDecline(ApplicationEvent):
     account: str
     muc: JID
     from_: JID
-    reason: Optional[str]
+    reason: str | None
 
 
 @dataclass
@@ -574,11 +573,11 @@ class MucInvitation(ApplicationEvent):
     info: Any
     muc: JID
     from_: JID
-    reason: Optional[str]
-    password: Optional[str]
+    reason: str | None
+    password: str | None
     type: InviteType
     continued: bool
-    thread: Optional[str]
+    thread: str | None
 
 
 @dataclass
@@ -604,9 +603,6 @@ class PingReply(ApplicationEvent):
     seconds: float
 
 
-PingEventT = Union[PingSent, PingReply, PingError]
-
-
 @dataclass
 class SecCatalogReceived(ApplicationEvent):
     name: str = field(init=False, default='sec-catalog-received')
@@ -630,9 +626,9 @@ class PresenceReceived(ApplicationEvent):
     id_: str
     fjid: str
     timestamp: float
-    avatar_sha: Optional[str]
-    user_nick: Optional[str]
-    idle_time: Optional[float]
+    avatar_sha: str | None
+    user_nick: str | None
+    idle_time: float | None
     show: str
     new_show: str
     old_show: str
@@ -725,17 +721,17 @@ class MUCRoomPresenceError(ApplicationEvent):
 class MUCRoomKicked(ApplicationEvent):
     name: str = field(init=False, default='muc-room-kicked')
     timestamp: float
-    status_codes: Optional[set[StatusCode]]
-    reason: Optional[str]
-    actor: Optional[str]
+    status_codes: set[StatusCode] | None
+    reason: str | None
+    actor: str | None
 
 
 @dataclass
 class MUCRoomDestroyed(ApplicationEvent):
     name: str = field(init=False, default='muc-room-destroyed')
     timestamp: float
-    reason: Optional[str]
-    alternate: Optional[JID]
+    reason: str | None
+    alternate: JID | None
 
 
 @dataclass
@@ -744,7 +740,7 @@ class MUCUserJoined(ApplicationEvent):
     timestamp: float
     is_self: bool
     nick: str
-    status_codes: Optional[set[StatusCode]]
+    status_codes: set[StatusCode] | None
 
 
 @dataclass
@@ -753,9 +749,9 @@ class MUCUserLeft(ApplicationEvent):
     timestamp: float
     is_self: bool
     nick: str
-    status_codes: Optional[set[StatusCode]]
-    reason: Optional[str]
-    actor: Optional[str]
+    status_codes: set[StatusCode] | None
+    reason: str | None
+    actor: str | None
 
 
 @dataclass
@@ -765,8 +761,8 @@ class MUCUserRoleChanged(ApplicationEvent):
     is_self: bool
     nick: str
     role: Role
-    reason: Optional[str]
-    actor: Optional[str]
+    reason: str | None
+    actor: str | None
 
 
 @dataclass
@@ -776,8 +772,8 @@ class MUCUserAffiliationChanged(ApplicationEvent):
     is_self: bool
     nick: str
     affiliation: Affiliation
-    reason: Optional[str]
-    actor: Optional[str]
+    reason: str | None
+    actor: str | None
 
 
 @dataclass

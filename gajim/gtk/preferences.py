@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 import sys
@@ -71,7 +70,7 @@ class Preferences(Gtk.ApplicationWindow):
 
         self._ui = get_builder('preferences.ui')
 
-        self._video_preview: Optional[VideoPreview] = None
+        self._video_preview: VideoPreview | None = None
         self._prefs: dict[str, PreferenceBox] = {}
 
         side_bar_switcher = SideBarSwitcher()
@@ -132,7 +131,7 @@ class Preferences(Gtk.ApplicationWindow):
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
-    def get_video_preview(self) -> Optional[VideoPreview]:
+    def get_video_preview(self) -> VideoPreview | None:
         return self._video_preview
 
     @staticmethod

@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 from pathlib import Path
@@ -58,7 +57,7 @@ class FileTransferSelector(Gtk.Box):
 
     def __init__(self,
                  contact: types.ChatContactT,
-                 method: Optional[str] = None
+                 method: str | None = None
                  ) -> None:
 
         Gtk.Box.__init__(self)
@@ -288,8 +287,8 @@ class FileRow(Gtk.ListBoxRow):
         load_file_async(self.file_path, self._on_load_finished, mime_type)
 
     def _on_load_finished(self,
-                          data: Optional[bytes],
-                          _error: Optional[GLib.Error],
+                          data: bytes | None,
+                          _error: GLib.Error | None,
                           mime_type: Any
                           ) -> None:
 

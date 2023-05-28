@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 from pathlib import Path
 
@@ -87,7 +85,7 @@ class CertificateStore:
 
     @staticmethod
     def _on_certificate_write_finished(_successful: bool,
-                                       error: Optional[GLib.Error],
+                                       error: GLib.Error | None,
                                        path: Path):
         if error is not None:
             log.error("Can't store certificate: %s", error.message)

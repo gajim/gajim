@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -118,13 +117,13 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def get_chatlist(self, workspace_id: str) -> ChatList:
         return self._chat_lists[workspace_id]
 
-    def get_selected_chat(self) -> Optional[ChatListRow]:
+    def get_selected_chat(self) -> ChatListRow | None:
         chat_list = self.get_current_chat_list()
         if chat_list is None:
             return None
         return chat_list.get_selected_chat()
 
-    def get_current_chat_list(self) -> Optional[ChatList]:
+    def get_current_chat_list(self) -> ChatList | None:
         workspace_id = self.get_visible_child_name()
         if workspace_id == 'empty' or workspace_id is None:
             return None
@@ -167,7 +166,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
     def _on_row_selected(self,
                          _chat_list: ChatList,
-                         row: Optional[ChatListRow]
+                         row: ChatListRow | None
                          ) -> None:
         if row is None:
             self.emit('chat-unselected')
@@ -300,14 +299,14 @@ class ChatListStack(Gtk.Stack, EventHelper):
             chat_list.remove_chats_for_account(account)
             self.store_open_chats(workspace_id)
 
-    def find_chat(self, account: str, jid: JID) -> Optional[ChatList]:
+    def find_chat(self, account: str, jid: JID) -> ChatList | None:
         for chat_list in self._chat_lists.values():
             if chat_list.contains_chat(account, jid):
                 return chat_list
         return None
 
     def contains_chat(self, account: str, jid: JID,
-                      workspace_id: Optional[str] = None) -> bool:
+                      workspace_id: str | None = None) -> bool:
         if workspace_id is None:
             return any(chat_list.contains_chat(account, jid) for
                        chat_list in self._chat_lists.values())
@@ -325,7 +324,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
                               account: str,
                               jid: JID,
                               include_silent: bool = False
-                              ) -> Optional[int]:
+                              ) -> int | None:
         for chat_list in self._chat_lists.values():
             count = chat_list.get_chat_unread_count(
                 account, jid, include_silent)

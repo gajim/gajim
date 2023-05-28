@@ -13,8 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import logging
 import random
@@ -45,7 +43,7 @@ log = logging.getLogger('gajim.gtk.groupchat_creation')
 
 
 class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
-    def __init__(self, account: Optional[str]) -> None:
+    def __init__(self, account: str | None) -> None:
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_name('CreateGroupchat')
@@ -86,7 +84,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_focus(self._ui.address_entry)
 
     def _on_account_state(self,
-                          _event: Union[AccountConnected, AccountDisconnected]
+                          _event: AccountConnected | AccountDisconnected
                           ) -> None:
         any_account_connected = app.get_number_of_connected_accounts() > 0
         if any_account_connected:
@@ -95,7 +93,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         else:
             self._ui.stack.set_visible_child_name('no-connection')
 
-    def _update_accounts(self, account: Optional[str] = None) -> None:
+    def _update_accounts(self, account: str | None = None) -> None:
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         account_liststore = self._ui.account_combo.get_model()
         assert isinstance(account_liststore, Gtk.ListStore)

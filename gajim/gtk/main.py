@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
@@ -441,7 +440,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_action(self,
                    action: Gio.SimpleAction,
-                   _param: Optional[GLib.Variant]) -> Optional[int]:
+                   _param: GLib.Variant | None) -> int | None:
 
         action_name = action.get_name()
         log.info('Activate action: %s', action_name)
@@ -755,7 +754,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._account_side_bar.activate_account_page(account)
         self._main_stack.show_account(account)
 
-    def get_active_workspace(self) -> Optional[str]:
+    def get_active_workspace(self) -> str | None:
         return self._workspace_side_bar.get_active_workspace()
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
@@ -801,7 +800,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.add_workspace(workspace_id)
 
     def add_workspace(self,
-                      workspace_id: Optional[str] = None,
+                      workspace_id: str | None = None,
                       switch: bool = True) -> str:
 
         if workspace_id is None:
@@ -967,7 +966,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                  jid: JID,
                  type_: str,
                  select: bool = False,
-                 message: Optional[str] = None
+                 message: str | None = None
                  ) -> None:
 
         workspace_id = self._get_suitable_workspace(account, jid)
@@ -1032,8 +1031,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def add_app_message(self,
                         category: str,
-                        new_version: Optional[str] = None,
-                        new_setup_url: Optional[str] = None
+                        new_version: str | None = None,
+                        new_setup_url: str | None = None
                         ) -> None:
 
         self._app_page.add_app_message(category, new_version, new_setup_url)
@@ -1126,7 +1125,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def get_preferred_ft_method(self,
                                 contact: types.ChatContactT
-                                ) -> Optional[str]:
+                                ) -> str | None:
 
         ft_pref = app.settings.get_account_setting(
             contact.account,
@@ -1154,8 +1153,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def show_add_join_groupchat(self,
                                 account: str,
                                 jid: str,
-                                nickname: Optional[str] = None,
-                                password: Optional[str] = None
+                                nickname: str | None = None,
+                                password: str | None = None
                                 ) -> None:
 
         if not self.chat_exists(account, JID.from_string(jid)):
@@ -1168,7 +1167,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def start_chat_from_jid(self,
                             account: str,
                             jid: str,
-                            message: Optional[str] = None
+                            message: str | None = None
                             ) -> None:
 
         jid_ = JID.from_string(jid)
@@ -1202,7 +1201,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         # TODO: Keep "confirm_block" setting?
-        def _block_contact(report: Optional[str] = None) -> None:
+        def _block_contact(report: str | None = None) -> None:
             client.get_module('Blocking').block([contact.jid], report)
             self._chat_page.remove_chat(account, contact.jid)
 
@@ -1314,7 +1313,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.settings.set('mainwin_height', window_height)
         app.settings.save()
 
-        def on_continue2(message: Optional[str]) -> None:
+        def on_continue2(message: str | None) -> None:
             if 'file_transfers' not in app.interface.instances:
                 app.app.start_shutdown(message=message)
                 return
@@ -1342,7 +1341,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return
             app.app.start_shutdown(message=message)
 
-        def on_continue(message: Optional[str]) -> None:
+        def on_continue(message: str | None) -> None:
             if message is None:
                 # user pressed Cancel to change status message dialog
                 return

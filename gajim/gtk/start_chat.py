@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import locale
 from enum import IntEnum
@@ -61,7 +59,7 @@ from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_icon_name
 
-ContactT = Union[BareContact, GroupchatContact]
+ContactT = BareContact | GroupchatContact
 
 
 class Search(IntEnum):
@@ -71,8 +69,8 @@ class Search(IntEnum):
 
 class StartChatDialog(Gtk.ApplicationWindow):
     def __init__(self,
-                 initial_jid: Optional[str] = None,
-                 initial_message: Optional[str] = None
+                 initial_jid: str | None = None,
+                 initial_message: str | None = None
                  ) -> None:
 
         Gtk.ApplicationWindow.__init__(self)
@@ -84,7 +82,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(-1, 600)
         self.ready_to_destroy = False
-        self._parameter_form: Optional[MuclumbusResult] = None
+        self._parameter_form: MuclumbusResult | None = None
         self._keywords: list[str] = []
         self._destroyed = False
         self._search_stopped = False
@@ -97,10 +95,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._ui.join_box.pack_start(self._nick_chooser, True, False, 0)
 
         # Helper for the case where we don't receive a disco info
-        self._new_chat_row: Optional[ContactRow] = None
+        self._new_chat_row: ContactRow | None = None
         self._search_is_valid_jid = False
 
-        self.new_contact_rows: dict[str, Optional[ContactRow]] = {}
+        self.new_contact_rows: dict[str, ContactRow | None] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
         rows: list[ContactRow] = []
@@ -144,7 +142,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         if rows:
             self._load_contacts(rows)
 
-        self._initial_message: dict[str, Optional[str]] = {}
+        self._initial_message: dict[str, str | None] = {}
         if initial_jid is not None:
             self._initial_message[initial_jid] = initial_message
             self._ui.search_entry.set_text(initial_jid)
@@ -459,7 +457,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._set_error_from_code('not-muc-service')
 
-    def _set_error(self, error: Union[StanzaError, TimeoutStanzaError]) -> None:
+    def _set_error(self, error: StanzaError | TimeoutStanzaError) -> None:
         if isinstance(error, TimeoutStanzaError):
             text = _('This address is not reachable.')
         else:
@@ -761,9 +759,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
 class ContactRow(Gtk.ListBoxRow):
     def __init__(self,
                  account: str,
-                 contact: Optional[ContactT],
-                 jid: Optional[JID],
-                 name: Optional[str],
+                 contact: ContactT | None,
+                 jid: JID | None,
+                 name: str | None,
                  show_account: bool,
                  groupchat: bool = False
                  ) -> None:
@@ -872,7 +870,7 @@ class GlobalSearch(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self.set_has_tooltip(True)
         self.set_activate_on_single_click(False)
-        self._progress: Optional[ProgressRow] = None
+        self._progress: ProgressRow | None = None
         self._add_placeholder()
         self.show_all()
 

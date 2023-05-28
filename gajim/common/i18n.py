@@ -21,7 +21,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 import gettext
 import importlib.resources
@@ -58,13 +57,13 @@ def get_default_lang() -> str:
     return locale.getdefaultlocale()[0] or 'en'
 
 
-def get_rfc5646_lang(lang: Optional[str] = None) -> str:
+def get_rfc5646_lang(lang: str | None = None) -> str:
     if lang is None:
         lang = LANG
     return lang.replace('_', '-')
 
 
-def get_short_lang_code(lang: Optional[str] = None) -> str:
+def get_short_lang_code(lang: str | None = None) -> str:
     if lang is None:
         lang = LANG
     return lang[:2]
@@ -92,8 +91,8 @@ def p_(context: str, message: str) -> str:
 def ngettext(s_sing: str,
              s_plural: str,
              n: int,
-             replace_sing: Optional[str] = None,
-             replace_plural: Optional[str] = None) -> str:
+             replace_sing: str | None = None,
+             replace_plural: str | None = None) -> str:
     '''
     Use as:
         i18n.ngettext(

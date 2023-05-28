@@ -18,8 +18,6 @@ from typing import Any
 from typing import cast
 from typing import Generator
 from typing import Literal
-from typing import Optional
-from typing import Union
 
 import logging
 import time
@@ -107,7 +105,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         self._list_box.set_sort_func(self._sort_func)
 
-        self._contact: Optional[ChatContactT] = None
+        self._contact: ChatContactT | None = None
         self._client = None
 
         # Keeps track of the number of rows shown in ConversationView
@@ -125,10 +123,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._current_upper: float = 0
         self._autoscroll: bool = True
-        self._request_history_at_upper: Optional[float] = None
+        self._request_history_at_upper: float | None = None
         self._upper_complete: bool = False
         self._lower_complete: bool = True
-        self._requesting: Optional[str] = None
+        self._requesting: str | None = None
         self._block_signals = False
 
         self._signal_handlers_enabled = False
@@ -157,7 +155,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self.disable_row_selection()
 
     def enable_row_selection(self,
-                             log_line_id: Optional[int]
+                             log_line_id: int | None
                              ) -> None:
 
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
@@ -376,13 +374,13 @@ class ConversationView(Gtk.ScrolledWindow):
         assert row is not None
         return cast(BaseRow, row)
 
-    def get_first_message_row(self) -> Optional[MessageRow]:
+    def get_first_message_row(self) -> MessageRow | None:
         for row in self._list_box.get_children():
             if isinstance(row, MessageRow):
                 return row
         return None
 
-    def get_last_message_row(self) -> Optional[MessageRow]:
+    def get_last_message_row(self) -> MessageRow | None:
         children = self._list_box.get_children()
         children.reverse()
         for row in children:
@@ -390,13 +388,13 @@ class ConversationView(Gtk.ScrolledWindow):
                 return row
         return None
 
-    def get_first_event_row(self) -> Optional[Union[InfoMessage, MUCJoinLeft]]:
+    def get_first_event_row(self) -> InfoMessage | MUCJoinLeft | None:
         for row in self._list_box.get_children():
             if isinstance(row, (InfoMessage, MUCJoinLeft)):
                 return row
         return None
 
-    def get_last_event_row(self) -> Optional[Union[InfoMessage, MUCJoinLeft]]:
+    def get_last_event_row(self) -> InfoMessage | MUCJoinLeft | None:
         children = self._list_box.get_children()
         children.reverse()
         for row in children:
@@ -412,7 +410,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_muc_subject(self,
                         subject: MucSubject,
-                        timestamp: Optional[float] = None
+                        timestamp: float | None = None
                         ) -> None:
 
         muc_subject = MUCSubject(self.contact.account, subject, timestamp)
@@ -450,7 +448,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_info_message(self,
                          text: str,
-                         timestamp: Optional[float] = None
+                         timestamp: float | None = None
                          ) -> None:
 
         message = InfoMessage(self.contact.account, text, timestamp)
@@ -460,13 +458,13 @@ class ConversationView(Gtk.ScrolledWindow):
         transfer_row = FileTransferRow(self.contact.account, transfer)
         self._insert_message(transfer_row)
 
-    def add_jingle_file_transfer(self,
-                                 event: Union[
-                                     events.FileRequestReceivedEvent,
-                                     events.FileRequestSent,
-                                     None] = None,
-                                 db_message: Optional[ConversationRow] = None
-                                 ) -> None:
+    def add_jingle_file_transfer(
+        self,
+        event: (events.FileRequestReceivedEvent |
+                events.FileRequestSent |
+                None) = None,
+        db_message: ConversationRow | None = None
+    ) -> None:
 
         assert isinstance(self._contact, BareContact)
         jingle_transfer_row = FileTransferJingleRow(
@@ -481,8 +479,8 @@ class ConversationView(Gtk.ScrolledWindow):
         self._insert_message(EncryptionInfoRow(event))
 
     def add_call_message(self,
-                         event: Optional[events.JingleRequestReceived] = None,
-                         db_message: Optional[ConversationRow] = None
+                         event: events.JingleRequestReceived | None = None,
+                         db_message: ConversationRow | None = None
                          ) -> None:
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
@@ -502,13 +500,13 @@ class ConversationView(Gtk.ScrolledWindow):
                     kind: str,
                     name: str,
                     timestamp: float,
-                    log_line_id: Optional[int] = None,
-                    message_id: Optional[str] = None,
-                    stanza_id: Optional[str] = None,
-                    display_marking: Optional[Displaymarking] = None,
-                    additional_data: Optional[AdditionalDataDict] = None,
-                    marker: Optional[str] = None,
-                    error: Union[CommonError, StanzaError, None] = None
+                    log_line_id: int | None = None,
+                    message_id: str | None = None,
+                    stanza_id: str | None = None,
+                    display_marking: Displaymarking | None = None,
+                    additional_data: AdditionalDataDict | None = None,
+                    marker: str | None = None,
+                    error: CommonError | StanzaError | None = None
                     ) -> None:
 
         if not timestamp:
@@ -584,7 +582,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if message.is_mergeable(ancestor):
                 message.set_merged(True)
 
-    def _find_ancestor(self, message: MessageRow) -> Optional[MessageRow]:
+    def _find_ancestor(self, message: MessageRow) -> MessageRow | None:
         index = message.get_index()
         while index != 0:
             index -= 1
@@ -700,10 +698,10 @@ class ConversationView(Gtk.ScrolledWindow):
         adj = self.get_vadjustment()
         adj.set_value(adj.get_upper() - adj.get_page_size())
 
-    def _get_row_by_message_id(self, id_: str) -> Optional[MessageRow]:
+    def _get_row_by_message_id(self, id_: str) -> MessageRow | None:
         return self._message_id_row_map.get(id_)
 
-    def get_row_by_log_line_id(self, log_line_id: int) -> Optional[MessageRow]:
+    def get_row_by_log_line_id(self, log_line_id: int) -> MessageRow | None:
         for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
@@ -711,7 +709,7 @@ class ConversationView(Gtk.ScrolledWindow):
                 return row
         return None
 
-    def get_row_by_stanza_id(self, stanza_id: str) -> Optional[MessageRow]:
+    def get_row_by_stanza_id(self, stanza_id: str) -> MessageRow | None:
         for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
@@ -753,7 +751,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def correct_message(self,
                         correct_id: str,
                         text: str,
-                        nickname: Optional[str]
+                        nickname: str | None
                         ) -> None:
 
         message_row = self._get_row_by_message_id(correct_id)
@@ -780,8 +778,8 @@ class ConversationView(Gtk.ScrolledWindow):
     def _on_contact_setting_changed(self,
                                     value: Any,
                                     setting: str,
-                                    _account: Optional[str],
-                                    _jid: Optional[JID]) -> None:
+                                    _account: str | None,
+                                    _jid: JID | None) -> None:
 
         if setting == 'print_join_left':
             if value:

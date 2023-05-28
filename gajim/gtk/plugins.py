@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
-from typing import Optional
 
 import logging
 from enum import IntEnum
@@ -259,7 +258,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             return True, plugin.available_text
         return False, ''
 
-    def _get_plugin_row(self, short_name: str) -> Optional[Gtk.TreeModelRow]:
+    def _get_plugin_row(self, short_name: str) -> Gtk.TreeModelRow | None:
         iter_ = self._manifests.get(short_name)
         if iter_ is None:
             return None
@@ -268,7 +267,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
     def _add_manifest(self,
                       manifest: PluginManifest,
                       installed: bool,
-                      icon: Optional[GdkPixbuf.Pixbuf] = None) -> None:
+                      icon: GdkPixbuf.Pixbuf | None = None) -> None:
 
         restart = self._get_restart(manifest)
         has_error, error = self._get_error(manifest, installed)
@@ -298,7 +297,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _get_plugin_icon(self,
                          manifest: PluginManifest
-                         ) -> Optional[GdkPixbuf.Pixbuf]:
+                         ) -> GdkPixbuf.Pixbuf | None:
 
         image_name = f'{manifest.short_name}.png'
         path = configpaths.get('PLUGINS_IMAGES') / image_name

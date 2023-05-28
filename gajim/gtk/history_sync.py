@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import Literal
-from typing import Optional
 from typing import overload
 
 import logging
@@ -56,11 +55,11 @@ class HistorySyncAssistant(Assistant, EventHelper):
         self.account = account
         self._client = app.get_client(account)
 
-        self._timedelta: Optional[timedelta] = None
+        self._timedelta: timedelta | None = None
         self._now = datetime.now(timezone.utc)
-        self._query_id: Optional[str] = None
-        self._start: Optional[datetime] = None
-        self._end: Optional[datetime] = None
+        self._query_id: str | None = None
+        self._start: datetime | None = None
+        self._end: datetime | None = None
 
         mam_start = ArchiveState.NEVER
         archive = app.storage.archive.get_archive_infos(
@@ -210,7 +209,7 @@ class SelectTime(Page):
         self.title = _('Synchronize Chat History')
 
         self.complete = False
-        self._timedelta: Optional[timedelta] = None
+        self._timedelta: timedelta | None = None
 
         heading = Gtk.Label()
         heading.get_style_context().add_class('large-header')
@@ -254,7 +253,7 @@ class SelectTime(Page):
         self.complete = True
         self.update_page_complete()
 
-    def get_timedelta(self) -> Optional[timedelta]:
+    def get_timedelta(self) -> timedelta | None:
         return self._timedelta
 
     def get_default_button(self) -> str:
@@ -307,12 +306,12 @@ class Progress(Page):
 
 
 class TimeOption(Gtk.ListBoxRow):
-    def __init__(self, text: str, months: Optional[timedelta] = None) -> None:
+    def __init__(self, text: str, months: timedelta | None = None) -> None:
         Gtk.ListBoxRow.__init__(self)
         label = Gtk.Label(label=text)
         self.add(label)
 
         self._timedelta = months
 
-    def get_timedelta(self) -> Optional[timedelta]:
+    def get_timedelta(self) -> timedelta | None:
         return self._timedelta

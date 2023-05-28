@@ -15,7 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 import os
 import platform
@@ -124,7 +123,7 @@ def _run_app() -> None:
     from gajim.gtk.application import GajimApplication
     application = GajimApplication()
 
-    def sigint_cb(num: int, stack: Optional[FrameType]) -> None:
+    def sigint_cb(num: int, stack: FrameType | None) -> None:
         print(' SIGINT/SIGTERM received')
         application.quit()
 

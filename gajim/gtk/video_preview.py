@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 import logging
 
@@ -41,10 +40,10 @@ class VideoPreview:
 
         self._active = False
 
-        self._av_pipeline: Optional[Gst.Pipeline] = None
-        self._av_src: Optional[Gst.Bin] = None
-        self._av_sink: Optional[Gst.Element] = None
-        self._av_widget: Optional[Gtk.Widget] = None
+        self._av_pipeline: Gst.Pipeline | None = None
+        self._av_src: Gst.Bin | None = None
+        self._av_sink: Gst.Element | None = None
+        self._av_widget: Gtk.Widget | None = None
 
     @property
     def widget(self) -> Gtk.Box:

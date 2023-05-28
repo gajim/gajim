@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -34,9 +33,9 @@ from gajim.common.types import ChatContactT
 class SecurityLabelSelector(Gtk.ComboBox):
     def __init__(self) -> None:
         Gtk.ComboBox.__init__(self, no_show_all=True)
-        self._account: Optional[str] = None
-        self._client: Optional[Client] = None
-        self._contact: Optional[ChatContactT] = None
+        self._account: str | None = None
+        self._client: Client | None = None
+        self._contact: ChatContactT | None = None
 
         self.set_valign(Gtk.Align.CENTER)
         self.set_tooltip_text(_('Select a security label for your message…'))
@@ -98,8 +97,8 @@ class SecurityLabelSelector(Gtk.ComboBox):
     def _on_setting_changed(self,
                             state: bool,
                             _name: str,
-                            _account: Optional[str],
-                            _jid: Optional[JID]
+                            _account: str | None,
+                            _jid: JID | None
                             ) -> None:
         self.set_no_show_all(not state)
         if state:
@@ -137,7 +136,7 @@ class SecurityLabelSelector(Gtk.ComboBox):
         self.set_no_show_all(False)
         self.show_all()
 
-    def get_seclabel(self) -> Optional[SecurityLabel]:
+    def get_seclabel(self) -> SecurityLabel | None:
         index = self.get_active()
         if index == -1:
             return None

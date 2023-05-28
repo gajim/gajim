@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import time
 from datetime import datetime
@@ -136,7 +135,7 @@ class MAM(BaseModule):
 
     def _get_unique_id(self,
                        properties: MessageProperties
-                       ) -> tuple[Optional[str], Optional[str]]:
+                       ) -> tuple[str | None, str | None]:
         if properties.type.is_groupchat:
             return properties.mam.id, None
 
@@ -156,7 +155,7 @@ class MAM(BaseModule):
     @staticmethod
     def _get_stanza_id(properties: MessageProperties,
                        archive_jid: str
-                       ) -> Optional[StanzaIDData]:
+                       ) -> StanzaIDData | None:
         for stanza_id in properties.stanza_ids:
             if stanza_id.by == archive_jid:
                 return stanza_id
@@ -343,7 +342,7 @@ class MAM(BaseModule):
         self._mam_query_ids[jid] = query_id
         return query_id
 
-    def _get_query_params(self) -> tuple[Optional[str], Optional[datetime]]:
+    def _get_query_params(self) -> tuple[str | None, datetime | None]:
         own_jid = self._con.get_own_jid().bare
         archive = app.storage.archive.get_archive_infos(own_jid)
 
@@ -366,7 +365,7 @@ class MAM(BaseModule):
     def _get_muc_query_params(self,
                               jid: JID,
                               threshold: SyncThreshold
-                              ) -> tuple[Optional[str], Optional[datetime]]:
+                              ) -> tuple[str | None, datetime | None]:
 
         archive = app.storage.archive.get_archive_infos(jid)
         mam_id = None
@@ -498,8 +497,8 @@ class MAM(BaseModule):
     @as_task
     def _execute_query(self,
                        jid: JID,
-                       mam_id: Optional[str],
-                       start_date: Optional[datetime]
+                       mam_id: str | None,
+                       start_date: datetime | None
                        ):
         _task = yield  # noqa: F841
 
@@ -539,8 +538,8 @@ class MAM(BaseModule):
     def request_archive_interval(self,
                                  start_date: datetime,
                                  end_date: datetime,
-                                 after: Optional[str] = None,
-                                 queryid: Optional[str] = None
+                                 after: str | None = None,
+                                 queryid: str | None = None
                                  ) -> str:
 
         jid = self._con.get_own_jid().bare

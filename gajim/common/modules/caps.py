@@ -21,7 +21,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 import weakref
 from collections import defaultdict
@@ -82,7 +81,7 @@ class Caps(BaseModule):
         self._queued_tasks_by_jid[task.entity.jid] = task
         app.task_manager.add_task(task)
 
-    def _get_task(self, jid: JID) -> Optional[EntityCapsTask]:
+    def _get_task(self, jid: JID) -> EntityCapsTask | None:
         return self._queued_tasks_by_jid.get(jid)
 
     def _get_similar_tasks(self, task: EntityCapsTask) -> set[EntityCapsTask]:

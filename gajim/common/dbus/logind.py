@@ -21,7 +21,6 @@ Documentation: https://www.freedesktop.org/wiki/Software/systemd/inhibit
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import os
@@ -36,7 +35,7 @@ log = logging.getLogger('gajim.c.dbus.logind')
 
 
 class LogindListener:
-    _instance: Optional[LogindListener] = None
+    _instance: LogindListener | None = None
 
     @classmethod
     def get(cls) -> LogindListener:
@@ -46,7 +45,7 @@ class LogindListener:
 
     def __init__(self) -> None:
         # file descriptor object of the inhibitor
-        self._inhibit_fd: Optional[int] = None
+        self._inhibit_fd: int | None = None
 
         Gio.bus_watch_name(
             Gio.BusType.SYSTEM,

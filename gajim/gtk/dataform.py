@@ -17,8 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
-from typing import Union
 
 from gi.repository import GLib
 from gi.repository import GObject
@@ -57,8 +55,8 @@ class DataFormWidget(Gtk.ScrolledWindow):
     __gsignals__ = {'is-valid': (GObject.SignalFlags.RUN_LAST, None, (bool,))}
 
     def __init__(self,
-                 form_node: Union[SimpleDataForm, MultipleDataForm],
-                 options: Optional[dict[str, Any]] = None
+                 form_node: SimpleDataForm | MultipleDataForm,
+                 options: dict[str, Any] | None = None
                  ) -> None:
 
         Gtk.ScrolledWindow.__init__(self)
@@ -80,20 +78,20 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self.add(self._form_grid)
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         return self._form_grid.title
 
     @property
-    def instructions(self) -> Optional[str]:
+    def instructions(self) -> str | None:
         return self._form_grid.instructions
 
     def validate(self) -> None:
         return self._form_grid.validate(True)
 
-    def get_form(self) -> Union[SimpleDataForm, MultipleDataForm]:
+    def get_form(self) -> SimpleDataForm | MultipleDataForm:
         return self._form_node
 
-    def get_submit_form(self) -> Union[SimpleDataForm, MultipleDataForm]:
+    def get_submit_form(self) -> SimpleDataForm | MultipleDataForm:
         self._form_node.type_ = 'submit'
         return self._form_node
 
@@ -116,7 +114,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
 class FormGrid(Gtk.Grid):
     def __init__(self,
-                 form_node: Union[SimpleDataForm, MultipleDataForm],
+                 form_node: SimpleDataForm | MultipleDataForm,
                  options: dict[str, Any]
                  ) -> None:
 
@@ -126,19 +124,19 @@ class FormGrid(Gtk.Grid):
         self.set_halign(Gtk.Align.CENTER)
         self.row_count = 0
 
-        self.rows: list[Union[SizeAdjustment,
-                              Title,
-                              Instructions,
-                              Field,
-                              ImageMediaField]] = []
+        self.rows: list[(SizeAdjustment |
+                         Title |
+                         Instructions |
+                         Field |
+                         ImageMediaField)] = []
 
         form_width = options.get('form-width', 435)
         self.set_size_request(form_width, -1)
 
         self._data_form = form_node
 
-        self.title: Optional[str] = None
-        self.instructions: Optional[str] = None
+        self.title: str | None = None
+        self.instructions: str | None = None
 
         self._fields = {
             'boolean': BooleanField,
@@ -164,20 +162,17 @@ class FormGrid(Gtk.Grid):
         self._analyse_fields(form_node, options)
         self._parse_form(form_node, options)
 
-    def _add_row(self,
-                 field: Union[SizeAdjustment,
-                              Title,
-                              Instructions,
-                              Field,
-                              ImageMediaField]
-                 ) -> None:
+    def _add_row(
+        self,
+        field: SizeAdjustment | Title | Instructions | Field | ImageMediaField
+    ) -> None:
 
         field.add(self, self.row_count)
         self.row_count += 1
         self.rows.append(field)
 
     @staticmethod
-    def _analyse_fields(form_node: Union[SimpleDataForm, MultipleDataForm],
+    def _analyse_fields(form_node: SimpleDataForm | MultipleDataForm,
                         options: dict[str, Any]
                         ) -> None:
 
@@ -198,7 +193,7 @@ class FormGrid(Gtk.Grid):
         options['right-align'] = max(label_lengths) < 30
 
     def _parse_form(self,
-                    form_node: Union[SimpleDataForm, MultipleDataForm],
+                    form_node: SimpleDataForm | MultipleDataForm,
                     options: dict[str, Any]
                     ) -> None:
 
@@ -292,10 +287,10 @@ class Field:
                  options: dict[str, Any]
                  ) -> None:
 
-        self._widget: Optional[Gtk.Widget] = None
+        self._widget: Gtk.Widget | None = None
         self._field = field
         self._form_grid = form_grid
-        self._validate_source_id: Optional[int] = None
+        self._validate_source_id: int | None = None
         self._read_only = options.get('read-only', False)
 
         self._label = Gtk.Label(label=field.label)
@@ -345,7 +340,7 @@ class Field:
 
     def _set_warning(self,
                      is_valid: bool,
-                     error: Union[str, InvalidJid]
+                     error: str | InvalidJid
                      ) -> None:
 
         if not self._field.required and not is_valid and not error:

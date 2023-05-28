@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 
@@ -63,8 +62,8 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self.set_title(_('PEP Service Configuration (%s)') % self.account)
         self._client = app.get_client(account)
 
-        self._result_node: Optional[Node] = None
-        self._dataform_widget: Optional[DataFormWidget] = None
+        self._result_node: Node | None = None
+        self._dataform_widget: DataFormWidget | None = None
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language('xml')

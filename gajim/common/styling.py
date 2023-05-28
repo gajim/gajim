@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Match
-from typing import Optional
-from typing import Union
 
 import re
 import string
@@ -190,7 +188,7 @@ def find_byte_index(text: str, index: int):
     raise ValueError('index not in string: %s, %s' % (text, index))
 
 
-def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
+def process(text: str | bytes, level: int = 0) -> ParsingResult:
     if isinstance(text, bytes):
         text = text.decode()
 
@@ -213,7 +211,7 @@ def process(text: Union[str, bytes], level: int = 0) -> ParsingResult:
     return ParsingResult(text, blocks)
 
 
-def process_uris(text: Union[str, bytes]) -> list[BaseHyperlink]:
+def process_uris(text: str | bytes) -> list[BaseHyperlink]:
     if isinstance(text, bytes):
         text = text.decode()
 
@@ -324,7 +322,7 @@ def _parse_uris(line: str,
                 offset_bytes: int) -> list[BaseHyperlink]:
     uris: list[BaseHyperlink] = []
 
-    def make(start: int, end: int, is_jid: bool) -> Optional[BaseHyperlink]:
+    def make(start: int, end: int, is_jid: bool) -> BaseHyperlink | None:
         if line[end - 1] == ',':
             # Trim one trailing comma
             end -= 1
@@ -399,7 +397,7 @@ def _make_hyperlink(line: str,
                     end: int,
                     offset: int,
                     offset_bytes: int,
-                    is_jid: bool) -> Optional[BaseHyperlink]:
+                    is_jid: bool) -> BaseHyperlink | None:
 
     text = line[start:end + 1]
 

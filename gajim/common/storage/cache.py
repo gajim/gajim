@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
 
 import json
 import logging
@@ -204,7 +203,7 @@ class CacheStorage(SqliteStorage):
 
     def get_last_disco_info(self,
                             jid: JID,
-                            max_age: int = 0) -> Optional[DiscoInfo]:
+                            max_age: int = 0) -> DiscoInfo | None:
         '''
         Get last disco info from jid
 
@@ -274,7 +273,7 @@ class CacheStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def load_roster(self, account: str) -> Optional[dict[JID, RosterItem]]:
+    def load_roster(self, account: str) -> dict[JID, RosterItem] | None:
         select_sql = 'SELECT roster FROM roster WHERE account = ?'
         result = self._con.execute(select_sql, (account,)).fetchone()
         if result is None:

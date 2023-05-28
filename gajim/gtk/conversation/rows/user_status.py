@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import time
 from datetime import datetime
 
@@ -37,7 +35,7 @@ class UserStatus(BaseRow):
                  account: str,
                  name: str,
                  show: str,
-                 status: Optional[str]) -> None:
+                 status: str | None) -> None:
 
         BaseRow.__init__(self, account)
 

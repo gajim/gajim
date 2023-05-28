@@ -16,9 +16,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Iterator
-from typing import Optional
 from typing import overload
-from typing import Union
 
 from datetime import datetime
 from datetime import timezone
@@ -111,7 +109,7 @@ class Contacts(BaseModule):
     def __init__(self, client: types.Client) -> None:
         BaseModule.__init__(self, client)
 
-        self._contacts: dict[JID, Union[BareContact, GroupchatContact]] = {}
+        self._contacts: dict[JID, BareContact | GroupchatContact] = {}
         self._con.connect_signal('state-changed', self._on_client_state_changed)
         self._con.connect_signal('resume-failed', self._on_client_resume_failed)
 
@@ -127,7 +125,7 @@ class Contacts(BaseModule):
         if state.is_disconnected:
             self._reset_presence()
 
-    def add_chat_contact(self, jid: Union[str, JID]) -> BareContact:
+    def add_chat_contact(self, jid: str | JID) -> BareContact:
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -143,7 +141,7 @@ class Contacts(BaseModule):
         self._contacts[jid] = contact
         return contact
 
-    def add_group_chat_contact(self, jid: Union[str, JID]) -> GroupchatContact:
+    def add_group_chat_contact(self, jid: str | JID) -> GroupchatContact:
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -160,7 +158,7 @@ class Contacts(BaseModule):
         self._contacts[jid] = contact
         return contact
 
-    def add_private_contact(self, jid: Union[str, JID]) -> GroupchatParticipant:
+    def add_private_contact(self, jid: str | JID) -> GroupchatParticipant:
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -179,9 +177,8 @@ class Contacts(BaseModule):
         return contact.add_resource(jid.resource)
 
     def add_contact(self,
-                    jid: Union[str, JID],
-                    groupchat: bool = False) -> Union[BareContact,
-                                                      GroupchatContact]:
+                    jid: str | JID,
+                    groupchat: bool = False) -> BareContact | GroupchatContact:
         if isinstance(jid, str):
             jid = JID.from_string(jid)
 
@@ -198,7 +195,7 @@ class Contacts(BaseModule):
         return contact
 
     def get_contact(self,
-                    jid: Union[str, JID],
+                    jid: str | JID,
                     groupchat: bool = False
                     ) -> types.ContactT:
 
@@ -218,8 +215,9 @@ class Contacts(BaseModule):
         contact = contact.get_resource(resource)
         return contact
 
-    def get_bare_contact(self, jid: Union[str, JID]) -> Union[BareContact,
-                                                              GroupchatContact]:
+    def get_bare_contact(self,
+                         jid: str | JID
+                         ) -> BareContact | GroupchatContact:
         '''This method gives direct access to the contacts dict.
            This is helpful when performance is essential. In difference to
            get_contact() this method does not create contacts nor can it handle
@@ -230,10 +228,9 @@ class Contacts(BaseModule):
 
     def get_contacts_with_domain(self,
                                  domain: str
-                                 ) -> list[Union[BareContact,
-                                                 GroupchatContact]]:
+                                 ) -> list[BareContact | GroupchatContact]:
 
-        contacts: list[Union[BareContact, GroupchatContact]] = []
+        contacts: list[BareContact | GroupchatContact] = []
         for contact in self._contacts.values():
             if contact.jid.domain == domain:
                 contacts.append(contact)
@@ -283,15 +280,16 @@ class CommonContact(Observable):
     def account(self) -> str:
         return self._account
 
-    def _on_signal(self,
-                   _contact: Union[BareContact,
-                                   ResourceContact,
-                                   GroupchatContact,
-                                   GroupchatParticipant],
-                   signal_name: str,
-                   *args: Any,
-                   **kwargs: Any
-                   ) -> None:
+    def _on_signal(
+        self,
+        _contact: (BareContact |
+                   ResourceContact |
+                   GroupchatContact |
+                   GroupchatParticipant),
+        signal_name: str,
+        *args: Any,
+        **kwargs: Any
+    ) -> None:
         self.notify(signal_name, *args, **kwargs)
 
     def supports(self, requested_feature: str) -> bool:
@@ -329,7 +327,7 @@ class CommonContact(Observable):
         return self._jid
 
     @property
-    def chatstate(self) -> Optional[Chatstate]:
+    def chatstate(self) -> Chatstate | None:
         return None
 
     @property
@@ -432,7 +430,7 @@ class BareContact(CommonContact):
         return max(show_values)
 
     @property
-    def chatstate(self) -> Optional[Chatstate]:
+    def chatstate(self) -> Chatstate | None:
         chatstates = {contact.chatstate for contact in self._resources.values()}
         chatstates.discard(None)
         if not chatstates:
@@ -460,14 +458,14 @@ class BareContact(CommonContact):
         assert self._jid.localpart is not None
         return self._jid.localpart
 
-    def get_tune(self) -> Optional[TuneData]:
+    def get_tune(self) -> TuneData | None:
         return self._module('UserTune').get_contact_tune(self._jid)
 
-    def get_location(self) -> Optional[LocationData]:
+    def get_location(self) -> LocationData | None:
         return self._module('UserLocation').get_contact_location(self._jid)
 
     @property
-    def avatar_sha(self) -> Optional[str]:
+    def avatar_sha(self) -> str | None:
         return app.storage.cache.get_contact(
             self._account, self._jid, 'avatar')
 
@@ -537,14 +535,14 @@ class BareContact(CommonContact):
         return disco_info.is_gateway
 
     @property
-    def ask(self) -> Optional[str]:
+    def ask(self) -> str | None:
         item = self._module('Roster').get_item(self._jid)
         if item is None:
             return None
         return item.ask
 
     @property
-    def subscription(self) -> Optional[str]:
+    def subscription(self) -> str | None:
         item = self._module('Roster').get_item(self._jid)
         if item is None:
             return None
@@ -604,7 +602,7 @@ class ResourceContact(CommonContact):
         return self._jid.resource
 
     @property
-    def identity_type(self) -> Optional[str]:
+    def identity_type(self) -> str | None:
         disco_info = app.storage.cache.get_last_disco_info(self._jid)
         if disco_info is None:
             return None
@@ -643,7 +641,7 @@ class ResourceContact(CommonContact):
         return self._presence.priority
 
     @property
-    def idle_time(self) -> Optional[float]:
+    def idle_time(self) -> float | None:
         return self._presence.idle_time
 
     @property
@@ -686,7 +684,7 @@ class GroupchatContact(CommonContact):
         return disco_info.is_irc
 
     @property
-    def muc_context(self) -> Optional[str]:
+    def muc_context(self) -> str | None:
         disco_info = self.get_disco()
         if disco_info is None:
             return None
@@ -748,13 +746,13 @@ class GroupchatContact(CommonContact):
         return get_groupchat_name(client, self._jid)
 
     @property
-    def avatar_sha(self) -> Optional[str]:
+    def avatar_sha(self) -> str | None:
         return app.storage.cache.get_muc(self._account, self._jid, 'avatar')
 
     def set_avatar_sha(self, sha: str) -> None:
         app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
-    def get_avatar(self, size: int, scale: int) -> Optional[cairo.ImageSurface]:
+    def get_avatar(self, size: int, scale: int) -> cairo.ImageSurface | None:
         transport_icon = None
         disco_info = self.get_disco()
         if disco_info is not None:
@@ -783,28 +781,28 @@ class GroupchatContact(CommonContact):
         for contact in self._resources.values():
             contact.notify('chatstate-update')
 
-    def get_self(self) -> Optional[GroupchatParticipant]:
+    def get_self(self) -> GroupchatParticipant | None:
         nick = self.nickname
         if nick is None:
             return None
         return self.get_resource(nick)
 
     @property
-    def nickname(self) -> Optional[str]:
+    def nickname(self) -> str | None:
         muc_data = self._module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.nick
 
     @property
-    def occupant_jid(self) -> Optional[JID]:
+    def occupant_jid(self) -> JID | None:
         muc_data = self._module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.occupant_jid
 
     @property
-    def subject(self) -> Optional[MucSubject]:
+    def subject(self) -> MucSubject | None:
         muc_data = self._module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
@@ -839,7 +837,7 @@ class GroupchatContact(CommonContact):
         client = app.get_client(self._account)
         return client.get_module('MUC').get_joined_users(self._jid)
 
-    def get_disco(self, max_age: int = 0) -> Optional[DiscoInfo]:
+    def get_disco(self, max_age: int = 0) -> DiscoInfo | None:
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
 
     def can_notify(self) -> bool:
@@ -891,7 +889,7 @@ class GroupchatParticipant(CommonContact):
         return self._module('Contacts').get_bare_contact(self.jid.bare)
 
     @property
-    def muc_context(self) -> Optional[str]:
+    def muc_context(self) -> str | None:
         return self.room.muc_context
 
     @property
@@ -916,7 +914,7 @@ class GroupchatParticipant(CommonContact):
         return self._presence.status
 
     @property
-    def idle_time(self) -> Optional[float]:
+    def idle_time(self) -> float | None:
         return self._presence.idle_time
 
     @property
@@ -925,10 +923,10 @@ class GroupchatParticipant(CommonContact):
         return self._jid.resource
 
     @property
-    def real_jid(self) -> Optional[JID]:
+    def real_jid(self) -> JID | None:
         return self._presence.real_jid
 
-    def get_real_contact(self) -> Optional[BareContact]:
+    def get_real_contact(self) -> BareContact | None:
         jid = self._presence.real_jid
         if jid is None:
             return None
@@ -974,9 +972,9 @@ class GroupchatParticipant(CommonContact):
         return 'pm'
 
 
-def can_add_to_roster(contact: Union[BareContact,
-                                     GroupchatContact,
-                                     GroupchatParticipant]) -> bool:
+def can_add_to_roster(
+    contact: BareContact | GroupchatContact | GroupchatParticipant
+) -> bool:
 
     if isinstance(contact, GroupchatContact):
         return False

@@ -9,7 +9,6 @@
 # Deletes unneeded DLLs and checks DLL dependencies.
 
 
-from typing import Optional
 
 import logging
 import os
@@ -76,7 +75,7 @@ def get_dependencies(filename: str) -> list[str]:
     return deps
 
 
-def find_lib(root: str, name: str) -> Optional[str]:
+def find_lib(root: str, name: str) -> str | None:
     search_path = os.path.join(root, 'bin')
     if os.path.exists(os.path.join(search_path, name)):
         return os.path.join(search_path, name)

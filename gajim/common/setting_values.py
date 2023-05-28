@@ -14,7 +14,6 @@
 
 from typing import Literal
 from typing import TypedDict
-from typing import Union
 
 import uuid
 
@@ -161,7 +160,7 @@ StringSettings = Literal[
 ]
 
 AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
-AllSettingsT = Union[str, int, bool, list[str]]
+AllSettingsT = str | int | bool | list[str]
 
 APP_SETTINGS = {
     'additional_uri_schemes': '',
@@ -390,7 +389,7 @@ AllGroupChatSettings = Literal[BoolGroupChatSettings,
                                IntGroupChatSettings,
                                StringGroupChatSettings]
 
-AllGroupChatSettingsT = Union[str, int, bool]
+AllGroupChatSettingsT = str | int | bool
 
 
 BoolContactSettings = Literal[
@@ -407,7 +406,7 @@ StringContactSettings = Literal[
 AllContactSettings = Literal[BoolContactSettings,
                              StringContactSettings]
 
-AllContactSettingsT = Union[str, bool]
+AllContactSettingsT = str | bool
 
 
 ACCOUNT_SETTINGS = {
@@ -519,7 +518,7 @@ class OpenChatSettingDetails(TypedDict):
 
 
 OpenChatsSettingT = list[OpenChatSettingDetails]
-AllWorkspaceSettingsT = Union[str, OpenChatsSettingT]
+AllWorkspaceSettingsT = str | OpenChatsSettingT
 
 
 class WorkspaceSettings(TypedDict):

@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
 
 import logging
 import os
@@ -82,13 +81,13 @@ class AudioPreviewState:
 class Preview:
     def __init__(self,
                  uri: str,
-                 urlparts: Optional[ParseResult],
-                 orig_path: Optional[Path],
-                 thumb_path: Optional[Path],
+                 urlparts: ParseResult | None,
+                 orig_path: Path | None,
+                 thumb_path: Path | None,
                  size: int,
                  widget: Any,
                  from_us: bool = False,
-                 context: Optional[str] = None
+                 context: str | None = None
                  ) -> None:
 
         self.id = str(uuid.uuid4())
@@ -104,17 +103,17 @@ class Preview:
         self.thumb_path = thumb_path
         self.size = size
 
-        self.thumbnail: Optional[bytes] = None
+        self.thumbnail: bytes | None = None
         self.mime_type: str = ''
         self.file_size: int = 0
         self.download_in_progress = False
 
-        self.info_message: Optional[str] = None
+        self.info_message: str | None = None
 
         self._request = None
 
-        self.key: Optional[bytes] = None
-        self.iv: Optional[bytes] = None
+        self.key: bytes | None = None
+        self.iv: bytes | None = None
         if self.is_aes_encrypted and urlparts is not None:
             try:
                 self.key, self.iv = parse_fragment(urlparts.fragment)
@@ -148,7 +147,7 @@ class Preview:
         return self._from_us
 
     @property
-    def context(self) -> Optional[str]:
+    def context(self) -> str | None:
         return self._context
 
     @property
@@ -160,7 +159,7 @@ class Preview:
         return self._request
 
     @property
-    def request_uri(self) -> Optional[str]:
+    def request_uri(self) -> str | None:
         if self._urlparts is None:
             return ''
         if self.is_aes_encrypted:
@@ -195,7 +194,7 @@ class Preview:
             return False
         return True
 
-    def update_widget(self, data: Optional[GdkPixbufType] = None) -> None:
+    def update_widget(self, data: GdkPixbufType | None = None) -> None:
         self._widget.update(self, data)
 
     def update_progress(self, progress: float, request: HTTPRequest) -> None:
@@ -228,7 +227,7 @@ class PreviewManager:
         log.info('Supported mime types for preview')
         log.info(sorted(PREVIEWABLE_MIME_TYPES))
 
-    def get_preview(self, preview_id: str) -> Optional[Preview]:
+    def get_preview(self, preview_id: str) -> Preview | None:
         return self._previews.get(preview_id)
 
     def clear_previews(self) -> None:
@@ -335,7 +334,7 @@ class PreviewManager:
                        uri: str,
                        widget: Any,
                        from_us: bool,
-                       context: Optional[str] = None
+                       context: str | None = None
                        ) -> None:
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
@@ -369,7 +368,7 @@ class PreviewManager:
                          uri: str,
                          widget: Any,
                          from_us: bool,
-                         context: Optional[str] = None
+                         context: str | None = None
                          ) -> Preview:
         urlparts = urlparse(uri)
         size = app.settings.get('preview_size')
@@ -388,7 +387,7 @@ class PreviewManager:
                        context=context)
 
     def _on_orig_load_finished(self,
-                               data: Optional[bytes],
+                               data: bytes | None,
                                error: Gio.AsyncResult,
                                preview: Preview) -> None:
         if preview.thumb_path is None or preview.orig_path is None:
@@ -409,7 +408,7 @@ class PreviewManager:
         preview.update_widget()
 
     @staticmethod
-    def _on_thumb_load_finished(data: Optional[bytes],
+    def _on_thumb_load_finished(data: bytes | None,
                                 error: Gio.AsyncResult,
                                 preview: Preview) -> None:
 

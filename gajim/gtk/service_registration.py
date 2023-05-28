@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
-from typing import Optional
 from typing import overload
 
 import logging
@@ -172,7 +171,7 @@ class Form(Page):
         self.title = _('Register')
         self.complete = False
 
-        self._dataform_widget: Optional[DataFormWidget] = None
+        self._dataform_widget: DataFormWidget | None = None
         self.show_all()
 
     def add_form(self, form: Any) -> None:

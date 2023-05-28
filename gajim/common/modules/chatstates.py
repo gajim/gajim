@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import time
 from functools import wraps
@@ -246,7 +245,7 @@ class Chatstate(BaseModule):
 
     def get_active_chatstate(self,
                              contact: types.ChatContactT
-                             ) -> Optional[str]:
+                             ) -> str | None:
         # determines if we add 'active' on outgoing messages
         if contact.settings.get('send_chatstate') == 'disabled':
             return None

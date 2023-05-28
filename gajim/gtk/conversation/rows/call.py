@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import time
 from datetime import datetime
 
@@ -41,8 +39,8 @@ class CallRow(BaseRow):
     def __init__(self,
                  account: str,
                  contact: types.BareContact,
-                 event: Optional[JingleRequestReceived] = None,
-                 db_message: Optional[ConversationRow] = None
+                 event: JingleRequestReceived | None = None,
+                 db_message: ConversationRow | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
@@ -61,7 +59,7 @@ class CallRow(BaseRow):
         self._event = event
         self._db_message = db_message
 
-        self._session: Optional[JingleSession] = None
+        self._session: JingleSession | None = None
 
         if db_message is not None:
             assert db_message.additional_data is not None

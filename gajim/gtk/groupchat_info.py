@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 import logging
 import time
@@ -105,7 +104,7 @@ MUC_FEATURES = {
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
     def __init__(self,
-                 account: Optional[str] = None,
+                 account: str | None = None,
                  width: int = 300,
                  minimal: bool = False
                  ) -> None:
@@ -126,23 +125,23 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                             Gtk.PolicyType.AUTOMATIC)
 
         self._account = account
-        self._info: Optional[DiscoInfo] = None
+        self._info: DiscoInfo | None = None
 
         self._ui = get_builder('groupchat_info_scrolled.ui')
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
         self.show_all()
 
-    def get_account(self) -> Optional[str]:
+    def get_account(self) -> str | None:
         return self._account
 
     def set_account(self, account: str) -> None:
         self._account = account
 
-    def get_jid(self) -> Optional[JID]:
+    def get_jid(self) -> JID | None:
         return self._info.jid
 
-    def set_subject(self, muc_subject: Optional[MucSubject]) -> None:
+    def set_subject(self, muc_subject: MucSubject | None) -> None:
         if muc_subject is None:
             return
 

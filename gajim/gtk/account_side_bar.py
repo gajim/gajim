@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 from gi.repository import Gtk
 
@@ -76,7 +75,7 @@ class Account(Gtk.ListBoxRow, EventHelper):
         self.get_style_context().add_class('account-sidebar-item')
 
         self.account = account
-        self._account_class: Optional[str] = None
+        self._account_class: str | None = None
 
         self.register_events([
             ('account-enabled', ged.GUI1,

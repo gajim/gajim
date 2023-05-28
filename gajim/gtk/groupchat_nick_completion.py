@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 
 from gi.repository import Gdk
@@ -35,7 +33,7 @@ class GroupChatNickCompletion(EventHelper):
     def __init__(self) -> None:
         EventHelper.__init__(self)
 
-        self._contact: Optional[GroupchatContact] = None
+        self._contact: GroupchatContact | None = None
 
         self._suggestions: list[str] = []
         self._last_key_tab = False

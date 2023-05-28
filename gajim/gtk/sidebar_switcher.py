@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 from gi.repository import Gtk
 
@@ -23,7 +22,7 @@ from gajim.common import app
 
 
 class SideBarSwitcher(Gtk.ListBox):
-    def __init__(self, width: Optional[int] = None) -> None:
+    def __init__(self, width: int | None = None) -> None:
         Gtk.ListBox.__init__(self)
         self.set_vexpand(True)
         self.get_style_context().add_class('settings-menu')
@@ -84,7 +83,7 @@ class Row(Gtk.ListBoxRow):
     def __init__(self,
                  name: str,
                  title: str,
-                 icon_name: Optional[str],
+                 icon_name: str | None,
                  visible: bool) -> None:
 
         Gtk.ListBoxRow.__init__(self)

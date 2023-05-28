@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 import logging
 import sys
@@ -32,7 +31,7 @@ log = logging.getLogger('gajim.c.dbus.system_style')
 
 class SystemStyleListener:
     def __init__(self, callback: Callable[..., None]) -> None:
-        self._prefer_dark: Optional[bool] = None
+        self._prefer_dark: bool | None = None
         self._callback = callback
 
         if sys.platform in ('win32', 'darwin'):
@@ -72,7 +71,7 @@ class SystemStyleListener:
 
     def _signal_setting_changed(self,
                                 _proxy: Gio.DBusProxy,
-                                _sender_name: Optional[str],
+                                _sender_name: str | None,
                                 signal_name: str,
                                 parameters: GLib.Variant,
                                 *_user_data: Any
@@ -88,5 +87,5 @@ class SystemStyleListener:
             app.ged.raise_event(StyleChanged())
 
     @property
-    def prefer_dark(self) -> Optional[bool]:
+    def prefer_dark(self) -> bool | None:
         return self._prefer_dark

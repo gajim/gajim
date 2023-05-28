@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -36,7 +34,7 @@ from gajim.gtk.util import EventHelper
 
 
 class StatusSelector(Gtk.MenuButton, EventHelper):
-    def __init__(self, account: Optional[str] = None, compact: bool = False):
+    def __init__(self, account: str | None = None, compact: bool = False):
         Gtk.MenuButton.__init__(self)
         EventHelper.__init__(self)
         self.set_direction(Gtk.ArrowType.UP)

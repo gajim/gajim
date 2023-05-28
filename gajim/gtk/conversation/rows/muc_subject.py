@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import time
 from datetime import datetime
 
@@ -37,7 +35,7 @@ class MUCSubject(BaseRow):
     def __init__(self,
                  account: str,
                  subject: MucSubject,
-                 timestamp: Optional[float] = None
+                 timestamp: float | None = None
                  ) -> None:
 
         BaseRow.__init__(self, account)

@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 import locale
 import logging
@@ -45,7 +44,7 @@ class ResourceSelector(Gtk.ScrolledWindow):
 
     def __init__(self,
                  contact: BareContact,
-                 constraints: Optional[list[str]] = None) -> None:
+                 constraints: list[str] | None = None) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_size_request(-1, 200)
@@ -154,7 +153,7 @@ class ResourceRow(Gtk.ListBoxRow):
 
     @staticmethod
     def _get_client_identity(disco_info: DiscoInfo
-                             ) -> tuple[Optional[str], Optional[str]]:
+                             ) -> tuple[str | None, str | None]:
         for identity in disco_info.identities:
             if identity.category == 'client':
                 return identity.name, identity.type

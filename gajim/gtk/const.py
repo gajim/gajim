@@ -20,8 +20,6 @@ from typing import Any
 from typing import Callable
 from typing import Iterator
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 from enum import Enum
 from enum import IntEnum
@@ -33,7 +31,7 @@ from gajim.common.setting_values import AllSettingsT
 
 class Filter(NamedTuple):
     name: str
-    pattern: Union[str, list[str]]
+    pattern: str | list[str]
     default: bool
 
 
@@ -41,15 +39,15 @@ class Setting(NamedTuple):
     kind: SettingKind
     label: str
     type: SettingType
-    value: Optional[AllSettingsT] = None
-    name: Optional[str] = None
-    callback: Optional[Callable[..., None]] = None
-    data: Optional[Any] = None
-    desc: Optional[str] = None
-    bind: Optional[str] = None
-    inverted: Optional[bool] = None
-    enabled_func: Optional[Callable[..., bool]] = None
-    props: Optional[dict[str, Any]] = None
+    value: AllSettingsT | None = None
+    name: str | None = None
+    callback: Callable[..., None] | None = None
+    data: Any | None = None
+    desc: str | None = None
+    bind: str | None = None
+    inverted: bool | None = None
+    enabled_func: Callable[..., bool] | None = None
+    props: dict[str, Any] | None = None
 
 
 DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'

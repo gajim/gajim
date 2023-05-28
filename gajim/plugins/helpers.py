@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim.  If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 from pathlib import Path
 
@@ -30,7 +29,7 @@ class GajimPluginActivateException(Exception):
     '''
 
 
-def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
+def get_builder(file_name: str, widgets: list[str] | None = None) -> Builder:
     return Builder(file_name,
                    widgets,  # pyright: ignore
                    domain=DOMAIN,

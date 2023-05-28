@@ -14,7 +14,6 @@
 
 # All XEPs that don’t need their own module
 
-from typing import Optional
 
 import logging
 
@@ -41,7 +40,7 @@ def parse_oob(properties: MessageProperties,
 
 
 # XEP-0308: Last Message Correction
-def parse_correction(properties: MessageProperties) -> Optional[str]:
+def parse_correction(properties: MessageProperties) -> str | None:
     if not properties.is_correction:
         return None
     assert properties.correction is not None

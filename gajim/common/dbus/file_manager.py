@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 import logging
 
@@ -31,7 +30,7 @@ class DBusFileManager(metaclass=Singleton):
     '''
 
     def __init__(self) -> None:
-        self._proxy: Optional[Gio.DBusProxy]
+        self._proxy: Gio.DBusProxy | None
         Gio.DBusProxy.new_for_bus(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.DO_NOT_AUTO_START_AT_CONSTRUCTION,

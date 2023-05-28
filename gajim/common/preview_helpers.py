@@ -14,8 +14,6 @@
 
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 import binascii
 import hashlib
@@ -146,7 +144,7 @@ def extract_and_resize_frames(image: ImageFile.ImageFile,
 def create_thumbnail(data: bytes,
                      size: int,
                      mime_type: str
-                     ) -> Optional[bytes]:
+                     ) -> bytes | None:
 
     try:
         thumbnail = create_thumbnail_with_pil(data, size)
@@ -162,7 +160,7 @@ def create_thumbnail(data: bytes,
 def create_thumbnail_with_pixbuf(data: bytes,
                                  size: int,
                                  mime_type: str
-                                 ) -> Optional[bytes]:
+                                 ) -> bytes | None:
 
     try:
         # Try to create GdKPixbuf loader with fixed mime-type to
@@ -204,7 +202,7 @@ def create_thumbnail_with_pixbuf(data: bytes,
     return bytes_
 
 
-def create_thumbnail_with_pil(data: bytes, size: int) -> Optional[bytes]:
+def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
     input_file = BytesIO(data)
     output_file = BytesIO()
     try:
@@ -267,7 +265,7 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     return image_width, image_height
 
 
-def pixbuf_from_data(data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
+def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf | None:
     loader = GdkPixbuf.PixbufLoader()
     try:
         loader.write(data)
@@ -446,8 +444,8 @@ def get_previewable_mime_types() -> set[str]:
     ))
 
 
-def guess_mime_type(file_path: Union[Path, str],
-                    data: Optional[bytes] = None
+def guess_mime_type(file_path: Path | str,
+                    data: bytes | None = None
                     ) -> str:
     file_path = str(file_path)
 
@@ -471,7 +469,7 @@ def guess_mime_type(file_path: Union[Path, str],
 
 
 def guess_simple_file_type(file_path: str,
-                           data: Optional[bytes] = None
+                           data: bytes | None = None
                            ) -> tuple[Gio.Icon, str]:
     mime_type = guess_mime_type(file_path, data)
     if mime_type == 'application/octet-stream':

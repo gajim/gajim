@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 
 import functools
 import sys
@@ -32,10 +31,10 @@ class Builder:
     filename = ''
 
     def __init__(self,
-                 filename: Optional[str] = None,
-                 widgets: Optional[list[str]] = None,
-                 domain: Optional[str] = None,
-                 gettext_: Optional[Any] = None) -> None:
+                 filename: str | None = None,
+                 widgets: list[str] | None = None,
+                 domain: str | None = None,
+                 gettext_: Any | None = None) -> None:
 
         if filename is None:
             filename = self.filename
@@ -86,5 +85,5 @@ class Builder:
         return self._builder.get_object(name)
 
 
-def get_builder(file_name: str, widgets: Optional[list[str]] = None) -> Builder:
+def get_builder(file_name: str, widgets: list[str] | None = None) -> Builder:
     return Builder(file_name, widgets)

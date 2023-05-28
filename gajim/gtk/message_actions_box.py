@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import tempfile
@@ -56,8 +55,8 @@ class MessageActionsBox(Gtk.Grid):
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
 
-        self._client: Optional[Client] = None
-        self._contact: Optional[ChatContactT] = None
+        self._client: Client | None = None
+        self._contact: ChatContactT | None = None
 
         self._ui = get_builder('message_actions_box.ui')
         self.get_style_context().add_class('message-actions-box')
@@ -103,7 +102,7 @@ class MessageActionsBox(Gtk.Grid):
         assert self._contact is not None
         return self._contact
 
-    def get_seclabel(self) -> Optional[SecurityLabel]:
+    def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
     def _connect_actions(self) -> None:
@@ -133,7 +132,7 @@ class MessageActionsBox(Gtk.Grid):
 
     def _on_action(self,
                    action: Gio.SimpleAction,
-                   param: Optional[GLib.Variant]) -> Optional[int]:
+                   param: GLib.Variant | None) -> int | None:
 
         if self._contact is None:
             return
@@ -218,10 +217,10 @@ class MessageActionsBox(Gtk.Grid):
     def toggle_message_correction(self) -> None:
         self.msg_textview.toggle_message_correction()
 
-    def try_message_correction(self, message: str) -> Optional[str]:
+    def try_message_correction(self, message: str) -> str | None:
         return self.msg_textview.try_message_correction(message)
 
-    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+    def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self.msg_textview.get_last_message_id(contact)
 
     def _on_client_state_changed(self,

@@ -18,8 +18,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import logging
 import math
@@ -64,7 +62,7 @@ from gajim.gtk.const import WINDOW_MODULES
 log = logging.getLogger('gajim.gtk.util')
 
 
-MenuValueT = Union[None, str, GLib.Variant, VariantMixin]
+MenuValueT = None | str | GLib.Variant | VariantMixin
 MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
@@ -79,8 +77,8 @@ def icon_exists(name: str) -> bool:
 
 def load_icon_info(icon_name: str,
                    size: int,
-                   scale: Optional[int],
-                   flags: Gtk.IconLookupFlags) -> Optional[Gtk.IconInfo]:
+                   scale: int | None,
+                   flags: Gtk.IconLookupFlags) -> Gtk.IconInfo | None:
 
     if scale is None:
         scale = app.window.get_scale_factor()
@@ -106,9 +104,9 @@ def load_icon_info(icon_name: str,
 def load_icon_surface(
         icon_name: str,
         size: int = 16,
-        scale: Optional[int] = None,
+        scale: int | None = None,
         flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
-) -> Optional[cairo.ImageSurface]:
+) -> cairo.ImageSurface | None:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
@@ -118,9 +116,9 @@ def load_icon_surface(
 
 def load_icon_pixbuf(icon_name: str,
                      size: int = 16,
-                     scale: Optional[int] = None,
+                     scale: int | None = None,
                      flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
-                     ) -> Optional[GdkPixbuf.Pixbuf]:
+                     ) -> GdkPixbuf.Pixbuf | None:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
@@ -139,7 +137,7 @@ def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
 
 
 def get_icon_name(name: str,
-                  transport: Optional[str] = None) -> str:
+                  transport: str | None = None) -> str:
     if transport is not None:
         return f'{transport}-{name}'
 
@@ -226,7 +224,7 @@ def restore_main_window_position() -> None:
                 app.settings.get('mainwin_y_position'))
 
 
-def get_source_view_style_scheme() -> Optional[GtkSource.StyleScheme]:
+def get_source_view_style_scheme() -> GtkSource.StyleScheme | None:
     style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
     if app.css_config.prefer_dark:
         return style_scheme_manager.get_scheme('solarized-dark')
@@ -362,7 +360,7 @@ def get_monitor_scale_factor() -> int:
     return monitor.get_scale_factor()
 
 
-def get_primary_accel_mod() -> Optional[Gdk.ModifierType]:
+def get_primary_accel_mod() -> Gdk.ModifierType | None:
     '''
     Returns the primary Gdk.ModifierType modifier.
     cmd on osx, ctrl everywhere else.
@@ -413,7 +411,7 @@ def format_tune(data: TuneData) -> str:
                                           'source': source}
 
 
-def get_account_tune_icon_name(account: str) -> Optional[str]:
+def get_account_tune_icon_name(account: str) -> str | None:
     client = app.get_client(account)
     tune = client.get_module('UserTune').get_current_tune()
     return None if tune is None else 'audio-x-generic'
@@ -436,13 +434,13 @@ def format_location(location: LocationData) -> str:
     return location_string.strip()
 
 
-def get_account_location_icon_name(account: str) -> Optional[str]:
+def get_account_location_icon_name(account: str) -> str | None:
     client = app.get_client(account)
     location = client.get_module('UserLocation').get_current_location()
     return None if location is None else 'applications-internet'
 
 
-def format_eta(time_: Union[int, float]) -> str:
+def format_eta(time_: int | float) -> str:
     times = {'minutes': 0, 'seconds': 0}
     time_ = int(time_)
     times['seconds'] = time_ % 60
@@ -463,7 +461,7 @@ def format_fingerprint(fingerprint: str) -> str:
     return buf.rstrip().upper()
 
 
-def find_widget(name: str, container: Gtk.Container) -> Optional[Gtk.Widget]:
+def find_widget(name: str, container: Gtk.Container) -> Gtk.Widget | None:
     for child in container.get_children():
         if Gtk.Buildable.get_name(child) == name:
             return child
@@ -550,7 +548,7 @@ def add_css_to_widget(widget: Any, css: str) -> None:
                          Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 
-def get_pixbuf_from_data(file_data: bytes) -> Optional[GdkPixbuf.Pixbuf]:
+def get_pixbuf_from_data(file_data: bytes) -> GdkPixbuf.Pixbuf | None:
     # TODO: This already exists in preview_helpery pixbuf_from_data
     '''
     Get image data and returns GdkPixbuf.Pixbuf
@@ -592,7 +590,7 @@ def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
 
 
 def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
-                 size: int) -> Optional[GdkPixbuf.Pixbuf]:
+                 size: int) -> GdkPixbuf.Pixbuf | None:
     width, height = scale_with_ratio(size,
                                      pixbuf.get_width(),
                                      pixbuf.get_height())
@@ -602,15 +600,15 @@ def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
 
 def scale_pixbuf_from_data(data: bytes,
                            size: int
-                           ) -> Optional[GdkPixbuf.Pixbuf]:
+                           ) -> GdkPixbuf.Pixbuf | None:
     pixbuf = get_pixbuf_from_data(data)
     assert pixbuf is not None
     return scale_pixbuf(pixbuf, size)
 
 
-def load_pixbuf(path: Union[str, Path],
-                size: Optional[int] = None
-                ) -> Optional[GdkPixbuf.Pixbuf]:
+def load_pixbuf(path: str | Path,
+                size: int | None = None
+                ) -> GdkPixbuf.Pixbuf | None:
     try:
         if size is None:
             return GdkPixbuf.Pixbuf.new_from_file(str(path))
@@ -688,9 +686,9 @@ def get_app_windows(account: str) -> list[Gtk.Window]:
 
 
 def get_app_window(name: str,
-                   account: Optional[str] = None,
-                   jid: Optional[Union[str, JID]] = None
-                   ) -> Optional[Gtk.Window]:
+                   account: str | None = None,
+                   jid: str | JID | None = None
+                   ) -> Gtk.Window | None:
     for win in app.app.get_windows():
         if type(win).__name__ != name:
             continue
@@ -797,7 +795,7 @@ def wrap_with_event_box(klass: Any) -> Any:
 
 
 class AccountBadge(Gtk.Label):
-    def __init__(self, account: Optional[str] = None) -> None:
+    def __init__(self, account: str | None = None) -> None:
         Gtk.Label.__init__(self)
         self.set_ellipsize(Pango.EllipsizeMode.END)
         self.set_max_width_chars(12)
@@ -831,7 +829,7 @@ class AccountBadge(Gtk.Label):
     def _on_account_label_changed(self,
                                   _value: str,
                                   _setting: str,
-                                  account: Optional[str],
+                                  account: str | None,
                                   *args: Any
                                   ) -> None:
 
@@ -883,7 +881,7 @@ def get_style_attribute_with_name(name: str) -> Pango.Attribute:
     raise ValueError('unknown attribute %s' % name)
 
 
-def get_key_theme() -> Optional[str]:
+def get_key_theme() -> str | None:
     settings = Gtk.Settings.get_default()
     if settings is None:
         return None
@@ -891,7 +889,7 @@ def get_key_theme() -> Optional[str]:
 
 
 def make_menu_item(label: str,
-                   action: Optional[str] = None,
+                   action: str | None = None,
                    value: MenuValueT = None) -> Gio.MenuItem:
 
     item = Gio.MenuItem.new(label)
@@ -925,7 +923,7 @@ class GajimMenu(Gio.Menu):
     def add_item(self,
                  label: str,
                  action: str,
-                 value: Optional[MenuValueT] = None) -> None:
+                 value: MenuValueT | None = None) -> None:
         item = make_menu_item(label, action, value)
         self.append_item(item)
 
@@ -953,9 +951,9 @@ class GdkRectangle(Gdk.Rectangle):
 class GajimPopover(Gtk.Popover):
     def __init__(self,
                  menu: Gio.MenuModel,
-                 relative_to: Optional[Gtk.Widget] = None,
+                 relative_to: Gtk.Widget | None = None,
                  position: Gtk.PositionType = Gtk.PositionType.RIGHT,
-                 event: Optional[Gdk.EventButton] = None) -> None:
+                 event: Gdk.EventButton | None = None) -> None:
 
         Gtk.Popover.__init__(self)
 

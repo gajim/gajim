@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 import logging
 import os
@@ -97,7 +96,7 @@ class PluginManager(metaclass=Singleton):
     def update_plugins(self,
                        replace: bool = True,
                        activate: bool = False,
-                       plugin_name: Optional[str] = None
+                       plugin_name: str | None = None
                        ) -> list[str]:
         '''
         Move plugins from the downloaded folder to the user plugin folder
@@ -151,7 +150,7 @@ class PluginManager(metaclass=Singleton):
 
     def _load_plugin_module(self,
                             manifest: PluginManifest
-                            ) -> Optional[type[GajimPlugin]]:
+                            ) -> type[GajimPlugin] | None:
 
         assert manifest.path is not None
         module_path = manifest.path / '__init__.py'
@@ -184,7 +183,7 @@ class PluginManager(metaclass=Singleton):
     def add_plugin(self,
                    manifest: PluginManifest,
                    activate: bool = False
-                   ) -> Optional[GajimPlugin]:
+                   ) -> GajimPlugin | None:
 
         plugin_class = self._load_plugin_module(manifest)
         if plugin_class is None:
@@ -242,13 +241,13 @@ class PluginManager(metaclass=Singleton):
         for module_to_remove in modules_to_remove:
             del sys.modules[module_to_remove]
 
-    def get_active_plugin(self, plugin_name: str) -> Optional[GajimPlugin]:
+    def get_active_plugin(self, plugin_name: str) -> GajimPlugin | None:
         for plugin in self.active_plugins:
             if plugin.manifest.short_name == plugin_name:
                 return plugin
         return None
 
-    def get_plugin(self, short_name: str) -> Optional[GajimPlugin]:
+    def get_plugin(self, short_name: str) -> GajimPlugin | None:
         for plugin in self.plugins:
             if plugin.manifest.short_name == short_name:
                 return plugin
@@ -527,7 +526,7 @@ class PluginManager(metaclass=Singleton):
                     client.connection.register_handler(handler)
 
     @staticmethod
-    def _load_manifest(plugin_path: Path) -> Optional[PluginManifest]:
+    def _load_manifest(plugin_path: Path) -> PluginManifest | None:
         try:
             return PluginManifest.from_path(plugin_path)
         except Exception as error:
@@ -564,7 +563,7 @@ class PluginManager(metaclass=Singleton):
     def install_from_zip(self,
                          zip_filename: str,
                          overwrite: bool = False
-                         ) -> Optional[GajimPlugin]:
+                         ) -> GajimPlugin | None:
         '''
         Install plugin from zip and return plugin
         '''
@@ -656,7 +655,7 @@ class PluginManager(metaclass=Singleton):
 
         app.ged.raise_event(PluginRemoved(manifest=plugin.manifest))
 
-    def get_plugin_by_path(self, plugin_dir: str) -> Optional[GajimPlugin]:
+    def get_plugin_by_path(self, plugin_dir: str) -> GajimPlugin | None:
         for plugin in self.plugins:
             if plugin.__path__ in plugin_dir:
                 return plugin

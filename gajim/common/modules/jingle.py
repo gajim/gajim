@@ -31,7 +31,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 
@@ -205,7 +204,7 @@ class Jingle(BaseModule):
                             jid: str,
                             file_props: FileProp,
                             request: bool = False
-                            ) -> Optional[str]:
+                            ) -> str | None:
         logger.info('start file transfer with file: %s', file_props)
         contact = self._con.get_module('Contacts').get_contact(jid)
         jingle = JingleSession(self._con,
@@ -240,7 +239,7 @@ class Jingle(BaseModule):
         return transfer.transport.sid
 
     @staticmethod
-    def __hash_support(contact: types.ResourceContact) -> Optional[str]:
+    def __hash_support(contact: types.ResourceContact) -> str | None:
         if contact.supports(Namespace.HASHES_2):
             if contact.supports(Namespace.HASHES_BLAKE2B_512):
                 return 'blake2b-512'
@@ -257,9 +256,9 @@ class Jingle(BaseModule):
         return None
 
     def get_jingle_sessions(self,
-                            jid: Optional[str],
-                            sid: Optional[str] = None,
-                            media: Optional[str] = None
+                            jid: str | None,
+                            sid: str | None = None,
+                            media: str | None = None
                             ) -> list[JingleSession]:
         if sid:
             return [se for se in self._sessions.values() if se.sid == sid]
@@ -278,10 +277,10 @@ class Jingle(BaseModule):
 
     def get_file_info(self,
                       peerjid: str,
-                      hash_: Optional[str] = None,
-                      name: Optional[str] = None,
-                      _account: Optional[str] = None
-                      ) -> Optional[dict[str, Any]]:
+                      hash_: str | None = None,
+                      name: str | None = None,
+                      _account: str | None = None
+                      ) -> dict[str, Any] | None:
         if hash_:
             for file in self.files:  # DEBUG
                 # if f['hash'] == '1294809248109223':
@@ -295,9 +294,9 @@ class Jingle(BaseModule):
 
     def get_jingle_session(self,
                            jid: str,
-                           sid: Optional[str] = None,
-                           media: Optional[str] = None
-                           ) -> Optional[JingleSession]:
+                           sid: str | None = None,
+                           media: str | None = None
+                           ) -> JingleSession | None:
         if sid is not None:
             if sid in self._sessions:
                 return self._sessions[sid]

@@ -19,8 +19,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 
@@ -53,7 +51,7 @@ class SettingsDialog(Gtk.ApplicationWindow):
                  flags: Gtk.DialogFlags,
                  settings: list[Setting],
                  account: str,
-                 extend: Optional[dict[SettingKind, GenericSetting]] = None
+                 extend: dict[SettingKind, GenericSetting] | None = None
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
@@ -97,9 +95,9 @@ class SettingsDialog(Gtk.ApplicationWindow):
 
 class SettingsBox(Gtk.ListBox):
     def __init__(self,
-                 account: Optional[str] = None,
-                 jid: Optional[str] = None,
-                 extend: Optional[dict[SettingKind, GenericSetting]] = None
+                 account: str | None = None,
+                 jid: str | None = None,
+                 extend: dict[SettingKind, GenericSetting] | None = None
                  ) -> None:
         Gtk.ListBox.__init__(self)
         self.get_style_context().add_class('settings-box')
@@ -176,13 +174,13 @@ class GenericSetting(Gtk.ListBoxRow):
                  label: str,
                  type_: SettingType,
                  value: AllSettingsT,
-                 name: Optional[str],
-                 callback: Optional[Callable[..., None]] = None,
-                 data: Optional[Any] = None,
-                 desc: Optional[str] = None,
-                 bind: Optional[str] = None,
+                 name: str | None,
+                 callback: Callable[..., None] | None = None,
+                 data: Any | None = None,
+                 desc: str | None = None,
+                 bind: str | None = None,
                  inverted: bool = False,
-                 enabled_func: Optional[Callable[..., bool]] = None
+                 enabled_func: Callable[..., bool] | None = None
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
@@ -278,8 +276,8 @@ class GenericSetting(Gtk.ListBoxRow):
 
     def _parse_bind(self) -> tuple[SettingType,
                                    str,
-                                   Optional[str],
-                                   Optional[JID]]:
+                                   str | None,
+                                   JID | None]:
         assert self.bind is not None
         if '::' not in self.bind:
             return SettingType.CONFIG, self.bind, None, None
@@ -306,7 +304,7 @@ class GenericSetting(Gtk.ListBoxRow):
                     value: AllSettingsT,
                     account: str,
                     jid: JID
-                    ) -> Optional[AllSettingsT]:
+                    ) -> AllSettingsT | None:
         if value is None:
             return None
         if type_ == SettingType.VALUE:
@@ -378,9 +376,7 @@ class GenericSetting(Gtk.ListBoxRow):
         self.set_sensitive(enabled_func_value)
 
     def _add_action_button(self,
-                           kwargs: dict[str, Union[str,
-                                                   Callable[..., None],
-                                                   None]]
+                           kwargs: dict[str, str | Callable[..., None] | None]
                            ) -> None:
         icon_name = cast(str, kwargs.get('button-icon-name'))
         button_text = cast(str, kwargs.get('button-text'))
@@ -699,7 +695,7 @@ class LoginSetting(DialogSetting):
 class PopoverSetting(GenericSetting):
     def __init__(self,
                  *args: Any,
-                 entries: Union[list[str], dict[str, str]],
+                 entries: list[str] | dict[str, str],
                  **kwargs: Any
                  ) -> None:
         GenericSetting.__init__(self, *args)
@@ -761,7 +757,7 @@ class PopoverSetting(GenericSetting):
         self.show_all()
 
     @staticmethod
-    def _convert_to_dict(entries: Union[list[Any], dict[Any, Any]]
+    def _convert_to_dict(entries: list[Any] | dict[Any, Any]
                          ) -> dict[Any, Any]:
         if isinstance(entries, list):
             entries = {key: key for key in entries}
@@ -795,7 +791,7 @@ class PopoverSetting(GenericSetting):
     def on_row_activated(self) -> None:
         self._popover.popup()
 
-    def update_entries(self, entries: Union[list[str], dict[str, str]]) -> None:
+    def update_entries(self, entries: list[str] | dict[str, str]) -> None:
         self._entries = self._convert_to_dict(entries)
         self._menu_listbox.foreach(self._menu_listbox.remove)
         self._add_menu_entries()
@@ -819,7 +815,7 @@ class PopoverRow(Gtk.ListBoxRow):
 class ComboSetting(GenericSetting):
     def __init__(self,
                  *args: Any,
-                 combo_items: list[Union[str, tuple[str, str]]]
+                 combo_items: list[str | tuple[str, str]]
                  ) -> None:
         GenericSetting.__init__(self, *args)
 

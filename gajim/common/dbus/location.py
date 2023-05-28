@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 from datetime import datetime
@@ -41,7 +40,7 @@ log = logging.getLogger('gajim.c.dbus.location')
 
 
 class LocationListener:
-    _instance: Optional[LocationListener] = None
+    _instance: LocationListener | None = None
 
     @classmethod
     def get(cls) -> LocationListener:
@@ -54,16 +53,16 @@ class LocationListener:
     def __init__(self) -> None:
         self._data: dict[str, Any] = {}
         self.location_info: dict[str, Any] = {}
-        self.simple: Optional[Geoclue.Simple] = None
-        self._current_location: Optional[LocationData] = None
+        self.simple: Geoclue.Simple | None = None
+        self._current_location: LocationData | None = None
         self._running = False
 
-    def _emit(self, info: Optional[LocationData]) -> None:
+    def _emit(self, info: LocationData | None) -> None:
         self._current_location = info
         app.ged.raise_event(LocationChanged(info=info))
 
     @property
-    def current_location(self) -> Optional[LocationData]:
+    def current_location(self) -> LocationData | None:
         return self._current_location
 
     def _on_location_update(self, simple: Geoclue.Simple, *args: Any) -> None:

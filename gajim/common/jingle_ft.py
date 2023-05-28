@@ -19,7 +19,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
@@ -77,8 +76,8 @@ class JingleFileTransfer(JingleContent):
     def __init__(self,
                  session: JingleSession,
                  file_props: FileProp,
-                 transport: Optional[JingleTransport] = None,
-                 senders: Optional[str] = None
+                 transport: JingleTransport | None = None,
+                 senders: str | None = None
                  ) -> None:
 
         JingleContent.__init__(self, session, transport, senders)
@@ -136,7 +135,7 @@ class JingleFileTransfer(JingleContent):
 
     def __state_changed(self,
                         nextstate: State,
-                        args: Optional[dict[str, Any]] = None
+                        args: dict[str, Any] | None = None
                         ) -> None:
         # Executes the next state action and sets the next state
         current_state = self.state
@@ -149,7 +148,7 @@ class JingleFileTransfer(JingleContent):
     def __on_session_initiate(self,
                               stanza: nbxmpp.Node,
                               content: nbxmpp.Node,
-                              error: Optional[nbxmpp.Node],
+                              error: nbxmpp.Node | None,
                               action: str
                               ) -> None:
         log.debug('Jingle FT request received')
@@ -258,7 +257,7 @@ class JingleFileTransfer(JingleContent):
     def __on_session_initiate_sent(self,
                                    stanza: nbxmpp.Node,
                                    content: nbxmpp.Node,
-                                   error: Optional[nbxmpp.Node],
+                                   error: nbxmpp.Node | None,
                                    action: str
                                    ) -> None:
         pass
@@ -283,7 +282,7 @@ class JingleFileTransfer(JingleContent):
         }
         self.session.connection.get_module('Jingle').set_file_info(file_info)
 
-    def _compute_hash(self) -> Optional[nbxmpp.Hashes2]:
+    def _compute_hash(self) -> nbxmpp.Hashes2 | None:
         # Calculates the hash and returns a xep-300 hash stanza
         if self.file_props.algo is None:
             return
@@ -311,7 +310,7 @@ class JingleFileTransfer(JingleContent):
     def __on_session_accept(self,
                             stanza: nbxmpp.Node,
                             content: nbxmpp.Node,
-                            error: Optional[nbxmpp.Node],
+                            error: nbxmpp.Node | None,
                             action: str
                             ) -> None:
         log.info('__on_session_accept')
@@ -347,7 +346,7 @@ class JingleFileTransfer(JingleContent):
     def __on_session_terminate(self,
                                stanza: nbxmpp.Node,
                                content: nbxmpp.Node,
-                               error: Optional[nbxmpp.Node],
+                               error: nbxmpp.Node | None,
                                action: str
                                ) -> None:
         log.info('__on_session_terminate')
@@ -355,7 +354,7 @@ class JingleFileTransfer(JingleContent):
     def __on_session_info(self,
                           stanza: nbxmpp.Node,
                           content: nbxmpp.Node,
-                          error: Optional[nbxmpp.Node],
+                          error: nbxmpp.Node | None,
                           action: str
                           ) -> None:
         pass
@@ -363,7 +362,7 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_accept(self,
                               stanza: nbxmpp.Node,
                               content: nbxmpp.Node,
-                              error: Optional[nbxmpp.Node],
+                              error: nbxmpp.Node | None,
                               action: str
                               ) -> None:
         log.info('__on_transport_accept')
@@ -371,7 +370,7 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_replace(self,
                                stanza: nbxmpp.Node,
                                content: nbxmpp.Node,
-                               error: Optional[nbxmpp.Node],
+                               error: nbxmpp.Node | None,
                                action: str
                                ) -> None:
         log.info('__on_transport_replace')
@@ -379,7 +378,7 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_reject(self,
                               stanza: nbxmpp.Node,
                               content: nbxmpp.Node,
-                              error: Optional[nbxmpp.Node],
+                              error: nbxmpp.Node | None,
                               action: str
                               ) -> None:
         log.info('__on_transport_reject')
@@ -387,7 +386,7 @@ class JingleFileTransfer(JingleContent):
     def __on_transport_info(self,
                             stanza: nbxmpp.Node,
                             content: nbxmpp.Node,
-                            error: Optional[nbxmpp.Node],
+                            error: nbxmpp.Node | None,
                             action: str
                             ) -> None:
         log.info('__on_transport_info')
@@ -443,7 +442,7 @@ class JingleFileTransfer(JingleContent):
     def __on_iq_result(self,
                        stanza: nbxmpp.Node,
                        content: nbxmpp.Node,
-                       error: Optional[nbxmpp.Node],
+                       error: nbxmpp.Node | None,
                        action: str
                        ) -> None:
         log.info('__on_iq_result')
@@ -463,7 +462,7 @@ class JingleFileTransfer(JingleContent):
     def __transport_setup(self,
                           stanza: nbxmpp.Node,
                           content: nbxmpp.Node,
-                          error: Optional[nbxmpp.Node],
+                          error: nbxmpp.Node | None,
                           action: str
                           ) -> None:
         # Sets up a few transport specific things for the file transfer

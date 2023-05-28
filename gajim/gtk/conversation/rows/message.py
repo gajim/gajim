@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import textwrap
 from datetime import datetime
 from datetime import timedelta
@@ -63,17 +60,17 @@ class MessageRow(BaseRow):
     def __init__(self,
                  account: str,
                  contact: ChatContactT,
-                 message_id: Optional[str],
-                 stanza_id: Optional[str],
+                 message_id: str | None,
+                 stanza_id: str | None,
                  timestamp: float,
                  kind: str,
                  name: str,
                  text: str,
-                 additional_data: Optional[AdditionalDataDict] = None,
-                 display_marking: Optional[Displaymarking] = None,
-                 marker: Optional[str] = None,
-                 error: Union[CommonError, StanzaError, None] = None,
-                 log_line_id: Optional[int] = None) -> None:
+                 additional_data: AdditionalDataDict | None = None,
+                 display_marking: Displaymarking | None = None,
+                 marker: str | None = None,
+                 error: CommonError | StanzaError | None = None,
+                 log_line_id: int | None = None) -> None:
 
         BaseRow.__init__(self, account)
         self.type = 'chat'
@@ -219,7 +216,7 @@ class MessageRow(BaseRow):
             self._message_widget.set_selectable(True)
 
     def _add_security_label(self,
-                            display_marking: Optional[Displaymarking]
+                            display_marking: Displaymarking | None
                             ) -> None:
 
         if display_marking is None:
@@ -256,7 +253,7 @@ class MessageRow(BaseRow):
             self.get_style_context().add_class(
                 'gajim-mention-highlight')
 
-    def _get_avatar(self, kind: str, name: str) -> Optional[cairo.ImageSurface]:
+    def _get_avatar(self, kind: str, name: str) -> cairo.ImageSurface | None:
         scale = self.get_scale_factor()
         if isinstance(self._contact, GroupchatContact):
             contact = self._contact.get_resource(name)
@@ -321,7 +318,7 @@ class MessageRow(BaseRow):
 
     def _get_encryption_image(self,
                               additional_data: AdditionalDataDict,
-                              ) -> Optional[Gtk.Image]:
+                              ) -> Gtk.Image | None:
 
         details = self._get_encryption_details(additional_data)
         if details is None:
@@ -352,9 +349,10 @@ class MessageRow(BaseRow):
         return image
 
     @staticmethod
-    def _get_encryption_details(additional_data: AdditionalDataDict
-                                ) -> Optional[tuple[
-                                    str, Optional[str], Optional[Trust]]]:
+    def _get_encryption_details(
+        additional_data: AdditionalDataDict
+    ) -> tuple[str, str | None, Trust | None] | None:
+
         name = additional_data.get_value('encrypted', 'name')
         if name is None:
             return None
@@ -396,7 +394,7 @@ class MessageRow(BaseRow):
         self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
 
-    def set_correction(self, text: str, nickname: Optional[str]) -> None:
+    def set_correction(self, text: str, nickname: str | None) -> None:
         if not isinstance(self._message_widget, PreviewWidget):
             self._message_widget.add_with_styling(text, nickname)
 

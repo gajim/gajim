@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 import time
@@ -43,9 +41,9 @@ from gajim.gtk.util import EventHelper
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
-MessageEventT = Union[events.MessageReceived,
-                      events.GcMessageReceived,
-                      events.MamMessageReceived]
+MessageEventT = (events.MessageReceived |
+                 events.GcMessageReceived |
+                 events.MamMessageReceived)
 
 
 class ChatList(Gtk.ListBox, EventHelper):
@@ -88,7 +86,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             entries,
             Gdk.DragAction.MOVE)
 
-        self._drag_row: Optional[ChatListRow] = None
+        self._drag_row: ChatListRow | None = None
         self._chat_order: list[ChatListRow] = []
 
         self.register_events([
@@ -115,7 +113,7 @@ class ChatList(Gtk.ListBox, EventHelper):
                               account: str,
                               jid: JID,
                               include_silent: bool = False
-                              ) -> Optional[int]:
+                              ) -> int | None:
         chat = self._chats.get((account, jid))
         if chat is not None:
             if include_silent:
@@ -140,13 +138,13 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._current_filter_text = text
         self.invalidate_filter()
 
-    def get_chat_type(self, account: str, jid: JID) -> Optional[str]:
+    def get_chat_type(self, account: str, jid: JID) -> str | None:
         row = self._chats.get((account, jid))
         if row is not None:
             return row.type
         return None
 
-    def get_selected_chat(self) -> Optional[ChatListRow]:
+    def get_selected_chat(self) -> ChatListRow | None:
         row = cast(ChatListRow | None, self.get_selected_row())
         if row is None:
             return None
@@ -352,13 +350,13 @@ class ChatList(Gtk.ListBox, EventHelper):
                        self._workspace_id,
                        count)
 
-    def _get_row_before(self, row: ChatListRow) -> Optional[ChatListRow]:
+    def _get_row_before(self, row: ChatListRow) -> ChatListRow | None:
         row_before = self.get_row_at_index(row.get_index() - 1)
         if row_before is None:
             return
         return cast(ChatListRow, row_before)
 
-    def _get_row_after(self, row: ChatListRow) -> Optional[ChatListRow]:
+    def _get_row_after(self, row: ChatListRow) -> ChatListRow | None:
         row_after = self.get_row_at_index(row.get_index() + 1)
         if row_after is None:
             return
@@ -435,7 +433,7 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         self._change_pinned_order(row_before)
 
-    def _change_pinned_order(self, row_before: Optional[ChatListRow]) -> None:
+    def _change_pinned_order(self, row_before: ChatListRow | None) -> None:
         assert self._drag_row is not None
 
         self._chat_order.remove(self._drag_row)

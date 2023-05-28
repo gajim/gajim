@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 from gajim.common.const import FTState
 from gajim.common.helpers import Observable
@@ -31,7 +30,7 @@ class FileTransfer(Observable):
 
         self._state = FTState.INIT
         self._error_text: str = ''
-        self._error_domain: Optional[str] = None
+        self._error_domain: str | None = None
 
     @property
     def account(self) -> str:
@@ -50,7 +49,7 @@ class FileTransfer(Observable):
         return self._error_text
 
     @property
-    def error_domain(self) -> Optional[str]:
+    def error_domain(self) -> str | None:
         return self._error_domain
 
     def get_progress(self) -> float:

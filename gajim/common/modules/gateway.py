@@ -16,8 +16,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
@@ -74,7 +72,7 @@ class Gateway(BaseModule):
 
     def request_gateway_prompt(self,
                                jid: str,
-                               prompt: Optional[str] = None
+                               prompt: str | None = None
                                ) -> None:
         typ_ = 'get'
         if prompt:

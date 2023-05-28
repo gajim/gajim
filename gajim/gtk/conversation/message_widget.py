@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 from gi.repository import Gdk
 from gi.repository import Gtk
 
@@ -32,7 +29,7 @@ from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
 
-ContentT = Union[ParsingResult, QuoteBlock]
+ContentT = ParsingResult | QuoteBlock
 
 
 class MessageWidget(Gtk.Box):
@@ -60,7 +57,7 @@ class MessageWidget(Gtk.Box):
 
     def add_with_styling(self,
                          text: str,
-                         nickname: Optional[str] = None) -> None:
+                         nickname: str | None = None) -> None:
 
         self._original_text = text
         if len(text) > MAX_MESSAGE_LENGTH:

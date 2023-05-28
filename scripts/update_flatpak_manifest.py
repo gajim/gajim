@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-from typing import Optional
 
 import json
 import logging
@@ -24,7 +23,7 @@ def get_package_type(module: ruamel.yaml.comments.CommentedMap) -> str:
     return 'sdist'
 
 def get_current_version(module: ruamel.yaml.comments.CommentedMap
-                        ) -> tuple[Optional[str], Optional[str]]:
+                        ) -> tuple[str | None, str | None]:
     name = module['name'].replace('python3-','')
     url = module['sources'][0]['url']
     if url.endswith('.git'):
@@ -38,8 +37,8 @@ def get_current_version(module: ruamel.yaml.comments.CommentedMap
 
 def get_latest_version(package_name: str,
                        package_type: str,
-                       py_version: Optional[str]
-                       ) -> tuple[str, Optional[str]]:
+                       py_version: str | None
+                       ) -> tuple[str, str | None]:
     with urlopen(f'{PYPI_INDEX}/{package_name}/json') as f:
         data = f.read()
         d = json.loads(data)

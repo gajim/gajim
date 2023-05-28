@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Iterator
-from typing import Optional
 
 import itertools
 import logging
@@ -57,12 +56,12 @@ class SearchView(Gtk.Box):
         Gtk.Box.__init__(self)
         self.set_size_request(300, -1)
 
-        self._account: Optional[str] = None
-        self._jid: Optional[JID] = None
-        self._results_iterator: Optional[Iterator[SearchLogRow]] = None
+        self._account: str | None = None
+        self._jid: JID | None = None
+        self._results_iterator: Iterator[SearchLogRow] | None = None
 
-        self._first_date: Optional[datetime] = None
-        self._last_date: Optional[datetime] = None
+        self._first_date: datetime | None = None
+        self._last_date: datetime | None = None
 
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -177,7 +176,7 @@ class SearchView(Gtk.Box):
 
     @staticmethod
     def _strip_filters(text: str,
-                       filter_name: str) -> tuple[str, Optional[list[str]]]:
+                       filter_name: str) -> tuple[str, list[str] | None]:
         filters: list[str] = []
         start = 0
         new_text = ''
@@ -353,7 +352,7 @@ class SearchView(Gtk.Box):
         self._clear()
         self._update_calendar()
 
-    def set_context(self, account: Optional[str], jid: Optional[JID]) -> None:
+    def set_context(self, account: str | None, jid: JID | None) -> None:
         self._account = account
         self._jid = jid
         self._update_calendar()
@@ -433,7 +432,7 @@ class ResultRow(Gtk.ListBoxRow):
 
     def _get_avatar(self,
                     kind: str,
-                    name: str) -> Optional[cairo.ImageSurface]:
+                    name: str) -> cairo.ImageSurface | None:
 
         scale = self.get_scale_factor()
         if self.contact.is_groupchat:

@@ -16,9 +16,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import nbxmpp
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
@@ -60,15 +57,15 @@ class Discovery(BaseModule):
                           ns=Namespace.DISCO_ITEMS),
         ]
 
-        self._account_info: Optional[DiscoInfo] = None
-        self._server_info: Optional[DiscoInfo] = None
+        self._account_info: DiscoInfo | None = None
+        self._server_info: DiscoInfo | None = None
 
     @property
-    def account_info(self) -> Optional[DiscoInfo]:
+    def account_info(self) -> DiscoInfo | None:
         return self._account_info
 
     @property
-    def server_info(self) -> Optional[DiscoInfo]:
+    def server_info(self) -> DiscoInfo | None:
         return self._server_info
 
     def discover_server_items(self) -> None:
@@ -204,7 +201,7 @@ class Discovery(BaseModule):
 
     @as_task
     def disco_muc(self,
-                  jid: Union[JID, str],
+                  jid: JID | str,
                   request_vcard: bool = False,
                   allow_redirect: bool = False
                   ):

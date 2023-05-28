@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -44,7 +42,7 @@ from gajim.gtk.structs import RemoveHistoryActionParams
 class GroupchatDetails(Gtk.ApplicationWindow):
     def __init__(self,
                  contact: GroupchatContact,
-                 page: Optional[str] = None
+                 page: str | None = None
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
@@ -73,7 +71,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
                                     self._on_stack_child_changed)
         self.add(self._ui.main_grid)
 
-        self._groupchat_manage: Optional[GroupchatManage] = None
+        self._groupchat_manage: GroupchatManage | None = None
 
         self._add_groupchat_info()
         self._add_groupchat_settings()

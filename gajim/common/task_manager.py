@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import functools
 import logging
 import queue
@@ -27,7 +25,7 @@ log = logging.getLogger('gajim.c.m.task_manager')
 
 class TaskManager:
     def __init__(self) -> None:
-        self._timeout: Optional[int] = None
+        self._timeout: int | None = None
         self._queue: queue.PriorityQueue[Task] = queue.PriorityQueue()
 
     def _start_worker(self) -> None:

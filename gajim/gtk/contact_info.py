@@ -15,8 +15,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 from enum import IntEnum
@@ -60,7 +58,7 @@ from gajim.gtk.vcard_grid import VCardGrid
 log = logging.getLogger('gajim.gtk.contact_info')
 
 
-ContactT = Union[BareContact, GroupchatParticipant]
+ContactT = BareContact | GroupchatParticipant
 
 
 class Column(IntEnum):
@@ -72,7 +70,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
     def __init__(self,
                  account: str,
                  contact: ContactT,
-                 page: Optional[str] = None) -> None:
+                 page: str | None = None) -> None:
 
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
@@ -539,7 +537,7 @@ class DeviceGrid:
     def widget(self) -> Gtk.Grid:
         return self._ui.devices_grid
 
-    def set_entity_time(self, entity_time: Optional[str]) -> None:
+    def set_entity_time(self, entity_time: str | None) -> None:
         if entity_time is not None:
             self._ui.time_value.set_text(entity_time)
             self._ui.time_value.show()
@@ -547,7 +545,7 @@ class DeviceGrid:
 
         self._check_complete()
 
-    def set_software(self, software: Optional[SoftwareVersionResult]) -> None:
+    def set_software(self, software: SoftwareVersionResult | None) -> None:
         if software is not None:
             software_string = f'{software.name} {software.version}'
             self._ui.software_value.set_text(software_string)

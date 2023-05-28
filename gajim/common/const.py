@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 from enum import Enum
 from enum import IntEnum
@@ -244,7 +242,7 @@ class XmppUriQuery(Enum):
     JOIN = 'join'
 
     @staticmethod
-    def from_str(s: str) -> Optional[XmppUriQuery]:
+    def from_str(s: str) -> XmppUriQuery | None:
         try:
             return XmppUriQuery(s)
         except ValueError:
@@ -1127,7 +1125,7 @@ class PresenceShowExt(Enum):
     def is_offline(self):
         return self == PresenceShowExt.OFFLINE
 
-    def __lt__(self, other: Union[PresenceShowExt, PresenceShow]) -> bool:
+    def __lt__(self, other: PresenceShowExt | PresenceShow) -> bool:
         if isinstance(other, PresenceShowExt):
             return False
         if not isinstance(other, PresenceShow):  # pyright: ignore

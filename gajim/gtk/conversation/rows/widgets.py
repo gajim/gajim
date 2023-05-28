@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 from datetime import datetime
 
@@ -150,7 +149,7 @@ class AvatarBox(Gtk.EventBox):
     def __init__(self,
                  contact: ChatContactT,
                  name: str,
-                 avatar: Optional[cairo.ImageSurface],
+                 avatar: cairo.ImageSurface | None,
                  ) -> None:
 
         Gtk.EventBox.__init__(self)
@@ -169,7 +168,7 @@ class AvatarBox(Gtk.EventBox):
         self.connect('button-press-event',
                      self._on_avatar_clicked, name)
 
-    def set_from_surface(self, surface: Optional[cairo.ImageSurface]) -> None:
+    def set_from_surface(self, surface: cairo.ImageSurface | None) -> None:
         self._image.set_from_surface(surface)
 
     def set_merged(self, merged: bool) -> None:

@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 from collections import defaultdict
 
@@ -91,7 +89,7 @@ def get_emoji_data() -> dict[str, dict[str, str]]:
     return emoji_data
 
 
-def try_load_raw_emoji_data(locale: str) -> Optional[GLib.Bytes]:
+def try_load_raw_emoji_data(locale: str) -> GLib.Bytes | None:
     # Sources of emoji data can be found at:
     # https://gitlab.gnome.org/GNOME/gtk/-/tree/main/gtk/emoji
     emoji_data_resource = f'/org/gtk/libgtk/emoji/{locale}.data'
@@ -211,7 +209,7 @@ short_locale = get_short_lang_code(app_locale)
 locales = get_locale_fallbacks(short_locale)
 try:
     log.debug('Trying locales %s', locales)
-    raw_emoji_data: Optional[GLib.Bytes] = None
+    raw_emoji_data: GLib.Bytes | None = None
     for loc in locales:
         raw_emoji_data = try_load_raw_emoji_data(loc)
         if raw_emoji_data:

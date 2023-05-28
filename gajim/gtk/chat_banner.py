@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import cairo
 from gi.repository import Gdk
@@ -53,8 +52,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
 
-        self._client: Optional[types.Client] = None
-        self._contact: Optional[types.ChatContactT] = None
+        self._client: types.Client | None = None
+        self._contact: types.ChatContactT | None = None
 
         self._last_message_from_phone: set[BareContact] = set()
 

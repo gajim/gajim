@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Callable
-from typing import Optional
 
 import logging
 
@@ -33,7 +32,7 @@ log = logging.getLogger('gajim.c.winapi.system_style')
 
 class SystemStyleListener:
     def __init__(self, callback: Callable[..., None]) -> None:
-        self._prefer_dark: Optional[bool] = None
+        self._prefer_dark: bool | None = None
         self._callback = callback
 
         self._ui_settings = UISettings()
@@ -56,5 +55,5 @@ class SystemStyleListener:
             app.ged.raise_event(StyleChanged())
 
     @property
-    def prefer_dark(self) -> Optional[bool]:
+    def prefer_dark(self) -> bool | None:
         return self._prefer_dark

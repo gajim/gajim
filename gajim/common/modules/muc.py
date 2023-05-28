@@ -18,7 +18,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import time
@@ -187,7 +186,7 @@ class MUC(BaseModule):
                 self._muc_service_jid = info.jid
                 raise nbxmpp.NodeProcessed
 
-    def get_muc_data(self, room_jid: str) -> Optional[MUCData]:
+    def get_muc_data(self, room_jid: str) -> MUCData | None:
         return self._mucs.get(room_jid)
 
     def set_password(self, room_jid: str, password: str) -> None:
@@ -226,9 +225,9 @@ class MUC(BaseModule):
 
     def _create_muc_data(self,
                          room_jid: str,
-                         nick: Optional[str],
-                         password: Optional[str],
-                         config: Optional[dict[str, Any]]
+                         nick: str | None,
+                         password: str | None,
+                         config: dict[str, Any] | None
                          ) -> MUCData:
         if not nick:
             nick = get_group_chat_nick(self._account, room_jid)
@@ -243,9 +242,9 @@ class MUC(BaseModule):
 
     def join(self,
              jid: str,
-             nick: Optional[str] = None,
-             password: Optional[str] = None,
-             config: Optional[dict[str, Any]] = None
+             nick: str | None = None,
+             password: str | None = None,
+             config: dict[str, Any] | None = None
              ) -> None:
         if not app.account_is_available(self._account):
             return
@@ -353,7 +352,7 @@ class MUC(BaseModule):
 
     def leave(self,
               room_jid: str,
-              reason: Optional[str] = None
+              reason: str | None = None
               ) -> None:
         self._log.info('Leave MUC: %s', room_jid)
 
@@ -415,7 +414,7 @@ class MUC(BaseModule):
 
     @staticmethod
     def _apply_config(form: SimpleDataForm,
-                      config: Optional[dict[str, Any]] = None
+                      config: dict[str, Any] | None = None
                       ) -> None:
         default_config = get_default_muc_config()
         if config is not None:
@@ -768,7 +767,7 @@ class MUC(BaseModule):
             self._joined_users[jid.bare][jid.resource] = muc_presence
         return muc_presence
 
-    def _is_user_joined(self, jid: Optional[JID]) -> bool:
+    def _is_user_joined(self, jid: JID | None) -> bool:
         try:
             self._joined_users[jid.bare][jid.resource]
         except KeyError:
@@ -1060,7 +1059,7 @@ class MUC(BaseModule):
     def invite(self,
                room: JID,
                jid: JID,
-               reason: Optional[str] = None,
+               reason: str | None = None,
                continue_: bool = False
                ) -> str:
 

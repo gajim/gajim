@@ -15,7 +15,6 @@
 from typing import Any
 from typing import cast
 from typing import NamedTuple
-from typing import Optional
 
 import logging
 from datetime import timedelta
@@ -49,7 +48,7 @@ log = logging.getLogger('gajim.gtk.server_info')
 class Feature(NamedTuple):
     name: str
     available: bool
-    additional: Optional[str] = None
+    additional: str | None = None
 
 
 class ServerInfo(Gtk.ApplicationWindow, EventHelper):
@@ -183,7 +182,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
     @staticmethod
     def _get_addresses(fields: dict[str, str],
                        dataforms: list[SimpleDataForm]
-                       ) -> Optional[dict[str, list[str]]]:
+                       ) -> dict[str, list[str]] | None:
         addresses: dict[str, list[str]] = {}
         for form in dataforms:
             field = form.vars.get('FORM_TYPE')

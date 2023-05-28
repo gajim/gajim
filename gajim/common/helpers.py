@@ -29,9 +29,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 from typing import TYPE_CHECKING
-from typing import Union
 
 import collections
 import copy
@@ -164,7 +162,7 @@ def ascii_to_idn(host: str) -> str:
     return '.'.join(converted_labels)
 
 
-def parse_resource(resource: str) -> Optional[str]:
+def parse_resource(resource: str) -> str | None:
     '''
     Perform stringprep on resource and return it
     '''
@@ -199,7 +197,7 @@ def get_uf_sub(sub: str) -> str:
     return p_('Contact subscription', 'Unknown')
 
 
-def get_uf_ask(ask: Union[str, None]) -> str:
+def get_uf_ask(ask: str | None) -> str:
     if ask is None:
         return p_('Contact subscription', 'None')
 
@@ -209,7 +207,7 @@ def get_uf_ask(ask: Union[str, None]) -> str:
     return ask
 
 
-def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
+def get_uf_role(role: Role | str, plural: bool = False) -> str:
     ''' plural determines if you get Moderators or Moderator'''
     if not isinstance(role, str):
         role = role.value
@@ -231,7 +229,7 @@ def get_uf_role(role: Union[Role, str], plural: bool = False) -> str:
     return ''
 
 
-def get_uf_affiliation(affiliation: Union[Affiliation, str],
+def get_uf_affiliation(affiliation: Affiliation | str,
                        plural: bool = False
                        ) -> str:
     '''Get a nice and translated affilition for muc'''
@@ -256,7 +254,7 @@ def get_uf_affiliation(affiliation: Union[Affiliation, str],
 
 
 def get_uf_relative_time(date_time: datetime,
-                         now: Optional[datetime] = None
+                         now: datetime | None = None
                          ) -> str:
 
     if now is None:  # used by unittest
@@ -301,7 +299,7 @@ def from_one_line(msg: str) -> str:
     return msg.replace('\\\\', '\\')
 
 
-def chatstate_to_string(chatstate: Optional[Chatstate]) -> str:
+def chatstate_to_string(chatstate: Chatstate | None) -> str:
     if chatstate is None:
         return ''
 
@@ -386,7 +384,7 @@ def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
 
 
 def play_sound(sound_event: str,
-               account: Optional[str] = None,
+               account: str | None = None,
                force: bool = False,
                loop: bool = False) -> None:
 
@@ -399,8 +397,8 @@ def play_sound(sound_event: str,
 
 
 def check_soundfile_path(file_: str,
-                         dirs: Optional[list[Path]] = None
-                         ) -> Optional[Path]:
+                         dirs: list[Path] | None = None
+                         ) -> Path | None:
     '''
     Check if the sound file exists
 
@@ -425,8 +423,8 @@ def check_soundfile_path(file_: str,
     return None
 
 
-def strip_soundfile_path(file_: Union[Path, str],
-                         dirs: Optional[list[Path]] = None,
+def strip_soundfile_path(file_: Path | str,
+                         dirs: list[Path] | None = None,
                          abs_: bool = True):
     '''
     Remove knowns paths from a sound file
@@ -526,7 +524,7 @@ def statuses_unified() -> bool:
     return True
 
 
-def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
+def get_full_jid_from_iq(iq_obj: Iq) -> str | None:
     '''
     Return the full jid (with resource) from an iq
     '''
@@ -536,7 +534,7 @@ def get_full_jid_from_iq(iq_obj: Iq) -> Optional[str]:
     return parse_jid(str(iq_obj.getFrom()))
 
 
-def get_jid_from_iq(iq_obj: Iq) -> Optional[str]:
+def get_jid_from_iq(iq_obj: Iq) -> str | None:
     '''
     Return the jid (without resource) from an iq
     '''
@@ -676,7 +674,7 @@ def jid_is_blocked(account: str, jid: str) -> bool:
     return jid in client.get_module('Blocking').blocked
 
 
-def get_subscription_request_msg(account: Optional[str] = None) -> str:
+def get_subscription_request_msg(account: str | None = None) -> str:
     if account is None:
         return _('I would like to add you to my contact list.')
 
@@ -691,7 +689,7 @@ def get_subscription_request_msg(account: Optional[str] = None) -> str:
 
 def get_retraction_text(account: str,
                         moderator_jid: str,
-                        reason: Optional[str]) -> str:
+                        reason: str | None) -> str:
 
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(
@@ -702,14 +700,14 @@ def get_retraction_text(account: str,
     return text
 
 
-def get_global_proxy() -> Optional[ProxyData]:
+def get_global_proxy() -> ProxyData | None:
     proxy_name = app.settings.get('global_proxy')
     if not proxy_name:
         return None
     return get_proxy(proxy_name)
 
 
-def get_account_proxy(account: str, fallback=True) -> Optional[ProxyData]:
+def get_account_proxy(account: str, fallback=True) -> ProxyData | None:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if proxy_name:
         return get_proxy(proxy_name)
@@ -719,7 +717,7 @@ def get_account_proxy(account: str, fallback=True) -> Optional[ProxyData]:
     return None
 
 
-def get_proxy(proxy_name: str) -> Optional[ProxyData]:
+def get_proxy(proxy_name: str) -> ProxyData | None:
     try:
         settings = app.settings.get_proxy_settings(proxy_name)
     except ValueError:
@@ -735,7 +733,7 @@ def get_proxy(proxy_name: str) -> Optional[ProxyData]:
                      password=password)
 
 
-def determine_proxy() -> Optional[ProxyData]:
+def determine_proxy() -> ProxyData | None:
     # Use this method to find a proxy for non-account related http requests
     # When there is no global proxy and at least one active account does
     # not use a proxy, we assume no proxy is necessary.
@@ -771,8 +769,8 @@ def call_counter(func):
 
 
 def load_json(path: Path,
-              key: Optional[str] = None,
-              default: Optional[Any] = None) -> Any:
+              key: str | None = None,
+              default: Any | None = None) -> Any:
     try:
         with path.open('r', encoding='utf8') as file:
             json_dict = json.loads(file.read())
@@ -794,7 +792,7 @@ class AdditionalDataDict(collections.UserDict):
             return full_path.split(':')
         return [full_path]
 
-    def set_value(self, full_path: str, key: str, value: Optional[str]) -> None:
+    def set_value(self, full_path: str, key: str, value: str | None) -> None:
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
         for path in path_childs:
@@ -808,7 +806,7 @@ class AdditionalDataDict(collections.UserDict):
     def get_value(self,
                   full_path: str,
                   key: str,
-                  default: Optional[str] = None) -> Optional[Any]:
+                  default: str | None = None) -> Any | None:
 
         path_childs = self._get_path_childs(full_path)
         _dict = self.data
@@ -1040,7 +1038,7 @@ _xmpp_query_type_handlers = {
 
 
 @catch_exceptions
-def open_uri(uri: Union[URI, str], account: Optional[str] = None) -> None:
+def open_uri(uri: URI | str, account: str | None = None) -> None:
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
 
@@ -1133,7 +1131,7 @@ def show_in_folder(path: Path) -> None:
         open_directory(path.parent)
 
 
-def filesystem_path_from_uri(uri: str) -> Optional[Path]:
+def filesystem_path_from_uri(uri: str) -> Path | None:
     puri = parse_uri(uri)
     if puri.type != URIType.FILE:
         return None
@@ -1144,7 +1142,7 @@ def filesystem_path_from_uri(uri: str) -> Optional[Path]:
     return Path(puri.data['path'])
 
 
-def get_file_path_from_dnd_dropped_uri(text: str) -> Optional[Path]:
+def get_file_path_from_dnd_dropped_uri(text: str) -> Path | None:
     uri = text.strip('\r\n\x00')  # remove \r\n and NULL
     return filesystem_path_from_uri(uri)
 
@@ -1184,7 +1182,7 @@ def geo_provider_from_location(lat: str, lon: str) -> str:
     return f'https://www.openstreetmap.org/?mlat={lat}&mlon={lon}&zoom=16'
 
 
-def get_resource(account: str) -> Optional[str]:
+def get_resource(account: str) -> str | None:
     resource = app.settings.get_account_setting(account, 'resource')
     if not resource:
         return None
@@ -1196,7 +1194,7 @@ def get_resource(account: str) -> Optional[str]:
     return resource
 
 
-def get_default_muc_config() -> dict[str, Union[bool, str]]:
+def get_default_muc_config() -> dict[str, bool | str]:
     return {
         # XEP-0045 options
         'muc#roomconfig_allowinvites': True,
@@ -1218,7 +1216,7 @@ def get_default_muc_config() -> dict[str, Union[bool, str]]:
     }
 
 
-def validate_jid(jid: Union[str, JID], type_: Optional[str] = None) -> JID:
+def validate_jid(jid: str | JID, type_: str | None = None) -> JID:
     try:
         jid = JID.from_string(str(jid))
     except InvalidJid as error:
@@ -1236,7 +1234,7 @@ def validate_jid(jid: Union[str, JID], type_: Optional[str] = None) -> JID:
     raise ValueError(f'Not a {type_} JID')
 
 
-def to_user_string(error: Union[CommonError, StanzaError]) -> str:
+def to_user_string(error: CommonError | StanzaError) -> str:
     text = error.get_text(get_rfc5646_lang())
     if text:
         return text
@@ -1262,7 +1260,7 @@ def get_groupchat_name(client: types.Client, jid: JID) -> str:
 
 def is_affiliation_change_allowed(self_contact: types.GroupchatParticipant,
                                   contact: types.GroupchatParticipant,
-                                  target_aff: Union[str, Affiliation]) -> bool:
+                                  target_aff: str | Affiliation) -> bool:
     if isinstance(target_aff, str):
         target_aff = Affiliation(target_aff)
 
@@ -1305,13 +1303,13 @@ def get_tls_error_phrases(tls_errors: set[Gio.TlsCertificateFlags]
 
 
 class Observable:
-    def __init__(self, log_: Union[logging.Logger, LogAdapter, None] = None):
+    def __init__(self, log_: logging.Logger | LogAdapter | None = None):
         self._log = log_
         self._callbacks: types.ObservableCbDict = defaultdict(list)
 
     def __disconnect(self,
                      obj: Any,
-                     signals: Optional[set[str]] = None
+                     signals: set[str] | None = None
                      ) -> None:
 
         def _remove(handlers: list[weakref.WeakMethod[types.AnyCallableT]]
@@ -1335,7 +1333,7 @@ class Observable:
 
     def multi_disconnect(self,
                          obj: Any,
-                         signals: Optional[set[str]]
+                         signals: set[str] | None
                          ) -> None:
 
         self.__disconnect(obj, signals)
@@ -1387,8 +1385,8 @@ class Observable:
 def write_file_async(
         path: Path,
         data: bytes,
-        callback: Callable[[bool, Optional[GLib.Error], Any], Any],
-        user_data: Optional[Any] = None):
+        callback: Callable[[bool, GLib.Error | None, Any], Any],
+        user_data: Any | None = None):
 
     def _on_write_finished(outputstream: Gio.OutputStream,
                            result: Gio.AsyncResult,
@@ -1424,10 +1422,10 @@ def write_file_async(
 
 
 def load_file_async(path: Path,
-                    callback: Callable[[Optional[bytes],
-                                        Optional[GLib.Error],
-                                        Optional[Any]], Any],
-                    user_data: Optional[Any] = None) -> None:
+                    callback: Callable[[bytes | None,
+                                        GLib.Error | None,
+                                        Any | None], Any],
+                    user_data: Any | None = None) -> None:
 
     def _on_load_finished(file: Gio.File,
                           result: Gio.AsyncResult) -> None:
@@ -1449,9 +1447,10 @@ def get_x509_cert_from_gio_cert(cert: Gio.TlsCertificate) -> x509.Certificate:
         glib_bytes.get_data(), default_backend())
 
 
-def get_custom_host(account: str) -> Optional[tuple[str,
-                                                    ConnectionProtocol,
-                                                    ConnectionType]]:
+def get_custom_host(
+    account: str
+) -> tuple[str, ConnectionProtocol, ConnectionType] | None:
+
     if not app.settings.get_account_setting(account, 'use_custom_host'):
         return None
     host = app.settings.get_account_setting(account, 'custom_host')
@@ -1488,7 +1487,7 @@ def get_idle_status_message(state: str, status_message: str) -> str:
     }
 
 
-def get_group_chat_nick(account: str, room_jid: Union[JID, str]) -> str:
+def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
     client = app.get_client(account)
 
     bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)

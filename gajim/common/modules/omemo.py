@@ -20,7 +20,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 
 import binascii
 import threading
@@ -408,7 +407,7 @@ class OMEMO(BaseModule):
 
     def _process_muc_message(self,
                              properties: MessageProperties
-                             ) -> Optional[str]:
+                             ) -> str | None:
 
         resource = properties.jid.resource
         if properties.muc_ofrom is not None:
@@ -426,7 +425,7 @@ class OMEMO(BaseModule):
 
     def _process_mam_message(self,
                              properties: MessageProperties
-                             ) -> Optional[str]:
+                             ) -> str | None:
 
         self._log.info('Message received, archive: %s', properties.mam.archive)
         if properties.from_muc:
@@ -567,7 +566,7 @@ class OMEMO(BaseModule):
             jid=JID.from_string(jid),
             message=EncryptionInfoMsg.UNDECIDED_FINGERPRINTS))
 
-    def set_devicelist(self, devicelist: Optional[list[int]] = None) -> None:
+    def set_devicelist(self, devicelist: list[int] | None = None) -> None:
         devicelist_: set[int] = {self.backend.get_our_device()}
         if devicelist is not None:
             devicelist_.update(devicelist)
@@ -584,7 +583,7 @@ class OMEMO(BaseModule):
         self.request_devicelist(jid)
 
     @as_task
-    def request_devicelist(self, jid: Optional[str] = None):
+    def request_devicelist(self, jid: str | None = None):
         _task = yield  # noqa: F841
 
         if jid is None:

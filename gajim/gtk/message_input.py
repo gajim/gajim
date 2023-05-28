@@ -20,7 +20,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 from collections import defaultdict
@@ -83,11 +82,11 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         self._undo_list: list[str] = []
         self.undo_pressed: bool = False
 
-        self._contact: Optional[ChatContactT] = None
+        self._contact: ChatContactT | None = None
 
         # XEP-0308 Message Correction
         self._correcting: dict[ChatContactT, bool] = defaultdict(lambda: False)
-        self._last_message_id: dict[ChatContactT, Optional[str]] = {}
+        self._last_message_id: dict[ChatContactT, str | None] = {}
 
         self._chat_action_processor = ChatActionProcessor(self)
 
@@ -119,7 +118,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
 
         return self._correcting[self._contact]
 
-    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+    def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._last_message_id.get(contact)
 
     def toggle_message_correction(self) -> None:
@@ -145,7 +144,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         self.get_style_context().add_class('gajim-msg-correcting')
         self.insert_text(message_row.message)
 
-    def try_message_correction(self, message: str) -> Optional[str]:
+    def try_message_correction(self, message: str) -> str | None:
         assert self._contact is not None
         if not self.is_correcting:
             return None
@@ -213,7 +212,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
 
     def _get_spell_checker_language(self,
                                     contact: ChatContactT
-                                    ) -> Optional[Gspell.Language]:
+                                    ) -> Gspell.Language | None:
 
         lang = contact.settings.get('speller_language')
         if not lang:

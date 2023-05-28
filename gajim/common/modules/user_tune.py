@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -46,13 +45,13 @@ class UserTune(BaseModule):
     def __init__(self, con: types.Client) -> None:
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._tune_received)
-        self._current_tune: Optional[TuneData] = None
+        self._current_tune: TuneData | None = None
         self._contact_tunes: dict[JID, TuneData] = {}
 
-    def get_current_tune(self) -> Optional[TuneData]:
+    def get_current_tune(self) -> TuneData | None:
         return self._current_tune
 
-    def get_contact_tune(self, jid: JID) -> Optional[TuneData]:
+    def get_contact_tune(self, jid: JID) -> TuneData | None:
         return self._contact_tunes.get(jid)
 
     @event_node(Namespace.TUNE)
@@ -74,7 +73,7 @@ class UserTune(BaseModule):
         contact.notify('tune-update', data)
 
     @store_publish
-    def set_tune(self, tune: Optional[TuneData], force: bool = False) -> None:
+    def set_tune(self, tune: TuneData | None, force: bool = False) -> None:
         if not self._con.get_module('PEP').supported:
             return
 

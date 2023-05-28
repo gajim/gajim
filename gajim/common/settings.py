@@ -17,10 +17,8 @@ from typing import Callable
 from typing import cast
 from typing import Literal
 from typing import NamedTuple
-from typing import Optional
 from typing import overload
 from typing import TypedDict
-from typing import Union
 
 import inspect
 import json
@@ -76,7 +74,7 @@ from gajim.common.setting_values import WorkspaceSettings
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 
-SETTING_TYPE = Union[bool, int, str, object]
+SETTING_TYPE = bool | int | str | object
 
 
 log = logging.getLogger('gajim.c.settings')
@@ -108,8 +106,8 @@ CREATE_SQL = '''
            CURRENT_USER_VERSION)
 
 
-_SignalCallable = Callable[[Any, str, Optional[str], Optional[JID]], Any]
-_CallbackDict = dict[tuple[str, Optional[str], Optional[JID]],
+_SignalCallable = Callable[[Any, str, str | None, JID | None], Any]
+_CallbackDict = dict[tuple[str, str | None, JID | None],
                      list[weakref.WeakMethod[_SignalCallable]]]
 
 if app.is_flatpak():
@@ -137,15 +135,15 @@ class Settings:
         self._settings: SettingsDictT = {}
         self._app_overrides: dict[str, AllSettingsT] = {}
         self._account_settings: dict[
-            str, Union[Any, dict[str, dict[Union[JID, str], Any]]]] = {}
+            str, Any | dict[str, dict[JID | str, Any]]] = {}
 
         self._callbacks: _CallbackDict = defaultdict(list)
 
     def connect_signal(self,
                        setting: str,
                        func: _SignalCallable,
-                       account: Optional[str] = None,
-                       jid: Optional[JID] = None) -> None:
+                       account: str | None = None,
+                       jid: JID | None = None) -> None:
         if not inspect.ismethod(func):
             # static methods are not bound to an object so we can’t easily
             # remove the func once it should not be called anymore
@@ -167,10 +165,10 @@ class Settings:
                     setting: str,
                     widget: Any,
                     func_name: str,
-                    account: Optional[str] = None,
-                    jid: Optional[JID] = None,
+                    account: str | None = None,
+                    jid: JID | None = None,
                     inverted: bool = False,
-                    default_text: Optional[str] = None
+                    default_text: str | None = None
                     ) -> None:
 
         callbacks = self._callbacks[(setting, account, jid)]
@@ -185,8 +183,8 @@ class Settings:
     def _notify(self,
                 value: Any,
                 setting: str,
-                account: Optional[str] = None,
-                jid: Optional[JID] = None) -> None:
+                account: str | None = None,
+                jid: JID | None = None) -> None:
 
         log.info('Signal: %s changed', setting)
 
@@ -504,8 +502,8 @@ class Settings:
                     jid]['encryption'] = encryption
             self._commit_account_settings(account)
 
-    def _split_encryption_config_key(self, key: str) -> tuple[Optional[str],
-                                                              Optional[str]]:
+    def _split_encryption_config_key(self, key: str) -> tuple[str | None,
+                                                              str | None]:
         for account in self._account_settings:
             if not key.startswith(account):
                 continue
@@ -644,19 +642,19 @@ class Settings:
     @overload
     def set_app_setting(self,
                         setting: BoolSettings,
-                        value: Optional[bool]) -> None:
+                        value: bool | None) -> None:
         ...
 
     @overload
     def set_app_setting(self,
                         setting: StringSettings,
-                        value: Optional[str]) -> None:
+                        value: str | None) -> None:
         ...
 
     @overload
     def set_app_setting(self,
                         setting: IntSettings,
-                        value: Optional[int]) -> None:
+                        value: int | None) -> None:
         ...
 
     @overload
@@ -667,7 +665,7 @@ class Settings:
 
     def set_app_setting(self,
                         setting: str,
-                        value: Optional[AllSettingsT]) -> None:
+                        value: AllSettingsT | None) -> None:
 
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
@@ -807,27 +805,27 @@ class Settings:
     def set_account_setting(self,
                             account: str,
                             setting: StringAccountSettings,
-                            value: Optional[str]) -> None:
+                            value: str | None) -> None:
         ...
 
     @overload
     def set_account_setting(self,
                             account: str,
                             setting: IntAccountSettings,
-                            value: Optional[int]) -> None:
+                            value: int | None) -> None:
         ...
 
     @overload
     def set_account_setting(self,
                             account: str,
                             setting: BoolAccountSettings,
-                            value: Optional[bool]) -> None:
+                            value: bool | None) -> None:
         ...
 
     def set_account_setting(self,
                             account: str,
                             setting: str,
-                            value: Optional[AllSettingsT]) -> None:
+                            value: AllSettingsT | None) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -1004,7 +1002,7 @@ class Settings:
     def set_group_chat_settings(self,
                                 setting: str,
                                 value: SETTING_TYPE,
-                                context: Optional[str] = None
+                                context: str | None = None
                                 ) -> None:
 
         for account, acc_settings in self._account_settings.items():

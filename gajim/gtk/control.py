@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 import time
@@ -54,7 +52,7 @@ from gajim.gtk.conversation.view import ConversationView
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.groupchat_state import GroupchatState
 
-HistoryRowT = Union[events.ApplicationEvent, ConversationRow]
+HistoryRowT = events.ApplicationEvent | ConversationRow
 
 REQUEST_LINES_COUNT = 20
 
@@ -147,9 +145,10 @@ class ChatControl(EventHelper):
         self._roster.clear()
         self.unregister_events()
 
-    def switch_contact(self, contact: Union[BareContact,
-                                            GroupchatContact,
-                                            GroupchatParticipant]) -> None:
+    def switch_contact(
+        self,
+        contact: BareContact | GroupchatContact | GroupchatParticipant
+    ) -> None:
 
         log.info('Switch to %s (%s)', contact.jid, contact.account)
         if self._contact is not None:
@@ -431,10 +430,10 @@ class ChatControl(EventHelper):
         if active_jid is None:
             self.add_call_message(event=event)
 
-    def _on_file_request_event(self,
-                               event: Union[events.FileRequestReceivedEvent,
-                                            events.FileRequestSent]
-                               ) -> None:
+    def _on_file_request_event(
+        self,
+        event: events.FileRequestReceivedEvent | events.FileRequestSent
+    ) -> None:
 
         if not self._is_event_processable(event):
             return
@@ -522,7 +521,7 @@ class ChatControl(EventHelper):
 
     def add_info_message(self,
                          text: str,
-                         timestamp: Optional[float] = None
+                         timestamp: float | None = None
                          ) -> None:
 
         self._scrolled_view.add_info_message(text, timestamp)
@@ -530,12 +529,10 @@ class ChatControl(EventHelper):
     def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
         self._scrolled_view.add_file_transfer(transfer)
 
-    def add_jingle_file_transfer(self,
-                                 event: Union[
-                                     events.FileRequestReceivedEvent,
-                                     events.FileRequestSent,
-                                     None]
-                                 ) -> None:
+    def add_jingle_file_transfer(
+        self,
+        event: events.FileRequestReceivedEvent | events.FileRequestSent | None
+    ) -> None:
         if self._allow_add_message():
             self._scrolled_view.add_jingle_file_transfer(event)
 
@@ -548,11 +545,11 @@ class ChatControl(EventHelper):
                      kind: str,
                      name: str,
                      tim: float,
-                     displaymarking: Optional[Displaymarking] = None,
-                     msg_log_id: Optional[int] = None,
-                     message_id: Optional[str] = None,
-                     stanza_id: Optional[str] = None,
-                     additional_data: Optional[AdditionalDataDict] = None
+                     displaymarking: Displaymarking | None = None,
+                     msg_log_id: int | None = None,
+                     message_id: str | None = None,
+                     stanza_id: str | None = None,
+                     additional_data: AdditionalDataDict | None = None
                      ) -> None:
 
         if additional_data is None:
@@ -777,11 +774,11 @@ class ChatControl(EventHelper):
                     text: str,
                     kind: str,
                     tim: float,
-                    displaymarking: Optional[Displaymarking] = None,
-                    msg_log_id: Optional[int] = None,
-                    stanza_id: Optional[str] = None,
-                    message_id: Optional[str] = None,
-                    additional_data: Optional[AdditionalDataDict] = None
+                    displaymarking: Displaymarking | None = None,
+                    msg_log_id: int | None = None,
+                    stanza_id: str | None = None,
+                    message_id: str | None = None,
+                    additional_data: AdditionalDataDict | None = None
                     ) -> None:
 
         if kind == 'incoming':
@@ -1204,11 +1201,11 @@ class ChatControl(EventHelper):
                         text: str,
                         tim: float,
                         contact: str = '',
-                        displaymarking: Optional[Displaymarking] = None,
-                        message_id: Optional[str] = None,
-                        stanza_id: Optional[str] = None,
-                        msg_log_id: Optional[int] = None,
-                        additional_data: Optional[AdditionalDataDict] = None,
+                        displaymarking: Displaymarking | None = None,
+                        message_id: str | None = None,
+                        stanza_id: str | None = None,
+                        msg_log_id: int | None = None,
+                        additional_data: AdditionalDataDict | None = None,
                         ) -> None:
 
         assert isinstance(self._contact, GroupchatContact)

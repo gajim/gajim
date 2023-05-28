@@ -27,7 +27,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import socket
@@ -130,7 +129,7 @@ class Bytestream(BaseModule):
         return file_props.receiver.jid + '/' + file_props.receiver.resource
 
     @staticmethod
-    def _ft_get_from(iq_obj: Iq) -> Optional[str]:
+    def _ft_get_from(iq_obj: Iq) -> str | None:
         return helpers.get_full_jid_from_iq(iq_obj)
 
     @staticmethod
@@ -183,7 +182,7 @@ class Bytestream(BaseModule):
             session.cancel_session()
 
     def send_success_connect_reply(self,
-                                   streamhost: Optional[dict[str, Any]]
+                                   streamhost: dict[str, Any] | None
                                    ) -> None:
         '''
         Send reply to the initiator of FT that we made a connection
@@ -230,7 +229,7 @@ class Bytestream(BaseModule):
         for file_props in FilesProp.getAllFileProp():
             self.remove_transfer(file_props)
 
-    def remove_transfer(self, file_props: Optional[FileProp]) -> None:
+    def remove_transfer(self, file_props: FileProp | None) -> None:
         if file_props is None:
             return
         self.disconnect_transfer(file_props)
@@ -519,7 +518,7 @@ class Bytestream(BaseModule):
                        sid: str,
                        error: str,
                        error_type: str,
-                       msg: Optional[str] = None
+                       msg: str | None = None
                        ) -> None:
         '''
         Called when there is an error establishing BS connection, or when

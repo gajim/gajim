@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import logging
 import time
 from datetime import datetime
@@ -54,7 +51,7 @@ from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.util import format_eta
 
-TransferEventT = Union[FileRequestReceivedEvent, FileRequestSent]
+TransferEventT = FileRequestReceivedEvent | FileRequestSent
 
 log = logging.getLogger('gajim.gtk.conversation.rows.file_transfer_jingle')
 
@@ -63,8 +60,8 @@ class FileTransferJingleRow(BaseRow):
     def __init__(self,
                  account: str,
                  contact: BareContact,
-                 event: Optional[TransferEventT] = None,
-                 db_message: Optional[ConversationRow] = None
+                 event: TransferEventT | None = None,
+                 db_message: ConversationRow | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 

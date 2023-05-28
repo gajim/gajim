@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 import pickle
@@ -62,9 +61,9 @@ class WorkspaceSideBar(Gtk.ListBox):
             entries,
             Gdk.DragAction.MOVE)
 
-        self.drag_row: Optional[Workspace] = None
-        self.row_before: Optional[CommonWorkspace] = None
-        self.row_after: Optional[CommonWorkspace] = None
+        self.drag_row: Workspace | None = None
+        self.row_before: CommonWorkspace | None = None
+        self.row_after: CommonWorkspace | None = None
 
         self.connect('drag-motion', self._on_drag_motion)
         self.connect('drag-data-received', self._on_drag_data_received)
@@ -169,14 +168,14 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     def _get_row_before(self,
                         row: CommonWorkspace
-                        ) -> Optional[CommonWorkspace]:
+                        ) -> CommonWorkspace | None:
         workspace = cast(
             CommonWorkspace, self.get_row_at_index(row.get_index() - 1))
         return workspace
 
     def _get_row_after(self,
                        row: CommonWorkspace
-                       ) -> Optional[CommonWorkspace]:
+                       ) -> CommonWorkspace | None:
         workspace = cast(
             CommonWorkspace, self.get_row_at_index(row.get_index() + 1))
         return workspace
@@ -231,7 +230,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     def get_other_workspace(self,
                             exclude_workspace_id: str
-                            ) -> Optional[str]:
+                            ) -> str | None:
 
         for workspace in self._workspaces.values():
             if workspace.workspace_id != exclude_workspace_id:
@@ -251,7 +250,7 @@ class WorkspaceSideBar(Gtk.ListBox):
         if row is not None and row.workspace_id != 'add':
             app.window.activate_workspace(row.workspace_id)
 
-    def get_active_workspace(self) -> Optional[str]:
+    def get_active_workspace(self) -> str | None:
         row = cast(CommonWorkspace | None, self.get_selected_row())
         if row is None:
             return None
@@ -265,7 +264,7 @@ class WorkspaceSideBar(Gtk.ListBox):
 
     def get_workspace_by_id(self,
                             workspace_id: str
-                            ) -> Optional[CommonWorkspace]:
+                            ) -> CommonWorkspace | None:
         workspaces = cast(list[CommonWorkspace], self.get_children())
         for row in workspaces:
             if row.workspace_id == workspace_id:

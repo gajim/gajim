@@ -26,7 +26,6 @@ from typing import Iterator
 from typing import KeysView
 from typing import Literal
 from typing import NamedTuple
-from typing import Optional
 
 import calendar
 import datetime
@@ -284,7 +283,7 @@ class MessageArchiveStorage(SqliteStorage):
             self._jid_ids[row.jid] = row
             self._jid_ids_reversed[row.jid_id] = row
 
-    def get_jid_from_id(self, jid_id: int) -> Optional[JidsTableRow]:
+    def get_jid_from_id(self, jid_id: int) -> JidsTableRow | None:
         # Use get as a fail-safe for cases where the JID ID table is incomplete
         return self._jid_ids_reversed.get(jid_id)
 
@@ -307,8 +306,8 @@ class MessageArchiveStorage(SqliteStorage):
     @timeit
     def get_jid_id(self,
                    jid: JID,
-                   kind: Optional[KindConstant] = None,
-                   type_: Optional[JIDConstant] = None
+                   kind: KindConstant | None = None,
+                   type_: JIDConstant | None = None
                    ) -> int:
         '''
         Get the jid id from a jid.
@@ -541,9 +540,9 @@ class MessageArchiveStorage(SqliteStorage):
                    account: str,
                    jid: JID,
                    query: str,
-                   from_users: Optional[list[str]] = None,
-                   before: Optional[datetime.datetime] = None,
-                   after: Optional[datetime.datetime] = None
+                   from_users: list[str] | None = None,
+                   before: datetime.datetime | None = None,
+                   after: datetime.datetime | None = None
                    ) -> Iterator[SearchLogRow]:
         '''
         Search the conversation log for messages containing the `query` string.
@@ -627,9 +626,9 @@ class MessageArchiveStorage(SqliteStorage):
     @timeit
     def search_all_logs(self,
                         query: str,
-                        from_users: Optional[list[str]] = None,
-                        before: Optional[datetime.datetime] = None,
-                        after: Optional[datetime.datetime] = None
+                        from_users: list[str] | None = None,
+                        before: datetime.datetime | None = None,
+                        after: datetime.datetime | None = None
                         ) -> Iterator[SearchLogRow]:
         '''
         Search all conversation logs for messages containing the `query`
@@ -737,7 +736,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_last_history_timestamp(self,
                                    account: str,
                                    jid: str
-                                   ) -> Optional[float]:
+                                   ) -> float | None:
         '''
         Get the timestamp of the last message we received for the jid
         '''
@@ -763,7 +762,7 @@ class MessageArchiveStorage(SqliteStorage):
     def get_first_history_timestamp(self,
                                     account: str,
                                     jid: str
-                                    ) -> Optional[float]:
+                                    ) -> float | None:
         '''
         Get the timestamp of the first message we received for the jid
         '''
@@ -790,7 +789,7 @@ class MessageArchiveStorage(SqliteStorage):
                          account: str,
                          jid: str,
                          date: datetime.datetime
-                         ) -> Optional[float]:
+                         ) -> float | None:
         '''
         Get a single timestamp of a message for 'jid'
         in time range of one day
@@ -819,7 +818,7 @@ class MessageArchiveStorage(SqliteStorage):
                                         account: str,
                                         jid: str,
                                         date: datetime.datetime
-                                        ) -> Optional[MessageMetaRow]:
+                                        ) -> MessageMetaRow | None:
         '''
         Load meta data for the first message of a specific date
         '''
@@ -950,7 +949,7 @@ class MessageArchiveStorage(SqliteStorage):
                                      account: str,
                                      jid: JID,
                                      message_id: str
-                                     ) -> Optional[LastConversationRow]:
+                                     ) -> LastConversationRow | None:
         '''
         Load the last correctable message of a conversation by message_id.
         Conditions: max 5 min old
@@ -977,7 +976,7 @@ class MessageArchiveStorage(SqliteStorage):
     def try_message_correction(self,
                                account: str,
                                jid: JID,
-                               nickname: Optional[str],
+                               nickname: str | None,
                                corrected_text: str,
                                correct_id: str,
                                kind: KindConstant,
@@ -1131,7 +1130,7 @@ class MessageArchiveStorage(SqliteStorage):
 
     def insert_jid(self,
                    jid: str,
-                   kind: Optional[KindConstant] = None,
+                   kind: KindConstant | None = None,
                    type_: JIDConstant = JIDConstant.NORMAL_TYPE
                    ) -> int:
         '''
@@ -1276,7 +1275,7 @@ class MessageArchiveStorage(SqliteStorage):
         self._delayed_commit()
 
     @timeit
-    def get_archive_infos(self, jid: str) -> Optional[LastArchiveMessageRow]:
+    def get_archive_infos(self, jid: str) -> LastArchiveMessageRow | None:
         '''
         Get the archive infos
 

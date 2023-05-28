@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 from gi.repository import Gtk
 
@@ -32,7 +31,7 @@ from gajim.gtk.util import EventHelper
 
 
 class StatusMessageSelector(Gtk.Box, EventHelper):
-    def __init__(self, account: Optional[str] = None) -> None:
+    def __init__(self, account: str | None = None) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
         self.get_style_context().add_class('linked')

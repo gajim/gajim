@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Generator
-from typing import Optional
 
 from nbxmpp.errors import is_error
 
@@ -40,7 +39,7 @@ class Delimiter(BaseModule):
         self.delimiter = '::'
 
     @as_task
-    def get_roster_delimiter(self) -> Generator[Optional[str], None, None]:
+    def get_roster_delimiter(self) -> Generator[str | None, None, None]:
         _task = yield  # noqa: F841
 
         delimiter = yield self.request_delimiter()

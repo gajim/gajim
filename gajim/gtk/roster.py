@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
-from typing import Optional
 
 import locale
 import logging
@@ -639,7 +638,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         assert path is not None
         return self._store.get_iter(path)
 
-    def _get_group_iter(self, group_name: str) -> Optional[Gtk.TreeIter]:
+    def _get_group_iter(self, group_name: str) -> Gtk.TreeIter | None:
         try:
             ref = self._group_refs[group_name]
         except KeyError:

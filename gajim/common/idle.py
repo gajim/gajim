@@ -22,7 +22,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 import ctypes
 import ctypes.util
@@ -323,7 +322,7 @@ class IdleMonitorManager(GObject.Object):
         return self.state == IdleState.UNKNOWN
 
     @staticmethod
-    def _get_idle_monitor() -> Optional[IdleMonitor]:
+    def _get_idle_monitor() -> IdleMonitor | None:
         if sys.platform == 'win32':
             return Windows()
 

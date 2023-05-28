@@ -13,9 +13,7 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 from typing import TextIO
-from typing import Union
 
 import cProfile
 import json
@@ -259,12 +257,12 @@ class CoreApplication(ged.EventHelper):
         import warnings
         os.environ['GAJIM_LEAK'] = 'true'
 
-        def warn_with_traceback(message: Union[Warning, str],
+        def warn_with_traceback(message: Warning | str,
                                 category: type[Warning],
                                 filename: str,
                                 lineno: int,
-                                _file: Optional[TextIO] = None,
-                                line: Optional[str] = None) -> None:
+                                _file: TextIO | None = None,
+                                line: str | None = None) -> None:
 
             traceback.print_stack(file=sys.stderr)
             sys.stderr.write(warnings.formatwarning(message, category,
@@ -353,7 +351,7 @@ class CoreApplication(ged.EventHelper):
             username = 'anon'
             account_label = f'anon@{domain}'
 
-        config: dict[str, Union[str, int, bool]] = {
+        config: dict[str, str | int | bool] = {
             'name': username,
             'resource': f'gajim.{get_random_string(8)}',
             'account_label': account_label,
@@ -428,7 +426,7 @@ class CoreApplication(ged.EventHelper):
 
     def change_status(self,
                       status: str,
-                      account: Optional[str] = None
+                      account: str | None = None
                       ) -> None:
 
         if account is not None:

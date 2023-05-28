@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
@@ -27,7 +24,7 @@ from gajim.gtk.app_page import AppPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_page import ChatPage
 
-PageT = Union[ChatPage, AccountPage, AppPage]
+PageT = ChatPage | AccountPage | AppPage
 
 
 class MainStack(Gtk.Stack):
@@ -58,7 +55,7 @@ class MainStack(Gtk.Stack):
     def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)
 
-    def get_visible_page_name(self) -> Optional[str]:
+    def get_visible_page_name(self) -> str | None:
         return self.get_visible_child_name()
 
     def show_app_page(self) -> None:

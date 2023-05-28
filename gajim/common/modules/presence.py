@@ -17,8 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import time
 
@@ -225,21 +223,21 @@ class Presence(BaseModule):
             jid=properties.jid.bare))
         raise nbxmpp.NodeProcessed
 
-    def unsubscribed(self, jid: Union[JID, str]) -> None:
+    def unsubscribed(self, jid: JID | str) -> None:
         self._log.info('Unsubscribed: %s', jid)
         self._jids_for_auto_auth.discard(str(jid))
         self._nbxmpp('BasePresence').unsubscribed(jid)
 
-    def unsubscribe(self, jid: Union[JID, str]) -> None:
+    def unsubscribe(self, jid: JID | str) -> None:
         self._log.info('Unsubscribe from %s', jid)
         self._jids_for_auto_auth.discard(str(jid))
         self._nbxmpp('BasePresence').unsubscribe(jid)
 
     def subscribe(self,
-                  jid: Union[JID, str],
-                  msg: Optional[str] = None,
-                  name: Optional[str] = None,
-                  groups: Optional[list[str]] = None,
+                  jid: JID | str,
+                  msg: str | None = None,
+                  name: str | None = None,
+                  groups: list[str] | None = None,
                   auto_auth: bool = False
                   ) -> None:
         self._log.info('Request Subscription to %s', jid)
@@ -253,12 +251,12 @@ class Presence(BaseModule):
                                                nick=app.nicks[self._account])
 
     def get_presence(self,
-                     to: Optional[str] = None,
-                     typ: Optional[str] = None,
-                     priority: Optional[int] = None,
-                     show: Optional[str] = None,
-                     status: Optional[str] = None,
-                     nick: Optional[str] = None,
+                     to: str | None = None,
+                     typ: str | None = None,
+                     priority: int | None = None,
+                     show: str | None = None,
+                     status: str | None = None,
+                     nick: str | None = None,
                      caps: bool = True,
                      idle_time: bool = False
                      ) -> nbxmpp.Presence:

@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import functools
 import hashlib
 import logging
@@ -53,7 +50,7 @@ from gajim.gtk.util import scale_with_ratio
 log = logging.getLogger('gajim.gtk.avatar')
 
 
-AvatarCacheT = dict[Union[JID, str], dict[tuple[int, int, Optional[str]],
+AvatarCacheT = dict[JID | str, dict[tuple[int, int, str | None],
                                           cairo.ImageSurface]]
 
 
@@ -186,7 +183,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
 
 
 @functools.lru_cache(maxsize=128)
-def get_show_circle(show: Union[str, types.PresenceShowT],
+def get_show_circle(show: str | types.PresenceShowT,
                     size: int,
                     scale: int
                     ) -> cairo.ImageSurface:
@@ -347,19 +344,19 @@ class AvatarStorage(metaclass=Singleton):
     def __init__(self):
         self._cache: AvatarCacheT = defaultdict(dict)
 
-    def invalidate_cache(self, jid: Union[JID, str]) -> None:
+    def invalidate_cache(self, jid: JID | str) -> None:
         self._cache.pop(jid, None)
 
     def get_pixbuf(self,
-                   contact: Union[types.BareContact,
-                                  types.GroupchatContact,
-                                  types.GroupchatParticipant],
+                   contact: (types.BareContact |
+                             types.GroupchatContact |
+                             types.GroupchatParticipant),
                    size: int,
                    scale: int,
-                   show: Optional[str] = None,
+                   show: str | None = None,
                    default: bool = False,
-                   transport_icon: Optional[str] = None,
-                   style: str = 'circle') -> Optional[GdkPixbuf.Pixbuf]:
+                   transport_icon: str | None = None,
+                   style: str = 'circle') -> GdkPixbuf.Pixbuf | None:
 
         surface = self.get_surface(
             contact, size, scale, show, default, transport_icon, style)
@@ -370,14 +367,14 @@ class AvatarStorage(metaclass=Singleton):
                                            size * scale)
 
     def get_surface(self,
-                    contact: Union[types.BareContact,
-                                   types.GroupchatContact,
-                                   types.GroupchatParticipant],
+                    contact: (types.BareContact |
+                              types.GroupchatContact |
+                              types.GroupchatParticipant),
                     size: int,
                     scale: int,
-                    show: Optional[str] = None,
+                    show: str | None = None,
                     default: bool = False,
-                    transport_icon: Optional[str] = None,
+                    transport_icon: str | None = None,
                     style: str = 'circle') -> cairo.ImageSurface:
 
         jid = contact.jid
@@ -418,8 +415,8 @@ class AvatarStorage(metaclass=Singleton):
                         size: int,
                         scale: int,
                         default: bool = False,
-                        transport_icon: Optional[str] = None,
-                        style: str = 'circle') -> Optional[cairo.ImageSurface]:
+                        transport_icon: str | None = None,
+                        style: str = 'circle') -> cairo.ImageSurface | None:
 
         if transport_icon is not None:
             surface = load_icon_surface(transport_icon, size, scale)
@@ -457,7 +454,7 @@ class AvatarStorage(metaclass=Singleton):
     def get_workspace_surface(self,
                               workspace_id: str,
                               size: int,
-                              scale: int) -> Optional[cairo.ImageSurface]:
+                              scale: int) -> cairo.ImageSurface | None:
 
         surface = self._cache[workspace_id].get((size, scale, None))
         if surface is not None:
@@ -483,7 +480,7 @@ class AvatarStorage(metaclass=Singleton):
         return surface
 
     @staticmethod
-    def _load_for_publish(path: str) -> Optional[tuple[bool, bytes]]:
+    def _load_for_publish(path: str) -> tuple[bool, bytes] | None:
         pixbuf = load_pixbuf(path)
         if pixbuf is None:
             return None
@@ -501,7 +498,7 @@ class AvatarStorage(metaclass=Singleton):
         return pixbuf.save_to_bufferv('png', [], [])
 
     @staticmethod
-    def save_avatar(data: bytes) -> Optional[str]:
+    def save_avatar(data: bytes) -> str | None:
         '''
         Save an avatar to the harddisk
 
@@ -521,7 +518,7 @@ class AvatarStorage(metaclass=Singleton):
         return sha
 
     @staticmethod
-    def get_avatar_path(filename: str) -> Optional[Path]:
+    def get_avatar_path(filename: str) -> Path | None:
         path = configpaths.get('AVATAR') / filename
         if not path.is_file():
             return None
@@ -533,7 +530,7 @@ class AvatarStorage(metaclass=Singleton):
     def surface_from_filename(self,
                               filename: str,
                               size: int,
-                              scale: int) -> Optional[cairo.ImageSurface]:
+                              scale: int) -> cairo.ImageSurface | None:
 
         size = size * scale
         path = self.get_avatar_path(filename)
@@ -550,7 +547,7 @@ class AvatarStorage(metaclass=Singleton):
     def _load_surface_from_storage(self,
                                    filename: str,
                                    size: int,
-                                   scale: int) -> Optional[cairo.ImageSurface]:
+                                   scale: int) -> cairo.ImageSurface | None:
 
         size = size * scale
         path = self.get_avatar_path(filename)
@@ -564,12 +561,12 @@ class AvatarStorage(metaclass=Singleton):
         return fit(surface, size)
 
     def _get_avatar_from_storage(self,
-                                 contact: Union[types.BareContact,
-                                                types.GroupchatContact,
-                                                types.GroupchatParticipant],
+                                 contact: (types.BareContact |
+                                           types.GroupchatContact |
+                                           types.GroupchatParticipant),
                                  size: int,
                                  scale: int,
-                                 style: str) -> Optional[cairo.ImageSurface]:
+                                 style: str) -> cairo.ImageSurface | None:
 
         avatar_sha = contact.avatar_sha
         if avatar_sha is None:

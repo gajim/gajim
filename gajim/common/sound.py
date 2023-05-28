@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import sys
@@ -97,7 +96,7 @@ class PlatformMacOS(PlaySound):
 class PlatformUnix(PlaySound):
 
     def __init__(self) -> None:
-        self._cancellable: Optional[Gio.Cancellable] = None
+        self._cancellable: Gio.Cancellable | None = None
 
     def play(self, path: Path, loop: bool = False) -> None:
         if not app.is_installed('GSOUND'):

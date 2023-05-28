@@ -15,7 +15,6 @@
 from typing import Any
 from typing import Callable
 from typing import NoReturn
-from typing import Optional
 
 import argparse
 import io
@@ -248,7 +247,7 @@ class ChatCommands(Observable):
     def _change_affiliation(self,
                             nick_or_address: str,
                             affiliation: str,
-                            reason: Optional[str]) -> None:
+                            reason: str | None) -> None:
 
         contact = self._check_if_joined()
 
@@ -285,7 +284,7 @@ class ChatCommands(Observable):
     def _affiliate_command(self, args: Any) -> None:
         self._change_affiliation(args.who, args.affiliation, None)
 
-    def _change_role(self, nick: str, role: str, reason: Optional[str]) -> None:
+    def _change_role(self, nick: str, role: str, reason: str | None) -> None:
 
         contact = self._check_if_joined()
 

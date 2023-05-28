@@ -18,8 +18,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import locale
 import logging
@@ -67,7 +65,7 @@ TRUST_DATA = {
 class OMEMOTrustManager(Gtk.Box, EventHelper):
     def __init__(self,
                  account: str,
-                 contact: Optional[types.ChatContactT] = None
+                 contact: types.ChatContactT | None = None
                  ) -> None:
 
         Gtk.Box.__init__(self)
@@ -153,7 +151,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         app.check_finalize(self)
 
     def _on_account_state(self,
-                          event: Union[AccountConnected, AccountDisconnected]
+                          event: AccountConnected | AccountDisconnected
                           ) -> None:
 
         if not app.account_is_connected(self._account):
@@ -402,7 +400,7 @@ class MenuOption(Gtk.ListBoxRow):
                  icon: str,
                  label_text: str,
                  color: str,
-                 type_: Optional[OMEMOTrust] = None
+                 type_: OMEMOTrust | None = None
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)

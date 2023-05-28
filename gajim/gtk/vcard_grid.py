@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 
 import datetime
 
@@ -159,7 +158,7 @@ class VCardGrid(Gtk.Grid):
 
         self._account = account
         self._row_count: int = 0
-        self._vcard: Optional[VCard] = None
+        self._vcard: VCard | None = None
         self._props = []
 
     def set_editable(self, enabled: bool) -> None:
@@ -177,7 +176,7 @@ class VCardGrid(Gtk.Grid):
 
                 self.add_property(prop)
 
-    def get_vcard(self) -> Optional[VCard]:
+    def get_vcard(self) -> VCard | None:
         return self._vcard
 
     def validate(self) -> None:
@@ -237,7 +236,7 @@ class ValueLabel(Gtk.Label):
     def __init__(self, prop, account):
         Gtk.Label.__init__(self)
         self._prop = prop
-        self._uri: Optional[URI] = None
+        self._uri: URI | None = None
         self._account = account
         self.set_selectable(True)
         self.set_xalign(0)
@@ -559,7 +558,7 @@ class VCardProperty:
             self._second_column.extend([self._type_combobox, self._type_image])
 
     @staticmethod
-    def _get_icon_name(type_: str) -> Optional[str]:
+    def _get_icon_name(type_: str) -> str | None:
         if type_ == 'home':
             return 'feather-home'
         if type_ == 'work':

@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 import time
 from datetime import datetime
@@ -32,9 +31,9 @@ class MUCJoinLeft(BaseRow):
                  type_: str,
                  account: str,
                  nick: str,
-                 reason: Optional[str] = None,
+                 reason: str | None = None,
                  error: bool = False,
-                 timestamp: Optional[float] = None
+                 timestamp: float | None = None
                  ) -> None:
 
         BaseRow.__init__(self, account)
@@ -74,7 +73,7 @@ class MUCJoinLeft(BaseRow):
         self.show_all()
 
     @staticmethod
-    def _make_left_message(nick: str, reason: Optional[str],
+    def _make_left_message(nick: str, reason: str | None,
                            error: bool) -> str:
         reason = '' if reason is None else f': {reason}'
 

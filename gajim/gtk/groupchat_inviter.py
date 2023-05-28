@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import locale
 
@@ -41,7 +40,7 @@ from gajim.gtk.util import AccountBadge
 class ContactRow(Gtk.ListBoxRow):
     def __init__(self,
                  account: str,
-                 contact: Optional[types.BareContact],
+                 contact: types.BareContact | None,
                  jid: str,
                  name: str,
                  show_account: bool
@@ -101,7 +100,7 @@ class ContactRow(Gtk.ListBoxRow):
         self.show_all()
 
     def _get_avatar_image(self,
-                          contact: Optional[types.BareContact]
+                          contact: types.BareContact | None
                           ) -> Gtk.Image:
         if contact is None:
             icon_name = 'avatar-default'
@@ -145,7 +144,7 @@ class GroupChatInviter(Gtk.Box):
         self._room_jid = room_jid
 
         self._new_contact_row_visible = False
-        self._new_contact_rows: dict[str, Optional[ContactRow]] = {}
+        self._new_contact_rows: dict[str, ContactRow | None] = {}
         self._accounts: list[list[str]] = []
 
         self._ui.search_entry.connect(
@@ -338,7 +337,7 @@ class GroupChatInviter(Gtk.Box):
 
     def _filter_func(self,
                      row: ContactRow,
-                     _user_data: Optional[Any]
+                     _user_data: Any | None
                      ) -> bool:
         search_text = self._ui.search_entry.get_text().lower()
         search_text_list = search_text.split()
@@ -353,7 +352,7 @@ class GroupChatInviter(Gtk.Box):
     @staticmethod
     def _sort_func(row1: ContactRow,
                    row2: ContactRow,
-                   _user_data: Optional[Any]
+                   _user_data: Any | None
                    ) -> int:
         name1 = row1.get_search_text()
         name2 = row2.get_search_text()

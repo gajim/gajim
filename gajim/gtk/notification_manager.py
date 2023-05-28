@@ -17,8 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
-from typing import Union
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -42,7 +40,7 @@ from gajim.gtk.util import open_window
 NotificationActionListT = list[
     tuple[str,
           Callable[[Gio.SimpleAction, GLib.Variant], Any],
-          Optional[str]]]
+          str | None]]
 
 
 class NotificationManager(Gtk.ListBox):
@@ -189,7 +187,7 @@ class NotificationManager(Gtk.ListBox):
     def _deny_request(self, jid: str) -> None:
         self._client.get_module('Presence').unsubscribed(jid)
 
-    def _get_notification_row(self, jid: str) -> Optional[NotificationRow]:
+    def _get_notification_row(self, jid: str) -> NotificationRow | None:
         rows = cast(list[NotificationRow], self.get_children())
         for row in rows:
             if row.jid == jid:
@@ -310,7 +308,7 @@ class NotificationRow(Gtk.ListBoxRow):
         label.set_max_width_chars(30)
         return label
 
-    def _generate_avatar_image(self, jid: Union[str, JID]) -> Gtk.Image:
+    def _generate_avatar_image(self, jid: str | JID) -> Gtk.Image:
         contact = self._client.get_module('Contacts').get_contact(jid)
         surface = contact.get_avatar(
             AvatarSize.ROSTER, self.get_scale_factor(), add_show=False)
@@ -324,7 +322,7 @@ class SubscriptionRequestRow(NotificationRow):
                  account: str,
                  jid: str,
                  text: str,
-                 user_nick: Optional[str] = None
+                 user_nick: str | None = None
                  ) -> None:
         NotificationRow.__init__(self, account, jid)
         self.type = 'subscribe'

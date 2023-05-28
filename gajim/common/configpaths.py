@@ -23,8 +23,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import Generator
-from typing import Optional
-from typing import Union
 
 import importlib.resources
 import os
@@ -39,7 +37,7 @@ from gajim.common.const import PathLocation
 from gajim.common.const import PathType
 from gajim.common.i18n import _
 
-PathTupleT = tuple[Optional[PathLocation], Path, Optional[PathType]]
+PathTupleT = tuple[PathLocation | None, Path, PathType | None]
 
 
 def get(key: str) -> Path:
@@ -103,7 +101,7 @@ class ConfigPaths:
         self._paths: dict[str, PathTupleT] = {}
         self.profile = ''
         self.profile_separation = False
-        self.custom_config_root: Optional[Path] = None
+        self.custom_config_root: Path | None = None
 
         if os.name == 'nt':
             if gajim.IS_PORTABLE:
@@ -156,9 +154,9 @@ class ConfigPaths:
 
     def add(self,
             name: str,
-            path: Union[Path, str],
-            location: Optional[PathLocation] = None,
-            path_type: Optional[PathType] = None,
+            path: Path | str,
+            location: PathLocation | None = None,
+            path_type: PathType | None = None,
             unique: bool = False) -> None:
 
         path = Path(path)

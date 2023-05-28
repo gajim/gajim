@@ -16,8 +16,6 @@
 
 from __future__ import annotations
 
-from typing import Union
-
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
@@ -50,8 +48,8 @@ class HTTPAuth(BaseModule):
 
     def _http_auth(self,
                    _con: types.xmppClient,
-                   stanza: Union[Iq, Message],
-                   properties: Union[IqProperties, MessageProperties]
+                   stanza: Iq | Message,
+                   properties: IqProperties | MessageProperties
                    ) -> None:
         if not properties.is_http_auth:
             return
@@ -70,7 +68,7 @@ class HTTPAuth(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def build_http_auth_answer(self,
-                               stanza: Union[Iq, Message],
+                               stanza: Iq | Message,
                                answer: str
                                ) -> None:
         if answer == 'yes':

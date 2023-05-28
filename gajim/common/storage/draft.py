@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from gajim.common import types
 from gajim.common.helpers import Observable
 
@@ -34,7 +32,7 @@ class DraftStorage(Observable):
         self._drafts[contact] = text
         self.notify('draft-update', contact, text)
 
-    def get(self, contact: types.ChatContactT) -> Optional[str]:
+    def get(self, contact: types.ChatContactT) -> str | None:
         return self._drafts.get(contact)
 
     def remove(self, contact: types.ChatContactT) -> None:

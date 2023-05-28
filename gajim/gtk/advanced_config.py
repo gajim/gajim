@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 from enum import IntEnum
 from enum import unique
@@ -128,7 +127,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                                     cell: Gtk.CellRenderer,
                                     model: Gtk.TreeModel,
                                     iter_: Gtk.TreeIter,
-                                    _data: Optional[object]
+                                    _data: object | None
                                     ) -> None:
 
         opt_is_default = model[iter_][Column.IS_DEFAULT]
@@ -139,7 +138,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                                     cell: Gtk.CellRenderer,
                                     model: Gtk.TreeModel,
                                     iter_: Gtk.TreeIter,
-                                    _data: Optional[object]
+                                    _data: object | None
                                     ) -> None:
 
         opt_type = model[iter_][Column.TYPE]
@@ -259,7 +258,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
     def _visible_func(self,
                       model: Gtk.TreeModel,
                       treeiter: Gtk.TreeIter,
-                      _data: Optional[object]
+                      _data: object | None
                       ) -> bool:
         search_string = self._ui.search_entry.get_text().lower()
         if not search_string:

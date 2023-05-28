@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import hashlib
 import logging
@@ -127,7 +126,7 @@ class BitsOfBinary(BaseModule):
             iq, self._on_bob_received, {'cid': cid})
 
 
-def parse_bob_data(stanza: Iq) -> Optional[Path]:
+def parse_bob_data(stanza: Iq) -> Path | None:
     data_node = stanza.getTag('data', namespace=Namespace.BOB)
     if data_node is None:
         return None
@@ -201,7 +200,7 @@ def parse_bob_data(stanza: Iq) -> Optional[Path]:
     return filepath
 
 
-def store_bob_data(bob_data: Optional[BobData]) -> Optional[Path]:
+def store_bob_data(bob_data: BobData | None) -> Path | None:
     if bob_data is None:
         return None
 

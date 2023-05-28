@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -134,7 +133,7 @@ class ChatMarkers(BaseModule):
     def send_displayed_marker(self,
                               contact: types.ChatContactT,
                               message_id: str,
-                              stanza_id: Optional[str]) -> None:
+                              stanza_id: str | None) -> None:
 
         if not self._is_sending_marker_allowed(contact):
             return
@@ -145,7 +144,7 @@ class ChatMarkers(BaseModule):
     @staticmethod
     def _determine_marker_id(contact: types.ChatContactT,
                              message_id: str,
-                             stanza_id: Optional[str]
+                             stanza_id: str | None
                              ) -> str:
 
         if stanza_id is None:

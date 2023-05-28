@@ -20,7 +20,6 @@ from __future__ import annotations
 from typing import Callable
 from typing import cast
 from typing import Iterator
-from typing import Optional
 
 import textwrap
 from datetime import datetime
@@ -655,7 +654,7 @@ def get_groupchat_participant_menu(account: str,
     return menu
 
 
-def get_component_search_menu(jid: Optional[str], copy_text: str) -> GajimMenu:
+def get_component_search_menu(jid: str | None, copy_text: str) -> GajimMenu:
     menuitems: MenuItemListT = [
         (_('Copy'), 'app.copy-text', copy_text),
     ]
@@ -672,9 +671,9 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       name: str,
                       text: str,
                       timestamp: datetime,
-                      message_id: Optional[str],
-                      stanza_id: Optional[str],
-                      log_line_id: Optional[int]
+                      message_id: str | None,
+                      stanza_id: str | None,
+                      log_line_id: int | None
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -806,7 +805,7 @@ def get_workspace_menu(workspace_id: str) -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
-def escape_mnemonic(label: Optional[str]) -> Optional[str]:
+def escape_mnemonic(label: str | None) -> str | None:
     if label is None:
         return None
     # Underscore inside a label means the next letter is a keyboard

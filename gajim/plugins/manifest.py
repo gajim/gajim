@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import json
 import sys
@@ -52,7 +51,7 @@ class PluginManifest:
     version: V
     requirements: list[Requirement]
     platforms: list[str]
-    path: Optional[Path] = None
+    path: Path | None = None
 
     def __hash__(self):
         return hash(f'{self.short_name}_{self.version}')
@@ -105,7 +104,7 @@ class PluginManifest:
     @classmethod
     def from_manifest_json(cls,
                            manifest: dict[str, Any],
-                           path: Optional[Path] = None) -> PluginManifest:
+                           path: Path | None = None) -> PluginManifest:
         return cls(
             name=manifest['name'],
             short_name=manifest['short_name'],

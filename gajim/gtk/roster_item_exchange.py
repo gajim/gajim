@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
@@ -34,7 +33,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                  action: str,
                  exchange_list: dict[str, list[str]],
                  jid_from: JID,
-                 message_body: Optional[str] = None
+                 message_body: str | None = None
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)

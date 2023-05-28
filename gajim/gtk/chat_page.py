@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
-from typing import Optional
 from typing import TYPE_CHECKING
 
 import logging
@@ -227,7 +226,7 @@ class ChatPage(Gtk.Box):
                                pinned: bool = False,
                                position: int = -1,
                                select: bool = False,
-                               message: Optional[str] = None) -> None:
+                               message: str | None = None) -> None:
 
         client = app.get_client(account)
 

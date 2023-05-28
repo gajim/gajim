@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import time
 
@@ -248,7 +247,7 @@ class Message(BaseModule):
                          message_id=properties.id,
                          error=properties.error))
 
-    def _log_muc_message(self, event: GcMessageReceived) -> Optional[int]:
+    def _log_muc_message(self, event: GcMessageReceived) -> int | None:
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
         if event.msgtxt and event.properties.muc_nickname:
@@ -273,7 +272,7 @@ class Message(BaseModule):
 
     def _get_unique_id(self,
                        properties: MessageProperties
-                       ) -> tuple[Optional[str], Optional[str]]:
+                       ) -> tuple[str | None, str | None]:
         if properties.is_self_message:
             # Deduplicate self message with message-id
             return None, properties.id
@@ -376,7 +375,7 @@ class Message(BaseModule):
 
         return stanza
 
-    def log_message(self, message: OutgoingMessage) -> Optional[int]:
+    def log_message(self, message: OutgoingMessage) -> int | None:
         if not message.is_loggable:
             return None
 

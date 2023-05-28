@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 
@@ -50,7 +48,7 @@ log = logging.getLogger('gajim.gtk.adhoc')
 
 
 class AdHocCommands(Assistant):
-    def __init__(self, account: str, jid: Optional[str] = None) -> None:
+    def __init__(self, account: str, jid: str | None = None) -> None:
         Assistant.__init__(self, width=600, height=500)
         self.account = account
         self.jid = jid
@@ -91,7 +89,7 @@ class AdHocCommands(Assistant):
     @ensure_not_destroyed
     def _received_command_list(self, task: Task) -> None:
         try:
-            commands = cast(Optional[list[AdHocCommand]], task.finish())
+            commands = cast(list[AdHocCommand] | None, task.finish())
         except (StanzaError, MalformedStanzaError) as error:
             self._set_error(to_user_string(error), False)
             return
@@ -116,7 +114,7 @@ class AdHocCommands(Assistant):
         if stage.is_completed:
             page_name = 'completed'
 
-        page = cast(Union[Stage, Completed], self.get_page(page_name))
+        page = cast(Stage | Completed, self.get_page(page_name))
         page.process_stage(stage)
         self.show_page(page_name)
 
@@ -247,7 +245,7 @@ class Commands(Page):
             self._commands[key] = command
             self._store.append((command.name, key))
 
-    def get_selected_command(self) -> Optional[AdHocCommand]:
+    def get_selected_command(self) -> AdHocCommand | None:
         model, treeiter = self._treeview.get_selection().get_selected()
         if treeiter is None:
             return None
@@ -268,19 +266,19 @@ class Stage(Page):
 
         self._dataform_widget = None
         self._notes: list[Gtk.Label] = []
-        self._last_stage_data: Optional[AdHocCommand] = None
+        self._last_stage_data: AdHocCommand | None = None
         self.default = None
         self.show_all()
 
     @property
     def stage_data(self) -> tuple[AdHocCommand,
-                                  Union[SimpleDataForm, MultipleDataForm]]:
+                                  SimpleDataForm | MultipleDataForm]:
         assert self._last_stage_data is not None
         assert self._dataform_widget is not None
         return self._last_stage_data, self._dataform_widget.get_submit_form()
 
     @property
-    def actions(self) -> Optional[set[AdHocAction]]:
+    def actions(self) -> set[AdHocAction] | None:
         assert self._last_stage_data is not None
         return self._last_stage_data.actions
 
@@ -295,7 +293,7 @@ class Stage(Page):
         self._show_form(stage_data.data)
         self.default = stage_data.default
 
-    def _show_form(self, form: Optional[Node]) -> None:
+    def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
             self._dataform_widget.destroy()
@@ -309,7 +307,7 @@ class Stage(Page):
         self._dataform_widget.show_all()
         self.add(self._dataform_widget)
 
-    def _show_notes(self, notes: Optional[list[AdHocCommandNote]]):
+    def _show_notes(self, notes: list[AdHocCommandNote] | None):
         for note in self._notes:
             self.remove(note)
         self._notes = []
@@ -375,7 +373,7 @@ class Completed(Page):
             self.set_valign(Gtk.Align.FILL)
             self._icon_text.hide()
 
-    def _show_form(self, form: Optional[Node]) -> None:
+    def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
             self._dataform_widget.destroy()

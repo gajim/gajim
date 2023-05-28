@@ -19,7 +19,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import socket
@@ -75,10 +74,10 @@ class JingleTransport:
         self.candidates: list[dict[str, Any]] = []
         self.remote_candidates: list[dict[str, Any]] = []
 
-        self.connection: Optional[Client] = None
-        self.file_props: Optional[FileProp] = None
-        self.ourjid: Optional[str] = None
-        self.sid: Optional[str] = None
+        self.connection: Client | None = None
+        self.file_props: FileProp | None = None
+        self.ourjid: str | None = None
+        self.sid: str | None = None
 
     def _iter_candidates(self):
         for candidate in self.candidates:
@@ -90,7 +89,7 @@ class JingleTransport:
         '''
 
     def make_transport(self,
-                       candidates: Optional[list[dict[str, Any]]] = None
+                       candidates: list[dict[str, Any]] | None = None
                        ) -> nbxmpp.Node:
         '''
         Build a transport stanza with the given candidates (or self.candidates
@@ -130,11 +129,11 @@ class JingleTransportSocks5(JingleTransport):
     Socks5 transport in jingle scenario
     Note: Don't forget to call set_file_props after initialization
     '''
-    def __init__(self, node: Optional[nbxmpp.Node] = None) -> None:
+    def __init__(self, node: nbxmpp.Node | None = None) -> None:
         JingleTransport.__init__(self, TransportType.SOCKS5)
         self.connection = None
         self.remote_candidates: list[dict[str, Any]] = []
-        self.sid: Optional[str] = None
+        self.sid: str | None = None
         if node and node.getAttr('sid'):
             self.sid = node.getAttr('sid')
 
@@ -152,7 +151,7 @@ class JingleTransportSocks5(JingleTransport):
         return nbxmpp.Node('candidate', attrs=attrs)
 
     def make_transport(self,
-                       candidates: Optional[list[dict[str, Any]]] = None,
+                       candidates: list[dict[str, Any]] | None = None,
                        add_candidates: bool = True
                        ) -> nbxmpp.Node:
         if add_candidates:
@@ -211,7 +210,7 @@ class JingleTransportSocks5(JingleTransport):
         type_preference = 126
         priority = (2**16) * type_preference
 
-        hosts: set[Optional[str]] = set()
+        hosts: set[str | None] = set()
         local_ip_cand: list[dict[str, Any]] = []
 
         my_ip = self.connection.local_address
@@ -353,7 +352,7 @@ class JingleTransportSocks5(JingleTransport):
 
         self._add_candidates(proxy_cand)
 
-    def get_content(self) -> Optional[JingleContent]:
+    def get_content(self) -> JingleContent | None:
         sesn = self.connection.get_module('Jingle').get_jingle_session(
             self.ourjid, self.file_props.sid)
         for content in sesn.contents.values():
@@ -411,8 +410,8 @@ class JingleTransportSocks5(JingleTransport):
 class JingleTransportIBB(JingleTransport):
 
     def __init__(self,
-                 node: Optional[nbxmpp.Node] = None,
-                 block_sz: Optional[str] = None
+                 node: nbxmpp.Node | None = None,
+                 block_sz: str | None = None
                  ) -> None:
 
         JingleTransport.__init__(self, TransportType.IBB)
@@ -423,7 +422,7 @@ class JingleTransportIBB(JingleTransport):
             self.block_sz = '4096'
 
         self.connection = None
-        self.sid: Optional[str] = None
+        self.sid: str | None = None
         if node and node.getAttr('sid'):
             self.sid = node.getAttr('sid')
 
@@ -436,7 +435,7 @@ class JingleTransportIBB(JingleTransport):
 
 
 class JingleTransportICEUDP(JingleTransport):
-    def __init__(self, node: Optional[nbxmpp.Node]) -> None:
+    def __init__(self, node: nbxmpp.Node | None) -> None:
         JingleTransport.__init__(self, TransportType.ICEUDP)
 
     def make_candidate(self, candidate) -> nbxmpp.Node:
@@ -467,7 +466,7 @@ class JingleTransportICEUDP(JingleTransport):
         return nbxmpp.Node('candidate', attrs=attrs)
 
     def make_transport(self,
-                       candidates: Optional[list[dict[str, Any]]] = None
+                       candidates: list[dict[str, Any]] | None = None
                        ) -> nbxmpp.Node:
         transport = JingleTransport.make_transport(self, candidates)
         transport.setNamespace(Namespace.JINGLE_ICE_UDP)

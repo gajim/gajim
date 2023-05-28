@@ -19,7 +19,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import NamedTuple
-from typing import Optional
 
 import sqlite3
 import time
@@ -42,7 +41,7 @@ from gajim.common import app
 from gajim.common.modules.util import LogAdapter
 
 
-def _convert_identity_key(key: bytes) -> Optional[IdentityKey]:
+def _convert_identity_key(key: bytes) -> IdentityKey | None:
     if not key:
         return
     return IdentityKey(CurvePublicKey(key[1:]))
@@ -423,7 +422,7 @@ class OMEMOStorage(Store):
         result = self._con.execute(query, (recipient_id, device_id)).fetchone()
         return result.record if result is not None else SessionRecord()
 
-    def get_jid_from_device(self, device_id: int) -> Optional[str]:
+    def get_jid_from_device(self, device_id: int) -> str | None:
         query = '''SELECT recipient_id
                    FROM sessions WHERE device_id = ?'''
         result = self._con.execute(query, (device_id, )).fetchone()
@@ -584,7 +583,7 @@ class OMEMOStorage(Store):
         self._con.execute(query, (pre_key_id,))
         self._con.commit()
 
-    def get_current_pre_key_id(self) -> Optional[int]:
+    def get_current_pre_key_id(self) -> int | None:
         query = 'SELECT MAX(prekey_id) FROM prekeys'
         result = self._con.execute(query).fetchone()
         return result.max_prekey_id if result is not None else None
@@ -678,7 +677,7 @@ class OMEMOStorage(Store):
     def get_trust_for_identity(self,
                                recipient_id: str,
                                identity_key: IdentityKey
-                               ) -> Optional[OMEMOTrust]:
+                               ) -> OMEMOTrust | None:
 
         query = '''SELECT trust FROM identities WHERE recipient_id = ?
                    AND public_key = ?'''
@@ -742,7 +741,7 @@ class OMEMOStorage(Store):
     def get_identity_last_seen(self,
                                recipient_id: str,
                                identity_key: IdentityKey
-                               ) -> Optional[int]:
+                               ) -> int | None:
 
         serialized = identity_key.get_public_key().serialize()
         query = '''SELECT timestamp FROM identities

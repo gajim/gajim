@@ -15,7 +15,6 @@
 from typing import Any
 from typing import cast
 from typing import Iterable
-from typing import Optional
 
 import json
 import logging
@@ -146,7 +145,7 @@ class PluginRepository(Observable):
 
         return suitable_plugins
 
-    def _refresh_plugin_index(self, callback: Optional[Any] = None) -> None:
+    def _refresh_plugin_index(self, callback: Any | None = None) -> None:
         log.info('Refresh index')
         request = create_http_request()
         request.set_user_data(callback)

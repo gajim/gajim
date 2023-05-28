@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Generator
-from typing import Optional
 
 from nbxmpp.modules.user_avatar import AvatarData
 from nbxmpp.modules.util import is_error
@@ -91,7 +90,7 @@ class UserAvatar(BaseModule):
     def _request_avatar_data(self,
                              contact: types.ChatContactT,
                              sha: str
-                             ) -> Generator[Optional[AvatarData], None, None]:
+                             ) -> Generator[AvatarData | None, None, None]:
 
         self._log.info('Request: %s %s', contact.jid, sha)
 

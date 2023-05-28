@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
 from typing import TypeVar
 
 import json
@@ -156,7 +155,7 @@ class SqliteStorage:
 
     def __init__(self,
                  log: logging.Logger,
-                 path: Optional[Path],
+                 path: Path | None,
                  create_statement: str,
                  commit_delay: int = 500
                  ) -> None:

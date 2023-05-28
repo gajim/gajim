@@ -16,8 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 
@@ -48,15 +46,15 @@ log = logging.getLogger('gajim.gtk.add_contact')
 
 class AddContact(Assistant):
     def __init__(self,
-                 account: Optional[str] = None,
-                 jid: Optional[JID] = None,
-                 nick: Optional[str] = None):
+                 account: str | None = None,
+                 jid: JID | None = None,
+                 nick: str | None = None):
         Assistant.__init__(self)
         self.account = account
         self.jid = jid
         self._nick = nick
 
-        self._result: Union[DiscoInfo, StanzaError, None] = None
+        self._result: DiscoInfo | StanzaError | None = None
 
         self.add_button('next', _('Next'), complete=True,
                         css_class='suggested-action')
@@ -221,7 +219,7 @@ class AddContact(Assistant):
 
 
 class Address(Page):
-    def __init__(self, account: Optional[str], jid: Optional[JID]) -> None:
+    def __init__(self, account: str | None, jid: JID | None) -> None:
         Page.__init__(self)
         self.title = _('Add Contact')
 
@@ -349,9 +347,9 @@ class Contact(Page):
         Page.__init__(self)
         self.title = _('Add Contact')
 
-        self._result: Union[DiscoInfo, BaseError, None] = None
-        self._account: Optional[str] = None
-        self._contact: Optional[types.BareContact] = None
+        self._result: DiscoInfo | BaseError | None = None
+        self._account: str | None = None
+        self._contact: types.BareContact | None = None
 
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.contact_grid)
@@ -366,7 +364,7 @@ class Contact(Page):
     def get_default_button(self) -> str:
         return 'add'
 
-    def prepare(self, account: str, result: Union[DiscoInfo, StanzaError]):
+    def prepare(self, account: str, result: DiscoInfo | StanzaError):
         self._result = result
         self._account = account
 
@@ -389,7 +387,7 @@ class Contact(Page):
         open_window(
             'ContactInfo', account=self._account, contact=self._contact)
 
-    def get_subscription_data(self) -> dict[str, Union[str, list[str], bool]]:
+    def get_subscription_data(self) -> dict[str, str | list[str] | bool]:
         group = self._ui.group_combo.get_child().get_text()
         groups = [group] if group else []
         return {
@@ -404,8 +402,8 @@ class Gateway(Page):
         Page.__init__(self)
         self.title = _('Service Gateway')
 
-        self._account: Optional[str] = None
-        self._result: Optional[DiscoInfo] = None
+        self._account: str | None = None
+        self._result: DiscoInfo | None = None
 
         self._ui = get_builder('add_contact.ui')
         self.add(self._ui.gateway_box)
@@ -492,7 +490,7 @@ class GroupChat(Page):
         Page.__init__(self)
         self.title = _('Join Group Chat?')
 
-        self._result: Optional[DiscoInfo] = None
+        self._result: DiscoInfo | None = None
 
         heading = Gtk.Label(label=_('Join Group Chat?'))
         heading.get_style_context().add_class('large-header')

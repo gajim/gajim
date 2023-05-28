@@ -18,8 +18,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 from gi.repository import GLib
 from nbxmpp.namespaces import Namespace
@@ -197,7 +195,7 @@ class Bookmarks(BaseModule):
         return set_
 
     @staticmethod
-    def _convert_to_dict(bookmarks: Optional[list[BookmarkData]]
+    def _convert_to_dict(bookmarks: list[BookmarkData] | None
                          ) -> types.BookmarksDict:
         _dict: types.BookmarksDict = {}
         if not bookmarks:
@@ -207,7 +205,7 @@ class Bookmarks(BaseModule):
             _dict[bookmark.jid] = bookmark
         return _dict
 
-    def get_bookmark(self, jid: Union[str, JID]) -> Optional[BookmarkData]:
+    def get_bookmark(self, jid: str | JID) -> BookmarkData | None:
         return self._bookmarks.get(cast(JID, jid))
 
     def request_bookmarks(self) -> None:
@@ -302,13 +300,13 @@ class Bookmarks(BaseModule):
             else:
                 self.store_bookmarks(self.bookmarks)
 
-    def get_name_from_bookmark(self, jid: Union[str, JID]) -> Optional[str]:
+    def get_name_from_bookmark(self, jid: str | JID) -> str | None:
         bookmark = self._bookmarks.get(cast(JID, jid))
         if bookmark is None:
             return bookmark
         return bookmark.name
 
-    def is_bookmark(self, jid: Union[str, JID]) -> bool:
+    def is_bookmark(self, jid: str | JID) -> bool:
         return jid in self._bookmarks
 
     def _remove_timeouts(self) -> None:

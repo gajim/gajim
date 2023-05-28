@@ -14,9 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import logging
 import sys
 import time
@@ -67,7 +64,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.set_vexpand(True)
         self.set_hexpand(True)
 
-        self._current_contact: Optional[ChatContactT] = None
+        self._current_contact: ChatContactT | None = None
 
         self.add_named(ChatPlaceholderBox(), 'empty')
 
@@ -349,10 +346,10 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self._update_group_chat_actions(self._current_contact)
 
-    def _on_account_state(self,
-                          event: Union[events.AccountConnected,
-                                       events.AccountDisconnected]
-                          ) -> None:
+    def _on_account_state(
+        self,
+        event: events.AccountConnected | events.AccountDisconnected
+    ) -> None:
 
         if self._current_contact is None:
             return
@@ -410,7 +407,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                 _icon, file_type = preview_helpers.guess_simple_file_type(text)
                 text = f'{file_type} ({file_name})'
 
-        sound: Optional[str] = None
+        sound: str | None = None
         msg_type = 'chat-message'
         if isinstance(contact, BareContact):
             msg_type = 'chat-message'
@@ -554,7 +551,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def _on_action(self,
                    action: Gio.SimpleAction,
-                   param: Optional[GLib.Variant]) -> None:
+                   param: GLib.Variant | None) -> None:
 
         action_name = action.get_name()
         contact = self._current_contact
@@ -697,8 +694,8 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def _show_chat_function_page(self,
                                  function_mode: FunctionMode,
-                                 data: Optional[str] = None,
-                                 files: Optional[list[str]] = None
+                                 data: str | None = None,
+                                 files: list[str] | None = None
                                  ) -> None:
 
         assert self._current_contact is not None
@@ -790,7 +787,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._message_action_box.msg_textview.clear()
         app.storage.drafts.set(contact, '')
 
-    def get_last_message_id(self, contact: ChatContactT) -> Optional[str]:
+    def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._message_action_box.get_last_message_id(contact)
 
     def _close_control(self) -> None:

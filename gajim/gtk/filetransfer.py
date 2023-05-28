@@ -19,8 +19,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 import os
 import time
@@ -714,7 +712,7 @@ class FileTransfersWindow:
                             file_path: str,
                             file_name: str,
                             file_desc: str = ''
-                            ) -> Optional[FileProp]:
+                            ) -> FileProp | None:
         '''
         Create new file_props object and set initial file transfer
         properties in it

@@ -22,7 +22,6 @@ from __future__ import annotations
 from typing import Callable
 from typing import ClassVar
 from typing import Literal
-from typing import Optional
 
 
 class FilesProp:
@@ -38,7 +37,7 @@ class FilesProp:
         return fp
 
     @classmethod
-    def getFileProp(cls, account: str, sid: str) -> Optional[FileProp]:
+    def getFileProp(cls, account: str, sid: str) -> FileProp | None:
         return cls._files_props.get((account, sid))
 
     @classmethod
@@ -54,7 +53,7 @@ class FilesProp:
     def getFilePropByType(cls,
                           type_: Literal['r', 's'],
                           sid: str
-                          ) -> Optional[FileProp]:
+                          ) -> FileProp | None:
         # This method should be deleted. Getting fileprop by type and sid is not
         # unique enough. More than one fileprop might have the same type and sid
         files_prop = cls.getAllFileProp()
@@ -64,7 +63,7 @@ class FilesProp:
         return None
 
     @classmethod
-    def getFilePropBySid(cls, sid: str) -> Optional[FileProp]:
+    def getFilePropBySid(cls, sid: str) -> FileProp | None:
         # This method should be deleted. It is kept to make things compatible
         # This method should be replaced and instead get the file_props by
         # account and sid
@@ -78,7 +77,7 @@ class FilesProp:
     def getFilePropByTransportSid(cls,
                                   account: str,
                                   sid: str
-                                  ) -> Optional[FileProp]:
+                                  ) -> FileProp | None:
         files_prop = cls.getAllFileProp()
         for fp in files_prop:
             if fp.account == account and fp.transport_sid == sid:
@@ -124,38 +123,38 @@ class FileProp:
         self.proxy_sender = None
         self.proxy_receiver = None
         self.streamhost_used = None
-        self.failure_cb: Optional[Callable[[str], None]] = None
+        self.failure_cb: Callable[[str], None] | None = None
         self.disconnect_cb = None
-        self.continue_cb: Optional[Callable[..., None]] = None
-        self.sha_str: Optional[str] = None
+        self.continue_cb: Callable[..., None] | None = None
+        self.sha_str: str | None = None
         # transfer type: 's' for sending and 'r' for receiving
-        self.type_: Optional[Literal['r', 's']] = None
-        self.error: Optional[int] = None
+        self.type_: Literal['r', 's'] | None = None
+        self.error: int | None = None
         self.elapsed_time: float = 0  # Elapsed time of the file transfer
-        self.last_time: Optional[float] = None
-        self.received_len: Optional[int] = None
-        self.file_name: Optional[str] = None  # full file path
-        self.name: Optional[str] = None
-        self.date: Optional[str] = None
-        self.desc: Optional[str] = None
-        self.offset: Optional[int] = None
-        self.sender: Optional[str] = None
-        self.receiver: Optional[str] = None
-        self.tt_account: Optional[str] = None
-        self.size: Optional[int] = None
+        self.last_time: float | None = None
+        self.received_len: int | None = None
+        self.file_name: str | None = None  # full file path
+        self.name: str | None = None
+        self.date: str | None = None
+        self.desc: str | None = None
+        self.offset: int | None = None
+        self.sender: str | None = None
+        self.receiver: str | None = None
+        self.tt_account: str | None = None
+        self.size: int | None = None
         self._sid = sid
-        self.transport_sid: Optional[str] = None
+        self.transport_sid: str | None = None
         self.account = account
-        self.mime_type: Optional[str] = None
-        self.algo: Optional[str] = None
-        self.direction: Optional[Literal['<', '>']] = None
-        self.syn_id: Optional[str] = None
-        self.seq: Optional[int] = None
-        self.hash_: Optional[str] = None
-        self.fd: Optional[int] = None
+        self.mime_type: str | None = None
+        self.algo: str | None = None
+        self.direction: Literal['<', '>'] | None = None
+        self.syn_id: str | None = None
+        self.seq: int | None = None
+        self.hash_: str | None = None
+        self.fd: int | None = None
         # Type of the session, if it is 'jingle' or 'si'
-        self.session_type: Optional[str] = None
-        self.request_id: Optional[str] = None
+        self.session_type: str | None = None
+        self.request_id: str | None = None
         self.proxyhosts = None
         self.dstaddr = None
 

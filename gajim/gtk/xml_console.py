@@ -13,8 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import time
 
@@ -59,9 +57,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_name('XMLConsoleWindow')
 
         self._selected_account = 'AllAccounts'
-        self._selected_send_account: Optional[str] = None
-        self._filter_dialog: Optional[SettingsDialog] = None
-        self._last_stanza: Optional[str] = None
+        self._selected_send_account: str | None = None
+        self._filter_dialog: SettingsDialog | None = None
+        self._last_stanza: str | None = None
         self._last_search: str = ''
 
         self._presence = True
@@ -148,7 +146,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.headerbar.set_subtitle(title)
 
     def _on_account_changed(self,
-                            event: Union[AccountEnabled, AccountDisabled]
+                            event: AccountEnabled | AccountDisabled
                             ) -> None:
         buf = self._ui.protocol_view.get_buffer()
 
@@ -356,9 +354,9 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._last_search = search_str
 
     @staticmethod
-    def _get_accounts() -> list[tuple[Optional[str], str]]:
+    def _get_accounts() -> list[tuple[str | None, str]]:
         accounts = app.get_accounts_sorted()
-        combo_accounts: list[tuple[Optional[str], str]] = []
+        combo_accounts: list[tuple[str | None, str]] = []
         for account in accounts:
             label = app.get_account_label(account)
             combo_accounts.append((account, label))
@@ -481,7 +479,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._print_stanza(event, 'outgoing')
 
     def _print_stanza(self,
-                      event: Union[StanzaReceived, StanzaSent],
+                      event: StanzaReceived | StanzaSent,
                       kind: str
                       ) -> None:
         if event.account == 'AccountWizard':

@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Callable
 from typing import cast
-from typing import Optional
 
 import logging
 import math
@@ -53,7 +52,7 @@ class AudioAnalyzer:
         self._duration = Gst.CLOCK_TIME_NONE  # in ns
         self._num_channels = 1
         self._samples: list[tuple[float, float]] = []
-        self._level: Optional[Gst.Element] = None
+        self._level: Gst.Element | None = None
         self._bus_watch_id: int = 0
 
         self._setup_audio_analyzer(filepath)

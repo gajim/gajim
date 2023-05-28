@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 
 import logging
 
@@ -81,7 +80,7 @@ class CodeWidget(Gtk.Box):
         self._textview.print_code(code)
 
     @staticmethod
-    def _prepare_code(text: str) -> tuple[str, Optional[str]]:
+    def _prepare_code(text: str) -> tuple[str, str | None]:
         text = text.strip()
         code_start = text.partition('\n')[0]
         lang = None

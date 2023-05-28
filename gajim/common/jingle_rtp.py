@@ -21,7 +21,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import Iterator
-from typing import Optional
 
 import logging
 import socket
@@ -56,7 +55,7 @@ class JingleRTPContent(JingleContent):
     def __init__(self,
                  session: JingleSession,
                  media: str,
-                 transport: Optional[JingleTransport] = None
+                 transport: JingleTransport | None = None
                  ) -> None:
         if transport is None:
             transport = JingleTransportICEUDP(None)
@@ -67,17 +66,17 @@ class JingleRTPContent(JingleContent):
             'audio': Farstream.MediaType.AUDIO,
             'video': Farstream.MediaType.VIDEO}[media]
 
-        self.pipeline: Optional[Gst.Pipeline] = None
-        self.src_bin: Optional[Gst.Bin] = None
+        self.pipeline: Gst.Pipeline | None = None
+        self.src_bin: Gst.Bin | None = None
         self.stream_failed_once = False
 
         self.candidates_ready = False  # True when local candidates are prepared
 
         # TODO
-        self.conference: Optional[Farstream.Conference] = None
-        self.funnel: Optional[Gst.Element] = None
-        self.p2psession: Optional[Farstream.Session] = None
-        self.p2pstream: Optional[Farstream.Stream] = None
+        self.conference: Farstream.Conference | None = None
+        self.funnel: Gst.Element | None = None
+        self.p2psession: Farstream.Session | None = None
+        self.p2pstream: Farstream.Stream | None = None
 
         self.available_gst_plugins: list[str] = []
         gst_plugin_registry = Gst.Registry.get()
@@ -143,7 +142,7 @@ class JingleRTPContent(JingleContent):
                              config_key: str,
                              pipeline: str,
                              text: str
-                             ) -> Optional[Gst.Bin]:
+                             ) -> Gst.Bin | None:
         pipeline = pipeline % app.settings.get(config_key)
         log.debug('Pipeline: %s', str(pipeline))
         try:
@@ -288,7 +287,7 @@ class JingleRTPContent(JingleContent):
             self.pipeline.set_state(Gst.State.PLAYING)
 
     @staticmethod
-    def get_fallback_src() -> Optional[Gst.Element]:
+    def get_fallback_src() -> Gst.Element | None:
         return Gst.ElementFactory.make('fakesrc', None)
 
     def on_negotiated(self) -> None:
@@ -309,7 +308,7 @@ class JingleRTPContent(JingleContent):
     def __on_remote_codecs(self,
                            _stanza: nbxmpp.Node,
                            content: nbxmpp.Node,
-                           _error: Optional[nbxmpp.Node],
+                           _error: nbxmpp.Node | None,
                            _action: str
                            ) -> None:
         '''
@@ -380,7 +379,7 @@ class JingleAudio(JingleRTPContent):
 
     def __init__(self,
                  session: JingleSession,
-                 transport: Optional[JingleTransport] = None
+                 transport: JingleTransport | None = None
                  ) -> None:
         JingleRTPContent.__init__(self, session, 'audio', transport)
         self.setup_stream()
@@ -500,7 +499,7 @@ class JingleAudio(JingleRTPContent):
 class JingleVideo(JingleRTPContent):
     def __init__(self,
                  session: JingleSession,
-                 transport: Optional[JingleTransport] = None
+                 transport: JingleTransport | None = None
                  ) -> None:
         JingleRTPContent.__init__(self, session, 'video', transport)
         self.sink = None
@@ -578,7 +577,7 @@ class JingleVideo(JingleRTPContent):
                 self.pipeline, Gst.DebugGraphDetails.ALL, str(filename))
 
     @staticmethod
-    def get_fallback_src() -> Optional[Gst.Bin]:
+    def get_fallback_src() -> Gst.Bin | None:
         # TODO: Use avatar?
         pipeline = ('videotestsrc is-live=true ! video/x-raw,framerate=10/1 ! '
                     'videoconvert')

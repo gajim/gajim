@@ -23,7 +23,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Optional
 
 import logging
 
@@ -88,7 +87,7 @@ class SecretPasswordStorage:
             return False
 
     @staticmethod
-    def get_password(account_name: str) -> Optional[str]:
+    def get_password(account_name: str) -> str | None:
         if not is_keyring_available():
             return
 
@@ -162,7 +161,7 @@ def is_keyring_available() -> bool:
     return _interface.is_keyring_available
 
 
-def get_password(account_name: str) -> Optional[str]:
+def get_password(account_name: str) -> str | None:
     if not app.settings.get_account_setting(account_name, 'savepass'):
         return MemoryPasswordStorage().get_password(account_name)
 

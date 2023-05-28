@@ -17,8 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import logging
 from functools import partial
@@ -42,7 +40,7 @@ from gajim.common.events import MessageUpdated
 from gajim.common.modules.misc import parse_correction
 
 
-def from_xs_boolean(value: Union[str, bool]) -> bool:
+def from_xs_boolean(value: str | bool) -> bool:
     if isinstance(value, bool):
         return value
 
@@ -55,7 +53,7 @@ def from_xs_boolean(value: Union[str, bool]) -> bool:
     raise ValueError(f'Cant convert {value} to python boolean')
 
 
-def to_xs_boolean(value: Union[bool, None]) -> str:
+def to_xs_boolean(value: bool | None) -> str:
     # Convert to xs:boolean ('true', 'false')
     # from a python boolean (True, False) or None
     if value is True:
@@ -196,7 +194,7 @@ def prepare_stanza(stanza: Message, plaintext: str) -> None:
 
 def delete_nodes(stanza: Message,
                  name: str,
-                 namespace: Optional[str] = None
+                 namespace: str | None = None
                  ) -> None:
 
     nodes = stanza.getTags(name, namespace=namespace)

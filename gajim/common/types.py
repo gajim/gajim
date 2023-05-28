@@ -16,7 +16,6 @@
 
 from typing import Any
 from typing import Callable
-from typing import Optional
 from typing import TYPE_CHECKING
 from typing import Union
 
@@ -46,10 +45,10 @@ if TYPE_CHECKING:
 
     from gajim.gtk.css_config import CSSConfig
 
-    ContactT = Union[BareContact,
-                     ResourceContact,
-                     GroupchatContact,
-                     GroupchatParticipant]
+    ContactT = (BareContact |
+                ResourceContact |
+                GroupchatContact |
+                GroupchatParticipant)
 
 InterfaceT = Union['Interface']
 PluginManagerT = Union['PluginManager']
@@ -63,14 +62,14 @@ PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
 PEPHandlersDict = dict[str, list[PEPNotifyCallback]]
 
 # Plugins
-PluginExtensionPoints = dict[str, tuple[Optional[Callable[..., None]],
-                                        Optional[Callable[..., None]]]]
+PluginExtensionPoints = dict[str, tuple[Callable[..., None] | None,
+                                        Callable[..., None] | None]]
 
 SettingsT = Union['Settings']
 
 BookmarksDict = dict[JID, BookmarkData]
 
-GdkPixbufType = Union[GdkPixbuf.Pixbuf, GdkPixbuf.PixbufAnimation]
+GdkPixbufType = GdkPixbuf.Pixbuf | GdkPixbuf.PixbufAnimation
 
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
@@ -80,4 +79,4 @@ ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
 OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
 GroupchatContactT = Union['GroupchatContact']
 
-PresenceShowT = Union[PresenceShowExt, PresenceShow]
+PresenceShowT = PresenceShowExt | PresenceShow

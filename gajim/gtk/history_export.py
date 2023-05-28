@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import Literal
-from typing import Optional
 from typing import overload
 
 import logging
@@ -43,7 +42,7 @@ log = logging.getLogger('gajim.gtk.history_export')
 
 
 class HistoryExport(Assistant):
-    def __init__(self, account: Optional[str] = None) -> None:
+    def __init__(self, account: str | None = None) -> None:
         Assistant.__init__(self)
 
         self.account = account
@@ -170,7 +169,7 @@ class HistoryExport(Assistant):
 
 
 class SelectAccountDir(Page):
-    def __init__(self, account: Optional[str]) -> None:
+    def __init__(self, account: str | None) -> None:
         Page.__init__(self)
         self._account = account
         self._export_directory = str(configpaths.get('MY_DATA'))

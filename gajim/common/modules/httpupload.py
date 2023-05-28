@@ -18,7 +18,6 @@ from __future__ import annotations
 
 from typing import Callable
 from typing import cast
-from typing import Optional
 
 import mimetypes
 import os
@@ -64,9 +63,9 @@ class HTTPUpload(BaseModule):
         BaseModule.__init__(self, con)
 
         self.available = False
-        self.component: Optional[JID] = None
-        self.httpupload_namespace: Optional[str] = None
-        self.max_file_size: Optional[float] = None  # max file size in bytes
+        self.component: JID | None = None
+        self.httpupload_namespace: str | None = None
+        self.max_file_size: float | None = None  # max file size in bytes
 
         self._requests_in_progress: dict[int, HTTPRequest] = {}
 
@@ -93,7 +92,7 @@ class HTTPUpload(BaseModule):
 
     def get_running_transfers(self,
                               contact: types.ChatContactT
-                              ) -> Optional[set[HTTPFileTransfer]]:
+                              ) -> set[HTTPFileTransfer] | None:
 
         return self._running_transfers.get((contact.account, contact.jid))
 
@@ -125,7 +124,7 @@ class HTTPUpload(BaseModule):
 
     def _make_transfer(self,
                        path: Path,
-                       encryption: Optional[str],
+                       encryption: str | None,
                        contact: types.ChatContactT,
                        ) -> HTTPFileTransfer:
 
@@ -352,7 +351,7 @@ class HTTPFileTransfer(FileTransfer):
                  path: str,
                  contact: types.ContactT,
                  mime: str,
-                 encryption: Optional[str],
+                 encryption: str | None,
                  groupchat: bool
                  ) -> None:
 
@@ -364,11 +363,11 @@ class HTTPFileTransfer(FileTransfer):
         self._contact = contact
         self._mime = mime
 
-        self.put_uri: Optional[str] = None
-        self.get_uri: Optional[str] = None
-        self._uri_transform_func: Optional[Callable[[str], str]] = None
+        self.put_uri: str | None = None
+        self.get_uri: str | None = None
+        self._uri_transform_func: Callable[[str], str] | None = None
 
-        self._data: Optional[bytes] = None
+        self._data: bytes | None = None
         self._headers: dict[str, str] = {}
 
         self._is_encrypted = False
@@ -398,7 +397,7 @@ class HTTPFileTransfer(FileTransfer):
         return self._groupchat
 
     @property
-    def encryption(self) -> Optional[str]:
+    def encryption(self) -> str | None:
         return self._encryption
 
     @property

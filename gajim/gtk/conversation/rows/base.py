@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from datetime import datetime
 
 from gi.repository import Gtk
@@ -25,7 +23,7 @@ from gajim.common import app
 
 
 class BaseRow(Gtk.ListBoxRow):
-    def __init__(self, account: str, widget: Optional[str] = None) -> None:
+    def __init__(self, account: str, widget: str | None = None) -> None:
         Gtk.ListBoxRow.__init__(self)
         self._account = account
         self._client = app.get_client(account)
@@ -33,9 +31,9 @@ class BaseRow(Gtk.ListBoxRow):
         self.timestamp: datetime = datetime.fromtimestamp(0)
         self.kind: str = ''
         self.name: str = ''
-        self.message_id: Optional[str] = None
-        self.log_line_id: Optional[int] = None
-        self.stanza_id: Optional[str] = None
+        self.message_id: str | None = None
+        self.log_line_id: int | None = None
+        self.stanza_id: str | None = None
         self.text: str = ''
         self._merged: bool = False
 

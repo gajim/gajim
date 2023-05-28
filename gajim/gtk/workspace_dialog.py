@@ -13,7 +13,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Optional
 
 from gi.repository import Gdk
 from gi.repository import Gtk
@@ -31,7 +30,7 @@ from gajim.gtk.util import rgba_to_float
 
 
 class WorkspaceDialog(Gtk.ApplicationWindow):
-    def __init__(self, workspace_id: Optional[str] = None) -> None:
+    def __init__(self, workspace_id: str | None = None) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('WorkspaceDialog')
         self.set_application(app.app)
@@ -51,8 +50,8 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._ui.image_box.add(self._avatar_selector)
 
         name: str = _('My Workspace')
-        color: Optional[str] = None
-        self._avatar_sha: Optional[str] = None
+        color: str | None = None
+        self._avatar_sha: str | None = None
 
         if app.settings.get_workspace_count() == 1:
             # Don't allow to remove last workspace
@@ -137,7 +136,7 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
                 scale)
         self._ui.preview.set_from_surface(surface)
 
-    def _get_avatar_data(self) -> Optional[bytes]:
+    def _get_avatar_data(self) -> bytes | None:
         if not self._avatar_selector.get_prepared():
             return None
 

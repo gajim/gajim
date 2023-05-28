@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import sys
 from datetime import datetime
@@ -77,8 +76,8 @@ class AppPage(Gtk.Box):
 
     def add_app_message(self,
                         category: str,
-                        new_version: Optional[str] = None,
-                        new_setup_url: Optional[str] = None
+                        new_version: str | None = None,
+                        new_setup_url: str | None = None
                         ) -> None:
 
         self._app_message_listbox.add_app_message(
@@ -117,8 +116,8 @@ class AppMessageListBox(Gtk.ListBox):
 
     def add_app_message(self,
                         category: str,
-                        new_version: Optional[str] = None,
-                        new_setup_url: Optional[str] = None
+                        new_version: str | None = None,
+                        new_setup_url: str | None = None
                         ) -> None:
 
         row = AppMessageRow(category, new_version, new_setup_url)
@@ -166,9 +165,9 @@ class AppMessageListBox(Gtk.ListBox):
 class AppMessageRow(Gtk.ListBoxRow):
     def __init__(self,
                  category: str,
-                 new_version: Optional[str] = None,
-                 new_setup_url: Optional[str] = None,
-                 plugin_manifests: Optional[list[PluginManifest]] = None
+                 new_version: str | None = None,
+                 new_setup_url: str | None = None,
+                 plugin_manifests: list[PluginManifest] | None = None
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)

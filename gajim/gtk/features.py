@@ -20,7 +20,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import NamedTuple
-from typing import Optional
 
 import os
 import sys
@@ -39,7 +38,7 @@ class Feature(NamedTuple):
     tooltip: str
     dependency_u: str
     dependency_w: str
-    enabled: Optional[bool]
+    enabled: bool | None
 
 
 class Features(Gtk.ApplicationWindow):
@@ -199,7 +198,7 @@ class FeatureItem(Gtk.Grid):
         self.add(self._icon)
         self.add(self._box)
 
-    def _set_feature(self, available: bool, enabled: Optional[bool]) -> None:
+    def _set_feature(self, available: bool, enabled: bool | None) -> None:
         self._icon.get_style_context().remove_class('error-color')
         self._icon.get_style_context().remove_class('warning-color')
         self._icon.get_style_context().remove_class('success-color')

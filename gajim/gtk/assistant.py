@@ -18,7 +18,6 @@ from typing import Any
 from typing import Callable
 from typing import cast
 from typing import Literal
-from typing import Optional
 from typing import overload
 
 from gi.repository import Gdk
@@ -46,7 +45,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         )}
 
     def __init__(self,
-                 transient_for: Optional[Gtk.Window] = None,
+                 transient_for: Gtk.Window | None = None,
                  width: int = 550,
                  height: int = 400,
                  transition_duration: int = 200) -> None:
@@ -134,7 +133,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
     def add_button(self,
                    name: str,
                    label: str,
-                   css_class: Optional[str] = None,
+                   css_class: str | None = None,
                    complete: bool = False
                    ) -> None:
         button = Gtk.Button(label=label,
@@ -227,10 +226,10 @@ class Page(Gtk.Box):
         self.title: str = ''
         self.complete: bool = True
 
-    def get_visible_buttons(self) -> Optional[list[str]]:
+    def get_visible_buttons(self) -> list[str] | None:
         return None
 
-    def get_default_button(self) -> Optional[str]:
+    def get_default_button(self) -> str | None:
         return None
 
     def update_page_complete(self) -> None:

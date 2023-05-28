@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import locale
 import logging
@@ -229,7 +228,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         return self._filter_string in model[iter_][Column.TEXT].lower()
 
-    def _get_group_iter(self, group_name: str) -> Optional[Gtk.TreeIter]:
+    def _get_group_iter(self, group_name: str) -> Gtk.TreeIter | None:
         try:
             ref = self._group_refs[group_name]
         except KeyError:
@@ -240,7 +239,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             return None
         return self._store.get_iter(path)
 
-    def _get_contact_iter(self, nick: str) -> Optional[Gtk.TreeIter]:
+    def _get_contact_iter(self, nick: str) -> Gtk.TreeIter | None:
         try:
             ref = self._contact_refs[nick]
         except KeyError:
@@ -359,7 +358,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                              renderer: Gtk.CellRenderer,
                              model: Gtk.TreeModel,
                              iter_: Gtk.TreeIter,
-                             _user_data: Optional[object]
+                             _user_data: object | None
                              ) -> None:
 
         has_parent = bool(model.iter_parent(iter_))
@@ -481,7 +480,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                             model: Gtk.TreeModel,
                             iter1: Gtk.TreeIter,
                             iter2: Gtk.TreeIter,
-                            _user_data: Optional[object]
+                            _user_data: object | None
                             ) -> int:
         '''
         Compare two iterators to sort them

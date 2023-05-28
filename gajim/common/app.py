@@ -29,7 +29,6 @@ from __future__ import annotations
 import typing
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import gc
 import logging
@@ -298,7 +297,7 @@ def detect_dependencies() -> None:
     log('gajim').info('Used language: %s', LANG)
 
 
-def detect_desktop_env() -> Optional[str]:
+def detect_desktop_env() -> str | None:
     if sys.platform in ('win32', 'darwin'):
         return sys.platform
 
@@ -334,7 +333,7 @@ def get_jid_without_resource(jid: str) -> str:
 
 
 def get_number_of_connected_accounts(
-        accounts_list: Optional[list[str]] = None) -> int:
+        accounts_list: list[str] | None = None) -> int:
     '''
     Returns the number of connected accounts. You can optionally pass an
     accounts_list and if you do those will be checked, else all will be checked
@@ -425,7 +424,7 @@ def account_is_available(account: str) -> bool:
 
 def get_transport_name_from_jid(
         jid: str,
-        use_config_setting: bool = True) -> Optional[str]:
+        use_config_setting: bool = True) -> str | None:
 
     '''
     Returns 'gg', 'irc' etc
@@ -539,7 +538,7 @@ def get_debug_mode() -> bool:
     return debug_enabled.exists()
 
 
-def get_stored_bob_data(algo_hash: str) -> Optional[bytes]:
+def get_stored_bob_data(algo_hash: str) -> bytes | None:
     try:
         return bob_cache[algo_hash]
     except KeyError:

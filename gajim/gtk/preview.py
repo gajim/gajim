@@ -14,7 +14,6 @@
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 
@@ -57,7 +56,7 @@ class PreviewWidget(Gtk.Box):
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
         self.account = account
-        self._preview: Optional[Preview] = None
+        self._preview: Preview | None = None
 
         self._destroyed = False
 
@@ -103,7 +102,7 @@ class PreviewWidget(Gtk.Box):
         self._ui.info_message.set_tooltip_text('')
 
     @ensure_not_destroyed
-    def update(self, preview: Preview, data: Optional[GdkPixbufType]) -> None:
+    def update(self, preview: Preview, data: GdkPixbufType | None) -> None:
         self._preview = preview
 
         self._ui.progress_box.hide()

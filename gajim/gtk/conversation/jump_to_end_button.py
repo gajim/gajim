@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Union
-
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -23,7 +21,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
-ContactT = Union[BareContact, GroupchatContact, GroupchatParticipant]
+ContactT = BareContact | GroupchatContact | GroupchatParticipant
 
 
 class JumpToEndButton(Gtk.Overlay):

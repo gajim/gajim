@@ -19,7 +19,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import Generator
-from typing import Optional
 
 import weakref
 
@@ -65,7 +64,7 @@ class VCardAvatars(BaseModule):
         self.avatar_conversion_available = is_available
         self._log.info('Discovered Avatar Conversion')
 
-    def get_avatar_sha(self, jid: JID) -> Optional[str]:
+    def get_avatar_sha(self, jid: JID) -> str | None:
         return self._muc_avatar_cache.get(jid)
 
     @as_task

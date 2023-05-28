@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Generator
-from typing import Optional
 
 from nbxmpp.errors import is_error
 from nbxmpp.modules.security_labels import Catalog
@@ -70,7 +69,7 @@ class SecLabels(BaseModule):
                                                jid=jid,
                                                catalog=catalog))
 
-    def get_catalog(self, jid: str) -> Optional[Catalog]:
+    def get_catalog(self, jid: str) -> Catalog | None:
         if not self.supported:
             return None
 

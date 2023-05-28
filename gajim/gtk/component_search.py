@@ -19,9 +19,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Literal
-from typing import Optional
 from typing import overload
-from typing import Union
 
 import itertools
 import logging
@@ -54,7 +52,7 @@ class ComponentSearch(Assistant, EventHelper):
     def __init__(self,
                  account: str,
                  jid: str,
-                 transient_for: Optional[Gtk.Window] = None
+                 transient_for: Gtk.Window | None = None
                  ) -> None:
         Assistant.__init__(self,
                            transient_for=transient_for,
@@ -186,7 +184,7 @@ class SearchForm(Page):
     def process_search_form(self, form: Node) -> None:
         self._show_form(form)
 
-    def _show_form(self, form: Optional[Node]) -> None:
+    def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
             self._dataform_widget.destroy()
@@ -225,7 +223,7 @@ class Result(Page):
         Page.__init__(self)
         self.title = _('Search Result')
 
-        self._jid_col: Optional[int] = None
+        self._jid_col: int | None = None
 
         self._label = Gtk.Label(label=_('No results found'))
         self._label.get_style_context().add_class('bold16')
@@ -240,11 +238,11 @@ class Result(Page):
         self.add(self._label)
         self.add(self._scrolled)
 
-        self._treeview: Optional[Gtk.TreeView] = None
+        self._treeview: Gtk.TreeView | None = None
 
         self.show_all()
 
-    def process_result(self, form: Optional[Node]) -> None:
+    def process_result(self, form: Node | None) -> None:
         if self._treeview is not None:
             self._scrolled.remove(self._treeview)
             self._treeview.destroy()
@@ -258,7 +256,7 @@ class Result(Page):
 
         form = dataforms.extend_form(node=form)
 
-        fieldtypes: list[Union[type[bool], type[str]]] = []
+        fieldtypes: list[type[bool] | type[str]] = []
         fieldvars: list[Any] = []
         index = 0
         for field in form.reported.iter_fields():

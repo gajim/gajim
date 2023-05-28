@@ -15,8 +15,6 @@
 
 from typing import Any
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import logging
 
@@ -96,15 +94,15 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.add_entry_button.set_menu_model(menu)
         self._add_actions()
 
-        self._avatar_selector: Optional[AvatarSelector] = None
-        self._current_avatar: Optional[cairo.ImageSurface] = None
-        self._current_vcard: Optional[VCard] = None
-        self._avatar_nick_public: Optional[bool] = None
+        self._avatar_selector: AvatarSelector | None = None
+        self._current_avatar: cairo.ImageSurface | None = None
+        self._current_vcard: VCard | None = None
+        self._avatar_nick_public: bool | None = None
 
         # False  - no change to avatar
         # None   - we want to delete the avatar
         # Avatar - upload new avatar
-        self._new_avatar: Union[None, bool, Avatar] = False
+        self._new_avatar: None | bool | Avatar = False
 
         self._ui.nickname_entry.set_text(app.nicks[account])
 
@@ -219,7 +217,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _on_action(self,
                    action: Gio.SimpleAction,
-                   _param: Optional[GLib.Variant]
+                   _param: GLib.Variant | None
                    ) -> None:
         name = action.get_name()
         key = name.split('-')[1]

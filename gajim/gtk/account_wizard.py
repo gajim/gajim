@@ -17,9 +17,7 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import Literal
-from typing import Optional
 from typing import overload
-from typing import Union
 
 import logging
 
@@ -108,7 +106,7 @@ class AccountWizard(Assistant):
 
         self.update_proxy_list()
 
-        self._client: Optional[Client] = None
+        self._client: Client | None = None
         self._method: str = 'login'
 
     @overload
@@ -264,7 +262,7 @@ class AccountWizard(Assistant):
     def update_proxy_list(self) -> None:
         self.get_page('advanced').update_proxy_list()
 
-    def _get_proxy_data(self, advanced: bool) -> Optional[ProxyData]:
+    def _get_proxy_data(self, advanced: bool) -> ProxyData | None:
         if advanced:
             proxy_name = self.get_page('advanced').get_proxy()
             proxy_data = get_proxy(proxy_name)
@@ -275,7 +273,7 @@ class AccountWizard(Assistant):
 
     def _get_base_client(self,
                          domain: str,
-                         username: Optional[str],
+                         username: str | None,
                          mode: Mode,
                          advanced: bool,
                          ignore_all_errors: bool
@@ -569,11 +567,11 @@ class AccountWizard(Assistant):
         self.get_page('form').remove_form()
         self._disconnect()
 
-    def _set_error_text(self,
-                        error: Union[StanzaError,
-                                     RegisterStanzaError,
-                                     MalformedStanzaError]
-                        ) -> None:
+    def _set_error_text(
+        self,
+        error: StanzaError | RegisterStanzaError | MalformedStanzaError
+    ) -> None:
+
         error_text = error.get_text()
         if not error_text:
             error_text = _('The server rejected the registration '
@@ -842,7 +840,7 @@ class AdvancedSettings(Page):
         active = self._ui.proxies_combobox.get_active()
         return self._ui.proxies_combobox.get_model()[active][0]
 
-    def get_custom_host(self) -> Optional[CustomHostT]:
+    def get_custom_host(self) -> CustomHostT | None:
         host = self._ui.custom_host_entry.get_text()
         port = self._ui.custom_port_entry.get_text()
         if not host or not port:
@@ -941,8 +939,8 @@ class SecurityWarning(Page):
     def __init__(self) -> None:
         Page.__init__(self)
         self.title: str = _('Security Warning')
-        self._cert: Optional[Gio.TlsCertificate] = None
-        self._domain: Optional[str] = None
+        self._cert: Gio.TlsCertificate | None = None
+        self._domain: str | None = None
 
         self._ui = get_builder('account_wizard.ui')
         self.pack_start(self._ui.security_warning_box, True, True, 0)
@@ -950,7 +948,7 @@ class SecurityWarning(Page):
         self.show_all()
 
     @property
-    def cert(self) -> Optional[Gio.TlsCertificate]:
+    def cert(self) -> Gio.TlsCertificate | None:
         return self._cert
 
     def set_warning(self,
@@ -1007,7 +1005,7 @@ class Form(Page):
         self.set_valign(Gtk.Align.FILL)
         self.complete: bool = False
         self.title: str = _('Create Account')
-        self._current_form: Optional[Any] = None
+        self._current_form: Any | None = None
 
         heading = Gtk.Label(label=_('Create Account'))
         heading.get_style_context().add_class('large-header')
@@ -1082,7 +1080,7 @@ class Redirect(Page):
     def __init__(self) -> None:
         Page.__init__(self)
         self.title: str = _('Redirect')
-        self._link: Optional[str] = None
+        self._link: str | None = None
 
         self._ui = get_builder('account_wizard.ui')
         self.pack_start(self._ui.redirect_box, True, True, 0)
@@ -1109,10 +1107,10 @@ class Success(SuccessPage):
         self.set_title(_('Account Added'))
         self.set_heading(_('Account has been added successfully'))
 
-        self._account: Optional[str] = None
-        self._our_jid: Optional[str] = None
-        self._label: Optional[str] = None
-        self._color: Optional[str] = None
+        self._account: str | None = None
+        self._our_jid: str | None = None
+        self._label: str | None = None
+        self._color: str | None = None
 
         self._ui = get_builder('account_wizard.ui')
         self.pack_start(self._ui.account_label_box, True, True, 0)
@@ -1136,7 +1134,7 @@ class Success(SuccessPage):
         self._save_config()
 
     @property
-    def account(self) -> Optional[str]:
+    def account(self) -> str | None:
         return self._account
 
     def _add_css_provider(self) -> Gtk.CssProvider:

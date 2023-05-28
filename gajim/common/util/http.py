@@ -12,7 +12,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
-from typing import Optional
 
 from nbxmpp.http import HTTPRequest
 from nbxmpp.http import HTTPSession
@@ -23,8 +22,8 @@ from gajim.common.helpers import determine_proxy
 from gajim.common.helpers import get_account_proxy
 
 
-def create_http_session(account: Optional[str] = None,
-                        proxy: Optional[ProxyData] = None
+def create_http_session(account: str | None = None,
+                        proxy: ProxyData | None = None
                         ) -> HTTPSession:
 
     session = HTTPSession(user_agent=f'Gajim {app.version}')
@@ -41,6 +40,6 @@ def create_http_session(account: Optional[str] = None,
     return session
 
 
-def create_http_request(account: Optional[str] = None) -> HTTPRequest:
+def create_http_request(account: str | None = None) -> HTTPRequest:
     session = create_http_session(account)
     return session.create_request()

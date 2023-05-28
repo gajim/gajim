@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 from functools import partial
@@ -48,7 +47,7 @@ class BaseModule(EventHelper):
         self._account = con.account
         self._log = self._set_logger(plugin)
         self._nbxmpp_callbacks: dict[str, Any] = {}
-        self._stored_publish: Optional[types.AnyCallableT] = None
+        self._stored_publish: types.AnyCallableT | None = None
         self.handlers: list[StanzaHandler] = []
 
     @classmethod
@@ -81,7 +80,7 @@ class BaseModule(EventHelper):
             return getattr(module, key)
         return partial(getattr(module, key), callback=callback)
 
-    def _nbxmpp(self, module_name: Optional[str] = None):
+    def _nbxmpp(self, module_name: str | None = None):
         if not app.account_is_connected(self._account):
             self._log.warning('Account not connected, can’t use nbxmpp method')
             return Mock()

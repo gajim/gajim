@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import locale
 import logging
@@ -169,7 +168,7 @@ class AccountsWindow(Gtk.ApplicationWindow):
         if not initial:
             self._accounts[account].show()
 
-    def select_account(self, account: str, page: Optional[str] = None) -> None:
+    def select_account(self, account: str, page: str | None = None) -> None:
         try:
             self._accounts[account].select(page)
         except KeyError:
@@ -466,7 +465,7 @@ class Account:
         self._account_row = AccountRow(account)
         self._menu.add_account(self._account_row)
 
-    def select(self, page_name: Optional[str] = None) -> None:
+    def select(self, page_name: str | None = None) -> None:
         self._account_row.emit('activate')
         if page_name is not None:
             self._menu.set_page(self._account, page_name)
@@ -763,7 +762,7 @@ class PrivacyPage(GenericSettingPage):
 
     def __init__(self, account: str) -> None:
         self._account = account
-        self._client: Optional[types.Client] = None
+        self._client: types.Client | None = None
         if app.account_is_connected(account):
             self._client = app.get_client(account)
 

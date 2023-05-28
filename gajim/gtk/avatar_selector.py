@@ -19,7 +19,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 from enum import IntEnum
@@ -162,7 +161,7 @@ class AvatarSelector(Gtk.Box):
             self.prepare_crop_area(str(path))
 
     @staticmethod
-    def _get_pixbuf_from_path(path: str) -> Optional[GdkPixbuf.Pixbuf]:
+    def _get_pixbuf_from_path(path: str) -> GdkPixbuf.Pixbuf | None:
         try:
             pixbuf = GdkPixbuf.Pixbuf.new_from_file(path)
             return pixbuf
@@ -187,9 +186,7 @@ class AvatarSelector(Gtk.Box):
             return scaled_pixbuf, width, height
         return pixbuf, width, height
 
-    def get_avatar_surface(self) -> Optional[tuple[cairo.ImageSurface,
-                                                   int,
-                                                   int]]:
+    def get_avatar_surface(self) -> tuple[cairo.ImageSurface, int, int] | None:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return None
@@ -198,7 +195,7 @@ class AvatarSelector(Gtk.Box):
         return Gdk.cairo_surface_create_from_pixbuf(
             scaled, self.get_scale_factor()), width, height
 
-    def get_avatar_bytes(self) -> tuple[bool, Optional[bytes], int, int]:
+    def get_avatar_bytes(self) -> tuple[bool, bytes | None, int, int]:
         pixbuf = self._crop_area.get_pixbuf()
         if pixbuf is None:
             return False, None, 0, 0
@@ -219,10 +216,10 @@ class CropArea(Gtk.DrawingArea):
 
         self._image = Gdk.Rectangle()
         self._crop = Gdk.Rectangle()
-        self._pixbuf: Optional[GdkPixbuf.Pixbuf] = None
-        self._browse_pixbuf: Optional[GdkPixbuf.Pixbuf] = None
-        self._color_shifted_pixbuf: Optional[GdkPixbuf.Pixbuf] = None
-        self._current_cursor: Optional[Gdk.CursorType] = None
+        self._pixbuf: GdkPixbuf.Pixbuf | None = None
+        self._browse_pixbuf: GdkPixbuf.Pixbuf | None = None
+        self._color_shifted_pixbuf: GdkPixbuf.Pixbuf | None = None
+        self._current_cursor: Gdk.CursorType | None = None
 
         self._scale = 1.0
         self._image.x = 0
@@ -257,7 +254,7 @@ class CropArea(Gtk.DrawingArea):
         else:
             self._aspect = -1
 
-    def set_pixbuf(self, pixbuf: Optional[GdkPixbuf.Pixbuf]) -> None:
+    def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf | None) -> None:
         if pixbuf is None:
             self._browse_pixbuf = None
             avatar_selector = cast(AvatarSelector, self.get_parent())
@@ -283,7 +280,7 @@ class CropArea(Gtk.DrawingArea):
 
         self.queue_draw()
 
-    def get_pixbuf(self) -> Optional[GdkPixbuf.Pixbuf]:
+    def get_pixbuf(self) -> GdkPixbuf.Pixbuf | None:
         if self._browse_pixbuf is None:
             return None
 

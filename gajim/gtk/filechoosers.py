@@ -20,8 +20,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
-from typing import Union
 
 import os
 import sys
@@ -60,10 +58,10 @@ class BaseFileChooser:
         pass
 
     def _on_response(self,
-                     dialog: Union[Gtk.FileChooser, Gtk.FileChooserNative],
+                     dialog: Gtk.FileChooser | Gtk.FileChooserNative,
                      response: Gtk.ResponseType,
                      accept_cb: AcceptCallbackT,
-                     cancel_cb: Optional[Callable[..., Any]]
+                     cancel_cb: Callable[..., Any] | None
                      ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
             accept_cb(dialog.get_filenames())
@@ -129,10 +127,10 @@ class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
 
     def __init__(self,
                  accept_cb: AcceptCallbackT,
-                 cancel_cb: Optional[Callable[..., Any]] = None,
-                 transient_for: Optional[Gtk.Window] = None,
-                 path: Optional[str] = None,
-                 file_name: Optional[str] = None,
+                 cancel_cb: Callable[..., Any] | None = None,
+                 transient_for: Gtk.Window | None = None,
+                 path: str | None = None,
+                 file_name: str | None = None,
                  select_multiple: bool = False,
                  modal: bool = False
                  ) -> None:
@@ -189,10 +187,10 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
 
     def __init__(self,
                  accept_cb: AcceptCallbackT,
-                 cancel_cb: Optional[Callable[..., Any]] = None,
-                 transient_for: Optional[Gtk.Window] = None,
-                 path: Optional[str] = None,
-                 file_name: Optional[str] = None,
+                 cancel_cb: Callable[..., Any] | None = None,
+                 transient_for: Gtk.Window | None = None,
+                 path: str | None = None,
+                 file_name: str | None = None,
                  select_multiple: bool = False,
                  preview: bool = True,
                  modal: bool = False

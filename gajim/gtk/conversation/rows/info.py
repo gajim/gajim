@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import time
 from datetime import datetime
 
@@ -32,7 +30,7 @@ class InfoMessage(BaseRow):
     def __init__(self,
                  account: str,
                  text: str,
-                 timestamp: Optional[float]
+                 timestamp: float | None
                  ) -> None:
 
         BaseRow.__init__(self, account)

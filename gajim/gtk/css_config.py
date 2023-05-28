@@ -17,9 +17,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-from typing import Union
-
 import logging
 import math
 import sys
@@ -84,17 +81,17 @@ class CSSConfig:
         css_parser.ser.prefs.keepEmptyRules = False
 
         # Holds the currently selected theme in the Theme Editor
-        self._pre_css: Optional[CSSStyleSheet] = None
-        self._pre_css_path: Optional[Path] = None
+        self._pre_css: CSSStyleSheet | None = None
+        self._pre_css_path: Path | None = None
 
         # Holds the default theme, its used if values are not found
         # in the selected theme
-        self._default_css: Optional[CSSStyleSheet] = None
-        self._default_css_path: Optional[Path] = None
+        self._default_css: CSSStyleSheet | None = None
+        self._default_css_path: Path | None = None
 
         # Holds the currently selected theme
-        self._css: Optional[CSSStyleSheet] = None
-        self._css_path: Optional[Path] = None
+        self._css: CSSStyleSheet | None = None
+        self._css_path: Path | None = None
 
         # User Theme CSS Provider
         self._provider = Gtk.CssProvider()
@@ -112,7 +109,7 @@ class CSSConfig:
             CSSPriority.APPLICATION)
 
         # Cache of recently requested values
-        self._cache: dict[str, Union[str, Pango.FontDescription, None]] = {}
+        self._cache: dict[str, str | Pango.FontDescription | None] = {}
 
         # Holds all currently available themes
         self.themes: list[str] = []
@@ -145,7 +142,7 @@ class CSSConfig:
             return settings.get_property('gtk-application-prefer-dark-theme')
         return setting == Theme.DARK
 
-    def set_dark_theme(self, value: Optional[int] = None) -> None:
+    def set_dark_theme(self, value: int | None = None) -> None:
         if value is None:
             value = app.settings.get('dark_theme')
         else:
@@ -256,7 +253,7 @@ class CSSConfig:
         log.info('Use Theme: %s', theme)
         return theme_path
 
-    def _load_selected(self, new_path: Optional[Path] = None) -> None:
+    def _load_selected(self, new_path: Path | None = None) -> None:
         if new_path is None:
             self._css_path = self._determine_theme_path()
         else:
@@ -291,8 +288,8 @@ class CSSConfig:
 
     def set_value(self,
                   selector: str,
-                  attr: Union[str, StyleAttr],
-                  value: Union[str, Pango.FontDescription],
+                  attr: str | StyleAttr,
+                  value: str | Pango.FontDescription,
                   pre: bool = False
                   ) -> None:
 
@@ -369,7 +366,7 @@ class CSSConfig:
 
     def _get_attr_from_description(self,
                                    description: Pango.FontDescription
-                                   ) -> tuple[Optional[str], float, str, int]:
+                                   ) -> tuple[str | None, float, str, int]:
 
         size = description.get_size() / Pango.SCALE
         style = self._get_string_from_pango_style(description.get_style())
@@ -380,7 +377,7 @@ class CSSConfig:
     def _get_default_rule(self,
                           selector: str,
                           _attr: str
-                          ) -> Optional[CSSStyleRule]:
+                          ) -> CSSStyleRule | None:
 
         assert self._default_css is not None
         for rule in self._default_css:
@@ -394,7 +391,7 @@ class CSSConfig:
     def get_font(self,
                  selector: str,
                  pre: bool = False
-                 ) -> Optional[Pango.FontDescription]:
+                 ) -> Pango.FontDescription | None:
         if pre:
             css = self._pre_css
         else:
@@ -429,11 +426,11 @@ class CSSConfig:
         return None
 
     def _get_description_from_css(self,
-                                  family: Optional[str],
-                                  size: Optional[str],
-                                  style: Optional[str],
-                                  weight: Optional[str]
-                                  ) -> Optional[Pango.FontDescription]:
+                                  family: str | None,
+                                  size: str | None,
+                                  style: str | None,
+                                  weight: str | None
+                                  ) -> Pango.FontDescription | None:
 
         if family is None:
             return None
@@ -467,9 +464,9 @@ class CSSConfig:
 
     def get_value(self,
                   selector: str,
-                  attr: Union[str, StyleAttr],
+                  attr: str | StyleAttr,
                   pre: bool = False
-                  ) -> Union[str, Pango.FontDescription, None]:
+                  ) -> str | Pango.FontDescription | None:
 
         if attr == StyleAttr.FONT:
             # forward to get_font() for convenience
@@ -510,7 +507,7 @@ class CSSConfig:
 
     def remove_value(self,
                      selector: str,
-                     attr: Union[str, StyleAttr],
+                     attr: str | StyleAttr,
                      pre: bool = False
                      ) -> None:
 
@@ -622,7 +619,7 @@ class CSSConfig:
     def _add_to_cache(self,
                       selector: str,
                       attr: str,
-                      value: Union[str, Pango.FontDescription, None]
+                      value: str | Pango.FontDescription | None
                       ) -> None:
 
         self._cache[selector + attr] = value
@@ -630,7 +627,7 @@ class CSSConfig:
     def _get_from_cache(self,
                         selector: str,
                         attr: str
-                        ) -> Union[str, Pango.FontDescription, None]:
+                        ) -> str | Pango.FontDescription | None:
 
         return self._cache[selector + attr]
 

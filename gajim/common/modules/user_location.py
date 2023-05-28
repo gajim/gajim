@@ -16,8 +16,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -47,13 +45,13 @@ class UserLocation(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._location_received)
 
-        self._current_location: Optional[LocationData] = None
-        self._contact_locations: dict[JID, Optional[LocationData]] = {}
+        self._current_location: LocationData | None = None
+        self._contact_locations: dict[JID, LocationData | None] = {}
 
-    def get_current_location(self) -> Optional[LocationData]:
+    def get_current_location(self) -> LocationData | None:
         return self._current_location
 
-    def get_contact_location(self, jid: JID) -> Optional[LocationData]:
+    def get_contact_location(self, jid: JID) -> LocationData | None:
         return self._contact_locations.get(jid)
 
     @event_node(Namespace.LOCATION)
@@ -78,7 +76,7 @@ class UserLocation(BaseModule):
 
     @store_publish
     def set_location(self,
-                     location: Optional[LocationData],
+                     location: LocationData | None,
                      force: bool = False
                      ) -> None:
         if not self._con.get_module('PEP').supported:

@@ -38,7 +38,6 @@ from __future__ import annotations
 from typing import Any
 from typing import Callable
 from typing import cast
-from typing import Optional
 
 import os
 import sys
@@ -599,12 +598,12 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_preferences_action(_action: Gio.SimpleAction,
-                               _param: Optional[GLib.Variant]) -> None:
+                               _param: GLib.Variant | None) -> None:
         open_window('Preferences')
 
     @staticmethod
     def _on_plugins_action(_action: Gio.SimpleAction,
-                           _param: Optional[GLib.Variant]) -> None:
+                           _param: GLib.Variant | None) -> None:
         open_window('PluginsWindow')
 
     @staticmethod
@@ -623,7 +622,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_quit_action(_action: Gio.SimpleAction,
-                        _param: Optional[GLib.Variant]) -> None:
+                        _param: GLib.Variant | None) -> None:
         app.window.quit()
 
     @staticmethod
@@ -675,7 +674,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_add_account_action(_action: Gio.SimpleAction,
-                               _param: Optional[GLib.Variant]) -> None:
+                               _param: GLib.Variant | None) -> None:
         open_window('AccountWizard')
 
     @staticmethod
@@ -721,22 +720,22 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_xml_console_action(_action: Gio.SimpleAction,
-                               _param: Optional[GLib.Variant]) -> None:
+                               _param: GLib.Variant | None) -> None:
         open_window('XMLConsoleWindow')
 
     @staticmethod
     def _on_manage_proxies_action(_action: Gio.SimpleAction,
-                                  _param: Optional[GLib.Variant]) -> None:
+                                  _param: GLib.Variant | None) -> None:
         open_window('ManageProxies')
 
     @staticmethod
     def _on_content_action(_action: Gio.SimpleAction,
-                           _param: Optional[GLib.Variant]) -> None:
+                           _param: GLib.Variant | None) -> None:
         open_uri(GAJIM_WIKI_URI)
 
     @staticmethod
     def _on_join_support_chat(_action: Gio.SimpleAction,
-                              _param: Optional[GLib.Variant]) -> None:
+                              _param: GLib.Variant | None) -> None:
         accounts = app.settings.get_active_accounts()
         if len(accounts) == 1:
             app.window.show_add_join_groupchat(
@@ -746,32 +745,32 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_faq_action(_action: Gio.SimpleAction,
-                       _param: Optional[GLib.Variant]) -> None:
+                       _param: GLib.Variant | None) -> None:
         open_uri(GAJIM_FAQ_URI)
 
     @staticmethod
     def _on_privacy_policy_action(_action: Gio.SimpleAction,
-                                  _param: Optional[GLib.Variant]) -> None:
+                                  _param: GLib.Variant | None) -> None:
         open_uri(GAJIM_PRIVACY_POLICY_URI)
 
     @staticmethod
     def _on_shortcuts_action(_action: Gio.SimpleAction,
-                             _param: Optional[GLib.Variant]) -> None:
+                             _param: GLib.Variant | None) -> None:
         ShortcutsWindow()
 
     @staticmethod
     def _on_features_action(_action: Gio.SimpleAction,
-                            _param: Optional[GLib.Variant]) -> None:
+                            _param: GLib.Variant | None) -> None:
         open_window('Features')
 
     @staticmethod
     def _on_about_action(_action: Gio.SimpleAction,
-                         _param: Optional[GLib.Variant]) -> None:
+                         _param: GLib.Variant | None) -> None:
         AboutDialog()
 
     @staticmethod
     def _on_file_transfer_action(_action: Gio.SimpleAction,
-                                 _param: Optional[GLib.Variant]) -> None:
+                                 _param: GLib.Variant | None) -> None:
 
         ft = app.interface.instances['file_transfers']
         if ft.window.get_property('visible'):

@@ -19,8 +19,6 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import NamedTuple
-from typing import Optional
-from typing import Union
 
 from enum import IntEnum
 
@@ -301,7 +299,7 @@ class Themes(Gtk.ApplicationWindow):
 
     @staticmethod
     def _update_preferences_window() -> None:
-        window = cast(Optional[Preferences], get_app_window('Preferences'))
+        window = cast(Preferences | None, get_app_window('Preferences'))
         if window is not None:
             window.update_theme_list()
 
@@ -353,7 +351,7 @@ class Themes(Gtk.ApplicationWindow):
 class Option(Gtk.ListBoxRow):
     def __init__(self,
                  option: StyleOption,
-                 value: Union[str, Pango.FontDescription, None]
+                 value: str | Pango.FontDescription | None
                  ) -> None:
         Gtk.ListBoxRow.__init__(self)
         self.option = option
@@ -382,7 +380,7 @@ class Option(Gtk.ListBoxRow):
         self.add(self._box)
         self.show_all()
 
-    def _init_color(self, color: Optional[str]) -> None:
+    def _init_color(self, color: str | None) -> None:
         color_button = Gtk.ColorButton()
         if color is not None:
             rgba = Gdk.RGBA()
@@ -392,7 +390,7 @@ class Option(Gtk.ListBoxRow):
         color_button.connect('color-set', self._on_color_set)
         self._box.add(color_button)
 
-    def _init_font(self, desc: Optional[Pango.FontDescription]) -> None:
+    def _init_font(self, desc: Pango.FontDescription | None) -> None:
         font_button = Gtk.FontButton()
         if desc is not None:
             font_button.set_font_desc(desc)

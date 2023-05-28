@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import cast
 from typing import NamedTuple
-from typing import Optional
 
 import logging
 from enum import IntEnum
@@ -39,7 +38,7 @@ log = logging.getLogger('gajim.gtk.groupchat_outcasts')
 
 class OutcastRow(NamedTuple):
     jid: str
-    reason: Optional[str]
+    reason: str | None
 
 
 class Column(IntEnum):

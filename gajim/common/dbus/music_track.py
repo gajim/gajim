@@ -22,7 +22,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 from typing import TypedDict
 
 import logging
@@ -48,7 +47,7 @@ class TrackProperties(TypedDict, total=False):
 
 class MusicTrackListener:
 
-    _instance: Optional[MusicTrackListener] = None
+    _instance: MusicTrackListener | None = None
 
     @classmethod
     def get(cls) -> MusicTrackListener:
@@ -58,19 +57,19 @@ class MusicTrackListener:
 
     def __init__(self) -> None:
         self.players: dict[str, int] = {}
-        self.connection: Optional[Gio.DBusConnection] = None
-        self._current_tune: Optional[TuneData] = None
+        self.connection: Gio.DBusConnection | None = None
+        self._current_tune: TuneData | None = None
         self._running = False
 
         if sys.platform not in ('win32', 'darwin'):
             self.start()
 
-    def _emit(self, info: Optional[TuneData]) -> None:
+    def _emit(self, info: TuneData | None) -> None:
         self._current_tune = info
         app.ged.raise_event(MusicTrackChanged(info=info))
 
     @property
-    def current_tune(self) -> Optional[TuneData]:
+    def current_tune(self) -> TuneData | None:
         return self._current_tune
 
     def start(self):
@@ -181,7 +180,7 @@ class MusicTrackListener:
         self._get_playing_track(user_data[0])
 
     @staticmethod
-    def _get_music_info(properties: TrackProperties) -> Optional[TuneData]:
+    def _get_music_info(properties: TrackProperties) -> TuneData | None:
         meta = properties.get('Metadata')
         if meta is None or not meta:
             return None

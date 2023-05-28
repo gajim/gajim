@@ -16,7 +16,6 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
-from typing import Optional
 
 import logging
 
@@ -52,8 +51,8 @@ class ChatActionProcessor(Gtk.Popover):
         self.connect('closed', self._on_popover_closed)
         self.connect('destroy', self._on_destroy)
 
-        self._account: Optional[str] = None
-        self._contact: Optional[types.ChatContactT] = None
+        self._account: str | None = None
+        self._contact: types.ChatContactT | None = None
 
         self._message_input = message_input
         self._message_input.connect('key-press-event', self._on_key_press)
@@ -64,8 +63,8 @@ class ChatActionProcessor(Gtk.Popover):
 
         self._nick_completion = GroupChatNickCompletion()
 
-        self._start_mark: Optional[Gtk.TextMark] = None
-        self._current_iter: Optional[Gtk.TextIter] = None
+        self._start_mark: Gtk.TextMark | None = None
+        self._current_iter: Gtk.TextIter | None = None
 
         self._active = False
 

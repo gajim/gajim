@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from gi.repository import Gtk
 
 try:
@@ -24,9 +22,7 @@ except Exception:
     pass
 
 
-def create_gtk_widget() -> Optional[tuple[Gst.Element,
-                                          Gtk.Widget,
-                                          str]]:
+def create_gtk_widget() -> tuple[Gst.Element, Gtk.Widget, str] | None:
     gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
     if gtkglsink is not None:
         glsinkbin = Gst.ElementFactory.make('glsinkbin', None)

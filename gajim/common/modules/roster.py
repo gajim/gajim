@@ -19,7 +19,6 @@ from __future__ import annotations
 from typing import cast
 from typing import Iterable
 from typing import Iterator
-from typing import Optional
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
@@ -158,10 +157,10 @@ class Roster(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def get_item(self, jid: JID) -> Optional[RosterItem]:
+    def get_item(self, jid: JID) -> RosterItem | None:
         return self._roster.get(jid)
 
-    def set_groups(self, jid: JID, groups: Optional[Iterable[str]]) -> None:
+    def set_groups(self, jid: JID, groups: Iterable[str] | None) -> None:
         if groups is not None:
             groups = set(groups)
         item = self.get_item(jid)

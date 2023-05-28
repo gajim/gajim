@@ -15,7 +15,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
 
 import logging
 import time
@@ -63,7 +62,7 @@ from gajim.gtk.util import open_window
 log = logging.getLogger('gajim.client')
 
 
-IgnoredTlsErrorsT = Optional[set[Gio.TlsCertificateFlags]]
+IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
 
 
 class Client(Observable):
@@ -144,7 +143,7 @@ class Client(Observable):
         return self._client.features
 
     @property
-    def local_address(self) -> Optional[str]:
+    def local_address(self) -> str | None:
         address = self._client.local_address
         if address is not None:
             return address.to_string().split(':')[0]

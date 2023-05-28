@@ -15,7 +15,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Callable
-from typing import Optional
 
 import logging
 import os
@@ -142,8 +141,8 @@ class FancyFormatter(logging.Formatter):
     }
 
     def __init__(self,
-                 fmt: Optional[str] = None,
-                 datefmt: Optional[str] = None,
+                 fmt: str | None = None,
+                 datefmt: str | None = None,
                  use_color: bool = False) -> None:
         logging.Formatter.__init__(self, fmt, datefmt)
         self.use_color = use_color

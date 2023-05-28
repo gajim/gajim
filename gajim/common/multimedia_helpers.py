@@ -16,8 +16,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 import logging
 
 try:
@@ -44,7 +42,7 @@ class DeviceManager:
 
     def detect_element(self, name: str, text: str, pipe: str = '%s') -> None:
         if Gst.ElementFactory.find(name):
-            element: Optional[Gst.Element] = Gst.ElementFactory.make(
+            element: Gst.Element | None = Gst.ElementFactory.make(
                 name, f'{name}presencetest')
             if element is None:
                 log.warning('could not create %spresencetest', name)

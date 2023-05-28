@@ -17,7 +17,6 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 from typing import NamedTuple
-from typing import Optional
 
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
@@ -41,7 +40,7 @@ class DialogButton(NamedTuple):
     is_default: bool
 
     @classmethod
-    def make(cls, type_: Optional[str] = None, **kwargs: Any) -> DialogButton:
+    def make(cls, type_: str | None = None, **kwargs: Any) -> DialogButton:
         # Defaults
         default_kwargs: dict[str, Any] = {
             'response': None,
@@ -149,7 +148,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
                  sec_text: str,
                  buttons: list[DialogButton],
                  modal: bool = True,
-                 transient_for: Optional[Gtk.Window] = None
+                 transient_for: Gtk.Window | None = None
                  ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
@@ -215,7 +214,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
                  check_text: str,
                  buttons: list[DialogButton],
                  modal: bool = True,
-                 transient_for: Optional[Gtk.Window] = None
+                 transient_for: Gtk.Window | None = None
                  ) -> None:
         ConfirmationDialog.__init__(self,
                                     title,
@@ -258,7 +257,7 @@ class PastePreviewDialog(ConfirmationDialog):
                  image: GdkPixbuf.Pixbuf,
                  buttons: list[DialogButton],
                  modal: bool = True,
-                 transient_for: Optional[Gtk.Window] = None
+                 transient_for: Gtk.Window | None = None
                  ) -> None:
         ConfirmationDialog.__init__(self,
                                     title,
@@ -294,9 +293,9 @@ class InputDialog(ConfirmationDialog):
                  text: str,
                  sec_text: str,
                  buttons: list[DialogButton],
-                 input_str: Optional[str] = None,
+                 input_str: str | None = None,
                  modal: bool = True,
-                 transient_for: Optional[Gtk.Window] = None,
+                 transient_for: Gtk.Window | None = None,
                  ) -> None:
         ConfirmationDialog.__init__(self,
                                     title,

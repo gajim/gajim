@@ -20,7 +20,6 @@
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
 from typing import Any
-from typing import Union
 
 import logging
 import sys
@@ -170,10 +169,10 @@ class GtkMenuBackend(EventHelper):
     def _on_our_show(self, _event: events.ShowChanged) -> None:
         self.update_state()
 
-    def _on_account_state(self,
-                          _event: Union[events.AccountConnected,
-                                        events.AccountDisconnected]
-                          ) -> None:
+    def _on_account_state(
+        self,
+        _event: events.AccountConnected | events.AccountDisconnected
+    ) -> None:
         account_connected = bool(app.get_number_of_connected_accounts() > 0)
         self._ui.start_chat_menuitem.set_sensitive(account_connected)
 

@@ -27,8 +27,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Optional
-from typing import Union
 
 import logging
 import sys
@@ -183,7 +181,7 @@ class PopupNotification(Gtk.Window):
         self.set_decorated(False)
         self.set_keep_above(True)
 
-        self._timeout_id: Optional[int] = None
+        self._timeout_id: int | None = None
         self._event = event
 
         self._ui = get_builder('popup_notification_window.ui')
@@ -384,7 +382,7 @@ class Linux(NotificationBackend):
                 _('Mark as Read'), action, params.to_variant())
 
     def _make_notification_id(self,
-                              event: events.Notification) -> Optional[str]:
+                              event: events.Notification) -> str | None:
         if event.type in ('connection-failed', 'server-shutdown'):
             return self._make_id([event.type, event.account])
 
@@ -419,7 +417,7 @@ class Linux(NotificationBackend):
 
 
 def _get_avatar_for_notification(account: str,
-                                 jid: Union[JID, str]) -> GdkPixbuf.Pixbuf:
+                                 jid: JID | str) -> GdkPixbuf.Pixbuf:
     scale = get_monitor_scale_factor()
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
