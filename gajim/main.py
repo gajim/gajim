@@ -95,6 +95,11 @@ def _check_required_deps() -> None:
     check_version('sqlite', sqlite3.sqlite_version, _MIN_SQLITE_VER)
 
 
+def _init_translations() -> None:
+    import gajim.common.i18n
+    gajim.common.i18n.init()
+
+
 def _init_gui(gui: str) -> None:
     if gui == 'GTK':
         _init_gtk()
@@ -162,5 +167,6 @@ def run() -> None:
     _check_required_deps()
     _set_proc_title()
     _set_env_vars()
+    _init_translations()
     _init_gui('GTK')
     _run_app()

@@ -34,7 +34,7 @@ from gajim.common import ged
 from gajim.common.events import MessageSent
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
-from gajim.common.i18n import LANG
+from gajim.common.i18n import get_default_lang
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
 from gajim.common.types import ChatContactT
@@ -219,7 +219,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             # use the default one
             lang = app.settings.get('speller_language')
             if not lang:
-                lang = LANG
+                lang = get_default_lang()
 
         assert isinstance(lang, str)
         lang = Gspell.language_lookup(lang)

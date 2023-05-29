@@ -49,7 +49,7 @@ from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common import types
 from gajim.common.const import Display
-from gajim.common.i18n import LANG
+from gajim.common.i18n import get_default_lang
 
 if typing.TYPE_CHECKING:
     from gajim.common.call_manager import CallManager
@@ -294,7 +294,7 @@ def detect_dependencies() -> None:
     for dep, val in _dependencies.items():
         log('gajim').info('%-13s %s', dep, val)
 
-    log('gajim').info('Used language: %s', LANG)
+    log('gajim').info('Used language: %s', get_default_lang())
 
 
 def detect_desktop_env() -> str | None:
