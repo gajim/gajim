@@ -94,6 +94,8 @@ class Translation:
         self.translation = gettext.NullTranslations()
         self._default_lang = None
 
+        self.install()
+
     def get_default_lang(self) -> str:
         assert self._default_lang is not None
         return self._default_lang
