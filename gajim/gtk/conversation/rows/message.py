@@ -106,13 +106,7 @@ class MessageRow(BaseRow):
         else:
             from_us = kind == 'outgoing'
 
-        is_previewable = False
-        preview_enabled = app.settings.get('enable_file_preview')
-        if additional_data is not None and preview_enabled:
-            is_previewable = app.preview_manager.is_previewable(
-                text, additional_data)
-
-        if is_previewable:
+        if app.preview_manager.is_previewable(text, additional_data):
             muc_context = None
             if isinstance(self._contact,
                           GroupchatContact | GroupchatParticipant):

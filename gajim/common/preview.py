@@ -306,7 +306,12 @@ class PreviewManager:
 
     def is_previewable(self,
                        text: str,
-                       additional_data: AdditionalDataDict) -> bool:
+                       additional_data: AdditionalDataDict | None
+                       ) -> bool:
+
+        if additional_data is None:
+            return False
+
         if not IRI_RX.fullmatch(text):
             # urlparse removes whitespace (and who knows what else) from URLs,
             # so can't be used for validation.
@@ -336,6 +341,7 @@ class PreviewManager:
                        from_us: bool,
                        context: str | None = None
                        ) -> None:
+
         if uri.startswith('geo:'):
             preview = Preview(uri, None, None, None, 96, widget)
             preview.update_widget()
@@ -344,6 +350,10 @@ class PreviewManager:
 
         preview = self._process_web_uri(uri, widget, from_us, context)
         self._previews[preview.id] = preview
+
+        if not app.settings.get('enable_file_preview'):
+            preview.update_widget()
+            return
 
         if not preview.orig_exists:
             if context is not None and not from_us:
@@ -554,6 +564,10 @@ class PreviewManager:
                          data,
                          self._on_orig_write_finished,
                          preview)
+
+        if not app.settings.get('enable_file_preview'):
+            preview.update_widget()
+            return
 
         if preview.is_previewable:
             if preview.create_thumbnail(data):

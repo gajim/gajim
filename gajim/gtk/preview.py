@@ -142,7 +142,9 @@ class PreviewWidget(Gtk.Box):
             self._ui.preview_box.set_size_request(160, -1)
             return
 
-        if preview.is_previewable and preview.orig_exists:
+        preview_enabled = app.settings.get('enable_file_preview')
+
+        if preview_enabled and preview.is_previewable and preview.orig_exists:
             self._ui.icon_event_box.hide()
             self._ui.image_button.show()
             self._ui.save_as_button.show()
@@ -170,11 +172,16 @@ class PreviewWidget(Gtk.Box):
             self._ui.info_message.show()
 
         if preview.orig_exists:
+            if preview_enabled:
+                self._ui.link_button.hide()
+
             self._ui.download_button.hide()
             self._ui.open_folder_button.show()
             self._ui.save_as_button.show()
-            self._ui.link_button.hide()
-            if (preview.orig_path is not None and preview.is_audio and
+
+            if (preview_enabled and
+                    preview.orig_path is not None and
+                    preview.is_audio and
                     app.is_installed('GST') and
                     contains_audio_streams(preview.orig_path)):
                 self._ui.image_button.hide()
@@ -183,7 +190,10 @@ class PreviewWidget(Gtk.Box):
                 self._ui.right_box.reorder_child(audio_widget, 1)
         else:
             if preview.file_size == 0:
-                self._ui.download_button.hide()
+                if preview_enabled:
+                    self._ui.download_button.hide()
+                else:
+                    self._ui.download_button.show()
                 self._ui.link_button.show()
             else:
                 self._ui.download_button.show()
