@@ -58,8 +58,6 @@ from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.events import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
-from gajim.plugins.pluginmanager import PluginManager
-from gajim.plugins.repository import PluginRepository
 
 
 class CoreApplication(ged.EventHelper):
@@ -119,6 +117,9 @@ class CoreApplication(ged.EventHelper):
             app.to_be_removed[account] = []
             app.nicks[account] = app.settings.get_account_setting(account,
                                                                   'name')
+
+        from gajim.plugins.pluginmanager import PluginManager
+        from gajim.plugins.repository import PluginRepository
 
         app.plugin_manager = PluginManager()
         app.plugin_manager.init_plugins()
