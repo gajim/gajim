@@ -153,7 +153,16 @@ class ChatPage(Gtk.Box):
 
         self._chat_stack.show_chat(account, jid)
 
-        if self._search_revealer.get_reveal_child():
+        if (not self._search_revealer.get_reveal_child() and
+                self._restore_occupants_list and
+                self._chat_control.contact.is_groupchat):
+            # GroupchatRoster was hidden by Search initially, but Search was
+            # afterwards closed in a 1:1 chat. Only restore GroupchatRoster if
+            # a group chat was selected.
+            app.settings.set('hide_groupchat_occupants_list', False)
+            self._restore_occupants_list = False
+
+        if not app.settings.get('hide_groupchat_occupants_list'):
             self._search_view.set_context(account, jid)
 
         self.emit('chat-selected', workspace_id, account, jid)
@@ -342,7 +351,11 @@ class ChatPage(Gtk.Box):
         if self._search_revealer.get_reveal_child():
             self._search_revealer.set_reveal_child(False)
 
-            if self._restore_occupants_list:
+            if (self._restore_occupants_list and
+                    self._chat_control.contact.is_groupchat):
+                # Restore GroupchatRoster only if a group chat is selected
+                # currently. If this condition isn' satisfied, it is checked
+                # again as soon as a chat is selected in _on_chat_selected.
                 app.settings.set('hide_groupchat_occupants_list', False)
                 self._restore_occupants_list = False
 
