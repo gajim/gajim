@@ -154,7 +154,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                           event: AccountConnected | AccountDisconnected
                           ) -> None:
 
-        if not app.account_is_connected(self._account):
+        if event.account != self._account:
             return
 
         if isinstance(event, AccountConnected):
