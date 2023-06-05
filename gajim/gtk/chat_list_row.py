@@ -525,7 +525,7 @@ class ChatListRow(Gtk.ListBoxRow):
             self.contact.connect('state-changed', self._on_muc_state_changed)
             self.contact.connect('mam-sync-started', self._on_mam_sync_changed)
             self.contact.connect('mam-sync-finished', self._on_mam_sync_changed)
-            self.contact.connect('mam-sync-error', self._on_mam_sync_changed)
+            self.contact.connect('mam-sync-error', self._on_mam_sync_error)
 
             self._client.connect_signal('state-changed',
                                         self._on_client_state_changed)
@@ -597,13 +597,21 @@ class ChatListRow(Gtk.ListBoxRow):
             context.add_class('info-color')
             self._ui.connection_icon.set_tooltip_text(_('Fetching messages…'))
             self._ui.connection_icon.show()
-        elif signal_name == 'mam-sync-error':
-            self._ui.connection_icon.set_from_icon_name(
-                'feather-zap-symbolic', Gtk.IconSize.MENU)
-            context.add_class('error-color')
-            self._ui.connection_icon.set_tooltip_text(
-                _('There has been an error while trying to fetch messages.'))
-            self._ui.connection_icon.show()
+
+    def _on_mam_sync_error(self,
+                           _contact: GroupchatContact,
+                           _signal_name: str,
+                           error_text: str
+                           ) -> None:
+
+        self._reset_connection_icon()
+        self._ui.connection_icon.set_from_icon_name(
+            'feather-zap-symbolic', Gtk.IconSize.MENU)
+        self._ui.connection_icon.get_style_context().add_class('error-color')
+        self._ui.connection_icon.set_tooltip_text(
+            _('There has been an error while trying to '
+              'fetch messages: %s') % error_text)
+        self._ui.connection_icon.show()
 
     def _reset_connection_icon(self) -> None:
         self._ui.connection_icon.hide()

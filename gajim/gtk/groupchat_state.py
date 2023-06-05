@@ -19,6 +19,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import SimpleClientState
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
@@ -61,7 +62,7 @@ class GroupchatState(Gtk.Box):
         self._contact.connect('state-changed', self._on_muc_state_changed)
         self._contact.connect('mam-sync-started', self._on_mam_sync_changed)
         self._contact.connect('mam-sync-finished', self._on_mam_sync_changed)
-        self._contact.connect('mam-sync-error', self._on_mam_sync_changed)
+        self._contact.connect('mam-sync-error', self._on_mam_sync_error)
 
         self._client = app.get_client(contact.account)
         self._client.connect_signal('state-changed',
@@ -97,15 +98,27 @@ class GroupchatState(Gtk.Box):
 
     def _on_mam_sync_changed(self,
                              _contact: GroupchatContact,
-                             signal_name: str
+                             signal_name: str,
                              ) -> None:
 
-        if signal_name in ('mam-sync-started', 'mam-sync-error'):
+        if signal_name == 'mam-sync-started':
             self.set_visible(True)
             self._ui.groupchat_state.set_visible_child_name(signal_name)
             return
 
         self.hide()
+
+    def _on_mam_sync_error(self,
+                           _contact: GroupchatContact,
+                           signal_name: str,
+                           error_text: str
+                           ) -> None:
+
+        self.set_visible(True)
+        self._ui.groupchat_state.set_visible_child_name(signal_name)
+        self._ui.mam_error_label.set_text(
+            _('There has been an error while trying to '
+              'fetch messages: %s') % error_text)
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
         self.hide()

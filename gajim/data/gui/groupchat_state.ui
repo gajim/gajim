@@ -165,10 +165,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkLabel" id="mam_error_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">There has been an error while trying to fetch messages.</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">50</property>
             <property name="xalign">0</property>

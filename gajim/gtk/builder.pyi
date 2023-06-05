@@ -522,6 +522,7 @@ class GroupchatRosterTooltipBuilder(Builder):
 
 class GroupchatStateBuilder(Builder):
     groupchat_state: Gtk.Stack
+    mam_error_label: Gtk.Label
 
 
 class GroupsPostWindowBuilder(Builder):
