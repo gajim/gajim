@@ -44,7 +44,7 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 -----END CERTIFICATE-----'''
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
-win = CertificateDialog(None, 'testacc', gio_cert)
+win = CertificateDialog(Gtk.Window(), 'testacc', gio_cert)
 win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()

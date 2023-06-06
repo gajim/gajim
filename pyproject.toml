@@ -103,11 +103,9 @@ exclude = [
   "gajim/plugins/pluginmanager.py",
   "scripts/update_flatpak_manifest.py",
   "test/common/test_uri_util.py",
-  "test/dialogs/certificate_dialog.py",
   "test/dialogs/change_password.py",
   "test/dialogs/dataform.py",
   "test/dialogs/groupchat_info.py",
-  "test/dialogs/ssl_error_dialog.py",
   "test/gui/test_menus.py",
   "test/gui/test_nick_completion.py",
 ]

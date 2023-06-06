@@ -1,3 +1,5 @@
+from typing import cast
+
 from unittest.mock import MagicMock
 
 from gi.repository import Gio
@@ -49,11 +51,14 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 
 app.settings = MagicMock()
 app.settings.get_account_setting = MagicMock(
-    return_value=['myhost@example.tld'])
+    return_value='myhost@example.tld')
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
-ssl_error_num = 10
-win = SSLErrorDialog('testacc', None, gio_cert, ssl_error_num)
+# Listing of Gio.TlsCertificateFlags:
+# https://lazka.github.io/pgi-docs/#Gio-2.0/flags.html#Gio.TlsCertificateFlags
+ssl_error_num = cast(Gio.TlsCertificateFlags, 10)
+
+win = SSLErrorDialog('testacc', MagicMock(), gio_cert, ssl_error_num)
 win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()
