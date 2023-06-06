@@ -78,6 +78,8 @@ class DataFormWidget(Gtk.ScrolledWindow):
 
         self.add(self._form_grid)
 
+        self.connect('destroy', self._on_destroy)
+
     @property
     def title(self) -> str | None:
         return self._form_grid.title
@@ -111,6 +113,9 @@ class DataFormWidget(Gtk.ScrolledWindow):
             if isinstance(widget, Gtk.Entry):
                 widget.grab_focus_without_selecting()
                 break
+
+    def _on_destroy(self, widget: Gtk.ScrolledWindow) -> None:
+        self._form_grid.destroy()
 
 
 class FormGrid(Gtk.Grid):
@@ -162,6 +167,8 @@ class FormGrid(Gtk.Grid):
 
         self._analyse_fields(form_node, options)
         self._parse_form(form_node, options)
+
+        self.connect('destroy', self._on_destroy)
 
     def _add_row(
         self,
@@ -238,6 +245,12 @@ class FormGrid(Gtk.Grid):
         viewport = cast(Gtk.Viewport, self.get_parent())
         dataform_widget = cast(DataFormWidget, viewport.get_parent())
         dataform_widget.emit('is-valid', value)
+
+    def _on_destroy(self, widget: Gtk.Grid) -> None:
+        for row in self.rows:
+            if isinstance(row, Field):
+                row.destroy()
+        self.rows.clear()
 
 
 class SizeAdjustment:
@@ -372,6 +385,10 @@ class Field:
             self._validate_source_id = None
 
         self._validate_source_id = GLib.timeout_add(200, _start_validation)
+
+    def destroy(self) -> None:
+        if self._validate_source_id is not None:
+            GLib.source_remove(self._validate_source_id)
 
 
 class BooleanField(Field):
