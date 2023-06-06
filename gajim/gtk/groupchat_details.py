@@ -19,11 +19,9 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
-from gajim.common.events import MucDiscoUpdate
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
@@ -60,6 +58,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self._contact = contact
         self._contact.connect('avatar-update', self._on_avatar_update)
+        self._contact.connect('disco-info-update', self._on_disco_info_update)
 
         self._ui = get_builder('groupchat_details.ui')
         self._ui.connect_signals(self)
@@ -91,9 +90,6 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         if page is not None:
             self._switcher.set_row(page)
 
-        app.ged.register_event_handler(
-            'muc-disco-update', ged.GUI1, self._on_muc_disco_update)
-
         self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
@@ -109,9 +105,11 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._ui.edit_name_button.set_tooltip_text(
             _('Not connected') if not state.is_connected else _('Edit Name…'))
 
-    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        if event.jid != self._contact.jid:
-            return
+    def _on_disco_info_update(self,
+                              _contact: GroupchatContact,
+                              _signal_name: str
+                              ) -> None:
+
         self._ui.name_entry.set_text(self._contact.name)
         disco_info = self._contact.get_disco()
         assert disco_info is not None
@@ -228,7 +226,4 @@ class GroupchatDetails(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_destroy(self, _widget: GroupchatDetails) -> None:
-        app.ged.remove_event_handler('muc-disco-update',
-                                     ged.GUI1,
-                                     self._on_muc_disco_update)
         app.check_finalize(self)

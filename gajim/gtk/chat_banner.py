@@ -30,7 +30,6 @@ from gajim.common.const import XmppUriQuery
 from gajim.common.events import AccountEnabled
 from gajim.common.events import BookmarksReceived
 from gajim.common.events import MessageReceived
-from gajim.common.events import MucDiscoUpdate
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
@@ -91,7 +90,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         if not self.has_events_registered():
             self.register_events([
                 ('message-received', ged.GUI2, self._on_message_received),
-                ('muc-disco-update', ged.GUI2, self._on_muc_disco_update),
                 ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
                 ('account-enabled', ged.GUI2, self._on_account_changed),
                 ('account-disabled', ged.GUI2, self._on_account_changed)
@@ -125,7 +123,8 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._contact.multi_connect({
                 'user-role-changed': self._on_user_role_changed,
                 'state-changed': self._on_muc_state_changed,
-                'room-voice-request': self._on_room_voice_request
+                'room-voice-request': self._on_room_voice_request,
+                'disco-info-update': self._on_disco_info_update,
             })
 
         elif isinstance(self._contact, GroupchatParticipant):
@@ -215,10 +214,10 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._update_name_label()
 
-    def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
-        assert self._contact is not None
-        if event.jid != self._contact.jid:
-            return
+    def _on_disco_info_update(self,
+                              _contact: GroupchatContact,
+                              _signal_name: str
+                              ) -> None:
 
         self._update_name_label()
         self._update_description_label()
