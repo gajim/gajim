@@ -398,6 +398,7 @@ class MamMessageReceived(ApplicationEvent):
     stanza_id: str
     archive_jid: str
     kind: KindConstant
+    occupant_id: str | None
 
 
 @dataclass
@@ -423,6 +424,7 @@ class MessageReceived(ApplicationEvent):
 class GcMessageReceived(MessageReceived):
     name: str = field(init=False, default='gc-message-received')
     room_jid: str
+    occupant_id: str | None
 
 
 @dataclass

@@ -237,16 +237,22 @@ class MUCPresenceData:
     affiliation: Affiliation
     role: Role
     real_jid: JID | None
+    occupant_id: str | None
 
     @classmethod
-    def from_presence(cls, properties: PresenceProperties) -> MUCPresenceData:
+    def from_presence(cls,
+                      properties: PresenceProperties,
+                      occupant_id: str | None
+                      ) -> MUCPresenceData:
+
         return cls(show=properties.show,
                    status=properties.status,
                    idle_time=properties.idle_timestamp,
                    available=properties.type.is_available,
                    affiliation=properties.muc_user.affiliation,
                    role=properties.muc_user.role,
-                   real_jid=properties.muc_user.jid)
+                   real_jid=properties.muc_user.jid,
+                   occupant_id=occupant_id)
 
 
 UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
@@ -255,7 +261,8 @@ UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        available=False,
                                        affiliation=Affiliation.NONE,
                                        role=Role.NONE,
-                                       real_jid=None)
+                                       real_jid=None,
+                                       occupant_id=None)
 
 
 class VariantMixin:

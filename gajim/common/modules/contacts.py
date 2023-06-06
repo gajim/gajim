@@ -971,6 +971,10 @@ class GroupchatParticipant(CommonContact):
     def type_string(self) -> str:
         return 'pm'
 
+    @property
+    def occupant_id(self) -> str | None:
+        return self._presence.occupant_id
+
 
 def can_add_to_roster(
     contact: BareContact | GroupchatContact | GroupchatParticipant

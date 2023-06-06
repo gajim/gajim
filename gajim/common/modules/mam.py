@@ -299,6 +299,8 @@ class MAM(BaseModule):
                 return
             stanza_id = message_id
 
+        occupant_id = self._get_occupant_id(properties)
+
         event_attr: dict[str, Any] = {
             'account': self._account,
             'jid': jid,
@@ -309,6 +311,7 @@ class MAM(BaseModule):
             'stanza_id': stanza_id,
             'archive_jid': properties.mam.archive,
             'kind': kind,
+            'occupant_id': occupant_id,
         }
 
         if check_if_message_correction(properties,
@@ -320,6 +323,7 @@ class MAM(BaseModule):
                                        self._log):
             return
 
+
         app.storage.archive.insert_into_logs(
             self._account,
             jid,
@@ -329,9 +333,23 @@ class MAM(BaseModule):
             contact_name=properties.muc_nickname,
             additional_data=additional_data,
             stanza_id=stanza_id,
-            message_id=properties.id)
+            message_id=properties.id,
+            occupant_id=occupant_id)
 
         app.ged.raise_event(MamMessageReceived(**event_attr))
+
+    def _get_occupant_id(self, properties: MessageProperties) -> str | None:
+        if not properties.type.is_groupchat:
+            return None
+
+        if properties.occupant_id is None:
+            return None
+
+        contact = self._client.get_module('Contacts').get_contact(
+            properties.jid.bare, groupchat=True)
+        if contact.supports(Namespace.OCCUPANT_ID):
+            return properties.occupant_id
+        return None
 
     def _is_valid_request(self, properties: MessageProperties) -> bool:
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)

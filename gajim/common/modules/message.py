@@ -192,8 +192,16 @@ class Message(BaseModule):
             if not msgtxt:
                 return
 
+            occupant_id = None
+            group_contact = self._client.get_module('Contacts').get_contact(
+                jid, groupchat=True)
+            if group_contact.supports(Namespace.OCCUPANT_ID):
+                # Only store occupant-id if MUC announces support
+                occupant_id = properties.occupant_id
+
             event_attr.update({
                 'room_jid': jid,
+                'occupant_id': occupant_id,
             })
 
             event = GcMessageReceived(**event_attr)
@@ -260,7 +268,8 @@ class Message(BaseModule):
                 contact_name=event.properties.muc_nickname,
                 additional_data=event.additional_data,
                 stanza_id=event.stanza_id,
-                message_id=event.properties.id)
+                message_id=event.properties.id,
+                occupant_id=event.occupant_id)
             return msg_log_id
 
         return None

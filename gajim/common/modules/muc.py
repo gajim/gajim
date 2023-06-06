@@ -759,8 +759,15 @@ class MUC(BaseModule):
     def _process_user_presence(self,
                                properties: PresenceProperties
                                ) -> MUCPresenceData:
+
         jid = properties.jid
-        muc_presence = MUCPresenceData.from_presence(properties)
+        group_contact = self._client.get_module('Contacts').get_contact(
+            jid.bare, groupchat=True)
+        occupant_id = None
+        if group_contact.supports(Namespace.OCCUPANT_ID):
+            occupant_id = properties.occupant_id
+
+        muc_presence = MUCPresenceData.from_presence(properties, occupant_id)
         if not muc_presence.available:
             self._joined_users[jid.bare].pop(jid.resource)
         else:
