@@ -241,6 +241,10 @@ class Discovery(BaseModule):
             account=self._account,
             jid=result.info.jid))
 
+        contact = self._con.get_module('Contacts').get_contact(
+            result.info.jid, groupchat=True)
+        contact.notify('disco-info-update')
+
         yield result
 
     @as_task

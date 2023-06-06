@@ -522,6 +522,8 @@ class ChatListRow(Gtk.ListBoxRow):
 
         elif isinstance(self.contact, GroupchatContact):
             self.contact.connect('avatar-update', self._on_avatar_update)
+            self.contact.connect('disco-info-update',
+                                  self._on_disco_info_update)
             self.contact.connect('state-changed', self._on_muc_state_changed)
             self.contact.connect('mam-sync-started', self._on_mam_sync_changed)
             self.contact.connect('mam-sync-finished', self._on_mam_sync_changed)
@@ -556,6 +558,12 @@ class ChatListRow(Gtk.ListBoxRow):
                           _signal_name: str
                           ) -> None:
         self.update_avatar()
+
+    def _on_disco_info_update(self,
+                              _contact: ChatContactT,
+                              _signal_name: str
+                              ) -> None:
+        self.update_name()
 
     def _on_client_state_changed(self, *args: Any) -> None:
         self._update_joined_state()
