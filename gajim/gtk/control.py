@@ -356,21 +356,14 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        if event.properties.muc_nickname is None:
-            # message from server
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.timestamp,
-                                 displaymarking=event.displaymarking,
-                                 additional_data=event.additional_data)
-        else:
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.timestamp,
-                                 contact=event.properties.muc_nickname,
-                                 displaymarking=event.displaymarking,
-                                 message_id=event.properties.id,
-                                 stanza_id=event.stanza_id,
-                                 msg_log_id=event.msg_log_id,
-                                 additional_data=event.additional_data)
+        self.add_muc_message(event.msgtxt,
+                             tim=event.properties.timestamp,
+                             contact=event.properties.muc_nickname,
+                             displaymarking=event.displaymarking,
+                             message_id=event.properties.id,
+                             stanza_id=event.stanza_id,
+                             msg_log_id=event.msg_log_id,
+                             additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         if not self._is_event_processable(event):
