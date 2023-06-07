@@ -105,10 +105,8 @@ class ConversationRow(NamedTuple):
     real_jid: JID | None
     time: float
     kind: int
-    show: int
     message: str
     error: CommonError
-    subject: str
     additional_data: AdditionalDataDict | None
     stanza_id: str
     message_id: str
@@ -391,10 +389,8 @@ class MessageArchiveStorage(SqliteStorage):
                 real_jid as "real_jid [jid]",
                 time,
                 kind,
-                show,
                 message,
                 error as "error [common_error]",
-                subject,
                 additional_data,
                 stanza_id,
                 message_id,
@@ -479,10 +475,8 @@ class MessageArchiveStorage(SqliteStorage):
                 real_jid as "real_jid [jid]",
                 time,
                 kind,
-                show,
                 message,
                 error as "error [common_error]",
-                subject,
                 additional_data,
                 stanza_id,
                 message_id,
@@ -504,10 +498,8 @@ class MessageArchiveStorage(SqliteStorage):
                 real_jid as "real_jid [jid]",
                 time,
                 kind,
-                show,
                 message,
                 error as "error [common_error]",
-                subject,
                 additional_data,
                 stanza_id,
                 message_id,
@@ -560,10 +552,8 @@ class MessageArchiveStorage(SqliteStorage):
                 real_jid as "real_jid [jid]",
                 time,
                 kind,
-                show,
                 message,
                 error as "error [common_error]",
-                subject,
                 additional_data,
                 stanza_id,
                 message_id,
