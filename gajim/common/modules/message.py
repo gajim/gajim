@@ -211,7 +211,6 @@ class Message(BaseModule):
 
             event = GcMessageReceived(**event_attr)
 
-            # TODO: Some plugins modify msgtxt in the GUI event
             msg_log_id = self._log_muc_message(event)
             event.msg_log_id = msg_log_id
             app.ged.raise_event(event)
@@ -261,24 +260,26 @@ class Message(BaseModule):
                          error=properties.error))
 
     def _log_muc_message(self, event: GcMessageReceived) -> int | None:
+        if not event.properties.muc_nickname:
+            return None
+
+        if not event.msgtxt:
+            return None
+
         self._check_for_mam_compliance(event.room_jid, event.stanza_id)
 
-        if event.msgtxt and event.properties.muc_nickname:
-            msg_log_id = app.storage.archive.insert_into_logs(
-                self._account,
-                event.jid,
-                event.properties.timestamp,
-                KindConstant.GC_MSG,
-                message=event.msgtxt,
-                contact_name=event.properties.muc_nickname,
-                additional_data=event.additional_data,
-                stanza_id=event.stanza_id,
-                message_id=event.properties.id,
-                occupant_id=event.occupant_id,
-                real_Jid=event.real_jid)
-            return msg_log_id
-
-        return None
+        return app.storage.archive.insert_into_logs(
+            self._account,
+            event.jid,
+            event.properties.timestamp,
+            KindConstant.GC_MSG,
+            message=event.msgtxt,
+            contact_name=event.properties.muc_nickname,
+            additional_data=event.additional_data,
+            stanza_id=event.stanza_id,
+            message_id=event.properties.id,
+            occupant_id=event.occupant_id,
+            real_Jid=event.real_jid)
 
     def _check_for_mam_compliance(self, room_jid: str, stanza_id: str) -> None:
         disco_info = app.storage.cache.get_last_disco_info(room_jid)
