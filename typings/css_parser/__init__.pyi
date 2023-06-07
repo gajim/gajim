@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional
 from typing import Union
 
 from pathlib import Path
@@ -14,4 +13,4 @@ from .stylesheets import MediaList
 ser: CSSSerializer
 
 
-def parseFile(filename: Union[str, Path], href: Optional[str] = ..., media: Union[MediaList, list[str], str, None] = ..., title: Optional[str] = ..., validate: Optional[bool] = ...) -> None: ...
+def parseFile(filename: Union[str, Path], href: str | None = ..., media: Union[MediaList, list[str], str, None] = ..., title: str | None = ..., validate: bool | None = ...) -> None: ...
