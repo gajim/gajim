@@ -325,12 +325,12 @@ class ChatControl(EventHelper):
                 return
             if event.archive_jid != self.contact.jid:
                 return
-            self.add_muc_message(event.msgtxt,
-                                 tim=event.properties.mam.timestamp,
-                                 contact=event.properties.muc_nickname,
-                                 message_id=event.properties.id,
-                                 stanza_id=event.stanza_id,
-                                 additional_data=event.additional_data)
+            self._add_muc_message(event.msgtxt,
+                                  tim=event.properties.mam.timestamp,
+                                  contact=event.properties.muc_nickname,
+                                  message_id=event.properties.id,
+                                  stanza_id=event.stanza_id,
+                                  additional_data=event.additional_data)
 
         else:
 
@@ -356,14 +356,14 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self.add_muc_message(event.msgtxt,
-                             tim=event.properties.timestamp,
-                             contact=event.properties.muc_nickname,
-                             displaymarking=event.displaymarking,
-                             message_id=event.properties.id,
-                             stanza_id=event.stanza_id,
-                             msg_log_id=event.msg_log_id,
-                             additional_data=event.additional_data)
+        self._add_muc_message(event.msgtxt,
+                              tim=event.properties.timestamp,
+                              contact=event.properties.muc_nickname,
+                              displaymarking=event.displaymarking,
+                              message_id=event.properties.id,
+                              stanza_id=event.stanza_id,
+                              msg_log_id=event.msg_log_id,
+                              additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         if not self._is_event_processable(event):
@@ -1190,16 +1190,16 @@ class ChatControl(EventHelper):
 
         self.add_info_message(message, event.timestamp)
 
-    def add_muc_message(self,
-                        text: str,
-                        tim: float,
-                        contact: str = '',
-                        displaymarking: Displaymarking | None = None,
-                        message_id: str | None = None,
-                        stanza_id: str | None = None,
-                        msg_log_id: int | None = None,
-                        additional_data: AdditionalDataDict | None = None,
-                        ) -> None:
+    def _add_muc_message(self,
+                         text: str,
+                         tim: float,
+                         contact: str = '',
+                         displaymarking: Displaymarking | None = None,
+                         message_id: str | None = None,
+                         stanza_id: str | None = None,
+                         msg_log_id: int | None = None,
+                         additional_data: AdditionalDataDict | None = None,
+                         ) -> None:
 
         assert isinstance(self._contact, GroupchatContact)
 
