@@ -22,6 +22,7 @@ import time
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
@@ -35,6 +36,7 @@ from gajim.common.events import MessageReceived
 from gajim.common.events import RawMessageReceived
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.misc import parse_xhtml
 from gajim.common.modules.util import check_if_message_correction
@@ -199,8 +201,11 @@ class Message(BaseModule):
                 # Only store occupant-id if MUC announces support
                 occupant_id = properties.occupant_id
 
+            real_jid = self._get_real_jid(properties)
+
             event_attr.update({
                 'room_jid': jid,
+                'real_jid': real_jid,
                 'occupant_id': occupant_id,
             })
 
@@ -269,7 +274,8 @@ class Message(BaseModule):
                 additional_data=event.additional_data,
                 stanza_id=event.stanza_id,
                 message_id=event.properties.id,
-                occupant_id=event.occupant_id)
+                occupant_id=event.occupant_id,
+                real_Jid=event.real_jid)
             return msg_log_id
 
         return None
@@ -278,6 +284,18 @@ class Message(BaseModule):
         disco_info = app.storage.cache.get_last_disco_info(room_jid)
         if stanza_id is None and disco_info.mam_namespace == Namespace.MAM_2:
             self._log.warning('%s announces mam:2 without stanza-id', room_jid)
+
+    def _get_real_jid(self, properties: MessageProperties) -> JID | None:
+        if not properties.type.is_groupchat:
+            return None
+
+        if not properties.jid.is_full:
+            return None
+
+        participant = self._client.get_module('Contacts').get_contact(
+                properties.jid, groupchat=True)
+        assert isinstance(participant, GroupchatParticipant)
+        return participant.real_jid
 
     def _get_unique_id(self,
                        properties: MessageProperties

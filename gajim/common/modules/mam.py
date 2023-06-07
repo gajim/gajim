@@ -300,6 +300,7 @@ class MAM(BaseModule):
             stanza_id = message_id
 
         occupant_id = self._get_occupant_id(properties)
+        real_jid = self._get_real_jid(properties)
 
         event_attr: dict[str, Any] = {
             'account': self._account,
@@ -312,6 +313,7 @@ class MAM(BaseModule):
             'archive_jid': properties.mam.archive,
             'kind': kind,
             'occupant_id': occupant_id,
+            'real_jid': real_jid,
         }
 
         if check_if_message_correction(properties,
@@ -323,7 +325,6 @@ class MAM(BaseModule):
                                        self._log):
             return
 
-
         app.storage.archive.insert_into_logs(
             self._account,
             jid,
@@ -334,9 +335,20 @@ class MAM(BaseModule):
             additional_data=additional_data,
             stanza_id=stanza_id,
             message_id=properties.id,
-            occupant_id=occupant_id)
+            occupant_id=occupant_id,
+            real_jid=real_jid,
+        )
 
         app.ged.raise_event(MamMessageReceived(**event_attr))
+
+    def _get_real_jid(self, properties: MessageProperties) -> JID | None:
+        if not properties.type.is_groupchat:
+            return None
+
+        if properties.muc_user is None:
+            return None
+
+        return properties.muc_user.jid
 
     def _get_occupant_id(self, properties: MessageProperties) -> str | None:
         if not properties.type.is_groupchat:
