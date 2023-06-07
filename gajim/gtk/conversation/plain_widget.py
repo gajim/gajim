@@ -21,9 +21,9 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from gajim.common.const import URIType
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import parse_uri
-from gajim.common.structs import URIType
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
