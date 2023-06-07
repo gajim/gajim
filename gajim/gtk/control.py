@@ -328,8 +328,10 @@ class ChatControl(EventHelper):
             self._add_muc_message(event.msgtxt,
                                   tim=event.properties.mam.timestamp,
                                   contact=event.properties.muc_nickname,
+                                  displaymarking=event.displaymarking,
                                   message_id=event.properties.id,
                                   stanza_id=event.stanza_id,
+                                  msg_log_id=event.msg_log_id,
                                   additional_data=event.additional_data)
 
         else:
@@ -1193,12 +1195,12 @@ class ChatControl(EventHelper):
     def _add_muc_message(self,
                          text: str,
                          tim: float,
-                         contact: str = '',
-                         displaymarking: Displaymarking | None = None,
-                         message_id: str | None = None,
-                         stanza_id: str | None = None,
-                         msg_log_id: int | None = None,
-                         additional_data: AdditionalDataDict | None = None,
+                         contact: str,
+                         displaymarking: Displaymarking | None,
+                         message_id: str | None,
+                         stanza_id: str | None,
+                         msg_log_id: int | None,
+                         additional_data: AdditionalDataDict | None,
                          ) -> None:
 
         assert isinstance(self._contact, GroupchatContact)
