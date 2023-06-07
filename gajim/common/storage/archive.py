@@ -99,17 +99,19 @@ class JidsTableRow(NamedTuple):
 
 
 class ConversationRow(NamedTuple):
+    log_line_id: int
     contact_name: str | None
+    occupant_id: str | None
+    real_jid: JID | None
     time: float
     kind: int
     show: int
     message: str
+    error: CommonError
     subject: str
     additional_data: AdditionalDataDict | None
-    log_line_id: int
-    message_id: str
     stanza_id: str
-    error: CommonError
+    message_id: str
     marker: str
 
 
@@ -382,10 +384,21 @@ class MessageArchiveStorage(SqliteStorage):
             time_order = 'AND time > ? ORDER BY time ASC, log_line_id ASC'
 
         sql = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id, stanza_id,
-                   error as "error [common_error]",
-                   marker as "marker [marker]"
+            SELECT
+                log_line_id,
+                contact_name,
+                occupant_id,
+                real_jid as "real_jid [jid]",
+                time,
+                kind,
+                show,
+                message,
+                error as "error [common_error]",
+                subject,
+                additional_data,
+                stanza_id,
+                message_id,
+                marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -459,10 +472,21 @@ class MessageArchiveStorage(SqliteStorage):
         n_lines = 50
 
         sql_before = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id, stanza_id,
-                   error as "error [common_error]",
-                   marker as "marker [marker]"
+            SELECT
+                log_line_id,
+                contact_name,
+                occupant_id,
+                real_jid as "real_jid [jid]",
+                time,
+                kind,
+                show,
+                message,
+                error as "error [common_error]",
+                subject,
+                additional_data,
+                stanza_id,
+                message_id,
+                marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -473,10 +497,21 @@ class MessageArchiveStorage(SqliteStorage):
                        account_id=account_id,
                        kinds=', '.join(kinds))
         sql_at_after = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id, stanza_id,
-                   error as "error [common_error]",
-                   marker as "marker [marker]"
+            SELECT
+                log_line_id,
+                contact_name,
+                occupant_id,
+                real_jid as "real_jid [jid]",
+                time,
+                kind,
+                show,
+                message,
+                error as "error [common_error]",
+                subject,
+                additional_data,
+                stanza_id,
+                message_id,
+                marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
@@ -518,10 +553,21 @@ class MessageArchiveStorage(SqliteStorage):
         kinds = map(str, [KindConstant.ERROR])
 
         sql = '''
-            SELECT contact_name, time, kind, show, message, subject,
-                   additional_data, log_line_id, message_id, stanza_id,
-                   error as "error [common_error]",
-                   marker as "marker [marker]"
+            SELECT
+                log_line_id,
+                contact_name,
+                occupant_id,
+                real_jid as "real_jid [jid]",
+                time,
+                kind,
+                show,
+                message,
+                error as "error [common_error]",
+                subject,
+                additional_data,
+                stanza_id,
+                message_id,
+                marker as "marker [marker]"
             FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND kind NOT IN ({kinds})
