@@ -400,6 +400,7 @@ class MamMessageReceived(ApplicationEvent):
     kind: KindConstant
     occupant_id: str | None
     real_jid: JID | None
+    msg_log_id: int | None
     displaymarking: Displaymarking | None
 
 

@@ -330,7 +330,7 @@ class MAM(BaseModule):
                                        self._log):
             return
 
-        app.storage.archive.insert_into_logs(
+        event_attr['msg_log_id'] = app.storage.archive.insert_into_logs(
             self._account,
             jid,
             properties.mam.timestamp,
