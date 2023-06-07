@@ -159,7 +159,7 @@ class Preview:
         return self._request
 
     @property
-    def request_uri(self) -> str | None:
+    def request_uri(self) -> str:
         if self._urlparts is None:
             return ''
         if self.is_aes_encrypted:
@@ -365,11 +365,13 @@ class PreviewManager:
             self.download_content(preview)
 
         elif not preview.thumb_exists:
+            assert preview.orig_path is not None
             load_file_async(preview.orig_path,
                             self._on_orig_load_finished,
                             preview)
 
         else:
+            assert preview.thumb_path is not None
             load_file_async(preview.thumb_path,
                             self._on_thumb_load_finished,
                             preview)
@@ -411,6 +413,7 @@ class PreviewManager:
         preview.file_size = os.path.getsize(preview.orig_path)
         if preview.is_previewable:
             if preview.create_thumbnail(data):
+                assert preview.thumbnail is not None
                 write_file_async(preview.thumb_path,
                                  preview.thumbnail,
                                  self._on_thumb_write_finished,
@@ -571,6 +574,7 @@ class PreviewManager:
 
         if preview.is_previewable:
             if preview.create_thumbnail(data):
+                assert preview.thumb_path is not None
                 write_file_async(preview.thumb_path,
                                  preview.thumbnail,
                                  self._on_thumb_write_finished,
@@ -580,7 +584,7 @@ class PreviewManager:
 
     @staticmethod
     def _on_orig_write_finished(_result: bool,
-                                error: GLib.Error,
+                                error: GLib.Error | None,
                                 preview: Preview) -> None:
         if preview.orig_path is None:
             return
@@ -598,7 +602,7 @@ class PreviewManager:
 
     @staticmethod
     def _on_thumb_write_finished(_result: bool,
-                                 error: GLib.Error,
+                                 error: GLib.Error | None,
                                  preview: Preview) -> None:
         if preview.thumb_path is None:
             return
