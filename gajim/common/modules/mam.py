@@ -302,6 +302,10 @@ class MAM(BaseModule):
         occupant_id = self._get_occupant_id(properties)
         real_jid = self._get_real_jid(properties)
 
+        displaymarking = None
+        if properties.has_security_label:
+            displaymarking = properties.security_label.displaymarking
+
         event_attr: dict[str, Any] = {
             'account': self._account,
             'jid': jid,
@@ -314,6 +318,7 @@ class MAM(BaseModule):
             'kind': kind,
             'occupant_id': occupant_id,
             'real_jid': real_jid,
+            'displaymarking': displaymarking
         }
 
         if check_if_message_correction(properties,
