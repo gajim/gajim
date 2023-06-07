@@ -31,7 +31,7 @@ from gajim.common.i18n import _
 from gajim.gtk import structs
 from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.chat_list import ChatList
-from gajim.gtk.chat_list import ChatListRow
+from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.dialogs import ConfirmationCheckDialog
 from gajim.gtk.dialogs import DialogButton
 

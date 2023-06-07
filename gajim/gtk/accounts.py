@@ -33,7 +33,7 @@ from gajim.common import types
 from gajim.common.const import ClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.settings import AllSettingsT
+from gajim.common.setting_values import AllSettingsT
 
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
