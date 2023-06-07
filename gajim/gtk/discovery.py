@@ -208,7 +208,7 @@ def get_agent_address(jid, node=None):
     Get an agent's address for displaying in the GUI
     '''
     if node:
-        return f'{node}@{str(jid)}'
+        return f'{node}@{jid}'
     return str(jid)
 
 
