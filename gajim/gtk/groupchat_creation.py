@@ -80,8 +80,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         self._update_accounts(account)
-
-        self.set_focus(self._ui.address_entry)
+        self._ui.create_button.grab_focus()
 
     def _on_account_state(self,
                           _event: AccountConnected | AccountDisconnected
@@ -134,12 +133,16 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.address_entry.set_placeholder_text(
             f'{placeholder[2]}@{server}')
 
+    def _has_muc_service(self, account: str) -> bool:
+        client = app.get_client(account)
+        return client.get_module('MUC').service_jid is not None
+
     def _get_muc_service_jid(self) -> str:
         assert self._account is not None
         client = app.get_client(self._account)
         service_jid = client.get_module('MUC').service_jid
         if service_jid is None:
-            return ''
+            return 'muc.example.org'
         return str(service_jid)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
@@ -154,23 +157,25 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             if not iter_:
                 return
             self._account = model[iter_][0]
+
         self._fill_placeholders()
+        self._unset_error()
+        self._unset_info()
+        self._ui.address_entry.get_buffer().set_text('', 0)
 
-        self._validate_jid(self._ui.address_entry.get_text())
+        has_muc_service = self._has_muc_service(self._account)
 
-        if not self._get_muc_service_jid():
-            self._set_warning(
-                _('Your server does not provide a group chat service. '
-                  'Please try with a different server.'))
-            self._ui.advanced_switch.set_active(True)
-        else:
-            self._ui.error_label.hide()
+        self._ui.advanced_switch.set_active(not has_muc_service)
+        self._ui.advanced_switch.set_sensitive(has_muc_service)
 
-    def _validate_jid(self, text: str) -> None:
+        if not has_muc_service:
+            self._set_info(
+                _('Your server does not offer a group chat service. '
+                  'Please specify the address of a different server.'))
+
+    def _is_jid_valid(self, text: str) -> bool:
         if not text:
-            self._ui.error_label.hide()
-            self._ui.create_button.set_sensitive(False)
-            return
+            return True
 
         try:
             jid = validate_jid(text)
@@ -178,10 +183,9 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
                 raise ValueError
 
         except ValueError:
-            self._set_warning(_('Invalid Address'))
-        else:
-            self._ui.error_label.hide()
-            self._ui.create_button.set_sensitive(True)
+            return False
+
+        return True
 
     def _set_processing_state(self, enabled: bool) -> None:
         if enabled:
@@ -191,32 +195,36 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.spinner.stop()
         self._ui.grid.set_sensitive(not enabled)
 
-    def _set_warning(self, text: str) -> None:
+    def _unset_info(self) -> None:
+        self._ui.info_label.hide()
+
+    def _set_info(self, text: str) -> None:
+        self._ui.info_label.set_text(text)
+        self._ui.info_label.show()
+
+    def _unset_error(self) -> None:
+        self._ui.error_label.hide()
+        self._ui.create_button.set_sensitive(True)
+
+    def _set_error(self, text: str) -> None:
         self._ui.error_label.set_text(text)
         self._ui.error_label.show()
-        self._ui.advanced_switch.set_active(True)
         self._ui.create_button.set_sensitive(False)
 
-    def _set_warning_from_error(self, error: StanzaError) -> None:
+    def _set_error_from_error(self, error: StanzaError) -> None:
         condition = error.condition or ''
         if condition == 'gone':
             condition = 'already-exists'
         text = MUC_DISCO_ERRORS.get(condition, to_user_string(error))
-        self._set_warning(text)
+        self._set_error(text)
 
-    def _set_warning_from_error_code(self, error_code: str) -> None:
-        self._set_warning(MUC_DISCO_ERRORS[error_code])
-
-    def _on_name_entry_changed(self, entry: Gtk.Entry) -> None:
-        name = entry.get_text()
-        name = name.replace(' ', '-')
-        server = self._get_muc_service_jid()
-        self._ui.address_entry.set_text(f'{name.lower()}@{server}')
+    def _set_error_from_error_code(self, error_code: str) -> None:
+        self._set_error(MUC_DISCO_ERRORS[error_code])
 
     def _on_address_entry_changed(self, entry: Gtk.Entry) -> None:
         text = entry.get_text()
         self._update_entry_completion(entry, text)
-        self._validate_jid(text)
+        self._unset_error()
 
     def _update_entry_completion(self, entry: Gtk.Entry, text: str) -> None:
         text = entry.get_text()
@@ -231,11 +239,12 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         model.append([f'{text}@{server}'])
 
     def _on_toggle_advanced(self, switch: Gtk.Switch, *args: Any) -> None:
-        if switch.get_active():
-            self._ui.advanced_box.set_no_show_all(False)
-            self._ui.advanced_box.show_all()
-        else:
-            self._ui.advanced_box.hide()
+        self._unset_error()
+        active = switch.get_active()
+        self._ui.address_entry.set_visible(active)
+        self._ui.address_entry_label.set_visible(active)
+        self._ui.public_radio.set_visible(active)
+        self._ui.private_radio.set_visible(active)
 
     def _on_create_clicked(self, _button: Gtk.Button) -> None:
         assert self._account is not None
@@ -249,6 +258,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         if not self._ui.advanced_switch.get_active() or not room_jid:
             server = self._get_muc_service_jid()
             room_jid = f'{get_random_muc_localpart()}@{server}'
+
+        if not self._is_jid_valid(room_jid):
+            self._set_error(_('Invalid Address'))
+            return
 
         self._set_processing_state(True)
         client = app.get_client(self._account)
@@ -264,10 +277,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
                 assert error.jid is not None
                 self._create_muc(error.jid)
                 return
-            self._set_warning_from_error(error)
+            self._set_error_from_error(error)
 
         else:
-            self._set_warning_from_error_code(
+            self._set_error_from_error_code(
                 'already-exists' if result.is_muc else 'not-muc-service')
 
         self._set_processing_state(False)

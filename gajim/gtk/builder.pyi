@@ -402,11 +402,13 @@ class GroupchatCreationBuilder(Builder):
     account_combo: Gtk.ComboBox
     account_label: Gtk.Label
     advanced_switch: Gtk.Switch
-    advanced_box: Gtk.Box
-    private_radio: Gtk.RadioButton
-    public_radio: Gtk.RadioButton
-    address_entry: Gtk.Entry
+    advanced_switch_label: Gtk.Label
     error_label: Gtk.Label
+    info_label: Gtk.Label
+    address_entry_label: Gtk.Label
+    address_entry: Gtk.Entry
+    public_radio: Gtk.RadioButton
+    private_radio: Gtk.RadioButton
     spinner: Gtk.Spinner
     create_button: Gtk.Button
 
