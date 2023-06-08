@@ -332,16 +332,6 @@ class ChatControl(EventHelper):
             else:
                 kind = 'incoming'
 
-            self._add_message(event.msgtxt,
-                              kind,
-                              nickname,
-                              event.properties.mam.timestamp,
-                              displaymarking=event.displaymarking,
-                              message_id=event.properties.id,
-                              stanza_id=event.stanza_id,
-                              msg_log_id=event.msg_log_id,
-                              additional_data=event.additional_data)
-
         else:
 
             if event.properties.is_muc_pm:
@@ -352,15 +342,20 @@ class ChatControl(EventHelper):
                     return
 
             kind = 'incoming'
+            nickname = self.contact.name
             if event.kind == KindConstant.CHAT_MSG_SENT:
                 kind = 'outgoing'
+                nickname = self.get_our_nick()
 
-            self.add_message(event.msgtxt,
-                             kind,
-                             tim=event.properties.mam.timestamp,
-                             message_id=event.properties.id,
-                             stanza_id=event.stanza_id,
-                             additional_data=event.additional_data)
+        self._add_message(event.msgtxt,
+                          kind,
+                          nickname,
+                          event.properties.mam.timestamp,
+                          displaymarking=event.displaymarking,
+                          msg_log_id=event.msg_log_id,
+                          message_id=event.properties.id,
+                          stanza_id=event.stanza_id,
+                          additional_data=event.additional_data)
 
     def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
         if not self._is_event_processable(event):
