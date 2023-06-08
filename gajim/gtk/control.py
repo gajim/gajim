@@ -121,6 +121,18 @@ class ChatControl(EventHelper):
         assert self._client is not None
         return self._client
 
+    @property
+    def is_chat(self) -> bool:
+        return isinstance(self.contact, BareContact)
+
+    @property
+    def is_privatechat(self) -> bool:
+        return isinstance(self.contact, GroupchatParticipant)
+
+    @property
+    def is_groupchat(self) -> bool:
+        return isinstance(self.contact, GroupchatContact)
+
     def is_loaded(self, account: str, jid: JID) -> bool:
         if self._contact is None:
             return False
@@ -131,6 +143,34 @@ class ChatControl(EventHelper):
 
     def get_group_chat_roster(self) -> GroupchatRoster:
         return self._roster
+
+    def add_command_output(self, text: str, is_error: bool) -> None:
+        self._scrolled_view.add_command_output(text, is_error)
+
+    def add_info_message(self,
+                         text: str,
+                         timestamp: float | None = None
+                         ) -> None:
+
+        self._scrolled_view.add_info_message(text, timestamp)
+
+    def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
+        self._scrolled_view.add_file_transfer(transfer)
+
+    def add_jingle_file_transfer(
+        self,
+        event: events.FileRequestReceivedEvent | events.FileRequestSent | None
+    ) -> None:
+        if self._allow_add_message():
+            self._scrolled_view.add_jingle_file_transfer(event)
+
+    def add_call_message(self, event: events.JingleRequestReceived) -> None:
+        if self._allow_add_message():
+            self._scrolled_view.add_call_message(event=event)
+
+    def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
+        app.window.activate_action('send-file',
+                                   GLib.Variant('as', selection.get_uris()))
 
     def clear(self) -> None:
         log.info('Clear')
@@ -144,6 +184,35 @@ class ChatControl(EventHelper):
         self._groupchat_state.clear()
         self._roster.clear()
         self.unregister_events()
+
+    def remove_message(self, log_line_id: int) -> None:
+        self._scrolled_view.remove_message(log_line_id)
+
+    def reset_view(self) -> None:
+        self._scrolled_view.reset()
+
+    def get_autoscroll(self) -> bool:
+        return self._scrolled_view.get_autoscroll()
+
+    def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
+        row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
+        if row is None:
+            # Clear view and reload conversation around timestamp
+            self._scrolled_view.reset()
+            self._scrolled_view.block_signals(True)
+            before, at_after = app.storage.archive.get_conversation_around(
+                self.contact.account, self.contact.jid, timestamp)
+            self.add_messages(before)
+            self.add_messages(at_after)
+            self._scrolled_view.set_history_complete(False, False)
+
+        GLib.idle_add(self._scrolled_view.block_signals, False)
+        GLib.idle_add(
+            self._scrolled_view.scroll_to_message_and_highlight,
+            log_line_id)
+
+    def mark_as_read(self) -> None:
+        self._jump_to_end_button.reset_unread_count()
 
     def switch_contact(
         self,
@@ -467,21 +536,6 @@ class ChatControl(EventHelper):
         if self._allow_add_message():
             self._scrolled_view.add_encryption_info(event)
 
-    @property
-    def is_chat(self) -> bool:
-        return isinstance(self.contact, BareContact)
-
-    @property
-    def is_privatechat(self) -> bool:
-        return isinstance(self.contact, GroupchatParticipant)
-
-    @property
-    def is_groupchat(self) -> bool:
-        return isinstance(self.contact, GroupchatContact)
-
-    def mark_as_read(self) -> None:
-        self._jump_to_end_button.reset_unread_count()
-
     def _on_autoscroll_changed(self,
                                _widget: ConversationView,
                                autoscroll: bool
@@ -514,10 +568,6 @@ class ChatControl(EventHelper):
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
 
-    def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
-        app.window.activate_action('send-file',
-                                   GLib.Variant('as', selection.get_uris()))
-
     def get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):
             muc_data = self.client.get_module('MUC').get_muc_data(
@@ -529,30 +579,6 @@ class ChatControl(EventHelper):
 
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
-
-    def add_command_output(self, text: str, is_error: bool) -> None:
-        self._scrolled_view.add_command_output(text, is_error)
-
-    def add_info_message(self,
-                         text: str,
-                         timestamp: float | None = None
-                         ) -> None:
-
-        self._scrolled_view.add_info_message(text, timestamp)
-
-    def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
-        self._scrolled_view.add_file_transfer(transfer)
-
-    def add_jingle_file_transfer(
-        self,
-        event: events.FileRequestReceivedEvent | events.FileRequestSent | None
-    ) -> None:
-        if self._allow_add_message():
-            self._scrolled_view.add_jingle_file_transfer(event)
-
-    def add_call_message(self, event: events.JingleRequestReceived) -> None:
-        if self._allow_add_message():
-            self._scrolled_view.add_call_message(event=event)
 
     def _add_message(self,
                      text: str,
@@ -588,32 +614,6 @@ class ChatControl(EventHelper):
                     self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
-
-    def remove_message(self, log_line_id: int) -> None:
-        self._scrolled_view.remove_message(log_line_id)
-
-    def reset_view(self) -> None:
-        self._scrolled_view.reset()
-
-    def get_autoscroll(self) -> bool:
-        return self._scrolled_view.get_autoscroll()
-
-    def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
-        row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
-        if row is None:
-            # Clear view and reload conversation around timestamp
-            self._scrolled_view.reset()
-            self._scrolled_view.block_signals(True)
-            before, at_after = app.storage.archive.get_conversation_around(
-                self.contact.account, self.contact.jid, timestamp)
-            self.add_messages(before)
-            self.add_messages(at_after)
-            self._scrolled_view.set_history_complete(False, False)
-
-        GLib.idle_add(self._scrolled_view.block_signals, False)
-        GLib.idle_add(
-            self._scrolled_view.scroll_to_message_and_highlight,
-            log_line_id)
 
     def _request_messages(self, before: bool) -> list[ConversationRow]:
         if before:
