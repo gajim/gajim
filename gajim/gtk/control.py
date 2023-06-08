@@ -325,14 +325,22 @@ class ChatControl(EventHelper):
                 return
             if event.archive_jid != self.contact.jid:
                 return
-            self._add_muc_message(event.msgtxt,
-                                  tim=event.properties.mam.timestamp,
-                                  contact=event.properties.muc_nickname,
-                                  displaymarking=event.displaymarking,
-                                  message_id=event.properties.id,
-                                  stanza_id=event.stanza_id,
-                                  msg_log_id=event.msg_log_id,
-                                  additional_data=event.additional_data)
+
+            nickname = event.properties.muc_nickname
+            if nickname == self.contact.nickname:
+                kind = 'outgoing'
+            else:
+                kind = 'incoming'
+
+            self._add_message(event.msgtxt,
+                              kind,
+                              nickname,
+                              event.properties.mam.timestamp,
+                              displaymarking=event.displaymarking,
+                              message_id=event.properties.id,
+                              stanza_id=event.stanza_id,
+                              msg_log_id=event.msg_log_id,
+                              additional_data=event.additional_data)
 
         else:
 
@@ -358,14 +366,23 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._add_muc_message(event.msgtxt,
-                              tim=event.properties.timestamp,
-                              contact=event.properties.muc_nickname,
-                              displaymarking=event.displaymarking,
-                              message_id=event.properties.id,
-                              stanza_id=event.stanza_id,
-                              msg_log_id=event.msg_log_id,
-                              additional_data=event.additional_data)
+        assert isinstance(self.contact, GroupchatContact)
+
+        nickname = event.properties.muc_nickname
+        if nickname == self.contact.nickname:
+            kind = 'outgoing'
+        else:
+            kind = 'incoming'
+
+        self._add_message(event.msgtxt,
+                          kind,
+                          nickname,
+                          event.properties.timestamp,
+                          displaymarking=event.displaymarking,
+                          message_id=event.properties.id,
+                          stanza_id=event.stanza_id,
+                          msg_log_id=event.msg_log_id,
+                          additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
         if not self._is_event_processable(event):
@@ -1191,35 +1208,6 @@ class ChatControl(EventHelper):
             return
 
         self.add_info_message(message, event.timestamp)
-
-    def _add_muc_message(self,
-                         text: str,
-                         tim: float,
-                         contact: str,
-                         displaymarking: Displaymarking | None,
-                         message_id: str | None,
-                         stanza_id: str | None,
-                         msg_log_id: int | None,
-                         additional_data: AdditionalDataDict | None,
-                         ) -> None:
-
-        assert isinstance(self._contact, GroupchatContact)
-
-        if contact == self._contact.nickname:
-            kind = 'outgoing'
-        else:
-            kind = 'incoming'
-            # muc-specific chatstate
-
-        self._add_message(text,
-                          kind,
-                          contact,
-                          tim,
-                          displaymarking=displaymarking,
-                          message_id=message_id,
-                          stanza_id=stanza_id,
-                          msg_log_id=msg_log_id,
-                          additional_data=additional_data)
 
     def _on_room_subject(self,
                          contact: GroupchatContact,
