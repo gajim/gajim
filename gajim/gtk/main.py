@@ -480,6 +480,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                             control.contact.jid)
                 return None
 
+        if action_name == 'escape' and app.settings.get('escape_key_closes'):
+            self.emit('delete-event', Gdk.Event())
+
         if action_name == 'restore-chat':
             self._chat_page.restore_chat()
 
