@@ -154,20 +154,6 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.add_info_message(text, timestamp)
 
-    def add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
-        self._scrolled_view.add_file_transfer(transfer)
-
-    def add_jingle_file_transfer(
-        self,
-        event: events.FileRequestReceivedEvent | events.FileRequestSent | None
-    ) -> None:
-        if self._allow_add_message():
-            self._scrolled_view.add_jingle_file_transfer(event)
-
-    def add_call_message(self, event: events.JingleRequestReceived) -> None:
-        if self._allow_add_message():
-            self._scrolled_view.add_call_message(event=event)
-
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
         app.window.activate_action('send-file',
                                    GLib.Variant('as', selection.get_uris()))
@@ -202,8 +188,8 @@ class ChatControl(EventHelper):
             self._scrolled_view.block_signals(True)
             before, at_after = app.storage.archive.get_conversation_around(
                 self.contact.account, self.contact.jid, timestamp)
-            self.add_messages(before)
-            self.add_messages(at_after)
+            self._add_messages(before)
+            self._add_messages(at_after)
             self._scrolled_view.set_history_complete(False, False)
 
         GLib.idle_add(self._scrolled_view.block_signals, False)
@@ -266,7 +252,7 @@ class ChatControl(EventHelper):
             contact)
         if transfers is not None:
             for transfer in transfers:
-                self.add_file_transfer(transfer)
+                self._add_file_transfer(transfer)
 
         if isinstance(contact, GroupchatContact):
             if (not app.settings.get('show_subject_on_join') or
@@ -348,10 +334,10 @@ class ChatControl(EventHelper):
 
         if event.correct_id:
             self._scrolled_view.correct_message(
-                event.correct_id, event.message, self.get_our_nick())
+                event.correct_id, event.message, self._get_our_nick())
             return
 
-        name = self.get_our_nick()
+        name = self._get_our_nick()
 
         self._add_message(event.message,
                           'outgoing',
@@ -377,7 +363,7 @@ class ChatControl(EventHelper):
         name = self.contact.name
         if event.properties.is_sent_carbon:
             kind = 'outgoing'
-            name = self.get_our_nick()
+            name = self._get_our_nick()
 
         self._add_message(event.msgtxt,
                           kind,
@@ -421,7 +407,7 @@ class ChatControl(EventHelper):
             nickname = self.contact.name
             if event.kind == KindConstant.CHAT_MSG_SENT:
                 kind = 'outgoing'
-                nickname = self.get_our_nick()
+                nickname = self._get_our_nick()
 
         self._add_message(event.msgtxt,
                           kind,
@@ -511,7 +497,7 @@ class ChatControl(EventHelper):
         active_jid = app.call_manager.get_active_call_jid()
         # Don't add a second row if contact upgrades to video
         if active_jid is None:
-            self.add_call_message(event=event)
+            self._add_call_message(event=event)
 
     def _on_file_request_event(
         self,
@@ -521,10 +507,10 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self.add_jingle_file_transfer(event=event)
+        self._add_jingle_file_transfer(event=event)
 
     def _on_http_upload_started(self, event: events.HTTPUploadStarted) -> None:
-        self.add_file_transfer(event.transfer)
+        self._add_file_transfer(event.transfer)
 
     def _on_http_upload_error(self, event: events.HTTPUploadError) -> None:
         self.add_info_message(event.error_msg)
@@ -568,7 +554,7 @@ class ChatControl(EventHelper):
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
 
-    def get_our_nick(self) -> str:
+    def _get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):
             muc_data = self.client.get_module('MUC').get_muc_data(
                 self.contact.jid.bare)
@@ -579,6 +565,20 @@ class ChatControl(EventHelper):
 
     def _allow_add_message(self) -> bool:
         return self._scrolled_view.get_lower_complete()
+
+    def _add_file_transfer(self, transfer: HTTPFileTransfer) -> None:
+        self._scrolled_view.add_file_transfer(transfer)
+
+    def _add_jingle_file_transfer(
+        self,
+        event: events.FileRequestReceivedEvent | events.FileRequestSent | None
+    ) -> None:
+        if self._allow_add_message():
+            self._scrolled_view.add_jingle_file_transfer(event)
+
+    def _add_call_message(self, event: events.JingleRequestReceived) -> None:
+        if self._allow_add_message():
+            self._scrolled_view.add_call_message(event=event)
 
     def _add_message(self,
                      text: str,
@@ -614,6 +614,68 @@ class ChatControl(EventHelper):
                     self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
+
+    def _add_messages(self, messages: list[ConversationRow]):
+        for msg in messages:
+            if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
+                            KindConstant.FILE_TRANSFER_OUTGOING):
+                assert msg.additional_data is not None
+                if msg.additional_data.get_value('gajim', 'type') == 'jingle':
+                    self._scrolled_view.add_jingle_file_transfer(
+                        db_message=msg)
+                continue
+
+            if msg.kind in (KindConstant.CALL_INCOMING,
+                            KindConstant.CALL_OUTGOING):
+                self._scrolled_view.add_call_message(db_message=msg)
+                continue
+
+            if not msg.message:
+                continue
+
+            message_text = msg.message
+
+            contact_name = msg.contact_name
+            kind = 'incoming'
+            if msg.kind in (
+                    KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
+                kind = 'incoming'
+                contact_name = self.contact.name
+            elif msg.kind == KindConstant.GC_MSG:
+                kind = 'incoming'
+                if contact_name is None:
+                    # Fall back to MUC name if contact name is None
+                    # (may be the case for service messages from the MUC)
+                    contact_name = self.contact.name
+            elif msg.kind in (
+                    KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
+                kind = 'outgoing'
+                contact_name = self._get_our_nick()
+            else:
+                log.warning('kind attribute could not be processed'
+                            'while adding message')
+
+            assert contact_name is not None
+
+            if msg.additional_data is not None:
+                retracted_by = msg.additional_data.get_value('retracted', 'by')
+                if retracted_by is not None:
+                    reason = msg.additional_data.get_value(
+                        'retracted', 'reason')
+                    message_text = get_retraction_text(
+                        self.contact.account, retracted_by, reason)
+
+            self._scrolled_view.add_message(
+                message_text,
+                kind,
+                contact_name,
+                msg.time,
+                additional_data=msg.additional_data,
+                message_id=msg.message_id,
+                stanza_id=msg.stanza_id,
+                log_line_id=msg.log_line_id,
+                marker=msg.marker,
+                error=msg.error)
 
     def _request_messages(self, before: bool) -> list[ConversationRow]:
         if before:
@@ -664,7 +726,7 @@ class ChatControl(EventHelper):
         assert self._contact is not None
         for row in rows:
             if not isinstance(row, events.ApplicationEvent):
-                self.add_messages([row])
+                self._add_messages([row])
 
             elif isinstance(row, events.MUCUserJoined):
                 self._process_muc_user_joined(row)
@@ -721,68 +783,6 @@ class ChatControl(EventHelper):
         rows = messages + event_rows
         rows.sort(key=sort_func, reverse=before)
         return rows
-
-    def add_messages(self, messages: list[ConversationRow]):
-        for msg in messages:
-            if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
-                            KindConstant.FILE_TRANSFER_OUTGOING):
-                assert msg.additional_data is not None
-                if msg.additional_data.get_value('gajim', 'type') == 'jingle':
-                    self._scrolled_view.add_jingle_file_transfer(
-                        db_message=msg)
-                continue
-
-            if msg.kind in (KindConstant.CALL_INCOMING,
-                            KindConstant.CALL_OUTGOING):
-                self._scrolled_view.add_call_message(db_message=msg)
-                continue
-
-            if not msg.message:
-                continue
-
-            message_text = msg.message
-
-            contact_name = msg.contact_name
-            kind = 'incoming'
-            if msg.kind in (
-                    KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
-                kind = 'incoming'
-                contact_name = self.contact.name
-            elif msg.kind == KindConstant.GC_MSG:
-                kind = 'incoming'
-                if contact_name is None:
-                    # Fall back to MUC name if contact name is None
-                    # (may be the case for service messages from the MUC)
-                    contact_name = self.contact.name
-            elif msg.kind in (
-                    KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
-                kind = 'outgoing'
-                contact_name = self.get_our_nick()
-            else:
-                log.warning('kind attribute could not be processed'
-                            'while adding message')
-
-            assert contact_name is not None
-
-            if msg.additional_data is not None:
-                retracted_by = msg.additional_data.get_value('retracted', 'by')
-                if retracted_by is not None:
-                    reason = msg.additional_data.get_value(
-                        'retracted', 'reason')
-                    message_text = get_retraction_text(
-                        self.contact.account, retracted_by, reason)
-
-            self._scrolled_view.add_message(
-                message_text,
-                kind,
-                contact_name,
-                msg.time,
-                additional_data=msg.additional_data,
-                message_id=msg.message_id,
-                stanza_id=msg.stanza_id,
-                log_line_id=msg.log_line_id,
-                marker=msg.marker,
-                error=msg.error)
 
     def _on_user_nickname_changed(self,
                                   _contact: types.GroupchatContact,
