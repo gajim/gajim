@@ -339,10 +339,10 @@ class ChatControl(EventHelper):
 
         name = self._get_our_nick()
 
-        self._add_message(event.message,
-                          'outgoing',
-                          name,
-                          event.timestamp,
+        self._add_message(text=event.message,
+                          kind='outgoing',
+                          name=name,
+                          timestamp=event.timestamp,
                           displaymarking=displaymarking,
                           msg_log_id=event.msg_log_id,
                           message_id=message_id,
@@ -365,10 +365,10 @@ class ChatControl(EventHelper):
             kind = 'outgoing'
             name = self._get_our_nick()
 
-        self._add_message(event.msgtxt,
-                          kind,
-                          name,
-                          event.properties.timestamp,
+        self._add_message(text=event.msgtxt,
+                          kind=kind,
+                          name=name,
+                          timestamp=event.properties.timestamp,
                           displaymarking=event.displaymarking,
                           msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
@@ -409,10 +409,10 @@ class ChatControl(EventHelper):
                 kind = 'outgoing'
                 nickname = self._get_our_nick()
 
-        self._add_message(event.msgtxt,
-                          kind,
-                          nickname,
-                          event.properties.mam.timestamp,
+        self._add_message(text=event.msgtxt,
+                          kind=kind,
+                          name=nickname,
+                          timestamp=event.properties.mam.timestamp,
                           displaymarking=event.displaymarking,
                           msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
@@ -431,14 +431,14 @@ class ChatControl(EventHelper):
         else:
             kind = 'incoming'
 
-        self._add_message(event.msgtxt,
-                          kind,
-                          nickname,
-                          event.properties.timestamp,
+        self._add_message(text=event.msgtxt,
+                          kind=kind,
+                          name=nickname,
+                          timestamp=event.properties.timestamp,
                           displaymarking=event.displaymarking,
+                          msg_log_id=event.msg_log_id,
                           message_id=event.properties.id,
                           stanza_id=event.stanza_id,
-                          msg_log_id=event.msg_log_id,
                           additional_data=event.additional_data)
 
     def _on_message_updated(self, event: events.MessageUpdated) -> None:
@@ -581,15 +581,16 @@ class ChatControl(EventHelper):
             self._scrolled_view.add_call_message(event=event)
 
     def _add_message(self,
+                     *,
                      text: str,
                      kind: str,
                      name: str,
-                     tim: float,
-                     displaymarking: Displaymarking | None = None,
-                     msg_log_id: int | None = None,
-                     message_id: str | None = None,
-                     stanza_id: str | None = None,
-                     additional_data: AdditionalDataDict | None = None
+                     timestamp: float,
+                     displaymarking: Displaymarking | None,
+                     msg_log_id: int | None,
+                     message_id: str | None,
+                     stanza_id: str | None,
+                     additional_data: AdditionalDataDict | None
                      ) -> None:
 
         if additional_data is None:
@@ -600,7 +601,7 @@ class ChatControl(EventHelper):
                 text,
                 kind,
                 name,
-                tim,
+                timestamp,
                 display_marking=displaymarking,
                 message_id=message_id,
                 stanza_id=stanza_id,
