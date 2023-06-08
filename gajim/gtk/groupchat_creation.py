@@ -137,7 +137,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
     def _get_muc_service_jid(self) -> str:
         assert self._account is not None
         client = app.get_client(self._account)
-        return str(client.get_module('MUC').service_jid or 'muc.example.com')
+        service_jid = client.get_module('MUC').service_jid
+        if service_jid is None:
+            return ''
+        return str(service_jid)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
@@ -153,9 +156,19 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             self._account = model[iter_][0]
         self._fill_placeholders()
 
+        self._validate_jid(self._ui.address_entry.get_text())
+
+        if not self._get_muc_service_jid():
+            self._set_warning(
+                _('Your server does not provide a group chat service. '
+                  'Please try with a different server.'))
+            self._ui.advanced_switch.set_active(True)
+        else:
+            self._ui.error_label.hide()
+
     def _validate_jid(self, text: str) -> None:
         if not text:
-            self._set_warning_icon(False)
+            self._ui.error_label.hide()
             self._ui.create_button.set_sensitive(False)
             return
 
@@ -167,7 +180,7 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         except ValueError:
             self._set_warning(_('Invalid Address'))
         else:
-            self._set_warning_icon(False)
+            self._ui.error_label.hide()
             self._ui.create_button.set_sensitive(True)
 
     def _set_processing_state(self, enabled: bool) -> None:
@@ -178,18 +191,10 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.spinner.stop()
         self._ui.grid.set_sensitive(not enabled)
 
-    def _set_warning_icon(self, enabled: bool) -> None:
-        icon = 'dialog-warning-symbolic' if enabled else None
-        self._ui.address_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY, icon)
-
-    def _set_warning_tooltip(self, text: str) -> None:
-        self._ui.address_entry.set_icon_tooltip_text(
-            Gtk.EntryIconPosition.SECONDARY, text)
-
     def _set_warning(self, text: str) -> None:
-        self._set_warning_icon(True)
-        self._set_warning_tooltip(text)
+        self._ui.error_label.set_text(text)
+        self._ui.error_label.show()
+        self._ui.advanced_switch.set_active(True)
         self._ui.create_button.set_sensitive(False)
 
     def _set_warning_from_error(self, error: StanzaError) -> None:

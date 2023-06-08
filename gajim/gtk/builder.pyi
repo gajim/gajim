@@ -406,6 +406,7 @@ class GroupchatCreationBuilder(Builder):
     private_radio: Gtk.RadioButton
     public_radio: Gtk.RadioButton
     address_entry: Gtk.Entry
+    error_label: Gtk.Label
     spinner: Gtk.Spinner
     create_button: Gtk.Button
 
