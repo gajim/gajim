@@ -282,13 +282,17 @@ class ChatControl(EventHelper):
                 event.correct_id, event.message, self.get_our_nick())
             return
 
-        self.add_message(event.message,
-                         'outgoing',
-                         tim=event.timestamp,
-                         displaymarking=displaymarking,
-                         message_id=message_id,
-                         msg_log_id=event.msg_log_id,
-                         additional_data=event.additional_data)
+        name = self.get_our_nick()
+
+        self._add_message(event.message,
+                          'outgoing',
+                          name,
+                          event.timestamp,
+                          displaymarking=displaymarking,
+                          msg_log_id=event.msg_log_id,
+                          message_id=message_id,
+                          stanza_id=None,
+                          additional_data=event.additional_data)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self._is_event_processable(event):
@@ -301,17 +305,20 @@ class ChatControl(EventHelper):
             return
 
         kind = 'incoming'
+        name = self.contact.name
         if event.properties.is_sent_carbon:
             kind = 'outgoing'
+            name = self.get_our_nick()
 
-        self.add_message(event.msgtxt,
-                         kind,
-                         tim=event.properties.timestamp,
-                         displaymarking=event.displaymarking,
-                         msg_log_id=event.msg_log_id,
-                         message_id=event.properties.id,
-                         stanza_id=event.stanza_id,
-                         additional_data=event.additional_data)
+        self._add_message(event.msgtxt,
+                          kind,
+                          name,
+                          event.properties.timestamp,
+                          displaymarking=event.displaymarking,
+                          msg_log_id=event.msg_log_id,
+                          message_id=event.properties.id,
+                          stanza_id=event.stanza_id,
+                          additional_data=event.additional_data)
 
     def _on_mam_message_received(self,
                                  event: events.MamMessageReceived) -> None:
@@ -776,32 +783,6 @@ class ChatControl(EventHelper):
                 log_line_id=msg.log_line_id,
                 marker=msg.marker,
                 error=msg.error)
-
-    def add_message(self,
-                    text: str,
-                    kind: str,
-                    tim: float,
-                    displaymarking: Displaymarking | None = None,
-                    msg_log_id: int | None = None,
-                    stanza_id: str | None = None,
-                    message_id: str | None = None,
-                    additional_data: AdditionalDataDict | None = None
-                    ) -> None:
-
-        if kind == 'incoming':
-            name = self.contact.name
-        else:
-            name = self.get_our_nick()
-
-        self._add_message(text,
-                          kind,
-                          name,
-                          tim,
-                          displaymarking=displaymarking,
-                          msg_log_id=msg_log_id,
-                          message_id=message_id,
-                          stanza_id=stanza_id,
-                          additional_data=additional_data)
 
     def _on_user_nickname_changed(self,
                                   _contact: types.GroupchatContact,
