@@ -531,6 +531,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         elif action_name == 'preview-save-as':
             def _on_ok(paths: list[str]) -> None:
+                if not paths:
+                    ErrorDialog(
+                        _('Could not save file'),
+                        _('Could not save file to selected directory.'),
+                        transient_for=self)
+                    return
+
                 target = paths[0]
                 assert preview is not None
                 assert preview.orig_path is not None
