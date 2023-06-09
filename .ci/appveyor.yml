@@ -23,6 +23,7 @@ build_script:
   - ps: |
         $filename = "Gajim-$($env:GAJIM_VERSION)-$($env:ARCH)"
         $filename_portable = "Gajim-Portable-$($env:GAJIM_VERSION)-$($env:ARCH)"
+        $filename_msixbundle = "Gajim-$($env:GAJIM_VERSION)"
 
         if ($env:GAJIM_VERSION -eq "Nightly") {
             $time_string=(get-date -UFormat "%Y-%m-%d").ToString()
@@ -43,6 +44,7 @@ build_script:
 
         Push-AppveyorArtifact "$($buildroot)/Gajim.exe" -FileName "$($filename).exe"
         Push-AppveyorArtifact "$($buildroot)/Gajim-Portable.exe" -FileName "$($filename_portable).exe"
+        Push-AppveyorArtifact "$($buildroot)/Gajim.msixbundle" -FileName "$($filename_msixbundle).msixbundle"
         if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode)  }
 
 # on_finish:

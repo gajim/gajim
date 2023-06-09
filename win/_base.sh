@@ -49,6 +49,7 @@ function install_pre_deps {
         wget \
         intltool \
         mingw-w64-x86_64-nsis \
+        "${MINGW_PACKAGE_PREFIX}"-librsvg \
         "${MINGW_PACKAGE_PREFIX}"-toolchain \
         "${MINGW_PACKAGE_PREFIX}"-python
 }
@@ -314,7 +315,46 @@ function cleanup_install {
 
 }
 
+function makeappx {
+    "$(find /c/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/*/x64/ -name makeappx.exe -print | sort | tail -n 1)" "$@"
+}
+
+function makepri {
+    "$(find /c/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/*/x64/ -name makepri.exe -print | sort | tail -n 1)" "$@"
+}
+
 function build_installer {
     MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi"
     MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi"
+    (
+        cd ${BUILD_ROOT}
+        rm -rf assets bundle filemapping.txt assets.resfiles appxmanifest.xml resources.pri
+        echo "[Files]" > filemapping.txt
+        find ${MSYSTEM_PREFIX:1} -type f | while read line; do
+            echo "\"$line\" \"${line/${MSYSTEM_PREFIX:1}\///}\"" >> filemapping.txt
+        done
+        mkdir -p assets bundle
+        # https://learn.microsoft.com/en-us/windows/apps/design/style/iconography/app-icon-construction
+        for size in {44,50,150}; do
+            for scale in {100,125,150,200,400}; do
+                scaled_size=$(( (${size}*${scale}+100/2)/100 ))
+                rsvg-convert -w ${scaled_size} -h ${scaled_size} -o assets/gajim${size}x${size}.scale-${scale}.png ${DIR}/../gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg
+                echo "\"assets/gajim${size}x${size}.scale-${scale}.png\" \"assets/gajim${size}x${size}.scale-${scale}.png\"" >> filemapping.txt
+            done
+        done
+        for size in {16,24,32,48,256}; do
+            rsvg-convert -w ${size} -h ${size} -o assets/gajim44x44.targetsize-${size}.png ${DIR}/../gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg
+            cp assets/gajim44x44.targetsize-${size}.png assets/gajim44x44.targetsize-${size}_altform-unplated.png
+            cp assets/gajim44x44.targetsize-${size}.png assets/gajim44x44.targetsize-${size}_altform-lightunplated.png
+            echo "\"assets/gajim44x44.targetsize-${size}.png\" \"assets/gajim44x44.targetsize-${size}.png\"" >> filemapping.txt
+            echo "\"assets/gajim44x44.targetsize-${size}_altform-unplated.png\" \"assets/gajim44x44.targetsize-${size}_altform-unplated.png\"" >> filemapping.txt
+            echo "\"assets/gajim44x44.targetsize-${size}_altform-lightunplated.png\" \"assets/gajim44x44.targetsize-${size}_altform-lightunplated.png\"" >> filemapping.txt
+        done
+        sed "s/QL_VERSION/${QL_VERSION}.0/" ${MISC}/appxmanifest.xml > AppxManifest.xml
+        makepri new -pr . -cf ${MISC}/priconfig.xml -mn AppxManifest.xml -of resources.pri -o
+        echo "\"resources.pri\" \"resources.pri\"" >> filemapping.txt
+        echo "\"AppxManifest.xml\" \"AppxManifest.xml\"" >> filemapping.txt
+        makeappx pack -f filemapping.txt -p bundle/Gajim_x64.msix -o
+        makeappx bundle -d bundle/ -p Gajim.msixbundle -o
+    )
 }

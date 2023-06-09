@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+  <Identity
+    Name="2126Gajim.Gajim"
+    Version="QL_VERSION"
+    Publisher="CN=7BA5D718-F03F-4E0C-BC3A-3CBC8E87B36A"
+    ProcessorArchitecture="x64" />
+  <Properties>
+    <DisplayName>Gajim</DisplayName>
+    <PublisherDisplayName>Gajim</PublisherDisplayName>
+    <Description>A fully-featured XMPP client</Description>
+    <Logo>gajim50x50.png</Logo>
+  </Properties>
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.22621.0" />
+  </Dependencies>
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust"/>
+  </Capabilities>
+  <Applications>
+    <Application Id="Gajim" Executable="bin\Gajim.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        BackgroundColor="transparent"
+        DisplayName="Gajim"
+        Square44x44Logo="gajim44x44.png"
+        Square150x150Logo="gajim150x150.png"
+        Description="Gajim">
+      </uap:VisualElements>
+      <Extensions>
+        <desktop:Extension Category="windows.startupTask" Executable="bin\Gajim.exe" EntryPoint="Windows.FullTrustApplication">
+          <desktop:StartupTask TaskId="Gajim" Enabled="true" DisplayName="Gajim"/>
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+</Package>
