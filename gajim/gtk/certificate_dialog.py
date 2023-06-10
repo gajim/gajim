@@ -14,6 +14,8 @@
 
 from typing import cast
 
+import logging
+
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric.dsa import DSAPublicKey
 from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePublicKey
@@ -21,6 +23,7 @@ from cryptography.hazmat.primitives.asymmetric.ed448 import Ed448PublicKey
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 from cryptography.x509 import DNSName
+from cryptography.x509 import ExtensionNotFound
 from cryptography.x509.oid import ExtensionOID
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -32,6 +35,8 @@ from gajim.common.i18n import _
 from gajim.common.util.text import format_sha_bytes
 
 from gajim.gtk.builder import get_builder
+
+log = logging.getLogger('gajim.gtk.certificate_dialog')
 
 
 class CertificateDialog(Gtk.ApplicationWindow):
@@ -83,13 +88,18 @@ class CertificateBox(Gtk.Box):
                 self._it_organization = str(attribute.value)
 
         # Get the subjectAltName extension from the certificate
-        subject_ext = cert.extensions.get_extension_for_oid(
-            ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
-        # Get the DNSName entries from the SAN extension
-        alt_names = cast(
-            list[str],
-            subject_ext.value.get_values_for_type(DNSName))  # pyright: ignore
-        self._it_subject_alt_names = '\n'.join(alt_names)
+        try:
+            subject_ext = cert.extensions.get_extension_for_oid(
+                ExtensionOID.SUBJECT_ALTERNATIVE_NAME)
+            # Get the DNSName entries from the SAN extension
+            alt_names = cast(
+                list[str],
+                subject_ext.value.get_values_for_type(  # pyright: ignore
+                    DNSName))
+            self._it_subject_alt_names = '\n'.join(alt_names)
+        except ExtensionNotFound as err:
+            log.info('Certificate does not have extension: %s', err)
+            self._it_subject_alt_names = ''
 
         serial_str = f'{cert.serial_number:02X}'
         serial_str_foratted = ':'.join(
