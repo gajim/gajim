@@ -42,10 +42,10 @@ from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_random_string
 from gajim.common.settings import LegacyConfig
 from gajim.common.settings import Settings
-from gajim.common.storage.archive import MessageArchiveStorage
+from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
-from gajim.common.storage.events import EventStorage
+from gajim.common.storage.events.storage import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
 
@@ -411,13 +411,12 @@ class CoreApplication(ged.EventHelper):
         # Delete password must be before del_per() because it calls set_per()
         # which would recreate the account with defaults values if not found
         passwords.delete_password(account)
+        app.storage.archive.remove_account(account)
         app.settings.remove_account(account)
         app.app.remove_account_actions(account)
 
     def _on_signed_in(self, event: SignedIn) -> None:
         client = app.get_client(event.account)
-        app.storage.archive.insert_jid(client.get_own_jid().bare)
-
         if client.get_module('MAM').available:
             client.get_module('MAM').request_archive_on_signin()
 

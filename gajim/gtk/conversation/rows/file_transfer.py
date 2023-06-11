@@ -31,7 +31,7 @@ class FileTransferRow(BaseRow, EventHelper):
 
         self.type = 'file-transfer'
         timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
+        self.timestamp = datetime.fromtimestamp(timestamp).astimezone()
         self.db_timestamp = timestamp
 
         self._destroyed: bool = False

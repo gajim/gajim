@@ -4,6 +4,7 @@
 
 import time
 from datetime import datetime
+from datetime import timezone
 
 from gi.repository import Gtk
 
@@ -25,7 +26,7 @@ class EncryptionInfoRow(BaseRow):
 
         self.type = 'encryption_info'
         timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
+        self.timestamp = datetime.fromtimestamp(timestamp).astimezone()
         self._event = event
 
         avatar_placeholder = Gtk.Box()

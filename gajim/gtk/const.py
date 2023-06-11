@@ -208,7 +208,7 @@ MAIN_WIN_ACTIONS = [
     ('input-clear', None, True),
     ('show-emoji-chooser', None, True),
     ('activate-message-selection', 'u', True),
-    ('delete-message-locally', 'u', True),
+    ('delete-message-locally', 'a{sv}', True),
     ('correct-message', None, False),
     ('copy-message', 's', True),
     ('retract-message', 'a{sv}', False),

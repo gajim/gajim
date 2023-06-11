@@ -8,29 +8,29 @@ import typing
 from typing import Any
 from typing import Union
 
+import datetime
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import InitVar, dataclass
 from dataclasses import field
+from functools import cached_property
 
 from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
 from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.security_labels import Catalog
-from nbxmpp.modules.security_labels import Displaymarking
-from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 from nbxmpp.structs import HTTPAuthData
 from nbxmpp.structs import LocationData
-from nbxmpp.structs import ModerationData
 from nbxmpp.structs import RosterItem
 from nbxmpp.structs import TuneData
 
+from gajim.common import app
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import JingleState
-from gajim.common.const import KindConstant
 from gajim.common.file_props import FileProp
-from gajim.common.helpers import AdditionalDataDict
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive import models as mod
 
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
@@ -38,12 +38,11 @@ if typing.TYPE_CHECKING:
 
 ChatListEventT = Union[
     'MessageReceived',
-    'MamMessageReceived',
-    'GcMessageReceived',
-    'MessageUpdated',
+    'MessageCorrected',
     'MessageModerated',
     'PresenceReceived',
     'MessageSent',
+    'MessageDeleted',
     'JingleRequestReceived',
     'FileRequestReceivedEvent'
 ]
@@ -156,15 +155,12 @@ class MessageSent(ApplicationEvent):
     name: str = field(init=False, default='message-sent')
     account: str
     jid: JID
-    message: str
-    message_id: str
-    msg_log_id: int | None
-    chatstate: str | None
-    timestamp: float
-    additional_data: AdditionalDataDict
-    label: SecurityLabel | None
-    correct_id: str | None
-    play_sound: bool
+    entitykey: int
+    play_sound: bool = False
+
+    @cached_property
+    def message(self) -> mod.Message:
+        return app.storage.archive.get_message_with_pk(self.entitykey)
 
 
 @dataclass
@@ -175,6 +171,14 @@ class MessageNotSent(ApplicationEvent):
     message: str
     error: str
     time: float
+
+
+@dataclass
+class MessageDeleted(ApplicationEvent):
+    name: str = field(init=False, default='message-deleted')
+    account: str
+    jid: JID
+    entitykey: int
 
 
 @dataclass
@@ -358,14 +362,18 @@ class ArchivingIntervalFinished(ApplicationEvent):
 
 
 @dataclass
-class MessageUpdated(ApplicationEvent):
-    name: str = field(init=False, default='message-updated')
+class MessageCorrected(ApplicationEvent):
+    name: str = field(init=False, default='message-corrected')
     account: str
     jid: JID
-    msgtxt: str
-    nickname: str | None
-    properties: Any
-    correct_id: str
+    corrected_message: InitVar[mod.Message]
+
+    def __post_init__(self, corrected_message: mod.Message) -> None:
+        self._corrected_message = corrected_message
+
+    @cached_property
+    def message(self) -> mod.Message | None:
+        return app.storage.archive.get_corrected_message(self._corrected_message)
 
 
 @dataclass
@@ -373,52 +381,21 @@ class MessageModerated(ApplicationEvent):
     name: str = field(init=False, default='message-moderated')
     account: str
     jid: JID
-    moderation: ModerationData
-
-
-@dataclass
-class MamMessageReceived(ApplicationEvent):
-    name: str = field(init=False, default='mam-message-received')
-    account: str
-    jid: JID
-    msgtxt: str
-    properties: Any
-    additional_data: AdditionalDataDict
-    unique_id: str
-    stanza_id: str
-    archive_jid: str
-    kind: KindConstant
-    occupant_id: str | None
-    real_jid: JID | None
-    msg_log_id: int | None
-    displaymarking: Displaymarking | None
+    moderation: mod.Moderation
 
 
 @dataclass
 class MessageReceived(ApplicationEvent):
     name: str = field(init=False, default='message-received')
-    conn: 'Client'
-    stanza: Any
     account: str
     jid: JID
-    msgtxt: str
-    properties: Any
-    additional_data: AdditionalDataDict
-    unique_id: str
-    stanza_id: str
-    fjid: str
-    resource: str | None
-    delayed: float | None
-    msg_log_id: int | None
-    displaymarking: Displaymarking | None
+    m_type: MessageType
+    from_mam: bool
+    entitykey: int
 
-
-@dataclass
-class GcMessageReceived(MessageReceived):
-    name: str = field(init=False, default='gc-message-received')
-    room_jid: str
-    real_jid: JID | None
-    occupant_id: str | None
+    @cached_property
+    def message(self) -> mod.Message:
+        return app.storage.archive.get_message_with_pk(self.entitykey)
 
 
 @dataclass
@@ -426,7 +403,6 @@ class MessageError(ApplicationEvent):
     name: str = field(init=False, default='message-error')
     account: str
     jid: JID
-    room_jid: str
     message_id: str
     error: Any
 
@@ -689,33 +665,33 @@ class MUCNicknameChanged(ApplicationEvent):
     is_self: bool
     new_name: str
     old_name: str
-    timestamp: float
+    timestamp: datetime.datetime
 
 
 @dataclass
 class MUCRoomConfigChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-room-config-changed')
-    timestamp: float
+    timestamp: datetime.datetime
     status_codes: set[StatusCode]
 
 
 @dataclass
 class MUCRoomConfigFinished(ApplicationEvent):
     name: str = field(init=False, default='muc-room-config-finished')
-    timestamp: float
+    timestamp: datetime.datetime
 
 
 @dataclass
 class MUCRoomPresenceError(ApplicationEvent):
     name: str = field(init=False, default='muc-room-presence-error')
-    timestamp: float
+    timestamp: datetime.datetime
     error: str
 
 
 @dataclass
 class MUCRoomKicked(ApplicationEvent):
     name: str = field(init=False, default='muc-room-kicked')
-    timestamp: float
+    timestamp: datetime.datetime
     status_codes: set[StatusCode] | None
     reason: str | None
     actor: str | None
@@ -724,7 +700,7 @@ class MUCRoomKicked(ApplicationEvent):
 @dataclass
 class MUCRoomDestroyed(ApplicationEvent):
     name: str = field(init=False, default='muc-room-destroyed')
-    timestamp: float
+    timestamp: datetime.datetime
     reason: str | None
     alternate: JID | None
 
@@ -732,7 +708,7 @@ class MUCRoomDestroyed(ApplicationEvent):
 @dataclass
 class MUCUserJoined(ApplicationEvent):
     name: str = field(init=False, default='muc-user-joined')
-    timestamp: float
+    timestamp: datetime.datetime
     is_self: bool
     nick: str
     status_codes: set[StatusCode] | None
@@ -741,7 +717,7 @@ class MUCUserJoined(ApplicationEvent):
 @dataclass
 class MUCUserLeft(ApplicationEvent):
     name: str = field(init=False, default='muc-user-left')
-    timestamp: float
+    timestamp: datetime.datetime
     is_self: bool
     nick: str
     status_codes: set[StatusCode] | None
@@ -752,7 +728,7 @@ class MUCUserLeft(ApplicationEvent):
 @dataclass
 class MUCUserRoleChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-role-changed')
-    timestamp: float
+    timestamp: datetime.datetime
     is_self: bool
     nick: str
     role: Role
@@ -763,7 +739,7 @@ class MUCUserRoleChanged(ApplicationEvent):
 @dataclass
 class MUCUserAffiliationChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-affiliation-changed')
-    timestamp: float
+    timestamp: datetime.datetime
     is_self: bool
     nick: str
     affiliation: Affiliation
@@ -774,7 +750,7 @@ class MUCUserAffiliationChanged(ApplicationEvent):
 @dataclass
 class MUCUserStatusShowChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-status-show-changed')
-    timestamp: float
+    timestamp: datetime.datetime
     is_self: bool
     nick: str
     status: str

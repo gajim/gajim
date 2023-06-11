@@ -8,8 +8,12 @@ from __future__ import annotations
 
 from typing import Any
 
+import datetime as dt
+
+import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
+from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
@@ -19,6 +23,8 @@ from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatMarkerType
 from gajim.common.structs import OutgoingMessage
 
 
@@ -39,7 +45,7 @@ class ChatMarkers(BaseModule):
     def _process_chat_marker(self,
                              _client: types.xmppClient,
                              _stanza: Any,
-                             properties: Any) -> None:
+                             properties: MessageProperties) -> None:
 
         if not properties.is_marker or not properties.marker.is_displayed:
             return
@@ -47,6 +53,10 @@ class ChatMarkers(BaseModule):
         if properties.type.is_error:
             return
 
+        self._process(properties)
+        raise nbxmpp.NodeProcessed
+
+    def _process(self, properties: MessageProperties) -> None:
         jid = properties.jid
         if not properties.is_muc_pm:
             jid = properties.jid.new_as_bare()
@@ -86,19 +96,27 @@ class ChatMarkers(BaseModule):
                        properties.jid,
                        properties.marker.id)
 
-        jid = properties.jid
         if not properties.is_muc_pm and not properties.type.is_groupchat:
-            jid = properties.jid.bare
+            if properties.is_mam_message:
+                timestamp = properties.mam.timestamp
+            else:
+                timestamp = properties.timestamp
 
-        app.storage.archive.set_marker(
-            app.get_jid_from_account(self._account),
-            jid,
-            properties.marker.id,
-            'displayed')
+            timestamp = dt.datetime.fromtimestamp(
+                timestamp, dt.timezone.utc)
+
+            marker_data = mod.Marker(
+                account_=self._account,
+                remote_jid_=properties.remote_jid,
+                occupant_=None,
+                type=ChatMarkerType.DISPLAYED,
+                id=properties.marker.id,
+                timestamp=timestamp)
+            app.storage.archive.upsert_row(marker_data)
 
         app.ged.raise_event(
             DisplayedReceived(account=self._account,
-                              jid=jid,
+                              jid=properties.remote_jid,
                               properties=properties,
                               type=properties.type,
                               is_muc_pm=properties.is_muc_pm,
@@ -113,7 +131,7 @@ class ChatMarkers(BaseModule):
 
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
-                                  message=None,
+                                  text=None,
                                   type_=typ,
                                   marker=(marker, id_),
                                   play_sound=False)

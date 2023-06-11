@@ -126,12 +126,15 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
         message_row = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, last_message_id)
-        if message_row is None or message_row.message is None:
+        if message_row is None or message_row.text is None:
             return
 
+        text = message_row.text
+        if message_row.corrections:
+            text = message_row.get_last_correction().text
         self._set_correcting(True)
         self.get_style_context().add_class('gajim-msg-correcting')
-        self.insert_text(message_row.message)
+        self.insert_text(text)
 
     def try_message_correction(self, message: str) -> str | None:
         assert self._contact is not None
@@ -147,7 +150,7 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             log.info('Trying to correct message older than threshold')
             return None
 
-        if message_row.message == message:
+        if message_row.text == message:
             log.info('Trying to correct message with original text')
             return None
 
@@ -158,18 +161,16 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self._correcting[self._contact] = state
 
     def _on_message_sent(self, event: MessageSent) -> None:
-        if not event.message:
-            return
+        message = event.message
 
-        if event.correct_id is None:
-            # This wasn't a corrected message
-            assert self._contact is not None
-            oob_url = event.additional_data.get_value('gajim', 'oob_url')
-            if oob_url == event.message:
-                # Don't allow to correct HTTP Upload file transfer URLs
-                self._last_message_id[self._contact] = None
-            else:
-                self._last_message_id[self._contact] = event.message_id
+        assert self._contact is not None
+
+        if (message.oob is not None and
+                message.oob.url == message.text):
+            # Don't allow to correct HTTP Upload file transfer URLs
+            self._last_message_id[self._contact] = None
+        else:
+            self._last_message_id[self._contact] = message.id
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:

@@ -23,7 +23,7 @@ _MIN_CAIRO_VER = '1.16.0'
 _MIN_PYGOBJECT_VER = '3.42.0'
 _MIN_GLIB_VER = '2.66.0'
 _MIN_PANGO_VER = '1.50.0'
-_MIN_SQLITE_VER = '3.33.0'
+_MIN_SQLITE_VER = '3.35.0'
 
 
 def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:

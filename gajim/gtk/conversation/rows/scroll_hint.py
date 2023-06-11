@@ -18,7 +18,7 @@ class ScrollHintRow(BaseRow):
         self.set_activatable(False)
 
         self.type = 'system'
-        self.timestamp = datetime.fromtimestamp(0)
+        self.timestamp = datetime.fromtimestamp(0).astimezone()
 
         self.get_style_context().add_class('conversation-system-row')
 

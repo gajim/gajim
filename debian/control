@@ -20,6 +20,7 @@ Build-Depends:
     python3-pil (>=9.1.0),
     gir1.2-gtk-3.0 (>=3.24.30),
     gir1.2-gtksource-4,
+    sqlite3 (>=3.35.0),
 Rules-Requires-Root: no
 Standards-Version: 4.1.4
 Homepage: https://gajim.org/
@@ -40,6 +41,7 @@ Depends:
     gir1.2-pango-1.0 (>= 1.50.0),
     gir1.2-gtk-3.0 (>= 3.24.30),
     gir1.2-gtksource-4,
+    sqlite3 (>=3.35.0),
 Recommends:
     ca-certificates,
     fonts-noto-color-emoji,

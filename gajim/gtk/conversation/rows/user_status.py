@@ -31,7 +31,7 @@ class UserStatus(BaseRow):
 
         self.type = 'muc-user-status'
         timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
+        self.timestamp = datetime.fromtimestamp(timestamp).astimezone()
         self.db_timestamp = timestamp
 
         avatar_placeholder = Gtk.Box()

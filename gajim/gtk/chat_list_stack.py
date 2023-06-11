@@ -69,12 +69,11 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
         self.register_events([
             ('message-received', ged.GUI2, self._on_event),
-            ('mam-message-received', ged.GUI2, self._on_event),
-            ('gc-message-received', ged.GUI2, self._on_event),
-            ('message-updated', ged.GUI2, self._on_event),
+            ('message-corrected', ged.GUI2, self._on_event),
             ('message-moderated', ged.GUI2, self._on_event),
             ('presence-received', ged.GUI2, self._on_event),
             ('message-sent', ged.GUI2, self._on_event),
+            ('message-deleted', ged.GUI2, self._on_event),
             ('file-request-received', ged.GUI2, self._on_event),
             ('jingle-request-received', ged.GUI2, self._on_event),
         ])

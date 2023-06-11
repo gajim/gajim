@@ -384,7 +384,7 @@ class Chatstate(BaseModule):
         type_ = 'groupchat' if contact.is_groupchat else 'chat'
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
-                                  message=None,
+                                  text=None,
                                   type_=type_,
                                   chatstate=chatstate.value,
                                   play_sound=False)

@@ -4,6 +4,7 @@
 
 import time
 from datetime import datetime
+from datetime import timezone
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -20,9 +21,9 @@ class CommandOutputRow(BaseRow):
         BaseRow.__init__(self, account)
 
         self.type = 'command_output'
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+        now = datetime.now(timezone.utc)
+        self.timestamp = now.astimezone()
+        self.db_timestamp = now.timestamp()
 
         self.get_style_context().add_class('conversation-command-row')
 

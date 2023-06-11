@@ -44,6 +44,7 @@ from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.structs import RetractMessageParam
@@ -690,7 +691,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       timestamp: datetime,
                       message_id: str | None,
                       stanza_id: str | None,
-                      log_line_id: int | None
+                      entitykey: int | None
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -727,7 +728,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
     menu_items.append(
         (p_('Message row action', 'Select Messages…'),
          'win.activate-message-selection',
-         GLib.Variant('u', log_line_id or 0)))
+         GLib.Variant('u', entitykey or 0)))
 
     show_correction = False
     if message_id is not None:
@@ -759,11 +760,17 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
-    if log_line_id is not None:
+    if entitykey is not None:
+        param = DeleteMessageParam(
+            account=contact.account,
+            jid=contact.jid,
+            entitykey=entitykey)
+
         menu_items.append(
-            (p_('Message row action', 'Delete Message Locally…'),
-            'win.delete-message-locally',
-            GLib.Variant('u', log_line_id or 0)))
+            (p_('Message row action',
+             'Delete Message Locally…'),
+             'win.delete-message-locally',
+              param))
 
     return GajimMenu.from_list(menu_items)
 

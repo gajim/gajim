@@ -20,8 +20,8 @@ class ReadMarkerRow(BaseRow):
         BaseRow.__init__(self, contact.account, widget='label')
         self.set_activatable(False)
         self.type = 'read_marker'
-        self.timestamp = datetime.fromtimestamp(0)
-        self._last_incoming_timestamp = datetime.fromtimestamp(0)
+        self.timestamp = datetime.fromtimestamp(0).astimezone()
+        self._last_incoming_timestamp = datetime.fromtimestamp(0).astimezone()
 
         contact.connect('nickname-update', self._on_nickname_update)
 

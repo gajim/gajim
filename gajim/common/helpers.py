@@ -678,7 +678,7 @@ def get_subscription_request_msg(account: str | None = None) -> str:
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
 
-def get_retraction_text(by: str | None,
+def get_retraction_text(by: str | JID | None,
                         reason: str | None) -> str:
 
     by_text = ''
