@@ -185,6 +185,7 @@
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Browse history by date</property>
             <property name="popover">calendar_popover</property>
+            <signal name="clicked" handler="_on_calender_button_clicked" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="visible">True</property>

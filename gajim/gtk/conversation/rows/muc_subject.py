@@ -31,7 +31,7 @@ class MUCSubject(BaseRow):
         BaseRow.__init__(self, account)
 
         current_timestamp = timestamp or time.time()
-        self.timestamp = datetime.fromtimestamp(current_timestamp)
+        self.timestamp = datetime.fromtimestamp(current_timestamp).astimezone()
         self.db_timestamp = current_timestamp
 
         self.grid.set_halign(Gtk.Align.START)

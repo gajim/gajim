@@ -25,17 +25,18 @@ classifiers = [
   "Topic :: Communications :: Chat",
 ]
 dependencies = [
+  "cryptography>=3.4.8",
   "css-parser",
   "keyring",
   "nbxmpp>=4.5.3,<5.0.0",
+  "omemo-dr>=1.0.0,<2.0.0",
   "packaging",
   "pillow>=9.1.0",
   "precis-i18n>=1.0.0",
-  "cryptography>=3.4.8",
   "pycairo>=1.16.0",
   "PyGObject>=3.42.0",
   "qrcode>=7.3.1",
-  "omemo-dr>=1.0.0,<2.0.0",
+  "SQLAlchemy>=2.0.0",
   "winsdk ; platform_system == 'Windows'",
 ]
 dynamic = ["version"]
@@ -137,6 +138,7 @@ include = [
     "gajim/common/modules/register.py",
     "gajim/common/modules/vcard4.py",
     "gajim/common/modules/vcard_temp.py",
+    "gajim/common/modules/moderations.py",
     "gajim/common/passwords.py",
     "gajim/common/preview_helpers.py",
     "gajim/common/regex.py",
@@ -288,9 +290,11 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 [tool.ruff.lint.per-file-ignores]
 "gajim/common/iana.py" = ["E501"]
 "gajim/common/storage/omemo.py" = ["N803"]
+"gajim/common/storage/*" = ["E501"]
 "test/*" = ["E402"]
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]
+"test/database/*" = ["E501"]
 "pep517build/*" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
 "win/*" = ["S603", "S607"]

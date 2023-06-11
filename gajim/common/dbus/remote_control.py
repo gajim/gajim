@@ -177,9 +177,6 @@ class GajimRemote(Server):
         app.ged.register_event_handler('presence-received',
                                        ged.POSTGUI,
                                        self._on_presence_received)
-        app.ged.register_event_handler('gc-message-received',
-                                       ged.POSTGUI,
-                                       self._on_gc_message_received)
         app.ged.register_event_handler('message-received',
                                        ged.POSTGUI,
                                        self._on_message_received)
@@ -191,9 +188,10 @@ class GajimRemote(Server):
                                        self._on_message_sent)
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
+        message = event.message
         self.raise_signal('MessageSent', (
             event.account, [event.jid,
-                          event.message]))
+                            message.text]))
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
         self.raise_signal('ContactPresence', (event.account, [
@@ -202,28 +200,16 @@ class GajimRemote(Server):
             event.show,
             event.status]))
 
-    def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
-        self.raise_signal('GCMessage', (
-            event.conn.name, [event.fjid,
-                              event.msgtxt,
-                              event.properties.timestamp,
-                              event.delayed,
-                              event.displaymarking]))
-
-    def _on_message_received(self,
-                             event: events.MessageReceived) -> None:
-
-        event_type = event.properties.type.value
-        if event.properties.is_muc_pm:
-            event_type = 'pm'
+    def _on_message_received(self, event: events.MessageReceived) -> None:
+        message = event.message
         self.raise_signal('NewMessage', (
-            event.conn.name, [event.fjid,
-                              event.msgtxt,
-                              event.properties.timestamp,
-                              event_type,
-                              event.properties.subject,
-                              event.msg_log_id,
-                              event.properties.nickname]))
+            event.account, [
+                message.remote.jid,
+                message.resource,
+                message.type,
+                message.timestamp,
+                message.text,
+            ]))
 
     def _on_our_status(self, event: events.ShowChanged) -> None:
         self.raise_signal('AccountPresence', (event.show, event.account))
@@ -270,7 +256,7 @@ class GajimRemote(Server):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         message_ = OutgoingMessage(account=account,
                                    contact=contact,
-                                   message=message,
+                                   text=message,
                                    type_=type_)
 
         app.get_client(account).send_message(message_)

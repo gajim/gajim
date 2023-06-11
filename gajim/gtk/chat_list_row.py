@@ -20,9 +20,7 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.const import KindConstant
 from gajim.common.const import RowHeaderType
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_retraction_text
@@ -32,10 +30,13 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.util import ChatDirection
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
 
@@ -137,64 +138,67 @@ class ChatListRow(Gtk.ListBoxRow):
             self._ui.unread_label.get_style_context().add_class(
                 'unread-counter-silent')
 
-        self._display_last_conversation_line()
+        self._display_last_conversation_row()
 
-    def _display_last_conversation_line(self) -> None:
-        line = app.storage.archive.get_last_conversation_line(
+    def _display_last_conversation_row(self) -> None:
+        message = app.storage.archive.get_last_conversation_row(
             self.contact.account, self.contact.jid)
-        if line is None:
+        if message is None:
             self.show_all()
             return
 
-        if line.message is not None:
-            message_text = line.message
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
 
-            if line.additional_data is not None:
-                retracted_by = line.additional_data.get_value(
-                    'retracted', 'by')
-                if retracted_by is not None:
-                    reason = line.additional_data.get_value(
-                        'retracted', 'reason')
-                    message_text = get_retraction_text(
-                        retracted_by, reason)
+        if message.text is not None:
+            message_text = message.text
+
+            if message.corrections:
+                message_text = message.get_last_correction().text
+                assert message_text is not None
+
+            if message.moderation is not None:
+                message_text = get_retraction_text(
+                    message.moderation.by, message.moderation.reason)
 
             me_nickname = None
-            if line.kind in (KindConstant.CHAT_MSG_SENT,
-                             KindConstant.SINGLE_MSG_SENT):
+            if (message.type == MessageType.CHAT and
+                    message.direction == ChatDirection.OUTGOING):
                 self.set_nick(_('Me'))
                 me_nickname = app.nicks[self.contact.account]
 
-            if line.kind == KindConstant.GC_MSG:
+            if message.type == MessageType.GROUPCHAT:
+                # TODO: not joined when starting (no groupchat nick)
                 our_nick = get_group_chat_nick(
                     self.contact.account, self.contact.jid)
-                if line.contact_name == our_nick:
+
+                if message.resource == our_nick:
                     self.set_nick(_('Me'))
                     me_nickname = our_nick
                 else:
-                    self.set_nick(line.contact_name)
-                    me_nickname = line.contact_name
+                    self.set_nick(message.resource or '')
+                    me_nickname = message.resource
 
             self.set_message_text(
                 message_text,
                 nickname=me_nickname,
-                additional_data=line.additional_data)
+                oob=message.oob)
 
-            self.set_timestamp(line.time)
+            self.set_timestamp(message.timestamp)
 
-            self.stanza_id = line.stanza_id
-            self.message_id = line.message_id
+            self.stanza_id = message.stanza_id
+            self.message_id = message.id
 
-        if line.kind in (KindConstant.FILE_TRANSFER_INCOMING,
-                         KindConstant.FILE_TRANSFER_OUTGOING):
+        if message.filetransfers:
             self.set_message_text(
                 _('File'), icon_name='text-x-generic-symbolic')
-            self.set_timestamp(line.time)
+            self.set_timestamp(message.timestamp)
 
-        if line.kind in (KindConstant.CALL_INCOMING,
-                         KindConstant.CALL_OUTGOING):
+        if message.call is not None:
             self.set_message_text(
                 _('Call'), icon_name='call-start-symbolic')
-            self.set_timestamp(line.time)
+            self.set_timestamp(message.timestamp)
 
         self.show_all()
 
@@ -250,7 +254,7 @@ class ChatListRow(Gtk.ListBoxRow):
                          text: str,
                          nickname: str | None = None,
                          icon_name: str | None = None,
-                         additional_data: AdditionalDataDict | None = None
+                         oob: list[mod.OOB] | None = None
                          ) -> None:
 
         assert isinstance(
@@ -267,8 +271,8 @@ class ChatListRow(Gtk.ListBoxRow):
         icon = None
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
-        if additional_data is not None:
-            if app.preview_manager.is_previewable(text, additional_data):
+        if oob:
+            if app.preview_manager.is_previewable(text, oob):
                 scheme = urlparse(text).scheme
                 if scheme == 'geo':
                     location = split_geo_uri(text)
@@ -308,8 +312,8 @@ class ChatListRow(Gtk.ListBoxRow):
     def set_stanza_id(self, stanza_id: str) -> None:
         self.stanza_id = stanza_id
 
-    def set_timestamp(self, timestamp: float) -> None:
-        self.timestamp = timestamp
+    def set_timestamp(self, timestamp: datetime) -> None:
+        self.timestamp = timestamp.timestamp()
         self.update_time()
 
     def update_account_identifier(self) -> None:
@@ -352,6 +356,7 @@ class ChatListRow(Gtk.ListBoxRow):
         self._ui.mute_image.set_visible(self.contact.is_muted)
 
     def add_unread(self, text: str) -> None:
+        assert self.message_id is not None
         self._unread_count += 1
         self._update_unread()
         app.storage.cache.set_unread_count(
@@ -419,7 +424,7 @@ class ChatListRow(Gtk.ListBoxRow):
     def _show_draft(self, draft: str | None) -> None:
         if not draft:
             self._ui.message_label.get_style_context().remove_class('draft')
-            self._display_last_conversation_line()
+            self._display_last_conversation_row()
             return
 
         self.set_nick('')

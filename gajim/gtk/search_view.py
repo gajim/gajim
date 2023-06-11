@@ -6,13 +6,11 @@ from __future__ import annotations
 
 from typing import Any
 
+import datetime as dt
 import itertools
 import logging
 import re
-import time
 from collections.abc import Iterator
-from datetime import datetime
-from datetime import timedelta
 
 import cairo
 from gi.repository import GObject
@@ -21,14 +19,16 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
-from gajim.common.const import KindConstant
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
-from gajim.common.storage.archive import SearchLogRow
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
@@ -52,10 +52,10 @@ class SearchView(Gtk.Box):
 
         self._account: str | None = None
         self._jid: JID | None = None
-        self._results_iterator: Iterator[SearchLogRow] | None = None
+        self._results_iterator: Iterator[Message] | None = None
 
-        self._first_date: datetime | None = None
-        self._last_date: datetime | None = None
+        self._first_date: dt.datetime | None = None
+        self._last_date: dt.datetime | None = None
 
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
@@ -77,14 +77,15 @@ class SearchView(Gtk.Box):
     @staticmethod
     def _header_func(row: ResultRow, before: ResultRow | None) -> None:
         if before is None:
-            row.set_header(RowHeader(row.account, row.jid, row.time))
+            row.set_header(RowHeader(
+                row.account, row.remote_jid, row.timestamp))
         else:
-            date1 = time.strftime('%x', time.localtime(row.time))
-            date2 = time.strftime('%x', time.localtime(before.time))
             if before.jid != row.jid:
-                row.set_header(RowHeader(row.account, row.jid, row.time))
-            elif date1 != date2:
-                row.set_header(RowHeader(row.account, row.jid, row.time))
+                row.set_header(RowHeader(
+                    row.account, row.remote_jid, row.timestamp))
+            elif before.timestamp.date() != row.timestamp.date():
+                row.set_header(RowHeader(
+                    row.account, row.remote_jid, row.timestamp))
             else:
                 row.set_header(None)
 
@@ -123,7 +124,7 @@ class SearchView(Gtk.Box):
         text, before_filters = self._strip_filters(text, 'before')
         if before_filters is not None:
             try:
-                before_filters = min(datetime.fromisoformat(date) for
+                before_filters = min(dt.datetime.fromisoformat(date) for
                                      date in before_filters)
             except ValueError:
                 self._ui.date_hint.show()
@@ -133,14 +134,14 @@ class SearchView(Gtk.Box):
         text, after_filters = self._strip_filters(text, 'after')
         if after_filters is not None:
             try:
-                after_filters = min(datetime.fromisoformat(date) for
+                after_filters = min(dt.datetime.fromisoformat(date) for
                                     date in after_filters)
                 # if only the day is specified, we want to look after the
                 # end of that day.
                 # if precision is increased,we do want to look during the
                 # day as well.
                 if after_filters.hour == after_filters.minute == 0:
-                    after_filters += timedelta(days=1)
+                    after_filters += dt.timedelta(days=1)
             except ValueError:
                 self._ui.date_hint.show()
                 return
@@ -152,15 +153,15 @@ class SearchView(Gtk.Box):
             self._ui.search_checkbutton.set_active(True)
 
         if not context or everywhere:
-            self._results_iterator = app.storage.archive.search_all_logs(
-                text,
-                from_users=from_filters,
-                before=before_filters,
-                after=after_filters)
+            account = None
+            jid = None
         else:
-            self._results_iterator = app.storage.archive.search_log(
-                self._account,
-                self._jid,
+            account = self._account
+            jid = self._jid
+
+        self._results_iterator = app.storage.archive.search_archive(
+                account,
+                jid,
                 text,
                 from_users=from_filters,
                 before=before_filters,
@@ -183,14 +184,9 @@ class SearchView(Gtk.Box):
         return new_text, filters or None
 
     def _add_results(self) -> None:
-        accounts = self._get_accounts()
         assert self._results_iterator is not None
-        for msg in itertools.islice(self._results_iterator, 25):
-            result_row = ResultRow(
-                msg,
-                accounts[msg.account_id],
-                msg.jid)
-
+        for db_row in itertools.islice(self._results_iterator, 25):
+            result_row = ResultRow(db_row)
             self._ui.results_listbox.add(result_row)
 
     def _on_edge_reached(self,
@@ -201,23 +197,26 @@ class SearchView(Gtk.Box):
 
         self._add_results()
 
+    def _on_calender_button_clicked(self, menu_button: Gtk.MenuButton) -> None:
+        if menu_button.get_active():
+            self._update_calendar()
+
     def _update_calendar(self) -> None:
-        if self._account is None and self._jid is None:
-            self._ui.calendar_button.set_sensitive(False)
-            return
+        self._ui.calendar.clear_marks()
 
-        self._ui.calendar_button.set_sensitive(True)
+        assert self._jid is not None
+        assert self._account is not None
 
-        first_log = app.storage.archive.get_first_history_timestamp(
+        first_log = app.storage.archive.get_first_message_ts(
             self._account, self._jid)
         if first_log is None:
             return
-        self._first_date = self._get_date_from_timestamp(first_log)
-        last_log = app.storage.archive.get_last_history_timestamp(
+        self._first_date = first_log.astimezone()
+        last_log = app.storage.archive.get_last_message_ts(
             self._account, self._jid)
         if last_log is None:
             return
-        self._last_date = self._get_date_from_timestamp(last_log)
+        self._last_date = last_log.astimezone()
         month = gtk_month(self._last_date.month)
         self._ui.calendar.select_month(month, self._last_date.year)
 
@@ -232,15 +231,18 @@ class SearchView(Gtk.Box):
         calendar.clear_marks()
         month = python_month(month)
 
-        history_days = app.storage.archive.get_days_with_history(
+        assert self._jid is not None
+        assert self._account is not None
+
+        history_days = app.storage.archive.get_days_containing_messages(
             self._account, self._jid, year, month)
-        for date in history_days:
-            calendar.mark_day(date.day)
+        for day in history_days:
+            calendar.mark_day(day)
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
         year, month, day = calendar.get_date()
         py_m = python_month(month)
-        date = datetime(year, py_m, day)
+        date = dt.datetime(year, py_m, day)
         self._scroll_to_date(date)
 
     def _on_first_date_selected(self, _button: Gtk.Button) -> None:
@@ -256,28 +258,32 @@ class SearchView(Gtk.Box):
         self._ui.calendar.select_day(self._last_date.day)
 
     def _on_previous_date_selected(self, _button: Gtk.Button) -> None:
-        delta = timedelta(days=-1)
+        delta = dt.timedelta(days=-1)
         assert self._first_date is not None
-        self._select_date(delta, self._first_date, Direction.NEXT)
+        self._select_date(delta, self._first_date.date(), Direction.NEXT)
 
     def _on_next_date_selected(self, _button: Gtk.Button) -> None:
-        delta = timedelta(days=1)
+        delta = dt.timedelta(days=1)
         assert self._last_date is not None
-        self._select_date(delta, self._last_date, Direction.PREV)
+        self._select_date(delta, self._last_date.date(), Direction.PREV)
 
     def _select_date(self,
-                     delta: timedelta,
-                     end_date: datetime,
+                     delta: dt.timedelta,
+                     end_date: dt.date,
                      direction: Direction
                      ) -> None:
         # Iterate through days until history entry found or
         # supplied end_date (first_date/last_date) reached
+
         year, month, day = self._ui.calendar.get_date()
         py_m = python_month(month)
-        date = datetime(year, py_m, day)
+        date = dt.date(year, py_m, day)
 
-        history = None
-        while history is None:
+        assert self._jid is not None
+        assert self._account is not None
+
+        day_has_messages = False
+        while not day_has_messages:
             if direction == Direction.PREV:
                 if end_date <= date:
                     return
@@ -288,69 +294,68 @@ class SearchView(Gtk.Box):
             date = date + delta
             if date == end_date:
                 break
-            history = app.storage.archive.date_has_history(
-                self._account, self._jid, date)
+            day_has_messages = self._ui.calendar.get_day_is_marked(date.day)
 
         gtk_m = gtk_month(date.month)
-        self._ui.calendar.select_month(gtk_m, date.year)
+        if gtk_m != month or date.year != year:
+            # Select month only if it's a different one
+            self._ui.calendar.select_month(gtk_m, date.year)
+
         self._ui.calendar.select_day(date.day)
 
-    def _scroll_to_date(self, date: datetime) -> None:
+    def _scroll_to_date(self, date: dt.datetime) -> None:
         control = app.window.get_control()
         if not control.has_active_chat():
             return
         if control.contact.jid == self._jid:
-            meta_row = app.storage.archive.get_first_message_meta_for_date(
+
+            assert self._jid is not None
+            assert self._account is not None
+
+            meta = app.storage.archive.get_first_message_meta_for_date(
                 self._account, self._jid, date)
-            if meta_row is None:
+            if meta is None:
                 return
-            control.scroll_to_message(
-                meta_row.log_line_id,
-                meta_row.time)
 
-    @staticmethod
-    def _get_date_from_timestamp(timestamp: float) -> datetime:
-        localtime = time.localtime(timestamp)
-        year, month, day = localtime[0], localtime[1], localtime[2]
-        date = datetime(year, month, day)
-        return date
-
-    @staticmethod
-    def _get_accounts() -> dict[int, str]:
-        accounts: dict[int, str] = {}
-        for account in app.settings.get_accounts():
-            account_id = app.storage.archive.get_account_id(account)
-            accounts[account_id] = account
-        return accounts
+            control.scroll_to_message(*meta)
 
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
         control = app.window.get_control()
         if control.has_active_chat():
-            if control.contact.jid == row.jid:
-                control.scroll_to_message(row.log_line_id, row.timestamp)
+            if control.contact.jid == row.remote_jid:
+                control.scroll_to_message(row.pk, row.timestamp)
                 return
 
         # Other chat or no control opened
-        jid = JID.from_string(row.jid)
-        app.window.add_chat(row.account, jid, row.type, select=True)
+        jid = row.remote_jid
+        chat_type = 'chat'
+        if row.type == MessageType.GROUPCHAT:
+            chat_type = 'groupchat'
+        elif row.type == MessageType.PM:
+            chat_type = 'pm'
+        app.window.add_chat(row.account, jid, chat_type, select=True)
         control = app.window.get_control()
         if control.has_active_chat():
-            control.scroll_to_message(row.log_line_id, row.timestamp)
+            control.scroll_to_message(row.pk, row.timestamp)
 
     def set_focus(self) -> None:
         self._ui.search_entry.grab_focus()
         self._clear()
-        self._update_calendar()
 
     def set_context(self, account: str | None, jid: JID | None) -> None:
         self._account = account
         self._jid = jid
-        self._update_calendar()
+
+        if self._account is None and self._jid is None:
+            self._ui.calendar_button.set_sensitive(False)
+            return
+
+        self._ui.calendar_button.set_sensitive(True)
 
 
 class RowHeader(Gtk.Box):
-    def __init__(self, account: str, jid: JID, timestamp: float) -> None:
+    def __init__(self, account: str, jid: JID, timestamp: dt.datetime) -> None:
         Gtk.Box.__init__(self)
         self.set_hexpand(True)
 
@@ -363,33 +368,35 @@ class RowHeader(Gtk.Box):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         self._ui.header_name_label.set_text(contact.name or '')
 
-        local_time = time.localtime(timestamp)
-        date = time.strftime('%x', local_time)
-        self._ui.header_date_label.set_text(date)
+        format_string = app.settings.get('time_format')
+        if timestamp.date() < dt.datetime.today().date():
+            format_string = app.settings.get('date_time_format')
+        self._ui.header_date_label.set_text(timestamp.strftime(format_string))
 
         self.show_all()
 
 
 class ResultRow(Gtk.ListBoxRow):
-    def __init__(self, msg: SearchLogRow, account: str, jid: JID) -> None:
+    def __init__(self, db_row: Message) -> None:
         Gtk.ListBoxRow.__init__(self)
-        self.account = account
-        self.jid = jid
-        self.time = msg.time
-        self._client = app.get_client(account)
 
-        self.log_line_id = msg.log_line_id
-        self.timestamp = msg.time
-        self.kind = msg.kind
+        self._client = self._get_client(str(db_row.account.jid))
+        self.account = self._client.account
 
-        self.type = 'contact'
-        if msg.kind == KindConstant.GC_MSG:
-            self.type = 'groupchat'
-        if jid.is_full:
-            self.type = 'pm'
+        self.remote_jid = db_row.remote.jid
+        self.direction = ChatDirection(db_row.direction)
+
+        self.jid = db_row.remote.jid
+        if (db_row.direction == ChatDirection.OUTGOING):
+            self.jid = JID.from_string(self._client.get_own_jid().bare)
+
+        self.pk = db_row.pk
+        self.timestamp = db_row.timestamp
+
+        self.type = MessageType(db_row.type)
 
         self.contact = self._client.get_module('Contacts').get_contact(
-            jid, groupchat=self.type == 'groupchat')
+            self.jid, groupchat=self.type == MessageType.GROUPCHAT)
         assert isinstance(
             self.contact,
             BareContact | GroupchatContact | GroupchatParticipant)
@@ -398,36 +405,42 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui = get_builder('search_view.ui')
         self.add(self._ui.result_row_grid)
 
-        kind = 'status'
-        contact_name = msg.contact_name
-        if msg.kind in (
-                KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
-            kind = 'incoming'
-            contact_name = self.contact.name
-        elif msg.kind == KindConstant.GC_MSG:
-            kind = 'incoming'
-        elif msg.kind in (
-                KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
-            kind = 'outgoing'
-            contact_name = app.nicks[account]
+        contact_name = self.contact.name
+        if self.type == MessageType.GROUPCHAT:
+            contact_name = db_row.resource
+            assert contact_name is not None
+
         self._ui.row_name_label.set_text(contact_name)
 
-        avatar = self._get_avatar(kind, contact_name)
+        avatar = self._get_avatar(self.direction, contact_name)
         self._ui.row_avatar.set_from_surface(avatar)
 
-        local_time = time.localtime(msg.time)
         format_string = app.settings.get('time_format')
-        date = time.strftime(format_string, local_time)
-        self._ui.row_time_label.set_label(date)
+        if self.timestamp.date() < dt.datetime.today().date():
+            format_string = app.settings.get('date_time_format')
+        self._ui.row_time_label.set_text(self.timestamp.strftime(format_string))
 
-        message_widget = MessageWidget(account, selectable=False)
-        message_widget.add_with_styling(msg.message, nickname=contact_name)
+        text = db_row.text
+        if db_row.corrections:
+            text = db_row.get_last_correction().text
+
+        assert text is not None
+
+        message_widget = MessageWidget(self.account, selectable=False)
+        message_widget.add_with_styling(text, nickname=contact_name)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
         self.show_all()
 
+    def _get_client(self, account_jid: str) -> Client:
+        for client in app.get_clients():
+            if client.is_own_jid(account_jid):
+                return client
+
+        raise ValueError('Unable to find account: %s' % account_jid)
+
     def _get_avatar(self,
-                    kind: str,
+                    direction: ChatDirection,
                     name: str) -> cairo.ImageSurface | None:
 
         scale = self.get_scale_factor()
@@ -435,9 +448,9 @@ class ResultRow(Gtk.ListBoxRow):
             contact = self.contact.get_resource(name)
             return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
-        if kind == 'outgoing':
+        if direction == ChatDirection.OUTGOING:
             contact = self._client.get_module('Contacts').get_contact(
-                str(self._client.get_own_jid().bare))
+                self._client.get_own_jid().bare)
         else:
             contact = self.contact
 

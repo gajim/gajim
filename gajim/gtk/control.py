@@ -7,15 +7,16 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
+import datetime as dt
 import logging
 import time
+from collections.abc import Sequence
 
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import StatusCode
-from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
@@ -23,17 +24,16 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.const import KindConstant
 from gajim.common.const import XmppUriQuery
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_retraction_text
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
-from gajim.common.storage.archive import ConversationRow
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
@@ -42,7 +42,7 @@ from gajim.gtk.conversation.view import ConversationView
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.groupchat_state import GroupchatState
 
-HistoryRowT = events.ApplicationEvent | ConversationRow
+HistoryRowT = events.ApplicationEvent | Message
 
 REQUEST_LINES_COUNT = 20
 
@@ -142,7 +142,7 @@ class ChatControl(EventHelper):
 
     def add_info_message(self,
                          text: str,
-                         timestamp: float | None = None
+                         timestamp: dt.datetime | None = None
                          ) -> None:
 
         self._scrolled_view.add_info_message(text, timestamp)
@@ -164,8 +164,11 @@ class ChatControl(EventHelper):
         self._roster.clear()
         self.unregister_events()
 
-    def remove_message(self, log_line_id: int) -> None:
-        self._scrolled_view.remove_message(log_line_id)
+    def remove_message(self, pk: int) -> None:
+        self._scrolled_view.remove_message(pk)
+
+    def _acknowledge_message(self, pk: int) -> None:
+        self._scrolled_view.acknowledge_message(pk)
 
     def reset_view(self) -> None:
         self._scrolled_view.reset()
@@ -173,22 +176,31 @@ class ChatControl(EventHelper):
     def get_autoscroll(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
-    def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
-        row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
+    def scroll_to_message(
+        self,
+        pk: int,
+        timestamp: dt.datetime
+    ) -> None:
+        row = self._scrolled_view.get_row_by_pk(pk)
         if row is None:
             # Clear view and reload conversation around timestamp
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
-            before, at_after = app.storage.archive.get_conversation_around(
-                self.contact.account, self.contact.jid, timestamp)
-            self._add_messages(before)
-            self._add_messages(at_after)
+            messages: list[Message] = []
+            m = app.storage.archive.get_message_with_pk(pk)
+            assert m is not None
+            messages.append(m)
+            messages.extend(app.storage.archive.get_conversation_before_after(
+                self.contact.account, self.contact.jid, True, timestamp, 50))
+            messages.extend(app.storage.archive.get_conversation_before_after(
+                self.contact.account, self.contact.jid, False, timestamp, 50))
+            self._add_messages(messages)
             self._scrolled_view.set_history_complete(False, False)
 
         GLib.idle_add(self._scrolled_view.block_signals, False)
         GLib.idle_add(
             self._scrolled_view.scroll_to_message_and_highlight,
-            log_line_id)
+            pk)
 
     def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
@@ -264,10 +276,10 @@ class ChatControl(EventHelper):
         self.register_events([
             ('presence-received', ged.GUI2, self._on_presence_received),
             ('message-sent', ged.GUI2, self._on_message_sent),
+            ('message-deleted', ged.GUI2, self._on_message_deleted),
+            ('message-acknowledged', ged.GUI2, self._on_message_acknowledged),
             ('message-received', ged.GUI2, self._on_message_received),
-            ('mam-message-received', ged.GUI2, self._on_mam_message_received),
-            ('gc-message-received', ged.GUI2, self._on_gc_message_received),
-            ('message-updated', ged.GUI2, self._on_message_updated),
+            ('message-corrected', ged.GUI2, self._on_message_corrected),
             ('message-moderated', ged.GUI2, self._on_message_moderated),
             ('receipt-received', ged.GUI2, self._on_receipt_received),
             ('displayed-received', ged.GUI2, self._on_displayed_received),
@@ -312,141 +324,44 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        if not event.message:
+        self._add_message(event.message)
+
+    def _on_message_deleted(self, event: events.MessageDeleted) -> None:
+        if not self._is_event_processable(event):
             return
 
-        if self.contact.is_groupchat:
+        self.remove_message(event.pk)
+
+    def _on_message_acknowledged(
+        self,
+        event: events.MessageAcknowledged
+    ) -> None:
+        if not self._is_event_processable(event):
             return
 
-        message_id = event.message_id
-
-        if event.label:
-            displaymarking = event.label.displaymarking
-        else:
-            displaymarking = None
-
-        if event.correct_id:
-            self._scrolled_view.correct_message(
-                event.correct_id, event.message, self._get_our_nick())
-            return
-
-        name = self._get_our_nick()
-
-        self._add_message(text=event.message,
-                          kind='outgoing',
-                          name=name,
-                          timestamp=event.timestamp,
-                          displaymarking=displaymarking,
-                          msg_log_id=event.msg_log_id,
-                          message_id=message_id,
-                          stanza_id=None,
-                          additional_data=event.additional_data)
+        self._acknowledge_message(event.pk)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self._is_event_processable(event):
             return
 
-        if self.is_groupchat:
-            return
+        self._add_message(event.message)
 
-        if not event.msgtxt:
-            return
-
-        kind = 'incoming'
-        name = self.contact.name
-        if event.properties.is_sent_carbon:
-            kind = 'outgoing'
-            name = self._get_our_nick()
-
-        self._add_message(text=event.msgtxt,
-                          kind=kind,
-                          name=name,
-                          timestamp=event.properties.timestamp,
-                          displaymarking=event.displaymarking,
-                          msg_log_id=event.msg_log_id,
-                          message_id=event.properties.id,
-                          stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
-
-    def _on_mam_message_received(self,
-                                 event: events.MamMessageReceived) -> None:
-
+    def _on_message_corrected(self, event: events.MessageCorrected) -> None:
         if not self._is_event_processable(event):
             return
 
-        if isinstance(self.contact, GroupchatContact):
-
-            if not event.properties.type.is_groupchat:
-                return
-            if event.archive_jid != self.contact.jid:
-                return
-
-            nickname = event.properties.muc_nickname
-            if nickname == self.contact.nickname:
-                kind = 'outgoing'
-            else:
-                kind = 'incoming'
-
-        else:
-
-            if event.properties.is_muc_pm:
-                if not event.properties.jid == self.contact.jid:
-                    return
-            else:
-                if not event.properties.jid.bare_match(self.contact.jid):
-                    return
-
-            kind = 'incoming'
-            nickname = self.contact.name
-            if event.kind == KindConstant.CHAT_MSG_SENT:
-                kind = 'outgoing'
-                nickname = self._get_our_nick()
-
-        self._add_message(text=event.msgtxt,
-                          kind=kind,
-                          name=nickname,
-                          timestamp=event.properties.mam.timestamp,
-                          displaymarking=event.displaymarking,
-                          msg_log_id=event.msg_log_id,
-                          message_id=event.properties.id,
-                          stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
-
-    def _on_gc_message_received(self, event: events.GcMessageReceived) -> None:
-        if not self._is_event_processable(event):
+        if event.message is None:
             return
 
-        assert isinstance(self.contact, GroupchatContact)
-
-        nickname = event.properties.muc_nickname
-        if nickname == self.contact.nickname:
-            kind = 'outgoing'
-        else:
-            kind = 'incoming'
-
-        self._add_message(text=event.msgtxt,
-                          kind=kind,
-                          name=nickname,
-                          timestamp=event.properties.timestamp,
-                          displaymarking=event.displaymarking,
-                          msg_log_id=event.msg_log_id,
-                          message_id=event.properties.id,
-                          stanza_id=event.stanza_id,
-                          additional_data=event.additional_data)
-
-    def _on_message_updated(self, event: events.MessageUpdated) -> None:
-        if not self._is_event_processable(event):
-            return
-
-        self._scrolled_view.correct_message(
-            event.correct_id, event.msgtxt, event.nickname)
+        self._scrolled_view.correct_message(event.message)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         if not self._is_event_processable(event):
             return
 
         text = get_retraction_text(
-            event.moderation.moderator_jid,
+            event.moderation.by,
             event.moderation.reason)
         self._scrolled_view.show_message_retraction(
             event.moderation.stanza_id, text)
@@ -532,8 +447,8 @@ class ChatControl(EventHelper):
                                        param: GLib.Variant
                                        ) -> None:
 
-        log_line_id = param.get_uint32()
-        self._scrolled_view.enable_row_selection(log_line_id)
+        pk = param.get_uint32()
+        self._scrolled_view.enable_row_selection(pk)
         self._message_selection.set_no_show_all(False)
         self._message_selection.show_all()
 
@@ -572,113 +487,45 @@ class ChatControl(EventHelper):
         if self._allow_add_message():
             self._scrolled_view.add_call_message(event=event)
 
-    def _add_message(self,
-                     *,
-                     text: str,
-                     kind: str,
-                     name: str,
-                     timestamp: float,
-                     displaymarking: Displaymarking | None,
-                     msg_log_id: int | None,
-                     message_id: str | None,
-                     stanza_id: str | None,
-                     additional_data: AdditionalDataDict | None
-                     ) -> None:
-
-        if additional_data is None:
-            additional_data = AdditionalDataDict()
-
+    def _add_message(self, db_row: Message) -> None:
+        # TODO: Unify with _add_db_row()
         if self._allow_add_message():
-            self._scrolled_view.add_message(
-                text,
-                kind,
-                name,
-                timestamp,
-                display_marking=displaymarking,
-                message_id=message_id,
-                stanza_id=stanza_id,
-                log_line_id=msg_log_id,
-                additional_data=additional_data)
+            self._scrolled_view.add_message_from_db(db_row)
 
             if not self._scrolled_view.get_autoscroll():
-                if kind == 'outgoing':
+                if db_row.direction == ChatDirection.OUTGOING:
                     self._scrolled_view.scroll_to_end()
                 else:
                     self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
 
-    def _add_messages(self, messages: list[ConversationRow]):
+    def _add_db_row(self, db_row: Message):
+        if db_row.filetransfers:
+            self._scrolled_view.add_jingle_file_transfer(db_row=db_row)
+            return
+
+        if db_row.call is not None:
+            self._scrolled_view.add_call_message(db_row=db_row)
+            return
+
+        self._scrolled_view.add_message_from_db(db_row)
+
+    def _add_messages(self, messages: list[Message]):
         for msg in messages:
-            if msg.kind in (KindConstant.FILE_TRANSFER_INCOMING,
-                            KindConstant.FILE_TRANSFER_OUTGOING):
-                assert msg.additional_data is not None
-                if msg.additional_data.get_value('gajim', 'type') == 'jingle':
-                    self._scrolled_view.add_jingle_file_transfer(
-                        db_message=msg)
-                continue
+            self._add_db_row(msg)
 
-            if msg.kind in (KindConstant.CALL_INCOMING,
-                            KindConstant.CALL_OUTGOING):
-                self._scrolled_view.add_call_message(db_message=msg)
-                continue
-
-            if not msg.message:
-                continue
-
-            message_text = msg.message
-
-            contact_name = msg.contact_name
-            kind = 'incoming'
-            if msg.kind in (
-                    KindConstant.SINGLE_MSG_RECV, KindConstant.CHAT_MSG_RECV):
-                kind = 'incoming'
-                contact_name = self.contact.name
-            elif msg.kind == KindConstant.GC_MSG:
-                kind = 'incoming'
-                if contact_name is None:
-                    # Fall back to MUC name if contact name is None
-                    # (may be the case for service messages from the MUC)
-                    contact_name = self.contact.name
-            elif msg.kind in (
-                    KindConstant.SINGLE_MSG_SENT, KindConstant.CHAT_MSG_SENT):
-                kind = 'outgoing'
-                contact_name = self._get_our_nick()
-            else:
-                log.warning('kind attribute could not be processed'
-                            'while adding message')
-
-            assert contact_name is not None
-
-            if msg.additional_data is not None:
-                retracted_by = msg.additional_data.get_value('retracted', 'by')
-                if retracted_by is not None:
-                    reason = msg.additional_data.get_value(
-                        'retracted', 'reason')
-                    message_text = get_retraction_text(retracted_by, reason)
-
-            self._scrolled_view.add_message(
-                message_text,
-                kind,
-                contact_name,
-                msg.time,
-                additional_data=msg.additional_data,
-                message_id=msg.message_id,
-                stanza_id=msg.stanza_id,
-                log_line_id=msg.log_line_id,
-                marker=msg.marker,
-                error=msg.error)
-
-    def _request_messages(self, before: bool) -> list[ConversationRow]:
+    def _request_messages(self, before: bool) -> Sequence[Message]:
         if before:
-            row = self._scrolled_view.get_first_message_row()
+            row = self._scrolled_view.get_first_row()
         else:
-            row = self._scrolled_view.get_last_message_row()
+            row = self._scrolled_view.get_last_row()
 
         if row is None:
-            timestamp = time.time()
+            timestamp = dt.datetime.now(dt.timezone.utc)
         else:
-            timestamp = row.db_timestamp
+            timestamp = dt.datetime.fromtimestamp(
+                row.db_timestamp, dt.timezone.utc)
 
         return app.storage.archive.get_conversation_before_after(
             self.contact.account,
@@ -762,15 +609,15 @@ class ChatControl(EventHelper):
         self._scrolled_view.block_signals(False)
 
     @staticmethod
-    def _sort_request_rows(messages: list[ConversationRow],
+    def _sort_request_rows(messages: Sequence[Message],
                            event_rows: list[events.ApplicationEvent],
                            before: bool
                            ) -> list[HistoryRowT]:
 
         def sort_func(obj: HistoryRowT) -> float:
-            if isinstance(obj, events.ApplicationEvent):
-                return obj.timestamp  # pyright: ignore
-            return obj.time
+            return obj.timestamp  # pyright: ignore
+
+        assert isinstance(messages, list)
 
         rows = messages + event_rows
         rows.sort(key=sort_func, reverse=before)

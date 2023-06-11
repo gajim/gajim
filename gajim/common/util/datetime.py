@@ -11,3 +11,7 @@ from datetime import timezone
 def convert_epoch_to_local_datetime(utc_timestamp: float) -> datetime:
     utc = datetime.fromtimestamp(utc_timestamp, tz=timezone.utc)
     return utc.astimezone()
+
+
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)

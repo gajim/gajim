@@ -317,6 +317,14 @@ class ContactTooltipBuilder(Builder):
     resources_box: Gtk.Box
 
 
+class DbMigrationBuilder(Builder):
+    box: Gtk.Box
+    stack: Gtk.Stack
+    status_label: Gtk.Label
+    error_label: Gtk.Label
+    error_view: Gtk.TextView
+
+
 class EmojiChooserBuilder(Builder):
     box: Gtk.Box
     search: Gtk.SearchEntry
@@ -1021,6 +1029,8 @@ def get_builder(file_name: Literal['chat_paned.ui'], widgets: list[str] = ...) -
 def get_builder(file_name: Literal['contact_info.ui'], widgets: list[str] = ...) -> ContactInfoBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['contact_tooltip.ui'], widgets: list[str] = ...) -> ContactTooltipBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['db_migration.ui'], widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['emoji_chooser.ui'], widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
 @overload

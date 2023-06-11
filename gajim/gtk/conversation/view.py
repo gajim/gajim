@@ -9,7 +9,6 @@ from typing import cast
 from typing import Literal
 
 import logging
-import time
 from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
@@ -19,22 +18,21 @@ from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
-from nbxmpp.modules.security_labels import Displaymarking
 from nbxmpp.protocol import JID
-from nbxmpp.structs import CommonError
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common import types
 from gajim.common.const import Direction
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_start_of_day
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
-from gajim.common.storage.archive import ConversationRow
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -144,13 +142,13 @@ class ConversationView(Gtk.ScrolledWindow):
         self.disable_row_selection()
 
     def enable_row_selection(self,
-                             log_line_id: int | None
+                             pk: int | None
                              ) -> None:
 
         self._list_box.set_selection_mode(Gtk.SelectionMode.MULTIPLE)
 
-        if log_line_id is not None:
-            row = self.get_row_by_log_line_id(log_line_id)
+        if pk is not None:
+            row = self.get_row_by_pk(pk)
             self._list_box.select_row(row)
 
         for row in self.iter_rows():
@@ -374,13 +372,32 @@ class ConversationView(Gtk.ScrolledWindow):
         assert row is not None
         return cast(BaseRow, row)
 
-    def get_first_message_row(self) -> MessageRow | None:
+    def get_first_row(self
+    ) -> MessageRow | CallRow | FileTransferJingleRow | None:
+        for row in self._list_box.get_children():
+            if isinstance(row, MessageRow | CallRow | FileTransferJingleRow):
+                return row
+        return None
+
+    def get_last_row(
+        self
+    ) -> MessageRow | CallRow | FileTransferJingleRow | None:
+        children = reversed(self._list_box.get_children())
+        for row in children:
+            if isinstance(row, MessageRow | CallRow | FileTransferJingleRow):
+                return row
+        return None
+
+    def get_first_message_row(self
+    ) -> MessageRow | None:
         for row in self._list_box.get_children():
             if isinstance(row, MessageRow):
                 return row
         return None
 
-    def get_last_message_row(self) -> MessageRow | None:
+    def get_last_message_row(
+        self
+    ) -> MessageRow | None:
         children = reversed(self._list_box.get_children())
         for row in children:
             if isinstance(row, MessageRow):
@@ -447,7 +464,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_info_message(self,
                          text: str,
-                         timestamp: float | None = None
+                         timestamp: datetime | None = None
                          ) -> None:
 
         message = InfoMessage(self.contact.account, text, timestamp)
@@ -462,7 +479,7 @@ class ConversationView(Gtk.ScrolledWindow):
         event: (events.FileRequestReceivedEvent |
                 events.FileRequestSent |
                 None) = None,
-        db_message: ConversationRow | None = None
+        db_row: Message | None = None
     ) -> None:
 
         assert isinstance(self._contact, BareContact)
@@ -470,7 +487,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._contact.account,
             self._contact,
             event=event,
-            db_message=db_message)
+            db_row=db_row)
         self._insert_message(jingle_transfer_row)
 
     def add_encryption_info(self, event: events.EncryptionInfo) -> None:
@@ -479,14 +496,14 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_call_message(self,
                          event: events.JingleRequestReceived | None = None,
-                         db_message: ConversationRow | None = None
+                         db_row: Message | None = None
                          ) -> None:
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
             self._contact.account,
             self._contact,
             event=event,
-            db_message=db_message)
+            db_row=db_row)
         self._insert_message(call_row)
 
     def add_command_output(self, text: str, is_error: bool) -> None:
@@ -494,47 +511,22 @@ class ConversationView(Gtk.ScrolledWindow):
             self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
-    def add_message(self,
-                    text: str,
-                    kind: str,
-                    name: str,
-                    timestamp: float,
-                    log_line_id: int | None = None,
-                    message_id: str | None = None,
-                    stanza_id: str | None = None,
-                    display_marking: Displaymarking | None = None,
-                    additional_data: AdditionalDataDict | None = None,
-                    marker: str | None = None,
-                    error: CommonError | StanzaError | None = None
-                    ) -> None:
+    def add_message_from_db(self, db_row: Message) -> None:
+        message_row = MessageRow.from_db_row(self.contact, db_row)
 
-        if not timestamp:
-            timestamp = time.time()
-
-        message_row = MessageRow(
-            self.contact.account,
-            self.contact,
-            message_id,
-            stanza_id,
-            timestamp,
-            kind,
-            name,
-            text,
-            additional_data=additional_data,
-            display_marking=display_marking,
-            marker=marker,
-            error=error,
-            log_line_id=log_line_id)
+        message_id = db_row.id
 
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
 
-        if kind == 'incoming':
+        if db_row.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(
                 message_row.timestamp)
-        if (marker is not None and marker == 'displayed' and
-                message_id is not None):
+
+        markers = db_row.markers
+        if markers:
+            assert message_id is not None
             self.set_read_marker(message_id)
 
         self._insert_message(message_row)
@@ -545,12 +537,12 @@ class ConversationView(Gtk.ScrolledWindow):
         self._check_for_merge(message)
         assert self._read_marker_row is not None
 
-        if message.kind == 'incoming':
+        if message.direction == ChatDirection.INCOMING:
             if message.timestamp > self._read_marker_row.timestamp:
                 self._read_marker_row.hide()
 
     def _add_date_row(self, timestamp: datetime) -> None:
-        start_of_day = get_start_of_day(timestamp)
+        start_of_day = get_start_of_day(timestamp.astimezone())
         if start_of_day in self._active_date_rows:
             return
 
@@ -665,8 +657,8 @@ class ConversationView(Gtk.ScrolledWindow):
         row = self._get_row_at_index(len(self._list_box.get_children()) - 1)
         row.destroy()
 
-    def remove_message(self, log_line_id: int) -> None:
-        row = self.get_row_by_log_line_id(log_line_id)
+    def remove_message(self, pk: int) -> None:
+        row = self.get_row_by_pk(pk)
         if row is None:
             return
 
@@ -679,12 +671,20 @@ class ConversationView(Gtk.ScrolledWindow):
             # unset merged state.
             decendant_row.set_merged(False)
 
-    def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
+    def acknowledge_message(self, pk: int) -> None:
+        row = self.get_row_by_pk(pk)
+        if row is None:
+            return
+
+        row.show_group_chat_message_state(MessageState.ACKNOWLEDGED)
+        self._check_for_merge(row)
+
+    def scroll_to_message_and_highlight(self, pk: int) -> None:
         highlight_row = None
         for row in cast(list[BaseRow], self._list_box.get_children()):
             row.get_style_context().remove_class(
                 'conversation-search-highlight')
-            if row.log_line_id == log_line_id:
+            if row.pk == pk:
                 highlight_row = row
 
         if highlight_row is not None:
@@ -702,11 +702,11 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _get_message_row_by_direction(
         self,
-        log_line_id: int,
+        pk: int,
         direction: Direction | None = None
     ) -> MessageRow | None:
 
-        row = self.get_row_by_log_line_id(log_line_id)
+        row = self.get_row_by_pk(pk)
         if row is None:
             return None
 
@@ -729,28 +729,29 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def get_prev_message_row(
         self,
-        log_line_id: int | None
+        pk: int | None
     ) -> MessageRow | None:
-        if log_line_id is None:
+        if pk is None:
             return self.get_last_message_row()
         return self._get_message_row_by_direction(
-            log_line_id, direction=Direction.PREV)
+            pk, direction=Direction.PREV)
 
     def get_next_message_row(
         self,
-        log_line_id: int | None
+        pk: int | None
     ) -> MessageRow | None:
-        if log_line_id is None:
+        if pk is None:
             return None
         return self._get_message_row_by_direction(
-            log_line_id, direction=Direction.NEXT)
+            pk, direction=Direction.NEXT)
 
-    def get_row_by_log_line_id(self, log_line_id: int) -> MessageRow | None:
+    def get_row_by_pk(self, pk: int) -> MessageRow | None:
         for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
-            if row.log_line_id == log_line_id:
+            if pk in {row.pk, row.orig_pk}:
                 return row
+
         return None
 
     def get_row_by_stanza_id(self, stanza_id: str) -> MessageRow | None:
@@ -779,7 +780,6 @@ class ConversationView(Gtk.ScrolledWindow):
         if row is None:
             return
 
-        row.set_displayed()
         assert self._read_marker_row is not None
         timestamp = row.timestamp + timedelta(microseconds=1)
         if self._read_marker_row.timestamp > timestamp:
@@ -792,16 +792,21 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def correct_message(self,
-                        correct_id: str,
-                        text: str,
-                        nickname: str | None
-                        ) -> None:
+    def correct_message(self, db_row: Message) -> None:
+        assert db_row.id is not None
+        message_row = self._get_row_by_message_id(db_row.id)
+        if message_row is None:
+            return
 
-        message_row = self._get_row_by_message_id(correct_id)
-        if message_row is not None:
-            message_row.set_correction(text, nickname)
-            message_row.set_merged(False)
+        message_row.update_with_content(db_row)
+
+        assert self._read_marker_row is not None
+        timestamp = message_row.timestamp + timedelta(microseconds=1)
+        if self._read_marker_row.timestamp == timestamp:
+            # This exact message has been marked as read
+            # -> set read marker to before this message
+            self._read_marker_row.set_timestamp(
+                message_row.timestamp - timedelta(microseconds=1), force=True)
 
     def show_message_retraction(self, stanza_id: str, text: str) -> None:
         message_row = self.get_row_by_stanza_id(stanza_id)
@@ -811,12 +816,12 @@ class ConversationView(Gtk.ScrolledWindow):
     def show_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
-            message_row.set_receipt()
+            message_row.show_receipt(True)
 
     def show_error(self, id_: str, error: StanzaError) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
-            message_row.set_error(to_user_string(error))
+            message_row.show_error(to_user_string(error))
             message_row.set_merged(False)
 
     def _on_contact_setting_changed(self,

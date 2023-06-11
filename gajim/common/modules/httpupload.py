@@ -176,7 +176,7 @@ class HTTPUpload(BaseModule):
 
             message = OutgoingMessage(account=transfer.account,
                                       contact=transfer.contact,
-                                      message=uri,
+                                      text=uri,
                                       type_=type_,
                                       oob_url=uri)
 

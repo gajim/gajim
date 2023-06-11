@@ -12,6 +12,7 @@ from __future__ import annotations
 import logging
 import os
 import time
+import uuid
 from datetime import datetime
 from datetime import timezone
 from enum import IntEnum
@@ -29,12 +30,10 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common import types
-from gajim.common.const import KindConstant
 from gajim.common.events import FileRequestSent
 from gajim.common.events import Notification
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import file_is_locked
 from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
@@ -42,6 +41,11 @@ from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
@@ -417,16 +421,24 @@ class FileTransfersWindow:
         if file_props is None:
             return False
 
-        # Insert file request into DB
-        additional_data = AdditionalDataDict()
-        additional_data.set_value('gajim', 'type', 'jingle')
-        additional_data.set_value('gajim', 'sid', file_props.sid)
-        app.storage.archive.insert_into_logs(
-            account,
-            contact.jid.bare,
-            time.time(),
-            KindConstant.FILE_TRANSFER_OUTGOING,
-            additional_data=additional_data)
+        ft_data = mod.FileTransfer(
+            state=1,
+            source=[mod.JingleFT(type='jingleft', sid=file_props.sid)],
+        )
+
+        message_data = mod.Message(
+            account_=account,
+            remote_jid_=contact.jid.new_as_bare(),
+            resource=resource_jid.resource,
+            type=MessageType.CHAT,
+            direction=ChatDirection.OUTGOING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            filetransfers=[ft_data],
+        )
+
+        app.storage.archive.insert_object(message_data)
 
         client = app.get_client(account)
         client.get_module('Jingle').start_file_transfer(

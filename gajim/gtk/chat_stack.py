@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import sys
-import time
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
@@ -27,6 +26,9 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
 from gajim.common.util.text import remove_invalid_xml_chars
@@ -141,7 +143,6 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self.register_events([
             ('message-received', 85, self._on_message_received),
-            ('gc-message-received', 85, self._on_message_received),
             ('muc-disco-update', 85, self._on_muc_disco_update),
             ('account-connected', 85, self._on_account_state),
             ('account-disconnected', 85, self._on_account_state),
@@ -363,35 +364,46 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._update_chat_actions(self._current_contact)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
-        if not event.msgtxt or event.properties.is_sent_carbon:
+        if event.from_mam:
             return
-
-        client = app.get_client(event.account)
-        contact = client.get_module('Contacts').get_contact(event.jid)
-        if isinstance(contact, GroupchatContact):
-            # MUC messages may be received after some delay, so make sure we
-            # don't issue notifications for our own messages.
-            self_contact = contact.get_self()
-            if (self_contact is not None and
-                    self_contact.name == event.properties.muc_nickname):
-                return
 
         if app.window.is_chat_active(event.account, event.jid):
             return
 
-        self._issue_notification(event)
+        message = event.message
+        if message.direction == ChatDirection.OUTGOING:
+            return
 
-    def _issue_notification(self, event: events.MessageReceived) -> None:
-        text = event.msgtxt
-        tim = event.properties.timestamp
-        additional_data = event.additional_data
-        client = app.get_client(event.account)
-        contact = client.get_module('Contacts').get_contact(event.jid)
+        if event.m_type == MessageType.GROUPCHAT:
+            client = app.get_client(event.account)
+            contact = client.get_module('Contacts').get_contact(
+                event.jid, groupchat=True)
+            assert isinstance(contact, GroupchatContact)
+            # MUC messages may be received after some delay, so make sure we
+            # don't issue notifications for our own messages.
+            self_contact = contact.get_self()
+            if (self_contact is not None and
+                    self_contact.name == message.resource):
+                return
+
+        self._issue_notification(event.account, message)
+
+    def _issue_notification(
+        self,
+        account: str,
+        data: Message
+    ) -> None:
+
+        text = data.text
+        assert text is not None
+
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(data.remote.jid)
 
         title = _('New message from')
 
         is_previewable = app.preview_manager.is_previewable(
-            text, additional_data)
+            text, data.oob)
         if is_previewable:
             scheme = urlparse(text).scheme
             if scheme == 'geo':
@@ -413,7 +425,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if isinstance(contact, GroupchatContact):
             msg_type = 'group-chat-message'
-            title += f' {event.resource} ({contact.name})'
+            title += f' {data.resource} ({contact.name})'
             assert contact.nickname is not None
             needs_highlight = helpers.message_needs_highlight(
                 text, contact.nickname, client.get_own_jid().bare)
@@ -433,17 +445,13 @@ class ChatStack(Gtk.Stack, EventHelper):
             title += f' {contact.name} (private in {contact.room.name})'
             sound = 'first_message_received'
 
-        # Is it a history message? Don't want sound-floods when we join.
-        if tim is not None and time.mktime(time.localtime()) - tim > 1:
-            sound = None
-
         assert isinstance(
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         if app.settings.get('notification_preview_message'):
             if text.startswith('/me '):
                 name = contact.name
                 if isinstance(contact, GroupchatContact):
-                    name = event.properties.muc_nickname
+                    name = data.resource
                 text = f'* {name} {text[3:]}'
         else:
             text = ''
@@ -656,7 +664,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                 row = view.get_next_message_row(self._last_quoted_id)
 
             if row is not None:
-                self._last_quoted_id = row.log_line_id
+                self._last_quoted_id = row.pk
                 self._message_action_box.insert_as_quote(
                     row.get_text(), clear=True)
 
@@ -790,7 +798,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         message_ = OutgoingMessage(account=contact.account,
                                    contact=contact,
-                                   message=message,
+                                   text=message,
                                    type_=type_,
                                    chatstate=chatstate,
                                    label=label,

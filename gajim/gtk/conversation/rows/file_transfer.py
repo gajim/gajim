@@ -5,7 +5,6 @@
 from typing import Any
 
 import time
-from datetime import datetime
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -15,6 +14,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import FTState
 from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -30,9 +30,9 @@ class FileTransferRow(BaseRow, EventHelper):
         EventHelper.__init__(self)
 
         self.type = 'file-transfer'
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+        timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         self._destroyed: bool = False
 

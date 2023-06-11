@@ -71,6 +71,13 @@ class RetractMessageParam(VariantMixin):
     stanza_id: str
 
 
+@dataclass
+class DeleteMessageParam(VariantMixin):
+    account: str
+    jid: JID
+    pk: int
+
+
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters

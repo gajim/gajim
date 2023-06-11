@@ -8,7 +8,7 @@ from typing import Any
 from typing import cast
 
 import logging
-import time
+from datetime import datetime
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -24,16 +24,15 @@ from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.i18n import _
+from gajim.common.modules.util import ChatDirection
 from gajim.common.setting_values import OpenChatsSettingT
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.util import EventHelper
 
 log = logging.getLogger('gajim.gtk.chatlist')
-
-MessageEventT = (events.MessageReceived |
-                 events.GcMessageReceived |
-                 events.MamMessageReceived)
 
 
 class ChatList(Gtk.ListBox, EventHelper):
@@ -304,12 +303,12 @@ class ChatList(Gtk.ListBox, EventHelper):
         return self._chats.get((account, jid)) is not None
 
     def process_event(self, event: events.ChatListEventT) -> None:
-        if isinstance(event, (events.MessageReceived |
-                              events.MamMessageReceived |
-                              events.GcMessageReceived)):
+        if isinstance(event, events.MessageReceived):
             self._on_message_received(event)
-        elif isinstance(event, events.MessageUpdated):
-            self._on_message_updated(event)
+        elif isinstance(event, events.MessageDeleted):
+            self._on_message_deleted(event)
+        elif isinstance(event, events.MessageCorrected):
+            self._on_message_corrected(event)
         elif isinstance(event, events.MessageModerated):
             self._on_message_moderated(event)
         elif isinstance(event, events.PresenceReceived):
@@ -550,33 +549,34 @@ class ChatList(Gtk.ListBox, EventHelper):
         app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))
 
     @staticmethod
-    def _get_nick_for_received_message(event: MessageEventT) -> str:
+    def _get_nick_for_received_message(
+        account: str,
+        data: Message
+    ) -> str:
+
         nick = _('Me')
-        if event.properties.type.is_groupchat:
-            event_nick = event.properties.muc_nickname
-            our_nick = get_group_chat_nick(event.account, event.jid)
+        if data.type == MessageType.GROUPCHAT:
+            event_nick = data.resource
+            assert event_nick is not None
+            our_nick = get_group_chat_nick(account, data.remote.jid)
             if event_nick != our_nick:
                 nick = event_nick
-        else:
-            con = app.get_client(event.account)
-            own_jid = con.get_own_jid()
-            if not own_jid.bare_match(event.properties.from_):
-                nick = ''
+
+        elif data.direction == ChatDirection.INCOMING:
+            nick = ''
+
         return nick
 
     @staticmethod
-    def _add_unread(row: ChatListRow, event: MessageEventT) -> None:
-        if event.properties.is_carbon_message:
-            if event.properties.carbon.is_sent:
-                return
-
-        if event.properties.is_from_us():
+    def _add_unread(row: ChatListRow, event: events.MessageReceived) -> None:
+        message = event.message
+        if message.direction == ChatDirection.OUTGOING:
             # Last message was from us (1:1), reset counter
             row.reset_unread()
             return
 
         our_nick = get_group_chat_nick(event.account, event.jid)
-        if event.properties.muc_nickname == our_nick:
+        if message.resource == our_nick:
             # Last message was from us (MUC), reset counter
             row.reset_unread()
             return
@@ -587,38 +587,54 @@ class ChatList(Gtk.ListBox, EventHelper):
                 control.get_autoscroll()):
             return
 
-        row.add_unread(event.msgtxt)
+        assert message.text is not None
+        row.add_unread(message.text)
 
-    def _on_message_received(self, event: MessageEventT) -> None:
-        if not event.msgtxt:
-            return
+    def _on_message_received(self, event: events.MessageReceived) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
             return
-        nick = self._get_nick_for_received_message(event)
-        row.set_nick(nick)
-        if event.name == 'mam-message-received':
-            row.set_timestamp(event.properties.mam.timestamp)
-        else:
-            row.set_timestamp(event.properties.timestamp)
 
-        row.set_stanza_id(event.stanza_id)
-        row.set_message_id(event.properties.id)
+        message = event.message
+        if message.text is None:
+            return
+
+        assert message.stanza_id is not None
+        assert message.id is not None
+
+        nick = self._get_nick_for_received_message(event.account, message)
+        row.set_nick(nick)
+        row.set_timestamp(message.timestamp)
+        row.set_stanza_id(message.stanza_id)
+        row.set_message_id(message.id)
         row.set_message_text(
-            event.msgtxt,
+            message.text,
             nickname=nick,
-            additional_data=event.additional_data)
+            oob=message.oob)
 
         self._add_unread(row, event)
         row.changed()
 
-    def _on_message_updated(self, event: events.MessageUpdated) -> None:
+    def _on_message_deleted(self, event: events.MessageDeleted) -> None:
+        # TODO
+        pass
+
+    def _on_message_corrected(self, event: events.MessageCorrected) -> None:
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
             return
 
-        if event.correct_id == row.message_id:
-            row.set_message_text(event.msgtxt, event.nickname)
+        message = event.message
+        if message is None:
+            return
+
+        if message.id == row.message_id:
+            text = message.get_last_correction().text
+            assert text is not None
+            row.set_message_text(
+                text,
+                self._get_nick_for_received_message(
+                    event.account, message))
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         row = self._chats.get((event.account, event.jid))
@@ -627,34 +643,24 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         if event.moderation.stanza_id == row.stanza_id:
             text = get_retraction_text(
-                event.moderation.moderator_jid,
+                event.moderation.by,
                 event.moderation.reason)
             row.set_message_text(text)
 
     def _on_message_sent(self, event: events.MessageSent) -> None:
-        msgtext = event.message
-        if not msgtext:
-            return
-
         row = self._chats.get((event.account, JID.from_string(event.jid)))
         if row is None:
             return
 
-        client = app.get_client(event.account)
-        own_jid = client.get_own_jid()
+        message = event.message
+        assert message.text is not None
 
-        if own_jid.bare_match(event.jid):
-            nick = ''
-        else:
-            nick = _('Me')
-        row.set_nick(nick)
-
-        # Set timestamp if it's None (outgoing MUC messages)
-        row.set_timestamp(event.timestamp or time.time())
+        row.set_nick(_('Me'))
+        row.set_timestamp(message.timestamp)
         row.set_message_text(
-            event.message,
+            message.text,
             nickname=app.nicks[event.account],
-            additional_data=event.additional_data)
+            oob=message.oob)
         row.changed()
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
@@ -674,7 +680,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             row = self._chats.get((event.account, JID.from_string(event.jid)))
             if row is None:
                 return
-            row.set_timestamp(time.time())
+            row.set_timestamp(datetime.now().astimezone())
             row.set_nick('')
             row.set_message_text(
                 _('Call'), icon_name='call-start-symbolic')
@@ -685,7 +691,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         row = self._chats.get((event.account, event.jid))
         if row is None:
             return
-        row.set_timestamp(time.time())
+        row.set_timestamp(datetime.now().astimezone())
         row.set_nick('')
         row.set_message_text(
             _('File'), icon_name='text-x-generic-symbolic')

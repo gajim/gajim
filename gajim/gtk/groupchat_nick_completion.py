@@ -11,7 +11,7 @@ from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.events import GcMessageReceived
+from gajim.common.events import MessageReceived
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.modules.contacts import GroupchatContact
@@ -29,7 +29,7 @@ class GroupChatNickCompletion(EventHelper):
         self._last_key_tab = False
 
         self.register_event(
-            'gc-message-received', ged.GUI2, self._on_gc_message_received)
+            'message-received', ged.GUI2, self._on_message_received)
 
     def switch_contact(self, contact: GroupchatContact) -> None:
         self._suggestions.clear()
@@ -130,7 +130,7 @@ class GroupChatNickCompletion(EventHelper):
         # Get recent nicknames from DB. This enables us to suggest
         # nicknames even if no message arrived since Gajim was started.
         recent_nicknames = app.storage.archive.get_recent_muc_nicks(
-            self._contact)
+            self._contact.account, self._contact.jid)
 
         matches: list[str] = []
         for nick in recent_nicknames:
@@ -147,11 +147,11 @@ class GroupChatNickCompletion(EventHelper):
 
         return matches + other_nicks
 
-    def _on_gc_message_received(self, event: GcMessageReceived) -> None:
+    def _on_message_received(self, event: MessageReceived) -> None:
         if self._contact is None:
             return
 
-        if event.room_jid != self._contact.jid:
+        if event.jid != self._contact.jid:
             return
 
         if not self._last_key_tab:

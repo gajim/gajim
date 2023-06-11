@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 
+from datetime import datetime
+from datetime import timezone
 from enum import Enum
 from enum import IntEnum
 from enum import unique
@@ -73,9 +75,9 @@ class AvatarSize(IntEnum):
     PUBLISH = 200
 
 
-class ArchiveState(IntEnum):
-    NEVER = 0
-    ALL = 1
+class ArchiveState:
+    NEVER = None
+    ALL = datetime.fromtimestamp(0, timezone.utc)
 
 
 @unique

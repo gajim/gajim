@@ -8,14 +8,12 @@ from __future__ import annotations
 
 from typing import Any
 
-import logging
 from collections.abc import Callable
 from functools import partial
 from functools import wraps
 from logging import LoggerAdapter
 
 import nbxmpp
-from nbxmpp.const import MessageType
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -26,9 +24,9 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import EME_MESSAGES
-from gajim.common.const import KindConstant
-from gajim.common.events import MessageUpdated
-from gajim.common.modules.misc import parse_correction
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.structs import MUCData
 
 
 def from_xs_boolean(value: str | bool) -> bool:
@@ -121,62 +119,6 @@ def as_task(func: Any) -> Any:
     return func_wrapper
 
 
-def check_if_message_correction(properties: MessageProperties,
-                                account: str,
-                                jid: JID,
-                                msgtxt: str,
-                                kind: KindConstant,
-                                timestamp: float,
-                                logger: LoggerAdapter[logging.Logger]) -> bool:
-
-    correct_id = parse_correction(properties)
-    if correct_id is None:
-        return False
-
-    if properties.type not in (MessageType.GROUPCHAT, MessageType.CHAT):
-        logger.warning('Ignore correction with message type: %s',
-                       properties.type)
-        return False
-
-    nickname = None
-    if properties.type.is_groupchat:
-        if jid.is_bare:
-            logger.warning(
-                'Ignore correction from bare groupchat jid: %s', jid)
-            return False
-
-        nickname = jid.resource
-        jid = jid.new_as_bare()
-
-    elif not properties.is_muc_pm:
-        jid = jid.new_as_bare()
-
-    successful = app.storage.archive.try_message_correction(
-        account,
-        jid,
-        nickname,
-        msgtxt,
-        correct_id,
-        kind,
-        timestamp)
-
-    if not successful:
-        logger.info('Message correction not successful')
-        return False
-
-    nickname = properties.muc_nickname or properties.nickname
-
-    event = MessageUpdated(account=account,
-                           jid=jid,
-                           msgtxt=msgtxt,
-                           nickname=nickname,
-                           properties=properties,
-                           correct_id=correct_id)
-
-    app.ged.raise_event(event)
-    return True
-
-
 def prepare_stanza(stanza: Message, plaintext: str) -> None:
     delete_nodes(stanza, 'encrypted', Namespace.OMEMO_TEMP)
     delete_nodes(stanza, 'body')
@@ -191,3 +133,34 @@ def delete_nodes(stanza: Message,
     nodes = stanza.getTags(name, namespace=namespace)
     for node in nodes:
         stanza.delChild(node)
+
+
+def get_chat_type_and_direction(
+    muc_data: MUCData | None, own_jid: JID, properties: MessageProperties
+) -> tuple[MessageType, ChatDirection]:
+
+    if properties.type.is_groupchat:
+        assert muc_data is not None
+        direction = ChatDirection.INCOMING
+        if muc_data.occupant_id is not None:
+            if muc_data.occupant_id == properties.occupant_id:
+                direction = ChatDirection.OUTGOING
+
+        elif muc_data.nick == properties.jid.resource:
+            direction = ChatDirection.OUTGOING
+
+        return MessageType.GROUPCHAT, direction
+
+    assert properties.from_ is not None
+    if properties.from_.bare_match(own_jid):
+        direction = ChatDirection.OUTGOING
+    else:
+        direction = ChatDirection.INCOMING
+
+    if properties.is_muc_pm:
+        return MessageType.PM, direction
+
+    if not properties.type.is_chat:
+        raise ValueError('Invalid message type', properties.type)
+
+    return MessageType.CHAT, direction

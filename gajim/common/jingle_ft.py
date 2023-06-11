@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 
 import logging
 import threading
-import time
+import uuid
 from enum import IntEnum
 from enum import unique
 
@@ -23,11 +23,9 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.const import KindConstant
 from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.jingle_content import contents
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_ftstates import StateCandReceived
@@ -38,6 +36,11 @@ from gajim.common.jingle_ftstates import StateTransfering
 from gajim.common.jingle_ftstates import StateTransportReplace
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import TransportType
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.datetime import utc_now
 
 if TYPE_CHECKING:
     from gajim.common.jingle_session import JingleSession
@@ -149,16 +152,26 @@ class JingleFileTransfer(JingleContent):
             stanza)
         jid = JID.from_string(jid)
         sid = stanza.getTag('jingle').getAttr('sid')
-        timestamp = time.time()
-        additional_data = AdditionalDataDict()
-        additional_data.set_value('gajim', 'type', 'jingle')
-        additional_data.set_value('gajim', 'sid', sid)
-        app.storage.archive.insert_into_logs(
-            account,
-            jid.bare,
-            timestamp,
-            KindConstant.FILE_TRANSFER_INCOMING,
-            additional_data=additional_data)
+        assert sid is not None
+
+        ft_data = mod.FileTransfer(
+            state=1,
+            source=[mod.JingleFT(type='jingleft', sid=sid)],
+        )
+
+        message_data = mod.Message(
+            account_=account,
+            remote_jid_=jid.new_as_bare(),
+            resource=jid.resource,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            filetransfer=[ft_data],
+        )
+
+        app.storage.archive.insert_object(message_data)
 
         if self.session.request:
             # accept the request

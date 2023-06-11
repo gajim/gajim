@@ -10,6 +10,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common.storage.archive.const import ChatDirection
 
 
 class BaseRow(Gtk.ListBoxRow):
@@ -17,12 +18,14 @@ class BaseRow(Gtk.ListBoxRow):
         Gtk.ListBoxRow.__init__(self)
         self._account = account
         self._client = app.get_client(account)
+
         self.type: str = ''
-        self.timestamp: datetime = datetime.fromtimestamp(0)
+        self.timestamp = datetime.fromtimestamp(0).astimezone()
         self.kind: str = ''
+        self.direction = ChatDirection.INCOMING
         self.name: str = ''
         self.message_id: str | None = None
-        self.log_line_id: int | None = None
+        self.pk: int | None = None
         self.stanza_id: str | None = None
         self.text: str = ''
         self._merged: bool = False

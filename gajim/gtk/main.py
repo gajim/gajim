@@ -36,6 +36,7 @@ from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive.const import MessageType
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -58,6 +59,7 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
@@ -724,16 +726,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             input_str=_('Spam'),
             transient_for=app.window).show()
 
+    @actionmethod
     def _on_delete_message_locally(self,
                                    _action: Gio.SimpleAction,
-                                   param: GLib.Variant
+                                   params: DeleteMessageParam
                                    ) -> None:
 
         def _on_delete() -> None:
-            log_line_id = param.get_uint32()
-            app.storage.archive.delete_message_from_logs(log_line_id)
-            control = self.get_control()
-            control.remove_message(log_line_id)
+            app.storage.archive.delete_message(params.pk)
+            app.ged.raise_event(
+                events.MessageDeleted(account=params.account,
+                                      jid=params.jid,
+                                      pk=params.pk))
 
         ConfirmationDialog(
             _('Delete Message'),
@@ -1170,18 +1174,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             # Read marker must be sent only once
             return
 
-        last_message = app.storage.archive.get_last_conversation_line(
+        last_message = app.storage.archive.get_last_conversation_row(
             account, jid)
-        if last_message is None:
+        if last_message is None or last_message.id is None:
             return
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
         assert isinstance(
             contact, BareContact | GroupchatContact | GroupchatParticipant)
+
         client.get_module('ChatMarkers').send_displayed_marker(
             contact,
-            last_message.message_id,
+            last_message.id,
             last_message.stanza_id)
 
     def _on_window_active(self,
@@ -1341,27 +1346,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._set_startup_finished()
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
-        if not self.chat_exists(event.account, event.jid):
-            if not event.properties.body:
-                # Don’t open control on chatstate etc.
-                return
+        if self.chat_exists(event.account, event.jid):
+            return
 
-            if event.properties.is_muc_pm:
-                self.add_private_chat(event.account,
-                                      event.properties.jid)
+        if event.m_type == MessageType.PM:
+            self.add_private_chat(event.account,
+                                  event.jid)
 
-            else:
-                jid = event.properties.jid.new_as_bare()
-                self.add_chat(event.account, jid, 'contact')
+        else:
+            self.add_chat(event.account, event.jid, 'contact')
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
-        last_message = app.storage.archive.get_last_conversation_line(
+        last_message = app.storage.archive.get_last_conversation_row(
             event.account, event.jid)
 
         if last_message is None:
             return
 
-        if event.marker_id not in (last_message.message_id,
+        if event.marker_id not in (last_message.id,
                                    last_message.stanza_id):
             return
 

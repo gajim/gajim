@@ -4,21 +4,19 @@
 
 from __future__ import annotations
 
-import time
-from datetime import datetime
-
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import AvatarSize
-from gajim.common.const import KindConstant
 from gajim.common.events import JingleRequestReceived
 from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
-from gajim.common.storage.archive import ConversationRow
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.models import Message
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -31,7 +29,7 @@ class CallRow(BaseRow):
                  account: str,
                  contact: types.BareContact,
                  event: JingleRequestReceived | None = None,
-                 db_message: ConversationRow | None = None
+                 db_row: Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
@@ -39,26 +37,24 @@ class CallRow(BaseRow):
 
         self._client = app.get_client(account)
 
-        if db_message is not None:
-            timestamp = db_message.time
+        if db_row is not None:
+            timestamp = db_row.timestamp
         else:
-            timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+            timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         self._contact = contact
         self._event = event
-        self._db_message = db_message
+        self._db_row = db_row
 
         self._session: JingleSession | None = None
 
-        if db_message is not None:
-            assert db_message.additional_data is not None
-            sid = db_message.additional_data.get_value('gajim', 'sid')
+        if db_row is not None and db_row.call is not None:
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(
-                str(self._contact.jid), sid)
-            self.log_line_id = db_message.log_line_id
+                str(self._contact.jid), db_row.call.sid)
+            self.pk = db_row.pk
 
         self._avatar_placeholder = Gtk.Box()
         self._avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
@@ -112,8 +108,8 @@ class CallRow(BaseRow):
         assert isinstance(contact, BareContact)
 
         is_self = True
-        if self._db_message is not None:
-            if self._db_message.kind == KindConstant.CALL_INCOMING:
+        if self._db_row is not None:
+            if self._db_row.direction == ChatDirection.INCOMING:
                 contact = self._contact
                 is_self = True
             else:

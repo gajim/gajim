@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import time
-from datetime import datetime
 from pathlib import Path
 
 from gi.repository import GdkPixbuf
@@ -16,7 +15,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import AvatarSize
-from gajim.common.const import KindConstant
 from gajim.common.events import FileCompleted
 from gajim.common.events import FileError
 from gajim.common.events import FileHashError
@@ -33,7 +31,9 @@ from gajim.common.helpers import open_file
 from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
-from gajim.common.storage.archive import ConversationRow
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -51,29 +51,31 @@ class FileTransferJingleRow(BaseRow):
                  account: str,
                  contact: BareContact,
                  event: TransferEventT | None = None,
-                 db_message: ConversationRow | None = None
+                 db_row: mod.Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'file-transfer'
 
-        if db_message is not None:
-            timestamp = db_message.time
+        if db_row is not None:
+            timestamp = db_row.timestamp
         else:
-            timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+            timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         self._contact = contact
 
-        if db_message is not None:
-            assert db_message.additional_data is not None
-            sid = db_message.additional_data.get_value('gajim', 'sid')
-            assert sid is not None
-            self._file_props = FilesProp.getFilePropBySid(sid)
-            if self._file_props is None:
-                log.debug('File prop not found for SID: %s', sid)
-            self.log_line_id = db_message.log_line_id
+        if db_row is not None and db_row.filetransfers:
+            # TODO: Handle filetransfers and sources specifically
+            file_transfer = db_row.filetransfers[0]
+            sources = file_transfer.source
+            for source in sources:
+                if isinstance(source, mod.JingleFT):
+                    self._file_props = FilesProp.getFilePropBySid(source.sid)
+                    if self._file_props is None:
+                        log.debug('File prop not found for SID: %s', source.sid)
+            self.pk = db_row.pk
         else:
             assert event is not None
             self._file_props = event.file_props
@@ -89,8 +91,8 @@ class FileTransferJingleRow(BaseRow):
         avatar_placeholder.set_valign(Gtk.Align.START)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        if db_message is not None:
-            if db_message.kind == KindConstant.FILE_TRANSFER_INCOMING:
+        if db_row is not None:
+            if db_row.direction == ChatDirection.INCOMING:
                 contact = self._contact
                 is_self = True
             else:
@@ -138,7 +140,7 @@ class FileTransferJingleRow(BaseRow):
 
         self.show_all()
 
-        if db_message is not None:
+        if db_row is not None:
             self._reconstruct_transfer()
         else:
             assert event is not None

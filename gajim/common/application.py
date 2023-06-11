@@ -36,18 +36,21 @@ from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AllowGajimUpdateCheck
+from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.helpers import from_one_line
 from gajim.common.helpers import get_random_string
 from gajim.common.settings import LegacyConfig
 from gajim.common.settings import Settings
-from gajim.common.storage.archive import MessageArchiveStorage
+from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
 from gajim.common.storage.draft import DraftStorage
-from gajim.common.storage.events import EventStorage
+from gajim.common.storage.events.storage import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
+
+log = logging.getLogger('gajim.c.application')
 
 
 class CoreApplication(ged.EventHelper):
@@ -55,7 +58,7 @@ class CoreApplication(ged.EventHelper):
         ged.EventHelper.__init__(self)
         self._profiling_session = None
 
-    def _init_core(self) -> None:
+    def _init_core(self) -> bool:
         # Create and initialize Application Paths & Databases
         app.app = self
         app.print_version()
@@ -70,14 +73,19 @@ class CoreApplication(ged.EventHelper):
         app.config = LegacyConfig()
         app.commands = ChatCommands()
 
-        app.storage.cache = CacheStorage()
-        app.storage.cache.init()
+        try:
+            app.storage.cache = CacheStorage()
+            app.storage.cache.init()
 
-        app.storage.events = EventStorage()
-        app.storage.events.init()
+            app.storage.events = EventStorage()
+            app.storage.events.init()
 
-        app.storage.archive = MessageArchiveStorage()
-        app.storage.archive.init()
+            app.storage.archive = MessageArchiveStorage()
+            app.storage.archive.init()
+        except Exception as error:
+            app.ged.raise_event(DBMigrationError(exception=error))
+            log.exception('Failed to init storage')
+            return False
 
         app.storage.drafts = DraftStorage()
 
@@ -125,6 +133,8 @@ class CoreApplication(ged.EventHelper):
         self.register_events([
             ('signed-in', ged.CORE, self._on_signed_in),
         ])
+
+        return True
 
     @property
     def _log(self) -> logging.Logger:
@@ -411,13 +421,12 @@ class CoreApplication(ged.EventHelper):
         # Delete password must be before del_per() because it calls set_per()
         # which would recreate the account with defaults values if not found
         passwords.delete_password(account)
+        app.storage.archive.remove_account(account)
         app.settings.remove_account(account)
         app.app.remove_account_actions(account)
 
     def _on_signed_in(self, event: SignedIn) -> None:
         client = app.get_client(event.account)
-        app.storage.archive.insert_jid(client.get_own_jid().bare)
-
         if client.get_module('MAM').available:
             client.get_module('MAM').request_archive_on_signin()
 

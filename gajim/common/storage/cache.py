@@ -338,7 +338,6 @@ class CacheStorage(SqliteStorage):
 
         self._delayed_commit()
 
-    @timeit
     def get_contact(self, account: str, jid: JID, prop: str) -> Any:
         try:
             value, prop_ts = self._contact_cache[(account, jid)][prop]

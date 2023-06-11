@@ -8,13 +8,17 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import AvatarSize
-from gajim.common.const import KindConstant
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ContactSettings
 from gajim.common.preview import PreviewManager
 from gajim.common.settings import Settings
-from gajim.common.storage.archive import MessageArchiveStorage
-from gajim.common.storage.events import EventStorage
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.storage import MessageArchiveStorage
+from gajim.common.storage.events.storage import EventStorage
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.control import ChatControl
@@ -78,20 +82,29 @@ class ConversationViewTest(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_jump_to_clicked(self, _button: Gtk.Button) -> None:
-        self._chat_control.scroll_to_message(500, BASE_TIMESTAMP + 500)
+        # BASE_TIMESTAMP + 500
+        self._chat_control.scroll_to_message(500, utc_now())
 
 
 def add_archive_messages() -> None:
+    remote_jid = JID.from_string(FROM_JID)
     timestamp = BASE_TIMESTAMP
     for num in range(1000):
-        app.storage.archive.insert_into_logs(
-            ACCOUNT,
-            FROM_JID,
-            timestamp,
-            KindConstant.CHAT_MSG_RECV,
-            message=num,
-            stanza_id=num,
-            message_id=num)
+        message_data = mod.Message(
+            account_=ACCOUNT,
+            remote_jid_=remote_jid,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            resource=None,
+            text=str(num),
+            id=str(num),
+            stanza_id=str(num),
+        )
+
+        app.storage.archive.insert_object(message_data)
+
         timestamp += 1
 
 

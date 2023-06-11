@@ -37,6 +37,7 @@ from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
 
@@ -44,6 +45,7 @@ from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
+from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.structs import RetractMessageParam
@@ -690,7 +692,10 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       timestamp: datetime,
                       message_id: str | None,
                       stanza_id: str | None,
-                      log_line_id: int | None
+                      pk: int | None,
+                      corrected_pk: int | None,
+                      state: MessageState,
+                      is_retracted: bool
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -714,12 +719,13 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
         show_quote = True
         if isinstance(contact, GroupchatContact):
-            if contact.is_joined:
+            if contact.is_joined and state == MessageState.ACKNOWLEDGED:
                 self_contact = contact.get_self()
                 assert self_contact is not None
                 show_quote = not self_contact.role.is_visitor
             else:
                 show_quote = False
+
         if show_quote:
             menu_items.append((
                 p_('Message row action', 'Quote…'), 'win.quote', text))
@@ -727,7 +733,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
     menu_items.append(
         (p_('Message row action', 'Select Messages…'),
          'win.activate-message-selection',
-         GLib.Variant('u', log_line_id or 0)))
+         GLib.Variant('u', corrected_pk or 0)))
 
     show_correction = False
     if message_id is not None:
@@ -737,7 +743,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
         menu_items.append((
             p_('Message row action', 'Correct…'), 'win.correct-message', None))
 
-    show_retract = False
+    retract_possible = False
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
         self_contact = contact.get_self()
@@ -747,9 +753,12 @@ def get_chat_row_menu(contact: types.ChatContactT,
         disco_info = app.storage.cache.get_last_disco_info(contact.jid)
         assert disco_info is not None
 
-        if disco_info.has_message_moderation and is_allowed:
-            show_retract = True
-    if show_retract and stanza_id is not None:
+        if (disco_info.has_message_moderation and is_allowed
+                and not is_retracted):
+            retract_possible = True
+
+    if (retract_possible and stanza_id is not None
+            and state == MessageState.ACKNOWLEDGED):
         param = RetractMessageParam(
             account=contact.account,
             jid=contact.jid,
@@ -759,11 +768,17 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
-    if log_line_id is not None:
+    if pk is not None and state == MessageState.ACKNOWLEDGED:
+        param = DeleteMessageParam(
+            account=contact.account,
+            jid=contact.jid,
+            pk=pk)
+
         menu_items.append(
-            (p_('Message row action', 'Delete Message Locally…'),
-            'win.delete-message-locally',
-            GLib.Variant('u', log_line_id or 0)))
+            (p_('Message row action',
+             'Delete Message Locally…'),
+             'win.delete-message-locally',
+              param))
 
     return GajimMenu.from_list(menu_items)
 

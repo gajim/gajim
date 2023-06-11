@@ -171,7 +171,7 @@ class ChatPage(Gtk.Box):
             app.settings.set('hide_groupchat_occupants_list', False)
             self._restore_occupants_list = False
 
-        if not app.settings.get('hide_groupchat_occupants_list'):
+        if self._search_revealer.get_reveal_child():
             self._search_view.set_context(account, jid)
 
         self.emit('chat-selected', workspace_id, account, jid)

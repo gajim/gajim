@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-import time
+import uuid
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -13,14 +13,17 @@ from gajim.common import sound
 from gajim.common import types
 from gajim.common.const import CallType
 from gajim.common.const import JingleState
-from gajim.common.const import KindConstant
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.datetime import utc_now
 
 log = logging.getLogger('gajim.c.call_manager')
 
@@ -418,11 +421,21 @@ class CallManager(EventHelper):
 
     @staticmethod
     def _store_outgoing_call(account: str, jid: JID, sid: str) -> None:
-        additional_data = AdditionalDataDict()
-        additional_data.set_value('gajim', 'sid', sid)
-        app.storage.archive.insert_into_logs(
-            account,
-            jid,
-            time.time(),
-            KindConstant.CALL_OUTGOING,
-            additional_data=additional_data)
+        call_data = mod.Call(
+            sid=sid,
+            state=0,  # TODO
+        )
+
+        message = mod.Message(
+            account_=account,
+            remote_jid_=jid,
+            resource=None,
+            type=MessageType.CHAT,
+            direction=ChatDirection.OUTGOING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            call=call_data,
+        )
+
+        app.storage.archive.insert_object(message)

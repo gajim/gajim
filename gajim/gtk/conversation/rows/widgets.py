@@ -17,8 +17,11 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.const import TRUST_SYMBOL_DATA
+from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.menus import get_groupchat_participant_menu
@@ -39,7 +42,6 @@ class SimpleLabel(Gtk.Label):
 @wrap_with_event_box
 class MoreMenuButton(Gtk.Button):
     def __init__(self, on_click_handler: Callable[[Gtk.Button], Any]) -> None:
-
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.START)
         self.set_halign(Gtk.Align.END)
@@ -51,7 +53,12 @@ class MoreMenuButton(Gtk.Button):
         image = Gtk.Image.new_from_icon_name(
             'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
         self.add(image)
-        self.connect('clicked', on_click_handler)
+
+        self._click_handler_id = self.connect('clicked', on_click_handler)
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, _buton: MoreMenuButton) -> None:
+        self.disconnect(self._click_handler_id)
 
 
 class DateTimeLabel(Gtk.Label):
@@ -93,34 +100,89 @@ class NicknameLabel(Gtk.Label):
 
 class MessageIcons(Gtk.Box):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.Box.__init__(self,
+                         orientation=Gtk.Orientation.HORIZONTAL,
+                         spacing=3)
+
+        self._encryption_image = Gtk.Image()
+        self._encryption_image.set_no_show_all(True)
+        self._encryption_image.set_margin_end(6)
+
+        self._security_label = Gtk.Label()
+        self._security_label.set_no_show_all(True)
+        self._security_label.set_margin_end(6)
+        self._security_label.set_ellipsize(Pango.EllipsizeMode.END)
+        self._security_label.set_max_width_chars(20)
 
         self._correction_image = Gtk.Image.new_from_icon_name(
             'document-edit-symbolic', Gtk.IconSize.MENU)
         self._correction_image.set_no_show_all(True)
         self._correction_image.get_style_context().add_class('dim-label')
 
-        self._marker_image = Gtk.Image()
+        self._group_chat_message_state_image = Gtk.Image()
+        self._group_chat_message_state_image.set_no_show_all(True)
+        self._group_chat_message_state_image.get_style_context().add_class(
+            'dim-label')
+
+        self._marker_image = Gtk.Image.new_from_icon_name(
+            'feather-check-symbolic', Gtk.IconSize.MENU)
         self._marker_image.set_no_show_all(True)
         self._marker_image.get_style_context().add_class('dim-label')
+        self._marker_image.set_tooltip_text(p_('Message state', 'Received'))
 
         self._error_image = Gtk.Image.new_from_icon_name(
             'dialog-warning-symbolic', Gtk.IconSize.MENU)
         self._error_image.get_style_context().add_class('warning-color')
         self._error_image.set_no_show_all(True)
 
+        self.add(self._encryption_image)
+        self.add(self._security_label)
         self.add(self._correction_image)
+        self.add(self._group_chat_message_state_image)
         self.add(self._marker_image)
         self.add(self._error_image)
         self.show_all()
+
+    def set_encryption_icon_visible(self, visible: bool) -> None:
+        self._encryption_image.set_visible(visible)
+
+    def set_encrytion_icon_data(self,
+                                icon: str,
+                                color: str,
+                                tooltip: str
+                                ) -> None:
+
+        context = self._encryption_image.get_style_context()
+        for trust_data in TRUST_SYMBOL_DATA.values():
+            context.remove_class(trust_data[2])
+
+        context.add_class(color)
+        self._encryption_image.set_from_icon_name(icon, Gtk.IconSize.MENU)
+        self._encryption_image.set_tooltip_markup(tooltip)
+
+    def set_security_label_visible(self, visible: bool) -> None:
+        self._security_label.set_visible(visible)
+
+    def set_security_label_data(self, tooltip: str, markup: str) -> None:
+        self._security_label.set_tooltip_text(tooltip)
+        self._security_label.set_markup(markup)
 
     def set_receipt_icon_visible(self, visible: bool) -> None:
         if not app.settings.get('positive_184_ack'):
             return
         self._marker_image.set_visible(visible)
-        self._marker_image.set_from_icon_name(
-            'feather-check-symbolic', Gtk.IconSize.MENU)
-        self._marker_image.set_tooltip_text(p_('Message state', 'Received'))
+
+    def set_group_chat_message_state_icon(self, state: MessageState) -> None:
+        if state == MessageState.PENDING:
+            icon_name = 'feather-clock-symbolic'
+            tooltip_text = _('Pending')
+        else:
+            icon_name = 'feather-check-symbolic'
+            tooltip_text = _('Received')
+        self._group_chat_message_state_image.set_from_icon_name(
+            icon_name, Gtk.IconSize.MENU)
+        self._group_chat_message_state_image.set_tooltip_text(tooltip_text)
+        self._group_chat_message_state_image.show()
 
     def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)
@@ -136,30 +198,27 @@ class MessageIcons(Gtk.Box):
 
 
 class AvatarBox(Gtk.EventBox):
-    def __init__(self,
-                 contact: ChatContactT,
-                 name: str,
-                 avatar: cairo.ImageSurface | None,
-                 ) -> None:
-
+    def __init__(self, contact: ChatContactT) -> None:
         Gtk.EventBox.__init__(self)
-
         self.set_size_request(AvatarSize.ROSTER, -1)
         self.set_valign(Gtk.Align.START)
 
         self._contact = contact
+        self._name = ''
 
-        self._image = Gtk.Image.new_from_surface(avatar)
+        self._image = Gtk.Image()
         self.add(self._image)
 
         if self._contact.is_groupchat:
             self.connect('realize', self._on_realize)
 
-        self.connect('button-press-event',
-                     self._on_avatar_clicked, name)
+        self.connect('button-press-event', self._on_avatar_clicked)
 
     def set_from_surface(self, surface: cairo.ImageSurface | None) -> None:
         self._image.set_from_surface(surface)
+
+    def set_name(self, name: str) -> None:
+        self._name = name
 
     def set_merged(self, merged: bool) -> None:
         self._image.set_no_show_all(merged)
@@ -174,7 +233,6 @@ class AvatarBox(Gtk.EventBox):
     def _on_avatar_clicked(self,
                            _widget: Gtk.Widget,
                            event: Gdk.EventButton,
-                           name: str
                            ) -> int:
 
         if event.type == Gdk.EventType.BUTTON_PRESS:
@@ -182,9 +240,10 @@ class AvatarBox(Gtk.EventBox):
                 return Gdk.EVENT_STOP
 
             if event.button == Gdk.BUTTON_PRIMARY:
-                app.window.activate_action('mention', GLib.Variant('s', name))
+                app.window.activate_action(
+                    'mention', GLib.Variant('s', self._name))
             elif event.button == Gdk.BUTTON_SECONDARY:
-                self._show_participant_menu(name, event)
+                self._show_participant_menu(self._name, event)
 
         return Gdk.EVENT_STOP
 

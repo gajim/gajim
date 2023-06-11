@@ -26,6 +26,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.util import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
@@ -221,14 +223,21 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_account_badge()
 
     def _on_message_received(self, event: MessageReceived) -> None:
-        if (not isinstance(self._contact, BareContact) or
-                event.jid != self._contact.jid or
-                not event.msgtxt or
-                event.properties.is_sent_carbon or
-                event.resource is None):
+        assert self._contact is not None
+        if event.jid != self._contact.jid:
             return
 
-        resource_contact = self._contact.get_resource(event.resource)
+        if event.from_mam or event.m_type != MessageType.CHAT:
+            return
+
+        message = event.message
+        if message.direction == ChatDirection.OUTGOING:
+            return
+
+        assert message.resource is not None
+        assert isinstance(self._contact, BareContact)
+
+        resource_contact = self._contact.get_resource(message.resource)
         if resource_contact.is_phone:
             self._last_message_from_phone.add(self._contact)
         else:

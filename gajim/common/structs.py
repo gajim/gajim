@@ -28,6 +28,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
 
 _T = TypeVar('_T')
@@ -45,6 +46,7 @@ class MUCData:
     def __init__(self,
                  room_jid: str,
                  nick: str,
+                 occupant_id: str | None,
                  password: str | None,
                  config: dict[str, Any] | None = None
                  ) -> None:
@@ -53,6 +55,7 @@ class MUCData:
         self._config = config
         self.nick = nick
         self.password = password
+        self.occupant_id = occupant_id
         self.state = MUCJoinedState.NOT_JOINED
         # Message id of the captcha challenge
         self.captcha_id: str | None = None
@@ -79,7 +82,7 @@ class OutgoingMessage:
     def __init__(self,
                  account: str,
                  contact: types.ChatContactT,
-                 message: str | None,
+                 text: str | None,
                  type_: str,
                  subject: str | None = None,
                  chatstate: str | None = None,
@@ -91,7 +94,6 @@ class OutgoingMessage:
                  attention: bool | None = None,
                  correct_id: str | None = None,
                  oob_url: str | None = None,
-                 xhtml: str | None = None,
                  nodes: Any | None = None,
                  play_sound: bool = True
                  ) -> None:
@@ -99,12 +101,12 @@ class OutgoingMessage:
         if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
             raise ValueError(f'Unknown message type: {type_}')
 
-        if not message and chatstate is None and marker is None:
+        if not text and chatstate is None and marker is None:
             raise ValueError('Trying to send message without content')
 
         self.account = account
         self.contact = contact
-        self.message = message
+        self.text = text
         self.type_ = type_
 
         if type_ == 'chat':
@@ -116,9 +118,6 @@ class OutgoingMessage:
         else:
             raise ValueError('Unknown message type')
 
-        from gajim.common.helpers import AdditionalDataDict
-        self.additional_data = AdditionalDataDict()
-
         self.subject = subject
         self.chatstate = chatstate
         self.marker = marker
@@ -128,36 +127,17 @@ class OutgoingMessage:
         self.control = control
         self.attention = attention
         self.correct_id = correct_id
-
         self.oob_url = oob_url
-
-        if oob_url is not None:
-            self.additional_data.set_value('gajim', 'oob_url', oob_url)
-
-        self.xhtml = xhtml
-
-        if xhtml is not None:
-            self.additional_data.set_value('gajim', 'xhtml', xhtml)
-
         self.nodes = nodes
         self.play_sound = play_sound
+
+        from gajim.common.helpers import AdditionalDataDict
+        self.additional_data = AdditionalDataDict()
 
         self.timestamp = None
         self.message_id = None
         self.stanza = None
         self.delayed = None  # TODO never set
-
-        self.is_loggable = True
-
-    def copy(self):
-        message = OutgoingMessage(self.account,
-                                  self.contact,
-                                  self.message,
-                                  self.type_)
-        for name, value in vars(self).items():
-            setattr(message, name, value)
-        message.additional_data = self.additional_data.copy()
-        return message
 
     @property
     def jid(self) -> JID:
@@ -175,9 +155,25 @@ class OutgoingMessage:
     def is_normal(self) -> bool:
         return self.type_ == 'normal'
 
+    @property
+    def is_pm(self) -> bool:
+        from gajim.common.modules.contacts import GroupchatParticipant
+        return isinstance(self.contact, GroupchatParticipant)
+
+    @property
+    def message_type(self) -> MessageType:
+        if self.is_pm:
+            return MessageType.PM
+
+        if self.type_ == 'chat':
+            return MessageType.CHAT
+
+        if self.type_ == 'groupchat':
+            return MessageType.GROUPCHAT
+
+        raise ValueError
+
     def set_sent_timestamp(self) -> None:
-        if self.is_groupchat:
-            return
         self.timestamp = time.time()
 
     @property

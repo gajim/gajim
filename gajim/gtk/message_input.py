@@ -125,14 +125,20 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         if last_message_id is None:
             return
 
-        message_row = app.storage.archive.get_last_correctable_message(
+        message = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, last_message_id)
-        if message_row is None or message_row.message is None:
+        if message is None or message.text is None:
             return
+
+        text = message.text
+        if message.corrections:
+            text = message.get_last_correction().text
+
+        assert text is not None
 
         self._set_correcting(True)
         self.get_style_context().add_class('gajim-msg-correcting')
-        self.insert_text(message_row.message)
+        self.insert_text(text)
 
     def try_message_correction(self, message: str) -> str | None:
         assert self._contact is not None
@@ -142,13 +148,15 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.toggle_message_correction()
 
         correct_id = self._last_message_id.get(self._contact)
+        if correct_id is None:
+            return None
         message_row = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, correct_id)
         if message_row is None:
             log.info('Trying to correct message older than threshold')
             return None
 
-        if message_row.message == message:
+        if message_row.text == message:
             log.info('Trying to correct message with original text')
             return None
 
@@ -159,18 +167,16 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self._correcting[self._contact] = state
 
     def _on_message_sent(self, event: MessageSent) -> None:
-        if not event.message:
-            return
+        message = event.message
 
-        if event.correct_id is None:
-            # This wasn't a corrected message
-            assert self._contact is not None
-            oob_url = event.additional_data.get_value('gajim', 'oob_url')
-            if oob_url == event.message:
-                # Don't allow to correct HTTP Upload file transfer URLs
-                self._last_message_id[self._contact] = None
-            else:
-                self._last_message_id[self._contact] = event.message_id
+        assert self._contact is not None
+
+        if (message.oob and
+                message.oob[0].url == message.text):
+            # Don't allow to correct HTTP Upload file transfer URLs
+            self._last_message_id[self._contact] = None
+        else:
+            self._last_message_id[self._contact] = message.id
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:

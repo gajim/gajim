@@ -51,19 +51,17 @@ class HistorySyncAssistant(Assistant, EventHelper):
         self._start: datetime | None = None
         self._end: datetime | None = None
 
-        mam_start = ArchiveState.NEVER
-        archive = app.storage.archive.get_archive_infos(
-            self._client.get_own_jid().bare)
-        if archive is not None and archive.oldest_mam_timestamp is not None:
-            mam_start = int(float(archive.oldest_mam_timestamp))
+        mam_start = None
+        archive = app.storage.archive.get_mam_archive_state(
+            account, self._client.get_own_jid().new_as_bare())
 
-        if mam_start == ArchiveState.NEVER:
+        if archive is not None and archive.from_stanza_ts is not None:
+            mam_start = archive.from_stanza_ts
+
+        if mam_start is None:
             self._current_start = self._now
-        elif mam_start == ArchiveState.ALL:
-            self._current_start = datetime.fromtimestamp(0, timezone.utc)
         else:
-            self._current_start = datetime.fromtimestamp(mam_start,
-                                                         timezone.utc)
+            self._current_start = mam_start
 
         self.add_button('synchronize', _('Synchronize'), 'suggested-action')
         self.add_button('close', _('Close'))

@@ -9,7 +9,6 @@ from typing import Literal
 from typing import overload
 
 import logging
-import time
 from datetime import datetime
 from pathlib import Path
 
@@ -17,11 +16,12 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.const import KindConstant
 from gajim.common.helpers import filesystem_path_from_uri
 from gajim.common.helpers import make_path_from_jid
 from gajim.common.i18n import _
-from gajim.common.storage.archive import MessageExportRow
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
@@ -132,30 +132,36 @@ class HistoryExport(Assistant):
             with open(file_path / 'history.txt', 'w', encoding='utf-8') as file:
                 file.write(f'History for {jid}\n\n')
                 for message in messages:
+                    if message.call is not None:
+                        continue
+
                     file.write(self._get_export_line(message))
 
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
 
-    def _get_export_line(self, message: MessageExportRow) -> str:
-        if message.kind in (KindConstant.SINGLE_MSG_RECV,
-                            KindConstant.CHAT_MSG_RECV):
-            name = message.jid
-        elif message.kind in (KindConstant.SINGLE_MSG_SENT,
-                              KindConstant.CHAT_MSG_SENT):
-            name = _('You')
-        elif message.kind == KindConstant.GC_MSG:
-            name = message.contact_name
-        else:
-            raise ValueError('Unknown kind: %s' % message.kind)
+    def _get_nickname(self, message: Message) -> str:
+        if message.direction == ChatDirection.OUTGOING:
+            return _('You')
 
-        timestamp = ''
-        try:
-            timestamp = time.strftime(
-                '%Y-%m-%d %H:%M:%S', time.localtime(message.time))
-        except ValueError:
-            pass
+        if message.type == MessageType.GROUPCHAT:
+            if message.occupant is not None:
+                if message.occupant.nickname is not None:
+                    return message.occupant.nickname
 
-        return f'{timestamp} {name}: {message.message}\n'
+            assert message.resource is not None
+            return message.resource
+
+        return str(message.remote.jid)
+
+    def _get_export_line(self, message: Message) -> str:
+        name = self._get_nickname(message)
+        timestamp = message.timestamp.astimezone().strftime('%Y-%m-%d %H:%M:%S')
+
+        text = message.text
+        if message.corrections:
+            text = message.get_last_correction().text
+
+        return f'{timestamp} {name}: {text or ""}\n'
 
 
 class SelectAccountDir(Page):

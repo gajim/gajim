@@ -17,6 +17,7 @@ from gi.repository import GLib
 from nbxmpp.const import Chatstate as State
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
+from nbxmpp.protocol import NodeProcessed
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import PresenceProperties
@@ -145,25 +146,26 @@ class Chatstate(BaseModule):
 
         contact.notify('chatstate-update')
 
+    def _raise_if_necessary(self, properties: MessageProperties) -> None:
+        if properties.chatstate != State.ACTIVE:
+            raise NodeProcessed
+
     def _process_chatstate(self,
                            _con: types.xmppClient,
                            _stanza: Any,
                            properties: MessageProperties
                            ) -> None:
-        if not (properties.type.is_chat or properties.type.is_groupchat):
-            return
-
-        if properties.is_self_message:
-            return
-
-        if properties.is_mam_message:
-            return
-
-        if properties.is_carbon_message and properties.carbon.is_sent:
-            return
 
         if not properties.has_chatstate:
             return
+
+        if not (properties.type.is_chat or properties.type.is_groupchat):
+            return self._raise_if_necessary(properties)
+
+        if (properties.is_self_message or
+                properties.is_mam_message or
+                properties.is_carbon_message and properties.carbon.is_sent):
+            return self._raise_if_necessary(properties)
 
         jid = properties.jid
         assert jid is not None
@@ -175,7 +177,7 @@ class Chatstate(BaseModule):
 
         contact = self._get_contact(jid)
         if contact is None:
-            return
+            return self._raise_if_necessary(properties)
 
         self._remove_remote_composing_timeout(contact)
         if state == State.COMPOSING:
@@ -190,10 +192,10 @@ class Chatstate(BaseModule):
         contact.notify('chatstate-update')
 
         if not isinstance(contact, GroupchatParticipant):
-            return
+            return self._raise_if_necessary(properties)
 
         if contact.is_self:
-            return
+            return self._raise_if_necessary(properties)
 
         muc = contact.room
 
@@ -201,7 +203,10 @@ class Chatstate(BaseModule):
             self._muc_composers[muc.jid].add(contact)
         else:
             self._muc_composers[muc.jid].discard(contact)
+
         muc.notify('chatstate-update')
+
+        return self._raise_if_necessary(properties)
 
     def _on_remote_composing_timeout(self, contact: types.ContactT):
         self._remote_chatstate_composing_timeouts.pop(contact.jid, None)
@@ -384,7 +389,7 @@ class Chatstate(BaseModule):
         type_ = 'groupchat' if contact.is_groupchat else 'chat'
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
-                                  message=None,
+                                  text=None,
                                   type_=type_,
                                   chatstate=chatstate.value,
                                   play_sound=False)

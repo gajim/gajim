@@ -4,14 +4,12 @@
 
 from __future__ import annotations
 
-import time
-from datetime import datetime
-
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.conversation.message_widget import MessageWidget
@@ -30,9 +28,9 @@ class UserStatus(BaseRow):
         BaseRow.__init__(self, account)
 
         self.type = 'muc-user-status'
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
-        self.db_timestamp = timestamp
+        timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)

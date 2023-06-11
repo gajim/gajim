@@ -46,10 +46,10 @@ if typing.TYPE_CHECKING:
     from gajim.common.cert_store import CertificateStore
     from gajim.common.commands import ChatCommands  # noqa: F401
     from gajim.common.preview import PreviewManager
-    from gajim.common.storage.archive import MessageArchiveStorage
+    from gajim.common.storage.archive.storage import MessageArchiveStorage
     from gajim.common.storage.cache import CacheStorage
     from gajim.common.storage.draft import DraftStorage
-    from gajim.common.storage.events import EventStorage
+    from gajim.common.storage.events.storage import EventStorage
     from gajim.common.task_manager import TaskManager
 
     from gajim.gtk.application import GajimApplication  # noqa: F401

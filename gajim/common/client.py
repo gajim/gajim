@@ -29,7 +29,6 @@ from gajim.common.const import SimpleClientState
 from gajim.common.events import AccountConnected
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import MessageNotSent
-from gajim.common.events import MessageSent
 from gajim.common.events import Notification
 from gajim.common.events import PasswordRequired
 from gajim.common.events import PlainConnection
@@ -339,6 +338,12 @@ class Client(Observable, ClientModules):
         # This returns the bare jid
         return nbxmpp.JID.from_string(app.get_jid_from_account(self._account))
 
+    def get_bound_jid(self) -> JID:
+        assert self._client is not None
+        jid = self._client.get_bound_jid()
+        assert jid is not None
+        return jid
+
     def change_status(self, show: str, message: str) -> None:
         if not message:
             message = ''
@@ -472,7 +477,7 @@ class Client(Observable, ClientModules):
                 app.ged.raise_event(
                     MessageNotSent(client=self._client,
                                    jid=message.jid,
-                                   message=message.message,
+                                   message=message.text,
                                    error=_('Encryption error'),
                                    time=time.time()))
                 return
@@ -493,22 +498,10 @@ class Client(Observable, ClientModules):
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
-        log_line_id = None
-        if not message.is_groupchat:
-            log_line_id = self.get_module('Message').log_message(message)
+        if message.text is None:
+            return
 
-        app.ged.raise_event(
-            MessageSent(jid=message.jid,
-                        account=message.account,
-                        message=message.message,
-                        chatstate=message.chatstate,
-                        timestamp=message.timestamp,
-                        additional_data=message.additional_data,
-                        label=message.label,
-                        correct_id=message.correct_id,
-                        message_id=message.message_id,
-                        msg_log_id=log_line_id,
-                        play_sound=message.play_sound))
+        self.get_module('Message').send_message(message)
 
     def connect(
         self,

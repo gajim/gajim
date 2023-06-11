@@ -22,7 +22,7 @@ from typing import Any
 from typing import TYPE_CHECKING
 
 import logging
-import time
+import uuid
 from collections.abc import Callable
 from enum import Enum
 from enum import unique
@@ -36,15 +36,18 @@ from nbxmpp.util import generate_id
 from gajim.common import app
 from gajim.common import events
 from gajim.common.client import Client
-from gajim.common.const import KindConstant
 from gajim.common.file_props import FilesProp
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.jingle_content import get_jingle_content
 from gajim.common.jingle_content import JingleContent
 from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_ft import State
 from gajim.common.jingle_transport import get_jingle_transport
 from gajim.common.jingle_transport import JingleTransportIBB
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.datetime import utc_now
 
 if TYPE_CHECKING:
     from gajim.common.jingle_transport import JingleTransport
@@ -689,15 +692,25 @@ class JingleSession:
 
         account = self.connection.name
         jid = JID.from_string(self.peerjid)
-        timestamp = time.time()
-        additional_data = AdditionalDataDict()
-        additional_data.set_value('gajim', 'sid', self.sid)
-        app.storage.archive.insert_into_logs(
-            account,
-            jid.bare,
-            timestamp,
-            KindConstant.CALL_INCOMING,
-            additional_data=additional_data)
+
+        call_data = mod.Call(
+            sid=self.sid,
+            state=0,  # TODO
+        )
+
+        message = mod.Message(
+            account_=account,
+            remote_jid_=jid.new_as_bare(),
+            resource=None,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            call=call_data,
+        )
+
+        app.storage.archive.insert_object(message)
 
     def __broadcast(self,
                     stanza: nbxmpp.Node,

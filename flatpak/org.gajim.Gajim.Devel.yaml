@@ -297,6 +297,33 @@ modules:
         url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.43.0-py2.py3-none-any.whl
         sha256: 8d768724839ca18d7b4c7463ef7528c40b7aa2bfbf7fe554d5f9a7c044acfd36
 
+  - name: python3-typing-extensions
+    buildsystem: simple
+    build-commands:
+      - pip3 install typing_extensions-4.10.0-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.10.0-py3-none-any.whl
+        sha256: 69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475
+
+  - name: python3-greenlet
+    buildsystem: simple
+    build-commands:
+      - pip3 install --no-build-isolation .
+    sources:
+      - type: archive
+        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.0.3.tar.gz
+        sha256: 43374442353259554ce33599da8b692d5aa96f8976d567d4badf263371fbe491
+
+  - name: python3-SQLAlchemy
+    buildsystem: simple
+    build-commands:
+      - pip3 install SQLAlchemy-2.0.29-py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.29-py3-none-any.whl
+        sha256: dc4ee2d4ee43251905f88637d5281a8d52e916a021384ec10758826f5cbae305
+
   # gssapi dependency
   - name: python3-decorator
     buildsystem: simple
@@ -316,15 +343,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/p/pypng/pypng-0.20220715.0-py3-none-any.whl
         sha256: 4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c
-
-  - name: python3-typing-extensions
-    buildsystem: simple
-    build-commands:
-      - pip3 install typing_extensions-4.10.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.10.0-py3-none-any.whl
-        sha256: 69b1a937c3a517342112fb4c6df7e72fc39a38e7891a5730ed4985b5214b5475
 
   # OMEMO dependencies
   - name: python3-qrcode

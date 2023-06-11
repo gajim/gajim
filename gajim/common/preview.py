@@ -28,7 +28,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import regex
 from gajim.common.const import MIME_TYPES
-from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
@@ -42,6 +41,7 @@ from gajim.common.preview_helpers import guess_mime_type
 from gajim.common.preview_helpers import parse_fragment
 from gajim.common.preview_helpers import pixbuf_from_data
 from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.storage.archive import models as mod
 from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
 
@@ -252,8 +252,8 @@ class PreviewManager:
     @staticmethod
     def _accept_uri(urlparts: ParseResult,
                     uri: str,
-                    additional_data: AdditionalDataDict) -> bool:
-        oob_url = additional_data.get_value('gajim', 'oob_url')
+                    oob_url: str | None
+                    ) -> bool:
 
         # geo
         if urlparts.scheme == 'geo':
@@ -295,11 +295,9 @@ class PreviewManager:
 
     def is_previewable(self,
                        text: str,
-                       additional_data: AdditionalDataDict | None
+                       oob_data: list[mod.OOB]
                        ) -> bool:
 
-        if additional_data is None:
-            return False
 
         if not IRI_RX.fullmatch(text):
             # urlparse removes whitespace (and who knows what else) from URLs,
@@ -312,7 +310,8 @@ class PreviewManager:
         except Exception:
             return False
 
-        if not self._accept_uri(urlparts, uri, additional_data):
+        oob_url = None if not oob_data else oob_data[0].url
+        if not self._accept_uri(urlparts, uri, oob_url):
             return False
 
         if urlparts.scheme == 'geo':

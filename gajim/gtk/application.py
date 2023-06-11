@@ -214,7 +214,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
             # to render colored emoji glyphs
             os.environ['PANGOCAIRO_BACKEND'] = 'fontconfig'
 
-        self._init_core()
+        app.ged.register_event_handler(
+            'db-migration', 0, self._on_db_migration)
+
+        if not self._init_core():
+            return
 
         Gtk.IconSize.register('100', 100, 100)
         icon_theme = Gtk.IconTheme.get_default()
@@ -578,6 +582,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         if window is not None:
             window.remove_account(account)
 
+    def _on_db_migration(self, _event: events.DBMigration) -> None:
+        open_window('DBMigration')
+
     # Action Callbacks
 
     @staticmethod
@@ -842,7 +849,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                   params: structs.RemoveHistoryActionParams
                                   ) -> None:
         def _remove() -> None:
-            app.storage.archive.remove_history(params.account, params.jid)
+            app.storage.archive.remove_history_for_jid(
+                params.account, params.jid)
 
             app.window.clear_chat_list_row(params.account, params.jid)
             control = app.window.get_control()
@@ -873,4 +881,4 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client.get_module('MUC').leave(params.jid)
         client.get_module('Bookmarks').remove(params.jid)
 
-        app.storage.archive.remove_history(params.account, params.jid)
+        app.storage.archive.remove_history_for_jid(params.account, params.jid)

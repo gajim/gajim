@@ -6,9 +6,6 @@
 
 from __future__ import annotations
 
-from typing import Any
-
-import time
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -32,19 +29,13 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import ArchiveState
 from gajim.common.const import ClientState
-from gajim.common.const import KindConstant
 from gajim.common.const import SyncThreshold
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import FeatureDiscovered
-from gajim.common.events import MamMessageReceived
 from gajim.common.events import RawMamMessageReceived
-from gajim.common.helpers import AdditionalDataDict
-from gajim.common.helpers import get_retraction_text
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.util import as_task
-from gajim.common.modules.util import check_if_message_correction
-from gajim.common.modules.util import get_eme_message
+from gajim.common.storage.archive import models as mod
 
 
 class MAM(BaseModule):
@@ -62,10 +53,10 @@ class MAM(BaseModule):
         self.handlers = [
             StanzaHandler(name='message',
                           callback=self._set_message_archive_info,
-                          priority=41),
+                          priority=42),
             StanzaHandler(name='message',
                           callback=self._mam_message_received,
-                          priority=51),
+                          priority=41),
         ]
 
         self.available = False
@@ -123,25 +114,6 @@ class MAM(BaseModule):
 
         return properties.mam.archive.bare_match(expected_archive)
 
-    def _get_unique_id(self,
-                       properties: MessageProperties
-                       ) -> tuple[str | None, str | None]:
-        if properties.type.is_groupchat:
-            return properties.mam.id, None
-
-        if properties.is_self_message:
-            return None, properties.id
-
-        if properties.is_muc_pm:
-            return properties.mam.id, properties.id
-
-        if self._con.get_own_jid().bare_match(properties.from_):
-            # message we sent
-            return properties.mam.id, properties.id
-
-        # A message we received
-        return properties.mam.id, None
-
     @staticmethod
     def _get_stanza_id(properties: MessageProperties,
                        archive_jid: str
@@ -192,16 +164,24 @@ class MAM(BaseModule):
         if not self.is_catch_up_finished(archive_jid):
             return
 
-        app.storage.archive.set_archive_infos(
-            archive_jid,
-            last_mam_id=stanza_id.id,
-            last_muc_timestamp=timestamp)
+        if timestamp is not None:
+            timestamp = datetime.fromtimestamp(timestamp, timezone.utc)
+
+        app.storage.archive.upsert_row(
+            mod.MAMArchiveState(
+                account_=self._account,
+                remote_jid_=JID.from_string(archive_jid),
+                to_stanza_id=stanza_id.id,
+                to_stanza_ts=timestamp,
+            )
+        )
 
     def _mam_message_received(self,
                               _con: types.xmppClient,
                               stanza: Message,
                               properties: MessageProperties
                               ) -> None:
+
         if not properties.is_mam_message:
             return
 
@@ -223,140 +203,6 @@ class MAM(BaseModule):
             self._log.debug(stanza)
             raise nbxmpp.NodeProcessed
 
-        is_groupchat = properties.type.is_groupchat
-        if is_groupchat:
-            kind = KindConstant.GC_MSG
-        else:
-            if properties.from_.bare_match(self._con.get_own_jid()):
-                kind = KindConstant.CHAT_MSG_SENT
-            else:
-                kind = KindConstant.CHAT_MSG_RECV
-
-        stanza_id, message_id = self._get_unique_id(properties)
-
-        # Search for duplicates
-        if app.storage.archive.find_stanza_id(self._account,
-                                              str(properties.mam.archive),
-                                              stanza_id,
-                                              message_id,
-                                              groupchat=is_groupchat):
-            self._log.info('Found duplicate with stanza-id: %s, '
-                           'message-id: %s', stanza_id, message_id)
-            raise nbxmpp.NodeProcessed
-
-        additional_data = AdditionalDataDict()
-        if properties.has_user_delay:
-            # Record it as a user timestamp
-            additional_data.set_value(
-                'gajim', 'user_timestamp', properties.user_timestamp)
-
-        parse_oob(properties, additional_data)
-
-        msgtxt = properties.body
-
-        if properties.is_encrypted:
-            additional_data['encrypted'] = properties.encrypted.additional_data
-        else:
-            if properties.eme is not None:
-                msgtxt = get_eme_message(properties.eme)
-
-        if properties.is_moderation:
-            additional_data.set_value(
-                'retracted', 'by', properties.moderation.moderator_jid)
-            additional_data.set_value(
-                'retracted', 'timestamp', properties.moderation.timestamp)
-            additional_data.set_value(
-                'retracted', 'reason', properties.moderation.reason)
-
-            msgtxt = get_retraction_text(
-                properties.moderation.moderator_jid,
-                properties.moderation.reason)
-
-        if not msgtxt:
-            # For example Chatstates, Receipts, Chatmarkers
-            self._log.debug(stanza.getProperties())
-            return
-
-        jid = properties.jid.new_as_bare()
-        if properties.is_muc_pm:
-            jid = properties.jid
-
-        if properties.is_self_message:
-            # Self messages can only be deduped with origin-id
-            if message_id is None:
-                self._log.warning('Self message without origin-id found')
-                return
-            stanza_id = message_id
-
-        occupant_id = self._get_occupant_id(properties)
-        real_jid = self._get_real_jid(properties)
-
-        displaymarking = None
-        if properties.has_security_label:
-            displaymarking = properties.security_label.displaymarking
-
-        event_attr: dict[str, Any] = {
-            'account': self._account,
-            'jid': jid,
-            'msgtxt': properties.body,
-            'properties': properties,
-            'additional_data': additional_data,
-            'unique_id': properties.id,
-            'stanza_id': stanza_id,
-            'archive_jid': properties.mam.archive,
-            'kind': kind,
-            'occupant_id': occupant_id,
-            'real_jid': real_jid,
-            'displaymarking': displaymarking
-        }
-
-        if check_if_message_correction(properties,
-                                       self._account,
-                                       properties.jid,
-                                       properties.body,
-                                       kind,
-                                       properties.mam.timestamp,
-                                       self._log):
-            return
-
-        event_attr['msg_log_id'] = app.storage.archive.insert_into_logs(
-            self._account,
-            jid,
-            properties.mam.timestamp,
-            kind,
-            message=msgtxt,
-            contact_name=properties.muc_nickname,
-            additional_data=additional_data,
-            stanza_id=stanza_id,
-            message_id=properties.id,
-            occupant_id=occupant_id,
-            real_jid=real_jid,
-        )
-
-        app.ged.raise_event(MamMessageReceived(**event_attr))
-
-    def _get_real_jid(self, properties: MessageProperties) -> JID | None:
-        if not properties.type.is_groupchat:
-            return None
-
-        if properties.muc_user is None:
-            return None
-
-        return properties.muc_user.jid
-
-    def _get_occupant_id(self, properties: MessageProperties) -> str | None:
-        if not properties.type.is_groupchat:
-            return None
-
-        if properties.occupant_id is None:
-            return None
-
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.jid.bare, groupchat=True)
-        if contact.supports(Namespace.OCCUPANT_ID):
-            return properties.occupant_id
-        return None
-
     def _is_valid_request(self, properties: MessageProperties) -> bool:
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)
         return valid_id == properties.mam.query_id
@@ -368,11 +214,12 @@ class MAM(BaseModule):
 
     def _get_query_params(self) -> tuple[str | None, datetime | None]:
         own_jid = self._con.get_own_jid().bare
-        archive = app.storage.archive.get_archive_infos(own_jid)
+        archive = app.storage.archive.get_mam_archive_state(
+            self._account, own_jid)
 
         mam_id = None
         if archive is not None:
-            mam_id = archive.last_mam_id
+            mam_id = archive.to_stanza_id
 
         start_date = None
         if mam_id:
@@ -391,12 +238,12 @@ class MAM(BaseModule):
                               threshold: SyncThreshold
                               ) -> tuple[str | None, datetime | None]:
 
-        archive = app.storage.archive.get_archive_infos(jid)
+        archive = app.storage.archive.get_mam_archive_state(self._account, jid)
         mam_id = None
         start_date = None
         now = datetime.now(timezone.utc)
 
-        if archive is None or archive.last_mam_id is None:
+        if archive is None or archive.to_stanza_id is None:
             # First join
             start_date = now - timedelta(days=1)
             self._log.info('Request archive: %s, after date %s',
@@ -405,19 +252,18 @@ class MAM(BaseModule):
         elif threshold == SyncThreshold.NO_THRESHOLD:
             # Not our first join and no threshold set
 
-            mam_id = archive.last_mam_id
+            mam_id = archive.to_stanza_id
             self._log.info('Request archive: %s, after mam-id %s',
-                           jid, archive.last_mam_id)
+                           jid, archive.to_stanza_id)
 
         else:
             # Not our first join, check how much time elapsed since our
             # last join and check against threshold
-            last_timestamp = archive.last_muc_timestamp
-            if last_timestamp is None:
+            last = archive.to_stanza_ts
+            if last is None:
                 self._log.info('No last muc timestamp found: %s', jid)
-                last_timestamp = 0
+                last = datetime.fromtimestamp(0, timezone.utc)
 
-            last = datetime.fromtimestamp(float(last_timestamp), timezone.utc)
             if now - last > timedelta(days=threshold):
                 # To much time has elapsed since last join, apply threshold
                 start_date = now - timedelta(days=threshold)
@@ -427,9 +273,9 @@ class MAM(BaseModule):
 
             else:
                 # Request from last mam-id
-                mam_id = archive.last_mam_id
+                mam_id = archive.to_stanza_id
                 self._log.info('Request archive: %s, after mam-id %s:',
-                               jid, archive.last_mam_id)
+                               jid, archive.to_stanza_id)
 
         return mam_id, start_date
 
@@ -451,7 +297,8 @@ class MAM(BaseModule):
                 self._log.warning(result)
                 return
 
-            app.storage.archive.reset_archive_infos(result.jid)
+            app.storage.archive.reset_mam_archive_state(
+                self._account, result.jid)
             _, start_date = self._get_query_params()
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
@@ -462,18 +309,26 @@ class MAM(BaseModule):
             # <last> is not provided if the requested page was empty
             # so this means we did not get anything hence we only need
             # to update the archive info if <last> is present
-            app.storage.archive.set_archive_infos(
-                result.jid,
-                last_mam_id=result.rsm.last,
-                last_muc_timestamp=time.time())
+            app.storage.archive.upsert_row(
+                mod.MAMArchiveState(
+                    account_=self._account,
+                    remote_jid_=result.jid,
+                    to_stanza_id=result.rsm.last,
+                    to_stanza_ts=datetime.now(timezone.utc),
+                )
+            )
 
         if start_date is not None:
             # Record the earliest timestamp we request from
             # the account archive. For the account archive we only
             # set start_date at the very first request.
-            app.storage.archive.set_archive_infos(
-                result.jid,
-                oldest_mam_timestamp=start_date.timestamp())
+            app.storage.archive.upsert_row(
+                mod.MAMArchiveState(
+                    account_=self._account,
+                    remote_jid_=result.jid,
+                    from_stanza_ts=start_date
+                )
+            )
 
     @as_task
     def request_archive_on_muc_join(self, jid: JID):
@@ -499,7 +354,8 @@ class MAM(BaseModule):
                 contact.notify('mam-sync-error', result.get_text())
                 return
 
-            app.storage.archive.reset_archive_infos(result.jid)
+            app.storage.archive.reset_mam_archive_state(
+                self._account, result.jid)
             _, start_date = self._get_muc_query_params(jid, threshold)
             result = yield self._execute_query(result.jid, None, start_date)
             if is_error(result):
@@ -511,10 +367,14 @@ class MAM(BaseModule):
             # <last> is not provided if the requested page was empty
             # so this means we did not get anything hence we only need
             # to update the archive info if <last> is present
-            app.storage.archive.set_archive_infos(
-                result.jid,
-                last_mam_id=result.rsm.last,
-                last_muc_timestamp=time.time())
+            app.storage.archive.upsert_row(
+                mod.MAMArchiveState(
+                    account_=self._account,
+                    remote_jid_=result.jid,
+                    to_stanza_id=result.rsm.last,
+                    to_stanza_ts=datetime.now(timezone.utc)
+                )
+            )
 
         contact.notify('mam-sync-finished')
 
@@ -541,8 +401,14 @@ class MAM(BaseModule):
         raise_if_error(result)
 
         while not result.complete:
-            app.storage.archive.set_archive_infos(result.jid,
-                                                  last_mam_id=result.rsm.last)
+            app.storage.archive.upsert_row(
+                mod.MAMArchiveState(
+                    account_=self._account,
+                    remote_jid_=result.jid,
+                    to_stanza_id=result.rsm.last,
+                )
+            )
+
             queryid = self._get_query_id(result.jid)
 
             result = yield self.make_query(result.jid,
@@ -599,15 +465,21 @@ class MAM(BaseModule):
         self._remove_query_id(result.jid)
 
         if start_date:
-            timestamp = start_date.timestamp()
+            timestamp = start_date
         else:
             timestamp = ArchiveState.ALL
 
         if result.complete:
             self._log.info('Request finished: %s, last mam id: %s',
                            result.jid, result.rsm.last)
-            app.storage.archive.set_archive_infos(
-                result.jid, oldest_mam_timestamp=timestamp)
+            app.storage.archive.upsert_row(
+                mod.MAMArchiveState(
+                    account_=self._account,
+                    remote_jid_=result.jid,
+                    from_stanza_ts=timestamp,
+                )
+            )
+
             app.ged.raise_event(ArchivingIntervalFinished(
                 account=self._account,
                 query_id=queryid))

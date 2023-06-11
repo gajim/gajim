@@ -2,9 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import time
-from datetime import datetime
-
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
@@ -12,6 +9,7 @@ from gajim.common.const import EncryptionInfoMsg
 from gajim.common.events import EncryptionInfo
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.util.datetime import utc_now
 
 from ...util import open_window
 from .base import BaseRow
@@ -24,8 +22,8 @@ class EncryptionInfoRow(BaseRow):
         BaseRow.__init__(self, event.account)
 
         self.type = 'encryption_info'
-        timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp)
+        timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
         self._event = event
 
         avatar_placeholder = Gtk.Box()

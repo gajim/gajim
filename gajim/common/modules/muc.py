@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import datetime as dt
 import logging
 import time
 from collections import defaultdict
@@ -37,7 +38,6 @@ from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import ClientState
 from gajim.common.const import MUCJoinedState
-from gajim.common.events import MessageModerated
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
@@ -47,8 +47,11 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
+from gajim.common.util.datetime import utc_now
 
 log = logging.getLogger('gajim.c.m.muc')
 
@@ -95,11 +98,6 @@ class MUC(BaseModule):
                           priority=49),
             StanzaHandler(name='message',
                           callback=self._on_subject_change,
-                          typ='groupchat',
-                          priority=49),
-            StanzaHandler(name='message',
-                          callback=self._on_moderation,
-                          ns=Namespace.FASTEN,
                           typ='groupchat',
                           priority=49),
             StanzaHandler(name='message',
@@ -228,7 +226,7 @@ class MUC(BaseModule):
             if bookmark.password is not None:
                 password = bookmark.password
 
-        return MUCData(room_jid, nick, password, config)
+        return MUCData(room_jid, nick, None, password, config)
 
     def join(self,
              jid: JID,
@@ -450,7 +448,8 @@ class MUC(BaseModule):
         self._log.info('Configuration finished: %s', jid)
 
         room = self._get_contact(jid.bare)
-        event = events.MUCRoomConfigFinished(timestamp=time.time())
+        event = events.MUCRoomConfigFinished(
+            timestamp=utc_now())
 
         assert isinstance(room, GroupchatContact)
         app.storage.events.store(room, event)
@@ -536,7 +535,7 @@ class MUC(BaseModule):
         else:
             error = helpers.to_user_string(properties.error)
             event = events.MUCRoomPresenceError(
-                timestamp=time.time(),
+                timestamp=utc_now(),
                 error=error)
             assert isinstance(room, GroupchatContact)
             app.storage.events.store(room, event)
@@ -558,6 +557,10 @@ class MUC(BaseModule):
         occupant = self._get_contact(properties.jid, groupchat=True)
         room = self._get_contact(properties.jid.bare)
 
+        self._store_occupant_info(room, properties)
+
+        timestamp = utc_now()
+
         if properties.is_muc_destroyed:
             self._log.info('MUC destroyed: %s', room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
@@ -565,7 +568,7 @@ class MUC(BaseModule):
             room.set_not_joined()
 
             event = events.MUCRoomDestroyed(
-                timestamp=time.time(),
+                timestamp=timestamp,
                 reason=properties.muc_destroyed.reason,
                 alternate=properties.muc_destroyed.alternate)
             assert isinstance(room, GroupchatContact)
@@ -600,7 +603,7 @@ class MUC(BaseModule):
                                                    occupant)
 
             event = events.MUCNicknameChanged(
-                timestamp=time.time(),
+                timestamp=timestamp,
                 is_self=properties.is_muc_self_presence,
                 new_name=new_occupant.name,
                 old_name=occupant.name)
@@ -616,6 +619,9 @@ class MUC(BaseModule):
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
                 if muc_data.state == MUCJoinedState.JOINING:
+                    if room.supports(Namespace.OCCUPANT_ID):
+                        muc_data.occupant_id = properties.occupant_id
+
                     if (properties.is_nickname_modified or
                             muc_data.nick != properties.muc_nickname):
                         muc_data.nick = properties.muc_nickname
@@ -637,7 +643,7 @@ class MUC(BaseModule):
             room.set_not_joined()
 
             event = events.MUCRoomKicked(
-                timestamp=time.time(),
+                timestamp=timestamp,
                 status_codes=properties.muc_status_codes,
                 reason=properties.muc_user.reason,
                 actor=properties.muc_user.actor)
@@ -666,13 +672,36 @@ class MUC(BaseModule):
 
         self._process_occupant_presence_change(properties, presence, occupant)
 
+    def _store_occupant_info(
+        self,
+        room_contact: GroupchatContact,
+        properties: PresenceProperties
+    ) -> None:
+
+        assert properties.muc_user is not None
+        real_jid = properties.muc_user.jid
+
+        occupant_id = properties.occupant_id or real_jid
+        timestamp = dt.datetime.fromtimestamp(
+            properties.timestamp, dt.timezone.utc)
+
+        occupant_data = mod.Occupant(
+            account_=self._account,
+            remote_jid_=room_contact.jid,
+            id=str(occupant_id),
+            real_remote_jid_=real_jid or VALUE_MISSING,
+            nickname=properties.jid.resource or VALUE_MISSING,
+            updated_at=timestamp,
+        )
+        app.storage.archive.upsert_row(occupant_data)
+
     def _process_occupant_presence_change(
             self,
             properties: PresenceProperties,
             presence: MUCPresenceData,
             occupant: GroupchatParticipant) -> None:
 
-        timestamp = time.time()
+        timestamp = utc_now()
 
         if not occupant.is_available and presence.available:
 
@@ -837,24 +866,6 @@ class MUC(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def _on_moderation(self,
-                       _con: types.xmppClient,
-                       _stanza: Message,
-                       properties: MessageProperties
-                       ) -> None:
-        if not properties.is_moderation:
-            return
-
-        app.storage.archive.update_additional_data(
-            self._account, properties.moderation.stanza_id, properties)
-
-        app.ged.raise_event(
-            MessageModerated(account=self._account,
-                             jid=properties.jid,
-                             moderation=properties.moderation))
-
-        raise nbxmpp.NodeProcessed
-
     def cancel_password_request(self, room_jid: JID) -> None:
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
@@ -1000,7 +1011,7 @@ class MUC(BaseModule):
 
         assert properties.muc_status_codes is not None
         event = events.MUCRoomConfigChanged(
-            timestamp=time.time(),
+            timestamp=utc_now(),
             status_codes=properties.muc_status_codes)
 
         assert properties.muc_jid is not None

@@ -36,6 +36,7 @@ import socket
 import string
 import sys
 import unicodedata
+import uuid
 import weakref
 import webbrowser
 from collections import defaultdict
@@ -71,6 +72,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from packaging.requirements import Requirement
+from packaging.specifiers import SpecifierSet
 from packaging.version import Version as V
 from qrcode.image.pil import PilImage as QrcPilImage
 
@@ -111,6 +113,7 @@ log = logging.getLogger('gajim.c.helpers')
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
+CURRENT_PYTHON_VERSION = platform.python_version()
 
 
 class InvalidFormat(Exception):
@@ -678,7 +681,7 @@ def get_subscription_request_msg(account: str | None = None) -> str:
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
 
-def get_retraction_text(by: str | None,
+def get_retraction_text(by: str | JID | None,
                         reason: str | None) -> str:
 
     by_text = ''
@@ -1574,6 +1577,11 @@ def package_version(requirement: str) -> bool:
     return installed_version in req.specifier
 
 
+def python_version(specifier_set: str) -> bool:
+    spec = SpecifierSet(specifier_set)
+    return CURRENT_PYTHON_VERSION in spec
+
+
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     assert jid.domain is not None
     domain = jid.domain[:50]
@@ -1602,3 +1610,7 @@ def format_idle_time(idle_time: datetime) -> str:
         return idle_time.strftime(f'%a {app.settings.get("time_format")}')
 
     return idle_date.strftime(app.settings.get('date_format'))
+
+
+def get_uuid() -> str:
+    return str(uuid.uuid4())
