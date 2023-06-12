@@ -117,10 +117,9 @@ class AvatarSelector(Gtk.Box):
         app.check_finalize(self)
 
     def reset(self) -> None:
+        self._crop_area.reset()
         self._load_button.show()
         self._helper_label.show()
-        self._crop_area.hide()
-        self._crop_area.set_pixbuf(None)
 
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
@@ -254,13 +253,11 @@ class CropArea(Gtk.DrawingArea):
         else:
             self._aspect = -1
 
-    def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf | None) -> None:
-        if pixbuf is None:
-            self._browse_pixbuf = None
-            avatar_selector = cast(AvatarSelector, self.get_parent())
-            avatar_selector.reset()
-            return
+    def reset(self) -> None:
+        self._browse_pixbuf = None
+        self.hide()
 
+    def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf) -> None:
         self._browse_pixbuf = pixbuf
         width = pixbuf.get_width()
         height = pixbuf.get_height()
@@ -306,9 +303,10 @@ class CropArea(Gtk.DrawingArea):
         self._update_pixbufs()
 
         if self._pixbuf is None:
+            avatar_selector = cast(AvatarSelector, self.get_parent())
+            avatar_selector.reset()
             ErrorDialog(_('Error Loading Image'),
                         _('Selected image could not be loaded.'))
-            self.set_pixbuf(None)
             return False
 
         width = self._pixbuf.get_width()
