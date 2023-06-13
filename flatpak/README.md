@@ -36,16 +36,16 @@ flatpak remote-ls gajim-nightly
 
 respectively.
 
-To install the stable/nightly version of OMEMO, for example, run
+To install the stable/nightly version of PGP, for example, run
 
 ```bash
-flatpak install --user flathub org.gajim.Gajim.Plugin.omemo
+flatpak install --user flathub org.gajim.Gajim.Plugin.pgp
 ```
 
 or
 
 ```bash
-flatpak install --user gajim-nightly org.gajim.Gajim.Devel.Plugin.omemo
+flatpak install --user gajim-nightly org.gajim.Gajim.Devel.Plugin.pgp
 ```
 
 respectively.
