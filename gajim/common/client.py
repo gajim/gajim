@@ -33,6 +33,7 @@ from gajim.common import app
 from gajim.common import helpers
 from gajim.common import modules
 from gajim.common import passwords
+from gajim.common.client_modules import ClientModules
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.events import AccountConnected
@@ -65,9 +66,10 @@ log = logging.getLogger('gajim.client')
 IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
 
 
-class Client(Observable):
+class Client(Observable, ClientModules):
     def __init__(self, account: str) -> None:
         Observable.__init__(self, log)
+        ClientModules.__init__(self, account)
         self._client = None
         self._account = account
         self.name = account
@@ -420,9 +422,6 @@ class Client(Observable):
 
         if include_muc:
             self.get_module('MUC').update_presence()
-
-    def get_module(self, name: str):
-        return modules.get(self._account, name)
 
     @helpers.call_counter
     def connect_machine(self) -> None:

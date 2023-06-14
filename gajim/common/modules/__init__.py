@@ -39,7 +39,7 @@ _store_publish_modules = [
 
 
 def register_modules(client: Client) -> None:
-    if client in _modules:
+    if client.account in _modules:
         return
 
     _modules[client.account] = {}
