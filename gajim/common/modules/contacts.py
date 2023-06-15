@@ -370,12 +370,14 @@ class BareContact(CommonContact):
         return any(resource.supports(requested_feature)
                    for resource in self.iter_resources())
 
+    @property
     def supports_audio(self) -> bool:
         if (self.supports(Namespace.JINGLE_ICE_UDP) and
                 app.is_installed('FARSTREAM')):
             return self.supports(Namespace.JINGLE_RTP_AUDIO)
         return False
 
+    @property
     def supports_video(self) -> bool:
         if (self.supports(Namespace.JINGLE_ICE_UDP) and
                 app.is_installed('FARSTREAM')):

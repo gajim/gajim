@@ -511,10 +511,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         online = app.account_is_connected(account)
 
         app.window.get_action('start-voice-call').set_enabled(
-            online and contact.supports_audio() and
+            online and contact.supports_audio and
             sys.platform != 'win32')
         app.window.get_action('start-video-call').set_enabled(
-            online and contact.supports_video() and
+            online and contact.supports_video and
             sys.platform != 'win32')
 
         app.window.get_action('quote').set_enabled(online)
