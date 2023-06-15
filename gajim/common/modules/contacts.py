@@ -68,9 +68,9 @@ class ContactSettings:
             self._account, self._jid, setting)
 
     @overload
-    def set(self, setting: StringContactSettings, value: str) -> None: ...  # noqa: E501, E704
+    def set(self, setting: StringContactSettings, value: str | None) -> None: ...  # noqa: E501, E704
     @overload
-    def set(self, setting: BoolContactSettings, value: bool) -> None: ...  # noqa: E501, E704
+    def set(self, setting: BoolContactSettings, value: bool | None) -> None: ...  # noqa: E501, E704
 
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_contact_setting(
@@ -94,11 +94,11 @@ class GroupChatSettings:
             self._account, self._jid, setting)
 
     @overload
-    def set(self, setting: StringGroupChatSettings, value: str) -> None: ...  # noqa: E501, E704
+    def set(self, setting: StringGroupChatSettings, value: str | None) -> None: ...  # noqa: E501, E704
     @overload
-    def set(self, setting: BoolGroupChatSettings, value: bool) -> None: ...  # noqa: E501, E704
+    def set(self, setting: BoolGroupChatSettings, value: bool | None) -> None: ...  # noqa: E501, E704
     @overload
-    def set(self, setting: IntGroupChatSettings, value: int) -> None: ...  # noqa: E501, E704
+    def set(self, setting: IntGroupChatSettings, value: int | None) -> None: ...  # noqa: E501, E704
 
     def set(self, setting: Any, value: Any) -> None:
         app.settings.set_group_chat_setting(

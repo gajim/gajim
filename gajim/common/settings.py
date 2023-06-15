@@ -924,7 +924,7 @@ class Settings:
                                account: str,
                                jid: JID,
                                setting: StringGroupChatSettings,
-                               value: str) -> None:
+                               value: str | None) -> None:
         ...
 
     @overload
@@ -932,7 +932,7 @@ class Settings:
                                account: str,
                                jid: JID,
                                setting: IntGroupChatSettings,
-                               value: int) -> None:
+                               value: int | None) -> None:
         ...
 
     @overload
@@ -940,14 +940,14 @@ class Settings:
                                account: str,
                                jid: JID,
                                setting: BoolGroupChatSettings,
-                               value: bool) -> None:
+                               value: bool | None) -> None:
         ...
 
     def set_group_chat_setting(self,
                                account: str,
                                jid: JID,
                                setting: AllGroupChatSettings,
-                               value: AllGroupChatSettingsT) -> None:
+                               value: AllGroupChatSettingsT | None) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -1059,7 +1059,7 @@ class Settings:
                             account: str,
                             jid: JID,
                             setting: StringContactSettings,
-                            value: str) -> None:
+                            value: str | None) -> None:
         ...
 
     @overload
@@ -1067,14 +1067,14 @@ class Settings:
                             account: str,
                             jid: JID,
                             setting: BoolContactSettings,
-                            value: bool) -> None:
+                            value: bool | None) -> None:
         ...
 
     def set_contact_setting(self,
                             account: str,
                             jid: JID,
                             setting: AllContactSettings,
-                            value: AllContactSettingsT) -> None:
+                            value: AllContactSettingsT | None) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
