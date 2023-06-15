@@ -41,6 +41,7 @@ from gajim.common.events import RosterPush
 from gajim.common.events import RosterReceived
 from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
@@ -152,7 +153,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             action.connect('activate', func)
 
     def _get_contact(self, jid: str) -> types.BareContact:
-        return self._client.get_module('Contacts').get_contact(jid)
+        contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
+        return contact
 
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self.redraw()
@@ -255,6 +258,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         contact = self._contacts.get_bare_contact(
             model[iter_][Column.JID_OR_GROUP])
+        assert isinstance(contact, BareContact)
         value, widget = self._roster_tooltip.get_tooltip(path, contact)
         tooltip.set_custom(widget)
         return value
@@ -294,6 +298,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         jid = JID.from_string(param.get_string())
         selected_contact = self._contacts.get_contact(jid)
+        assert isinstance(selected_contact, types.BareContact)
         if selected_contact.is_gateway:
             # Check for transport users in roster and warn about removing the
             # transport if there are any
@@ -305,7 +310,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
             def _on_remove():
                 self._client.get_module('Gateway').unsubscribe(
-                    selected_contact.jid)
+                    str(selected_contact.jid))
 
             if has_transport_contacts:
                 ConfirmationDialog(
@@ -380,6 +385,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                            event: Gdk.EventButton) -> None:
 
         contact = self._contacts.get_bare_contact(jid)
+        assert isinstance(contact, BareContact)
         gateway_register = contact.is_gateway and contact.supports(
             Namespace.REGISTER)
 
@@ -469,6 +475,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     @event_filter(['account'])
     def _on_roster_push(self, event: RosterPush) -> None:
         contact = self._contacts.get_contact(str(event.item.jid))
+        assert isinstance(contact, BareContact)
 
         if event.item.subscription == 'remove':
             contact.disconnect(self)
@@ -598,6 +605,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             for child in group.iterchildren():
                 contact = self._contacts.get_bare_contact(
                     child[Column.JID_OR_GROUP])
+                assert isinstance(contact, BareContact)
                 is_visible = self._get_contact_visible(contact)
                 child[Column.VISIBLE] = is_visible
                 if is_visible:
@@ -693,8 +701,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
             contact1 = self._contacts.get_bare_contact(
                 model[iter1][Column.JID_OR_GROUP])
+            assert isinstance(contact1, BareContact)
             contact2 = self._contacts.get_bare_contact(
                 model[iter2][Column.JID_OR_GROUP])
+            assert isinstance(contact2, BareContact)
 
             if contact1.show != contact2.show:
                 if contact1.show == PresenceShow.DND:

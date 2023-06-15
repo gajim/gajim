@@ -31,6 +31,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contacts_flowbox import ContactsFlowBox
@@ -229,6 +230,7 @@ class GroupChatInviter(Gtk.Box):
             show_account = len(self._accounts) > 1
             client = app.get_client(account)
             contact = client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             row = ContactRow(account,
                              contact,
                              str(contact.jid),

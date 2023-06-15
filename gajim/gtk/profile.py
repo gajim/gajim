@@ -35,6 +35,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
@@ -198,6 +199,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
+        assert isinstance(self._contact, BareContact)
         self._current_avatar = self._contact.get_avatar(AvatarSize.VCARD,
                                                         scale,
                                                         add_show=False)
@@ -320,6 +322,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
     def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
+        assert isinstance(self._contact, BareContact)
         surface = self._contact.get_avatar(AvatarSize.VCARD,
                                            scale,
                                            add_show=False,

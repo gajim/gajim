@@ -22,6 +22,9 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 
 class ContactItem(Gtk.FlowBoxChild):
@@ -46,6 +49,8 @@ class ContactItem(Gtk.FlowBoxChild):
         else:
             client = app.get_client(account)
             contact = client.get_module('Contacts').get_contact(jid)
+            assert isinstance(
+                contact, BareContact | GroupchatContact | GroupchatParticipant)
             surface = contact.get_avatar(
                 AvatarSize.ROSTER, self.get_scale_factor())
             avatar_image = Gtk.Image.new_from_surface(surface)

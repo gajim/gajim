@@ -20,6 +20,7 @@ from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.jingle_session import JingleSession
+from gajim.common.modules.contacts import BareContact
 
 log = logging.getLogger('gajim.c.call_manager')
 
@@ -88,6 +89,7 @@ class CallManager(EventHelper):
 
             client = app.get_client(event.account)
             contact = client.get_module('Contacts').get_contact(event.jid)
+            assert isinstance(contact, BareContact)
             app.ged.raise_event(
                 events.Notification(account=event.account,
                                     jid=event.jid,
@@ -295,6 +297,7 @@ class CallManager(EventHelper):
                    ) -> None:
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         call_resources = self._get_call_resources(contact)
         if not call_resources:
             return

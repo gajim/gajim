@@ -104,13 +104,17 @@ class FileTransferJingleRow(BaseRow):
                 contact = self._contact
                 is_self = True
             else:
-                contact = self._client.get_module('Contacts').get_contact(
-                    str(self._client.get_own_jid().bare))
+                bare_contact = self._client.get_module('Contacts').get_contact(
+                    self._client.get_own_jid().bare)
+                assert isinstance(bare_contact, BareContact)
+                contact = bare_contact
                 is_self = False
         else:
             if isinstance(event, FileRequestSent):
-                contact = self._client.get_module('Contacts').get_contact(
-                    str(self._client.get_own_jid().bare))
+                bare_contact = self._client.get_module('Contacts').get_contact(
+                    self._client.get_own_jid().bare)
+                assert isinstance(bare_contact, BareContact)
+                contact = bare_contact
                 is_self = False
             else:
                 contact = self._contact

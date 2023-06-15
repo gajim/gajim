@@ -19,6 +19,9 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import i18n
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import InformationDialog
@@ -53,6 +56,8 @@ class RosterItemExchange(Gtk.ApplicationWindow):
 
         # Set label depending on action
         contact = self._client.get_module('Contacts').get_contact(jid_from)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         type_label = ''
         if action == 'add':
             type_label = _('%(name)s (%(jid)s) would like to add some '
@@ -126,6 +131,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
     def _add(self) -> None:
         for jid in self._exchange_list:
             contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
             groups = ''
             num_list = len(self._exchange_list[jid][1])
@@ -152,6 +158,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
         for jid in self._exchange_list:
             is_right = True
             contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
             groups = ''
 
@@ -182,6 +189,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
     def _delete(self) -> None:
         for jid in self._exchange_list:
             contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
             groups = ''
             num_list = len(self._exchange_list[jid][1])
@@ -216,11 +224,15 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     # It is selected
                     contact = self._client.get_module('Contacts').get_contact(
                         self._jid_from)
+                    assert isinstance(
+                        contact,
+                        BareContact | GroupchatContact | GroupchatParticipant)
                     message = _('%(name)s %(jid)s suggested me to add you to '
                                 'my contact list.') % {
                                     'name': contact.name,
                                     'jid': self._jid_from}
                     # Keep same groups and same nickname
+                    groups: list[str] = []
                     groups = model[iter_][3].split(', ')
                     if groups == ['']:
                         groups = []

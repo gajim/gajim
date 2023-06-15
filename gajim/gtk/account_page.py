@@ -26,6 +26,7 @@ from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_account_menu
@@ -132,6 +133,7 @@ class AccountPage(Gtk.Box, EventHelper):
             self._account, 'account_label')
         self._ui.account_label.set_text(account_label)
 
+        assert isinstance(self._contact, BareContact)
         surface = self._contact.get_avatar(AvatarSize.ACCOUNT_PAGE,
                                            self.get_scale_factor(),
                                            add_show=False)

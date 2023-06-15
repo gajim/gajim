@@ -29,6 +29,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.dataform import DataFormWidget
@@ -362,6 +363,7 @@ class ChatFunctionPage(Gtk.Box):
             self._contact.jid, invited_jid)
         invited_contact = client.get_module('Contacts').get_contact(
             invited_jid)
+        assert isinstance(invited_contact, BareContact)
         self.emit(
             'message',
             _('%s has been invited to this group chat') % invited_contact.name)

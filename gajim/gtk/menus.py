@@ -42,8 +42,10 @@ from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
@@ -493,6 +495,8 @@ def get_chat_list_row_menu(workspace_id: str,
 
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
+    assert isinstance(
+        contact, BareContact | GroupchatContact | GroupchatParticipant)
 
     menu = GajimMenu()
 

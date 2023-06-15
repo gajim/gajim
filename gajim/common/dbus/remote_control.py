@@ -25,6 +25,8 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import helpers
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import OutgoingMessage
 
 log = logging.getLogger('gajim.c.dbus.remote_control')
@@ -270,9 +272,12 @@ class GajimRemote(Server):
             jid, groupchat=type_ == 'groupchat')
 
         if type_ == 'groupchat':
+            assert isinstance(contact, GroupchatContact)
             if not contact.is_joined:
                 return False
 
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         message_ = OutgoingMessage(account=account,
                                    contact=contact,
                                    message=message,

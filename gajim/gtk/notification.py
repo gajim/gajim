@@ -50,6 +50,8 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.structs import AccountJidParam
@@ -422,6 +424,7 @@ def _get_avatar_for_notification(account: str,
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
+    assert isinstance(contact, BareContact | GroupchatParticipant)
     surface = contact.get_avatar(size, scale)
     pixbuf = Gdk.pixbuf_get_from_surface(surface,
                                          0,

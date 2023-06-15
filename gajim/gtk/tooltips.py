@@ -44,6 +44,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.file_props import FileProp
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
@@ -320,13 +321,16 @@ class FileTransfersTooltip:
             type_ = p_('Noun', 'Download')
             actor = _('Sender: ')
             sender = JID.from_string(file_prop.sender)
-            name = client.get_module('Contacts').get_contact(sender.bare).name
+            contact = client.get_module('Contacts').get_contact(sender.bare)
+            assert isinstance(contact, BareContact)
+            name = contact.name
         else:
             type_ = p_('Noun', 'Upload')
             actor = _('Recipient: ')
             receiver = JID.from_string(file_prop.receiver)
-            name = client.get_module('Contacts').get_contact(
-                receiver.bare).name
+            contact = client.get_module('Contacts').get_contact(receiver.bare)
+            assert isinstance(contact, BareContact)
+            name = contact.name
         properties.append((p_('File transfer type', 'Type: '), type_))
         properties.append((actor, GLib.markup_escape_text(name)))
 

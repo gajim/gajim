@@ -43,7 +43,9 @@ from gajim.common.helpers import play_sound
 from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -1109,6 +1111,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         client.get_module('ChatMarkers').send_displayed_marker(
             contact,
             last_message.message_id,
@@ -1204,6 +1208,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         client = app.get_client(account)
 
         contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         if contact.is_blocked:
             client.get_module('Blocking').unblock([jid])
             return
@@ -1236,6 +1241,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client.get_module('Roster').delete_item(jid)
 
         contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         sec_text = _('You are about to remove %(name)s (%(jid)s) from '
                      'your contact list.\n') % {
                          'name': contact.name,

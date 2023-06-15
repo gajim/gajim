@@ -27,6 +27,7 @@ from gajim.common.const import KindConstant
 from gajim.common.events import JingleRequestReceived
 from gajim.common.i18n import _
 from gajim.common.jingle_session import JingleSession
+from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import ConversationRow
 
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -117,7 +118,9 @@ class CallRow(BaseRow):
 
     def _add_history_call_widget(self) -> None:
         contact = self._client.get_module('Contacts').get_contact(
-            str(self._client.get_own_jid().bare))
+            self._client.get_own_jid().bare)
+        assert isinstance(contact, BareContact)
+
         is_self = True
         if self._db_message is not None:
             if self._db_message.kind == KindConstant.CALL_INCOMING:

@@ -18,6 +18,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
@@ -171,6 +172,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
                             'contact list?' % hostname)
                 remote_contact = self._remote_client.get_module(
                     'Contacts').get_contact(remote_jid)
+                assert isinstance(remote_contact, BareContact)
 
                 # keep same groups and same nickname
                 self._local_client.get_module('Presence').subscribe(

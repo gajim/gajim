@@ -34,6 +34,10 @@ from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import KindConstant
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive import SearchLogRow
 
 from gajim.gtk.builder import get_builder
@@ -368,6 +372,8 @@ class RowHeader(Gtk.Box):
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         self._ui.header_name_label.set_text(contact.name or '')
 
         local_time = time.localtime(timestamp)
@@ -397,6 +403,9 @@ class ResultRow(Gtk.ListBoxRow):
 
         self.contact = self._client.get_module('Contacts').get_contact(
             jid, groupchat=self.type == 'groupchat')
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
 
         self.get_style_context().add_class('search-view-row')
         self._ui = get_builder('search_view.ui')
@@ -435,7 +444,7 @@ class ResultRow(Gtk.ListBoxRow):
                     name: str) -> cairo.ImageSurface | None:
 
         scale = self.get_scale_factor()
-        if self.contact.is_groupchat:
+        if isinstance(self.contact, GroupchatContact):
             contact = self.contact.get_resource(name)
             return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
 
@@ -445,4 +454,5 @@ class ResultRow(Gtk.ListBoxRow):
         else:
             contact = self.contact
 
+        assert not isinstance(contact, GroupchatContact | ResourceContact)
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)

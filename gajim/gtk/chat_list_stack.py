@@ -27,6 +27,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk import structs
 from gajim.gtk.chat_filter import ChatFilter
@@ -275,7 +276,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
             return
 
         client = app.get_client(account)
-        contact = client.get_module('Contacts').get_contact(jid, groupchat=True)
+        contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, GroupchatContact)
 
         if contact.is_not_joined and client.state.is_available:
             # For example a chat opened from the search bar

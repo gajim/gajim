@@ -32,6 +32,8 @@ from gajim.common.events import CallUpdated
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleVideo
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.gstreamer import create_gtk_widget
@@ -56,7 +58,9 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
         contacts_module = self._client.get_module('Contacts')
         self._contact = contacts_module.get_contact(resource_jid.bare)
+        assert isinstance(self._contact, BareContact)
         self._resource_contact = contacts_module.get_contact(resource_jid)
+        assert isinstance(self._resource_contact, ResourceContact)
         self.set_title(_('Call with %s') % self._contact.name)
 
         self._video_widget_other = None
@@ -79,6 +83,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
         ])
 
     def _on_destroy(self, *args: Any) -> None:
+        assert isinstance(self._resource_contact, ResourceContact)
         app.call_manager.stop_call(
             self._account,
             self._resource_contact)
@@ -97,6 +102,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_end_call_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
+        assert isinstance(self._resource_contact, ResourceContact)
         app.call_manager.stop_call(
             self._account,
             self._resource_contact)
@@ -143,6 +149,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._update_video(event)
 
     def _update_audio(self, event: CallUpdated) -> None:
+        assert isinstance(self._contact, BareContact)
         if self._contact.supports_video:
             self._ui.av_cam_button.set_sensitive(
                 event.video_state not in (

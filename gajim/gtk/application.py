@@ -71,6 +71,7 @@ from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk import menus
 from gajim.gtk import structs
@@ -835,6 +836,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         client = app.get_client(params.account)
         contact = client.get_module('Contacts').get_contact(params.jid)
+        assert not isinstance(contact, ResourceContact)
 
         if params.state == MuteState.UNMUTE:
             contact.settings.set('mute_until', None)

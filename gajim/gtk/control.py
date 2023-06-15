@@ -308,8 +308,9 @@ class ChatControl(EventHelper):
             return
 
         contact = self.client.get_module('Contacts').get_contact(event.fjid)
-        if isinstance(contact, BareContact):
+        if isinstance(contact, BareContact | GroupchatContact):
             return
+
         self._scrolled_view.add_user_status(self.contact.name,
                                             contact.show.value,
                                             contact.status)

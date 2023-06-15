@@ -189,7 +189,10 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._current_contact.disconnect_all_from_obj(self)
 
         client = app.get_client(account)
-        self._current_contact = client.get_module('Contacts').get_contact(jid)
+        contact = client.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
+        self._current_contact = contact
 
         app.preview_manager.clear_previews()
 
@@ -441,6 +444,8 @@ class ChatStack(Gtk.Stack, EventHelper):
         if tim is not None and time.mktime(time.localtime()) - tim > 1:
             sound = None
 
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
         if app.settings.get('notification_preview_message'):
             if text.startswith('/me') or text.startswith('/me\n'):
                 name = contact.name

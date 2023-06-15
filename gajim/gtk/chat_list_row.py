@@ -91,6 +91,9 @@ class ChatListRow(Gtk.ListBoxRow):
         self._client = app.get_client(account)
 
         self.contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
         self._connect_contact_signals()
 
         self.contact_name: str = self.contact.name
@@ -212,7 +215,8 @@ class ChatListRow(Gtk.ListBoxRow):
 
     @property
     def unread_count(self) -> int:
-        if (self.contact.is_groupchat and not self.contact.can_notify() and
+        if (isinstance(self.contact, GroupchatContact) and
+                not self.contact.can_notify() and
                 not self._needs_muc_highlight):
             return 0
         return self._unread_count
@@ -259,6 +263,10 @@ class ChatListRow(Gtk.ListBoxRow):
                          icon_name: str | None = None,
                          additional_data: AdditionalDataDict | None = None
                          ) -> None:
+
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
 
         draft = app.storage.drafts.get(self.contact)
         if draft is not None:
@@ -323,10 +331,16 @@ class ChatListRow(Gtk.ListBoxRow):
 
     def update_avatar(self) -> None:
         scale = self.get_scale_factor()
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
         surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
         self._ui.avatar_image.set_from_surface(surface)
 
     def update_name(self) -> None:
+        assert isinstance(
+            self.contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
         if self.type == 'pm':
             client = app.get_client(self.account)
             muc_name = get_groupchat_name(client, self.jid.new_as_bare())
@@ -354,12 +368,12 @@ class ChatListRow(Gtk.ListBoxRow):
             self.message_id,
             self.timestamp)
 
-        if self.contact.is_groupchat:
-            needs_highlight = message_needs_highlight(
-                text,
-                self.contact.nickname,
-                self._client.get_own_jid().bare)
-            if needs_highlight:
+        if (isinstance(self.contact, GroupchatContact) and
+                self.contact.nickname is not None):
+            if message_needs_highlight(
+                    text,
+                    self.contact.nickname,
+                    self._client.get_own_jid().bare):
                 self._needs_muc_highlight = True
                 self._ui.unread_label.get_style_context().remove_class(
                     'unread-counter-silent')
@@ -375,7 +389,8 @@ class ChatListRow(Gtk.ListBoxRow):
         app.storage.cache.reset_unread_count(self.account, self.jid)
 
         # Add class again in case we were mentioned previously
-        if self.contact.is_groupchat and not self.contact.can_notify():
+        if (isinstance(self.contact, GroupchatContact) and
+                not self.contact.can_notify()):
             self._ui.unread_label.get_style_context().add_class(
                 'unread-counter-silent')
 
@@ -575,6 +590,7 @@ class ChatListRow(Gtk.ListBoxRow):
         self._reset_connection_icon()
         context = self._ui.connection_icon.get_style_context()
 
+        assert isinstance(self.contact, GroupchatContact)
         if self.contact.is_joining:
             self._ui.connection_icon.set_from_icon_name(
                 'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)

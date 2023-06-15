@@ -19,6 +19,7 @@ from gajim.common import app
 from gajim.common.events import MucInvitation
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
@@ -54,6 +55,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         contact = self._client.get_module('Contacts').get_contact(
             event.from_.bare)
+        assert isinstance(contact, BareContact)
         contact_label = Gtk.Label(label=contact.name)
         contact_label.get_style_context().add_class('bold16')
         contact_label.set_line_wrap(True)

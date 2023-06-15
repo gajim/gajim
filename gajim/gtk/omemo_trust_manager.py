@@ -36,6 +36,8 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import generate_qr_code
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.omemo import compose_trust_uri
 
 from .builder import get_builder
@@ -108,6 +110,9 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
                                 'contact’s screen to ensure the safety of '
                                 'your end-to-end encrypted chat.')
         else:
+            assert isinstance(
+                self._contact,
+                BareContact | GroupchatContact | GroupchatParticipant)
             header_text = _('Devices connected with "%s"') % self._contact.name
             popover_qr_text = _('Compare this code with the one shown on your '
                                 'contact’s screen to ensure the safety of '
@@ -141,6 +146,9 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
             else:
                 self._ui.list_heading_box.set_halign(Gtk.Align.START)
 
+        assert isinstance(
+            self._contact,
+            BareContact | GroupchatContact | GroupchatParticipant)
         self._load_fingerprints(self._contact)
 
     def _on_destroy(self, *args: Any) -> None:

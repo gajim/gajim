@@ -39,6 +39,7 @@ from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.message_widget import MessageWidget
@@ -259,6 +260,7 @@ class MessageRow(BaseRow):
         else:
             contact = self._contact
 
+        assert not isinstance(contact, GroupchatContact | ResourceContact)
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
         assert not isinstance(avatar, GdkPixbuf.Pixbuf)
         return avatar

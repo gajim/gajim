@@ -65,6 +65,7 @@ class ChatMarkers(BaseModule):
             contact = self._client.get_module('Contacts').get_contact(
                 properties.muc_jid,
                 groupchat=True)
+            assert isinstance(contact, GroupchatContact)
             if not contact.is_joined:
                 self._log.warning('Received chat marker while not joined')
                 return
