@@ -427,7 +427,8 @@ class MessageActionsBox(Gtk.Grid):
                     units = GLib.FormatSizeFlags.IEC_UNITS
                 else:
                     units = GLib.FormatSizeFlags.DEFAULT
-                max_file_size = GLib.format_size_full(max_file_size, units)
+                max_file_size = GLib.format_size_full(
+                    int(max_file_size), units)
                 tooltip_text = _('Send File (max. %s)…') % max_file_size
 
         self._ui.sendfile_button.set_tooltip_text(tooltip_text)
