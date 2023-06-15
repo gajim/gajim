@@ -24,7 +24,6 @@ from dataclasses import fields
 
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
-from nbxmpp.const import Chatstate
 from nbxmpp.const import PresenceShow
 from nbxmpp.const import Role
 from nbxmpp.modules.dataforms import SimpleDataForm
@@ -91,7 +90,7 @@ class OutgoingMessage:
                  message: str | None,
                  type_: str,
                  subject: str | None = None,
-                 chatstate: Chatstate | None = None,
+                 chatstate: str | None = None,
                  marker: tuple[str, str] | None = None,
                  resource: str | None = None,
                  user_nick: str | None = None,
