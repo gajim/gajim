@@ -53,7 +53,7 @@ class Annotations(BaseModule):
         for note in annotations:
             self._annotations[note.jid] = note
 
-    def get_note(self, jid: str) -> AnnotationNote | None:
+    def get_note(self, jid: JID | str) -> AnnotationNote | None:
         return self._annotations.get(jid)
 
     def set_note(self, note: AnnotationNote) -> None:
