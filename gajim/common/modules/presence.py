@@ -237,7 +237,7 @@ class Presence(BaseModule):
                   jid: JID | str,
                   msg: str | None = None,
                   name: str | None = None,
-                  groups: list[str] | None = None,
+                  groups: list[str] | set[str] | None = None,
                   auto_auth: bool = False
                   ) -> None:
         self._log.info('Request Subscription to %s', jid)
