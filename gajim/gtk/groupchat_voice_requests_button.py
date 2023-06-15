@@ -14,8 +14,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -80,7 +78,7 @@ class VoiceRequestsButton(Gtk.Button):
         desc_label.set_margin_bottom(6)
         menu_box.add(desc_label)
 
-        for request in cast(list[VoiceRequest], voice_requests):
+        for request in voice_requests:
             request_box = Gtk.Box(spacing=12)
 
             name_label = Gtk.Label(label=request.nick)
