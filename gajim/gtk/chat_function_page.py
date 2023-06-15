@@ -20,6 +20,7 @@ from pathlib import Path
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_resourcepart
@@ -202,7 +203,9 @@ class ChatFunctionPage(Gtk.Box):
                 'suggested-action')
             muc_data = self._client.get_module('MUC').get_muc_data(
                 self._contact.jid)
+            assert muc_data is not None
             form = muc_data.captcha_form
+            assert form is not None
             options = {'no-scrolling': True,
                        'entry-activates-default': True}
             self._widget = DataFormWidget(form, options=options)
@@ -309,6 +312,7 @@ class ChatFunctionPage(Gtk.Box):
         elif self._mode == FunctionMode.CAPTCHA_REQUEST:
             assert isinstance(self._widget, DataFormWidget)
             form_node = self._widget.get_submit_form()
+            assert isinstance(form_node, SimpleDataForm)
             self._client.get_module('MUC').send_captcha(
                 self._contact.jid, form_node)
 
