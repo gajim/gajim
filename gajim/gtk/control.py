@@ -259,8 +259,7 @@ class ChatControl(EventHelper):
                     contact.is_joining):
                 return
 
-            muc_data = self._client.get_module('MUC').get_muc_data(
-                str(contact.jid))
+            muc_data = self._client.get_module('MUC').get_muc_data(contact.jid)
             if muc_data is not None and muc_data.subject is not None:
                 self._scrolled_view.add_muc_subject(
                     muc_data.subject, muc_data.last_subject_timestamp)
@@ -556,7 +555,7 @@ class ChatControl(EventHelper):
     def _get_our_nick(self) -> str:
         if isinstance(self.contact, GroupchatParticipant):
             muc_data = self.client.get_module('MUC').get_muc_data(
-                self.contact.jid.bare)
+                self.contact.jid.new_as_bare())
             if muc_data is not None:
                 return muc_data.nick
 

@@ -1164,12 +1164,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                 password: str | None = None
                                 ) -> None:
 
-        if not self.chat_exists(account, JID.from_string(jid)):
+        jid_ = JID.from_string(jid)
+        if not self.chat_exists(account, jid_):
             client = app.get_client(account)
             client.get_module('MUC').join(
-                jid, nick=nickname, password=password)
+                jid_, nick=nickname, password=password)
 
-        self.add_group_chat(account, JID.from_string(jid), select=True)
+        self.add_group_chat(account, jid_, select=True)
 
     def start_chat_from_jid(self,
                             account: str,

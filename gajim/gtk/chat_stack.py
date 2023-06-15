@@ -222,7 +222,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         if isinstance(self._current_contact, GroupchatContact):
             muc_data = client.get_module('MUC').get_muc_data(
-                str(self._current_contact.jid))
+                self._current_contact.jid)
             if muc_data is not None:
                 if muc_data.state.is_captcha_request:
                     self._show_chat_function_page(FunctionMode.CAPTCHA_REQUEST)

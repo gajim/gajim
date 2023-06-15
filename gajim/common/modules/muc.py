@@ -186,10 +186,10 @@ class MUC(BaseModule):
                 self._muc_service_jid = info.jid
                 raise nbxmpp.NodeProcessed
 
-    def get_muc_data(self, room_jid: str) -> MUCData | None:
+    def get_muc_data(self, room_jid: JID) -> MUCData | None:
         return self._mucs.get(room_jid)
 
-    def set_password(self, room_jid: str, password: str) -> None:
+    def set_password(self, room_jid: JID, password: str) -> None:
         muc_data = self.get_muc_data(room_jid)
         muc_data.password = password
 
@@ -241,7 +241,7 @@ class MUC(BaseModule):
         return MUCData(room_jid, nick, password, config)
 
     def join(self,
-             jid: str,
+             jid: JID,
              nick: str | None = None,
              password: str | None = None,
              config: dict[str, Any] | None = None
@@ -351,7 +351,7 @@ class MUC(BaseModule):
         self._con.send_stanza(presence)
 
     def leave(self,
-              room_jid: str,
+              room_jid: JID,
               reason: str | None = None
               ) -> None:
         self._log.info('Leave MUC: %s', room_jid)
@@ -378,7 +378,7 @@ class MUC(BaseModule):
         room.set_not_joined()
         room.notify('room-left')
 
-    def abort_join(self, room_jid: str) -> None:
+    def abort_join(self, room_jid: JID) -> None:
         self._remove_rejoin_timeout(room_jid)
 
         muc = self._mucs[room_jid]
@@ -473,7 +473,7 @@ class MUC(BaseModule):
                 status=message,
                 idle_time=idle)
 
-    def change_nick(self, room_jid: str, new_nick: str) -> None:
+    def change_nick(self, room_jid: JID, new_nick: str) -> None:
         status, message, _idle = self._con.get_presence_state()
         self._con.get_module('Presence').send_presence(
             f'{room_jid}/{new_nick}',
@@ -860,7 +860,7 @@ class MUC(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def cancel_password_request(self, room_jid: str) -> None:
+    def cancel_password_request(self, room_jid: JID) -> None:
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
     def _room_join_complete(self, muc_data: MUCData):
@@ -954,7 +954,7 @@ class MUC(BaseModule):
 
         raise nbxmpp.NodeProcessed
 
-    def cancel_captcha(self, room_jid: str) -> None:
+    def cancel_captcha(self, room_jid: JID) -> None:
         muc_data = self._mucs.get(room_jid)
         if muc_data is None:
             return
@@ -967,7 +967,7 @@ class MUC(BaseModule):
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
     def send_captcha(self,
-                     room_jid: str,
+                     room_jid: JID,
                      form_node: SimpleDataForm
                      ) -> None:
         self._set_muc_state(room_jid, MUCJoinedState.JOINING)
