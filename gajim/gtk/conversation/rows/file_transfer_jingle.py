@@ -336,6 +336,7 @@ class FileTransferJingleRow(BaseRow):
         self._start_time = time.time()
 
     def _on_reject_file_request(self, _button: Gtk.Button) -> None:
+        assert self._file_props is not None
         self._client.get_module('Bytestream').send_file_rejection(
             self._file_props)
         assert self._file_props is not None
