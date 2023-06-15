@@ -65,7 +65,8 @@ class CallRow(BaseRow):
             assert db_message.additional_data is not None
             sid = db_message.additional_data.get_value('gajim', 'sid')
             module = self._client.get_module('Jingle')
-            self._session = module.get_jingle_session(self._contact.jid, sid)
+            self._session = module.get_jingle_session(
+                str(self._contact.jid), sid)
             self.log_line_id = db_message.log_line_id
 
         self._avatar_placeholder = Gtk.Box()

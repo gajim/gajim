@@ -101,6 +101,8 @@ class CallManager(EventHelper):
         client = app.get_client(event.account)
         session = client.get_module('Jingle').get_jingle_session(
             event.fjid, event.sid)
+        if session is None:
+            return
 
         if event.media == 'audio':
             self._set_jingle_state(
@@ -247,9 +249,11 @@ class CallManager(EventHelper):
             session = client.get_module('Jingle').get_jingle_session(
                 str(full_jid), self._jingle_video_sid)
 
-        if session:
+        if session is not None:
             content = session.get_content(jingle_type)
-            if content:
+            if content is not None:
+                assert content.creator is not None
+                assert content.name is not None
                 session.remove_content(content.creator, content.name)
 
         if not shutdown:
@@ -274,7 +278,15 @@ class CallManager(EventHelper):
         client = app.get_client(account)
         session = client.get_module('Jingle').get_jingle_session(
             str(jid), self._jingle_audio_sid)
-        return session.get_content('audio')
+        if session is None:
+            return None
+
+        content = session.get_content('audio')
+        if content is None:
+            return None
+
+        assert isinstance(content, JingleAudio)
+        return content
 
     def start_call(self,
                    account: str,

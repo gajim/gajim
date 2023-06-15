@@ -31,6 +31,7 @@ from gajim.common.const import JingleState
 from gajim.common.events import CallUpdated
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.jingle_rtp import JingleVideo
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.gstreamer import create_gtk_widget
@@ -263,7 +264,9 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
             session = self._client.get_module('Jingle').get_jingle_session(
                 str(self._resource_contact.jid), event.video_sid)
+            assert session is not None
             content = session.get_content('video')
+            assert isinstance(content, JingleVideo)
             content.do_setup(sink_self, sink_other)
 
             self._ui.jingle_connection_state.set_text('')
