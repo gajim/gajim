@@ -233,7 +233,7 @@ class Chatstate(BaseModule):
 
         return GLib.SOURCE_CONTINUE
 
-    def get_remote_chatstate(self, jid: JID) -> Chatstate:
+    def get_remote_chatstate(self, jid: JID) -> State | None:
         return self._remote_chatstate.get(jid)
 
     @ensure_enabled
