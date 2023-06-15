@@ -19,6 +19,7 @@ from __future__ import annotations
 import nbxmpp
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.muc.util import MucInfoResult
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
@@ -204,7 +205,7 @@ class Discovery(BaseModule):
                   jid: JID | str,
                   request_vcard: bool = False,
                   allow_redirect: bool = False
-                  ):
+                  ) -> MucInfoResult | None:
 
         _task = yield  # noqa: F841
 
