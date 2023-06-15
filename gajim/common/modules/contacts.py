@@ -35,6 +35,7 @@ from nbxmpp.structs import TuneData
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.client_modules import ClientModules
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import chatstate_to_string
@@ -169,7 +170,7 @@ class Contacts(BaseModule):
         if jid.resource is None:
             raise ValueError(f'Trying to add a bare JID as private {jid}')
 
-        contact = self._contacts.get(jid.bare)
+        contact = self._contacts.get(jid.new_as_bare())
         if contact is None:
             group_chat_contact = self.add_group_chat_contact(jid.bare)
             return group_chat_contact.add_resource(jid.resource)
@@ -252,7 +253,7 @@ class Contacts(BaseModule):
             contact.force_chatstate_update()
 
 
-class CommonContact(Observable):
+class CommonContact(Observable, ClientModules):
     def __init__(self,
                  logger: LogAdapter,
                  jid: JID,
@@ -260,6 +261,7 @@ class CommonContact(Observable):
                  ) -> None:
 
         Observable.__init__(self, logger)
+        ClientModules.__init__(self, account)
         self._jid = jid
         self._account = account
 
@@ -272,9 +274,6 @@ class CommonContact(Observable):
 
         return (self._account == obj.account and
                 obj._jid == self._jid)
-
-    def _module(self, name: str) -> BaseModule:
-        return app.get_client(self._account).get_module(name)
 
     @property
     def jid(self) -> JID:
@@ -449,7 +448,7 @@ class BareContact(CommonContact):
 
     @property
     def name(self) -> str:
-        item = self._module('Roster').get_item(self._jid)
+        item = self.get_module('Roster').get_item(self._jid)
         if item is not None and item.name:
             return item.name
 
@@ -465,10 +464,10 @@ class BareContact(CommonContact):
         return self._jid.localpart
 
     def get_tune(self) -> TuneData | None:
-        return self._module('UserTune').get_contact_tune(self._jid)
+        return self.get_module('UserTune').get_contact_tune(self._jid)
 
     def get_location(self) -> LocationData | None:
-        return self._module('UserLocation').get_contact_location(self._jid)
+        return self.get_module('UserLocation').get_contact_location(self._jid)
 
     @property
     def avatar_sha(self) -> str | None:
@@ -530,7 +529,7 @@ class BareContact(CommonContact):
 
     @property
     def is_in_roster(self) -> bool:
-        item = self._module('Roster').get_item(self._jid)
+        item = self.get_module('Roster').get_item(self._jid)
         return item is not None
 
     @property
@@ -542,21 +541,21 @@ class BareContact(CommonContact):
 
     @property
     def ask(self) -> str | None:
-        item = self._module('Roster').get_item(self._jid)
+        item = self.get_module('Roster').get_item(self._jid)
         if item is None:
             return None
         return item.ask
 
     @property
     def subscription(self) -> str | None:
-        item = self._module('Roster').get_item(self._jid)
+        item = self.get_module('Roster').get_item(self._jid)
         if item is None:
             return None
         return item.subscription
 
     @property
     def groups(self) -> set[str]:
-        item = self._module('Roster').get_item(self._jid)
+        item = self.get_module('Roster').get_item(self._jid)
         if item is None:
             return set()
         return item.groups
@@ -567,7 +566,7 @@ class BareContact(CommonContact):
 
     @property
     def is_blocked(self) -> bool:
-        return self._module('Blocking').is_blocked(self._jid)
+        return self.get_module('Blocking').is_blocked(self._jid)
 
     def set_blocked(self) -> None:
         self.update_presence(UNKNOWN_PRESENCE)
@@ -651,8 +650,8 @@ class ResourceContact(CommonContact):
         return self._presence.idle_time
 
     @property
-    def chatstate(self) -> Chatstate:
-        return self._module('Chatstate').get_remote_chatstate(self._jid)
+    def chatstate(self) -> Chatstate | None:
+        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
 
     def update_presence(self,
                         presence_data: PresenceData,
@@ -795,42 +794,42 @@ class GroupchatContact(CommonContact):
 
     @property
     def nickname(self) -> str | None:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.nick
 
     @property
     def occupant_jid(self) -> JID | None:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.occupant_jid
 
     @property
     def subject(self) -> MucSubject | None:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return None
         return muc_data.subject
 
     @property
     def is_joined(self) -> bool:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return False
         return muc_data.state.is_joined
 
     @property
     def is_joining(self) -> bool:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return False
         return muc_data.state.is_joining
 
     @property
     def is_not_joined(self) -> bool:
-        muc_data = self._module('MUC').get_muc_data(self._jid)
+        muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return True
         return muc_data.state.is_not_joined
@@ -841,7 +840,7 @@ class GroupchatContact(CommonContact):
 
     def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
-        return client.get_module('MUC').get_joined_users(self._jid)
+        return client.get_module('MUC').get_joined_users(str(self._jid))
 
     def get_disco(self, max_age: int = 0) -> DiscoInfo | None:
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)
@@ -892,7 +891,9 @@ class GroupchatParticipant(CommonContact):
 
     @property
     def room(self) -> GroupchatContact:
-        return self._module('Contacts').get_bare_contact(self.jid.bare)
+        contact = self.get_module('Contacts').get_bare_contact(self.jid.bare)
+        assert isinstance(contact, GroupchatContact)
+        return contact
 
     @property
     def muc_context(self) -> str | None:
@@ -936,8 +937,10 @@ class GroupchatParticipant(CommonContact):
         jid = self._presence.real_jid
         if jid is None:
             return None
-        return self._client.get_module('Contacts').get_contact(
+        contact = self._client.get_module('Contacts').get_contact(
             jid.new_as_bare())
+        assert isinstance(contact, BareContact)
+        return contact
 
     @property
     def affiliation(self) -> Affiliation:
@@ -948,12 +951,13 @@ class GroupchatParticipant(CommonContact):
         return self._presence.role
 
     @property
-    def chatstate(self) -> Chatstate:
-        return self._module('Chatstate').get_remote_chatstate(self._jid)
+    def chatstate(self) -> Chatstate | None:
+        return self.get_module('Chatstate').get_remote_chatstate(self._jid)
 
     @property
-    def avatar_sha(self) -> str:
-        return self._client.get_module('VCardAvatars').get_avatar_sha(self._jid)
+    def avatar_sha(self) -> str | None:
+        return self._client.get_module('VCardAvatars').get_avatar_sha(
+            self._jid)
 
     def get_avatar(self,
                    size: int,
