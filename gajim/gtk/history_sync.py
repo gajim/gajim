@@ -173,6 +173,8 @@ class HistorySyncAssistant(Assistant, EventHelper):
         if result.rsm.count is not None:
             self.get_page('progress').set_count(int(result.rsm.count))
         mam_module = self._client.get_module('MAM')
+        assert self._start is not None
+        assert self._end is not None
         self._query_id = mam_module.request_archive_interval(
             self._start, self._end)
 
