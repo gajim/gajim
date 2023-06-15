@@ -19,6 +19,7 @@ from __future__ import annotations
 from typing import Any
 
 import logging
+from collections.abc import Callable
 from functools import partial
 from functools import wraps
 from logging import LoggerAdapter
@@ -109,14 +110,14 @@ class LogAdapter(LoggerAdapter):
         return f'({self.extra["account"]}) {msg}', kwargs
 
 
-def as_task(func):
+def as_task(func: Any) -> Any:
     @wraps(func)
-    def func_wrapper(self,
-                     *args,
-                     timeout=None,
-                     callback=None,
-                     user_data=None,
-                     **kwargs):
+    def func_wrapper(self: Any,
+                     *args: Any,
+                     timeout: int | None =None,
+                     callback: Callable[..., Any] | None = None,
+                     user_data: Any = None,
+                     **kwargs: Any):
 
         task_ = Task(func(self, *args, **kwargs))
         task_.set_timeout(timeout)
