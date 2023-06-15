@@ -34,6 +34,9 @@ from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util import open_window
@@ -136,6 +139,7 @@ class NotificationManager(Gtk.ListBox):
         self._client.get_module('Presence').subscribed(jid)
         jid = JID.from_string(jid)
         contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         if not contact.is_in_roster:
             open_window('AddContact', account=self._account,
                         jid=jid, nick=nickname or contact.name)
@@ -212,6 +216,7 @@ class NotificationManager(Gtk.ListBox):
             if not nick:
                 contact = self._client.get_module('Contacts').get_contact(
                     event.jid)
+                assert isinstance(contact, BareContact)
                 nick = contact.name
             text = _('%s asks you to share your status') % nick
 
@@ -237,6 +242,7 @@ class NotificationManager(Gtk.ListBox):
 
             contact = self._client.get_module('Contacts').get_contact(
                 event.jid)
+            assert isinstance(contact, BareContact)
             text = _('%s stopped sharing their status') % contact.name
 
             app.ged.raise_event(
@@ -260,10 +266,12 @@ class NotificationManager(Gtk.ListBox):
 
         jid = event.from_.bare
         client = app.get_client(event.account)
-        contact = client.get_module('Contacts').get_contact(event.muc)
-        if (contact.muc_context == 'private' and
+        muc_contact = client.get_module('Contacts').get_contact(event.muc)
+        assert isinstance(muc_contact, GroupchatContact)
+        if (muc_contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             text = _('%(contact)s invited you to %(chat)s') % {
                 'contact': contact.name,
                 'chat': event.info.muc_name}
@@ -311,8 +319,14 @@ class NotificationRow(Gtk.ListBoxRow):
 
     def _generate_avatar_image(self, jid: str | JID) -> Gtk.Image:
         contact = self._client.get_module('Contacts').get_contact(jid)
-        surface = contact.get_avatar(
-            AvatarSize.ROSTER, self.get_scale_factor(), add_show=False)
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant)
+        if isinstance(contact, GroupchatContact):
+            surface = contact.get_avatar(
+                AvatarSize.ROSTER, self.get_scale_factor())
+        else:
+            surface = contact.get_avatar(
+                AvatarSize.ROSTER, self.get_scale_factor(), add_show=False)
         image = Gtk.Image.new_from_surface(surface)
         image.set_valign(Gtk.Align.CENTER)
         return image
@@ -381,6 +395,7 @@ class UnsubscribedRow(NotificationRow):
         self.grid.attach(image, 1, 1, 1, 2)
 
         contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         nick_markup = f'<b>{contact.name}</b>'
         nick_label = self._generate_label()
         nick_label.set_tooltip_markup(nick_markup)
@@ -432,10 +447,12 @@ class InvitationReceivedRow(NotificationRow):
         self.grid.attach(title_label, 2, 1, 1, 1)
 
         client = app.get_client(event.account)
-        contact = client.get_module('Contacts').get_contact(event.muc)
-        if (contact.muc_context == 'private' and
+        muc_contact = client.get_module('Contacts').get_contact(event.muc)
+        assert isinstance(muc_contact, GroupchatContact)
+        if (muc_contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
             invitation_text = _('%(contact)s invited you to %(chat)s') % {
                 'contact': contact.name,
                 'chat': event.info.muc_name}
@@ -491,6 +508,7 @@ class InvitationDeclinedRow(NotificationRow):
         self.grid.attach(title_label, 2, 1, 1, 1)
 
         contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         muc_name = get_groupchat_name(self._client, event.muc)
         invitation_text = _('%(contact)s declined your invitation '
                             'to %(chat)s') % {
