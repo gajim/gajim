@@ -19,6 +19,7 @@ from __future__ import annotations
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Iq
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import types
@@ -50,8 +51,8 @@ class Gateway(BaseModule):
             return
 
         agent = stanza.getFrom().bare
-        jid_list = []
-        for contact in self._client.get_module('Roster').iter_contacts:
+        jid_list: list[JID] = []
+        for contact in self._client.get_module('Roster').iter_contacts():
             if contact.jid.domain == agent:
                 jid_list.append(contact.jid)
                 self._log.info(
