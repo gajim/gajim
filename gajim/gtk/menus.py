@@ -198,7 +198,7 @@ def build_accounts_menu() -> None:
                                             'app.add-contact::')
         acc_menu.insert_item(1, add_contact_item)
         menubar.remove(menu_position)
-        menubar.insert_submenu(menu_position, _('Accounts'), acc_menu)
+        menubar.insert_submenu(menu_position, _('_Accounts'), acc_menu)
 
 
 def get_encryption_menu() -> GajimMenu:
