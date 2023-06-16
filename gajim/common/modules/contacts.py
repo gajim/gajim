@@ -42,6 +42,10 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
+from gajim.common.setting_values import AllContactSettings
+from gajim.common.setting_values import AllContactSettingsT
+from gajim.common.setting_values import AllGroupChatSettings
+from gajim.common.setting_values import AllGroupChatSettingsT
 from gajim.common.setting_values import BoolContactSettings
 from gajim.common.setting_values import BoolGroupChatSettings
 from gajim.common.setting_values import IntGroupChatSettings
@@ -63,7 +67,7 @@ class ContactSettings:
     @overload
     def get(self, setting: BoolContactSettings) -> bool: ...  # noqa: E704
 
-    def get(self, setting: Any) -> Any:
+    def get(self, setting: AllContactSettings) -> AllContactSettingsT:
         return app.settings.get_contact_setting(
             self._account, self._jid, setting)
 
@@ -89,7 +93,7 @@ class GroupChatSettings:
     @overload
     def get(self, setting: IntGroupChatSettings) -> int: ...  # noqa: E704
 
-    def get(self, setting: Any) -> Any:
+    def get(self, setting: AllGroupChatSettings) -> AllGroupChatSettingsT:
         return app.settings.get_group_chat_setting(
             self._account, self._jid, setting)
 
