@@ -637,7 +637,6 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         if event.moderation.stanza_id == row.stanza_id:
             text = get_retraction_text(
-                event.account,
                 event.moderation.moderator_jid,
                 event.moderation.reason)
             row.set_message_text(text)

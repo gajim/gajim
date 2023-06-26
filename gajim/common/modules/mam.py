@@ -279,7 +279,6 @@ class MAM(BaseModule):
                 'retracted', 'reason', properties.moderation.reason)
 
             msgtxt = get_retraction_text(
-                self._account,
                 properties.moderation.moderator_jid,
                 properties.moderation.reason)
 

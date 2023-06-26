@@ -687,14 +687,13 @@ def get_subscription_request_msg(account: str | None = None) -> str:
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
 
-def get_retraction_text(account: str,
-                        moderator_jid: str,
+def get_retraction_text(by: str | None,
                         reason: str | None) -> str:
 
-    client = app.get_client(account)
-    contact = client.get_module('Contacts').get_contact(
-        moderator_jid, groupchat=True)
-    text = _('This message has been retracted by %s.') % contact.name
+    by_text = ''
+    if by is not None:
+        by_text = (' by %s') % by
+    text = _('This message has been moderated%s.') % by_text
     if reason is not None:
         text += ' ' + _('Reason: %s') % reason
     return text

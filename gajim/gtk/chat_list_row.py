@@ -164,7 +164,7 @@ class ChatListRow(Gtk.ListBoxRow):
                     reason = line.additional_data.get_value(
                         'retracted', 'reason')
                     message_text = get_retraction_text(
-                        self.account, retracted_by, reason)
+                        retracted_by, reason)
 
             me_nickname = None
             if line.kind in (KindConstant.CHAT_MSG_SENT,

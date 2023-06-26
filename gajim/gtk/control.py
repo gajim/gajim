@@ -453,7 +453,6 @@ class ChatControl(EventHelper):
             return
 
         text = get_retraction_text(
-            self.contact.account,
             event.moderation.moderator_jid,
             event.moderation.reason)
         self._scrolled_view.show_message_retraction(
@@ -663,8 +662,7 @@ class ChatControl(EventHelper):
                 if retracted_by is not None:
                     reason = msg.additional_data.get_value(
                         'retracted', 'reason')
-                    message_text = get_retraction_text(
-                        self.contact.account, retracted_by, reason)
+                    message_text = get_retraction_text(retracted_by, reason)
 
             self._scrolled_view.add_message(
                 message_text,
