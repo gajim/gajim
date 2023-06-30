@@ -244,6 +244,7 @@ class Client(Observable, ClientModules):
                         account=self._account,
                         client=self,
                         cert=cert,
+                        ignored_errors=set(self._client.ignored_tls_errors),
                         error=errors.pop())
 
         elif domain in (StreamError.STREAM, StreamError.BIND):

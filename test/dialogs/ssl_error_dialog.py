@@ -58,7 +58,7 @@ gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 # https://lazka.github.io/pgi-docs/#Gio-2.0/flags.html#Gio.TlsCertificateFlags
 ssl_error_num = cast(Gio.TlsCertificateFlags, 10)
 
-win = SSLErrorDialog('testacc', MagicMock(), gio_cert, ssl_error_num)
+win = SSLErrorDialog('testacc', MagicMock(), gio_cert, set(), ssl_error_num)
 win.connect('destroy', Gtk.main_quit)
 win.show_all()
 Gtk.main()

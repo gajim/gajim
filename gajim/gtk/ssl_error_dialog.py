@@ -29,6 +29,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
                  account: str,
                  client: Client,
                  cert: Gio.TlsCertificate,
+                 ignored_errors: set[Gio.TlsCertificateFlags],
                  error: Gio.TlsCertificateFlags
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
@@ -44,6 +45,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
 
         self.account = account
         self._error = error
+        self._ignored_errors = ignored_errors
         self._client = client
         self._cert = cert
         self._server = app.settings.get_account_setting(self.account,
@@ -88,9 +90,8 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         if self._ui.add_certificate_checkbutton.get_active():
             app.cert_store.add_certificate(self._cert)
 
-        ignored_tls_errors = None
         if self._error == Gio.TlsCertificateFlags.EXPIRED:
-            ignored_tls_errors = {Gio.TlsCertificateFlags.EXPIRED}
+            self._ignored_errors.add(Gio.TlsCertificateFlags.EXPIRED)
 
         self.destroy()
-        self._client.connect(ignored_tls_errors=ignored_tls_errors)
+        self._client.connect(ignored_tls_errors=self._ignored_errors)
