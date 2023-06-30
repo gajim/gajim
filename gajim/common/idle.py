@@ -283,7 +283,7 @@ class IdleMonitorManager(GObject.Object):
         self._idle_monitor = self._get_idle_monitor()
 
         if self.is_available():
-            GLib.timeout_add_seconds(1, self._poll)
+            GLib.timeout_add_seconds(5, self._poll)
 
     def set_interval(self,
                      away_interval: int = 60,
