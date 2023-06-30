@@ -211,7 +211,7 @@ class CoreApplication(ged.EventHelper):
         self._profiling_session.disable()
         self._log.info('End profiling')
         ps = pstats.Stats(self._profiling_session)
-        ps = ps.sort_stats(SortKey.CUMULATIVE)
+        ps = ps.sort_stats(SortKey.TIME)
         ps.print_stats()
 
     def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
