@@ -59,7 +59,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._selected_account = 'AllAccounts'
         self._selected_send_account: str | None = None
         self._filter_dialog: SettingsDialog | None = None
-        self._last_stanza: str | None = None
+        self._sent_stanzas = SentSzanzas()
+        self._last_selected_ts = 0
         self._last_search: str = ''
 
         self._presence = True
@@ -199,7 +200,10 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             self._on_send()
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Up):
-            self._on_paste_last()
+            self._on_paste_previous()
+        if (event.state & Gdk.ModifierType.CONTROL_MASK and
+                event.keyval == Gdk.KEY_Down):
+            self._on_paste_next()
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_f):
             self._ui.search_toggle.set_active(
@@ -274,13 +278,17 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             client = app.get_client(self._selected_send_account)
             assert isinstance(node, nbxmpp.Protocol)
             client.connection.send_stanza(node)
-            self._last_stanza = stanza
+            self._sent_stanzas.add(stanza)
             buffer_.set_text('')
 
-    def _on_paste_last(self, *args: Any) -> None:
+    def _on_paste_previous(self, *args: Any) -> None:
         buffer_ = self._ui.input_entry.get_buffer()
-        if self._last_stanza is not None:
-            buffer_.set_text(self._last_stanza)
+        buffer_.set_text(self._sent_stanzas.get_previous())
+        self._ui.input_entry.grab_focus()
+
+    def _on_paste_next(self, *args: Any) -> None:
+        buffer_ = self._ui.input_entry.get_buffer()
+        buffer_.set_text(self._sent_stanzas.get_next())
         self._ui.input_entry.grab_focus()
 
     def _on_input(self, button: Gtk.ToggleButton) -> None:
@@ -520,3 +528,39 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         if is_at_the_end:
             GLib.idle_add(scroll_to_end, self._ui.scrolled)
+
+
+class SentSzanzas:
+    def __init__(self) -> None:
+        self._sent_stanzas: dict[float, str] = {}
+        self._last_selected_ts = 0
+
+    def add(self, stanza: str) -> None:
+        self._sent_stanzas[time.time()] = stanza
+        self._last_selected_ts = 0
+
+    def get_previous(self) -> str:
+        return self._get(Direction.PREV)
+
+    def get_next(self) -> str:
+        return self._get(Direction.NEXT)
+
+    def _get(self, direction: Direction) -> str:
+        if not self._sent_stanzas:
+            return ''
+
+        if direction == Direction.PREV:
+            for timestamp, stanza in reversed(self._sent_stanzas.items()):
+                if timestamp >= self._last_selected_ts:
+                    continue
+                self._last_selected_ts = timestamp
+                return stanza
+        else:
+            for timestamp, stanza in self._sent_stanzas.items():
+                if timestamp <= self._last_selected_ts:
+                    continue
+                self._last_selected_ts = timestamp
+                return stanza
+
+        self._last_selected_ts = list(self._sent_stanzas.keys())[-1]
+        return self._sent_stanzas[self._last_selected_ts]

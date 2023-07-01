@@ -326,7 +326,7 @@
                 <property name="can-focus">True</property>
                 <property name="receives-default">True</property>
                 <property name="no-show-all">True</property>
-                <signal name="clicked" handler="_on_paste_last" swapped="no"/>
+                <signal name="clicked" handler="_on_paste_previous" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
