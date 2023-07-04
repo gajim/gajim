@@ -436,6 +436,7 @@ ACCOUNT_SETTINGS = {
         'default_workspace': '',
         'enable_gssapi': False,
         'enable_security_labels': False,
+        'encryption_default': '',
         'file_transfer_proxies': '',
         'filetransfer_preference': 'httpupload',
         'ft_send_local_ips': True,
@@ -480,7 +481,7 @@ ACCOUNT_SETTINGS = {
     },
 
     'contact': {
-        'encryption': '',
+        'encryption': HAS_ACCOUNT_DEFAULT,
         'mute_until': '',
         'send_chatstate': HAS_ACCOUNT_DEFAULT,
         'send_marker': HAS_ACCOUNT_DEFAULT,

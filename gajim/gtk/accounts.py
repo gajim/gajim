@@ -783,7 +783,22 @@ class PrivacyPage(GenericSettingPage):
             'disabled': _('Disabled'),
         }
 
+        encryption_entries = {
+            '': _('Unencrypted'),
+            'OMEMO': 'OMEMO',
+            'OpenPGP': 'OpenPGP',
+            'PGP': 'PGP',
+        }
+
         settings = [
+            Setting(SettingKind.POPOVER,
+                    _('Default Encryption'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'encryption_default',
+                    desc=_('Encryption method to use '
+                           'unless overridden on a per-contact basis'),
+                    props={'entries': encryption_entries}),
+
             Setting(SettingKind.SWITCH,
                     _('Idle Time'),
                     SettingType.ACCOUNT_CONFIG,
