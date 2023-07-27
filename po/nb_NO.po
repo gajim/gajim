@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2009-11-18 15:50+0100\n"
 "Last-Translator: Stian B. Barmen <stian@barmen.nu>\n"
 "Language-Team: <>\n"
@@ -1577,6 +1577,14 @@ msgid "Could not open file (%s)"
 msgstr "Kunne ikke åpne fil"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Kunne ikke åpne fil"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Du har ikke tilgang til å opprette filer i denne mappa."
+
+#, fuzzy
 msgid "Country"
 msgstr "land"
 
@@ -2375,6 +2383,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "gajim-remote"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2712,10 +2724,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Påslått"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "_Innkommende melding:"
 
@@ -2967,6 +2975,10 @@ msgstr "Velg bilde"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "vCard-publisering mislyktes"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Laster"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5255,7 +5267,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5347,8 +5360,12 @@ msgstr ""
 "Dette navnet er allerede i bruk. Ønsker du å overskrive denne "
 "statusmeldingen?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "_Kopier JID/E-postadresse"
+
 #, fuzzy, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr "[Denne meldingen er kryptert]"
 
 #, python-format
@@ -6109,6 +6126,11 @@ msgstr "Dine arkiveringsinnstillinger har blitt lagret."
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Zip-filer"
@@ -6593,10 +6615,6 @@ msgstr ""
 msgid "or"
 msgstr "Tor"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "tok pause i meldingsskrivingen"
 
@@ -6894,6 +6912,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Sender profil…"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Påslått"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

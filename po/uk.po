@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -1446,6 +1446,14 @@ msgid "Could not open file (%s)"
 msgstr "Не вдалося відкрити файл"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Не вдалося звернутись до файлу"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
+
+#, fuzzy
 msgid "Country"
 msgstr "країні"
 
@@ -2178,6 +2186,10 @@ msgstr "З'єднання недоступне"
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Теми Gajim"
+
 msgid "Gajim Themes"
 msgstr "Теми Gajim"
 
@@ -2514,10 +2526,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Активний"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Колір вхідного псевдоніму"
 
@@ -2771,6 +2779,10 @@ msgstr "Вибрати зображення"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Спроба оприлюднення vCard зазнала невдачі"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Завантаження"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5067,7 +5079,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5158,8 +5171,12 @@ msgid ""
 msgstr ""
 "Цю назву вже було використано. Бажаєте перезаписати повідомлення про стан?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Копіювати XMPP адресу"
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -5914,6 +5931,11 @@ msgstr "Налаштування архівації збережено!"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Файли ZIP"
@@ -6398,10 +6420,6 @@ msgstr ""
 msgid "or"
 msgstr "Tor"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "призупинив (призупинила) створення повідомлення"
 
@@ -6724,6 +6742,10 @@ msgstr ""
 
 #~ msgid "Edit Profile…"
 #~ msgstr "Змінити профіль…"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Активний"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

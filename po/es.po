@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-05-23 20:15+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-06-09 08:33+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1418,6 +1418,12 @@ msgstr "No se pudo acceder al fichero"
 msgid "Could not open file (%s)"
 msgstr "No se pudo abrir el fichero (%s)"
 
+msgid "Could not save file"
+msgstr "No se pudo guardar el fichero"
+
+msgid "Could not save file to selected directory."
+msgstr "No se pudo guardar el fichero en el directorio seleccionado."
+
 msgid "Country"
 msgstr "País"
 
@@ -2119,6 +2125,10 @@ msgstr "Está disponible Gajim %s"
 msgid "Gajim - Error"
 msgstr "Gajim - Error"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Temas Gajim"
+
 msgid "Gajim Themes"
 msgstr "Temas Gajim"
 
@@ -2421,9 +2431,6 @@ msgstr ""
 "Para escribir mensajes en este chat, necesitas primero pedir voz.\n"
 "Un moderador procesará tu petición."
 
-msgid "Inactive"
-msgstr "Inactivo"
-
 msgid "Incoming Call"
 msgstr "Llamada entrante"
 
@@ -2644,6 +2651,9 @@ msgstr "Cargar Imagen"
 
 msgid "Loading Avatar Failed"
 msgstr "La carga de avatar ha fallado"
+
+msgid "Loading Preview…"
+msgstr "Cargando previsualización…"
 
 msgid "Loading avatar image failed"
 msgstr "La carga de la imagen del avatar ha fallado"
@@ -4655,8 +4665,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Hay actualizaciones para los complementos de Gajim"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr "Se ha producido un error al intentar obtener mensajes."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "Se ha producido un error al intentar obtener mensajes: %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "No hay método de cifrado disponible para el cifrado elegido."
@@ -4737,8 +4748,11 @@ msgstr ""
 "Este es el tema que estás usando actualmente.\n"
 "¿Quieres borrar este tema?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "Esta es tu dirección XMPP"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Este mensaje ha sido retirado por %s."
 
 #, python-format
@@ -5417,6 +5431,13 @@ msgstr "Tu contraseña ha sido cambiado."
 msgid "Your public key or authentication certificate"
 msgstr "Tu clave pública o certificado de autenticación"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+"Tu servidor no proporciona servicio de grupos de chat. Especifica la "
+"dirección de un servidor diferente."
+
 msgid "ZIP files"
 msgstr "Archivos ZIP"
 
@@ -5833,10 +5854,6 @@ msgstr "noticias"
 msgid "or"
 msgstr "o"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "ha parado de escribir"
 
@@ -6146,6 +6163,9 @@ msgstr "…o soltarla aqui"
 #~ "Para la verificación a través de QR-Code, debes instalar <tt>python-"
 #~ "qrcode</tt>."
 
+#~ msgid "Inactive"
+#~ msgstr "Inactivo"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Invitar contactos…"
 
@@ -6163,3 +6183,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Has soltado algo que Gajim no pudo procesar: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

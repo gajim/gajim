@@ -9,13 +9,14 @@
 # andy baker <andy.baker@dismail.de>, 2022.
 # Bob Huang (Ziyan Huang) <bc3104hzy@126.com>, 2022, 2023.
 # André <git@apitzsch.eu>, 2023.
+# lovetox <philipp@hoerist.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-05-25 09:45+0000\n"
-"Last-Translator: Bob Huang (Ziyan Huang) <bc3104hzy@126.com>\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-07-04 02:32+0000\n"
+"Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.18.2\n"
 
 msgid " (Video Call)"
 msgstr " (视频聊天)"
@@ -1392,6 +1393,12 @@ msgstr "无法访问文件"
 msgid "Could not open file (%s)"
 msgstr "无法打开文件 (%s)"
 
+msgid "Could not save file"
+msgstr "无法保存文件"
+
+msgid "Could not save file to selected directory."
+msgstr "无法在选定的目录中保存文件。"
+
 msgid "Country"
 msgstr "国家"
 
@@ -2019,7 +2026,7 @@ msgid "Forget Group Chat"
 msgstr "忘记群聊"
 
 msgid "Forget this Group Chat"
-msgstr "离开该群聊"
+msgstr "忘记该群聊"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "在证书吊销列表的 lastUpdate 字段格式错误"
@@ -2080,6 +2087,10 @@ msgstr "Gajim 版本 %s 已可用"
 
 msgid "Gajim - Error"
 msgstr "Gajim - 错误"
+
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim 主题"
 
 msgid "Gajim Themes"
 msgstr "Gajim 主题"
@@ -2371,9 +2382,6 @@ msgstr ""
 "为了在该聊天中编写消息，您需要首先请求发言权。\n"
 "将由主持人处理您的请求。"
 
-msgid "Inactive"
-msgstr "不活跃"
-
 msgid "Incoming Call"
 msgstr "来电"
 
@@ -2593,6 +2601,9 @@ msgstr "加载图像"
 
 msgid "Loading Avatar Failed"
 msgstr "加载头像失败"
+
+msgid "Loading Preview…"
+msgstr "加载预览中…"
 
 msgid "Loading avatar image failed"
 msgstr "加载头像图片失败"
@@ -4562,8 +4573,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim 插件有更新"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr "获取消息时发生了错误。"
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "获取消息时发生了错误： %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "没有适用于选定加密的加密方式。"
@@ -4641,8 +4653,11 @@ msgstr ""
 "这是您当前正在使用的主题。\n"
 "您想要删除该主题吗？"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "这是您的 XMPP 地址"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "该消息已被 %s 撤回。"
 
 #, python-format
@@ -5307,6 +5322,11 @@ msgstr "您的密码已修改成功。"
 msgid "Your public key or authentication certificate"
 msgstr "您的公钥或者认证证书"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr "您的服务器不提供群聊服务。请指定另一个服务器地址。"
+
 msgid "ZIP files"
 msgstr "Zip 文件"
 
@@ -5723,10 +5743,6 @@ msgstr "新闻"
 msgid "or"
 msgstr "或者"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "暂停输入消息"
 
@@ -6036,6 +6052,9 @@ msgstr "或者把图像拖放到这里"
 #~ "For verification via QR-Code you have to install <tt>python-qrcode</tt>."
 #~ msgstr "您需要安装 <tt>python-qrcode</tt> 才能通过二维码来验证。"
 
+#~ msgid "Inactive"
+#~ msgstr "不活跃"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "邀请联系人…"
 
@@ -6053,3 +6072,6 @@ msgstr "或者把图像拖放到这里"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "您拖放了 Gajim 无法处理的对象: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

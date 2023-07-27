@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-04-07 19:08+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-05-29 09:44+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -99,7 +99,7 @@ msgstr "%(type)s の暗号化は有効 %(authenticated)s。"
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (あなた)"
 
 #, python-format
 msgid "%s (desynced)"
@@ -255,7 +255,7 @@ msgid ": Affiliation changed"
 msgstr "分掌を変更しました"
 
 msgid ": Group chat configuration changed to members-only"
-msgstr "談話室はメンバー制に変更されました"
+msgstr "談話室はメンバー限定に変更されました"
 
 msgid "<Description>"
 msgstr "<説明>"
@@ -423,9 +423,8 @@ msgstr "アカウントはサーバーに接続されている必要がありま
 msgid "Account is being created"
 msgstr "アカウントを作成しています"
 
-#, fuzzy
 msgid "Account is not connected."
-msgstr "アカウント %s はまだサーバーに接続中です"
+msgstr "アカウントは接続されていません。"
 
 #, python-format
 msgid "Account: %s"
@@ -566,7 +565,7 @@ msgid "Affiliations"
 msgstr "分掌"
 
 msgid "Algorithm"
-msgstr ""
+msgstr "アルゴリズム"
 
 msgid "All"
 msgstr "すべて"
@@ -833,10 +832,10 @@ msgid "Birthday"
 msgstr "誕生日"
 
 msgid "Blind Trust"
-msgstr ""
+msgstr "盲目的信用"
 
 msgid "Blindly trust new devices until you verify them"
-msgstr ""
+msgstr "検証するまで新しいデバイスを無条件に信用する"
 
 msgid "Block"
 msgstr "遮断"
@@ -1093,16 +1092,14 @@ msgstr "市(区町村)"
 msgid "Clear"
 msgstr "消去"
 
-#, fuzzy
 msgid "Clear Devices"
-msgstr "デバイス"
+msgstr "デバイスを消去"
 
 msgid "Clear Devices Now?"
-msgstr ""
+msgstr "直ちにデバイスを消去しますか ?"
 
-#, fuzzy
 msgid "Clear Devices…"
-msgstr "サービスを探索…"
+msgstr "デバイスを消去…"
 
 msgid "Clear File"
 msgstr "ファイルを消去"
@@ -1189,11 +1186,15 @@ msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat with %s."
 msgstr ""
+"%s とのエンドツーエンドの暗号化チャットの安全性を確認するには、このコードを相"
+"手先の画面に表示されるコードと比較してください。"
 
 msgid ""
 "Compare this code with the one shown on your contact’s screen to ensure the "
 "safety of your end-to-end encrypted chat."
 msgstr ""
+"エンドツーエンドの暗号化チャットの安全性を確認するには、このコードを相手先の"
+"画面に表示されるコードと比較してください。"
 
 msgid "Complete"
 msgstr "完了"
@@ -1224,7 +1225,7 @@ msgid "Configure logging system"
 msgstr "ログシステムを設定"
 
 msgid "Confirm Unencrypted Connection"
-msgstr "暗号化されていない接続を確認"
+msgstr "非暗号化接続を確認"
 
 msgid "Confirm new password..."
 msgstr "新しいパスワードを再入力…"
@@ -1275,9 +1276,8 @@ msgstr "連絡先アドレス"
 msgid "Contact Connected"
 msgstr "相手先が接続した"
 
-#, fuzzy
 msgid "Contact Details and Settings"
-msgstr "接続設定"
+msgstr "相手先の詳細と設定"
 
 msgid "Contact Disconnected"
 msgstr "相手先が切断した"
@@ -1391,9 +1391,8 @@ msgstr "コードスニペットをコピー"
 msgid "Copy info to clipboard"
 msgstr "情報をクリップボードにコピー"
 
-#, fuzzy
 msgid "Copy to clipboard"
-msgstr "情報をクリップボードにコピー"
+msgstr "クリップボードにコピー"
 
 msgid "Correct the last message"
 msgstr "最後のメッセージを修正"
@@ -1408,6 +1407,14 @@ msgstr "ファイルにアクセスできませんでした"
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "ファイルを開けませんでした (%s)"
+
+#, fuzzy
+msgid "Could not save file"
+msgstr "ファイルにアクセスできませんでした"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "このディレクトリにファイルを作成する権限がありません。"
 
 msgid "Country"
 msgstr "国"
@@ -1499,9 +1506,8 @@ msgstr "新しい談話室のデフォルト"
 msgid "Delete"
 msgstr "削除"
 
-#, fuzzy
 msgid "Delete Fingerprint"
-msgstr "指紋"
+msgstr "指紋を削除"
 
 msgid "Delete Message"
 msgstr "メッセージを削除"
@@ -1547,9 +1553,9 @@ msgstr "デバイス \"%s\""
 msgid "Devices"
 msgstr "デバイス"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Devices connected with \"%s\""
-msgstr "\"%s\" に接続していることを確認してください。"
+msgstr "\"%s\" に係属するデバイス"
 
 msgid "Dial Number"
 msgstr "電話番号"
@@ -1640,7 +1646,7 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 
 msgid "Doing so will permanently delete this Fingerprint"
-msgstr ""
+msgstr "この指紋を完全に削除します"
 
 msgid "Don’t show this again"
 msgstr "次回からこのメッセージを表示しない"
@@ -1763,9 +1769,8 @@ msgstr "暗号化された証明書"
 msgid "Encrypting file…"
 msgstr "ファイルを暗号化…"
 
-#, fuzzy
 msgid "Encryption (OMEMO)"
-msgstr "暗号化のエラー"
+msgstr "暗号化 (OMEMO)"
 
 msgid "Encryption error"
 msgstr "暗号化のエラー"
@@ -2009,9 +2014,8 @@ msgstr "チャットを絞り込む"
 msgid "Filter Chats…"
 msgstr "チャットを絞り込む…"
 
-#, fuzzy
 msgid "Fingerprint for this Device"
-msgstr "指紋"
+msgstr "このデバイスの指紋"
 
 msgid "Fingerprints"
 msgstr "指紋"
@@ -2108,6 +2112,10 @@ msgstr "Gajim  %s が利用可能です"
 
 msgid "Gajim - Error"
 msgstr "Gajim - エラー"
+
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim テーマ"
 
 msgid "Gajim Themes"
 msgstr "Gajim テーマ"
@@ -2407,10 +2415,6 @@ msgstr ""
 "この談話室に書き込むには発言権が必要です。\n"
 "司会者が要求を処理します。"
 
-#, fuzzy
-msgid "Inactive"
-msgstr "有効"
-
 msgid "Incoming Call"
 msgstr "着信通話"
 
@@ -2490,9 +2494,8 @@ msgstr "相手先を招待"
 msgid "Invite friends to group chats or join one"
 msgstr "談話室への招待と参加"
 
-#, fuzzy
 msgid "Invite to this chat"
-msgstr "前のチャットへ切替"
+msgstr "この談話室に招待"
 
 msgid "Invitees"
 msgstr "招待者"
@@ -2562,9 +2565,8 @@ msgstr "談話室に参加…"
 msgid "Join Support Chat"
 msgstr "サポートチャットに参加"
 
-#, fuzzy
 msgid "Joining Group Chat…"
-msgstr "談話室に参加…"
+msgstr "談話室に参加中…"
 
 msgid "Joining…"
 msgstr "参加中…"
@@ -2581,9 +2583,8 @@ msgstr "会話の履歴を保存"
 msgid "Keep and manage all your chat history"
 msgstr "すべての会話履歴の保存と管理"
 
-#, fuzzy
 msgid "Key Size"
-msgstr "プレビューのサイズ"
+msgstr "鍵のサイズ"
 
 msgid "Key usage does not include certificate signing"
 msgstr "証明書署名に鍵の使い方が含まれていません"
@@ -2636,6 +2637,9 @@ msgstr "画像を読む込む"
 msgid "Loading Avatar Failed"
 msgstr "アバターの読み込みに失敗しました"
 
+msgid "Loading Preview…"
+msgstr "プレビューを読み込み中…"
+
 msgid "Loading avatar image failed"
 msgstr "アバター画像の読み込みに失敗しました"
 
@@ -2663,9 +2667,8 @@ msgstr "位置 %s"
 msgid "Location:"
 msgstr "位置:"
 
-#, fuzzy
 msgid "Log"
-msgstr "ログイン"
+msgstr "履歴"
 
 msgid "Log In"
 msgstr "ログイン"
@@ -2716,13 +2719,11 @@ msgstr "プロキシを管理..."
 msgid "Manage Sounds"
 msgstr "サウンドを管理"
 
-#, fuzzy
 msgid "Manage Trust"
-msgstr "サウンドを管理"
+msgstr "信用を管理"
 
-#, fuzzy
 msgid "Manage your Devices…"
-msgstr "プロキシを管理"
+msgstr "デバイスを管理…"
 
 msgid "Manually set the hostname for the server"
 msgstr "サーバーのホスト名を手動で設定する"
@@ -2952,6 +2953,8 @@ msgstr ""
 
 msgid "No devices found to encypt this message to. Querying for devices now…"
 msgstr ""
+"このメッセージを暗号化するデバイスが見つかりませんでした。デバイスを問い合わ"
+"せます…"
 
 msgid "No devices online"
 msgstr "オンラインのデバイスがありません"
@@ -3005,9 +3008,8 @@ msgstr "不在"
 msgid "Not Connected"
 msgstr "接続されていません"
 
-#, fuzzy
 msgid "Not Decided"
-msgstr "未定の信用"
+msgstr "決定されていない"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
@@ -3163,7 +3165,7 @@ msgid "Other"
 msgstr "その他"
 
 msgid "Other devices connected with your account"
-msgstr ""
+msgstr "アカウントに係属する他のデバイス"
 
 msgid "Others"
 msgstr "その他"
@@ -3480,7 +3482,7 @@ msgid "Project discussion"
 msgstr "プロジェクトについての議論"
 
 msgid "Protocol"
-msgstr ""
+msgstr "プロトコル"
 
 msgid "Prox_y"
 msgstr "プロキシ (_Y)"
@@ -3508,13 +3510,11 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "公開鍵"
 
-#, fuzzy
 msgid "Public Key Information"
-msgstr "情報"
+msgstr "公開鍵情報"
 
-#, fuzzy
 msgid "Public Key: "
-msgstr "公開"
+msgstr "公開鍵: "
 
 #, python-format
 msgid "Pulse: %s"
@@ -3553,7 +3553,7 @@ msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia の項を読む (_W)"
 
 msgid "Read more about blind trust"
-msgstr ""
+msgstr "盲目的信用の詳細"
 
 msgid "Really block this contact?"
 msgstr "本当にこの相手先を遮断しますか ?"
@@ -3881,15 +3881,15 @@ msgid "Say hi to your new contact…"
 msgstr "新しい相手先に挨拶を送信…"
 
 msgid "Scan QR Code"
-msgstr ""
+msgstr "QR コードをスキャン"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr ""
+msgstr "%s に参加するにはこの QR コードをスキャンします。"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr "自分自身を相手先一覧に追加することはできません。"
+msgstr "%s との会話を始めるにはこの QR コードをスキャンします。"
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
@@ -3907,9 +3907,8 @@ msgstr "スクロールアップしてさらに会話履歴を読み込む…"
 msgid "Search"
 msgstr "検索"
 
-#, fuzzy
 msgid "Search Participants…"
-msgstr "参加者"
+msgstr "参加者を検索…"
 
 msgid "Search Result"
 msgstr "検索結果"
@@ -4127,9 +4126,8 @@ msgstr "設定はシステムによって制限されています"
 msgid "Settings"
 msgstr "設定"
 
-#, fuzzy
 msgid "Share Contact…"
-msgstr "相手先を追加…"
+msgstr "相手先を共有…"
 
 msgid "Share Status"
 msgstr "在席状況を通知"
@@ -4152,9 +4150,8 @@ msgstr "相手先の情報を表示"
 msgid "Show Content"
 msgstr "内容を表示"
 
-#, fuzzy
 msgid "Show Inactive Devices"
-msgstr "音声入力デバイス"
+msgstr "休止中のデバイスを表示する"
 
 msgid "Show Invitation"
 msgstr "招待を表示"
@@ -4637,7 +4634,7 @@ msgid "Themes"
 msgstr "テーマ"
 
 msgid "There are devices for which you have not made a trust decision yet."
-msgstr ""
+msgstr "まだ信用を決定していないデバイスがあります。"
 
 msgid ""
 "There are plenty of servers to choose from.\n"
@@ -4651,8 +4648,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim プラグインの更新があります"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr ""
+#, fuzzy, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "メッセージを取得しようとした際にエラーが発生しました。"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -4673,9 +4671,8 @@ msgid ""
 "XMPP server (%s)."
 msgstr "XMPP サーバー (%s) の SSL 証明書を検証する際にエラーがありました。"
 
-#, fuzzy
 msgid "This Device"
-msgstr "デバイスを選択"
+msgstr "このデバイス"
 
 msgid "This account has already been added"
 msgstr "このアカウントは既に追加されています"
@@ -4693,6 +4690,8 @@ msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
+"この談話室の調整は OMEMO での暗号化に適していません。この談話室で OMEMO を使"
+"用するには、非匿名かつメンバー限定である必要があります。"
 
 msgid "This device is not compatible."
 msgstr "このデバイスは互換性がありません。"
@@ -4731,8 +4730,11 @@ msgstr ""
 "このテーマは現在使用中です。\n"
 "このテーマを削除しますか ?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "これはあなたの XMPP アドレスです"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "このメッセージは %s さんによって撤回されました。"
 
 #, python-format
@@ -4746,9 +4748,10 @@ msgstr ""
 "このメッセージは伝統的な OpenPGP で暗号化されており、復号することができませ"
 "ん。このようなメッセージを扱うには PGP プラグインをインストールしてください。"
 
-#, fuzzy
 msgid "This message was encrypted with OMEMO, but not for your device."
-msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
+msgstr ""
+"このメッセージは OMEMO で暗号化されていましたが、お使いのデバイス用ではありま"
+"せんでした。"
 
 msgid "This message was encrypted with OTR and could not be decrypted."
 msgstr "このメッセージは OTR で暗号化されており、復号することができません。"
@@ -4786,9 +4789,8 @@ msgstr "このサービスは、詳細情報の返答がありません"
 msgid "This type of service does not contain any items to browse."
 msgstr "このサービスのタイプには表示する項目がありません。"
 
-#, fuzzy
 msgid "This will clear the devices store for your account."
-msgstr "アカウントを Gajim からします。"
+msgstr "アカウントのデバイス一覧を消去します。"
 
 msgid "This will remove your account from Gajim."
 msgstr "アカウントを Gajim からします。"
@@ -4831,6 +4833,8 @@ msgid ""
 "To send an encrypted message, you have to decide whether to trust the device "
 "of your contact."
 msgstr ""
+"暗号化されたメッセージを送信するには、相手先のデバイスを信用するかどうかを決"
+"定する必要があります。"
 
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
@@ -4867,7 +4871,7 @@ msgid "Trip planning"
 msgstr "旅行の計画"
 
 msgid "Trust Management"
-msgstr ""
+msgstr "信用の管理"
 
 msgid "Trust Not Decided"
 msgstr "未定の信用"
@@ -5300,9 +5304,9 @@ msgstr "あなたは現在 {show}{status}"
 msgid "You are offline."
 msgstr "オフラインです。"
 
-#, fuzzy, python-format
+#, python-format
 msgid "You can join this group chat instead: %s"
-msgstr "代わりに次の談話室に参加できます: xmpp:%s?join"
+msgstr "代わりに次の談話室に参加できます: %s"
 
 msgid "You can not join a group chat unless you are connected."
 msgstr "接続しないと、談話室に参加できません。"
@@ -5413,6 +5417,11 @@ msgstr "パスワードは無事変更されました。"
 msgid "Your public key or authentication certificate"
 msgstr "公開鍵または認証証明書"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "ZIP ファイル"
 
@@ -5473,9 +5482,8 @@ msgstr "中止 (_C)"
 msgid "_Clear"
 msgstr "消去 (_C)"
 
-#, fuzzy
 msgid "_Clear Devices"
-msgstr "デバイスを選択"
+msgstr "デバイスを消去 (_C)"
 
 msgid "_Close"
 msgstr "閉じる (_C)"
@@ -5612,9 +5620,8 @@ msgstr "ポート番号 (_P)"
 msgid "_Preferences"
 msgstr "設定 (_P)"
 
-#, fuzzy
 msgid "_Privacy Policy (Online)"
-msgstr "Wiki (オンライン) (_W)"
+msgstr "プライバシーポリシー (オンライン) (_P)"
 
 msgid "_Purge"
 msgstr "削除 (_P)"
@@ -5802,9 +5809,9 @@ msgstr "イタリック"
 msgid "lat"
 msgstr "緯度"
 
-#, fuzzy, python-format
+#, python-format
 msgid "libsoup Version: %s"
-msgstr "GLib バージョン: %s"
+msgstr "libsoup バージョン: %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5836,10 +5843,6 @@ msgstr "ニュース"
 # 固有名詞(プロキシ・サーバー The Onion Router)
 msgid "or"
 msgstr "または"
-
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
 
 msgid "paused composing a message"
 msgstr "さんは書く手をちょっと止めています"
@@ -6145,6 +6148,10 @@ msgstr "…またはここにドロップ"
 #~ msgid "Edit Profile…"
 #~ msgstr "プロフィールを編集…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "有効"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "相手先を招待…"
 
@@ -6159,3 +6166,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

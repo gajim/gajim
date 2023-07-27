@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -1608,6 +1608,14 @@ msgid "Could not open file (%s)"
 msgstr "Ne mogu učitati sliku"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Ne mogu učitati sliku"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+
+#, fuzzy
 msgid "Country"
 msgstr "Nalog"
 
@@ -2412,6 +2420,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "gajim-remote"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2738,10 +2750,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Aktivno"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "_Dolazna poruka:"
 
@@ -2992,6 +3000,10 @@ msgstr "Odaberite sliku"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Publikacija vCard neuspela"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Programira"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5295,7 +5307,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5385,8 +5398,12 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr "Ovo ime se već koristi. Da li želite da prepišete ovu statusnu poruku?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "_Kopiraj džaber ID/e-mejl adresu"
+
 #, fuzzy, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr "[Ova poruka je šifrovana]"
 
 #, python-format
@@ -6134,6 +6151,11 @@ msgstr "_Podešavanja"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Sve datoteke"
@@ -6624,10 +6646,6 @@ msgstr ""
 msgid "or"
 msgstr "Za"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "pauza pri pisanju poruke"
 
@@ -6930,6 +6948,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Slanje profila..."
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Aktivno"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

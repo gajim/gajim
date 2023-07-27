@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1449,6 +1449,14 @@ msgstr "Não foi possível acessar o arquivo"
 msgid "Could not open file (%s)"
 msgstr "Não pode Abrir Arquivo"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Não foi possível acessar o arquivo"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Você não tem permissão para criar este diretório."
+
 msgid "Country"
 msgstr "País"
 
@@ -2211,6 +2219,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "gajim-remote"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2537,10 +2549,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Ativo"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Mensagem _recebida:"
 
@@ -2787,6 +2795,10 @@ msgstr "Colar imagem"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Upload do Avatar Falhou"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Carregando"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5067,7 +5079,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5165,8 +5178,12 @@ msgstr ""
 "Esse é o tema que está atualmente usando.\n"
 "Quer deletá-lo?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Somente os moderadores podem ver seu endereço XMPP"
+
 #, fuzzy, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr "[Esta mensagem está criptografada]"
 
 #, fuzzy, python-format
@@ -5918,6 +5935,11 @@ msgstr "Sua senha foi alterada com sucesso."
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "Ficheiros ZIP"
 
@@ -6387,11 +6409,6 @@ msgstr ""
 msgid "or"
 msgstr "ou"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-#, fuzzy
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "parou de digitar"
 
@@ -6704,6 +6721,10 @@ msgstr ""
 #~ msgid "Edit Profile…"
 #~ msgstr "Editar Perfil…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Ativo"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Convidar Contatos…"
 
@@ -6721,3 +6742,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim org.gajim.Gajim"

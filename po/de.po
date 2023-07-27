@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-05-23 20:15+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-06-09 08:32+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1433,6 +1433,12 @@ msgstr "Zugriff auf Datei nicht möglich"
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
 
+msgid "Could not save file"
+msgstr "Datei konnte nicht gespeichert werden"
+
+msgid "Could not save file to selected directory."
+msgstr "Die Datei konnte im gewählten Verzeichnis nicht abgespeichert werden."
+
 msgid "Country"
 msgstr "Land"
 
@@ -2138,6 +2144,11 @@ msgid "Gajim - Error"
 msgstr "Gajim - Fehler"
 
 # TODO mark as do not translate?
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim Designs"
+
+# TODO mark as do not translate?
 msgid "Gajim Themes"
 msgstr "Gajim Designs"
 
@@ -2444,9 +2455,6 @@ msgstr ""
 "Schreibrechte anfragen.\n"
 "Ein Moderator wird deine Anfrage bearbeiten."
 
-msgid "Inactive"
-msgstr "Inaktiv"
-
 msgid "Incoming Call"
 msgstr "Eingehender Anruf"
 
@@ -2673,6 +2681,9 @@ msgstr "Bild laden"
 
 msgid "Loading Avatar Failed"
 msgstr "Laden des Kontaktbilds fehlgeschlagen"
+
+msgid "Loading Preview…"
+msgstr "Vorschau wird geladen…"
 
 msgid "Loading avatar image failed"
 msgstr "Beim Laden des Kontaktbilds ist ein Fehler aufgetreten"
@@ -4690,8 +4701,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Es sind Updates für Gajims Plugins verfügbar"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr "Beim Abrufen neuer Nachrichten ist ein Fehler aufgetreten."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "Beim Abrufen neuer Nachrichten ist ein Fehler aufgetreten: %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
@@ -4778,8 +4790,11 @@ msgstr ""
 "Dieses Design verwendest du gerade.\n"
 "Willst du das Design löschen?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "Dies ist deine XMPP-Adresse"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Diese Nachricht wurde von %s zurückgezogen."
 
 #, python-format
@@ -5478,6 +5493,13 @@ msgstr "Dein Passwort wurde erfolgreich geändert."
 msgid "Your public key or authentication certificate"
 msgstr "Dein öffentlicher Schlüssel oder Authentifizierungszertifikat"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+"Dein Server stellt keinen Dienst für Gruppenchats bereit. Bitte versuche es "
+"mit der Adresse eines anderen Servers."
+
 msgid "ZIP files"
 msgstr "ZIP-Dateien"
 
@@ -5896,11 +5918,6 @@ msgstr "neuigkeiten"
 msgid "or"
 msgstr "oder"
 
-# Don't translate icon file name.
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "schreibt nicht mehr"
 
@@ -6218,6 +6235,9 @@ msgstr "… oder hierher ziehen"
 #~ "Für die Verifikation mittels QR-Code muss <tt>python-qrcode</tt> "
 #~ "installiert sein."
 
+#~ msgid "Inactive"
+#~ msgstr "Inaktiv"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Kontakte einladen…"
 
@@ -6238,3 +6258,7 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Du hast etwas abgelegt, das Gajim nicht verarbeiten konnte: %s"
+
+# Don't translate icon file name.
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

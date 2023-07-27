@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1594,6 +1594,14 @@ msgid "Could not open file (%s)"
 msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
+
+#, fuzzy
 msgid "Country"
 msgstr "Χώρα:"
 
@@ -2403,6 +2411,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim - %s"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2723,10 +2735,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Ενεργό"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
@@ -2980,6 +2988,10 @@ msgstr "Επιλογή εικόνας"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Σύνθεση"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5276,7 +5288,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5365,8 +5378,12 @@ msgstr ""
 "Αυτό το όνομα χρησιμοποιείται ήδη από κάποιον άλλον από τους λογαριασμούς "
 "σας. Παρακαλώ, επιλέξτε άλλο όνομα."
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -6118,6 +6135,11 @@ msgstr "_Προτιμήσεις"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Όλα τα αρχεία"
@@ -6615,10 +6637,6 @@ msgstr ""
 msgid "or"
 msgstr "Προς"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "σταμάτησε για λίγο να γράφει ένα μήνυμα"
 
@@ -6927,6 +6945,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Όνομα προφίλ:"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Ενεργό"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

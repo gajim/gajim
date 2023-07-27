@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2023-04-23 10:01+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -1421,6 +1421,14 @@ msgstr "Nu s-a putut accesa fișierul"
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Nu s-a putut accesa fișierul"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
+
 msgid "Country"
 msgstr "Țara"
 
@@ -2127,6 +2135,10 @@ msgstr "Gajim %s este disponibil"
 msgid "Gajim - Error"
 msgstr "Gajim - Eroare"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim Teme"
+
 msgid "Gajim Themes"
 msgstr "Gajim Teme"
 
@@ -2434,9 +2446,6 @@ msgstr ""
 "Pentru a scrie mesaje în acest chat, trebuie să solicitați mai întâi voce.\n"
 "Un moderator vă va procesa cererea."
 
-msgid "Inactive"
-msgstr "Inactiv"
-
 msgid "Incoming Call"
 msgstr "Apel primit"
 
@@ -2659,6 +2668,10 @@ msgstr "Încărcați imaginea"
 
 msgid "Loading Avatar Failed"
 msgstr "Încărcarea Avatarului a eșuat"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Încărcare…"
 
 msgid "Loading avatar image failed"
 msgstr "Încărcarea imaginii avatar a eșuat"
@@ -4682,7 +4695,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Există actualizări pentru plugin-urile lui Gajim"
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4766,8 +4780,12 @@ msgstr ""
 "Aceasta este tema pe care o utilizați în prezent.\n"
 "Doriți să ștergeți această temă?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Doar moderatorii vă pot vedea adresa XMPP"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Acest mesaj a fost retras de %s."
 
 #, python-format
@@ -5455,6 +5473,11 @@ msgstr "Parola dumneavoastră a fost schimbată cu succes."
 msgid "Your public key or authentication certificate"
 msgstr "Cheia dumneavoastră publică sau certificatul de autentificare"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "Fișiere ZIP"
 
@@ -5873,10 +5896,6 @@ msgstr "noutăți"
 msgid "or"
 msgstr "sau"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "a fost întreruptă compunerea unui mesaj"
 
@@ -6180,6 +6199,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Edit Profile…"
 #~ msgstr "Editați profilurile…"
 
+#~ msgid "Inactive"
+#~ msgstr "Inactiv"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Invitați contacte…"
 
@@ -6197,3 +6219,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

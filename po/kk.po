@@ -6,17 +6,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-03-02 08:25+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-07-02 10:51+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
-"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
-">\n"
+"Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/>"
+"\n"
 "Language: kk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 4.18.2\n"
 "X-Poedit-Language: Kazakh\n"
 "X-Poedit-Country: KAZAKHSTAN\n"
 
@@ -97,7 +97,7 @@ msgstr "%(type)s түрдегі шифрлеу белсенді %(authenticated)
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (Сіз)"
 
 #, python-format
 msgid "%s (desynced)"
@@ -227,25 +227,25 @@ msgid "1 Year"
 msgstr "1 жыл"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1 сағат"
 
 msgid "2 Days"
 msgstr "2 күн"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2 сағат"
 
 msgid "3 Months"
 msgstr "3 ай"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 минут"
 
 msgid "6 Months"
 msgstr "6 ай"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 сағат"
 
 msgid ": Affiliation changed"
 msgstr ": Қатысуы өзгертілген"
@@ -421,9 +421,8 @@ msgstr "Тіркелгі байланысқан болуы керек"
 msgid "Account is being created"
 msgstr "Тіркелгі жасалуда"
 
-#, fuzzy
 msgid "Account is not connected."
-msgstr "%s тіркелгісі әлі байланысқан"
+msgstr "Тіркелгісі байланыпаған."
 
 #, python-format
 msgid "Account: %s"
@@ -565,7 +564,7 @@ msgid "Affiliations"
 msgstr "Қатысулар"
 
 msgid "Algorithm"
-msgstr ""
+msgstr "Алгоритм"
 
 msgid "All"
 msgstr "Барлығы"
@@ -835,7 +834,7 @@ msgid "Birthday"
 msgstr "Туған күні"
 
 msgid "Blind Trust"
-msgstr ""
+msgstr "Соқыр сенім"
 
 msgid "Blindly trust new devices until you verify them"
 msgstr ""
@@ -1099,16 +1098,14 @@ msgstr "Қала"
 msgid "Clear"
 msgstr "Тазарту"
 
-#, fuzzy
 msgid "Clear Devices"
-msgstr "Құрылғылар"
+msgstr "Құрылғылар тізімін тазарту"
 
 msgid "Clear Devices Now?"
-msgstr ""
+msgstr "Құрылғылар тізімін қазір тазарту керек пе?"
 
-#, fuzzy
 msgid "Clear Devices…"
-msgstr "Қызметтерді қарап шығу…"
+msgstr "Құрылғылар тізімін тазарту…"
 
 msgid "Clear File"
 msgstr "Файлды тазарту"
@@ -1410,6 +1407,14 @@ msgstr "Файлға қатынау мүмкін емес"
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Файлды ашу мүмкін емес (%s)"
+
+#, fuzzy
+msgid "Could not save file"
+msgstr "Файлға қатынау мүмкін емес"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Сізде бұл бумада файлдарды жасауға рұқсаттарыңыз жоқ."
 
 msgid "Country"
 msgstr "Ел"
@@ -2114,6 +2119,10 @@ msgstr "Gajim %s нұсқасы қолжетімді"
 msgid "Gajim - Error"
 msgstr "Gajim - Қате"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim темалары"
+
 msgid "Gajim Themes"
 msgstr "Gajim темалары"
 
@@ -2414,10 +2423,6 @@ msgstr ""
 "Бұл чатта хабарлама жазу үшін алдымен дауысты сұрау керек.\n"
 "Модератор сұрауыңызды өңдейді."
 
-#, fuzzy
-msgid "Inactive"
-msgstr "Белсенді"
-
 msgid "Incoming Call"
 msgstr "Кіріс қоңырау"
 
@@ -2642,6 +2647,10 @@ msgstr "Суретті жүктеу"
 
 msgid "Loading Avatar Failed"
 msgstr "Аватарды жүктеу қатемен аяқталды"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Жүктеу…"
 
 msgid "Loading avatar image failed"
 msgstr "Аватар суретін жүктеу сәтсіз аяқталды"
@@ -4653,7 +4662,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim плагин модульдеріне арналған жаңартулар бар"
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4733,8 +4743,12 @@ msgstr ""
 "Бұл тема қазір қолданылуда.\n"
 "Бұл теманы өшіруді қалайсыз ба?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Сіздің XMPP адресіңізді тек модераторлар көре алады"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Бұл хабарламаны %s кері қайтарып алды."
 
 #, python-format
@@ -5412,6 +5426,11 @@ msgstr "Сіздің пароліңіз сәтті өзгертілді."
 msgid "Your public key or authentication certificate"
 msgstr "Сізідң ашық кілтіңіз немесе аутентификация сертификатыңыз"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "ZIP файлдары"
 
@@ -5830,10 +5849,6 @@ msgstr "жаңалықтар"
 msgid "or"
 msgstr "немесе"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "хабарлама жазуды аялдатқан"
 
@@ -6116,6 +6131,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Edit Profile…"
 #~ msgstr "Профильді түзету…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Белсенді"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Контакттарды шақыру…"
 
@@ -6130,3 +6149,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim-ді көрсету"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

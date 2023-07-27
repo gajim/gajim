@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -1441,6 +1441,14 @@ msgstr "Não posso acessar arquivo"
 msgid "Could not open file (%s)"
 msgstr "Não posso Abrir Arquivo"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Não posso acessar arquivo"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Você não tem permissões para criar arquivos neste diretório."
+
 msgid "Country"
 msgstr "País"
 
@@ -2169,6 +2177,10 @@ msgstr "A versão %s está disponível"
 msgid "Gajim - Error"
 msgstr "Gajim - Error"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim Temas"
+
 msgid "Gajim Themes"
 msgstr "Gajim Temas"
 
@@ -2476,10 +2488,6 @@ msgstr ""
 "voz.\n"
 "Um moderador processará sua solicitação."
 
-#, fuzzy
-msgid "Inactive"
-msgstr "Ativo"
-
 msgid "Incoming Call"
 msgstr "Chamada Entrando"
 
@@ -2706,6 +2714,10 @@ msgstr "Carregar imagem"
 
 msgid "Loading Avatar Failed"
 msgstr "Falha ao Carregar o Avatar"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Carregando…"
 
 msgid "Loading avatar image failed"
 msgstr "Falha ao carregar a imagem do avatar"
@@ -4805,7 +4817,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Há atualizações para os plugins do Gajim"
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4890,8 +4903,12 @@ msgstr ""
 "Este é o tema que você está usando atualmente.\n"
 "Deseja excluir este tema?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Apenas moderadores podem ver seu endereço XMPP"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Esta mensagem foi retirada por %s."
 
 #, python-format
@@ -5589,6 +5606,11 @@ msgstr "Sua senha foi alterada com sucesso."
 msgid "Your public key or authentication certificate"
 msgstr "Sua chave pública ou certificado de autenticação"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "Arquivos ZIP"
 
@@ -6013,10 +6035,6 @@ msgstr ""
 msgid "or"
 msgstr "ou"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "pausada a digitação da mensagem"
 
@@ -6323,6 +6341,10 @@ msgstr "…ou solte aqui"
 #~ msgid "Edit Profile…"
 #~ msgstr "Editar Perfil…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Ativo"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Convidar Contatos…"
 
@@ -6337,3 +6359,6 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Mostrar Gajim"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

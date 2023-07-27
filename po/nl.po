@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1565,6 +1565,14 @@ msgstr "Kon bestand niet openen"
 msgid "Could not open file (%s)"
 msgstr "Kon bestand niet openen"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Kon bestand niet openen"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+
 msgid "Country"
 msgstr "Land"
 
@@ -2366,6 +2374,10 @@ msgstr "Er is geen verbinding beschikbaar"
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim-thema’s"
+
 msgid "Gajim Themes"
 msgstr "Gajim-thema’s"
 
@@ -2706,10 +2718,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Actief"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Binnenkomend bericht:"
 
@@ -2960,6 +2968,10 @@ msgstr "Kies afbeelding"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Uploaden van avatar is mislukt"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Bezig met laden"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5236,7 +5248,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5328,8 +5341,14 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr "Deze naam is al in gebruik. Wil je dit statusbericht overschrijven?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr ""
+"Semi-anoniem\n"
+"<span size=\"small\">(Enkel moderators kunnen je XMPP-adres zien)</span>"
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -6090,6 +6109,11 @@ msgstr "Je archiefvoorkeuren zijn opgeslagen!"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "ZIP-bestanden"
 
@@ -6569,10 +6593,6 @@ msgstr ""
 msgid "or"
 msgstr "Tor"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "pauzeert tijdens het typen van een bericht"
 
@@ -6872,6 +6892,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profiel wordt verzonden…"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Actief"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

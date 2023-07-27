@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -1604,6 +1604,14 @@ msgid "Could not open file (%s)"
 msgstr "Неуспех при зареждането на изображението"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Неуспех при зареждането на изображението"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Нямата права да създавате файлове в тази папка."
+
+#, fuzzy
 msgid "Country"
 msgstr "Акаунт"
 
@@ -2416,6 +2424,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "gajim-remote"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2744,10 +2756,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Активен"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Невалиден псевдоним"
 
@@ -2999,6 +3007,10 @@ msgstr "Избор на изображение"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Неуспех при публикуването на визитката"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Програмирам"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5301,7 +5313,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5393,8 +5406,12 @@ msgstr ""
 "Това име вече се използва. Искате ли да презапишете това съобщение за "
 "състояние?"
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Копиране на _JID/Е-поща"
+
 #, fuzzy, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr "[Това съобщение е шифрирано]"
 
 #, python-format
@@ -6145,6 +6162,11 @@ msgstr "_Настройки"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Всички файлове"
@@ -6635,10 +6657,6 @@ msgstr ""
 msgid "or"
 msgstr "За"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "спря да пише съобщение"
 
@@ -6946,6 +6964,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Изпращане на профила…"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Активен"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

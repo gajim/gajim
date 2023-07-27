@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -1580,6 +1580,13 @@ msgid "Could not open file (%s)"
 msgstr "Dibosupl eo kargañ ar skeudenn"
 
 #, fuzzy
+msgid "Could not save file"
+msgstr "Dibosupl eo kargañ ar skeudenn"
+
+msgid "Could not save file to selected directory."
+msgstr ""
+
+#, fuzzy
 msgid "Country"
 msgstr "Bro:"
 
@@ -2383,6 +2390,10 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "Gajim - %s"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2699,10 +2710,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Inactive"
-msgstr "Oberiant"
-
-#, fuzzy
 msgid "Incoming Call"
 msgstr "Anv-arveriad-ez direizh"
 
@@ -2952,6 +2959,10 @@ msgstr "Pegañ ar skeudenn"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "C'hwitet eo embannadur ar vCard"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "O skrivañ"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -5240,7 +5251,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5329,8 +5341,12 @@ msgstr ""
 "Implijet e vez an anv-mañ gant unan eus ho kontoù dija. Dibabit un anv all "
 "marplij."
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "_Kopiañ ar JID/Chomlec'h postel"
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -6069,6 +6085,11 @@ msgstr "_Penndibaboù"
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "An holl restroù"
@@ -6561,10 +6582,6 @@ msgstr ""
 msgid "or"
 msgstr "Da"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr "a zo paouezet da skrivañ ar gemennadenn"
 
@@ -6870,6 +6887,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Kas ur restr"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Oberiant"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

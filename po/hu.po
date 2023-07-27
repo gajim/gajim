@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-05-25 09:45+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-06-09 08:33+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -1405,6 +1405,12 @@ msgstr "A fájl nem nyitható meg"
 msgid "Could not open file (%s)"
 msgstr "Nem sikerült megnyitni a fájlt (%s)"
 
+msgid "Could not save file"
+msgstr "Sikertelen mentés"
+
+msgid "Could not save file to selected directory."
+msgstr "A fájlt nem lehet a kiválasztott könyvtárba menteni."
+
 msgid "Country"
 msgstr "Ország"
 
@@ -2103,6 +2109,10 @@ msgstr "Megjelent a Gajim %s verziója"
 msgid "Gajim - Error"
 msgstr "Gajim – Hiba"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "A Gajim témái"
+
 msgid "Gajim Themes"
 msgstr "A Gajim témái"
 
@@ -2402,9 +2412,6 @@ msgstr ""
 "Ebben a társalgóban hozzászólás előtt szót kell kérni.\n"
 "Egy moderátor fogja elbírálni a kérést."
 
-msgid "Inactive"
-msgstr "Inaktív"
-
 msgid "Incoming Call"
 msgstr "Bejövő hívás"
 
@@ -2625,6 +2632,9 @@ msgstr "Kép betöltése"
 
 msgid "Loading Avatar Failed"
 msgstr "A profilkép betöltése nem sikerült"
+
+msgid "Loading Preview…"
+msgstr "Előnézet betöltése…"
 
 msgid "Loading avatar image failed"
 msgstr "A profilkép betöltése nem sikerült"
@@ -4620,8 +4630,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "A bővítményekhez frissítés érhető el"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr "Hiba történt az üzenetek letöltése közben."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "Hiba történt az üzenetek letöltése közben: %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "A választott titkosításhoz nincs megfelelő titkosítási módszer."
@@ -4703,8 +4714,11 @@ msgstr ""
 "Ez a téma van jelenleg használatban.\n"
 "Biztosan törölhető ?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "A saját XMPP-címem"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Ezt az üzenetet %s visszavonta."
 
 #, python-format
@@ -5383,6 +5397,13 @@ msgstr "A jelszó módosítása sikerült."
 msgid "Your public key or authentication certificate"
 msgstr "A saját nyilvános kulcs vagy hitelesítő tanúsítvány"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+"Ezen a kiszolgálón nem lehet társalgókat használni, ezért egy másik "
+"kiszolgáló címét kell megadni."
+
 msgid "ZIP files"
 msgstr "ZIP-fájlok"
 
@@ -5799,10 +5820,6 @@ msgstr "hírek"
 msgid "or"
 msgstr "vagy"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "félbehagyta a gépelést"
 
@@ -6115,6 +6132,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "A QR-kóddal történő ellenőrzéshez telepíteni kell a <tt>python-qrcode</"
 #~ "tt> csomagot."
 
+#~ msgid "Inactive"
+#~ msgstr "Inaktív"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Ismerősök meghívása…"
 
@@ -6132,3 +6152,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

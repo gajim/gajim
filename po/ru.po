@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -1412,6 +1412,14 @@ msgstr "Не удалось получить доступ к файлу"
 msgid "Could not open file (%s)"
 msgstr "Не удалось открыть файл (%s)"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Не удалось получить доступ к файлу"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "У Вас нет прав на создание файлов в этой директории."
+
 msgid "Country"
 msgstr "Страна"
 
@@ -2127,6 +2135,10 @@ msgstr "Доступна версия %s"
 msgid "Gajim - Error"
 msgstr "Gajim - Ошибка"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Темы Gajim"
+
 msgid "Gajim Themes"
 msgstr "Темы Gajim"
 
@@ -2434,10 +2446,6 @@ msgstr ""
 "запрос.\n"
 "Модератор обработает ваш запрос."
 
-#, fuzzy
-msgid "Inactive"
-msgstr "Активен"
-
 msgid "Incoming Call"
 msgstr "Входящий звонок"
 
@@ -2663,6 +2671,10 @@ msgstr "Загрузить изображение"
 #, fuzzy
 msgid "Loading Avatar Failed"
 msgstr "Не удалось загрузить аватар"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Загрузка…"
 
 #, fuzzy
 msgid "Loading avatar image failed"
@@ -4694,7 +4706,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Есть обновления для модулей Gajim"
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4775,8 +4788,12 @@ msgstr ""
 "Эта тема используется в данный момент.\n"
 "Удалить эту тему?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Только модераторы могут видеть ваш адрес XMPP"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Это сообщение было отозвано: %s."
 
 #, python-format
@@ -5456,6 +5473,11 @@ msgstr "Ваш пароль был успешно изменен."
 msgid "Your public key or authentication certificate"
 msgstr "Ваш публичный ключ или сертификат аутентификации"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "ZIP-файлы"
 
@@ -5880,10 +5902,6 @@ msgstr ""
 msgid "or"
 msgstr "или"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "перестал печатать сообщение"
 
@@ -6181,6 +6199,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Edit Profile…"
 #~ msgstr "Редактировать профиль…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Активен"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Пригласить контакты…"
 
@@ -6196,3 +6218,6 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

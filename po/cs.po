@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -1412,6 +1412,14 @@ msgstr "Nezda"
 msgid "Could not open file (%s)"
 msgstr "Nelze získat přístup k souboru (%s)"
 
+#, fuzzy
+msgid "Could not save file"
+msgstr "Nezda"
+
+#, fuzzy
+msgid "Could not save file to selected directory."
+msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
+
 msgid "Country"
 msgstr "Země"
 
@@ -2110,6 +2118,10 @@ msgstr "Je dostupná verze %s Gajim"
 msgid "Gajim - Error"
 msgstr "Gajim - Chyba"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Motivy vzhledu"
+
 msgid "Gajim Themes"
 msgstr "Motivy vzhledu"
 
@@ -2412,10 +2424,6 @@ msgstr ""
 "Chcete-li v této konverzaci psát zprávy, musíte nejprve požádat o svolení.\n"
 "Váš požadavek zpracuje moderátor."
 
-#, fuzzy
-msgid "Inactive"
-msgstr "Aktivní"
-
 msgid "Incoming Call"
 msgstr "Příchozí hovor"
 
@@ -2638,6 +2646,10 @@ msgstr "Načíst obrázek"
 
 msgid "Loading Avatar Failed"
 msgstr "Nahrávání profilového obrázku selhalo"
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Načítám…"
 
 msgid "Loading avatar image failed"
 msgstr "Nahrávání profilového obrázku selhalo"
@@ -4641,7 +4653,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Jsou k dispozici aktualizace pro zásuvné moduly Gajimu"
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4721,8 +4734,12 @@ msgstr ""
 "Toto je motiv vzhledu, který současně používáte.\n"
 "Opravdu si přejete odstranit tento motiv vzhledu?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "Vaši XMPP adresu mohou vidět pouze moderátoři"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Tato zpráva byla stažena uživatelem %s."
 
 #, python-format
@@ -5398,6 +5415,11 @@ msgstr "Vaše heslo bylo úspěšně změněno."
 msgid "Your public key or authentication certificate"
 msgstr "Váš veřejný klíč nebo ověřovací certifikát"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr "Soubory ZIP"
 
@@ -5816,10 +5838,6 @@ msgstr "zprávy"
 msgid "or"
 msgstr "nebo"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
-
 msgid "paused composing a message"
 msgstr "pozastavil(a) psaní zprávy"
 
@@ -6163,6 +6181,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Edit Profile…"
 #~ msgstr "Upravit profil…"
 
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Aktivní"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Pozvat kontakty…"
 
@@ -6180,3 +6202,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

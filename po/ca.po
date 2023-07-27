@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1515,6 +1515,12 @@ msgstr ""
 msgid "Could not open file (%s)"
 msgstr ""
 
+msgid "Could not save file"
+msgstr ""
+
+msgid "Could not save file to selected directory."
+msgstr ""
+
 #, fuzzy
 msgid "Country"
 msgstr "Entrada:"
@@ -2272,6 +2278,10 @@ msgid "Gajim - Error"
 msgstr ""
 
 #, fuzzy
+msgid "Gajim Team"
+msgstr "Personalització Temes Gajim"
+
+#, fuzzy
 msgid "Gajim Themes"
 msgstr "Personalització Temes Gajim"
 
@@ -2579,10 +2589,6 @@ msgid ""
 "A moderator will process your request."
 msgstr ""
 
-#, fuzzy
-msgid "Inactive"
-msgstr "Activa"
-
 msgid "Incoming Call"
 msgstr ""
 
@@ -2823,6 +2829,10 @@ msgstr ""
 
 msgid "Loading Avatar Failed"
 msgstr ""
+
+#, fuzzy
+msgid "Loading Preview…"
+msgstr "Envia _Fitxer"
 
 msgid "Loading avatar image failed"
 msgstr ""
@@ -5014,7 +5024,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5093,8 +5104,12 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr ""
 
+#, fuzzy
+msgid "This is your XMPP address"
+msgstr "_Copia adreça JID/Email"
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -5800,6 +5815,11 @@ msgstr ""
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Perfil"
@@ -6269,10 +6289,6 @@ msgstr ""
 msgid "or"
 msgstr "otr"
 
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr ""
-
 msgid "paused composing a message"
 msgstr ""
 
@@ -6511,6 +6527,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "Inactive"
+#~ msgstr "Activa"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"

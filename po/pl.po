@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
-"PO-Revision-Date: 2023-05-25 09:45+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"PO-Revision-Date: 2023-07-27 22:31+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -91,7 +91,7 @@ msgstr "%(received)s z %(max)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr "%(type)s szyfrowanie jest aktywne %(authenticated)s."
+msgstr "Szyfrowanie %(type)s jest aktywne %(authenticated)s."
 
 #, python-format
 msgctxt "own nickname in group chat"
@@ -1414,6 +1414,12 @@ msgstr "Brak dostępu do pliku"
 msgid "Could not open file (%s)"
 msgstr "Nie udało się otworzyć pliku (%s)"
 
+msgid "Could not save file"
+msgstr "Nie udało się zapisać pliku"
+
+msgid "Could not save file to selected directory."
+msgstr "Nie udało się zapisać pliku do wybranego katalogu."
+
 msgid "Country"
 msgstr "Kraj"
 
@@ -2113,6 +2119,10 @@ msgstr "Gajim %s jest dostępny"
 msgid "Gajim - Error"
 msgstr "Gajim — błąd"
 
+#, fuzzy
+msgid "Gajim Team"
+msgstr "Motywy Gajima"
+
 msgid "Gajim Themes"
 msgstr "Motywy Gajima"
 
@@ -2416,9 +2426,6 @@ msgstr ""
 "głosu.\n"
 "Moderator przetworzy Twoją prośbę."
 
-msgid "Inactive"
-msgstr "Nieaktywny"
-
 msgid "Incoming Call"
 msgstr "Przychodząca rozmowa"
 
@@ -2639,6 +2646,9 @@ msgstr "Wczytaj obraz"
 
 msgid "Loading Avatar Failed"
 msgstr "Wczytywanie awataru nie powiodło się"
+
+msgid "Loading Preview…"
+msgstr "Ładowanie podglądu…"
 
 msgid "Loading avatar image failed"
 msgstr "Wczytywanie obrazu awataru nie powiodło się"
@@ -4652,8 +4662,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Są aktualizacje do wtyczek Gajima"
 
-msgid "There has been an error while trying to fetch messages."
-msgstr "Wystąpił błąd podczas próby pobrania wiadomości."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
+msgstr "Wystąpił błąd podczas próby pobrania wiadomości: %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "Nie jest dostępna żadna metoda szyfrowania dla wybranego szyfrowania."
@@ -4735,8 +4746,11 @@ msgstr ""
 "To jest motyw, z którego aktualnie korzystasz.\n"
 "Czy chcesz usunąć ten motyw?"
 
-#, python-format
-msgid "This message has been retracted by %s."
+msgid "This is your XMPP address"
+msgstr "To jest Twój adres XMPP"
+
+#, fuzzy, python-format
+msgid "This message has been moderated%s."
 msgstr "Ta wiadomość została wycofana przez %s."
 
 #, python-format
@@ -5427,6 +5441,13 @@ msgstr "Twoje hasło zostało zmienione."
 msgid "Your public key or authentication certificate"
 msgstr "Twój klucz publiczny lub certyfikat uwierzytelnienia"
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+"Twój serwer nie oferuje usługi rozmów grupowych. Proszę określić adres "
+"innego serwera."
+
 msgid "ZIP files"
 msgstr "Pliki ZIP"
 
@@ -5718,10 +5739,10 @@ msgid "alt"
 msgstr "wysokość"
 
 msgid "and NOT authenticated"
-msgstr "oraz NIE uwierzytelniana"
+msgstr "i NIEUWIERZYTELNIONE"
 
 msgid "and authenticated"
-msgstr "oraz uwierzytelniana"
+msgstr "i uwierzytelnione"
 
 msgid "area"
 msgstr "obszar"
@@ -5842,10 +5863,6 @@ msgstr "wiadomosci"
 
 msgid "or"
 msgstr "lub"
-
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
-msgstr "org.gajim.Gajim"
 
 msgid "paused composing a message"
 msgstr "przerwał pisanie wiadomości"
@@ -6159,6 +6176,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Edit Profile…"
 #~ msgstr "Edytuj profil…"
 
+#~ msgid "Inactive"
+#~ msgstr "Nieaktywny"
+
 #~ msgid "Invite Contacts…"
 #~ msgstr "Zaproś kontakty…"
 
@@ -6176,3 +6196,6 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Upuściłeś coś, czego Gajim nie potrafi obsłużyć: %s"
+
+#~ msgid "org.gajim.Gajim"
+#~ msgstr "org.gajim.Gajim"

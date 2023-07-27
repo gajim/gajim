@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-23 19:40+0000\n"
+"POT-Creation-Date: 2023-07-01 15:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -1362,6 +1362,12 @@ msgstr ""
 msgid "Could not open file (%s)"
 msgstr ""
 
+msgid "Could not save file"
+msgstr ""
+
+msgid "Could not save file to selected directory."
+msgstr ""
+
 msgid "Country"
 msgstr ""
 
@@ -2044,6 +2050,9 @@ msgstr ""
 msgid "Gajim - Error"
 msgstr ""
 
+msgid "Gajim Team"
+msgstr ""
+
 msgid "Gajim Themes"
 msgstr ""
 
@@ -2319,9 +2328,6 @@ msgid ""
 "A moderator will process your request."
 msgstr ""
 
-msgid "Inactive"
-msgstr ""
-
 msgid "Incoming Call"
 msgstr ""
 
@@ -2536,6 +2542,9 @@ msgid "Load Image"
 msgstr ""
 
 msgid "Loading Avatar Failed"
+msgstr ""
+
+msgid "Loading Preview…"
 msgstr ""
 
 msgid "Loading avatar image failed"
@@ -4481,7 +4490,8 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr ""
 
-msgid "There has been an error while trying to fetch messages."
+#, python-format
+msgid "There has been an error while trying to fetch messages: %s"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -4556,8 +4566,11 @@ msgid ""
 "Do you want to delete this theme?"
 msgstr ""
 
+msgid "This is your XMPP address"
+msgstr ""
+
 #, python-format
-msgid "This message has been retracted by %s."
+msgid "This message has been moderated%s."
 msgstr ""
 
 #, python-format
@@ -5211,6 +5224,11 @@ msgstr ""
 msgid "Your public key or authentication certificate"
 msgstr ""
 
+msgid ""
+"Your server does not offer a group chat service. Please specify the address "
+"of a different server."
+msgstr ""
+
 msgid "ZIP files"
 msgstr ""
 
@@ -5623,10 +5641,6 @@ msgid "news"
 msgstr ""
 
 msgid "or"
-msgstr ""
-
-#. Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-msgid "org.gajim.Gajim"
 msgstr ""
 
 msgid "paused composing a message"
