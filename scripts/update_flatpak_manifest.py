@@ -13,6 +13,7 @@ PYPI_INDEX = 'https://pypi.org/pypi'
 YAML = ruamel.yaml.YAML()
 YAML.indent(mapping=2, sequence=4, offset=2)
 YAML.preserve_quotes = True
+YAML.width = 180
 
 logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
 
