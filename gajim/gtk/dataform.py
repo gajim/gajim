@@ -550,7 +550,7 @@ class ListMutliTreeView(Gtk.TreeView):
         for row in model:
             if not row[3]:
                 continue
-            values.append(row[2])
+            values.append(row[1])
         self._field.values = values
 
 
