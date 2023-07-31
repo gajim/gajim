@@ -32,7 +32,6 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import StyleAttr
@@ -152,7 +151,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             assert action is not None
             action.connect('activate', func)
 
-    def _get_contact(self, jid: str) -> types.BareContact:
+    def _get_contact(self, jid: str) -> BareContact:
         contact = self._client.get_module('Contacts').get_contact(jid)
         assert isinstance(contact, BareContact)
         return contact
@@ -298,7 +297,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         jid = JID.from_string(param.get_string())
         selected_contact = self._contacts.get_contact(jid)
-        assert isinstance(selected_contact, types.BareContact)
+        assert isinstance(selected_contact, BareContact)
         if selected_contact.is_gateway:
             # Check for transport users in roster and warn about removing the
             # transport if there are any
@@ -411,7 +410,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         return self._filter_string in model[iter_][Column.TEXT].lower()
 
-    def _get_contact_visible(self, contact: types.BareContact) -> bool:
+    def _get_contact_visible(self, contact: BareContact) -> bool:
         if self._filter_enabled:
             return self._filter_string in contact.name.lower()
 
@@ -456,14 +455,14 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._set_model()
         self._roster.expand_all()
 
-    def _connect_contact_signals(self, contact: types.BareContact) -> None:
+    def _connect_contact_signals(self, contact: BareContact) -> None:
         contact.connect('presence-update', self._on_contact_update)
         contact.connect('caps-update', self._on_contact_update)
         contact.connect('avatar-update', self._on_contact_update)
         contact.connect('blocking-update', self._on_contact_update)
 
     def _on_contact_update(self,
-                           contact: types.BareContact,
+                           contact: BareContact,
                            _signal_name: str) -> None:
 
         self._draw_contact(contact)
@@ -507,7 +506,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         return group_iter
 
     def _add_contact_to_group(self,
-                              contact: types.BareContact,
+                              contact: BareContact,
                               group: str) -> None:
 
         group_iter = self._add_group(group)
@@ -519,13 +518,13 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._contact_refs[contact.jid].append(ref)
 
     def _add_contact_to_groups(self,
-                               contact: types.BareContact,
+                               contact: BareContact,
                                groups: set[str]) -> None:
         for group in groups:
             self._add_contact_to_group(contact, group)
 
     def _remove_contact_from_groups(self,
-                                    contact: types.BareContact,
+                                    contact: BareContact,
                                     groups: set[str]) -> None:
         if not groups:
             return
@@ -545,7 +544,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._check_for_empty_groups()
 
-    def _remove_contact(self, contact: types.BareContact) -> None:
+    def _remove_contact(self, contact: BareContact) -> None:
         refs = self._contact_refs.pop(contact.jid)
         for ref in refs:
             iter_ = self._get_iter_from_ref(ref)
@@ -562,7 +561,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             self._store.remove(group_iter)
             del self._group_refs[group]
 
-    def _add_or_update_contact(self, contact: types.BareContact) -> None:
+    def _add_or_update_contact(self, contact: BareContact) -> None:
         new_groups = set(contact.groups or [DEFAULT_GROUP])
         groups = self._get_current_groups(contact.jid)
 
@@ -614,14 +613,14 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             group[Column.VISIBLE] = group_is_visible
         self._roster.expand_all()
 
-    def _draw_contact(self, contact: types.BareContact) -> None:
+    def _draw_contact(self, contact: BareContact) -> None:
         for ref in self._contact_refs[contact.jid]:
             self._draw_contact_row(ref, contact)
         self._roster.expand_all()
 
     def _draw_contact_row(self,
                           ref: Gtk.TreeRowReference,
-                          contact: types.BareContact):
+                          contact: BareContact):
 
         iter_ = self._get_iter_from_ref(ref)
 
