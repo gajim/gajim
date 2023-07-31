@@ -352,6 +352,7 @@ class ChatPage(Gtk.Box):
             self._search_revealer.set_reveal_child(False)
 
             if (self._restore_occupants_list and
+                    self._chat_control.has_active_chat() and
                     self._chat_control.contact.is_groupchat):
                 # Restore GroupchatRoster only if a group chat is selected
                 # currently. If this condition isn' satisfied, it is checked
