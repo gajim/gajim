@@ -77,13 +77,28 @@ def build_wheel(wheel_directory: str,
     return basename
 
 
-def build_editable(*args: Any, **kwargs: Any) -> str:
-    return build_wheel(*args, **kwargs)
+def build_editable(wheel_directory: str,
+                   config_settings: dict[str, str] | None = None,
+                   metadata_directory: str | None = None
+                   ) -> str:
+
+    if config_settings is not None:
+        _check_config_settings(config_settings)
+
+    build_translations()
+
+    basename = _orig.build_editable(
+        wheel_directory,
+        config_settings=config_settings,
+        metadata_directory=metadata_directory,
+    )
+
+    return basename
 
 
 def get_requires_for_build_editable(*args: Any, **kwargs: Any) -> list[str]:
-    return get_requires_for_build_wheel(*args, **kwargs)
+    return _orig.get_requires_for_build_editable(*args, **kwargs)
 
 
 def prepare_metadata_for_build_editable(*args: Any, **kwargs: Any) -> str:
-    return prepare_metadata_for_build_wheel(*args, **kwargs)
+    return _orig.prepare_metadata_for_build_editable(*args, **kwargs)
