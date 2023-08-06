@@ -56,7 +56,7 @@ class GroupChatInvitation(Gtk.ApplicationWindow):
 
         contact = self._client.get_module('Contacts').get_contact(
             event.from_.bare)
-        assert isinstance(contact, (BareContact, GroupchatContact))
+        assert isinstance(contact, BareContact | GroupchatContact)
         contact_label = Gtk.Label(label=contact.name)
         contact_label.get_style_context().add_class('bold16')
         contact_label.set_line_wrap(True)
