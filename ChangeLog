@@ -1,3 +1,46 @@
+Gajim 1.8.1 (07 Aug 2023)
+
+  New
+
+  * Add setting for default encryption
+
+  Improvements
+
+  * XMLConsole: Enable browsing sent stanzas in message input (#5403)
+  * Sort cprofile output after total time
+  * Moderation: Handle unknown moderator JID
+  * Preview: Always show preview widget (#11427)
+  * Preview: Add loading placeholder (#11264)
+  * Account page: Show our XMPP address
+
+  Performance
+
+  * Idle: Raise poll interval
+
+  Bug Fixes
+
+  * Search: Don't fail while closing if no chat has been loaded before (#11588)
+  * Dataform: Correctly serialize multi list fields
+  * Profile: Respect avatar/nickname privacy setting on consecutive changes (#11584)
+  * Don’t forget ignored TLS errors from previous connects (#11574)
+  * App menu: Add missing mnemonic for Accounts menu
+  * Gateway: Fix roster method call
+  * Contacts: Fix supports_{audio,video} property
+  * AvatarSelector: Fix crash on reset (#11563)
+  * CertificateBox: Catch exception if cert does not offer extension (#11560)
+  * CreateGroupchatWindow: Improve handling of MUC service availability (#11557)
+  * Preview: Show error if file saving directory is not available (#11558)
+  * SecurityLabels: Display labels for messages received with MAM
+  * DataForm: Handle destroy correctly (#11548)
+  * ChatListRow: Always update group chat name
+  * Fix showing MAM sync errors and show error text
+  * OMEMOTrustManager: React correctly to connection changes (#11547)
+  * Fix interaction of GroupchatRoster and SearchView (#11546)
+  * Init plugin translation module later
+  * GroupchatManage: Improve checks for joined state (#11231)
+  * Search: Restore group chat participants list to previous state when closing search (#11536)
+  * Windows themes: Don't fail hard when winsdk UISettings are not available (#11542)
+
 Gajim 1.8.0 (27 May 2023)
 
   New
