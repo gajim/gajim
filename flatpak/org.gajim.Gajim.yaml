@@ -58,11 +58,11 @@ modules:
   - name: python3-pyparsing
     buildsystem: simple
     build-commands:
-      - pip3 install pyparsing-3.1.0-py3-none-any.whl
+      - pip3 install pyparsing-3.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.1.0-py3-none-any.whl
-        sha256: d554a96d1a7d3ddaf7183104485bc19fd80543ad6ac5bdb6426719d766fb06c1
+        url: https://files.pythonhosted.org/packages/py3/p/pyparsing/pyparsing-3.1.1-py3-none-any.whl
+        sha256: 32c7c0b711493c72ff18a981d24f28aaf9c1fb7ed5e9667c9e84e3db623bdbfb
 
   - name: python3-packaging
     buildsystem: simple
@@ -172,13 +172,13 @@ modules:
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-10.0.0-py3-none-any.whl
+      - pip3 install more_itertools-10.1.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.0.0-py3-none-any.whl
-        sha256: 928d514ffd22b5b0a8fce326d57f423a55d2ff783b093bab217eda71e732330f
+        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.1.0-py3-none-any.whl
+        sha256: 64e0735fcfdc6f3464ea133afe8ea4483b1c5fe3a3d69852e6503b43a0b222e6
 
   # keyring dependency
   - name: python3-importlib-metadata
@@ -288,11 +288,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.28.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.29.2-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.28.1-py2.py3-none-any.whl
-        sha256: 6bdb25bd9092478d3a817cb0d01fa99e296aea34d404eac3ca0037faa5c2aa0a
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.29.2-py2.py3-none-any.whl
+        sha256: 3e17215d8006612e2df02b0e73115eb8376c37e3f586d8436fa41644e605074d
 
   # gssapi dependency
   - name: python3-decorator
@@ -364,11 +364,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-4.3.1-py3-none-any.whl
+      - pip3 install nbxmpp-4.3.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.3.1-py3-none-any.whl
-        sha256: a2b3eb5dcb15a98415561eceffac3a83dc0d8f67ed932788abef713239c120f6
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.3.2-py3-none-any.whl
+        sha256: 17ab439a04a4cec24d02a0fcff99ee1830738975d3dc95aae4553134d4d0cc44
 
   - name: gajim
     buildsystem: simple
