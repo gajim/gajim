@@ -266,7 +266,7 @@ class Client(Observable, ClientModules):
 
             if error in ('not-authorized', 'no-password'):
                 def _on_password() -> None:
-                    self._prepare_for_connect()
+                    self.connect()
 
                 app.ged.raise_event(PasswordRequired(client=self,
                                                      on_password=_on_password))
@@ -377,7 +377,7 @@ class Client(Observable, ClientModules):
             if show == 'offline':
                 return
 
-            self._prepare_for_connect()
+            self.connect()
             return
 
         if self._state.is_connecting:
@@ -392,7 +392,7 @@ class Client(Observable, ClientModules):
                 self._destroy_client = True
                 self._abort_reconnect()
             else:
-                self._prepare_for_connect()
+                self.connect()
             return
 
         # We are connected
@@ -521,7 +521,18 @@ class Client(Observable, ClientModules):
                         msg_log_id=log_line_id,
                         play_sound=message.play_sound))
 
-    def _prepare_for_connect(self) -> None:
+    def connect(
+        self,
+        ignored_tls_errors: IgnoredTlsErrorsT = None
+    ) -> None:
+
+        log.info('Connect')
+
+        if self._state not in (ClientState.DISCONNECTED,
+                               ClientState.RECONNECT_SCHEDULED):
+            # Do not try to reco while we are already trying
+            return
+
         custom_host = get_custom_host(self._account)
         if custom_host is not None:
             self._client.set_custom_host(*custom_host)
@@ -547,19 +558,10 @@ class Client(Observable, ClientModules):
         password = passwords.get_password(self._account)
         self._client.set_password(password)
 
-        self.connect()
-
-    def connect(self, ignored_tls_errors: IgnoredTlsErrorsT = None) -> None:
-        if self._state not in (ClientState.DISCONNECTED,
-                               ClientState.RECONNECT_SCHEDULED):
-            # Do not try to reco while we are already trying
-            return
-
-        log.info('Connect')
-
         self._client.set_accepted_certificates(
             app.cert_store.get_certificates())
         self._client.set_ignored_tls_errors(ignored_tls_errors)
+
         self._reconnect = True
         self._disable_reconnect_timer()
         self._set_state(ClientState.CONNECTING)
@@ -578,7 +580,7 @@ class Client(Observable, ClientModules):
         self._set_state(ClientState.RECONNECT_SCHEDULED)
         log.info('Reconnect to %s in 3s', self._account)
         self._reconnect_timer_source = GLib.timeout_add_seconds(
-            3, self._prepare_for_connect)
+            3, self.connect)
 
     def _abort_reconnect(self) -> None:
         self._set_state(ClientState.DISCONNECTED)
