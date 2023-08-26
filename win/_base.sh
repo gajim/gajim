@@ -171,6 +171,7 @@ function cleanup_install {
         "${MINGW_PACKAGE_PREFIX}"-python-pip "${MINGW_PACKAGE_PREFIX}"-ncurses || true
     build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tk || true
     build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tcl || true
+    build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-frei0r-plugins || true
 
     #delete translations we don't support
     for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do
