@@ -757,7 +757,7 @@ class GroupchatContact(CommonContact):
     def set_avatar_sha(self, sha: str) -> None:
         app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
-    def get_avatar(self, size: int, scale: int) -> cairo.ImageSurface | None:
+    def get_avatar(self, size: int, scale: int) -> cairo.ImageSurface:
         transport_icon = None
         disco_info = self.get_disco()
         if disco_info is not None:

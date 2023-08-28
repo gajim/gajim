@@ -416,7 +416,7 @@ class AvatarStorage(metaclass=Singleton):
                         scale: int,
                         default: bool = False,
                         transport_icon: str | None = None,
-                        style: str = 'circle') -> cairo.ImageSurface | None:
+                        style: str = 'circle') -> cairo.ImageSurface:
 
         if transport_icon is not None:
             surface = load_icon_surface(transport_icon, size, scale)
