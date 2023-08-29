@@ -21,8 +21,9 @@ def create_icns(icon_path: str) -> None:
             png_path = os.path.join(tmpdir, png_fn)
             run(['inkscape', '-z', '-e', png_path,
                  '-w', str(size_px), '-h', str(size_px), '-y', '0',
-                 ICON_SVG])
-    run(['iconutil', '-c', 'icns', '-o', icon_path, tmpdir])
+                 ICON_SVG],
+                 check=True)
+    run(['iconutil', '-c', 'icns', '-o', icon_path, tmpdir], check=True)
 
     shutil.rmtree(tmpdir)
 

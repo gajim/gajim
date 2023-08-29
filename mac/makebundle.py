@@ -31,7 +31,7 @@ if __name__ == '__main__':
     run(['cp', 'mac/gajim.spec', 'gajim.spec'], check=True)
     run(['pyinstaller', 'gajim.spec'], check=True)
     # we only want Gajim.app in the dmg
-    run(['rm', '-rf', 'dist/launch'])
+    run(['rm', '-rf', 'dist/launch'], check=True)
     run(['hdiutil',
          'create',
          '-volname',
