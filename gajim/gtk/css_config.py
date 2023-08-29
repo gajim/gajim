@@ -441,7 +441,7 @@ class CSSConfig:
         if style is not None:
             desc.set_style(self._get_pango_style_from_string(style))
         if size is not None:
-            desc.set_size(int(size[:-2]) * Pango.SCALE)
+            desc.set_size(int(float(size[:-2])) * Pango.SCALE)
         return desc
 
     @staticmethod
