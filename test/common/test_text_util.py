@@ -1,6 +1,7 @@
 import unittest
 
 from gajim.common.util.text import escape_iri_path_segment
+from gajim.common.util.text import format_bytes_as_hex
 from gajim.common.util.text import format_duration
 from gajim.common.util.text import jid_to_iri
 from gajim.common.util.text import remove_invalid_xml_chars
@@ -71,6 +72,17 @@ class Test(unittest.TestCase):
         do(3599999999999.0, '000:59:59')
         do(3600000000000.0, '001:00:00')
         do(3599999999999999.0, '999:59:59')
+
+    def test_format_bytes_as_hex(self) -> None:
+        tests = [
+            (b'U\xe9\xf4\xd6~\x17\xa6\xdf]\xc7\xfe\x9a\x01\r\x8b\xea\xfd\x8f@.',
+             '55:E9:F4:D6:7E:17:A6:DF:5D:C7\nFE:9A:01:0D:8B:EA:FD:8F:40:2E'),
+        ]
+
+        for test in tests:
+            bytes_, string = test
+            hex_string = format_bytes_as_hex(bytes_, 2)
+            self.assertEqual(hex_string, string)
 
 
 if __name__ == '__main__':

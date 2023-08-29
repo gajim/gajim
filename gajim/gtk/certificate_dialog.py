@@ -22,6 +22,7 @@ from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePublicKey
 from cryptography.hazmat.primitives.asymmetric.ed448 import Ed448PublicKey
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
+from cryptography.utils import int_to_bytes
 from cryptography.x509 import DNSName
 from cryptography.x509 import ExtensionNotFound
 from cryptography.x509.oid import ExtensionOID
@@ -32,7 +33,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
-from gajim.common.util.text import format_sha_bytes
+from gajim.common.util.text import format_bytes_as_hex
 
 from gajim.gtk.builder import get_builder
 
@@ -101,10 +102,9 @@ class CertificateBox(Gtk.Box):
             log.info('Certificate does not have extension: %s', err)
             self._it_subject_alt_names = ''
 
-        serial_str = f'{cert.serial_number:02X}'
-        serial_str_foratted = ':'.join(
-            map('{}{}'.format, *(serial_str[::2], serial_str[1::2])))
-        self._it_serial_number = serial_str_foratted
+        serial_bytes = format_bytes_as_hex(
+            int_to_bytes(cert.serial_number), 2)
+        self._it_serial_number = serial_bytes
 
         self._ib_common_name = ''
         self._ib_organization = ''
@@ -120,10 +120,10 @@ class CertificateBox(Gtk.Box):
         self._expires = cert.not_valid_after.strftime('%c %Z')
 
         sha1_bytes = cert.fingerprint(hashes.SHA1())
-        self._sha1 = format_sha_bytes('sha1', sha1_bytes)
+        self._sha1 = format_bytes_as_hex(sha1_bytes, 2)
 
         sha256_bytes = cert.fingerprint(hashes.SHA256())
-        self._sha256 = format_sha_bytes('sha256', sha256_bytes)
+        self._sha256 = format_bytes_as_hex(sha256_bytes, 4)
 
         public_key = cert.public_key()
         self._pk_algorithm = ''
