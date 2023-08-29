@@ -146,7 +146,7 @@ class ConversationView(Gtk.ScrolledWindow):
         for row in cast(list[BaseRow], self._list_box.get_selected_rows()):
             if isinstance(row, MessageRow):
                 timestamp_formatted = row.timestamp.strftime(format_string)
-                selection_text += (f'{timestamp_formatted} - {row.name}: '
+                selection_text += (f'{timestamp_formatted} - {row.name}:\n'
                                    f'{row.get_text()}\n')
 
         clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
