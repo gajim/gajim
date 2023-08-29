@@ -649,6 +649,7 @@ class OMEMO(BaseModule):
         return compose_trust_uri(jid, verified_identities)
 
     def cleanup(self) -> None:
+        BaseModule.cleanup(self)
         self._backend.destroy()
         del self._backend
 

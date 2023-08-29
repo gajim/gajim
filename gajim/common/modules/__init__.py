@@ -23,6 +23,7 @@ from pathlib import Path
 
 from nbxmpp.structs import StanzaHandler
 
+from gajim.common import app
 from gajim.common.modules.base import BaseModule
 
 if typing.TYPE_CHECKING:
@@ -80,6 +81,7 @@ def unregister_modules(client: Client) -> None:
     for instance in _modules[client.account].values():
         if hasattr(instance, 'cleanup'):
             instance.cleanup()
+        app.check_finalize(instance)
     del _modules[client.account]
 
 

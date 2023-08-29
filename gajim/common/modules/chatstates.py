@@ -400,6 +400,7 @@ class Chatstate(BaseModule):
         self._remote_chatstate_composing_timeouts.clear()
 
     def cleanup(self) -> None:
+        BaseModule.cleanup(self)
         self.remove_all_timeouts()
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)

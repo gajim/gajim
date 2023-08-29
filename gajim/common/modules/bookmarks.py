@@ -314,4 +314,5 @@ class Bookmarks(BaseModule):
             GLib.source_remove(_id)
 
     def cleanup(self) -> None:
+        BaseModule.cleanup(self)
         self._remove_timeouts()

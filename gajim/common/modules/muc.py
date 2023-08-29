@@ -1113,5 +1113,5 @@ class MUC(BaseModule):
             self._remove_rejoin_timeout(room_jid)
 
     def cleanup(self) -> None:
-        super().cleanup()
+        BaseModule.cleanup(self)
         self._remove_all_timeouts()

@@ -156,6 +156,7 @@ class BaseModule(EventHelper):
             jid, groupchat=groupchat)
 
     def cleanup(self) -> None:
+        self.handlers.clear()
         self.unregister_events()
         self._client.disconnect_all_from_obj(self)
 

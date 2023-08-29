@@ -197,8 +197,8 @@ class Caps(BaseModule):
                              client.status_message)
 
     def cleanup(self) -> None:
-        self._remove_all_tasks()
         BaseModule.cleanup(self)
+        self._remove_all_tasks()
 
 
 class EntityCapsTask(Task):
