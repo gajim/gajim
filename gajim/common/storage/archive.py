@@ -1361,7 +1361,7 @@ class MessageArchiveStorage(SqliteStorage):
 
             args = ' = ?, '.join(kwargs.keys()) + ' = ?'
             sql = '''UPDATE last_archive_message SET {}
-                     WHERE jid_id = ?'''.format(args)
+                     WHERE jid_id = ?'''.format(args)  # noqa: UP032
             self._con.execute(sql, tuple(kwargs.values()) + (jid_id,))
         log.info('Set message archive info: %s %s', jid, kwargs)
         self._delayed_commit()

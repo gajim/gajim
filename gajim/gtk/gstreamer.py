@@ -23,9 +23,9 @@ except Exception:
 
 
 def create_gtk_widget() -> tuple[Gst.Element, Gtk.Widget, str] | None:
-    gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
+    gtkglsink = Gst.ElementFactory.make('gtkglsink', None)  # pyright: ignore [reportUnboundVariable] # noqa: E501
     if gtkglsink is not None:
-        glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
+        glsinkbin = Gst.ElementFactory.make('glsinkbin', None)  # pyright: ignore [reportUnboundVariable] # noqa: E501
         if glsinkbin is None:
             return None
         glsinkbin.set_property('sink', gtkglsink)
@@ -33,7 +33,7 @@ def create_gtk_widget() -> tuple[Gst.Element, Gtk.Widget, str] | None:
         widget = gtkglsink.get_property('widget')
         name = 'gtkglsink'
     else:
-        sink = Gst.ElementFactory.make('gtksink', None)
+        sink = Gst.ElementFactory.make('gtksink', None)  # pyright: ignore [reportUnboundVariable] # noqa: E501
         if sink is None:
             return None
         widget = sink.get_property('widget')

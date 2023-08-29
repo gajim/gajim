@@ -85,7 +85,7 @@ class EventStorage(SqliteStorage):
                             row: tuple[Any, ...]) -> NamedTuple:
 
         assert cursor.description is not None
-        fields = [col[0] for col in cursor.description]
+        fields = [col[0] for col in cursor.description]  # pyright: ignore
         Row = namedtuple('Row', fields)  # pyright: ignore
         return Row(*row)
 
@@ -126,7 +126,7 @@ class EventStorage(SqliteStorage):
         insert_sql = '''
             SELECT account, jid, event, timestamp, data as "data [JSON]"
             FROM events WHERE account=? AND jid=? {time_order}
-            LIMIT ?'''.format(time_order=time_order)
+            LIMIT ?'''.format(time_order=time_order)  # noqa: UP032
 
         event_list: list[events.ApplicationEvent] = []
         for row in self._con.execute(insert_sql, (contact.account,
