@@ -46,8 +46,9 @@ repository = "https://dev.gajim.org/gajim/gajim"
 
 [project.optional-dependencies]
 dev = [
-  "ruff",
-  "codespell[toml]",
+  "ruff>=0.0.286",
+  "codespell[toml]>=2.2.5",
+  "isort>=5.12.0",
   "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
   "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
   "python-gitlab",
@@ -156,38 +157,62 @@ include = [
 line-length = 80
 
 select = [
-  "A",      # flake8-builtins
-  # "ANN",  # flake8-annotations
-  # "ARG",    # flake8-unused-arguments
-  "B",      # flake8-bugbear
-  "BLE",    # flake8-blind-except
-  "C",      # flake8-comprehensions
-  "C901",   # mccabe
-  # "D",    # pydocstyle
-  "E",      # pycodestyle
-  # "EM",     # flake8-errmsg
-  # "ERA",    # eradicate
-  "F",      # pyflakes  
-  # "FBT",    # flake8-boolean-trap
-  # "I",    # flake8-tidy-imports, isort
-  "ICN",    # flake8-import-conventions
-  "N",      # pep8-naming
-  # "PDV",    # pandas-vet
-  "PGH",    # pygrep-hooks
-  "PLC",    # pylint
-  "PLE",    # pylint
-  "PLR",    # pylint
-  "PLW",    # pylint
-  "Q",      # flake8-quotes
-  "RUF",    # Ruff-specific rules
-  # "RET",    # flake8-return
-  "S",      # flake8-bandit
-  "SIM",    # flake8-simplify
-  # "T",      # flake8-debugger, flake8-print
-  # "TID",    # flake8-tidy-imports
-  "UP",     # pyupgrade
-  "W",      # pycodestyle
-  "YTT",    # flake8-2020
+    "A",     # flake8-builtins
+    # "AIR",   # Airflow
+    # "ANN",   # flake8-annotations
+    # "ARG",   # flake8-unused-arguments
+    # "ASYNC", # flake8-async
+    "B",     # flake8-bugbear
+    "BLE",   # flake8-blind-except
+    "C4",    # flake8-comprehensions
+    "C90",   # mccabe
+    "COM",   # flake8-commas
+    "CPY",   # flake8-copyright
+    # "D",     # pydocstyle
+    # "DJ",    # flake8-django
+    # "DTZ",   # flake8-datetimez
+    "E",     # Error
+    # "EM",    # flake8-errmsg 
+    # "ERA",   # eradicate
+    "EXE",   # flake8-executable
+    "F",     # Pyflakes
+    "FA",    # flake8-future-annotations
+    # "FBT",   # flake8-boolean-trap
+    # "FIX",   # flake8-fixme
+    # "FLY",   # flynt
+    "G",     # flake8-logging-format
+    # "I",     # isort
+    "ICN",   # flake8-import-conventions
+    # "INP",   # flake8-no-pep420
+    # "INT",   # flake8-gettext
+    # "ISC",   # flake8-implicit-str-concat
+    "N",     # pep8-naming
+    # "NPY",   # NumPy-specific rules
+    # "PD",    # pandas-vet
+    # "PERF",  # Perflint
+    "PGH",   # pygrep-hooks
+    # "PIE",   # flake8-pie
+    "PL",    # Pylint
+    # "PT",    # flake8-pytest-style
+    # "PTH",   # flake8-use-pathlib
+    # "PYI",   # flake8-pyi
+    "Q",     # flake8-quotes
+    # "RET",   # flake8-return
+    "RSE",   # flake8-raise
+    "RUF",   # Ruff-specific rules
+    "S",     # flake8-bandit
+    "SIM",   # flake8-simplify
+    # "SLF",   # flake8-self
+    "SLOT",  # flake8-slots
+    "T10",   # flake8-debugger
+    # "T20",   # flake8-print
+    # "TCH",   # flake8-type-checking
+    # "TD",    # flake8-todos
+    # "TID",   # flake8-tidy-imports
+    # "TRY",   # tryceratops
+    "UP",    # pyupgrade
+    "W",     # Warning
+    "YTT",   # flake8-2020
 ]
 
 ignore = [
@@ -195,6 +220,7 @@ ignore = [
   "B904",   # Within an except clause ..
   "BLE001", # Blind except Exception: statement
   "C901",   # too complex
+  "COM812", # Trailing comma missing
   "FBT003", # Boolean positional value in function call
   "N802",   # Function name should be lower case
   "N806",   # Variable should be lower case
@@ -214,6 +240,7 @@ ignore = [
   "RUF002", # AmbiguousUnicodeCharacterDocstring
   "RUF003", # AmbiguousUnicodeCharacterComment
   "RUF005", # Consider x instead of concatenation
+  "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
   "RUF100", # Unused `noqa` directive
   "S101",   # Use of `assert` detected
   "S110",   # `try`-`except`-`pass` detected, consider logging the exception

@@ -24,6 +24,7 @@ test-codespell:
   image: gajim-test
   stage: test
   script:
+    - codespell --version
     - codespell gajim
   interruptible: true
 
@@ -37,6 +38,7 @@ test-pyright:
     - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
     - pip install git+https://dev.gajim.org/gajim/omemo-dr.git
     - pip install --config-settings=config=Gtk3,Gdk3,GtkSource4 git+https://github.com/pygobject/pygobject-stubs.git
+    - pyright --version
     - pyright
   interruptible: true
 
@@ -47,6 +49,7 @@ test-ruff:
     - changes:
       - "**/*.py"
   script:
+    - ruff --version
     - ruff .
   interruptible: true
 
@@ -57,6 +60,7 @@ test-isort:
     - changes:
       - "**/*.py"
   script:
+    - isort --version
     - isort --check .
   interruptible: true
 
