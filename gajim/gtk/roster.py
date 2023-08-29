@@ -133,10 +133,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.settings.connect_signal('sort_by_show_in_roster',
                                     self._on_setting_changed)
 
-        self._connect_actions()
+        self._action_signal_ids = self._connect_actions()
         self._initial_draw()
 
-    def _connect_actions(self):
+    def _connect_actions(self) -> dict[Gio.Action, int]:
         app_actions = [
             (f'{self._account}-contact-info', self._on_contact_info),
             (f'{self._account}-modify-gateway', self._on_modify_gateway),
@@ -145,11 +145,15 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             (f'{self._account}-remove-contact', self._on_remove_contact),
         ]
 
+        signal_ids: dict[Gio.Action, int] = {}
         for action in app_actions:
             action_name, func = action
             action = app.app.lookup_action(action_name)
             assert action is not None
-            action.connect('activate', func)
+            signal_id = action.connect('activate', func)
+            signal_ids[action] = signal_id
+
+        return signal_ids
 
     def _get_contact(self, jid: str) -> BareContact:
         contact = self._client.get_module('Contacts').get_contact(jid)
@@ -448,7 +452,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _initial_draw(self) -> None:
         for contact in self._client.get_module('Roster').iter_contacts():
-            self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
         self._enable_sort(True)
@@ -477,11 +480,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         assert isinstance(contact, BareContact)
 
         if event.item.subscription == 'remove':
-            contact.disconnect(self)
             self._remove_contact(contact)
         else:
-            if contact.jid not in self._contact_refs:
-                self._connect_contact_signals(contact)
             self._add_or_update_contact(contact)
 
     def _get_current_groups(self, jid: JID) -> set[str]:
@@ -545,6 +545,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._check_for_empty_groups()
 
     def _remove_contact(self, contact: BareContact) -> None:
+        contact.disconnect(self)
         refs = self._contact_refs.pop(contact.jid)
         for ref in refs:
             iter_ = self._get_iter_from_ref(ref)
@@ -562,6 +563,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             del self._group_refs[group]
 
     def _add_or_update_contact(self, contact: BareContact) -> None:
+        self._connect_contact_signals(contact)
         new_groups = set(contact.groups or [DEFAULT_GROUP])
         groups = self._get_current_groups(contact.jid)
 
@@ -685,7 +687,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                             model: Gtk.TreeModel,
                             iter1: Gtk.TreeIter,
                             iter2: Gtk.TreeIter,
-                            _user_data: Literal[None]):
+                            _user_data: Literal[None]) -> int:
         '''
         Compare two iterators to sort them
         '''
@@ -724,12 +726,29 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs.clear()
         self._store.clear()
 
+    def _disconnect_actions(self) -> None:
+        for action, signal_id in self._action_signal_ids.items():
+            action.disconnect(signal_id)
+        self._action_signal_ids.clear()
+
+    @staticmethod
+    def _dummy_tree_compare(
+        _model: Gtk.TreeModel,
+        _iter1: Gtk.TreeIter,
+        _iter2: Gtk.TreeIter,
+        _user_data: Any
+    ) -> int:
+        return 0
+
     def _on_destroy(self, _roster: Roster) -> None:
         app.settings.disconnect_signals(self)
+        self._disconnect_actions()
         self._contact_refs.clear()
         self._group_refs.clear()
         self._unset_model()
         self._enable_sort(False)
+        # Set dummy method, otherwise store will not get destroyed
+        self._store.set_sort_func(Column.TEXT, self._dummy_tree_compare)
         self._store.clear()
         self._roster_tooltip.destroy()
         del self._roster
