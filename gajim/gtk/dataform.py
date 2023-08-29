@@ -750,7 +750,7 @@ class TextMultiField(Field):
         self._validate()
 
 
-class ImageMediaField():
+class ImageMediaField:
     def __init__(self,
                  uri: Uri,
                  form_grid: FormGrid,

@@ -1127,7 +1127,7 @@ class CutstomHostnameDialog(SettingsDialog):
                     SettingType.ACCOUNT_CONFIG,
                     'custom_port',
                     bind='account::use_custom_host',
-                    props={'range_': (0, 65535)},),
+                    props={'range_': (0, 65535)}),
 
             Setting(SettingKind.COMBO,
                     _('Type'),

@@ -734,7 +734,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                                parameters: bool = False
                                ) -> None:
         if self._search_stopped:
-            raise CancelledError()
+            raise CancelledError
 
         if is_error(result):
             assert isinstance(result, StanzaError)

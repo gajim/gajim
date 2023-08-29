@@ -230,7 +230,7 @@ class CropArea(Gtk.DrawingArea):
         self._last_press_y = -1
         self._base_width = 10
         self._base_height = 10
-        self._aspect = float(1.0)
+        self._aspect = 1.0
 
         self.set_size_request(self._base_width, self._base_height)
 

@@ -513,7 +513,7 @@ class AvatarStorage(metaclass=Singleton):
             with open(path, 'wb') as output_file:
                 output_file.write(data)
         except Exception:
-            log.error('Storing avatar failed', exc_info=True)
+            log.exception('Storing avatar failed')
             return None
         return sha
 
