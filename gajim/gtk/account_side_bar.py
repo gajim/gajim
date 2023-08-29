@@ -24,6 +24,7 @@ from gajim.common import ged
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_client_status
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.util import EventHelper
 
@@ -170,6 +171,7 @@ class AccountAvatar(Gtk.Image):
         self._update_image()
 
     def _update_image(self) -> None:
+        assert not isinstance(self._contact, ResourceContact)
         status = get_client_status(self._account)
         surface = app.app.avatar_storage.get_surface(
             self._contact,
