@@ -1355,6 +1355,10 @@ class Observable:
 
         weak_func = weakref.WeakMethod(func)
 
+        if weak_func in self._callbacks[signal_name]:
+            # Don’t register handler multiple times
+            return
+
         self._callbacks[signal_name].append(weak_func)
 
     def connect(self,
