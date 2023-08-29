@@ -17,7 +17,7 @@ Build-Depends:
     python3-setuptools,
     python3-packaging,
     python3-cryptography (>=3.4.8),
-    python3-pil,
+    python3-pil (>=9.1.0),
     gir1.2-gtk-3.0 (>=3.24.30),
     gir1.2-gtksource-4,
 Rules-Requires-Root: no

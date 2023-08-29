@@ -14,7 +14,7 @@
 - [keyring](https://pypi.org/project/keyring/)
 - [precis_i18n](https://pypi.org/project/precis-i18n/)
 - [packaging](https://pypi.org/project/packaging/)
-- [Pillow](https://pypi.org/project/Pillow/)
+- [Pillow](https://pypi.org/project/Pillow/) (>=9.1.0)
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [Gtk3](https://gitlab.gnome.org/GNOME/gtk) (>=3.24.30)
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.60.0)

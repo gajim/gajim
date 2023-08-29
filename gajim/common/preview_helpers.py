@@ -129,7 +129,7 @@ def extract_and_resize_frames(image: ImageFile.ImageFile,
             new_frame.paste(image, (0, 0), image.convert('RGBA'))
 
             # This method preservs aspect ratio
-            new_frame.thumbnail(resize_to, Image.ANTIALIAS)
+            new_frame.thumbnail(resize_to, Image.Resampling.LANCZOS)
             frames.append(new_frame)
 
             i += 1
