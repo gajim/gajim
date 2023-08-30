@@ -175,8 +175,8 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             'iq'
         ]
 
-        for account in app.settings.get_active_accounts():
-            tags.append(account)
+        accounts = app.settings.get_active_accounts()
+        tags.extend(accounts)
 
         tags.append('AccountWizard')
 

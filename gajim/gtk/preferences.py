@@ -666,8 +666,7 @@ class Themes(PreferenceBox):
     @staticmethod
     def _get_theme_items() -> list[str]:
         theme_items = ['default']
-        for settings_theme in app.css_config.themes:
-            theme_items.append(settings_theme)
+        theme_items.extend(app.css_config.themes)
         return theme_items
 
     def update_theme_list(self) -> None:
