@@ -522,7 +522,7 @@ class Test(unittest.TestCase):
         return f'Prologue (link: {link}), and epilogue!'
 
     def test_styling(self):
-        for _name, params in STYLING.items():
+        for params in STYLING.values():
             assert isinstance(params['input'], str)
             result = styling.process(params['input'])
             self.assertEqual(result.blocks, params['tokens'])

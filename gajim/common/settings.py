@@ -153,7 +153,7 @@ class Settings:
         self._callbacks[(setting, account, jid)].append(weak_func)
 
     def disconnect_signals(self, object_: object) -> Any:
-        for _, handlers in self._callbacks.items():
+        for handlers in self._callbacks.values():
             for handler in list(handlers):
                 if isinstance(handler, tuple):
                     continue
@@ -440,12 +440,12 @@ class Settings:
         # Migrate deprecated settings
         value = app_settings.pop('send_chatstate_muc_default', None)
         if value is not None:
-            for _account, settings in self._account_settings.items():
+            for settings in self._account_settings.values():
                 settings['account']['gc_send_chatstate_default'] = value
 
         value = app_settings.pop('send_chatstate_default', None)
         if value is not None:
-            for _account, settings in self._account_settings.items():
+            for settings in self._account_settings.values():
                 settings['account']['send_chatstate_default'] = value
 
         value = app_settings.pop('print_join_left_default', None)

@@ -456,7 +456,7 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._pinned_order_change = False
 
     def _update_time(self) -> bool:
-        for _key, row in self._chats.items():
+        for row in self._chats.values():
             row.update_time()
         return True
 
