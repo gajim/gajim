@@ -169,7 +169,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
                 hostname = app.get_hostname_from_account(self._remote_account)
                 message = _('I’m synchronizing my contacts from my account at '
                             '"%s". Could you please add this address to your '
-                            'contact list?' % hostname)
+                            'contact list?') % hostname
                 remote_contact = self._remote_client.get_module(
                     'Contacts').get_contact(remote_jid)
                 assert isinstance(remote_contact, BareContact)

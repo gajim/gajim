@@ -147,7 +147,7 @@ class ChatCommands(Observable):
         command = self._commands.get(command_name)
         if command is None or type_ not in command[0]:
             self.notify('command-not-found',
-                        _('Unknown command: %s' % command_name))
+                        _('Unknown command: %s') % command_name)
             raise CommandFailed
 
         try:
@@ -236,10 +236,10 @@ class ChatCommands(Observable):
         try:
             jid = JID.from_string(args.address)
         except Exception:
-            raise CommandError(_('Invalid address: %s' % args.address))
+            raise CommandError(_('Invalid address: %s') % args.address)
 
         if jid.is_full or jid.localpart is None:
-            raise CommandError(_('Invalid address: %s' % args.address))
+            raise CommandError(_('Invalid address: %s') % args.address)
 
         client = app.get_client(contact.account)
         client.get_module('MUC').invite(contact.jid, args.address, args.reason)
@@ -267,10 +267,10 @@ class ChatCommands(Observable):
             try:
                 jid = JID.from_string(nick_or_address)
             except Exception:
-                raise CommandError(_('Invalid address: %s' % nick_or_address))
+                raise CommandError(_('Invalid address: %s') % nick_or_address)
 
             if jid.is_full or jid.localpart is None:
-                raise CommandError(_('Invalid address: %s' % nick_or_address))
+                raise CommandError(_('Invalid address: %s') % nick_or_address)
 
         client = app.get_client(contact.account)
         client.get_module('MUC').set_affiliation(
@@ -290,7 +290,7 @@ class ChatCommands(Observable):
 
         nick_list = contact.get_user_nicknames()
         if nick not in nick_list:
-            raise CommandError(_('User %s not found' % nick))
+            raise CommandError(_('User %s not found') % nick)
 
         participant = contact.get_resource(nick)
         self_contact = contact.get_self()

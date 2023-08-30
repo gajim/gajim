@@ -251,7 +251,7 @@ class HTTPUpload(BaseModule):
                     GLib.FormatSizeFlags.IEC_UNITS)
 
                 error_text = _('File is too large, '
-                               'maximum allowed file size is: %s' % size_text)
+                               'maximum allowed file size is: %s') % size_text
                 transfer.set_error('file-too-large', error_text)
 
             else:

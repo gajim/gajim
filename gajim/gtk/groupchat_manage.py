@@ -221,7 +221,7 @@ class GroupchatManage(Gtk.Box):
             task.finish()
         except Exception as error:
             ErrorDialog(_('Uploading Avatar Failed'),
-                        _('Uploading avatar image failed: %s' % error))
+                        _('Uploading avatar image failed: %s') % error)
 
     def _on_avatar_update_clicked(self, _button: Gtk.Button) -> None:
         success, data, _w, _h = self._avatar_selector.get_avatar_bytes()
