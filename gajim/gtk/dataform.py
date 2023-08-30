@@ -108,7 +108,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self._original_form_hash = self.get_form_hash()
 
     def focus_first_entry(self) -> None:
-        for row in range(0, self._form_grid.row_count):
+        for row in range(self._form_grid.row_count):
             widget = self._form_grid.get_child_at(1, row)
             if isinstance(widget, Gtk.Entry):
                 widget.grab_focus_without_selecting()

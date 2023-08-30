@@ -191,7 +191,7 @@ select = [
     # "PD",    # pandas-vet
     # "PERF",  # Perflint
     "PGH",   # pygrep-hooks
-    # "PIE",   # flake8-pie
+    "PIE",   # flake8-pie
     "PL",    # Pylint
     # "PT",    # flake8-pytest-style
     # "PTH",   # flake8-use-pathlib

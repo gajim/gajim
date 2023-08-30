@@ -117,8 +117,8 @@ class ChatActionProcessor(Gtk.Popover):
             if win is not None and pointer is not None:
                 _win, x_pos, y_pos, _mod = win.get_device_position(pointer)
                 rect = self.get_allocation()
-                if (x_pos not in range(0, rect.width) or
-                        y_pos not in range(0, rect.height)):
+                if (x_pos not in range(rect.width) or
+                        y_pos not in range(rect.height)):
                     # Only popdown if click is outside of Popover's Rectangle
                     self.popdown()
 

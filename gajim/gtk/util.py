@@ -164,7 +164,7 @@ def get_total_screen_geometry() -> tuple[int, int]:
     display = Gdk.Display.get_default()
     assert display is not None
     monitors = display.get_n_monitors()
-    for num in range(0, monitors):
+    for num in range(monitors):
         monitor = display.get_monitor(num)
         assert monitor is not None
         geometry = monitor.get_geometry()

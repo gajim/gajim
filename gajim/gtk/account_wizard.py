@@ -849,7 +849,7 @@ class AdvancedSettings(Page):
         con_type = self._ui.con_type_combo.get_active_text()
 
         protocol = ConnectionProtocol.TCP
-        if host.startswith('ws://') or host.startswith('wss://'):
+        if host.startswith(('ws://', 'wss://')):
             protocol = ConnectionProtocol.WEBSOCKET
 
         return (f'{host}:{port}', protocol, ConnectionType(con_type))
@@ -866,7 +866,7 @@ class AdvancedSettings(Page):
 
     def _validate_host(self) -> bool:
         host = self._ui.custom_host_entry.get_text()
-        if host.startswith('ws://') or host.startswith('wss://'):
+        if host.startswith(('ws://', 'wss://')):
             # We have no method for validating websocket URIs
             self._show_host_icon(False)
             return True
@@ -896,7 +896,7 @@ class AdvancedSettings(Page):
                 Gtk.EntryIconPosition.SECONDARY, _('Must be a port number'))
             return False
 
-        if port not in range(0, 65535):
+        if port not in range(65535):
             self._show_port_icon(True)
             self._ui.custom_port_entry.set_icon_tooltip_text(
                 Gtk.EntryIconPosition.SECONDARY,

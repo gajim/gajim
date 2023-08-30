@@ -515,7 +515,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             type_ = 'message'
         elif stanza.startswith('<iq'):
             type_ = 'iq'
-        elif stanza.startswith('<r') or stanza.startswith('<a'):
+        elif stanza.startswith(('<r', '<a')):
             type_ = 'stream'
 
         text = '<!-- {kind} {time} ({account}) -->\n{stanza}\n\n'.format(

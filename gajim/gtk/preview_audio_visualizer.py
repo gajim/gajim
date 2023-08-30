@@ -200,7 +200,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         x_shift = (self._width - 2 * peak_width) / self._num_samples
         x = self._x_offset + x_shift
 
-        for i in range(0, self._num_samples):
+        for i in range(self._num_samples):
             sample1 = self._samples[i][0]
             sample2 = self._samples[i][1]
 

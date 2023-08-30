@@ -1461,7 +1461,7 @@ def get_custom_host(
     port = app.settings.get_account_setting(account, 'custom_port')
     type_ = app.settings.get_account_setting(account, 'custom_type')
 
-    if host.startswith('ws://') or host.startswith('wss://'):
+    if host.startswith(('ws://', 'wss://')):
         protocol = ConnectionProtocol.WEBSOCKET
     else:
         host = f'{host}:{port}'

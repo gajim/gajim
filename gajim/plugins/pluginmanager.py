@@ -582,8 +582,7 @@ class PluginManager(metaclass=Singleton):
         dirs: list[str] = []
         manifest = None
         for filename in zip_file.namelist():
-            if (filename.startswith('.') or filename.startswith('/') or
-                    ('/' not in filename)):
+            if (filename.startswith(('.', '/')) or ('/' not in filename)):
                 # members not safe
                 raise PluginsystemError(_('Archive is malformed'))
             if filename.endswith('/') and filename.find('/', 0, -1) < 0:
