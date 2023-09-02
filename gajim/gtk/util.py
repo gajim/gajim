@@ -43,6 +43,7 @@ from nbxmpp import util as nbxmpp_util
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
 from PIL import Image
+from PIL import UnidentifiedImageError
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -619,7 +620,7 @@ def load_pixbuf(path: str | Path,
             with open(path, 'rb') as im_handle:
                 img = Image.open(im_handle)
                 avatar = img.convert('RGBA')
-        except (NameError, OSError):
+        except (NameError, OSError, UnidentifiedImageError):
             log.warning('Pillow convert failed: %s', path)
             log.debug('Error', exc_info=True)
             return None
