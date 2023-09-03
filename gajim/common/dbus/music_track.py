@@ -200,14 +200,18 @@ class MusicTrackListener:
     def _get_playing_track(self, name: str) -> None:
         '''Return a TuneData for the currently playing
         song, or None if no song is playing'''
-        proxy = Gio.DBusProxy.new_for_bus_sync(
-            Gio.BusType.SESSION,
-            Gio.DBusProxyFlags.NONE,
-            None,
-            name,
-            '/org/mpris/MediaPlayer2',
-            'org.freedesktop.DBus.Properties',
-            None)
+        try:
+            proxy = Gio.DBusProxy.new_for_bus_sync(
+                Gio.BusType.SESSION,
+                Gio.DBusProxyFlags.NONE,
+                None,
+                name,
+                '/org/mpris/MediaPlayer2',
+                'org.freedesktop.DBus.Properties',
+                None)
+        except GLib.Error as error:
+            log.debug('Could not enable music listener: %s', error.message)
+            return
 
         def proxy_call_finished(proxy: Gio.DBusProxy,
                                 res: Gio.AsyncResult
