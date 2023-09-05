@@ -112,6 +112,11 @@ class FileTransferSelector(Gtk.Box):
     def _is_over_max_http_file_size(self, path: Path) -> bool:
         if self._max_http_file_size is None:
             return False
+
+        if not path.exists():
+            # Non-existing files are handled in the send_file method
+            return False
+
         return path.stat().st_size > self._max_http_file_size
 
     def transfer_resource_required(self) -> bool:
