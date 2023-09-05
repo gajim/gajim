@@ -11,18 +11,6 @@ import setuptools.build_meta as _orig
 logging.basicConfig(level='INFO', format='%(message)s')
 
 ALLOWED_CONFIG_SETTINGS = {'target'}
-MAN_FILES = [
-    Path('data/gajim.1'),
-    Path('data/gajim-remote.1')
-]
-META_FILES = [
-    (Path('data/org.gajim.Gajim.desktop.in'), '--desktop'),
-    (Path('data/org.gajim.Gajim.appdata.xml.in'), '--xml')
-]
-ICONS = [
-    Path('gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg'),
-    Path('gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim-symbolic.svg'),
-]
 
 
 def build_translations() -> None:
