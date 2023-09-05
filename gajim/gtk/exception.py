@@ -256,7 +256,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             pass
 
         # Remove the hostname of the machine
-        event['server_name'] = ''
+        event['server_name'] = 'redacted'
         pprint.pprint(event)
         return event
 
