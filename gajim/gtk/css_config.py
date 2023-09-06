@@ -342,7 +342,9 @@ class CSSConfig:
             if rule.selectorText == selector:
                 log.info('Set Font for: %s %s %s %s %s',
                          selector, family, size, style, weight)
-                rule.style['font-family'] = family
+                # Quote font-family in order to avoid unquoted font-families
+                # (this is a bug in css_parser)
+                rule.style['font-family'] = f'"{family}"'
                 rule.style['font-style'] = style
                 rule.style['font-size'] = f'{size}pt'
                 rule.style['font-weight'] = weight
@@ -357,7 +359,9 @@ class CSSConfig:
         log.info('Set Font for: %s %s %s %s %s',
                  selector, family, size, style, weight)
         rule = CSSStyleRule(selectorText=selector)
-        rule.style['font-family'] = family
+        # Quote font-family in order to avoid unquoted font-families
+        # (this is a bug in css_parser)
+        rule.style['font-family'] = f'"{family}"'
         rule.style['font-style'] = style
         rule.style['font-size'] = f'{size}pt'
         rule.style['font-weight'] = weight
@@ -415,6 +419,11 @@ class CSSConfig:
                 size = rule.style.getPropertyValue('font-size') or None
                 weight = rule.style.getPropertyValue('font-weight') or None
                 family = rule.style.getPropertyValue('font-family') or None
+
+                if family is not None:
+                    # Unquote previously quoted font-family
+                    # (this is a bug in css_parser)
+                    family = family.strip('"')
 
                 desc = self._get_description_from_css(
                     family, size, style, weight)
