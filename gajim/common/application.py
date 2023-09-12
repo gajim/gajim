@@ -313,10 +313,10 @@ class CoreApplication(ged.EventHelper):
                      callback=self._on_update_response)
 
     def _on_update_response(self, request: HTTPRequest) -> None:
-
         if not request.is_complete():
-            self._log.warning('Error while performing gajim update check: %s',
-                              request.get_error(), request.get_status())
+            self._log.warning(
+                'Error while performing gajim update check: %s (%s)',
+                request.get_error_string(), request.get_status())
             return
 
         now = datetime.now()
