@@ -37,6 +37,11 @@
         <desktop:Extension Category="windows.startupTask" Executable="bin\Gajim.exe" EntryPoint="Windows.FullTrustApplication">
           <desktop:StartupTask TaskId="Gajim" Enabled="true" DisplayName="Gajim"/>
         </desktop:Extension>
+        <uap:Extension Category="windows.protocol">
+          <uap:Protocol Name="xmpp">
+            <uap:DisplayName>XMPP URI Scheme</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
