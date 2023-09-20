@@ -44,11 +44,9 @@ from gajim.gtk.util import get_icon_name
 from gajim.gtk.util import open_window
 
 if app.is_installed('APPINDICATOR'):
-    # pylint: disable=ungrouped-imports
     from gi.repository import AppIndicator3 as AppIndicator
 
 elif app.is_installed('AYATANA_APPINDICATOR'):
-    # pylint: disable=ungrouped-imports
     from gi.repository import AyatanaAppIndicator3 as AppIndicator
 
 
@@ -301,10 +299,10 @@ class AppIndicatorIcon(GtkMenuBackend):
         self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
             'org.gajim.Gajim',
-            AppIndicator.IndicatorCategory.COMMUNICATIONS)
+            AppIndicator.IndicatorCategory.COMMUNICATIONS)  # pyright: ignore # noqa: E501
         if not app.is_flatpak():
             self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
-        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)  # pyright: ignore # noqa: E501
         self._status_icon.set_menu(self._ui.systray_context_menu)
         self._status_icon.set_secondary_activate_target(
             self._ui.toggle_window_menuitem)
@@ -313,10 +311,10 @@ class AppIndicatorIcon(GtkMenuBackend):
 
     def update_state(self, init: bool = False) -> None:
         if not app.settings.get('show_trayicon'):
-            self._status_icon.set_status(AppIndicator.IndicatorStatus.PASSIVE)
+            self._status_icon.set_status(AppIndicator.IndicatorStatus.PASSIVE)  # pyright: ignore # noqa: E501
             return
 
-        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
+        self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)  # pyright: ignore # noqa: E501
 
         if not init and app.window.get_total_unread_count():
             icon_name = 'dcraven-message-new'
