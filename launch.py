@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import os
 import subprocess
+from pathlib import Path
 
 import gajim
 import gajim.main
@@ -10,7 +10,7 @@ try:
     res = subprocess.check_output(
         ['git',
          '-C',
-         f'{os.path.dirname(__file__)}',
+         f'{Path(__file__).parent}',
          'rev-parse',
          '--short=12',
          'HEAD'])
