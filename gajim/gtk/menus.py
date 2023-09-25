@@ -97,6 +97,12 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
         params = AccountJidParam(account=account, jid=contact.jid)
         menu.add_item(_('Add to Contact List…'), 'win.add-to-roster', params)
 
+    menu.add_item(
+        _('Execute Command…'),
+        f'app.{account}-execute-command',
+        contact.jid.bare,
+    )
+
     return menu
 
 
