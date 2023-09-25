@@ -364,12 +364,16 @@ class BareContact(CommonContact):
         self._avatar_sha = app.storage.cache.get_contact(
             account, jid, 'avatar')
 
+        self._presence = UNKNOWN_PRESENCE
+
     @property
     def is_self(self):
         own_jid = app.get_client(self._account).get_own_jid().new_as_bare()
         return own_jid == self.jid
 
     def supports(self, requested_feature: str) -> bool:
+        if not self._resources:
+            return super().supports(requested_feature)
         return any(resource.supports(requested_feature)
                    for resource in self.iter_resources())
 
@@ -423,12 +427,18 @@ class BareContact(CommonContact):
 
     @property
     def is_available(self) -> bool:
-        # pylint: disable=R1729
+        if not self._resources:
+            return self._presence.available
         return any(contact.is_available for contact
                    in self._resources.values())
 
     @property
     def show(self):
+        if not self._resources:
+            if not self._presence.available:
+                return PresenceShowExt.OFFLINE
+            return self._presence.show
+
         show_values = [contact.show for contact in self._resources.values()]
         if not show_values:
             return PresenceShowExt.OFFLINE
@@ -513,8 +523,10 @@ class BareContact(CommonContact):
             style=style)
 
     def update_presence(self, presence_data: PresenceData) -> None:
-        for contact in self._resources.values():
-            contact.update_presence(presence_data, notify=False)
+        self._presence = presence_data
+        if not presence_data.available:
+            for contact in self._resources.values():
+                contact.update_presence(presence_data, notify=False)
         self.notify('presence-update')
 
     def update_avatar(self, sha: str) -> None:
