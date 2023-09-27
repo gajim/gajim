@@ -809,16 +809,21 @@ class ContactRow(Gtk.ListBoxRow):
             name_box.add(account_badge)
         box.add(name_box)
 
-        self.jid_label = Gtk.Label(label=str(jid))
-        self.jid_label.set_tooltip_text(str(jid))
-        self.jid_label.set_ellipsize(Pango.EllipsizeMode.END)
-        self.jid_label.set_xalign(0)
-        self.jid_label.set_width_chars(22)
-        self.jid_label.set_halign(Gtk.Align.START)
-        self.jid_label.get_style_context().add_class('dim-label')
-        box.add(self.jid_label)
+        if contact and not contact.is_groupchat and (status := contact.status):
+            self.status_label = Gtk.Label(
+                label=status,
+                ellipsize=Pango.EllipsizeMode.END,
+                xalign=0,
+                width_chars=22,
+                halign=Gtk.Align.START,
+            )
+            self.status_label.get_style_context().add_class('dim-label')
+            box.add(self.status_label)
+
+        grid.set_tooltip_text(str(jid))
 
         grid.add(box)
+        self._grid = grid
 
         eventbox = Gtk.EventBox()
         eventbox.connect('button-press-event', self._popup_menu)
@@ -855,7 +860,7 @@ class ContactRow(Gtk.ListBoxRow):
 
     def update_jid(self, jid: JID) -> None:
         self.jid = jid
-        self.jid_label.set_text(str(jid))
+        self._grid.set_tooltip_text(str(jid))
 
     def update_chat_type(self, groupchat: bool = False) -> None:
         self.is_new = False
