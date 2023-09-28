@@ -224,6 +224,18 @@ infobar.error > revealer > box {
     font-weight: lighter;
 }
 
+.group {
+    color: rgb(242, 242, 242);
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 4px;
+    font-size: 80%;
+    font-weight: bold;
+    background-color: rgb(128, 128, 128);
+}
+
 .link-button { min-height: 0px; }
 
 .floating-overlay-box {

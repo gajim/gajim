@@ -796,6 +796,23 @@ def wrap_with_event_box(klass: Any) -> Any:
     return klass_wrapper
 
 
+class GroupBadge(Gtk.Label):
+    def __init__(self, group: str) -> None:
+        Gtk.Label.__init__(
+            self,
+            ellipsize=Pango.EllipsizeMode.END,
+            no_show_all=True,
+            halign=Gtk.Align.END,
+            valign=Gtk.Align.START,
+            hexpand=True,
+            tooltip_text=group,
+        )
+        self.set_size_request(50, -1)
+        self.get_style_context().add_class('group')
+        self.set_text(group)
+        self.show()
+
+
 class IdleBadge(Gtk.Label):
     def __init__(self, idle: datetime | None = None) -> None:
         Gtk.Label.__init__(

@@ -59,6 +59,7 @@ from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import GroupBadge
 from gajim.gtk.util import IdleBadge
 
 ContactT = BareContact | GroupchatContact
@@ -818,6 +819,12 @@ class ContactRow(Gtk.ListBoxRow):
             if idle := contact.idle_datetime:
                 idle_badge = IdleBadge(idle)
                 name_box.add(idle_badge)
+
+        if contact and not contact.is_groupchat and not contact.is_pm_contact:
+            groups = contact.groups
+            for group in groups:
+                account_badge = GroupBadge(group)
+                name_box.add(account_badge)
 
         box.add(name_box)
 
