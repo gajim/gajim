@@ -159,6 +159,7 @@ class ChatBanner(Gtk.Box, EventHelper):
                             ) -> None:
 
         self._update_avatar()
+        self._update_description_label()
 
     def _on_chatstate_update(self,
                              _contact: types.BareContact,
@@ -304,13 +305,18 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
     def _update_description_label(self) -> None:
-        assert self._contact is not None
-        text = ''
-        if self._contact.is_groupchat:
-            disco_info = app.storage.cache.get_last_disco_info(
-                self._contact.jid)
-            if disco_info is not None:
+        contact = self._contact
+        assert contact is not None
+
+        if contact.is_groupchat:
+            disco_info = app.storage.cache.get_last_disco_info(contact.jid)
+            if disco_info is None:
+                text = ''
+            else:
                 text = disco_info.muc_description or ''
+        else:
+            assert not isinstance(contact, GroupchatContact)
+            text = contact.status or ''
         self._ui.description_label.set_text(text)
         self._ui.description_label.set_visible(bool(text))
 

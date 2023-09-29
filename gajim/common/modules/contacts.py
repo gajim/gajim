@@ -601,6 +601,20 @@ class BareContact(CommonContact):
     def type_string(self) -> str:
         return 'chat'
 
+    @property
+    def status(self) -> str | None:
+        if s := self._presence.status:
+            return s
+
+        statuses = [
+            (r.priority, r.status)
+            for r in self._resources.values()
+            if r.status
+        ]
+        if not statuses:
+            return
+        return max(statuses)[1]
+
 
 class ResourceContact(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
