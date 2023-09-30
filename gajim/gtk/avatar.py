@@ -17,6 +17,7 @@ from __future__ import annotations
 import functools
 import hashlib
 import logging
+import math
 from collections import defaultdict
 from math import pi
 from pathlib import Path
@@ -50,8 +51,11 @@ from gajim.gtk.util import scale_with_ratio
 log = logging.getLogger('gajim.gtk.avatar')
 
 
-AvatarCacheT = dict[JID | str, dict[tuple[int, int, str | None],
+AvatarCacheT = dict[JID | str, dict[tuple[int, int, str | None, str | None],
                                           cairo.ImageSurface]]
+
+CIRCLE_RATIO = 0.18
+CIRCLE_FILL_RATIO = 0.80
 
 
 def generate_avatar_letter(text: str) -> str:
@@ -130,6 +134,55 @@ def make_workspace_avatar(letter: str,
     return clip(surface, style)
 
 
+def add_transport_to_avatar(surface: cairo.ImageSurface,
+                            transport_icon: str,
+                            ) -> cairo.ImageSurface:
+
+    scale = surface.get_device_scale()[0]
+    width = surface.get_width()
+    height = surface.get_height()
+
+    transport_surface = load_icon_surface(
+        transport_icon,
+        math.floor(width / scale * CIRCLE_RATIO * 2),
+        int(scale))
+    if transport_surface is None:
+        return surface
+
+    new_surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+    new_surface.set_device_scale(*surface.get_device_scale())
+
+    context = cairo.Context(new_surface)
+    context.set_source_surface(surface, 0, 0)
+    context.paint()
+
+    width = width / scale
+    height = height / scale
+
+    clip_radius = width * CIRCLE_RATIO
+    center_x = clip_radius
+    center_y = clip_radius
+
+    context.set_source_rgb(255, 255, 255)
+    context.set_operator(cairo.Operator.CLEAR)
+    context.arc(center_x, center_y, clip_radius, 0, 2 * pi)
+    context.fill()
+
+    clip_radius *= CIRCLE_FILL_RATIO
+    t_width = transport_surface.get_width() / scale
+    t_height = transport_surface.get_height() / scale
+
+    context.set_source_surface(
+        transport_surface,
+        center_x - t_width / 2,
+        center_y - t_height / 2)
+    context.set_operator(cairo.Operator.OVER)
+    context.arc(center_x, center_y, clip_radius, 0, 2 * pi)
+    context.fill()
+
+    return context.get_target()
+
+
 def add_status_to_avatar(surface: cairo.ImageSurface,
                          show: str
                          ) -> cairo.ImageSurface:
@@ -150,7 +203,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     width = width / scale
     height = height / scale
 
-    clip_radius = width / 5.5
+    clip_radius = width * CIRCLE_RATIO
     center_x = width - clip_radius
     center_y = height - clip_radius
 
@@ -163,7 +216,7 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
 
-    show_radius = clip_radius * 0.75
+    show_radius = clip_radius * CIRCLE_FILL_RATIO
 
     context.set_source_rgb(*color)
     context.set_operator(cairo.Operator.OVER)
@@ -379,16 +432,8 @@ class AvatarStorage(metaclass=Singleton):
 
         jid = contact.jid
 
-        if transport_icon is not None:
-            surface = load_icon_surface(transport_icon, size, scale)
-            assert surface is not None
-            if show is not None:
-                surface = add_status_to_avatar(surface, show)
-            self._cache[jid][(size, scale, show)] = surface
-            return surface
-
         if not default:
-            surface = self._cache[jid].get((size, scale, show))
+            surface = self._cache[jid].get((size, scale, show, transport_icon))
             if surface is not None:
                 return surface
 
@@ -396,7 +441,11 @@ class AvatarStorage(metaclass=Singleton):
             if surface is not None:
                 if show is not None:
                     surface = add_status_to_avatar(surface, show)
-                self._cache[jid][(size, scale, show)] = surface
+
+                if transport_icon is not None:
+                    surface = add_transport_to_avatar(surface, transport_icon)
+
+                self._cache[jid][(size, scale, show, transport_icon)] = surface
                 return surface
 
         name = contact.name
@@ -406,7 +455,11 @@ class AvatarStorage(metaclass=Singleton):
             letter, color, size, scale, style=style)
         if show is not None:
             surface = add_status_to_avatar(surface, show)
-        self._cache[jid][(size, scale, show)] = surface
+
+        if transport_icon is not None:
+            surface = add_transport_to_avatar(surface, transport_icon)
+
+        self._cache[jid][(size, scale, show, transport_icon)] = surface
         return surface
 
     def get_muc_surface(self,
@@ -418,14 +471,15 @@ class AvatarStorage(metaclass=Singleton):
                         transport_icon: str | None = None,
                         style: str = 'circle') -> cairo.ImageSurface:
 
-        if transport_icon is not None:
-            surface = load_icon_surface(transport_icon, size, scale)
+        if transport_icon == 'gateway-irc':
+            surface = load_icon_surface('gajim-agent-irc', size, scale)
             assert surface is not None
-            self._cache[jid][(size, scale, None)] = surface
+            surface = add_transport_to_avatar(surface, transport_icon)
+            self._cache[jid][(size, scale, None, transport_icon)] = surface
             return surface
 
         if not default:
-            surface = self._cache[jid].get((size, scale, None))
+            surface = self._cache[jid].get((size, scale, None, transport_icon))
             if surface is not None:
                 return surface
 
@@ -433,8 +487,13 @@ class AvatarStorage(metaclass=Singleton):
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is not None:
+                    if transport_icon is not None:
+                        surface = add_transport_to_avatar(
+                            surface, transport_icon)
+
                     surface = clip(surface, style)
-                    self._cache[jid][(size, scale, None)] = surface
+                    self._cache[jid][
+                        (size, scale, None, transport_icon)] = surface
                     return surface
 
                 # avatar_sha set, but image is missing
@@ -448,7 +507,10 @@ class AvatarStorage(metaclass=Singleton):
         color = get_contact_color(contact)
         letter = generate_avatar_letter(name)
         surface = generate_default_avatar(letter, color, size, scale, style)
-        self._cache[jid][(size, scale, None)] = surface
+        if transport_icon is not None:
+            surface = add_transport_to_avatar(surface, transport_icon)
+
+        self._cache[jid][(size, scale, None, transport_icon)] = surface
         return surface
 
     def get_workspace_surface(self,
@@ -456,7 +518,7 @@ class AvatarStorage(metaclass=Singleton):
                               size: int,
                               scale: int) -> cairo.ImageSurface | None:
 
-        surface = self._cache[workspace_id].get((size, scale, None))
+        surface = self._cache[workspace_id].get((size, scale, None, None))
         if surface is not None:
             return surface
 
@@ -476,7 +538,7 @@ class AvatarStorage(metaclass=Singleton):
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
         surface = make_workspace_avatar(
             name, rgba_to_float(rgba), size, scale)
-        self._cache[workspace_id][(size, scale, None)] = surface
+        self._cache[workspace_id][(size, scale, None, None)] = surface
         return surface
 
     @staticmethod

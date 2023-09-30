@@ -533,7 +533,7 @@ class BareContact(CommonContact):
                 if disco_info.gateway_type == 'sms':
                     transport_icon = 'gajim-agent-sms'
                 if disco_info.gateway_type == 'irc':
-                    transport_icon = 'gajim-agent-irc'
+                    transport_icon = 'gateway-irc'
         else:
             for resource_contact in self.iter_resources():
                 if resource_contact.identity_type == 'sms':
@@ -805,7 +805,7 @@ class GroupchatContact(CommonContact):
         if disco_info is not None:
             for identity in disco_info.identities:
                 if identity.type == 'irc':
-                    transport_icon = 'gajim-agent-irc'
+                    transport_icon = 'gateway-irc'
                 break
         return app.app.avatar_storage.get_muc_surface(
             self._account,
