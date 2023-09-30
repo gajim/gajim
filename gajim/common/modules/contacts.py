@@ -15,8 +15,10 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 from typing import overload
 
+import operator
 from collections.abc import Iterator
 from datetime import datetime
 from datetime import timezone
@@ -25,6 +27,7 @@ import cairo
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
+from nbxmpp.const import PresenceShow
 from nbxmpp.const import Role
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -413,6 +416,13 @@ class BareContact(CommonContact):
             contact = self.add_resource(resource)
         return contact
 
+    def get_active_resource(self) -> ResourceContact | None:
+        if not self._resources:
+            return None
+
+        return sorted(self._resources.values(),
+                      key=operator.attrgetter('show'))[-1]
+
     def get_resources(self) -> list[ResourceContact]:
         resources: list[ResourceContact] = []
         for contact in self._resources.values():
@@ -433,16 +443,33 @@ class BareContact(CommonContact):
                    in self._resources.values())
 
     @property
-    def show(self):
+    def show(self) -> PresenceShow | Literal[PresenceShowExt.OFFLINE]:
         if not self._resources:
             if not self._presence.available:
                 return PresenceShowExt.OFFLINE
             return self._presence.show
 
-        show_values = [contact.show for contact in self._resources.values()]
-        if not show_values:
-            return PresenceShowExt.OFFLINE
-        return max(show_values)
+        res = self.get_active_resource()
+        assert res is not None
+        return res.show
+
+    @property
+    def status(self) -> str:
+        if not self._resources:
+            return self._presence.status
+
+        res = self.get_active_resource()
+        assert res is not None
+        return res.status
+
+    @property
+    def idle_time(self) -> float | None:
+        if not self._resources:
+            return self._presence.idle_time
+
+        res = self.get_active_resource()
+        assert res is not None
+        return res.idle_time
 
     @property
     def chatstate(self) -> Chatstate | None:
@@ -600,20 +627,6 @@ class BareContact(CommonContact):
     @property
     def type_string(self) -> str:
         return 'chat'
-
-    @property
-    def status(self) -> str | None:
-        if s := self._presence.status:
-            return s
-
-        statuses = [
-            (r.priority, r.status)
-            for r in self._resources.values()
-            if r.status
-        ]
-        if not statuses:
-            return
-        return max(statuses)[1]
 
 
 class ResourceContact(CommonContact):
