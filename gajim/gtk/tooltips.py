@@ -151,24 +151,25 @@ class RosterTooltip:
         self.clear_tooltip()
         scale = self._ui.tooltip_grid.get_scale_factor()
 
-        # Avatar
         surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         assert not isinstance(surface, GdkPixbuf.Pixbuf)
         self._ui.avatar.set_from_surface(surface)
         self._ui.avatar.show()
 
-        # Name
         self._ui.name.set_markup(GLib.markup_escape_text(contact.name))
         self._ui.name.show()
 
-        # JID
         self._ui.jid.set_text(str(contact.jid))
         self._ui.jid.show()
 
-        # Resources with show, status, priority
-        self._add_resources(contact)
+        if contact.has_resources():
+            for res in contact.iter_resources():
+                self._add_resources(res)
+        else:
+            self._add_resources(contact)
 
-        # Subscription
+        self._ui.resources_box.show_all()
+
         if contact.subscription and contact.subscription != 'both':
             # 'both' is the normal subscription value, just omit it
             self._ui.sub.set_text(helpers.get_uf_sub(contact.subscription))
@@ -194,67 +195,71 @@ class RosterTooltip:
                 break
         last_widget.set_vexpand(True)
 
-    def _add_resources(self, contact: types.BareContact) -> None:
-        for resource in contact.iter_resources():
-            resource_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+    def _add_resources(
+        self,
+        contact: types.BareContact | types.ResourceContact
+    ) -> None:
 
-            show_surface = get_show_circle(
-                resource.show,
-                AvatarSize.SHOW_CIRCLE,
-                self._ui.tooltip_grid.get_scale_factor())
-            show_image = Gtk.Image.new_from_surface(show_surface)
-            show_image.set_halign(Gtk.Align.START)
-            show_image.set_valign(Gtk.Align.CENTER)
+        resource_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
-            show_string = helpers.get_uf_show(resource.show.value)
+        show_surface = get_show_circle(
+            contact.show,
+            AvatarSize.SHOW_CIRCLE,
+            self._ui.tooltip_grid.get_scale_factor())
+        show_image = Gtk.Image.new_from_surface(show_surface)
+        show_image.set_halign(Gtk.Align.START)
+        show_image.set_valign(Gtk.Align.CENTER)
 
-            assert resource.jid.resource is not None
-            resource_string = GLib.markup_escape_text(resource.jid.resource)
-            resource_label = Gtk.Label()
-            resource_label.set_halign(Gtk.Align.START)
-            resource_label.set_xalign(0)
-            resource_label.set_ellipsize(Pango.EllipsizeMode.END)
-            resource_label.set_max_width_chars(30)
-            resource_label.set_text(f'{show_string} ({resource_string})')
+        show_string = helpers.get_uf_show(contact.show.value)
 
-            base_box = Gtk.Box(spacing=6)
-            base_box.add(show_image)
-            base_box.add(resource_label)
-            resource_box.add(base_box)
+        resource_string = ''
+        if contact.jid.resource is not None:
+            escaped_resource = GLib.markup_escape_text(contact.jid.resource)
+            resource_string = f' ({escaped_resource})'
 
-            if resource.status:
-                status_text = GLib.markup_escape_text(resource.status)
-                status_label = Gtk.Label(label=status_text)
-                status_label.set_halign(Gtk.Align.START)
-                status_label.set_xalign(0)
-                status_label.set_ellipsize(Pango.EllipsizeMode.END)
-                status_label.set_max_width_chars(30)
-                resource_box.add(status_label)
+        resource_label = Gtk.Label()
+        resource_label.set_halign(Gtk.Align.START)
+        resource_label.set_xalign(0)
+        resource_label.set_ellipsize(Pango.EllipsizeMode.END)
+        resource_label.set_max_width_chars(30)
+        resource_label.set_text(f'{show_string}{resource_string}')
 
-            if resource.idle_time:
-                idle_time = time.localtime(resource.idle_time)
-                idle_time = datetime(*(idle_time[:6]))
-                current = datetime.now()
-                if idle_time.date() == current.date():
-                    format_string = app.settings.get('time_format')
-                    formatted = idle_time.strftime(format_string)
-                else:
-                    format_string = app.settings.get('date_time_format')
-                    formatted = idle_time.strftime(format_string)
-                idle_text = _('Idle since: %s') % formatted
-                idle_label = Gtk.Label(label=idle_text)
-                idle_label.set_halign(Gtk.Align.START)
-                idle_label.set_xalign(0)
-                resource_box.add(idle_label)
+        base_box = Gtk.Box(spacing=6)
+        base_box.add(show_image)
+        base_box.add(resource_label)
+        resource_box.add(base_box)
 
-            app.plugin_manager.extension_point(
-                'roster_tooltip_resource_populate',
-                resource_box,
-                resource)
+        if contact.status:
+            status_text = GLib.markup_escape_text(contact.status)
+            status_label = Gtk.Label(label=status_text)
+            status_label.set_halign(Gtk.Align.START)
+            status_label.set_xalign(0)
+            status_label.set_ellipsize(Pango.EllipsizeMode.END)
+            status_label.set_max_width_chars(30)
+            resource_box.add(status_label)
 
-            self._ui.resources_box.add(resource_box)
+        if contact.idle_time:
+            idle_time = time.localtime(contact.idle_time)
+            idle_time = datetime(*(idle_time[:6]))
+            current = datetime.now()
+            if idle_time.date() == current.date():
+                format_string = app.settings.get('time_format')
+                formatted = idle_time.strftime(format_string)
+            else:
+                format_string = app.settings.get('date_time_format')
+                formatted = idle_time.strftime(format_string)
+            idle_text = _('Idle since: %s') % formatted
+            idle_label = Gtk.Label(label=idle_text)
+            idle_label.set_halign(Gtk.Align.START)
+            idle_label.set_xalign(0)
+            resource_box.add(idle_label)
 
-        self._ui.resources_box.show_all()
+        app.plugin_manager.extension_point(
+            'roster_tooltip_resource_populate',
+            resource_box,
+            contact)
+
+        self._ui.resources_box.add(resource_box)
 
     def _append_pep_info(self, contact: types.BareContact) -> None:
         tune = contact.get_tune()

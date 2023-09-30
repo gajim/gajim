@@ -410,6 +410,9 @@ class BareContact(CommonContact):
         contact.connect('caps-update', self._on_signal)
         return contact
 
+    def has_resources(self) -> bool:
+        return bool(self._resources)
+
     def get_resource(self, resource: str) -> ResourceContact:
         contact = self._resources.get(resource)
         if contact is None:
