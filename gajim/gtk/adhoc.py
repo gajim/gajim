@@ -21,6 +21,7 @@ import logging
 
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.const import AdHocAction
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
@@ -316,7 +317,10 @@ class Stage(Page):
             return
 
         for note in notes:
-            label = Gtk.Label(label=note.text)
+            label = Gtk.Label(
+                label=note.text,
+                wrap=True,
+                wrap_mode=Pango.WrapMode.WORD_CHAR)
             label.show()
             self._notes.append(label)
             self.add(label)
