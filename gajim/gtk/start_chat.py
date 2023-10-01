@@ -55,6 +55,7 @@ from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
+from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_icon_name
@@ -787,6 +788,10 @@ class ContactRow(Gtk.ListBoxRow):
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
         grid.add(image)
 
+        self._tooltip = ContactTooltip()
+        image.set_has_tooltip(True)
+        image.connect('query-tooltip', self._on_query_tooltip)
+
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         box.set_hexpand(True)
 
@@ -820,8 +825,6 @@ class ContactRow(Gtk.ListBoxRow):
             self.status_label.get_style_context().add_class('dim-label')
             box.add(self.status_label)
 
-        grid.set_tooltip_text(str(jid))
-
         grid.add(box)
         self._grid = grid
 
@@ -830,6 +833,18 @@ class ContactRow(Gtk.ListBoxRow):
         eventbox.add(grid)
         self.add(eventbox)
         self.show_all()
+
+    def _on_query_tooltip(self,
+                          _img: Gtk.Image,
+                          _x_coord: int,
+                          _y_coord: int,
+                          _keyboard_mode: bool,
+                          tooltip: Gtk.Tooltip) -> bool:
+        if not isinstance(self.contact, BareContact):
+            return False
+        v, widget = self._tooltip.get_tooltip(self.contact)
+        tooltip.set_custom(widget)
+        return v
 
     def _popup_menu(self,
                     _widget: Gtk.EventBox,
