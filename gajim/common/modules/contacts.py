@@ -367,6 +367,8 @@ class BareContact(CommonContact):
         self._avatar_sha = app.storage.cache.get_contact(
             account, jid, 'avatar')
 
+        self._gateway_type: str | None = None
+
         self._presence = UNKNOWN_PRESENCE
 
     @property
@@ -517,6 +519,25 @@ class BareContact(CommonContact):
     def set_avatar_sha(self, sha: str) -> None:
         app.storage.cache.set_contact(self._account, self._jid, 'avatar', sha)
 
+    def _get_transport_icon_name(self) -> str | None:
+        if self._gateway_type is not None:
+            return f'gateway-{self._gateway_type}'
+
+        domain_disco = app.storage.cache.get_last_disco_info(self._jid.domain)
+        if domain_disco is None:
+            return None
+
+        if gateway_type := domain_disco.gateway_type:
+            self._gateway_type = gateway_type
+            return f'gateway-{gateway_type}'
+
+    def update_gateway_type(self, gateway_type: str | None):
+        if gateway_type == self._gateway_type:
+            return
+
+        self._gateway_type = gateway_type
+        self.notify('avatar-update')
+
     def get_avatar(self,
                    size: int,
                    scale: int,
@@ -526,22 +547,7 @@ class BareContact(CommonContact):
 
         show = self.show.value if add_show else None
 
-        transport_icon = None
-        if self.is_gateway:
-            disco_info = app.storage.cache.get_last_disco_info(self._jid)
-            if disco_info is not None:
-                if disco_info.gateway_type == 'sms':
-                    transport_icon = 'gajim-agent-sms'
-                if disco_info.gateway_type == 'irc':
-                    transport_icon = 'gateway-irc'
-        else:
-            for resource_contact in self.iter_resources():
-                if resource_contact.identity_type == 'sms':
-                    transport_icon = 'gajim-agent-sms'
-                    break
-
-        if self.avatar_sha is not None:
-            transport_icon = None
+        transport_icon = self._get_transport_icon_name()
 
         return app.app.avatar_storage.get_surface(
             self,

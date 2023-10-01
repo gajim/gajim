@@ -33,6 +33,7 @@ from gajim.common import types
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import ServerDiscoReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.util import as_task
 
 
@@ -160,11 +161,17 @@ class Discovery(BaseModule):
 
     def _parse_transports(self, info: DiscoInfo) -> None:
         for identity in info.identities:
-            if identity.category not in ('gateway', 'headline'):
+            if identity.category != 'gateway':
                 continue
 
             self._log.info('Found transport: %s %s %s',
                            info.jid, identity.category, identity.type)
+
+            for child in self._con.get_module(
+                    'Contacts').get_contacts_with_domain(info.jid.domain):
+                if not isinstance(child, BareContact):
+                    continue
+                child.update_gateway_type(identity.type)
 
             jid = str(info.jid)
             if jid not in app.transport_type:
