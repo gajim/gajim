@@ -101,12 +101,10 @@ class ConversationView(Gtk.ScrolledWindow):
         # horizontally under certain conditions (applies to GroupchatControl)
         self.get_hscrollbar().hide()
 
-        self._list_box = Gtk.ListBox()
-        self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._list_box.set_sort_func(self._sort_func)
-
         self._contact: ChatContactT | None = None
         self._client = None
+
+        self._list_box = Gtk.ListBox()
 
         # Keeps track of the number of rows shown in ConversationView
         self._row_count: int = 0
@@ -254,6 +252,18 @@ class ConversationView(Gtk.ScrolledWindow):
             log.debug('emit %s, %s', signal_name, args)
             self.emit(signal_name, *args)
 
+    def _reset_list_box(self) -> None:
+        self._list_box.destroy()
+        self._list_box = Gtk.ListBox()
+        self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        self._list_box.set_sort_func(self._sort_func)
+        self._list_box.show()
+
+        current_child = self.get_child()
+        assert current_child is not None
+        current_child.destroy()
+        self.add(self._list_box)
+
     def _reset(self) -> None:
         self._current_upper = 0
         self._autoscroll = True
@@ -263,8 +273,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._requesting = None
         self.set_history_complete(True, False)
 
-        for row in self._list_box.get_children():
-            row.destroy()
+        self._reset_list_box()
 
         self._row_count = 0
         self._active_date_rows = set()
