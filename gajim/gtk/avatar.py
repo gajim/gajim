@@ -157,7 +157,6 @@ def add_transport_to_avatar(surface: cairo.ImageSurface,
     context.paint()
 
     width = width / scale
-    height = height / scale
 
     clip_radius = width * CIRCLE_RATIO
     center_x = clip_radius
