@@ -637,6 +637,15 @@ class BareContact(CommonContact):
     def type_string(self) -> str:
         return 'chat'
 
+    @property
+    def is_bot(self) -> bool:
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+
+        if disco_info is not None and disco_info.has_identity('client', 'bot'):
+            return True
+
+        return any(r.is_bot for r in self.iter_resources())
+
 
 class ResourceContact(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -674,6 +683,12 @@ class ResourceContact(CommonContact):
 
         return any(identity.type == 'phone' for
                    identity in disco_info.identities)
+
+    @property
+    def is_bot(self):
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        return (disco_info is not None
+                and disco_info.has_identity('client', 'bot'))
 
     @property
     def is_available(self) -> bool:

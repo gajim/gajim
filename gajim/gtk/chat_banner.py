@@ -99,6 +99,7 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._set_chat_menu(contact)
         self._update_phone_image()
+        self._update_robot_image()
         self._update_roster_button()
         self._update_avatar()
         self._update_visitor_button()
@@ -186,8 +187,8 @@ class ChatBanner(Gtk.Box, EventHelper):
                         _contact: types.BareContact,
                         _signal_name: str
                         ) -> None:
-
         self._update_avatar()
+        self._update_robot_image()
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,
@@ -256,6 +257,13 @@ class ChatBanner(Gtk.Box, EventHelper):
     def _update_phone_image(self) -> None:
         self._ui.phone_image.set_visible(
             self._contact in self._last_message_from_phone)
+
+    def _update_robot_image(self) -> None:
+        if isinstance(self._contact, BareContact):
+            self._ui.robot_image.set_visible(self._contact.is_gateway
+                                             or self._contact.is_bot)
+        else:
+            self._ui.robot_image.set_visible(False)
 
     def _update_roster_button(self) -> None:
         self._ui.toggle_roster_button.set_visible(
