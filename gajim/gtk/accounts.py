@@ -778,9 +778,9 @@ class PrivacyPage(GenericSettingPage):
         }
 
         chatstate_entries = {
-            'all': _('Enabled'),
-            'composing_only': _('Composing Only'),
             'disabled': _('Disabled'),
+            'composing_only': _('Composing Only'),
+            'all': _('All Chat States'),
         }
 
         encryption_entries = {
