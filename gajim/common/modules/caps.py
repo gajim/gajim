@@ -178,6 +178,9 @@ class Caps(BaseModule):
             self._log.info('Update %s', task.entity.jid)
             contact = self._con.get_module('Contacts').get_contact(
                 task.entity.jid)
+            app.storage.cache.set_last_disco_info(task.entity.jid,
+                                                  disco_info,
+                                                  cache_only=True)
             contact.notify('caps-update')
 
     def update_caps(self) -> None:
