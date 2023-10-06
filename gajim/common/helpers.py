@@ -1317,7 +1317,12 @@ class Observable:
 
             for handler in list(handlers):
                 func = handler()
-                if func is None or func.__self__ is obj:
+                # Don’t remove dead weakrefs from the handler list
+                # notify() will remove dead refs, and __disconnect()
+                # can be called from inside notify(), this can lead
+                # to race conditions where later notfiy tries to remove
+                # a dead ref which is not anymore in the list.
+                if func is not None and func.__self__ is obj:
                     handlers.remove(handler)
 
         if signals is None:
