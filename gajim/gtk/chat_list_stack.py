@@ -104,16 +104,18 @@ class ChatListStack(Gtk.Stack, EventHelper):
             app.window.add_action(act)
 
     def _on_visible_child_name(self, _stack: Gtk.Stack, _param: str) -> None:
-        if self._last_visible_child_name == self.get_visible_child_name():
+        new_visible_child_name = self.get_visible_child_name()
+        if self._last_visible_child_name == new_visible_child_name:
             return
 
         if self._last_visible_child_name != 'default':
             chat_list = cast(
-                ChatList,
+                ChatList | None,
                 self.get_child_by_name(self._last_visible_child_name))
-            chat_list.set_filter_text('')
-        last_child = self.get_visible_child_name() or 'default'
-        self._last_visible_child_name = last_child
+            if chat_list is not None:
+                chat_list.set_filter_text('')
+
+        self._last_visible_child_name = new_visible_child_name or 'default'
 
     def get_chatlist(self, workspace_id: str) -> ChatList:
         return self._chat_lists[workspace_id]
