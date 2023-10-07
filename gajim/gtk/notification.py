@@ -63,10 +63,10 @@ log = logging.getLogger('gajim.gtk.notification')
 
 
 NOTIFICATION_ICONS: dict[str, str] = {
-    'incoming-message': 'gajim-chat_msg_recv',
-    'group-chat-invitation': 'gajim-gc_invitation',
+    'incoming-message': 'gajim-chat-msg-recv',
+    'group-chat-invitation': 'gajim-group-chat-invitation',
     'incoming-call': 'call-start-symbolic',
-    'subscription_request': 'gajim-subscription_request',
+    'subscription_request': 'gajim-subscription-request',
     'unsubscribed': 'gajim-unsubscribed',
     'file-request-received': 'document-send',
     'file-send-error': 'dialog-error',
@@ -220,7 +220,7 @@ class PopupNotification(Gtk.Window):
         if event.icon_name is not None:
             return event.icon_name
         icon_name = event.sub_type or event.type
-        return NOTIFICATION_ICONS.get(icon_name, 'gajim-chat_msg_recv')
+        return NOTIFICATION_ICONS.get(icon_name, 'gajim-chat-msg-recv')
 
     def _add_background_color(self, event: events.Notification) -> None:
         event_type = event.sub_type or event.type
