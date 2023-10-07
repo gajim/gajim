@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '44'
+runtime-version: '45'
 sdk: org.gnome.Sdk
 command: gajim-devel
 tags:
@@ -62,14 +62,21 @@ cleanup:
 modules:
   - shared-modules/libappindicator/libappindicator-gtk3-introspection-12.10.json
 
+  - name: gtksourceview4
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/gtksourceview/4.8/gtksourceview-4.8.4.tar.xz
+        sha256: 7ec9d18fb283d1f84a3a3eff3b7a72b09a10c9c006597b3fbabbb5958420a87d
+
   - name: python3-packaging
     buildsystem: simple
     build-commands:
-      - pip3 install packaging-23.1-py3-none-any.whl
+      - pip3 install packaging-23.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-23.1-py3-none-any.whl
-        sha256: 994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61
+        url: https://files.pythonhosted.org/packages/py3/p/packaging/packaging-23.2-py3-none-any.whl
+        sha256: 8c491190033a9af7e1d931d0b5dacc2ef47509b34dd0de67ed209b5203fc88c7
 
   - name: python3-pycparser
     buildsystem: simple
@@ -83,11 +90,11 @@ modules:
   - name: python3-cffi
     buildsystem: simple
     build-commands:
-      - pip3 install .
+      - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/c/cffi/cffi-1.15.1.tar.gz
-        sha256: d400bfb9a37b1351253cb402671cea7e89bdecc294e8016a707f6d1d8ac934f9
+        url: https://files.pythonhosted.org/packages/source/c/cffi/cffi-1.16.0.tar.gz
+        sha256: bcb3ef43e58665bbda2fb198698fcae6776483e0c4a631aa5647806c25e02cc0
 
   - name: python3-idna
     buildsystem: simple
@@ -250,11 +257,11 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.0.5-py3-none-any.whl
+      - pip3 install urllib3-2.0.6-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.0.5-py3-none-any.whl
-        sha256: ef16afa8ba34a1f989db38e1dbbe0c302e4289a47856990d0682e374563ce35e
+        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.0.6-py3-none-any.whl
+        sha256: 7a7c7003b000adf9e7ca2a377c9688bbc54ed41b985789ed576570342a375cd2
 
   - name: python3-certifi
     buildsystem: simple
@@ -316,11 +323,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-4.24.3-py3-none-any.whl
+      - pip3 install --no-deps protobuf-4.24.4-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.24.3-py3-none-any.whl
-        sha256: f6f8dc65625dadaad0c8545319c2e2f0424fede988368893ca3844261342c11a
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.24.4-py3-none-any.whl
+        sha256: 80797ce7424f8c8d2f2547e2d42bfbb6c08230ce5832d6c099a37335c9c90a92
 
   - name: python3-omemo-dr
     buildsystem: simple
