@@ -324,7 +324,7 @@
                     <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
                     <property name="halign">start</property>
                     <property name="margin-end">4</property>
-                    <property name="icon-name">phone-apple-iphone-symbolic</property>
+                    <property name="icon-name">phone-symbolic</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
