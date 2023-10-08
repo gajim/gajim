@@ -73,28 +73,33 @@ class DataFormWidget(Gtk.ScrolledWindow):
             self.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.NEVER)
 
         self._form_node = form_node
-        self._form_grid = FormGrid(form_node, options)
+        if self._form_node.is_reported:
+            self._form_widget = DataFormReportedTable(form_node)
+        else:
+            self._form_widget = FormGrid(form_node, options)
         self._original_form_hash = self.get_form_hash()
 
-        self.add(self._form_grid)
+        self.add(self._form_widget)
 
         self.connect('destroy', self._on_destroy)
 
     @property
     def title(self) -> str | None:
-        return self._form_grid.title
+        return self._form_widget.title
 
     @property
     def instructions(self) -> str | None:
-        return self._form_grid.instructions
+        return self._form_widget.instructions
 
     def validate(self) -> None:
-        return self._form_grid.validate(True)
+        return self._form_widget.validate(True)
 
     def get_form(self) -> SimpleDataForm | MultipleDataForm:
         return self._form_node
 
-    def get_submit_form(self) -> SimpleDataForm | MultipleDataForm:
+    def get_submit_form(self) -> SimpleDataForm:
+        if self._form_node.is_reported:
+            raise ValueError('MultipleDataForm cannot be submitted')
         self._form_node.type_ = 'submit'
         return self._form_node
 
@@ -108,19 +113,22 @@ class DataFormWidget(Gtk.ScrolledWindow):
         self._original_form_hash = self.get_form_hash()
 
     def focus_first_entry(self) -> None:
-        for row in range(self._form_grid.row_count):
-            widget = self._form_grid.get_child_at(1, row)
+        if self._form_node.is_reported:
+            return
+
+        for row in range(self._form_widget.row_count):
+            widget = self._form_widget.get_child_at(1, row)
             if isinstance(widget, Gtk.Entry):
                 widget.grab_focus_without_selecting()
                 break
 
     def _on_destroy(self, widget: Gtk.ScrolledWindow) -> None:
-        self._form_grid.destroy()
+        self._form_widget.destroy()
 
 
 class FormGrid(Gtk.Grid):
     def __init__(self,
-                 form_node: SimpleDataForm | MultipleDataForm,
+                 form_node: SimpleDataForm,
                  options: dict[str, Any]
                  ) -> None:
 
@@ -180,7 +188,7 @@ class FormGrid(Gtk.Grid):
         self.rows.append(field)
 
     @staticmethod
-    def _analyse_fields(form_node: SimpleDataForm | MultipleDataForm,
+    def _analyse_fields(form_node: SimpleDataForm,
                         options: dict[str, Any]
                         ) -> None:
 
@@ -201,7 +209,7 @@ class FormGrid(Gtk.Grid):
         options['right-align'] = max(label_lengths) < 30
 
     def _parse_form(self,
-                    form_node: SimpleDataForm | MultipleDataForm,
+                    form_node: SimpleDataForm,
                     options: dict[str, Any]
                     ) -> None:
 
@@ -881,3 +889,86 @@ class DataFormDialog(Gtk.Dialog):
         if response == Gtk.ResponseType.OK:
             self._submit_callback(self._form.get_submit_form(), self._node)
         self.destroy()
+
+
+class DataFormReportedTable(Gtk.Grid):
+    '''
+    A widget representing the results of a command as a table, when the data
+    form contains a <reported> element.
+    '''
+
+    def __init__(self, form_node: MultipleDataForm) -> None:
+        super().__init__(row_spacing=10)
+        self._form_node = form_node
+
+        self.title = form_node.title
+        self.instructions = form_node.instructions
+
+        self._process_form()
+        self._build_list_store()
+        self._build_treeview()
+        self._build_scrolled_window()
+
+    def _process_form(self) -> None:
+        self._column_names: list[str] = []
+        self._column_types: list[str] = []
+        for field in self._form_node.reported.iter_fields():
+            self._column_types.append(field.type_)
+            self._column_names.append(field.label)
+
+        rows: list[list[str]] = [[f.value for f in record.fields]
+                                 for record in self._form_node.items]
+
+        self._rows = rows
+
+    def _build_list_store(self) -> None:
+        self._list_store = Gtk.ListStore(*(str for _ in self._column_names))
+        for row in self._rows:
+            self._list_store.append(row)
+
+    def _build_treeview(self) -> None:
+        self._treeview = Gtk.TreeView(model=self._list_store.filter_new())
+        self._treeview.connect('row-activated', self._on_row_activate)
+
+        for i, column_title in enumerate(self._column_names):
+            renderer = Gtk.CellRendererText()
+            column = Gtk.TreeViewColumn(column_title, renderer, text=i)
+            self._treeview.append_column(column)
+
+    def _build_scrolled_window(self) -> None:
+        scrolled_window = Gtk.ScrolledWindow()
+        scrolled_window.set_vexpand(True)
+        scrolled_window.set_hexpand(True)
+        scrolled_window.add(self._treeview)
+
+        title = f'<big>{GLib.markup_escape_text(self._form_node.title)}</big>'
+        self.attach(Gtk.Label(label=title, use_markup=True), 0, 0, 1, 1)
+        self.attach(scrolled_window, 0, 2, 1, 1)
+
+    def _on_row_activate(
+        self,
+        _tree_view: Gtk.TreeView,
+        path: Gtk.TreePath,
+        column: Gtk.TreeViewColumn,
+    ) -> None:
+        row = self._rows[int(path.to_string())]
+        col = self._column_names.index(column.get_title())
+        # If the activated cell is a JID, start a chat with it.
+        if self._column_types[col] == 'jid-single':
+            dest: str | None = row[col]
+        else:
+            # else, try to find a column that is a JID
+            for i, t in enumerate(self._column_types):
+                if t == 'jid-single':
+                    dest = row[i]
+                    break
+            else:
+                dest = None
+        if dest:
+            app.app.activate_action(
+                'start-chat', GLib.Variant('as', [dest, '']))
+
+    def validate(self, is_valid: bool) -> None:
+        viewport = cast(Gtk.Viewport, self.get_parent())
+        dataform_widget = cast(DataFormWidget, viewport.get_parent())
+        dataform_widget.emit('is-valid', is_valid)
