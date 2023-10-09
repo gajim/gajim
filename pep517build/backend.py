@@ -75,3 +75,15 @@ def build_wheel(wheel_directory: str,
     )
 
     return basename
+
+
+def build_editable(*args: Any, **kwargs: Any) -> str:
+    return build_wheel(*args, **kwargs)
+
+
+def get_requires_for_build_editable(*args: Any, **kwargs: Any) -> list[str]:
+    return get_requires_for_build_wheel(*args, **kwargs)
+
+
+def prepare_metadata_for_build_editable(*args: Any, **kwargs: Any) -> str:
+    return prepare_metadata_for_build_wheel(*args, **kwargs)
