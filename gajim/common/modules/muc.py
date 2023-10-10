@@ -302,10 +302,14 @@ class MUC(BaseModule):
         try:
             result = task.finish()
         except StanzaError as error:
-            self._log.info('Disco %s failed: %s', error.jid, error.get_text())
-
-            room = self._get_contact(error.jid.bare)
+            jid = error.jid
+            self._log.info('Disco %s failed: %s', jid, error.get_text())
+            muc_data = self._mucs.get(jid)
+            muc_data.error = 'join-failed'
             error_text = helpers.to_user_string(error)
+            muc_data.error_text = error_text
+            self._set_muc_state(jid, MUCJoinedState.NOT_JOINED)
+            room = self._get_contact(jid)
             room.notify('room-join-failed', error_text)
             return
 
