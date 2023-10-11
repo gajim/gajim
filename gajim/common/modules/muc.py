@@ -366,10 +366,11 @@ class MUC(BaseModule):
         if muc_data is None:
             return
 
+        self._remove_rejoin_timeout(room_jid)
+
         if muc_data.state.is_not_joined:
             return
 
-        self._remove_rejoin_timeout(room_jid)
 
         self._con.get_module('Presence').send_presence(
             muc_data.occupant_jid,
