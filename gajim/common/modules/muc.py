@@ -868,7 +868,12 @@ class MUC(BaseModule):
     def cancel_password_request(self, room_jid: JID) -> None:
         self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
 
-    def _room_join_complete(self, muc_data: MUCData):
+    def _room_join_complete(self, muc_data: MUCData) -> None:
+        # Reset errors from previous tries, otherwise when we are
+        # disconnected from the room, the ChatFunctionPage will be shown
+        muc_data.error = None
+        muc_data.error_text = None
+
         self._set_muc_state(muc_data.jid, MUCJoinedState.JOINED)
         self._remove_rejoin_timeout(muc_data.jid)
 
