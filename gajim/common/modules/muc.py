@@ -793,7 +793,7 @@ class MUC(BaseModule):
         self._remove_rejoin_timeout(room_jid)
         self._rejoin_muc.add(room_jid)
         self._log.info('Start rejoin timeout for: %s', room_jid)
-        id_ = GLib.timeout_add_seconds(2, self._rejoin, room_jid)
+        id_ = GLib.timeout_add_seconds(10, self._rejoin, room_jid)
         self._rejoin_timeouts[room_jid] = id_
 
     def _remove_rejoin_timeout(self, room_jid: str) -> None:
