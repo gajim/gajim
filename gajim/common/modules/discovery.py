@@ -24,6 +24,7 @@ from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import ServerDiscoReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 
 
@@ -159,7 +160,7 @@ class Discovery(BaseModule):
 
             for child in self._con.get_module(
                     'Contacts').get_contacts_with_domain(info.jid.domain):
-                if not isinstance(child, BareContact):
+                if not isinstance(child, BareContact | GroupchatContact):
                     continue
                 child.update_gateway_type(identity.type)
 

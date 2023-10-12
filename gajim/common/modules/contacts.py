@@ -257,6 +257,7 @@ class CommonContact(Observable, ClientModules):
         ClientModules.__init__(self, account)
         self._jid = jid
         self._account = account
+        self._gateway_type: str | None = None
 
     def __hash__(self) -> int:
         return hash(f'{self._account}-{self._jid}')
@@ -346,6 +347,25 @@ class CommonContact(Observable, ClientModules):
     def __repr__(self) -> str:
         return f'{self.jid} ({self._account})'
 
+    def _get_transport_icon_name(self) -> str | None:
+        if self._gateway_type is not None:
+            return f'gateway-{self._gateway_type}'
+
+        domain_disco = app.storage.cache.get_last_disco_info(self._jid.domain)
+        if domain_disco is None:
+            return None
+
+        if gateway_type := domain_disco.gateway_type:
+            self._gateway_type = gateway_type
+            return f'gateway-{gateway_type}'
+
+    def update_gateway_type(self, gateway_type: str | None):
+        if gateway_type == self._gateway_type:
+            return
+
+        self._gateway_type = gateway_type
+        self.notify('avatar-update')
+
 
 class BareContact(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -356,8 +376,6 @@ class BareContact(CommonContact):
 
         self._avatar_sha = app.storage.cache.get_contact(
             account, jid, 'avatar')
-
-        self._gateway_type: str | None = None
 
         self._presence = UNKNOWN_PRESENCE
 
@@ -508,25 +526,6 @@ class BareContact(CommonContact):
 
     def set_avatar_sha(self, sha: str) -> None:
         app.storage.cache.set_contact(self._account, self._jid, 'avatar', sha)
-
-    def _get_transport_icon_name(self) -> str | None:
-        if self._gateway_type is not None:
-            return f'gateway-{self._gateway_type}'
-
-        domain_disco = app.storage.cache.get_last_disco_info(self._jid.domain)
-        if domain_disco is None:
-            return None
-
-        if gateway_type := domain_disco.gateway_type:
-            self._gateway_type = gateway_type
-            return f'gateway-{gateway_type}'
-
-    def update_gateway_type(self, gateway_type: str | None):
-        if gateway_type == self._gateway_type:
-            return
-
-        self._gateway_type = gateway_type
-        self.notify('avatar-update')
 
     def get_avatar(self,
                    size: int,
@@ -811,13 +810,8 @@ class GroupchatContact(CommonContact):
         app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
     def get_avatar(self, size: int, scale: int) -> cairo.ImageSurface:
-        transport_icon = None
-        disco_info = self.get_disco()
-        if disco_info is not None:
-            for identity in disco_info.identities:
-                if identity.type == 'irc':
-                    transport_icon = 'gateway-irc'
-                break
+        transport_icon = self._get_transport_icon_name()
+
         return app.app.avatar_storage.get_muc_surface(
             self._account,
             self._jid,

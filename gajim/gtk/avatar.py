@@ -472,11 +472,13 @@ class AvatarStorage(metaclass=Singleton):
             if avatar_sha is not None:
                 surface = self.surface_from_filename(avatar_sha, size, scale)
                 if surface is not None:
+                    # clip first to avoid clipping the transport icon
+                    surface = clip(surface, style)
+
                     if transport_icon is not None:
                         surface = add_transport_to_avatar(
                             surface, transport_icon)
 
-                    surface = clip(surface, style)
                     self._cache[jid][
                         (size, scale, None, transport_icon)] = surface
                     return surface
