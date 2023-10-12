@@ -514,7 +514,7 @@ class AvatarStorage(metaclass=Singleton):
         avatar_sha = app.settings.get_workspace_setting(
             workspace_id, 'avatar_sha')
         if avatar_sha:
-            surface = self._load_surface_from_storage(avatar_sha, size, scale)
+            surface = self.surface_from_filename(avatar_sha, size, scale)
             if surface is not None:
                 return clip(surface, 'round-corners')
 
@@ -593,22 +593,6 @@ class AvatarStorage(metaclass=Singleton):
         surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
         return fit(surface, size)
 
-    def _load_surface_from_storage(self,
-                                   filename: str,
-                                   size: int,
-                                   scale: int) -> cairo.ImageSurface | None:
-
-        size = size * scale
-        path = self.get_avatar_path(filename)
-        if path is None:
-            return None
-
-        pixbuf = load_pixbuf(path, size)
-        if pixbuf is None:
-            return None
-        surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-        return fit(surface, size)
-
     def _get_avatar_from_storage(self,
                                  contact: (types.BareContact |
                                            types.GroupchatContact |
@@ -621,7 +605,7 @@ class AvatarStorage(metaclass=Singleton):
         if avatar_sha is None:
             return None
 
-        surface = self._load_surface_from_storage(avatar_sha, size, scale)
+        surface = self.surface_from_filename(avatar_sha, size, scale)
         if surface is None:
             return None
         return clip(surface, style)
