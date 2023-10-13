@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim
 runtime: org.gnome.Platform
-runtime-version: '44'
+runtime-version: '45'
 sdk: org.gnome.Sdk
 command: gajim
 finish-args:
