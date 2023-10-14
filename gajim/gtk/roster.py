@@ -46,7 +46,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.menus import get_roster_menu
-from gajim.gtk.tooltips import RosterTooltip
+from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import open_window
@@ -77,7 +77,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._client = app.get_client(account)
         self._contacts = self._client.get_module('Contacts')
 
-        self._roster_tooltip = RosterTooltip()
+        self._roster_tooltip = ContactTooltip()
 
         self._ui = get_builder('roster.ui')
         self._ui.roster_treeview.set_model(None)
@@ -262,7 +262,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         contact = self._contacts.get_bare_contact(
             model[iter_][Column.JID_OR_GROUP])
         assert isinstance(contact, BareContact)
-        value, widget = self._roster_tooltip.get_tooltip(path, contact)
+        value, widget = self._roster_tooltip.get_tooltip(contact)
         tooltip.set_custom(widget)
         return value
 

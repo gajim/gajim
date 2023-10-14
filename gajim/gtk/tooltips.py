@@ -125,30 +125,29 @@ class GCTooltip:
         self._ui.tooltip_grid.destroy()
 
 
-class RosterTooltip:
+class ContactTooltip:
     def __init__(self) -> None:
-        self._row = None
-        self._ui = get_builder('roster_tooltip.ui')
+        self._contact = None
+        self._ui = get_builder('contact_tooltip.ui')
 
     def clear_tooltip(self) -> None:
-        self._row = None
+        self._contact = None
         for widget in self._ui.resources_box.get_children():
             widget.destroy()
         for widget in self._ui.tooltip_grid.get_children():
             widget.hide()
 
     def get_tooltip(self,
-                    row: Gtk.TreePath,
                     contact: types.BareContact) -> tuple[bool, Gtk.Grid]:
-        if self._row == row:
+        if self._contact == contact:
             return True, self._ui.tooltip_grid
 
+        self.clear_tooltip()
         self._populate_grid(contact)
-        self._row = row
+        self._contact = contact
         return False, self._ui.tooltip_grid
 
     def _populate_grid(self, contact: types.BareContact) -> None:
-        self.clear_tooltip()
         scale = self._ui.tooltip_grid.get_scale_factor()
 
         surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)

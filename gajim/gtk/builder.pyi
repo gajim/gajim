@@ -301,6 +301,20 @@ class ContactInfoBuilder(Builder):
     devices_box: Gtk.Box
 
 
+class ContactTooltipBuilder(Builder):
+    tooltip_grid: Gtk.Grid
+    jid: Gtk.Label
+    tune_label: Gtk.Label
+    location_label: Gtk.Label
+    tune: Gtk.Label
+    location: Gtk.Label
+    name: Gtk.Label
+    avatar: Gtk.Image
+    sub_label: Gtk.Label
+    sub: Gtk.Label
+    resources_box: Gtk.Box
+
+
 class EmojiChooserBuilder(Builder):
     box: Gtk.Box
     search: Gtk.SearchEntry
@@ -792,20 +806,6 @@ class RosterItemExchangeBuilder(Builder):
     accept_button: Gtk.Button
 
 
-class RosterTooltipBuilder(Builder):
-    tooltip_grid: Gtk.Grid
-    jid: Gtk.Label
-    tune_label: Gtk.Label
-    location_label: Gtk.Label
-    tune: Gtk.Label
-    location: Gtk.Label
-    name: Gtk.Label
-    avatar: Gtk.Image
-    sub_label: Gtk.Label
-    sub: Gtk.Label
-    resources_box: Gtk.Box
-
-
 class SearchViewBuilder(Builder):
     calendar_popover: Gtk.Popover
     calendar: Gtk.Calendar
@@ -1011,6 +1011,8 @@ def get_builder(file_name: Literal['chat_paned.ui'], widgets: list[str] = ...) -
 @overload
 def get_builder(file_name: Literal['contact_info.ui'], widgets: list[str] = ...) -> ContactInfoBuilder: ...  # noqa
 @overload
+def get_builder(file_name: Literal['contact_tooltip.ui'], widgets: list[str] = ...) -> ContactTooltipBuilder: ...  # noqa
+@overload
 def get_builder(file_name: Literal['emoji_chooser.ui'], widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['exception_dialog.ui'], widgets: list[str] = ...) -> ExceptionDialogBuilder: ...  # noqa
@@ -1082,8 +1084,6 @@ def get_builder(file_name: Literal['profile.ui'], widgets: list[str] = ...) -> P
 def get_builder(file_name: Literal['roster.ui'], widgets: list[str] = ...) -> RosterBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['roster_item_exchange.ui'], widgets: list[str] = ...) -> RosterItemExchangeBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['roster_tooltip.ui'], widgets: list[str] = ...) -> RosterTooltipBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['search_view.ui'], widgets: list[str] = ...) -> SearchViewBuilder: ...  # noqa
 @overload
