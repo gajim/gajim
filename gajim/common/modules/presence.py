@@ -141,7 +141,6 @@ class Presence(BaseModule):
             'timestamp': properties.timestamp,
             'avatar_sha': properties.avatar_sha,
             'user_nick': properties.nickname,
-            'idle_time': properties.idle_timestamp,
             'show': show,
             'new_show': show,
             'old_show': 0,

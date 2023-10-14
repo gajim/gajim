@@ -468,13 +468,13 @@ class BareContact(CommonContact):
         return res.status
 
     @property
-    def idle_time(self) -> float | None:
+    def idle_datetime(self) -> datetime | None:
         if not self._resources:
-            return self._presence.idle_time
+            return self._presence.idle_datetime
 
         res = self.get_active_resource()
         assert res is not None
-        return res.idle_time
+        return res.idle_datetime
 
     @property
     def chatstate(self) -> Chatstate | None:
@@ -709,8 +709,8 @@ class ResourceContact(CommonContact):
         return self._presence.priority
 
     @property
-    def idle_time(self) -> float | None:
-        return self._presence.idle_time
+    def idle_datetime(self) -> datetime | None:
+        return self._presence.idle_datetime
 
     @property
     def chatstate(self) -> Chatstate | None:
@@ -984,8 +984,8 @@ class GroupchatParticipant(CommonContact):
         return self._presence.status
 
     @property
-    def idle_time(self) -> float | None:
-        return self._presence.idle_time
+    def idle_datetime(self) -> datetime | None:
+        return self._presence.idle_datetime
 
     @property
     def name(self) -> str:

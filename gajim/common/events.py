@@ -634,7 +634,6 @@ class PresenceReceived(ApplicationEvent):
     timestamp: float
     avatar_sha: str | None
     user_nick: str | None
-    idle_time: float | None
     show: str
     new_show: str
     old_show: str

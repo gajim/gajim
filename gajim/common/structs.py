@@ -21,6 +21,7 @@ from typing import TypeVar
 import time
 from dataclasses import dataclass
 from dataclasses import fields
+from datetime import datetime
 
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
@@ -37,6 +38,7 @@ from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
+from gajim.common.util.datetime import convert_epoch_to_local_datetime
 
 _T = TypeVar('_T')
 
@@ -208,22 +210,27 @@ class PresenceData:
     show: PresenceShow
     status: str
     priority: int
-    idle_time: float | None
+    idle_datetime: datetime | None
     available: bool
 
     @classmethod
     def from_presence(cls, properties: PresenceProperties) -> PresenceData:
+        idle_datetime = None
+        if properties.idle_timestamp is not None:
+            idle_datetime = convert_epoch_to_local_datetime(
+                properties.idle_timestamp)
+
         return cls(show=properties.show,
                    status=properties.status,
                    priority=properties.priority,
-                   idle_time=properties.idle_timestamp,
+                   idle_datetime=idle_datetime,
                    available=properties.type.is_available)
 
 
 UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
                                 status='',
                                 priority=0,
-                                idle_time=0,
+                                idle_datetime=None,
                                 available=False)
 
 
@@ -231,7 +238,7 @@ UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
 class MUCPresenceData:
     show: PresenceShow
     status: str
-    idle_time: float | None
+    idle_datetime: datetime | None
     available: bool
     affiliation: Affiliation
     role: Role
@@ -244,9 +251,14 @@ class MUCPresenceData:
                       occupant_id: str | None
                       ) -> MUCPresenceData:
 
+        idle_datetime = None
+        if properties.idle_timestamp is not None:
+            idle_datetime = convert_epoch_to_local_datetime(
+                properties.idle_timestamp)
+
         return cls(show=properties.show,
                    status=properties.status,
-                   idle_time=properties.idle_timestamp,
+                   idle_datetime=idle_datetime,
                    available=properties.type.is_available,
                    affiliation=properties.muc_user.affiliation,
                    role=properties.muc_user.role,
@@ -256,7 +268,7 @@ class MUCPresenceData:
 
 UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        status='',
-                                       idle_time=0,
+                                       idle_datetime=None,
                                        available=False,
                                        affiliation=Affiliation.NONE,
                                        role=Role.NONE,

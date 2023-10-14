@@ -28,7 +28,6 @@ from __future__ import annotations
 
 import logging
 import os
-import time
 from datetime import datetime
 
 from gi.repository import GdkPixbuf
@@ -241,16 +240,14 @@ class ContactTooltip:
             )
             resource_box.add(status_label)
 
-        if contact.idle_time:
-            idle_time = time.localtime(contact.idle_time)
-            idle_time = datetime(*(idle_time[:6]))
+        if idle_datetime := contact.idle_datetime:
             current = datetime.now()
-            if idle_time.date() == current.date():
+            if idle_datetime.date() == current.date():
                 format_string = app.settings.get('time_format')
-                formatted = idle_time.strftime(format_string)
+                formatted = idle_datetime.strftime(format_string)
             else:
                 format_string = app.settings.get('date_time_format')
-                formatted = idle_time.strftime(format_string)
+                formatted = idle_datetime.strftime(format_string)
             idle_text = _('Idle since: %s') % formatted
             idle_label = Gtk.Label(
                 halign=Gtk.Align.START,
