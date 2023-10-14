@@ -205,9 +205,10 @@ class ContactTooltip:
             contact.show,
             AvatarSize.SHOW_CIRCLE,
             self._ui.tooltip_grid.get_scale_factor())
-        show_image = Gtk.Image.new_from_surface(show_surface)
-        show_image.set_halign(Gtk.Align.START)
-        show_image.set_valign(Gtk.Align.CENTER)
+        show_image = Gtk.Image(
+            surface=show_surface,
+            halign=Gtk.Align.START,
+            valign=Gtk.Align.CENTER)
 
         show_string = helpers.get_uf_show(contact.show.value)
 
@@ -216,12 +217,13 @@ class ContactTooltip:
             escaped_resource = GLib.markup_escape_text(contact.jid.resource)
             resource_string = f' ({escaped_resource})'
 
-        resource_label = Gtk.Label()
-        resource_label.set_halign(Gtk.Align.START)
-        resource_label.set_xalign(0)
-        resource_label.set_ellipsize(Pango.EllipsizeMode.END)
-        resource_label.set_max_width_chars(30)
-        resource_label.set_text(f'{show_string}{resource_string}')
+        resource_label = Gtk.Label(
+            ellipsize=Pango.EllipsizeMode.END,
+            halign=Gtk.Align.START,
+            label=f'{show_string}{resource_string}',
+            max_width_chars=30,
+            xalign=0,
+        )
 
         base_box = Gtk.Box(spacing=6)
         base_box.add(show_image)
@@ -230,11 +232,13 @@ class ContactTooltip:
 
         if contact.status:
             status_text = GLib.markup_escape_text(contact.status)
-            status_label = Gtk.Label(label=status_text)
-            status_label.set_halign(Gtk.Align.START)
-            status_label.set_xalign(0)
-            status_label.set_ellipsize(Pango.EllipsizeMode.END)
-            status_label.set_max_width_chars(30)
+            status_label = Gtk.Label(
+                ellipsize=Pango.EllipsizeMode.END,
+                halign=Gtk.Align.START,
+                label=status_text,
+                max_width_chars=30,
+                xalign=0,
+            )
             resource_box.add(status_label)
 
         if contact.idle_time:
@@ -248,9 +252,11 @@ class ContactTooltip:
                 format_string = app.settings.get('date_time_format')
                 formatted = idle_time.strftime(format_string)
             idle_text = _('Idle since: %s') % formatted
-            idle_label = Gtk.Label(label=idle_text)
-            idle_label.set_halign(Gtk.Align.START)
-            idle_label.set_xalign(0)
+            idle_label = Gtk.Label(
+                halign=Gtk.Align.START,
+                label=idle_text,
+                xalign=0,
+            )
             resource_box.add(idle_label)
 
         app.plugin_manager.extension_point(
@@ -351,16 +357,21 @@ class FileTransfersTooltip:
 
         while properties:
             property_ = properties.pop(0)
-            label = Gtk.Label()
-            label.set_halign(Gtk.Align.END)
-            label.set_valign(Gtk.Align.CENTER)
-            label.set_markup(property_[0])
+            label = Gtk.Label(
+                halign=Gtk.Align.END,
+                label=property_[0],
+                use_markup=True,
+                valign=Gtk.Align.CENTER,
+            )
+
             ft_grid.attach(label, 0, current_row, 1, 1)
-            label = Gtk.Label()
-            label.set_halign(Gtk.Align.START)
-            label.set_valign(Gtk.Align.START)
-            label.set_line_wrap(True)
-            label.set_markup(property_[1])
+            label = Gtk.Label(
+                halign=Gtk.Align.START,
+                label=property_[1],
+                use_markup=True,
+                valign=Gtk.Align.START,
+                wrap=True,
+            )
             ft_grid.attach(label, 1, current_row, 1, 1)
             current_row += 1
 
