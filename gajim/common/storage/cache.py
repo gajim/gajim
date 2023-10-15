@@ -124,7 +124,7 @@ class CacheStorage(SqliteStorage):
                             row: tuple[Any, ...]) -> NamedTuple:
 
         assert cursor.description is not None
-        fields = [col[0] for col in cursor.description]  # pyright: ignore
+        fields = [col[0] for col in cursor.description]
         Row = namedtuple('Row', fields)  # pyright: ignore
         return Row(*row)
 
