@@ -118,6 +118,8 @@
       <object class="GtkImage" id="avatar_image">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
+        <property name="has-tooltip">True</property>
+        <signal name="query-tooltip" handler="_on_query_tooltip" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>

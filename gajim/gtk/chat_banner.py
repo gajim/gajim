@@ -43,6 +43,7 @@ from gajim.gtk.menus import get_groupchat_menu
 from gajim.gtk.menus import get_private_chat_menu
 from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
+from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 
 
@@ -275,6 +276,20 @@ class ChatBanner(Gtk.Box, EventHelper):
         surface = self._contact.get_avatar(AvatarSize.CHAT, scale)
         assert isinstance(surface, cairo.ImageSurface)
         self._ui.avatar_image.set_from_surface(surface)
+
+        self._avatar_image_tooltip = ContactTooltip()
+
+    def _on_query_tooltip(self,
+                          _img: Gtk.Image,
+                          _x_coord: int,
+                          _y_coord: int,
+                          _keyboard_mode: bool,
+                          tooltip: Gtk.Tooltip) -> bool:
+        if not isinstance(self._contact, BareContact):
+            return False
+        res, widget = self._avatar_image_tooltip.get_tooltip(self._contact)
+        tooltip.set_custom(widget)
+        return res
 
     def _update_visitor_button(self) -> None:
         if not isinstance(self._contact, GroupchatContact):
