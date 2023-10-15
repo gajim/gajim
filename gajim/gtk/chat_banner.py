@@ -164,11 +164,13 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_description_label()
 
     def _on_chatstate_update(self,
-                             _contact: types.BareContact,
+                             contact: types.BareContact,
                              _signal_name: str
                              ) -> None:
-
-        self._update_name_label()
+        if contact.is_groupchat:
+            self._update_description_label()
+        else:
+            self._update_name_label()
 
     def _on_nickname_update(self,
                             _contact: types.BareContact,
@@ -327,16 +329,32 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
+    def _get_muc_description_text(self) -> str:
+        contact = self._contact
+        assert isinstance(contact, GroupchatContact)
+
+        typing = contact.get_composers()
+        if not typing:
+            disco_info = app.storage.cache.get_last_disco_info(contact.jid)
+            if disco_info is None:
+                return ''
+            return disco_info.muc_description or ''
+
+        composers = tuple(c.name for c in typing)
+        n = len(composers)
+        if n == 1:
+            return _('%s is typing…') % composers[0]
+        elif n == 2:
+            return _('%s and %s are typing…') % composers
+        else:
+            return _('%s participants are typing…') % n
+
     def _update_description_label(self) -> None:
         contact = self._contact
         assert contact is not None
 
         if contact.is_groupchat:
-            disco_info = app.storage.cache.get_last_disco_info(contact.jid)
-            if disco_info is None:
-                text = ''
-            else:
-                text = disco_info.muc_description or ''
+            text = self._get_muc_description_text()
         else:
             assert not isinstance(contact, GroupchatContact)
             text = contact.status or ''

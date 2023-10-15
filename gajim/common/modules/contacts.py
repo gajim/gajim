@@ -917,6 +917,12 @@ class GroupchatContact(CommonContact):
     def type_string(self) -> str:
         return 'groupchat'
 
+    def has_composing_participants(self) -> bool:
+        return bool(self.get_module('Chatstate').get_composers(self._jid))
+
+    def get_composers(self) -> list['GroupchatParticipant']:
+        return self.get_module('Chatstate').get_composers(self._jid)
+
 
 class GroupchatParticipant(CommonContact):
     def __init__(self, logger: LogAdapter, jid: JID, account: str) -> None:
@@ -1047,6 +1053,12 @@ class GroupchatParticipant(CommonContact):
     @property
     def occupant_id(self) -> str | None:
         return self._presence.occupant_id
+
+    @property
+    def is_self(self) -> bool:
+        data = self.get_module('MUC').get_muc_data(self.room.jid)
+        assert data is not None
+        return data.nick == self.name
 
 
 def can_add_to_roster(

@@ -48,7 +48,6 @@ from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
-from gajim.common.types import OneOnOneContactT
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_chat_list_row_menu
@@ -528,9 +527,9 @@ class ChatListRow(Gtk.ListBoxRow):
         selection_data.set(drop_type, 8, byte_data)
 
     def _connect_contact_signals(self) -> None:
+        self.contact.connect('chatstate-update', self._on_chatstate_update)
         if isinstance(self.contact, BareContact):
             self.contact.connect('presence-update', self._on_presence_update)
-            self.contact.connect('chatstate-update', self._on_chatstate_update)
             self.contact.connect('nickname-update', self._on_nickname_update)
             self.contact.connect('caps-update', self._on_avatar_update)
             self.contact.connect('avatar-update', self._on_avatar_update)
@@ -548,7 +547,6 @@ class ChatListRow(Gtk.ListBoxRow):
                                         self._on_client_state_changed)
 
         elif isinstance(self.contact, GroupchatParticipant):
-            self.contact.connect('chatstate-update', self._on_chatstate_update)
             self.contact.connect('user-joined', self._on_muc_user_update)
             self.contact.connect('user-left', self._on_muc_user_update)
             self.contact.connect('user-avatar-update', self._on_muc_user_update)
@@ -661,9 +659,15 @@ class ChatListRow(Gtk.ListBoxRow):
         self.update_avatar()
 
     def _on_chatstate_update(self,
-                             contact: OneOnOneContactT,
+                             contact: ChatContactT,
                              _signal_name: str
                              ) -> None:
+        if contact.is_groupchat:
+            assert isinstance(contact, GroupchatContact)
+            self._ui.chatstate_image.set_visible(
+                contact.has_composing_participants())
+            return
+
         if contact.chatstate is None:
             self._ui.chatstate_image.hide()
         else:
