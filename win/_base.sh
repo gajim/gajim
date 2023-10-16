@@ -88,6 +88,7 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-gstreamer \
         "${MINGW_PACKAGE_PREFIX}"-gst-plugins-base \
         "${MINGW_PACKAGE_PREFIX}"-gst-plugins-good \
+        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-bad \
         "${MINGW_PACKAGE_PREFIX}"-gst-libav \
         "${MINGW_PACKAGE_PREFIX}"-gst-python \
         "${MINGW_PACKAGE_PREFIX}"-adwaita-icon-theme \
