@@ -26,7 +26,9 @@ from gi.repository import Pango
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common import types
 from gajim.common.const import AvatarSize
+from gajim.common.const import SimpleClientState
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.events import Notification
@@ -52,6 +54,8 @@ class NotificationManager(Gtk.ListBox):
         Gtk.ListBox.__init__(self)
         self._account = account
         self._client = app.get_client(account)
+        self._client.connect_signal(
+            'state-changed', self._on_client_state_changed)
 
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_halign(Gtk.Align.CENTER)
@@ -70,6 +74,13 @@ class NotificationManager(Gtk.ListBox):
 
     def _on_destroy(self, *args: Any) -> None:
         self._remove_actions()
+
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 _state: SimpleClientState
+                                 ) -> None:
+        self.update_actions()
 
     def _add_actions(self) -> None:
         actions: NotificationActionListT = [
