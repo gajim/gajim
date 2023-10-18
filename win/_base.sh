@@ -173,6 +173,7 @@ function cleanup_install {
     build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tk || true
     build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-tcl || true
     build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-frei0r-plugins || true
+    build_pacman --noconfirm -Rdd "${MINGW_PACKAGE_PREFIX}"-abseil-cpp || true
 
     #delete translations we don't support
     for d in "${MINGW_ROOT}"/share/locale/*/LC_MESSAGES; do
