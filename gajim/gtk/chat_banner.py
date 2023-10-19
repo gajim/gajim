@@ -356,6 +356,10 @@ class ChatBanner(Gtk.Box, EventHelper):
 
     def _update_share_box(self) -> None:
         assert self._contact is not None
+        if self._contact.is_groupchat:
+            self._ui.share_menu_button.set_tooltip_text(_('Share Group Chat…'))
+        else:
+            self._ui.share_menu_button.set_tooltip_text(_('Share Contact…'))
         self._ui.share_menu_button.set_sensitive(
             not self._contact.is_pm_contact)
         self._ui.jid_label.set_text(str(self._contact.jid))
