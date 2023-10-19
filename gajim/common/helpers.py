@@ -52,6 +52,7 @@ from collections import defaultdict
 from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
+from datetime import timezone
 from functools import wraps
 from pathlib import Path
 from string import Template
@@ -1589,3 +1590,20 @@ def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     if jid.resource is not None:
         return path / jid.resource[:30]
     return path
+
+
+def format_idle_time(idle_time: datetime) -> str:
+    now = datetime.now(timezone.utc)
+
+    now_date = now.date()
+    idle_date = idle_time.date()
+
+    if idle_date == now_date:
+        return idle_time.strftime(app.settings.get('time_format'))
+    if idle_date == now_date - timedelta(days=1):
+        return _('yesterday ') + idle_time.strftime(
+            app.settings.get('time_format'))
+    if idle_date >= now_date - timedelta(days=6):
+        return idle_time.strftime(f'%a {app.settings.get("time_format")}')
+
+    return idle_date.strftime(app.settings.get('date_format'))

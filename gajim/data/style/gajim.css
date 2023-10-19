@@ -219,6 +219,11 @@ infobar.error > revealer > box {
     font-weight: bold;
 }
 
+.idle-time {
+    font-size: 80%;
+    font-weight: lighter;
+}
+
 .link-button { min-height: 0px; }
 
 .floating-overlay-box {
