@@ -34,8 +34,6 @@ import re
 from enum import IntEnum
 from enum import unique
 
-from gi.repository import GLib
-
 import gajim
 
 
@@ -54,6 +52,10 @@ opt_str = ['string', 0]
 opt_bool = ['boolean', 0]
 opt_color = ['color', r'(#[0-9a-fA-F]{6})|rgb\(\d+,\d+,\d+\)|rgba\(\d+,\d+,\d+,[01]\.?\d*\)']
 
+
+# NOTE: THIS FILE CONTAINS LEGACY CONFIG OPTIONS.
+# IT IS USED FOR MIGRATION PURPOSES ONLY.
+# TO CHANGE SETTINGS, settings_values.py MUST BE USED.
 
 class Config:
 
