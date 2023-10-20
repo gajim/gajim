@@ -230,11 +230,10 @@ class ContactTooltip:
         resource_box.add(base_box)
 
         if contact.status:
-            status_text = GLib.markup_escape_text(contact.status)
             status_label = Gtk.Label(
                 ellipsize=Pango.EllipsizeMode.END,
                 halign=Gtk.Align.START,
-                label=status_text,
+                label=contact.status,
                 max_width_chars=30,
                 xalign=0,
             )
