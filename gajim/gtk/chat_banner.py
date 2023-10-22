@@ -334,7 +334,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert isinstance(contact, GroupchatContact)
 
         typing = contact.get_composers()
-        if not typing:
+        if not typing or not app.settings.get('show_chatstate_in_banner'):
             disco_info = app.storage.cache.get_last_disco_info(contact.jid)
             if disco_info is None:
                 return ''
