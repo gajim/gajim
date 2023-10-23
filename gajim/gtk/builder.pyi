@@ -909,6 +909,8 @@ class SynchronizeAccountsBuilder(Builder):
     stack: Gtk.Stack
     sync_accounts_box: Gtk.Box
     accounts_treeview: Gtk.TreeView
+    select_contacts_button: Gtk.Button
+    connection_warning_label: Gtk.Label
     sync_contacts_box: Gtk.Box
     contacts_treeview: Gtk.TreeView
 

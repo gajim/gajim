@@ -12,11 +12,14 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.exceptions import GajimGeneralException
+from gajim.common import types
+from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 
@@ -37,15 +40,14 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         self.set_title(_('Synchronize Accounts'))
         self.set_transient_for(get_app_window('AccountsWindow'))
 
-        if not app.account_is_available(account):
-            ErrorDialog(
-                _('You are not connected to the server'),
-                _('You cannot synchronize with an account unless it is '
-                  'connected.'))
-            raise GajimGeneralException('You are not connected to the server')
-
         self.account = account
+        if not app.account_is_available(account):
+            self._ui.connection_warning_label.show()
+            self._ui.select_contacts_button.set_sensitive(False)
+
         self._local_client = app.get_client(account)
+        self._local_client.connect_signal(
+            'state-changed', self._on_client_state_changed)
 
         self._remote_account = None
         self._remote_client = None
@@ -86,6 +88,15 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
+
+    def _on_client_state_changed(self,
+                                 _client: types.Client,
+                                 _signal_name: str,
+                                 state: SimpleClientState
+                                 ) -> None:
+
+        self._ui.select_contacts_button.set_sensitive(state.is_connected)
+        self._ui.connection_warning_label.set_visible(not state.is_connected)
 
     def _init_accounts(self) -> None:
         '''
