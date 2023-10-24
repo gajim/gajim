@@ -393,15 +393,24 @@ class ChatBanner(Gtk.Box, EventHelper):
 
     def _on_share_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
-        if self._contact.is_groupchat:
+        if isinstance(self._contact, GroupchatContact):
             share_text = _('Scan this QR code to join %s.')
+            if self._contact.muc_context == 'private':
+                share_text = _('%s can be joined by invite only.')
         else:
             share_text = _('Scan this QR code to start a chat with %s.')
         self._ui.share_instructions.set_text(share_text % self._contact.name)
 
+        if (isinstance(self._contact, GroupchatContact) and
+                self._contact.muc_context == 'private'):
+            # Don't display QR code for private MUCs (they require an invite)
+            self._ui.qr_code_image.hide()
+            return
+
         # Generate QR code on demand (i.e. not when switching chats)
         self._ui.qr_code_image.set_from_pixbuf(
             generate_qr_code(self._get_share_uri()))
+        self._ui.qr_code_image.show()
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
         text = self._get_share_uri()
