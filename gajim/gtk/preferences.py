@@ -419,7 +419,7 @@ class FilePreview(PreferenceBox):
                     'preview_size',
                     desc=_('Size of preview images in pixels'),
                     bind='enable_file_preview',
-                    props={'range_': (100, 1000)}),
+                    props={'range_': (100, 1000, 1)}),
 
             Setting(SettingKind.POPOVER,
                     _('File Size Limit'),
@@ -589,7 +589,7 @@ class AutoAwayDialog(SettingsDialog):
                     SettingType.CONFIG,
                     'autoawaytime',
                     desc=_('Minutes until your status gets changed'),
-                    props={'range_': (1, 720)},
+                    props={'range_': (1, 720, 1)},
                     bind='autoaway'),
 
             Setting(SettingKind.ENTRY,
@@ -617,7 +617,7 @@ class AutoExtendedAwayDialog(SettingsDialog):
                     SettingType.CONFIG,
                     'autoxatime',
                     desc=_('Minutes until your status gets changed'),
-                    props={'range_': (1, 720)},
+                    props={'range_': (1, 720, 1)},
                     bind='autoxa'),
 
             Setting(SettingKind.ENTRY,

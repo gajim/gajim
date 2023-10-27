@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import get_args
 
 import logging
 from collections.abc import Callable
@@ -33,6 +34,7 @@ from gajim.common import passwords
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
+from gajim.common.setting_values import FloatSettings
 
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
@@ -562,14 +564,14 @@ class DialogSetting(GenericSetting):
 
 
 class SpinSetting(GenericSetting):
-    def __init__(self, *args: Any, range_: tuple[float, float]) -> None:
+    def __init__(self, *args: Any, range_: tuple[float, float, float]) -> None:
         GenericSetting.__init__(self, *args)
 
-        lower, upper = range_
+        lower, upper, step = range_
         adjustment = Gtk.Adjustment(value=0,
                                     lower=lower,
                                     upper=upper,
-                                    step_increment=1,
+                                    step_increment=step,
                                     page_increment=10,
                                     page_size=0)
 
@@ -579,6 +581,9 @@ class SpinSetting(GenericSetting):
         self.spin.set_update_policy(Gtk.SpinButtonUpdatePolicy.IF_VALID)
 
         assert self.setting_value is not None
+        if isinstance(self.setting_value, float):
+            self.spin.set_digits(3)
+
         self.spin.set_value(float(self.setting_value))
         self.spin.set_halign(Gtk.Align.FILL)
         self.spin.set_valign(Gtk.Align.CENTER)
@@ -586,13 +591,29 @@ class SpinSetting(GenericSetting):
 
         self.setting_box.pack_start(self.spin, True, True, 0)
 
+        assert isinstance(self.value, str)
+        app.settings.connect_signal(self.value,
+                                    self._on_setting_changed,
+                                    account=self.account,
+                                    jid=self.jid)
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_setting_changed(self, value: float, *args: Any) -> None:
+        self.spin.set_value(value)
+
+    def _on_destroy(self, *args: Any) -> None:
+        app.settings.disconnect_signals(self)
 
     def on_row_activated(self) -> None:
         self.spin.grab_focus()
 
     def on_value_change(self, spin: Gtk.SpinButton, *args: Any) -> None:
-        value = spin.get_value_as_int()
+        if self.value in list(get_args(FloatSettings)):
+            value = spin.get_value()
+        else:
+            value = spin.get_value_as_int()
         self.set_value(value)
 
 

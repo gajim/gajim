@@ -1071,9 +1071,9 @@ class PriorityDialog(SettingsDialog):
 
         neg_priority = app.settings.get('enable_negative_priority')
         if neg_priority:
-            range_ = (-128, 127)
+            range_ = (-128, 127, 1)
         else:
-            range_ = (0, 127)
+            range_ = (0, 127, 1)
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -1127,7 +1127,7 @@ class CutstomHostnameDialog(SettingsDialog):
                     SettingType.ACCOUNT_CONFIG,
                     'custom_port',
                     bind='account::use_custom_host',
-                    props={'range_': (0, 65535)}),
+                    props={'range_': (0, 65535, 1)}),
 
             Setting(SettingKind.COMBO,
                     _('Type'),
