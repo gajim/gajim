@@ -52,6 +52,7 @@ from gajim.common.setting_values import BoolContactSettings
 from gajim.common.setting_values import BoolGroupChatSettings
 from gajim.common.setting_values import BoolSettings
 from gajim.common.setting_values import DEFAULT_SOUNDEVENT_SETTINGS
+from gajim.common.setting_values import FloatSettings
 from gajim.common.setting_values import HAS_ACCOUNT_DEFAULT
 from gajim.common.setting_values import HAS_APP_DEFAULT
 from gajim.common.setting_values import INITAL_WORKSPACE
@@ -238,6 +239,9 @@ class Settings:
     def _setup_installation_defaults() -> None:
         if IS_PORTABLE:
             APP_SETTINGS['use_keyring'] = False
+
+        if sys.platform == 'win32':
+            APP_SETTINGS['app_font_size'] = 1.125
 
     def _load_app_overrides(self) -> None:
         if not OVERRIDES_PATH.exists():
@@ -628,6 +632,10 @@ class Settings:
     def get_app_setting(self, setting: IntSettings) -> int:
         ...
 
+    @overload
+    def get_app_setting(self, setting: FloatSettings) -> float:
+        ...
+
     def get_app_setting(self, setting: str) -> AllSettingsT:
         if setting not in APP_SETTINGS:
             raise ValueError(f'Invalid app setting: {setting}')
@@ -655,6 +663,12 @@ class Settings:
     def set_app_setting(self,
                         setting: IntSettings,
                         value: int | None) -> None:
+        ...
+
+    @overload
+    def set_app_setting(self,
+                        setting: FloatSettings,
+                        value: float | None) -> None:
         ...
 
     @overload

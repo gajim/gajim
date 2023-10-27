@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from typing import Any
 from typing import Literal
 from typing import TypedDict
 
@@ -125,6 +126,10 @@ IntSettings = Literal[
     'preview_size',
 ]
 
+FloatSettings = Literal[
+    'app_font_size',
+]
+
 StringSettings = Literal[
     'action_on_close',
     'additional_uri_schemes',
@@ -159,10 +164,10 @@ StringSettings = Literal[
     'video_size',
 ]
 
-AllSettings = Literal[BoolSettings, IntSettings, StringSettings]
-AllSettingsT = str | int | bool | list[str]
+AllSettings = Literal[BoolSettings, IntSettings, FloatSettings, StringSettings]
+AllSettingsT = str | int | float | bool | list[str]
 
-APP_SETTINGS = {
+APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'additional_uri_schemes': '',
     'allow_open_file_uris': False,
     'always_english_wikipedia': False,
@@ -277,6 +282,7 @@ APP_SETTINGS = {
     'use_speller': True,
     'use_stun_server': False,
     'use_urgency_hint': True,
+    'app_font_size': 1.0,
     'video_framerate': '',
     'video_input_device': 'autovideosrc',
     'video_see_self': True,

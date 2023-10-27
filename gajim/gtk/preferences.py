@@ -643,6 +643,13 @@ class Themes(PreferenceBox):
         }
 
         settings = [
+            Setting(SettingKind.SPIN,
+                    _('User Interface Font Size'),
+                    SettingType.CONFIG,
+                    'app_font_size',
+                    props={'range_': (1.0, 1.5, 0.125)},
+                    callback=self._on_app_font_size_changed),
+
             Setting(SettingKind.POPOVER,
                     _('Dark Theme'),
                     SettingType.CONFIG,
@@ -662,6 +669,10 @@ class Themes(PreferenceBox):
         ]
 
         PreferenceBox.__init__(self, settings)
+
+    @staticmethod
+    def _on_app_font_size_changed(_value: float, *args: Any) -> None:
+        app.css_config.apply_app_font_size()
 
     @staticmethod
     def _get_theme_items() -> list[str]:

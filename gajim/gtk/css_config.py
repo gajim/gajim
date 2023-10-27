@@ -108,6 +108,13 @@ class CSSConfig:
             self._dynamic_provider,
             CSSPriority.APPLICATION)
 
+        # Font size provider for GUI font size
+        self._app_font_size_provider = Gtk.CssProvider()
+        Gtk.StyleContext.add_provider_for_screen(
+            screen,
+            self._app_font_size_provider,
+            CSSPriority.PRE_APPLICATION)
+
         # Cache of recently requested values
         self._cache: dict[str, str | Pango.FontDescription | None] = {}
 
@@ -128,8 +135,7 @@ class CSSConfig:
             self._provider,
             CSSPriority.USER_THEME)
 
-        if sys.platform == 'win32':
-            self._apply_windows_font_size()
+        self.apply_app_font_size()
 
     @property
     def prefer_dark(self) -> bool:
@@ -197,20 +203,14 @@ class CSSConfig:
         except Exception:
             log.exception('Error loading application css')
 
-    @staticmethod
-    def _apply_windows_font_size() -> None:
-        css = '''
-        * {
-            font-size: 1.125rem;
-        }
+    def apply_app_font_size(self) -> None:
+        app_font_size = app.settings.get('app_font_size')
+        css = f'''
+        * {{
+            font-size: {app_font_size}rem;
+        }}
         '''
-        provider = Gtk.CssProvider()
-        provider.load_from_data(bytes(css.encode('utf-8')))
-        screen = Gdk.Screen.get_default()
-        assert screen is not None
-        Gtk.StyleContext.add_provider_for_screen(screen,
-                                                 provider,
-                                                 CSSPriority.PRE_APPLICATION)
+        self._app_font_size_provider.load_from_data(bytes(css.encode('utf-8')))
 
     @staticmethod
     def _pango_to_css_weight(number: int) -> int:

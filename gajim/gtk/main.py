@@ -416,6 +416,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('switch-workspace-7', self._on_action),
             ('switch-workspace-8', self._on_action),
             ('switch-workspace-9', self._on_action),
+            ('increase-app-font-size', self._on_app_font_size_action),
+            ('decrease-app-font-size', self._on_app_font_size_action),
+            ('reset-app-font-size', self._on_app_font_size_action),
             ('toggle-chat-list', self._on_action),
             ('preview-download', self._on_preview_action),
             ('preview-open', self._on_preview_action),
@@ -504,6 +507,34 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._toggle_chat_list()
 
         return None
+
+    def _on_app_font_size_action(
+            self,
+            action: Gio.SimpleAction,
+            _param: GLib.Variant
+            ) -> None:
+
+        action_name = action.get_name()
+        if action_name == 'reset-app-font-size':
+            app.settings.set_app_setting('app_font_size', None)
+            app.css_config.apply_app_font_size()
+            return
+
+        app_font_size = app.settings.get('app_font_size')
+        new_app_font_size = app_font_size
+        if action_name == 'increase-app-font-size':
+            new_app_font_size = app_font_size + 0.125
+        elif action_name == 'decrease-app-font-size':
+            new_app_font_size = app_font_size - 0.125
+
+        # Clamp font size
+        new_app_font_size = max(min(1.5, new_app_font_size), 1.0)
+
+        if new_app_font_size == app_font_size:
+            return
+
+        app.settings.set_app_setting('app_font_size', new_app_font_size)
+        app.css_config.apply_app_font_size()
 
     def _on_preview_action(self,
                            action: Gio.SimpleAction,

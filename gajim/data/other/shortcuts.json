@@ -38,6 +38,9 @@
     "win.switch-workspace-7": ["<Primary>7", "<Primary>KP_7"],
     "win.switch-workspace-8": ["<Primary>8", "<Primary>KP_8"],
     "win.switch-workspace-9": ["<Primary>9", "<Primary>KP_9"],
+    "win.increase-app-font-size": ["<Primary>plus", "<Primary>KP_Add"],
+    "win.decrease-app-font-size": ["<Primary>minus", "<Primary>KP_Subtract"],
+    "win.reset-app-font-size": ["<Primary>0", "<Primary>KP_0"],
     "win.toggle-chat-list": ["<Primary>R"],
     "win.scroll-view-up": ["<Shift>Page_Up"],
     "win.scroll-view-down": ["<Shift>Page_Down"]
