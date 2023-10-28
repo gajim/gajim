@@ -76,7 +76,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._add_groupchat_settings()
         self._add_groupchat_encryption()
 
-        if self._client.state.is_available:
+        if self._client.state.is_available and self._contact.is_joined:
             self._ui.edit_name_button.set_sensitive(True)
             self._ui.edit_name_button.set_tooltip_text(_('Edit Name…'))
             self._add_groupchat_manage()
