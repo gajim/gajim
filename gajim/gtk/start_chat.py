@@ -556,7 +556,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
             search_entry.set_text(uri.data['jid'])
             return
 
-        if '@' in search_text:
+        if search_text:
             try:
                 validate_jid(search_text)
             except ValueError:
