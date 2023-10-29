@@ -1,3 +1,73 @@
+Gajim 1.8.2 (29 Oct 2023)
+
+  New
+
+  * Allow adjusting user interface font size via hotkeys (#11343)
+  * Display composing participants in MUC chat banner
+  * ChatBanner: Show contact tooltip when hovering the avatar
+  * Hint that a contact is a bot in the chat banner
+  * Support multiple item dataforms (#10857)
+  * Display gateway icon in avatars
+  * RosterTooltip: Display BareContact presence (#10963)
+  * Display status message in banner
+  * ChatMenu: Always show "Execute command" action
+
+  Improvements
+
+  * MUC features: Use better icons for public and anonymous properties (#11585)
+  * Allow GroupChatInfoScrolled to be set with minimal information (#11662)
+  * Settings: Allow to set step size for spin settings; bind setting value
+  * StartChat: Better discover MUC services
+  * StartChat: Allow to start chats with domain JIDs
+  * ChatBanner: Don't show QR code for privated MUCs (#11647)
+  * Windows: Add gst-plugins-bad dependency for broader media preview support (#11638)
+  * MUC: Raise rejoin timeout
+  * Accounts: Be more consistent with chat state settings
+  * GroupChatInfo: Improve scaling of subject text (#11586)
+  * Windows appx: Add URI handler for xmpp: URIs
+
+  Change
+
+  * Raise GLib version
+  * Avatar: Don’t use custom avatar for IRC group chats
+  * Raise nbxmpp version
+  * Depend on Pillow >= 9.1.0
+
+  Performance
+
+  * View: Reset view faster
+
+  Bug Fixes
+
+  * VideoPreview: Disable preview on destroy (#11657)
+  * GroupchatDetails: Depend on joined state for some elements (#11661)
+  * GroupChatInfo: Align max width of labels
+  * SynchronizeAccounts: Adapt to connection state changes (#11650, #11651)
+  * Tooltip: Do not escape presence status text
+  * Chatstates: Remove timeout id on remote timeout
+  * NotificationManager: Update actions if online state changes (#11642)
+  * Caps: Add disco info to cache after query
+  * MUC: Don’t show old join errors when disconnected from room
+  * MUC: Always remove rejoin timer when closing chat
+  * MUC: Update state correctly on disco info error
+  * Switch phone icon to something more widely supported
+  * ChatListStack: Handle missing last visible child
+  * Observable: Fix race condition when removing handlers
+  * PasswordDialog: Use verb instead of noun for log in button
+  * AdHoc: Wrap notes label
+  * Unpack string correctly while handling update error
+  * CSSConfig: Quote font-family property correctly (#11600)
+  * File transfers: Don't fail when tryting to send non-existing file
+  * MusicTrackListener: Don't fail if playing track could not be determined (#11607)
+  * Catch error if loading image with PIL fails due to unidentifiable image (#11616)
+  * CSSConfig: Fix parsing float sizes for font description
+  * Modules: Make sure BaseModule.cleanup() is always called on destroy
+  * Roster: Unregister all handlers on destroy
+  * Observable: Don’t allow to register handler multiple times
+  * View: Add newline after username when copying a message (#11610)
+  * Show notification on group chat mentions again (#11613)
+  * Make it impossible to connect without config (#11608)
+
 Gajim 1.8.1 (07 Aug 2023)
 
   New
