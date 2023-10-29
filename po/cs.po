@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -108,8 +108,16 @@ msgid "%s (desynced)"
 msgstr "%s (nesynchronizováno)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "%s chce znát váš stav"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, python-format
 msgid "%s group chats found"
@@ -151,12 +159,20 @@ msgstr ""
 "%s je připojen na více zařízení.\n"
 "Vyberte zařízení, na které chcete soubor zaslat."
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s volá"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "před %s minutou"
 msgstr[1] "před %s minutami"
 msgstr[2] "před %s minutami"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1474,6 +1490,9 @@ msgstr "Odmítnout"
 msgid "Decline Invitation"
 msgstr "Odmítnout pozvánku"
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr "Snížit rychlost přehrávání"
 
@@ -1482,6 +1501,10 @@ msgstr "Dešifrování se nezdařilo"
 
 msgid "Default"
 msgstr "Výchozí"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Veřejný šifrovací klíč"
 
 msgid "Default Sync Threshold"
 msgstr "Výchozí práh synchronizace"
@@ -1784,6 +1807,9 @@ msgstr "Chyba šifrování"
 
 msgid "Encryption error"
 msgstr "Chyba šifrování"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 msgid "Encryption required"
 msgstr "Šifrování je vyžadováno"
@@ -2429,6 +2455,9 @@ msgstr "Příchozí hovor"
 
 msgid "Incoming Call (Video)"
 msgstr "Příchozí hovor (video)"
+
+msgid "Increase User Interface Font Size"
+msgstr ""
 
 msgid "Increase playback speed"
 msgstr "Zvýšit rychlost přehrávání"
@@ -3774,6 +3803,9 @@ msgstr "Resetovat"
 msgid "Reset Hints"
 msgstr "Resetovat rady"
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr "Resetovat všechny konverzace na aktuální výchozí hodnoty"
 
@@ -4138,6 +4170,10 @@ msgstr "Nastavení"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "Přidat kontakt…"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Vytvořit skupinovou konverzaci…"
 
 msgid "Share Status"
 msgstr "Sdílet stav"
@@ -4697,6 +4733,10 @@ msgid ""
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
+#, fuzzy
+msgid "This contact is a bot"
+msgstr "Seznam kontaktů"
+
 msgid "This device is not compatible."
 msgstr "Toto zařízení není kompatibilní."
 
@@ -4952,6 +4992,10 @@ msgstr "Nepodařilo se ověřit první certifikát"
 msgid "Unblock"
 msgstr "Odblokovat"
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Nešifrováno"
+
 msgid "Uninstall Plugin"
 msgstr "Odinstalovat zásuvný modul"
 
@@ -5102,6 +5146,13 @@ msgstr "Použít systémovou klíčenku pro ukládání hesel"
 #, python-format
 msgid "User %s not found"
 msgstr "Uživatel %s nebyl nalezen"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Rozhraní D-Bus"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Uživatelé"
@@ -5568,9 +5619,6 @@ msgstr "Odejít"
 
 msgid "_Log In"
 msgstr "Přihlásit se"
-
-msgid "_Login"
-msgstr "Přihlášení"
 
 msgid "_Modify Accounts…"
 msgstr "Upravit účty…"
@@ -6202,6 +6250,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"
+
+#~ msgid "_Login"
+#~ msgstr "Přihlášení"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -96,9 +96,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Išplėstinis"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Dabar \"%s\" žinos apie jūsų būklę."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -138,11 +146,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Banning..."
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1644,6 +1660,9 @@ msgstr "A_tsijungęs"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1653,6 +1672,10 @@ msgstr "Nepavyko prisijungti prie proksi"
 
 msgid "Default"
 msgstr "Default"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Encryption enabled"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1988,6 +2011,9 @@ msgstr "Encryption enabled"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Encryption enabled"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2705,6 +2731,9 @@ msgid "Incoming Call"
 msgstr "Įeinančio slapyvardžio spalva."
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4225,6 +4254,9 @@ msgstr "_Buvimas"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4650,6 +4682,10 @@ msgstr "Registracija nesėkminga"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Leave Groupchats"
 
 #, fuzzy
 msgid "Share Status"
@@ -5282,6 +5318,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Asmuo"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "The service is not browsable"
 
@@ -5544,6 +5584,10 @@ msgstr ""
 msgid "Unblock"
 msgstr ""
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Not in roster"
+
 msgid "Uninstall Plugin"
 msgstr ""
 
@@ -5711,6 +5755,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s not found"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Naudotojo vardas:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Users"
@@ -6245,10 +6296,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Prisijungti"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Prisijungti"
 
 #, fuzzy
@@ -6866,3 +6913,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Prisijungti"

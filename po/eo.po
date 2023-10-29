@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -99,9 +99,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Krome"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Ekde nun \"%s\" konos vian staton."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -141,11 +149,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s estas alvokanta"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1662,6 +1678,9 @@ msgstr "_Senkonekta"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1671,6 +1690,10 @@ msgstr "Konektado malsukcesis"
 
 msgid "Default"
 msgstr "Defaŭlte"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Ĉifrado ebligata"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -1939,8 +1962,8 @@ msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
 "\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
-"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ \"WIKTIONARY"
-"\" kio signifas uzi wiktionary."
+"Enigi propran URL kun %s en ĝi, kie %s estos la vorto/frazo, aŭ "
+"\"WIKTIONARY\" kio signifas uzi wiktionary."
 
 #, fuzzy
 msgid "Email"
@@ -2010,6 +2033,9 @@ msgstr "Ĉifrado ebligata"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Ĉifrado ebligata"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2733,6 +2759,9 @@ msgid "Incoming Call"
 msgstr "Malkorekta salutnomo"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4270,6 +4299,9 @@ msgstr "_Ĉeesto"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4697,6 +4729,10 @@ msgstr "Konektado malsukcesis"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Aldoni kontakton..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Nova babilejo"
 
 #, fuzzy
 msgid "Share Status"
@@ -5332,6 +5368,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontaktoj"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Tiu ĉi servo ne rigardeblas"
 
@@ -5601,6 +5641,10 @@ msgid "Unblock"
 msgstr ""
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Ne lanĉitas"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Malrapidas"
 
@@ -5769,6 +5813,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s ne trovitas"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Salutnomo:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Uzuloj"
@@ -6308,10 +6359,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "E_nsaluti"
-
-#, fuzzy
-msgid "_Login"
 msgstr "E_nsaluti"
 
 #, fuzzy
@@ -6934,3 +6981,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "E_nsaluti"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
-"PO-Revision-Date: 2023-06-09 08:33+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"PO-Revision-Date: 2023-10-29 11:43+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
 msgstr " (Llamada de vídeo)"
@@ -105,8 +105,16 @@ msgid "%s (desynced)"
 msgstr "%s (desincronizado)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr "%s y %s están escribiendo…"
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "%s te pide que compartas tu estado"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr "%s solo puede unirse con invitación."
 
 #, python-format
 msgid "%s group chats found"
@@ -149,10 +157,18 @@ msgstr ""
 "Escoge el dispositivo al que quisieras enviar el archivo."
 
 #, python-format
+msgid "%s is typing…"
+msgstr "%s está escribiendo…"
+
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "hace %s min"
 msgstr[1] "hace %s mins"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr "%s participantes están escribiendo…"
 
 #, python-format
 msgid "%s s"
@@ -1478,6 +1494,9 @@ msgstr "Declinar"
 msgid "Decline Invitation"
 msgstr "Rechazar invitación"
 
+msgid "Decrease User Interface Font Size"
+msgstr "Reducir el tamaño de letra de la interfaz de usuario"
+
 msgid "Decrease playback speed"
 msgstr "Bajar la velocidad de reproducción"
 
@@ -1486,6 +1505,9 @@ msgstr "Descifrado fallido"
 
 msgid "Default"
 msgstr "Por defecto"
+
+msgid "Default Encryption"
+msgstr "Cifrado por defecto"
 
 msgid "Default Sync Threshold"
 msgstr "Umbral de sincronización predeterminado"
@@ -1793,6 +1815,9 @@ msgstr "Cifrado (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Error de cifrado"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr "Método de cifrado a utilizar a menos que se anule por cada contacto"
 
 msgid "Encryption required"
 msgstr "Cifrado requerido"
@@ -2125,9 +2150,8 @@ msgstr "Está disponible Gajim %s"
 msgid "Gajim - Error"
 msgstr "Gajim - Error"
 
-#, fuzzy
 msgid "Gajim Team"
-msgstr "Temas Gajim"
+msgstr "Equipo Gajim"
 
 msgid "Gajim Themes"
 msgstr "Temas Gajim"
@@ -2436,6 +2460,9 @@ msgstr "Llamada entrante"
 
 msgid "Incoming Call (Video)"
 msgstr "Llamada entrante (Vídeo)"
+
+msgid "Increase User Interface Font Size"
+msgstr "Aumentar el tamaño de letra de la interfaz de usuario"
 
 msgid "Increase playback speed"
 msgstr "Aumentar la velocidad de reproducción"
@@ -3776,6 +3803,9 @@ msgstr "Reiniciar"
 msgid "Reset Hints"
 msgstr "Reiniciar sugerencias"
 
+msgid "Reset User Interface Font Size"
+msgstr "Resetear el tamaño de letra de la interfaz de usuario"
+
 msgid "Reset all chats to the current default value"
 msgstr "Reiniciar todos los chats a los valores por defecto actuales"
 
@@ -4139,6 +4169,9 @@ msgstr "Configuraciones"
 
 msgid "Share Contact…"
 msgstr "Compartir contacto…"
+
+msgid "Share Group Chat…"
+msgstr "Compartir grupo de chat…"
 
 msgid "Share Status"
 msgstr "Compartir estado"
@@ -4711,6 +4744,9 @@ msgstr ""
 "La configuración de este chat no es adecuada para el cifrado con OMEMO. Para "
 "usar OMEMO en este chat, debe ser no anónimo y solo para miembros."
 
+msgid "This contact is a bot"
+msgstr "Este contacto es un bot"
+
 msgid "This device is not compatible."
 msgstr "Este dispositivo no es compatible."
 
@@ -4751,9 +4787,9 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "Esta es tu dirección XMPP"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated%s."
-msgstr "Este mensaje ha sido retirado por %s."
+msgstr "Este mensaje ha sido moderado %s."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4965,6 +5001,9 @@ msgstr "No se puede verificar el primer certificado"
 msgid "Unblock"
 msgstr "Desbloquear"
 
+msgid "Unencrypted"
+msgstr "No cifrado"
+
 msgid "Uninstall Plugin"
 msgstr "Desinstalar extensión"
 
@@ -5114,6 +5153,12 @@ msgstr "Usa tu llavero de sistema para almacenar contraseñas"
 #, python-format
 msgid "User %s not found"
 msgstr "Usuario %s no encontrado"
+
+msgid "User Interface"
+msgstr "Interfaz de usuario"
+
+msgid "User Interface Font Size"
+msgstr "Tamaño de letra de la interfaz de usuario"
 
 msgid "Users"
 msgstr "Usuarios"
@@ -5585,9 +5630,6 @@ msgstr "Abandonar"
 
 msgid "_Log In"
 msgstr "Iniciar sesión"
-
-msgid "_Login"
-msgstr "Inicio de sesión"
 
 msgid "_Modify Accounts…"
 msgstr "_Modificar cuentas…"
@@ -6183,6 +6225,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Has soltado algo que Gajim no pudo procesar: %s"
+
+#~ msgid "_Login"
+#~ msgstr "Inicio de sesión"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

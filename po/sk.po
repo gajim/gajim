@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -98,9 +98,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Pokročilé"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Od teraz bude \"%s\" vidieť váš stav."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -140,12 +148,20 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Píšem"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1674,6 +1690,9 @@ msgstr "_Odhlásený"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1683,6 +1702,10 @@ msgstr "Spojenie zlyhalo"
 
 msgid "Default"
 msgstr "Predvolené"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "E2E šifrovanie povolené"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2026,6 +2049,9 @@ msgstr "E2E šifrovanie povolené"
 #, fuzzy
 msgid "Encryption error"
 msgstr "E2E šifrovanie povolené"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2744,6 +2770,9 @@ msgid "Incoming Call"
 msgstr "_Prichádzajúca správa:"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4276,6 +4305,9 @@ msgstr "_Prítomnosť"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4700,6 +4732,10 @@ msgstr "Registrácia zlyhala"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Pridať kontakt..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
 msgid "Share Status"
@@ -5344,6 +5380,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontakty"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Služba nie je prehľadávateľná"
 
@@ -5613,6 +5653,10 @@ msgstr "Nepodarilo sa overiť prvý certifikát"
 msgid "Unblock"
 msgstr "_Odblokovať"
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Nezačal"
+
 msgid "Uninstall Plugin"
 msgstr ""
 
@@ -5781,6 +5825,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s nenájdený"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Používateľské meno:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Používatelia"
@@ -6323,10 +6374,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "Prihlásiť znovu?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6949,3 +6996,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Prihlásiť znovu?"

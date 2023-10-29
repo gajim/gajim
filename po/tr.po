@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -100,9 +100,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "-e  --ed  Bir ed betiği çıktılar."
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "%(nick)s durumu şimdi %(status)s"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -142,10 +150,18 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s yazılıyor..."
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1666,6 +1682,9 @@ msgstr "Bağlı _değil"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1675,6 +1694,10 @@ msgstr "Bağlantı Kurulamıyor"
 
 msgid "Default"
 msgstr "Öntanımlı"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Üyelik isteği"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2009,6 +2032,9 @@ msgstr "Üyelik isteği"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Üyelik isteği"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2722,6 +2748,9 @@ msgid "Incoming Call"
 msgstr "Kullanıcak takma ad"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4255,6 +4284,9 @@ msgstr "_Bulunma"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4680,6 +4712,10 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "Kişi _ekle"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
 msgid "Share Status"
@@ -5314,6 +5350,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kişiler"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Bu hizmet gözatılabilir değil"
 
@@ -5582,6 +5622,10 @@ msgid "Unblock"
 msgstr "Engellemeyi _Kaldır"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Başlatılmadı"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr " [ %i%% ] (askıda)"
 
@@ -5751,6 +5795,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s bulunamadı"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Kullanıcı ismi"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Kullanıcılar"
@@ -6288,10 +6339,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "%(nick)s durumu şimdi %(status)s"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6908,3 +6955,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "%(nick)s durumu şimdi %(status)s"

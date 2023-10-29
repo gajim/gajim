@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -102,9 +102,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "未同步"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "現在\"%s\"將知道您的狀態。"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -144,10 +152,18 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "寫作"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1669,6 +1685,9 @@ msgstr "離線(_O)"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1678,6 +1697,10 @@ msgstr "連線失敗"
 
 msgid "Default"
 msgstr "預設"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "認證請求"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2021,6 +2044,9 @@ msgstr "認證請求"
 #, fuzzy
 msgid "Encryption error"
 msgstr "認證請求"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2744,6 +2770,9 @@ msgid "Incoming Call"
 msgstr "收到訊息的暱稱顏色。"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4277,6 +4306,9 @@ msgstr "_Presence"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4700,6 +4732,10 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "加入聯絡人(_A)…"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "離開聊天室"
 
 #, fuzzy
 msgid "Share Status"
@@ -5336,6 +5372,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "聯絡人"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "該服務無法瀏覽"
 
@@ -5605,6 +5645,10 @@ msgid "Unblock"
 msgstr "解除阻斷(_U)"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "未開始"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "卸載"
 
@@ -5773,6 +5817,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr " %s 找不到"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "使用者名稱(_U):"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "使用者"
@@ -6312,10 +6363,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "現在重新登入?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6941,3 +6988,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "現在重新登入?"

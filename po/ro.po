@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2023-04-23 10:01+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -105,8 +105,16 @@ msgid "%s (desynced)"
 msgstr "%s (desincronizat)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "%s vă cere să vă împărtășiți statutul"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, python-format
 msgid "%s group chats found"
@@ -148,12 +156,20 @@ msgstr ""
 "%s este online cu mai multe dispozitive.\n"
 "Alegeți dispozitivul la care doriți să trimiteți fișierul."
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s apelează"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "%s min în urmă"
 msgstr[1] "%s minute în urmă"
 msgstr[2] "%s de minute în urmă"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1483,6 +1499,9 @@ msgstr "Declin"
 msgid "Decline Invitation"
 msgstr "Declinarea invitației"
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr "Reduceți viteza de redare"
 
@@ -1491,6 +1510,10 @@ msgstr "Decriptarea a eșuat"
 
 msgid "Default"
 msgstr "Implicit"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Cheia publică de criptare"
 
 msgid "Default Sync Threshold"
 msgstr "Prag de sincronizare implicit"
@@ -1801,6 +1824,9 @@ msgstr "Criptare (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Eroare de criptare"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 msgid "Encryption required"
 msgstr "Criptare necesară"
@@ -2451,6 +2477,9 @@ msgstr "Apel primit"
 
 msgid "Incoming Call (Video)"
 msgstr "Apeluri primite (Video)"
+
+msgid "Increase User Interface Font Size"
+msgstr ""
 
 msgid "Increase playback speed"
 msgstr "Creșteți viteza de redare"
@@ -3798,6 +3827,9 @@ msgstr "Resetare"
 msgid "Reset Hints"
 msgstr "Sfaturi de resetare"
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr "Resetați toate chat-urile la valoarea implicită curentă"
 
@@ -4164,6 +4196,10 @@ msgstr "Setări"
 
 msgid "Share Contact…"
 msgstr "Distribuie Contact…"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Creați Group Chat…"
 
 msgid "Share Status"
 msgstr "Distribuie Starea"
@@ -4743,6 +4779,10 @@ msgstr ""
 "Pentru a utiliza OMEMO în acest chat, acesta trebuie să fie non-anonim și "
 "destinat exclusiv membrilor."
 
+#, fuzzy
+msgid "This contact is a bot"
+msgstr "Lista de contacte"
+
 msgid "This device is not compatible."
 msgstr "Acest dispozitiv nu este compatibil."
 
@@ -5002,6 +5042,10 @@ msgstr "Nu se poate verifica primul certificat"
 msgid "Unblock"
 msgstr "Deblocați"
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Necriptat"
+
 msgid "Uninstall Plugin"
 msgstr "Dezinstalare Plugin"
 
@@ -5152,6 +5196,13 @@ msgstr "Utilizați keyring-ul sistemului dumneavoastră pentru a stoca parolele"
 #, python-format
 msgid "User %s not found"
 msgstr "Utilizatorul %s nu a fost găsit"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Interfață D-Bus"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Utilizatori"
@@ -5624,9 +5675,6 @@ msgid "_Leave"
 msgstr "_Plecați"
 
 msgid "_Log In"
-msgstr "_Autentificare"
-
-msgid "_Login"
 msgstr "_Autentificare"
 
 msgid "_Modify Accounts…"
@@ -6219,6 +6267,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"
+
+#~ msgid "_Login"
+#~ msgstr "_Autentificare"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

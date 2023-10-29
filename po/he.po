@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -115,9 +115,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "לא מסונכרן"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "מעתה המצב שלך יהיה גלוי בפני \"%s\"."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -158,11 +166,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "כותב"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1717,6 +1733,9 @@ msgstr "לא מ_קוון"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1726,6 +1745,10 @@ msgstr "התחברות נכשלה"
 
 msgid "Default"
 msgstr "ברירת מחדל"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "בקשת הרשמה"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2083,6 +2106,9 @@ msgstr "בקשת הרשמה"
 #, fuzzy
 msgid "Encryption error"
 msgstr "בקשת הרשמה"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2827,6 +2853,9 @@ msgid "Incoming Call"
 msgstr "צבע שם כינוי נכנס."
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4392,6 +4421,9 @@ msgstr "_נוכחות"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4824,6 +4856,10 @@ msgstr "קיצורי מקש"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "הוסף _איש קשר..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
 msgid "Share Status"
@@ -5479,6 +5515,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "איש קשר"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "השירות אינו בר עיון"
 
@@ -5753,6 +5793,10 @@ msgid "Unblock"
 msgstr "_בטל חסימה"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "לא הותחלה"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "הסר"
 
@@ -5924,6 +5968,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "cli"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "שם _משתמש:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "משתמשים"
@@ -6486,10 +6537,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "להתחבר מחדש עכשיו?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -7118,3 +7165,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "‫Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "להתחבר מחדש עכשיו?"

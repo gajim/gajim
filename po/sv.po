@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -101,9 +101,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "inte i synk"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Nu kommer \"%s\" veta din status."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -143,11 +151,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Skriver"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1676,6 +1692,9 @@ msgstr "_Frånkopplad"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1685,6 +1704,10 @@ msgstr "Anslutningsfel"
 
 msgid "Default"
 msgstr "Standard"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Kryptering aktiverad"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2026,6 +2049,9 @@ msgstr "Kryptering aktiverad"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Kryptering aktiverad"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2741,6 +2767,9 @@ msgid "Incoming Call"
 msgstr "Ogiltigt smeknamn"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4280,6 +4309,9 @@ msgstr "_Närvaro"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4708,6 +4740,10 @@ msgstr "Registreringen misslyckades"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Lägg till kontakt..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Lämna gruppchattar"
 
 #, fuzzy
 msgid "Share Status"
@@ -5343,6 +5379,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontakter"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Tjänst är inte bläddringsbar"
 
@@ -5612,6 +5652,10 @@ msgid "Unblock"
 msgstr "A_vblockera"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Inte startad"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Avstannad"
 
@@ -5780,6 +5824,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s kunde inte hittas"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Användarnamn:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Användare"
@@ -6325,10 +6376,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "Ans_lut"
-
-#, fuzzy
-msgid "_Login"
 msgstr "Ans_lut"
 
 #, fuzzy
@@ -6958,3 +7005,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Ans_lut"

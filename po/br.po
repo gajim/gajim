@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -97,9 +97,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Dre ar munut"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Anavezout a raio \"%s\" ho stad adalek bremañ."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -139,11 +147,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "O labourat"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1654,6 +1670,9 @@ msgstr "_Ezlinenn"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1664,6 +1683,10 @@ msgstr "Kevreadenn"
 #, fuzzy
 msgid "Default"
 msgstr "Dilemel"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "War enaou emañ ar sifrañ"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2001,6 +2024,9 @@ msgstr "War enaou emañ ar sifrañ"
 #, fuzzy
 msgid "Encryption error"
 msgstr "War enaou emañ ar sifrañ"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2714,6 +2740,9 @@ msgid "Incoming Call"
 msgstr "Anv-arveriad-ez direizh"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4248,6 +4277,9 @@ msgstr "_Bezañs"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4673,6 +4705,10 @@ msgstr "échec lors de la publication de votre vCard"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Flap a-stroll"
 
 #, fuzzy
 msgid "Share Status"
@@ -5300,6 +5336,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Darempredoù"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "N'eus ket tu furchal er servij"
 
@@ -5568,6 +5608,10 @@ msgstr ""
 msgid "Unblock"
 msgstr ""
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "N'eo ket kroget"
+
 msgid "Uninstall Plugin"
 msgstr ""
 
@@ -5736,6 +5780,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "N'eo ket bet kavet %s"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Anv:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Arveridi"
@@ -6271,10 +6322,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Lugañ"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Lugañ"
 
 #, fuzzy
@@ -6903,3 +6950,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Lugañ"

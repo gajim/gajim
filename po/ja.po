@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
-"PO-Revision-Date: 2023-05-29 09:44+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"PO-Revision-Date: 2023-09-25 05:15+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0\n"
 "X-Pootle-Path: /ja/gajim/ja.po\n"
 "X-Pootle-Revision: 1602\n"
 
@@ -106,8 +106,16 @@ msgid "%s (desynced)"
 msgstr "%s (不揃い)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "\"%s\" さんはあなたの在席状況を知ることを求めています"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, python-format
 msgid "%s group chats found"
@@ -149,10 +157,18 @@ msgstr ""
 "%s さんは複数のデバイスでオンライン状態です。\n"
 "ファイルを送りたいデバイスを選んでください。"
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s さんから着信"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "%s分前"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1408,13 +1424,11 @@ msgstr "ファイルにアクセスできませんでした"
 msgid "Could not open file (%s)"
 msgstr "ファイルを開けませんでした (%s)"
 
-#, fuzzy
 msgid "Could not save file"
-msgstr "ファイルにアクセスできませんでした"
+msgstr "ファイルを保存できませんでした"
 
-#, fuzzy
 msgid "Could not save file to selected directory."
-msgstr "このディレクトリにファイルを作成する権限がありません。"
+msgstr "選択されたディレクトリにファイルを保存できませんでした。"
 
 msgid "Country"
 msgstr "国"
@@ -1470,6 +1484,9 @@ msgstr "拒否"
 msgid "Decline Invitation"
 msgstr "招待を辞退"
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr "再生速度を落とす"
 
@@ -1478,6 +1495,9 @@ msgstr "復号に失敗しました"
 
 msgid "Default"
 msgstr "デフォルト"
+
+msgid "Default Encryption"
+msgstr "デフォルトの暗号化"
 
 msgid "Default Sync Threshold"
 msgstr "デフォルトの同期の制限値"
@@ -1774,6 +1794,9 @@ msgstr "暗号化 (OMEMO)"
 
 msgid "Encryption error"
 msgstr "暗号化のエラー"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr "相手先ごとに上書きされない場合に使用される暗号化方式"
 
 msgid "Encryption required"
 msgstr "暗号化が必要です"
@@ -2113,9 +2136,8 @@ msgstr "Gajim  %s が利用可能です"
 msgid "Gajim - Error"
 msgstr "Gajim - エラー"
 
-#, fuzzy
 msgid "Gajim Team"
-msgstr "Gajim テーマ"
+msgstr "Gajim チーム"
 
 msgid "Gajim Themes"
 msgstr "Gajim テーマ"
@@ -2420,6 +2442,9 @@ msgstr "着信通話"
 
 msgid "Incoming Call (Video)"
 msgstr "着信通話 (ビデオ)"
+
+msgid "Increase User Interface Font Size"
+msgstr ""
 
 msgid "Increase playback speed"
 msgstr "再生速度を上げる"
@@ -3766,6 +3791,9 @@ msgstr "リセット"
 msgid "Reset Hints"
 msgstr "ヒントをリセット"
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr "すべての会話を現在のデフォルト値にリセットします"
 
@@ -4129,6 +4157,10 @@ msgstr "設定"
 msgid "Share Contact…"
 msgstr "相手先を共有…"
 
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "談話室を作成…"
+
 msgid "Share Status"
 msgstr "在席状況を通知"
 
@@ -4454,10 +4486,10 @@ msgid "Subject"
 msgstr "題"
 
 msgid "Subject Alt Names"
-msgstr ""
+msgstr "サブジェクト代替名"
 
 msgid "Subject Alt Names: "
-msgstr ""
+msgstr "サブジェクト代替名: "
 
 msgid "Subject issuer mismatch"
 msgstr "サブジェクトの発行者が合致しません"
@@ -4648,9 +4680,9 @@ msgstr ""
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim プラグインの更新があります"
 
-#, fuzzy, python-format
+#, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr "メッセージを取得しようとした際にエラーが発生しました。"
+msgstr "メッセージを取得しようとした際にエラーが発生しました: %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -4692,6 +4724,10 @@ msgid ""
 msgstr ""
 "この談話室の調整は OMEMO での暗号化に適していません。この談話室で OMEMO を使"
 "用するには、非匿名かつメンバー限定である必要があります。"
+
+#, fuzzy
+msgid "This contact is a bot"
+msgstr "相手先一覧"
 
 msgid "This device is not compatible."
 msgstr "このデバイスは互換性がありません。"
@@ -4951,6 +4987,9 @@ msgstr "ルート証明書が検証できません"
 msgid "Unblock"
 msgstr "遮断の解除"
 
+msgid "Unencrypted"
+msgstr "暗号化しない"
+
 msgid "Uninstall Plugin"
 msgstr "プラグインをアンインストール"
 
@@ -5100,6 +5139,13 @@ msgstr "パスワード保存にシステムの鍵束を使います"
 #, python-format
 msgid "User %s not found"
 msgstr "ユーザー %s は見つかりません"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "D-Bus インターフェース"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "ユーザー数"
@@ -5421,6 +5467,8 @@ msgid ""
 "Your server does not offer a group chat service. Please specify the address "
 "of a different server."
 msgstr ""
+"お使いのサーバーは談話室サービスを提供していません。別のサーバーのアドレスを"
+"指定してください。"
 
 msgid "ZIP files"
 msgstr "ZIP ファイル"
@@ -5568,9 +5616,6 @@ msgid "_Leave"
 msgstr "退出 (_L)"
 
 msgid "_Log In"
-msgstr "ログイン (_L)"
-
-msgid "_Login"
 msgstr "ログイン (_L)"
 
 msgid "_Modify Accounts…"
@@ -6166,6 +6211,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
+
+#~ msgid "_Login"
+#~ msgstr "ログイン (_L)"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

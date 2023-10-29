@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -100,9 +100,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "gedesynchroniseerd"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "‘%s’ zal nu je status zien."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -142,11 +150,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Schrijven"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1638,6 +1654,9 @@ msgstr "_Weigeren"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1647,6 +1666,10 @@ msgstr "Verbinding mislukt"
 
 msgid "Default"
 msgstr "Standaard"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Versleutelingsfout"
 
 msgid "Default Sync Threshold"
 msgstr "Standaarddrempelwaarde voor synchronisatie"
@@ -1994,6 +2017,9 @@ msgstr "Versleutelingsfout"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Versleutelingsfout"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2722,6 +2748,9 @@ msgid "Incoming Call"
 msgstr "Binnenkomend bericht:"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4238,6 +4267,9 @@ msgstr "Voorinstellingen"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4660,6 +4692,10 @@ msgstr "Instellingen"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "Contact toevoegen…"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
 msgid "Share Status"
@@ -5300,6 +5336,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Contacten"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "De dienst kan niet worden doorbladerd"
 
@@ -5579,6 +5619,10 @@ msgstr "Kan het eerste certificaat niet verifiëren"
 msgid "Unblock"
 msgstr "_Deblokkeren"
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Niet versleuteld"
+
 msgid "Uninstall Plugin"
 msgstr "Plug-in verwijderen"
 
@@ -5744,6 +5788,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s niet gevonden"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Gebr_uikersnaam"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Gebruikers"
@@ -6294,10 +6345,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Log in"
-
-#, fuzzy
-msgid "_Login"
-msgstr "Inloggen"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6915,3 +6962,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Inloggen"

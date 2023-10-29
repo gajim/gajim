@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -14,8 +14,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #, fuzzy
 msgid " (Video Call)"
@@ -97,9 +97,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Pašyranyja"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Ciapier \"%s\" budzie viedać tvoj status."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -139,12 +147,20 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Pracuju"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1662,6 +1678,9 @@ msgstr "Adł_učany"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1671,6 +1690,10 @@ msgstr "Niemahvyma dałučycca"
 
 msgid "Default"
 msgstr "Zmoŭčany"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Šyfravańnie ŭklučanaje"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2013,6 +2036,9 @@ msgstr "Šyfravańnie ŭklučanaje"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Šyfravańnie ŭklučanaje"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2736,6 +2762,9 @@ msgid "Incoming Call"
 msgstr "Niapravilnaje imia karystalnika"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4274,6 +4303,9 @@ msgstr "P_rysutnaść"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4700,6 +4732,10 @@ msgstr "Niemahvyma dałučycca"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Dadaj kantakt..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Pakiń pakoji"
 
 #, fuzzy
 msgid "Share Status"
@@ -5335,6 +5371,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kantakty"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Niemahčyma ahladać hety servis"
 
@@ -5603,6 +5643,10 @@ msgid "Unblock"
 msgstr ""
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Nie pačata"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Zatrymana"
 
@@ -5771,6 +5815,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s nia znojdzieny"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Imia karystalnika:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Karystalniki"
@@ -6312,10 +6363,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Dałučysia"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Dałučysia"
 
 #, fuzzy
@@ -6940,3 +6987,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Dałučysia"

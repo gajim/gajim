@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,9 +98,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "десинхронизован"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Сада ће контакт \"%s\" знати Ваш статус."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -140,11 +148,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Пише"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1679,6 +1695,9 @@ msgstr "_Није на вези"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1688,6 +1707,10 @@ msgstr "Веза прекинута"
 
 msgid "Default"
 msgstr "Подразумевано"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Захтев за претплатом"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2033,6 +2056,9 @@ msgstr "Захтев за претплатом"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Захтев за претплатом"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2751,6 +2777,9 @@ msgid "Incoming Call"
 msgstr "Боја за долазни надимак."
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4286,6 +4315,9 @@ msgstr "_Присутност"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4712,6 +4744,10 @@ msgstr "Регистрација неуспела"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Додај контакт..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Напусти групне разговоре"
 
 #, fuzzy
 msgid "Share Status"
@@ -5353,6 +5389,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Контакт"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Услуге нису претраживе"
 
@@ -5623,6 +5663,10 @@ msgid "Unblock"
 msgstr "_Одблокирај"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Није почео"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Застој"
 
@@ -5791,6 +5835,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s није пронађен"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Корисничко име:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Корисници"
@@ -6335,10 +6386,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "Отићи са везе и повезати се одмах?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6959,3 +7006,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Гајим"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Отићи са везе и повезати се одмах?"

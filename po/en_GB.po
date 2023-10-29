@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -96,9 +96,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "desync'ed"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Now \"%s\" will know your status."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -138,11 +146,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Writing"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1673,6 +1689,9 @@ msgstr "_Offline"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1682,6 +1701,10 @@ msgstr "Connection Failed"
 
 msgid "Default"
 msgstr "Default"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "E2E encryption enabled"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2024,6 +2047,9 @@ msgstr "E2E encryption enabled"
 #, fuzzy
 msgid "Encryption error"
 msgstr "E2E encryption enabled"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2743,6 +2769,9 @@ msgid "Incoming Call"
 msgstr "_Incoming message:"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4280,6 +4309,9 @@ msgstr "_Presence"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4704,6 +4736,10 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Add Contact..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Leave Groupchats"
 
 #, fuzzy
 msgid "Share Status"
@@ -5345,6 +5381,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Contacts"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "The service is not browsable"
 
@@ -5615,6 +5655,10 @@ msgid "Unblock"
 msgstr "_Unblock"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Not started"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Stalled"
 
@@ -5783,6 +5827,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s not found"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Username:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Users"
@@ -6325,10 +6376,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Log on"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Log on"
 
 #, fuzzy
@@ -6951,3 +6998,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Log on"

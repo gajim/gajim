@@ -2,13 +2,14 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the Gajim package.
 # Sally <sallyahaj@yahoo.com>, 2023.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
-"PO-Revision-Date: 2023-04-13 19:06+0000\n"
-"Last-Translator: Sally <sallyahaj@yahoo.com>\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"PO-Revision-Date: 2023-10-17 17:18+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
 ">\n"
 "Language: ar\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
 msgstr " (مكالمة فيديو)"
@@ -27,7 +28,7 @@ msgstr " (مكالمة صوتية)"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr " by {المستخدم}"
+msgstr " المستخدم {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -98,7 +99,15 @@ msgid "%s (desynced)"
 msgstr ""
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
+#, python-format
 msgid "%s asks you to share your status"
+msgstr ""
+
+#, python-format
+msgid "%s can be joined by invite only."
 msgstr ""
 
 #, python-format
@@ -140,10 +149,18 @@ msgid ""
 msgstr ""
 
 #, python-format
+msgid "%s is typing…"
+msgstr ""
+
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1427,6 +1444,9 @@ msgstr ""
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1434,6 +1454,9 @@ msgid "Decryption failed"
 msgstr ""
 
 msgid "Default"
+msgstr ""
+
+msgid "Default Encryption"
 msgstr ""
 
 msgid "Default Sync Threshold"
@@ -1724,6 +1747,9 @@ msgid "Encryption (OMEMO)"
 msgstr ""
 
 msgid "Encryption error"
+msgstr ""
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
 
 msgid "Encryption required"
@@ -2337,6 +2363,9 @@ msgid "Incoming Call"
 msgstr ""
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -3641,6 +3670,9 @@ msgstr ""
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -3996,6 +4028,9 @@ msgid "Settings"
 msgstr ""
 
 msgid "Share Contact…"
+msgstr ""
+
+msgid "Share Group Chat…"
 msgstr ""
 
 msgid "Share Status"
@@ -4537,6 +4572,9 @@ msgid ""
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
+msgid "This contact is a bot"
+msgstr ""
+
 msgid "This device is not compatible."
 msgstr ""
 
@@ -4778,6 +4816,9 @@ msgstr ""
 msgid "Unblock"
 msgstr ""
 
+msgid "Unencrypted"
+msgstr ""
+
 msgid "Uninstall Plugin"
 msgstr ""
 
@@ -4922,6 +4963,12 @@ msgstr ""
 
 #, python-format
 msgid "User %s not found"
+msgstr ""
+
+msgid "User Interface"
+msgstr ""
+
+msgid "User Interface Font Size"
 msgstr ""
 
 msgid "Users"
@@ -5381,9 +5428,6 @@ msgid "_Leave"
 msgstr ""
 
 msgid "_Log In"
-msgstr ""
-
-msgid "_Login"
 msgstr ""
 
 msgid "_Modify Accounts…"

@@ -16,17 +16,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
-"PO-Revision-Date: 2023-06-09 08:32+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"PO-Revision-Date: 2023-10-29 11:43+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
-">\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
+"\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
 msgstr " (Videoanruf)"
@@ -115,8 +115,16 @@ msgid "%s (desynced)"
 msgstr "%s (nicht synchronisiert)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr "%s uns %s schreiben…"
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "%s bittet dich darum, deinen Status zu teilen"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr "%s kann nur per Einladung beigetreten werden."
 
 #, python-format
 msgid "%s group chats found"
@@ -159,10 +167,18 @@ msgstr ""
 "Wähle das Gerät, an das du die Datei senden willst."
 
 #, python-format
+msgid "%s is typing…"
+msgstr "%s schreibt…"
+
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "vor %s min"
 msgstr[1] "vor %s min"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr "%s Teilnehmer schreiben…"
 
 #, python-format
 msgid "%s s"
@@ -1494,6 +1510,9 @@ msgstr "Ablehnen"
 msgid "Decline Invitation"
 msgstr "Einladung ablehnen"
 
+msgid "Decrease User Interface Font Size"
+msgstr "Schriftgröße der Benutzeroberfläche verringern"
+
 msgid "Decrease playback speed"
 msgstr "Abspielgeschwindigkeit verringern"
 
@@ -1502,6 +1521,9 @@ msgstr "Entschlüsselung fehlgeschlagen"
 
 msgid "Default"
 msgstr "Standard"
+
+msgid "Default Encryption"
+msgstr "Standardverschlüsselung"
 
 msgid "Default Sync Threshold"
 msgstr "Standardwert für Synchronisationsbegrenzung"
@@ -1810,6 +1832,11 @@ msgstr "Verschlüsselung (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Fehler bei der Verschlüsselung"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
+"Standardmethode zur Verschlüsselung, falls nicht pro Kontakt anders "
+"eingestellt"
 
 msgid "Encryption required"
 msgstr "Verschlüsselung erforderlich"
@@ -2144,9 +2171,8 @@ msgid "Gajim - Error"
 msgstr "Gajim - Fehler"
 
 # TODO mark as do not translate?
-#, fuzzy
 msgid "Gajim Team"
-msgstr "Gajim Designs"
+msgstr "Gajim Team"
 
 # TODO mark as do not translate?
 msgid "Gajim Themes"
@@ -2460,6 +2486,9 @@ msgstr "Eingehender Anruf"
 
 msgid "Incoming Call (Video)"
 msgstr "Eingehender Anruf (Video)"
+
+msgid "Increase User Interface Font Size"
+msgstr "Schriftgröße der Benutzeroberfläche erhöhen"
 
 msgid "Increase playback speed"
 msgstr "Abspielgeschwindigkeit erhöhen"
@@ -3036,7 +3065,7 @@ msgstr "Keine"
 
 msgctxt "Group chat feature"
 msgid "Not Anonymous"
-msgstr "Nicht Anonym"
+msgstr "Nicht anonym"
 
 msgid "Not Available"
 msgstr "Nicht verfügbar"
@@ -3053,7 +3082,7 @@ msgstr "Vertrauen nicht festgelegt"
 
 msgctxt "Group chat feature"
 msgid "Not Moderated"
-msgstr "Nicht Moderiert"
+msgstr "Nicht moderiert"
 
 msgid "Not accelerated"
 msgstr "Nicht beschleunigt"
@@ -3805,6 +3834,9 @@ msgstr "Zurücksetzen"
 msgid "Reset Hints"
 msgstr "Hinweise zurücksetzen"
 
+msgid "Reset User Interface Font Size"
+msgstr "Schriftgröße der Benutzeroberfläche zurücksetzen"
+
 msgid "Reset all chats to the current default value"
 msgstr "Alle Chats zur derzeitigen Standardeinstellung zurücksetzen"
 
@@ -4169,6 +4201,9 @@ msgstr "Einstellungen"
 
 msgid "Share Contact…"
 msgstr "Kontakt teilen…"
+
+msgid "Share Group Chat…"
+msgstr "Gruppenchat teilen…"
 
 msgid "Share Status"
 msgstr "Status teilen"
@@ -4750,6 +4785,9 @@ msgstr ""
 "geeignet. Um OMEMO in diesem Chat zu nutzen sollte er nicht-anonym und nur "
 "für Mitglieder sein."
 
+msgid "This contact is a bot"
+msgstr "Dieser Kontakt ist ein Bot"
+
 msgid "This device is not compatible."
 msgstr "Dieses Gerät ist nicht kompatibel."
 
@@ -4793,9 +4831,9 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "Dies ist deine XMPP-Adresse"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated%s."
-msgstr "Diese Nachricht wurde von %s zurückgezogen."
+msgstr "Diese Nachricht wurde zurückgezogen%s."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5018,6 +5056,9 @@ msgstr "Das erste Zertifikat konnte nicht überprüft werden"
 msgid "Unblock"
 msgstr "Sperrung aufheben"
 
+msgid "Unencrypted"
+msgstr "Unverschlüsselt"
+
 msgid "Uninstall Plugin"
 msgstr "Plugin deinstallieren"
 
@@ -5167,6 +5208,12 @@ msgstr "Passwortverwaltung des Systems zum Speichern von Passwörtern verwenden"
 #, python-format
 msgid "User %s not found"
 msgstr "Nutzer %s konnte nicht gefunden werden"
+
+msgid "User Interface"
+msgstr "Benutzeroberfläche"
+
+msgid "User Interface Font Size"
+msgstr "Schriftgröße der Benutzeroberfläche"
 
 msgid "Users"
 msgstr "Benutzer"
@@ -5646,9 +5693,6 @@ msgid "_Leave"
 msgstr "_Verlassen"
 
 msgid "_Log In"
-msgstr "_Einloggen"
-
-msgid "_Login"
 msgstr "_Einloggen"
 
 msgid "_Modify Accounts…"
@@ -6258,6 +6302,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Du hast etwas abgelegt, das Gajim nicht verarbeiten konnte: %s"
+
+#~ msgid "_Login"
+#~ msgstr "_Einloggen"
 
 # Don't translate icon file name.
 #~ msgid "org.gajim.Gajim"

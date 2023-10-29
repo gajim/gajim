@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2023-06-10 08:18+0000\n"
 "Last-Translator: Marco Ciampa <ciampix@posteo.net>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -114,8 +114,16 @@ msgid "%s (desynced)"
 msgstr "%s (non sincronizzato)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "%s chiede di condividere il tuo stato"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, python-format
 msgid "%s group chats found"
@@ -158,10 +166,18 @@ msgstr ""
 "Scegliere il dispositivo a cui inviare il file."
 
 #, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "%s sta chiamando"
+
+#, fuzzy, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "%i min fa"
 msgstr[1] "%i min fa"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1484,6 +1500,9 @@ msgstr "Rifiuta"
 msgid "Decline Invitation"
 msgstr "Rifiuta invito"
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr "Riduci velocità riproduzione"
 
@@ -1492,6 +1511,10 @@ msgstr "Decrittografia fallita"
 
 msgid "Default"
 msgstr "Predefinito"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Chiave di Cifratura Pubblica"
 
 msgid "Default Sync Threshold"
 msgstr "Soglia Sincronizzazione Predefinita"
@@ -1816,6 +1839,9 @@ msgstr "Cifratura richiesta"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Cifratura richiesta"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 msgid "Encryption required"
 msgstr "Cifratura richiesta"
@@ -2509,6 +2535,9 @@ msgstr "Chiamata in Entrata"
 
 msgid "Incoming Call (Video)"
 msgstr "Chiamata in Entrata (Video)"
+
+msgid "Increase User Interface Font Size"
+msgstr ""
 
 msgid "Increase playback speed"
 msgstr "Aumenta velocità riproduzione"
@@ -3956,6 +3985,9 @@ msgstr "Ripristina"
 msgid "Reset Hints"
 msgstr "Ripristina Suggerimenti"
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr "Ripristina tutte le conversazioni al valore predefinito impostato"
 
@@ -4346,6 +4378,10 @@ msgstr "Impostazioni"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "Aggiungi _Contatto…"
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Crea conversazione di gruppo…"
 
 #, fuzzy
 msgid "Share Status"
@@ -4980,6 +5016,10 @@ msgid ""
 "OMEMO in this chat, it should be non-anonymous and members-only."
 msgstr ""
 
+#, fuzzy
+msgid "This contact is a bot"
+msgstr "Lista Contatti"
+
 msgid "This device is not compatible."
 msgstr "Dispositivo non compatibile."
 
@@ -5250,6 +5290,10 @@ msgstr "Impossibile verificare il primo certificato"
 msgid "Unblock"
 msgstr "Sblocca"
 
+#, fuzzy
+msgid "Unencrypted"
+msgstr "Non cifrato"
+
 msgid "Uninstall Plugin"
 msgstr "Disinstalla Estensione"
 
@@ -5414,6 +5458,13 @@ msgstr "Usa il portachiavi di sistema per memorizzare le password"
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s non trovato"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Interfaccia D-Bus"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Utenti"
@@ -5911,10 +5962,6 @@ msgstr "_Abbandona"
 
 msgid "_Log In"
 msgstr "_Accedi"
-
-#, fuzzy
-msgid "_Login"
-msgstr "Accedi"
 
 msgid "_Modify Accounts…"
 msgstr "_Modifica gli Account…"
@@ -6511,6 +6558,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Accedi"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

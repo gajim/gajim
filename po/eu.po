@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -99,9 +99,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Aurreratua"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Orain \"%s\"-ak jakingo du zure egoera."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -141,11 +149,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Lanean"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1665,6 +1681,9 @@ msgstr "_Deskonektatuta"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1674,6 +1693,10 @@ msgstr "Konexioak huts egin du"
 
 msgid "Default"
 msgstr "Berezkoa"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Enkriptazioa aktibatuta"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2012,6 +2035,9 @@ msgstr "Enkriptazioa aktibatuta"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Enkriptazioa aktibatuta"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2735,6 +2761,9 @@ msgid "Incoming Call"
 msgstr "Baliogabeko izena"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4271,6 +4300,9 @@ msgstr "_Egoera"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4699,6 +4731,10 @@ msgstr "Konexioak huts egin du"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Txat Taldea Berria"
 
 #, fuzzy
 msgid "Share Status"
@@ -5334,6 +5370,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontaktua"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Zerbitzua erabilezina"
 
@@ -5605,6 +5645,10 @@ msgid "Unblock"
 msgstr ""
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Hasigabea"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Stalled"
 
@@ -5773,6 +5817,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s ez da aurkitu"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Izena"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Erabiltzaileak"
@@ -6312,10 +6363,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Log aktibatua"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Log aktibatua"
 
 #, fuzzy
@@ -6943,3 +6990,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Log aktibatua"

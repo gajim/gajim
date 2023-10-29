@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -102,9 +102,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "ikke synkroniseret"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Nu vil %s vide din status."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -144,11 +152,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Skriver"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1682,6 +1698,9 @@ msgstr "_Afkoblet"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1691,6 +1710,10 @@ msgstr "Tilslutning Fejlede"
 
 msgid "Default"
 msgstr "Standard"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Abonnement forespørgsel"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2035,6 +2058,9 @@ msgstr "Abonnement forespørgsel"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Abonnement forespørgsel"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2752,6 +2778,9 @@ msgid "Incoming Call"
 msgstr "_Indkommende besked:"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4288,6 +4317,9 @@ msgstr "_Tilstedeværelse"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4712,6 +4744,10 @@ msgstr "Tilslutning fejlede"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Forlad Gruppesamtaler"
 
 #, fuzzy
 msgid "Share Status"
@@ -5354,6 +5390,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontakter"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Det er ikke mulig at gennemse denne tjeneste"
 
@@ -5624,6 +5664,10 @@ msgid "Unblock"
 msgstr "_Fjern blokering"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Ikke startet"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Hænger"
 
@@ -5792,6 +5836,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s ikke fundet"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Brugernavn:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Brugere"
@@ -6334,10 +6385,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "Log ind igen nu?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6958,3 +7005,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Log ind igen nu?"

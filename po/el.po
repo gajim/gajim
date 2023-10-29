@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -105,9 +105,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "Προχωρημένοι"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Τώρα ο/η \"%s\" θα γνωρίζει την κατάσταση σας."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -147,11 +155,19 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Δουλειά"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1669,6 +1685,9 @@ msgstr "Απ_οσυνδεδεμένος"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1678,6 +1697,10 @@ msgstr "Η σύνδεση απέτυχε"
 
 msgid "Default"
 msgstr "Προεπιλογή"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2020,6 +2043,9 @@ msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2739,6 +2765,9 @@ msgid "Incoming Call"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4279,6 +4308,9 @@ msgstr "_Παρουσία"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4709,6 +4741,10 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Προσθήκη επαφής..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Ομαδικές συζητήσεις"
 
 #, fuzzy
 msgid "Share Status"
@@ -5337,6 +5373,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Επαφές"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Η υπηρεσία δεν είναι περιηγήσιμη"
 
@@ -5607,6 +5647,10 @@ msgid "Unblock"
 msgstr ""
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Δεν έχει ξεκινήσει"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Πάγωσε"
 
@@ -5778,6 +5822,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "μη υπαρκτό %s"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Όν_ομα χρήστη:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Χρήστες"
@@ -6323,10 +6374,6 @@ msgstr ""
 
 #, fuzzy
 msgid "_Log In"
-msgstr "_Σύνδεση"
-
-#, fuzzy
-msgid "_Login"
 msgstr "_Σύνδεση"
 
 #, fuzzy
@@ -6961,3 +7008,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "_Σύνδεση"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: KBabel 1.11.4\n"
 
 #, fuzzy
@@ -101,9 +101,17 @@ msgstr ""
 msgid "%s (desynced)"
 msgstr "desinhronizovan"
 
+#, python-format
+msgid "%s and %s are typing…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
 msgstr "Sada će kontakt \"%s\" znati Vaš status."
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -143,12 +151,20 @@ msgid ""
 "Choose the device you would like to send the files to."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "%s is typing…"
+msgstr "Piše"
+
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr ""
 
 #, python-format
 msgid "%s s"
@@ -1682,6 +1698,9 @@ msgstr "_Nije na vezi"
 msgid "Decline Invitation"
 msgstr ""
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr ""
 
@@ -1691,6 +1710,10 @@ msgstr "Veza prekinuta"
 
 msgid "Default"
 msgstr "Podrazumevano"
+
+#, fuzzy
+msgid "Default Encryption"
+msgstr "Zahtev za pretplatom"
 
 msgid "Default Sync Threshold"
 msgstr ""
@@ -2035,6 +2058,9 @@ msgstr "Zahtev za pretplatom"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Zahtev za pretplatom"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
 
 #, fuzzy
 msgid "Encryption required"
@@ -2754,6 +2780,9 @@ msgid "Incoming Call"
 msgstr "_Dolazna poruka:"
 
 msgid "Incoming Call (Video)"
+msgstr ""
+
+msgid "Increase User Interface Font Size"
 msgstr ""
 
 msgid "Increase playback speed"
@@ -4291,6 +4320,9 @@ msgstr "_Prisutnost"
 msgid "Reset Hints"
 msgstr ""
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr ""
 
@@ -4717,6 +4749,10 @@ msgstr "Registracija neuspela"
 #, fuzzy
 msgid "Share Contact…"
 msgstr "_Dodaj kontakt..."
+
+#, fuzzy
+msgid "Share Group Chat…"
+msgstr "Napusti grupne razgovore"
 
 #, fuzzy
 msgid "Share Status"
@@ -5359,6 +5395,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "This contact is a bot"
+msgstr "Kontakti"
+
+#, fuzzy
 msgid "This device is not compatible."
 msgstr "Usluge nisu pretražive"
 
@@ -5629,6 +5669,10 @@ msgid "Unblock"
 msgstr "_Odblokiraj"
 
 #, fuzzy
+msgid "Unencrypted"
+msgstr "Nije počeo"
+
+#, fuzzy
 msgid "Uninstall Plugin"
 msgstr "Zastoj"
 
@@ -5797,6 +5841,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "User %s not found"
 msgstr "%s nije pronađen"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "_Korisničko ime:"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Korisnici"
@@ -6338,10 +6389,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Login"
-msgstr "Otići sa veze i povezati se odmah?"
 
 #, fuzzy
 msgid "_Modify Accounts…"
@@ -6964,3 +7011,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "_Login"
+#~ msgstr "Otići sa veze i povezati se odmah?"

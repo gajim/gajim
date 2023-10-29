@@ -4,13 +4,14 @@
 # pitchum <pitchum@gramaton.org>, 2022, 2023.
 # André <git@apitzsch.eu>, 2023.
 # Thérèse <gcfod@inboxen.org>, 2023.
+# nicoco <nicoco@nicoco.fr>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-01 15:36+0000\n"
-"PO-Revision-Date: 2023-04-23 10:01+0000\n"
-"Last-Translator: Thérèse <gcfod@inboxen.org>\n"
+"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"PO-Revision-Date: 2023-10-26 14:35+0000\n"
+"Last-Translator: nicoco <nicoco@nicoco.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
 ">\n"
 "Language: fr\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.11.2\n"
+"X-Generator: Weblate 5.0\n"
 "X-Pootle-Path: /fr/gajim/fr.po\n"
 "X-Pootle-Revision: 1011\n"
 
@@ -100,15 +101,23 @@ msgstr "Chiffrement %(type)s actif %(authenticated)s."
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (Vous)"
 
 #, python-format
 msgid "%s (desynced)"
 msgstr "%s (désynchronisé)"
 
 #, python-format
+msgid "%s and %s are typing…"
+msgstr "%s et %s sont en train d'écrire…"
+
+#, python-format
 msgid "%s asks you to share your status"
 msgstr "\"%s\" vous demande de partager votre état"
+
+#, python-format
+msgid "%s can be joined by invite only."
+msgstr "%s ne peut être rejoint que sur invitation."
 
 #, python-format
 msgid "%s group chats found"
@@ -151,10 +160,18 @@ msgstr ""
 "Choisissez l'appareil vers lequel envoyer les fichiers."
 
 #, python-format
+msgid "%s is typing…"
+msgstr "%s est en train d'écrire…"
+
+#, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
 msgstr[0] "il y a %s minute"
 msgstr[1] "il y a %s minutes"
+
+#, python-format
+msgid "%s participants are typing…"
+msgstr "%s participants sont en train d'écrire…"
 
 #, python-format
 msgid "%s s"
@@ -251,7 +268,7 @@ msgid "8 hours"
 msgstr "8 heures"
 
 msgid ": Affiliation changed"
-msgstr ": Affiliation changée"
+msgstr ": Affiliation changée"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
@@ -468,7 +485,7 @@ msgid "Add Contact"
 msgstr "Ajouter un contact"
 
 msgid "Add Contact…"
-msgstr "Ajouter un _contact…"
+msgstr "Ajouter un contact…"
 
 msgid "Add Entry"
 msgstr "Ajouter une entrée"
@@ -1393,7 +1410,7 @@ msgid "Copy Email Address"
 msgstr "Copier l’adresse électronique"
 
 msgid "Copy Link"
-msgstr "_Copier le lien"
+msgstr "Copier le lien"
 
 msgid "Copy Link Location"
 msgstr "Copier l'adresse du lien"
@@ -1424,7 +1441,7 @@ msgstr "Corriger le dernier message"
 
 msgctxt "Message row action"
 msgid "Correct…"
-msgstr "C'est exact…"
+msgstr "Corriger…"
 
 msgid "Could not access file"
 msgstr "Impossible d’accéder au fichier"
@@ -1433,15 +1450,12 @@ msgstr "Impossible d’accéder au fichier"
 msgid "Could not open file (%s)"
 msgstr "Impossible d’ouvrir le fichier (%s)"
 
-#, fuzzy
 msgid "Could not save file"
-msgstr "Impossible d’accéder au fichier"
+msgstr "Impossible d’enregistrer le fichier"
 
-#, fuzzy
 msgid "Could not save file to selected directory."
 msgstr ""
-"Vous n’avez pas les permissions pour pouvoir créer des fichiers dans ce "
-"dossier."
+"Vous n’avez pas les permissions pour créer des fichiers dans ce dossier."
 
 msgid "Country"
 msgstr "Pays"
@@ -1497,6 +1511,9 @@ msgstr "Décliner"
 msgid "Decline Invitation"
 msgstr "Refuser l'invitation"
 
+msgid "Decrease User Interface Font Size"
+msgstr ""
+
 msgid "Decrease playback speed"
 msgstr "Diminuer la vitesse de lecture"
 
@@ -1505,6 +1522,9 @@ msgstr "Échec du déchiffrement"
 
 msgid "Default"
 msgstr "Par défaut"
+
+msgid "Default Encryption"
+msgstr "Méthode de chiffrement par défaut"
 
 msgid "Default Sync Threshold"
 msgstr "Seuil de synchronisation par défaut"
@@ -1581,9 +1601,9 @@ msgstr "Appareil \"%s\""
 msgid "Devices"
 msgstr "Appareils"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Devices connected with \"%s\""
-msgstr "Appareils connectés avec %s"
+msgstr "Appareils connectés avec \"%s\""
 
 msgid "Dial Number"
 msgstr "Composer le numéro"
@@ -1711,9 +1731,9 @@ msgstr "%s messages téléchargés"
 msgid "Downloading…"
 msgstr "Téléchargement…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Draft: %s"
-msgstr "État : %s"
+msgstr "Brouillon : %s"
 
 msgid "Drop files here"
 msgstr "Déposez les fichiers ici"
@@ -1817,6 +1837,11 @@ msgstr "Chiffrement (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Erreur de chiffrement"
+
+msgid "Encryption method to use unless overridden on a per-contact basis"
+msgstr ""
+"Méthode de chiffrement à utiliser, sauf si explicitement choisie pour un "
+"contact"
 
 msgid "Encryption required"
 msgstr "Chiffrement requis"
@@ -1924,7 +1949,7 @@ msgid "Exporting History..."
 msgstr "Exportation de l'historique…"
 
 msgid "Exporting your messages..."
-msgstr "Exporter vos messages..."
+msgstr "Export de vos messages..."
 
 msgid "Extended Address"
 msgstr "Complément d'adresse"
@@ -2120,7 +2145,6 @@ msgctxt "Contact subscription"
 msgid "From"
 msgstr "De"
 
-#, fuzzy
 msgid "Full Message View"
 msgstr "Message complet"
 
@@ -2152,9 +2176,8 @@ msgstr "Version %s de Gajim disponible"
 msgid "Gajim - Error"
 msgstr "Gajim - Erreur"
 
-#, fuzzy
 msgid "Gajim Team"
-msgstr "Thèmes de Gajim"
+msgstr "L'équipe Gajim"
 
 msgid "Gajim Themes"
 msgstr "Thèmes de Gajim"
@@ -2469,6 +2492,9 @@ msgstr "Appel entrant"
 msgid "Incoming Call (Video)"
 msgstr "Appel entrant (vidéo)"
 
+msgid "Increase User Interface Font Size"
+msgstr ""
+
 msgid "Increase playback speed"
 msgstr "Augmenter la vitesse de lecture"
 
@@ -2613,9 +2639,8 @@ msgstr "Rejoindre un salon de discussion…"
 msgid "Join Support Chat"
 msgstr "Rejoindre le salon de support"
 
-#, fuzzy
 msgid "Joining Group Chat…"
-msgstr "Rejoindre le salon en tant que…"
+msgstr "En train de rejoindre le salon de discussion…"
 
 msgid "Joining…"
 msgstr "Connexion…"
@@ -2687,9 +2712,8 @@ msgstr "Charger l'image"
 msgid "Loading Avatar Failed"
 msgstr "Le chargement d'avatar a échoué"
 
-#, fuzzy
 msgid "Loading Preview…"
-msgstr "Chargement…"
+msgstr "Chargement de l'aperçu…"
 
 msgid "Loading avatar image failed"
 msgstr "Le chargement d'image d'avatar a échoué"
@@ -2718,9 +2742,8 @@ msgstr "Localisation : %s"
 msgid "Location:"
 msgstr "Emplacement :"
 
-#, fuzzy
 msgid "Log"
-msgstr "Identifiant"
+msgstr "Journal"
 
 msgid "Log In"
 msgstr "Se connecter"
@@ -3479,7 +3502,6 @@ msgstr "Code postal"
 msgid "Prefer direct messages in private group chats "
 msgstr "Préférer les messages directs dans les salons privés "
 
-#, fuzzy
 msgctxt "Configuration"
 msgid "Preference Name"
 msgstr "Nom de la préférence"
@@ -3536,7 +3558,7 @@ msgid "Project discussion"
 msgstr "Discussions autour du projet"
 
 msgid "Protocol"
-msgstr ""
+msgstr "Protocole"
 
 msgid "Prox_y"
 msgstr "Serveur _mandataire"
@@ -3556,7 +3578,6 @@ msgstr "Serveur mandataire, nom d'hôte et port personnalisés"
 msgid "Public"
 msgstr "Public"
 
-#, fuzzy
 msgctxt "Group chat feature"
 msgid "Public"
 msgstr "Public"
@@ -3593,7 +3614,7 @@ msgstr "Quitter Gajim"
 
 msgctxt "Message row action"
 msgid "Quote…"
-msgstr "Citation…"
+msgstr "Citer…"
 
 msgid "Re-Login"
 msgstr "Reconnexion"
@@ -3821,6 +3842,9 @@ msgstr "Rétablir"
 msgid "Reset Hints"
 msgstr "Rétablir les conseils"
 
+msgid "Reset User Interface Font Size"
+msgstr ""
+
 msgid "Reset all chats to the current default value"
 msgstr "Rétablir toutes les discussions à la valeur par défaut actuelle"
 
@@ -3851,9 +3875,10 @@ msgstr "Rétracter le message"
 msgid "Retract message?"
 msgstr "Retirer le message ?"
 
+#, fuzzy
 msgctxt "Message row action"
 msgid "Retract…"
-msgstr "Se rétracter…"
+msgstr "Modérer…"
 
 msgid "Revoke Member"
 msgstr "Révoquer membre"
@@ -3937,11 +3962,11 @@ msgstr "Scanner le QR code"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr ""
+msgstr "Scannez ce QR code pour rejoindre %s."
 
-#, fuzzy, python-format
+#, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr "Vous ne pouvez pas vous ajouter vous-même à votre liste de contacts."
+msgstr "Scannez ce QR code pour discuter avec %s."
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
@@ -4186,7 +4211,10 @@ msgid "Settings"
 msgstr "Paramètres"
 
 msgid "Share Contact…"
-msgstr "Partager un _contact…"
+msgstr "Partager un contact…"
+
+msgid "Share Group Chat…"
+msgstr "Partager le salon de discussion…"
 
 msgid "Share Status"
 msgstr "Partager l'état"
@@ -4413,10 +4441,9 @@ msgstr "É_tat"
 msgid "Stage"
 msgstr "Étape"
 
-#, fuzzy
 msgctxt "File transfer state"
 msgid "Stalled"
-msgstr "Retardé"
+msgstr "Bloqué"
 
 msgid "Start / Join Chat"
 msgstr "Commencer/rejoindre une discussion"
@@ -4721,7 +4748,7 @@ msgstr "Il y a des mises à jour pour vos extensions de Gajim"
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr ""
+msgstr "Une erreur est survenue en essayant de récupérer les messages : %s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
@@ -4768,6 +4795,9 @@ msgstr ""
 "OMEMO. Pour utiliser OMEMO dans cette discussion, celle-ci doit être non "
 "anonyme et réservée aux membres."
 
+msgid "This contact is a bot"
+msgstr "Ce contact est un bot"
+
 msgid "This device is not compatible."
 msgstr "Cet appareil n'est pas compatible."
 
@@ -4807,13 +4837,12 @@ msgstr ""
 "C'est le thème que vous utilisez actuellement.\n"
 "Voulez vous supprimer ce thème ?"
 
-#, fuzzy
 msgid "This is your XMPP address"
-msgstr "Seuls les modérateurs/trices peuvent voir l’adresse XMPP"
+msgstr "Ceci est votre adresse XMPP"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated%s."
-msgstr "Ce message a été retiré par %s."
+msgstr "Ce message a été retiré%s."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4927,7 +4956,7 @@ msgstr "Transféré : "
 
 msgctxt "File transfer state"
 msgid "Transferring"
-msgstr "Transfert de fichier en cours…"
+msgstr "Transfert de fichier en cours"
 
 msgid "Transferring File…"
 msgstr "Transfert de fichier en cours…"
@@ -5026,6 +5055,9 @@ msgstr "Impossible de vérifier le premier certificat"
 
 msgid "Unblock"
 msgstr "Débloquer"
+
+msgid "Unencrypted"
+msgstr "Non chiffré"
 
 msgid "Uninstall Plugin"
 msgstr "Désinstaller l'extension"
@@ -5153,7 +5185,6 @@ msgstr "Utilise un profil défini dans le dossier de configuration"
 msgid "Use file transfer proxies"
 msgstr "Utiliser les serveurs mandataires pour les transferts de fichiers"
 
-#, fuzzy
 msgid ""
 "Use filters to narrow down your search:\n"
 "from:username\n"
@@ -5161,9 +5192,9 @@ msgid ""
 "after:yyyy-mm-dd"
 msgstr ""
 "Utilisez des filtres pour affiner votre recherche :\n"
-"de:nom d'utilisateur/trice\n"
-"avant:aaaa-mm-jj\n"
-"après:aaaa-mm-jj"
+"from:nom d'utilisateur/trice\n"
+"before:aaaa-mm-jj\n"
+"after:aaaa-mm-jj"
 
 msgid "Use proxy auth_entication"
 msgstr "Utiliser l'auth_entification"
@@ -5179,6 +5210,13 @@ msgstr ""
 #, python-format
 msgid "User %s not found"
 msgstr "Utilisateur/trice %s non trouvé·e"
+
+#, fuzzy
+msgid "User Interface"
+msgstr "Interface D-Bus"
+
+msgid "User Interface Font Size"
+msgstr ""
 
 msgid "Users"
 msgstr "Utilisateurs/trices"
@@ -5386,9 +5424,9 @@ msgstr "Vous êtes désormais {show}{status}"
 msgid "You are offline."
 msgstr "Vous êtes hors-ligne."
 
-#, fuzzy, python-format
+#, python-format
 msgid "You can join this group chat instead: %s"
-msgstr "Vous pouvez rejoindre le salon xmpp:%s?join à la place"
+msgstr "Vous pouvez rejoindre le salon : %s"
 
 msgid "You can not join a group chat unless you are connected."
 msgstr ""
@@ -5513,6 +5551,8 @@ msgid ""
 "Your server does not offer a group chat service. Please specify the address "
 "of a different server."
 msgstr ""
+"Votre serveur n'offre pas de service de salons de discussions. Choisissez un "
+"autre serveur en précisant son adresse."
 
 msgid "ZIP files"
 msgstr "Fichier ZIP"
@@ -5663,9 +5703,6 @@ msgstr "_Quitter"
 msgid "_Log In"
 msgstr "_Connexion"
 
-msgid "_Login"
-msgstr "_Identifiant"
-
 msgid "_Modify Accounts…"
 msgstr "_Modifier des comptes …"
 
@@ -5709,9 +5746,8 @@ msgstr "_Port"
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#, fuzzy
 msgid "_Privacy Policy (Online)"
-msgstr "_Wiki (en ligne)"
+msgstr "_Politique de confidentialité (en ligne)"
 
 msgid "_Purge"
 msgstr "_Purger"
@@ -5898,9 +5934,9 @@ msgstr "Italique"
 msgid "lat"
 msgstr "lat"
 
-#, fuzzy, python-format
+#, python-format
 msgid "libsoup Version: %s"
-msgstr "Version de GLib : %s"
+msgstr "Version de libsoup : %s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -6257,6 +6293,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Montrer Gajim"
+
+#~ msgid "_Login"
+#~ msgstr "_Identifiant"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
