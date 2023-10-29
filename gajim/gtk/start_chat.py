@@ -416,7 +416,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._show_error_page(_('This address is not reachable.'))
             return
 
-        if result.is_muc:
+        if result.is_muc and not result.jid.is_domain:
+            # This is mostly a fix for the MUC protocol, there is no
+            # way to differentiate between a MUC service and room.
+            # Except the MUC XEP defines rooms should have a localpart.
             row.update_chat_type(groupchat=True)
         else:
             row.update_chat_type()
