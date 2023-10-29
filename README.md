@@ -17,7 +17,7 @@
 - [Pillow](https://pypi.org/project/Pillow/) (>=9.1.0)
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [Gtk3](https://gitlab.gnome.org/GNOME/gtk) (>=3.24.30)
-- [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.60.0)
+- [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.66.0)
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
 - [sqlite](https://www.sqlite.org/) (>=3.33.0)
