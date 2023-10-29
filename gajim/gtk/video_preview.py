@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 
 import logging
 
@@ -33,10 +34,9 @@ except Exception:
 log = logging.getLogger('gajim.gtk.preview')
 
 
-class VideoPreview:
+class VideoPreview(Gtk.Box):
     def __init__(self) -> None:
-
-        self._ui = get_builder('video_preview.ui')
+        Gtk.Box.__init__(self)
 
         self._active = False
 
@@ -45,9 +45,14 @@ class VideoPreview:
         self._av_sink: Gst.Element | None = None
         self._av_widget: Gtk.Widget | None = None
 
-    @property
-    def widget(self) -> Gtk.Box:
-        return self._ui.video_preview_box
+        self._ui = get_builder('video_preview.ui')
+        self.add(self._ui.video_preview_box)
+        self.show_all()
+
+        self.connect('destroy', self._on_destroy)
+
+    def _on_destroy(self, widget: VideoPreview) -> None:
+        self._disable_preview()
 
     @property
     def is_active(self) -> bool:

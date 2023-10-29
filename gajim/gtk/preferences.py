@@ -125,7 +125,7 @@ class Preferences(Gtk.ApplicationWindow):
 
     def _add_video_preview(self) -> None:
         self._video_preview = VideoPreview()
-        self._ui.video.add(self._video_preview.widget)
+        self._ui.video.add(self._video_preview)
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
