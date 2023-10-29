@@ -51,12 +51,12 @@ MUC_FEATURES = {
         _('This group chat is restricted '
           'to members only')),
     'muc_nonanonymous': (
-        'feather-shield-off-symbolic',
+        'feather-eye-symbolic',
         p_('Group chat feature', 'Not Anonymous'),
         _('All other group chat participants '
           'can see your XMPP address')),
     'muc_semianonymous': (
-        'feather-shield-symbolic',
+        'feather-eye-off-symbolic',
         p_('Group chat feature', 'Semi-Anonymous'),
         _('Only moderators can see your XMPP address')),
     'muc_moderated': (
@@ -70,11 +70,11 @@ MUC_FEATURES = {
         _('Participants entering this group chat are '
           'allowed to send messages')),
     'muc_public': (
-        'feather-eye-symbolic',
+        'lucide-megaphone-symbolic',
         p_('Group chat feature', 'Public'),
         _('Group chat can be found via search')),
     'muc_hidden': (
-        'feather-eye-off-symbolic',
+        'lucide-megaphone-off-symbolic',
         p_('Group chat feature', 'Hidden'),
         _('This group chat can not be found via search')),
     'muc_passwordprotected': (
