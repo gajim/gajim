@@ -111,9 +111,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
                               ) -> None:
 
         self._ui.name_entry.set_text(self._contact.name)
-        disco_info = self._contact.get_disco()
-        assert disco_info is not None
-        self._groupchat_info.set_from_disco_info(disco_info)
+        self._groupchat_info.set_info_from_contact(self._contact)
 
     def _on_stack_child_changed(self,
                                 _widget: Gtk.Stack,
@@ -159,9 +157,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._groupchat_info = GroupChatInfoScrolled(
             self._contact.account, width=600)
         self._groupchat_info.set_halign(Gtk.Align.FILL)
-        disco_info = self._contact.get_disco()
-        assert disco_info is not None
-        self._groupchat_info.set_from_disco_info(disco_info)
+        self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
         self._ui.info_box.add(self._groupchat_info)
         self._switcher.set_row_visible('information', True)

@@ -12,6 +12,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Gajim. If not, see <http://www.gnu.org/licenses/>.
 
+from __future__ import annotations
 
 import logging
 import time
@@ -32,6 +33,7 @@ from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
+from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import make_href_markup
@@ -139,7 +141,11 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._account = account
 
     def get_jid(self) -> JID | None:
-        return self._info.jid
+        jid = self._ui.address_label.get_text()
+        if not jid:
+            return None
+
+        return JID.from_string(self._ui.address_label.get_text())
 
     def set_subject(self, muc_subject: MucSubject | None) -> None:
         if muc_subject is None:
@@ -160,6 +166,16 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.subject.set_markup(make_href_markup(subject))
         self._ui.subject.set_visible(has_subject)
         self._ui.subject_label.set_visible(has_subject)
+
+    def set_info_from_contact(self, contact: GroupchatContact) -> None:
+        disco_info = contact.get_disco()
+        if disco_info is not None:
+            self.set_from_disco_info(disco_info)
+            return
+
+        self._ui.address.set_text(str(contact.jid))
+        self._ui.address.set_tooltip_text(str(contact.jid))
+        self._ui.address_copy_button.set_sensitive(True)
 
     def set_from_disco_info(self, info: DiscoInfo) -> None:
         self._info = info
@@ -188,6 +204,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         # Set address
         self._ui.address.set_text(str(info.jid))
         self._ui.address.set_tooltip_text(str(info.jid))
+        self._ui.address_copy_button.set_sensitive(True)
 
         if self._minimal:
             return
@@ -257,8 +274,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         grid.show_all()
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
+        jid = JID.from_string(self._ui.address_label.get_text())
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(self._info.jid.to_iri(XmppUriQuery.JOIN.value), -1)
+        clipboard.set_text(jid.to_iri(XmppUriQuery.JOIN.value), -1)
 
     @staticmethod
     def _on_activate_log_link(button: Gtk.LinkButton) -> int:

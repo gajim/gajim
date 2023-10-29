@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk+" version="3.24"/>
   <!-- n-columns=2 n-rows=10 -->
   <object class="GtkGrid" id="info_grid">
     <property name="visible">True</property>
@@ -240,12 +240,12 @@
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
         <property name="halign">start</property>
-        <property name="max-width-chars">40</property>
         <property name="valign">start</property>
         <property name="use-markup">True</property>
         <property name="wrap">True</property>
         <property name="wrap-mode">word-char</property>
         <property name="selectable">True</property>
+        <property name="max-width-chars">40</property>
         <property name="xalign">0</property>
         <signal name="activate-link" handler="_on_activate_subject_link" swapped="no"/>
       </object>
@@ -311,10 +311,11 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="address_copy_button">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
+            <property name="receives-default">False</property>
             <property name="tooltip-text" translatable="yes">Copy Address</property>
             <property name="halign">start</property>
             <property name="valign">start</property>

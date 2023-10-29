@@ -466,6 +466,7 @@ class GroupchatInfoScrolledBuilder(Builder):
     name: Gtk.Label
     avatar_image: Gtk.Image
     address: Gtk.Label
+    address_copy_button: Gtk.Button
 
 
 class GroupchatInviterBuilder(Builder):
