@@ -127,6 +127,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                             Gtk.PolicyType.AUTOMATIC)
 
         self._account = account
+        self._contact: GroupchatContact | None = None
         self._info: DiscoInfo | None = None
 
         self._ui = get_builder('groupchat_info_scrolled.ui')
@@ -141,11 +142,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._account = account
 
     def get_jid(self) -> JID | None:
-        jid = self._ui.address_label.get_text()
-        if not jid:
-            return None
-
-        return JID.from_string(self._ui.address_label.get_text())
+        if self._contact is not None:
+            return self._contact.jid
+        return self._info.jid
 
     def set_subject(self, muc_subject: MucSubject | None) -> None:
         if muc_subject is None:
@@ -168,6 +167,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.subject_label.set_visible(has_subject)
 
     def set_info_from_contact(self, contact: GroupchatContact) -> None:
+        self._contact = contact
         disco_info = contact.get_disco()
         if disco_info is not None:
             self.set_from_disco_info(disco_info)
@@ -274,7 +274,10 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         grid.show_all()
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
-        jid = JID.from_string(self._ui.address_label.get_text())
+        if self._contact is not None:
+            jid = self._contact.jid
+        else:
+            jid = self._info.jid
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(jid.to_iri(XmppUriQuery.JOIN.value), -1)
 
