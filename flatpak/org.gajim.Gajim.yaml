@@ -195,11 +195,11 @@ modules:
   - name: python3-css-parser
     buildsystem: simple
     build-commands:
-      - pip3 install css_parser-1.0.9-py2.py3-none-any.whl
+      - pip3 install css_parser-1.0.10-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/c/css_parser/css_parser-1.0.9-py2.py3-none-any.whl
-        sha256: e18f66961103b61df25aa6df0dc808ab61c23e65ae6c1a8c149fe71911190495
+        url: https://files.pythonhosted.org/packages/py2.py3/c/css_parser/css_parser-1.0.10-py2.py3-none-any.whl
+        sha256: d2e955a114829f0a327cc5535c2e65fe2e40b883b892881017d419a3b6dd05b7
 
   - name: python3-precis_i18n
     buildsystem: simple
@@ -243,18 +243,18 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-10.0.1.tar.gz
-        sha256: d72967b06be9300fed5cfbc8b5bafceec48bf7cdc7dab66b1d2549035287191d
+        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-10.1.0.tar.gz
+        sha256: e6bf8de6c36ed96c86ea3b6e1d5273c53f46ef518a062464cd7ef5dd2cf92e38
 
   # sentry-sdk dependency
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.0.6-py3-none-any.whl
+      - pip3 install urllib3-2.0.7-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.0.6-py3-none-any.whl
-        sha256: 7a7c7003b000adf9e7ca2a377c9688bbc54ed41b985789ed576570342a375cd2
+        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.0.7-py3-none-any.whl
+        sha256: fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
 
   - name: python3-certifi
     buildsystem: simple
@@ -268,11 +268,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.31.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.32.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.31.0-py2.py3-none-any.whl
-        sha256: 64a7141005fb775b9db298a30de93e3b83e0ddd1232dc6f36eb38aebc1553291
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.32.0-py2.py3-none-any.whl
+        sha256: eeb0b3550536f3bbc05bb1c7e0feb3a78d74acb43b607159a606ed2ec0a33a4d
 
   # gssapi dependency
   - name: python3-decorator
@@ -344,11 +344,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-4.4.0-py3-none-any.whl
+      - pip3 install nbxmpp-4.5.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.4.0-py3-none-any.whl
-        sha256: e966480e1df4d9b3feb248687933c4c49533b2d7dd7bf03252757973fed6df29
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.5.0-py3-none-any.whl
+        sha256: 4de2d8f6253e39a1e1bc66324d574bc2cb393058aa76c1cf4a5edf5e2bf383ca
 
   - name: gajim
     buildsystem: simple
