@@ -470,13 +470,6 @@ class AvatarStorage(metaclass=Singleton):
                         transport_icon: str | None = None,
                         style: str = 'circle') -> cairo.ImageSurface:
 
-        if transport_icon == 'gateway-irc':
-            surface = load_icon_surface('gajim-agent-irc', size, scale)
-            assert surface is not None
-            surface = add_transport_to_avatar(surface, transport_icon)
-            self._cache[jid][(size, scale, None, transport_icon)] = surface
-            return surface
-
         if not default:
             surface = self._cache[jid].get((size, scale, None, transport_icon))
             if surface is not None:
