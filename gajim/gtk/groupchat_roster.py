@@ -526,8 +526,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if not self.get_reveal_child():
             return
 
+        if self._contact is None:
+            return
+
         log.info('Load Roster')
-        assert self._contact is not None
         self._contact.multi_connect({
             'user-affiliation-changed': self._update_contact,
             'user-avatar-update': self._on_user_avatar_update,
