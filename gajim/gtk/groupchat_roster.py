@@ -106,9 +106,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self._ui.connect_signals(self)
 
-        app.settings.connect_signal(
-            'hide_groupchat_occupants_list', self._hide_roster)
-
         self.register_events([
             ('theme-update', ged.GUI2, self._on_theme_update),
         ])
@@ -129,6 +126,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_visible(not hide_roster)
 
     def _on_reveal(self, revealer: Gtk.Revealer, param: Any) -> None:
+        if self._contact is not None:
+            return
+
         if revealer.get_reveal_child():
             self._load_roster()
         else:
@@ -140,12 +140,12 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         log.info('Clear')
         self._unload_roster()
+        app.settings.disconnect_signals(self)
         self._contact.disconnect_signal(self, 'state-changed')
         self._contact = None
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
-        if self._contact is not None:
-            self.clear()
+        self.clear()
 
         is_groupchat = isinstance(contact, GroupchatContact)
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
@@ -156,6 +156,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         log.info('Switch to %s (%s)', contact.jid, contact.account)
 
         contact.connect('state-changed', self._on_muc_state_changed)
+        app.settings.connect_signal(
+            'hide_groupchat_occupants_list', self._hide_roster)
 
         self._contact = contact
 
@@ -515,7 +517,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         group2_index = AffiliationRoleSortOrder[group2]
         return -1 if group1_index < group2_index else 1
 
-    def enable_sort(self, enable: bool) -> None:
+    def _enable_sort(self, enable: bool) -> None:
         column = Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
         if enable:
             column = Column.TEXT
@@ -526,10 +528,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if not self.get_reveal_child():
             return
 
-        if self._contact is None:
-            return
-
         log.info('Load Roster')
+        assert self._contact is not None
         self._contact.multi_connect({
             'user-affiliation-changed': self._update_contact,
             'user-avatar-update': self._on_user_avatar_update,
@@ -543,7 +543,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         for participant in self._contact.get_participants():
             self._add_contact(participant)
 
-        self.enable_sort(True)
+        self._enable_sort(True)
         self._roster.set_model(self._modelfilter)
 
         self._ui.search_entry.set_text('')
@@ -559,14 +559,14 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self._roster.set_model(None)
         self._store.clear()
-        self.enable_sort(False)
+        self._enable_sort(False)
 
         self._contact_refs = {}
         self._group_refs = {}
 
     def invalidate_sort(self) -> None:
-        self.enable_sort(False)
-        self.enable_sort(True)
+        self._enable_sort(False)
+        self._enable_sort(True)
 
     def _redraw(self) -> None:
         self._roster.set_model(None)
@@ -654,4 +654,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         return count
 
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
+        if self._contact is None:
+            return
         self._redraw()
