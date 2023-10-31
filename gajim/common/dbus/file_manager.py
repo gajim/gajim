@@ -30,7 +30,7 @@ class DBusFileManager(metaclass=Singleton):
     '''
 
     def __init__(self) -> None:
-        self._proxy: Gio.DBusProxy | None
+        self._proxy: Gio.DBusProxy | None = None
         Gio.DBusProxy.new_for_bus(
             Gio.BusType.SESSION,
             Gio.DBusProxyFlags.DO_NOT_AUTO_START_AT_CONSTRUCTION,
