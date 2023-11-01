@@ -414,7 +414,7 @@ class ChatListRow(Gtk.ListBoxRow):
                          _draft_storage: DraftStorage,
                          _signal_name: str,
                          contact: ChatContactT,
-                         draft: str
+                         draft: str | None
                          ) -> None:
 
         if contact != self.contact:
@@ -422,7 +422,7 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self._show_draft(draft)
 
-    def _show_draft(self, draft: str) -> None:
+    def _show_draft(self, draft: str | None) -> None:
         if not draft:
             self._ui.message_label.get_style_context().remove_class('draft')
             self._display_last_conversation_line()
