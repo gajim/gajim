@@ -177,7 +177,7 @@ def init() -> None:
     stream_handler.setFormatter(
         FancyFormatter(
             '%(asctime)s %(levelname)s %(name)-35s %(message)s',
-            '%x %H:%M:%S',
+            '%Y-%m-%dT%H:%M:%S',
             use_color
         )
     )
