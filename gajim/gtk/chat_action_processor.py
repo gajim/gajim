@@ -233,9 +233,11 @@ class ChatActionProcessor(Gtk.Popover):
 
             action_text = self._buf.get_text(
                 start, self._current_iter, False)[1:]
-            if self._start_mark is None:
-                self._start_mark = Gtk.TextMark.new('chat-action-start', True)
-                self._buf.add_mark(self._start_mark, start)
+            if self._start_mark is not None:
+                self._buf.delete_mark(self._start_mark)
+
+            self._start_mark = Gtk.TextMark.new('chat-action-start', True)
+            self._buf.add_mark(self._start_mark, start)
             if self._active or len(action_text) > 1:
                 # Don't activate until a sufficient # of chars has been typed,
                 # which is chosen to be > 1 to not interfere with ASCII smilies
