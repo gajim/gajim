@@ -1049,7 +1049,8 @@ class ChatControl(EventHelper):
                                           event: events.MUCRoomConfigFinished
                                           ) -> None:
 
-        self.add_info_message(_('A new group chat has been created'))
+        self.add_info_message(_('A new group chat has been created'),
+                              event.timestamp)
 
     def _on_room_presence_error(self,
                                 _contact: GroupchatContact,
@@ -1063,7 +1064,7 @@ class ChatControl(EventHelper):
                                          event: events.MUCRoomPresenceError
                                          ) -> None:
 
-        self.add_info_message(_('Error: %s') % event.error)
+        self.add_info_message(_('Error: %s') % event.error, event.timestamp)
 
     def _on_room_destroyed(self,
                            _contact: GroupchatContact,
