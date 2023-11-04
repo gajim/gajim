@@ -95,8 +95,8 @@ class Presence(BaseModule):
             # MUC occupant presences are already handled in MUC module
             return
 
-        muc = self._con.get_module('MUC').get_muc_data(properties.jid)
-        if muc is not None:
+        contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        if contact.is_groupchat:
             # Presence from the MUC itself, used for MUC avatar
             # handled in VCardAvatars module
             return
@@ -106,7 +106,6 @@ class Presence(BaseModule):
         presence_data = PresenceData.from_presence(properties)
         self._presence_store[properties.jid] = presence_data
 
-        contact = self._con.get_module('Contacts').get_contact(properties.jid)
         contact.update_presence(presence_data)
 
         if properties.is_self_presence:
