@@ -322,6 +322,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
             self._new_avatar = False
             return
 
+        self._client.update_presence(include_muc=True)
+
     def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
         assert isinstance(self._contact, BareContact)
