@@ -86,11 +86,13 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self._version = ''
         self._hostname = app.get_hostname_from_account(account)
         self._ui.server_hostname.set_text(self._hostname)
+
+        domain = self._client.get_own_jid().domain
         self._client.get_module('SoftwareVersion').request_software_version(
-            self._hostname, callback=self._software_version_received)
+            domain, callback=self._software_version_received)
 
         self._client.get_module('LastActivity').request_last_activity(
-            self._hostname, callback=self._on_last_activity)
+            domain, callback=self._on_last_activity)
 
         server_info = self._client.get_module('Discovery').server_info
         self._add_contact_addresses(server_info.dataforms)
