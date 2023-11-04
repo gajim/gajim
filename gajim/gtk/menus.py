@@ -688,36 +688,39 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     menu_items: MenuItemListT = []
 
-    format_string = app.settings.get('date_time_format')
-    timestamp_formatted = timestamp.strftime(format_string)
+    if text:
+        # Text can be an empty string,
+        # e.g. if a preview has not been loaded yet
+        timestamp_formatted = timestamp.strftime(
+            app.settings.get('date_time_format'))
 
-    copy_text = f'{timestamp_formatted} - {name}: '
-    if text.startswith(('```', '> ')):
-        # Prepend a line break in order to keep code block/quotes rendering
-        copy_text += '\n'
-    copy_text += text
+        copy_text = f'{timestamp_formatted} - {name}: '
+        if text.startswith(('```', '> ')):
+            # Prepend a line break in order to keep code block/quotes rendering
+            copy_text += '\n'
+        copy_text += text
 
-    menu_items.append(
-        (p_('Message row action', 'Copy'),
-         'win.copy-message',
-         copy_text))
+        menu_items.append(
+            (p_('Message row action', 'Copy'),
+            'win.copy-message',
+            copy_text))
+
+        show_quote = True
+        if isinstance(contact, GroupchatContact):
+            if contact.is_joined:
+                self_contact = contact.get_self()
+                assert self_contact is not None
+                show_quote = not self_contact.role.is_visitor
+            else:
+                show_quote = False
+        if show_quote:
+            menu_items.append((
+                p_('Message row action', 'Quote…'), 'win.quote', text))
 
     menu_items.append(
         (p_('Message row action', 'Select Messages…'),
          'win.activate-message-selection',
          GLib.Variant('u', log_line_id or 0)))
-
-    show_quote = True
-    if isinstance(contact, GroupchatContact):
-        if contact.is_joined:
-            self_contact = contact.get_self()
-            assert self_contact is not None
-            show_quote = not self_contact.role.is_visitor
-        else:
-            show_quote = False
-    if show_quote:
-        menu_items.append((
-            p_('Message row action', 'Quote…'), 'win.quote', text))
 
     show_correction = False
     if message_id is not None:
