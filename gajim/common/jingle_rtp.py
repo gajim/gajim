@@ -21,7 +21,6 @@ from __future__ import annotations
 from typing import Any
 
 import logging
-import socket
 from collections import deque
 from collections.abc import Callable
 from collections.abc import Iterator
@@ -116,18 +115,18 @@ class JingleRTPContent(JingleContent):
         # due to bad controlling-mode
 
         params = {'controlling-mode': self.session.weinitiate, 'debug': False}
-        if app.settings.get('use_stun_server'):
-            stun_server = app.settings.get('stun_server')
-            if not stun_server and self.session.connection._stun_servers:
-                stun_server = self.session.connection._stun_servers[0]['host']
-            if stun_server:
-                try:
-                    ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
-                                            socket.SOCK_STREAM)[0][4][0]
-                except socket.gaierror as e:
-                    log.warning('Lookup of stun ip failed: %s', str(e))
-                else:
-                    params['stun-ip'] = ip
+        # if app.settings.get('use_stun_server'):
+        #     stun_server = app.settings.get('stun_server')
+        #     if not stun_server and self.session.connection._stun_servers:
+        #         stun_server = self.session.connection._stun_servers[0]['host']
+        #     if stun_server:
+        #         try:
+        #             ip = socket.getaddrinfo(stun_server, 0, socket.AF_UNSPEC,
+        #                                     socket.SOCK_STREAM)[0][4][0]
+        #         except socket.gaierror as e:
+        #             log.warning('Lookup of stun ip failed: %s', str(e))
+        #         else:
+        #             params['stun-ip'] = ip
 
         self.p2pstream = self.p2psession.new_stream(
             participant,
