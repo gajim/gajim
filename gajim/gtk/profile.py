@@ -40,7 +40,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
@@ -78,6 +77,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self.account = account
         self._jid = app.get_jid_from_account(account)
+        self._running_tasks: list[Task] = []
 
         self._client = app.get_client(self.account)
         self._client.connect_signal(
@@ -145,6 +145,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, *args: Any) -> None:
+        self._running_tasks.clear()
         self._avatar_selector = None
         self._ui.privacy_popover.destroy()
         app.check_finalize(self)
@@ -194,8 +195,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self._load_avatar()
         self._vcard_grid.set_vcard(self._current_vcard.copy())
-        self._ui.profile_stack.set_visible_child_name('profile')
-        self._ui.spinner.stop()
+        self._show_profile_page()
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
@@ -253,6 +253,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore # noqa: E501
         self._new_avatar = False
 
+    def _on_back_clicked(self, *args: Any) -> None:
+        self._show_profile_page()
+
     def _on_save_clicked(self, _button: Gtk.Button) -> None:
         self._ui.spinner.start()
         self._ui.profile_stack.set_visible_child_name('spinner')
@@ -272,10 +275,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._current_vcard = vcard.copy()  # pyright: ignore
 
         client = app.get_client(self.account)
-        client.get_module('VCard4').set_vcard(
+        task = client.get_module('VCard4').set_vcard(
             self._current_vcard,
             public=self._ui.vcard_access.get_active(),
-            callback=self._on_save_finished)
+            callback=self._on_set_vcard_result)
+        self._running_tasks.append(task)
 
         public = self._ui.avatar_nick_access.get_active()
 
@@ -285,10 +289,11 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         else:
             # Only update avatar if it changed
-            client.get_module('UserAvatar').set_avatar(
+            task = client.get_module('UserAvatar').set_avatar(
                 self._new_avatar,
                 public=public,
-                callback=self._on_set_avatar)
+                callback=self._on_set_avatar_result)
+            self._running_tasks.append(task)
 
         self._avatar_nick_public = public
 
@@ -300,7 +305,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
                 self.account, 'name')
         app.nicks[self.account] = nick
 
-    def _on_set_avatar(self, task: Task) -> None:
+    def _on_set_avatar_result(self, task: Task) -> None:
+        self._running_tasks.remove(task)
         try:
             task.finish()
         except StanzaError as error:
@@ -316,13 +322,30 @@ class ProfileWindow(Gtk.ApplicationWindow):
                     error.app_condition == 'payload-too-big'):
                 text = _('Avatar file size too big')
 
-            ErrorDialog(title, text)
-
             self._ui.avatar_image.set_from_surface(self._current_avatar)
             self._new_avatar = False
+
+            self._show_error_page(title, text)
             return
 
         self._client.update_presence(include_muc=True)
+        if not self._running_tasks:
+            self._show_profile_page()
+
+    def _on_set_vcard_result(self, task: Task) -> None:
+        self._running_tasks.remove(task)
+        try:
+            task.finish()
+        except StanzaError as error:
+            log.error('Could not publish VCard: %s', error)
+            self._show_error_page(
+                _('Unable to save profile'),
+                error.get_text())
+            return
+
+        self._vcard_grid.set_editable(False)
+        if not self._running_tasks:
+            self._show_profile_page()
 
     def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
@@ -352,15 +375,16 @@ class ProfileWindow(Gtk.ApplicationWindow):
                                                button.get_toplevel()))
 
     def _on_cancel_update_avatar(self, _button: Gtk.Button) -> None:
-        self._ui.profile_stack.set_visible_child_name('profile')
+        self._show_profile_page()
 
     def _on_update_avatar(self, _button: Gtk.Button) -> None:
+        error_title = _('Error while processing image')
+        error_text = _('Failed to generate avatar.')
+
         assert self._avatar_selector
         success, data, width, height = self._avatar_selector.get_avatar_bytes()
         if not success:
-            self._ui.profile_stack.set_visible_child_name('profile')
-            ErrorDialog(_('Error while processing image'),
-                        _('Failed to generate avatar.'))
+            self._show_error_page(error_title, error_text)
             return
 
         assert data
@@ -368,9 +392,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         assert width
         sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
-            self._ui.profile_stack.set_visible_child_name('profile')
-            ErrorDialog(_('Error while processing image'),
-                        _('Failed to generate avatar.'))
+            self._show_error_page(error_title, error_text)
             return
 
         self._new_avatar = Avatar()
@@ -384,7 +406,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
 
         self._ui.avatar_image.set_from_surface(clip_circle(surface))
         self._ui.remove_avatar_button.show()
-        self._ui.profile_stack.set_visible_child_name('profile')
+        self._show_profile_page()
 
     def _set_vcard_access_switch(self, state: bool) -> None:
         self._ui.vcard_access.set_active(state)
@@ -403,14 +425,12 @@ class ProfileWindow(Gtk.ApplicationWindow):
         state = self._ui.avatar_nick_access.get_active()
         self._set_avatar_nick_access_switch(state)
 
-    def _on_save_finished(self, task: Task) -> None:
-        try:
-            task.finish()
-        except StanzaError as err:
-            log.error('Could not publish VCard: %s', err)
-            # TODO Handle error
-            return
+    def _show_error_page(self, title: str, text: str) -> None:
+        self._ui.error_title_label.set_text(title)
+        self._ui.error_label.set_text(text)
+        self._ui.profile_stack.set_visible_child_name('error')
 
-        self._vcard_grid.set_editable(False)
+    def _show_profile_page(self) -> None:
+        self._running_tasks.clear()
         self._ui.profile_stack.set_visible_child_name('profile')
         self._ui.spinner.stop()

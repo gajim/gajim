@@ -784,6 +784,9 @@ class ProfileBuilder(Builder):
     edit_button: Gtk.Button
     avatar_selector_box: Gtk.Box
     avatar_update_button: Gtk.Button
+    error_label: Gtk.Label
+    error_title_label: Gtk.Label
+    back_button: Gtk.Button
 
 
 class RosterBuilder(Builder):
