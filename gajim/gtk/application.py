@@ -529,7 +529,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     def create_account(self,
                        account: str,
-                       username: str,
+                       username: str | None,
                        domain: str,
                        password: str,
                        proxy_name: str | None,
