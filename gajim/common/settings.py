@@ -754,6 +754,9 @@ class Settings:
 
     def add_account(self, account: str) -> None:
         log.info('Add account: %s', account)
+        if account in self._account_settings:
+            raise ValueError('Account %s exists already' % account)
+
         self._account_settings[account] = {'account': {},
                                            'contact': {},
                                            'group_chat': {}}
@@ -774,6 +777,14 @@ class Settings:
 
     def get_accounts(self) -> list[str]:
         return list(self._account_settings.keys())
+
+    def account_exists(self, jid: str) -> bool:
+        for account in self._account_settings:
+            name = self.get_account_setting(account, 'name')
+            hostname = self.get_account_setting(account, 'hostname')
+            if jid == f'{name}@{hostname}':
+                return True
+        return False
 
     def get_active_accounts(self) -> list[str]:
         active: list[str] = []
