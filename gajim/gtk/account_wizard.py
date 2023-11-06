@@ -182,6 +182,17 @@ class AccountWizard(Assistant):
                 self._test_credentials(ignore_all_errors=True)
 
         elif button_name == 'signup':
+
+            if self.get_page('signup').is_anonymous():
+                domain = self.get_page('signup').get_server()
+
+                if app.settings.account_exists(f'anon@{domain}'):
+                    self._show_error_page(
+                        _('Account exists already'),
+                        _('Account exists already'),
+                        _('This account has already been added'))
+                    return
+
             if page == 'signup':
                 if self.get_page('signup').is_advanced():
                     self.show_page('advanced',
@@ -675,15 +686,12 @@ class Login(Page):
                 Gtk.EntryIconPosition.SECONDARY, _('Invalid Address'))
             return False
 
-        for account in app.settings.get_accounts():
-            name = app.settings.get_account_setting(account, 'name')
-            hostname = app.settings.get_account_setting(account, 'hostname')
-            if address == f'{name}@{hostname}':
-                self._show_icon(True)
-                self._ui.log_in_address_entry.set_icon_tooltip_text(
-                    Gtk.EntryIconPosition.SECONDARY,
-                    _('This account has already been added'))
-                return False
+        if app.settings.account_exists(address):
+            self._show_icon(True)
+            self._ui.log_in_address_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                _('This account has already been added'))
+            return False
 
         self._show_icon(False)
         return True
