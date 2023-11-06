@@ -240,6 +240,8 @@ class ChatFunctionPage(Gtk.Box):
             self._widget.focus()
         elif isinstance(self._widget, DataFormWidget):
             self._widget.focus_first_entry()
+        elif mode == FunctionMode.SEND_FILE:
+            self._confirm_button.grab_focus()
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
