@@ -337,7 +337,7 @@ class CoreApplication(ged.EventHelper):
 
     def create_account(self,
                        account: str,
-                       username: str,
+                       username: str | None,
                        domain: str,
                        password: str,
                        proxy_name: str | None,
@@ -347,10 +347,13 @@ class CoreApplication(ged.EventHelper):
                        anonymous: bool = False
                        ) -> None:
 
-        account_label = f'{username}@{domain}'
         if anonymous:
             username = 'anon'
-            account_label = f'anon@{domain}'
+
+        if not username:
+            raise ValueError('Username must be set')
+
+        account_label = f'{username}@{domain}'
 
         config: dict[str, str | int | bool] = {
             'name': username,
