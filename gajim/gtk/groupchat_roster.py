@@ -126,7 +126,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_visible(not hide_roster)
 
     def _on_reveal(self, revealer: Gtk.Revealer, param: Any) -> None:
-        if self._contact is not None:
+        if self._contact is None:
             return
 
         if revealer.get_reveal_child():
