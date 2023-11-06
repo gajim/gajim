@@ -376,8 +376,9 @@ class CoreApplication(ged.EventHelper):
         for opt, value in config.items():
             app.settings.set_account_setting(account, opt, value)  # pyright: ignore  # noqa: E501
 
-        # Password module depends on existing config
-        passwords.save_password(account, password)
+        if not anonymous:
+            # Password module depends on existing config
+            passwords.save_password(account, password)
 
     def enable_account(self, account: str) -> None:
         app.connections[account] = Client(account)
