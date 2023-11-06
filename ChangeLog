@@ -1,3 +1,27 @@
+Gajim 1.8.3 (06 Nov 2023)
+
+  Improvements
+
+  * Profile: Show error page on errors after saving
+  * Close main window when pressing Escape key (#11543)
+
+  Bug Fixes
+
+  * GroupchatRoster: Display participants correctly on reveal
+  * Filetransfer: Always focus confirm button (#11672)
+  * AccountWizard: Don’t allow multiple anonymous accounts for the same domain
+  * AccountPage: Show anonymous address
+  * Accounts: Don’t try to save password for anonymous accounts
+  * Message row menu: Show quote and copy actions only if there is text (#11652)
+  * Audio/Video: Disable broken stun server code (#11559)
+  * Presence: Don’t fail on unknown MUC presences (#10967)
+  * Control: Add events with correct timestamp (#11670)
+  * Avatar: Send presence after changing avatar (#11669)
+  * ServerInfo: Use domain instead of hostname for queries (#11653)
+  * Emojis: Improve detection of shortcode start (#11594)
+  * DBusFileManager: Set self._proxy attribute on init (#11668)
+  * GroupchatRoster: Check for contact before trying to load roster (#11666)
+
 Gajim 1.8.2 (29 Oct 2023)
 
   New
