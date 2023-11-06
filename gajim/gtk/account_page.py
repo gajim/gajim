@@ -21,7 +21,9 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
+from gajim.common.const import ClientState
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
@@ -46,15 +48,15 @@ class AccountPage(Gtk.Box, EventHelper):
         EventHelper.__init__(self)
 
         self._account = account
-        self._jid = app.get_jid_from_account(account)
         client = app.get_client(account)
-        self._contact = client.get_module('Contacts').get_contact(self._jid)
+        jid = client.get_own_jid().bare
+        self._contact = client.get_module('Contacts').get_contact(jid)
         self._contact.connect('avatar-update', self._on_avatar_update)
 
         self._ui = get_builder('account_page.ui')
         self.add(self._ui.paned)
 
-        self._ui.our_jid_label.set_text(self._jid)
+        self._ui.our_jid_label.set_text(jid)
 
         self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
@@ -82,6 +84,8 @@ class AccountPage(Gtk.Box, EventHelper):
 
         self._ui.connect_signals(self)
 
+        client.connect_signal('state-changed', self._on_client_state_changed)
+
         app.settings.connect_signal(
             'account_label',
             self._on_account_label_changed,
@@ -102,6 +106,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, _widget: AccountPage) -> None:
+        self._contact.disconnect_all_from_obj(self)
+        app.settings.disconnect_signals(self)
         app.check_finalize(self)
 
     def _on_account_label_changed(self, value: str, *args: Any) -> None:
@@ -113,6 +119,15 @@ class AccountPage(Gtk.Box, EventHelper):
     def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window('AccountsWindow')
         window.select_account(self._account)
+
+    def _on_client_state_changed(self,
+                                 client: Client,
+                                 _signal_name: str,
+                                 state: ClientState
+                                 ) -> None:
+
+        jid = client.get_own_jid().bare
+        self._ui.our_jid_label.set_text(jid)
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         text = widget.get_text().lower()
