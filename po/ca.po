@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -420,6 +420,10 @@ msgstr "Comptes"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Comptes"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Comptes"
 
 msgid "Account has been added successfully"
@@ -5355,6 +5359,9 @@ msgid "Unable to get local issuer certificate"
 msgstr ""
 
 msgid "Unable to properly remove the plugin"
+msgstr ""
+
+msgid "Unable to save profile"
 msgstr ""
 
 msgid "Unable to verify the first certificate"

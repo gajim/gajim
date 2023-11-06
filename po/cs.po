@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -430,6 +430,10 @@ msgid "Account Wizard"
 msgstr "Průvodce účtem"
 
 msgid "Account disabled"
+msgstr "Účet byl vypnut"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Účet byl vypnut"
 
 msgid "Account has been added successfully"
@@ -4985,6 +4989,10 @@ msgstr "Nepodařilo se získat certifikát lokálního vydavatele"
 
 msgid "Unable to properly remove the plugin"
 msgstr "Nebylo možné zcela odstranit zásuvný modul"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Nezda"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nepodařilo se ověřit první certifikát"

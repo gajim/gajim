@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -453,6 +453,10 @@ msgstr "Känsloikoner inaktiverade"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Känsloikoner inaktiverade"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Känsloikoner inaktiverade"
 
 msgid "Account has been added successfully"
@@ -5643,6 +5647,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Kunde inte läsa in bild"
 
 msgid "Unable to verify the first certificate"
 msgstr "Kunde inte verifiera det första certifikatet"

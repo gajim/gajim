@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -472,6 +472,10 @@ msgstr "חשבון מנוטרל"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "חשבון מנוטרל"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "חשבון מנוטרל"
 
 msgid "Account has been added successfully"
@@ -5784,6 +5788,10 @@ msgstr "אין אפשרות לקבל תעודת מנפיק מקומית"
 
 msgid "Unable to properly remove the plugin"
 msgstr "אין אפשרות להסיר כהוגן את התוסף"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "לא היתה אפשרות להטעין תמונה"
 
 msgid "Unable to verify the first certificate"
 msgstr "אין אפשרות לאמת את התעודה הראשונה"

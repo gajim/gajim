@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2023-07-02 10:51+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -426,6 +426,10 @@ msgid "Account Wizard"
 msgstr "Тіркелгі шебері"
 
 msgid "Account disabled"
+msgstr "Тіркелгі сөндірілді"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Тіркелгі сөндірілді"
 
 msgid "Account has been added successfully"
@@ -4993,6 +4997,10 @@ msgstr "Жергілікті шығарушы сертификатын алу м
 
 msgid "Unable to properly remove the plugin"
 msgstr "Плагинді дұрыс өшіру мүмкін емес"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Файлға қатынау мүмкін емес"
 
 msgid "Unable to verify the first certificate"
 msgstr "Бірінші сертификатты тексеру мүмкін емес"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -457,6 +457,10 @@ msgstr "Følelsesikoner er ikke aktiveret"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Følelsesikoner er ikke aktiveret"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Følelsesikoner er ikke aktiveret"
 
 msgid "Account has been added successfully"
@@ -5655,6 +5659,10 @@ msgstr "Ikke i stand til at skaffe lokalt udstedelses certifikat"
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Kunne ikke laste billede"
 
 msgid "Unable to verify the first certificate"
 msgstr "Ikke i stand til at verificere det første certifikat"

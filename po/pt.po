@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -432,6 +432,10 @@ msgid "Account Wizard"
 msgstr "Assistente da Conta"
 
 msgid "Account disabled"
+msgstr "Conta desativada"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Conta desativada"
 
 msgid "Account has been added successfully"
@@ -5164,6 +5168,10 @@ msgstr "Não foi possível obter o certificado do emissor local"
 
 msgid "Unable to properly remove the plugin"
 msgstr "Não foi possível remover o plug-in corretamente"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Não posso acessar arquivo"
 
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"

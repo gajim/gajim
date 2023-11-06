@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -430,6 +430,10 @@ msgid "Account Wizard"
 msgstr "Майстер облікових записів"
 
 msgid "Account disabled"
+msgstr "Обліковий запис вимкнено"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Обліковий запис вимкнено"
 
 msgid "Account has been added successfully"
@@ -5435,6 +5439,10 @@ msgstr "Не вдалося отримати сертифікат локальн
 
 msgid "Unable to properly remove the plugin"
 msgstr "Не вдається коректно вилучити додаток лм"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Не вдалося звернутись до файлу"
 
 msgid "Unable to verify the first certificate"
 msgstr "Не вдалося перевірити перший сертифікат"

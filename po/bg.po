@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -452,6 +452,10 @@ msgstr "Емотиконите са изключени"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Емотиконите са изключени"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Емотиконите са изключени"
 
 msgid "Account has been added successfully"
@@ -5669,6 +5673,10 @@ msgstr "Неуспех при получаването на сертификат
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Неуспех при зареждането на изображението"
 
 msgid "Unable to verify the first certificate"
 msgstr "Неуспех при проверката на първия сертификат"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -443,6 +443,10 @@ msgstr "Lazhet eo ar sifrañ"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Lazhet eo ar sifrañ"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Lazhet eo ar sifrañ"
 
 msgid "Account has been added successfully"
@@ -5601,6 +5605,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Dibosupl eo kargañ ar skeudenn"
 
 msgid "Unable to verify the first certificate"
 msgstr ""

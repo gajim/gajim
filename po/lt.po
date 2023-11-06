@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -438,6 +438,10 @@ msgstr "Account name is in use"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Account name is in use"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Account name is in use"
 
 msgid "Account has been added successfully"
@@ -5577,6 +5581,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Could not load image"
 
 msgid "Unable to verify the first certificate"
 msgstr ""

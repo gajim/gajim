@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -451,6 +451,10 @@ msgstr "Смајлији искључени"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Смајлији искључени"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Смајлији искључени"
 
 msgid "Account has been added successfully"
@@ -5654,6 +5658,10 @@ msgstr "У немогућности да узмем сертификат лок�
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Не могу учитати слику"
 
 msgid "Unable to verify the first certificate"
 msgstr "У немогућности да верификујем први сертификат"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -444,6 +444,10 @@ msgstr "Account is uitgeschakeld"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Account is uitgeschakeld"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Account is uitgeschakeld"
 
 msgid "Account has been added successfully"
@@ -5611,6 +5615,10 @@ msgstr "Kan lokale uitgever van certificaat niet ophalen"
 
 msgid "Unable to properly remove the plugin"
 msgstr "Kon plug-in niet correct verwijderen"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Kon bestand niet openen"
 
 msgid "Unable to verify the first certificate"
 msgstr "Kan het eerste certificaat niet verifiëren"

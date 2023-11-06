@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -446,6 +446,10 @@ msgstr "Cifrado desactivado"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Cifrado desactivado"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Cifrado desactivado"
 
 msgid "Account has been added successfully"
@@ -5637,6 +5641,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Non foi posíbel cargar a imaxe"
 
 msgid "Unable to verify the first certificate"
 msgstr ""

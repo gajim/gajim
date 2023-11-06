@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -455,6 +455,10 @@ msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Απενεργοποιήθηκε η κρυπτογράφηση"
 
 msgid "Account has been added successfully"
@@ -5639,6 +5643,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
 msgid "Unable to verify the first certificate"
 msgstr ""

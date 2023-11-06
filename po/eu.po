@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -448,6 +448,10 @@ msgstr "Enkriptazioa desaktibatuta"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Enkriptazioa desaktibatuta"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Enkriptazioa desaktibatuta"
 
 msgid "Account has been added successfully"
@@ -5637,6 +5641,10 @@ msgstr ""
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Ezin izan da irudia kargatu"
 
 msgid "Unable to verify the first certificate"
 msgstr ""

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
-"PO-Revision-Date: 2023-10-29 19:10+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"PO-Revision-Date: 2023-11-06 05:57+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -418,6 +418,10 @@ msgid "Account Wizard"
 msgstr "Fiókkészítő segéd"
 
 msgid "Account disabled"
+msgstr "A fiók le van tiltva"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "A fiók le van tiltva"
 
 msgid "Account has been added successfully"
@@ -4960,6 +4964,9 @@ msgstr "Nem lehet lekérni a helyi kibocsátó tanúsítványát"
 
 msgid "Unable to properly remove the plugin"
 msgstr "Nem sikerült megfelelően eltávolítani a bővítményt"
+
+msgid "Unable to save profile"
+msgstr "A profil mentése nem sikerült"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nem lehet ellenőrizni az első tanúsítványt"

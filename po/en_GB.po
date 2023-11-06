@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -448,6 +448,10 @@ msgstr "Emoticons disabled"
 
 #, fuzzy
 msgid "Account disabled"
+msgstr "Emoticons disabled"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Emoticons disabled"
 
 msgid "Account has been added successfully"
@@ -5646,6 +5650,10 @@ msgstr "Unable to get local issuer certificate"
 
 msgid "Unable to properly remove the plugin"
 msgstr ""
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Could not load image"
 
 msgid "Unable to verify the first certificate"
 msgstr "Unable to verify the first certificate"

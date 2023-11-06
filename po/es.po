@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
-"PO-Revision-Date: 2023-10-29 11:43+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"PO-Revision-Date: 2023-11-06 12:33+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -432,6 +432,9 @@ msgstr "Asistente de cuentas"
 
 msgid "Account disabled"
 msgstr "Cuenta deshabilitada"
+
+msgid "Account exists already"
+msgstr "La cuenta ya existe"
 
 msgid "Account has been added successfully"
 msgstr "La cuenta ha sido añadida con éxito"
@@ -4994,6 +4997,9 @@ msgstr "No se puede obtener el certificado del emisor local"
 
 msgid "Unable to properly remove the plugin"
 msgstr "No se puede eliminar correctamente el complemento"
+
+msgid "Unable to save profile"
+msgstr "No se pudo guardar el perfil"
 
 msgid "Unable to verify the first certificate"
 msgstr "No se puede verificar el primer certificado"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2023-04-23 10:01+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -431,6 +431,10 @@ msgid "Account Wizard"
 msgstr "Expertul de cont"
 
 msgid "Account disabled"
+msgstr "Cont dezactivat"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Cont dezactivat"
 
 msgid "Account has been added successfully"
@@ -5035,6 +5039,10 @@ msgstr "Nu se poate obține certificatul emitentului local"
 
 msgid "Unable to properly remove the plugin"
 msgstr "Imposibilitatea de a elimina în mod corespunzător plugin-ul"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Nu s-a putut accesa fișierul"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nu se poate verifica primul certificat"

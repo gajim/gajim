@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2023-09-25 05:15+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -428,6 +428,10 @@ msgid "Account Wizard"
 msgstr "アカウントウィザード"
 
 msgid "Account disabled"
+msgstr "アカウントは無効です"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "アカウントは無効です"
 
 msgid "Account has been added successfully"
@@ -4979,6 +4983,10 @@ msgstr "ローカルの発行者の証明書を取得できません"
 
 msgid "Unable to properly remove the plugin"
 msgstr "プラグインを正しく削除できません"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "ファイルを保存できませんでした"
 
 # (Mako)The first は root のことか?
 msgid "Unable to verify the first certificate"

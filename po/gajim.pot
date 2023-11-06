@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -406,6 +406,9 @@ msgid "Account Wizard"
 msgstr ""
 
 msgid "Account disabled"
+msgstr ""
+
+msgid "Account exists already"
 msgstr ""
 
 msgid "Account has been added successfully"
@@ -4806,6 +4809,9 @@ msgid "Unable to get local issuer certificate"
 msgstr ""
 
 msgid "Unable to properly remove the plugin"
+msgstr ""
+
+msgid "Unable to save profile"
 msgstr ""
 
 msgid "Unable to verify the first certificate"

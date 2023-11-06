@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:06+0000\n"
+"POT-Creation-Date: 2023-11-06 09:51+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -427,6 +427,10 @@ msgid "Account Wizard"
 msgstr "Мастер учетной записи"
 
 msgid "Account disabled"
+msgstr "Учетная запись отключена"
+
+#, fuzzy
+msgid "Account exists already"
 msgstr "Учетная запись отключена"
 
 msgid "Account has been added successfully"
@@ -5044,6 +5048,10 @@ msgstr "Не удалось получить сертификат локальн
 
 msgid "Unable to properly remove the plugin"
 msgstr "Невозможно правильно удалить модуль"
+
+#, fuzzy
+msgid "Unable to save profile"
+msgstr "Не удалось получить доступ к файлу"
 
 msgid "Unable to verify the first certificate"
 msgstr "Не удалось подтвердить первый сертификат"
