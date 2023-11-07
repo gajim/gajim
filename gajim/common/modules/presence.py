@@ -91,34 +91,36 @@ class Presence(BaseModule):
                            properties: PresenceProperties
                            ) -> None:
 
+        self._log.info('Received from %s', properties.jid)
+
         if properties.from_muc:
             # MUC occupant presences are already handled in MUC module
             return
 
-        contact = self._con.get_module('Contacts').get_contact(properties.jid)
-        if contact.is_groupchat:
+        muc = self._con.get_module('MUC').get_muc_data(properties.jid)
+        if muc is not None:
             # Presence from the MUC itself, used for MUC avatar
             # handled in VCardAvatars module
             return
 
-        self._log.info('Received from %s', properties.jid)
+        jid = properties.jid.bare
+        roster_item = self._con.get_module('Roster').get_item(jid)
+
+        if roster_item is None and not properties.is_self_bare:
+            # Handle only presence from roster contacts
+            self._log.warning('Unknown presence received')
+            self._log.warning(stanza)
+            return
 
         presence_data = PresenceData.from_presence(properties)
         self._presence_store[properties.jid] = presence_data
 
+        contact = self._con.get_module('Contacts').get_contact(properties.jid)
         contact.update_presence(presence_data)
 
         if properties.is_self_presence:
             app.ged.raise_event(ShowChanged(account=self._account,
                                             show=properties.show.value))
-            return
-
-        jid = properties.jid.bare
-        roster_item = self._con.get_module('Roster').get_item(jid)
-        if not properties.is_self_bare and roster_item is None:
-            # Handle only presence from roster contacts
-            self._log.warning('Unknown presence received')
-            self._log.warning(stanza)
             return
 
         show = properties.show.value
