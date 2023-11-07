@@ -440,9 +440,11 @@ class HTTPFileTransfer(FileTransfer):
             text = self._errors[domain]
 
         super().set_error(domain, text)
+        self._cleanup()
 
     def set_finished(self) -> None:
         super().set_finished()
+        self._cleanup()
 
     def set_encrypted_data(self, data: bytes) -> None:
         self._temp_path.write_bytes(data)
@@ -455,3 +457,7 @@ class HTTPFileTransfer(FileTransfer):
         self.put_uri = result.put_uri
         self.get_uri = result.get_uri
         self._headers = result.headers
+
+    def _cleanup(self) -> None:
+        if self._temp_path.exists():
+            self._temp_path.unlink()
