@@ -829,7 +829,7 @@ class ChatPlaceholderBox(Gtk.Box):
         self.set_valign(Gtk.Align.CENTER)
         image = Gtk.Image.new_from_icon_name(
             'org.gajim.Gajim-symbolic', Gtk.IconSize.from_name('100'))
-        image.get_style_context().add_class('dim-label')
+        image.set_opacity(0.2)
         self.add(image)
 
         button = Gtk.Button(label=_('Start Chatting…'))
