@@ -243,16 +243,19 @@ def get_show_circle(show: str | types.PresenceShowT,
     if not isinstance(show, str):
         show = show.value
 
-    size = size * scale
-    center = size / 2
-    radius = size / 3
+    width = size * scale
+    height = width
 
-    surface = cairo.ImageSurface(cairo.Format.ARGB32, size, size)
+    surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+    surface.set_device_scale(scale, scale)
     context = cairo.Context(surface)
 
     css_color = get_css_show_class(show)
     color = convert_rgb_string_to_float(
         app.css_config.get_value(css_color, StyleAttr.COLOR))
+
+    center = size / 2
+    radius = size / 3
 
     context.set_source_rgb(*color)
     context.set_operator(cairo.Operator.OVER)
