@@ -122,6 +122,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.connect('notify::is-active', self._on_window_active)
         self.connect('delete-event', self._on_window_delete)
         self.connect('window-state-event', self._on_window_state_changed)
+        self.connect_after('key-press-event', self._on_key_press_event)
 
         self._ui.connect_signals(self)
 
@@ -249,6 +250,42 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def update_account_unread_count(self, account: str, count: int) -> None:
         self._account_side_bar.update_unread_count(account, count)
+
+    def _on_key_press_event(
+        self,
+        _window: MainWindow,
+        event: Gdk.EventKey
+    ) -> bool:
+
+        modifier = event.get_state() & Gtk.accelerator_get_default_mod_mask()
+
+        if not modifier:
+            if event.keyval in (
+                Gdk.KEY_Control_L,
+                Gdk.KEY_Control_R,
+                Gdk.KEY_Alt_L,
+                Gdk.KEY_Alt_R,
+            ):
+                return False
+
+        if modifier == Gdk.ModifierType.CONTROL_MASK:
+            if event.keyval == Gdk.KEY_C:
+                return False
+
+        focused_widget = self.get_focus()
+        if (isinstance(focused_widget, Gtk.TextView)
+            and focused_widget.props.editable):
+                return False
+
+        if isinstance(focused_widget, Gtk.Entry):
+            return False
+
+        message_input = self.get_chat_stack().get_message_input()
+        if not message_input.get_mapped() or not message_input.is_sensitive():
+            return False
+
+        message_input.grab_focus()
+        return self.propagate_key_event(event)
 
     def _on_client_state_changed(self,
                                  client: Client,
