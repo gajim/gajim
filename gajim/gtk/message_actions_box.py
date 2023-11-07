@@ -140,6 +140,10 @@ class MessageActionsBox(Gtk.Grid):
         action_name = action.get_name()
         log.info('Activate action: %s', action_name)
 
+        if not self.msg_textview.is_sensitive():
+            log.info('Action dismissed, input is not enabled')
+            return
+
         if action_name == 'input-clear':
             self._on_clear()
 
