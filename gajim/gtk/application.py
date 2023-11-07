@@ -226,6 +226,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self._init_core()
 
+        Gtk.IconSize.register('100', 100, 100)
         icon_theme = Gtk.IconTheme.get_default()
         icon_theme.append_search_path(str(configpaths.get('ICONS')))
         load_user_iconsets()

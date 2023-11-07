@@ -827,13 +827,8 @@ class ChatPlaceholderBox(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
         self.set_valign(Gtk.Align.CENTER)
-        pixbuf = Gtk.IconTheme.load_icon_for_scale(
-            Gtk.IconTheme.get_default(),
-            'org.gajim.Gajim-symbolic',
-            100,
-            self.get_scale_factor(),
-            Gtk.IconLookupFlags.FORCE_SIZE)
-        image = Gtk.Image.new_from_pixbuf(pixbuf)
+        image = Gtk.Image.new_from_icon_name(
+            'org.gajim.Gajim-symbolic', Gtk.IconSize.from_name('100'))
         image.get_style_context().add_class('dim-label')
         self.add(image)
 

@@ -620,13 +620,10 @@ class AddNewAccountPage(Gtk.Box):
         self.set_vexpand(True)
         self.set_hexpand(True)
         self.set_margin_top(24)
-        pixbuf = Gtk.IconTheme.load_icon_for_scale(
-            Gtk.IconTheme.get_default(),
-            'org.gajim.Gajim-symbolic',
-            100,
-            self.get_scale_factor(),
-            Gtk.IconLookupFlags.FORCE_SIZE)
-        self.add(Gtk.Image.new_from_pixbuf(pixbuf))
+        image = Gtk.Image.new_from_icon_name(
+            'org.gajim.Gajim-symbolic', Gtk.IconSize.from_name('100'))
+        image.get_style_context().add_class('dim-label')
+        self.add(image)
 
         button = Gtk.Button(label=_('Add Account'))
         button.get_style_context().add_class('suggested-action')
