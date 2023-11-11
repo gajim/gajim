@@ -196,13 +196,10 @@ class SearchView(Gtk.Box):
         accounts = self._get_accounts()
         assert self._results_iterator is not None
         for msg in itertools.islice(self._results_iterator, 25):
-            archive_jid = app.storage.archive.get_jid_from_id(msg.jid_id)
-            if archive_jid is None:
-                continue
             result_row = ResultRow(
                 msg,
                 accounts[msg.account_id],
-                JID.from_string(archive_jid.jid))
+                msg.jid)
 
             self._ui.results_listbox.add(result_row)
 

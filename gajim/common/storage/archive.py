@@ -126,6 +126,7 @@ class LastConversationRow(NamedTuple):
 class SearchLogRow(NamedTuple):
     account_id: int
     jid_id: int
+    jid: JID
     contact_name: str
     time: float
     kind: int
@@ -282,10 +283,6 @@ class MessageArchiveStorage(SqliteStorage):
         for row in rows:
             self._jid_ids[row.jid] = row
             self._jid_ids_reversed[row.jid_id] = row
-
-    def get_jid_from_id(self, jid_id: int) -> JidsTableRow | None:
-        # Use get as a fail-safe for cases where the JID ID table is incomplete
-        return self._jid_ids_reversed.get(jid_id)
 
     def get_jids_in_db(self) -> KeysView[JID]:
         return self._jid_ids.keys()
@@ -583,10 +580,6 @@ class MessageArchiveStorage(SqliteStorage):
         '''
         Search the conversation log for messages containing the `query` string.
 
-        The search can either span the complete log for the given
-        `account` and `jid` or be restricted to a single day by
-        specifying `date`.
-
         :param account: The account
 
         :param jid: The jid for which we request the conversation
@@ -622,9 +615,20 @@ class MessageArchiveStorage(SqliteStorage):
             users_query_string = 'AND UPPER(contact_name) IN (?)'
 
         sql = '''
-            SELECT account_id, jid_id, contact_name, time, kind, show, message,
-                   subject, additional_data, log_line_id
-            FROM logs NATURAL JOIN jids WHERE jid IN ({jids})
+            SELECT
+                account_id,
+                jid_id,
+                jid as "jid [jid]",
+                contact_name,
+                time,
+                kind,
+                show,
+                message,
+                subject,
+                additional_data,
+                log_line_id
+            FROM logs NATURAL JOIN jids
+            WHERE jid IN ({jids})
             AND account_id = {account_id}
             AND message LIKE like(?)
             AND kind NOT IN ({kinds})
@@ -699,9 +703,20 @@ class MessageArchiveStorage(SqliteStorage):
             users_query_string = 'AND UPPER(contact_name) IN (?)'
 
         sql = '''
-            SELECT account_id, jid_id, contact_name, time, kind, show, message,
-                   subject, additional_data, log_line_id
-            FROM logs WHERE message LIKE like(?)
+            SELECT
+                account_id,
+                jid_id,
+                jid as "jid [jid]",
+                contact_name,
+                time,
+                kind,
+                show,
+                message,
+                subject,
+                additional_data,
+                log_line_id
+            FROM logs NATURAL JOIN jids
+            WHERE message LIKE like(?)
             AND account_id IN ({account_ids})
             AND kind NOT IN ({kinds})
             {users_query}
