@@ -37,6 +37,7 @@ from nbxmpp.structs import MucSubject
 from gajim.common import app
 from gajim.common import events
 from gajim.common import types
+from gajim.common.const import Direction
 from gajim.common.helpers import AdditionalDataDict
 from gajim.common.helpers import get_start_of_day
 from gajim.common.helpers import to_user_string
@@ -712,7 +713,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def _get_message_row_by_direction(
         self,
         log_line_id: int,
-        direction: Literal['prev', 'next'] | None = None
+        direction: Direction | None = None
     ) -> MessageRow | None:
 
         row = self.get_row_by_log_line_id(log_line_id)
@@ -724,7 +725,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         index = row.get_index()
         while True:
-            if direction == 'prev':
+            if direction == Direction.PREV:
                 index -= 1
             else:
                 index += 1
@@ -742,7 +743,8 @@ class ConversationView(Gtk.ScrolledWindow):
     ) -> MessageRow | None:
         if log_line_id is None:
             return self.get_last_message_row()
-        return self._get_message_row_by_direction(log_line_id, direction='prev')
+        return self._get_message_row_by_direction(
+            log_line_id, direction=Direction.PREV)
 
     def get_next_message_row(
         self,
@@ -750,7 +752,8 @@ class ConversationView(Gtk.ScrolledWindow):
     ) -> MessageRow | None:
         if log_line_id is None:
             return None
-        return self._get_message_row_by_direction(log_line_id, direction='next')
+        return self._get_message_row_by_direction(
+            log_line_id, direction=Direction.NEXT)
 
     def get_row_by_log_line_id(self, log_line_id: int) -> MessageRow | None:
         for row in cast(list[BaseRow], self._list_box.get_children()):
