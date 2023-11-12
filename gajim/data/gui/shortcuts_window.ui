@@ -111,6 +111,20 @@
             <child>
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Up</property>
+                <property name="title" translatable="yes">Quote previous message</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Down</property>
+                <property name="title" translatable="yes">Quote next message</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Return &lt;primary&gt;Return</property>
                 <property name="title" translatable="yes">Add new line</property>
               </object>

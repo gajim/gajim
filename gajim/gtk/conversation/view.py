@@ -390,8 +390,7 @@ class ConversationView(Gtk.ScrolledWindow):
         return None
 
     def get_last_message_row(self) -> MessageRow | None:
-        children = self._list_box.get_children()
-        children.reverse()
+        children = reversed(self._list_box.get_children())
         for row in children:
             if isinstance(row, MessageRow):
                 return row
@@ -709,6 +708,49 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def _get_row_by_message_id(self, id_: str) -> MessageRow | None:
         return self._message_id_row_map.get(id_)
+
+    def _get_message_row_by_direction(
+        self,
+        log_line_id: int,
+        direction: Literal['prev', 'next'] | None = None
+    ) -> MessageRow | None:
+
+        row = self.get_row_by_log_line_id(log_line_id)
+        if row is None:
+            return None
+
+        if direction is None:
+            return row
+
+        index = row.get_index()
+        while True:
+            if direction == 'prev':
+                index -= 1
+            else:
+                index += 1
+
+            row = self._list_box.get_row_at_index(index)
+            if row is None:
+                return None
+
+            if isinstance(row, MessageRow):
+                return row
+
+    def get_prev_message_row(
+        self,
+        log_line_id: int | None
+    ) -> MessageRow | None:
+        if log_line_id is None:
+            return self.get_last_message_row()
+        return self._get_message_row_by_direction(log_line_id, direction='prev')
+
+    def get_next_message_row(
+        self,
+        log_line_id: int | None
+    ) -> MessageRow | None:
+        if log_line_id is None:
+            return None
+        return self._get_message_row_by_direction(log_line_id, direction='next')
 
     def get_row_by_log_line_id(self, log_line_id: int) -> MessageRow | None:
         for row in cast(list[BaseRow], self._list_box.get_children()):
