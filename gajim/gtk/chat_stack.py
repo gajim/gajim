@@ -533,9 +533,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             assert self_contact
             is_visitor = self_contact.role.is_visitor
 
-        app.window.get_action('muc-change-nickname').set_enabled(
-            joined and not contact.is_irc)
-
+        app.window.get_action('muc-change-nickname').set_enabled(joined)
         app.window.get_action('muc-contact-info').set_enabled(joined)
         app.window.get_action('muc-execute-command').set_enabled(joined)
         app.window.get_action('muc-ban').set_enabled(joined)
