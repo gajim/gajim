@@ -238,13 +238,6 @@
                 <property name="title" translatable="yes">Restore chat</property>
               </object>
             </child>
-            <child>
-              <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
-                <property name="accelerator">&lt;primary&gt;1...9</property>
-                <property name="title" translatable="yes">Switch to the first - ninth workspace</property>
-              </object>
-            </child>
           </object>
         </child>
         <child>
