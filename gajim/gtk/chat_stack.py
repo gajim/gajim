@@ -65,6 +65,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self.set_hexpand(True)
 
         self._current_contact: ChatContactT | None = None
+        self._last_quoted_id: int | None = None
 
         self.add_named(ChatPlaceholderBox(), 'empty')
 
@@ -184,6 +185,8 @@ class ChatStack(Gtk.Stack, EventHelper):
         # Store (preserve) primary clipboard and restore it after switching
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
         old_primary_clipboard = clipboard.wait_for_text()
+
+        self._last_quoted_id = None
 
         if self._current_contact is not None:
             self._current_contact.disconnect_all_from_obj(self)
@@ -483,6 +486,8 @@ class ChatStack(Gtk.Stack, EventHelper):
             'muc-change-role',
             'muc-change-affiliation',
             'muc-request-voice',
+            'quote-next',
+            'quote-prev',
         ]
 
         for action in actions:
@@ -556,9 +561,14 @@ class ChatStack(Gtk.Stack, EventHelper):
                    action: Gio.SimpleAction,
                    param: GLib.Variant | None) -> None:
 
+        if self.get_visible_child_name() != 'controls':
+            return
+
         action_name = action.get_name()
         contact = self._current_contact
-        assert contact is not None
+        if contact is None:
+            return
+
         account = contact.account
         client = app.get_client(account)
         jid = contact.jid
@@ -647,6 +657,18 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         elif action_name == 'muc-request-voice':
             client.get_module('MUC').request_voice(contact.jid)
+
+        elif action_name.startswith('quote-'):
+            view = self._chat_control.get_conversation_view()
+            if action_name == 'quote-prev':
+                row = view.get_prev_message_row(self._last_quoted_id)
+            else:
+                row = view.get_next_message_row(self._last_quoted_id)
+
+            if row is not None:
+                self._last_quoted_id = row.log_line_id
+                self._message_action_box.insert_as_quote(
+                    row.get_text(), clear=True)
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
@@ -788,6 +810,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         client.send_message(message_)
 
         self._message_action_box.msg_textview.clear()
+        self._last_quoted_id = None
         app.storage.drafts.set(contact, '')
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
@@ -805,6 +828,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         if self._current_contact is not None:
             self._current_contact.disconnect_all_from_obj(self)
 
+        self._last_quoted_id = None
         self.set_visible_child_name('empty')
         self._chat_banner.clear()
         self._message_action_box.clear()

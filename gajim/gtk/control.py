@@ -144,6 +144,9 @@ class ChatControl(EventHelper):
     def get_group_chat_roster(self) -> GroupchatRoster:
         return self._roster
 
+    def get_conversation_view(self) -> ConversationView:
+        return self._scrolled_view
+
     def add_command_output(self, text: str, is_error: bool) -> None:
         self._scrolled_view.add_command_output(text, is_error)
 

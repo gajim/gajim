@@ -218,6 +218,17 @@ class MessageActionsBox(Gtk.Grid):
     def is_correcting(self) -> bool:
         return self.msg_textview.is_correcting
 
+    def insert_as_quote(self, text: str, *, clear: bool = False) -> None:
+        if self._contact is None:
+            return
+
+        if not self.msg_textview.is_sensitive():
+            return
+
+        if clear:
+            self.msg_textview.clear()
+        self.msg_textview.insert_as_quote(text)
+
     def toggle_message_correction(self) -> None:
         self.msg_textview.toggle_message_correction()
 
