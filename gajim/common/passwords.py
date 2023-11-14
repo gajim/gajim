@@ -77,10 +77,13 @@ class SecretPasswordStorage:
         if not is_keyring_available():
             log.warning('No recommended keyring backend available.'
                         'Passwords cannot be stored.')
-            return True
+            return False
+
+        account_jid = app.get_jid_from_account(account_name)
+
         try:
             log.info('Save password to keyring')
-            _interface.backend.set_password('gajim', account_name, password)
+            _interface.backend.set_password('gajim', account_jid, password)
             return True
         except Exception:
             log.exception('Save password failed')
@@ -93,13 +96,32 @@ class SecretPasswordStorage:
 
         log.info('Request password from keyring')
 
+        account_jid = app.get_jid_from_account(account_name)
+
         try:
             # For security reasons remove clear-text password
             ConfigPasswordStorage.delete_password(account_name)
-            return _interface.backend.get_password('gajim', account_name)
+            password = _interface.backend.get_password('gajim', account_jid)
         except Exception:
             log.exception('Request password failed')
             return
+
+        if password is not None:
+            return password
+
+        # Migration from account name to account jid
+        try:
+            password = _interface.backend.get_password('gajim', account_name)
+        except Exception:
+            log.exception('Request password failed')
+            return
+
+        if password is not None:
+            result = SecretPasswordStorage.save_password(account_name, password)
+            if not result:
+                log.error('Password migration failed')
+
+        return password
 
     @staticmethod
     def delete_password(account_name: str) -> None:
@@ -108,8 +130,11 @@ class SecretPasswordStorage:
 
         log.info('Remove password from keyring')
 
+        account_jid = app.get_jid_from_account(account_name)
+
         try:
-            return _interface.backend.delete_password('gajim', account_name)
+            _interface.backend.delete_password('gajim', account_name)
+            return _interface.backend.delete_password('gajim', account_jid)
         except keyring.errors.PasswordDeleteError as error:
             log.warning('Removing password failed: %s', error)
         except Exception:
