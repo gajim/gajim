@@ -189,7 +189,7 @@ def init() -> None:
     root_log.propagate = False
 
     root_log = logging.getLogger('nbxmpp')
-    root_log.setLevel(logging.ERROR)
+    root_log.setLevel(logging.WARNING)
     root_log.addHandler(_log_console_handler)
     root_log.addHandler(stream_handler)
     root_log.propagate = False
