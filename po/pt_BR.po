@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -3842,6 +3842,14 @@ msgstr "_Sair"
 msgid "Quit Gajim"
 msgstr "Sair do Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Envie-nos uma mensagem"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Encaminhar mensagens não lidas"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -4945,10 +4953,6 @@ msgstr "Remover Contato"
 
 #, fuzzy
 msgid "Switch to the first - ninth chat"
-msgstr "Mudar para a primeira - nona guia"
-
-#, fuzzy
-msgid "Switch to the first - ninth workspace"
 msgstr "Mudar para a primeira - nona guia"
 
 #, fuzzy
@@ -6797,6 +6801,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Mudar para a primeira - nona guia"
 
 #, fuzzy
 #~ msgid "_Login"

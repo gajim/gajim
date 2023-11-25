@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-07-02 10:51+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -3580,6 +3580,14 @@ msgstr "Шығу"
 msgid "Quit Gajim"
 msgstr "Gajim жұмысын аяқтау"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Хабарламаны жіберу"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Хабарламаңызды пішімдеу"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Дәйексөз…"
@@ -4547,9 +4555,6 @@ msgstr "Жұмыс кеңістігін ауыстыру"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Бірінші - тоғызыншы чатқа ауысу"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
 
 msgid "Switch to the next chat"
 msgstr "Келесі чатқа ауысу"
@@ -6205,6 +6210,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim-ді көрсету"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
 
 #~ msgid "_Login"
 #~ msgstr "_Кіру"

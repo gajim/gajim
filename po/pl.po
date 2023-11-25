@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
-"PO-Revision-Date: 2023-10-27 07:36+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"PO-Revision-Date: 2023-11-15 07:57+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -433,9 +433,8 @@ msgstr "Kreator konta"
 msgid "Account disabled"
 msgstr "Konto jest wyłączone"
 
-#, fuzzy
 msgid "Account exists already"
-msgstr "Konto jest wyłączone"
+msgstr "Konto już istnieje"
 
 msgid "Account has been added successfully"
 msgstr "Konto zostało pomyślnie dodane"
@@ -1495,7 +1494,7 @@ msgid "Decline Invitation"
 msgstr "Odrzuć zaproszenie"
 
 msgid "Decrease User Interface Font Size"
-msgstr ""
+msgstr "Zmniejsz rozmiar czcionki interfejsu użytkownika"
 
 msgid "Decrease playback speed"
 msgstr "Zmniejsz prędkość odtwarzania"
@@ -2462,7 +2461,7 @@ msgid "Incoming Call (Video)"
 msgstr "Przychodząca rozmowa (wideo)"
 
 msgid "Increase User Interface Font Size"
-msgstr ""
+msgstr "Zwiększ rozmiar czcionki interfejsu użytkownika"
 
 msgid "Increase playback speed"
 msgstr "Zwiększ prędkość odtwarzania"
@@ -3575,6 +3574,12 @@ msgstr "Wyjście"
 msgid "Quit Gajim"
 msgstr "Wyjdź z Gajima"
 
+msgid "Quote next message"
+msgstr "Cytuj następną wiadomość"
+
+msgid "Quote previous message"
+msgstr "Cytuj poprzednią wiadomość"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Cytuj…"
@@ -3805,7 +3810,7 @@ msgid "Reset Hints"
 msgstr "Zresetuj podpowiedzi"
 
 msgid "Reset User Interface Font Size"
-msgstr ""
+msgstr "Zresetuj rozmiar czcionki interfejsu użytkownika"
 
 msgid "Reset all chats to the current default value"
 msgstr "Zresetuj wszystkie rozmowy do obecnej domyślnej wartości"
@@ -4540,9 +4545,6 @@ msgstr "Przełącz obszar roboczy"
 msgid "Switch to the first - ninth chat"
 msgstr "Przełącz na pierwszą — dziewiątą rozmowę"
 
-msgid "Switch to the first - ninth workspace"
-msgstr "Przełącz na pierwszy — dziewiąty obszar roboczy"
-
 msgid "Switch to the next chat"
 msgstr "Przełącz na następną rozmowę"
 
@@ -5006,9 +5008,8 @@ msgstr "Nie można pobrać lokalnego certyfikatu wystawcy"
 msgid "Unable to properly remove the plugin"
 msgstr "Nie można poprawnie usunąć wtyczki"
 
-#, fuzzy
 msgid "Unable to save profile"
-msgstr "Nie udało się zapisać pliku"
+msgstr "Nie udało się zapisać profilu"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nie można zweryfikować pierwszego certyfikatu"
@@ -5170,12 +5171,11 @@ msgstr "Użyj Twojego systemowego pęku kluczy do przechowywania haseł"
 msgid "User %s not found"
 msgstr "Użytkownik %s nieodnaleziony"
 
-#, fuzzy
 msgid "User Interface"
-msgstr "Interfejs D-Bus"
+msgstr "Interfejs użytkownika"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "Rozmiar czcionki interfejsu użytkownika"
 
 msgid "Users"
 msgstr "Użytkownicy"
@@ -6245,6 +6245,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Pokaż Gajima"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Przełącz na pierwszy — dziewiąty obszar roboczy"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Upuściłeś coś, czego Gajim nie potrafi obsłużyć: %s"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
-"PO-Revision-Date: 2023-11-06 12:34+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"PO-Revision-Date: 2023-11-15 04:57+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -49,7 +49,7 @@ msgstr "%(contact)s 邀请您加入 %(chat)s"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr "%(days)s 天， %(hours)s 小时"
+msgstr "%(days)s 天，%(hours)s 小时"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
@@ -125,7 +125,7 @@ msgstr "%s 个群聊已找到"
 
 #, python-format
 msgid "%s has been invited to this group chat"
-msgstr "%s 已经被邀请加入此群聊"
+msgstr "%s 已受邀加入此群聊"
 
 #, python-format
 msgid "%s has joined"
@@ -451,13 +451,13 @@ msgid "Accounts"
 msgstr "账号"
 
 msgid "Action for left-clicking a preview"
-msgstr "左击预览时的动作"
+msgstr "左键单击预览的操作"
 
 msgid "Action on Close"
-msgstr "关闭时的动作"
+msgstr "关闭时的操作"
 
 msgid "Action when closing Gajim’s window"
-msgstr "关闭 Gajim 窗口时的动作"
+msgstr "关闭 Gajim 窗口时的操作"
 
 msgid "Activate"
 msgstr "启用"
@@ -502,7 +502,7 @@ msgid "Add _Contact…"
 msgstr "添加联系人(_C)…"
 
 msgid "Add a checkmark to received messages"
-msgstr "添加已接收消息的检查标志"
+msgstr "为收到的消息添加钩形符号"
 
 msgid "Add a name and color for your account"
 msgstr "为您的账号添加名称和颜色"
@@ -756,7 +756,7 @@ msgid "Authentication mechanism too weak"
 msgstr "验证机制太弱"
 
 msgid "Author"
-msgstr "创始人"
+msgstr "创建者"
 
 msgid "Authority and issuer serial number mismatch"
 msgstr "颁发机构与颁发者序列号不匹配"
@@ -768,7 +768,7 @@ msgid "Authorization Request"
 msgstr "授权请求"
 
 msgid "Authors"
-msgstr "授权者"
+msgstr "作者"
 
 msgid "Auto Away"
 msgstr "自动离开"
@@ -970,13 +970,13 @@ msgid "Certificate is not yet valid"
 msgstr "证书还未生效"
 
 msgid "Certificate not trusted"
-msgstr "不被信任的证书"
+msgstr "证书不受信任"
 
 msgid "Certificate rejected"
 msgstr "证书被拒绝"
 
 msgid "Certificate revoked"
-msgstr "证书已被吊销"
+msgstr "证书已吊销"
 
 msgid "Certificate signature failure"
 msgstr "证书签名失败"
@@ -1130,16 +1130,16 @@ msgstr ""
 "(Ctrl + 双击以取消选择)"
 
 msgid "Click on contacts you would like to invite to this group chat."
-msgstr "点击您想要邀请到此群聊的联系人。"
+msgstr "单击您要邀请加入此群聊的联系人。"
 
 msgid "Click to change time display"
-msgstr "点击切换时间显示"
+msgstr "单击可更改时间显示"
 
 msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
 msgstr "点击查看 Gajim 维基页面来了解如何在 Flatpak 下安装插件。"
 
 msgid "Click to view location"
-msgstr "点击来查看位置"
+msgstr "单击以查看位置"
 
 msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
@@ -1186,10 +1186,10 @@ msgid "Commands"
 msgstr "命令"
 
 msgid "Common Name (CN)"
-msgstr "常用名(CN)"
+msgstr "通用名称 (CN)"
 
 msgid "Common Name (CN): "
-msgstr "常用名(CN): "
+msgstr "通用名称 (CN): "
 
 #, python-format
 msgid ""
@@ -1595,7 +1595,7 @@ msgid "Disabled"
 msgstr "已禁用"
 
 msgid "Disabled in Preferences"
-msgstr "在首选项中被禁用"
+msgstr "在首选项中禁用"
 
 msgid ""
 "Disclose information about media that is currently being played on your "
@@ -1606,13 +1606,13 @@ msgid "Disclose information about the operating system you currently use"
 msgstr "公开您当前正在使用操作系统的信息"
 
 msgid "Disclose the local system time of the device Gajim runs on"
-msgstr "公开正在运行 Gajim 的本地系统时间"
+msgstr "公开 Gajim 运行设备的本地系统时间"
 
 msgid "Disclose the time of your last activity"
 msgstr "公开您最近活动的时间"
 
 msgid "Discover Services…"
-msgstr "寻找服务器…"
+msgstr "发现服务…"
 
 msgid "Discussion Logs"
 msgstr "讨论日志"
@@ -1871,10 +1871,10 @@ msgid "Executing…"
 msgstr "正在执行…"
 
 msgid "Expires on"
-msgstr "到期于"
+msgstr "截止日期"
 
 msgid "Expires on: "
-msgstr "到期于: "
+msgstr "截止日期: "
 
 msgid "Export"
 msgstr "导出"
@@ -2170,7 +2170,7 @@ msgid "Gajim: No updates available (last check: never)"
 msgstr "Gajim: 没有可用的更新 (上一次检查: 从未)"
 
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: 更新检查在首选项中被禁用"
+msgstr "Gajim: 在首选项中禁用更新检查"
 
 msgid "Gathering information…"
 msgstr "正在收集信息…"
@@ -2409,8 +2409,8 @@ msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
 "A moderator will process your request."
 msgstr ""
-"为了在此聊天中编写消息，您需要首先请求发言权。\n"
-"将由主持人处理您的请求。"
+"要在此聊天中写消息，您需要先请求发言权。\n"
+"主持人将处理您的请求。"
 
 msgid "Incoming Call"
 msgstr "来电"
@@ -2496,25 +2496,25 @@ msgid "Invite to this chat"
 msgstr "邀请加入此聊天"
 
 msgid "Invitees"
-msgstr "被邀请人"
+msgstr "受邀者"
 
 msgid "Issued by"
-msgstr "发起自"
+msgstr "颁发者"
 
 msgid "Issued by\n"
-msgstr "发起自\n"
+msgstr "颁发者\n"
 
 msgid "Issued on"
-msgstr "发生于"
+msgstr "颁发日期"
 
 msgid "Issued on: "
-msgstr "发生于: "
+msgstr "颁发日期: "
 
 msgid "Issued to"
-msgstr "发生给"
+msgstr "颁发对象"
 
 msgid "Issued to\n"
-msgstr "发生给\n"
+msgstr "颁发对象\n"
 
 msgid "It is not possible to send empty files"
 msgstr "无法发送空文件"
@@ -2611,7 +2611,7 @@ msgid "Leave Group Chat"
 msgstr "离开群聊"
 
 msgid "Left Click Action"
-msgstr "左键点击动作"
+msgstr "左键单击操作"
 
 msgid "Let others know if you read up to this point"
 msgstr "让其他人知道您已阅读至此"
@@ -2796,7 +2796,7 @@ msgid "Minimize"
 msgstr "最小化"
 
 msgid "Minutes until your status gets changed"
-msgstr "几分钟后您的状态就会改变"
+msgstr "状态更改前的分钟数"
 
 msgid "Miscellaneous"
 msgstr "杂项"
@@ -3135,10 +3135,10 @@ msgid "Organisation"
 msgstr "组织"
 
 msgid "Organization (O)"
-msgstr "组织(O)"
+msgstr "组织 (O)"
 
 msgid "Organization (O): "
-msgstr "组织(O): "
+msgstr "组织 (O): "
 
 msgid "Organize your chats with workspaces"
 msgstr "用工作区组织您的聊天"
@@ -3222,12 +3222,12 @@ msgid "Participants asking for voice:"
 msgstr "参与者请求发言权:"
 
 msgid "Participants entering this group chat are allowed to send messages"
-msgstr "进入此群聊的参与者被允许发送消息"
+msgstr "允许进入此群聊的参与者发送消息"
 
 msgid ""
 "Participants entering this group chat need to request permission to send "
 "messages"
-msgstr "进入此群聊的参与者需要请求许可来发送消息"
+msgstr "进入此群聊的参与者需要请求发送消息的权限"
 
 msgid "Pass_word"
 msgstr "密码(_W)"
@@ -3514,6 +3514,12 @@ msgstr "退出"
 
 msgid "Quit Gajim"
 msgstr "退出 Gajim"
+
+msgid "Quote next message"
+msgstr "引用下一条消息"
+
+msgid "Quote previous message"
+msgstr "引用上一条消息"
 
 msgctxt "Message row action"
 msgid "Quote…"
@@ -4068,7 +4074,7 @@ msgid "Server Software: %s\n"
 msgstr "服务器软件: %s\n"
 
 msgid "Server Uptime"
-msgstr "服务器运行时间"
+msgstr "服务器正常运行时间"
 
 msgid "Service"
 msgstr "服务"
@@ -4219,10 +4225,10 @@ msgstr "仅显示严重错误"
 
 msgid ""
 "Show previews automatically in public group chats (may disclose your data)"
-msgstr "在公开群聊中自动生成预览(可能公开您的数据)"
+msgstr "在公开群聊中自动显示预览 (可能会泄露您的数据)"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
-msgstr "为包含图片的任何 URL 生成预览(可能不安全)"
+msgstr "显示任何包含图片的 URL 的预览 (可能不安全)"
 
 msgid "Show previews for files"
 msgstr "显示文件预览"
@@ -4460,9 +4466,6 @@ msgstr "切换工作区"
 msgid "Switch to the first - ninth chat"
 msgstr "切换至第一至第九聊天"
 
-msgid "Switch to the first - ninth workspace"
-msgstr "切换至第一至第九工作区"
-
 msgid "Switch to the next chat"
 msgstr "切换至下个聊天"
 
@@ -4636,7 +4639,7 @@ msgid "This Device"
 msgstr "此设备"
 
 msgid "This account has already been added"
-msgstr "此账号已被添加"
+msgstr "已添加此账号"
 
 msgid "This account is not connected to the server"
 msgstr "此账号没有连接到服务器"
@@ -4699,7 +4702,7 @@ msgstr "这是您的 XMPP 地址"
 
 #, python-format
 msgid "This message has been moderated%s."
-msgstr "此消息已被 %s 审核。"
+msgstr "此消息已由 %s 审核。"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4761,7 +4764,7 @@ msgstr "这将重置所有的入门提示"
 msgid ""
 "This workspace contains chats. All chats will be moved to the next "
 "workspace. Remove anyway?"
-msgstr "此工作区包含聊天。所有的聊天将被移动至下一个工作区。仍然移除？"
+msgstr "此工作区包含聊天。将移动所有聊天至下一个工作区。仍要移除？"
 
 msgid "Three Months"
 msgstr "三个月"
@@ -4770,10 +4773,10 @@ msgid "Time"
 msgstr "时间"
 
 msgid "Time Until Away"
-msgstr "直到离开前的时间"
+msgstr "直到“离开”前的时间"
 
 msgid "Time Until Not Available"
-msgstr "直到不可用前的时间"
+msgstr "直到“不在”前的时间"
 
 msgctxt "Profile"
 msgid "Title"
@@ -4856,7 +4859,7 @@ msgid "Turn Camera on"
 msgstr "开启摄像头"
 
 msgid "Type"
-msgstr "输入"
+msgstr "类型"
 
 msgctxt "Configuration"
 msgid "Type"
@@ -5079,10 +5082,10 @@ msgid "Vacation"
 msgstr "假期"
 
 msgid "Validity"
-msgstr "有效性"
+msgstr "有效期"
 
 msgid "Validity\n"
-msgstr "有效性\n"
+msgstr "有效期\n"
 
 msgctxt "Configuration"
 msgid "Value"
@@ -5160,7 +5163,7 @@ msgstr "参与者应该去哪里聊天"
 msgid ""
 "Whether to check for a valid certificate before downloading (not safe to "
 "disable)"
-msgstr "是否在下载前检查证书有效性(禁用会不安全)"
+msgstr "下载前是否检查有效证书 (禁用会不安全)"
 
 msgid "Which server should I choose?"
 msgstr "我应该选择哪个服务器呢？"
@@ -5232,8 +5235,8 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
-"您将通过一种不安全的连接方式连接到账号 %(account)s (%(server)s)。这意味着您的"
-"所有对话都不会被加密。强烈不建议使用 PLAIN 方式连接。"
+"您将通过不安全的连接方式连接到账号 %(account)s (%(server)s)。这意味着对话不会"
+"被加密。强烈建议不要通过 PLAIN 方式连接。"
 
 msgid "You are about to quit Gajim"
 msgstr "您即将退出 Gajim"
@@ -5296,19 +5299,19 @@ msgstr "您没有合适的权限在这个目录里创建文件。"
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
-msgstr "您已被封禁{actor}{reason}"
+msgstr "已将您封禁{actor}{reason}"
 
 #, python-format
 msgid "You have been invited to %s"
-msgstr "您已被邀请加入 %s"
+msgstr "您已受邀加入 %s"
 
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
-msgstr "您已被踢出{actor}{reason}"
+msgstr "已将您踢出{actor}{reason}"
 
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
-msgstr "您已经被从群聊移除{actor}{reason}"
+msgstr "已将您从群聊移除{actor}{reason}"
 
 msgid "You have insufficient permissions"
 msgstr "您没有足够的权限"
@@ -5321,7 +5324,7 @@ msgid "You have to be connected to create a group chat."
 msgstr "您必须连接网络才能创建群聊。"
 
 msgid "You have to invite people so they can join"
-msgstr "您必须要邀请人员使得他们可以加入"
+msgstr "您必须邀请别人才能加入"
 
 msgid "You left this group chat"
 msgstr "您离开了此群聊"
@@ -5438,7 +5441,7 @@ msgid "_Cancel"
 msgstr "取消(_C)"
 
 msgid "_Clear"
-msgstr "清空(_C)"
+msgstr "清除(_C)"
 
 msgid "_Clear Devices"
 msgstr "清除设备(_C)"
@@ -6119,6 +6122,9 @@ msgstr "…或者把图片拖放到这里"
 
 #~ msgid "Show Gajim"
 #~ msgstr "显示 Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "切换至第一至第九工作区"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "您拖放了 Gajim 无法处理的对象: %s"

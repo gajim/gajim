@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -3832,6 +3832,14 @@ msgstr ""
 msgid "Quit Gajim"
 msgstr "Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Надіслати повідомлення"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Переспрямувати непрочитані повідомлення"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -4950,9 +4958,6 @@ msgid "Switch Workspace"
 msgstr "Перейменувати контакт"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy

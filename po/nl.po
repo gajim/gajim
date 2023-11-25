@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -4004,6 +4004,14 @@ msgstr "_Afsluiten"
 msgid "Quit Gajim"
 msgstr "Gajim afsluiten"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Bericht verzenden"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Ongelezen berichten doorsturen"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5118,10 +5126,6 @@ msgstr "Contact hernoemen"
 
 #, fuzzy
 msgid "Switch to the first - ninth chat"
-msgstr "Wisselen naar het eerste - negende tabblad"
-
-#, fuzzy
-msgid "Switch to the first - ninth workspace"
 msgstr "Wisselen naar het eerste - negende tabblad"
 
 #, fuzzy
@@ -6970,6 +6974,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Wisselen naar het eerste - negende tabblad"
 
 #, fuzzy
 #~ msgid "_Login"

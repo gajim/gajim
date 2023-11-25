@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -4042,6 +4042,14 @@ msgstr "A_vsluta"
 msgid "Quit Gajim"
 msgstr "Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Skicka meddelande"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Vidarebefordra olästa meddelanden"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5163,9 +5171,6 @@ msgid "Switch Workspace"
 msgstr "Byt namn på kontakt"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-10-17 17:18+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -3447,6 +3447,12 @@ msgstr ""
 msgid "Quit Gajim"
 msgstr ""
 
+msgid "Quote next message"
+msgstr ""
+
+msgid "Quote previous message"
+msgstr ""
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -4385,9 +4391,6 @@ msgid "Switch Workspace"
 msgstr ""
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 msgid "Switch to the next chat"

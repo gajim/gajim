@@ -5,15 +5,16 @@
 # André <git@apitzsch.eu>, 2023.
 # Thérèse <gcfod@inboxen.org>, 2023.
 # nicoco <nicoco@nicoco.fr>, 2023.
+# franck-x <dev@monanderos.fr>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
-"PO-Revision-Date: 2023-10-26 14:35+0000\n"
-"Last-Translator: nicoco <nicoco@nicoco.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"PO-Revision-Date: 2023-11-25 09:57+0000\n"
+"Last-Translator: pitchum <pitchum@gramaton.org>\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -438,9 +439,8 @@ msgstr "Assistant de configuration de compte"
 msgid "Account disabled"
 msgstr "Compte désactivé"
 
-#, fuzzy
 msgid "Account exists already"
-msgstr "Compte désactivé"
+msgstr "Le compte existe déjà"
 
 msgid "Account has been added successfully"
 msgstr "Compte ajouté avec succès"
@@ -1516,7 +1516,7 @@ msgid "Decline Invitation"
 msgstr "Refuser l'invitation"
 
 msgid "Decrease User Interface Font Size"
-msgstr ""
+msgstr "Réduire la taille de police de l'interface"
 
 msgid "Decrease playback speed"
 msgstr "Diminuer la vitesse de lecture"
@@ -2497,7 +2497,7 @@ msgid "Incoming Call (Video)"
 msgstr "Appel entrant (vidéo)"
 
 msgid "Increase User Interface Font Size"
-msgstr ""
+msgstr "Augmenter la taille de police de l'interface"
 
 msgid "Increase playback speed"
 msgstr "Augmenter la vitesse de lecture"
@@ -3616,6 +3616,12 @@ msgstr "Quitter"
 msgid "Quit Gajim"
 msgstr "Quitter Gajim"
 
+msgid "Quote next message"
+msgstr "Citer le message suivant"
+
+msgid "Quote previous message"
+msgstr "Citer le message précédent"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Citer…"
@@ -3847,7 +3853,7 @@ msgid "Reset Hints"
 msgstr "Rétablir les conseils"
 
 msgid "Reset User Interface Font Size"
-msgstr ""
+msgstr "Restaurer la taille de police de l'interface"
 
 msgid "Reset all chats to the current default value"
 msgstr "Rétablir toutes les discussions à la valeur par défaut actuelle"
@@ -3879,10 +3885,9 @@ msgstr "Rétracter le message"
 msgid "Retract message?"
 msgstr "Retirer le message ?"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Retract…"
-msgstr "Modérer…"
+msgstr "Rétracter…"
 
 msgid "Revoke Member"
 msgstr "Révoquer membre"
@@ -4591,9 +4596,6 @@ msgstr "Changer d'espace de travail"
 msgid "Switch to the first - ninth chat"
 msgstr "Basculer vers la première - neuvième discussion"
 
-msgid "Switch to the first - ninth workspace"
-msgstr "Basculer vers le premier - neuvième espace de travail"
-
 msgid "Switch to the next chat"
 msgstr "Basculer vers la discussion suivante"
 
@@ -5054,9 +5056,8 @@ msgstr "Impossible de récupérer le certificat de l’émetteur/trice local·e"
 msgid "Unable to properly remove the plugin"
 msgstr "Impossible de supprimer l'extension proprement"
 
-#, fuzzy
 msgid "Unable to save profile"
-msgstr "Impossible d’enregistrer le fichier"
+msgstr "Impossible d’enregistrer le profil"
 
 msgid "Unable to verify the first certificate"
 msgstr "Impossible de vérifier le premier certificat"
@@ -5219,12 +5220,11 @@ msgstr ""
 msgid "User %s not found"
 msgstr "Utilisateur/trice %s non trouvé·e"
 
-#, fuzzy
 msgid "User Interface"
-msgstr "Interface D-Bus"
+msgstr "Interface utilisateur"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "Taille de police de l'interface"
 
 msgid "Users"
 msgstr "Utilisateurs/trices"
@@ -5248,7 +5248,7 @@ msgid "Value"
 msgstr "Valeur"
 
 msgid "Verified"
-msgstr "_Vérifié"
+msgstr "Vérifié"
 
 msgid "Version"
 msgstr "Version"
@@ -6301,6 +6301,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Montrer Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Basculer vers le premier - neuvième espace de travail"
 
 #~ msgid "_Login"
 #~ msgstr "_Identifiant"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4048,6 +4048,14 @@ msgstr ""
 msgid "Quit Gajim"
 msgstr "Гајим"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Пошаљи поруку"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Проследи непрочитане поруке"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5173,9 +5181,6 @@ msgid "Switch Workspace"
 msgstr "Преименуј контакт"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy

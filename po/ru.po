@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-01-05 11:03+0000\n"
 "Last-Translator: Nikolay Chizhov <admin@kgd.in>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -3614,6 +3614,14 @@ msgstr "Выйти"
 msgid "Quit Gajim"
 msgstr "Выход из Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Отправить сообщение"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Начертание сообщения"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -4592,9 +4600,6 @@ msgstr "Переключить вкладку"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Переключиться на первую-девятый чат"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Переключиться на первую-девятую вкладку"
 
 msgid "Switch to the next chat"
 msgstr "Перейти к следующему чату"
@@ -6274,6 +6279,9 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Переключиться на первую-девятую вкладку"
 
 #~ msgid "_Login"
 #~ msgstr "_Логин"

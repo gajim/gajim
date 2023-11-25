@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -3577,6 +3577,14 @@ msgstr "Ukončit"
 msgid "Quit Gajim"
 msgstr "Ukončit Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Odeslat zprávu"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Formátovat zprávu"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Citovat…"
@@ -4537,9 +4545,6 @@ msgstr "Změnit pracovní plochu"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Přepnout na první až devátý chat"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Přepnout na první až devátou pracovní plochu"
 
 msgid "Switch to the next chat"
 msgstr "Přepnout na další konverzaci"
@@ -6255,6 +6260,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Zobrazit Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Přepnout na první až devátou pracovní plochu"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"

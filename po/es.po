@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
-"PO-Revision-Date: 2023-11-06 12:33+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"PO-Revision-Date: 2023-11-14 21:58+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -3577,6 +3577,12 @@ msgstr "Salir"
 msgid "Quit Gajim"
 msgstr "Salir de Gajim"
 
+msgid "Quote next message"
+msgstr "Citar el siguiente mensaje"
+
+msgid "Quote previous message"
+msgstr "Citar el mensaje anterior"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Cita…"
@@ -4543,9 +4549,6 @@ msgstr "Cambiar de espacio de trabajo"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Cambiar a la primera - novena conversación"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Cambiar al primer - noveno espacio de trabajo"
 
 msgid "Switch to the next chat"
 msgstr "Cambiar a la conversación siguiente"
@@ -6228,6 +6231,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Mostrar Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Cambiar al primer - noveno espacio de trabajo"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Has soltado algo que Gajim no pudo procesar: %s"

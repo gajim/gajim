@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
-"PO-Revision-Date: 2023-11-06 05:57+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"PO-Revision-Date: 2023-11-14 21:58+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -420,9 +420,8 @@ msgstr "Fiókkészítő segéd"
 msgid "Account disabled"
 msgstr "A fiók le van tiltva"
 
-#, fuzzy
 msgid "Account exists already"
-msgstr "A fiók le van tiltva"
+msgstr "A fiók már létezik"
 
 msgid "Account has been added successfully"
 msgstr "A fiók létrehozása sikerült"
@@ -3550,6 +3549,12 @@ msgstr "Kilépés"
 msgid "Quit Gajim"
 msgstr "Kilépés a programból"
 
+msgid "Quote next message"
+msgstr "A következő üzenet idézése"
+
+msgid "Quote previous message"
+msgstr "Az előző üzenet idézése"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Idézés…"
@@ -4512,9 +4517,6 @@ msgstr "Munkaterület-váltás"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Váltás az első … kilencedik beszélgetésre"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Váltás az első … kilencedik munkaterületre"
 
 msgid "Switch to the next chat"
 msgstr "Váltás a következő beszélgetésre"
@@ -6198,6 +6200,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Show Gajim"
 #~ msgstr "A főablak megnyitása"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Váltás az első … kilencedik munkaterületre"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"

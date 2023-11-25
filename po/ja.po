@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-09-25 05:15+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -3565,6 +3565,14 @@ msgstr "終了"
 msgid "Quit Gajim"
 msgstr "Gajim を終了"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "メッセージを送信"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "メッセージを装飾"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "引用…"
@@ -4528,9 +4536,6 @@ msgstr "作業空間を切替"
 
 msgid "Switch to the first - ninth chat"
 msgstr "1--9番目のチャットへ切替"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "1--9番目の作業空間へ切替"
 
 msgid "Switch to the next chat"
 msgstr "次のチャットへ切替"
@@ -6219,6 +6224,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "1--9番目の作業空間へ切替"
 
 #~ msgid "_Login"
 #~ msgstr "ログイン (_L)"

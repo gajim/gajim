@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -4013,6 +4013,14 @@ msgstr "_Kuitaat"
 msgid "Quit Gajim"
 msgstr "Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Kas ur gemennadenn"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Gajim - %d gemennadenn nevez"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5125,9 +5133,6 @@ msgid "Switch Workspace"
 msgstr "Darempredoù"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy

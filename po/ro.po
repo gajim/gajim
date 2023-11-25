@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2023-04-23 10:01+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -3600,6 +3600,14 @@ msgstr "Ieșiți"
 msgid "Quit Gajim"
 msgstr "Renunță la Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Trimiteți mesajul"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "Formatați mesajul dumneavoastră"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Citat…"
@@ -4574,9 +4582,6 @@ msgstr "Comutați spațiul de lucru"
 
 msgid "Switch to the first - ninth chat"
 msgstr "Treceți la primul - al nouălea chat"
-
-msgid "Switch to the first - ninth workspace"
-msgstr "Treceți la primul - al nouălea spațiu de lucru"
 
 msgid "Switch to the next chat"
 msgstr "Treceți la următorul chat"
@@ -6272,6 +6277,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Show Gajim"
 #~ msgstr "Afișați Gajim"
+
+#~ msgid "Switch to the first - ninth workspace"
+#~ msgstr "Treceți la primul - al nouălea spațiu de lucru"
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"

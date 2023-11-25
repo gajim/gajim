@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -4033,6 +4033,14 @@ msgstr "_Eliri"
 msgid "Quit Gajim"
 msgstr "Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Sendi mesaĝon"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr " %d nelegita mesaĝo"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5157,9 +5165,6 @@ msgid "Switch Workspace"
 msgstr "Renomigado de kontakto"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy

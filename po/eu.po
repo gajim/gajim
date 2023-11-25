@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-06 09:51+0000\n"
+"POT-Creation-Date: 2023-11-14 20:07+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -4034,6 +4034,14 @@ msgstr "At_era"
 msgid "Quit Gajim"
 msgstr "Gajim"
 
+#, fuzzy
+msgid "Quote next message"
+msgstr "Bidali mezua"
+
+#, fuzzy
+msgid "Quote previous message"
+msgstr "%d mezu irakurri gabe"
+
 msgctxt "Message row action"
 msgid "Quote…"
 msgstr ""
@@ -5159,9 +5167,6 @@ msgid "Switch Workspace"
 msgstr "Berridatzi Kontaktua"
 
 msgid "Switch to the first - ninth chat"
-msgstr ""
-
-msgid "Switch to the first - ninth workspace"
 msgstr ""
 
 #, fuzzy
