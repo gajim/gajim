@@ -1,3 +1,30 @@
+Gajim 1.8.4 (25 Nov 2023)
+
+  New
+
+  * Add shortcuts for quoting previous messages
+
+  Improvements
+
+  * Raise nbxmpp log level
+  * Passwords: Use JID as username instead of account (#11684)
+  * MUC: Allow nick change for IRC channels
+  * HTTPUpload: Remove temporary files after transfer (#11579)
+  * MessageInput: Regain focus on common key presses
+
+  Change
+
+  * Raise nbxmpp version
+
+  Bug Fixes
+
+  * ShortcutWindow: Remove duplicated entry
+  * SearchView: Fix displaying results for newly created group chats (#11681)
+  * ChatList: Update mute state periodically (#11456)
+  * Icons: Register icon size to make it work for scale > 1
+  * Message input: Don't allow text actions if input is disabled
+  * Avatar: Draw status circle correctly for scale > 1
+
 Gajim 1.8.3 (06 Nov 2023)
 
   Improvements
