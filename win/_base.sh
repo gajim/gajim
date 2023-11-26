@@ -257,6 +257,8 @@ function cleanup_install {
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstfaac.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstschro.dll
     rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstcacasink.dll
+    # Crashes often on Windows maschines
+    rm -f "${MINGW_ROOT}"/lib/gstreamer-1.0/libgstamfcodec.dll
 
     rm -f "${MINGW_ROOT}"/bin/libBulletCollision.dll
     rm -f "${MINGW_ROOT}"/bin/libBulletDynamics.dll
