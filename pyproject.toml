@@ -27,7 +27,7 @@ classifiers = [
 dependencies = [
   "css-parser",
   "keyring",
-  "nbxmpp>=4.4.0,<5.0.0",
+  "nbxmpp>=4.5.3,<5.0.0",
   "packaging",
   "pillow>=9.1.0",
   "precis-i18n>=1.0.0",
