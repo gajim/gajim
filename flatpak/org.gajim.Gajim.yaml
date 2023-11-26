@@ -92,11 +92,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.4-py3-none-any.whl
+      - pip3 install idna-3.6-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.4-py3-none-any.whl
-        sha256: 90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2
+        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.6-py3-none-any.whl
+        sha256: c05567e9c24a6b9faaa835c4821bad0590fbb9d5779e7caa6e1cc4978e7eb24f
 
   - name: python3-cryptography
     buildsystem: simple
@@ -184,13 +184,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-24.2.0-py3-none-any.whl
+      - pip3 install keyring-24.3.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-24.2.0-py3-none-any.whl
-        sha256: 4901caaf597bfd3bbd78c9a0c7c4c29fcd8310dab2cffefe749e916b6527acd6
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-24.3.0-py3-none-any.whl
+        sha256: 4446d35d636e6a10b8bce7caa66913dd9eca5fd222ca03a3d42c38608ac30836
 
   - name: python3-css-parser
     buildsystem: simple
@@ -204,11 +204,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install precis_i18n-1.0.5-py3-none-any.whl
+      - pip3 install precis_i18n-1.1.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.0.5-py3-none-any.whl
-        sha256: 14eceeae73dc7bbd1c4a17d2ac7143db87d65ded98eec44c47911270812862a3
+        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.1.0-py3-none-any.whl
+        sha256: 15358c96f070a1fc1ae5738d62d7ed00037975844715db88c3b041060a436a50
 
   # GSound dependency
   - shared-modules/libcanberra/libcanberra.json
@@ -250,29 +250,29 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.0.7-py3-none-any.whl
+      - pip3 install urllib3-2.1.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.0.7-py3-none-any.whl
-        sha256: fdb6d215c776278489906c2f8916e6e7d4f5a9b602ccbcfdf7f016fc8da0596e
+        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.1.0-py3-none-any.whl
+        sha256: 55901e917a5896a349ff771be919f8bd99aff50b79fe58fec595eb37bbc56bb3
 
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2023.7.22-py3-none-any.whl
+      - pip3 install certifi-2023.11.17-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2023.7.22-py3-none-any.whl
-        sha256: 92d6037539857d8206b8f6ae472e8b77db8058fec5937a1ef3f54304089edbb9
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2023.11.17-py3-none-any.whl
+        sha256: e036ab49d5b79556f99cfc2d9320b34cfbe5be05c5871b51de9329f0603b0474
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.32.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.37.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.32.0-py2.py3-none-any.whl
-        sha256: eeb0b3550536f3bbc05bb1c7e0feb3a78d74acb43b607159a606ed2ec0a33a4d
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.37.1-py2.py3-none-any.whl
+        sha256: a249c7364827ee89daaa078bb8b56ece0b3d52d9130961bef2302b79bdf7fe70
 
   # gssapi dependency
   - name: python3-decorator
@@ -316,11 +316,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-4.24.4-py3-none-any.whl
+      - pip3 install --no-deps protobuf-4.25.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.24.4-py3-none-any.whl
-        sha256: 80797ce7424f8c8d2f2547e2d42bfbb6c08230ce5832d6c099a37335c9c90a92
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.25.1-py3-none-any.whl
+        sha256: a19731d5e83ae4737bb2a089605e636077ac001d18781b3cf489b9546c7c80d6
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -328,8 +328,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-1.0.0.tar.gz
-        sha256: b0fe5023e947a17b740fb7ed4aa246120d6f21d819b5812e94dfc9570520be61
+        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-1.0.1.tar.gz
+        sha256: 2a8a8c77231d73949bdd375278d4d5a261252bdaee52cb6241acb251c202d361
 
   # nbxmpp dependency (optional)
   - name: python3-gssapi
