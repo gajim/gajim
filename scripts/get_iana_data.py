@@ -10,6 +10,7 @@ import operator
 import re
 import sys
 from datetime import datetime
+from datetime import timezone
 from pathlib import Path
 from urllib.request import urlopen
 
@@ -126,7 +127,7 @@ def generate_output(
     outpath: Path) -> None:
 
     logging.info('Generate output')
-    current_date = datetime.utcnow().isoformat()
+    current_date = datetime.now(tz=timezone.utc).isoformat()
     content = BOILER_PLATE.format(current_date=current_date)
 
     content += 'ZONE_DATA = {\n'
