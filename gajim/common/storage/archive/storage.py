@@ -78,7 +78,7 @@ class MessageArchiveStorage(AlchemyStorage):
             migration.pre_v7.run(self._path)
 
         # if user_version < 8:
-        #     MigrationV8(self._con).run()
+        #     migration.v8.run(session)
 
     def _load_jids(self, session: Session) -> None:
         jids = session.scalars(select(Remote))
