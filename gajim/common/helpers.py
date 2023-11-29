@@ -1601,7 +1601,7 @@ def format_idle_time(idle_time: datetime) -> str:
     if idle_date == now_date:
         return idle_time.strftime(app.settings.get('time_format'))
     if idle_date == now_date - timedelta(days=1):
-        return _('yesterday ') + idle_time.strftime(
+        return _('Yesterday (%s)') % idle_time.strftime(
             app.settings.get('time_format'))
     if idle_date >= now_date - timedelta(days=6):
         return idle_time.strftime(f'%a {app.settings.get("time_format")}')
