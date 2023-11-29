@@ -794,39 +794,24 @@ class ContactRow(Gtk.ListBoxRow):
         image.set_has_tooltip(True)
         image.connect('query-tooltip', self._on_query_tooltip)
 
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        box.set_hexpand(True)
-
         if self.name is None:
             self.name = _('Start New Chat')
+
+        meta_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, valign=Gtk.Align.CENTER)
 
         self.name_label = Gtk.Label(label=self.name)
         self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
         self.name_label.set_xalign(0)
         self.name_label.set_width_chars(20)
         self.name_label.set_halign(Gtk.Align.START)
-        self.name_label.get_style_context().add_class('bold16')
-        name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        name_box.add(self.name_label)
-        if show_account:
-            account_badge = AccountBadge(account)
-            account_badge.set_halign(Gtk.Align.END)
-            account_badge.set_valign(Gtk.Align.START)
-            account_badge.set_hexpand(True)
-            name_box.add(account_badge)
+        self.name_label.get_style_context().add_class('bold14')
+        meta_box.add(self.name_label)
 
         if contact and not contact.is_groupchat:
             if idle := contact.idle_datetime:
                 idle_badge = IdleBadge(idle)
-                name_box.add(idle_badge)
-
-        if contact and not contact.is_groupchat and not contact.is_pm_contact:
-            groups = contact.groups
-            for group in groups:
-                group_badge = GroupBadge(group)
-                name_box.add(group_badge)
-
-        box.add(name_box)
+                meta_box.add(idle_badge)
 
         if contact and not contact.is_groupchat and (status := contact.status):
             self.status_label = Gtk.Label(
@@ -837,9 +822,27 @@ class ContactRow(Gtk.ListBoxRow):
                 halign=Gtk.Align.START,
             )
             self.status_label.get_style_context().add_class('dim-label')
-            box.add(self.status_label)
+            self.status_label.get_style_context().add_class('small-label')
+            meta_box.add(self.status_label)
 
-        grid.add(box)
+        grid.attach(meta_box, 1, 0, 1, 3)
+
+        badge_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+        if show_account:
+            account_badge = AccountBadge(account)
+            account_badge.set_halign(Gtk.Align.END)
+            account_badge.set_valign(Gtk.Align.START)
+            account_badge.set_hexpand(True)
+            badge_box.add(account_badge)
+
+        if contact and not contact.is_groupchat and not contact.is_pm_contact:
+            groups = contact.groups
+            for group in groups:
+                group_badge = GroupBadge(group)
+                badge_box.add(group_badge)
+
+        grid.attach(badge_box, 2, 0, 1, 3)
+
         self._grid = grid
 
         eventbox = Gtk.EventBox()

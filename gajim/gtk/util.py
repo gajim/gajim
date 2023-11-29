@@ -803,7 +803,7 @@ class GroupBadge(Gtk.Label):
             ellipsize=Pango.EllipsizeMode.END,
             no_show_all=True,
             halign=Gtk.Align.END,
-            valign=Gtk.Align.START,
+            valign=Gtk.Align.CENTER,
             hexpand=True,
             tooltip_text=group,
         )
@@ -817,21 +817,21 @@ class IdleBadge(Gtk.Label):
     def __init__(self, idle: datetime | None = None) -> None:
         Gtk.Label.__init__(
             self,
-            valign=Gtk.Align.START,
-            halign=Gtk.Align.END,
+            halign=Gtk.Align.START,
             hexpand=True,
             ellipsize=Pango.EllipsizeMode.NONE,
             no_show_all=True,
         )
         self.set_size_request(50, -1)
-        self.get_style_context().add_class('idle-time')
+        self.get_style_context().add_class('dim-label')
+        self.get_style_context().add_class('small-label')
         if idle is not None:
             self.set_idle(idle)
 
         self.show()
 
     def set_idle(self, idle: datetime) -> None:
-        self.set_text(_('Last seen %s') % format_idle_time(idle))
+        self.set_text(_('Last seen: %s') % format_idle_time(idle))
         format_string = app.settings.get('date_time_format')
         self.set_tooltip_text(idle.strftime(format_string))
 

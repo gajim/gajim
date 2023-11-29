@@ -59,6 +59,10 @@ infobar.error > revealer > box {
 /* Text style */
 .bold { font-weight: bold; }
 .monospace { font-family: monospace; }
+.bold14 {
+    font-size: 1.125rem;
+    font-weight: bold;
+}
 .bold16 {
     font-size: 1.33rem;
     font-weight: bold;
@@ -217,11 +221,6 @@ infobar.error > revealer > box {
     border-radius: 4px;
     font-size: 80%;
     font-weight: bold;
-}
-
-.idle-time {
-    font-size: 80%;
-    font-weight: lighter;
 }
 
 .group {
