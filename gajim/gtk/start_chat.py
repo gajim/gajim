@@ -823,8 +823,8 @@ class ContactRow(Gtk.ListBoxRow):
         if contact and not contact.is_groupchat and not contact.is_pm_contact:
             groups = contact.groups
             for group in groups:
-                account_badge = GroupBadge(group)
-                name_box.add(account_badge)
+                group_badge = GroupBadge(group)
+                name_box.add(group_badge)
 
         box.add(name_box)
 
