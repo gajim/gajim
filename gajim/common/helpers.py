@@ -1108,7 +1108,7 @@ def open_file_uri(uri: str) -> None:
         if sys.platform != 'win32':
             Gio.AppInfo.launch_default_for_uri(uri)
         else:
-            os.startfile(uri)  # noqa: S606
+            os.startfile(uri, 'open')  # noqa: S606
     except Exception as err:
         log.info("Couldn't open file URI %s: %s", uri, err)
 
