@@ -113,6 +113,6 @@ Gajim is now updated.
 
 When switching to Flatpak you might want to migrate your user data (accounts, history, ...) from your previous installation. Just copy your user data from/to the following directories:
 
-Copy `.local/share/gajim` -> `.var/app/org.gajim.Gajim/data/gajim`
+Copy `~/.local/share/gajim` -> `~/.var/app/org.gajim.Gajim/data/gajim`
 
-Copy `.config/gajim` -> `.var/app/org.gajim.Gajim/config/gajim`
+Copy `~/.config/gajim` -> `~/.var/app/org.gajim.Gajim/config/gajim`
