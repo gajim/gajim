@@ -256,21 +256,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         _window: MainWindow,
         event: Gdk.EventKey
     ) -> bool:
-
+        # Filter out modifier not used for shortcuts like Numlock (MOD2)
         modifier = event.get_state() & Gtk.accelerator_get_default_mod_mask()
+        accel_name = Gtk.accelerator_name(event.keyval, modifier)
 
-        if not modifier:
-            if event.keyval in (
-                Gdk.KEY_Control_L,
-                Gdk.KEY_Control_R,
-                Gdk.KEY_Alt_L,
-                Gdk.KEY_Alt_R,
-            ):
-                return False
+        log.warning('Captured key pressed: %s', accel_name)
 
-        if modifier == Gdk.ModifierType.CONTROL_MASK:
-            if event.keyval == Gdk.KEY_C:
-                return False
+        if event.keyval in (
+            Gdk.KEY_Control_L,
+            Gdk.KEY_Control_R,
+            Gdk.KEY_Alt_L,
+            Gdk.KEY_Alt_R,
+        ):
+            return False
 
         focused_widget = self.get_focus()
         if (isinstance(focused_widget, Gtk.TextView)
