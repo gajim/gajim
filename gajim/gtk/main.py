@@ -272,6 +272,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             Gdk.KEY_Control_R,
             Gdk.KEY_Alt_L,
             Gdk.KEY_Alt_R,
+            Gdk.KEY_Shift_L,
+            Gdk.KEY_Shift_R,
         ):
             return False
 
