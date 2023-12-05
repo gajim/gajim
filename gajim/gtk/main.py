@@ -256,11 +256,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         _window: MainWindow,
         event: Gdk.EventKey
     ) -> bool:
+
+        # event.get_state() behaves different on Linux and Windows.
+        # On Linux its not set in the case that only a modifier key
+        # is pressed.
+
         # Filter out modifier not used for shortcuts like Numlock (MOD2)
         modifier = event.get_state() & Gtk.accelerator_get_default_mod_mask()
         accel_name = Gtk.accelerator_name(event.keyval, modifier)
 
-        log.warning('Captured key pressed: %s', accel_name)
+        log.info('Captured key pressed: %s', accel_name)
 
         if event.keyval in (
             Gdk.KEY_Control_L,
