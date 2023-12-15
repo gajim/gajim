@@ -66,6 +66,7 @@ from gajim.common.events import EncryptionInfo
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
+from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
@@ -150,14 +151,17 @@ class OMEMO(BaseModule):
         self._omemo_groupchats: set[str] = set()
         self._muc_temp_store: dict[bytes, str] = {}
 
+    @event_filter(['account'])
     def _on_signed_in(self, _event: SignedIn) -> None:
         self._log.info('Publish our bundle after sign in')
         self.set_bundle()
         self.request_devicelist()
 
+    @event_filter(['account'])
     def _on_muc_disco_update(self, event: MucDiscoUpdate) -> None:
         self._check_if_omemo_capable(str(event.jid))
 
+    @event_filter(['account'])
     def _on_muc_added(self, event: MucAdded) -> None:
         client = app.get_client(event.account)
         contact = client.get_module('Contacts').get_contact(event.jid)
