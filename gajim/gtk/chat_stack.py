@@ -6,13 +6,16 @@ from __future__ import annotations
 
 import logging
 import sys
+from functools import partial
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import events
@@ -643,15 +646,28 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         elif action_name == 'muc-change-role':
             assert param is not None
+            assert isinstance(contact, GroupchatContact)
             nick, role = param.get_strv()
-            client.get_module('MUC').set_role(contact.jid, nick, role)
+            client.get_module('MUC').set_role(
+                contact.jid,
+                nick,
+                role,
+                callback=partial(
+                    self._on_affiliation_or_role_change,
+                    contact, jid, role),
+            )
 
         elif action_name == 'muc-change-affiliation':
             assert param is not None
+            assert isinstance(contact, GroupchatContact)
             jid, affiliation = param.get_strv()
             client.get_module('MUC').set_affiliation(
                 contact.jid,
-                {jid: {'affiliation': affiliation}})
+                {jid: {'affiliation': affiliation}},
+                callback=partial(
+                    self._on_affiliation_or_role_change,
+                    contact, jid, affiliation),
+            )
 
         elif action_name == 'muc-request-voice':
             client.get_module('MUC').request_voice(contact.jid)
@@ -667,6 +683,36 @@ class ChatStack(Gtk.Stack, EventHelper):
                 self._last_quoted_id = row.pk
                 self._message_action_box.insert_as_quote(
                     row.get_text(), clear=True)
+
+    def _on_affiliation_or_role_change(self,
+                                       muc: GroupchatContact,
+                                       jid: JID | str,
+                                       affiliation_or_role: str,
+                                       task: Task) -> None:
+        try:
+            result = task.finish()
+        except StanzaError as error:
+            log.error('Error on affiliation/role change request: %s',
+                      error)
+            if self._current_contact == muc:
+                self._chat_control.add_info_message(
+                    _('An error occurred while trying to make '
+                      '{occupant_jid} {affiliation_or_role}: {error}').format(
+                        occupant_jid=jid,
+                        affiliation_or_role=affiliation_or_role,
+                        error=str(error),
+                    ))
+            else:
+                ErrorDialog(
+                    _('An error occurred while trying to make '
+                      '{occupant_jid} {affiliation_or_role} in group '
+                      '"{group}"').format(
+                        occupant_jid=jid,
+                        affiliation_or_role=affiliation_or_role,
+                        group=muc.name),
+                    str(error))
+        else:
+            log.debug('Affiliation/role change success: %s', result)
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
