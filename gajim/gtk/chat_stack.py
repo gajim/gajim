@@ -450,7 +450,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         assert isinstance(
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         if app.settings.get('notification_preview_message'):
-            if text.startswith('/me'):
+            if text.startswith('/me '):
                 name = contact.name
                 if isinstance(contact, GroupchatContact):
                     name = event.properties.muc_nickname

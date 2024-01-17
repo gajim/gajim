@@ -63,7 +63,7 @@ class MessageWidget(Gtk.Box):
         if len(text) > MAX_MESSAGE_LENGTH:
             text = text[:MAX_MESSAGE_LENGTH]
 
-        if text.startswith('/me') and nickname is not None:
+        if text.startswith('/me ') and nickname is not None:
             self._add_action_phrase(text, nickname)
             if len(self._original_text) > MAX_MESSAGE_LENGTH:
                 self._add_read_more_button(self._original_text)

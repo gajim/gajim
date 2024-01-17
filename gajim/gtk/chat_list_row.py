@@ -291,7 +291,7 @@ class ChatListRow(Gtk.ListBoxRow):
                     text = f'{file_type} ({file_name})'
 
         text = GLib.markup_escape_text(text)
-        if text.startswith('/me') and nickname is not None:
+        if text.startswith('/me ') and nickname is not None:
             nickname = GLib.markup_escape_text(nickname)
             text = text.replace('/me', f'* {nickname}', 1)
             text = f'<i>{text}</i>'
