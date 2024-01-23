@@ -287,7 +287,10 @@ def detect_dependencies() -> None:
     try:
         import sentry_sdk  # noqa: F401
         _dependencies['SENTRY_SDK'] = True
-    except ImportError:
+    except Exception:
+        # Sentry has a lot of side effects on import
+        # make sure this optional dependency does not prevent
+        # Gajim from starting
         pass
 
     # Print results

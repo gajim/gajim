@@ -52,7 +52,10 @@ from gajim.gtk.util import get_gtk_version
 
 try:
     import sentry_sdk
-except ImportError:
+except Exception:
+    # Sentry has a lot of side effects on import
+    # make sure this optional dependency does not prevent
+    # Gajim from starting
     pass
 
 _exception_in_progress = threading.Lock()
