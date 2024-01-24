@@ -103,22 +103,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-41.0.4-cp37-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-42.0.0-cp39-abi3-manylinux_2_28_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp37/c/cryptography/cryptography-41.0.4-cp37-abi3-manylinux_2_28_aarch64.whl
-        sha256: 23a25c09dfd0d9f28da2352503b23e086f8e78096b9fd585d1d14eca01613e13
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.0-cp39-abi3-manylinux_2_28_aarch64.whl
+        sha256: c58115384bdcfe9c7f644c72f10f6f42bed7cf59f7b52fe1bf7ae0a622b3a139
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-41.0.4-cp37-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-42.0.0-cp39-abi3-manylinux_2_28_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp37/c/cryptography/cryptography-41.0.4-cp37-abi3-manylinux_2_28_x86_64.whl
-        sha256: 2ed09183922d66c4ec5fdaa59b4d14e105c084dd0febd27452de8f6f74704143
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.0-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 56ce0c106d5c3fec1038c3cca3d55ac320a5be1b44bf15116732d0bc716979a2
 
   - name: python3-jeepney
     buildsystem: simple
@@ -152,23 +152,23 @@ modules:
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-10.1.0-py3-none-any.whl
+      - pip3 install more_itertools-10.2.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.1.0-py3-none-any.whl
-        sha256: 64e0735fcfdc6f3464ea133afe8ea4483b1c5fe3a3d69852e6503b43a0b222e6
+        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.2.0-py3-none-any.whl
+        sha256: 686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684
 
   # keyring dependency
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-6.8.0-py3-none-any.whl
+      - pip3 install importlib_metadata-7.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-6.8.0-py3-none-any.whl
-        sha256: 3ebb78df84a805d7698245025b975d9d67053cd94c79245ba4b3eb694abe68bb
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-7.0.1-py3-none-any.whl
+        sha256: 4805911c3a4ec7c3966410053e9ec6a1fecd629117df5adee56dfc9432a1081e
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -243,8 +243,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/Pillow-10.1.0.tar.gz
-        sha256: e6bf8de6c36ed96c86ea3b6e1d5273c53f46ef518a062464cd7ef5dd2cf92e38
+        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-10.2.0.tar.gz
+        sha256: e87f0b2c78157e12d7686b27d63c070fd65d994e8ddae6f328e0dcf4a0cd007e
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -268,11 +268,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.37.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-1.39.2-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.37.1-py2.py3-none-any.whl
-        sha256: a249c7364827ee89daaa078bb8b56ece0b3d52d9130961bef2302b79bdf7fe70
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.39.2-py2.py3-none-any.whl
+        sha256: acaf597b30258fc7663063b291aa99e58f3096e91fe1e6634f4b79f9c1943e8e
 
   # gssapi dependency
   - name: python3-decorator
@@ -297,11 +297,11 @@ modules:
   - name: python3-typing-extensions
     buildsystem: simple
     build-commands:
-      - pip3 install typing_extensions-4.8.0-py3-none-any.whl
+      - pip3 install typing_extensions-4.9.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.8.0-py3-none-any.whl
-        sha256: 8f92fc8806f9a6b641eaa5318da32b44d401efaac0f6678c9bc448ba3605faa0
+        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.9.0-py3-none-any.whl
+        sha256: af72aea155e91adfc61c3ae9e0e342dbc0cba726d6cba4b6c72c1f34e47291cd
 
   # OMEMO dependencies
   - name: python3-qrcode
@@ -316,11 +316,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-4.25.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-4.25.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.25.1-py3-none-any.whl
-        sha256: a19731d5e83ae4737bb2a089605e636077ac001d18781b3cf489b9546c7c80d6
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-4.25.2-py3-none-any.whl
+        sha256: a8b7a98d4ce823303145bf3c1a8bdb0f2f4642a414b196f04ad9853ed0c8f830
 
   - name: python3-omemo-dr
     buildsystem: simple
