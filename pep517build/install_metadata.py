@@ -17,7 +17,7 @@ FILES = {
     'org.gajim.Gajim.desktop': 'share/applications',
     'org.gajim.Gajim-symbolic.svg': 'share/icons/hicolor/scalable/apps',
     'org.gajim.Gajim.svg': 'share/icons/hicolor/scalable/apps',
-    'org.gajim.Gajim.appdata.xml': 'share/metainfo',
+    'org.gajim.Gajim.metainfo.xml': 'share/metainfo',
 }
 
 if __name__ == '__main__':

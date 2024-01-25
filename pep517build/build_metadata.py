@@ -19,7 +19,7 @@ MAN_FILES = [
 ]
 META_FILES = [
     (Path('data/org.gajim.Gajim.desktop.in'), '--desktop'),
-    (Path('data/org.gajim.Gajim.appdata.xml.in'), '--xml')
+    (Path('data/org.gajim.Gajim.metainfo.xml.in'), '--xml')
 ]
 ICONS = [
     Path('gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg'),

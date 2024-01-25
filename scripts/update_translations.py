@@ -17,7 +17,7 @@ TRANSLATABLE_FILES = [
     'gajim/**/*.py',
     'gajim/**/*.ui',
     'data/org.gajim.Gajim.desktop.in',
-    'data/org.gajim.Gajim.appdata.xml.in',
+    'data/org.gajim.Gajim.metainfo.xml.in',
 ]
 
 

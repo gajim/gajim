@@ -17,7 +17,7 @@ test-other:
   script:
     - pyproject-build
     - python ./pep517build/build_metadata.py
-    - appstream-util validate dist/metadata/org.gajim.Gajim.appdata.xml
+    - appstream-util validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
 
 test-codespell:
