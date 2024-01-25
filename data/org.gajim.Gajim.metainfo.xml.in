@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2017-2023 Gajim Team -->
+<!-- Copyright 2017-2024 Gajim Team -->
 <component type="desktop-application">
   <id>org.gajim.Gajim</id>
   <metadata_license>CC-BY-SA-3.0</metadata_license>
@@ -56,7 +56,9 @@
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">org.gajim.Gajim.desktop</launchable>
-  <developer_name>Gajim Team</developer_name>
+  <developer id="gajim.org">
+    <name>Gajim Team</name>
+  </developer>
   <update_contact>gajim-devel_AT_gajim.org</update_contact>
   <url type="homepage">https://gajim.org/</url>
   <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
