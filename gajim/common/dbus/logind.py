@@ -82,6 +82,7 @@ class LogindListener:
             # yet another one.
             log.warning('Trying to obtain a shutdown inhibitor '
                         'while already holding one.')
+            return
 
         try:
             result = connection.call_with_unix_fd_list_sync(
@@ -100,12 +101,16 @@ class LogindListener:
                 -1,
                 None,
                 None)
-
-            ret, ret_fdlist = result
         except GLib.Error as error:
             log.warning(
                 'Could not obtain a shutdown delay inhibitor from '
                 'logind: %s', error)
+            return
+
+        ret, ret_fdlist = result
+        if ret_fdlist is None:  # pyright: ignore
+            # This can happen as reported by users
+            log.warning('Unable to obtain inhibitor, fdlist is None')
             return
 
         self._inhibit_fd = ret_fdlist.get(ret.unpack()[0])
