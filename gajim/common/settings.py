@@ -935,12 +935,18 @@ class Settings:
                 return self.get_app_setting(f'gc_{setting}_default')
 
             if default is HAS_ACCOUNT_DEFAULT:
-                context_default_setting = f'gc_{setting}_{context}_default'
-                if context_default_setting in ACCOUNT_SETTINGS['account']:
-                    return self.get_account_setting(account,
-                                                    context_default_setting)
-                return self.get_account_setting(account,
-                                                f'gc_{setting}_default')
+                default_settings = [
+                    f'gc_{setting}_{context}_default',
+                    f'gc_{setting}_default',
+                    f'{setting}_default',
+                ]
+
+                for default_setting in default_settings:
+                    if default_setting in ACCOUNT_SETTINGS['account']:
+                        return self.get_account_setting(
+                            account, default_setting)
+
+                raise ValueError(f'No default setting found for {setting}')
 
             return default
 
@@ -997,9 +1003,20 @@ class Settings:
             if default is HAS_ACCOUNT_DEFAULT:
                 default_store = ACCOUNT_SETTINGS['account']
 
-            default = default_store.get(f'gc_{setting}_{context}_default')
+            default_settings = [
+                f'gc_{setting}_{context}_default',
+                f'gc_{setting}_default',
+                f'{setting}_default',
+            ]
+
+            default = None
+            for default_setting in default_settings:
+                if default_setting in default_store:
+                    default = default_store.get(default_setting)
+                    break
+
             if default is None:
-                default = default_store.get(f'gc_{setting}_default')
+                raise ValueError(f'No default setting found for {setting}')
 
         if not isinstance(value, type(default)) and value is not None:
             raise TypeError(f'Invalid type for {setting}: '
