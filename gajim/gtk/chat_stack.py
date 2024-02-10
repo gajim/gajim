@@ -631,7 +631,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                 assert isinstance(contact, GroupchatContact)
                 resource_contact = contact.get_resource(nick)
                 jid = resource_contact.jid
-            open_window('AdHocCommands', account=account, jid=jid)
+            open_window('AdHocCommands', account=account, jids=[jid])
 
         elif action_name == 'muc-kick':
             assert param is not None

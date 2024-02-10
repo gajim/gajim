@@ -298,7 +298,7 @@ ACCOUNT_ACTIONS = [
     ('contact-info', 's'),
     ('block-contact', 's'),
     ('remove-contact', 's'),
-    ('execute-command', 's'),
+    ('execute-command', 'as'),
     ('modify-gateway', 's'),
     ('archive', 's'),
     ('blocking', 's'),

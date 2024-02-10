@@ -49,10 +49,11 @@ log = logging.getLogger('gajim.gtk.adhoc')
 
 
 class AdHocCommands(Assistant):
-    def __init__(self, account: str, jid: str | None = None) -> None:
+    def __init__(self, account: str, jids: list[str]) -> None:
         Assistant.__init__(self, width=600, height=500)
         self.account = account
-        self.jid = jid
+        self.jids = jids
+        self.jid = self.jids[0]  # TODO: Add resource chooser
 
         self._destroyed = False
 
@@ -84,7 +85,7 @@ class AdHocCommands(Assistant):
         self.connect('destroy', self._on_destroy)
 
         self._client.get_module('AdHocCommands').request_command_list(
-            jid, callback=self._received_command_list)
+            self.jid, callback=self._received_command_list)
         self.show_all()
 
     @ensure_not_destroyed

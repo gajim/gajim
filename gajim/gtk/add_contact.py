@@ -481,8 +481,9 @@ class Gateway(Page):
 
     def _on_command_clicked(self, _button: Gtk.Button) -> None:
         assert self._result is not None
-        open_window(
-            'AdHocCommands', account=self._account, jid=str(self._result.jid))
+        open_window('AdHocCommands',
+                    account=self._account,
+                    jids=[str(self._result.jid)])
 
 
 class GroupChat(Page):

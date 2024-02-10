@@ -1331,7 +1331,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         if not iter_:
             return
         service = model[iter_][0]
-        open_window('AdHocCommands', account=self.account, jid=service)
+        open_window('AdHocCommands', account=self.account, jids=[service])
 
     def _on_register_button_clicked(self, widget=None):
         '''

@@ -287,7 +287,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
                             _action: Gio.SimpleAction,
                             param: GLib.Variant) -> None:
 
-        app.window.execute_command(self._account, param.get_string())
+        app.window.execute_command(self._account, param.get_strv())
 
     def _on_block_contact(self,
                           _action: Gio.SimpleAction,
@@ -392,7 +392,8 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         gateway_register = contact.is_gateway and contact.supports(
             Namespace.REGISTER)
 
-        menu = get_roster_menu(self._account, jid, gateway=gateway_register)
+        menu = get_roster_menu(
+            self._account, contact, gateway=gateway_register)
         popover = GajimPopover(menu, relative_to=treeview, event=event)
         popover.popup()
 

@@ -1276,9 +1276,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         open_window('ContactInfo', account=account, contact=contact)
 
     @staticmethod
-    def execute_command(account: str, jid: str) -> None:
-        # TODO: Resource?
-        open_window('AdHocCommands', account=account, jid=jid)
+    def execute_command(account: str, jids: list[str]) -> None:
+        open_window('AdHocCommands', account=account, jids=jids)
 
     def block_contact(self, account: str, jid: str) -> None:
         client = app.get_client(account)
