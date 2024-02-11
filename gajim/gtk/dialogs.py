@@ -110,7 +110,7 @@ class HigDialog(Gtk.MessageDialog):
                                    buttons=self._buttons_type,
                                    text=text,
                                    use_markup=use_markup,
-                                   secondary_text=secondary_text,
+                                   secondary_text=secondary_text or '',
                                    secondary_use_markup=secondary_use_markup)
 
         self.connect('response', self.on_response)
