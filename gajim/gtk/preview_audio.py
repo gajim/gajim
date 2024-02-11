@@ -261,9 +261,6 @@ class AudioWidget(Gtk.Box):
         if height == -1:
             height = self._ui.seek_bar.get_preferred_height()[1]
 
-        if width is None or height is None:
-            return
-
         width -= 2 * SEEK_BAR_PADDING
         self._audio_visualizer = AudioVisualizerWidget(
             width,
