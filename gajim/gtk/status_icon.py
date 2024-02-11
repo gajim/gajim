@@ -296,6 +296,7 @@ class AppIndicatorIcon(GtkMenuBackend):
     def __init__(self) -> None:
         GtkMenuBackend.__init__(self)
 
+        assert AppIndicator is not None
         self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
             'org.gajim.Gajim',
@@ -332,6 +333,7 @@ class AppIndicatorIcon(GtkMenuBackend):
         self._status_icon.set_icon_full(icon_name, show)
 
     def is_visible(self) -> bool:
+        assert AppIndicator is not None
         status = self._status_icon.get_status()
         return status == AppIndicator.IndicatorStatus.ACTIVE
 

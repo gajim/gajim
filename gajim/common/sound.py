@@ -28,9 +28,8 @@ from gajim.common import app
 if sys.platform == 'win32':
     import winsound
 
-elif sys.platform == 'darwin':
+if sys.platform == 'darwin':
     from AppKit import NSSound
-
 
 log = logging.getLogger('gajim.c.sound')
 
@@ -56,6 +55,7 @@ class PlatformWindows(PlaySound):
         if self._loop_in_progress:
             return
 
+        assert winsound is not None
         flags = (winsound.SND_FILENAME |
                  winsound.SND_ASYNC |
                  winsound.SND_NODEFAULT)
@@ -69,6 +69,7 @@ class PlatformWindows(PlaySound):
             log.exception('Sound Playback Error')
 
     def stop(self) -> None:
+        assert winsound is not None
         try:
             winsound.PlaySound(None, 0)
         except Exception:
@@ -82,6 +83,7 @@ class PlatformWindows(PlaySound):
 class PlatformMacOS(PlaySound):
 
     def play(self, path: Path, loop: bool = False) -> None:
+        assert NSSound is not None
         sound = NSSound.alloc()
         sound.initWithContentsOfFile_byReference_(str(path), True)
         sound.play()

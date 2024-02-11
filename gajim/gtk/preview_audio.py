@@ -52,6 +52,7 @@ class AudioWidget(Gtk.Box):
                          orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
 
+        assert Gst is not None
         self._playbin = Gst.ElementFactory.make('playbin', 'bin')
         self._bus_watch_id: int = 0
         self._timeout_id: int = -1
@@ -184,6 +185,7 @@ class AudioWidget(Gtk.Box):
         self._update_ui()
 
     def _setup_audio_player(self, file_path: Path) -> None:
+        assert Gst is not None
         assert self._playbin is not None
 
         # Set up the whole pipeline
@@ -347,6 +349,7 @@ class AudioWidget(Gtk.Box):
 
         self._ui.speed_label.set_text(f'{self._state.speed:.2f}x')
 
+        assert Gst is not None
         assert self._playbin is not None
         self._playbin.seek(self._state.speed,
                            Gst.Format.TIME,
@@ -358,16 +361,19 @@ class AudioWidget(Gtk.Box):
         return True
 
     def _get_paused(self) -> bool:
+        assert Gst is not None
         assert self._playbin is not None
         _, state, _ = self._playbin.get_state(timeout=40)
         return state == Gst.State.PAUSED
 
     def _get_ready(self) -> bool:
+        assert Gst is not None
         assert self._playbin is not None
         _, state, _ = self._playbin.get_state(timeout=40)
         return state == Gst.State.READY
 
     def _pause_on_eos(self) -> bool:
+        assert Gst is not None
         assert self._playbin is not None
         self._ui.play_icon.set_from_icon_name(
             'media-playback-start-symbolic',
@@ -379,6 +385,7 @@ class AudioWidget(Gtk.Box):
         return False
 
     def _set_pause(self, paused: bool) -> None:
+        assert Gst is not None
         assert self._playbin is not None
         if paused:
             self._playbin.set_state(Gst.State.PAUSED)
@@ -394,6 +401,7 @@ class AudioWidget(Gtk.Box):
                 Gtk.IconSize.BUTTON)
 
     def _set_ready(self) -> None:
+        assert Gst is not None
         assert self._playbin is not None
         self._playbin.set_state(Gst.State.READY)
         self._is_ready = True
@@ -414,6 +422,7 @@ class AudioWidget(Gtk.Box):
         * _on_seek_bar_button_released:
         * _on_play_clicked
         '''
+        assert Gst is not None
         assert self._playbin is not None
 
         self._state.position = self._get_constrained_position(position)
@@ -440,6 +449,7 @@ class AudioWidget(Gtk.Box):
         * _on_rewind_clicked
         * _on_forward_clicked
         '''
+        assert Gst is not None
         assert self._playbin is not None
 
         self._state.position = self._get_constrained_position(position)
@@ -459,6 +469,7 @@ class AudioWidget(Gtk.Box):
             self._state.position / self._state.duration)
 
     def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
+        assert Gst is not None
         assert self._playbin is not None
 
         if message.type == Gst.MessageType.EOS:
@@ -581,6 +592,7 @@ class AudioWidget(Gtk.Box):
                 self._state.position / self._state.duration)
 
     def _on_play_clicked(self, _button: Gtk.Button) -> None:
+        assert Gst is not None
         app.preview_manager.stop_audio_except(self._id)
         if self._get_ready():
             # The order is always READY -> PAUSE -> PLAYING
@@ -614,6 +626,7 @@ class AudioWidget(Gtk.Box):
         self._seek_unconditionally(new_pos)
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
+        assert Gst is not None
         if self._playbin is not None:
             self._playbin.set_state(Gst.State.NULL)
             bus = self._playbin.get_bus()

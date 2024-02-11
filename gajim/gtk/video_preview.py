@@ -26,7 +26,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.gstreamer import create_gtk_widget
 
 try:
-    from gi.repository import Gst  # pylint: disable=ungrouped-imports
+    from gi.repository import Gst
 except Exception:
     pass
 
@@ -65,6 +65,7 @@ class VideoPreview(Gtk.Box):
         return self._disable_preview()
 
     def _enable_preview(self) -> None:
+        assert Gst is not None
         src_name = app.settings.get('video_input_device')
         try:
             self._av_src = Gst.parse_bin_from_description(src_name, True)
@@ -105,6 +106,7 @@ class VideoPreview(Gtk.Box):
         self._av_pipeline.set_state(Gst.State.PLAYING)
 
     def _disable_preview(self) -> None:
+        assert Gst is not None
         if self._av_pipeline is not None:
             self._av_pipeline.set_state(Gst.State.NULL)
             if self._av_src is not None:

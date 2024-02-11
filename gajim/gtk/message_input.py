@@ -44,7 +44,7 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL'):
-    from gi.repository import Gspell  # pylint: disable=ungrouped-imports
+    from gi.repository import Gspell
 
 UNDO_LIMIT: int = 20
 
@@ -186,6 +186,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         if not app.is_installed('GSPELL'):
             return 0
 
+        assert Gspell is not None
         checker = Gspell.Checker.new(Gspell.language_get_default())
 
         buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(self.get_buffer())
@@ -202,6 +203,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         if not app.is_installed('GSPELL'):
             return
 
+        assert Gspell is not None
         buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(self.get_buffer())
         checker = buffer.get_spell_checker()
         assert checker is not None
@@ -221,6 +223,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
             if not lang:
                 lang = get_default_lang()
 
+        assert Gspell is not None
         assert isinstance(lang, str)
         lang = Gspell.language_lookup(lang)
         if lang is None:
@@ -352,6 +355,7 @@ class MessageInputTextView(Gtk.TextView, EventHelper):
         if not app.is_installed('GSPELL'):
             return
 
+        assert Gspell is not None
         use_spell_check = app.settings.get('use_speller')
         spell_view = Gspell.TextView.get_from_gtk_text_view(self)
         spell_view.set_inline_spell_checking(use_spell_check)

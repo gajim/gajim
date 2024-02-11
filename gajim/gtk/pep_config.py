@@ -214,7 +214,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         self._result_node = result.node
 
         form = dataforms.extend_form(node=result.form)  # pyright: ignore
-        self._dataform_widget = DataFormWidget(form)
+        self._dataform_widget = DataFormWidget(form)  # pyright: ignore
         self._dataform_widget.set_propagate_natural_height(True)
         self._dataform_widget.show_all()
         self._ui.form_box.add(self._dataform_widget)

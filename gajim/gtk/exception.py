@@ -172,6 +172,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             traceback_text)
 
     def _report_with_sentry(self) -> None:
+        assert sentry_sdk is not None
         if sentry_sdk.last_event_id() is None:
             # Sentry has not been initialized yet:
             # update sentry endpoint, init sentry, then capture exception
@@ -220,7 +221,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             self.destroy()
 
     def _init_sentry(self, endpoint: str) -> None:
-        # pylint: disable=abstract-class-instantiated
+        assert sentry_sdk is not None
         sentry_sdk.init(
             dsn=endpoint,
             traces_sample_rate=0.0,
@@ -243,6 +244,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             'GLib': get_glib_version()})
 
     def _capture_exception(self) -> None:
+        assert sentry_sdk is not None
         sentry_sdk.set_context('user_feedback', {
             'Feedback': self._ui.user_feedback_entry.get_text()})
         sentry_sdk.capture_exception(self._traceback_data)

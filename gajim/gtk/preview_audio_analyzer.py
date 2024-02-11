@@ -39,6 +39,7 @@ class AudioAnalyzer:
                  samples_callback: Callable[[AudioSampleT], None]
                  ) -> None:
 
+        assert Gst is not None
         self._playbin = Gst.ElementFactory.make('playbin', 'bin')
 
         if self._playbin is None:
@@ -58,6 +59,7 @@ class AudioAnalyzer:
         self._setup_audio_analyzer(filepath)
 
     def _setup_audio_analyzer(self, file_path: Path) -> None:
+        assert Gst is not None
         assert isinstance(self._playbin, Gst.Bin)
 
         audio_sink = Gst.Bin.new('audiosink')
@@ -110,6 +112,7 @@ class AudioAnalyzer:
         self._bus_watch_id = bus.connect('message', self._on_bus_message)
 
     def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
+        assert Gst is not None
         assert self._playbin is not None
 
         if message.type == Gst.MessageType.EOS:
@@ -154,6 +157,7 @@ class AudioAnalyzer:
                 self._samples.append((lin_val1, lin_val2))
 
     def destroy(self) -> None:
+        assert Gst is not None
         if self._playbin is not None:
             self._playbin.set_state(Gst.State.NULL)
             bus = self._playbin.get_bus()
