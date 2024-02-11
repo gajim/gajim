@@ -210,12 +210,12 @@ class Commands(Page):
         self._treeview.get_style_context().add_class('gajim-treeview')
         self._store = Gtk.ListStore(str, str)
         self._treeview.set_model(self._store)
-        column = Gtk.TreeViewColumn(_('Commands'))
+        column = Gtk.TreeViewColumn(
+            _('Commands'),
+            Gtk.CellRendererText(),
+            text=0)
         column.set_expand(True)
         self._treeview.append_column(column)
-        renderer = Gtk.CellRendererText()
-        column.pack_start(renderer, True)
-        column.add_attribute(renderer, 'text', 0)
 
         self._treeview.connect('row-activated', self._on_row_activate)
         self._treeview.set_search_equal_func(self._search_func)
