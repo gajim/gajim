@@ -63,9 +63,6 @@ class MessageActionsBox(Gtk.Grid):
 
         self.attach(self._ui.box, 0, 0, 1, 1)
 
-        # For undo
-        self.space_pressed = False
-
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
         app.settings.bind_signal('show_send_message_button',
@@ -76,8 +73,8 @@ class MessageActionsBox(Gtk.Grid):
         self._ui.box.pack_start(self._security_label_selector, False, True, 0)
 
         self.msg_textview = MessageInputTextView()
-        self.msg_textview.get_buffer().connect('changed',
-                                               self._on_buffer_changed)
+        self.msg_textview.connect('buffer-changed',
+                                  self._on_buffer_changed)
         self.msg_textview.connect('key-press-event',
                                   self._on_msg_textview_key_press_event)
         self.msg_textview.connect('paste-clipboard',
@@ -448,7 +445,7 @@ class MessageActionsBox(Gtk.Grid):
 
         self._ui.sendfile_button.set_tooltip_text(tooltip_text)
 
-    def _on_buffer_changed(self, textbuffer: Gtk.TextBuffer) -> None:
+    def _on_buffer_changed(self, _message_input: MessageInputTextView) -> None:
         has_text = self.msg_textview.has_text
         send_message_action = app.window.get_action('send-message')
         send_message_action.set_enabled(has_text)
@@ -475,23 +472,6 @@ class MessageActionsBox(Gtk.Grid):
                                          event: Gdk.EventKey
                                          ) -> bool:
         # pylint: disable=too-many-nested-blocks
-        if event.keyval == Gdk.KEY_space:
-            self.space_pressed = True
-
-        elif ((self.space_pressed or self.msg_textview.undo_pressed) and
-                event.keyval not in (Gdk.KEY_Control_L, Gdk.KEY_Control_R) and
-                not (event.keyval == Gdk.KEY_z and
-                     event.get_state() & Gdk.ModifierType.CONTROL_MASK)):
-            # If the space key has been pressed and now it hasn't,
-            # we save the buffer into the undo list. But be careful we're not
-            # pressing Control again (as in ctrl+z)
-            _buffer = textview.get_buffer()
-            start_iter, end_iter = _buffer.get_bounds()
-            self.msg_textview.save_undo(_buffer.get_text(start_iter,
-                                                         end_iter,
-                                                         True))
-            self.space_pressed = False
-
         event_state = event.get_state()
         if event_state & Gdk.ModifierType.SHIFT_MASK:
             if event_state & Gdk.ModifierType.CONTROL_MASK:
@@ -507,6 +487,10 @@ class MessageActionsBox(Gtk.Grid):
 
             if event.keyval == Gdk.KEY_z:
                 self.msg_textview.undo()
+                return True
+
+            if event.keyval == Gdk.KEY_y:
+                self.msg_textview.redo()
                 return True
 
             if event.keyval == Gdk.KEY_Up:
