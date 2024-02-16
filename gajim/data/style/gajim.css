@@ -344,37 +344,21 @@ infobar.error > revealer > box {
 /* AccountSidebar */
 .account-sidebar {
     background: transparent;
-    margin-bottom: 6px;
 }
-.account-sidebar-item {
-    padding-top: 3px;
-    padding-bottom: 3px;
+.account-sidebar .selection-bar {
+    margin-top: 6px;
+    margin-bottom: 12px;
 }
-.account-sidebar-item:hover,
-.account-sidebar-item:selected,
-.account-sidebar-item:focus {
-    background: transparent;
-    box-shadow: none;
-    outline: none;
+.account-sidebar image {
+    padding: 6px 6px 12px 6px;
 }
-.account-sidebar-item .selection-bar {
-    margin-top: 3px;
-    margin-bottom: 3px;
-}
-.account-sidebar-item:selected .selection-bar {
+.selection-bar-selected {
     background-color: lighter(@theme_selected_bg_color);
 }
-.account-sidebar-item:hover .selection-bar {
+.selection-bar-hover {
     background-color: @theme_selected_bg_color;
 }
-.account-sidebar-item image {
-    border-radius: 9px;
-    padding: 3px;
-}
-.account-sidebar-item .account-identifier-bar {
-	padding: 0 3px;
-    margin: 3px 0;
-}
+
 .account-box {
     background-color: mix(@theme_base_color, @theme_fg_color, 0.15);
 }

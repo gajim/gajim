@@ -5,172 +5,280 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
+from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.client import Client
 from gajim.common.const import AvatarSize
-from gajim.common.helpers import get_client_status
+from gajim.common.events import AccountDisabled
+from gajim.common.events import AccountEnabled
+from gajim.common.events import ShowChanged
+from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import ResourceContact
+from gajim.common.modules.contacts import BareContact
 
+from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import GajimPopover
 
 
-class AccountSideBar(Gtk.ListBox):
+class AccountSideBar(Gtk.EventBox):
     def __init__(self) -> None:
-        Gtk.ListBox.__init__(self)
-        self.set_vexpand(True)
-        self.set_valign(Gtk.Align.END)
-        self.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        Gtk.EventBox.__init__(self)
         self.get_style_context().add_class('account-sidebar')
-        self.connect('row-activated', self._on_row_activated)
 
-        for account in app.settings.get_active_accounts():
-            self.add_account(account)
+        self.connect('button-press-event', self._on_button_press)
+        self.connect('enter-notify-event', self._on_hover)
+        self.connect('leave-notify-event', self._on_hover)
 
-    def add_account(self, account: str) -> None:
-        self.add(Account(account))
+        container = Gtk.Box()
+        self.add(container)
 
-    def remove_account(self, account: str) -> None:
-        accounts = cast(list[Account], self.get_children())
-        for row in accounts:
-            if row.account == account:
-                row.destroy()
-                return
+        self._selection_bar = Gtk.Box(
+            width_request=6,
+            margin_start=1
+        )
+        self._selection_bar.get_style_context().add_class('selection-bar')
+        container.add(self._selection_bar)
 
-    @staticmethod
-    def _on_row_activated(_listbox: AccountSideBar, row: Account) -> None:
-        app.window.show_account_page(row.account)
+        self._account_avatar = AccountAvatar()
+        container.add(self._account_avatar)
 
-    def activate_account_page(self, account: str) -> None:
-        row = cast(Account | None, self.get_selected_row())
-        if row is not None and row.account == account:
-            return
-
-        self.select_row(row)
-
-    def update_unread_count(self, account: str, count: int) -> None:
-        for row in cast(list[Account], self.get_children()):
-            if row.account == account:
-                row.set_unread_count(count)
-                break
-
-
-class Account(Gtk.ListBoxRow, EventHelper):
-    def __init__(self, account: str) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        EventHelper.__init__(self)
-        self.get_style_context().add_class('account-sidebar-item')
-
-        self.account = account
-        self._account_class: str | None = None
-
-        self.register_events([
-            ('account-enabled', ged.GUI1,
-             self._update_account_color_visibility),
-            ('account-disabled', ged.GUI1,
-             self._update_account_color_visibility),
-        ])
-
-        app.settings.connect_signal(
-            'account_label',
-            self._on_account_label_changed,
-            account)
-
-        selection_bar = Gtk.Box()
-        selection_bar.set_size_request(6, -1)
-        selection_bar.get_style_context().add_class('selection-bar')
-
-        self._image = AccountAvatar(account)
-
-        self._unread_label = Gtk.Label()
-        self._unread_label.get_style_context().add_class(
-            'unread-counter')
-        self._unread_label.set_no_show_all(True)
-        self._unread_label.set_halign(Gtk.Align.END)
-        self._unread_label.set_valign(Gtk.Align.START)
-
-        self._account_color_bar = Gtk.Box()
-        self._account_color_bar.set_no_show_all(True)
-        self._account_color_bar.set_size_request(6, -1)
-        self._account_color_bar.get_style_context().add_class(
-            'account-identifier-bar')
-        self._update_account_color_visibility()
-
-        self._account_box = Gtk.Box(spacing=3)
-        self._account_box.set_tooltip_text(
-            _('Account: %s') % app.get_account_label(account))
-        self._account_box.add(selection_bar)
-        self._account_box.add(self._image)
-        self._account_box.add(self._account_color_bar)
-        self._set_account_color()
-
-        overlay = Gtk.Overlay()
-        overlay.add(self._account_box)
-        overlay.add_overlay(self._unread_label)
-
-        self.add(overlay)
         self.show_all()
 
-    def _on_account_label_changed(self, value: str, *args: Any) -> None:
-        self._account_box.set_tooltip_text(
-            _('Account: %s') % value)
+    def select(self) -> None:
+        self._selection_bar.get_style_context().add_class('selection-bar-selected')
 
-    def _set_account_color(self) -> None:
-        context = self._account_color_bar.get_style_context()
-        if self._account_class is not None:
-            context.remove_class(self._account_class)
+    def unselect(self) -> None:
+        self._selection_bar.get_style_context().remove_class('selection-bar-selected')
 
-        self._account_class = app.css_config.get_dynamic_class(self.account)
-        context.add_class(self._account_class)
+    def _on_hover(self,
+                  _widget: AccountSideBar,
+                  event: Gdk.EventCrossing
+                  ) -> bool:
 
-    def set_unread_count(self, count: int) -> None:
-        if count < 1000:
-            self._unread_label.set_text(str(count))
+        style_context = self._selection_bar.get_style_context()
+        if event.type == Gdk.EventType.ENTER_NOTIFY:
+            style_context.add_class('selection-bar-hover')
         else:
-            self._unread_label.set_text('999+')
-        self._unread_label.set_visible(bool(count))
+            style_context.remove_class('selection-bar-hover')
+        return True
 
-    def _update_account_color_visibility(self, *args: Any) -> None:
-        visible = len(app.settings.get_active_accounts()) > 1
-        self._account_color_bar.set_visible(visible)
+    def _on_button_press(self,
+                         _widget: AccountSideBar,
+                         event: Gdk.EventButton
+                         ) -> bool:
+
+        accounts = app.settings.get_active_accounts()
+
+        if event.button == Gdk.BUTTON_PRIMARY:
+            # Left click
+            # Show current account's page if only one account is active
+            # If more than one account is active, a popover containing
+            # all accounts is shown (clicking one opens the account's page)
+            if len(accounts) == 1:
+                app.window.show_account_page(accounts[0])
+                return True
+
+            self._display_accounts_menu(event)
+
+        elif event.button == Gdk.BUTTON_SECONDARY:
+            # Right click
+            # Show account context menu containing account status selector
+            # Global status selector if multiple accounts are active
+            self._display_status_selector(event)
+
+        return True
+
+    def _display_accounts_menu(self, event: Gdk.EventButton):
+        popover_scrolled = Gtk.ScrolledWindow(
+            hscrollbar_policy=Gtk.PolicyType.NEVER,
+            propagate_natural_height=True
+        )
+
+        popover = GajimPopover(relative_to=self, event=event)
+        popover.add(popover_scrolled)
+
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+        box.get_style_context().add_class('margin-3')
+        popover_scrolled.add(box)
+
+        for account in app.settings.get_active_accounts():
+            account_color_bar = Gtk.Box(
+                width_request=6
+            )
+            color_class = app.css_config.get_dynamic_class(account)
+            style_context = account_color_bar.get_style_context()
+            style_context.add_class('account-identifier-bar')
+            style_context.add_class(color_class)
+
+            avatar = Gtk.Image()
+            label = Gtk.Label(
+                halign=Gtk.Align.START,
+                label=app.settings.get_account_setting(account, 'account_label')
+            )
+
+            surface = app.app.avatar_storage.get_account_button_surface(
+                account,
+                AvatarSize.ACCOUNT_SIDE_BAR,
+                self.get_scale_factor())
+            avatar.set_from_surface(surface)
+
+            account_box = Gtk.Box(spacing=6)
+            account_box.add(account_color_bar)
+            account_box.add(avatar)
+            account_box.add(label)
+
+            button = Gtk.Button(relief=Gtk.ReliefStyle.NONE)
+            button.add(account_box)
+            button.connect(
+                'clicked',
+                self._on_account_clicked,
+                account,
+                popover)
+            box.add(button)
+
+        popover.show_all()
+        popover.popup()
+
+    def _on_account_clicked(self,
+                            _button: Gtk.MenuButton,
+                            account: str,
+                            popover: Gtk.Popover) -> None:
+
+        popover.popdown()
+        app.window.show_account_page(account)
+
+    def _display_status_selector(self, event: Gdk.EventButton) -> None:
+        accounts = app.settings.get_active_accounts()
+        account = accounts[0] if len(accounts) == 1 else None
+
+        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
+        box.get_style_context().add_class('margin-3')
+
+        popover = GajimPopover(relative_to=self, event=event)
+        popover.add(box)
+
+        popover_items = [
+            'online',
+            'away',
+            'xa',
+            'dnd',
+            'separator',
+            'offline',
+        ]
+
+        for item in popover_items:
+            if item == 'separator':
+                box.add(Gtk.Separator())
+                continue
+
+            show_icon = Gtk.Image()
+            show_label = Gtk.Label(halign=Gtk.Align.START)
+
+            surface = get_show_circle(
+                item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
+            show_icon.set_from_surface(surface)
+            show_label.set_text_with_mnemonic(
+                get_uf_show(item, use_mnemonic=True))
+
+            show_box = Gtk.Box(spacing=6)
+            show_box.add(show_icon)
+            show_box.add(show_label)
+
+            button = Gtk.Button(
+                relief=Gtk.ReliefStyle.NONE
+            )
+            button.add(show_box)
+            button.connect(
+                'clicked',
+                self._on_change_status,
+                item,
+                account,
+                popover
+            )
+            box.add(button)
+
+        popover.show_all()
+        popover.popup()
+
+    def _on_change_status(self,
+                          _button: Gtk.Button,
+                          item: str,
+                          account: str | None,
+                          popover: Gtk.Popover
+                          ) -> None:
+
+        popover.popdown()
+        app.app.change_status(status=item, account=account)
 
 
-class AccountAvatar(Gtk.Image):
-    def __init__(self, account: str) -> None:
+class AccountAvatar(Gtk.Image, EventHelper):
+    def __init__(self) -> None:
         Gtk.Image.__init__(self)
+        EventHelper.__init__(self)
 
-        self._account = account
+        self._client: Client | None = None
+        self._contact: BareContact | None = None
 
-        jid = app.get_jid_from_account(self._account)
-        self._client = app.get_client(self._account)
+        self.register_event('account-enabled',
+                            ged.GUI1,
+                            self._on_account_changed)
+        self.register_event('account-disabled',
+                            ged.GUI1,
+                            self._on_account_changed)
+        self.register_event('our-show', ged.GUI1, self._on_our_show)
 
-        self._client.connect_signal('state-changed', self._on_event)
+        self._update_image()
 
-        self._contact = self._client.get_module('Contacts').get_contact(jid)
-        self._contact.connect('avatar-update', self._on_event)
-        self._contact.connect('presence-update', self._on_event)
+    def _on_account_changed(self,
+                            _event: AccountEnabled | AccountDisabled
+                            ) -> None:
 
-        self.connect('destroy', self._on_destroy)
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+
+        accounts = app.settings.get_active_accounts()
+
+        if len(accounts) == 1:
+            account = accounts[0]
+            self._client = app.get_client(account)
+            self._client.connect_signal('state-changed', self._on_event)
+
+            jid = app.get_jid_from_account(account)
+            contact = self._client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
+            self._contact = contact
+            self._contact.connect('avatar-update', self._on_event)
+            self._contact.connect('presence-update', self._on_event)
+
+        self._update_image()
+
+    def _on_our_show(self, _event: ShowChanged) -> None:
         self._update_image()
 
     def _on_event(self, *args: Any) -> None:
         self._update_image()
 
     def _update_image(self) -> None:
-        assert not isinstance(self._contact, ResourceContact)
-        status = get_client_status(self._account)
-        surface = app.app.avatar_storage.get_surface(
-            self._contact,
-            AvatarSize.ACCOUNT_SIDE_BAR,
-            self.get_scale_factor(),
-            status)
-        self.set_from_surface(surface)
+        accounts = app.settings.get_active_accounts()
 
-    def _on_destroy(self, _widget: Gtk.Image) -> None:
-        self._contact.disconnect_all_from_obj(self)
-        self._client.disconnect_all_from_obj(self)
-        app.check_finalize(self)
+        if len(accounts) == 1:
+            account = accounts[0]
+            account_label = app.settings.get_account_setting(
+                account, 'account_label')
+            self.set_tooltip_text(_('Account: %s') % account_label)
+        else:
+            account = None
+            self.set_tooltip_text(_('Accounts'))
+
+        surface = app.app.avatar_storage.get_account_button_surface(
+            account,
+            AvatarSize.ACCOUNT_SIDE_BAR,
+            self.get_scale_factor())
+        self.set_from_surface(surface)

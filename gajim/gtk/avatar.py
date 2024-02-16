@@ -24,7 +24,10 @@ from gajim.common import configpaths
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.helpers import get_client_status
+from gajim.common.helpers import get_global_show
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.modules.contacts import BareContact
 from gajim.common.util.classes import Singleton
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
@@ -526,6 +529,46 @@ class AvatarStorage(metaclass=Singleton):
         surface = make_workspace_avatar(
             name, rgba_to_float(rgba), size, scale)
         self._cache[workspace_id][(size, scale, None, None)] = surface
+        return surface
+
+    @staticmethod
+    def get_account_button_surface(account: str | None,
+                                   size: int,
+                                   scale: int
+                                   ) -> cairo.ImageSurface:
+
+        if account is not None:
+            jid = app.get_jid_from_account(account)
+            client = app.get_client(account)
+            contact = client.get_module('Contacts').get_contact(jid)
+            assert isinstance(contact, BareContact)
+            return app.app.avatar_storage.get_surface(
+                contact,
+                size,
+                scale,
+                get_client_status(account))
+
+        # Paint default avatar on grey background (incl. show)
+        size = size * scale
+        width = size
+        height = size
+
+        surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+        context = cairo.Context(surface)
+
+        context.set_source_rgb(0.7, 0.7, 0.7)
+        context.rectangle(0, 0, width, height)
+        context.fill()
+
+        icon_surface = load_icon_surface(
+            'avatar-default-symbolic', int(size * 0.7), scale)
+        if icon_surface is not None:
+            pos = (size - size * 0.7) / 2
+            context.set_source_surface(icon_surface, pos, pos)
+            context.paint_with_alpha(0.6)
+
+        surface = clip_circle(context.get_target())
+        surface = add_status_to_avatar(surface, get_global_show())
         return surface
 
     @staticmethod

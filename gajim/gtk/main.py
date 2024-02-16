@@ -230,7 +230,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.hide()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
-        self._account_side_bar.add_account(event.account)
         self._main_stack.add_account_page(event.account)
         client = app.get_client(event.account)
         client.connect_signal('state-changed', self._on_client_state_changed)
@@ -238,12 +237,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
-        self._account_side_bar.remove_account(event.account)
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
 
     def update_account_unread_count(self, account: str, count: int) -> None:
-        self._account_side_bar.update_unread_count(account, count)
+        # TODO
+        # self._account_side_bar.update_unread_count(account, count)
+        pass
 
     def _on_key_press_event(
         self,
@@ -842,7 +842,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def show_account_page(self, account: str) -> None:
         self._app_side_bar.unselect_all()
         self._workspace_side_bar.unselect_all()
-        self._account_side_bar.activate_account_page(account)
+        self._account_side_bar.select()
         self._main_stack.show_account(account)
 
     def get_active_workspace(self) -> str | None:
@@ -983,7 +983,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def activate_workspace(self, workspace_id: str) -> None:
         self._app_side_bar.unselect_all()
-        self._account_side_bar.unselect_all()
+        self._account_side_bar.unselect()
         self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
 
@@ -1091,7 +1091,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def select_chat(self, account: str, jid: JID) -> None:
         self._app_side_bar.unselect_all()
-        self._account_side_bar.unselect_all()
+        self._account_side_bar.unselect()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
@@ -1116,7 +1116,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         open_window('AddContact', account=params.account, jid=params.jid)
 
     def show_app_page(self) -> None:
-        self._account_side_bar.unselect_all()
+        self._account_side_bar.unselect()
         self._workspace_side_bar.unselect_all()
         self._main_stack.show_app_page()
 
