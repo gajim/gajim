@@ -72,18 +72,18 @@ class MessageInputTextView(GtkSource.View, EventHelper):
     }
 
     def __init__(self) -> None:
-        GtkSource.View.__init__(self)
+        GtkSource.View.__init__(
+            self,
+            accepts_tab=True,
+            wrap_mode=Gtk.WrapMode.WORD_CHAR,
+            border_width=0,
+            margin_left=3,
+            margin_top=3,
+            margin_right=3,
+            margin_bottom=3
+        )
         EventHelper.__init__(self)
 
-        self.set_border_width(1)
-        self.set_accepts_tab(True)
-        self.set_editable(True)
-        self.set_cursor_visible(True)
-        self.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
-        self.set_left_margin(2)
-        self.set_right_margin(2)
-        self.set_pixels_above_lines(2)
-        self.set_pixels_below_lines(2)
         self.get_style_context().add_class('gajim-conversation-text')
 
         self._contact: ChatContactT | None = None
