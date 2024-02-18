@@ -1072,14 +1072,16 @@ class GdkRectangle(Gdk.Rectangle):
 
 class GajimPopover(Gtk.Popover):
     def __init__(self,
-                 menu: Gio.MenuModel,
+                 menu: Gio.MenuModel | None = None,
                  relative_to: Gtk.Widget | None = None,
                  position: Gtk.PositionType = Gtk.PositionType.RIGHT,
                  event: Gdk.EventButton | None = None) -> None:
 
         Gtk.Popover.__init__(self)
 
-        self.bind_model(menu)
+        if menu is not None:
+            self.bind_model(menu)
+
         self.set_relative_to(relative_to)
         self.set_position(position)
         if event is not None:
