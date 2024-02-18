@@ -79,6 +79,13 @@ class DeleteMessageParam(VariantMixin):
     pk: int
 
 
+@dataclass
+class SubscriptionAcceptParam(VariantMixin):
+    account: str
+    jid: JID
+    nickname: str
+
+
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters

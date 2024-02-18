@@ -36,6 +36,7 @@ from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
 from gajim.common.util.text import remove_invalid_xml_chars
 
+from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
@@ -63,6 +64,9 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._last_quoted_id: int | None = None
 
         self.add_named(ChatPlaceholderBox(), 'empty')
+
+        self._activity_page = ActivityPage()
+        self.add_named(self._activity_page, 'activity')
 
         self._chat_function_page = ChatFunctionPage()
         self._chat_function_page.connect('finish', self._on_function_finished)
@@ -257,6 +261,10 @@ class ChatStack(Gtk.Stack, EventHelper):
                           -1)
 
         GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
+
+    def show_activity_page(self) -> None:
+        self._activity_page.set_visible_child_name('default')
+        self.set_visible_child_name('activity')
 
     def _on_room_password_required(self,
                                    _contact: GroupchatContact,

@@ -21,7 +21,6 @@ class AccountPageBuilder(Builder):
     our_jid_label: Gtk.Label
     account_page_menu_button: Gtk.MenuButton
     status_box: Gtk.Box
-    notifications_menu_button: Gtk.MenuButton
 
 
 class AccountWizardBuilder(Builder):
@@ -61,6 +60,39 @@ class AccountWizardBuilder(Builder):
     sign_up_advanced_checkbutton: Gtk.CheckButton
 
 
+class ActivityListRowBuilder(Builder):
+    activity_list_row: Gtk.EventBox
+    account_identifier: Gtk.Box
+    avatar_image: Gtk.Image
+    activity_type_indicator: Gtk.Image
+    activity_title_label: Gtk.Label
+    timestamp_label: Gtk.Label
+    activity_subject_label: Gtk.Label
+    activity_message_label: Gtk.Label
+    revealer: Gtk.Revealer
+    close_button: Gtk.Button
+
+
+class ActivityPageBuilder(Builder):
+    default_page: Gtk.Box
+    gajim_update_page: Gtk.Box
+    update_image: Gtk.Image
+    update_title_label: Gtk.Label
+    update_text_label: Gtk.Label
+    update_actions_box: Gtk.Box
+    muc_invitation_page: Gtk.Box
+    invitation_actions_box: Gtk.Box
+    invitation_declined_box: Gtk.Box
+    invitation_image: Gtk.Image
+    invitation_title_label: Gtk.Label
+    invitation_text_label: Gtk.Label
+    subscription_page: Gtk.Box
+    subscription_actions_box: Gtk.Box
+    subscription_image: Gtk.Image
+    subscription_title_label: Gtk.Label
+    subscription_text_label: Gtk.Label
+
+
 class AddContactBuilder(Builder):
     account_liststore: Gtk.ListStore
     address_box: Gtk.Box
@@ -86,16 +118,6 @@ class AdvancedConfigurationBuilder(Builder):
     advanced_treeview: Gtk.TreeView
     description: Gtk.Label
     reset_button: Gtk.Button
-
-
-class AppPageBuilder(Builder):
-    gajim_update: Gtk.Box
-    update_message: Gtk.Label
-    gajim_update_check: Gtk.Box
-    plugin_updates: Gtk.Box
-    auto_update_plugins: Gtk.CheckButton
-    plugin_updates_finished: Gtk.Box
-    notify_after_plugin_updates: Gtk.CheckButton
 
 
 class ApplicationMenuBuilder(Builder):
@@ -242,7 +264,8 @@ class ChatPanedBuilder(Builder):
     section_label_eventbox: Gtk.EventBox
     section_label: Gtk.Label
     workspace_settings_button: Gtk.Button
-    chat_list_scrolled: Gtk.ScrolledWindow
+    list_scrolled: Gtk.ScrolledWindow
+    list_stack: Gtk.Stack
     right_grid: Gtk.Grid
 
 
@@ -595,7 +618,7 @@ class MainBuilder(Builder):
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
     workspace_scrolled: Gtk.ScrolledWindow
-    app_box: Gtk.Box
+    activity_box: Gtk.Box
     account_box: Gtk.Box
     toggle_chat_list_button: Gtk.Button
     toggle_chat_list_icon: Gtk.Image
@@ -1007,11 +1030,13 @@ def get_builder(file_name: Literal['account_page.ui'], widgets: list[str] = ...)
 @overload
 def get_builder(file_name: Literal['account_wizard.ui'], widgets: list[str] = ...) -> AccountWizardBuilder: ...  # noqa
 @overload
+def get_builder(file_name: Literal['activity_list_row.ui'], widgets: list[str] = ...) -> ActivityListRowBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['activity_page.ui'], widgets: list[str] = ...) -> ActivityPageBuilder: ...  # noqa
+@overload
 def get_builder(file_name: Literal['add_contact.ui'], widgets: list[str] = ...) -> AddContactBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['advanced_configuration.ui'], widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['app_page.ui'], widgets: list[str] = ...) -> AppPageBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['application_menu.ui'], widgets: list[str] = ...) -> ApplicationMenuBuilder: ...  # noqa
 @overload

@@ -572,6 +572,54 @@ class AvatarStorage(metaclass=Singleton):
         return surface
 
     @staticmethod
+    def get_activity_sidebar_icon(size: int, scale: int) -> cairo.ImageSurface:
+        # Paint activity icon on grey background
+        size = size * scale
+        width = size
+        height = size
+
+        surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+        context = cairo.Context(surface)
+
+        context.set_source_rgb(0.7, 0.7, 0.7)
+        context.rectangle(0, 0, width, height)
+        context.fill()
+
+        icon_surface = load_icon_surface(
+            'feather-bell-symbolic', int(size * 0.6), scale)
+        if icon_surface is not None:
+            pos = (size - size * 0.6) / 2
+            context.set_source_surface(icon_surface, pos, pos)
+            context.paint_with_alpha(0.6)
+
+        surface = round_corners(context.get_target())
+        return surface
+
+    @staticmethod
+    def get_gajim_circle_icon(size: int, scale: int) -> cairo.ImageSurface:
+        # Paint activity icon on grey background
+        size = size * scale
+        width = size
+        height = size
+
+        surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+        context = cairo.Context(surface)
+
+        context.set_source_rgb(1, 1 , 1)
+        context.rectangle(0, 0, width, height)
+        context.fill()
+
+        icon_surface = load_icon_surface(
+            'org.gajim.Gajim', int(size * 0.6), scale)
+        if icon_surface is not None:
+            pos = (size - size * 0.6) / 2
+            context.set_source_surface(icon_surface, pos, pos)
+            context.paint()
+
+        surface = clip_circle(context.get_target())
+        return surface
+
+    @staticmethod
     def _load_for_publish(path: str) -> tuple[bool, bytes] | None:
         pixbuf = load_pixbuf(path)
         if pixbuf is None:

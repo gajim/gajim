@@ -455,8 +455,9 @@ def get_roster_view_menu() -> GajimMenu:
 
 
 def get_account_notifications_menu(account: str) -> GajimMenu:
+    # TODO: accounts menu above activity list?
     menuitems: MenuItemListT = [
-        (_('Deny all subscription requests'),
+        (_('Deny all contact requests'),
          f'win.subscription-deny-all-{account}',
          None),
     ]
@@ -471,10 +472,8 @@ def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
     value = str(jid)
     menuitems: MenuItemListT = [
         (_('Start Chat'), 'win.add-chat', params),
-        (_('Details'), f'win.contact-info-{account}', value),
-        (_('Block'), f'win.subscription-block-{account}', value),
-        (_('Report'), f'win.subscription-report-{account}', value),
-        (_('Deny'), f'win.subscription-deny-{account}', value),
+        (_('Details'), f'app.{account}-contact-info', value),
+        (_('Block'), f'app.{account}-block-contact', value),
     ]
 
     return GajimMenu.from_list(menuitems)

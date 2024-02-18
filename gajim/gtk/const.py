@@ -306,6 +306,9 @@ ACCOUNT_ACTIONS = [
     ('server-info', 's'),
     ('services', 's'),
     ('sync-history', 's'),
+    ('subscription-accept', 'a{sv}'),
+    ('subscription-deny', 'a{sv}'),
+    ('subscription-deny-all', None),
 ]
 
 
@@ -330,6 +333,9 @@ ONLINE_ACCOUNT_ACTIONS = {
     'services',
     'sync-history',
     'mark-as-read',
+    'subscription-accept',
+    'subscription-deny',
+    'subscription-deny-all',
 }
 
 
