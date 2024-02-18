@@ -56,6 +56,7 @@ from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.helpers import load_json
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.uri import open_uri
 
@@ -436,7 +437,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
             if self.has_action(account_action_name):
                 raise ValueError("Trying to add action more than once")
 
-            act = Gio.SimpleAction.new(account_action_name, GLib.VariantType.new(type_))
+            variant_type = None
+            if type_ is not None:
+                variant_type = GLib.VariantType.new(type_)
+            act = Gio.SimpleAction.new(account_action_name, variant_type)
             act.set_enabled(action_name in ALWAYS_ACCOUNT_ACTIONS)
             self.add_action(act)
 
@@ -458,6 +462,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ("block-contact", self._on_block_contact),
             ("remove-contact", self._on_remove_contact),
             ("execute-command", self._on_execute_command),
+            ("subscription-accept", self._on_subscription_accept),
+            ("subscription-deny", self._on_subscription_deny),
         ]
 
         for action_name, func in actions:
@@ -679,6 +685,31 @@ class GajimApplication(Gtk.Application, CoreApplication):
         open_window("AdHocCommands", account=account, jids=jids)
 
     @staticmethod
+    @structs.actionfunction
+    def _on_subscription_accept(
+        _action: Gio.SimpleAction, params: structs.SubscriptionAcceptParam
+    ) -> None:
+        client = app.get_client(params.account)
+        client.get_module("Presence").subscribed(params.jid)
+        contact = client.get_module("Contacts").get_contact(params.jid)
+        assert isinstance(contact, BareContact)
+        if not contact.is_in_roster:
+            open_window(
+                "AddContact",
+                account=params.account,
+                jid=params.jid,
+                nick=params.nickname or contact.name,
+            )
+
+    @staticmethod
+    @structs.actionfunction
+    def _on_subscription_deny(
+        _action: Gio.SimpleAction, params: structs.AccountJidParam
+    ) -> None:
+        client = app.get_client(params.account)
+        client.get_module("Presence").unsubscribed(params.jid)
+
+    @staticmethod
     def _on_pep_config_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
         open_window("PEPConfig", account=account)
@@ -775,18 +806,19 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_open_event_action(
         _action: Gio.SimpleAction, params: structs.OpenEventActionParams
     ) -> None:
-
-        if params.type in (
-            "connection-failed",
-            "subscription-request",
-            "unsubscribed",
-            "group-chat-invitation",
-            "server-shutdown",
-        ):
+        if params.type in ("connection-failed", "server-shutdown"):
 
             app.window.show_account_page(params.account)
 
-        elif params.type in ("incoming-message", "incoming-call"):
+        elif params.type in (
+            "subscription-request",
+            "unsubscribed",
+            "group-chat-invitation",
+        ):
+
+            app.window.show_activity_page()
+
+        elif params.type in ("incoming-message", "incoming-call", "file-transfer"):
 
             assert params.jid
             jid = JID.from_string(params.jid)

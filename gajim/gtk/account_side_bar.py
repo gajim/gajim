@@ -13,16 +13,16 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
-from gajim.common.ged import EventHelper
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
 from gajim.common.events import ShowChanged
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
 
-from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.avatar import convert_surface_to_texture
+from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.util.classes import SignalManager
 
 
@@ -49,10 +49,7 @@ class AccountSideBar(Gtk.Box, SignalManager):
         container = Gtk.Box()
         self.append(container)
 
-        self._selection_bar = Gtk.Box(
-            width_request=6,
-            margin_start=1
-        )
+        self._selection_bar = Gtk.Box(width_request=6, margin_start=1)
         self._selection_bar.add_css_class("selection-bar")
         container.append(self._selection_bar)
 
@@ -74,7 +71,7 @@ class AccountSideBar(Gtk.Box, SignalManager):
         self._selection_bar.add_css_class("selection-bar-selected")
 
     def unselect(self) -> None:
-        self._selection_bar.get_style_context().remove_class("selection-bar-selected")
+        self._selection_bar.remove_css_class("selection-bar-selected")
 
     def _on_cursor_enter(
         self,
@@ -118,8 +115,7 @@ class AccountSideBar(Gtk.Box, SignalManager):
 
     def _display_accounts_menu(self):
         popover_scrolled = Gtk.ScrolledWindow(
-            hscrollbar_policy=Gtk.PolicyType.NEVER,
-            propagate_natural_height=True
+            hscrollbar_policy=Gtk.PolicyType.NEVER, propagate_natural_height=True
         )
 
         self._accounts_popover.set_child(popover_scrolled)
@@ -129,9 +125,7 @@ class AccountSideBar(Gtk.Box, SignalManager):
         popover_scrolled.set_child(box)
 
         for account in app.settings.get_active_accounts():
-            account_color_bar = Gtk.Box(
-                width_request=6
-            )
+            account_color_bar = Gtk.Box(width_request=6)
             color_class = app.css_config.get_dynamic_class(account)
             account_color_bar.add_css_class("account-identifier-bar")
             account_color_bar.add_css_class(color_class)
@@ -139,13 +133,12 @@ class AccountSideBar(Gtk.Box, SignalManager):
             avatar = Gtk.Image(pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
             label = Gtk.Label(
                 halign=Gtk.Align.START,
-                label=app.settings.get_account_setting(account, "account_label")
+                label=app.settings.get_account_setting(account, "account_label"),
             )
 
             texture = app.app.avatar_storage.get_account_button_texture(
-                account,
-                AvatarSize.ACCOUNT_SIDE_BAR,
-                self.get_scale_factor())
+                account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+            )
             avatar.set_from_paintable(texture)
 
             account_box = Gtk.Box(spacing=6)
@@ -166,10 +159,11 @@ class AccountSideBar(Gtk.Box, SignalManager):
         self._status_popover.popdown()
         self._accounts_popover.popup()
 
-    def _on_account_clicked(self,
-                            _button: Gtk.MenuButton,
-                            account: str,
-                            ) -> None:
+    def _on_account_clicked(
+        self,
+        _button: Gtk.MenuButton,
+        account: str,
+    ) -> None:
 
         self._accounts_popover.popdown()
         app.window.show_account_page(account)
@@ -215,10 +209,11 @@ class AccountSideBar(Gtk.Box, SignalManager):
         status_popover.set_child(popover_box)
         return status_popover
 
-    def _on_change_status(self,
-                          _button: Gtk.Button,
-                          new_status: str,
-                          ) -> None:
+    def _on_change_status(
+        self,
+        _button: Gtk.Button,
+        new_status: str,
+    ) -> None:
 
         self._status_popover.popdown()
 
@@ -235,19 +230,13 @@ class AccountAvatar(Gtk.Image, EventHelper):
         self._client: Client | None = None
         self._contact: BareContact | None = None
 
-        self.register_event("account-enabled",
-                            ged.GUI1,
-                            self._on_account_changed)
-        self.register_event("account-disabled",
-                            ged.GUI1,
-                            self._on_account_changed)
+        self.register_event("account-enabled", ged.GUI1, self._on_account_changed)
+        self.register_event("account-disabled", ged.GUI1, self._on_account_changed)
         self.register_event("our-show", ged.GUI1, self._on_our_show)
 
         self._update_image()
 
-    def _on_account_changed(self,
-                            _event: AccountEnabled | AccountDisabled
-                            ) -> None:
+    def _on_account_changed(self, _event: AccountEnabled | AccountDisabled) -> None:
 
         if self._client is not None:
             self._client.disconnect_all_from_obj(self)
@@ -290,15 +279,13 @@ class AccountAvatar(Gtk.Image, EventHelper):
 
         if len(accounts) == 1:
             account = accounts[0]
-            account_label = app.settings.get_account_setting(
-                account, "account_label")
+            account_label = app.settings.get_account_setting(account, "account_label")
             self.set_tooltip_text(_("Account: %s") % account_label)
         else:
             account = None
             self.set_tooltip_text(_("Accounts"))
 
         texture = app.app.avatar_storage.get_account_button_texture(
-            account,
-            AvatarSize.ACCOUNT_SIDE_BAR,
-            self.get_scale_factor())
+            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+        )
         self.set_from_paintable(texture)

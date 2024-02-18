@@ -10,6 +10,27 @@
         <property name="orientation">vertical</property>
         <property name="row-spacing">6</property>
         <child>
+          <object class="GtkBox" id="activity_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">5</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <object class="GtkSeparator"/>
+            </child>
+            <style>
+              <class name="activity-box"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
           <object class="GtkScrolledWindow" id="workspace_scrolled">
             <property name="focusable">1</property>
             <property name="vexpand">1</property>
@@ -25,25 +46,6 @@
             <layout>
               <property name="column">0</property>
               <property name="row">2</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="app_box">
-            <property name="orientation">vertical</property>
-            <property name="spacing">5</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkSeparator"/>
-            </child>
-            <style>
-              <class name="app-sidebar"/>
-            </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">1</property>
             </layout>
           </object>
         </child>
