@@ -17,7 +17,7 @@ from __future__ import annotations
 import logging
 
 from gi.repository import Gdk
-from gi.repository import Gtk
+from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import ged
@@ -47,7 +47,7 @@ class GroupChatNickCompletion(EventHelper):
         self._contact = contact
 
     def process_key_press(self,
-                          textview: Gtk.TextView,
+                          source_view: GtkSource.View,
                           event: Gdk.EventKey
                           ) -> bool:
 
@@ -57,7 +57,7 @@ class GroupChatNickCompletion(EventHelper):
             self._last_key_tab = False
             return False
 
-        message_buffer = textview.get_buffer()
+        message_buffer = source_view.get_buffer()
         start_iter, end_iter = message_buffer.get_bounds()
         cursor_position = message_buffer.get_insert()
         end_iter = message_buffer.get_iter_at_mark(cursor_position)

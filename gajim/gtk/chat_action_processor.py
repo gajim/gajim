@@ -23,6 +23,7 @@ from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import GtkSource
 
 from gajim.common import app
 from gajim.common import types
@@ -40,7 +41,7 @@ log = logging.getLogger('gajim.gtk.chat_action_processor')
 
 
 class ChatActionProcessor(Gtk.Popover):
-    def __init__(self, message_input: Gtk.TextView) -> None:
+    def __init__(self, message_input: GtkSource.View) -> None:
         Gtk.Popover.__init__(self)
         self._menu = Gio.Menu()
         self.bind_model(self._menu)
@@ -57,9 +58,8 @@ class ChatActionProcessor(Gtk.Popover):
         self._message_input = message_input
         self._message_input.connect('key-press-event', self._on_key_press)
         self._message_input.connect('focus-out-event', self._on_focus_out)
+        self._message_input.connect('buffer-changed', self._on_changed)
 
-        self._buf = message_input.get_buffer()
-        self._buf.connect('changed', self._on_changed)
 
         self._nick_completion = GroupChatNickCompletion()
 
@@ -78,11 +78,11 @@ class ChatActionProcessor(Gtk.Popover):
         app.check_finalize(self)
 
     def _on_key_press(self,
-                      textview: Gtk.TextView,
+                      source_view: GtkSource.View,
                       event: Gdk.EventKey
                       ) -> bool:
         if isinstance(self._contact, GroupchatContact):
-            res = self._nick_completion.process_key_press(textview, event)
+            res = self._nick_completion.process_key_press(source_view, event)
             if res:
                 return True
 
@@ -129,36 +129,39 @@ class ChatActionProcessor(Gtk.Popover):
         self._message_input.grab_focus()
 
     def _get_text(self) -> str:
-        start, end = self._buf.get_bounds()
-        return self._buf.get_text(start, end, True)
+        text_buffer = self._message_input.get_buffer()
+        start, end = text_buffer.get_bounds()
+        return text_buffer.get_text(start, end, True)
 
     def _replace_text(self, selected_action: str) -> None:
         assert self._start_mark is not None
-        start_iter = self._buf.get_iter_at_mark(self._start_mark)
+        text_buffer = self._message_input.get_buffer()
+        start_iter = text_buffer.get_iter_at_mark(self._start_mark)
         assert self._current_iter is not None
-        self._buf.delete(start_iter, self._current_iter)
-        self._buf.insert(start_iter, selected_action)
+        text_buffer.delete(start_iter, self._current_iter)
+        text_buffer.insert(start_iter, selected_action)
 
     def _get_commands(self) -> list[tuple[str, str]]:
         assert self._contact is not None
         return app.commands.get_commands(self._contact.type_string)
 
-    def _on_changed(self, _text_buffer: Gtk.TextBuffer) -> None:
-        insert = self._buf.get_insert()
-        self._current_iter = self._buf.get_iter_at_mark(insert)
+    def _on_changed(self, message_input: GtkSource.View) -> None:
+        text_buffer = self._message_input.get_buffer()
+        insert = text_buffer.get_insert()
+        self._current_iter = text_buffer.get_iter_at_mark(insert)
         current_offset = self._current_iter.get_offset()
 
         if self._start_mark is None:
-            start_iter = self._buf.get_iter_at_offset(current_offset - 1)
+            start_iter = text_buffer.get_iter_at_offset(current_offset - 1)
         else:
-            start_iter = self._buf.get_iter_at_mark(self._start_mark)
+            start_iter = text_buffer.get_iter_at_mark(self._start_mark)
 
         command_found = self._check_for_command(start_iter)
         emoji_found = self._check_for_emoji(start_iter)
 
         if not command_found and not emoji_found:
             if self._start_mark is not None:
-                self._buf.delete_mark(self._start_mark)
+                text_buffer.delete_mark(self._start_mark)
                 self._start_mark = None
             self.popdown()
 
@@ -175,10 +178,11 @@ class ChatActionProcessor(Gtk.Popover):
                 # '/' not at the beginning
                 return False
 
-            action_text = self._buf.get_text(start, self._current_iter, False)
+            text_buffer = self._message_input.get_buffer()
+            action_text = text_buffer.get_text(start, self._current_iter, False)
             if self._start_mark is None:
                 self._start_mark = Gtk.TextMark.new('chat-action-start', True)
-                self._buf.add_mark(self._start_mark, start)
+                text_buffer.add_mark(self._start_mark, start)
             self._update_commands_menu(action_text, start)
             return True
 
@@ -222,7 +226,8 @@ class ChatActionProcessor(Gtk.Popover):
         if search is not None:
             start, _end = search
             colon_offset = start.get_offset()
-            before_colon = self._buf.get_iter_at_offset(colon_offset - 1)
+            text_buffer = self._message_input.get_buffer()
+            before_colon = text_buffer.get_iter_at_offset(colon_offset - 1)
             if before_colon.get_char() not in (' ', '\n'):
                 # We want to show the menu only if text begins with a colon,
                 # or if a colon follows on a space. This avoids showing the
@@ -231,13 +236,13 @@ class ChatActionProcessor(Gtk.Popover):
                 if not text.startswith(':'):
                     return False
 
-            action_text = self._buf.get_text(
+            action_text = text_buffer.get_text(
                 start, self._current_iter, False)[1:]
             if self._start_mark is not None:
-                self._buf.delete_mark(self._start_mark)
+                text_buffer.delete_mark(self._start_mark)
 
             self._start_mark = Gtk.TextMark.new('chat-action-start', True)
-            self._buf.add_mark(self._start_mark, start)
+            text_buffer.add_mark(self._start_mark, start)
             if self._active or len(action_text) > 1:
                 # Don't activate until a sufficient # of chars has been typed,
                 # which is chosen to be > 1 to not interfere with ASCII smilies
