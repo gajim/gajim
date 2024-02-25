@@ -77,6 +77,11 @@ class ChatPage(Gtk.Box):
 
         self._restore_occupants_list = False
 
+        self._ui.section_label_eventbox.connect(
+            'enter-notify-event', self._on_section_label_hover)
+        self._ui.section_label_eventbox.connect(
+            'leave-notify-event', self._on_section_label_hover)
+
         self._chat_filter = ChatFilter(icons=True)
         self._ui.filter_bar.add(self._chat_filter)
         self._ui.filter_bar_toggle.connect(
@@ -141,6 +146,20 @@ class ChatPage(Gtk.Box):
         self._ui.filter_bar_revealer.set_reveal_child(active)
         self._chat_filter.reset()
 
+    def _on_section_label_hover(self,
+                                _eventbox: Gtk.EventBox,
+                                event: Gdk.EventCrossing
+                                ) -> bool:
+
+        if event.type == Gdk.EventType.ENTER_NOTIFY:
+            self._ui.workspace_settings_button.set_visible(True)
+
+        if (event.type == Gdk.EventType.LEAVE_NOTIFY and
+                event.detail != Gdk.NotifyType.INFERIOR):
+            self._ui.workspace_settings_button.set_visible(False)
+
+        return True
+
     @staticmethod
     def _on_edit_workspace_clicked(_button: Gtk.Button) -> None:
         app.window.activate_action('edit-workspace', GLib.Variant('s', ''))
@@ -199,7 +218,7 @@ class ChatPage(Gtk.Box):
         assert chat_list is not None
         name = app.settings.get_workspace_setting(chat_list.workspace_id,
                                                   'name')
-        self._ui.workspace_label.set_text(name)
+        self._ui.section_label.set_text(name)
         self._ui.search_entry.set_text('')
         self._ui.chat_list_scrolled.get_vadjustment().set_value(0)
 
@@ -213,7 +232,7 @@ class ChatPage(Gtk.Box):
 
     def update_workspace(self, workspace_id: str) -> None:
         name = app.settings.get_workspace_setting(workspace_id, 'name')
-        self._ui.workspace_label.set_text(name)
+        self._ui.section_label.set_text(name)
 
     def remove_chat_list(self, workspace_id: str) -> None:
         self._chat_list_stack.remove_chat_list(workspace_id)

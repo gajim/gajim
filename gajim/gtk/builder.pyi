@@ -237,12 +237,14 @@ class ChatPanedBuilder(Builder):
     paned: Gtk.Paned
     middle_grid: Gtk.Grid
     header_bar: Gtk.Grid
-    workspace_label: Gtk.Label
+    start_chat_menu_button: Gtk.MenuButton
     filter_bar_toggle: Gtk.ToggleButton
     search_entry: Gtk.SearchEntry
-    start_chat_menu_button: Gtk.MenuButton
     filter_bar_revealer: Gtk.Revealer
     filter_bar: Gtk.Box
+    section_label_eventbox: Gtk.EventBox
+    section_label: Gtk.Label
+    workspace_settings_button: Gtk.Button
     chat_list_scrolled: Gtk.ScrolledWindow
     right_grid: Gtk.Grid
 
