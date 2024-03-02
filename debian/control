@@ -41,7 +41,6 @@ Depends:
     gir1.2-gtk-3.0 (>= 3.24.30),
     gir1.2-gtksource-4,
 Recommends:
-    aspell-en | aspell-dictionary,
     ca-certificates,
     fonts-noto-color-emoji,
     gir1.2-gsound-1.0,
