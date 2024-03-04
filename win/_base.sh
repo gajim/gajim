@@ -2,9 +2,7 @@
 # Copyright 2016 Christoph Reiter
 # Copyright 2017 Philipp Hörist
 #
-# This program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License version 2 as
-# published by the Free Software Foundation.
+# SPDX-License-Identifier: GPL-2.0-only
 
 set -e
 DIR="$( cd "$( dirname "$0" )" && pwd )"
