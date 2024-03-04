@@ -84,14 +84,3 @@ While developing this command is useful to preview the manpage
 To convert the markdown
 
     $ pandoc gajim.1.md -s -t man -o gajim.1
-
-# Database
-
-The database layout is defined in `archive.dbml`.
-Use the python package `dbml-sqlite` to transform it to SQLite.
-
-```python
-from dbml_sqlite import toSQLite
-from pathlib import Path
-Path("./archive.sql").write_text(toSQLite('archive.dbml', tableExists=False, indexExists=False))
-```
