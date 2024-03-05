@@ -485,7 +485,7 @@ ACCOUNT_SETTINGS = {
     },
 
     'group_chat': {
-        'encryption': '',
+        'encryption': HAS_ACCOUNT_DEFAULT,
         'mute_until': '',
         'notify_on_all_messages': HAS_APP_DEFAULT,
         'print_join_left': HAS_APP_DEFAULT,
