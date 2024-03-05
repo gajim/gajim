@@ -33,6 +33,10 @@
       <li>Even more features via plugins</li>
     </ul>
   </description>
+  <branding>
+    <color type="primary" scheme_preference="light">#cfe6a3</color>
+    <color type="primary" scheme_preference="dark">#22363b</color>
+  </branding>
   <screenshots>
     <screenshot type="default">
       <image>https://gajim.org/img/screenshots/single-window-mode.png</image>
