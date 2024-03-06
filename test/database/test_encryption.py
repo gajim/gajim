@@ -47,7 +47,7 @@ class EncryptionTest(unittest.TestCase):
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             resource='res',
-            message='Some Message',
+            text='Some Message',
             id='1',
             stanza_id='1a',
             stable_id=True,
@@ -64,7 +64,7 @@ class EncryptionTest(unittest.TestCase):
             timestamp=datetime.fromtimestamp(1, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             resource='res',
-            message='Some other Message',
+            text='Some other Message',
             id='2',
             stanza_id='1a',
             stable_id=True,
@@ -75,7 +75,6 @@ class EncryptionTest(unittest.TestCase):
 
         message_pk1 = self._archive.insert_object(message_data1)
         message_pk2 = self._archive.insert_object(message_data2)
-        self._archive.get_session().expunge_all()
 
         message1 = self._archive.get_message_with_pk(message_pk1)
         message2 = self._archive.get_message_with_pk(message_pk2)
@@ -101,8 +100,8 @@ class EncryptionTest(unittest.TestCase):
 
         self.assertEqual(pk1, pk2)
 
-        session = self._archive.get_session()
-        res = session.scalar(select(Encryption).where(Encryption.pk == pk1))
+        with self._archive.get_session() as s:
+            res = s.scalar(select(Encryption).where(Encryption.pk == pk1))
         assert res is not None
 
 

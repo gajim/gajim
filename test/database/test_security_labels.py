@@ -53,7 +53,7 @@ class SecurityLabelsTest(unittest.TestCase):
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             resource='res',
-            message='Some Message',
+            text='Some Message',
             id='messageid1',
             stanza_id='1a',
             stable_id=True,
@@ -63,7 +63,6 @@ class SecurityLabelsTest(unittest.TestCase):
         )
 
         message_pk = self._archive.insert_object(message_data)
-        self._archive.get_session().expunge_all()
 
         message = self._archive.get_message_with_pk(message_pk)
 
@@ -102,8 +101,8 @@ class SecurityLabelsTest(unittest.TestCase):
         self.assertEqual(pk1, pk2)
         self.assertEqual(pk2, pk3)
 
-        session = self._archive.get_session()
-        res = session.scalar(select(SecurityLabel).where(SecurityLabel.pk == pk3))
+        with self._archive.get_session() as s:
+            res = s.scalar(select(SecurityLabel).where(SecurityLabel.pk == pk3))
         assert res is not None
 
         self.assertEqual(res.displaymarking, 'NOT SECRET')

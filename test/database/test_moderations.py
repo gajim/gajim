@@ -49,8 +49,8 @@ class ModerationTest(unittest.TestCase):
         pk = self._archive.insert_row(mod_data, ignore_on_conflict=True)
         self.assertNotEqual(pk, -1)
 
-        session = self._archive.get_session()
-        moderation = session.scalar(select(Moderation).where(Moderation.pk == pk))
+        with self._archive.get_session() as s:
+            moderation = s.scalar(select(Moderation).where(Moderation.pk == pk))
         assert moderation is not None
 
         self.assertEqual(moderation.by, 'some@domain.com')
@@ -85,7 +85,7 @@ class ModerationTest(unittest.TestCase):
             id='1',
             stanza_id='stanzaid1',
             stable_id=True,
-            message='message',
+            text='message',
             user_delay_ts=None,
             correction_id=None,
         )
@@ -104,8 +104,6 @@ class ModerationTest(unittest.TestCase):
 
         self._archive.insert_row(mod_data, ignore_on_conflict=True)
 
-        session = self._archive.get_session()
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None

@@ -165,8 +165,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
 
         assert self._contact is not None
 
-        if (message.oob is not None and
-                message.oob.url == message.text):
+        if (message.oob and
+                message.oob[0].url == message.text):
             # Don't allow to correct HTTP Upload file transfer URLs
             self._last_message_id[self._contact] = None
         else:

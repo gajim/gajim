@@ -394,7 +394,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         data: Message
     ) -> None:
 
-        text = data.message
+        text = data.text
         assert text is not None
 
         client = app.get_client(account)

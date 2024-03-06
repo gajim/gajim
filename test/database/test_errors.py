@@ -49,8 +49,8 @@ class ErrorTest(unittest.TestCase):
 
         pk = self._archive.insert_row(error_data1)
 
-        session = self._archive.get_session()
-        error = session.scalar(select(MessageError).where(MessageError.pk == pk))
+        with self._archive.get_session() as s:
+            error = s.scalar(select(MessageError).where(MessageError.pk == pk))
         assert error is not None
 
         self.assertEqual(error.by, 'some@domain.com')
@@ -86,7 +86,7 @@ class ErrorTest(unittest.TestCase):
             id='1',
             stanza_id=None,
             stable_id=True,
-            message='message',
+            text='message',
             user_delay_ts=None,
             correction_id=None,
         )
@@ -105,8 +105,6 @@ class ErrorTest(unittest.TestCase):
         )
         self._archive.insert_row(error_data1)
 
-        session = self._archive.get_session()
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None

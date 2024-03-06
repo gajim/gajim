@@ -25,9 +25,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression as expr
 from sqlalchemy.types import TypeEngine
 
-from gajim.common.storage.archive.const import ChatMarkerType
 from gajim.common.storage.base import EpochTimestampType
-from gajim.common.storage.base import IntEnumType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import StrValueMissingType
 from gajim.common.storage.base import VALUE_MISSING
@@ -159,8 +157,9 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'oob'
 
+    pk: Mapped[int] = mapped_column(init=False, primary_key=True)
     fk_message_pk: Mapped[int] = mapped_column(
-        ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey('message.pk', ondelete='CASCADE'), init=False
     )
     url: Mapped[str]
     description: Mapped[str | None]
@@ -310,7 +309,7 @@ class Marker(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('occupant.pk'), default=None, init=False
     )
 
-    type: Mapped[ChatMarkerType] = mapped_column(IntEnumType(ChatMarkerType))
+    type: Mapped[int] = mapped_column()
     id: Mapped[str] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
@@ -519,9 +518,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         viewonly=True,
     )
 
-    oob: Mapped[OOB | None] = relationship(
+    oob: Mapped[list[OOB]] = relationship(
         lazy='joined',
-        default=None,
+        default_factory=list,
         cascade="all, delete",
         passive_deletes=True,
     )

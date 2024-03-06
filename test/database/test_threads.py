@@ -46,20 +46,18 @@ class ThreadsTest(unittest.TestCase):
             stanza_id=None,
             stable_id=True,
             thread_id_=thread_id,
-            message='message',
+            text='message',
             user_delay_ts=None,
             correction_id=None,
         )
 
     def test_insert_thread(self) -> None:
-        session = self._archive.get_session()
 
         # Insert thread and join afterwards
 
         message_data = self._create_base_message(message_id='1', thread_id='t1')
         pk = self._archive.insert_object(message_data)
 
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None
@@ -75,7 +73,6 @@ class ThreadsTest(unittest.TestCase):
         message_data = self._create_base_message(message_id='2', thread_id='t1')
         pk = self._archive.insert_object(message_data)
 
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None
@@ -91,7 +88,6 @@ class ThreadsTest(unittest.TestCase):
         message_data = self._create_base_message(message_id='3', thread_id='t2')
         pk = self._archive.insert_object(message_data)
 
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None
@@ -108,7 +104,6 @@ class ThreadsTest(unittest.TestCase):
         message_data.remote_jid_ = JID.from_string('remote2@jid.org')
         pk = self._archive.insert_object(message_data)
 
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None

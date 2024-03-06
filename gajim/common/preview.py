@@ -295,7 +295,7 @@ class PreviewManager:
 
     def is_previewable(self,
                        text: str,
-                       oob_data: mod.OOB | None
+                       oob_data: list[mod.OOB]
                        ) -> bool:
 
 
@@ -310,7 +310,7 @@ class PreviewManager:
         except Exception:
             return False
 
-        oob_url = None if oob_data is None else oob_data.url
+        oob_url = None if not oob_data else oob_data[0].url
         if not self._accept_uri(urlparts, uri, oob_url):
             return False
 

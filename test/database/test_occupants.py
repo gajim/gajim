@@ -46,8 +46,8 @@ class OccupantTest(unittest.TestCase):
 
         pk = self._archive.upsert_row(occupant_data)
 
-        session = self._archive.get_session()
-        occupant = session.scalar(select(Occupant).where(Occupant.pk == pk))
+        with self._archive.get_session() as s:
+            occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
 
         self.assertEqual(occupant.id, 'someid')
@@ -68,8 +68,8 @@ class OccupantTest(unittest.TestCase):
 
         pk = self._archive.upsert_row(occupant_data)
 
-        session = self._archive.get_session()
-        occupant = session.scalar(select(Occupant).where(Occupant.pk == pk))
+        with self._archive.get_session() as s:
+            occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
         assert occupant.real_remote is not None
 
@@ -95,7 +95,8 @@ class OccupantTest(unittest.TestCase):
         pk = self._archive.upsert_row(occupant_data)
         self.assertEqual(pk, 1)
 
-        occupant = session.scalar(select(Occupant).where(Occupant.pk == pk))
+        with self._archive.get_session() as s:
+            occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
         assert occupant.real_remote is not None
 
@@ -121,7 +122,8 @@ class OccupantTest(unittest.TestCase):
         pk = self._archive.upsert_row(occupant_data)
         self.assertEqual(pk, 1)
 
-        occupant = session.scalar(select(Occupant).where(Occupant.pk == pk))
+        with self._archive.get_session() as s:
+            occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
         assert occupant.real_remote is not None
 
@@ -146,7 +148,8 @@ class OccupantTest(unittest.TestCase):
         pk = self._archive.upsert_row(occupant_data)
         self.assertEqual(pk, 1)
 
-        occupant = session.scalar(select(Occupant).where(Occupant.pk == pk))
+        with self._archive.get_session() as s:
+            occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
         assert occupant.real_remote is not None
 
@@ -179,7 +182,7 @@ class OccupantTest(unittest.TestCase):
             id='1',
             stanza_id=None,
             stable_id=True,
-            message='message',
+            text='message',
             user_delay_ts=None,
             occupant_=occupant_data,
             correction_id=None,
@@ -187,8 +190,6 @@ class OccupantTest(unittest.TestCase):
 
         pk = self._archive.insert_object(message_data)
 
-        session = self._archive.get_session()
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None

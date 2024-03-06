@@ -68,7 +68,7 @@ class MarkersTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             resource='res',
-            message='Some Message',
+            text='Some Message',
             id='messageid1',
             stanza_id='1a',
             stable_id=True,
@@ -149,7 +149,7 @@ class MarkersTest(unittest.TestCase):
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             resource='res',
-            message='Some Message',
+            text='Some Message',
             id='messageid99',
             stanza_id='messageid1',
             stable_id=True,
@@ -204,10 +204,10 @@ class MarkersTest(unittest.TestCase):
         pk1 = self._archive.upsert_row(marker_data1)
         pk2 = self._archive.upsert_row(marker_data2)
 
-        session = self._archive.get_session()
-
         self.assertEqual(pk1, pk2)
-        marker = session.scalar(select(Marker))
+
+        with self._archive.get_session() as s:
+            marker = s.scalar(select(Marker))
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)
@@ -227,7 +227,9 @@ class MarkersTest(unittest.TestCase):
 
         pk3 = self._archive.upsert_row(marker_data3)
         self.assertEqual(pk1, pk3)
-        marker = session.scalar(select(Marker))
+
+        with self._archive.get_session() as s:
+            marker = s.scalar(select(Marker))
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)
@@ -247,7 +249,9 @@ class MarkersTest(unittest.TestCase):
 
         pk4 = self._archive.upsert_row(marker_data4)
         self.assertEqual(pk1, pk4)
-        marker = session.scalar(select(Marker))
+
+        with self._archive.get_session() as s:
+            marker = s.scalar(select(Marker))
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)

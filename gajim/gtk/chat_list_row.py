@@ -259,7 +259,7 @@ class ChatListRow(Gtk.ListBoxRow):
                          text: str,
                          nickname: str | None = None,
                          icon_name: str | None = None,
-                         oob: mod.OOB | None = None
+                         oob: list[mod.OOB] | None = None
                          ) -> None:
 
         assert isinstance(

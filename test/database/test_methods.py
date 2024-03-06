@@ -79,7 +79,7 @@ class ThreadsTest(unittest.TestCase):
                 id=message_id_,
                 stanza_id=None,
                 stable_id=True,
-                message=message,
+                text=message,
                 user_delay_ts=None,
                 correction_id=None,
             )
@@ -321,27 +321,27 @@ class ThreadsTest(unittest.TestCase):
 
         self._archive.insert_object(error)
 
-        s = self._archive.get_session()
+        with self._archive.get_session() as s:
+            result = s.scalar(select(MessageError))
+            self.assertIsNotNone(result)
 
-        result = s.scalar(select(MessageError))
-        self.assertIsNotNone(result)
+            result = s.scalar(select(Moderation))
+            self.assertIsNotNone(result)
 
-        result = s.scalar(select(Moderation))
-        self.assertIsNotNone(result)
-
-        result = s.scalar(select(Message))
-        self.assertIsNotNone(result)
+            result = s.scalar(select(Message))
+            self.assertIsNotNone(result)
 
         self._archive.remove_history_for_jid('testacc1', remote_jid)
 
-        result = s.scalar(select(MessageError))
-        self.assertIsNone(result)
+        with self._archive.get_session() as s:
+            result = s.scalar(select(MessageError))
+            self.assertIsNone(result)
 
-        result = s.scalar(select(Moderation))
-        self.assertIsNone(result)
+            result = s.scalar(select(Moderation))
+            self.assertIsNone(result)
 
-        result = s.scalar(select(Message))
-        self.assertIsNone(result)
+            result = s.scalar(select(Message))
+            self.assertIsNone(result)
 
 
 if __name__ == '__main__':

@@ -40,7 +40,8 @@ class ForeignKeyTest(unittest.TestCase):
         app.settings.set_account_setting('testacc1', 'hostname', 'domain.org')
 
     def test_message_delete_cascade(self) -> None:
-        oob_data = OOB(url='https://www.test.com', description='somedesc')
+        oob_data1 = OOB(url='https://www.test.com', description='somedesc')
+        oob_data2 = OOB(url='https://www.othertest.com', description='otherdesc')
 
         reply_data = Reply(
             id='123',
@@ -72,12 +73,12 @@ class ForeignKeyTest(unittest.TestCase):
             id='1',
             stanza_id=None,
             stable_id=True,
-            message='message',
+            text='message',
             user_delay_ts=None,
             correction_id=None,
             encryption_=enc_data,
             security_label_=sec_data,
-            oob=oob_data,
+            oob=[oob_data1, oob_data2],
             reply=reply_data,
         )
 
@@ -96,13 +97,12 @@ class ForeignKeyTest(unittest.TestCase):
 
         self._archive.insert_row(error_data)
 
-        session = self._archive.get_session()
-        session.expunge_all()
         message = self._archive.get_message_with_pk(pk)
 
         assert message is not None
         assert message.oob is not None
-        self.assertEqual(message.oob.description, 'somedesc')
+        self.assertEqual(message.oob[0].description, 'otherdesc')
+        self.assertEqual(message.oob[1].description, 'somedesc')
 
         assert message.reply is not None
         self.assertEqual(message.reply.id, '123')
@@ -137,7 +137,8 @@ class ForeignKeyTest(unittest.TestCase):
         ]
 
         for stmt in stmts:
-            res = session.execute(stmt).one_or_none()
+            with self._archive.get_session() as s:
+                res = s.execute(stmt).one_or_none()
             assert res is None
 
 

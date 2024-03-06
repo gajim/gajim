@@ -57,14 +57,14 @@ class CorrectionsTest(unittest.TestCase):
             state=MessageState.ACKNOWLEDGED,
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             resource='res1',
-            message='Some Message',
+            text='Some Message',
             id='messageid1',
             stanza_id='1a',
             stable_id=True,
             user_delay_ts=None,
             correction_id=None,
             occupant_=self._create_base_occupant('occupantid1'),
-            oob=OOB(url='https://www.test.com', description='desc'),
+            oob=[OOB(url='https://www.test.com', description='desc')],
         )
 
     def test_join_correction_groupchat_occupant_id(self) -> None:
@@ -77,12 +77,12 @@ class CorrectionsTest(unittest.TestCase):
         # Insert in not ascending order to test ordering
 
         m = self._create_base_message()
-        m.message = 'second correction'
+        m.text = 'second correction'
         m.id = 'messageid3'
         m.timestamp = datetime.fromtimestamp(2, timezone.utc)
         m.correction_id = 'messageid1'
-        assert m.oob is not None
-        m.oob.description = 'second corrected desc'
+        assert m.oob
+        m.oob[0].description = 'second corrected desc'
 
         self._archive.insert_object(m)
 
@@ -90,7 +90,7 @@ class CorrectionsTest(unittest.TestCase):
         # this message should be still joined
 
         m = self._create_base_message()
-        m.message = 'first correction'
+        m.text = 'first correction'
         m.resource = 'otherres'
         m.id = 'messageid2'
         m.timestamp = datetime.fromtimestamp(1, timezone.utc)
@@ -102,7 +102,7 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.occupant_ = self._create_base_occupant('occupantid2')
-        m.message = 'third correction'
+        m.text = 'third correction'
         m.id = 'messageid4'
         m.timestamp = datetime.fromtimestamp(3, timezone.utc)
         m.correction_id = 'messageid1'
@@ -113,24 +113,23 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.occupant_ = None
-        m.message = 'third correction'
+        m.text = 'third correction'
         m.id = 'messageid5'
         m.timestamp = datetime.fromtimestamp(4, timezone.utc)
         m.correction_id = 'messageid1'
 
         self._archive.insert_object(m)
 
-        self._archive.get_session().expunge_all()
         message = self._archive.get_message_with_pk(message_pk)
 
         assert message is not None
         assert message.corrections
 
         self.assertEqual(len(message.corrections), 2)
-        self.assertEqual(message.corrections[0].message, 'first correction')
-        self.assertEqual(message.corrections[1].message, 'second correction')
+        self.assertEqual(message.corrections[0].text, 'first correction')
+        self.assertEqual(message.corrections[1].text, 'second correction')
         assert message.corrections[1].oob is not None
-        self.assertEqual(message.corrections[1].oob.description, 'second corrected desc')
+        self.assertEqual(message.corrections[1].oob[0].description, 'second corrected desc')
 
     def test_join_correction_groupchat_resource(self) -> None:
         # Join only with resource, when occupant id is not supported
@@ -141,7 +140,7 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.occupant_ = None
-        m.message = 'first correction'
+        m.text = 'first correction'
         m.id = 'messageid2'
         m.timestamp = datetime.fromtimestamp(1, timezone.utc)
         m.correction_id = 'messageid1'
@@ -153,21 +152,20 @@ class CorrectionsTest(unittest.TestCase):
         m = self._create_base_message()
         m.occupant_ = None
         m.resource = 'unrelatedres'
-        m.message = 'second correction'
+        m.text = 'second correction'
         m.id = 'messageid3'
         m.timestamp = datetime.fromtimestamp(2, timezone.utc)
         m.correction_id = 'messageid1'
 
         self._archive.insert_object(m)
 
-        self._archive.get_session().expunge_all()
         message = self._archive.get_message_with_pk(message_pk)
 
         assert message is not None
         assert message.corrections
 
         self.assertEqual(len(message.corrections), 1)
-        self.assertEqual(message.corrections[0].message, 'first correction')
+        self.assertEqual(message.corrections[0].text, 'first correction')
 
     def test_join_correction_single_chat(self) -> None:
         # Order corrections by timestamp
@@ -179,7 +177,7 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.type = MessageType.CHAT
-        m.message = 'first correction'
+        m.text = 'first correction'
         m.id = 'messageid2'
         m.timestamp = datetime.fromtimestamp(1, timezone.utc)
         m.correction_id = 'messageid1'
@@ -191,7 +189,7 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.type = MessageType.CHAT
-        m.message = 'second correction'
+        m.text = 'second correction'
         m.resource = 'otherres'
         m.id = 'messageid3'
         m.timestamp = datetime.fromtimestamp(2, timezone.utc)
@@ -204,7 +202,7 @@ class CorrectionsTest(unittest.TestCase):
         m = self._create_base_message()
         m.type = MessageType.CHAT
         m.remote_jid_ = JID.from_string("other@remote.jid")
-        m.message = 'third correction'
+        m.text = 'third correction'
         m.id = 'messageid4'
         m.timestamp = datetime.fromtimestamp(3, timezone.utc)
         m.correction_id = 'messageid1'
@@ -216,7 +214,7 @@ class CorrectionsTest(unittest.TestCase):
         m = self._create_base_message()
         m.type = MessageType.CHAT
         m.account_ = 'testacc2'
-        m.message = 'fourth correction'
+        m.text = 'fourth correction'
         m.id = 'messageid5'
         m.timestamp = datetime.fromtimestamp(4, timezone.utc)
         m.correction_id = 'messageid1'
@@ -228,22 +226,21 @@ class CorrectionsTest(unittest.TestCase):
         m = self._create_base_message()
         m.type = MessageType.CHAT
         m.direction = ChatDirection.OUTGOING
-        m.message = 'fifth correction'
+        m.text = 'fifth correction'
         m.id = 'messageid6'
         m.timestamp = datetime.fromtimestamp(5, timezone.utc)
         m.correction_id = 'messageid1'
 
         self._archive.insert_object(m)
 
-        self._archive.get_session().expunge_all()
         message = self._archive.get_message_with_pk(message_pk)
 
         assert message is not None
         assert message.corrections
 
         self.assertEqual(len(message.corrections), 2)
-        self.assertEqual(message.corrections[0].message, 'first correction')
-        self.assertEqual(message.corrections[1].message, 'second correction')
+        self.assertEqual(message.corrections[0].text, 'first correction')
+        self.assertEqual(message.corrections[1].text, 'second correction')
 
 
 if __name__ == '__main__':

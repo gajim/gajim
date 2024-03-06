@@ -446,9 +446,9 @@ class Message(BaseModule):
                     updated_at=timestamp,
                 )
 
-        oob_data = None
+        oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
-            oob_data = mod.OOB(url=message.oob_url, description=None)
+            oob_data.append(mod.OOB(url=message.oob_url, description=None))
 
         # TODO our occupant id is missing here?
 

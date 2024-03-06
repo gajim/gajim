@@ -488,22 +488,3 @@ class EpochTimestampType(sa.types.TypeDecorator[Any]):
         if value is None:
             return None
         return datetime.fromtimestamp(value, timezone.utc)
-
-
-class IntEnumType(sa.types.TypeDecorator[Any]):
-    impl = sa.types.INTEGER
-    cache_ok = True
-
-    def __init__(self, enumtype: type[IntEnum]):
-        super().__init__()
-        self._enumtype = enumtype
-
-    def process_bind_param(self, value: IntEnum | None, dialect: Any) -> int | None:
-        if value is None:
-            return None
-        return value.value
-
-    def process_result_value(self, value: int | None, dialect: Any) -> IntEnum | None:
-        if value is None:
-            return None
-        return self._enumtype(value)
