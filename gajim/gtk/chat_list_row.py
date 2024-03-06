@@ -276,7 +276,7 @@ class ChatListRow(Gtk.ListBoxRow):
         icon = None
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
-        if oob is not None:
+        if oob:
             if app.preview_manager.is_previewable(text, oob):
                 scheme = urlparse(text).scheme
                 if scheme == 'geo':
