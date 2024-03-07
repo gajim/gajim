@@ -188,7 +188,6 @@ class Preview:
         self._widget.update(self, data)
 
     def update_progress(self, progress: float, request: HTTPRequest) -> None:
-        self.download_in_progress = True
         self._request = request
         self._widget.update_progress(self, progress)
 
@@ -453,7 +452,9 @@ class PreviewManager:
             # History Window can be opened without account context
             # This means we can not apply proxy settings
             return
+
         log.info('Start downloading: %s', preview.request_uri)
+        preview.download_in_progress = True
 
         request = create_http_request(preview.account)
         request.set_user_data(preview)
@@ -465,7 +466,7 @@ class PreviewManager:
 
     def _accept_certificate(self,
                             request: HTTPRequest,
-                            certificate: Gio.TlsCertificate,
+                            _certificate: Gio.TlsCertificate,
                             certificate_errors: Gio.TlsCertificateFlags,
                             ) -> bool:
 
@@ -479,6 +480,7 @@ class PreviewManager:
 
         preview = cast(Preview, request.get_user_data())
         preview.info_message = _('TLS verification failed: %s') % phrases[0]
+        preview.download_in_progress = False
         preview.update_widget()
         return False
 
@@ -497,6 +499,7 @@ class PreviewManager:
         if content_type not in ALLOWED_MIME_TYPES and not force:
             log.info('Not an allowed content type: %s, %s', content_type, uri)
             request.cancel()
+            preview.download_in_progress = False
             return
 
         if content_length > int(app.settings.get('preview_max_file_size')):
@@ -507,6 +510,7 @@ class PreviewManager:
                 preview.info_message = None
             else:
                 request.cancel()
+                preview.download_in_progress = False
                 preview.info_message = _('Automatic preview disabled '
                                          '(file too big)')
 
@@ -625,3 +629,4 @@ class PreviewManager:
 
     def cancel_download(self, preview: Preview) -> None:
         preview.request.cancel()
+        preview.download_in_progress = False
