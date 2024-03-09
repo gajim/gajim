@@ -488,3 +488,18 @@ class EpochTimestampType(sa.types.TypeDecorator[Any]):
         if value is None:
             return None
         return datetime.fromtimestamp(value, timezone.utc)
+
+
+class JSONType(sa.types.TypeDecorator[Any]):
+    impl = sa.types.TEXT
+    cache_ok = True
+
+    def process_bind_param(self, value: dict[str, Any] | None, dialect: Any):
+        if value is not None:
+            return json.dumps(value)
+        return value
+
+    def process_result_value(self, value: str | None, dialect: Any):
+        if value is not None:
+            return json.loads(value)
+        return value

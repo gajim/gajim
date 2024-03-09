@@ -261,11 +261,13 @@ class MessageArchiveStorage(AlchemyStorage):
         return existing.pk
 
     @with_session
-    def get_message_with_pk(self, session: Session, pk: int) -> Message | None:
-        return self._get_message_with_pk(session, pk)
+    def get_message_with_pk(self, session: Session, pk: int, options: Any = None) -> Message | None:
+        return self._get_message_with_pk(session, pk, options)
 
-    def _get_message_with_pk(self, session: Session, pk: int) -> Message | None:
+    def _get_message_with_pk(self, session: Session, pk: int, options: Any = None) -> Message | None:
         stmt = select(Message).where(Message.pk == pk)
+        if options is not None:
+            stmt = stmt.options(*options)
         message = session.scalar(stmt)
         return message
 

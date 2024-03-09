@@ -52,7 +52,6 @@ class ThreadsTest(unittest.TestCase):
         )
 
     def test_insert_thread(self) -> None:
-
         # Insert thread and join afterwards
 
         message_data = self._create_base_message(message_id='1', thread_id='t1')

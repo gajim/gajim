@@ -27,6 +27,7 @@ from sqlalchemy.types import TypeEngine
 
 from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
+from gajim.common.storage.base import JSONType
 from gajim.common.storage.base import StrValueMissingType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import ValueMissingT
@@ -175,6 +176,19 @@ class Reply(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     fallback_start: Mapped[int | None]
     fallback_end: Mapped[int | None]
     to: Mapped[JID | None] = mapped_column(JIDType)
+
+
+class Call(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = 'call'
+
+    fk_message_pk: Mapped[int] = mapped_column(
+        ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
+    )
+    sid: Mapped[str]
+    end_timestamp: Mapped[datetime.datetime | None] = mapped_column(
+        EpochTimestampType, default=None
+    )
+    state: Mapped[int]
 
 
 class Encryption(MappedAsDataclass, Base, UtilMixin, kw_only=True):
@@ -375,6 +389,65 @@ class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         return True
 
 
+class FileTransferSource(MappedAsDataclass, Base, kw_only=True):
+    __tablename__ = "ft_source"
+
+    pk: Mapped[int] = mapped_column(primary_key=True, init=False)
+    fk_filetransfer_pk: Mapped[int] = mapped_column(
+        ForeignKey('filetransfer.pk', ondelete='CASCADE'), init=False
+    )
+    type: Mapped[str]
+
+    __mapper_args__ = {
+        "polymorphic_identity": "source",
+        "polymorphic_on": "type",
+    }
+
+
+class UrlData(FileTransferSource):
+    __tablename__ = "ft_source_urldata"
+
+    fk_ft_source_pk: Mapped[int] = mapped_column(
+        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+    )
+    target: Mapped[str]
+    scheme_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
+
+    __mapper_args__ = {
+        "polymorphic_identity": "urldata",
+    }
+
+
+class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = 'filetransfer'
+
+    pk: Mapped[int] = mapped_column(primary_key=True, init=False)
+    fk_message_pk: Mapped[int] = mapped_column(
+        ForeignKey('message.pk', ondelete='CASCADE'), init=False
+    )
+
+    date: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType)
+    desc: Mapped[str | None]
+    hash: Mapped[str | None]
+    hash_algo: Mapped[str | None]
+    height: Mapped[int | None]
+    length: Mapped[int | None]
+    media_type: Mapped[str | None]
+    name: Mapped[str | None]
+    size: Mapped[int | None]
+    width: Mapped[int | None]
+
+    state: Mapped[int | None]
+    path: Mapped[str | None] = mapped_column(default=None, init=False)
+
+    source: Mapped[list[UrlData]] = relationship(
+        lazy='raise',
+        default_factory=list,
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+
+
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'message'
     __table_args__ = (
@@ -390,7 +463,6 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     # TODO stable id?
-    # Filetransfer?
     # direction in unique index notwendig?
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
@@ -450,7 +522,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     correction_id: Mapped[str | None] = mapped_column()
     corrections: Mapped[list[Message]] = relationship(
-        lazy='joined',
+        lazy='selectin',
         init=False,
         primaryjoin=sa.and_(
             sa.orm.foreign(id) == sa.orm.remote(correction_id),
@@ -476,7 +548,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
     markers: Mapped[list[Marker]] = relationship(
-        lazy='joined',
+        lazy='selectin',
         init=False,
         primaryjoin=sa.and_(
             expr.case(
@@ -518,8 +590,20 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         viewonly=True,
     )
 
-    oob: Mapped[list[OOB]] = relationship(
+    filetransfer: Mapped[list[FileTransfer]] = relationship(
+        lazy='selectin',
+        default_factory=list,
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    call: Mapped[Call | None] = relationship(
         lazy='joined',
+        default=None,
+        cascade="all, delete",
+        passive_deletes=True,
+    )
+    oob: Mapped[list[OOB]] = relationship(
+        lazy='selectin',
         default_factory=list,
         cascade="all, delete",
         passive_deletes=True,

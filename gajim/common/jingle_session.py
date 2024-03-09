@@ -47,9 +47,8 @@ from gajim.common.jingle_transport import JingleTransportIBB
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-
-# from gajim.common.storage.archive.structs import DbInsertCallRowData
-# from gajim.common.storage.archive.structs import DbInsertMessageRowData
+from gajim.common.storage.archive import models as mod
+from gajim.common.util.datetime import utc_now
 
 if TYPE_CHECKING:
     from gajim.common.jingle_transport import JingleTransport
@@ -695,25 +694,29 @@ class JingleSession:
         account = self.connection.name
         jid = JID.from_string(self.peerjid)
 
-        call_data = DbInsertCallRowData(
+        call_data = mod.Call(
             sid=self.sid,
             state=0,  # TODO
         )
 
-        message_data = DbInsertMessageRowData(
-            account=account,
-            remote_jid=jid.new_as_bare(),
-            m_type=MessageType.CHAT,
+        message = mod.Message(
+            account_=account,
+            remote_jid_=jid.new_as_bare(),
+            resource=None,
+            type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=time.time(),
+            timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
-            message_id=str(uuid.uuid4()),
+            id=str(uuid.uuid4()),
+            stanza_id=None,
+            stable_id=True,
+            text=None,
+            user_delay_ts=None,
+            correction_id=None,
+            call=call_data,
         )
 
-        app.storage.archive.insert_row(
-            message_data,
-            [call_data],
-        )
+        app.storage.archive.insert_object(message)
 
     def __broadcast(self,
                     stanza: nbxmpp.Node,

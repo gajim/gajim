@@ -23,9 +23,9 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive import models as mod
+from gajim.common.util.datetime import utc_now
 
-# from gajim.common.storage.archive.structs import DbInsertCallRowData
-# from gajim.common.storage.archive.structs import DbInsertMessageRowData
 
 log = logging.getLogger('gajim.c.call_manager')
 
@@ -423,22 +423,26 @@ class CallManager(EventHelper):
 
     @staticmethod
     def _store_outgoing_call(account: str, jid: JID, sid: str) -> None:
-        call_data = DbInsertCallRowData(
+        call_data = mod.Call(
             sid=sid,
             state=0,  # TODO
         )
 
-        message_data = DbInsertMessageRowData(
-            account=account,
-            remote_jid=jid,
-            m_type=MessageType.CHAT,
+        message = mod.Message(
+            account_=account,
+            remote_jid_=jid,
+            resource=None,
+            type=MessageType.CHAT,
             direction=ChatDirection.OUTGOING,
-            timestamp=time.time(),
+            timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
-            message_id=str(uuid.uuid4()),
+            id=str(uuid.uuid4()),
+            stanza_id=None,
+            stable_id=True,
+            text=None,
+            user_delay_ts=None,
+            correction_id=None,
+            call=call_data,
         )
 
-        app.storage.archive.insert_row(
-            message_data,
-            [call_data],
-        )
+        app.storage.archive.insert_object(message)

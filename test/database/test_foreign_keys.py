@@ -101,8 +101,8 @@ class ForeignKeyTest(unittest.TestCase):
 
         assert message is not None
         assert message.oob is not None
-        self.assertEqual(message.oob[0].description, 'otherdesc')
-        self.assertEqual(message.oob[1].description, 'somedesc')
+        self.assertEqual(message.oob[0].description, 'somedesc')
+        self.assertEqual(message.oob[1].description, 'otherdesc')
 
         assert message.reply is not None
         self.assertEqual(message.reply.id, '123')

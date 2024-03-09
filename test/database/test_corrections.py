@@ -129,7 +129,9 @@ class CorrectionsTest(unittest.TestCase):
         self.assertEqual(message.corrections[0].text, 'first correction')
         self.assertEqual(message.corrections[1].text, 'second correction')
         assert message.corrections[1].oob is not None
-        self.assertEqual(message.corrections[1].oob[0].description, 'second corrected desc')
+        self.assertEqual(
+            message.corrections[1].oob[0].description, 'second corrected desc'
+        )
 
     def test_join_correction_groupchat_resource(self) -> None:
         # Join only with resource, when occupant id is not supported
