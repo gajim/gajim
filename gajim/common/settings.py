@@ -91,7 +91,7 @@ CREATE_SQL = '''
     INSERT INTO settings(name, settings) VALUES ('workspaces', '{workspaces}');
 
     PRAGMA user_version={version};
-    '''.format(status=json.dumps(STATUS_PRESET_EXAMPLES),
+    '''.format(status=json.dumps(STATUS_PRESET_EXAMPLES),  # noqa: UP032
                proxies=json.dumps(PROXY_EXAMPLES),
                workspaces=json.dumps(INITAL_WORKSPACE),
                version=CURRENT_USER_VERSION)

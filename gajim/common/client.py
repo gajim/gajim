@@ -359,8 +359,7 @@ class Client(Observable, ClientModules):
                 helpers.to_one_line(message))
 
         if self._state.is_disconnecting:
-            log.warning("Can\'t change status while "
-                        'disconnect is in progress')
+            log.warning("Can't change status while disconnect is in progress")
             return
 
         if self._state.is_disconnected:

@@ -277,7 +277,7 @@ class ValueLabel(Gtk.Label):
             self.set_text(value)
             return
         self._uri = puri
-        super().set_markup('<a href="{}">{}</a>'.format(
+        super().set_markup('<a href="{}">{}</a>'.format(  # noqa: UP032
             GLib.markup_escape_text(uri),
             GLib.markup_escape_text(value)))
 
