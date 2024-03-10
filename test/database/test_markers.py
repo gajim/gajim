@@ -71,10 +71,7 @@ class MarkersTest(unittest.TestCase):
             text='Some Message',
             id='messageid1',
             stanza_id='1a',
-            stable_id=True,
             occupant_=None,
-            user_delay_ts=None,
-            correction_id=None,
         )
 
         pk = self._archive.insert_object(message_data)
@@ -152,10 +149,7 @@ class MarkersTest(unittest.TestCase):
             text='Some Message',
             id='messageid99',
             stanza_id='messageid1',
-            stable_id=True,
             occupant_=None,
-            user_delay_ts=None,
-            correction_id=None,
         )
 
         pk = self._archive.insert_object(message_data)

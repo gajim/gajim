@@ -56,9 +56,6 @@ class SecurityLabelsTest(unittest.TestCase):
             text='Some Message',
             id='messageid1',
             stanza_id='1a',
-            stable_id=True,
-            user_delay_ts=None,
-            correction_id=None,
             security_label_=sec_data,
         )
 

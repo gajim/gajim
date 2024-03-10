@@ -192,9 +192,6 @@ class Moderations(BaseModule):
             text=UNKNOWN_MESSAGE,
             id=properties.id,
             stanza_id=properties.mam.id,
-            stable_id=properties.origin_id is not None,
-            user_delay_ts=None,
-            correction_id=None,
             occupant_=occupant_data,
         )
 

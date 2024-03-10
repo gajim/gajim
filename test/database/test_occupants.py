@@ -180,12 +180,8 @@ class OccupantTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id='1',
-            stanza_id=None,
-            stable_id=True,
             text='message',
-            user_delay_ts=None,
             occupant_=occupant_data,
-            correction_id=None,
         )
 
         pk = self._archive.insert_object(message_data)

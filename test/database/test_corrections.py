@@ -60,8 +60,6 @@ class CorrectionsTest(unittest.TestCase):
             text='Some Message',
             id='messageid1',
             stanza_id='1a',
-            stable_id=True,
-            user_delay_ts=None,
             correction_id=None,
             occupant_=self._create_base_occupant('occupantid1'),
             oob=[OOB(url='https://www.test.com', description='desc')],

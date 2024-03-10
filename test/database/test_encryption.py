@@ -50,9 +50,6 @@ class EncryptionTest(unittest.TestCase):
             text='Some Message',
             id='1',
             stanza_id='1a',
-            stable_id=True,
-            user_delay_ts=None,
-            correction_id=None,
             encryption_=enc_data1,
         )
 
@@ -67,9 +64,6 @@ class EncryptionTest(unittest.TestCase):
             text='Some other Message',
             id='2',
             stanza_id='1a',
-            stable_id=True,
-            user_delay_ts=None,
-            correction_id=None,
             encryption_=enc_data2,
         )
 

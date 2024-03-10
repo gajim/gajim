@@ -185,7 +185,7 @@ class Call(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
     )
     sid: Mapped[str]
-    end_timestamp: Mapped[datetime.datetime | None] = mapped_column(
+    end_ts: Mapped[datetime.datetime | None] = mapped_column(
         EpochTimestampType, default=None
     )
     state: Mapped[int]
@@ -509,10 +509,9 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
     state: Mapped[int]
     id: Mapped[str] = mapped_column()
-    stanza_id: Mapped[str | None] = mapped_column()
-    stable_id: Mapped[int]
-    text: Mapped[str | None]
-    user_delay_ts: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType)
+    stanza_id: Mapped[str | None] = mapped_column(default=None)
+    text: Mapped[str | None] = mapped_column(default=None)
+    user_delay_ts: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType, default=None)
 
     thread_id_: str | None = dataclasses.field(repr=False, default=None)
     thread: Mapped[Thread | None] = relationship(
@@ -546,7 +545,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('securitylabel.pk'), default=None, init=False
     )
 
-    correction_id: Mapped[str | None] = mapped_column()
+    correction_id: Mapped[str | None] = mapped_column(default=None)
     corrections: Mapped[list[Message]] = relationship(
         lazy='selectin',
         init=False,

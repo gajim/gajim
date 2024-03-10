@@ -77,11 +77,7 @@ class ThreadsTest(unittest.TestCase):
                 timestamp=timestamp_,
                 state=MessageState.ACKNOWLEDGED,
                 id=message_id_,
-                stanza_id=None,
-                stable_id=True,
                 text=message,
-                user_delay_ts=None,
-                correction_id=None,
             )
             self._archive.insert_object(m)
 

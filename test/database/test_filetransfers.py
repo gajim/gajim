@@ -77,10 +77,7 @@ class ForeignKeyTest(unittest.TestCase):
             state=MessageState.ACKNOWLEDGED,
             id='1',
             stanza_id=None,
-            stable_id=True,
             text='message',
-            user_delay_ts=None,
-            correction_id=None,
             filetransfer=[ft_data1],
         )
 

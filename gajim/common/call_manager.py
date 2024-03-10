@@ -437,11 +437,6 @@ class CallManager(EventHelper):
             timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
             id=str(uuid.uuid4()),
-            stanza_id=None,
-            stable_id=True,
-            text=None,
-            user_delay_ts=None,
-            correction_id=None,
             call=call_data,
         )
 

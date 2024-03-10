@@ -43,12 +43,8 @@ class ThreadsTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id=message_id,
-            stanza_id=None,
-            stable_id=True,
             thread_id_=thread_id,
             text='message',
-            user_delay_ts=None,
-            correction_id=None,
         )
 
     def test_insert_thread(self) -> None:
