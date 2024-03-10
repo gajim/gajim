@@ -22,6 +22,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
+from gajim.common.helpers import package_version
 from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
 
@@ -106,8 +107,12 @@ class CertificateBox(Gtk.Box):
             if dotted_string == '2.5.4.10':
                 self._ib_organization = str(attribute.value)
 
-        self._issued = cert.not_valid_before.strftime('%c %Z')
-        self._expires = cert.not_valid_after.strftime('%c %Z')
+        if package_version('cryptography>=42.0.0'):
+            self._issued = str(cert.not_valid_before_utc.strftime('%c %Z'))  # pyright: ignore # noqa: E501
+            self._expires = str(cert.not_valid_after_utc.strftime('%c %Z'))  # pyright: ignore # noqa: E501
+        else:
+            self._issued = str(cert.not_valid_before.strftime('%c %Z'))
+            self._expires = str(cert.not_valid_after.strftime('%c %Z'))
 
         sha1_bytes = cert.fingerprint(hashes.SHA1())
         self._sha1 = format_bytes_as_hex(sha1_bytes, 2)
