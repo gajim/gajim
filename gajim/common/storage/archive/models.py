@@ -488,7 +488,6 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ),
     )
 
-    # TODO stable id?
     # direction in unique index notwendig?
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
