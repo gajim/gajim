@@ -885,7 +885,7 @@ _grapheme_buffer = Gtk.TextBuffer()
 def get_first_graphemes(text: str, n: int) -> str:
     # This should be possible with lower-level APIs like Pango.break_* or
     # Pango.get_log_attrs, but their Python bindings seem totally broken.
-    # The re-use of one global buffer is to mitigate very probable memory leaks.
+    # The reuse of one global buffer is to mitigate very probable memory leaks.
     _grapheme_buffer.set_text(text)
     cursor = _grapheme_buffer.get_start_iter()
     cursor.forward_cursor_positions(n)

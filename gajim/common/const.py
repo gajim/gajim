@@ -36,7 +36,7 @@ class EncryptionInfoMsg(Enum):
                          'it should be non-anonymous and members-only.')
     NO_FINGERPRINTS = _('To send an encrypted message, you have to decide '
                         'whether to trust the device of your contact.')
-    QUERY_DEVICES = _('No devices found to encypt this message to. '
+    QUERY_DEVICES = _('No devices found to encrypt this message to. '
                       'Querying for devices now…')
     UNDECIDED_FINGERPRINTS = _('There are devices for which you have not made '
                                'a trust decision yet.')

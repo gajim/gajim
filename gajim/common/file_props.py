@@ -8,7 +8,7 @@ None
 >>> fp = FilesProp()
 Traceback (most recent call last):
     ...
-Exception: this class should not be instatiated
+Exception: this class should not be instantiated
 >>> print(FilesProp.getAllFileProp())
 []
 >>> fp = FilesProp.getNewFileProp('jabberid', '10')
