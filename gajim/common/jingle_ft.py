@@ -13,7 +13,6 @@ from typing import TYPE_CHECKING
 
 import logging
 import threading
-import time
 import uuid
 from enum import IntEnum
 from enum import unique
@@ -38,12 +37,11 @@ from gajim.common.jingle_ftstates import StateTransportReplace
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import TransportType
 from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import FiletransferSourceType
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive import models as mod
+from gajim.common.util.datetime import utc_now
 
-# from gajim.common.storage.archive.structs import DbInsertFiletransferRowData
-# from gajim.common.storage.archive.structs import DbInsertMessageRowData
 
 if TYPE_CHECKING:
     from gajim.common.jingle_session import JingleSession
@@ -157,25 +155,29 @@ class JingleFileTransfer(JingleContent):
         sid = stanza.getTag('jingle').getAttr('sid')
         assert sid is not None
 
-        message_data = DbInsertMessageRowData(
-            account=account,
-            remote_jid=jid.new_as_bare(),
-            m_type=MessageType.CHAT,
-            direction=ChatDirection.INCOMING,
-            timestamp=time.time(),
-            state=MessageState.ACKNOWLEDGED,
-            message_id=str(uuid.uuid4()),
+        ft_data = mod.FileTransfer(
+            state=1,
+            source=[mod.JingleFT(type='jingleft', sid=sid)],
         )
 
-        message_ek = app.storage.archive.insert_row(message_data)
+        message_data = mod.Message(
+            account_=account,
+            remote_jid_=jid.new_as_bare(),
+            resource=jid.resource,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            stanza_id=None,
+            stable_id=True,
+            text=None,
+            correction_id=None,
+            user_delay_ts=None,
+            filetransfer=[ft_data],
+        )
 
-        filetransfer_data = DbInsertFiletransferRowData(
-            fk_message_ek=message_ek,
-            source_type=FiletransferSourceType.JINGLE,
-            source=sid,
-            state=1,
-            )
-        app.storage.archive.insert_row(filetransfer_data)
+        app.storage.archive.insert_object(message_data)
 
         if self.session.request:
             # accept the request

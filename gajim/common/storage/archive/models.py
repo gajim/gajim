@@ -418,6 +418,32 @@ class UrlData(FileTransferSource):
     }
 
 
+class JingleFT(FileTransferSource):
+    __tablename__ = "ft_source_jingleft"
+
+    fk_ft_source_pk: Mapped[int] = mapped_column(
+        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+    )
+    sid: Mapped[str]
+
+    __mapper_args__ = {
+        "polymorphic_identity": "jingleft",
+    }
+
+
+class JinglePub(FileTransferSource):
+    __tablename__ = "ft_source_jinglepub"
+
+    fk_ft_source_pk: Mapped[int] = mapped_column(
+        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+    )
+    id: Mapped[str]
+
+    __mapper_args__ = {
+        "polymorphic_identity": "jinglepub",
+    }
+
+
 class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'filetransfer'
 
@@ -426,21 +452,21 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('message.pk', ondelete='CASCADE'), init=False
     )
 
-    date: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType)
-    desc: Mapped[str | None]
-    hash: Mapped[str | None]
-    hash_algo: Mapped[str | None]
-    height: Mapped[int | None]
-    length: Mapped[int | None]
-    media_type: Mapped[str | None]
-    name: Mapped[str | None]
-    size: Mapped[int | None]
-    width: Mapped[int | None]
+    date: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType, default=None)
+    desc: Mapped[str | None] = mapped_column(default=None)
+    hash: Mapped[str | None] = mapped_column(default=None)
+    hash_algo: Mapped[str | None] = mapped_column(default=None)
+    height: Mapped[int | None] = mapped_column(default=None)
+    length: Mapped[int | None] = mapped_column(default=None)
+    media_type: Mapped[str | None] = mapped_column(default=None)
+    name: Mapped[str | None] = mapped_column(default=None)
+    size: Mapped[int | None] = mapped_column(default=None)
+    width: Mapped[int | None] = mapped_column(default=None)
 
     state: Mapped[int | None]
     path: Mapped[str | None] = mapped_column(default=None, init=False)
 
-    source: Mapped[list[UrlData]] = relationship(
+    source: Mapped[list[FileTransferSource]] = relationship(
         lazy='raise',
         default_factory=list,
         cascade="all, delete",

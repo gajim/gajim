@@ -7,14 +7,13 @@ from datetime import timezone
 from nbxmpp.protocol import JID
 from sqlalchemy import select
 from sqlalchemy.orm import defaultload
-from sqlalchemy.orm import selectinload
 
 from gajim.common import app
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive.models import FileTransfer
+from gajim.common.storage.archive.models import FileTransfer, JinglePub
 from gajim.common.storage.archive.models import FileTransferSource
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import UrlData
@@ -48,6 +47,11 @@ class ForeignKeyTest(unittest.TestCase):
             scheme_data={'header': 'someheader'},
         )
 
+        source2 = JinglePub(
+            type='jinglepub',
+            id='123',
+        )
+
         ft_data1 = FileTransfer(
             date=now,
             desc='desc',
@@ -60,7 +64,7 @@ class ForeignKeyTest(unittest.TestCase):
             size=6555,
             width=789,
             state=0,
-            source=[source1],
+            source=[source1, source2],
         )
 
         message_data = Message(
@@ -110,10 +114,16 @@ class ForeignKeyTest(unittest.TestCase):
             assert ft1.source
 
             source1 = ft1.source[0]
+            source2 = ft1.source[1]
+            assert isinstance(source1, UrlData)
+            assert isinstance(source2, JinglePub)
 
             self.assertEqual(source1.type, 'urldata')
             self.assertEqual(source1.target, 'http://target')
             self.assertEqual(source1.scheme_data, {'header': 'someheader'})
+
+            self.assertEqual(source2.type, 'jinglepub')
+            self.assertEqual(source2.id, '123')
 
         self._archive.delete_message(message.pk)
 

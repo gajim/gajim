@@ -21,11 +21,6 @@ class ChatDirection(IntEnum):
     OUTGOING = 2
 
 
-class FiletransferSourceType(IntEnum):
-    JINGLE = 1
-    URL = 2
-
-
 class ChatMarkerType(IntEnum):
     RECEIVED = 1
     DISPLAYED = 2

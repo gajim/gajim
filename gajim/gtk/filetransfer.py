@@ -42,9 +42,10 @@ from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import FiletransferSourceType
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive import models as mod
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
@@ -53,9 +54,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.tooltips import FileTransfersTooltip
 from gajim.gtk.util import format_eta
-
-# from gajim.common.storage.archive.structs import DbInsertFiletransferRowData
-# from gajim.common.storage.archive.structs import DbInsertMessageRowData
 
 
 log = logging.getLogger('gajim.gtk.filetransfer')
@@ -424,25 +422,29 @@ class FileTransfersWindow:
         if file_props is None:
             return False
 
-        message_data = DbInsertMessageRowData(
-            account=account,
-            remote_jid=contact.jid.new_as_bare(),
-            m_type=MessageType.CHAT,
-            direction=ChatDirection.OUTGOING,
-            timestamp=time.time(),
-            state=MessageState.ACKNOWLEDGED,
-            message_id=str(uuid.uuid4()),
+        ft_data = mod.FileTransfer(
+            state=1,
+            source=[mod.JingleFT(type='jingleft', sid=file_props.sid)],
         )
 
-        message_ek = app.storage.archive.insert_row(message_data)
+        message_data = mod.Message(
+            account_=account,
+            remote_jid_=contact.jid.new_as_bare(),
+            resource=resource_jid.resource,
+            type=MessageType.CHAT,
+            direction=ChatDirection.OUTGOING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id=str(uuid.uuid4()),
+            stanza_id=None,
+            stable_id=True,
+            text=None,
+            correction_id=None,
+            user_delay_ts=None,
+            filetransfer=[ft_data],
+        )
 
-        filetransfer_data = DbInsertFiletransferRowData(
-            fk_message_ek=message_ek,
-            source_type=FiletransferSourceType.JINGLE,
-            source=file_props.sid,
-            state=1,
-            )
-        app.storage.archive.insert_row(filetransfer_data)
+        app.storage.archive.insert_object(message_data)
 
         client = app.get_client(account)
         client.get_module('Jingle').start_file_transfer(
