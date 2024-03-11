@@ -123,15 +123,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
             contact = self._client.get_module('Contacts').get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ''
-            num_list = len(self._exchange_list[jid][1])
-            current = 0
-            for group in self._exchange_list[jid][1]:
-                current += 1
-                if current == num_list:
-                    groups = groups + group
-                else:
-                    groups = groups + group + ', '
+            groups = ', '.join(self._exchange_list[jid][1])
             if not contact.is_in_roster:
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
@@ -150,20 +142,13 @@ class RosterItemExchange(Gtk.ApplicationWindow):
             contact = self._client.get_module('Contacts').get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ''
+            groups = ', '.join(self._exchange_list[jid][1])
 
             if name != contact.name:
                 is_right = False
-            num_list = len(self._exchange_list[jid][1])
-            current = 0
             for group in self._exchange_list[jid][1]:
-                current += 1
                 if group not in contact.groups:
                     is_right = False
-                if current == num_list:
-                    groups = groups + group
-                else:
-                    groups = groups + group + ', '
             if not is_right and contact.is_in_roster:
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
@@ -181,15 +166,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
             contact = self._client.get_module('Contacts').get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ''
-            num_list = len(self._exchange_list[jid][1])
-            current = 0
-            for group in self._exchange_list[jid][1]:
-                current += 1
-                if current == num_list:
-                    groups = groups + group
-                else:
-                    groups = groups + group + ', '
+            groups = ', '.join(self._exchange_list[jid][1])
             if contact.is_in_roster:
                 self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
