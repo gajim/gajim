@@ -22,12 +22,11 @@ import time
 from collections.abc import Callable
 from datetime import datetime
 from datetime import timezone
-from enum import IntEnum
-from functools import wraps
 from pathlib import Path
 
 import nbxmpp.const
 import sqlalchemy as sa
+import sqlalchemy.exc
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Role
@@ -43,6 +42,8 @@ from sqlalchemy.engine import Engine
 from sqlalchemy.engine.interfaces import DBAPIConnection
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
+
+from gajim.common.helpers import python_version
 
 _T = TypeVar('_T')
 P = ParamSpec("P")
@@ -503,3 +504,12 @@ class JSONType(sa.types.TypeDecorator[Any]):
         if value is not None:
             return json.loads(value)
         return value
+
+
+def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:
+    if not isinstance(error, sqlalchemy.exc.IntegrityError):
+        return False
+
+    if python_version('<3.11'):
+        return 'UNIQUE constraint failed' in error.args[0]
+    return error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE  # pyright: ignore

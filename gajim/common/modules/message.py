@@ -10,6 +10,7 @@ import datetime as dt
 import time
 
 import nbxmpp
+import sqlalchemy.exc
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
@@ -18,10 +19,11 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.events import MessageCorrected, MessageSent
+from gajim.common.events import MessageCorrected
 from gajim.common.events import MessageDeleted
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
+from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -32,6 +34,7 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.base import is_unique_constraint_error
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
 
@@ -197,9 +200,14 @@ class Message(BaseModule):
             thread_id_=properties.thread,
         )
 
+        try:
+            pk = app.storage.archive.insert_object(message_data, ignore_on_conflict=False)
+        except sqlalchemy.exc.IntegrityError as error:
+            if is_unique_constraint_error(error):
+                self._log.warning('Duplicate found with message id: %s', message_id)
+                return
 
-        pk = app.storage.archive.insert_object(message_data)
-        if pk == -1:
+            self._log.exception('Insertion Error')
             return
 
         if correction_id is not None:
@@ -287,6 +295,8 @@ class Message(BaseModule):
             self._log.warning(stanza)
             return
 
+        timestamp = self._get_message_timestamp(properties)
+
         error_data = mod.MessageError(
             account_=self._account,
             remote_jid_=remote_jid,
@@ -296,6 +306,7 @@ class Message(BaseModule):
             text=properties.error.get_text() or None,
             condition=properties.error.condition,
             condition_text=properties.error.condition_data,
+            timestamp=timestamp,
         )
         app.storage.archive.insert_row(error_data)
 

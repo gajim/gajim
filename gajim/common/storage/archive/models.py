@@ -266,6 +266,7 @@ class MessageError(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     text: Mapped[str | None]
     condition: Mapped[str]
     condition_text: Mapped[str | None]
+    timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
 
 class Moderation(MappedAsDataclass, Base, UtilMixin, kw_only=True):
@@ -452,7 +453,9 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('message.pk', ondelete='CASCADE'), init=False
     )
 
-    date: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType, default=None)
+    date: Mapped[datetime.datetime | None] = mapped_column(
+        EpochTimestampType, default=None
+    )
     desc: Mapped[str | None] = mapped_column(default=None)
     hash: Mapped[str | None] = mapped_column(default=None)
     hash_algo: Mapped[str | None] = mapped_column(default=None)
@@ -476,19 +479,6 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'message'
-    __table_args__ = (
-        Index('idx_message', 'fk_remote_pk', 'fk_account_pk', text('timestamp DESC')),
-        Index(
-            'idx_message_unique',
-            'id',
-            'fk_remote_pk',
-            'fk_account_pk',
-            'direction',
-            unique=True,
-        ),
-    )
-
-    # direction in unique index notwendig?
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
 
@@ -510,7 +500,11 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     id: Mapped[str] = mapped_column()
     stanza_id: Mapped[str | None] = mapped_column(default=None)
     text: Mapped[str | None] = mapped_column(default=None)
-    user_delay_ts: Mapped[datetime.datetime | None] = mapped_column(EpochTimestampType, default=None)
+    markup_type: Mapped[int | None] = mapped_column(default=None)
+    markup: Mapped[str | None] = mapped_column(default=None)
+    user_delay_ts: Mapped[datetime.datetime | None] = mapped_column(
+        EpochTimestampType, default=None
+    )
 
     thread_id_: str | None = dataclasses.field(repr=False, default=None)
     thread: Mapped[Thread | None] = relationship(
@@ -637,6 +631,27 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         default=None,
         cascade="all, delete",
         passive_deletes=True,
+    )
+
+    __table_args__ = (
+        Index(
+            'idx_message', 'fk_remote_pk', 'fk_account_pk', sa.text('timestamp DESC')
+        ),
+        Index(
+            'idx_message_id_outgoing_unique',
+            'id',
+            'fk_remote_pk',
+            'fk_account_pk',
+            unique=True,
+            sqlite_where=direction == 2,
+        ),
+        Index(
+            'idx_stanza_id_unique',
+            'stanza_id',
+            'fk_remote_pk',
+            'fk_account_pk',
+            unique=True,
+        ),
     )
 
     def get_latest_marker(self) -> Marker | None:

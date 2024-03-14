@@ -44,10 +44,10 @@ from gajim.common.jingle_content import JingleContentSetupException
 from gajim.common.jingle_ft import State
 from gajim.common.jingle_transport import get_jingle_transport
 from gajim.common.jingle_transport import JingleTransportIBB
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive import models as mod
 from gajim.common.util.datetime import utc_now
 
 if TYPE_CHECKING:

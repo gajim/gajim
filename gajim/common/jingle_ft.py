@@ -36,12 +36,11 @@ from gajim.common.jingle_ftstates import StateTransfering
 from gajim.common.jingle_ftstates import StateTransportReplace
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.jingle_transport import TransportType
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive import models as mod
 from gajim.common.util.datetime import utc_now
-
 
 if TYPE_CHECKING:
     from gajim.common.jingle_session import JingleSession

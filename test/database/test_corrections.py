@@ -7,6 +7,7 @@ from datetime import timezone
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -59,7 +60,7 @@ class CorrectionsTest(unittest.TestCase):
             resource='res1',
             text='Some Message',
             id='messageid1',
-            stanza_id='1a',
+            stanza_id=get_uuid(),
             correction_id=None,
             occupant_=self._create_base_occupant('occupantid1'),
             oob=[OOB(url='https://www.test.com', description='desc')],

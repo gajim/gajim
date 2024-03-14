@@ -7,6 +7,7 @@ from datetime import timezone
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -43,6 +44,7 @@ class ThreadsTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id=message_id,
+            stanza_id=get_uuid(),
             thread_id_=thread_id,
             text='message',
         )

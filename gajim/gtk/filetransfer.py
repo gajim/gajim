@@ -41,10 +41,10 @@ from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
 from gajim.common.modules.bytestream import is_transfer_stopped
 from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive import models as mod
 from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
@@ -54,7 +54,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.tooltips import FileTransfersTooltip
 from gajim.gtk.util import format_eta
-
 
 log = logging.getLogger('gajim.gtk.filetransfer')
 

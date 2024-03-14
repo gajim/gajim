@@ -17,9 +17,9 @@ from sqlalchemy.orm import Session
 
 from gajim.common import events
 from gajim.common.storage.base import AlchemyStorage
-from gajim.common.storage.base import with_session
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
+from gajim.common.storage.base import with_session
 from gajim.common.storage.events import models as mod
 from gajim.common.types import ChatContactT
 

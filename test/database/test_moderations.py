@@ -8,6 +8,7 @@ from nbxmpp.protocol import JID
 from sqlalchemy import select
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -36,11 +37,12 @@ class ModerationTest(unittest.TestCase):
         app.settings.set_account_setting('testacc1', 'hostname', 'domain.org')
 
     def test_insert_moderation(self) -> None:
+        uuid = get_uuid()
         mod_data = Moderation(
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=None,
-            stanza_id='stanzaid1',
+            stanza_id=uuid,
             by=JID.from_string('some@domain.com'),
             reason='some reason',
             timestamp=datetime.fromtimestamp(0, timezone.utc),
@@ -57,14 +59,14 @@ class ModerationTest(unittest.TestCase):
         self.assertIsInstance(moderation.by, JID)
         self.assertEqual(moderation.reason, 'some reason')
         self.assertEqual(moderation.timestamp, datetime.fromtimestamp(0, timezone.utc))
-        self.assertEqual(moderation.stanza_id, 'stanzaid1')
+        self.assertEqual(moderation.stanza_id, uuid)
         self.assertEqual(moderation.occupant, None)
 
         mod_data = Moderation(
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=None,
-            stanza_id='stanzaid1',
+            stanza_id=uuid,
             by=JID.from_string('someother@domain.com'),
             reason='some other reason',
             timestamp=datetime.fromtimestamp(1, timezone.utc),
@@ -74,6 +76,7 @@ class ModerationTest(unittest.TestCase):
         self.assertEqual(pk, -1)
 
     def test_moderation_join(self) -> None:
+        uuid = get_uuid()
         message_data = Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
@@ -83,7 +86,7 @@ class ModerationTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id='1',
-            stanza_id='stanzaid1',
+            stanza_id=uuid,
             text='message',
         )
 
@@ -93,7 +96,7 @@ class ModerationTest(unittest.TestCase):
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=None,
-            stanza_id='stanzaid1',
+            stanza_id=uuid,
             by=JID.from_string('some@domain.com'),
             reason='some reason',
             timestamp=datetime.fromtimestamp(0, timezone.utc),
@@ -111,7 +114,7 @@ class ModerationTest(unittest.TestCase):
         self.assertEqual(
             message.moderation.timestamp, datetime.fromtimestamp(0, timezone.utc)
         )
-        self.assertEqual(message.moderation.stanza_id, 'stanzaid1')
+        self.assertEqual(message.moderation.stanza_id, uuid)
         self.assertEqual(message.moderation.occupant, None)
 
 

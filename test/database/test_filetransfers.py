@@ -9,12 +9,14 @@ from sqlalchemy import select
 from sqlalchemy.orm import defaultload
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive.models import FileTransfer, JinglePub
+from gajim.common.storage.archive.models import FileTransfer
 from gajim.common.storage.archive.models import FileTransferSource
+from gajim.common.storage.archive.models import JinglePub
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import UrlData
 from gajim.common.storage.archive.storage import MessageArchiveStorage
@@ -76,7 +78,7 @@ class ForeignKeyTest(unittest.TestCase):
             timestamp=now,
             state=MessageState.ACKNOWLEDGED,
             id='1',
-            stanza_id=None,
+            stanza_id=get_uuid(),
             text='message',
             filetransfer=[ft_data1],
         )

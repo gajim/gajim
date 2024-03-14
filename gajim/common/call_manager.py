@@ -20,12 +20,11 @@ from gajim.common.i18n import _
 from gajim.common.jingle_rtp import JingleAudio
 from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.archive import models as mod
 from gajim.common.util.datetime import utc_now
-
 
 log = logging.getLogger('gajim.c.call_manager')
 

@@ -171,13 +171,17 @@ class MessageArchiveStorage(AlchemyStorage):
             row.fk_occupant_pk = pk
 
     @with_session
-    def insert_object(self, session: Session, obj: Any) -> int:
+    def insert_object(
+        self, session: Session, obj: Any, ignore_on_conflict: bool = True
+    ) -> int:
         self._set_foreign_keys(session, obj)
         session.add(obj)
 
         try:
             session.commit()
         except Exception as error:
+            if not ignore_on_conflict:
+                raise
             self._log.warning(error)
             return -1
 
@@ -261,10 +265,14 @@ class MessageArchiveStorage(AlchemyStorage):
         return existing.pk
 
     @with_session
-    def get_message_with_pk(self, session: Session, pk: int, options: Any = None) -> Message | None:
+    def get_message_with_pk(
+        self, session: Session, pk: int, options: Any = None
+    ) -> Message | None:
         return self._get_message_with_pk(session, pk, options)
 
-    def _get_message_with_pk(self, session: Session, pk: int, options: Any = None) -> Message | None:
+    def _get_message_with_pk(
+        self, session: Session, pk: int, options: Any = None
+    ) -> Message | None:
         stmt = select(Message).where(Message.pk == pk)
         if options is not None:
             stmt = stmt.options(*options)

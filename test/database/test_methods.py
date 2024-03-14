@@ -10,15 +10,18 @@ from nbxmpp.protocol import JID
 from sqlalchemy import select
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Encryption
 from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
 from gajim.common.storage.archive.storage import MessageArchiveStorage
+from gajim.common.util.datetime import utc_now
 
 
 class ThreadsTest(unittest.TestCase):
@@ -80,6 +83,42 @@ class ThreadsTest(unittest.TestCase):
                 text=message,
             )
             self._archive.insert_object(m)
+
+    def test_rollback(self) -> None:
+        now = utc_now()
+        uuid = get_uuid()
+        m1 = Message(
+            account_='testacc1',
+            remote_jid_=JID.from_string(f'remote1@jid.org'),
+            resource=None,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=now,
+            state=MessageState.ACKNOWLEDGED,
+            id='1',
+            stanza_id=uuid,
+        )
+        self._archive.insert_object(m1)
+
+        m2 = Message(
+            account_='testacc1',
+            remote_jid_=JID.from_string(f'remote1@jid.org'),
+            resource=None,
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=now,
+            state=MessageState.ACKNOWLEDGED,
+            id='1',
+            stanza_id=uuid,
+            encryption_=Encryption(protocol=1, key='123', trust=1),
+        )
+
+        with self.assertRaises(Exception):
+            self._archive.insert_object(m2, ignore_on_conflict=False)
+
+        with self._archive.get_session() as s:
+            result = s.scalar(select(Encryption))
+            self.assertIsNone(result)
 
     def test_get_conversation_jids(self) -> None:
         self._insert_messages('testacc1', count=10)
@@ -300,7 +339,7 @@ class ThreadsTest(unittest.TestCase):
             stanza_id='stanzaid1',
             by=None,
             reason=None,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=utc_now(),
         )
         self._archive.insert_object(mod)
 
@@ -313,6 +352,7 @@ class ThreadsTest(unittest.TestCase):
             text='text',
             condition='somecond',
             condition_text='somecondtext',
+            timestamp=utc_now(),
         )
 
         self._archive.insert_object(error)

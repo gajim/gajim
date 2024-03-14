@@ -8,6 +8,7 @@ from nbxmpp.protocol import JID
 from sqlalchemy import select
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -19,6 +20,7 @@ from gajim.common.storage.archive.models import OOB
 from gajim.common.storage.archive.models import Reply
 from gajim.common.storage.archive.models import SecurityLabel
 from gajim.common.storage.archive.storage import MessageArchiveStorage
+from gajim.common.util.datetime import utc_now
 
 
 class ForeignKeyTest(unittest.TestCase):
@@ -71,7 +73,7 @@ class ForeignKeyTest(unittest.TestCase):
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id='1',
-            stanza_id=None,
+            stanza_id=get_uuid(),
             text='message',
             encryption_=enc_data,
             security_label_=sec_data,
@@ -90,6 +92,7 @@ class ForeignKeyTest(unittest.TestCase):
             text='Some error text',
             condition='not-acceptable',
             condition_text='Some Application Text',
+            timestamp=utc_now(),
         )
 
         self._archive.insert_row(error_data)

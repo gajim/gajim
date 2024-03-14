@@ -10,8 +10,9 @@ from typing import Union
 
 import datetime
 from collections.abc import Callable
-from dataclasses import InitVar, dataclass
+from dataclasses import dataclass
 from dataclasses import field
+from dataclasses import InitVar
 from functools import cached_property
 
 from nbxmpp.const import Affiliation
@@ -29,8 +30,8 @@ from gajim.common import app
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import JingleState
 from gajim.common.file_props import FileProp
-from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import MessageType
 
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client

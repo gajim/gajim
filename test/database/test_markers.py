@@ -8,6 +8,7 @@ from nbxmpp.protocol import JID
 from sqlalchemy import select
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import ChatMarkerType
@@ -70,7 +71,7 @@ class MarkersTest(unittest.TestCase):
             resource='res',
             text='Some Message',
             id='messageid1',
-            stanza_id='1a',
+            stanza_id=get_uuid(),
             occupant_=None,
         )
 
@@ -115,11 +116,13 @@ class MarkersTest(unittest.TestCase):
             updated_at=datetime.fromtimestamp(0, timezone.utc),
         )
 
+        uuid = get_uuid()
+
         marker_data1 = Marker(
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=occupant_data1,
-            id='messageid1',
+            id=uuid,
             type=ChatMarkerType.RECEIVED,
             timestamp=datetime.fromtimestamp(1, timezone.utc),
         )
@@ -128,7 +131,7 @@ class MarkersTest(unittest.TestCase):
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=occupant_data2,
-            id='messageid1',
+            id=uuid,
             type=ChatMarkerType.DISPLAYED,
             timestamp=datetime.fromtimestamp(2, timezone.utc),
         )
@@ -148,7 +151,7 @@ class MarkersTest(unittest.TestCase):
             resource='res',
             text='Some Message',
             id='messageid99',
-            stanza_id='messageid1',
+            stanza_id=uuid,
             occupant_=None,
         )
 

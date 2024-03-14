@@ -8,6 +8,7 @@ from nbxmpp.protocol import JID
 from sqlalchemy import select
 
 from gajim.common import app
+from gajim.common.helpers import get_uuid
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -55,7 +56,7 @@ class SecurityLabelsTest(unittest.TestCase):
             resource='res',
             text='Some Message',
             id='messageid1',
-            stanza_id='1a',
+            stanza_id=get_uuid(),
             security_label_=sec_data,
         )
 
