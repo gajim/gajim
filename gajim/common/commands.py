@@ -75,6 +75,8 @@ class ArgumentParser(argparse.ArgumentParser):
 class ChatCommands(Observable):
     def __init__(self) -> None:
         Observable.__init__(self)
+
+    def init(self) -> None:
         self._parser = ArgumentParser(prog='ChatCommands')
         self._sub_parser = self._parser.add_subparsers(title='Commands')
         self._commands: dict[str, tuple[list[str], str]] = {}
@@ -196,6 +198,8 @@ class ChatCommands(Observable):
         parser.add_argument('role',
                             choices=['moderator', 'participant', 'visitor'])
         self.add_command('role', ['groupchat'], parser)
+
+        app.plugin_manager.extension_point('add_commands', self)
 
     def _help_command(self, args: Any) -> str:
         return self._generate_help(args.used_in)

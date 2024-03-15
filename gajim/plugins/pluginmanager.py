@@ -431,6 +431,9 @@ class PluginManager(metaclass=Singleton):
                                         True)
         plugin.active = True
 
+        if not init:
+            app.commands.init()
+
     def deactivate_plugin(self, plugin: GajimPlugin) -> None:
         # remove GUI extension points handlers (provided by plug-in) from
         # handlers list
@@ -468,6 +471,7 @@ class PluginManager(metaclass=Singleton):
                                         'active',
                                         False)
         plugin.active = False
+        app.commands.init()
 
     def _add_gui_extension_points_handlers_from_plugin(self,
                                                        plugin: GajimPlugin

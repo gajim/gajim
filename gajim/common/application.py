@@ -115,6 +115,8 @@ class CoreApplication(ged.EventHelper):
         app.plugin_manager.init_plugins()
         app.plugin_repository = PluginRepository()
 
+        app.commands.init()
+
         for client in app.get_clients():
             client.get_module('Roster').load_roster()
 
