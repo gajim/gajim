@@ -29,6 +29,8 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.storage.archive import migration
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
 from gajim.common.storage.archive.models import MAMArchiveState
@@ -708,36 +710,30 @@ class MessageArchiveStorage(AlchemyStorage):
 
         session.execute(stmt)
 
-    # def delete_pending_message(
-    #     self,
-    #     account: str,
-    #     remote_jid: JID,
-    #     message_id: str
-    # ) -> int | None:
+    @with_session
+    def delete_pending_message(
+        self, session: Session, account: str, jid: JID, message_id: str
+    ) -> int | None:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_ek(session, jid)
 
-    #     account_ek = self._get_account_ek(account)
-    #     jid_ek = self._get_jid_ek(remote_jid)
+        stmt = select(Message).where(
+            Message.id == message_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+            Message.type == MessageType.GROUPCHAT,
+            Message.direction == ChatDirection.OUTGOING,
+        )
 
-    #     delete_stmt = '''
-    #         DELETE FROM message
-    #         WHERE
-    #             state = ? AND
-    #             message_id = ? AND
-    #             fk_jid_ek = ? AND
-    #             fk_account_ek = ?
-    #         RETURNING entitykey
-    #     '''
+        message = session.scalar(stmt)
+        if message is None:
+            self._log.warning(
+                'Unable to delete pending message with message id: %s', message_id
+            )
+            return
 
-    #     results = self._con.execute(delete_stmt, (
-    #         MessageState.PENDING,
-    #         message_id,
-    #         jid_ek,
-    #         account_ek)).fetchall()
-
-    #     if results:
-    #         assert len(results) == 1
-    #         self._delayed_commit()
-    #         return results[0].entitykey
+        self._delete_message(session, message)
+        return message.pk
 
     @with_session
     def remove_history_for_jid(self, session: Session, account: str, jid: JID) -> None:

@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-# Message handler
-
 from __future__ import annotations
 
 import datetime as dt
@@ -128,15 +126,14 @@ class Message(BaseModule):
         occupant = None
         if m_type == MessageType.GROUPCHAT:
             # Delete pending message when we receive the reflection
-            # TODO
-            # entitykey = app.storage.archive.delete_pending_message(
-            #     self._account, remote_jid, properties.id)
+            entitykey = app.storage.archive.delete_pending_message(
+                self._account, remote_jid, properties.id)
 
-            # if entitykey is not None:
-            #     app.ged.raise_event(MessageDeleted(account=self._account,
-            #                                        jid=remote_jid,
-            #                                        entitykey=entitykey))
-            # todo
+            if entitykey is not None:
+                app.ged.raise_event(MessageDeleted(account=self._account,
+                                                   jid=remote_jid,
+                                                   entitykey=entitykey))
+
             occupant = self._get_occupant_info(
                 remote_jid, timestamp, properties)
 
