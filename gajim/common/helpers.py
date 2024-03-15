@@ -1188,13 +1188,18 @@ def get_resource(account: str) -> str | None:
 def get_default_muc_config() -> dict[str, bool | str]:
     return {
         # XEP-0045 options
+        # https://xmpp.org/registrar/formtypes.html
+
         'muc#roomconfig_allowinvites': True,
-        'muc#roomconfig_publicroom': False,
+        'muc#roomconfig_allowpm': 'anyone',
+        'muc#roomconfig_changesubject': False,
+        'muc#roomconfig_enablelogging': False,
         'muc#roomconfig_membersonly': True,
-        'muc#roomconfig_persistentroom': True,
-        'muc#roomconfig_whois': 'anyone',
         'muc#roomconfig_moderatedroom': False,
-        'muc#roomconfig_enablelogging': True,
+        'muc#roomconfig_passwordprotectedroom': False,
+        'muc#roomconfig_persistentroom': True,
+        'muc#roomconfig_publicroom': False,
+        'muc#roomconfig_whois': 'moderators',
 
         # Ejabberd options
         'allow_voice_requests': False,
@@ -1202,7 +1207,7 @@ def get_default_muc_config() -> dict[str, bool | str]:
         'mam': True,
 
         # Prosody options
-        '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': True,
+        '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': False,
         'muc#roomconfig_enablearchiving': True,
     }
 
