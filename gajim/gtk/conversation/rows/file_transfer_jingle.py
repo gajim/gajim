@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import time
-from datetime import datetime
 from pathlib import Path
 
 from gi.repository import GdkPixbuf
@@ -34,6 +33,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
@@ -60,9 +60,9 @@ class FileTransferJingleRow(BaseRow):
         if db_row is not None:
             timestamp = db_row.timestamp
         else:
-            timestamp = time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp).astimezone()
-        self.db_timestamp = timestamp
+            timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         self._contact = contact
 

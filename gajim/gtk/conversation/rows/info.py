@@ -5,11 +5,11 @@
 from __future__ import annotations
 
 from datetime import datetime
-from datetime import timezone
 
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -28,7 +28,7 @@ class InfoMessage(BaseRow):
         self.type = 'info'
 
         if timestamp is None:
-            timestamp = datetime.now(timezone.utc)
+            timestamp = utc_now()
         self.timestamp = timestamp.astimezone()
         self.db_timestamp = timestamp.timestamp()
 

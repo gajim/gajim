@@ -10,6 +10,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -23,15 +24,16 @@ class MUCJoinLeft(BaseRow):
                  nick: str,
                  reason: str | None = None,
                  error: bool = False,
-                 timestamp: float | None = None
+                 timestamp: datetime | None = None
                  ) -> None:
 
         BaseRow.__init__(self, account)
 
         self.type = type_
-        timestamp = timestamp or time.time()
-        self.timestamp = datetime.fromtimestamp(timestamp).astimezone()
-        self.db_timestamp = timestamp
+        if timestamp is None:
+            timestamp = utc_now()
+        self.timestamp = timestamp.astimezone()
+        self.db_timestamp = timestamp.timestamp()
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)

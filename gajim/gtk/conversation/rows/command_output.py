@@ -2,14 +2,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-import time
-from datetime import datetime
-from datetime import timezone
-
 from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -21,7 +18,7 @@ class CommandOutputRow(BaseRow):
         BaseRow.__init__(self, account)
 
         self.type = 'command_output'
-        now = datetime.now(timezone.utc)
+        now = utc_now()
         self.timestamp = now.astimezone()
         self.db_timestamp = now.timestamp()
 

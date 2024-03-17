@@ -4,9 +4,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from datetime import timezone
-
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 
@@ -19,6 +16,7 @@ from gajim.common.jingle_session import JingleSession
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -42,7 +40,7 @@ class CallRow(BaseRow):
         if db_row is not None:
             timestamp = db_row.timestamp
         else:
-            timestamp = datetime.now(timezone.utc)
+            timestamp = utc_now()
         self.timestamp = timestamp.astimezone()
         self.db_timestamp = timestamp.timestamp()
 
