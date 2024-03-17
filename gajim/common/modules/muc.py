@@ -226,7 +226,7 @@ class MUC(BaseModule):
             if bookmark.password is not None:
                 password = bookmark.password
 
-        return MUCData(room_jid, nick, password, config)
+        return MUCData(room_jid, nick, None, password, config)
 
     def join(self,
              jid: JID,
@@ -619,6 +619,9 @@ class MUC(BaseModule):
             if properties.is_muc_self_presence:
                 self._log.info('Self presence: %s', properties.jid)
                 if muc_data.state == MUCJoinedState.JOINING:
+                    if room.supports(Namespace.OCCUPANT_ID):
+                        muc_data.occupant_id = properties.occupant_id
+
                     if (properties.is_nickname_modified or
                             muc_data.nick != properties.muc_nickname):
                         muc_data.nick = properties.muc_nickname

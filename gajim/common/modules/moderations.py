@@ -35,6 +35,7 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
+from gajim.common.structs import MUCData
 
 UNKNOWN_MESSAGE = _('Message content unknown')
 
@@ -73,9 +74,16 @@ class Moderations(BaseModule):
         if not properties.moderation.is_tombstone:
             return
 
+        remote_jid = properties.remote_jid
+        muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+        if muc_data is None:
+            self._log.warning('Groupchat message from unknown MUC: %s',
+                              remote_jid)
+            return
+
         is_occupant_id_supported = self._is_occupant_id_supported(properties)
 
-        self._insert_tombstone(properties, is_occupant_id_supported)
+        self._insert_tombstone(muc_data, properties, is_occupant_id_supported)
         self._insert_moderation_message(properties, is_occupant_id_supported)
 
         raise NodeProcessed
@@ -151,19 +159,20 @@ class Moderations(BaseModule):
 
     def _insert_tombstone(
         self,
+        muc_data: MUCData,
         properties: MessageProperties,
         is_occupant_id_supported: bool
     ) -> None:
 
         assert properties.mam is not None
 
-        message_occupant_id = None
-        if is_occupant_id_supported:
-            message_occupant_id = properties.occupant_id
-
         remote_jid = properties.remote_jid
         assert remote_jid is not None
         assert properties.jid is not None
+
+        message_occupant_id = None
+        if is_occupant_id_supported:
+            message_occupant_id = properties.occupant_id
 
         timestamp = dt.datetime.fromtimestamp(
             properties.mam.timestamp, dt.timezone.utc)
@@ -179,7 +188,7 @@ class Moderations(BaseModule):
             )
 
         m_type, direction = get_chat_type_and_direction(
-            self._client.get_own_jid(), properties)
+            muc_data, self._client.get_own_jid(), properties)
 
         message_data = mod.Message(
             account_=self._account,

@@ -183,6 +183,14 @@ class MessageDeleted(ApplicationEvent):
 
 
 @dataclass
+class MessageAcknowledged(ApplicationEvent):
+    name: str = field(init=False, default='message-acknowledged')
+    account: str
+    jid: JID
+    pk: int
+
+
+@dataclass
 class FileProgress(ApplicationEvent):
     name: str = field(init=False, default='file-progress')
     file_props: FileProp

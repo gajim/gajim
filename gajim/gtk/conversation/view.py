@@ -32,6 +32,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import ChatMarkerType
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 
@@ -669,6 +670,17 @@ class ConversationView(Gtk.ScrolledWindow):
             # Unset possible merged state if we delete a 'top level' message.
             # Checks for same sender etc. are not necessary, since we simply
             # unset merged state.
+            decendant_row.set_merged(False)
+
+    def acknowledge_message(self, log_line_id: int) -> None:
+        row = self.get_row_by_log_line_id(log_line_id)
+        if row is None:
+            return
+
+        row.show_group_chat_message_state(MessageState.ACKNOWLEDGED)
+        index = row.get_index()
+        decendant_row = self._list_box.get_row_at_index(index)
+        if isinstance(decendant_row, MessageRow):
             decendant_row.set_merged(False)
 
     def scroll_to_message_and_highlight(self, log_line_id: int) -> None:

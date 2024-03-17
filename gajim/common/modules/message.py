@@ -17,8 +17,8 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
-from gajim.common.events import MessageDeleted
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
@@ -111,8 +111,17 @@ class Message(BaseModule):
             # TODO: Check where in Gajim and plugins we depend on that behavior
             stanza.setFrom(stanza.getTo())
 
+        muc_data = None
+        if properties.type.is_groupchat:
+            muc_data = self._client.get_module('MUC').get_muc_data(
+                properties.remote_jid)
+            if muc_data is None:
+                self._log.warning('Groupchat message from unknown MUC: %s',
+                 properties.remote_jid)
+                return
+
         m_type, direction = get_chat_type_and_direction(
-            self._client.get_own_jid(), properties)
+            muc_data, self._client.get_own_jid(), properties)
         timestamp = self._get_message_timestamp(properties)
         remote_jid = properties.remote_jid
         assert remote_jid is not None
@@ -125,22 +134,20 @@ class Message(BaseModule):
 
         occupant = None
         if m_type == MessageType.GROUPCHAT:
-            # Delete pending message when we receive the reflection
-            entitykey = app.storage.archive.delete_pending_message(
-                self._account, remote_jid, properties.id)
+            if direction == ChatDirection.OUTGOING:
+                pk = app.storage.archive.update_pending_message(
+                    self._account, remote_jid, properties.id)
 
-            if entitykey is not None:
-                app.ged.raise_event(MessageDeleted(account=self._account,
-                                                   jid=remote_jid,
-                                                   entitykey=entitykey))
+                if pk is not None:
+                    app.ged.raise_event(
+                        MessageAcknowledged(account=self._account,
+                                            jid=remote_jid,
+                                            pk=pk))
+                    return
 
-            occupant = self._get_occupant_info(
-                remote_jid, timestamp, properties)
-
+        occupant = self._get_occupant_info(remote_jid, timestamp, properties)
         stanza_id = self._get_stanza_id(properties)
-
         message_text = properties.body
-
         oob_data = parse_oob(properties)
 
         encryption_data = None
@@ -239,7 +246,10 @@ class Message(BaseModule):
         occupant_contact = self._client.get_module('Contacts').get_contact(
             properties.jid, groupchat=True)
         assert isinstance(occupant_contact, GroupchatParticipant)
-        return occupant_contact.real_jid
+        real_jid = occupant_contact.real_jid
+        if real_jid is None:
+            return None
+        return real_jid.new_as_bare()
 
     def _get_occupant_info(
         self,
@@ -247,6 +257,9 @@ class Message(BaseModule):
         timestamp: dt.datetime,
         properties: MessageProperties
     ) -> mod.Occupant | None:
+
+        if not properties.type.is_groupchat:
+            return None
 
         real_jid = self._get_real_jid(properties)
         occupant_id = self._get_occupant_id(properties) or real_jid
@@ -426,8 +439,27 @@ class Message(BaseModule):
         m_type = message.message_type
         assert message.message_id is not None
 
+        occupant = None
+        resource = self._client.get_bound_jid().resource
         state = MessageState.ACKNOWLEDGED
+
         if m_type == MessageType.GROUPCHAT:
+            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+            if muc_data is None:
+                self._log.warning('Trying to send message to unknown MUC: %s',
+                                  remote_jid)
+                return
+
+            resource = muc_data.nick
+            occupant_id = muc_data.occupant_id
+            if occupant_id is not None:
+                occupant = mod.Occupant(
+                    account_=self._account,
+                    remote_jid_=remote_jid,
+                    id=str(occupant_id),
+                    updated_at=timestamp,
+                )
+
             state = MessageState.PENDING
 
         encryption_data = None
@@ -457,8 +489,6 @@ class Message(BaseModule):
         if message.oob_url is not None:
             oob_data.append(mod.OOB(url=message.oob_url, description=None))
 
-        # TODO our occupant id is missing here?
-
         message_data = mod.Message(
             account_=self._account,
             remote_jid_=remote_jid,
@@ -466,7 +496,7 @@ class Message(BaseModule):
             direction=direction,
             timestamp=timestamp,
             state=state,
-            resource=None,
+            resource=resource,
             text=message_text,
             id=message.message_id,
             stanza_id=None,
@@ -475,6 +505,7 @@ class Message(BaseModule):
             encryption_=encryption_data,
             oob=oob_data,
             security_label_=securitylabel_data,
+            occupant_=occupant,
         )
 
 

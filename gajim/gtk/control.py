@@ -166,6 +166,9 @@ class ChatControl(EventHelper):
     def remove_message(self, log_line_id: int) -> None:
         self._scrolled_view.remove_message(log_line_id)
 
+    def _acknowledge_message(self, log_line_id: int) -> None:
+        self._scrolled_view.acknowledge_message(log_line_id)
+
     def reset_view(self) -> None:
         self._scrolled_view.reset()
 
@@ -268,6 +271,7 @@ class ChatControl(EventHelper):
             ('presence-received', ged.GUI2, self._on_presence_received),
             ('message-sent', ged.GUI2, self._on_message_sent),
             ('message-deleted', ged.GUI2, self._on_message_deleted),
+            ('message-acknowledged', ged.GUI2, self._on_message_acknowledged),
             ('message-received', ged.GUI2, self._on_message_received),
             ('message-corrected', ged.GUI2, self._on_message_corrected),
             ('message-moderated', ged.GUI2, self._on_message_moderated),
@@ -321,6 +325,12 @@ class ChatControl(EventHelper):
             return
 
         self.remove_message(event.entitykey)
+
+    def _on_message_acknowledged(self, event: events.MessageAcknowledged) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self._acknowledge_message(event.pk)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self._is_event_processable(event):

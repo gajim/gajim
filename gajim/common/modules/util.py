@@ -26,6 +26,7 @@ from gajim.common import types
 from gajim.common.const import EME_MESSAGES
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.structs import MUCData
 
 
 def from_xs_boolean(value: str | bool) -> bool:
@@ -135,11 +136,20 @@ def delete_nodes(stanza: Message,
 
 
 def get_chat_type_and_direction(
-    own_jid: JID, properties: MessageProperties
+    muc_data: MUCData | None, own_jid: JID, properties: MessageProperties
 ) -> tuple[MessageType, ChatDirection]:
 
     if properties.type.is_groupchat:
-        return MessageType.GROUPCHAT, ChatDirection.INCOMING
+        assert muc_data is not None
+        direction = ChatDirection.INCOMING
+        if muc_data.occupant_id is not None:
+            if muc_data.occupant_id == properties.occupant_id:
+                direction = ChatDirection.OUTGOING
+
+        elif muc_data.nick == properties.jid.resource:
+            direction = ChatDirection.OUTGOING
+
+        return MessageType.GROUPCHAT, direction
 
     assert properties.from_ is not None
     if properties.from_.bare_match(own_jid):

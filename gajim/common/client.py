@@ -338,6 +338,12 @@ class Client(Observable, ClientModules):
         # This returns the bare jid
         return nbxmpp.JID.from_string(app.get_jid_from_account(self._account))
 
+    def get_bound_jid(self) -> JID:
+        assert self._client is not None
+        jid = self._client.get_bound_jid()
+        assert jid is not None
+        return jid
+
     def change_status(self, show: str, message: str) -> None:
         if not message:
             message = ''

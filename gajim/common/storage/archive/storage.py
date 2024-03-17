@@ -30,6 +30,7 @@ from gajim.common import configpaths
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
@@ -711,29 +712,22 @@ class MessageArchiveStorage(AlchemyStorage):
         session.execute(stmt)
 
     @with_session
-    def delete_pending_message(
+    def update_pending_message(
         self, session: Session, account: str, jid: JID, message_id: str
     ) -> int | None:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_ek(session, jid)
 
-        stmt = select(Message).where(
-            Message.id == message_id,
-            Message.fk_remote_pk == fk_remote_pk,
-            Message.fk_account_pk == fk_account_pk,
-            Message.type == MessageType.GROUPCHAT,
-            Message.direction == ChatDirection.OUTGOING,
+        stmt = (
+            update(Message).where(
+                Message.id == message_id,
+                Message.fk_remote_pk == fk_remote_pk,
+                Message.fk_account_pk == fk_account_pk,
+                Message.direction == ChatDirection.OUTGOING)
+            .values(state=MessageState.ACKNOWLEDGED)
+            .returning(Message.pk)
         )
-
-        message = session.scalar(stmt)
-        if message is None:
-            self._log.warning(
-                'Unable to delete pending message with message id: %s', message_id
-            )
-            return
-
-        self._delete_message(session, message)
-        return message.pk
+        return session.scalar(stmt)
 
     @with_session
     def remove_history_for_jid(self, session: Session, account: str, jid: JID) -> None:

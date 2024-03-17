@@ -46,6 +46,7 @@ class MUCData:
     def __init__(self,
                  room_jid: str,
                  nick: str,
+                 occupant_id: str | None,
                  password: str | None,
                  config: dict[str, Any] | None = None
                  ) -> None:
@@ -54,6 +55,7 @@ class MUCData:
         self._config = config
         self.nick = nick
         self.password = password
+        self.occupant_id = occupant_id
         self.state = MUCJoinedState.NOT_JOINED
         # Message id of the captcha challenge
         self.captcha_id: str | None = None
