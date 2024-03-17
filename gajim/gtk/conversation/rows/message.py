@@ -62,8 +62,9 @@ class MessageRow(BaseRow):
         self.db_timestamp = message.timestamp.timestamp()
         self.message_id = message.id
         self.stanza_id = message.stanza_id
-        self.log_line_id = message.pk
         self.direction = ChatDirection(message.direction)
+
+        self._orig_log_line_id = message.pk
 
         assert message.text is not None
         self._original_text = message.text
@@ -105,6 +106,8 @@ class MessageRow(BaseRow):
         # be taken from the correction
         if message.corrections:
             message = message.get_last_correction()
+
+        self.log_line_id = message.pk
 
         self.encryption = message.encryption
         self.securitylabel = message.security_label
@@ -239,6 +242,7 @@ class MessageRow(BaseRow):
             self.timestamp,
             self.message_id,
             self.stanza_id,
+            self._orig_log_line_id,
             self.log_line_id)
 
         popover = GajimPopover(menu, relative_to=button)

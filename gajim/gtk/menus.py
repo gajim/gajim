@@ -691,7 +691,8 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       timestamp: datetime,
                       message_id: str | None,
                       stanza_id: str | None,
-                      entitykey: int | None
+                      pk: int | None,
+                      corrected_pk: int | None,
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -728,7 +729,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
     menu_items.append(
         (p_('Message row action', 'Select Messages…'),
          'win.activate-message-selection',
-         GLib.Variant('u', entitykey or 0)))
+         GLib.Variant('u', corrected_pk or 0)))
 
     show_correction = False
     if message_id is not None:
@@ -760,11 +761,11 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
-    if entitykey is not None:
+    if pk is not None:
         param = DeleteMessageParam(
             account=contact.account,
             jid=contact.jid,
-            entitykey=entitykey)
+            entitykey=pk)
 
         menu_items.append(
             (p_('Message row action',
