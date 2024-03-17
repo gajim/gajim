@@ -199,7 +199,7 @@ class ThreadsTest(unittest.TestCase):
             'testacc1', remote_jid, 2024, 1
         )
 
-        self.assertEqual(days, [1, 2, 3] if offset_s < 0 else [1, 2, 3, 4],
+        self.assertEqual(days, [1, 2, 3] if offset_s <= 0 else [1, 2, 3, 4],
                          msg=f'Localtime: {localtime}, offset: {offset_s}')
 
     def test_get_last_history_ts(self) -> None:
