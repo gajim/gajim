@@ -64,7 +64,7 @@ class MessageRow(BaseRow):
         self.stanza_id = message.stanza_id
         self.direction = ChatDirection(message.direction)
 
-        self._orig_log_line_id = message.pk
+        self.orig_log_line_id = message.pk
 
         assert message.text is not None
         self._original_text = message.text
@@ -174,9 +174,11 @@ class MessageRow(BaseRow):
                 marker.type == ChatMarkerType.RECEIVED):
             self.show_receipt(True)
 
+        self.state = MessageState(message.state)
+
         if (self._contact.is_groupchat and
                 self.direction == ChatDirection.OUTGOING):
-            self.show_group_chat_message_state(MessageState(message.state))
+            self.show_group_chat_message_state(self.state)
 
         if message.error is not None:
             if message.error.text is not None:
@@ -242,7 +244,7 @@ class MessageRow(BaseRow):
             self.timestamp,
             self.message_id,
             self.stanza_id,
-            self._orig_log_line_id,
+            self.orig_log_line_id,
             self.log_line_id)
 
         popover = GajimPopover(menu, relative_to=button)
@@ -333,8 +335,13 @@ class MessageRow(BaseRow):
                 return True
         return False
 
+    def is_same_state(self, message: MessageRow) -> bool:
+        return message.state == self.state
+
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
+            return False
+        if not self.is_same_state(message):
             return False
         if self._original_message.corrections:
             return False
@@ -376,6 +383,7 @@ class MessageRow(BaseRow):
         self._message_icons.set_receipt_icon_visible(show)
 
     def show_group_chat_message_state(self, state: MessageState) -> None:
+        self.state = state
         self._message_icons.set_group_chat_message_state_icon(state)
 
     def show_error(self, tooltip: str) -> None:

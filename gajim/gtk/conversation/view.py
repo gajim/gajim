@@ -678,10 +678,7 @@ class ConversationView(Gtk.ScrolledWindow):
             return
 
         row.show_group_chat_message_state(MessageState.ACKNOWLEDGED)
-        index = row.get_index()
-        decendant_row = self._list_box.get_row_at_index(index)
-        if isinstance(decendant_row, MessageRow):
-            decendant_row.set_merged(False)
+        self._check_for_merge(row)
 
     def scroll_to_message_and_highlight(self, log_line_id: int) -> None:
         highlight_row = None
@@ -754,7 +751,7 @@ class ConversationView(Gtk.ScrolledWindow):
             if not isinstance(row, MessageRow):
                 continue
             if (row.log_line_id == log_line_id or
-                    row._orig_log_line_id == log_line_id):
+                    row.orig_log_line_id == log_line_id):
                 return row
 
         return None
