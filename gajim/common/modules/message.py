@@ -206,10 +206,12 @@ class Message(BaseModule):
         )
 
         try:
-            pk = app.storage.archive.insert_object(message_data, ignore_on_conflict=False)
+            pk = app.storage.archive.insert_object(
+                message_data, ignore_on_conflict=False)
         except sqlalchemy.exc.IntegrityError as error:
             if is_unique_constraint_error(error):
-                self._log.warning('Duplicate found with message id: %s', message_id)
+                self._log.warning('Duplicate found with message id: %s',
+                                  message_id)
                 return
 
             self._log.exception('Insertion Error')
@@ -229,7 +231,10 @@ class Message(BaseModule):
                                             from_mam=properties.is_mam_message,
                                             entitykey=pk))
 
-    def _get_message_timestamp(self, properties: MessageProperties) -> dt.datetime:
+    def _get_message_timestamp(
+        self,
+        properties: MessageProperties
+    ) -> dt.datetime:
         timestamp = properties.timestamp
         if properties.is_mam_message:
             timestamp = properties.mam.timestamp
@@ -436,7 +441,8 @@ class Message(BaseModule):
         remote_jid = message.jid
         message_text = message.text
         assert message_text is not None
-        timestamp = dt.datetime.fromtimestamp(message.timestamp, tz=dt.timezone.utc)
+        timestamp = dt.datetime.fromtimestamp(
+            message.timestamp, tz=dt.timezone.utc)
         m_type = message.message_type
         assert message.message_id is not None
 

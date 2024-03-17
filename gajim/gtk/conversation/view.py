@@ -750,8 +750,7 @@ class ConversationView(Gtk.ScrolledWindow):
         for row in cast(list[BaseRow], self._list_box.get_children()):
             if not isinstance(row, MessageRow):
                 continue
-            if (row.log_line_id == log_line_id or
-                    row.orig_log_line_id == log_line_id):
+            if log_line_id in {row.log_line_id, row.orig_log_line_id}:
                 return row
 
         return None

@@ -382,7 +382,8 @@ class MessageCorrected(ApplicationEvent):
 
     @cached_property
     def message(self) -> mod.Message | None:
-        return app.storage.archive.get_corrected_message(self._corrected_message)
+        return app.storage.archive.get_corrected_message(
+            self._corrected_message)
 
 
 @dataclass

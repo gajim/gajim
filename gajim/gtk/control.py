@@ -10,6 +10,7 @@ from typing import cast
 import datetime as dt
 import logging
 import time
+from collections.abc import Sequence
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -326,7 +327,10 @@ class ChatControl(EventHelper):
 
         self.remove_message(event.entitykey)
 
-    def _on_message_acknowledged(self, event: events.MessageAcknowledged) -> None:
+    def _on_message_acknowledged(
+        self,
+        event: events.MessageAcknowledged
+    ) -> None:
         if not self._is_event_processable(event):
             return
 
@@ -507,7 +511,7 @@ class ChatControl(EventHelper):
         for msg in messages:
             self._add_db_row(msg)
 
-    def _request_messages(self, before: bool) -> list[Message]:
+    def _request_messages(self, before: bool) -> Sequence[Message]:
         if before:
             row = self._scrolled_view.get_first_row()
         else:
@@ -516,7 +520,8 @@ class ChatControl(EventHelper):
         if row is None:
             timestamp = dt.datetime.now(dt.timezone.utc)
         else:
-            timestamp = dt.datetime.fromtimestamp(row.db_timestamp, dt.timezone.utc)
+            timestamp = dt.datetime.fromtimestamp(
+                row.db_timestamp, dt.timezone.utc)
 
         return app.storage.archive.get_conversation_before_after(
             self.contact.account,

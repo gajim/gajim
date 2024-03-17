@@ -4,6 +4,7 @@ import unittest
 from datetime import datetime
 from datetime import timezone
 
+import sqlalchemy.exc
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -56,7 +57,7 @@ class MessagesTest(unittest.TestCase):
         message_data = self._create_base_message(message_id='1', stanza_id='s1')
         self._archive.insert_object(message_data, ignore_on_conflict=False)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(sqlalchemy.exc.IntegrityError):
             message_data = self._create_base_message(message_id='2', stanza_id='s1')
             self._archive.insert_object(message_data, ignore_on_conflict=False)
 
@@ -66,7 +67,7 @@ class MessagesTest(unittest.TestCase):
         )
         self._archive.insert_object(message_data, ignore_on_conflict=False)
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(sqlalchemy.exc.IntegrityError):
             message_data = self._create_base_message(
                 message_id='1', stanza_id='s2', direction=ChatDirection.OUTGOING
             )

@@ -12,12 +12,13 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ContactSettings
 from gajim.common.preview import PreviewManager
 from gajim.common.settings import Settings
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.storage import MessageArchiveStorage
-# from gajim.common.storage.archive.structs import DbInsertMessageRowData
 from gajim.common.storage.events.storage import EventStorage
+from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.control import ChatControl
@@ -88,20 +89,20 @@ def add_archive_messages() -> None:
     remote_jid = JID.from_string(FROM_JID)
     timestamp = BASE_TIMESTAMP
     for num in range(1000):
-        message_data = DbInsertMessageRowData(
-            account=ACCOUNT,
-            remote_jid=remote_jid,
-            m_type=MessageType.CHAT,
+        message_data = mod.Message(
+            account_=ACCOUNT,
+            remote_jid_=remote_jid,
+            type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=timestamp,
+            timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
             resource=None,
-            message=str(num),
-            message_id=str(num),
+            text=str(num),
+            id=str(num),
             stanza_id=str(num),
         )
 
-        app.storage.archive.insert_row(message_data)
+        app.storage.archive.insert_object(message_data)
 
         timestamp += 1
 

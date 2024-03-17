@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
 
+import sqlalchemy.exc
 from nbxmpp.protocol import JID
 from sqlalchemy import select
 
@@ -50,7 +51,7 @@ class ThreadsTest(unittest.TestCase):
         resource: str | None = None,
         message: str = 'test',
         message_id: str | None = None,
-        type: int = MessageType.CHAT,
+        type: int = MessageType.CHAT,  # noqa: A002
         timestamp: datetime | None = None,
         count: int = 10,
     ) -> None:
@@ -89,7 +90,7 @@ class ThreadsTest(unittest.TestCase):
         uuid = get_uuid()
         m1 = Message(
             account_='testacc1',
-            remote_jid_=JID.from_string(f'remote1@jid.org'),
+            remote_jid_=JID.from_string('remote1@jid.org'),
             resource=None,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
@@ -102,7 +103,7 @@ class ThreadsTest(unittest.TestCase):
 
         m2 = Message(
             account_='testacc1',
-            remote_jid_=JID.from_string(f'remote1@jid.org'),
+            remote_jid_=JID.from_string('remote1@jid.org'),
             resource=None,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
@@ -113,7 +114,7 @@ class ThreadsTest(unittest.TestCase):
             encryption_=Encryption(protocol=1, key='123', trust=1),
         )
 
-        with self.assertRaises(Exception):
+        with self.assertRaises(sqlalchemy.exc.IntegrityError):
             self._archive.insert_object(m2, ignore_on_conflict=False)
 
         with self._archive.get_session() as s:
@@ -287,7 +288,7 @@ class ThreadsTest(unittest.TestCase):
             remote_jid=remote_jid,
             timestamp=timestamp,
             resource='res101',
-            message_id=f'messageid101',
+            message_id='messageid101',
             count=1,
         )
         self._insert_messages(

@@ -8,8 +8,8 @@ from typing import Any
 
 import datetime
 
-import sqlalchemy.types as types
 from nbxmpp import JID
+from sqlalchemy import types
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column

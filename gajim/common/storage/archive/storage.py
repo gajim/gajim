@@ -517,8 +517,7 @@ class MessageArchiveStorage(AlchemyStorage):
             .execution_options(yield_per=25)
         )
 
-        for message in session.scalars(stmt):
-            yield message
+        yield from session.scalars(stmt)
 
     @with_session
     def get_days_containing_messages(
@@ -823,5 +822,4 @@ class MessageArchiveStorage(AlchemyStorage):
             .execution_options(yield_per=25)
         )
 
-        for message in session.scalars(stmt).unique().all():
-            yield message
+        yield from session.scalars(stmt).unique().all()
