@@ -31,7 +31,6 @@ from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
-from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
 from gajim.common.storage.archive.models import MAMArchiveState
@@ -534,9 +533,9 @@ class MessageArchiveStorage(AlchemyStorage):
 
         # The user wants all days which have messages within a month.
         # A message in the database with a timestamp 2024-01-01 00:00:01 UTC
-        # sould show up if a user is in the timezone -01:00 and passes
+        # should show up if a user is in the timezone -01:00 and passes
         # year=2023, month=12 to this function. Because for the user the message
-        # happend 2023-12 localtime.
+        # happened 2023-12 localtime.
         #
         # astimezone(timezone.utc) applied to a naive datetime assumes that the
         # datetime is in localtime and converts to UTC.
@@ -546,7 +545,7 @@ class MessageArchiveStorage(AlchemyStorage):
         #   datetime.datetime(2023, 12, 31, 23, 0, tzinfo=datetime.timezone.utc)
         #
         # If we now search with this UTC timestamp in the database it will return
-        # the day 31 altough the user would want to see the day 1. To compensate
+        # the day 31 although the user would want to see the day 1. To compensate
         # for this, the day selected is converted back by SQL to localtime.
 
         local_start = datetime(year, month, 1)
