@@ -53,10 +53,10 @@ class MAM(BaseModule):
         self.handlers = [
             StanzaHandler(name='message',
                           callback=self._set_message_archive_info,
-                          priority=41),
+                          priority=42),
             StanzaHandler(name='message',
                           callback=self._mam_message_received,
-                          priority=49),
+                          priority=41),
         ]
 
         self.available = False
