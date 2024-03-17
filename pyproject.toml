@@ -25,17 +25,18 @@ classifiers = [
   "Topic :: Communications :: Chat",
 ]
 dependencies = [
+  "cryptography>=3.4.8",
   "css-parser",
   "keyring",
   "nbxmpp>=4.5.3,<5.0.0",
+  "omemo-dr>=1.0.0,<2.0.0",
   "packaging",
   "pillow>=9.1.0",
   "precis-i18n>=1.0.0",
-  "cryptography>=3.4.8",
   "pycairo>=1.16.0",
   "PyGObject>=3.42.0",
   "qrcode>=7.3.1",
-  "omemo-dr>=1.0.0,<2.0.0",
+  "SQLAlchemy>=2.0.0",
   "winsdk ; platform_system == 'Windows'",
 ]
 dynamic = ["version"]
