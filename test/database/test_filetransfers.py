@@ -45,7 +45,7 @@ class ForeignKeyTest(unittest.TestCase):
 
         source1 = UrlData(
             type='urldata',
-            target="http://target",
+            target='http://target',
             scheme_data={'header': 'someheader'},
         )
 

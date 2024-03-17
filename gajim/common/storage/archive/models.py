@@ -390,7 +390,7 @@ class MAMArchiveState(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
 
 class FileTransferSource(MappedAsDataclass, Base, kw_only=True):
-    __tablename__ = "ft_source"
+    __tablename__ = 'ft_source'
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
     fk_filetransfer_pk: Mapped[int] = mapped_column(
@@ -399,48 +399,48 @@ class FileTransferSource(MappedAsDataclass, Base, kw_only=True):
     type: Mapped[str]
 
     __mapper_args__ = {
-        "polymorphic_identity": "source",
-        "polymorphic_on": "type",
+        'polymorphic_identity': 'source',
+        'polymorphic_on': 'type',
     }
 
 
 class UrlData(FileTransferSource):
-    __tablename__ = "ft_source_urldata"
+    __tablename__ = 'ft_source_urldata'
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
     )
     target: Mapped[str]
     scheme_data: Mapped[dict[str, Any] | None] = mapped_column(JSONType)
 
     __mapper_args__ = {
-        "polymorphic_identity": "urldata",
+        'polymorphic_identity': 'urldata',
     }
 
 
 class JingleFT(FileTransferSource):
-    __tablename__ = "ft_source_jingleft"
+    __tablename__ = 'ft_source_jingleft'
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
     )
     sid: Mapped[str]
 
     __mapper_args__ = {
-        "polymorphic_identity": "jingleft",
+        'polymorphic_identity': 'jingleft',
     }
 
 
 class JinglePub(FileTransferSource):
-    __tablename__ = "ft_source_jinglepub"
+    __tablename__ = 'ft_source_jinglepub'
 
     fk_ft_source_pk: Mapped[int] = mapped_column(
-        ForeignKey("ft_source.pk", ondelete='CASCADE'), primary_key=True, init=False
+        ForeignKey('ft_source.pk', ondelete='CASCADE'), primary_key=True, init=False
     )
     id: Mapped[str]
 
     __mapper_args__ = {
-        "polymorphic_identity": "jinglepub",
+        'polymorphic_identity': 'jinglepub',
     }
 
 
@@ -471,7 +471,7 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     source: Mapped[list[FileTransferSource]] = relationship(
         lazy='raise',
         default_factory=list,
-        cascade="all, delete",
+        cascade='all, delete',
         passive_deletes=True,
     )
 
@@ -610,25 +610,25 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     filetransfer: Mapped[list[FileTransfer]] = relationship(
         lazy='selectin',
         default_factory=list,
-        cascade="all, delete",
+        cascade='all, delete',
         passive_deletes=True,
     )
     call: Mapped[Call | None] = relationship(
         lazy='joined',
         default=None,
-        cascade="all, delete",
+        cascade='all, delete',
         passive_deletes=True,
     )
     oob: Mapped[list[OOB]] = relationship(
         lazy='selectin',
         default_factory=list,
-        cascade="all, delete",
+        cascade='all, delete',
         passive_deletes=True,
     )
     reply: Mapped[Reply | None] = relationship(
         lazy='joined',
         default=None,
-        cascade="all, delete",
+        cascade='all, delete',
         passive_deletes=True,
     )
 

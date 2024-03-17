@@ -202,7 +202,7 @@ class CorrectionsTest(unittest.TestCase):
 
         m = self._create_base_message()
         m.type = MessageType.CHAT
-        m.remote_jid_ = JID.from_string("other@remote.jid")
+        m.remote_jid_ = JID.from_string('other@remote.jid')
         m.text = 'third correction'
         m.id = 'messageid4'
         m.timestamp = datetime.fromtimestamp(3, timezone.utc)

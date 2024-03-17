@@ -5,12 +5,12 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Iterator
-from typing import Sequence
 
 import calendar
 import datetime as dt
 import logging
+from collections.abc import Iterator
+from collections.abc import Sequence
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -718,11 +718,13 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_remote_pk = self._get_jid_ek(session, jid)
 
         stmt = (
-            update(Message).where(
+            update(Message)
+            .where(
                 Message.id == message_id,
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
-                Message.direction == ChatDirection.OUTGOING)
+                Message.direction == ChatDirection.OUTGOING,
+            )
             .values(state=MessageState.ACKNOWLEDGED)
             .returning(Message.pk)
         )

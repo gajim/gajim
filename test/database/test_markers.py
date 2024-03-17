@@ -208,7 +208,7 @@ class MarkersTest(unittest.TestCase):
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)
-        self.assertEqual(marker.id, "messageid1")
+        self.assertEqual(marker.id, 'messageid1')
         self.assertEqual(marker.timestamp, datetime.fromtimestamp(1, timezone.utc))
 
         # Don’t Update marker with different id and earlier timestamp
@@ -230,7 +230,7 @@ class MarkersTest(unittest.TestCase):
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)
-        self.assertEqual(marker.id, "messageid1")
+        self.assertEqual(marker.id, 'messageid1')
         self.assertEqual(marker.timestamp, datetime.fromtimestamp(1, timezone.utc))
 
         # Update marker with different id and later timestamp
@@ -252,7 +252,7 @@ class MarkersTest(unittest.TestCase):
         assert marker is not None
 
         self.assertEqual(marker.type, ChatMarkerType.RECEIVED)
-        self.assertEqual(marker.id, "messageid2")
+        self.assertEqual(marker.id, 'messageid2')
         self.assertEqual(marker.timestamp, datetime.fromtimestamp(5, timezone.utc))
 
         # Markers with different types don’t have same pk

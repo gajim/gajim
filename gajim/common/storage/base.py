@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import Callable
 from typing import cast
 from typing import Concatenate
 from typing import ParamSpec
@@ -46,8 +45,8 @@ from sqlalchemy.orm import sessionmaker
 from gajim.common.helpers import python_version
 
 _T = TypeVar('_T')
-P = ParamSpec("P")
-R = TypeVar("R")
+P = ParamSpec('P')
+R = TypeVar('R')
 
 
 class ValueMissingT:
@@ -338,7 +337,7 @@ class AlchemyStorage:
         self, dbapi_connection: DBAPIConnection, _connection_record: Any
     ) -> None:
         cursor = dbapi_connection.cursor()
-        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.execute('PRAGMA foreign_keys=ON')
 
         for key, value in self._pragma.items():
             cursor.execute(f'PRAGMA {key}={value}')
@@ -354,7 +353,7 @@ class AlchemyStorage:
 
     def _get_user_version(self) -> int:
         with self._session as s:
-            return s.scalar(sa.text("PRAGMA user_version"))
+            return s.scalar(sa.text('PRAGMA user_version'))
 
     def _create_engine(self) -> Engine:
         self._log.info('Create engine')
@@ -366,7 +365,7 @@ class AlchemyStorage:
         engine = sa.create_engine(
             con_str, connect_args={'check_same_thread': False}, echo=False
         )
-        event.listen(engine, "connect", self._set_sqlite_pragma)
+        event.listen(engine, 'connect', self._set_sqlite_pragma)
         return engine
 
     def _create_session(self) -> Session:
@@ -418,7 +417,7 @@ class AlchemyStorage:
             return
 
         stmt = stmt.compile(
-            compile_kwargs={"literal_binds": True}, dialect=sa.dialects.sqlite.dialect()
+            compile_kwargs={'literal_binds': True}, dialect=sa.dialects.sqlite.dialect()
         )
         res = session.execute(sa.text(f'EXPLAIN QUERY PLAN {stmt}')).all()
         pprint.pprint(res)
@@ -512,4 +511,6 @@ def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:
 
     if python_version('<3.11'):
         return 'UNIQUE constraint failed' in error.args[0]
-    return error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE  # pyright: ignore
+    return (
+        error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE
+    )  # pyright: ignore
