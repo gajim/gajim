@@ -133,11 +133,13 @@ class Message(BaseModule):
             self._log.warning(stanza)
             return
 
+        stanza_id = self._get_stanza_id(properties)
+
         occupant = None
         if m_type == MessageType.GROUPCHAT:
             if direction == ChatDirection.OUTGOING:
                 pk = app.storage.archive.update_pending_message(
-                    self._account, remote_jid, properties.id)
+                    self._account, remote_jid, properties.id, stanza_id)
 
                 if pk is not None:
                     app.ged.raise_event(
@@ -147,7 +149,6 @@ class Message(BaseModule):
                     return
 
         occupant = self._get_occupant_info(remote_jid, timestamp, properties)
-        stanza_id = self._get_stanza_id(properties)
         message_text = properties.body
         oob_data = parse_oob(properties)
 
@@ -164,6 +165,7 @@ class Message(BaseModule):
             message_text = get_eme_message(properties.eme)
 
         if not message_text:
+            self._log.warning("Received message without text")
             return
 
         securitylabel_data = None
