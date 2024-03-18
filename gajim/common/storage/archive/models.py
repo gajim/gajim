@@ -172,8 +172,6 @@ class Reply(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ForeignKey('message.pk', ondelete='CASCADE'), primary_key=True, init=False
     )
     id: Mapped[str]
-    fallback_start: Mapped[int | None]
-    fallback_end: Mapped[int | None]
     to: Mapped[JID | None] = mapped_column(JIDType)
 
 

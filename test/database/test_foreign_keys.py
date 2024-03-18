@@ -48,8 +48,6 @@ class ForeignKeyTest(unittest.TestCase):
         reply_data = Reply(
             id='123',
             to=JID.from_string('somejid@jid.com'),
-            fallback_start=0,
-            fallback_end=5,
         )
 
         enc_data = Encryption(protocol=1, key='testkey', trust=2)
@@ -106,8 +104,6 @@ class ForeignKeyTest(unittest.TestCase):
 
         assert message.reply is not None
         self.assertEqual(message.reply.id, '123')
-        self.assertEqual(message.reply.fallback_end, 5)
-        self.assertEqual(message.reply.fallback_start, 0)
         self.assertEqual(message.reply.to, JID.from_string('somejid@jid.com'))
         self.assertIsInstance(message.reply.to, JID)
 

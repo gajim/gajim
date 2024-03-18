@@ -1176,10 +1176,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         last_message = app.storage.archive.get_last_conversation_row(
             account, jid)
-        if last_message is None or last_message.message_id is None:
+        if last_message is None:
             return
-
-        assert last_message.message_id is not None
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
@@ -1188,7 +1186,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         client.get_module('ChatMarkers').send_displayed_marker(
             contact,
-            last_message.message_id,
+            last_message.id,
             last_message.stanza_id)
 
     def _on_window_active(self,
