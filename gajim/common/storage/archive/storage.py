@@ -420,6 +420,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_account_pk == fk_account_pk,
                 Message.id == message_id,
                 Message.timestamp > min_time,
+                Message.state == MessageState.ACKNOWLEDGED
             )
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .limit(1)

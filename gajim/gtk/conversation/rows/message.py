@@ -245,7 +245,8 @@ class MessageRow(BaseRow):
             self.message_id,
             self.stanza_id,
             self.orig_log_line_id,
-            self.log_line_id)
+            self.log_line_id,
+            self.state)
 
         popover = GajimPopover(menu, relative_to=button)
         popover.popup()

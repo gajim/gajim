@@ -37,6 +37,7 @@ from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
+from gajim.common.storage.archive.const import MessageState
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
 
@@ -693,6 +694,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       stanza_id: str | None,
                       pk: int | None,
                       corrected_pk: int | None,
+                      state: MessageState,
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -716,12 +718,13 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
         show_quote = True
         if isinstance(contact, GroupchatContact):
-            if contact.is_joined:
+            if contact.is_joined and state == MessageState.ACKNOWLEDGED:
                 self_contact = contact.get_self()
                 assert self_contact is not None
                 show_quote = not self_contact.role.is_visitor
             else:
                 show_quote = False
+
         if show_quote:
             menu_items.append((
                 p_('Message row action', 'Quote…'), 'win.quote', text))
@@ -751,7 +754,9 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
         if disco_info.has_message_moderation and is_allowed:
             show_retract = True
-    if show_retract and stanza_id is not None:
+
+    if (show_retract and stanza_id is not None
+            and state == MessageState.ACKNOWLEDGED):
         param = RetractMessageParam(
             account=contact.account,
             jid=contact.jid,
@@ -761,7 +766,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
             'win.retract-message',
             param))
 
-    if pk is not None:
+    if pk is not None and state == MessageState.ACKNOWLEDGED:
         param = DeleteMessageParam(
             account=contact.account,
             jid=contact.jid,
