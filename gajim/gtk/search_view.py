@@ -9,7 +9,6 @@ from typing import Any
 import itertools
 import logging
 import re
-import time
 from collections.abc import Iterator
 from datetime import datetime
 from datetime import timedelta
@@ -82,12 +81,10 @@ class SearchView(Gtk.Box):
             row.set_header(RowHeader(
                 row.account, row.remote_jid, row.timestamp))
         else:
-            date1 = time.strftime('%x', time.localtime(row.timestamp))
-            date2 = time.strftime('%x', time.localtime(before.timestamp))
             if before.jid != row.jid:
                 row.set_header(RowHeader(
                     row.account, row.remote_jid, row.timestamp))
-            elif date1 != date2:
+            elif before.timestamp.date() != row.timestamp.date():
                 row.set_header(RowHeader(
                     row.account, row.remote_jid, row.timestamp))
             else:
@@ -274,7 +271,7 @@ class SearchView(Gtk.Box):
         # supplied end_date (first_date/last_date) reached
         year, month, day = self._ui.calendar.get_date()
         py_m = python_month(month)
-        date = datetime(year, py_m, day)
+        date = datetime(year, py_m, day).astimezone()
 
         has_history = False
         while not has_history:
@@ -339,7 +336,7 @@ class SearchView(Gtk.Box):
 
 
 class RowHeader(Gtk.Box):
-    def __init__(self, account: str, jid: JID, timestamp: float) -> None:
+    def __init__(self, account: str, jid: JID, timestamp: datetime) -> None:
         Gtk.Box.__init__(self)
         self.set_hexpand(True)
 
@@ -352,9 +349,10 @@ class RowHeader(Gtk.Box):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         self._ui.header_name_label.set_text(contact.name or '')
 
-        local_time = time.localtime(timestamp)
-        date = time.strftime('%x', local_time)
-        self._ui.header_date_label.set_text(date)
+        format_string = app.settings.get('time_format')
+        if timestamp.date() < datetime.today().date():
+            format_string = app.settings.get('date_time_format')
+        self._ui.header_date_label.set_text(timestamp.strftime(format_string))
 
         self.show_all()
 
@@ -363,21 +361,20 @@ class ResultRow(Gtk.ListBoxRow):
     def __init__(self, db_row: Message) -> None:
         Gtk.ListBoxRow.__init__(self)
 
-        print(db_row)
-        self._client = self._get_client(db_row.account_jid)
+        self._client = self._get_client(str(db_row.account.jid))
         self.account = self._client.account
 
-        self.remote_jid = JID.from_string(db_row.remote_jid)
+        self.remote_jid = db_row.remote.jid
         self.direction = ChatDirection(db_row.direction)
 
-        self.jid = JID.from_string(db_row.remote_jid)
+        self.jid = db_row.remote.jid
         if (db_row.direction == ChatDirection.OUTGOING):
             self.jid = JID.from_string(self._client.get_own_jid().bare)
 
-        self.entitykey = db_row.entitykey
+        self.entitykey = db_row.pk
         self.timestamp = db_row.timestamp
 
-        self.type = MessageType(db_row.m_type)
+        self.type = MessageType(db_row.type)
 
         self.contact = self._client.get_module('Contacts').get_contact(
             self.jid, groupchat=self.type == MessageType.GROUPCHAT)
@@ -399,15 +396,15 @@ class ResultRow(Gtk.ListBoxRow):
         avatar = self._get_avatar(self.direction, contact_name)
         self._ui.row_avatar.set_from_surface(avatar)
 
-        local_time = time.localtime(self.timestamp)
         format_string = app.settings.get('time_format')
-        date = time.strftime(format_string, local_time)
-        self._ui.row_time_label.set_label(date)
+        if self.timestamp.date() < datetime.today().date():
+            format_string = app.settings.get('date_time_format')
+        self._ui.row_time_label.set_text(self.timestamp.strftime(format_string))
 
-        assert db_row.message is not None
-        message = db_row.message
-        if db_row.correction is not None:
-            message = db_row.correction.message
+        assert db_row.text is not None
+        message = db_row.text
+        if db_row.corrections:
+            message = db_row.corrections[-1].text
 
         message_widget = MessageWidget(self.account, selectable=False)
         message_widget.add_with_styling(message, nickname=contact_name)
