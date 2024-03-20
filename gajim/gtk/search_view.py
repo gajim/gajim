@@ -205,6 +205,9 @@ class SearchView(Gtk.Box):
 
         self._ui.calendar_button.set_sensitive(True)
 
+        assert self._jid is not None
+        assert self._account is not None
+
         first_log = app.storage.archive.get_first_history_ts(
             self._account, self._jid)
         if first_log is None:
@@ -228,6 +231,9 @@ class SearchView(Gtk.Box):
 
         calendar.clear_marks()
         month = python_month(month)
+
+        assert self._jid is not None
+        assert self._account is not None
 
         history_days = app.storage.archive.get_days_containing_messages(
             self._account, self._jid, year, month)
@@ -273,6 +279,9 @@ class SearchView(Gtk.Box):
         py_m = python_month(month)
         date = datetime(year, py_m, day).astimezone()
 
+        assert self._jid is not None
+        assert self._account is not None
+
         has_history = False
         while not has_history:
             if direction == Direction.PREV:
@@ -297,6 +306,10 @@ class SearchView(Gtk.Box):
         if not control.has_active_chat():
             return
         if control.contact.jid == self._jid:
+
+            assert self._jid is not None
+            assert self._account is not None
+
             meta = app.storage.archive.get_first_message_meta_for_date(
                 self._account, self._jid, date)
             if meta is None:
@@ -401,13 +414,14 @@ class ResultRow(Gtk.ListBoxRow):
             format_string = app.settings.get('date_time_format')
         self._ui.row_time_label.set_text(self.timestamp.strftime(format_string))
 
-        assert db_row.text is not None
-        message = db_row.text
+        text = db_row.text
         if db_row.corrections:
-            message = db_row.corrections[-1].text
+            text = db_row.get_last_correction().text
+
+        assert text is not None
 
         message_widget = MessageWidget(self.account, selectable=False)
-        message_widget.add_with_styling(message, nickname=contact_name)
+        message_widget.add_with_styling(text, nickname=contact_name)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
         self.show_all()

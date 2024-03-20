@@ -176,7 +176,7 @@ class ChatControl(EventHelper):
     def get_autoscroll(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
-    def scroll_to_message(self, log_line_id: int, timestamp: float) -> None:
+    def scroll_to_message(self, log_line_id: int, timestamp: dt.datetime) -> None:
         row = self._scrolled_view.get_row_by_log_line_id(log_line_id)
         if row is None:
             # Clear view and reload conversation around timestamp
