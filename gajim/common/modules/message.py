@@ -34,6 +34,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import is_unique_constraint_error
 from gajim.common.storage.base import VALUE_MISSING
+from gajim.common.structs import MUCData
 from gajim.common.structs import OutgoingMessage
 
 
@@ -148,7 +149,8 @@ class Message(BaseModule):
                                             pk=pk))
                     return
 
-        occupant = self._get_occupant_info(remote_jid, timestamp, properties)
+        occupant = self._get_occupant_info(
+            remote_jid, direction, timestamp, properties)
         message_text = properties.body
         oob_data = parse_oob(properties)
 
@@ -262,6 +264,7 @@ class Message(BaseModule):
     def _get_occupant_info(
         self,
         remote_jid: JID,
+        direction: ChatDirection,
         timestamp: dt.datetime,
         properties: MessageProperties
     ) -> mod.Occupant | None:
@@ -269,7 +272,11 @@ class Message(BaseModule):
         if not properties.type.is_groupchat:
             return None
 
-        real_jid = self._get_real_jid(properties)
+        if direction == ChatDirection.OUTGOING:
+            real_jid = self._client.get_own_jid().new_as_bare()
+        else:
+            real_jid = self._get_real_jid(properties)
+
         occupant_id = self._get_occupant_id(properties) or real_jid
         if occupant_id is None:
             return None
@@ -460,14 +467,16 @@ class Message(BaseModule):
                 return
 
             resource = muc_data.nick
-            occupant_id = muc_data.occupant_id
-            if occupant_id is not None:
-                occupant = mod.Occupant(
-                    account_=self._account,
-                    remote_jid_=remote_jid,
-                    id=str(occupant_id),
-                    updated_at=timestamp,
-                )
+            real_jid = self._client.get_own_jid().new_as_bare()
+            occupant_id = muc_data.occupant_id or real_jid
+
+            occupant = mod.Occupant(
+                account_=self._account,
+                remote_jid_=remote_jid,
+                id=str(occupant_id),
+                real_remote_jid_=real_jid,
+                updated_at=timestamp,
+            )
 
             state = MessageState.PENDING
 
