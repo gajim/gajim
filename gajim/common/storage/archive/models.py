@@ -42,24 +42,30 @@ class Base(DeclarativeBase):
 
 class UtilMixin:
     def get_upsert_values(self) -> dict[str, str]:
-        values = {f.name: getattr(self, f.name) for f in dataclasses.fields(self)}
+        values = {
+            f.name: getattr(self, f.name)
+            for f in dataclasses.fields(self)  # pyright: ignore
+        }
         for key, value in list(values.items()):
             if value is VALUE_MISSING:
                 values.pop(key)
                 continue
 
-            if key not in self.__upsert_cols__:
+            if key not in self.__upsert_cols__:  # pyright: ignore
                 values.pop(key)
         return values
 
     def get_insert_values(self):
-        values = {f.name: getattr(self, f.name) for f in dataclasses.fields(self)}
+        values = {
+            f.name: getattr(self, f.name)
+            for f in dataclasses.fields(self)  # pyright: ignore
+        }
         for key, value in list(values.items()):
             if value is VALUE_MISSING:
                 values.pop(key)
                 continue
 
-            if key in self.__no_table_cols__:
+            if key in self.__no_table_cols__:  # pyright: ignore
                 values.pop(key)
         return values
 
@@ -135,10 +141,10 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         init=False,
     )
 
-    nickname: Mapped[str | None] = mapped_column(
+    nickname: Mapped[str | None | ValueMissingT] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
-    avatar_sha: Mapped[str | None] = mapped_column(
+    avatar_sha: Mapped[str | None | ValueMissingT] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)

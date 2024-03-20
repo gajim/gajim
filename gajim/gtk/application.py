@@ -842,7 +842,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                                   params: structs.RemoveHistoryActionParams
                                   ) -> None:
         def _remove() -> None:
-            app.storage.archive.remove_history(params.account, params.jid)
+            app.storage.archive.remove_history_for_jid(params.account, params.jid)
 
             app.window.clear_chat_list_row(params.account, params.jid)
             control = app.window.get_control()
@@ -873,4 +873,4 @@ class GajimApplication(Gtk.Application, CoreApplication):
         client.get_module('MUC').leave(params.jid)
         client.get_module('Bookmarks').remove(params.jid)
 
-        app.storage.archive.remove_history(params.account, params.jid)
+        app.storage.archive.remove_history_for_jid(params.account, params.jid)

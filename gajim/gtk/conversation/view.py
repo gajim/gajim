@@ -517,8 +517,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         message_id = db_row.id
 
-        if message_id is not None:
-            self._message_id_row_map[message_id] = message_row
+        self._message_id_row_map[message_id] = message_row
 
         if db_row.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None

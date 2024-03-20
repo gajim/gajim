@@ -629,8 +629,10 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         if message.id == row.message_id:
+            text = message.get_last_correction().text
+            assert text is not None
             row.set_message_text(
-                message.get_last_correction().text,
+                text,
                 self._get_nick_for_received_message(
                     event.account, message))
 
@@ -651,6 +653,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         message = event.message
+        assert message.text is not None
 
         row.set_nick(_('Me'))
         row.set_timestamp(message.timestamp)

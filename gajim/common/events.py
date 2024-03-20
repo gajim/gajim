@@ -161,7 +161,9 @@ class MessageSent(ApplicationEvent):
 
     @cached_property
     def message(self) -> mod.Message:
-        return app.storage.archive.get_message_with_pk(self.entitykey)
+        m = app.storage.archive.get_message_with_pk(self.entitykey)
+        assert m is not None
+        return m
 
 
 @dataclass
@@ -405,7 +407,9 @@ class MessageReceived(ApplicationEvent):
 
     @cached_property
     def message(self) -> mod.Message:
-        return app.storage.archive.get_message_with_pk(self.entitykey)
+        m = app.storage.archive.get_message_with_pk(self.entitykey)
+        assert m is not None
+        return m
 
 
 @dataclass

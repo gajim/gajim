@@ -420,7 +420,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_account_pk == fk_account_pk,
                 Message.id == message_id,
                 Message.timestamp > min_time,
-                Message.state == MessageState.ACKNOWLEDGED
+                Message.state == MessageState.ACKNOWLEDGED,
             )
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .limit(1)
@@ -712,7 +712,12 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     def update_pending_message(
-        self, session: Session, account: str, jid: JID, message_id: str, stanza_id: str | None
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        message_id: str,
+        stanza_id: str | None,
     ) -> int | None:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_ek(session, jid)
@@ -726,8 +731,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.direction == ChatDirection.OUTGOING,
                 Message.state == MessageState.PENDING,
             )
-            .values(state=MessageState.ACKNOWLEDGED,
-                    stanza_id=stanza_id)
+            .values(state=MessageState.ACKNOWLEDGED, stanza_id=stanza_id)
             .returning(Message.pk)
         )
         return session.scalar(stmt)

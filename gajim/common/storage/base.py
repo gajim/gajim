@@ -512,5 +512,5 @@ def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:
     if python_version('<3.11'):
         return 'UNIQUE constraint failed' in error.args[0]
     return (
-        error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE
-    )  # pyright: ignore
+        error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE  # pyright: ignore
+    )

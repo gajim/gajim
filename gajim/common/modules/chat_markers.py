@@ -47,7 +47,7 @@ class ChatMarkers(BaseModule):
                              _stanza: Any,
                              properties: MessageProperties) -> None:
 
-        if not properties.is_marker or not properties.marker.is_displayed:
+        if properties.marker is None or not properties.marker.is_displayed:
             return
 
         if properties.type.is_error:
@@ -57,11 +57,15 @@ class ChatMarkers(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _process(self, properties: MessageProperties) -> None:
+        assert properties.marker is not None
+        assert properties.jid is not None
+
         jid = properties.jid
         if not properties.is_muc_pm:
             jid = properties.jid.new_as_bare()
 
         if properties.type.is_groupchat:
+            assert properties.muc_jid is not None
             contact = self._client.get_module('Contacts').get_contact(
                 properties.muc_jid,
                 groupchat=True)

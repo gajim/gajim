@@ -264,7 +264,7 @@ class MessageRow(BaseRow):
             security_labels: mod.SecurityLabel | None
             ) -> tuple[str, str] | None:
 
-        if (security_labels is None or security_labels.displaymarking is None):
+        if security_labels is None:
             return None
 
         if not app.settings.get_account_setting(self._account,

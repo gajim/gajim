@@ -183,8 +183,9 @@ class ChatControl(EventHelper):
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
             messages: list[Message] = []
-            messages.append(app.storage.archive.get_message_with_pk(
-                log_line_id))
+            m = app.storage.archive.get_message_with_pk(log_line_id)
+            assert m is not None
+            messages.append(m)
             messages.extend(app.storage.archive.get_conversation_before_after(
                 self.contact.account, self.contact.jid, True, timestamp, 50))
             messages.extend(app.storage.archive.get_conversation_before_after(
@@ -605,13 +606,15 @@ class ChatControl(EventHelper):
         self._scrolled_view.block_signals(False)
 
     @staticmethod
-    def _sort_request_rows(messages: list[Message],
+    def _sort_request_rows(messages: Sequence[Message],
                            event_rows: list[events.ApplicationEvent],
                            before: bool
                            ) -> list[HistoryRowT]:
 
         def sort_func(obj: HistoryRowT) -> float:
             return obj.timestamp  # pyright: ignore
+
+        assert isinstance(messages, list)
 
         rows = messages + event_rows
         rows.sort(key=sort_func, reverse=before)

@@ -74,6 +74,8 @@ class Moderations(BaseModule):
         if not properties.moderation.is_tombstone:
             return
 
+        assert properties.remote_jid is not None
+
         remote_jid = properties.remote_jid
         muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
         if muc_data is None:
@@ -141,7 +143,7 @@ class Moderations(BaseModule):
             remote_jid_=remote_jid,
             occupant_=occupant_data,
             stanza_id=properties.moderation.stanza_id,
-            by=moderator_nickname,
+            by=properties.moderation.by,
             reason=properties.moderation.reason,
             timestamp=timestamp,
         )
@@ -189,6 +191,8 @@ class Moderations(BaseModule):
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, self._client.get_own_jid(), properties)
+
+        assert properties.id is not None
 
         message_data = mod.Message(
             account_=self._account,

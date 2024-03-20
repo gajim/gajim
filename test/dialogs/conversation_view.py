@@ -82,7 +82,8 @@ class ConversationViewTest(Gtk.ApplicationWindow):
             self.destroy()
 
     def _on_jump_to_clicked(self, _button: Gtk.Button) -> None:
-        self._chat_control.scroll_to_message(500, BASE_TIMESTAMP + 500)
+        # BASE_TIMESTAMP + 500
+        self._chat_control.scroll_to_message(500, utc_now())
 
 
 def add_archive_messages() -> None:
