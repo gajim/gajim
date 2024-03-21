@@ -9,7 +9,6 @@ from typing import Literal
 from typing import overload
 
 import logging
-import time
 from datetime import datetime
 from pathlib import Path
 
@@ -135,32 +134,34 @@ class HistoryExport(Assistant):
                 for message in messages:
                     if message.call is not None:
                         continue
-                    if message.has_filetransfers:
-                        continue
+
                     file.write(self._get_export_line(message))
 
         self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
 
-    def _get_nickname(self, joined_data: Message) -> str:
-        if joined_data.m_type == MessageType.GROUPCHAT:
-            assert joined_data.resource is not None
-            return joined_data.resource
+    def _get_nickname(self, message: Message) -> str:
+        if message.direction == ChatDirection.OUTGOING:
+            return _('You')
 
-        if joined_data.direction == ChatDirection.INCOMING:
-            return joined_data.remote_jid
+        if message.type == MessageType.GROUPCHAT:
+            if message.occupant is not None:
+                if message.occupant.nickname is not None:
+                    return message.occupant.nickname
 
-        return _('You')
+            assert message.resource is not None
+            return message.resource
 
-    def _get_export_line(self, joined_data: Message) -> str:
-        name = self._get_nickname(joined_data)
-        timestamp = time.strftime(
-            '%Y-%m-%d %H:%M:%S', time.localtime(joined_data.timestamp))
+        return str(message.remote.jid)
 
-        message = joined_data.message
-        if joined_data.correction is not None:
-            message = joined_data.correction.message
+    def _get_export_line(self, message: Message) -> str:
+        name = self._get_nickname(message)
+        timestamp = message.timestamp.astimezone().strftime('%Y-%m-%d %H:%M:%S')
 
-        return f'{timestamp} {name}: {message}\n'
+        text = message.text
+        if message.corrections:
+            text = message.get_last_correction().text
+
+        return f'{timestamp} {name}: {text or ""}\n'
 
 
 class SelectAccountDir(Page):

@@ -263,6 +263,7 @@ class MessageArchiveStorage(AlchemyStorage):
             .where(table.pk == existing.pk)
             .values(**row.get_upsert_values())
         )
+
         session.execute(stmt)
         return existing.pk
 

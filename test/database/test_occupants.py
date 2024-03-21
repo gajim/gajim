@@ -108,6 +108,7 @@ class OccupantTest(unittest.TestCase):
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, timezone.utc))
 
         # Update with new data
+        # Remote JID should not be overwritten
 
         occupant_data = Occupant(
             account_=self._account,
@@ -128,19 +129,20 @@ class OccupantTest(unittest.TestCase):
         assert occupant.real_remote is not None
 
         self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real2@remote.jid')
+        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
         self.assertIsInstance(occupant.real_remote.jid, JID)
         self.assertEqual(occupant.nickname, 'peter2')
         self.assertEqual(occupant.avatar_sha, 'sha2')
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(200, timezone.utc))
 
-        # Only change fields which are passed and reset fields with None
+        # Set avatar_sha None
+        # Passing None to for nickname should be ignored
 
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
             id='someid',
-            nickname='peter3',
+            nickname=None,
             avatar_sha=None,
             updated_at=datetime.fromtimestamp(300, timezone.utc),
         )
@@ -154,9 +156,9 @@ class OccupantTest(unittest.TestCase):
         assert occupant.real_remote is not None
 
         self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real2@remote.jid')
+        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
         self.assertIsInstance(occupant.real_remote.jid, JID)
-        self.assertEqual(occupant.nickname, 'peter3')
+        self.assertEqual(occupant.nickname, 'peter2')
         self.assertEqual(occupant.avatar_sha, None)
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(300, timezone.utc))
 

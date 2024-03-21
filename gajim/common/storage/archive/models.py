@@ -16,6 +16,7 @@ from sqlalchemy import Index
 from sqlalchemy import Select
 from sqlalchemy import select
 from sqlalchemy import types
+from sqlalchemy import update
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -141,10 +142,9 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         init=False,
     )
 
-    nickname: Mapped[str | None | ValueMissingT] = mapped_column(
-        StrValueMissingType, default=VALUE_MISSING
-    )
-    avatar_sha: Mapped[str | None | ValueMissingT] = mapped_column(
+    nickname: Mapped[str | None] = mapped_column(default=None)
+
+    avatar_sha: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
@@ -158,6 +158,21 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             Occupant.fk_remote_pk == self.fk_remote_pk,
             Occupant.fk_account_pk == self.fk_account_pk,
         )
+
+    def get_upsert_values(self) -> dict[str, Any]:
+        values: dict[str, Any] = {'updated_at': self.updated_at}
+        if self.nickname is not None:
+            values['nickname'] = self.nickname
+
+        if isinstance(self.fk_real_remote_pk, int):
+            values['fk_real_remote_pk'] = sa.func.coalesce(
+                Occupant.fk_real_remote_pk, self.fk_real_remote_pk
+            )
+
+        if self.avatar_sha is not VALUE_MISSING:
+            values['avatar_sha'] = self.avatar_sha
+
+        return values
 
 
 class OOB(MappedAsDataclass, Base, UtilMixin, kw_only=True):

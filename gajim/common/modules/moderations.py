@@ -34,7 +34,6 @@ from gajim.common.modules.util import get_chat_type_and_direction
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 
 UNKNOWN_MESSAGE = _('Message content unknown')
@@ -134,7 +133,7 @@ class Moderations(BaseModule):
                 account_=self._account,
                 remote_jid_=remote_jid,
                 id=moderator_occupant_id,
-                nickname=moderator_nickname or VALUE_MISSING,
+                nickname=moderator_nickname,
                 updated_at=timestamp,
             )
 
@@ -185,7 +184,7 @@ class Moderations(BaseModule):
                 account_=self._account,
                 remote_jid_=remote_jid,
                 id=message_occupant_id,
-                nickname=properties.jid.resource or VALUE_MISSING,
+                nickname=properties.jid.resource,
                 updated_at=timestamp,
             )
 
@@ -197,11 +196,11 @@ class Moderations(BaseModule):
         message_data = mod.Message(
             account_=self._account,
             remote_jid_=remote_jid,
+            resource=properties.jid.resource,
             type=m_type,
             direction=direction,
             timestamp=timestamp,
             state=MessageState.ACKNOWLEDGED,
-            resource=properties.jid.resource,
             text=UNKNOWN_MESSAGE,
             id=properties.id,
             stanza_id=properties.mam.id,

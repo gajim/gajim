@@ -483,8 +483,6 @@ class EpochTimestampType(sa.types.TypeDecorator[Any]):
     def process_result_value(
         self, value: float | None, dialect: Any
     ) -> datetime | None:
-        # if isinstance(value, str):
-        #     breakpoint()
         if value is None:
             return None
         return datetime.fromtimestamp(value, timezone.utc)
