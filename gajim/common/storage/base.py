@@ -433,8 +433,8 @@ def with_session(
     func: Callable[Concatenate[Any, Session, P], R]
 ) -> Callable[Concatenate[Any, P], R]:
     def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> R:
-        with self._session as s, self._session.begin():
-            return func(self, s, *args, **kwargs)
+        with self._create_session() as session, session.begin():
+            return func(self, session, *args, **kwargs)
 
     return wrapper
 
