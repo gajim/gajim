@@ -124,14 +124,17 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         if last_message_id is None:
             return
 
-        message_row = app.storage.archive.get_last_correctable_message(
+        message = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, last_message_id)
-        if message_row is None or message_row.text is None:
+        if message is None or message.text is None:
             return
 
-        text = message_row.text
-        if message_row.corrections:
-            text = message_row.get_last_correction().text
+        text = message.text
+        if message.corrections:
+            text = message.get_last_correction().text
+
+        assert text is not None
+
         self._set_correcting(True)
         self.get_style_context().add_class('gajim-msg-correcting')
         self.insert_text(text)
@@ -144,6 +147,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.toggle_message_correction()
 
         correct_id = self._last_message_id.get(self._contact)
+        if correct_id is None:
+            return None
         message_row = app.storage.archive.get_last_correctable_message(
             self._contact.account, self._contact.jid, correct_id)
         if message_row is None:

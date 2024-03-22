@@ -130,7 +130,7 @@ class GroupChatNickCompletion(EventHelper):
         # Get recent nicknames from DB. This enables us to suggest
         # nicknames even if no message arrived since Gajim was started.
         recent_nicknames = app.storage.archive.get_recent_muc_nicks(
-            self._contact)
+            self._contact.account, self._contact.jid)
 
         matches: list[str] = []
         for nick in recent_nicknames:

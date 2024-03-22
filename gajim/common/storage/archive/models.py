@@ -16,7 +16,6 @@ from sqlalchemy import Index
 from sqlalchemy import Select
 from sqlalchemy import select
 from sqlalchemy import types
-from sqlalchemy import update
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column

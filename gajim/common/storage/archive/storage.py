@@ -655,7 +655,10 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         self._explain(session, stmt)
-        return session.execute(stmt).one_or_none()
+        result = session.execute(stmt).one_or_none()
+        if result is None:
+            return None
+        return result.pk, result.timestamp
 
     def date_has_history(self, account: str, jid: JID, date: dt.date) -> bool:
         return self.get_first_message_meta_for_date(account, jid, date) is not None

@@ -314,8 +314,8 @@ class SearchView(Gtk.Box):
                 self._account, self._jid, date)
             if meta is None:
                 return
-            entitykey, timestamp = meta
-            control.scroll_to_message(entitykey, timestamp)
+
+            control.scroll_to_message(*meta)
 
     @staticmethod
     def _on_row_activated(_listbox: SearchView, row: ResultRow) -> None:
