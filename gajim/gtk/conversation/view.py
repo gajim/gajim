@@ -517,7 +517,8 @@ class ConversationView(Gtk.ScrolledWindow):
 
         message_id = db_row.id
 
-        self._message_id_row_map[message_id] = message_row
+        if message_id is not None:
+            self._message_id_row_map[message_id] = message_row
 
         if db_row.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None
@@ -526,6 +527,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         marker = db_row.get_latest_marker()
         if (marker is not None and
+                message_id is not None and
                 marker.type == ChatMarkerType.DISPLAYED):
             self.set_read_marker(message_id)
 

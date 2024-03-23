@@ -1176,7 +1176,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         last_message = app.storage.archive.get_last_conversation_row(
             account, jid)
-        if last_message is None:
+        if last_message is None or last_message.id is None:
             return
 
         client = app.get_client(account)

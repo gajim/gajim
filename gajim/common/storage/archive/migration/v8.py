@@ -7,26 +7,39 @@ from __future__ import annotations
 from typing import Any
 
 import json
-import sqlite3
+import logging
+import uuid
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 
 import sqlalchemy as sa
+from gi.repository import Gtk
+from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import MappedAsDataclass
+from sqlalchemy.orm import relationship
 
+from gajim.common import app
 from gajim.common.const import Trust
+from gajim.common.events import DBMigrationProgress
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
+
+log = logging.getLogger('gajim.c.storage.archive.migration')
 
 
 class MigrationBase(DeclarativeBase):
     pass
 
 
-class LastArchiveMessage(MigrationBase, MappedAsDataclass, kw_only=True):
+class LastArchiveMessage(MappedAsDataclass, MigrationBase, kw_only=True):
     __tablename__ = 'last_archive_message'
 
     jid_id: Mapped[int] = mapped_column(primary_key=True)
@@ -35,7 +48,7 @@ class LastArchiveMessage(MigrationBase, MappedAsDataclass, kw_only=True):
     last_muc_timestamp: Mapped[float]
 
 
-class Jids(MigrationBase, MappedAsDataclass, kw_only=True):
+class Jids(MappedAsDataclass, MigrationBase, kw_only=True):
     __tablename__ = 'jids'
 
     jid_id: Mapped[int] = mapped_column(primary_key=True)
@@ -43,12 +56,20 @@ class Jids(MigrationBase, MappedAsDataclass, kw_only=True):
     type: Mapped[int]
 
 
-class Logs(MigrationBase, MappedAsDataclass, kw_only=True):
+class Logs(MappedAsDataclass, MigrationBase, kw_only=True):
     __tablename__ = 'logs'
 
     log_line_id: Mapped[int] = mapped_column(primary_key=True)
-    account_id: Mapped[int]
-    jid_id: Mapped[int]
+    account_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
+    account: Mapped[Jids] = relationship(
+        lazy='joined', foreign_keys=[account_id], viewonly=True, init=False
+    )
+
+    jid_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
+    remote: Mapped[Jids] = relationship(
+        lazy='joined', foreign_keys=[jid_id], viewonly=True, init=False
+    )
+
     contact_name: Mapped[str | None]
     occupant_id: Mapped[str | None]
     real_jid: Mapped[str | None]
@@ -66,189 +87,172 @@ class Logs(MigrationBase, MappedAsDataclass, kw_only=True):
     marker: Mapped[int | None]
 
 
+KIND_MAPPING = {
+    2: (MessageType.GROUPCHAT, ChatDirection.INCOMING),
+    4: (MessageType.CHAT, ChatDirection.INCOMING),
+    6: (MessageType.CHAT, ChatDirection.OUTGOING),
+}
+
+
 class Migration:
-    def __init__(self, session: sa.orm.Session) -> None:
-        self._session = session
-        self._account_eks: dict[str, int] = {}
-        self._jid_eks: dict[str, int] = {}
-        self._encryption_eks: dict[Any, int] = {}
+    def __init__(self, archive: Any) -> None:
+        self._archive = archive
+        self._engine = archive._engine
 
-    def _get_type_and_direction(self, kind: int) -> tuple[int, int]:
-        match kind:
-            case 2:
-                return MessageType.GROUPCHAT, ChatDirection.INCOMING
-            case 4:
-                return MessageType.CHAT, ChatDirection.INCOMING
-            case 6:
-                return MessageType.CHAT, ChatDirection.OUTGOING
-            case _:
-                raise ValueError('Unknown kind: %s' % kind)
+        self._account_pks: dict[JID, int] = {}
+        self._remote_pks: dict[JID, int] = {}
+        self._encryption_pks: dict[tuple[str | Trust, ...], int] = {}
 
-    def _get_account_ek(self, row: Any) -> int:
-        account_ek = self._account_eks.get(row.account_jid)
-        if account_ek is not None:
-            return account_ek
+        self._accounts: dict[str, str] = {}
+        for account_name in app.settings.get_accounts():
+            jid = app.get_jid_from_account(account_name)
+            self._accounts[jid] = account_name
 
-        account_ek = self._con.execute(
-            'INSERT INTO account(jid) VALUES(?)', row.account_jid
-        ).lastrowid
-        assert account_ek is not None
-        self._account_eks[row.account_jid] = account_ek
-        return account_ek
+        mod.Base.metadata.create_all(archive._engine)
 
-    def _get_jid_ek(self, row: Any) -> int:
-        jid_ek = self._jid_eks.get(row.remote_jid)
-        if jid_ek is not None:
-            return jid_ek
-
-        jid_ek = self._con.execute(
-            'INSERT INTO jid(jid) VALUES(?)', row.remote_jid
-        ).lastrowid
-        assert jid_ek is not None
-        self._jid_eks[row.account_jid] = jid_ek
-        return jid_ek
-
-    def _get_message_data(self, row: Any) -> dict[str, Any] | None:
-        timestamp = row.time
-        if timestamp is None:
-            return None
-
-        message = row.message
-        if message is None:
-            return None
-
-        account_ek = self._get_account_ek(row)
-        jid_ek = self._get_jid_ek(row)
-        m_type, direction = self._get_type_and_direction(row.kind)
-        data = {
-            'account_ek': account_ek,
-            'jid_ek': jid_ek,
-            'm_type': m_type,
-            'direction': direction,
-            'stanza_id': row.stanza_id,
-            'message_id': row.message_id,
-            'message': message,
-            'marker': row.marker,
-            'error': row.error,
-            'timestamp': timestamp,
-            'resource': row.contact_name,
-            'state': MessageState.ACKNOWLEDGED,
-            'additional_data': json.loads(row.additional_data or '{}'),
-        }
-        return data
-
-    def _migrate_correction(
-        self,
-        message_data: dict[str, Any],
-        encryption_ek: int | None,
-    ) -> str | None:
-        additional_data = message_data['additional_data']
-        if additional_data is None:
-            return
-
-        corrected = additional_data.get('corrected')
-        if corrected is None:
-            return None
-
-        original_text = corrected.get('original_text')
-
-        if message_data['message_id'] is None:
-            return
-
-        corrected_message = message_data['message']
-
-        stmt = '''
-            INSERT INTO correction(
-                fk_account_ek,
-                fk_jid_ek,
-                resource,
-                direction,
-                timestamp,
-                correction_id,
-                corrected_message,
-                fk_encryption_ek
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        '''
-
-        self._con.execute(
-            stmt,
-            (
-                message_data['account_ek'],
-                message_data['jid_ek'],
-                message_data['resource'],
-                message_data['direction'],
-                message_data['timestamp'] + 0.1,
-                message_data['message_id'],
-                corrected_message,
-                encryption_ek,
-            ),
+        stmt = (
+            sa.select(Logs)
+            .where(Logs.kind.in_([2, 4, 6]))
+            .execution_options(yield_per=1000)
         )
 
-        return original_text
+        with self._engine.connect() as conn:
+            for i, log_row in enumerate(self._archive.get_session().scalars(stmt)):
+                try:
+                    self._process_row(conn, log_row)
+                except Exception:
+                    log.exception('Error')
+                    raise
 
-    def _migrate_message(
+                if i % 1000 == 0:
+                    app.ged.raise_event(DBMigrationProgress(message=str(i)))
+                    conn.commit()
+
+            conn.execute(sa.text('PRAGMA user_version=8'))
+            conn.commit()
+
+        self._drop_tables()
+
+    def _process_row(self, conn: sa.Connection, log_row: Logs) -> None:
+        m_type, direction = KIND_MAPPING[log_row.kind]
+
+        if log_row.time is None:
+            raise ValueError('Empty timestamp')
+
+        account_jid = JID.from_string(log_row.account.jid)
+        remote_jid = JID.from_string(log_row.remote.jid)
+
+        account_pk = self._get_account_pk(conn, account_jid)
+        remote_pk = self._get_remote_pk(conn, remote_jid)
+
+        try:
+            additional_data = json.loads(log_row.additional_data or '{}')
+        except Exception as error:
+            raise ValueError(
+                f'failed to parse additional_data, skipping record: {error} - {log_row.additional_data}'
+            )
+
+        user_timestamp = additional_data.get('user_timestamp')
+        user_delay_ts = None
+        if user_timestamp is not None:
+            user_delay_ts = datetime.fromtimestamp(user_timestamp, timezone.utc)
+
+        timestamp = datetime.fromtimestamp(log_row.time, timezone.utc)
+
+        encryption_pk = self._insert_encryption_data(conn, additional_data)
+
+        text = log_row.message
+        corrected = additional_data.get('corrected')
+        if corrected is not None:
+            text = corrected.get('original_text') or text
+
+        message_data: dict[str, Any] = {
+            'fk_account_pk': account_pk,
+            'fk_remote_pk': remote_pk,
+            'resource': log_row.contact_name,
+            'type': m_type,
+            'direction': direction,
+            'timestamp': timestamp,
+            'state': MessageState.ACKNOWLEDGED,
+            'id': log_row.message_id,
+            'stanza_id': log_row.stanza_id,
+            'text': text,
+            'user_delay_ts': user_delay_ts,
+            'fk_encryption_pk': encryption_pk,
+        }
+
+        try:
+            pk = conn.execute(
+                sa.insert(mod.Message).returning(mod.Message.pk), [message_data]
+            ).scalar()
+        except IntegrityError as error:
+            if 'message.stanza_id' not in error.args[0]:
+                raise
+
+            message_data['stanza_id'] = str(uuid.uuid4())
+
+            try:
+                pk = conn.execute(
+                    sa.insert(mod.Message).returning(mod.Message.pk), [message_data]
+                ).scalar()
+            except Exception:
+                raise
+
+        except Exception as error:
+            print(error)
+            raise
+
+        assert pk is not None
+
+        self._insert_oob_data(conn, pk, additional_data)
+        self._insert_error_data(conn, account_pk, remote_pk, log_row, timestamp)
+
+    def _get_account_pk(self, conn: sa.Connection, jid: JID) -> int:
+        pk = self._account_pks.get(jid)
+        if pk is not None:
+            return pk
+
+        try:
+            pk = conn.execute(
+                sa.insert(mod.Account).values(jid=jid).returning(mod.Account.pk)
+            ).scalar()
+        except Exception as error:
+            log.warning('Failed to insert remote: %s', error)
+            raise
+
+        if pk is None:
+            raise ValueError('Failed to insert remote')
+
+        self._account_pks[jid] = pk
+        return pk
+
+    def _get_remote_pk(self, conn: sa.Connection, jid: JID) -> int:
+        pk = self._remote_pks.get(jid)
+        if pk is not None:
+            return pk
+
+        try:
+            pk = conn.execute(
+                sa.insert(mod.Remote).values(jid=jid).returning(mod.Remote.pk)
+            ).scalar()
+        except Exception as error:
+            log.warning('Failed to insert remote: %s', error)
+            raise
+
+        if pk is None:
+            raise ValueError('Failed to insert remote')
+
+        self._remote_pks[jid] = pk
+        return pk
+
+    def _insert_oob_data(
         self,
-        message_data: dict[str, Any],
-        original_text: str | None,
-        encryption_ek: int | None,
-    ) -> int:
-        user_timestamp = None
-        additional_data = message_data['additional_data']
-        if additional_data is not None:
-            gajim_data = additional_data.get('gajim')
-            if gajim_data is not None:
-                user_timestamp = gajim_data.get('user_timestamp')
-
-        message = message_data['message']
-        if original_text is not None:
-            message = original_text
-
-        stmt = '''
-            INSERT INTO message(
-                fk_account_ek,
-                fk_jid_ek,
-                resource,
-                m_type,
-                direction,
-                timestamp,
-                state,
-                message_id,
-                stanza_id,
-                message,
-                user_delay_ts,
-                fk_encryption_ek
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        '''
-
-        entitykey = self._con.execute(
-            stmt,
-            (
-                message_data['account_ek'],
-                message_data['jid_ek'],
-                message_data['resource'],
-                message_data['m_type'],
-                message_data['direction'],
-                message_data['timestamp'],
-                message_data['state'],
-                message_data['message_id'],
-                message_data['stanza_id'],
-                message,
-                user_timestamp,
-                encryption_ek,
-            ),
-        ).lastrowid
-
-        assert entitykey is not None
-        return entitykey
-
-    def _migrate_oob(
-        self,
-        entitykey: int,
-        message_data: dict[str, Any],
-    ) -> None:
-        additional_data = message_data['additional_data']
-        if additional_data is None:
-            return
+        conn: sa.Connection,
+        fk_message_pk: int,
+        additional_data: dict[str, Any],
+    ) -> dict[str, Any] | None:
+        if not additional_data:
+            return None
 
         gajim_data = additional_data.get('gajim')
         if gajim_data is None:
@@ -260,27 +264,35 @@ class Migration:
         if url is None:
             return None
 
-        self._con.execute(
-            'INSERT INTO oob(entitykey, url, description) VALUES (?, ?, ?)',
-            (entitykey, url, description),
-        )
+        oob_data = {
+            'fk_message_pk': fk_message_pk,
+            'url': url,
+            'description': description,
+        }
 
-    def _migrate_errors(
+        try:
+            conn.execute(sa.insert(mod.OOB), [oob_data])
+        except Exception as error:
+            print(error)
+            raise
+
+    def _insert_error_data(
         self,
-        message_data: dict[str, Any],
-    ) -> None:
-        error_node_serialized = message_data['error']
-        if error_node_serialized is None:
-            return None
-
-        message_id = message_data['message_id']
-        if message_id is None:
+        conn: sa.Connection,
+        fk_account_pk: int,
+        fk_remote_pk: int,
+        log_row: Logs,
+        timestamp: datetime,
+    ) -> dict[str, Any] | None:
+        if log_row.error is None:
             return None
 
         try:
-            error = CommonError.from_string(error_node_serialized)
+            error = CommonError.from_string(log_row.error)
         except Exception:
             return None
+
+        assert log_row.message_id is not None
 
         by = error.by
         e_type = error.type  # pyright: ignore
@@ -291,88 +303,28 @@ class Migration:
         if e_type is None or condition is None:
             return None
 
-        stmt = '''
-            INSERT INTO error(
-                fk_account_ek,
-                fk_jid_ek,
-                message_id,
-                by,
-                e_type,
-                text,
-                condition,
-                condition_text
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        '''
+        error_data = {  # pyright: ignore
+            'fk_account_pk': fk_account_pk,
+            'fk_remote_pk': fk_remote_pk,
+            'message_id': log_row.message_id,
+            'by': by,
+            'type': e_type,
+            'text': text,
+            'condition': condition,
+            'condition_text': condition_text,
+            'timestamp': timestamp + timedelta(seconds=1),
+        }
 
         try:
-            self._con.execute(
-                stmt,
-                (
-                    message_data['account_ek'],
-                    message_data['jid_ek'],
-                    message_id,
-                    by,
-                    e_type,
-                    text,
-                    condition,
-                    condition_text,
-                ),  # pyright: ignore
-            )
-        except sqlite3.IntegrityError:
-            pass
+            conn.execute(sa.insert(mod.MessageError), [error_data])  # pyright: ignore
+        except Exception as error:
+            print(error)
+            raise
 
-    def _migrate_moderations(
-        self,
-        message_data: dict[str, Any],
-    ) -> None:
-        additional_data = message_data['additional_data']
-        if additional_data is None:
-            return None
-
-        stanza_id = message_data['stanza_id']
-        if stanza_id is None:
-            return None
-
-        retracted = additional_data.get('retracted')
-        if retracted is None:
-            return None
-
-        by = retracted.get('by')
-        timestamp = retracted.get('timestamp')
-        reason = retracted.get('reason')
-
-        if timestamp is None:
-            timestamp = message_data['timestamp']
-
-        stmt = '''
-            INSERT INTO moderation(
-                fk_account_ek,
-                fk_jid_ek,
-                timestamp,
-                stanza_id,
-                by,
-                reason)
-            VALUES (?, ?, ?, ?, ?, ?)
-        '''
-
-        try:
-            self._con.execute(
-                stmt,
-                (
-                    message_data['account_ek'],
-                    message_data['jid_ek'],
-                    timestamp,
-                    stanza_id,
-                    by,
-                    reason,
-                ),
-            )
-        except sqlite3.IntegrityError:
-            pass
-
-    def _migrate_encryption(self, message_data: dict[str, Any]) -> int | None:
-        additional_data = message_data['additional_data']
-        if additional_data is None:
+    def _insert_encryption_data(
+        self, conn: sa.Connection, additional_data: dict[str, Any]
+    ) -> int | None:
+        if not additional_data:
             return None
 
         encrypted = additional_data.get('encrypted')
@@ -398,62 +350,36 @@ class Migration:
             except Exception:
                 trust = Trust.UNTRUSTED
 
-        encryption_ek = self._encryption_eks.get((protocol, key, trust))
-        if encryption_ek is not None:
-            return encryption_ek
+        encryption_data = {'protocol': protocol, 'key': key, 'trust': trust}
+        encryption_pk = self._encryption_pks.get(tuple(encryption_data.values()))
+        if encryption_pk is not None:
+            return encryption_pk
 
-        stmt = 'INSERT INTO encryption(protocol, key, trust) VALUES (?, ?, ?)'
+        try:
+            pk = conn.execute(
+                sa.insert(mod.Encryption).returning(mod.Encryption.pk),
+                [encryption_data],
+            ).scalar()
+        except Exception as error:
+            print(error)
+            raise
 
-        encryption_ek = self._con.execute(stmt, (protocol, key, trust)).lastrowid
-        assert encryption_ek is not None
-        return encryption_ek
+        if pk is None:
+            return None
+
+        data_tp = tuple(encryption_data.values())
+        self._encryption_pks[data_tp] = pk
+        return pk
+
+    def _drop_tables(self) -> None:
+        with self._engine.connect() as conn:
+            conn.execute(sa.text('DROP TABLE jids'))
+            conn.execute(sa.text('DROP TABLE logs'))
+            conn.commit()
 
     def run(self) -> None:
-        stmt = '''
-            SELECT
-                account.jid as account_jid,
-                jids.jid as remote_jid,
-                account_id,
-                contact_name,
-                time,
-                kind,
-                message,
-                error,
-                additional_data,
-                stanza_id,
-                message_id,
-                marker
-            FROM logs
-            LEFT OUTER JOIN jids AS account ON logs.account_id = account.jid_id
-            LEFT OUTER JOIN jids ON jids.jid_id = logs.jid_id
-            WHERE kind IN (2, 4, 6)
-        '''
-
-        rows = self._con.execute(stmt).fetchall()
-        for row in rows:
-            message_data = self._get_message_data(row)
-            if message_data is None:
-                continue
-
-            encryption_ek = self._migrate_encryption(message_data)
-            original_text = self._migrate_correction(
-                message_data,
-                encryption_ek,
-            )
-
-            message_entity_key = self._migrate_message(
-                message_data,
-                original_text,
-                encryption_ek,
-            )
-
-            assert message_entity_key is not None
-            self._migrate_oob(message_entity_key, message_data)
-            self._migrate_errors(message_data)
-            self._migrate_moderations(message_data)
+        pass
 
 
-def run(session: sa.orm.Session) -> None:
-    # TODO
-    return
-    Migration(session)
+def run(archive: Any) -> None:
+    Migration(archive)

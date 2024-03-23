@@ -350,6 +350,7 @@ class AlchemyStorage:
             cursor = connection.cursor()
             cursor.execute('PRAGMA analysis_limit=400')
             cursor.execute('PRAGMA optimize')
+            cursor.execute('VACUUM')
 
     def _get_user_version(self) -> int:
         with self._session as s:
@@ -407,7 +408,7 @@ class AlchemyStorage:
                 s.rollback()
                 s.close()
                 self._log.exception('Error')
-                sys.exit()
+                raise
 
     def _migrate(self, session: Session) -> None:
         raise NotImplementedError

@@ -777,3 +777,20 @@ class EncryptionInfo(ApplicationEvent):
     account: str
     jid: JID
     message: EncryptionInfoMsg
+
+
+@dataclass
+class DBMigration(ApplicationEvent):
+    name: str = field(init=False, default='db-migration')
+
+
+@dataclass
+class DBMigrationProgress(ApplicationEvent):
+    name: str = field(init=False, default='db-migration-progress')
+    message: str
+
+
+@dataclass
+class DBMigrationError(ApplicationEvent):
+    name: str = field(init=False, default='db-migration-error')
+    exception: Exception

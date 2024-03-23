@@ -700,6 +700,7 @@ def open_window(name: str, **kwargs: Any) -> Any:
     window = get_app_window(name,
                             kwargs.get('account'),
                             kwargs.get('jid'))
+
     if window is None:
         module = import_module(WINDOW_MODULES[name])
         window_cls = getattr(module, name)

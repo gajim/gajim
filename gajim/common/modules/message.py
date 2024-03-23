@@ -34,7 +34,6 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import is_unique_constraint_error
 from gajim.common.storage.base import VALUE_MISSING
-from gajim.common.structs import MUCData
 from gajim.common.structs import OutgoingMessage
 
 
@@ -128,6 +127,11 @@ class Message(BaseModule):
         remote_jid = properties.remote_jid
         assert remote_jid is not None
 
+        user_delay_ts = None
+        if properties.user_timestamp is not None:
+            user_delay_ts = dt.datetime.fromtimestamp(
+                properties.user_timestamp, tz=dt.timezone.utc)
+
         message_id = properties.id
         if message_id is None:
             self._log.warning('Received message without message id')
@@ -167,7 +171,7 @@ class Message(BaseModule):
             message_text = get_eme_message(properties.eme)
 
         if not message_text:
-            self._log.warning("Received message without text")
+            self._log.warning('Received message without text')
             return
 
         securitylabel_data = None
@@ -200,7 +204,7 @@ class Message(BaseModule):
             text=message_text,
             id=message_id,
             stanza_id=stanza_id,
-            user_delay_ts=properties.user_timestamp,
+            user_delay_ts=user_delay_ts,
             correction_id=correction_id,
             encryption_=encryption_data,
             occupant_=occupant,

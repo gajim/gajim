@@ -514,7 +514,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     direction: Mapped[int] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
     state: Mapped[int]
-    id: Mapped[str] = mapped_column()
+    id: Mapped[str | None] = mapped_column(default=None)
     stanza_id: Mapped[str | None] = mapped_column(default=None)
     text: Mapped[str | None] = mapped_column(default=None)
     markup_type: Mapped[int | None] = mapped_column(default=None)

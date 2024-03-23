@@ -9,6 +9,7 @@ from typing import Any
 import calendar
 import datetime as dt
 import logging
+import shutil
 from collections.abc import Iterator
 from collections.abc import Sequence
 from datetime import datetime
@@ -28,6 +29,8 @@ from sqlalchemy.orm import Session
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
+from gajim.common.events import DBMigration
+from gajim.common.helpers import get_random_string
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -73,14 +76,24 @@ class MessageArchiveStorage(AlchemyStorage):
         Base.metadata.create_all(engine)
         session.execute(sa.text(f'PRAGMA user_version={CURRENT_USER_VERSION}'))
 
+    def _make_backup(self) -> None:
+        db_path = configpaths.get('LOG_DB')
+        random_string = get_random_string(10)
+        db_backup_path = db_path.parent / f'{db_path.name}.{random_string}.bak'
+        shutil.copy(db_path, db_backup_path)
+
     def _migrate(self, session: Session) -> None:
         user_version = self._get_user_version()
+        if user_version < CURRENT_USER_VERSION:
+            app.ged.raise_event(DBMigration())
+            self._make_backup()
+
         if user_version < 7:
             assert self._path is not None
             migration.pre_v7.run(self._path)
 
-        # if user_version < 8:
-        #     migration.v8.run(session)
+        if user_version < 8:
+            migration.v8.run(self)
 
     def _load_jids(self, session: Session) -> None:
         jids = session.scalars(select(Remote))
@@ -833,4 +846,4 @@ class MessageArchiveStorage(AlchemyStorage):
             .execution_options(yield_per=25)
         )
 
-        yield from session.scalars(stmt).unique().all()
+        yield from session.scalars(stmt)

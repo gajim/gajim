@@ -36,6 +36,7 @@ from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountDisconnected
 from gajim.common.events import AccountEnabled
 from gajim.common.events import AllowGajimUpdateCheck
+from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
 from gajim.common.helpers import from_one_line
@@ -49,13 +50,15 @@ from gajim.common.storage.events.storage import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
 
+log = logging.getLogger('gajim.c.application')
+
 
 class CoreApplication(ged.EventHelper):
     def __init__(self) -> None:
         ged.EventHelper.__init__(self)
         self._profiling_session = None
 
-    def _init_core(self) -> None:
+    def _init_core(self) -> bool:
         # Create and initialize Application Paths & Databases
         app.app = self
         app.print_version()
@@ -70,14 +73,19 @@ class CoreApplication(ged.EventHelper):
         app.config = LegacyConfig()
         app.commands = ChatCommands()
 
-        app.storage.cache = CacheStorage()
-        app.storage.cache.init()
+        try:
+            app.storage.cache = CacheStorage()
+            app.storage.cache.init()
 
-        app.storage.events = EventStorage()
-        app.storage.events.init()
+            app.storage.events = EventStorage()
+            app.storage.events.init()
 
-        app.storage.archive = MessageArchiveStorage()
-        app.storage.archive.init()
+            app.storage.archive = MessageArchiveStorage()
+            app.storage.archive.init()
+        except Exception as error:
+            app.ged.raise_event(DBMigrationError(exception=error))
+            log.exception('Failed to init storage')
+            return False
 
         app.storage.drafts = DraftStorage()
 
@@ -125,6 +133,8 @@ class CoreApplication(ged.EventHelper):
         self.register_events([
             ('signed-in', ged.CORE, self._on_signed_in),
         ])
+
+        return True
 
     @property
     def _log(self) -> logging.Logger:
