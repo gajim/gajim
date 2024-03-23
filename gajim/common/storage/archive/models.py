@@ -625,7 +625,7 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         viewonly=True,
     )
 
-    filetransfer: Mapped[list[FileTransfer]] = relationship(
+    filetransfers: Mapped[list[FileTransfer]] = relationship(
         lazy='selectin',
         default_factory=list,
         cascade='all, delete',

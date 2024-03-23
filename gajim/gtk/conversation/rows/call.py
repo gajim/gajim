@@ -54,7 +54,7 @@ class CallRow(BaseRow):
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(
                 str(self._contact.jid), db_row.call.sid)
-            self.log_line_id = db_row.entitykey
+            self.log_line_id = db_row.pk
 
         self._avatar_placeholder = Gtk.Box()
         self._avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)

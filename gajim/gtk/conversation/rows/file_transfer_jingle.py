@@ -31,8 +31,8 @@ from gajim.common.helpers import open_file
 from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.models import Message
 from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.builder import get_builder
@@ -51,7 +51,7 @@ class FileTransferJingleRow(BaseRow):
                  account: str,
                  contact: BareContact,
                  event: TransferEventT | None = None,
-                 db_row: Message | None = None
+                 db_row: mod.Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
@@ -66,14 +66,14 @@ class FileTransferJingleRow(BaseRow):
 
         self._contact = contact
 
-        if db_row is not None and db_row.has_filetransfers:
-            filetransfers = db_row.get_filetransfers()
-            file_transfer = filetransfers[0]  # TODO: Proper processing
-            self._file_props = FilesProp.getFilePropBySid(file_transfer.source)
+        if db_row is not None and db_row.filetransfers:
+            file_transfer = db_row.filetransfers[0]
+            source = file_transfer.source
+            assert isinstance(source, mod.JingleFT)
+            self._file_props = FilesProp.getFilePropBySid(source.sid)
             if self._file_props is None:
-                log.debug(
-                    'File prop not found for SID: %s', file_transfer.source)
-            self.log_line_id = db_row.entitykey
+                log.debug('File prop not found for SID: %s', source.sid)
+            self.log_line_id = db_row.pk
         else:
             assert event is not None
             self._file_props = event.file_props

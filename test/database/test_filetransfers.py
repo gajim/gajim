@@ -80,7 +80,7 @@ class ForeignKeyTest(unittest.TestCase):
             id='1',
             stanza_id=get_uuid(),
             text='message',
-            filetransfer=[ft_data1],
+            filetransfers=[ft_data1],
         )
 
         pk = self._archive.insert_object(message_data)
@@ -88,7 +88,7 @@ class ForeignKeyTest(unittest.TestCase):
         message = self._archive.get_message_with_pk(
             pk,
             options=[
-                defaultload(Message.filetransfer).selectinload(FileTransfer.source)
+                defaultload(Message.filetransfers).selectinload(FileTransfer.source)
             ],
         )
 
@@ -96,8 +96,8 @@ class ForeignKeyTest(unittest.TestCase):
             s.add(message)
 
             assert message is not None
-            assert message.filetransfer
-            ft1 = message.filetransfer[0]
+            assert message.filetransfers
+            ft1 = message.filetransfers[0]
             self.assertEqual(ft1.date, now)
             self.assertEqual(ft1.desc, 'desc')
             self.assertEqual(ft1.hash, 'abc')
