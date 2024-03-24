@@ -538,6 +538,7 @@ class MessageActionsBox(Gtk.Grid):
             # prevent TextView from pasting the URIs as text:
             texview.stop_emission_by_name('paste-clipboard')
             return
+
         log.info('No URIs pasted')
 
         image = clipboard.wait_for_image()
@@ -548,8 +549,13 @@ class MessageActionsBox(Gtk.Grid):
         temp_dir = Path(tempfile.gettempdir())
         image_path = temp_dir / f'{uuid.uuid4()}.png'
 
-        if not image.savev(str(image_path), 'png', [], []):
-            log.error('Could not process pasted image')
+        try:
+            success = image.savev(str(image_path), 'png', [], [])
+            if not success:
+                log.error('Could not process pasted image')
+                return
+        except GLib.Error as e:
+            log.error('Error while trying to store pasted image: %s', e)
             return
 
         app.window.activate_action(
