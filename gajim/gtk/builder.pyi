@@ -318,6 +318,7 @@ class ContactTooltipBuilder(Builder):
 
 
 class DbMigrationBuilder(Builder):
+    box: Gtk.Box
     stack: Gtk.Stack
     status_label: Gtk.Label
     error_label: Gtk.Label

@@ -14,7 +14,6 @@ from datetime import timedelta
 from datetime import timezone
 
 import sqlalchemy as sa
-from gi.repository import Gtk
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from sqlalchemy.exc import IntegrityError
@@ -26,6 +25,7 @@ from sqlalchemy.orm import relationship
 
 from gajim.common import app
 from gajim.common.const import Trust
+from gajim.common.events import DBMigrationFinished
 from gajim.common.events import DBMigrationProgress
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
@@ -125,13 +125,15 @@ class Migration:
                     raise
 
                 if i % 1000 == 0:
-                    app.ged.raise_event(DBMigrationProgress(message=str(i)))
+                    app.ged.raise_event(DBMigrationProgress(count=i))
                     conn.commit()
 
             conn.execute(sa.text('PRAGMA user_version=8'))
             conn.commit()
 
         self._drop_tables()
+
+        app.ged.raise_event(DBMigrationFinished())
 
     def _process_row(self, conn: sa.Connection, log_row: Logs) -> None:
         m_type, direction = KIND_MAPPING[log_row.kind]

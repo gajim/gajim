@@ -787,8 +787,11 @@ class DBMigration(ApplicationEvent):
 @dataclass
 class DBMigrationProgress(ApplicationEvent):
     name: str = field(init=False, default='db-migration-progress')
-    message: str
+    count: int
 
+@dataclass
+class DBMigrationFinished(ApplicationEvent):
+    name: str = field(init=False, default='db-migration-finished')
 
 @dataclass
 class DBMigrationError(ApplicationEvent):
