@@ -70,6 +70,8 @@ class MessageRow(BaseRow):
         self._original_text = message.text
         self._original_message = message
 
+        self._is_retracted = message.moderation is not None
+
         self._avatar_box = AvatarBox(contact)
 
         self._meta_box = Gtk.Box(spacing=6)
@@ -246,7 +248,9 @@ class MessageRow(BaseRow):
             self.stanza_id,
             self.orig_log_line_id,
             self.log_line_id,
-            self.state)
+            self.state,
+            self._is_retracted
+            )
 
         popover = GajimPopover(menu, relative_to=button)
         popover.popup()
@@ -402,6 +406,8 @@ class MessageRow(BaseRow):
 
         self._message_widget.add_with_styling(text)
         self.get_style_context().add_class('retracted-message')
+
+        self._is_retracted = True
 
     def set_correction(self) -> None:
         self.show_receipt(False)

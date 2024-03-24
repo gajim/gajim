@@ -695,6 +695,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       pk: int | None,
                       corrected_pk: int | None,
                       state: MessageState,
+                      is_retracted: bool
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -742,7 +743,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
         menu_items.append((
             p_('Message row action', 'Correct…'), 'win.correct-message', None))
 
-    show_retract = False
+    retract_possible = False
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
         self_contact = contact.get_self()
@@ -752,10 +753,11 @@ def get_chat_row_menu(contact: types.ChatContactT,
         disco_info = app.storage.cache.get_last_disco_info(contact.jid)
         assert disco_info is not None
 
-        if disco_info.has_message_moderation and is_allowed:
-            show_retract = True
+        if (disco_info.has_message_moderation and is_allowed
+                and not is_retracted):
+            retract_possible = True
 
-    if (show_retract and stanza_id is not None
+    if (retract_possible and stanza_id is not None
             and state == MessageState.ACKNOWLEDGED):
         param = RetractMessageParam(
             account=contact.account,
