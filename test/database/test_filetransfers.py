@@ -6,7 +6,6 @@ from datetime import timezone
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
-from sqlalchemy.orm import defaultload
 
 from gajim.common import app
 from gajim.common.helpers import get_uuid
@@ -85,44 +84,36 @@ class ForeignKeyTest(unittest.TestCase):
 
         pk = self._archive.insert_object(message_data)
 
-        message = self._archive.get_message_with_pk(
-            pk,
-            options=[
-                defaultload(Message.filetransfers).selectinload(FileTransfer.source)
-            ],
-        )
+        message = self._archive.get_message_with_pk(pk)
 
-        with self._archive.get_session() as s:
-            s.add(message)
+        assert message is not None
+        assert message.filetransfers
+        ft1 = message.filetransfers[0]
+        self.assertEqual(ft1.date, now)
+        self.assertEqual(ft1.desc, 'desc')
+        self.assertEqual(ft1.hash, 'abc')
+        self.assertEqual(ft1.hash_algo, 'sha-1')
+        self.assertEqual(ft1.height, 123)
+        self.assertEqual(ft1.length, 778272)
+        self.assertEqual(ft1.media_type, 'image/png')
+        self.assertEqual(ft1.name, 'filename1')
+        self.assertEqual(ft1.size, 6555)
+        self.assertEqual(ft1.width, 789)
+        self.assertEqual(ft1.state, 0)
 
-            assert message is not None
-            assert message.filetransfers
-            ft1 = message.filetransfers[0]
-            self.assertEqual(ft1.date, now)
-            self.assertEqual(ft1.desc, 'desc')
-            self.assertEqual(ft1.hash, 'abc')
-            self.assertEqual(ft1.hash_algo, 'sha-1')
-            self.assertEqual(ft1.height, 123)
-            self.assertEqual(ft1.length, 778272)
-            self.assertEqual(ft1.media_type, 'image/png')
-            self.assertEqual(ft1.name, 'filename1')
-            self.assertEqual(ft1.size, 6555)
-            self.assertEqual(ft1.width, 789)
-            self.assertEqual(ft1.state, 0)
+        assert ft1.source
 
-            assert ft1.source
+        source1 = ft1.source[0]
+        source2 = ft1.source[1]
+        assert isinstance(source1, UrlData)
+        assert isinstance(source2, JinglePub)
 
-            source1 = ft1.source[0]
-            source2 = ft1.source[1]
-            assert isinstance(source1, UrlData)
-            assert isinstance(source2, JinglePub)
+        self.assertEqual(source1.type, 'urldata')
+        self.assertEqual(source1.target, 'http://target')
+        self.assertEqual(source1.scheme_data, {'header': 'someheader'})
 
-            self.assertEqual(source1.type, 'urldata')
-            self.assertEqual(source1.target, 'http://target')
-            self.assertEqual(source1.scheme_data, {'header': 'someheader'})
-
-            self.assertEqual(source2.type, 'jinglepub')
-            self.assertEqual(source2.id, '123')
+        self.assertEqual(source2.type, 'jinglepub')
+        self.assertEqual(source2.id, '123')
 
         self._archive.delete_message(message.pk)
 
