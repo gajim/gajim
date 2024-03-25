@@ -27,6 +27,7 @@ class DBMigration(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(
             self,
             application=app.app,
+            transient_for=app.window,
             window_position=Gtk.WindowPosition.CENTER,
             show_menubar=False,
             type_hint=Gdk.WindowTypeHint.DIALOG,
@@ -38,6 +39,8 @@ class DBMigration(Gtk.ApplicationWindow):
             name='DBMigration',
             title=_('Database Migration')
         )
+
+        self.set_keep_above(True)
 
         self._ui = get_builder('db_migration.ui')
         self.add(self._ui.box)
