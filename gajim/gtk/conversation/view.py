@@ -797,8 +797,18 @@ class ConversationView(Gtk.ScrolledWindow):
     def correct_message(self, db_row: Message) -> None:
         assert db_row.id is not None
         message_row = self._get_row_by_message_id(db_row.id)
-        if message_row is not None:
-            message_row.update_with_content(db_row)
+        if message_row is None:
+            return
+
+        message_row.update_with_content(db_row)
+
+        assert self._read_marker_row is not None
+        timestamp = message_row.timestamp + timedelta(microseconds=1)
+        if self._read_marker_row.timestamp == timestamp:
+            # This exact message has been marked as read
+            # -> set read marker to before this message
+            self._read_marker_row.set_timestamp(
+                message_row.timestamp - timedelta(microseconds=1), force=True)
 
     def show_message_retraction(self, stanza_id: str, text: str) -> None:
         message_row = self.get_row_by_stanza_id(stanza_id)
