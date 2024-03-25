@@ -788,6 +788,12 @@ class DBMigration(ApplicationEvent):
 class DBMigrationProgress(ApplicationEvent):
     name: str = field(init=False, default='db-migration-progress')
     count: int
+    progress: int
+
+    @property
+    def value(self) -> str:
+        return '{:05.2f}'.format(self.progress / self.count * 100)
+
 
 @dataclass
 class DBMigrationFinished(ApplicationEvent):

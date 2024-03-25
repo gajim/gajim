@@ -65,7 +65,7 @@ class DBMigration(Gtk.ApplicationWindow):
         )
 
     def _on_progress(self, event: DBMigrationProgress) -> None:
-        self._ui.status_label.set_text(_('Migrated %s messages…') % event.count)
+        self._ui.status_label.set_text(f'{event.value} %')
 
         while Gtk.events_pending():
             Gtk.main_iteration()

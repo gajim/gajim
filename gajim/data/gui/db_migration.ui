@@ -8,21 +8,6 @@
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Database Migration</property>
-        <style>
-          <class name="large-header"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkStack" id="stack">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -33,18 +18,22 @@
           <object class="GtkBox">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <property name="homogeneous">True</property>
             <child>
-              <object class="GtkSpinner">
-                <property name="width-request">42</property>
-                <property name="height-request">42</property>
+              <object class="GtkLabel" id="status_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="halign">center</property>
-                <property name="valign">center</property>
-                <property name="active">True</property>
+                <property name="label" translatable="yes">0 %</property>
+                <property name="justify">center</property>
+                <property name="wrap">True</property>
+                <property name="max-width-chars">52</property>
+                <attributes>
+                  <attribute name="font-desc" value="Sans Bold 24"/>
+                </attributes>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -67,20 +56,6 @@ This may take a while…</property>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="status_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="justify">center</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">52</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
               </packing>
             </child>
           </object>

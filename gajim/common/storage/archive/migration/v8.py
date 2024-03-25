@@ -110,6 +110,10 @@ class Migration:
 
         mod.Base.metadata.create_all(archive._engine)
 
+        count_stmt = (
+            sa.select(sa.func.count(Logs.log_line_id))
+            .where(Logs.kind.in_([2, 4, 6]))
+        )
         stmt = (
             sa.select(Logs)
             .where(Logs.kind.in_([2, 4, 6]))
@@ -117,6 +121,7 @@ class Migration:
         )
 
         with self._engine.connect() as conn:
+            count = conn.execute(count_stmt).scalar()
             for i, log_row in enumerate(self._archive.get_session().scalars(stmt)):
                 try:
                     self._process_row(conn, log_row)
@@ -125,9 +130,10 @@ class Migration:
                     raise
 
                 if i % 1000 == 0:
-                    app.ged.raise_event(DBMigrationProgress(count=i))
+                    app.ged.raise_event(DBMigrationProgress(count=count, progress=i))
                     conn.commit()
 
+            app.ged.raise_event(DBMigrationProgress(count=count, progress=count))
             conn.execute(sa.text('PRAGMA user_version=8'))
             conn.commit()
 
