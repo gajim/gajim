@@ -792,6 +792,8 @@ class DBMigrationProgress(ApplicationEvent):
 
     @property
     def value(self) -> str:
+        if self.count == 0:
+            return '{:05.2f}'.format(100)
         return '{:05.2f}'.format(self.progress / self.count * 100)
 
 
