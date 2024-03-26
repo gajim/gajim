@@ -18,10 +18,13 @@ from __future__ import annotations
 
 from typing import Any
 
+import hashlib
 import logging
 import sys
 import textwrap
+from pathlib import Path
 
+import cairo
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
@@ -30,6 +33,7 @@ from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
@@ -40,6 +44,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.builder import get_builder
@@ -182,8 +187,7 @@ class PopupNotification(Gtk.Window):
 
         if event.type == 'incoming-message':
             assert event.jid is not None
-            pixbuf = _get_avatar_for_notification(
-                event.account, event.jid)
+            pixbuf = _get_pixbuf_icon(event.account, event.jid)
             self._ui.image.set_from_pixbuf(pixbuf)
         else:
             icon_name = self._get_icon_name(event)
@@ -383,9 +387,16 @@ class Linux(NotificationBackend):
         return None
 
     def _make_icon(self, event: events.Notification) -> Gio.Icon:
-        if (event.type == 'incoming-message' and app.desktop_env == 'gnome'):
+        if event.type == 'incoming-message':
             assert event.jid is not None
-            return _get_avatar_for_notification(event.account, event.jid)
+
+            if app.is_flatpak():
+                return _get_bytes_icon(event.account, event.jid)
+
+            if app.desktop_env == 'gnome':
+                return _get_pixbuf_icon(event.account, event.jid)
+
+            return _get_file_icon(event.account, event.jid)
 
         if event.icon_name is not None:
             return Gio.ThemedIcon.new(event.icon_name)
@@ -407,14 +418,23 @@ class Linux(NotificationBackend):
         return ','.join(map(str, details))
 
 
-def _get_avatar_for_notification(account: str,
-                                 jid: JID | str) -> GdkPixbuf.Pixbuf:
+def _get_surface_for_notification(account: str,
+                                  jid: JID | str) -> cairo.ImageSurface:
     scale = get_monitor_scale_factor()
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
+    if isinstance(contact, GroupchatContact):
+        return contact.get_avatar(size, scale)
+
     assert not isinstance(contact, ResourceContact)
-    surface = contact.get_avatar(size, scale)
+    return contact.get_avatar(size, scale, add_show=False)
+
+
+def _get_pixbuf_icon(account: str, jid: JID | str) -> GdkPixbuf.Pixbuf:
+    scale = get_monitor_scale_factor()
+    size = AvatarSize.NOTIFICATION
+    surface = _get_surface_for_notification(account, jid)
     pixbuf = Gdk.pixbuf_get_from_surface(surface,
                                          0,
                                          0,
@@ -422,6 +442,26 @@ def _get_avatar_for_notification(account: str,
                                          size * scale)
     assert pixbuf is not None
     return pixbuf
+
+
+def _get_bytes_icon(account: str, jid: JID | str) -> Gio.BytesIcon:
+    pixbuf = _get_pixbuf_icon(account, jid)
+    _, data = pixbuf.save_to_bufferv('png')
+    return Gio.BytesIcon(bytes=GLib.Bytes.new(data))
+
+
+def _get_file_icon(account: str, jid: JID | str) -> Gio.FileIcon:
+    surface = _get_surface_for_notification(account, jid)
+    path = _get_path_for_icon(surface)
+    return Gio.FileIcon(file=Gio.File.new_for_path(str(path)))
+
+
+def _get_path_for_icon(surface: cairo.ImageSurface) -> Path:
+    path = configpaths.get('AVATAR_ICONS') / hashlib.sha1(
+        bytes(surface.get_data())).hexdigest()
+    if not path.exists():
+        surface.write_to_png(str(path))
+    return path
 
 
 def get_notification_backend() -> NotificationBackend:

@@ -207,6 +207,8 @@ class ConfigPaths:
             # Cache paths
             ('CACHE_DB', 'cache.db', PathLocation.CACHE, PathType.FILE),
             ('AVATAR', 'avatars', PathLocation.CACHE, PathType.FOLDER),
+            ('AVATAR_ICONS', 'avatar_icons',
+             PathLocation.CACHE, PathType.FOLDER),
             ('BOB', 'bob', PathLocation.CACHE, PathType.FOLDER),
 
             # Config paths
