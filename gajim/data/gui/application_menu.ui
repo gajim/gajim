@@ -42,6 +42,10 @@
           <attribute name="label" translatable="yes">_File Transfer</attribute>
           <attribute name="action">app.file-transfer</attribute>
         </item>
+        <item>
+          <attribute name="label" translatable="yes">_Show menu bar</attribute>
+          <attribute name="action">win.toggle-menu-bar</attribute>
+        </item>
       </section>
     </submenu>
     <submenu>

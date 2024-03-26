@@ -87,6 +87,13 @@
                 <property name="title" translatable="yes">Reset User Interface Font Size</property>
               </object>
             </child>
+            <child>
+              <object class="GtkShortcutsShortcut">
+                <property name="visible">1</property>
+                <property name="accelerator">&lt;primary&gt;M</property>
+                <property name="title" translatable="yes">Hide/show the main window menu</property>
+              </object>
+            </child>
           </object>
         </child>
 

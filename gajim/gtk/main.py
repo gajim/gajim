@@ -153,6 +153,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.app.systray.connect_unread_widget(chat_list_stack,
                                               'unread-count-changed')
 
+        self.set_show_menubar(app.settings.get_app_setting('show_main_menu'))
+
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
@@ -454,6 +456,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('decrease-app-font-size', self._on_app_font_size_action),
             ('reset-app-font-size', self._on_app_font_size_action),
             ('toggle-chat-list', self._on_action),
+            ('toggle-menu-bar', self._on_action),
             ('preview-download', self._on_preview_action),
             ('preview-open', self._on_preview_action),
             ('preview-save-as', self._on_preview_action),
@@ -542,6 +545,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         elif action_name == 'toggle-chat-list':
             self._toggle_chat_list()
+
+        elif action_name == 'toggle-menu-bar':
+            show_menu_bar = not self.get_show_menubar()
+            app.settings.set_app_setting('show_main_menu', show_menu_bar)
+            self.set_show_menubar(show_menu_bar)
 
         return None
 
