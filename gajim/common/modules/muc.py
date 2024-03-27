@@ -92,6 +92,11 @@ class MUC(BaseModule):
                           typ='unavailable',
                           ns=Namespace.MUC_USER,
                           priority=49),
+            StanzaHandler(name='message',
+                          callback=self._on_muc_normal_user_message,
+                          typ='normal',
+                          ns=Namespace.MUC_USER,
+                          priority=49),
             StanzaHandler(name='presence',
                           callback=self._on_error_presence,
                           typ='error',
@@ -779,6 +784,38 @@ class MUC(BaseModule):
         occupant.update_presence(presence)
         for signal, event in signals_and_events:
             occupant.notify(signal, event)
+
+    def _on_muc_normal_user_message(self,
+                                    _con: types.xmppClient,
+                                    stanza: Presence,
+                                    properties: MessageProperties) -> None:
+        if not properties.muc_user or not properties.muc_user.jid:
+            return
+
+        if not properties.muc_user.affiliation and not properties.muc_user.role:
+            return
+
+        room_jid = str(properties.muc_jid)
+        if room_jid not in self._mucs:
+            self._log.warning('Message from unknown MUC')
+            self._log.warning(stanza)
+            return
+
+        room = self._get_contact(room_jid)
+
+        if properties.muc_user.nick is not None:
+            nick = properties.muc_user.nick
+        else:
+            contact = self._get_contact(properties.muc_user.jid)
+            nick = contact.name
+
+        event = events.MUCAffiliationChanged(
+            timestamp=utc_now(),
+            nick=nick,
+            affiliation=properties.muc_user.affiliation,
+        )
+        app.storage.events.store(room, event)
+        room.notify('room-affiliation-changed', event)
 
     def _process_user_presence(self,
                                properties: PresenceProperties

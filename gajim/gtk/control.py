@@ -249,6 +249,7 @@ class ChatControl(EventHelper):
                 'room-config-changed': self._on_room_config_changed,
                 'room-presence-error': self._on_room_presence_error,
                 'room-subject': self._on_room_subject,
+                'room-affiliation-changed': self._on_room_affiliation_changed,
             })
 
         self._client.get_module('Chatstate').set_active(contact)
@@ -582,6 +583,9 @@ class ChatControl(EventHelper):
             elif isinstance(row, events.MUCUserAffiliationChanged):
                 self._process_muc_user_affiliation_changed(row)
 
+            elif isinstance(row, events.MUCAffiliationChanged):
+                self._process_room_affiliation_changed(row)
+
             elif isinstance(row, events.MUCUserRoleChanged):
                 self._process_muc_user_role_changed(row)
 
@@ -737,14 +741,43 @@ class ChatControl(EventHelper):
                             actor=actor,
                             reason=reason)
         else:
-            message = _('** Affiliation of {nick} has been set to '
-                        '{affiliation}{actor}{reason}').format(
+            message = self.__format_affiliation_change(
                             nick=event.nick,
                             affiliation=affiliation,
                             actor=actor,
                             reason=reason)
 
         self.add_info_message(message, event.timestamp)
+
+    def _on_room_affiliation_changed(
+        self,
+        _contact: GroupchatContact,
+        _signal_name: str,
+        event: events.MUCAffiliationChanged,
+    ) -> None:
+        self._process_room_affiliation_changed(event)
+
+    def _process_room_affiliation_changed(
+        self,
+        event: events.MUCAffiliationChanged,
+    ) -> None:
+        self.add_info_message(
+            self.__format_affiliation_change(
+                event.nick,
+                helpers.get_uf_affiliation(event.affiliation)),
+            event.timestamp)
+
+    @staticmethod
+    def __format_affiliation_change(nick: str,
+                                    affiliation: str,
+                                    actor: str = '',
+                                    reason: str = '') -> str:
+        return _('** Affiliation of {nick} has been set to '
+                 '{affiliation}{actor}{reason}').format(
+            nick=nick,
+            affiliation=affiliation,
+            actor=actor,
+            reason=reason)
 
     def _on_user_role_changed(self,
                               _contact: GroupchatContact,

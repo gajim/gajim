@@ -762,6 +762,14 @@ class MUCUserAffiliationChanged(ApplicationEvent):
 
 
 @dataclass
+class MUCAffiliationChanged(ApplicationEvent):
+    name: str = field(init=False, default='room-affiliation-changed')
+    timestamp: datetime.datetime
+    nick: str
+    affiliation: Affiliation
+
+
+@dataclass
 class MUCUserStatusShowChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-status-show-changed')
     timestamp: datetime.datetime

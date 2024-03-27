@@ -35,6 +35,7 @@ EVENT_CLASSES: dict[str, Any] = {
     'muc-user-role-changed': events.MUCUserRoleChanged,
     'muc-user-affiliation-changed': events.MUCUserAffiliationChanged,
     'muc-user-status-show-changed': events.MUCUserStatusShowChanged,
+    'room-affiliation-changed': events.MUCAffiliationChanged,
 }
 
 log = logging.getLogger('gajim.c.storage.events')
