@@ -34,6 +34,25 @@
               </packing>
             </child>
             <child type="overlay">
+              <object class="GtkButton" id="remove_avatar_button">
+                <property name="can-focus">True</property>
+                <property name="receives-default">False</property>
+                <property name="no-show-all">True</property>
+                <property name="tooltip-text" translatable="yes">Remove your group chat avatar</property>
+                <property name="halign">start</property>
+                <property name="valign">end</property>
+                <property name="always-show-image">True</property>
+                <signal name="clicked" handler="_on_remove_avatar" swapped="no"/>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="icon-name">user-trash-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="overlay">
               <object class="GtkButton" id="avatar_select_button">
                 <property name="can-focus">True</property>
                 <property name="receives-default">False</property>

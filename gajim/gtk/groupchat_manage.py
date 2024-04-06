@@ -138,6 +138,7 @@ class GroupchatManage(Gtk.Box):
 
         if vcard_support and self_contact.affiliation.is_owner:
             self._ui.avatar_select_button.show()
+            self._ui.remove_avatar_button.show()
 
         if self_contact.affiliation.is_owner:
             self._client.get_module('MUC').request_config(
@@ -183,6 +184,13 @@ class GroupchatManage(Gtk.Box):
 
     def _on_avatar_cancel_clicked(self, _button: Gtk.Button) -> None:
         self._ui.stack.set_visible_child_name('manage')
+
+    def _on_remove_avatar(self, _button: Gtk.Button) -> None:
+        vcard = VCard()
+        self._client.get_module('VCardTemp').set_vcard(
+            vcard,
+            jid=self._contact.jid,
+            callback=self._on_upload_avatar_result)
 
     def _on_change_avatar_clicked(self, _button: Gtk.Button) -> None:
         def _on_accept(paths: list[str]) -> None:

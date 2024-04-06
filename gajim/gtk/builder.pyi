@@ -484,6 +484,7 @@ class GroupchatInviterBuilder(Builder):
 class GroupchatManageBuilder(Builder):
     stack: Gtk.Stack
     avatar_button_image: Gtk.Image
+    remove_avatar_button: Gtk.Button
     avatar_select_button: Gtk.Button
     muc_description_entry: Gtk.Entry
     muc_name_entry: Gtk.Entry
