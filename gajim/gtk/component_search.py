@@ -7,7 +7,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -309,7 +308,7 @@ class Result(Page):
         assert store is not None
         assert path is not None
         iter_ = store.get_iter(path)
-        column_values = cast(str, store[iter_])
+        column_values = [str(item) for item in store[iter_]]
         text = ' '.join(column_values)
 
         jid = None
