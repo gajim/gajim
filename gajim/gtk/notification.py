@@ -137,7 +137,7 @@ class Windows(NotificationBackend):
 
     def _send(self, event: events.Notification) -> None:
         timeout = app.settings.get('notification_timeout')
-        self._withdraw()
+        self._withdraw([])
         self._active_notification = PopupNotification(event, timeout)
 
         def _on_popup_destroy(_widget: Gtk.Window) -> None:
@@ -145,7 +145,7 @@ class Windows(NotificationBackend):
 
         self._active_notification.connect('destroy', _on_popup_destroy)
 
-    def _withdraw(self, *args: Any) -> None:
+    def _withdraw(self, details: list[Any]) -> None:
         if self._active_notification is not None:
             self._active_notification.destroy()
 
