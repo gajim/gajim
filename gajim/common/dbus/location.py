@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Any
 
 import logging
@@ -20,7 +21,7 @@ from nbxmpp.structs import LocationData
 from gajim.common import app
 from gajim.common.events import LocationChanged
 
-if app.is_installed('GEOCLUE'):
+if app.is_installed('GEOCLUE') or typing.TYPE_CHECKING:
     import gi
     gi.require_version('Geoclue', '2.0')
     from gi.repository import Geoclue
@@ -79,7 +80,6 @@ class LocationListener:
                          _obj: GObject.Object,
                          result: Gio.AsyncResult
                          ) -> None:
-        assert Geoclue is not None
         try:
             self.simple = Geoclue.Simple.new_finish(result)
         except GLib.Error as error:
@@ -97,7 +97,6 @@ class LocationListener:
             self._on_location_update(self.simple)
 
     def get_data(self) -> None:
-        assert Geoclue is not None
         Geoclue.Simple.new('org.gajim.Gajim',
                            Geoclue.AccuracyLevel.EXACT,
                            None,

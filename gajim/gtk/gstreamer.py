@@ -4,16 +4,18 @@
 
 from __future__ import annotations
 
+import typing
+
 from gi.repository import Gtk
 
 try:
     from gi.repository import Gst
 except Exception:
-    pass
+    if typing.TYPE_CHECKING:
+        from gi.repository import Gst
 
 
 def create_gtk_widget() -> tuple[Gst.Element, Gtk.Widget, str] | None:
-    assert Gst is not None
     gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
     if gtkglsink is not None:
         glsinkbin = Gst.ElementFactory.make('glsinkbin', None)

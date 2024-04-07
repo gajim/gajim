@@ -9,6 +9,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Any
 
 import logging
@@ -35,7 +36,7 @@ from gajim.gtk.chat_action_processor import ChatActionProcessor
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.util import scroll_to_end
 
-if app.is_installed('GSPELL'):
+if app.is_installed('GSPELL') or typing.TYPE_CHECKING:
     from gi.repository import Gspell
 
 FORMAT_CHARS: dict[str, str] = {
@@ -448,7 +449,6 @@ class TextBufferManager(GObject.Object):
             buffer_handler = self._text_buffer_handlers[contact]
             buf.disconnect(buffer_handler)
             if app.is_installed('GSPELL'):
-                assert Gspell is not None
                 gspell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(buf)
                 checker = gspell_buffer.get_spell_checker()
                 assert checker is not None
@@ -474,7 +474,6 @@ class TextBufferManager(GObject.Object):
         if not app.is_installed('GSPELL'):
             return
 
-        assert Gspell is not None
         checker = Gspell.Checker.new(Gspell.language_get_default())
 
         buf = self._text_buffers[contact]
@@ -493,7 +492,6 @@ class TextBufferManager(GObject.Object):
         if not app.is_installed('GSPELL'):
             return
 
-        assert Gspell is not None
         use_spell_check = app.settings.get('use_speller')
         spell_view = Gspell.TextView.get_from_gtk_text_view(self._message_input)
         spell_view.set_inline_spell_checking(use_spell_check)
@@ -509,7 +507,6 @@ class TextBufferManager(GObject.Object):
             if not lang:
                 lang = get_default_lang()
 
-        assert Gspell is not None
         assert isinstance(lang, str)
         lang = Gspell.language_lookup(lang)
         if lang is None:
@@ -520,7 +517,6 @@ class TextBufferManager(GObject.Object):
         if not app.is_installed('GSPELL'):
             return
 
-        assert Gspell is not None
         buf = self._text_buffers[contact]
         gspell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(buf)
         checker = gspell_buffer.get_spell_checker()

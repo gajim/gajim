@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import typing
 from typing import Any
 
 import logging
@@ -15,10 +16,10 @@ from gi.repository import GLib
 
 from gajim.common import app
 
-if sys.platform == 'win32':
+if sys.platform == 'win32' or typing.TYPE_CHECKING:
     import winsound
 
-if sys.platform == 'darwin':
+if sys.platform == 'darwin' or typing.TYPE_CHECKING:
     from AppKit import NSSound
 
 log = logging.getLogger('gajim.c.sound')
