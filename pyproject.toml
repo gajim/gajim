@@ -72,7 +72,7 @@ gajim = ["py.typed"]
 version = {attr = "gajim.__version__"}
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,dist,test,*.egg-info,.git,*.po,*.nsi,*.spec"
+skip = "*__pycache__*,_build_root,build,dist,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
 ignore-words-list = "claus,pres,ser,trough"
 
 [tool.pyright]

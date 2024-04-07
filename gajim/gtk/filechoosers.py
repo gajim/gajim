@@ -214,7 +214,7 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
         self.connect('response', self._on_response, accept_cb, cancel_cb)
         self.show()
 
-    def _on_response(self, 
+    def _on_response(self,
                      dialog: Gtk.FileChooser | Gtk.FileChooserNative,
                      response: Gtk.ResponseType,
                      accept_cb: AcceptCallbackT,
