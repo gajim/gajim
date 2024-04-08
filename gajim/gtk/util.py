@@ -104,7 +104,20 @@ def load_icon_surface(
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
         return None
-    return icon_info.load_surface(None)
+
+    try:
+        surface = icon_info.load_surface(None)
+    except GLib.Error as e:
+        log.error(
+            'Error loading icon surface for %s, %s, %s: %s',
+            icon_name,
+            size,
+            scale,
+            e
+        )
+        return None
+
+    return surface
 
 
 def load_icon_pixbuf(icon_name: str,
@@ -116,7 +129,20 @@ def load_icon_pixbuf(icon_name: str,
     icon_info = load_icon_info(icon_name, size, scale, flags)
     if icon_info is None:
         return None
-    return icon_info.load_icon()
+
+    try:
+        icon = icon_info.load_icon()
+    except GLib.Error as e:
+        log.error(
+            'Error loading icon surface for %s, %s, %s: %s',
+            icon_name,
+            size,
+            scale,
+            e
+        )
+        return None
+
+    return icon
 
 
 def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
