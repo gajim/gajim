@@ -307,6 +307,8 @@ class HTTPUpload(BaseModule):
             if request.get_error() == HTTPRequestError.CANCELLED:
                 self._log.info('Upload cancelled')
             else:
+                if not error:
+                    error = _('Upload could not be completed.')
                 transfer.set_error('http-response', error)
             return
 
@@ -333,7 +335,8 @@ class HTTPFileTransfer(FileTransfer):
     _errors = {
         'unsecure': _('The server returned an insecure transport (HTTP).'),
         'encryption-not-available': _('There is no encryption method available '
-                                      'for the chosen encryption.')
+                                      'for the chosen encryption.'),
+        'unknown': _('Unknown error.')
     }
 
     def __init__(self,
@@ -427,7 +430,7 @@ class HTTPFileTransfer(FileTransfer):
 
     def set_error(self, domain: str, text: str = '') -> None:
         if not text:
-            text = self._errors[domain]
+            text = self._errors.get(domain) or self._errors['unknown']
 
         super().set_error(domain, text)
         self._cleanup()
