@@ -216,6 +216,11 @@ class MessageRow(BaseRow):
                 return contact.name
             return resource
 
+        elif db_row.type == MessageType.PM:
+            resource = db_row.resource
+            assert resource is not None
+            return resource
+
         else:
             raise ValueError
 
