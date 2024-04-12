@@ -234,7 +234,9 @@ class ChatBanner(Gtk.Box, EventHelper):
         if message.direction == ChatDirection.OUTGOING:
             return
 
-        assert message.resource is not None
+        if message.resource is None:
+            return
+
         assert isinstance(self._contact, BareContact)
 
         resource_contact = self._contact.get_resource(message.resource)
