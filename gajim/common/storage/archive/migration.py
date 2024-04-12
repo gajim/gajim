@@ -45,7 +45,7 @@ class LastArchiveMessage(MappedAsDataclass, MigrationBase, kw_only=True):
     __tablename__ = 'last_archive_message'
 
     jid_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'), primary_key=True)
-    remote: Mapped[Jids] = relationship(lazy='joined', viewonly=True, init=False)
+    remote: Mapped[Jids | None] = relationship(lazy='joined', viewonly=True, init=False)
     last_mam_id: Mapped[str | None]
     oldest_mam_timestamp: Mapped[float | None]
     last_muc_timestamp: Mapped[float | None]
@@ -220,6 +220,14 @@ class Migration:
         archive_row: LastArchiveMessage,
         account_pks: list[int],
     ) -> None:
+
+        if archive_row.remote is None:
+            log.warning(
+                'Unable to migrate mam state because jid_id %s was not found',
+                archive_row.jid_id,
+            )
+            return
+
         remote_jid = JID.from_string(archive_row.remote.jid)
         remote_pk = self._get_remote_pk(conn, remote_jid)
 
