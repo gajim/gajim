@@ -469,11 +469,13 @@ class Message(BaseModule):
         resource = self._client.get_bound_jid().resource
         state = MessageState.ACKNOWLEDGED
 
-        if m_type == MessageType.GROUPCHAT:
-            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            # PM is a full jid, so convert to bare
+            muc_jid = remote_jid.new_as_bare()
+            muc_data = self._client.get_module('MUC').get_muc_data(muc_jid)
             if muc_data is None:
                 self._log.warning('Trying to send message to unknown MUC: %s',
-                                  remote_jid)
+                                  muc_jid)
                 return
 
             resource = muc_data.nick
@@ -485,10 +487,12 @@ class Message(BaseModule):
                 remote_jid_=remote_jid,
                 id=str(occupant_id),
                 real_remote_jid_=real_jid,
+                nickname=resource,
                 updated_at=timestamp,
             )
 
-            state = MessageState.PENDING
+            if m_type == MessageType.GROUPCHAT:
+                state = MessageState.PENDING
 
         encryption_data = None
         if message.is_encrypted:
