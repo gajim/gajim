@@ -64,12 +64,12 @@ class Logs(MappedAsDataclass, MigrationBase, kw_only=True):
 
     log_line_id: Mapped[int] = mapped_column(primary_key=True)
     account_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
-    account: Mapped[Jids] = relationship(
+    account: Mapped[Jids | None] = relationship(
         lazy='joined', foreign_keys=[account_id], viewonly=True, init=False
     )
 
     jid_id: Mapped[int] = mapped_column(sa.ForeignKey('jids.jid_id'))
-    remote: Mapped[Jids] = relationship(
+    remote: Mapped[Jids | None] = relationship(
         lazy='joined', foreign_keys=[jid_id], viewonly=True, init=False
     )
 
@@ -253,7 +253,22 @@ class Migration:
         m_type, direction = KIND_MAPPING[log_row.kind]
 
         if log_row.time is None:
-            raise ValueError('Empty timestamp')
+            log.warning('Unable to migrate message because timestamp is empty')
+            return
+
+        if log_row.account is None:
+            log.warning(
+                'Unable to migrate message because account_id %s was not found',
+                log_row.account_id,
+            )
+            return
+
+        if log_row.remote is None:
+            log.warning(
+                'Unable to migrate message because jid_id %s was not found',
+                log_row.jid_id,
+            )
+            return
 
         account_jid = JID.from_string(log_row.account.jid)
         remote_jid = JID.from_string(log_row.remote.jid)
