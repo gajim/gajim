@@ -220,7 +220,6 @@ class Migration:
         archive_row: LastArchiveMessage,
         account_pks: list[int],
     ) -> None:
-
         if archive_row.remote is None:
             log.warning(
                 'Unable to migrate mam state because jid_id %s was not found',
@@ -246,16 +245,25 @@ class Migration:
                 float(archive_row.oldest_mam_timestamp), tz=timezone.utc
             )
 
+        if (from_stanza_ts, to_stanza_id, to_stanza_ts) == (None, None, None):
+            return
+
         for account_pk in account_pks:
-            conn.execute(
-                sa.insert(mod.MAMArchiveState).values(
-                    fk_account_pk=account_pk,
-                    fk_remote_pk=remote_pk,
-                    from_stanza_ts=from_stanza_ts,
-                    to_stanza_id=to_stanza_id,
-                    to_stanza_ts=to_stanza_ts,
+            try:
+                conn.execute(
+                    sa.insert(mod.MAMArchiveState).values(
+                        fk_account_pk=account_pk,
+                        fk_remote_pk=remote_pk,
+                        from_stanza_ts=from_stanza_ts,
+                        to_stanza_id=to_stanza_id,
+                        to_stanza_ts=to_stanza_ts,
+                    )
                 )
-            )
+            except IntegrityError:
+                log.warning(
+                    'Unable to migrate mam archive state, because it was already migrated'
+                )
+                return
 
     def _process_message_row(self, conn: sa.Connection, log_row: Logs) -> None:
         m_type, direction = KIND_MAPPING[log_row.kind]
