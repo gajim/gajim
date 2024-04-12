@@ -23,6 +23,7 @@ from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
+from gajim.common.helpers import get_uuid
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.misc import parse_oob
@@ -135,7 +136,9 @@ class Message(BaseModule):
         if message_id is None:
             self._log.warning('Received message without message id')
             self._log.warning(stanza)
-            return
+            # TODO: Make Gajim not depend on a message_id being present
+            message_id = get_uuid()
+            self._log.warning('Generating id')
 
         stanza_id = self._get_stanza_id(properties)
 
