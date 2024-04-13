@@ -46,7 +46,7 @@
         <property name="no-show-all">True</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="yes">Topic</property>
+        <property name="label" translatable="yes">Subject</property>
         <style>
           <class name="dim-label"/>
         </style>
