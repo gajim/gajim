@@ -291,6 +291,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "gajim/common/iana.py" = ["E501"]
 "gajim/common/storage/omemo.py" = ["N803"]
 "gajim/common/storage/*" = ["E501"]
+"gajim/common/modules/chatstates.py" = ["E501"]
 "test/*" = ["E402"]
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]

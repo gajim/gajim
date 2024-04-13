@@ -42,6 +42,7 @@ def ensure_enabled(func: Any) -> Any:
         if not self._enabled:
             return None
         return func(self, *args, **kwargs)
+
     return func_wrapper
 
 
@@ -50,18 +51,32 @@ class Chatstate(BaseModule):
         BaseModule.__init__(self, con)
 
         self.handlers = [
-            StanzaHandler(name='presence',
-                          callback=self._presence_received,
-                          typ='error',
-                          priority=50),
-            StanzaHandler(name='presence',
-                          callback=self._presence_received,
-                          typ='unavailable',
-                          priority=50),
-            StanzaHandler(name='message',
-                          callback=self._process_chatstate,
-                          ns=Namespace.CHATSTATES,
-                          priority=46),
+            StanzaHandler(
+                name='presence',
+                callback=self._presence_received,
+                typ='error',
+                priority=50,
+            ),
+            StanzaHandler(
+                name='presence',
+                callback=self._presence_received,
+                typ='unavailable',
+                priority=50,
+            ),
+            StanzaHandler(
+                name='message',
+                typ='chat',
+                callback=self._process_chatstate,
+                ns=Namespace.CHATSTATES,
+                priority=46,
+            ),
+            StanzaHandler(
+                name='message',
+                typ='groupchat',
+                callback=self._process_groupchat_chatstate,
+                ns=Namespace.CHATSTATES,
+                priority=46,
+            ),
         ]
 
         # Our current chatstate with a specific contact
@@ -72,10 +87,9 @@ class Chatstate(BaseModule):
         # Cache set of participants that are composing for group chats,
         # to avoid having to iterate over all their chat states to determine
         # who is typing a message.
-        self._muc_composers: dict[JID, set[GroupchatParticipant]] = \
-            defaultdict(set)
+        self._muc_composers: dict[JID, set[GroupchatParticipant]] = defaultdict(set)
 
-        self._remote_chatstate_composing_timeouts: dict[JID, int] = {}
+        self._remote_composing_timeouts: dict[tuple[JID, str], int] = {}
 
         self._last_keyboard_activity: dict[JID, float] = {}
         self._last_mouse_activity: dict[JID, float] = {}
@@ -84,22 +98,17 @@ class Chatstate(BaseModule):
         self._blocked: list[JID] = []
         self._enabled = False
 
-        self._client.connect_signal('state-changed',
-                                    self._on_client_state_changed)
-        self._client.connect_signal('resume-failed',
-                                    self._on_client_resume_failed)
+        self._client.connect_signal('state-changed', self._on_client_state_changed)
+        self._client.connect_signal('resume-failed', self._on_client_resume_failed)
 
-    def _on_client_resume_failed(self,
-                                 _client: types.Client,
-                                 _signal_name: str
-                                 ) -> None:
+    def _on_client_resume_failed(
+        self, _client: types.Client, _signal_name: str
+    ) -> None:
         self._set_enabled(False)
 
-    def _on_client_state_changed(self,
-                                 _client: types.Client,
-                                 _signal_name: str,
-                                 state: ClientState
-                                 ) -> None:
+    def _on_client_state_changed(
+        self, _client: types.Client, _signal_name: str, state: ClientState
+    ) -> None:
         if state.is_disconnected:
             self._set_enabled(False)
         elif state.is_connected:
@@ -109,24 +118,19 @@ class Chatstate(BaseModule):
         if self._enabled == value:
             return
 
-        self._log.info('Chatstate module %s',
-                       'enabled' if value else 'disabled')
+        self._log.info('Chatstate module %s', 'enabled' if value else 'disabled')
         self._enabled = value
 
         if value:
-            self._timeout_id = GLib.timeout_add_seconds(
-                2, self._check_last_interaction)
+            self._timeout_id = GLib.timeout_add_seconds(2, self._check_last_interaction)
         else:
             self.cleanup()
             self._client.get_module('Contacts').force_chatstate_update()
 
     @ensure_enabled
-    def _presence_received(self,
-                           _con: types.xmppClient,
-                           _stanza: Presence,
-                           properties: PresenceProperties
-                           ) -> None:
-
+    def _presence_received(
+        self, _con: types.xmppClient, _stanza: Presence, properties: PresenceProperties
+    ) -> None:
         if properties.is_self_bare:
             return
 
@@ -150,52 +154,58 @@ class Chatstate(BaseModule):
         if properties.chatstate != State.ACTIVE:
             raise NodeProcessed
 
-    def _process_chatstate(self,
-                           _con: types.xmppClient,
-                           _stanza: Any,
-                           properties: MessageProperties
-                           ) -> None:
-
+    def _process_chatstate(
+        self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
         if not properties.has_chatstate:
             return
 
-        if not (properties.type.is_chat or properties.type.is_groupchat):
-            return self._raise_if_necessary(properties)
-
-        if (properties.is_self_message or
-                properties.is_mam_message or
-                properties.is_carbon_message and properties.carbon.is_sent):
+        if (
+            properties.is_self_message
+            or properties.is_mam_message
+            or properties.is_carbon_message
+            and properties.carbon.is_sent
+        ):
             return self._raise_if_necessary(properties)
 
         jid = properties.jid
         assert jid is not None
 
+        m_type = 'chat'
         state = properties.chatstate
         self._remote_chatstate[jid] = state
 
-        self._log.info('Recv: %-10s - %s', state, jid)
+        self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
 
         contact = self._get_contact(jid)
-        if contact is None:
-            return self._raise_if_necessary(properties)
-
-        self._remove_remote_composing_timeout(contact)
-        if state == State.COMPOSING:
-            # the spec does not cover any timeout for the composing action,
-            # but if a contact's client does not send another chat state,
-            # we don't want the GUI to show that they are "composing" forever
-            self._remote_chatstate_composing_timeouts[jid] = \
-                GLib.timeout_add_seconds(REMOTE_PAUSED_AFTER,
-                                         self._on_remote_composing_timeout,
-                                         contact)
+        self._set_composing_timeout(contact, m_type, state)
 
         contact.notify('chatstate-update')
 
-        if not isinstance(contact, GroupchatParticipant):
+        return self._raise_if_necessary(properties)
+
+    def _process_groupchat_chatstate(
+        self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
+    ) -> None:
+        if not properties.has_chatstate:
+            return
+
+        jid = properties.jid
+        assert jid is not None
+
+        if properties.is_mam_message or jid.is_bare:
             return self._raise_if_necessary(properties)
 
+        contact = self._get_contact(jid)
+        assert isinstance(contact, GroupchatParticipant)
         if contact.is_self:
             return self._raise_if_necessary(properties)
+
+        m_type = 'groupchat'
+        state = properties.chatstate
+        self._log.info('Recv: %-10s - %s (%s)', state, jid, m_type)
+
+        self._set_composing_timeout(contact, m_type, state)
 
         muc = contact.room
 
@@ -206,18 +216,39 @@ class Chatstate(BaseModule):
 
         muc.notify('chatstate-update')
 
-        return self._raise_if_necessary(properties)
+        self._raise_if_necessary(properties)
 
-    def _on_remote_composing_timeout(self, contact: types.ContactT):
-        self._remote_chatstate_composing_timeouts.pop(contact.jid, None)
+    def _set_composing_timeout(
+        self, contact: types.ContactT, m_type: str, state: State
+    ) -> None:
+        self._remove_remote_composing_timeout(contact, m_type)
+        if state != State.COMPOSING:
+            return
+
+        # the spec does not cover any timeout for the composing action,
+        # but if a contact's client does not send another chat state,
+        # we don't want the GUI to show that they are "composing" forever
+        self._remote_composing_timeouts[
+            (contact.jid, m_type)
+        ] = GLib.timeout_add_seconds(
+            REMOTE_PAUSED_AFTER, self._on_remote_composing_timeout, contact, m_type
+        )
+
+    def _on_remote_composing_timeout(
+        self, contact: types.ContactT, m_type: str
+    ) -> None:
+        self._remote_composing_timeouts.pop((contact.jid, m_type), None)
         self._log.info(
-            'Automatically switching the chat state of %s to ACTIVE', contact)
-        self._remote_chatstate[contact.jid] = State.ACTIVE
-        contact.notify('chatstate-update')
+            'Set to ACTIVE after timeout has been reached - %s (%s)', contact, m_type
+        )
 
-        if isinstance(contact, GroupchatParticipant):
+        if m_type == 'groupchat':
+            assert isinstance(contact, GroupchatParticipant)
             self._muc_composers[contact.room.jid].discard(contact)
             contact.room.notify('chatstate-update')
+        else:
+            self._remote_chatstate[contact.jid] = State.ACTIVE
+            contact.notify('chatstate-update')
 
     def get_composers(self, jid: JID) -> list[GroupchatParticipant]:
         '''
@@ -225,11 +256,12 @@ class Chatstate(BaseModule):
         '''
         return list(self._muc_composers[jid])
 
-    def _remove_remote_composing_timeout(self, contact: types.ContactT):
-        source_id = self._remote_chatstate_composing_timeouts.pop(
-            contact.jid, None)
+    def _remove_remote_composing_timeout(self, contact: types.ContactT, m_type: str):
+        source_id = self._remote_composing_timeouts.pop((contact.jid, m_type), None)
         if source_id is not None:
-            self._log.debug('Removing remote composing timeout of %s', contact)
+            self._log.debug(
+                'Removing remote composing timeout of %s (%s)', contact, m_type
+            )
             GLib.source_remove(source_id)
 
     @ensure_enabled
@@ -272,9 +304,7 @@ class Chatstate(BaseModule):
         self._last_mouse_activity[contact.jid] = time.time()
         self._chatstates[contact.jid] = State.ACTIVE
 
-    def get_active_chatstate(self,
-                             contact: types.ChatContactT
-                             ) -> str | None:
+    def get_active_chatstate(self, contact: types.ChatContactT) -> str | None:
         # determines if we add 'active' on outgoing messages
         if contact.settings.get('send_chatstate') == 'disabled':
             return None
@@ -291,10 +321,7 @@ class Chatstate(BaseModule):
         return 'active'
 
     @ensure_enabled
-    def block_chatstates(self,
-                         contact: types.ChatContactT,
-                         block: bool
-                         ) -> None:
+    def block_chatstates(self, contact: types.ChatContactT, block: bool) -> None:
         # Block sending chatstates to a contact
         # Used for example if we cycle through the MUC nick list, which
         # produces a lot of buffer 'changed' signals from the input textview.
@@ -305,10 +332,7 @@ class Chatstate(BaseModule):
             self._blocked.remove(contact.jid)
 
     @ensure_enabled
-    def set_chatstate_delayed(self,
-                              contact: types.ChatContactT,
-                              state: State
-                              ) -> None:
+    def set_chatstate_delayed(self, contact: types.ChatContactT, state: State) -> None:
         # Used when we go from Composing -> Active after deleting all text
         # from the Textview. We delay the Active state because maybe the
         # User starts writing again.
@@ -319,7 +343,8 @@ class Chatstate(BaseModule):
 
         self.remove_delay_timeout(contact)
         self._delay_timeout_ids[contact.jid] = GLib.timeout_add_seconds(
-            2, self.set_chatstate, contact, state)
+            2, self.set_chatstate, contact, state
+        )
 
     @ensure_enabled
     def set_chatstate(self, contact: types.ChatContactT, state: State) -> None:
@@ -337,8 +362,7 @@ class Chatstate(BaseModule):
             # Send a last 'active' state after user disabled chatstates
             if current_state is not None:
                 self._log.info('Disabled for %s', contact)
-                self._log.info('Send last state: %-10s - %s',
-                               State.ACTIVE, contact)
+                self._log.info('Send last state: %-10s - %s', State.ACTIVE, contact)
 
                 self._send_chatstate(contact, State.ACTIVE)
 
@@ -382,25 +406,21 @@ class Chatstate(BaseModule):
 
         self._chatstates[contact.jid] = state
 
-    def _send_chatstate(self,
-                        contact: types.ChatContactT,
-                        chatstate: State
-                        ) -> None:
+    def _send_chatstate(self, contact: types.ChatContactT, chatstate: State) -> None:
         type_ = 'groupchat' if contact.is_groupchat else 'chat'
-        message = OutgoingMessage(account=self._account,
-                                  contact=contact,
-                                  text=None,
-                                  type_=type_,
-                                  chatstate=chatstate.value,
-                                  play_sound=False)
+        message = OutgoingMessage(
+            account=self._account,
+            contact=contact,
+            text=None,
+            type_=type_,
+            chatstate=chatstate.value,
+            play_sound=False,
+        )
 
         self._client.send_message(message)
 
     @ensure_enabled
-    def set_mouse_activity(self,
-                           contact: types.ChatContactT,
-                           was_paused: bool
-                           ) -> None:
+    def set_mouse_activity(self, contact: types.ChatContactT, was_paused: bool) -> None:
         if contact.settings.get('send_chatstate') == 'disabled':
             return
         self._last_mouse_activity[contact.jid] = time.time()
@@ -422,11 +442,11 @@ class Chatstate(BaseModule):
 
     def remove_all_timeouts(self) -> None:
         for timeout in chain(
-                self._delay_timeout_ids.values(),
-                self._remote_chatstate_composing_timeouts.values()):
+            self._delay_timeout_ids.values(), self._remote_composing_timeouts.values()
+        ):
             GLib.source_remove(timeout)
         self._delay_timeout_ids.clear()
-        self._remote_chatstate_composing_timeouts.clear()
+        self._remote_composing_timeouts.clear()
 
     def cleanup(self) -> None:
         BaseModule.cleanup(self)
