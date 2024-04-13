@@ -179,8 +179,17 @@ class MessageActionsBox(Gtk.Grid):
                 'room-left': self._on_user_state_changed,
             })
 
-        self._update_encryption_button()
-        self._update_encryption_details_button()
+        encryption = contact.settings.get('encryption')
+        encryption_available = self._is_encryption_available(contact)
+        if not encryption_available and encryption:
+            # Disable encryption if chat was encrypted before, but due to
+            # changed circumstances, encryption is not applicable anymore
+            # (i.e. group chat configuration changed).
+            contact.settings.set('encryption', '')
+
+        self._update_encryption_button(
+            encryption, is_available=encryption_available)
+        self._update_encryption_details_button(encryption)
         self._update_send_file_button_tooltip()
 
         self._set_chatstate(True)
@@ -294,46 +303,50 @@ class MessageActionsBox(Gtk.Grid):
         contact = self.get_current_contact()
         contact.settings.set('encryption', new_state)
 
-        self._update_encryption_button()
-        self._update_encryption_details_button()
+        self._update_encryption_button(new_state, is_available=True)
+        self._update_encryption_details_button(new_state)
 
-    def _update_encryption_button(self) -> None:
+    def _update_encryption_button(
+        self,
+        encryption: str,
+        *,
+        is_available: bool
+    ) -> None:
+
         contact = self.get_current_contact()
-        state = contact.settings.get('encryption')
 
-        action = app.window.get_action('set-encryption')
-        action.set_state(GLib.Variant('s', state))
+        if is_available:
+            tooltip = _('Choose encryption')
 
-        sensitive = True
-        tooltip = _('Choose encryption')
-
-        if state in ('OMEMO', 'OpenPGP', 'PGP'):
-            icon_name = 'channel-secure-symbolic'
-        else:
-            icon_name = 'channel-insecure-symbolic'
-
-        if isinstance(self._contact, GroupchatContact):
-            if not self._contact.encryption_available:
-                sensitive = False
-                tooltip = _('This is a public group chat. '
-                            'Encryption is not available.')
+            if encryption in ('OMEMO', 'OpenPGP', 'PGP'):
+                icon_name = 'channel-secure-symbolic'
+            else:
                 icon_name = 'channel-insecure-symbolic'
 
-                # Disable encryption if chat was encrypted before, but due to
-                # changed circumstances, encryption is not applicable anymore
-                # (i.e. group chat configuration changed).
-                contact.settings.set('encryption', '')
-                action.set_state(GLib.Variant('s', ''))
+        else:
+            icon_name = 'channel-insecure-symbolic'
+            if isinstance(contact, GroupchatContact):
+                tooltip = _('This is a public group chat. '
+                            'Encryption is not available.')
+            elif isinstance(contact, GroupchatParticipant):
+                tooltip = _('Encryption is not available in private chats')
+            else:
+                raise ValueError('Unexpected contact type: %s', type(contact))
 
-        self._ui.encryption_menu_button.set_sensitive(sensitive)
+        self._ui.encryption_menu_button.set_sensitive(is_available)
         self._ui.encryption_menu_button.set_tooltip_text(tooltip)
         self._ui.encryption_image.set_from_icon_name(
             icon_name, Gtk.IconSize.MENU)
 
-    def _update_encryption_details_button(self) -> None:
-        contact = self.get_current_contact()
-        encryption = contact.settings.get('encryption')
+    @staticmethod
+    def _is_encryption_available(contact: ChatContactT) -> bool:
+        if isinstance(contact, GroupchatContact):
+            return contact.encryption_available
+        elif isinstance(contact, GroupchatParticipant):
+            return False
+        return True
 
+    def _update_encryption_details_button(self, encryption: str) -> None:
         encryption_state = {'visible': bool(encryption),
                             'enc_type': encryption,
                             'authenticated': False}
