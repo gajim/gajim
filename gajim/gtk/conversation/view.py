@@ -569,8 +569,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if ancestor is None:
             self._update_descendants(message)
         else:
-            if message.is_mergeable(ancestor):
-                message.set_merged(True)
+            message.set_merged(message.is_mergeable(ancestor))
 
     def _find_ancestor(self, message: MessageRow) -> MessageRow | None:
         index = message.get_index()
@@ -822,7 +821,9 @@ class ConversationView(Gtk.ScrolledWindow):
     def show_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
+            message_row.has_receipt = True
             message_row.show_receipt(True)
+            self._check_for_merge(message_row)
 
     def show_error(self, id_: str, error: StanzaError) -> None:
         message_row = self._get_row_by_message_id(id_)

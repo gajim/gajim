@@ -189,7 +189,8 @@ class MessageRow(BaseRow):
             self._message_icons.set_security_label_visible(True)
 
         # Receipts are always for the original message, never the correction
-        if self._original_message.receipt is not None:
+        self.has_receipt = self._original_message.receipt is not None
+        if self.has_receipt:
             self.show_receipt(True)
 
         self.state = MessageState(message.state)
@@ -379,6 +380,9 @@ class MessageRow(BaseRow):
             return False
         if not self.is_same_securitylabels(message):
             return False
+        if app.settings.get('positive_184_ack'):
+            if self.has_receipt != message.has_receipt:
+                return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
     def get_text(self) -> str:
