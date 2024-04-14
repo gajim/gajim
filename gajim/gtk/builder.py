@@ -53,9 +53,9 @@ class Builder:
         if sys.platform == 'win32':
             # This is a workaround for non working translation on Windows
             tree = ET.parse(file_path)
-            for node in tree.iter():
-                if 'translatable' in node.attrib and node.text is not None:
-                    node.text = gettext_(node.text)
+            for node in tree.findall(".//*[@translatable='yes']"):
+                node.text = gettext_(node.text) if node.text else ''
+                del node.attrib['translatable']
 
             return ET.tostring(tree.getroot(),
                                encoding='unicode',
