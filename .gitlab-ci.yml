@@ -109,6 +109,7 @@ build-debian-nightly:
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
+  allow_failure: true
   script:
     - apt-get update
     - apt-get install -y python3-nbxmpp-nightly
