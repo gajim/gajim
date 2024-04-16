@@ -186,7 +186,10 @@ class MessageActionsBox(Gtk.Grid):
             # changed circumstances, encryption is not applicable anymore
             # (i.e. group chat configuration changed).
             contact.settings.set('encryption', '')
+            encryption = ''
 
+        action = app.window.get_action('set-encryption')
+        action.set_state(GLib.Variant('s', encryption))
         self._update_encryption_button(
             encryption, is_available=encryption_available)
         self._update_encryption_details_button(encryption)
@@ -302,6 +305,7 @@ class MessageActionsBox(Gtk.Grid):
 
         contact = self.get_current_contact()
         contact.settings.set('encryption', new_state)
+        action.set_state(GLib.Variant('s', new_state))
 
         self._update_encryption_button(new_state, is_available=True)
         self._update_encryption_details_button(new_state)
