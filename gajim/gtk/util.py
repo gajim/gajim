@@ -39,6 +39,7 @@ from PIL import UnidentifiedImageError
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
+from gajim.common.const import AvatarSize
 from gajim.common.const import Display
 from gajim.common.const import LOCATION_DATA
 from gajim.common.const import StyleAttr
@@ -46,7 +47,12 @@ from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.helpers import format_idle_time
 from gajim.common.helpers import URL_REGEX
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import VariantMixin
 from gajim.common.styling import PlainBlock
 
@@ -564,6 +570,59 @@ def add_css_to_widget(widget: Any, css: str) -> None:
     context = widget.get_style_context()
     context.add_provider(provider,
                          Gtk.STYLE_PROVIDER_PRIORITY_USER)
+
+
+def get_contact_name_for_message(
+        db_row: mod.Message,
+        contact: types.ChatContactT
+    ) -> str:
+
+    if isinstance(contact, BareContact) and contact.is_self:
+        return _('Me')
+
+    if db_row.type == MessageType.CHAT:
+        if db_row.direction == ChatDirection.INCOMING:
+            return contact.name
+        return app.nicks[contact.account]
+
+    elif db_row.type == MessageType.GROUPCHAT:
+        resource = db_row.resource
+        if resource is None:
+            # Fall back to MUC name if contact name is None
+            # (may be the case for service messages from the MUC)
+            return contact.name
+        return resource
+
+    elif db_row.type == MessageType.PM:
+        resource = db_row.resource
+        assert resource is not None
+        return resource
+
+    else:
+        raise ValueError
+
+
+def get_avatar_for_message(
+        db_row: mod.Message,
+        contact: types.ChatContactT,
+        scale: int,
+        size: AvatarSize
+    ) -> cairo.ImageSurface | None:
+
+    if isinstance(contact, GroupchatContact):
+        name = get_contact_name_for_message(db_row, contact)
+        resource_contact = contact.get_resource(name)
+        return resource_contact.get_avatar(
+            size, scale, add_show=False)
+
+    if db_row.direction == ChatDirection.OUTGOING:
+        client = app.get_client(contact.account)
+        self_contact = client.get_module('Contacts').get_contact(
+            client.get_own_jid().bare)
+        assert isinstance(self_contact, BareContact)
+        return self_contact.get_avatar(size, scale, add_show=False)
+
+    return contact.get_avatar(size, scale, add_show=False)
 
 
 def get_pixbuf_from_data(file_data: bytes) -> GdkPixbuf.Pixbuf | None:

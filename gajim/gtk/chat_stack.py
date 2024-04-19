@@ -164,6 +164,10 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._message_action_box.toggle_message_correction()
             return True
 
+        if self._message_action_box.is_in_reply_mode:
+            self._message_action_box.disable_reply_mode()
+            return True
+
         return False
 
     def get_chat_control(self) -> ChatControl:

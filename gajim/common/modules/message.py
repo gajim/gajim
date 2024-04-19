@@ -35,6 +35,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.text import quote_text
 from gajim.common.util.text import remove_fallback_text
 
 
@@ -398,8 +399,12 @@ class Message(BaseModule):
     def build_message_stanza(self, message: OutgoingMessage) -> nbxmpp.Message:
         own_jid = self._con.get_own_jid()
 
+        message_text = message.text
+        if message.reply and message.text is not None:
+            message_text = f'{quote_text(message.text)}{message.text}'
+
         stanza = nbxmpp.Message(to=message.jid,
-                                body=message.text,
+                                body=message_text,
                                 typ=message.type_,
                                 subject=message.subject)
 

@@ -143,8 +143,7 @@ class MessageRow(BaseRow):
         else:
             if message.reply is not None:
                 self._ref_message_widget = ReferredMessageWidget(
-                    self._contact,
-                    message.reply.id)
+                    self._contact, message.pk)
 
             self._message_widget = MessageWidget(self._contact.account)
             self._message_widget.add_with_styling(self.text, nickname=self.name)

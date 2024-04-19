@@ -155,7 +155,7 @@ class MessageActionsBox(Gtk.Grid):
 
         elif action_name == 'reply':
             assert param
-            self._enable_reply_mode(param.get_string())
+            self._enable_reply_mode(param.get_uint32())
 
         elif action_name == 'mention':
             assert param
@@ -560,10 +560,13 @@ class MessageActionsBox(Gtk.Grid):
 
         return False
 
-    def _enable_reply_mode(self, reply_to_id: str) -> None:
-        assert self._contact is not None
+    @property
+    def is_in_reply_mode(self) -> bool:
+        return self._reply_box.is_in_reply_mode
 
-        self._reply_box.enable_reply_mode(self._contact, reply_to_id)
+    def _enable_reply_mode(self, pk: int) -> None:
+        assert self._contact is not None
+        self._reply_box.enable_reply_mode(self._contact, pk)
         self.msg_textview.grab_focus()
 
     def disable_reply_mode(self, *args: Any) -> None:

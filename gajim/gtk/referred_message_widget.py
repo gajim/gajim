@@ -1,49 +1,89 @@
 # This file is part of Gajim.
 #
-# Gajim is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published
-# by the Free Software Foundation; version 3 only.
-#
-# Gajim is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with Gajim. If not, see <http://www.gnu.org/licenses/>.
+# SPDX-License-Identifier: GPL-3.0-only
 
 from __future__ import annotations
 
 from typing import Any
 
 import datetime as dt
+import logging
+from urllib.parse import urlparse
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.structs import ReplyData
 
 from gajim.common import app
-from gajim.common import types
+from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.preview_helpers import filename_from_uri
+from gajim.common.preview_helpers import format_geo_coords
+from gajim.common.preview_helpers import guess_simple_file_type
+from gajim.common.preview_helpers import split_geo_uri
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.types import ChatContactT
 from gajim.common.util.text import quote_text
 
+from gajim.gtk.util import get_avatar_for_message
+from gajim.gtk.util import get_contact_name_for_message
 from gajim.gtk.util import get_cursor
+
+log = logging.getLogger('gajim.gtk.referred_message_widget')
 
 
 class ReferredMessageWidget(Gtk.EventBox):
-    def __init__(self, contact: types.ChatContactT, reply_to_id: str) -> None:
-
+    def __init__(
+        self, contact: ChatContactT, pk: int, reply_mode: bool = False
+    ) -> None:
         Gtk.EventBox.__init__(self)
+
+        self._contact = contact
+
+        self._message = app.storage.archive.get_message_with_pk(pk)
+        if self._message is None:
+            log.warning('Could not find message with pk %s in database', pk)
+            return
+
+        if reply_mode:
+            # In reply mode the ReferredMessage widget shows
+            # the original message, which is about to be replied to.
+            self._referred_message = self._message
+        else:
+            assert self._message.reply is not None
+            if self._message.type == MessageType.GROUPCHAT:
+                self._referred_message = \
+                    app.storage.archive.get_message_with_stanza_id(
+                        self._message.reply.id
+                )
+            else:
+                self._referred_message = \
+                    app.storage.archive.get_message_with_id(
+                        self._message.reply.id
+                )
+
+            if self._referred_message is None:
+                log.warning(
+                    'Could not find referred message in with id %s database',
+                    self._message.reply.id,
+                )
+                return
+
         self.connect('realize', self._on_realize)
         self.connect('button-release-event', self._on_button_release)
 
-        main_box = Gtk.Box(spacing=12, hexpand=True)
-        main_box.set_tooltip_text(_('Scroll to this message'))
+        self._add_content(self._referred_message)
+
+        self.show_all()
+
+    def _add_content(self, message: mod.Message) -> None:
+        main_box = Gtk.Box(
+            spacing=12, hexpand=True, tooltip_text=_('Scroll to this message')
+        )
         main_box.get_style_context().add_class('referred-message')
         self.add(main_box)
 
@@ -52,58 +92,74 @@ class ReferredMessageWidget(Gtk.EventBox):
         main_box.add(quote_bar)
 
         content_box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL,
-            halign=Gtk.Align.START
+            orientation=Gtk.Orientation.VERTICAL, halign=Gtk.Align.START
         )
         main_box.add(content_box)
 
-        self._contact = contact
-
-        message = app.storage.archive.get_referred_message(contact, reply_to_id)
-        assert message is not None
-        self._referred_message = message
-
-        if self._contact.is_groupchat:
-            name = self._referred_message.occupant.nickname
-        else:
-            if self._referred_message.direction == ChatDirection.INCOMING:
-                name = self._contact.name
-            else:
-                name = _('You')
-
-        icon = Gtk.Image.new_from_icon_name(
-            'lucide-reply-symbolic', Gtk.IconSize.BUTTON
+        name_box = Gtk.Box(spacing=6)
+        avatar_surface = get_avatar_for_message(
+            message,
+            self._contact,
+            self.get_scale_factor(),
+            AvatarSize.MESSAGE_REPLY
         )
-        icon.get_style_context().add_class('dim-label')
+        avatar_image = Gtk.Image.new_from_surface(avatar_surface)
+        name_box.add(avatar_image)
 
-        name_label = Gtk.Label(label=name)
+        name = get_contact_name_for_message(message, self._contact)
+        name_label = Gtk.Label(label=name, valign=Gtk.Align.START)
         name_label.get_style_context().add_class('dim-label')
         name_label.get_style_context().add_class('small-label')
         name_label.get_style_context().add_class('bold')
+        name_box.add(name_label)
 
-        timestamp = self._referred_message.timestamp.astimezone()
+        reply_icon = Gtk.Image.new_from_icon_name(
+            'lucide-reply-symbolic', Gtk.IconSize.BUTTON
+        )
+        reply_icon.set_valign(Gtk.Align.CENTER)
+        reply_icon.get_style_context().add_class('dim-label')
+
+        timestamp = message.timestamp.astimezone()
         format_string = app.settings.get('time_format')
         if timestamp.date() < dt.datetime.today().date():
             format_string = app.settings.get('date_time_format')
 
-        timestamp_label = Gtk.Label(label=timestamp.strftime(format_string))
+        timestamp_label = Gtk.Label(
+            label=timestamp.strftime(format_string), valign=Gtk.Align.CENTER
+        )
         timestamp_label.get_style_context().add_class('dim-label')
         timestamp_label.get_style_context().add_class('small-label')
 
         meta_box = Gtk.Box(spacing=6)
         meta_box.get_style_context().add_class('small-label')
-        meta_box.add(icon)
-        meta_box.add(name_label)
+        meta_box.add(reply_icon)
+        meta_box.add(name_box)
         meta_box.add(timestamp_label)
         content_box.add(meta_box)
 
+        message_box = Gtk.Box(spacing=12)
         label_text = ''
-        if self._referred_message.text is not None:
-            label_text = self._referred_message.text
-            lines = self._referred_message.text.split('\n')
-            if len(lines) > 3:
-                label_text = '\n'.join(lines[:3])
-                label_text = f'{label_text} …'
+        if message.text is not None:
+            if app.preview_manager.is_previewable(message.text, message.oob):
+                scheme = urlparse(message.text).scheme
+                if scheme == 'geo':
+                    location = split_geo_uri(message.text)
+                    icon = Gio.Icon.new_for_string('mark-location')
+                    label_text = format_geo_coords(
+                        float(location.lat), float(location.lon)
+                    )
+                else:
+                    file_name = filename_from_uri(message.text)
+                    icon, file_type = guess_simple_file_type(message.text)
+                    label_text = f'{file_type} ({file_name})'
+                image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.BUTTON)
+                message_box.add(image)
+            else:
+                label_text = message.text
+                lines = message.text.split('\n')
+                if len(lines) > 3:
+                    label_text = '\n'.join(lines[:3])
+                    label_text = f'{label_text} …'
 
         message_label = Gtk.Label(
             label=label_text,
@@ -112,16 +168,16 @@ class ReferredMessageWidget(Gtk.EventBox):
             ellipsize=Pango.EllipsizeMode.END,
         )
         message_label.get_style_context().add_class('dim-label')
-        content_box.add(message_label)
 
-        self.show_all()
+        message_box.add(message_label)
+        content_box.add(message_box)
 
     def _on_button_release(
-        self,
-        _event_box: ReferredMessageWidget,
-        _event: Gdk.EventButton
+        self, _event_box: ReferredMessageWidget, _event: Gdk.EventButton
     ) -> bool:
 
+        # Widget can only be clicked once a message was found
+        assert self._referred_message is not None
         app.window.activate_action(
             'jump-to-message',
             GLib.Variant(
@@ -140,26 +196,32 @@ class ReferredMessageWidget(Gtk.EventBox):
         if window is not None:
             window.set_cursor(get_cursor('pointer'))
 
-    def get_reply_data(self) -> ReplyData:
-        if isinstance(self._contact, GroupchatContact):
-            resource_contact = self._contact.get_resource(
-                self._referred_message.occupant.nickname
-            )
-            jid = str(resource_contact.real_jid or resource_contact.jid)
-        else:
-            jid = self._contact.jid.bare
+    def get_reply_data(self) -> ReplyData | None:
+        if self._message is None:
+            return None
 
-        reply_quoted_text = quote_text(self._referred_message.text)
-        reply_to_id = self._referred_message.id
-        if self._referred_message.type == MessageType.GROUPCHAT:
-            reply_to_id = self._referred_message.stanza_id
+        # We only show the reply menu if there is text
+        assert self._message.text
 
-        fallback_end = len(reply_quoted_text) - len(self._referred_message.text)
+        jid = str(self._message.remote.jid)
+        reply_to_id = self._message.id
+
+        if self._message.type == MessageType.GROUPCHAT:
+            occupant = self._message.occupant
+            if occupant is not None and occupant.real_remote is not None:
+                jid = str(occupant.real_remote.jid)
+            else:
+                jid = f'{self._message.remote.jid}/{self._message.resource}'
+            reply_to_id = self._message.stanza_id
+
+        if reply_to_id is None:
+            return None
+
         return ReplyData(
             to=jid,
             id=reply_to_id,
             fallback_start=0,
-            fallback_end=fallback_end,
+            fallback_end=len(quote_text(self._message.text)),
         )
 
 
@@ -177,16 +239,11 @@ class ReplyBox(Gtk.Box):
 
         self._ref_widget = None
 
-    def enable_reply_mode(
-        self,
-        contact: types.ChatContactT,
-        reply_to_id: str
-    ) -> None:
-
+    def enable_reply_mode(self, contact: ChatContactT, pk: int) -> None:
         if self._ref_widget is not None:
             self.disable_reply_mode()
 
-        self._ref_widget = ReferredMessageWidget(contact, reply_to_id)
+        self._ref_widget = ReferredMessageWidget(contact, pk, reply_mode=True)
         self.add(self._ref_widget)
         self.set_no_show_all(False)
         self.show_all()
@@ -198,6 +255,10 @@ class ReplyBox(Gtk.Box):
 
         self.set_no_show_all(True)
         self.hide()
+
+    @property
+    def is_in_reply_mode(self) -> bool:
+        return self._ref_widget is not None
 
     def get_reply_data(self) -> ReplyData | None:
         if self._ref_widget is None:
