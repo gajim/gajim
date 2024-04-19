@@ -269,6 +269,8 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.get_buffer().insert_at_cursor(text)
 
     def insert_newline(self) -> None:
+        # Reset IMContext to clear preedit state
+        self.reset_im_context()
         buf = self.get_buffer()
         buf.insert_at_cursor('\n')
         mark = buf.get_insert()

@@ -520,6 +520,9 @@ class MessageActionsBox(Gtk.Grid):
 
             assert self._contact is not None
 
+            # Reset IMContext to clear preedit state
+            self.msg_textview.reset_im_context()
+
             message = self.msg_textview.get_text()
 
             try:
