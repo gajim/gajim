@@ -215,9 +215,7 @@ deploy-debian-nightly:
   rules:
     - if: '$DEBIAN_BUILD'
     - if: '$NIGHTLY_BUILD'
-  allow_failure:
-    exit_codes:
-      - 100
+  allow_failure: true
   script:
     - release-helper nightly-check
     - >
