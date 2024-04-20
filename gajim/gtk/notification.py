@@ -284,20 +284,23 @@ class Linux(NotificationBackend):
 
     def __init__(self):
         NotificationBackend.__init__(self)
-        self._dbus_available: bool = False
+        self._notifications_supported: bool = False
         self._caps: list[str] = []
         self._detect_dbus_caps()
         log.info('Detected notification capabilities: %s', self._caps)
 
     def _detect_dbus_caps(self) -> None:
-        if app.desktop_env == 'gnome':
+        if app.is_flatpak() or app.desktop_env == 'gnome':
             # Gnome Desktop does not use org.freedesktop.Notifications.
             # It has its own API at org.gtk.Notifications, which is not an
             # implementation of the freedesktop spec. There is no documentation
             # on what it currently supports, we can assume at least what the
             # GLib.Notification API offers (icons, actions).
+            #
+            # If the app is run as flatpak the portal API is used
+            # https://flatpak.github.io/xdg-desktop-portal/docs
             self._caps = ['actions']
-            self._dbus_available = True
+            self._notifications_supported = True
             return
 
         def on_proxy_ready(_source: Gio.DBusProxy,
@@ -308,7 +311,7 @@ class Linux(NotificationBackend):
             except GLib.Error as error:
                 log.warning('Notifications D-Bus not available: %s', error)
             else:
-                self._dbus_available = True
+                self._notifications_supported = True
                 log.info('Notifications D-Bus connected')
 
         log.info('Connecting to Notifications D-Bus')
@@ -322,7 +325,7 @@ class Linux(NotificationBackend):
                                   on_proxy_ready)
 
     def _send(self, event: events.Notification) -> None:
-        if not self._dbus_available:
+        if not self._notifications_supported:
             return
 
         notification = Gio.Notification()
@@ -393,9 +396,6 @@ class Linux(NotificationBackend):
             if app.is_flatpak():
                 return _get_bytes_icon(event.account, event.jid)
 
-            if app.desktop_env == 'gnome':
-                return _get_pixbuf_icon(event.account, event.jid)
-
             return _get_file_icon(event.account, event.jid)
 
         if event.icon_name is not None:
@@ -406,7 +406,7 @@ class Linux(NotificationBackend):
         return Gio.ThemedIcon.new(icon_name)
 
     def _withdraw(self, details: list[Any]) -> None:
-        if not self._dbus_available:
+        if not self._notifications_supported:
             return
         notification_id = self._make_id(details)
 
