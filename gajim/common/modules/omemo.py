@@ -393,7 +393,7 @@ class OMEMO(BaseModule):
         self._debug_print_stanza(stanza)
         properties.encrypted = EncryptionData({
             'name': 'OMEMO',
-            'fingerprint': fingerprint,
+            'fingerprint': fingerprint or 'Unknown',
             'trust': GajimTrust[trust.name]})
 
     def _process_muc_message(self,
