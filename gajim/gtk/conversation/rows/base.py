@@ -4,13 +4,12 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-
 from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.storage.archive.const import ChatDirection
+from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
 
 class BaseRow(Gtk.ListBoxRow):
@@ -20,7 +19,7 @@ class BaseRow(Gtk.ListBoxRow):
         self._client = app.get_client(account)
 
         self.type: str = ''
-        self.timestamp = datetime.fromtimestamp(0).astimezone()
+        self.timestamp = FIRST_LOCAL_DATETIME
         self.kind: str = ''
         self.direction = ChatDirection.INCOMING
         self.name: str = ''

@@ -11,6 +11,7 @@ from gi.repository import Gtk
 
 from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
+from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
 from gajim.gtk.conversation.rows.base import BaseRow
 
@@ -20,8 +21,8 @@ class ReadMarkerRow(BaseRow):
         BaseRow.__init__(self, contact.account, widget='label')
         self.set_activatable(False)
         self.type = 'read_marker'
-        self.timestamp = datetime.fromtimestamp(0).astimezone()
-        self._last_incoming_timestamp = datetime.fromtimestamp(0).astimezone()
+        self.timestamp = FIRST_LOCAL_DATETIME
+        self._last_incoming_timestamp = FIRST_LOCAL_DATETIME
 
         contact.connect('nickname-update', self._on_nickname_update)
 

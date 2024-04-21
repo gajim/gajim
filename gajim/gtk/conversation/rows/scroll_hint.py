@@ -2,11 +2,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from datetime import datetime
-
 from gi.repository import Gtk
 
 from gajim.common.i18n import _
+from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
 from gajim.gtk.conversation.rows.base import BaseRow
 
@@ -18,7 +17,7 @@ class ScrollHintRow(BaseRow):
         self.set_activatable(False)
 
         self.type = 'system'
-        self.timestamp = datetime.fromtimestamp(0).astimezone()
+        self.timestamp = FIRST_LOCAL_DATETIME
 
         self.get_style_context().add_class('conversation-system-row')
 

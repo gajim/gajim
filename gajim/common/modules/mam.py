@@ -36,6 +36,7 @@ from gajim.common.events import RawMamMessageReceived
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import as_task
 from gajim.common.storage.archive import models as mod
+from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
 
 class MAM(BaseModule):
@@ -262,7 +263,7 @@ class MAM(BaseModule):
             last = archive.to_stanza_ts
             if last is None:
                 self._log.info('No last muc timestamp found: %s', jid)
-                last = datetime.fromtimestamp(0, timezone.utc)
+                last = FIRST_UTC_DATETIME
 
             if now - last > timedelta(days=threshold):
                 # To much time has elapsed since last join, apply threshold

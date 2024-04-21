@@ -77,7 +77,7 @@ class AvatarSize(IntEnum):
 
 class ArchiveState:
     NEVER = None
-    ALL = datetime.fromtimestamp(0, timezone.utc)
+    ALL = datetime(1970, 1, 1, tzinfo=timezone.utc)
 
 
 @unique

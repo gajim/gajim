@@ -49,6 +49,7 @@ from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
+from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
 CURRENT_USER_VERSION = 8
 
@@ -539,7 +540,7 @@ class MessageArchiveStorage(AlchemyStorage):
             before = datetime.now(timezone.utc)
 
         if after is None:
-            after = datetime.fromtimestamp(0, timezone.utc)
+            after = FIRST_UTC_DATETIME
 
         fk_account_pk = None
         if account is not None:
