@@ -127,9 +127,6 @@ class ChatCommands(Observable):
         self._commands[command_name] = (used_in, usage)
 
     def parse(self, type_: str, arg_string: str) -> bool:
-        if arg_string.startswith('/me '):
-            return False
-
         if regex.COMMAND_REGEX.match(arg_string) is None:
             return False
 
@@ -155,6 +152,9 @@ class ChatCommands(Observable):
         except CommandError as error:
             self.notify('command-error', str(error))
             raise CommandFailed
+
+        if result == 'silent':
+            return True
 
         if result is None:
             result = _('Command executed successfully')
@@ -198,6 +198,10 @@ class ChatCommands(Observable):
         parser.add_argument('role',
                             choices=['moderator', 'participant', 'visitor'])
         self.add_command('role', ['groupchat'], parser)
+
+        parser = self.make_parser('me', self._me_command)
+        parser.add_argument('message', default=None, nargs='*')
+        self.add_command('me', ['chat', 'groupchat', 'pm'], parser)
 
         app.plugin_manager.extension_point('add_commands', self)
 
@@ -303,3 +307,7 @@ class ChatCommands(Observable):
 
     def _role_command(self, args: Any) -> None:
         self._change_role(args.who, args.role, None)
+
+    def _me_command(self, _args: Any) -> str:
+        app.window.activate_action('send-message', None)
+        return 'silent'
