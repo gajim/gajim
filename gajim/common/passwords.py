@@ -122,14 +122,18 @@ class SecretPasswordStorage:
 
         account_jid = app.get_jid_from_account(account_name)
 
+        keyring_errors = (
+            keyring.errors.PasswordDeleteError,
+            keyring.errors.InitError
+        )
         try:
             _interface.backend.delete_password('gajim', account_name)
-        except keyring.errors.PasswordDeleteError:
+        except keyring_errors:
             pass
 
         try:
             return _interface.backend.delete_password('gajim', account_jid)
-        except keyring.errors.PasswordDeleteError as error:
+        except keyring_errors as error:
             log.warning('Removing password failed: %s', error)
         except Exception:
             log.exception('Removing password failed')
