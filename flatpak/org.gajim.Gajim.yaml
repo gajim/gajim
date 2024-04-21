@@ -317,6 +317,15 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.29-py3-none-any.whl
         sha256: dc4ee2d4ee43251905f88637d5281a8d52e916a021384ec10758826f5cbae305
 
+  - name: python3-emoji
+    buildsystem: simple
+    build-commands:
+      - pip3 install emoji-2.11.0-py2.py3-none-any.whl
+    sources:
+      - type: file
+        url: https://files.pythonhosted.org/packages/55/c1/1d97d960831e23a3dd8608b0b489eb4866144445475277a443efb0379609/emoji-2.11.0-py2.py3-none-any.whl
+        sha256: 63fc9107f06c6c2e48e5078ce9575cef98518f5ac09474f6148a43e989989582
+
   # gssapi dependency
   - name: python3-decorator
     buildsystem: simple

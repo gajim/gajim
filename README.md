@@ -7,6 +7,7 @@
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [cryptography](https://pypi.org/project/cryptography/) (>=3.4.8)
 - [css-parser](https://pypi.org/project/css-parser/)
+- [emoji](https://pypi.org/project/emoji/) (>=2.6.0)
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.66.0)
 - [Gtk3](https://gitlab.gnome.org/GNOME/gtk) (>=3.24.30)
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)

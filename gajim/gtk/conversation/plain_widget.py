@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 
+import emoji
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -103,6 +104,15 @@ class MessageLabel(Gtk.Label):
             return
 
         self.set_attributes(make_pango_attributes(block))
+
+        stripped = text.strip()
+        if emoji.purely_emoji(stripped):
+            emoji_count = emoji.emoji_count(stripped)
+            if emoji_count == 1:
+                classname = 'gajim-single-emoji-msg'
+            else:
+                classname = 'gajim-emoji-msg'
+            self.get_style_context().add_class(classname)
 
     def add_action_phrase(self, text: str, nickname: str) -> None:
         text = text.replace('/me', f'* {nickname}', 1)

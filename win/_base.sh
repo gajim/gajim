@@ -108,6 +108,7 @@ python-gnupg
 qrcode
 css_parser
 sentry-sdk
+emoji
 "
 
     build_pip install precis-i18n

@@ -72,3 +72,9 @@
 .gajim-status-connecting {
     color: rgb(77, 166, 255);
 }
+.gajim-single-emoji-msg {
+    font-size: 36pt
+}
+.gajim-emoji-msg {
+    font-size: 24pt
+}

@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "cryptography>=3.4.8",
   "css-parser",
+  "emoji>=2.6.0",
   "keyring",
   "nbxmpp>=4.5.3,<5.0.0",
   "omemo-dr>=1.0.0,<2.0.0",
@@ -183,7 +184,7 @@ select = [
     # "DJ",    # flake8-django
     # "DTZ",   # flake8-datetimez
     "E",     # Error
-    # "EM",    # flake8-errmsg 
+    # "EM",    # flake8-errmsg
     # "ERA",   # eradicate
     "EXE",   # flake8-executable
     "F",     # Pyflakes
