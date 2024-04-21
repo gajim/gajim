@@ -77,6 +77,7 @@ from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.start_chat import StartChatDialog
@@ -654,8 +655,8 @@ class GajimApplication(Gtk.Application, CoreApplication):
             try:
                 # Object will add itself to the window dict
                 ServiceDiscoveryWindow(account, address_entry=True)
-            except GajimGeneralException:
-                pass
+            except (GajimGeneralException, RuntimeError) as e:
+                ErrorDialog(_('Error'), str(e))
 
     @staticmethod
     def _on_create_groupchat_action(_action: Gio.SimpleAction,
