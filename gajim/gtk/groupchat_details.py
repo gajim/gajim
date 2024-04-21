@@ -9,13 +9,12 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common import types
 from gajim.common.const import AvatarSize
-from gajim.common.const import SimpleClientState
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
@@ -43,8 +42,6 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self.account = contact.account
         self._client = app.get_client(contact.account)
-        self._client.connect_signal(
-            'state-changed', self._on_client_state_changed)
 
         self._contact = contact
         self._contact.connect('avatar-update', self._on_avatar_update)
@@ -67,15 +64,12 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._add_groupchat_encryption()
 
         if self._client.state.is_available and self._contact.is_joined:
-            self._ui.edit_name_button.set_sensitive(True)
-            self._ui.edit_name_button.set_tooltip_text(_('Edit Name…'))
             self._add_groupchat_manage()
             self._add_affiliations()
             self._add_outcasts()
             self._add_configuration()
 
         self._load_avatar()
-        self._ui.name_entry.set_text(contact.name)
 
         if page is not None:
             self._switcher.set_row(page)
@@ -85,22 +79,11 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
         self.show_all()
 
-    def _on_client_state_changed(self,
-                                 _client: types.Client,
-                                 _signal_name: str,
-                                 state: SimpleClientState
-                                 ) -> None:
-
-        self._ui.edit_name_button.set_sensitive(state.is_connected)
-        self._ui.edit_name_button.set_tooltip_text(
-            _('Not connected') if not state.is_connected else _('Edit Name…'))
-
     def _on_disco_info_update(self,
                               _contact: GroupchatContact,
                               _signal_name: str
                               ) -> None:
 
-        self._ui.name_entry.set_text(self._contact.name)
         self._groupchat_info.set_info_from_contact(self._contact)
 
     def _on_stack_child_changed(self,
@@ -110,19 +93,9 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         name = self._ui.main_stack.get_visible_child_name()
         self._ui.header_revealer.set_reveal_child(name != 'information')
 
-    def _on_edit_name_toggled(self, widget: Gtk.ToggleButton) -> None:
-        active = widget.get_active()
-        self._ui.name_entry.set_sensitive(active)
-        if active:
-            self._ui.edit_name_button_image.set_from_icon_name(
-                'document-save-symbolic', Gtk.IconSize.BUTTON)
-            self._ui.name_entry.grab_focus()
-        else:
-            self._ui.edit_name_button_image.set_from_icon_name(
-                'document-edit-symbolic', Gtk.IconSize.BUTTON)
-            name = self._ui.name_entry.get_text()
-            self._client.get_module('Bookmarks').modify(
-                self._contact.jid, name=name)
+    def _on_edit_name_clicked(self, widget: Gtk.Button) -> None:
+        self._switcher.set_row('information')
+        self._groupchat_info.enable_edit_mode()
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
@@ -145,7 +118,8 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _add_groupchat_info(self) -> None:
         self._groupchat_info = GroupChatInfoScrolled(
-            self._contact.account, width=600)
+            self._contact.account, width=600, edit_mode=True)
+        self._groupchat_info.connect('name-updated', self._on_contact_name_updated)
         self._groupchat_info.set_halign(Gtk.Align.FILL)
         self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
@@ -204,6 +178,9 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         config = GroupchatConfig(self._client, self._contact)
         self._ui.configuration_box.add(config)
         self._switcher.set_row_visible('config', True)
+
+    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+        self._ui.contact_name_header_label.set_text(name)
 
     def _on_key_press(self,
                       _widget: GroupchatDetails,

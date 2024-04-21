@@ -202,7 +202,7 @@
                 <property name="can-focus">False</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkImage" id="header_image">
+                  <object class="GtkImage" id="avatar_image_header">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="icon-name">missing-image</property>
@@ -215,31 +215,33 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkEntry" id="name_entry">
-                    <property name="name">ContactNameEntry</property>
+                  <object class="GtkLabel" id="contact_name_header_label">
                     <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">True</property>
-                    <property name="valign">center</property>
-                    <property name="activates-default">True</property>
-                    <signal name="activate" handler="_on_name_entry_activate" swapped="no"/>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="ellipsize">end</property>
+                    <property name="single-line-mode">True</property>
+                    <property name="max-width-chars">20</property>
+                    <style>
+                      <class name="large-header"/>
+                    </style>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleButton" id="edit_name_button">
+                  <object class="GtkButton" id="edit_contact_name_header_button">
+                    <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
-                    <property name="no-show-all">True</property>
                     <property name="tooltip-text" translatable="yes">Edit Name…</property>
                     <property name="valign">center</property>
-                    <signal name="toggled" handler="_on_edit_name_toggled" swapped="no"/>
+                    <signal name="clicked" handler="_on_edit_contact_name_header_clicked" swapped="no"/>
                     <child>
-                      <object class="GtkImage" id="edit_name_button_image">
+                      <object class="GtkImage">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="icon-name">document-edit-symbolic</property>
@@ -300,17 +302,13 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel" id="contact_name_label">
+                          <object class="GtkBox" id="contact_name_controls_box">
                             <property name="visible">True</property>
-                            <property name="can-focus">True</property>
+                            <property name="can-focus">False</property>
                             <property name="halign">center</property>
-                            <property name="selectable">True</property>
-                            <property name="ellipsize">end</property>
-                            <property name="single-line-mode">True</property>
-                            <property name="max-width-chars">20</property>
-                            <style>
-                              <class name="large-header"/>
-                            </style>
+                            <child>
+                              <placeholder/>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>

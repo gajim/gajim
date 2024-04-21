@@ -260,15 +260,14 @@ class ContactInfoBuilder(Builder):
     groups_model: Gtk.ListStore
     main_grid: Gtk.Grid
     header_revealer: Gtk.Revealer
-    header_image: Gtk.Image
-    name_entry: Gtk.Entry
-    edit_name_button: Gtk.ToggleButton
-    edit_name_button_image: Gtk.Image
+    avatar_image_header: Gtk.Image
+    contact_name_header_label: Gtk.Label
+    edit_contact_name_header_button: Gtk.Button
     main_stack: Gtk.Stack
     vcard_scrolled: Gtk.ScrolledWindow
     vcard_box: Gtk.Box
     avatar_image: Gtk.Image
-    contact_name_label: Gtk.Label
+    contact_name_controls_box: Gtk.Box
     contact_jid_label: Gtk.Label
     group_chat_grid: Gtk.Grid
     role_label: Gtk.Label
@@ -461,9 +460,8 @@ class GroupchatDetailsBuilder(Builder):
     main_grid: Gtk.Grid
     header_revealer: Gtk.Revealer
     header_image: Gtk.Image
-    name_entry: Gtk.Entry
-    edit_name_button: Gtk.ToggleButton
-    edit_name_button_image: Gtk.Image
+    edit_name_button: Gtk.Button
+    contact_name_header_label: Gtk.Label
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box
@@ -492,10 +490,10 @@ class GroupchatInfoScrolledBuilder(Builder):
     lang_image: Gtk.Image
     contact_box: Gtk.Box
     subject: Gtk.Label
-    name: Gtk.Label
     avatar_image: Gtk.Image
     address: Gtk.Label
     address_copy_button: Gtk.Button
+    name_box: Gtk.Box
 
 
 class GroupchatInviterBuilder(Builder):

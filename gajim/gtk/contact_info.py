@@ -37,6 +37,7 @@ from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.contact_settings import ContactSettings
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
@@ -92,11 +93,16 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._ui.main_stack.connect('notify::visible-child-name',
                                     self._on_stack_child_changed)
 
-        self._ui.name_entry.set_text(contact.name)
-        if contact.is_in_roster:
-            self._ui.edit_name_button.show()
-
         self._load_avatar()
+
+        self._contact_name_widget = ContactNameWidget(
+            contact=self.contact,
+            edit_mode=True
+        )
+        self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
+        self._ui.contact_name_controls_box.add(self._contact_name_widget)
+
+        self._ui.contact_name_header_label.set_text(self.contact.name)
 
         self._fill_information_page(self.contact)
 
@@ -140,10 +146,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
                                  _signal_name: str,
                                  state: SimpleClientState
                                  ) -> None:
-
-        self._ui.edit_name_button.set_sensitive(state.is_connected)
-        self._ui.edit_name_button.set_tooltip_text(
-            _('Not connected') if not state.is_connected else _('Edit Name…'))
         self._ui.subscription_listbox.set_sensitive(state.is_connected)
 
         if state.is_connected:
@@ -174,6 +176,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self.unregister_events()
         app.check_finalize(self)
 
+    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+        self._ui.contact_name_header_label.set_text(name)
+
     def _fill_information_page(self, contact: ContactT) -> None:
         self._vcard_grid = VCardGrid(self.account)
         self._ui.vcard_box.add(self._vcard_grid)
@@ -184,9 +189,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
         jid = str(contact.get_address())
 
-        self._ui.contact_name_label.set_text(contact.name)
-        self._ui.edit_name_button.set_sensitive(
-            self._client.state.is_available)
 
         self._ui.contact_jid_label.set_text(jid)
         self._ui.contact_jid_label.set_tooltip_text(jid)
@@ -315,7 +317,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         assert not isinstance(surface_1, GdkPixbuf.Pixbuf)
         assert not isinstance(surface_2, GdkPixbuf.Pixbuf)
         self._ui.avatar_image.set_from_surface(surface_1)
-        self._ui.header_image.set_from_surface(surface_2)
+        self._ui.avatar_image_header.set_from_surface(surface_2)
 
     def _set_os_info(self, task: Task) -> None:
         self._tasks.remove(task)
@@ -354,27 +356,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
                 jid=self.contact.jid, data=new_annotation)
             self._client.get_module('Annotations').set_note(new_note)
 
-    def _on_edit_name_toggled(self, widget: Gtk.ToggleButton) -> None:
-        active = widget.get_active()
-        self._ui.name_entry.set_sensitive(active)
-        if active:
-            self._ui.name_entry.grab_focus()
-            self._ui.edit_name_button_image.set_from_icon_name(
-                'document-save-symbolic', Gtk.IconSize.BUTTON)
-        else:
-            self._ui.edit_name_button_image.set_from_icon_name(
-                'document-edit-symbolic', Gtk.IconSize.BUTTON)
-            name = self._ui.name_entry.get_text()
-            if name == self.contact.name:
-                return
-
-            assert isinstance(self.contact, BareContact)
-            self._client.get_module('Roster').set_item(
-                self.contact.jid, name, self.contact.groups)
-            self._ui.contact_name_label.set_text(name)
-
-    def _on_name_entry_activate(self, _widget: Gtk.Entry) -> None:
-        self._ui.edit_name_button.set_active(False)
+    def _on_edit_contact_name_header_clicked(self, _widget: Gtk.Button) -> None:
+        self._switcher.set_row('information')
+        self._contact_name_widget.enable_edit_mode()
 
     def _on_from_subscription_switch_toggled(self,
                                              switch: Gtk.Switch,

@@ -962,7 +962,7 @@ popover.combo scrollbar.vertical {
     font-weight: bold;
     border: none;
     padding: 0px 0px 0px 0px;
-    background-color: @insensitive_bg_color;
+    background-color: transparent;
     color: @theme_fg_color;
 }
 

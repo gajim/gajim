@@ -8,6 +8,7 @@ import logging
 import time
 
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
@@ -25,6 +26,7 @@ from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.util import make_href_markup
 
 log = logging.getLogger('gajim.gtk.groupchat_info')
@@ -94,10 +96,16 @@ MUC_FEATURES = {
 
 
 class GroupChatInfoScrolled(Gtk.ScrolledWindow):
+
+    __gsignals__ = {
+        'name-updated': (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
     def __init__(self,
                  account: str | None = None,
                  width: int = 300,
-                 minimal: bool = False
+                 minimal: bool = False,
+                 edit_mode: bool = False
                  ) -> None:
         Gtk.ScrolledWindow.__init__(self)
         self.set_size_request(width, -1)
@@ -122,6 +130,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui = get_builder('groupchat_info_scrolled.ui')
         self.add(self._ui.info_grid)
         self._ui.connect_signals(self)
+
+        self._contact_name_widget = ContactNameWidget(edit_mode=edit_mode)
+        self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
+
+        self._ui.name_box.add(self._contact_name_widget)
+
         self.show_all()
 
     def get_account(self) -> str | None:
@@ -156,6 +170,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     def set_info_from_contact(self, contact: GroupchatContact) -> None:
         self._contact = contact
+
+        self._contact_name_widget.set_contact(contact)
+
         disco_info = contact.get_disco()
         if disco_info is not None:
             self.set_from_disco_info(disco_info)
@@ -180,8 +197,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                 self.get_scale_factor())
             self._ui.avatar_image.set_from_surface(surface)
 
-        self._ui.name.set_text(name)
-        self._ui.name.set_visible(True)
+        self._contact_name_widget.update_displayed_name(name or '')
 
         # Set description
         has_desc = bool(info.muc_description)
@@ -235,6 +251,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.lang_image.set_visible(has_lang)
 
         self._add_features(info.features)
+
+    def enable_edit_mode(self) -> None:
+        self._contact_name_widget.enable_edit_mode()
+
+    def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
+        self.emit('name-updated', name)
 
     def _add_features(self, features: list[str]) -> None:
         grid = self._ui.info_grid

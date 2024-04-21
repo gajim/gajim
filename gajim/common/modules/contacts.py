@@ -513,6 +513,22 @@ class BareContact(CommonContact):
         assert self._jid.localpart is not None
         return self._jid.localpart
 
+    @property
+    def original_name(self) -> str:
+        if self._jid.is_domain:
+            assert self._jid.domain is not None
+            original_name = self._jid.domain
+        else:
+            assert self._jid.localpart is not None
+            original_name = self._jid.localpart
+
+        nickname = app.storage.cache.get_contact(
+            self._account, self._jid, 'nickname')
+        if nickname is not None:
+            original_name = nickname
+
+        return original_name
+
     def get_tune(self) -> TuneData | None:
         return self.get_module('UserTune').get_contact_tune(self._jid)
 
@@ -801,6 +817,18 @@ class GroupchatContact(CommonContact):
     def name(self) -> str:
         client = app.get_client(self._account)
         return get_groupchat_name(client, self._jid)
+
+    @property
+    def original_name(self) -> str:
+        assert self._jid.localpart is not None
+        original_name = self._jid.localpart
+
+        disco_info = app.storage.cache.get_last_disco_info(self._jid)
+        if disco_info is not None:
+            if disco_info.muc_name:
+                original_name = disco_info.muc_name
+
+        return original_name
 
     @property
     def avatar_sha(self) -> str | None:
