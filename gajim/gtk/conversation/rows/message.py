@@ -348,6 +348,8 @@ class MessageRow(BaseRow):
             return False
         if not self.is_same_state(message):
             return False
+        if message.direction != self.direction:
+            return False
         if self._original_message.corrections:
             return False
         if not self.is_same_sender(message):
