@@ -35,7 +35,6 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
-from gajim.common.util.text import quote_text
 from gajim.common.util.text import remove_fallback_text
 
 
@@ -400,8 +399,8 @@ class Message(BaseModule):
         own_jid = self._con.get_own_jid()
 
         message_text = message.text
-        if message.reply and message.text is not None:
-            message_text = f'{quote_text(message.text)}{message.text}'
+        if message.fallback_text is not None:
+            message_text = f'{message.fallback_text}{message.text}'
 
         stanza = nbxmpp.Message(to=message.jid,
                                 body=message_text,
@@ -413,13 +412,13 @@ class Message(BaseModule):
                           namespace=Namespace.CORRECT)
 
         # XEP-0461
-        if message.reply is not None:
-            assert message.reply.fallback_start is not None
-            assert message.reply.fallback_end is not None
+        if message.reply_data is not None:
+            assert message.reply_data.fallback_start is not None
+            assert message.reply_data.fallback_end is not None
             stanza.setReply(str(message.jid),
-                            message.reply.id,
-                            message.reply.fallback_start,
-                            message.reply.fallback_end)
+                            message.reply_data.id,
+                            message.reply_data.fallback_start,
+                            message.reply_data.fallback_end)
 
         # XEP-0359
         message.message_id = generate_id()
@@ -548,10 +547,10 @@ class Message(BaseModule):
                 )
 
         reply = None
-        if message.reply is not None:
+        if message.reply_data is not None:
             reply = mod.Reply(
-                id=message.reply.id,
-                to=JID.from_string(message.reply.to)
+                id=message.reply_data.id,
+                to=JID.from_string(message.reply_data.to)
             )
 
         oob_data: list[mod.OOB] = []

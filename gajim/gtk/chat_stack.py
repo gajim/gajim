@@ -841,10 +841,11 @@ class ChatStack(Gtk.Stack, EventHelper):
             if correct_id is None:
                 return
 
-        reply = None
-        message_reply = self._message_action_box.get_reply_data()
+        reply_data = None
+        fallback_text = None
+        message_reply = self._message_action_box.get_message_reply()
         if message_reply is not None:
-            reply, message = message_reply
+            reply_data, fallback_text = message_reply
 
         chatstate = client.get_module('Chatstate').get_active_chatstate(
             contact)
@@ -861,7 +862,8 @@ class ChatStack(Gtk.Stack, EventHelper):
                                    label=label,
                                    control=self._chat_control,
                                    correct_id=correct_id,
-                                   reply=reply)
+                                   reply_data=reply_data,
+                                   fallback_text=fallback_text)
 
         client.send_message(message_)
 

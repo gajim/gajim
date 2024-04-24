@@ -58,11 +58,15 @@ class ReferredMessageWidget(Gtk.EventBox):
             if self._message.type == MessageType.GROUPCHAT:
                 self._referred_message = \
                     app.storage.archive.get_message_with_stanza_id(
+                        self._contact.account,
+                        self._contact.jid,
                         self._message.reply.id
                 )
             else:
                 self._referred_message = \
                     app.storage.archive.get_message_with_id(
+                        self._contact.account,
+                        self._contact.jid,
                         self._message.reply.id
                 )
 
@@ -196,7 +200,7 @@ class ReferredMessageWidget(Gtk.EventBox):
         if window is not None:
             window.set_cursor(get_cursor('pointer'))
 
-    def get_reply_data(self) -> ReplyData | None:
+    def get_message_reply(self) -> tuple[ReplyData, str] | None:
         if self._message is None:
             return None
 
@@ -217,12 +221,13 @@ class ReferredMessageWidget(Gtk.EventBox):
         if reply_to_id is None:
             return None
 
+        quoted_text = quote_text(self._message.text)
         return ReplyData(
             to=jid,
             id=reply_to_id,
             fallback_start=0,
-            fallback_end=len(quote_text(self._message.text)),
-        )
+            fallback_end=len(quoted_text),
+        ), quoted_text
 
 
 class ReplyBox(Gtk.Box):
@@ -260,8 +265,8 @@ class ReplyBox(Gtk.Box):
     def is_in_reply_mode(self) -> bool:
         return self._ref_widget is not None
 
-    def get_reply_data(self) -> ReplyData | None:
+    def get_message_reply(self) -> tuple[ReplyData, str] | None:
         if self._ref_widget is None:
             return None
 
-        return self._ref_widget.get_reply_data()
+        return self._ref_widget.get_message_reply()

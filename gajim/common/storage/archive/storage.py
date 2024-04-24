@@ -311,20 +311,50 @@ class MessageArchiveStorage(AlchemyStorage):
     def get_message_with_id(
         self,
         session: Session,
+        account: str,
+        jid: JID,
         message_id: str
     ) -> Message | None:
-        stmt = select(Message).where(Message.id == message_id)
-        return session.scalar(stmt)
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = select(Message).where(
+            Message.id == message_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+        )
+
+        result = session.scalars(stmt).all()
+        if len(result) > 1:
+            self._log.warning('Found >1 message with message id %s', message_id)
+            return None
+        return result[0]
 
     @with_session
     @timeit
     def get_message_with_stanza_id(
         self,
         session: Session,
+        account: str,
+        jid: JID,
         stanza_id: str
     ) -> Message | None:
-        stmt = select(Message).where(Message.stanza_id == stanza_id)
-        return session.scalar(stmt)
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = select(Message).where(
+            Message.stanza_id == stanza_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+        )
+
+        result = session.scalars(stmt).all()
+        if len(result) > 1:
+            self._log.warning('Found >1 message with stanza id %s', stanza_id)
+            return None
+        return result[0]
 
     @with_session
     @timeit

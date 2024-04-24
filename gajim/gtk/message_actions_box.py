@@ -572,12 +572,12 @@ class MessageActionsBox(Gtk.Grid):
     def disable_reply_mode(self, *args: Any) -> None:
         self._reply_box.disable_reply_mode()
 
-    def get_reply_data(self) -> tuple[ReplyData, str] | None:
-        reply_data = self._reply_box.get_reply_data()
-        if reply_data is None:
+    def get_message_reply(self) -> tuple[ReplyData, str] | None:
+        message_reply = self._reply_box.get_message_reply()
+        if message_reply is None:
             return None
 
-        return reply_data, self.msg_textview.get_text()
+        return message_reply
 
     def _on_paste_clipboard(self,
                             texview: MessageInputTextView
