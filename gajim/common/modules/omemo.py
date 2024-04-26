@@ -83,6 +83,7 @@ ALLOWED_TAGS = [
     ('replace', Namespace.CORRECT),
     ('thread', None),
     ('reply', Namespace.REPLY),
+    ('fallback', Namespace.FALLBACK),
     ('origin-id', Namespace.SID),
 ]
 
