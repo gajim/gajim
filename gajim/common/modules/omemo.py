@@ -266,14 +266,14 @@ class OMEMO(BaseModule):
         return room_jid in self._omemo_groupchats
 
     def encrypt_message(self, event: OutgoingMessage) -> bool:
-        if not event.text:
+        if not event.has_text():
             return False
 
         client = app.get_client(self._account)
         contact = client.get_module('Contacts').get_contact(event.jid)
 
         omemo_message = self.backend.encrypt(str(event.jid),
-                                             event.text,
+                                             event.get_text(),
                                              groupchat=contact.is_groupchat)
         if omemo_message is None:
             raise Exception('Encryption error')

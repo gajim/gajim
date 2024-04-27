@@ -18,7 +18,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
-from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common.client import Client
@@ -29,6 +28,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.builder import get_builder
@@ -572,7 +572,7 @@ class MessageActionsBox(Gtk.Grid):
     def disable_reply_mode(self, *args: Any) -> None:
         self._reply_box.disable_reply_mode()
 
-    def get_message_reply(self) -> tuple[ReplyData, str] | None:
+    def get_message_reply(self) -> ReplyData | None:
         message_reply = self._reply_box.get_message_reply()
         if message_reply is None:
             return None

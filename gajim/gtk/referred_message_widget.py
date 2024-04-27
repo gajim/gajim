@@ -15,7 +15,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-from nbxmpp.structs import ReplyData
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -26,6 +25,7 @@ from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 from gajim.common.util.text import quote_text
 
@@ -200,22 +200,19 @@ class ReferredMessageWidget(Gtk.EventBox):
         if window is not None:
             window.set_cursor(get_cursor('pointer'))
 
-    def get_message_reply(self) -> tuple[ReplyData, str] | None:
+    def get_message_reply(self) -> ReplyData | None:
         if self._message is None:
             return None
 
         # We only show the reply menu if there is text
         assert self._message.text
 
-        jid = str(self._message.remote.jid)
+        jid = self._message.remote.jid
         reply_to_id = self._message.id
 
         if self._message.type == MessageType.GROUPCHAT:
-            occupant = self._message.occupant
-            if occupant is not None and occupant.real_remote is not None:
-                jid = str(occupant.real_remote.jid)
-            else:
-                jid = f'{self._message.remote.jid}/{self._message.resource}'
+            jid = self._message.remote.jid
+            jid.new_with(resource=self._message.resource)
             reply_to_id = self._message.stanza_id
 
         if reply_to_id is None:
@@ -227,7 +224,8 @@ class ReferredMessageWidget(Gtk.EventBox):
             id=reply_to_id,
             fallback_start=0,
             fallback_end=len(quoted_text),
-        ), quoted_text
+            fallback_text=quoted_text
+        )
 
 
 class ReplyBox(Gtk.Box):
@@ -265,7 +263,7 @@ class ReplyBox(Gtk.Box):
     def is_in_reply_mode(self) -> bool:
         return self._ref_widget is not None
 
-    def get_message_reply(self) -> tuple[ReplyData, str] | None:
+    def get_message_reply(self) -> ReplyData | None:
         if self._ref_widget is None:
             return None
 

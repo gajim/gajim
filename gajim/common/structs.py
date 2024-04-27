@@ -22,7 +22,6 @@ from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
-from nbxmpp.structs import ReplyData
 
 from gajim.common import types
 from gajim.common.const import KindConstant
@@ -95,7 +94,6 @@ class OutgoingMessage:
                  attention: bool | None = None,
                  correct_id: str | None = None,
                  reply_data: ReplyData | None = None,
-                 fallback_text: str | None = None,
                  oob_url: str | None = None,
                  nodes: Any | None = None,
                  play_sound: bool = True
@@ -109,7 +107,7 @@ class OutgoingMessage:
 
         self.account = account
         self.contact = contact
-        self.text = text
+        self._text = text
         self.type_ = type_
 
         if type_ == 'chat':
@@ -131,7 +129,6 @@ class OutgoingMessage:
         self.attention = attention
         self.correct_id = correct_id
         self.reply_data = reply_data
-        self.fallback_text = fallback_text
 
         self.oob_url = oob_url
         self.nodes = nodes
@@ -144,6 +141,18 @@ class OutgoingMessage:
         self.message_id = None
         self.stanza = None
         self.delayed = None  # TODO never set
+
+    def get_text(self, with_fallback: bool = True) -> str | None:
+        if not with_fallback:
+            return self._text
+
+        if self.reply_data is None:
+            return self._text
+        assert self._text is not None
+        return f'{self.reply_data.fallback_text}{self._text}'
+
+    def has_text(self) -> bool:
+        return bool(self._text)
 
     @property
     def jid(self) -> JID:
@@ -334,3 +343,12 @@ class VariantMixin:
                     raise ValueError(f'no conversion for: {value_t_name}')
                 vdict[field_name] = conversion_func(value)
         return cls(**vdict)
+
+
+@dataclass
+class ReplyData:
+    to: JID
+    id: str
+    fallback_start: int
+    fallback_end: int
+    fallback_text: str

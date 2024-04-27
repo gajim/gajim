@@ -35,7 +35,6 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
-from gajim.common.util.text import remove_fallback_text
 
 
 class Message(BaseModule):
@@ -165,7 +164,9 @@ class Message(BaseModule):
 
         occupant = self._get_occupant_info(
             remote_jid, direction, timestamp, properties)
-        message_text = properties.body
+
+        assert properties.bodies is not None
+        message_text = properties.bodies.get(None)
         oob_data = parse_oob(properties)
 
         encryption_data = None
@@ -203,12 +204,8 @@ class Message(BaseModule):
         if properties.reply_data is not None:
             reply = mod.Reply(
                 id=properties.reply_data.id,
-                to=JID.from_string(properties.reply_data.to)
+                to=properties.reply_data.to
             )
-            message_text = remove_fallback_text(
-                message_text,
-                properties.reply_data.fallback_start,
-                properties.reply_data.fallback_end)
 
         correction_id = None
         if properties.correction is not None:
@@ -398,12 +395,8 @@ class Message(BaseModule):
     def build_message_stanza(self, message: OutgoingMessage) -> nbxmpp.Message:
         own_jid = self._con.get_own_jid()
 
-        message_text = message.text
-        if message.fallback_text is not None:
-            message_text = f'{message.fallback_text}{message.text}'
-
         stanza = nbxmpp.Message(to=message.jid,
-                                body=message_text,
+                                body=message.get_text(),
                                 typ=message.type_,
                                 subject=message.subject)
 
@@ -413,9 +406,7 @@ class Message(BaseModule):
 
         # XEP-0461
         if message.reply_data is not None:
-            assert message.reply_data.fallback_start is not None
-            assert message.reply_data.fallback_end is not None
-            stanza.setReply(str(message.jid),
+            stanza.setReply(str(message.reply_data.to),
                             message.reply_data.id,
                             message.reply_data.fallback_start,
                             message.reply_data.fallback_end)
@@ -453,7 +444,7 @@ class Message(BaseModule):
 
         # XEP-0184
         if not own_jid.bare_match(message.jid):
-            if message.text and not message.is_groupchat:
+            if message.has_text() and not message.is_groupchat:
                 stanza.setReceiptRequest()
 
         # Mark Message as MUC PM
@@ -463,12 +454,12 @@ class Message(BaseModule):
         # XEP-0085
         if message.chatstate is not None:
             stanza.setTag(message.chatstate, namespace=Namespace.CHATSTATES)
-            if not message.text:
+            if not message.has_text():
                 stanza.setTag('no-store',
                               namespace=Namespace.MSG_HINTS)
 
         # XEP-0333
-        if message.text:
+        if message.has_text():
             stanza.setMarkable()
         if message.marker:
             marker, id_ = message.marker
@@ -482,13 +473,12 @@ class Message(BaseModule):
         return stanza
 
     def send_message(self, message: OutgoingMessage) -> None:
-        if not message.text:
+        if not message.has_text():
             raise ValueError('Trying to send message without text')
 
         direction = ChatDirection.OUTGOING
         remote_jid = message.jid
-        message_text = message.text
-        assert message_text is not None
+
         timestamp = dt.datetime.fromtimestamp(
             message.timestamp, tz=dt.timezone.utc)
         m_type = message.message_type
@@ -550,7 +540,7 @@ class Message(BaseModule):
         if message.reply_data is not None:
             reply = mod.Reply(
                 id=message.reply_data.id,
-                to=JID.from_string(message.reply_data.to)
+                to=message.reply_data.to
             )
 
         oob_data: list[mod.OOB] = []
@@ -565,7 +555,7 @@ class Message(BaseModule):
             timestamp=timestamp,
             state=state,
             resource=resource,
-            text=message_text,
+            text=message.get_text(with_fallback=False),
             id=message.message_id,
             stanza_id=None,
             user_delay_ts=None,
