@@ -212,7 +212,7 @@ class ReferredMessageWidget(Gtk.EventBox):
 
         if self._message.type == MessageType.GROUPCHAT:
             jid = self._message.remote.jid
-            jid.new_with(resource=self._message.resource)
+            jid = jid.new_with(resource=self._message.resource)
             reply_to_id = self._message.stanza_id
 
         if reply_to_id is None:
