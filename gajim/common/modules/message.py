@@ -344,8 +344,8 @@ class Message(BaseModule):
         pk = app.storage.archive.insert_row(
             error_data, ignore_on_conflict=True)
         if pk == -1:
-            self._log.warning('Received error with already known message id',
-                              message_id)
+            self._log.warning(
+                'Received error with already known message id: %s', message_id)
             return
 
         app.ged.raise_event(
