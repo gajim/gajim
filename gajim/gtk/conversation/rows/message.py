@@ -394,6 +394,7 @@ class MessageRow(BaseRow):
         self._message_icons.set_group_chat_message_state_icon(state)
 
     def show_error(self, tooltip: str) -> None:
+        self._message_icons.hide_group_chat_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 

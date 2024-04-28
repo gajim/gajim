@@ -184,6 +184,9 @@ class MessageIcons(Gtk.Box):
         self._group_chat_message_state_image.set_tooltip_text(tooltip_text)
         self._group_chat_message_state_image.show()
 
+    def hide_group_chat_message_state_icon(self):
+        self._group_chat_message_state_image.hide()
+
     def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)
 
