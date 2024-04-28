@@ -25,6 +25,7 @@ function main {
         ${MINGW_PACKAGE_PREFIX}-python-setuptools-scm \
         ${MINGW_PACKAGE_PREFIX}-python-six \
         ${MINGW_PACKAGE_PREFIX}-python-winsdk \
+        ${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
         ${MINGW_PACKAGE_PREFIX}-gtk3 \
         ${MINGW_PACKAGE_PREFIX}-gtksourceview4 \
         ${MINGW_PACKAGE_PREFIX}-gstreamer \
@@ -49,6 +50,7 @@ python-gnupg
 qrcode
 css_parser
 sentry-sdk
+emoji
 "
 pip3 install --upgrade precis-i18n
 pip3 install --upgrade $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
