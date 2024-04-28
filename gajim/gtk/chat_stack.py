@@ -160,12 +160,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._chat_function_page.process_escape()
             return True
 
-        if self._message_action_box.is_correcting:
-            self._message_action_box.toggle_message_correction()
-            return True
-
-        if self._message_action_box.is_in_reply_mode:
-            self._message_action_box.disable_reply_mode()
+        if self._message_action_box.process_escape():
             return True
 
         return False
@@ -862,12 +857,9 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         client.send_message(message_)
 
-        self._message_action_box.msg_textview.clear()
-        self._last_quoted_id = None
-        app.storage.drafts.set(contact, '')
+        self._message_action_box.reset_state_after_send()
 
-        if reply_data is not None:
-            self._message_action_box.disable_reply_mode()
+        self._last_quoted_id = None
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._message_action_box.get_last_message_id(contact)

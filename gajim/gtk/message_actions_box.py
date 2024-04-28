@@ -242,6 +242,23 @@ class MessageActionsBox(Gtk.Grid):
             self.msg_textview.clear()
         self.msg_textview.insert_as_quote(text)
 
+    def process_escape(self) -> bool:
+        if not self.is_correcting and not self.is_in_reply_mode:
+            return False
+        self._cancel_action()
+        return True
+
+    def _cancel_action(self) -> None:
+        if self.is_correcting:
+            self.toggle_message_correction()
+        self.disable_reply_mode()
+
+    def reset_state_after_send(self) -> None:
+        self.msg_textview.clear()
+        self._cancel_action()
+        assert self._contact is not None
+        app.storage.drafts.set(self._contact, '')
+
     def toggle_message_correction(self) -> None:
         self.msg_textview.toggle_message_correction()
 
