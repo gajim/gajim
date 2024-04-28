@@ -180,7 +180,7 @@ class Message(BaseModule):
             message_text = get_eme_message(properties.eme)
 
         if not message_text:
-            self._log.warning('Received message without text')
+            self._log.debug('Received message without text')
             return
 
         securitylabel_data = None
