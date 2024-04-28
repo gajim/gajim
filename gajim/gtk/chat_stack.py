@@ -795,7 +795,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_control.add_info_message(message)
 
     def _on_send_message(self) -> None:
-        message = self._message_action_box.msg_textview.get_text()
+        message = self._message_action_box.get_text()
         if message.startswith('//'):
             # Escape sequence for chat commands
             message = message[1:]
@@ -828,14 +828,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             return
 
         label = self._message_action_box.get_seclabel()
-
-        correct_id = None
-        if self._message_action_box.is_correcting:
-            correct_id = self._message_action_box.try_message_correction(
-                message)
-            if correct_id is None:
-                return
-
+        correct_id = self._message_action_box.get_correction_id()
         reply_data = self._message_action_box.get_message_reply()
 
         chatstate = client.get_module('Chatstate').get_active_chatstate(
