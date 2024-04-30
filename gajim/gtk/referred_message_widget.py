@@ -68,7 +68,6 @@ class ReferredMessageWidget(Gtk.EventBox):
         )
         main_box.add(content_box)
 
-        name_box = Gtk.Box(spacing=6)
         avatar_surface = get_avatar_for_message(
             message,
             self._contact,
@@ -76,19 +75,16 @@ class ReferredMessageWidget(Gtk.EventBox):
             AvatarSize.MESSAGE_REPLY
         )
         avatar_image = Gtk.Image.new_from_surface(avatar_surface)
-        name_box.add(avatar_image)
 
         name = get_contact_name_for_message(message, self._contact)
-        name_label = Gtk.Label(label=name, valign=Gtk.Align.START)
+        name_label = Gtk.Label(label=name)
         name_label.get_style_context().add_class('dim-label')
         name_label.get_style_context().add_class('small-label')
         name_label.get_style_context().add_class('bold')
-        name_box.add(name_label)
 
         reply_icon = Gtk.Image.new_from_icon_name(
             'lucide-reply-symbolic', Gtk.IconSize.BUTTON
         )
-        reply_icon.set_valign(Gtk.Align.CENTER)
         reply_icon.get_style_context().add_class('dim-label')
 
         timestamp = message.timestamp.astimezone()
@@ -97,15 +93,17 @@ class ReferredMessageWidget(Gtk.EventBox):
             format_string = app.settings.get('date_time_format')
 
         timestamp_label = Gtk.Label(
-            label=timestamp.strftime(format_string), valign=Gtk.Align.CENTER
+            label=timestamp.strftime(format_string),
+            margin_start=6,
         )
         timestamp_label.get_style_context().add_class('dim-label')
         timestamp_label.get_style_context().add_class('small-label')
 
-        meta_box = Gtk.Box(spacing=6)
+        meta_box = Gtk.Box(spacing=6, valign=Gtk.Align.CENTER)
         meta_box.get_style_context().add_class('small-label')
         meta_box.add(reply_icon)
-        meta_box.add(name_box)
+        meta_box.add(avatar_image)
+        meta_box.add(name_label)
         meta_box.add(timestamp_label)
         content_box.add(meta_box)
 
