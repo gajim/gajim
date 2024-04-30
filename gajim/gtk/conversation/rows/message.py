@@ -40,7 +40,7 @@ from gajim.gtk.conversation.rows.widgets import MoreMenuButton
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
-from gajim.gtk.referred_message_widget import ReferredMessageWidget
+from gajim.gtk.referenced_message_widget import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
 
@@ -143,7 +143,7 @@ class MessageRow(BaseRow):
         else:
             referenced_message = message.get_referenced_message()
             if referenced_message is not None:
-                self._ref_message_widget = ReferredMessageWidget(
+                self._ref_message_widget = ReferencedMessageWidget(
                     self._contact, referenced_message)
 
             self._message_widget = MessageWidget(self._contact.account)

@@ -33,10 +33,10 @@ from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
 from gajim.gtk.util import get_cursor
 
-log = logging.getLogger('gajim.gtk.referred_message_widget')
+log = logging.getLogger('gajim.gtk.referenced_message_widget')
 
 
-class ReferredMessageWidget(Gtk.EventBox):
+class ReferencedMessageWidget(Gtk.EventBox):
     def __init__(
         self, contact: ChatContactT, message: mod.Message
     ) -> None:
@@ -56,7 +56,7 @@ class ReferredMessageWidget(Gtk.EventBox):
         main_box = Gtk.Box(
             spacing=12, hexpand=True, tooltip_text=_('Scroll to this message')
         )
-        main_box.get_style_context().add_class('referred-message')
+        main_box.get_style_context().add_class('referenced-message')
         self.add(main_box)
 
         quote_bar = Gtk.Box(width_request=4)
@@ -143,7 +143,7 @@ class ReferredMessageWidget(Gtk.EventBox):
         content_box.add(message_box)
 
     def _on_button_release(
-        self, _event_box: ReferredMessageWidget, _event: Gdk.EventButton
+        self, _event_box: ReferencedMessageWidget, _event: Gdk.EventButton
     ) -> bool:
 
         app.window.activate_action(
@@ -212,7 +212,7 @@ class ReplyBox(Gtk.Box):
         if self._ref_widget is not None:
             self.disable_reply_mode()
 
-        self._ref_widget = ReferredMessageWidget(contact, message)
+        self._ref_widget = ReferencedMessageWidget(contact, message)
         self.add(self._ref_widget)
         self.set_no_show_all(False)
         self.show_all()
