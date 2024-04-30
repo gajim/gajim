@@ -37,6 +37,7 @@ from gajim.common.helpers import get_random_string
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
 from gajim.common.storage.archive.models import MAMArchiveState
@@ -547,6 +548,21 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._explain(session, stmt)
         return session.scalar(stmt)
+
+    def get_referenced_message(
+        self,
+        account: str,
+        jid: JID,
+        message_type: MessageType | int,
+        reply_id: str
+    ) -> Message | None:
+
+        if message_type == MessageType.GROUPCHAT:
+            return app.storage.archive.get_message_with_stanza_id(
+                account, jid, reply_id)
+
+        return app.storage.archive.get_message_with_id(
+            account, jid, reply_id)
 
     @with_session
     @timeit

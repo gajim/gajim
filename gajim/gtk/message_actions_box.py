@@ -32,6 +32,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive import models as mod
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 
@@ -167,7 +168,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         elif action_name == 'reply':
             assert param
-            self._enable_reply_mode(param.get_uint32())
+            pk = param.get_uint32()
+            message = app.storage.archive.get_message_with_pk(pk)
+            if message is None:
+                return
+            if message.corrections:
+                message = message.get_last_correction()
+            self._enable_reply_mode(message)
 
         elif action_name == 'mention':
             assert param
@@ -307,11 +314,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         if message.corrections:
             message = message.get_last_correction()
 
-        #TODO: Set reply
-        #TODO: Set seclabel
-
         self.msg_textview.start_correction(message)
 
+        referenced_message = message.get_referenced_message()
+        if referenced_message is not None:
+            self._enable_reply_mode(referenced_message)
+
+        #TODO: Set seclabel
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._last_message_id.get(contact)
@@ -645,9 +654,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
     def is_in_reply_mode(self) -> bool:
         return self._reply_box.is_in_reply_mode
 
-    def _enable_reply_mode(self, pk: int) -> None:
+    def _enable_reply_mode(self, message: mod.Message) -> None:
         assert self._contact is not None
-        self._reply_box.enable_reply_mode(self._contact, pk)
+        self._reply_box.enable_reply_mode(self._contact, message)
         self.msg_textview.grab_focus()
 
     def disable_reply_mode(self, *args: Any) -> None:

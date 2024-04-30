@@ -98,9 +98,6 @@ class MessageInputTextView(GtkSource.View):
         self.grab_focus()
 
         text = message.text
-        if message.corrections:
-            text = message.get_last_correction().text
-
         assert text is not None
 
         self.insert_text(text)

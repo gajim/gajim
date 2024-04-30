@@ -141,9 +141,10 @@ class MessageRow(BaseRow):
                 self._message_from_us,
                 self._muc_context)
         else:
-            if message.reply is not None:
+            referenced_message = message.get_referenced_message()
+            if referenced_message is not None:
                 self._ref_message_widget = ReferredMessageWidget(
-                    self._contact, message.pk)
+                    self._contact, referenced_message)
 
             self._message_widget = MessageWidget(self._contact.account)
             self._message_widget.add_with_styling(self.text, nickname=self.name)

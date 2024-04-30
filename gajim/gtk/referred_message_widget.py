@@ -38,49 +38,17 @@ log = logging.getLogger('gajim.gtk.referred_message_widget')
 
 class ReferredMessageWidget(Gtk.EventBox):
     def __init__(
-        self, contact: ChatContactT, pk: int, reply_mode: bool = False
+        self, contact: ChatContactT, message: mod.Message
     ) -> None:
         Gtk.EventBox.__init__(self)
 
         self._contact = contact
-
-        self._message = app.storage.archive.get_message_with_pk(pk)
-        if self._message is None:
-            log.warning('Could not find message with pk %s in database', pk)
-            return
-
-        if reply_mode:
-            # In reply mode the ReferredMessage widget shows
-            # the original message, which is about to be replied to.
-            self._referred_message = self._message
-        else:
-            assert self._message.reply is not None
-            if self._message.type == MessageType.GROUPCHAT:
-                self._referred_message = \
-                    app.storage.archive.get_message_with_stanza_id(
-                        self._contact.account,
-                        self._contact.jid,
-                        self._message.reply.id
-                )
-            else:
-                self._referred_message = \
-                    app.storage.archive.get_message_with_id(
-                        self._contact.account,
-                        self._contact.jid,
-                        self._message.reply.id
-                )
-
-            if self._referred_message is None:
-                log.warning(
-                    'Could not find referred message in with id %s database',
-                    self._message.reply.id,
-                )
-                return
+        self._message = message
 
         self.connect('realize', self._on_realize)
         self.connect('button-release-event', self._on_button_release)
 
-        self._add_content(self._referred_message)
+        self._add_content(message)
 
         self.show_all()
 
@@ -180,15 +148,13 @@ class ReferredMessageWidget(Gtk.EventBox):
         self, _event_box: ReferredMessageWidget, _event: Gdk.EventButton
     ) -> bool:
 
-        # Widget can only be clicked once a message was found
-        assert self._referred_message is not None
         app.window.activate_action(
             'jump-to-message',
             GLib.Variant(
                 'au',
                 [
-                    self._referred_message.pk,
-                    self._referred_message.timestamp.timestamp(),
+                    self._message.pk,
+                    self._message.timestamp.timestamp(),
                 ],
             ),
         )
@@ -201,9 +167,6 @@ class ReferredMessageWidget(Gtk.EventBox):
             window.set_cursor(get_cursor('pointer'))
 
     def get_message_reply(self) -> ReplyData | None:
-        if self._message is None:
-            return None
-
         # We only show the reply menu if there is text
         assert self._message.text
 
@@ -242,11 +205,16 @@ class ReplyBox(Gtk.Box):
 
         self._ref_widget = None
 
-    def enable_reply_mode(self, contact: ChatContactT, pk: int) -> None:
+    def enable_reply_mode(
+        self,
+        contact: ChatContactT,
+        message: mod.Message
+    ) -> None:
+
         if self._ref_widget is not None:
             self.disable_reply_mode()
 
-        self._ref_widget = ReferredMessageWidget(contact, pk, reply_mode=True)
+        self._ref_widget = ReferredMessageWidget(contact, message)
         self.add(self._ref_widget)
         self.set_no_show_all(False)
         self.show_all()
