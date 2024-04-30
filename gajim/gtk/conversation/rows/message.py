@@ -40,7 +40,7 @@ from gajim.gtk.conversation.rows.widgets import MoreMenuButton
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
-from gajim.gtk.referenced_message_widget import ReferencedMessageWidget
+from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
 
