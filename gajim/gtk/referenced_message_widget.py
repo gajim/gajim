@@ -37,9 +37,7 @@ log = logging.getLogger('gajim.gtk.referenced_message_widget')
 
 
 class ReferencedMessageWidget(Gtk.EventBox):
-    def __init__(
-        self, contact: ChatContactT, message: mod.Message
-    ) -> None:
+    def __init__(self, contact: ChatContactT, message: mod.Message) -> None:
         Gtk.EventBox.__init__(self)
 
         self._contact = contact
@@ -69,10 +67,7 @@ class ReferencedMessageWidget(Gtk.EventBox):
         main_box.add(content_box)
 
         avatar_surface = get_avatar_for_message(
-            message,
-            self._contact,
-            self.get_scale_factor(),
-            AvatarSize.MESSAGE_REPLY
+            message, self._contact, self.get_scale_factor(), AvatarSize.MESSAGE_REPLY
         )
         avatar_image = Gtk.Image.new_from_surface(avatar_surface)
 
@@ -185,7 +180,7 @@ class ReferencedMessageWidget(Gtk.EventBox):
             id=reply_to_id,
             fallback_start=0,
             fallback_end=len(quoted_text),
-            fallback_text=quoted_text
+            fallback_text=quoted_text,
         )
 
 
@@ -203,11 +198,7 @@ class ReplyBox(Gtk.Box):
 
         self._ref_widget = None
 
-    def enable_reply_mode(
-        self,
-        contact: ChatContactT,
-        message: mod.Message
-    ) -> None:
+    def enable_reply_mode(self, contact: ChatContactT, message: mod.Message) -> None:
 
         if self._ref_widget is not None:
             self.disable_reply_mode()
