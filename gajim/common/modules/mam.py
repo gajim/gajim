@@ -201,7 +201,18 @@ class MAM(BaseModule):
         if not self._is_valid_request(properties):
             self._log.warning('Invalid MAM Message: unknown query id %s',
                               properties.mam.query_id)
-            self._log.debug(stanza)
+            self._log.warning(stanza)
+            raise nbxmpp.NodeProcessed
+
+        stanza_id = self._get_stanza_id(properties, properties.mam.archive)
+        if stanza_id is None:
+            self.log.warning('Unable to determine stanza id')
+            self.log.warning(stanza)
+            raise nbxmpp.NodeProcessed
+
+        if app.storage.archive.check_if_stanza_id_exists(
+            self._account, properties.remote_jid, stanza_id.id):
+            self._log.info('Received duplicated message from MAM: %s', stanza_id.id)
             raise nbxmpp.NodeProcessed
 
     def _is_valid_request(self, properties: MessageProperties) -> bool:
