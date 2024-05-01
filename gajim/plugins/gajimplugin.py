@@ -164,7 +164,7 @@ class GajimPluginConfig:
                     shelf = shelve.open(str(self.FILE_PATH))
                     for (key, value) in shelf.items():
                         self.data[key] = value
-                    if not isinstance(self.data, dict):
+                    if not isinstance(self.data, dict):  # pyright: ignore
                         raise GajimPluginException
                     shelf.close()
                     self.save()
