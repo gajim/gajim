@@ -204,15 +204,15 @@ class MAM(BaseModule):
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
-        stanza_id = self._get_stanza_id(properties, properties.mam.archive)
+        stanza_id = properties.mam.id
         if stanza_id is None:
             self._log.warning('Unable to determine stanza id')
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
         if app.storage.archive.check_if_stanza_id_exists(
-            self._account, properties.remote_jid, stanza_id.id):
-            self._log.info('Received duplicated message from MAM: %s', stanza_id.id)
+            self._account, properties.remote_jid, stanza_id):
+            self._log.info('Received duplicated message from MAM: %s', stanza_id)
             raise nbxmpp.NodeProcessed
 
     def _is_valid_request(self, properties: MessageProperties) -> bool:
