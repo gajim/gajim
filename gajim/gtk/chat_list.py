@@ -551,21 +551,23 @@ class ChatList(Gtk.ListBox, EventHelper):
     @staticmethod
     def _get_nick_for_received_message(
         account: str,
-        data: Message
+        message: Message
     ) -> str:
 
-        nick = _('Me')
-        if data.type == MessageType.GROUPCHAT:
-            event_nick = data.resource
-            assert event_nick is not None
-            our_nick = get_group_chat_nick(account, data.remote.jid)
-            if event_nick != our_nick:
-                nick = event_nick
+        if message.type == MessageType.CHAT:
+            if message.direction == ChatDirection.OUTGOING:
+                return _('Me')
+            return ''
 
-        elif data.direction == ChatDirection.INCOMING:
-            nick = ''
+        if message.type == MessageType.GROUPCHAT:
+            if message.direction == ChatDirection.OUTGOING:
+                return _('Me')
 
-        return nick
+            nick = message.resource or message.remote.jid.localpart
+            assert nick is not None
+            return nick
+
+        return ''
 
     @staticmethod
     def _add_unread(row: ChatListRow, event: events.MessageReceived) -> None:
