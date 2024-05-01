@@ -298,6 +298,8 @@ class MAM(BaseModule):
                 self._log.warning(result)
                 return
 
+            self._log.warning(result)
+            self._log.warning('Reset archive state: %s', own_jid)
             app.storage.archive.reset_mam_archive_state(
                 self._account, result.jid)
             _, start_date = self._get_query_params()
@@ -355,6 +357,8 @@ class MAM(BaseModule):
                 contact.notify('mam-sync-error', result.get_text())
                 return
 
+            self._log.warning(result)
+            self._log.warning('Reset archive state: %s', jid)
             app.storage.archive.reset_mam_archive_state(
                 self._account, result.jid)
             _, start_date = self._get_muc_query_params(jid, threshold)
