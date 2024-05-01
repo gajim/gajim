@@ -206,8 +206,8 @@ class MAM(BaseModule):
 
         stanza_id = self._get_stanza_id(properties, properties.mam.archive)
         if stanza_id is None:
-            self.log.warning('Unable to determine stanza id')
-            self.log.warning(stanza)
+            self._log.warning('Unable to determine stanza id')
+            self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
         if app.storage.archive.check_if_stanza_id_exists(
