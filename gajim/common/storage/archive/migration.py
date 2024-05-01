@@ -108,8 +108,12 @@ class Migration:
 
         self._accounts: dict[str, str] = {}
 
-        self._pre_v7(user_version)
-        self._v8()
+        if user_version < 7:
+            self._pre_v7(user_version)
+        if user_version < 8:
+            self._v8()
+        if user_version < 9:
+            self._v9()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -213,6 +217,14 @@ class Migration:
             conn.execute(sa.text('DROP TABLE jids'))
             conn.execute(sa.text('DROP TABLE IF EXISTS unread_messages'))
             conn.execute(sa.text('PRAGMA user_version=8'))
+
+    def _v9(self) -> None:
+        statements = [
+            'CREATE INDEX idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);',
+            'PRAGMA user_version=9',
+        ]
+
+        self._execute_multiple(statements)
 
     def _process_archive_row(
         self,

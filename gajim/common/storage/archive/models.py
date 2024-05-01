@@ -709,6 +709,12 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             'fk_remote_pk',
             'fk_account_pk',
         ),
+        Index(
+            'idx_stanza_id',
+            'stanza_id',
+            'fk_remote_pk',
+            'fk_account_pk',
+        ),
     )
 
     def get_last_correction(self) -> Message:
