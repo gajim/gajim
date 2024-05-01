@@ -29,7 +29,7 @@ class CallRow(BaseRow):
                  account: str,
                  contact: types.BareContact,
                  event: JingleRequestReceived | None = None,
-                 db_row: Message | None = None
+                 message: Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
@@ -37,8 +37,8 @@ class CallRow(BaseRow):
 
         self._client = app.get_client(account)
 
-        if db_row is not None:
-            timestamp = db_row.timestamp
+        if message is not None:
+            timestamp = message.timestamp
         else:
             timestamp = utc_now()
         self.timestamp = timestamp.astimezone()
@@ -46,15 +46,15 @@ class CallRow(BaseRow):
 
         self._contact = contact
         self._event = event
-        self._db_row = db_row
+        self._message = message
 
         self._session: JingleSession | None = None
 
-        if db_row is not None and db_row.call is not None:
+        if message is not None and message.call is not None:
             module = self._client.get_module('Jingle')
             self._session = module.get_jingle_session(
-                str(self._contact.jid), db_row.call.sid)
-            self.pk = db_row.pk
+                str(self._contact.jid), message.call.sid)
+            self.pk = message.pk
 
         self._avatar_placeholder = Gtk.Box()
         self._avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
@@ -108,8 +108,8 @@ class CallRow(BaseRow):
         assert isinstance(contact, BareContact)
 
         is_self = True
-        if self._db_row is not None:
-            if self._db_row.direction == ChatDirection.INCOMING:
+        if self._message is not None:
+            if self._message.direction == ChatDirection.INCOMING:
                 contact = self._contact
                 is_self = True
             else:

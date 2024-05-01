@@ -501,29 +501,29 @@ class ChatControl(EventHelper):
         if self._allow_add_message():
             self._scrolled_view.add_call_message(event=event)
 
-    def _add_message(self, db_row: Message) -> None:
+    def _add_message(self, message: Message) -> None:
         # TODO: Unify with _add_db_row()
         if self._allow_add_message():
-            self._scrolled_view.add_message_from_db(db_row)
+            self._scrolled_view.add_message_from_db(message)
 
             if not self._scrolled_view.get_autoscroll():
-                if db_row.direction == ChatDirection.OUTGOING:
+                if message.direction == ChatDirection.OUTGOING:
                     self._scrolled_view.scroll_to_end()
                 else:
                     self._jump_to_end_button.add_unread_count()
         else:
             self._jump_to_end_button.add_unread_count()
 
-    def _add_db_row(self, db_row: Message):
-        if db_row.filetransfers:
-            self._scrolled_view.add_jingle_file_transfer(db_row=db_row)
+    def _add_db_row(self, message: Message):
+        if message.filetransfers:
+            self._scrolled_view.add_jingle_file_transfer(message=message)
             return
 
-        if db_row.call is not None:
-            self._scrolled_view.add_call_message(db_row=db_row)
+        if message.call is not None:
+            self._scrolled_view.add_call_message(message=message)
             return
 
-        self._scrolled_view.add_message_from_db(db_row)
+        self._scrolled_view.add_message_from_db(message)
 
     def _add_messages(self, messages: list[Message]):
         for msg in messages:

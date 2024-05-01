@@ -51,14 +51,14 @@ class FileTransferJingleRow(BaseRow):
                  account: str,
                  contact: BareContact,
                  event: TransferEventT | None = None,
-                 db_row: mod.Message | None = None
+                 message: mod.Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
 
         self.type = 'file-transfer'
 
-        if db_row is not None:
-            timestamp = db_row.timestamp
+        if message is not None:
+            timestamp = message.timestamp
         else:
             timestamp = utc_now()
         self.timestamp = timestamp.astimezone()
@@ -66,16 +66,16 @@ class FileTransferJingleRow(BaseRow):
 
         self._contact = contact
 
-        if db_row is not None and db_row.filetransfers:
+        if message is not None and message.filetransfers:
             # TODO: Handle filetransfers and sources specifically
-            file_transfer = db_row.filetransfers[0]
+            file_transfer = message.filetransfers[0]
             sources = file_transfer.source
             for source in sources:
                 if isinstance(source, mod.JingleFT):
                     self._file_props = FilesProp.getFilePropBySid(source.sid)
                     if self._file_props is None:
                         log.debug('File prop not found for SID: %s', source.sid)
-            self.pk = db_row.pk
+            self.pk = message.pk
         else:
             assert event is not None
             self._file_props = event.file_props
@@ -91,8 +91,8 @@ class FileTransferJingleRow(BaseRow):
         avatar_placeholder.set_valign(Gtk.Align.START)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        if db_row is not None:
-            if db_row.direction == ChatDirection.INCOMING:
+        if message is not None:
+            if message.direction == ChatDirection.INCOMING:
                 contact = self._contact
                 is_self = True
             else:
@@ -140,7 +140,7 @@ class FileTransferJingleRow(BaseRow):
 
         self.show_all()
 
-        if db_row is not None:
+        if message is not None:
             self._reconstruct_transfer()
         else:
             assert event is not None

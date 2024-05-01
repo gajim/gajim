@@ -479,7 +479,7 @@ class ConversationView(Gtk.ScrolledWindow):
         event: (events.FileRequestReceivedEvent |
                 events.FileRequestSent |
                 None) = None,
-        db_row: Message | None = None
+        message: Message | None = None
     ) -> None:
 
         assert isinstance(self._contact, BareContact)
@@ -487,7 +487,7 @@ class ConversationView(Gtk.ScrolledWindow):
             self._contact.account,
             self._contact,
             event=event,
-            db_row=db_row)
+            message=message)
         self._insert_message(jingle_transfer_row)
 
     def add_encryption_info(self, event: events.EncryptionInfo) -> None:
@@ -496,14 +496,14 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_call_message(self,
                          event: events.JingleRequestReceived | None = None,
-                         db_row: Message | None = None
+                         message: Message | None = None
                          ) -> None:
         assert isinstance(self._contact, BareContact)
         call_row = CallRow(
             self._contact.account,
             self._contact,
             event=event,
-            db_row=db_row)
+            message=message)
         self._insert_message(call_row)
 
     def add_command_output(self, text: str, is_error: bool) -> None:
@@ -511,21 +511,20 @@ class ConversationView(Gtk.ScrolledWindow):
             self.contact.account, text, is_error)
         self._insert_message(command_output_row)
 
-    def add_message_from_db(self, db_row: Message) -> None:
-        message_row = MessageRow.from_db_row(self.contact, db_row)
+    def add_message_from_db(self, message: Message) -> None:
+        message_row = MessageRow.from_db_row(self.contact, message)
 
-        message_id = db_row.id
+        message_id = message.id
 
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
 
-        if db_row.direction == ChatDirection.INCOMING:
+        if message.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(
                 message_row.timestamp)
 
-        markers = db_row.markers
-        if markers:
+        if message.markers:
             assert message_id is not None
             self.set_read_marker(message_id)
 
@@ -792,13 +791,13 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def correct_message(self, db_row: Message) -> None:
-        assert db_row.id is not None
-        message_row = self._get_row_by_message_id(db_row.id)
+    def correct_message(self, message: Message) -> None:
+        assert message.id is not None
+        message_row = self._get_row_by_message_id(message.id)
         if message_row is None:
             return
 
-        message_row.update_with_content(db_row)
+        message_row.update_with_content(message)
 
         assert self._read_marker_row is not None
         timestamp = message_row.timestamp + timedelta(microseconds=1)
