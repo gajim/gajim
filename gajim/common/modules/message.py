@@ -134,11 +134,9 @@ class Message(BaseModule):
 
         message_id = properties.id
         if message_id is None:
-            self._log.warning('Received message without message id')
-            self._log.warning(stanza)
             # TODO: Make Gajim not depend on a message_id being present
             message_id = get_uuid()
-            self._log.warning('Generating id')
+            self._log.debug('Generating id for message')
 
         stanza_id = self._get_stanza_id(properties)
 
