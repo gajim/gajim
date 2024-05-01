@@ -865,7 +865,6 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
                 Message.direction == ChatDirection.OUTGOING,
-                Message.state == MessageState.PENDING,
             )
             .values(state=MessageState.ACKNOWLEDGED, stanza_id=stanza_id)
             .returning(Message.pk)

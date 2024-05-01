@@ -150,17 +150,22 @@ class Message(BaseModule):
                 return
 
         occupant = None
-        if m_type == MessageType.GROUPCHAT:
-            if direction == ChatDirection.OUTGOING:
-                pk = app.storage.archive.update_pending_message(
-                    self._account, remote_jid, properties.id, stanza_id)
+        if (m_type == MessageType.GROUPCHAT and
+                direction == ChatDirection.OUTGOING and
+                properties.origin_id is not None):
 
-                if pk is not None:
-                    app.ged.raise_event(
-                        MessageAcknowledged(account=self._account,
-                                            jid=remote_jid,
-                                            pk=pk))
-                    return
+            # Use origin-id because some group chats change the message id
+            # on the reflection.
+
+            pk = app.storage.archive.update_pending_message(
+                self._account, remote_jid, properties.origin_id, stanza_id)
+
+            if pk is not None:
+                app.ged.raise_event(
+                    MessageAcknowledged(account=self._account,
+                                        jid=remote_jid,
+                                        pk=pk))
+                return
 
         occupant = self._get_occupant_info(
             remote_jid, direction, timestamp, properties)
