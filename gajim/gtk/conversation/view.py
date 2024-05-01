@@ -791,13 +791,13 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def correct_message(self, message: Message) -> None:
-        assert message.id is not None
-        message_row = self._get_row_by_message_id(message.id)
+    def correct_message(self, original_message: Message) -> None:
+        assert original_message.id is not None
+        message_row = self._get_row_by_message_id(original_message.id)
         if message_row is None:
             return
 
-        message_row.update_with_content(message)
+        message_row.refresh_original_message(original_message)
 
         assert self._read_marker_row is not None
         timestamp = message_row.timestamp + timedelta(microseconds=1)

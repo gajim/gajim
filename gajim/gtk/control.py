@@ -354,10 +354,10 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        if event.message is None:
+        if event.original_message is None:
             return
 
-        self._scrolled_view.correct_message(event.message)
+        self._scrolled_view.correct_message(event.original_message)
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         if not self._is_event_processable(event):

@@ -383,7 +383,7 @@ class MessageCorrected(ApplicationEvent):
         self._corrected_message = corrected_message
 
     @cached_property
-    def message(self) -> mod.Message | None:
+    def original_message(self) -> mod.Message | None:
         return app.storage.archive.get_corrected_message(
             self._corrected_message)
 

@@ -85,7 +85,7 @@ class MessageRow(BaseRow):
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
-        self.update_with_content(message)
+        self._set_content(message)
 
     @classmethod
     def from_db_row(cls,
@@ -95,7 +95,14 @@ class MessageRow(BaseRow):
 
         return cls(contact, message)
 
-    def update_with_content(self, message: Message) -> None:
+    def refresh_original_message(self, original_message: Message) -> None:
+        # After a correction, the original message is loaded again from the
+        # database so especially the message.corrections relationship has
+        # all the new corrections.
+        self._original_message = original_message
+        self._set_content(original_message)
+
+    def _set_content(self, message: Message) -> None:
         self.set_merged(False)
         self.get_style_context().remove_class('retracted-message')
         self.get_style_context().remove_class('gajim-mention-highlight')
