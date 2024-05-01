@@ -37,6 +37,7 @@ from gajim.common.helpers import get_random_string
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Account
 from gajim.common.storage.archive.models import Base
 from gajim.common.storage.archive.models import MAMArchiveState
@@ -308,6 +309,56 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def get_message_with_id(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        message_id: str
+    ) -> Message | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = select(Message).where(
+            Message.id == message_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+        )
+
+        result = session.scalars(stmt).all()
+        if len(result) > 1:
+            self._log.warning('Found >1 message with message id %s', message_id)
+            return None
+        return result[0]
+
+    @with_session
+    @timeit
+    def get_message_with_stanza_id(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        stanza_id: str
+    ) -> Message | None:
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        stmt = select(Message).where(
+            Message.stanza_id == stanza_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+        )
+
+        result = session.scalars(stmt).all()
+        if len(result) > 1:
+            self._log.warning('Found >1 message with stanza id %s', stanza_id)
+            return None
+        return result[0]
+
+    @with_session
+    @timeit
     def delete_message(self, session: Session, pk: int) -> None:
         message = self._get_message_with_pk(session, pk)
         if message is None:
@@ -452,9 +503,7 @@ class MessageArchiveStorage(AlchemyStorage):
         Load the last correctable message of a conversation by message_id.
         Conditions: max 5 min old
         '''
-
         # TODO this could match multiple rows, better is to search with the pk
-        # TODO there is no index for message_id
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -499,6 +548,21 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._explain(session, stmt)
         return session.scalar(stmt)
+
+    def get_referenced_message(
+        self,
+        account: str,
+        jid: JID,
+        message_type: MessageType | int,
+        reply_id: str
+    ) -> Message | None:
+
+        if message_type == MessageType.GROUPCHAT:
+            return app.storage.archive.get_message_with_stanza_id(
+                account, jid, reply_id)
+
+        return app.storage.archive.get_message_with_id(
+            account, jid, reply_id)
 
     @with_session
     @timeit

@@ -17,6 +17,7 @@ from gi.repository import Gtk
 from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import StreamError
+from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -157,6 +158,7 @@ class Client(Observable, ClientModules):
         self._client.set_username(self._user)
         self._client.set_resource(get_resource(self._account))
         self._client.set_http_session(create_http_session())
+        self._client.set_supported_fallback_ns([Namespace.REPLY])
 
         self._client.subscribe('resume-failed', self._on_resume_failed)
         self._client.subscribe('resume-successful', self._on_resume_successful)
@@ -474,12 +476,15 @@ class Client(Observable, ClientModules):
                 self.get_module('OMEMO').encrypt_message(message)
             except Exception:
                 log.exception('Error')
+                text = message.get_text(with_fallback=False)
+                assert text is not None
                 app.ged.raise_event(
-                    MessageNotSent(client=self._client,
-                                   jid=message.jid,
-                                   message=message.text,
-                                   error=_('Encryption error'),
-                                   time=time.time()))
+                    MessageNotSent(
+                        client=self._client,
+                        jid=str(message.jid),
+                        message=text,
+                        error=_('Encryption error'),
+                        time=time.time()))
                 return
 
             self._send_message(message)
@@ -498,7 +503,7 @@ class Client(Observable, ClientModules):
         message.set_sent_timestamp()
         message.message_id = self.send_stanza(message.stanza)
 
-        if message.text is None:
+        if not message.has_text():
             return
 
         self.get_module('Message').send_message(message)

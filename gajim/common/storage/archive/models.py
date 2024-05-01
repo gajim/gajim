@@ -24,6 +24,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import expression as expr
 from sqlalchemy.types import TypeEngine
 
+from gajim.common import app
 from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
@@ -712,3 +713,14 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     def get_last_correction(self) -> Message:
         return self.corrections[-1]
+
+    def get_referenced_message(self) -> Message | None:
+        if self.reply is None:
+            return None
+        account = app.settings.get_account_from_jid(self.account.jid)
+        return app.storage.archive.get_referenced_message(
+            account,
+            self.remote.jid,
+            self.type,
+            self.reply.id
+        )

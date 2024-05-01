@@ -9,6 +9,7 @@ from typing import Any
 import logging
 import tempfile
 import uuid
+from collections import defaultdict
 from pathlib import Path
 
 from gi.repository import Gdk
@@ -20,14 +21,19 @@ from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.commands import CommandFailed
 from gajim.common.const import Direction
 from gajim.common.const import SimpleClientState
+from gajim.common.events import MessageSent
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.storage.archive import models as mod
+from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.builder import get_builder
@@ -35,23 +41,32 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util import open_window
 
 log = logging.getLogger('gajim.gtk.messageactionsbox')
 
 
-class MessageActionsBox(Gtk.Grid):
+class MessageActionsBox(Gtk.Grid, EventHelper):
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
+        EventHelper.__init__(self)
 
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
+        # XEP-0308 Message Correction
+        self._correcting: dict[ChatContactT, str | None] = defaultdict(lambda: None)
+        self._last_message_id: dict[ChatContactT, str | None] = {}
 
         self._ui = get_builder('message_actions_box.ui')
         self.get_style_context().add_class('message-actions-box')
 
         self.attach(self._ui.box, 0, 0, 1, 1)
+
+        # For message replies
+        self._reply_box = ReplyBox()
+        self._ui.box.pack_start(self._reply_box, True, True, 0)
 
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
@@ -60,7 +75,8 @@ class MessageActionsBox(Gtk.Grid):
                                  'set_visible')
 
         self._security_label_selector = SecurityLabelSelector()
-        self._ui.box.pack_start(self._security_label_selector, False, True, 0)
+        self._ui.action_box.pack_start(
+            self._security_label_selector, False, True, 0)
 
         self.msg_textview = MessageInputTextView()
         self.msg_textview.connect('buffer-changed',
@@ -83,7 +99,11 @@ class MessageActionsBox(Gtk.Grid):
         self._connect_actions()
 
         app.plugin_manager.gui_extension_point(
-            'message_actions_box', self, self._ui.box)
+            'message_actions_box', self, self._ui.action_box)
+
+        self.register_events([
+            ('message-sent', ged.GUI2, self._on_message_sent)
+        ])
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -101,6 +121,7 @@ class MessageActionsBox(Gtk.Grid):
             'show-emoji-chooser',
             'quote',
             'mention',
+            'reply',
             'correct-message',
         ]
 
@@ -145,6 +166,16 @@ class MessageActionsBox(Gtk.Grid):
             assert param
             self.msg_textview.insert_as_quote(param.get_string())
 
+        elif action_name == 'reply':
+            assert param
+            pk = param.get_uint32()
+            message = app.storage.archive.get_message_with_pk(pk)
+            if message is None:
+                return
+            if message.corrections:
+                message = message.get_last_correction()
+            self._enable_reply_mode(message)
+
         elif action_name == 'mention':
             assert param
             self.msg_textview.mention_participant(param.get_string())
@@ -163,6 +194,8 @@ class MessageActionsBox(Gtk.Grid):
         self._client = app.get_client(contact.account)
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
+
+        self.disable_reply_mode()
 
         self._contact = contact
 
@@ -198,6 +231,9 @@ class MessageActionsBox(Gtk.Grid):
         self._set_chatstate(True)
 
         self.msg_textview.switch_contact(contact)
+        if self.is_correcting:
+            self.msg_textview.start_correction()
+
         self._security_label_selector.switch_contact(contact)
 
         self._update_message_input_state()
@@ -213,9 +249,19 @@ class MessageActionsBox(Gtk.Grid):
         self._contact = None
         self._client = None
 
+    def get_text(self) -> str:
+        return self.msg_textview.get_text()
+
     @property
     def is_correcting(self) -> bool:
-        return self.msg_textview.is_correcting
+        if self._contact is None:
+            return False
+
+        return self._correcting[self._contact] is not None
+
+    def _set_correcting(self, message_id: str | None) -> None:
+        assert self._contact is not None
+        self._correcting[self._contact] = message_id
 
     def insert_as_quote(self, text: str, *, clear: bool = False) -> None:
         if self._contact is None:
@@ -228,14 +274,72 @@ class MessageActionsBox(Gtk.Grid):
             self.msg_textview.clear()
         self.msg_textview.insert_as_quote(text)
 
-    def toggle_message_correction(self) -> None:
-        self.msg_textview.toggle_message_correction()
+    def process_escape(self) -> bool:
+        if not self.is_correcting and not self.is_in_reply_mode:
+            return False
+        self._cancel_action()
+        return True
 
-    def try_message_correction(self, message: str) -> str | None:
-        return self.msg_textview.try_message_correction(message)
+    def _cancel_action(self) -> None:
+        if self.is_correcting:
+            self.toggle_message_correction()
+        self.disable_reply_mode()
+
+    def reset_state_after_send(self) -> None:
+        self.msg_textview.clear()
+        self._cancel_action()
+        assert self._contact is not None
+        app.storage.drafts.set(self._contact, '')
+
+    def toggle_message_correction(self) -> None:
+        if self.is_correcting:
+            self._set_correcting(None)
+            self.msg_textview.end_correction()
+            self.disable_reply_mode()
+            return
+
+        assert self._contact is not None
+        last_message_id = self._last_message_id.get(self._contact)
+        if last_message_id is None:
+            return
+
+        assert self._contact is not None
+        message = app.storage.archive.get_last_correctable_message(
+            self._contact.account, self._contact.jid, last_message_id)
+        if message is None or message.text is None:
+            return
+
+        self._set_correcting(last_message_id)
+
+        if message.corrections:
+            message = message.get_last_correction()
+
+        self.msg_textview.start_correction(message)
+
+        referenced_message = message.get_referenced_message()
+        if referenced_message is not None:
+            self._enable_reply_mode(referenced_message)
+
+        #TODO: Set seclabel
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
-        return self.msg_textview.get_last_message_id(contact)
+        return self._last_message_id.get(contact)
+
+    def get_correction_id(self) -> str | None:
+        assert self._contact is not None
+        return self._correcting.get(self._contact)
+
+    def _on_message_sent(self, event: MessageSent) -> None:
+        message = event.message
+
+        assert self._contact is not None
+
+        if (message.oob and
+                message.oob[0].url == message.text):
+            # Don't allow to correct HTTP Upload file transfer URLs
+            self._last_message_id[self._contact] = None
+        else:
+            self._last_message_id[self._contact] = message.id
 
     def _on_client_state_changed(self,
                                  _client: Client,
@@ -545,6 +649,25 @@ class MessageActionsBox(Gtk.Grid):
             return True
 
         return False
+
+    @property
+    def is_in_reply_mode(self) -> bool:
+        return self._reply_box.is_in_reply_mode
+
+    def _enable_reply_mode(self, message: mod.Message) -> None:
+        assert self._contact is not None
+        self._reply_box.enable_reply_mode(self._contact, message)
+        self.msg_textview.grab_focus()
+
+    def disable_reply_mode(self, *args: Any) -> None:
+        self._reply_box.disable_reply_mode()
+
+    def get_message_reply(self) -> ReplyData | None:
+        message_reply = self._reply_box.get_message_reply()
+        if message_reply is None:
+            return None
+
+        return message_reply
 
     def _on_paste_clipboard(self,
                             texview: MessageInputTextView

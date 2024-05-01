@@ -65,6 +65,7 @@ class AvatarSize(IntEnum):
     WORKSPACE = 40
     WORKSPACE_EDIT = 100
     CHAT = 48
+    MESSAGE_REPLY = 24
     NOTIFICATION = 48
     CALL = 100
     CALL_BIG = 200
@@ -915,6 +916,7 @@ COMMON_FEATURES = [
     Namespace.JINGLE_IBB,
     Namespace.AVATAR_METADATA + '+notify',
     Namespace.MESSAGE_MODERATE,
+    Namespace.REPLY,
     Namespace.OMEMO_TEMP_DL + '+notify',
     Namespace.STYLING,
 ]

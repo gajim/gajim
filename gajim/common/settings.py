@@ -783,6 +783,14 @@ class Settings:
                 active.append(account)
         return active
 
+    def get_account_from_jid(self, jid: JID) -> str:
+        for account in self._account_settings:
+            name = self.get_account_setting(account, 'name')
+            hostname = self.get_account_setting(account, 'hostname')
+            if jid.localpart == name and jid.domain == hostname:
+                return account
+        raise ValueError(f'No account found for: {jid}')
+
     @overload
     def get_account_setting(self,
                             account: str,

@@ -216,6 +216,8 @@ MAIN_WIN_ACTIONS = [
     ('quote', 's', False),
     ('quote-next', None, True),
     ('quote-prev', None, True),
+    ('reply', 'u', False),
+    ('jump-to-message', 'au', True),
     ('mention', 's', False),
     ('send-file-httpupload', 'as', False),
     ('send-file-jingle', 'as', False),

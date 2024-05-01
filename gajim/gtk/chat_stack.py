@@ -160,8 +160,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._chat_function_page.process_escape()
             return True
 
-        if self._message_action_box.is_correcting:
-            self._message_action_box.toggle_message_correction()
+        if self._message_action_box.process_escape():
             return True
 
         return False
@@ -530,6 +529,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         app.window.get_action('quote').set_enabled(online)
         app.window.get_action('mention').set_enabled(online)
+        app.window.get_action('reply').set_enabled(online)
 
     def _update_group_chat_actions(self, contact: GroupchatContact) -> None:
         joined = contact.is_joined
@@ -552,6 +552,7 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         app.window.get_action('quote').set_enabled(joined)
         app.window.get_action('mention').set_enabled(joined)
+        app.window.get_action('reply').set_enabled(joined)
         app.window.get_action('retract-message').set_enabled(joined)
 
     def _update_participant_actions(self,
@@ -794,7 +795,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_control.add_info_message(message)
 
     def _on_send_message(self) -> None:
-        message = self._message_action_box.msg_textview.get_text()
+        message = self._message_action_box.get_text()
         if message.startswith('//'):
             # Escape sequence for chat commands
             message = message[1:]
@@ -827,13 +828,8 @@ class ChatStack(Gtk.Stack, EventHelper):
             return
 
         label = self._message_action_box.get_seclabel()
-
-        correct_id = None
-        if self._message_action_box.is_correcting:
-            correct_id = self._message_action_box.try_message_correction(
-                message)
-            if correct_id is None:
-                return
+        correct_id = self._message_action_box.get_correction_id()
+        reply_data = self._message_action_box.get_message_reply()
 
         chatstate = client.get_module('Chatstate').get_active_chatstate(
             contact)
@@ -849,13 +845,14 @@ class ChatStack(Gtk.Stack, EventHelper):
                                    chatstate=chatstate,
                                    label=label,
                                    control=self._chat_control,
-                                   correct_id=correct_id)
+                                   correct_id=correct_id,
+                                   reply_data=reply_data)
 
         client.send_message(message_)
 
-        self._message_action_box.msg_textview.clear()
+        self._message_action_box.reset_state_after_send()
+
         self._last_quoted_id = None
-        app.storage.drafts.set(contact, '')
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._message_action_box.get_last_message_id(contact)

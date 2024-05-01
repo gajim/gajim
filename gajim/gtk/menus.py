@@ -700,9 +700,9 @@ def get_chat_row_menu(contact: types.ChatContactT,
 
     menu_items: MenuItemListT = []
 
+    # Text can be an empty string,
+    # e.g. if a preview has not been loaded yet
     if text:
-        # Text can be an empty string,
-        # e.g. if a preview has not been loaded yet
         timestamp_formatted = timestamp.strftime(
             app.settings.get('date_time_format'))
 
@@ -726,14 +726,26 @@ def get_chat_row_menu(contact: types.ChatContactT,
             else:
                 show_quote = False
 
-        if show_quote:
-            menu_items.append((
-                p_('Message row action', 'Quote…'), 'win.quote', text))
+        show_reply = True
+        if isinstance(contact, GroupchatContact):
+            if contact.is_joined and stanza_id is not None:
+                self_contact = contact.get_self()
+                assert self_contact is not None
+                show_reply = not self_contact.role.is_visitor
+            else:
+                show_reply = False
 
-    menu_items.append(
-        (p_('Message row action', 'Select Messages…'),
-         'win.activate-message-selection',
-         GLib.Variant('u', corrected_pk or 0)))
+        if show_reply:
+            menu_items.append((
+                p_('Message row action', 'Reply…'),
+                'win.reply',
+                GLib.Variant('u', pk)))
+        else:
+            if show_quote:
+                # Use XEP-0393 quotes if XEP-0461 message reply is not available
+                menu_items.append((
+                    p_('Message row action', 'Quote…'), 'win.quote', text))
+
 
     show_correction = False
     if message_id is not None:
@@ -767,6 +779,11 @@ def get_chat_row_menu(contact: types.ChatContactT,
             p_('Message row action', 'Retract…'),
             'win.retract-message',
             param))
+
+    menu_items.append(
+        (p_('Message row action', 'Select Messages…'),
+         'win.activate-message-selection',
+         GLib.Variant('u', corrected_pk or 0)))
 
     if pk is not None and state == MessageState.ACKNOWLEDGED:
         param = DeleteMessageParam(

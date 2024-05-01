@@ -164,7 +164,9 @@ class Message(BaseModule):
 
         occupant = self._get_occupant_info(
             remote_jid, direction, timestamp, properties)
-        message_text = properties.body
+
+        assert properties.bodies is not None
+        message_text = properties.bodies.get(None)
         oob_data = parse_oob(properties)
 
         encryption_data = None
@@ -198,6 +200,13 @@ class Message(BaseModule):
                     updated_at=timestamp,
                 )
 
+        reply = None
+        if properties.reply_data is not None:
+            reply = mod.Reply(
+                id=properties.reply_data.id,
+                to=properties.reply_data.to
+            )
+
         correction_id = None
         if properties.correction is not None:
             correction_id = properties.correction.id
@@ -219,6 +228,7 @@ class Message(BaseModule):
             occupant_=occupant,
             oob=oob_data,
             security_label_=securitylabel_data,
+            reply=reply,
             thread_id_=properties.thread,
         )
 
@@ -386,13 +396,20 @@ class Message(BaseModule):
         own_jid = self._con.get_own_jid()
 
         stanza = nbxmpp.Message(to=message.jid,
-                                body=message.text,
+                                body=message.get_text(),
                                 typ=message.type_,
                                 subject=message.subject)
 
         if message.correct_id:
             stanza.setTag('replace', attrs={'id': message.correct_id},
                           namespace=Namespace.CORRECT)
+
+        # XEP-0461
+        if message.reply_data is not None:
+            stanza.setReply(str(message.reply_data.to),
+                            message.reply_data.id,
+                            message.reply_data.fallback_start,
+                            message.reply_data.fallback_end)
 
         # XEP-0359
         message.message_id = generate_id()
@@ -427,7 +444,7 @@ class Message(BaseModule):
 
         # XEP-0184
         if not own_jid.bare_match(message.jid):
-            if message.text and not message.is_groupchat:
+            if message.has_text() and not message.is_groupchat:
                 stanza.setReceiptRequest()
 
         # Mark Message as MUC PM
@@ -437,12 +454,12 @@ class Message(BaseModule):
         # XEP-0085
         if message.chatstate is not None:
             stanza.setTag(message.chatstate, namespace=Namespace.CHATSTATES)
-            if not message.text:
+            if not message.has_text():
                 stanza.setTag('no-store',
                               namespace=Namespace.MSG_HINTS)
 
         # XEP-0333
-        if message.text:
+        if message.has_text():
             stanza.setMarkable()
         if message.marker:
             marker, id_ = message.marker
@@ -456,13 +473,12 @@ class Message(BaseModule):
         return stanza
 
     def send_message(self, message: OutgoingMessage) -> None:
-        if not message.text:
+        if not message.has_text():
             raise ValueError('Trying to send message without text')
 
         direction = ChatDirection.OUTGOING
         remote_jid = message.jid
-        message_text = message.text
-        assert message_text is not None
+
         timestamp = dt.datetime.fromtimestamp(
             message.timestamp, tz=dt.timezone.utc)
         m_type = message.message_type
@@ -520,6 +536,13 @@ class Message(BaseModule):
                     updated_at=timestamp,
                 )
 
+        reply = None
+        if message.reply_data is not None:
+            reply = mod.Reply(
+                id=message.reply_data.id,
+                to=message.reply_data.to
+            )
+
         oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
             oob_data.append(mod.OOB(url=message.oob_url, description=None))
@@ -532,13 +555,14 @@ class Message(BaseModule):
             timestamp=timestamp,
             state=state,
             resource=resource,
-            text=message_text,
+            text=message.get_text(with_fallback=False),
             id=message.message_id,
             stanza_id=None,
             user_delay_ts=None,
             correction_id=message.correct_id,
             encryption_=encryption_data,
             oob=oob_data,
+            reply=reply,
             security_label_=securitylabel_data,
             occupant_=occupant,
         )

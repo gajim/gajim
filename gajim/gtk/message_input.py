@@ -13,7 +13,6 @@ import typing
 from typing import Any
 
 import logging
-from collections import defaultdict
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -23,11 +22,9 @@ from gi.repository import GtkSource
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common import ged
-from gajim.common.events import MessageSent
-from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.i18n import get_default_lang
+from gajim.common.storage.archive import models as mod
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
 from gajim.common.types import ChatContactT
@@ -49,7 +46,7 @@ FORMAT_CHARS: dict[str, str] = {
 log = logging.getLogger('gajim.gtk.message_input')
 
 
-class MessageInputTextView(GtkSource.View, EventHelper):
+class MessageInputTextView(GtkSource.View):
     '''
     A GtkSource.View for chat message input
     '''
@@ -73,15 +70,10 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             margin_right=3,
             margin_bottom=3
         )
-        EventHelper.__init__(self)
 
         self.get_style_context().add_class('gajim-conversation-text')
 
         self._contact: ChatContactT | None = None
-
-        # XEP-0308 Message Correction
-        self._correcting: dict[ChatContactT, bool] = defaultdict(lambda: False)
-        self._last_message_id: dict[ChatContactT, str | None] = {}
 
         self._text_buffer_manager = TextBufferManager(self)
         self._text_buffer_manager.connect(
@@ -95,88 +87,24 @@ class MessageInputTextView(GtkSource.View, EventHelper):
         self.connect('destroy', self._on_destroy)
         self.connect('populate-popup', self._on_populate_popup)
 
-        self.register_events([
-            ('message-sent', ged.GUI2, self._on_message_sent)
-        ])
-
         app.plugin_manager.gui_extension_point('message_input', self)
 
-    @property
-    def is_correcting(self) -> bool:
-        if self._contact is None:
-            return False
+    def start_correction(self, message: mod.Message | None = None) -> None:
+        self.get_style_context().add_class('gajim-msg-correcting')
+        if message is None:
+            return
 
-        return self._correcting[self._contact]
-
-    def get_last_message_id(self, contact: ChatContactT) -> str | None:
-        return self._last_message_id.get(contact)
-
-    def toggle_message_correction(self) -> None:
         self.clear()
         self.grab_focus()
 
-        if self.is_correcting:
-            self._set_correcting(False)
-            self.get_style_context().remove_class('gajim-msg-correcting')
-            return
-
-        assert self._contact is not None
-        last_message_id = self._last_message_id.get(self._contact)
-        if last_message_id is None:
-            return
-
-        message = app.storage.archive.get_last_correctable_message(
-            self._contact.account, self._contact.jid, last_message_id)
-        if message is None or message.text is None:
-            return
-
         text = message.text
-        if message.corrections:
-            text = message.get_last_correction().text
-
         assert text is not None
 
-        self._set_correcting(True)
-        self.get_style_context().add_class('gajim-msg-correcting')
         self.insert_text(text)
 
-    def try_message_correction(self, message: str) -> str | None:
-        assert self._contact is not None
-        if not self.is_correcting:
-            return None
-
-        self.toggle_message_correction()
-
-        correct_id = self._last_message_id.get(self._contact)
-        if correct_id is None:
-            return None
-        message_row = app.storage.archive.get_last_correctable_message(
-            self._contact.account, self._contact.jid, correct_id)
-        if message_row is None:
-            log.info('Trying to correct message older than threshold')
-            return None
-
-        if message_row.text == message:
-            log.info('Trying to correct message with original text')
-            return None
-
-        return correct_id
-
-    def _set_correcting(self, state: bool) -> None:
-        assert self._contact is not None
-        self._correcting[self._contact] = state
-
-    def _on_message_sent(self, event: MessageSent) -> None:
-        message = event.message
-
-        assert self._contact is not None
-
-        if (message.oob and
-                message.oob[0].url == message.text):
-            # Don't allow to correct HTTP Upload file transfer URLs
-            self._last_message_id[self._contact] = None
-        else:
-            self._last_message_id[self._contact] = message.id
+    def end_correction(self) -> None:
+        self.clear()
+        self.get_style_context().remove_class('gajim-msg-correcting')
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:
@@ -190,10 +118,6 @@ class MessageInputTextView(GtkSource.View, EventHelper):
             self.insert_text(draft)
 
         self._contact = contact
-        if self.is_correcting:
-            self.get_style_context().add_class('gajim-msg-correcting')
-        else:
-            self.get_style_context().remove_class('gajim-msg-correcting')
 
         self._chat_action_processor.switch_contact(contact)
 

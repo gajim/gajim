@@ -85,6 +85,8 @@ class ChatControl(EventHelper):
 
         app.window.get_action('activate-message-selection').connect(
             'activate', self._on_activate_message_selection)
+        app.window.get_action('jump-to-message').connect(
+            'activate', self._on_jump_to_message)
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
         self.widget.show_all()
@@ -458,6 +460,17 @@ class ChatControl(EventHelper):
 
     def _on_cancel_selection(self, _widget: MessageSelection) -> None:
         self._scrolled_view.disable_row_selection()
+
+    def _on_jump_to_message(self,
+                            _action: Gio.SimpleAction,
+                            param: GLib.Variant
+                            ) -> None:
+
+        pk, timestamp = param.unpack()
+        self.scroll_to_message(
+            pk,
+            dt.datetime.fromtimestamp(timestamp, dt.timezone.utc)
+        )
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
