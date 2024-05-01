@@ -66,7 +66,7 @@ class AvatarSize(IntEnum):
     WORKSPACE_EDIT = 100
     CHAT = 48
     MESSAGE_REPLY = 24
-    NOTIFICATION = 48
+    NOTIFICATION = 96
     CALL = 100
     CALL_BIG = 200
     GROUP_INFO = 100

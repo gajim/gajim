@@ -51,7 +51,6 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
 from gajim.gtk.util import add_css_to_widget
-from gajim.gtk.util import get_monitor_scale_factor
 from gajim.gtk.util import get_total_screen_geometry
 
 log = logging.getLogger('gajim.gtk.notification')
@@ -420,26 +419,24 @@ class Linux(NotificationBackend):
 
 def _get_surface_for_notification(account: str,
                                   jid: JID | str) -> cairo.ImageSurface:
-    scale = get_monitor_scale_factor()
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
     if isinstance(contact, GroupchatContact):
-        return contact.get_avatar(size, scale)
+        return contact.get_avatar(size, 1)
 
     assert not isinstance(contact, ResourceContact)
-    return contact.get_avatar(size, scale, add_show=False)
+    return contact.get_avatar(size, 1, add_show=False)
 
 
 def _get_pixbuf_icon(account: str, jid: JID | str) -> GdkPixbuf.Pixbuf:
-    scale = get_monitor_scale_factor()
     size = AvatarSize.NOTIFICATION
     surface = _get_surface_for_notification(account, jid)
     pixbuf = Gdk.pixbuf_get_from_surface(surface,
                                          0,
                                          0,
-                                         size * scale,
-                                         size * scale)
+                                         size,
+                                         size)
     assert pixbuf is not None
     return pixbuf
 

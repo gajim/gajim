@@ -376,6 +376,7 @@ def make_rgba(color_string: str) -> Gdk.RGBA:
 
 
 def get_monitor_scale_factor() -> int:
+    # Does not work on Wayland
     display = Gdk.Display.get_default()
     assert display is not None
     monitor = display.get_primary_monitor()
