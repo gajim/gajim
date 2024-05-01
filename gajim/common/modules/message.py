@@ -139,24 +139,26 @@ class Message(BaseModule):
             self._log.debug('Generating id for message')
 
         stanza_id = self._get_stanza_id(properties)
+        origin_id = properties.origin_id
 
-        if (m_type != MessageType.GROUPCHAT and
-                direction == ChatDirection.OUTGOING):
+        if (m_type == MessageType.CHAT and
+                direction == ChatDirection.OUTGOING and
+                origin_id is not None):
             if app.storage.archive.check_if_message_id_exists(
-                    self._account, remote_jid, message_id):
-                self._log.info('Duplicated message received: %s', message_id)
+                    self._account, remote_jid, origin_id):
+                self._log.info('Duplicated message received: %s', origin_id)
                 return
 
         occupant = None
         if (m_type == MessageType.GROUPCHAT and
                 direction == ChatDirection.OUTGOING and
-                properties.origin_id is not None):
+                origin_id is not None):
 
             # Use origin-id because some group chats change the message id
             # on the reflection.
 
             pk = app.storage.archive.update_pending_message(
-                self._account, remote_jid, properties.origin_id, stanza_id)
+                self._account, remote_jid, origin_id, stanza_id)
 
             if pk is not None:
                 app.ged.raise_event(
