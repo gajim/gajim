@@ -439,8 +439,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             if not contact.can_notify() and not needs_highlight:
                 return
 
-            if contact.can_notify() or needs_highlight:
-                set_urgency_hint(app.window, True)
+            set_urgency_hint(app.window, True)
 
         if isinstance(contact, GroupchatParticipant):
             msg_type = 'private-chat-message'
