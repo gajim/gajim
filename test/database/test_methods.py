@@ -25,7 +25,7 @@ from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.util.datetime import utc_now
 
 
-class ThreadsTest(unittest.TestCase):
+class MethodsTest(unittest.TestCase):
     def setUp(self) -> None:
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
@@ -384,6 +384,54 @@ class ThreadsTest(unittest.TestCase):
 
             result = s.scalar(select(Message))
             self.assertIsNone(result)
+
+    def test_check_if_stanza_id_exists(self) -> None:
+        remote_jid = JID.from_string('remote1@jid.org')
+        m = Message(
+            account_='testacc1',
+            remote_jid_=remote_jid,
+            resource='test',
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id='123',
+            stanza_id='stanzaid123',
+            text='testmessage',
+        )
+        self._archive.insert_object(m)
+
+        result = self._archive.check_if_stanza_id_exists(
+            'testacc1', remote_jid, 'stanzaid123')
+        self.assertTrue(result)
+
+        result = self._archive.check_if_stanza_id_exists(
+            'testacc1', remote_jid, 'xxx')
+        self.assertFalse(result)
+
+    def test_check_if_message_id_exists(self) -> None:
+        remote_jid = JID.from_string('remote1@jid.org')
+        m = Message(
+            account_='testacc1',
+            remote_jid_=remote_jid,
+            resource='test',
+            type=MessageType.CHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=utc_now(),
+            state=MessageState.ACKNOWLEDGED,
+            id='123',
+            stanza_id='stanzaid123',
+            text='testmessage',
+        )
+        self._archive.insert_object(m)
+
+        result = self._archive.check_if_message_id_exists(
+            'testacc1', remote_jid, '123')
+        self.assertTrue(result)
+
+        result = self._archive.check_if_message_id_exists(
+            'testacc1', remote_jid, 'xxx')
+        self.assertFalse(result)
 
 
 if __name__ == '__main__':

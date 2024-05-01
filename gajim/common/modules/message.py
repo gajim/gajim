@@ -144,7 +144,7 @@ class Message(BaseModule):
 
         if (m_type != MessageType.GROUPCHAT and
                 direction == ChatDirection.OUTGOING):
-            if app.storage.archive.check_if_duplicate(
+            if app.storage.archive.check_if_message_id_exists(
                     self._account, remote_jid, message_id):
                 self._log.info('Duplicated message received: %s', message_id)
                 return

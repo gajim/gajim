@@ -382,21 +382,37 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def check_if_duplicate(
+    def check_if_message_id_exists(
         self, session: Session, account: str, jid: JID, message_id: str
     ) -> bool:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        stmt = select(Message.id).where(
+        exists_criteria = select(Message.id).where(
             Message.id == message_id,
             Message.fk_remote_pk == fk_remote_pk,
             Message.fk_account_pk == fk_account_pk,
-        )
+        ).exists()
 
-        self._explain(session, stmt)
-        res = session.scalars(stmt).first()
-        return res is not None
+        res = session.scalar(select(1).where(exists_criteria))
+        return bool(res)
+
+    @with_session
+    @timeit
+    def check_if_stanza_id_exists(
+        self, session: Session, account: str, jid: JID, stanza_id: str
+    ) -> bool:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        exists_criteria = select(Message.id).where(
+            Message.stanza_id == stanza_id,
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+        ).exists()
+
+        res = session.scalar(select(1).where(exists_criteria))
+        return bool(res)
 
     @with_session
     @timeit
