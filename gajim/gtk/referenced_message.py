@@ -37,16 +37,23 @@ log = logging.getLogger('gajim.gtk.referenced_message_widget')
 
 
 class ReferencedMessageWidget(Gtk.EventBox):
-    def __init__(self, contact: ChatContactT, message: mod.Message) -> None:
+    def __init__(
+        self,
+        contact: ChatContactT,
+        original_message: mod.Message
+    ) -> None:
         Gtk.EventBox.__init__(self)
 
         self._contact = contact
-        self._message = message
+        self._original_message = original_message
+        self._message = original_message
+        if original_message.corrections:
+            self._message = original_message.get_last_correction()
 
         self.connect('realize', self._on_realize)
         self.connect('button-release-event', self._on_button_release)
 
-        self._add_content(message)
+        self._add_content(self._message)
 
         self.show_all()
 
@@ -164,12 +171,12 @@ class ReferencedMessageWidget(Gtk.EventBox):
         assert self._message.text
 
         jid = self._message.remote.jid
-        reply_to_id = self._message.id
+        reply_to_id = self._original_message.id
 
         if self._message.type == MessageType.GROUPCHAT:
             jid = self._message.remote.jid
             jid = jid.new_with(resource=self._message.resource)
-            reply_to_id = self._message.stanza_id
+            reply_to_id = self._original_message.stanza_id
 
         if reply_to_id is None:
             return None
@@ -198,12 +205,14 @@ class ReplyBox(Gtk.Box):
 
         self._ref_widget = None
 
-    def enable_reply_mode(self, contact: ChatContactT, message: mod.Message) -> None:
-
+    def enable_reply_mode(
+        self, contact: ChatContactT,
+        original_message: mod.Message
+    ) -> None:
         if self._ref_widget is not None:
             self.disable_reply_mode()
 
-        self._ref_widget = ReferencedMessageWidget(contact, message)
+        self._ref_widget = ReferencedMessageWidget(contact, original_message)
         self.add(self._ref_widget)
         self.set_no_show_all(False)
         self.show_all()
