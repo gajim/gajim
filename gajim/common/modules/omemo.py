@@ -272,8 +272,10 @@ class OMEMO(BaseModule):
         client = app.get_client(self._account)
         contact = client.get_module('Contacts').get_contact(event.jid)
 
+        text = event.get_text()
+        assert text is not None
         omemo_message = self.backend.encrypt(str(event.jid),
-                                             event.get_text(),
+                                             text,
                                              groupchat=contact.is_groupchat)
         if omemo_message is None:
             raise Exception('Encryption error')
@@ -282,7 +284,7 @@ class OMEMO(BaseModule):
                              node_whitelist=ALLOWED_TAGS)
 
         if event.is_groupchat:
-            self._muc_temp_store[omemo_message.payload] = event.text
+            self._muc_temp_store[omemo_message.payload] = text
 
         event.additional_data['encrypted'] = {
             'name': 'OMEMO',
