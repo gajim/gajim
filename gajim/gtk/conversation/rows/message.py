@@ -261,16 +261,16 @@ class MessageRow(BaseRow):
 
     def _on_more_menu_button_clicked(self, button: Gtk.Button) -> None:
         menu = get_chat_row_menu(
-            self._contact,
-            self.name,
-            self.get_text(),
-            self.timestamp,
-            self.message_id,
-            self.stanza_id,
-            self.orig_pk,
-            self.pk,
-            self.state,
-            self._is_retracted
+            contact=self._contact,
+            name=self.name,
+            text=self.get_text(),
+            timestamp=self.timestamp,
+            message_id=self.message_id,
+            stanza_id=self.stanza_id,
+            pk=self.orig_pk,
+            corrected_pk=self.pk,
+            state=self.state,
+            is_retracted=self._is_retracted
             )
 
         popover = GajimPopover(menu, relative_to=button)
