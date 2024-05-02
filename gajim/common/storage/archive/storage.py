@@ -327,10 +327,11 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         result = session.scalars(stmt).all()
-        if len(result) > 1:
-            self._log.warning('Found >1 message with message id %s', message_id)
-            return None
-        return result[0]
+        if len(result) == 1:
+            return result[0]
+
+        self._log.warning('Found more than one message with message id %s', message_id)
+        return None
 
     @with_session
     @timeit
@@ -352,10 +353,11 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         result = session.scalars(stmt).all()
-        if len(result) > 1:
-            self._log.warning('Found >1 message with stanza id %s', stanza_id)
-            return None
-        return result[0]
+        if len(result) == 1:
+            return result[0]
+
+        self._log.warning('Found more than one message with stanza id %s', stanza_id)
+        return None
 
     @with_session
     @timeit
