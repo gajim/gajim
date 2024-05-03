@@ -45,6 +45,7 @@ function main {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://dev.gajim.org/gajim/omemo-dr.git
 pygobject-stubs --no-cache-dir --config-settings=config=Gtk3,Gdk3,GtkSource4
 python-gnupg
 qrcode
@@ -52,10 +53,10 @@ css_parser
 sentry-sdk
 emoji
 "
-pip3 install --upgrade precis-i18n
-pip3 install --upgrade $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
-SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install --upgrade git+https://dev.gajim.org/gajim/omemo-dr.git
+# Env variable described in https://www.msys2.org/docs/python/
+SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install --upgrade precis-i18n
+SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install --upgrade $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
 }
 

@@ -104,16 +104,17 @@ function install_deps {
 
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
+git+https://dev.gajim.org/gajim/omemo-dr.git
 python-gnupg
 qrcode
 css_parser
 sentry-sdk
 emoji
 "
-
-    build_pip install precis-i18n
-    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install git+https://dev.gajim.org/gajim/omemo-dr.git
-    build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
+    # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
+    # Env variable described in https://www.msys2.org/docs/python/
+    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install precis-i18n
+    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
     # remove the large png icons, they should be used rarely and svg works fine
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/512x512"
