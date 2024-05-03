@@ -1,1 +1,47 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2.5" stroke-linecap="square" stroke-linejoin="arcs"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="32"
+   height="32"
+   viewBox="0 0 24 24"
+   fill="none"
+   stroke="#000000"
+   stroke-width="2.5"
+   stroke-linecap="square"
+   stroke-linejoin="arcs"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="feather-unlock-symbolic.svg"
+   inkscape:version="1.3.2 (091e20ef0f, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="24.1875"
+     inkscape:cx="16"
+     inkscape:cy="16"
+     inkscape:window-width="1920"
+     inkscape:window-height="999"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     style="color:#000000;fill:#000000;-inkscape-stroke:none;stroke:none"
+     d="M 5,9.75 C 3.2211233,9.75 1.75,11.221123 1.75,13 v 7 c 0,1.778877 1.4711233,3.25 3.25,3.25 h 14 c 1.778877,0 3.25,-1.471123 3.25,-3.25 V 13 C 22.25,11.221123 20.778877,9.75 19,9.75 Z m 0,2.5 h 14 c 0.437121,0 0.75,0.312879 0.75,0.75 v 7 c 0,0.437121 -0.312879,0.75 -0.75,0.75 H 5 C 4.5628789,20.75 4.25,20.437121 4.25,20 v -7 c 0,-0.437121 0.3128789,-0.75 0.75,-0.75 z"
+     id="rect1" />
+  <path
+     style="color:#000000;fill:#000000;-inkscape-stroke:none;stroke:none"
+     d="M 11.371094,0.77734375 C 8.5130687,1.0660331 5.746364,3.3840462 5.75,7.0019531 V 11 12.25 h 2.5 V 11 7 6.9980469 c -0.00243,-2.4153634 1.5797088,-3.5532298 3.373047,-3.734375 1.793338,-0.1811453 3.572089,0.6173164 4.052734,2.984375 L 15.923828,7.4746094 18.373047,6.9765625 18.125,5.7519531 C 17.405054,2.2064007 14.229119,0.48865435 11.371094,0.77734375 Z"
+     id="path1" />
+</svg>
