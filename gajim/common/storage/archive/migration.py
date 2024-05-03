@@ -114,6 +114,8 @@ class Migration:
             self._v8()
         if user_version < 9:
             self._v9()
+        if user_version < 10:
+            self._v10()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -225,6 +227,44 @@ class Migration:
         ]
 
         self._execute_multiple(statements)
+
+    def _v10(self) -> None:
+        self._execute_multiple(['PRAGMA foreign_keys=OFF'])
+
+        with self._engine.begin() as conn:
+
+            stmt = sa.select(mod.Message.fk_occupant_pk).union(
+                sa.select(mod.Moderation.fk_occupant_pk),
+                sa.select(mod.DisplayedMarker.fk_occupant_pk),
+            )
+            occupant_pks = set(conn.scalars(stmt))
+            occupant_pks.discard(None)
+
+            conn.execute(sa.delete(mod.Occupant).where(mod.Occupant.pk.not_in(occupant_pks)))
+            conn.commit()
+
+        with self._engine.begin() as conn:
+
+            stmt = sa.select(mod.Occupant.fk_remote_pk).union(
+                sa.select(mod.Occupant.fk_real_remote_pk),
+                sa.select(mod.SecurityLabel.fk_remote_pk),
+                sa.select(mod.MessageError.fk_remote_pk),
+                sa.select(mod.Moderation.fk_remote_pk),
+                sa.select(mod.DisplayedMarker.fk_remote_pk),
+                sa.select(mod.Receipt.fk_remote_pk),
+                sa.select(mod.MAMArchiveState.fk_remote_pk),
+                sa.select(mod.Message.fk_remote_pk),
+            )
+
+            occupant_pks = set(conn.scalars(stmt))
+            occupant_pks.discard(None)
+
+            conn.execute(sa.delete(mod.Remote).where(mod.Remote.pk.not_in(occupant_pks)))
+
+        self._execute_multiple([
+            'PRAGMA foreign_keys=ON',
+            'PRAGMA user_version=10'
+        ])
 
     def _process_archive_row(
         self,
