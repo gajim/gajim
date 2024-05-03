@@ -9,7 +9,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import datetime as dt
 import logging
 import time
 from collections import defaultdict
@@ -47,8 +46,6 @@ from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.storage.archive import models as mod
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
 from gajim.common.util.datetime import utc_now
@@ -562,8 +559,6 @@ class MUC(BaseModule):
         occupant = self._get_contact(properties.jid, groupchat=True)
         room = self._get_contact(properties.jid.bare)
 
-        self._store_occupant_info(room, properties)
-
         timestamp = utc_now()
 
         if properties.is_muc_destroyed:
@@ -676,29 +671,6 @@ class MUC(BaseModule):
             return
 
         self._process_occupant_presence_change(properties, presence, occupant)
-
-    def _store_occupant_info(
-        self,
-        room_contact: GroupchatContact,
-        properties: PresenceProperties
-    ) -> None:
-
-        assert properties.muc_user is not None
-        real_jid = properties.muc_user.jid
-
-        occupant_id = properties.occupant_id or real_jid
-        timestamp = dt.datetime.fromtimestamp(
-            properties.timestamp, dt.timezone.utc)
-
-        occupant_data = mod.Occupant(
-            account_=self._account,
-            remote_jid_=room_contact.jid,
-            id=str(occupant_id),
-            real_remote_jid_=real_jid or VALUE_MISSING,
-            nickname=properties.jid.resource or VALUE_MISSING,
-            updated_at=timestamp,
-        )
-        app.storage.archive.upsert_row(occupant_data)
 
     def _process_occupant_presence_change(
             self,

@@ -149,7 +149,6 @@ class Message(BaseModule):
                 self._log.info('Duplicated message received: %s', origin_id)
                 return
 
-        occupant = None
         if (m_type == MessageType.GROUPCHAT and
                 direction == ChatDirection.OUTGOING and
                 origin_id is not None):
@@ -266,19 +265,18 @@ class Message(BaseModule):
             timestamp = properties.mam.timestamp
         return dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc)
 
-    def _get_real_jid(self, properties: MessageProperties) -> JID | None:
+    def _get_real_jid(
+        self,
+        properties: MessageProperties,
+        contact: GroupchatParticipant,
+    ) -> JID | None:
+
         if properties.is_mam_message:
             if properties.muc_user is None:
                 return None
             return properties.muc_user.jid
 
-        if properties.jid.is_bare:
-            return None
-
-        occupant_contact = self._client.get_module('Contacts').get_contact(
-            properties.jid, groupchat=True)
-        assert isinstance(occupant_contact, GroupchatParticipant)
-        real_jid = occupant_contact.real_jid
+        real_jid = contact.real_jid
         if real_jid is None:
             return None
         return real_jid.new_as_bare()
@@ -294,10 +292,17 @@ class Message(BaseModule):
         if not properties.type.is_groupchat:
             return None
 
+        if properties.jid.is_bare:
+            return None
+
+        contact = self._client.get_module('Contacts').get_contact(
+            properties.jid, groupchat=True)
+        assert isinstance(contact, GroupchatParticipant)
+
         if direction == ChatDirection.OUTGOING:
             real_jid = self._client.get_own_jid().new_as_bare()
         else:
-            real_jid = self._get_real_jid(properties)
+            real_jid = self._get_real_jid(properties, contact)
 
         occupant_id = self._get_occupant_id(properties) or real_jid
         if occupant_id is None:
@@ -316,9 +321,6 @@ class Message(BaseModule):
         )
 
     def _get_occupant_id(self, properties: MessageProperties) -> str | None:
-        if not properties.type.is_groupchat:
-            return None
-
         if properties.occupant_id is None:
             return None
 
