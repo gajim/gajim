@@ -607,12 +607,28 @@ infobar.error > revealer > box {
     color: @theme_fg_color;
 }
 @keyframes highlight {
-    from { background: rgb(140, 160, 180); }
-    to { background: transparent; }
+    0% {
+        background: transparent;
+    }
+    10% {
+        background: rgb(140, 160, 180);
+    }
+    30% {
+        background: transparent;
+    }
+    50% {
+        background: rgb(140, 160, 180);
+    }
+    70% {
+        background: transparent;
+    }
+    100% {
+        background: transparent;
+    }
 }
-.conversation-search-highlight {
-    animation-duration: 3s;
-    animation-timing-function: ease-out;
+.conversation-row-highlight {
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
     animation-iteration-count: 1;
     animation-name: highlight;
 }

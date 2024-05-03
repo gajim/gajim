@@ -15,6 +15,7 @@ from datetime import timedelta
 
 from gi.repository import Gdk
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
@@ -681,16 +682,23 @@ class ConversationView(Gtk.ScrolledWindow):
     def scroll_to_message_and_highlight(self, pk: int) -> None:
         highlight_row = None
         for row in cast(list[BaseRow], self._list_box.get_children()):
-            row.get_style_context().remove_class(
-                'conversation-search-highlight')
             if row.pk == pk:
                 highlight_row = row
+                break
 
         if highlight_row is not None:
+            highlight_row.get_style_context().remove_class(
+                'conversation-row-highlight')
             highlight_row.get_style_context().add_class(
-                'conversation-search-highlight')
+                'conversation-row-highlight')
             # This scrolls the ListBox to the highlighted row
             highlight_row.grab_focus()
+
+            GLib.timeout_add(1500, self._remove_highligh_class, highlight_row)
+
+    def _remove_highligh_class(self, highlight_row: BaseRow) -> None:
+        highlight_row.get_style_context().remove_class(
+            'conversation-row-highlight')
 
     def scroll_to_end(self) -> None:
         adj = self.get_vadjustment()
