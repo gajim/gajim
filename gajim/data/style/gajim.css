@@ -677,14 +677,14 @@ infobar.error > revealer > box {
 
 /* ReferencedMessageWidget */
 .referenced-message {
-    padding: 6px;
+    padding: 8px;
     border: 1px solid @borders;
     border-radius: 4px;
-    background-color: alpha(@insensitive_fg_color, 0.03);
+    background-color: alpha(@insensitive_fg_color, 0.06);
 }
 
 .referenced-message #quote-bar {
-    background-color: @borders;
+    background-color: alpha(@insensitive_fg_color, 0.7);
     border-radius: 3px;
 }
 

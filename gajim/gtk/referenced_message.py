@@ -87,7 +87,6 @@ class ReferencedMessageWidget(Gtk.EventBox):
         reply_icon = Gtk.Image.new_from_icon_name(
             'lucide-reply-symbolic', Gtk.IconSize.BUTTON
         )
-        reply_icon.get_style_context().add_class('dim-label')
 
         timestamp = message.timestamp.astimezone()
         format_string = app.settings.get('time_format')
