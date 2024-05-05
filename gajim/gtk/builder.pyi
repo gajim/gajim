@@ -199,14 +199,11 @@ class ChatBannerBuilder(Builder):
     toggle_roster_image: Gtk.Image
     contact_info_button: Gtk.Button
     share_menu_button: Gtk.MenuButton
+    additional_items_box: Gtk.Box
     name_label: Gtk.Label
     phone_image: Gtk.Image
     robot_image: Gtk.Image
     description_label: Gtk.Label
-    additional_items_box: Gtk.Box
-    visitor_box: Gtk.Box
-    visitor_menu_button: Gtk.MenuButton
-    visitor_popover: Gtk.Popover
 
 
 class ChatControlBuilder(Builder):
@@ -629,6 +626,12 @@ class MessageActionsBoxBuilder(Builder):
     send_message_button: Gtk.Button
     formattings_button: Gtk.MenuButton
     input_scrolled: Gtk.ScrolledWindow
+    state_box: Gtk.Box
+    state_box_image: Gtk.Image
+    state_box_label: Gtk.Label
+    visitor_menu_button: Gtk.MenuButton
+    edit_box: Gtk.Box
+    visitor_popover: Gtk.Popover
 
 
 class OmemoTrustManagerBuilder(Builder):

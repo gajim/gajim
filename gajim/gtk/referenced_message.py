@@ -198,6 +198,7 @@ class ReplyBox(Gtk.Box):
             'window-close-symbolic', Gtk.IconSize.BUTTON
         )
         close_button.set_valign(Gtk.Align.CENTER)
+        close_button.set_margin_end(6)
         close_button.set_tooltip_text(_('Cancel'))
         close_button.connect('clicked', self.disable_reply_mode)
         self.pack_end(close_button, False, False, 0)

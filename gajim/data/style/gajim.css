@@ -541,6 +541,12 @@ infobar.error > revealer > box {
 	background-color: @theme_base_color; 
 	border: none;
 }
+.message-action-info-box {
+    padding: 6px;
+    border: 1px @borders solid;
+    border-radius: 6px;
+    background-color: alpha(@theme_selected_bg_color, 0.1);
+}
 
 /* MessageInputTextView */
 .message-input-border {

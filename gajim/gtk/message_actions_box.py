@@ -261,6 +261,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         assert self._contact is not None
         self._correcting[self._contact] = message_id
 
+    def _on_cancel_correction_clicked(self, _button: Gtk.Button) -> None:
+        self.toggle_message_correction()
+
     def insert_as_quote(self, text: str, *, clear: bool = False) -> None:
         if self._contact is None:
             return
@@ -294,6 +297,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._set_correcting(None)
             self.msg_textview.end_correction()
             self.disable_reply_mode()
+            self._ui.edit_box.hide()
             return
 
         assert self._contact is not None
@@ -313,6 +317,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             message = message.get_last_correction()
 
         self.msg_textview.start_correction(message)
+        self._ui.edit_box.show()
 
         referenced_message = message.get_referenced_message()
         if referenced_message is not None:
@@ -356,6 +361,14 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         assert self._client
         state = self._client.state.is_available
 
+        self._ui.visitor_menu_button.hide()
+
+        if not state:
+            self._ui.state_box_label.set_text(
+                _('You are offline. Go online to send messages…'))
+            self._ui.state_box_image.set_from_icon_name(
+                'network-offline-symbolic', Gtk.IconSize.BUTTON)
+
         if isinstance(self._contact, GroupchatContact):
             state = self._contact.is_joined
             if self._contact.is_joined:
@@ -363,8 +376,26 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
                 assert self_contact
                 state = not self_contact.role.is_visitor
 
+                if self_contact.role.is_visitor:
+                    self._ui.visitor_menu_button.show()
+                    self._ui.state_box_label.set_text(
+                        _('You are a visitor.'))
+                    self._ui.state_box_image.set_from_icon_name(
+                        'feather-mic-off-symbolic', Gtk.IconSize.BUTTON)
+            else:
+                self._ui.state_box_label.set_text(
+                    _('You left this chat. Join to send messages…'))
+                self._ui.state_box_image.set_from_icon_name(
+                    'action-unavailable-symbolic', Gtk.IconSize.BUTTON)
+
         if isinstance(self._contact, GroupchatParticipant):
             state = self._contact.is_available
+            self._ui.state_box_label.set_text(
+                _('You can’t send private messages to contacts if they are offline.'))
+            self._ui.state_box_image.set_from_icon_name(
+                'network-offline-symbolic', Gtk.IconSize.BUTTON)
+
+        self._ui.state_box.set_visible(not state)
 
         self._ui.emoticons_button.set_sensitive(state)
         self._ui.formattings_button.set_sensitive(state)
@@ -647,6 +678,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             return True
 
         return False
+
+    def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
+        self._ui.visitor_popover.popdown()
+        app.window.activate_action('muc-request-voice', None)
 
     @property
     def is_in_reply_mode(self) -> bool:

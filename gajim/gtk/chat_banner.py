@@ -95,7 +95,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_robot_image()
         self._update_roster_button()
         self._update_avatar()
-        self._update_visitor_button()
         self._update_name_label()
         self._update_description_label()
         self._update_account_badge()
@@ -115,8 +114,6 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         if isinstance(self._contact, GroupchatContact):
             self._contact.multi_connect({
-                'user-role-changed': self._on_user_role_changed,
-                'state-changed': self._on_muc_state_changed,
                 'room-voice-request': self._on_room_voice_request,
                 'disco-info-update': self._on_disco_info_update,
             })
@@ -185,19 +182,9 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_avatar()
         self._update_robot_image()
 
-    def _on_muc_state_changed(self,
-                              contact: GroupchatContact,
-                              _signal_name: str
-                              ) -> None:
-
-        self._update_visitor_button()
-
     def _on_room_voice_request(self, *args: Any) -> None:
         self._voice_requests_button.set_no_show_all(False)
         self._voice_requests_button.show_all()
-
-    def _on_user_role_changed(self, *args: Any) -> None:
-        self._update_visitor_button()
 
     def _on_user_state_changed(self, *args: Any) -> None:
         self._update_avatar()
@@ -293,19 +280,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         res, widget = self._avatar_image_tooltip.get_tooltip(self._contact)
         tooltip.set_custom(widget)
         return res
-
-    def _update_visitor_button(self) -> None:
-        if not isinstance(self._contact, GroupchatContact):
-            self._ui.visitor_box.set_visible(False)
-            return
-
-        if self._contact.is_not_joined:
-            self._ui.visitor_box.set_visible(False)
-            return
-
-        self_contact = self._contact.get_self()
-        assert self_contact is not None
-        self._ui.visitor_box.set_visible(self_contact.role.is_visitor)
 
     def _update_name_label(self) -> None:
         assert self._contact is not None
@@ -418,10 +392,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
         clipboard.set_text(text, -1)
         self._ui.share_popover.popdown()
-
-    def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
-        self._ui.visitor_popover.popdown()
-        app.window.activate_action('muc-request-voice', None)
 
     def _on_toggle_roster_clicked(self, _button: Gtk.Button) -> None:
         state = app.settings.get('hide_groupchat_occupants_list')
