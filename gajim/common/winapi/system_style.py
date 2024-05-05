@@ -11,9 +11,9 @@ from typing import Any
 import logging
 from collections.abc import Callable
 
-from winsdk.windows.ui import Color
-from winsdk.windows.ui.viewmanagement import UIColorType
-from winsdk.windows.ui.viewmanagement import UISettings
+from winrt.windows.ui import Color
+from winrt.windows.ui.viewmanagement import UIColorType
+from winrt.windows.ui.viewmanagement import UISettings
 
 from gajim.common import app
 from gajim.common.events import StyleChanged

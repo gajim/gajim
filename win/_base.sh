@@ -80,7 +80,6 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-python-setuptools \
         "${MINGW_PACKAGE_PREFIX}"-python-setuptools-scm \
         "${MINGW_PACKAGE_PREFIX}"-python-six \
-        "${MINGW_PACKAGE_PREFIX}"-python-winsdk \
         "${MINGW_PACKAGE_PREFIX}"-python-sqlalchemy \
         "${MINGW_PACKAGE_PREFIX}"-gtk3 \
         "${MINGW_PACKAGE_PREFIX}"-gtksourceview4 \
@@ -110,6 +109,8 @@ qrcode
 css_parser
 sentry-sdk
 emoji
+winrt-Windows.UI
+winrt-Windows.UI.ViewManagement
 "
     # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
     # Env variable described in https://www.msys2.org/docs/python/
