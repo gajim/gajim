@@ -169,9 +169,6 @@ class ChatControl(EventHelper):
     def remove_message(self, pk: int) -> None:
         self._scrolled_view.remove_message(pk)
 
-    def _acknowledge_message(self, pk: int) -> None:
-        self._scrolled_view.acknowledge_message(pk)
-
     def reset_view(self) -> None:
         self._scrolled_view.reset()
 
@@ -342,7 +339,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._acknowledge_message(event.pk)
+        self._scrolled_view.acknowledge_message(event)
 
     def _on_message_received(self, event: events.MessageReceived) -> None:
         if not self._is_event_processable(event):

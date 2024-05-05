@@ -190,6 +190,7 @@ class MessageAcknowledged(ApplicationEvent):
     account: str
     jid: JID
     pk: int
+    stanza_id: str | None
 
 
 @dataclass

@@ -163,7 +163,8 @@ class Message(BaseModule):
                 app.ged.raise_event(
                     MessageAcknowledged(account=self._account,
                                         jid=remote_jid,
-                                        pk=pk))
+                                        pk=pk,
+                                        stanza_id=stanza_id))
                 return
 
         occupant = self._get_occupant_info(

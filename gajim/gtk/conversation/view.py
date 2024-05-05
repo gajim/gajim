@@ -32,7 +32,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 
@@ -671,12 +670,12 @@ class ConversationView(Gtk.ScrolledWindow):
             # unset merged state.
             decendant_row.set_merged(False)
 
-    def acknowledge_message(self, pk: int) -> None:
-        row = self.get_row_by_pk(pk)
+    def acknowledge_message(self, event: events.MessageAcknowledged) -> None:
+        row = self.get_row_by_pk(event.pk)
         if row is None:
             return
 
-        row.show_group_chat_message_state(MessageState.ACKNOWLEDGED)
+        row.set_acknowledged(event.stanza_id)
         self._check_for_merge(row)
 
     def scroll_to_message_and_highlight(self, pk: int) -> None:

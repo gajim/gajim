@@ -196,7 +196,7 @@ class MessageRow(BaseRow):
 
         if (self._contact.is_groupchat and
                 self.direction == ChatDirection.OUTGOING):
-            self.show_group_chat_message_state(self.state)
+            self._message_icons.set_message_state_icon(self.state)
 
         if message.error is not None:
             if message.error.text is not None:
@@ -407,15 +407,16 @@ class MessageRow(BaseRow):
 
         return icon, color, tooltip
 
+    def set_acknowledged(self, stanza_id: str | None) -> None:
+        self.state = MessageState.ACKNOWLEDGED
+        self.stanza_id = stanza_id
+        self._message_icons.set_message_state_icon(self.state)
+
     def show_receipt(self, show: bool) -> None:
         self._message_icons.set_receipt_icon_visible(show)
 
-    def show_group_chat_message_state(self, state: MessageState) -> None:
-        self.state = state
-        self._message_icons.set_group_chat_message_state_icon(state)
-
     def show_error(self, tooltip: str) -> None:
-        self._message_icons.hide_group_chat_message_state_icon()
+        self._message_icons.hide_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 

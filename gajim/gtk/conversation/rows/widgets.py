@@ -119,9 +119,9 @@ class MessageIcons(Gtk.Box):
         self._correction_image.set_no_show_all(True)
         self._correction_image.get_style_context().add_class('dim-label')
 
-        self._group_chat_message_state_image = Gtk.Image()
-        self._group_chat_message_state_image.set_no_show_all(True)
-        self._group_chat_message_state_image.get_style_context().add_class(
+        self._message_state_image = Gtk.Image()
+        self._message_state_image.set_no_show_all(True)
+        self._message_state_image.get_style_context().add_class(
             'dim-label')
 
         self._marker_image = Gtk.Image.new_from_icon_name(
@@ -138,7 +138,7 @@ class MessageIcons(Gtk.Box):
         self.add(self._encryption_image)
         self.add(self._security_label)
         self.add(self._correction_image)
-        self.add(self._group_chat_message_state_image)
+        self.add(self._message_state_image)
         self.add(self._marker_image)
         self.add(self._error_image)
         self.show_all()
@@ -172,20 +172,20 @@ class MessageIcons(Gtk.Box):
             return
         self._marker_image.set_visible(visible)
 
-    def set_group_chat_message_state_icon(self, state: MessageState) -> None:
+    def set_message_state_icon(self, state: MessageState) -> None:
         if state == MessageState.PENDING:
             icon_name = 'feather-clock-symbolic'
             tooltip_text = _('Pending')
         else:
             icon_name = 'feather-check-symbolic'
             tooltip_text = _('Received')
-        self._group_chat_message_state_image.set_from_icon_name(
+        self._message_state_image.set_from_icon_name(
             icon_name, Gtk.IconSize.MENU)
-        self._group_chat_message_state_image.set_tooltip_text(tooltip_text)
-        self._group_chat_message_state_image.show()
+        self._message_state_image.set_tooltip_text(tooltip_text)
+        self._message_state_image.show()
 
-    def hide_group_chat_message_state_icon(self):
-        self._group_chat_message_state_image.hide()
+    def hide_message_state_icon(self):
+        self._message_state_image.hide()
 
     def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)
