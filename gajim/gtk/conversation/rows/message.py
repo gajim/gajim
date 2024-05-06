@@ -177,7 +177,7 @@ class MessageRow(BaseRow):
         self._bottom_box.pack_end(more_menu_button, False, True, 0)
 
         if self._original_message.corrections:
-            self.set_correction()
+            self._set_correction()
 
         if message.moderation is not None:
             self.set_retracted(get_retraction_text(
@@ -445,7 +445,7 @@ class MessageRow(BaseRow):
 
         self._is_retracted = True
 
-    def set_correction(self) -> None:
+    def _set_correction(self) -> None:
         original_text = textwrap.fill(self._original_text,
                                       width=150,
                                       max_lines=10,
