@@ -347,6 +347,7 @@ class VariantMixin:
 
 @dataclass
 class ReplyData:
+    pk: int
     to: JID
     id: str
     fallback_start: int

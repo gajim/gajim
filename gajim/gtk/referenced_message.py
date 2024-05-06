@@ -187,6 +187,7 @@ class ReferencedMessageWidget(Gtk.EventBox):
 
         quoted_text = quote_text(self._message.text)
         return ReplyData(
+            pk=self._original_message.pk,
             to=jid,
             id=reply_to_id,
             fallback_start=0,

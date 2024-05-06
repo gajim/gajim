@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from gajim.common import types
+from gajim.common.const import Draft
 from gajim.common.helpers import Observable
 
 
@@ -12,17 +13,26 @@ class DraftStorage(Observable):
     def __init__(self) -> None:
         Observable.__init__(self)
 
-        self._drafts: dict[types.ChatContactT, str] = {}
+        self._drafts: dict[types.ChatContactT, Draft] = {}
 
-    def set(self, contact: types.ChatContactT, text: str) -> None:
-        if not text:
+    def set(
+        self,
+        contact: types.ChatContactT,
+        draft: Draft | None,
+    ) -> None:
+
+        if draft is None:
             self.remove(contact)
             return
 
-        self._drafts[contact] = text
-        self.notify('draft-update', contact, text)
+        self._drafts[contact] = draft
+        self.notify('draft-update', contact, draft)
 
-    def get(self, contact: types.ChatContactT) -> str | None:
+    def get(
+        self,
+        contact: types.ChatContactT
+    ) -> Draft | None:
+
         return self._drafts.get(contact)
 
     def remove(self, contact: types.ChatContactT) -> None:

@@ -20,6 +20,7 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
+from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_groupchat_name
@@ -413,7 +414,7 @@ class ChatListRow(Gtk.ListBoxRow):
                          _draft_storage: DraftStorage,
                          _signal_name: str,
                          contact: ChatContactT,
-                         draft: str | None
+                         draft: Draft | None,
                          ) -> None:
 
         if contact != self.contact:
@@ -421,14 +422,14 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self._show_draft(draft)
 
-    def _show_draft(self, draft: str | None) -> None:
-        if not draft:
+    def _show_draft(self, draft: Draft | None) -> None:
+        if draft is None:
             self._ui.message_label.get_style_context().remove_class('draft')
             self._display_last_conversation_row()
             return
 
         self.set_nick('')
-        self._ui.message_label.set_text(_('Draft: %s') % draft)
+        self._ui.message_label.set_text(_('Draft: %s') % draft.text)
         self._ui.message_label.get_style_context().add_class('draft')
 
     def _on_state_flags_changed(self,

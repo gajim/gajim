@@ -7,6 +7,7 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 
+from dataclasses import dataclass
 from datetime import datetime
 from datetime import timezone
 from enum import Enum
@@ -360,6 +361,12 @@ class JingleState(Enum):
 class CallType(Enum):
     AUDIO = 'audio'
     VIDEO = 'video'
+
+
+@dataclass
+class Draft:
+    text: str
+    reply_pk: int | None
 
 
 MUC_CREATION_EXAMPLES = [

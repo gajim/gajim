@@ -26,6 +26,7 @@ from gajim.common.client import Client
 from gajim.common.commands import CommandFailed
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
+from gajim.common.const import Draft
 from gajim.common.const import SimpleClientState
 from gajim.common.events import MessageSent
 from gajim.common.ged import EventHelper
@@ -197,6 +198,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
 
+        self._store_draft()
         self.disable_reply_mode()
 
         self._contact = contact
@@ -233,12 +235,47 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._set_chatstate(True)
 
         self.msg_textview.switch_contact(contact)
-        if self.is_correcting:
-            self.msg_textview.start_correction()
+
+        self._ui.edit_box.set_visible(self._is_correcting)
+        self._restore_draft()
 
         self._security_label_selector.switch_contact(contact)
 
         self._update_message_input_state()
+
+    def _store_draft(self) -> None:
+        if self._contact is None:
+            return
+
+        text = self.msg_textview.get_text()
+
+        reply_pk = None
+        reply_data = self._reply_box.get_message_reply()
+        if reply_data is not None:
+            reply_pk = reply_data.pk
+
+        draft = None
+        if text or reply_pk is not None:
+            draft = Draft(text, reply_pk)
+
+        app.storage.drafts.set(self._contact, draft)
+
+    def _restore_draft(self) -> None:
+        assert self._contact is not None
+        draft = app.storage.drafts.get(self._contact)
+        if draft is None:
+            return
+
+        self.msg_textview.insert_text(draft.text)
+
+        if draft.reply_pk is None:
+            return
+
+        message = app.storage.archive.get_message_with_pk(draft.reply_pk)
+        if message is None:
+            return
+
+        self._enable_reply_mode(message)
 
     def clear(self) -> None:
         if self._client is not None and not self._client.is_destroyed():
@@ -255,7 +292,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         return self.msg_textview.get_text()
 
     @property
-    def is_correcting(self) -> bool:
+    def _is_correcting(self) -> bool:
         if self._contact is None:
             return False
 
@@ -266,7 +303,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._correcting[self._contact] = message_id
 
     def _on_cancel_correction_clicked(self, _button: Gtk.Button) -> None:
-        self.toggle_message_correction()
+        self._cancel_action()
 
     def insert_as_quote(self, text: str, *, clear: bool = False) -> None:
         if self._contact is None:
@@ -280,13 +317,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self.msg_textview.insert_as_quote(text)
 
     def process_escape(self) -> bool:
-        if not self.is_correcting and not self.is_in_reply_mode:
+        if not self._is_correcting and not self._reply_box.is_in_reply_mode:
             return False
         self._cancel_action()
         return True
 
     def _cancel_action(self) -> None:
-        if self.is_correcting:
+        if self._is_correcting:
             self.toggle_message_correction()
         self.disable_reply_mode()
 
@@ -294,17 +331,17 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self.msg_textview.clear()
         self._cancel_action()
         assert self._contact is not None
-        app.storage.drafts.set(self._contact, '')
+        app.storage.drafts.set(self._contact, None)
 
     def toggle_message_correction(self) -> None:
-        if self.is_correcting:
+        assert self._contact is not None
+
+        if self._is_correcting:
             self._set_correcting(None)
             self.msg_textview.end_correction()
-            self.disable_reply_mode()
             self._ui.edit_box.hide()
             return
 
-        assert self._contact is not None
         last_message_id = self._last_message_id.get(self._contact)
         if last_message_id is None:
             return
@@ -681,10 +718,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()
         app.window.activate_action('muc-request-voice', None)
-
-    @property
-    def is_in_reply_mode(self) -> bool:
-        return self._reply_box.is_in_reply_mode
 
     def _enable_reply_mode(self, original_message: mod.Message) -> None:
         assert self._contact is not None

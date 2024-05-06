@@ -105,18 +105,9 @@ class MessageInputTextView(GtkSource.View):
         self.clear()
 
     def switch_contact(self, contact: ChatContactT) -> None:
-        if self._contact is not None:
-            app.storage.drafts.set(self._contact, self.get_text())
-
         self._text_buffer_manager.switch_contact(contact)
-
         self.clear()
-        draft = app.storage.drafts.get(contact)
-        if draft is not None:
-            self.insert_text(draft)
-
         self._contact = contact
-
         self._chat_action_processor.switch_contact(contact)
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
