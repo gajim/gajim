@@ -199,7 +199,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             'state-changed', self._on_client_state_changed)
 
         self._store_draft()
-        self.disable_reply_mode()
+        self._disable_reply_mode()
 
         self._contact = contact
 
@@ -325,7 +325,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
     def _cancel_action(self) -> None:
         if self._is_correcting:
             self.toggle_message_correction()
-        self.disable_reply_mode()
+        self._disable_reply_mode()
 
     def reset_state_after_send(self) -> None:
         self.msg_textview.clear()
@@ -724,7 +724,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._reply_box.enable_reply_mode(self._contact, original_message)
         self.msg_textview.grab_focus()
 
-    def disable_reply_mode(self, *args: Any) -> None:
+    def _disable_reply_mode(self, *args: Any) -> None:
         self._reply_box.disable_reply_mode()
 
     def get_message_reply(self) -> ReplyData | None:
