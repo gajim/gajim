@@ -23,7 +23,6 @@ class BaseRow(Gtk.ListBoxRow):
         self.kind: str = ''
         self.direction = ChatDirection.INCOMING
         self.name: str = ''
-        self.message_id: str | None = None
         self.pk: int | None = None
         self.stanza_id: str | None = None
         self.text: str = ''

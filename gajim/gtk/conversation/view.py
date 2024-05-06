@@ -519,6 +519,14 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
 
+        if message.corrections:
+            # Store the same MessageRow object also with the message id
+            # of the last correction, because we need it for XEP-0184 Receipts
+            # which does not reference the original message id.
+            corr_message_id = message.get_last_correction().id
+            if corr_message_id is not None:
+                self._message_id_row_map[corr_message_id] = message_row
+
         if message.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(
@@ -803,6 +811,10 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is None:
             return
 
+        corr_message_id = original_message.get_last_correction().id
+        if corr_message_id is not None:
+            self._message_id_row_map[corr_message_id] = message_row
+
         message_row.refresh_original_message(original_message)
 
         assert self._read_marker_row is not None
@@ -820,7 +832,10 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def set_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
-        if message_row is not None:
+        if message_row is None:
+            return
+
+        if message_row.last_message_id == id_:
             message_row.set_receipt(True)
             self._check_for_merge(message_row)
 

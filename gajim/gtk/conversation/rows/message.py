@@ -60,7 +60,6 @@ class MessageRow(BaseRow):
 
         self.timestamp = message.timestamp.astimezone()
         self.db_timestamp = message.timestamp.timestamp()
-        self.message_id = message.id
         self.stanza_id = message.stanza_id
         self.direction = ChatDirection(message.direction)
 
@@ -97,6 +96,16 @@ class MessageRow(BaseRow):
         return cls(contact, message)
 
     @property
+    def last_message_id(self) -> str | None:
+        if self._corr_message is None:
+            return self._original_message.id
+        return self._corr_message.id
+
+    @property
+    def message_id(self) -> str | None:
+        return self._original_message.id
+
+    @property
     def has_receipt(self) -> bool:
         return self._has_receipt
 
@@ -118,10 +127,13 @@ class MessageRow(BaseRow):
         for widget in self._bottom_box.get_children():
             widget.destroy()
 
+        self._corr_message = None
+
         # From here on, if this is a correction all data must
         # be taken from the correction
         if message.corrections:
             message = message.get_last_correction()
+            self._corr_message = message
 
         self.pk = message.pk
 
@@ -268,7 +280,7 @@ class MessageRow(BaseRow):
             name=self.name,
             text=self.get_text(),
             timestamp=self.timestamp,
-            message_id=self.message_id,
+            message_id=self._original_message.id,
             stanza_id=self.stanza_id,
             pk=self.orig_pk,
             corrected_pk=self.pk,
