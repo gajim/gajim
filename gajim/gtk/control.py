@@ -370,7 +370,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.show_receipt(event.receipt_id)
+        self._scrolled_view.set_receipt(event.receipt_id)
 
     def _on_displayed_received(self, event: events.DisplayedReceived) -> None:
         if not self._is_event_processable(event):

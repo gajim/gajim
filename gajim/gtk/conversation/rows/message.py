@@ -71,6 +71,7 @@ class MessageRow(BaseRow):
         self._original_message = message
 
         self._is_retracted = message.moderation is not None
+        self._has_receipt = False
 
         self._avatar_box = AvatarBox(contact)
 
@@ -94,6 +95,10 @@ class MessageRow(BaseRow):
     ) -> MessageRow:
 
         return cls(contact, message)
+
+    @property
+    def has_receipt(self) -> bool:
+        return self._has_receipt
 
     def refresh_original_message(self, original_message: Message) -> None:
         # After a correction, the original message is loaded again from the
@@ -188,10 +193,7 @@ class MessageRow(BaseRow):
             self._message_icons.set_security_label_data(*sec_label_data)
             self._message_icons.set_security_label_visible(True)
 
-        # Receipts are always for the original message, never the correction
-        self.has_receipt = self._original_message.receipt is not None
-        if self.has_receipt:
-            self.show_receipt(True)
+        self.set_receipt(message.receipt is not None)
 
         self.state = MessageState(message.state)
 
@@ -365,6 +367,11 @@ class MessageRow(BaseRow):
     def is_same_state(self, message: MessageRow) -> bool:
         return message.state == self.state
 
+    def has_same_receipt_status(self, message: MessageRow) -> bool:
+        if not app.settings.get('positive_184_ack'):
+            return True
+        return self._has_receipt == message.has_receipt
+
     def is_mergeable(self, message: MessageRow) -> bool:
         if message.type != self.type:
             return False
@@ -380,9 +387,8 @@ class MessageRow(BaseRow):
             return False
         if not self.is_same_securitylabels(message):
             return False
-        if app.settings.get('positive_184_ack'):
-            if self.has_receipt != message.has_receipt:
-                return False
+        if not self.has_same_receipt_status(message):
+            return False
         return abs(message.timestamp - self.timestamp) < MERGE_TIMEFRAME
 
     def get_text(self) -> str:
@@ -416,8 +422,9 @@ class MessageRow(BaseRow):
         self.stanza_id = stanza_id
         self._message_icons.set_message_state_icon(self.state)
 
-    def show_receipt(self, show: bool) -> None:
-        self._message_icons.set_receipt_icon_visible(show)
+    def set_receipt(self, value: bool) -> None:
+        self._has_receipt = value
+        self._message_icons.set_receipt_icon_visible(value)
 
     def show_error(self, tooltip: str) -> None:
         self._message_icons.hide_message_state_icon()
@@ -439,8 +446,6 @@ class MessageRow(BaseRow):
         self._is_retracted = True
 
     def set_correction(self) -> None:
-        self.show_receipt(False)
-
         original_text = textwrap.fill(self._original_text,
                                       width=150,
                                       max_lines=10,

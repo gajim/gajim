@@ -581,7 +581,6 @@ class Message(BaseModule):
             return
 
         if message.correct_id is not None:
-            # TODO: Reset Chat Markers on Correction
             event = MessageCorrected(account=self._account,
                                      jid=message.jid,
                                      corrected_message=message_data)

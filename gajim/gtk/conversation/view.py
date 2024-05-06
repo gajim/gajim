@@ -818,11 +818,10 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is not None:
             message_row.set_retracted(text)
 
-    def show_receipt(self, id_: str) -> None:
+    def set_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
-            message_row.has_receipt = True
-            message_row.show_receipt(True)
+            message_row.set_receipt(True)
             self._check_for_merge(message_row)
 
     def show_error(self, id_: str, error: StanzaError) -> None:
