@@ -631,6 +631,7 @@ class MessageActionsBoxBuilder(Builder):
     state_box_label: Gtk.Label
     visitor_menu_button: Gtk.MenuButton
     edit_box: Gtk.Box
+    edit_box_image: Gtk.Image
     visitor_popover: Gtk.Popover
 
 

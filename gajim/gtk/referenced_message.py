@@ -40,13 +40,16 @@ class ReferencedMessageWidget(Gtk.EventBox):
     def __init__(
         self,
         contact: ChatContactT,
-        original_message: mod.Message
+        original_message: mod.Message,
+        show_reply_icon: bool = True,
     ) -> None:
         Gtk.EventBox.__init__(self)
 
         self._contact = contact
         self._original_message = original_message
         self._message = original_message
+        self._show_reply_icon = show_reply_icon
+
         if original_message.corrections:
             self._message = original_message.get_last_correction()
 
@@ -87,6 +90,8 @@ class ReferencedMessageWidget(Gtk.EventBox):
         reply_icon = Gtk.Image.new_from_icon_name(
             'lucide-reply-symbolic', Gtk.IconSize.BUTTON
         )
+
+        reply_icon.set_no_show_all(not self._show_reply_icon)
 
         timestamp = message.timestamp.astimezone()
         format_string = app.settings.get('time_format')
@@ -192,27 +197,37 @@ class ReferencedMessageWidget(Gtk.EventBox):
 
 class ReplyBox(Gtk.Box):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, spacing=14, no_show_all=True)
+        Gtk.Box.__init__(self, spacing=12, no_show_all=True)
+
+        reply_image = Gtk.Image.new_from_icon_name(
+            'lucide-reply-symbolic', Gtk.IconSize.LARGE_TOOLBAR
+        )
+        reply_image.set_size_request(AvatarSize.CHAT, -1)
+        reply_image.get_style_context().add_class('dim-label')
+        self.pack_start(reply_image, False, True, 0)
 
         close_button = Gtk.Button.new_from_icon_name(
             'window-close-symbolic', Gtk.IconSize.BUTTON
         )
         close_button.set_valign(Gtk.Align.CENTER)
-        close_button.set_margin_end(6)
+        close_button.set_relief(Gtk.ReliefStyle.NONE)
         close_button.set_tooltip_text(_('Cancel'))
+        close_button.get_style_context().add_class('message-actions-box-button')
+        close_button.get_style_context().remove_class('image-button')
         close_button.connect('clicked', self.disable_reply_mode)
         self.pack_end(close_button, False, False, 0)
 
         self._ref_widget = None
 
     def enable_reply_mode(
-        self, contact: ChatContactT,
-        original_message: mod.Message
+        self, contact: ChatContactT, original_message: mod.Message
     ) -> None:
         if self._ref_widget is not None:
             self.disable_reply_mode()
 
-        self._ref_widget = ReferencedMessageWidget(contact, original_message)
+        self._ref_widget = ReferencedMessageWidget(
+            contact, original_message, show_reply_icon=False
+        )
         self.add(self._ref_widget)
         self.set_no_show_all(False)
         self.show_all()

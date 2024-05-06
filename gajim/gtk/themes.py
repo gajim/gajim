@@ -69,10 +69,6 @@ CSS_STYLE_OPTIONS: list[StyleOption] = [
                 '.gajim-status-message',
                 StyleAttr.FONT),
 
-    StyleOption(_('Message Correction: Background Color'),
-                '.gajim-msg-correcting text',
-                StyleAttr.BACKGROUND),
-
     StyleOption(_('Chat Banner: Foreground Color'),
                 '.gajim-banner',
                 StyleAttr.COLOR),

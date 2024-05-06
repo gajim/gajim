@@ -214,12 +214,12 @@
       <object class="GtkBox" id="state_box">
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
-        <property name="halign">center</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage" id="state_box_image">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
+            <property name="icon_size">3</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -270,9 +270,6 @@
             <property name="position">2</property>
           </packing>
         </child>
-        <style>
-          <class name="message-action-info-box"/>
-        </style>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -286,47 +283,21 @@
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
         <property name="spacing">12</property>
-        <child type="center">
-          <object class="GtkBox">
+        <child>
+          <object class="GtkImage" id="edit_box_image">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">document-edit-symbolic</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Edit your message…</property>
-                <style>
-                  <class name="small-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
+            <property name="icon-name">document-edit-symbolic</property>
+            <property name="icon_size">3</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">3</property>
+            <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
         <child>
           <object class="GtkButton">
@@ -334,6 +305,7 @@
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="tooltip-text" translatable="yes">Cancel</property>
+            <property name="relief">none</property>
             <signal name="clicked" handler="_on_cancel_correction_clicked" swapped="no"/>
             <child>
               <object class="GtkImage">
@@ -342,6 +314,9 @@
                 <property name="icon-name">window-close-symbolic</property>
               </object>
             </child>
+            <style>
+              <class name="message-actions-box-button"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -350,9 +325,21 @@
             <property name="position">2</property>
           </packing>
         </child>
-        <style>
-          <class name="message-action-info-box"/>
-        </style>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label" translatable="yes">Edit your message (Esc to cancel)…</property>
+            <style>
+              <class name="small-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>

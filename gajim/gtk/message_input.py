@@ -90,7 +90,6 @@ class MessageInputTextView(GtkSource.View):
         app.plugin_manager.gui_extension_point('message_input', self)
 
     def start_correction(self, message: mod.Message | None = None) -> None:
-        self.get_style_context().add_class('gajim-msg-correcting')
         if message is None:
             return
 
@@ -104,7 +103,6 @@ class MessageInputTextView(GtkSource.View):
 
     def end_correction(self) -> None:
         self.clear()
-        self.get_style_context().remove_class('gajim-msg-correcting')
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if self._contact is not None:

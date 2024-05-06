@@ -39,9 +39,6 @@
 .gajim-user-connected {
     color: rgb(160, 200, 170);
 }
-.gajim-msg-correcting text {
-    background: rgb(240, 230, 170);
-}
 .gajim-notify-message {
 	color: rgb(30, 144, 255);
 }

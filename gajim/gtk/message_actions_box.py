@@ -24,6 +24,7 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.commands import CommandFailed
+from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import SimpleClientState
 from gajim.common.events import MessageSent
@@ -63,6 +64,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self.get_style_context().add_class('message-actions-box')
 
         self.attach(self._ui.box, 0, 0, 1, 1)
+
+        self._ui.state_box_image.set_size_request(AvatarSize.CHAT, -1)
+        self._ui.edit_box_image.set_size_request(AvatarSize.CHAT, -1)
 
         # For message replies
         self._reply_box = ReplyBox()
@@ -382,11 +386,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
                         _('You are a visitor.'))
                     self._ui.state_box_image.set_from_icon_name(
                         'feather-mic-off-symbolic', Gtk.IconSize.BUTTON)
-            else:
-                self._ui.state_box_label.set_text(
-                    _('You left this chat. Join to send messages…'))
-                self._ui.state_box_image.set_from_icon_name(
-                    'action-unavailable-symbolic', Gtk.IconSize.BUTTON)
 
         if isinstance(self._contact, GroupchatParticipant):
             state = self._contact.is_available
