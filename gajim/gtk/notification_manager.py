@@ -260,15 +260,16 @@ class NotificationManager(Gtk.ListBox):
         if row is not None:
             return
 
-        new_row = InvitationReceivedRow(self._account, event)
-        new_row.connect('destroy', self._on_row_destroy)
-        self.add(new_row)
-        self.update_unread_count()
-
         jid = event.from_.bare
         client = app.get_client(event.account)
         muc_contact = client.get_module('Contacts').get_contact(event.muc)
         assert isinstance(muc_contact, GroupchatContact)
+
+        new_row = InvitationReceivedRow(self._account, event, muc_contact)
+        new_row.connect('destroy', self._on_row_destroy)
+        self.add(new_row)
+        self.update_unread_count()
+
         if (muc_contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
@@ -432,9 +433,13 @@ class UnsubscribedRow(NotificationRow):
 
 
 class InvitationReceivedRow(NotificationRow):
-    def __init__(self, account: str, event: MucInvitation) -> None:
+    def __init__(self,
+                 account: str,
+                 event: MucInvitation,
+                 muc_contact: GroupchatContact) -> None:
         NotificationRow.__init__(self, account, str(event.muc))
         self.type = 'invitation-received'
+        muc_contact.connect('room-joined', self._on_room_joined)
 
         self._event = event
 
@@ -447,9 +452,6 @@ class InvitationReceivedRow(NotificationRow):
         title_label.get_style_context().add_class('bold')
         self.grid.attach(title_label, 2, 1, 1, 1)
 
-        client = app.get_client(event.account)
-        muc_contact = client.get_module('Contacts').get_contact(event.muc)
-        assert isinstance(muc_contact, GroupchatContact)
         if (muc_contact.muc_context == 'private' and
                 not event.muc.bare_match(event.from_)):
             contact = self._client.get_module('Contacts').get_contact(jid)
@@ -492,6 +494,10 @@ class InvitationReceivedRow(NotificationRow):
             self.jid, self._event.from_)
         self.destroy()
 
+    def _on_room_joined(self,
+                        contact: GroupchatContact,
+                        signal_name: str) -> None:
+        self.destroy()
 
 class InvitationDeclinedRow(NotificationRow):
     def __init__(self, account: str, event: MucDecline) -> None:
