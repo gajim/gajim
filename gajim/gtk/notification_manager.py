@@ -484,7 +484,7 @@ class InvitationReceivedRow(NotificationRow):
         self.show_all()
 
     def _on_show_invitation(self, _button: Gtk.Button) -> None:
-        open_window('GroupChatInvitation',
+        open_window('GroupChatInvitationDialog',
                     account=self._account,
                     event=self._event)
         self.destroy()
