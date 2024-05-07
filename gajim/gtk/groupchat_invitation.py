@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -35,11 +36,12 @@ class GroupChatInvitationDialog(Gtk.ApplicationWindow):
         self.connect('key-press-event', self._on_key_press)
 
         invitation_widget = GroupChatInvitation(account, event)
-        invitation_widget.connect('destroy', self._on_invitation_widget_destroyed)
+        invitation_widget.connect('accepted', self._on_invitation_widget_action)
+        invitation_widget.connect('declined', self._on_invitation_widget_action)
         self.add(invitation_widget)
         self.show_all()
 
-    def _on_invitation_widget_destroyed(self, _widget: GroupChatInvitation) -> None:
+    def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
         self.destroy()
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
@@ -48,8 +50,22 @@ class GroupChatInvitationDialog(Gtk.ApplicationWindow):
 
 
 class GroupChatInvitation(Gtk.Box):
+
+    __gsignals__ = {
+        'accepted': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            ()
+        ),
+        'declined': (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            ()
+        ),
+    }
+
     def __init__(self, account: str, event: MucInvitation) -> None:
-        Gtk.Box.__init__(self)
+        Gtk.Box.__init__(self, halign=Gtk.Align.CENTER)
 
         self._account = account
         self._client = app.get_client(account)
@@ -127,8 +143,8 @@ class GroupChatInvitation(Gtk.Box):
         app.window.show_add_join_groupchat(
             self._account, self._room_jid, nickname=nickname
         )
-        self.destroy()
+        self.emit('accepted')
 
     def _on_decline(self, _button: Gtk.Button) -> None:
         self._client.get_module('MUC').decline(self._room_jid, self._from)
-        self.destroy()
+        self.emit('declined')
