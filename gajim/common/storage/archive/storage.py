@@ -295,6 +295,28 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def upsert_row2(self, session: Session, row: Any) -> int | None:
+        return self._upsert_row2(session, row)
+
+    def _upsert_row2(
+        self,
+        session: Session,
+        row: Any,
+    ) -> int | None:
+        self._set_foreign_keys(session, row)
+        self._log_row(row)
+        table = row.__class__
+
+        stmt = insert(table).values(**row.get_insert_values())
+        stmt = stmt.on_conflict_do_update(
+            set_=row.get_upsert_values(),
+            where=sa.text('excluded.timestamp > timestamp'))
+        stmt = stmt.returning(table.pk)
+        pk = session.scalar(stmt)
+        return pk
+
+    @with_session
+    @timeit
     def get_message_with_pk(
         self, session: Session, pk: int, options: Any = None
     ) -> Message | None:

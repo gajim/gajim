@@ -525,6 +525,64 @@ class FileTransfer(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
 
+class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = 'reaction'
+    __upsert_cols__ = ['emojis', 'timestamp']
+    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
+
+    pk: Mapped[int] = mapped_column(primary_key=True, init=False)
+
+    account_: str = dataclasses.field(repr=False)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+    )
+
+    remote_jid_: JID = dataclasses.field(repr=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+
+    occupant_: Occupant | None = dataclasses.field(repr=False)
+    occupant: Mapped[Occupant | None] = relationship(
+        lazy='joined', viewonly=True, init=False
+    )
+    fk_occupant_pk: Mapped[int | None] = mapped_column(
+        ForeignKey('occupant.pk'), default=None, init=False
+    )
+
+    id: Mapped[str] = mapped_column()
+    direction: Mapped[int] = mapped_column()
+    emojis: Mapped[str] = mapped_column()
+    timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
+
+    __table_args__ = (
+        Index(
+            'idx_reaction',
+            'id',
+            'fk_remote_pk',
+            'fk_account_pk',
+            'direction',
+            unique=True,
+            sqlite_where=fk_occupant_pk.is_(None),
+        ),
+        Index(
+            'idx_reaction_gc',
+            'id',
+            'fk_remote_pk',
+            'fk_occupant_pk',
+            'fk_account_pk',
+            'direction',
+            unique=True,
+            sqlite_where=fk_occupant_pk.isnot(None),
+        ),
+    )
+
+    def get_select_stmt(self) -> Select[Any]:
+        return select(Reaction).where(
+            Reaction.id == self.id,
+            Reaction.fk_remote_pk == self.fk_remote_pk,
+            Reaction.fk_account_pk == self.fk_account_pk,
+        )
+
+
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'message'
 
@@ -641,6 +699,24 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             fk_account_pk == Receipt.fk_account_pk,
         ),
         viewonly=True,
+    )
+
+    reactions: Mapped[list[Reaction]] = relationship(
+        lazy='selectin',
+        init=False,
+        primaryjoin=sa.and_(
+            expr.case(
+                (
+                    type == 2,  # Groupchat
+                    sa.orm.foreign(stanza_id) == Reaction.id,
+                ),
+                else_=sa.orm.foreign(id) == Reaction.id,
+            ),
+            fk_remote_pk == Reaction.fk_remote_pk,
+            fk_account_pk == Reaction.fk_account_pk,
+        ),
+        viewonly=True,
+        uselist=True,
     )
 
     moderation: Mapped[Moderation | None] = relationship(
