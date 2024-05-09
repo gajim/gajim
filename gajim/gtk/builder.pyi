@@ -867,6 +867,7 @@ class ServerInfoBuilder(Builder):
     tls_version: Gtk.Label
     cipher_suite: Gtk.Label
     cert_scrolled: Gtk.ScrolledWindow
+    no_certificate_label: Gtk.Label
     features: Gtk.Box
     features_listbox: Gtk.ListBox
     clipboard_button: Gtk.Button

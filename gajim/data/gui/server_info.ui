@@ -439,8 +439,8 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkScrolledWindow" id="cert_scrolled">
-            <property name="visible">True</property>
             <property name="can-focus">True</property>
+            <property name="no-show-all">True</property>
             <child>
               <placeholder/>
             </child>
@@ -449,6 +449,22 @@
             <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="no_certificate_label">
+            <property name="can-focus">False</property>
+            <property name="no-show-all">True</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">No certificate</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>

@@ -87,11 +87,15 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         server_info = self._client.get_module('Discovery').server_info
         self._add_contact_addresses(server_info.dataforms)
 
-        self._cert = self._client.certificate
         self._add_connection_info()
 
-        cert_box = CertificateBox(account, self._cert)
-        self._ui.cert_scrolled.add(cert_box)
+        if self._client.certificate is None:
+            self._ui.no_certificate_label.show()
+        else:
+            cert_box = CertificateBox(account, self._client.certificate)
+            self._ui.cert_scrolled.add(cert_box)
+            self._ui.cert_scrolled.show()
+            cert_box.show_all()
 
         for feature in self._get_features():
             self._add_feature(feature)
