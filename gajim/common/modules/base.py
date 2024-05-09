@@ -145,6 +145,9 @@ class BaseModule(EventHelper):
         return self._con.get_module('Contacts').get_contact(
             jid, groupchat=groupchat)
 
+    def _get_own_bare_jid(self) -> JID:
+        return self._client.get_own_jid().new_as_bare()
+
     def cleanup(self) -> None:
         self.handlers.clear()
         self.unregister_events()

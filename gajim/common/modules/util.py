@@ -9,6 +9,8 @@ from __future__ import annotations
 from typing import Any
 
 from collections.abc import Callable
+from datetime import datetime
+from datetime import timezone
 from functools import partial
 from functools import wraps
 from logging import LoggerAdapter
@@ -24,9 +26,11 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import EME_MESSAGES
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
 
 
@@ -187,3 +191,77 @@ def get_nickname_from_message(message: mod.Message) -> str:
     nickname = message.resource
     assert nickname is not None
     return nickname
+
+
+def get_real_jid(
+    properties: MessageProperties,
+    contact: GroupchatParticipant,
+) -> JID | None:
+
+    if properties.is_mam_message:
+        if properties.muc_user is None:
+            return None
+        return properties.muc_user.jid
+
+    real_jid = contact.real_jid
+    if real_jid is None:
+        return None
+    return real_jid.new_as_bare()
+
+
+def get_occupant_info(
+    account: str,
+    remote_jid: JID,
+    own_bare_jid: JID,
+    direction: ChatDirection,
+    timestamp: datetime,
+    contact: GroupchatParticipant,
+    properties: MessageProperties
+) -> mod.Occupant | None:
+
+    assert properties.jid is not None
+    if properties.jid.is_bare:
+        return None
+
+    if direction == ChatDirection.OUTGOING:
+        real_jid = own_bare_jid
+    else:
+        real_jid = get_real_jid(properties, contact)
+
+    occupant_id = get_occupant_id(contact, properties) or real_jid
+    if occupant_id is None:
+        return None
+
+    resource = properties.jid.resource
+    assert resource is not None
+
+    return mod.Occupant(
+        account_=account,
+        remote_jid_=remote_jid,
+        id=str(occupant_id),
+        real_remote_jid_=real_jid or VALUE_MISSING,
+        nickname=resource,
+        updated_at=timestamp,
+    )
+
+
+def get_occupant_id(
+    contact: GroupchatParticipant,
+    properties: MessageProperties
+) -> str | None:
+
+    if not properties.occupant_id:
+        return None
+
+    if contact.room.supports(Namespace.OCCUPANT_ID):
+        return properties.occupant_id
+    return None
+
+
+def get_message_timestamp(
+    properties: MessageProperties
+) -> datetime:
+    timestamp = properties.timestamp
+    if properties.is_mam_message:
+        timestamp = properties.mam.timestamp
+    return datetime.fromtimestamp(timestamp, tz=timezone.utc)

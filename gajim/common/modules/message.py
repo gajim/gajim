@@ -10,7 +10,6 @@ import datetime as dt
 import nbxmpp
 import sqlalchemy.exc
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
@@ -24,16 +23,16 @@ from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.misc import parse_oob
 from gajim.common.modules.util import convert_message_type
 from gajim.common.modules.util import get_chat_type_and_direction
 from gajim.common.modules.util import get_eme_message
+from gajim.common.modules.util import get_message_timestamp
+from gajim.common.modules.util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
 
 
@@ -123,7 +122,7 @@ class Message(BaseModule):
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, self._client.get_own_jid(), properties)
-        timestamp = self._get_message_timestamp(properties)
+        timestamp = get_message_timestamp(properties)
         remote_jid = properties.remote_jid
         assert remote_jid is not None
 
@@ -167,8 +166,20 @@ class Message(BaseModule):
                                         stanza_id=stanza_id))
                 return
 
-        occupant = self._get_occupant_info(
-            remote_jid, m_type, direction, timestamp, properties)
+        occupant = None
+        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            contact = self._client.get_module('Contacts').get_contact(
+                    properties.jid, groupchat=True)
+
+            occupant = get_occupant_info(
+                self._account,
+                remote_jid,
+                self._get_own_bare_jid(),
+                direction,
+                timestamp,
+                contact,
+                properties
+            )
 
         assert properties.bodies is not None
         message_text = properties.bodies.get(None)
@@ -253,81 +264,6 @@ class Message(BaseModule):
                                             m_type=m_type,
                                             from_mam=properties.is_mam_message,
                                             pk=pk))
-
-    def _get_message_timestamp(
-        self,
-        properties: MessageProperties
-    ) -> dt.datetime:
-        timestamp = properties.timestamp
-        if properties.is_mam_message:
-            timestamp = properties.mam.timestamp
-        return dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc)
-
-    def _get_real_jid(
-        self,
-        properties: MessageProperties,
-        contact: GroupchatParticipant,
-    ) -> JID | None:
-
-        if properties.is_mam_message:
-            if properties.muc_user is None:
-                return None
-            return properties.muc_user.jid
-
-        real_jid = contact.real_jid
-        if real_jid is None:
-            return None
-        return real_jid.new_as_bare()
-
-    def _get_occupant_info(
-        self,
-        remote_jid: JID,
-        message_type: MessageType,
-        direction: ChatDirection,
-        timestamp: dt.datetime,
-        properties: MessageProperties
-    ) -> mod.Occupant | None:
-
-        if message_type not in (MessageType.GROUPCHAT, MessageType.PM):
-            return None
-
-        if properties.jid.is_bare:
-            return None
-
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.jid, groupchat=True)
-        assert isinstance(contact, GroupchatParticipant)
-
-        if direction == ChatDirection.OUTGOING:
-            real_jid = self._client.get_own_jid().new_as_bare()
-        else:
-            real_jid = self._get_real_jid(properties, contact)
-
-        occupant_id = self._get_occupant_id(properties) or real_jid
-        if occupant_id is None:
-            return None
-
-        resource = properties.jid.resource
-        assert resource is not None
-
-        return mod.Occupant(
-            account_=self._account,
-            remote_jid_=remote_jid,
-            id=str(occupant_id),
-            real_remote_jid_=real_jid or VALUE_MISSING,
-            nickname=resource,
-            updated_at=timestamp,
-        )
-
-    def _get_occupant_id(self, properties: MessageProperties) -> str | None:
-        if properties.occupant_id is None:
-            return None
-
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.remote_jid, groupchat=True)
-        if contact.room.supports(Namespace.OCCUPANT_ID):
-            return properties.occupant_id
-        return None
 
     def _message_error_received(self,
                                 _con: types.xmppClient,
