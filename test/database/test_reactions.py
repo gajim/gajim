@@ -16,7 +16,7 @@ from gajim.common.storage.archive.models import Reaction
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.util.datetime import utc_now
 
-from ..util import mk_utc_dt
+from .util import mk_utc_dt
 
 
 class ReactionsTest(unittest.TestCase):
