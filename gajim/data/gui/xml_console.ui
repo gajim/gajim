@@ -160,28 +160,64 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkScrolledWindow" id="scrolled">
-                    <property name="height-request">400</property>
+                  <placeholder/>
+                </child>
+                <child>
+                  <object class="GtkOverlay">
                     <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="shadow-type">in</property>
+                    <property name="can-focus">False</property>
                     <child>
-                      <object class="GtkSourceView" id="protocol_view">
+                      <object class="GtkScrolledWindow" id="scrolled">
+                        <property name="height-request">400</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="editable">False</property>
-                        <property name="left-margin">6</property>
-                        <property name="right-margin">6</property>
-                        <property name="top-margin">6</property>
-                        <property name="bottom-margin">6</property>
-                        <property name="monospace">True</property>
+                        <property name="shadow-type">in</property>
+                        <child>
+                          <object class="GtkSourceView" id="protocol_view">
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="editable">False</property>
+                            <property name="left-margin">6</property>
+                            <property name="right-margin">6</property>
+                            <property name="top-margin">6</property>
+                            <property name="bottom-margin">6</property>
+                            <property name="monospace">True</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="index">-1</property>
+                      </packing>
+                    </child>
+                    <child type="overlay">
+                      <object class="GtkButton" id="jump_to_end_button">
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                        <property name="no-show-all">True</property>
+                        <property name="halign">end</property>
+                        <property name="valign">end</property>
+                        <property name="margin-end">12</property>
+                        <property name="margin-bottom">12</property>
+                        <signal name="clicked" handler="_on_jump_to_end_clicked" swapped="no"/>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="margin-start">4</property>
+                            <property name="margin-end">4</property>
+                            <property name="icon-name">go-bottom-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="circular"/>
+                        </style>
                       </object>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">True</property>
                     <property name="fill">True</property>
-                    <property name="position">1</property>
+                    <property name="position">2</property>
                   </packing>
                 </child>
               </object>

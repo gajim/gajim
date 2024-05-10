@@ -106,6 +106,12 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.stack.connect('notify::visible-child-name',
                                self._on_stack_child_changed)
 
+        vadjustment = self._ui.scrolled.get_vadjustment()
+        vadjustment.connect('notify::upper',
+                            self._on_adj_upper_changed)
+        vadjustment.connect('notify::value',
+                            self._on_adj_value_changed)
+
         self.show_all()
 
         self.connect('key-press-event', self._on_key_press)
@@ -123,6 +129,23 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         get_log_console_handler().set_callback(None)
         self._ui.popover.destroy()
         app.check_finalize(self)
+
+    def _on_adj_upper_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+        if adj.get_upper() == adj.get_page_size():
+            self._ui.jump_to_end_button.set_visible(False)
+
+    def _on_adj_value_changed(self,
+                              adj: Gtk.Adjustment,
+                              _pspec: GObject.ParamSpec) -> None:
+        bottom = adj.get_upper() - adj.get_page_size()
+        autoscroll = bottom - adj.get_value() < 1
+        self._ui.jump_to_end_button.set_visible(not autoscroll)
+
+    def _on_jump_to_end_clicked(self, _button: Gtk.Button) -> None:
+        vadjustment = self._ui.scrolled.get_vadjustment()
+        vadjustment.set_value(vadjustment.get_upper())
 
     def _on_value_change(self, combo: Gtk.ComboBox) -> None:
         self._selected_send_account = combo.get_active_id()

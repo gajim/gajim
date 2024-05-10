@@ -989,6 +989,7 @@ class XmlConsoleBuilder(Builder):
     search_backward: Gtk.ToolButton
     scrolled: Gtk.ScrolledWindow
     protocol_view: GtkSource.View
+    jump_to_end_button: Gtk.Button
     scrolled_input: Gtk.ScrolledWindow
     input_entry: GtkSource.View
     actionbox: Gtk.Box
