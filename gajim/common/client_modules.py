@@ -41,6 +41,7 @@ if TYPE_CHECKING:
     from gajim.common.modules.ping import Ping
     from gajim.common.modules.presence import Presence
     from gajim.common.modules.pubsub import PubSub
+    from gajim.common.modules.reactions import Reactions
     from gajim.common.modules.receipts import Receipts
     from gajim.common.modules.register import Register
     from gajim.common.modules.roster import Roster
@@ -119,6 +120,8 @@ class ClientModules:
     def get_module(self, name: Literal['Presence']) -> Presence: ...
     @overload
     def get_module(self, name: Literal['PubSub']) -> PubSub: ...
+    @overload
+    def get_module(self, name: Literal['Reactions']) -> Reactions: ...
     @overload
     def get_module(self, name: Literal['Receipts']) -> Receipts: ...
     @overload

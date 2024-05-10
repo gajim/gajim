@@ -94,7 +94,7 @@ class Reactions(BaseModule):
 
         reaction = mod.Reaction(
             account_=self._account,
-            remote_jid_=self._remote_jid,
+            remote_jid_=remote_jid,
             occupant_=occupant,
             id=properties.reactions.id,
             direction=direction,
@@ -102,7 +102,7 @@ class Reactions(BaseModule):
             timestamp=timestamp,
         )
 
-        self._archive.upsert_row2(reaction)
+        app.storage.archive.upsert_row2(reaction)
 
         app.ged.raise_event(
             ReactionReceived(
