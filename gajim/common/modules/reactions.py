@@ -7,7 +7,6 @@
 from __future__ import annotations
 
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.structs import MessageProperties
@@ -22,6 +21,7 @@ from gajim.common.modules.util import get_message_timestamp
 from gajim.common.modules.util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import MessageType
+from gajim.common.structs import OutgoingMessage
 
 
 class Reactions(BaseModule):
@@ -110,7 +110,23 @@ class Reactions(BaseModule):
             )
         )
 
-    def send_reactions(self, jid: JID, reaction_id: str, reactions: list[str]) -> None:
+    def send_reaction(
+        self,
+        contact: types.ChatContactT,
+        reaction_id: str,
+        reactions: set[str],
+    ) -> None:
 
-        # TODO
-        pass
+        typ = 'groupchat' if contact.is_groupchat else 'chat'
+
+        message = OutgoingMessage(
+            account=self._account,
+            contact=contact,
+            text=None,
+            type_=typ,
+            reaction_data=(reaction_id, reactions),
+            play_sound=False
+        )
+
+        self._client.send_message(message)
+        self._log.info('Send %s: %s', reactions, contact.jid)

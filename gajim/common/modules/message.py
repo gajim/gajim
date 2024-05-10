@@ -355,6 +355,10 @@ class Message(BaseModule):
                             message.reply_data.fallback_start,
                             message.reply_data.fallback_end)
 
+        # XEP-0444
+        if message.reaction_data is not None:
+            stanza.setReactions(*message.reaction_data)
+
         # XEP-0359
         stanza.setID(message.message_id)
         stanza.setOriginID(message.message_id)

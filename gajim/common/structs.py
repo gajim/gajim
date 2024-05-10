@@ -91,6 +91,7 @@ class OutgoingMessage:
     control: Any | None = None
     correct_id: str | None = None
     reply_data: ReplyData | None = None
+    reaction_data: tuple[str, set[str]] | None = None
     oob_url: str | None = None
     play_sound: bool = True
 

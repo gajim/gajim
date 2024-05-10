@@ -85,6 +85,7 @@ ALLOWED_TAGS = [
     ('reply', Namespace.REPLY),
     ('fallback', Namespace.FALLBACK),
     ('origin-id', Namespace.SID),
+    ('reactions', Namespace.REACTIONS),
 ]
 
 DeviceIdT = int
