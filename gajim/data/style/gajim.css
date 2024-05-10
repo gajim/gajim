@@ -754,11 +754,11 @@ infobar.error > revealer > box {
  }
  .reaction:hover {
     border-color: @theme_selected_bg_color;
-    background: alpha(@theme_selected_bg_color, 0.2);
+    background: alpha(@theme_selected_bg_color, 0.3);
  }
  .reaction-from-us {
-    border-color: alpha(@theme_selected_bg_color, 0.8);
-    background: alpha(@theme_selected_bg_color, 0.06);
+    border-color: alpha(@theme_selected_bg_color, 0.9);
+    background: alpha(@theme_selected_bg_color, 0.1);
 }
 .reaction label {
     font-size: 90%;

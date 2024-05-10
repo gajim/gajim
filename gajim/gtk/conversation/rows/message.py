@@ -198,14 +198,14 @@ class MessageRow(BaseRow):
                 message.moderation.by, message.moderation.reason))
 
         # Reactions
-        if self._contact.is_groupchat:
-            reaction_id = self.stanza_id
-        else:
-            reaction_id = self.message_id
-        if reaction_id is not None:
-            self._reactions_bar = ReactionsBar(
-                self._contact, reaction_id, False)
-            self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+        reaction_id = message.id
+        if isinstance(self._contact, GroupchatContact):
+            reaction_id = message.stanza_id
+
+        self._reactions_bar = ReactionsBar(self._contact, reaction_id)
+        self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+        if message.reactions:
+            self._reactions_bar.update_from_reactions(message.reactions)
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
@@ -452,6 +452,9 @@ class MessageRow(BaseRow):
         self._message_icons.hide_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
+
+    def show_reactions(self) -> None:
+        self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
     def set_retracted(self, text: str) -> None:
         self.text = text

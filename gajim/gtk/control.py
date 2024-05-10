@@ -388,10 +388,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        # TODO: Get reactions from archive
-        # reaction_id = event.reaction_id
-        # reaction_data format should be: (emoji, [(user, timestamp)])
-        # self._scrolled_view.show_reactions(reaction_id, reaction_data)
+        self._scrolled_view.show_message_reactions(event.reaction_id)
 
     def _on_message_error(self, event: events.MessageError) -> None:
         if not self._is_event_processable(event):

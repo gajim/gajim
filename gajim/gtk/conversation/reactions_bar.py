@@ -7,103 +7,165 @@ from __future__ import annotations
 from typing import NamedTuple
 
 import datetime as dt
-import time
+import logging
+from collections import defaultdict
 
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import BareContact
+from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
 
-MAX_VISIBLE_REACTIONS = 3
+MAX_VISIBLE_REACTIONS = 5
+MAX_TOTAL_REACTIONS = 25
+MAX_USERS = 25
+
+log = logging.getLogger('gajim.gtk.conversation.reactions_bar')
 
 
 class ReactionData(NamedTuple):
-    emoji: str
-    users: list[tuple[types.ChatContactT, float]]
+    username: str
+    timestamp: dt.datetime
+    from_us: bool
 
 
 class ReactionsBar(Gtk.Box):
-    def __init__(
-        self, contact: types.ChatContactT, message_id: str, new_reaction: bool
-    ) -> None:
-
-        Gtk.Box.__init__(self, spacing=3)
-
+    def __init__(self, contact: types.ChatContactT, reaction_id: str) -> None:
+        Gtk.Box.__init__(self, spacing=3, no_show_all=True)
         self._contact = contact
-        self._message_id = message_id
+        self._reaction_id = reaction_id
 
-        if new_reaction:
-            self.add(AddReaction(self._contact, self._message_id, new_reaction=True))
-            self.show_all()
-            return
+        self._reactions: list[mod.Reaction] | None = None
 
-        # TODO: remove dummy
-        self._add_dummy_data()
-
-    def set_reactions(self, reactions: list[ReactionData]) -> None:
+    def _aggregate_reactions(
+        self, reactions: list[mod.Reaction]
+    ) -> dict[str, list[ReactionData]]:
+        aggregated_reactions: dict[str, list[ReactionData]] = defaultdict(list)
         for reaction in reactions:
-            reaction_widget = Reaction(self._contact, self._message_id, reaction)
-            self.add(reaction_widget)
-            if reactions.index(reaction) + 1 >= MAX_VISIBLE_REACTIONS:
+            if reaction.direction == ChatDirection.OUTGOING:
+                username = _('Me')
+            else:
+                if isinstance(self._contact, BareContact):
+                    username = self._contact.name
+                else:
+                    if reaction.occupant is None or reaction.occupant.nickname is None:
+                        log.debug('Ignoring MUC reaction without occupant')
+                        continue
+                    username = reaction.occupant.nickname
+
+            for emoji in reaction.emojis.split(';'):
+                aggregated_reactions[emoji].append(
+                    ReactionData(
+                        username=username,
+                        timestamp=reaction.timestamp,
+                        from_us=reaction.direction == ChatDirection.OUTGOING,
+                    )
+                )
+
+        return aggregated_reactions
+
+    def _get_our_reactions(self) -> set[str]:
+        assert self._reactions is not None
+
+        our_reactions: set[str] = set()
+        for reaction in self._reactions:
+            if reaction.direction == ChatDirection.OUTGOING:
+                our_reactions = set(reaction.emojis.split(';'))
                 break
 
-        if len(reactions) > MAX_VISIBLE_REACTIONS:
-            more_reactions_button = MoreReactionsButton(
-                self._contact, self._message_id, reactions
-            )
-            self.add(more_reactions_button)
+        return our_reactions
 
-        self.add(AddReaction(self._contact, self._message_id))
-        self.show_all()
+    def _on_reaction_clicked(self, reaction_widget: Reaction) -> None:
+        if reaction_widget.from_us:
+            reaction_widget.toggle_from_us()
+            reactions = self._get_our_reactions()
+            reactions.discard(reaction_widget.emoji)
+            self._send_reaction(reactions)
+            return
 
-    def _add_dummy_data(self) -> None:
-        # TODO: remove
-        reactions_list: list[ReactionData] = []
+        reaction_widget.toggle_from_us()
+        reactions = self._get_our_reactions()
+        reactions.add(reaction_widget.emoji)
+        self._send_reaction(reactions)
+
+    def _on_emoji_added(self, _widget: AddReaction, emoji: str) -> None:
+        reactions = self._get_our_reactions()
+        reactions.add(emoji)
+        self._send_reaction(reactions)
+
+    def _send_reaction(self, reactions: set[str]) -> None:
         client = app.get_client(self._contact.account)
-        contact1 = client.get_module('Contacts').get_contact('heinrich@test')
-        contact2 = client.get_module('Contacts').get_contact('igor@test')
-        contact3 = client.get_module('Contacts').get_contact('romeo@test')
-
-        timestamp = time.time()
-        data1 = ReactionData(
-            emoji='🤘️', users=[(contact1, timestamp), (contact2, timestamp)]
+        client.get_module('Reactions').send_reaction(
+            contact=self._contact,
+            reaction_id=self._reaction_id,
+            reactions=reactions
         )
-        data2 = ReactionData(emoji='🚀️', users=[(contact3, timestamp)])
-        data3 = ReactionData(emoji='🙉️', users=[(contact2, timestamp)])
-        reactions_list.append(data1)
-        reactions_list.append(data2)
-        reactions_list.append(data3)
-        self.set_reactions(reactions_list)
+
+    def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
+        # TODO: updated reactions reflected from db?
+        # should we update ourself when sending reactions?
+
+        for widget in self.get_children():
+            widget.destroy()
+
+        self._reactions = reactions
+
+        aggregated_reactions = self._aggregate_reactions(reactions)
+
+        more_reactions_button = None
+        for index, (emoji, data) in enumerate(aggregated_reactions.items()):
+            reaction_widget = Reaction(emoji, data)
+            reaction_widget.connect('clicked', self._on_reaction_clicked)
+            if index + 1 <= MAX_VISIBLE_REACTIONS:
+                self.add(reaction_widget)
+            elif index + 1 > MAX_VISIBLE_REACTIONS and index + 1 <= MAX_TOTAL_REACTIONS:
+                if more_reactions_button is None:
+                    more_reactions_button = MoreReactionsButton()
+                    self.add(more_reactions_button)
+                more_reactions_button.add_reaction(reaction_widget)
+            else:
+                log.debug('Too many reactions: %s', len(aggregated_reactions))
+                break
+
+        add_emoji_widget = AddReaction()
+        add_emoji_widget.connect('emoji-added', self._on_emoji_added)
+        self.add(add_emoji_widget)
+
+        self.set_no_show_all(False)
+        self.show_all()
 
 
 class Reaction(Gtk.Button):
-    def __init__(
-        self, contact: types.ChatContactT, message_id: str, reaction: ReactionData
-    ) -> None:
-
+    def __init__(self, emoji: str, reaction_data: list[ReactionData]) -> None:
         Gtk.Button.__init__(self)
+        self.emoji = emoji
+
+        format_string = app.settings.get('date_time_format')
+        tooltip_markup = f'<span size="200%">{emoji}</span>\n'
+
+        self.from_us = False
+        for reaction in reaction_data[:MAX_USERS]:
+            if reaction.from_us:
+                self.from_us = True
+            tooltip_markup += (
+                f'{reaction.username} ({reaction.timestamp.strftime(format_string)})\n'
+            )
+        if len(reaction_data) > MAX_USERS:
+            tooltip_markup += _('And more...')
+
+        self.set_tooltip_markup(tooltip_markup.strip())
+
         self.get_style_context().add_class('flat')
         self.get_style_context().add_class('reaction')
-
-        self._contact = contact
-        self._message_id = message_id
-        self._reaction = reaction
-
-        if isinstance(contact, GroupchatContact):
-            self_contact = contact.get_self()
-        else:
-            client = app.get_client(contact.account)
-            self_contact = client.get_module('Contacts').get_contact(
-                client.get_own_jid().bare
-            )
-
-        if self_contact in reaction.users[0]:
+        if self.from_us:
             self.get_style_context().add_class('reaction-from-us')
 
-        emoji_label = Gtk.Label(label=reaction.emoji)
-        count_label = Gtk.Label(label=str(len(reaction.users)))
+        emoji_label = Gtk.Label(label=emoji)
+        count_label = Gtk.Label(label=str(len(reaction_data)))
         count_label.get_style_context().add_class('monospace')
 
         self._box = Gtk.Box(spacing=3)
@@ -111,69 +173,54 @@ class Reaction(Gtk.Button):
         self._box.add(count_label)
         self.add(self._box)
 
-        format_string = app.settings.get('date_time_format')
-        tooltip_markup = f'<span size="200%">{reaction.emoji}</span>\n'
-        for user, timestamp in reaction.users:
-            date_time = dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc)
-            timestamp_formatted = date_time.strftime(format_string)
-            tooltip_markup += f'{user.name} ({timestamp_formatted})\n'
-        self.set_tooltip_markup(tooltip_markup.strip())
-
-        self.connect('clicked', self._on_clicked, self_contact in reaction.users)
-
         self.show_all()
 
-    def _on_clicked(self, _button: Gtk.Button, from_us: bool) -> None:
-        if from_us:
-            # TODO: Remove reaction of type self._reaction
-            return
+    def toggle_from_us(self) -> None:
+        # TODO: should we update ourself or use updated DB reactions?
+        if self.from_us:
+            self.get_style_context().remove_class('reaction-from-us')
+        else:
+            self.get_style_context().add_class('reaction-from-us')
 
-        # TODO: Add reaction of type self._reaction
+        self.from_us = not self.from_us
 
 
 class MoreReactionsButton(Gtk.MenuButton):
-    def __init__(
-        self,
-        contact: types.ChatContactT,
-        message_id: str,
-        reactions: list[ReactionData],
-    ) -> None:
-
-        Gtk.MenuButton.__init__(self)
+    def __init__(self) -> None:
+        Gtk.MenuButton.__init__(self, tooltip_text=_('Show all reactions'))
         self.get_style_context().add_class('flat')
         self.get_style_context().add_class('reaction')
 
-        box = Gtk.FlowBox(
+        self._flow_box = Gtk.FlowBox(
             row_spacing=3,
             column_spacing=3,
             selection_mode=Gtk.SelectionMode.NONE,
             min_children_per_line=3,
             max_children_per_line=3,
         )
-        box.get_style_context().add_class('padding-6')
-
-        for reaction in reactions[MAX_VISIBLE_REACTIONS:]:
-            reaction_widget = Reaction(contact, message_id, reaction)
-            box.add(reaction_widget)
-
-        box.show_all()
+        self._flow_box.get_style_context().add_class('padding-6')
 
         popover = Gtk.Popover()
-        popover.add(box)
+        popover.add(self._flow_box)
         self.set_popover(popover)
+
+        self.show_all()
+
+    def add_reaction(self, reaction_widget: Reaction) -> None:
+        self._flow_box.add(reaction_widget)
+        self._flow_box.show_all()
 
 
 class AddReaction(Gtk.Button):
-    def __init__(
-        self, contact: types.ChatContactT, message_id: str, new_reaction: bool = False
-    ) -> None:
 
-        Gtk.Button.__init__(self)
+    __gsignals__ = {
+        'emoji-added': (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
+    def __init__(self) -> None:
+        Gtk.Button.__init__(self, tooltip_text=_('Add reaction'))
         self.get_style_context().add_class('reaction')
         self.get_style_context().add_class('flat')
-
-        self._contact = contact
-        self._message_id = message_id
 
         icon = Gtk.Image.new_from_icon_name('list-add-symbolic', Gtk.IconSize.BUTTON)
         self._dummy_entry = Gtk.Entry(
@@ -193,10 +240,6 @@ class AddReaction(Gtk.Button):
 
         self.connect('clicked', self._on_clicked)
 
-        if new_reaction:
-            self._dummy_entry.show()
-            self._dummy_entry.emit('insert-emoji')
-
     def _on_clicked(self, _button: Gtk.Button) -> None:
         self._dummy_entry.show()
         self._dummy_entry.emit('insert-emoji')
@@ -208,6 +251,4 @@ class AddReaction(Gtk.Button):
         self._dummy_entry.hide()
         emoji = self._dummy_entry.get_text()
         entry.set_text('')
-
-        print(f'Reaction to {self._contact.jid} ({self._message_id}): {emoji}')
-        # TODO: Add reaction of type 'emoji'
+        self.emit('emoji-added', emoji)
