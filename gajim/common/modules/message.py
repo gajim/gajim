@@ -23,12 +23,11 @@ from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_eme_message
+from gajim.common.modules.message_util import get_message_timestamp
+from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.modules.misc import parse_oob
-from gajim.common.modules.util import convert_message_type
-from gajim.common.modules.util import get_chat_type_and_direction
-from gajim.common.modules.util import get_eme_message
-from gajim.common.modules.util import get_message_timestamp
-from gajim.common.modules.util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState

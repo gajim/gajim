@@ -16,9 +16,10 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import ReactionReceived
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import get_chat_type_and_direction
-from gajim.common.modules.util import get_message_timestamp
-from gajim.common.modules.util import get_occupant_info
+from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_message_timestamp
+from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import MessageType
 from gajim.common.structs import OutgoingMessage
@@ -80,6 +81,7 @@ class Reactions(BaseModule):
             contact = self._client.get_module('Contacts').get_contact(
                     remote_jid, groupchat=True)
 
+            assert contact is GroupchatParticipant
             occupant = get_occupant_info(
                 account=self._account,
                 remote_jid=remote_jid,
