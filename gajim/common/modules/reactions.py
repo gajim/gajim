@@ -79,9 +79,9 @@ class Reactions(BaseModule):
         occupant = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
             contact = self._client.get_module('Contacts').get_contact(
-                    remote_jid, groupchat=True)
+                properties.jid, groupchat=True)
 
-            assert contact is GroupchatParticipant
+            assert isinstance(contact, GroupchatParticipant)
             occupant = get_occupant_info(
                 account=self._account,
                 remote_jid=remote_jid,
@@ -91,6 +91,10 @@ class Reactions(BaseModule):
                 contact=contact,
                 properties=properties,
             )
+
+            if occupant is None:
+                self._log.info('Reactions not supported without occupant-id')
+                raise NodeProcessed
 
         reaction = mod.Reaction(
             account_=self._account,
@@ -111,6 +115,8 @@ class Reactions(BaseModule):
                 reaction_id=properties.reactions.id,
             )
         )
+
+        raise NodeProcessed
 
     def send_reaction(
         self,
