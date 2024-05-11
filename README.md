@@ -25,7 +25,7 @@
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
 - [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) (>=2.0.0)
 - [sqlite](https://www.sqlite.org/) (>=3.35.0)
-- [winsdk](https://pypi.org/project/winsdk/) (Only on Windows)
+- [PyWinRT](https://github.com/pywinrt/pywinrt) (Only on Windows)
 
 ### Optional Runtime Requirements
 

@@ -38,7 +38,8 @@ dependencies = [
   "PyGObject>=3.42.0",
   "qrcode>=7.3.1",
   "SQLAlchemy>=2.0.0",
-  "winsdk ; platform_system == 'Windows'",
+  "winrt-Windows.UI; platform_system == 'Windows'",
+  "winrt-Windows.UI.ViewManagement; platform_system == 'Windows'",
 ]
 dynamic = ["version"]
 
