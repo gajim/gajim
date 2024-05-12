@@ -247,8 +247,7 @@ class GajimRemote(Server):
         contact = client.get_module('Contacts').get_contact(
             jid, groupchat=type_ == 'groupchat')
 
-        if type_ == 'groupchat':
-            assert isinstance(contact, GroupchatContact)
+        if isinstance(contact, GroupchatContact):
             if not contact.is_joined:
                 return False
 
@@ -256,8 +255,7 @@ class GajimRemote(Server):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         message_ = OutgoingMessage(account=account,
                                    contact=contact,
-                                   text=message,
-                                   type_=type_)
+                                   text=message)
 
         app.get_client(account).send_message(message_)
         return True

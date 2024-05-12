@@ -23,10 +23,10 @@ from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
-from gajim.common.helpers import get_uuid
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.misc import parse_oob
+from gajim.common.modules.util import convert_message_type
 from gajim.common.modules.util import get_chat_type_and_direction
 from gajim.common.modules.util import get_eme_message
 from gajim.common.storage.archive import models as mod
@@ -135,7 +135,7 @@ class Message(BaseModule):
         message_id = properties.id
         if message_id is None:
             # TODO: Make Gajim not depend on a message_id being present
-            message_id = get_uuid()
+            message_id = generate_id()
             self._log.debug('Generating id for message')
 
         stanza_id = self._get_stanza_id(properties)
@@ -398,11 +398,13 @@ class Message(BaseModule):
 
     def build_message_stanza(self, message: OutgoingMessage) -> nbxmpp.Message:
         own_jid = self._con.get_own_jid()
+        remote_jid = message.contact.jid
 
-        stanza = nbxmpp.Message(to=message.jid,
-                                body=message.get_text(),
-                                typ=message.type_,
-                                subject=message.subject)
+        stanza = nbxmpp.Message(
+            to=remote_jid,
+            body=message.get_text(),
+            typ=convert_message_type(message.type)
+        )
 
         if message.correct_id:
             stanza.setTag('replace', attrs={'id': message.correct_id},
@@ -416,17 +418,11 @@ class Message(BaseModule):
                             message.reply_data.fallback_end)
 
         # XEP-0359
-        message.message_id = generate_id()
         stanza.setID(message.message_id)
         stanza.setOriginID(message.message_id)
 
-        if message.label:
-            stanza.addChild(node=message.label.to_node())
-
-        # XEP-0172: user_nickname
-        if message.user_nick:
-            stanza.setTag('nick', namespace=Namespace.NICK).setData(
-                message.user_nick)
+        if message.sec_label:
+            stanza.addChild(node=message.sec_label.to_node())
 
         # XEP-0066
         if message.oob_url is not None:
@@ -434,12 +430,12 @@ class Message(BaseModule):
             oob.addChild('url').setData(message.oob_url)
 
         # XEP-0184
-        if not own_jid.bare_match(message.jid):
+        if not own_jid.bare_match(message.contact.jid):
             if message.has_text() and not message.is_groupchat:
                 stanza.setReceiptRequest()
 
         # Mark Message as MUC PM
-        if message.contact.is_pm_contact:
+        if message.is_pm:
             stanza.setTag('x', namespace=Namespace.MUC_USER)
 
         # XEP-0085
@@ -456,30 +452,22 @@ class Message(BaseModule):
             marker, id_ = message.marker
             stanza.setMarker(marker, id_)
 
-        # Add other nodes
-        if message.nodes is not None:
-            for node in message.nodes:
-                stanza.addChild(node=node)
-
         return stanza
 
-    def send_message(self, message: OutgoingMessage) -> None:
+    def store_message(self, message: OutgoingMessage) -> None:
         if not message.has_text():
-            raise ValueError('Trying to send message without text')
+            return
 
         direction = ChatDirection.OUTGOING
-        remote_jid = message.jid
+        remote_jid = message.contact.jid
 
-        timestamp = dt.datetime.fromtimestamp(
-            message.timestamp, tz=dt.timezone.utc)
-        m_type = message.message_type
         assert message.message_id is not None
 
         occupant = None
         resource = self._client.get_bound_jid().resource
         state = MessageState.ACKNOWLEDGED
 
-        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+        if message.type in (MessageType.GROUPCHAT, MessageType.PM):
             # PM is a full jid, so convert to bare
             muc_jid = remote_jid.new_as_bare()
             muc_data = self._client.get_module('MUC').get_muc_data(muc_jid)
@@ -498,10 +486,10 @@ class Message(BaseModule):
                 id=str(occupant_id),
                 real_remote_jid_=real_jid,
                 nickname=resource,
-                updated_at=timestamp,
+                updated_at=message.timestamp,
             )
 
-            if m_type == MessageType.GROUPCHAT:
+            if message.type == MessageType.GROUPCHAT:
                 state = MessageState.PENDING
 
         encryption_data = None
@@ -510,17 +498,17 @@ class Message(BaseModule):
             encryption_data = mod.Encryption(**dataclasses.asdict(encryption))
 
         securitylabel_data = None
-        if message.label is not None:
-            displaymarking = message.label.displaymarking
+        if message.sec_label is not None:
+            displaymarking = message.sec_label.displaymarking
             if displaymarking is not None:
                 securitylabel_data = mod.SecurityLabel(
                     account_=self._account,
                     remote_jid_=remote_jid,
-                    label_hash=message.label.get_label_hash(),
+                    label_hash=message.sec_label.get_label_hash(),
                     displaymarking=displaymarking.name,
                     fgcolor=displaymarking.fgcolor,
                     bgcolor=displaymarking.bgcolor,
-                    updated_at=timestamp,
+                    updated_at=message.timestamp,
                 )
 
         reply = None
@@ -537,9 +525,9 @@ class Message(BaseModule):
         message_data = mod.Message(
             account_=self._account,
             remote_jid_=remote_jid,
-            type=m_type,
+            type=message.type,
             direction=direction,
-            timestamp=timestamp,
+            timestamp=message.timestamp,
             state=state,
             resource=resource,
             text=message.get_text(with_fallback=False),
@@ -554,20 +542,19 @@ class Message(BaseModule):
             occupant_=occupant,
         )
 
-
         pk = app.storage.archive.insert_object(message_data)
         if pk == -1:
             return
 
         if message.correct_id is not None:
             event = MessageCorrected(account=self._account,
-                                     jid=message.jid,
+                                     jid=remote_jid,
                                      corrected_message=message_data)
             app.ged.raise_event(event)
             return
 
         app.ged.raise_event(
-            MessageSent(jid=message.jid,
+            MessageSent(jid=remote_jid,
                         account=message.account,
                         pk=pk,
                         play_sound=message.play_sound))

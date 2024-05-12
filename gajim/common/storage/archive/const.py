@@ -15,6 +15,10 @@ class MessageType(IntEnum):
     GROUPCHAT = 2
     PM = 3
 
+    @classmethod
+    def from_str(cls, string: str):
+        return cls[string.upper()]
+
 
 class ChatDirection(IntEnum):
     INCOMING = 1

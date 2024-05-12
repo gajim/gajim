@@ -170,14 +170,9 @@ class HTTPUpload(BaseModule):
         if state.is_finished:
             uri = transfer.get_transformed_uri()
 
-            type_ = 'chat'
-            if transfer.is_groupchat:
-                type_ = 'groupchat'
-
             message = OutgoingMessage(account=transfer.account,
                                       contact=transfer.contact,
                                       text=uri,
-                                      type_=type_,
                                       oob_url=uri)
 
             self._client.send_message(message)

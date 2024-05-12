@@ -265,28 +265,30 @@ class OMEMO(BaseModule):
     def _is_omemo_groupchat(self, room_jid: str) -> bool:
         return room_jid in self._omemo_groupchats
 
-    def encrypt_message(self, event: OutgoingMessage) -> bool:
-        if not event.has_text():
+    def encrypt_message(self, message: OutgoingMessage) -> bool:
+        if not message.has_text():
             return False
 
-        client = app.get_client(self._account)
-        contact = client.get_module('Contacts').get_contact(event.jid)
+        remote_jid = message.contact.jid
 
-        text = event.get_text()
+        client = app.get_client(self._account)
+        contact = client.get_module('Contacts').get_contact(remote_jid)
+
+        text = message.get_text()
         assert text is not None
-        omemo_message = self.backend.encrypt(str(event.jid),
+        omemo_message = self.backend.encrypt(str(remote_jid),
                                              text,
                                              groupchat=contact.is_groupchat)
         if omemo_message is None:
             raise Exception('Encryption error')
 
-        create_omemo_message(event.stanza, omemo_message,
+        create_omemo_message(message.get_stanza(), omemo_message,
                              node_whitelist=ALLOWED_TAGS)
 
-        if event.is_groupchat:
+        if message.is_groupchat:
             self._muc_temp_store[omemo_message.payload] = text
 
-        event.set_encryption(
+        message.set_encryption(
             EncryptionData(
                 protocol='OMEMO',
                 key='Unknown',
@@ -294,7 +296,7 @@ class OMEMO(BaseModule):
             )
         )
 
-        self._debug_print_stanza(event.stanza)
+        self._debug_print_stanza(message.get_stanza())
         return True
 
     def encrypt_file(self,

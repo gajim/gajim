@@ -833,16 +833,11 @@ class ChatStack(Gtk.Stack, EventHelper):
         chatstate = client.get_module('Chatstate').get_active_chatstate(
             contact)
 
-        type_ = 'chat'
-        if isinstance(contact, GroupchatContact):
-            type_ = 'groupchat'
-
         message_ = OutgoingMessage(account=contact.account,
                                    contact=contact,
                                    text=message,
-                                   type_=type_,
                                    chatstate=chatstate,
-                                   label=label,
+                                   sec_label=label,
                                    control=self._chat_control,
                                    correct_id=correct_id,
                                    reply_data=reply_data)

@@ -8,7 +8,7 @@ from typing import Any
 from typing import NamedTuple
 from typing import TypeVar
 
-import time
+import dataclasses
 from dataclasses import dataclass
 from dataclasses import fields
 from datetime import datetime
@@ -23,14 +23,15 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
+from nbxmpp.util import generate_id
 
 from gajim.common import types
-from gajim.common.const import KindConstant
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
+from gajim.common.util.datetime import utc_now
 
 _T = TypeVar('_T')
 
@@ -79,65 +80,42 @@ class MUCData:
         return self._config
 
 
+@dataclass(slots=True)
 class OutgoingMessage:
-    def __init__(self,
-                 account: str,
-                 contact: types.ChatContactT,
-                 text: str | None,
-                 type_: str,
-                 subject: str | None = None,
-                 chatstate: str | None = None,
-                 marker: tuple[str, str] | None = None,
-                 resource: str | None = None,
-                 user_nick: str | None = None,
-                 label: SecurityLabel | None = None,
-                 control: Any | None = None,
-                 correct_id: str | None = None,
-                 reply_data: ReplyData | None = None,
-                 oob_url: str | None = None,
-                 nodes: Any | None = None,
-                 play_sound: bool = True
-                 ) -> None:
+    account: str
+    contact: types.ChatContactT
+    text: dataclasses.InitVar[str | None] = None
+    chatstate: str | None = None
+    marker: tuple[str, str] | None = None
+    sec_label: SecurityLabel | None = None
+    control: Any | None = None
+    correct_id: str | None = None
+    reply_data: ReplyData | None = None
+    oob_url: str | None = None
+    play_sound: bool = True
 
-        if type_ not in ('chat', 'groupchat', 'normal', 'headline'):
-            raise ValueError(f'Unknown message type: {type_}')
+    type: MessageType = dataclasses.field(init=False)
+    message_id: str = dataclasses.field(init=False)
+    timestamp: datetime = dataclasses.field(init=False)
 
-        if not text and chatstate is None and marker is None:
-            raise ValueError('Trying to send message without content')
+    _text: str | None = dataclasses.field(init=False)
+    _encryption_data: EncryptionData | None = dataclasses.field(
+        init=False, default=None)
+    _stanza: Any = dataclasses.field(init=False, default=None)
 
-        self.account = account
-        self.contact = contact
+    def __post_init__(self, text: str | None) -> None:
         self._text = text
-        self.type_ = type_
+        self.timestamp = utc_now()
+        self.message_id = generate_id()
+        self.type = MessageType.from_str(self.contact.type_string)
 
-        if type_ == 'chat':
-            self.kind = KindConstant.CHAT_MSG_SENT
-        elif type_ == 'groupchat':
-            self.kind = KindConstant.GC_MSG
-        elif type_ == 'normal':
-            self.kind = KindConstant.SINGLE_MSG_SENT
-        else:
-            raise ValueError('Unknown message type')
+    @property
+    def is_groupchat(self) -> bool:
+        return self.type == MessageType.GROUPCHAT
 
-        self.subject = subject
-        self.chatstate = chatstate
-        self.marker = marker
-        self.resource = resource
-        self.user_nick = user_nick
-        self.label = label
-        self.control = control
-        self.correct_id = correct_id
-        self.reply_data = reply_data
-
-        self.oob_url = oob_url
-        self.nodes = nodes
-        self.play_sound = play_sound
-
-        self.timestamp = None
-        self.message_id = None
-        self.stanza = None
-
-        self._encryption_data: EncryptionData | None = None
+    @property
+    def is_pm(self) -> bool:
+        return self.type == MessageType.CHAT
 
     def get_text(self, with_fallback: bool = True) -> str | None:
         if not with_fallback:
@@ -151,43 +129,6 @@ class OutgoingMessage:
     def has_text(self) -> bool:
         return bool(self._text)
 
-    @property
-    def jid(self) -> JID:
-        return self.contact.jid
-
-    @property
-    def is_groupchat(self) -> bool:
-        return self.type_ == 'groupchat'
-
-    @property
-    def is_chat(self) -> bool:
-        return self.type_ == 'chat'
-
-    @property
-    def is_normal(self) -> bool:
-        return self.type_ == 'normal'
-
-    @property
-    def is_pm(self) -> bool:
-        from gajim.common.modules.contacts import GroupchatParticipant
-        return isinstance(self.contact, GroupchatParticipant)
-
-    @property
-    def message_type(self) -> MessageType:
-        if self.is_pm:
-            return MessageType.PM
-
-        if self.type_ == 'chat':
-            return MessageType.CHAT
-
-        if self.type_ == 'groupchat':
-            return MessageType.GROUPCHAT
-
-        raise ValueError
-
-    def set_sent_timestamp(self) -> None:
-        self.timestamp = time.time()
-
     def set_encryption(self, data: EncryptionData) -> None:
         self._encryption_data = data
 
@@ -197,6 +138,12 @@ class OutgoingMessage:
     @property
     def is_encrypted(self) -> bool:
         return self._encryption_data is not None
+
+    def set_stanza(self, stanza: Any) -> None:
+        self._stanza = stanza
+
+    def get_stanza(self) -> Any:
+        return self._stanza
 
 
 @dataclass(frozen=True)

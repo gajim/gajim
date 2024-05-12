@@ -464,7 +464,7 @@ class Client(Observable, ClientModules):
             return
 
         stanza = self.get_module('Message').build_message_stanza(message)
-        message.stanza = stanza
+        message.set_stanza(stanza)
 
         method = message.contact.settings.get('encryption')
         if not method:
@@ -481,7 +481,7 @@ class Client(Observable, ClientModules):
                 app.ged.raise_event(
                     MessageNotSent(
                         client=self._client,
-                        jid=str(message.jid),
+                        jid=str(message.contact.jid),
                         message=text,
                         error=_('Encryption error'),
                         time=time.time()))
@@ -500,13 +500,8 @@ class Client(Observable, ClientModules):
                                            self._send_message)
 
     def _send_message(self, message: OutgoingMessage) -> None:
-        message.set_sent_timestamp()
-        message.message_id = self.send_stanza(message.stanza)
-
-        if not message.has_text():
-            return
-
-        self.get_module('Message').send_message(message)
+        self.send_stanza(message.get_stanza())
+        self.get_module('Message').store_message(message)
 
     def connect(
         self,

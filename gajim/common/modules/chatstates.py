@@ -407,12 +407,9 @@ class Chatstate(BaseModule):
         self._chatstates[contact.jid] = state
 
     def _send_chatstate(self, contact: types.ChatContactT, chatstate: State) -> None:
-        type_ = 'groupchat' if contact.is_groupchat else 'chat'
         message = OutgoingMessage(
             account=self._account,
             contact=contact,
-            text=None,
-            type_=type_,
             chatstate=chatstate.value,
             play_sound=False,
         )

@@ -135,6 +135,12 @@ def delete_nodes(stanza: Message,
         stanza.delChild(node)
 
 
+def convert_message_type(type_: MessageType) -> str:
+    if type_ in (MessageType.CHAT, MessageType.PM):
+        return 'chat'
+    return 'groupchat'
+
+
 def get_chat_type_and_direction(
     muc_data: MUCData | None, own_jid: JID, properties: MessageProperties
 ) -> tuple[MessageType, ChatDirection]:

@@ -129,12 +129,8 @@ class ChatMarkers(BaseModule):
                      marker: str,
                      id_: str) -> None:
 
-        typ = 'groupchat' if contact.is_groupchat else 'chat'
-
         message = OutgoingMessage(account=self._account,
                                   contact=contact,
-                                  text=None,
-                                  type_=typ,
                                   marker=(marker, id_),
                                   play_sound=False)
 
