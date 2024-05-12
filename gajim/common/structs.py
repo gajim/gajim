@@ -20,6 +20,7 @@ from nbxmpp.const import Role
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
+from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
 
@@ -134,13 +135,11 @@ class OutgoingMessage:
         self.nodes = nodes
         self.play_sound = play_sound
 
-        from gajim.common.helpers import AdditionalDataDict
-        self.additional_data = AdditionalDataDict()
-
         self.timestamp = None
         self.message_id = None
         self.stanza = None
         self.delayed = None  # TODO never set
+        self._encryption_data: EncryptionData | None = None
 
     def get_text(self, with_fallback: bool = True) -> str | None:
         if not with_fallback:
@@ -191,9 +190,15 @@ class OutgoingMessage:
     def set_sent_timestamp(self) -> None:
         self.timestamp = time.time()
 
+    def set_encryption(self, data: EncryptionData) -> None:
+        self._encryption_data = data
+
+    def get_encryption(self) -> EncryptionData | None:
+        return self._encryption_data
+
     @property
     def is_encrypted(self) -> bool:
-        return bool(self.additional_data.get_value('encrypted', 'name', False))
+        return self._encryption_data is not None
 
     @property
     def msg_iq(self) -> Any:

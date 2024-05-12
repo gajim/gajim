@@ -27,6 +27,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.protocol import Presence
+from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import OMEMOMessage
 from nbxmpp.structs import PresenceProperties
@@ -48,7 +49,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.const import EncryptionData
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import Trust as GajimTrust
 from gajim.common.const import XmppUriQuery
@@ -286,9 +286,13 @@ class OMEMO(BaseModule):
         if event.is_groupchat:
             self._muc_temp_store[omemo_message.payload] = text
 
-        event.additional_data['encrypted'] = {
-            'name': 'OMEMO',
-            'trust': GajimTrust[OMEMOTrust.VERIFIED.name]}
+        event.set_encryption(
+            EncryptionData(
+                protocol='OMEMO',
+                key='Unknown',
+                trust=GajimTrust[OMEMOTrust.VERIFIED.name]
+            )
+        )
 
         self._debug_print_stanza(event.stanza)
         return True
@@ -395,10 +399,11 @@ class OMEMO(BaseModule):
 
         prepare_stanza(stanza, plaintext)
         self._debug_print_stanza(stanza)
-        properties.encrypted = EncryptionData({
-            'name': 'OMEMO',
-            'fingerprint': fingerprint or 'Unknown',
-            'trust': GajimTrust[trust.name]})
+        properties.encrypted = EncryptionData(
+            protocol='OMEMO',
+            key=fingerprint or 'Unknown',
+            trust=GajimTrust[trust.name]
+        )
 
     def _process_muc_message(self,
                              properties: MessageProperties

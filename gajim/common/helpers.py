@@ -20,8 +20,6 @@ from __future__ import annotations
 from typing import Any
 from typing import TYPE_CHECKING
 
-import collections
-import copy
 import functools
 import hashlib
 import importlib.metadata
@@ -774,61 +772,6 @@ def load_json(path: Path,
     if key is None:
         return json_dict
     return json_dict.get(key, default)
-
-
-class AdditionalDataDict(collections.UserDict):
-    data: dict[str, Any]
-
-    @staticmethod
-    def _get_path_childs(full_path: str) -> list[str]:
-        if ':' in full_path:
-            return full_path.split(':')
-        return [full_path]
-
-    def set_value(self, full_path: str, key: str, value: str | None) -> None:
-        path_childs = self._get_path_childs(full_path)
-        _dict = self.data
-        for path in path_childs:
-            try:
-                _dict = _dict[path]
-            except KeyError:
-                _dict[path] = {}
-                _dict = _dict[path]
-        _dict[key] = value
-
-    def get_value(self,
-                  full_path: str,
-                  key: str,
-                  default: str | bool | None = None
-                  ) -> Any | None:
-
-        path_childs = self._get_path_childs(full_path)
-        _dict = self.data
-        for path in path_childs:
-            try:
-                _dict = _dict[path]
-            except KeyError:
-                return default
-        try:
-            return _dict[key]
-        except KeyError:
-            return default
-
-    def remove_value(self, full_path: str, key: str) -> None:
-        path_childs = self._get_path_childs(full_path)
-        _dict = self.data
-        for path in path_childs:
-            try:
-                _dict = _dict[path]
-            except KeyError:
-                return
-        try:
-            del _dict[key]
-        except KeyError:
-            return
-
-    def copy(self) -> AdditionalDataDict:
-        return copy.deepcopy(self)
 
 
 def delay_execution(milliseconds):

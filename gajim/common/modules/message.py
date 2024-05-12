@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import dataclasses
 import datetime as dt
 import time
 
@@ -176,12 +177,8 @@ class Message(BaseModule):
 
         encryption_data = None
         if properties.is_encrypted:
-            enc_data = properties.encrypted.additional_data
             encryption_data = mod.Encryption(
-                protocol=enc_data['name'],
-                key=enc_data.get('fingerprint'),
-                trust=enc_data['trust'],
-            )
+                **dataclasses.asdict(properties.encrypted))
 
         elif properties.eme is not None:
             message_text = get_eme_message(properties.eme)
@@ -522,13 +519,9 @@ class Message(BaseModule):
                 state = MessageState.PENDING
 
         encryption_data = None
-        if message.is_encrypted:
-            enc_data = message.additional_data['encrypted']
-            encryption_data = mod.Encryption(
-                protocol=enc_data['name'],
-                key='Unknown',
-                trust=enc_data['trust'],
-            )
+        encryption = message.get_encryption()
+        if encryption is not None:
+            encryption_data = mod.Encryption(**dataclasses.asdict(encryption))
 
         securitylabel_data = None
         if message.label is not None:
