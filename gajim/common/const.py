@@ -92,58 +92,6 @@ class PathType(IntEnum):
 
 
 @unique
-class KindConstant(IntEnum):
-    STATUS = 0
-    GCSTATUS = 1
-    GC_MSG = 2
-    SINGLE_MSG_RECV = 3
-    CHAT_MSG_RECV = 4
-    SINGLE_MSG_SENT = 5
-    CHAT_MSG_SENT = 6
-    ERROR = 7
-    FILE_TRANSFER_INCOMING = 8
-    FILE_TRANSFER_OUTGOING = 9
-    CALL_INCOMING = 10
-    CALL_OUTGOING = 11
-
-    def __str__(self):
-        return str(self.value)
-
-
-@unique
-class TypeConstant(IntEnum):
-    AIM = 0
-    GG = 1
-    HTTP_WS = 2
-    ICQ = 3
-    MSN = 4
-    QQ = 5
-    SMS = 6
-    SMTP = 7
-    TLEN = 8
-    YAHOO = 9
-    NEWMAIL = 10
-    RSS = 11
-    WEATHER = 12
-    MRIM = 13
-    NO_TRANSPORT = 14
-
-
-@unique
-class SubscriptionConstant(IntEnum):
-    NONE = 0
-    TO = 1
-    FROM = 2
-    BOTH = 3
-
-
-@unique
-class JIDConstant(IntEnum):
-    NORMAL_TYPE = 0
-    ROOM_TYPE = 1
-
-
-@unique
 class StyleAttr(Enum):
     COLOR = 'color'
     BACKGROUND = 'background'
