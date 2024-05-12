@@ -61,6 +61,10 @@ class Reactions(BaseModule):
             # TODO DELETE Reactions
             raise NodeProcessed
 
+        # Set arbitrary limit of max reactions to prevent
+        # performance problems when loading and displaying them
+        reactions = list(properties.reactions.emojis)[:10]
+
         timestamp = get_message_timestamp(properties)
 
         muc_data = None
@@ -102,7 +106,7 @@ class Reactions(BaseModule):
             occupant_=occupant,
             id=properties.reactions.id,
             direction=direction,
-            emojis=';'.join(properties.reactions.emojis),
+            emojis=';'.join(reactions),
             timestamp=timestamp,
         )
 
