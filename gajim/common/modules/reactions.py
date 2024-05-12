@@ -129,13 +129,9 @@ class Reactions(BaseModule):
         reactions: set[str],
     ) -> None:
 
-        typ = 'groupchat' if contact.is_groupchat else 'chat'
-
         message = OutgoingMessage(
             account=self._account,
             contact=contact,
-            text=None,
-            type_=typ,
             reaction_data=(reaction_id, reactions),
             play_sound=False
         )

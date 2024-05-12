@@ -87,6 +87,15 @@ class MessageRow(BaseRow):
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
+        # Reactions
+        reaction_id = message.id
+        if isinstance(self._contact, GroupchatContact):
+            reaction_id = message.stanza_id
+
+        if reaction_id is not None:
+            self._reactions_bar = ReactionsBar(self._contact, reaction_id)
+            self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+
         self._set_content(message)
 
     @classmethod
@@ -111,12 +120,13 @@ class MessageRow(BaseRow):
     def has_receipt(self) -> bool:
         return self._has_receipt
 
-    def refresh(self) -> None:
+    def refresh(self, *, complete: bool = True) -> None:
         original_message = app.storage.archive.get_message_with_pk(
             self.orig_pk)
         assert original_message is not None
         self._original_message = original_message
-        self._set_content(original_message)
+        if complete:
+            self._set_content(original_message)
 
     def _set_content(self, message: Message) -> None:
         self.set_merged(False)
@@ -197,14 +207,7 @@ class MessageRow(BaseRow):
             self.set_retracted(get_retraction_text(
                 message.moderation.by, message.moderation.reason))
 
-        # Reactions
-        reaction_id = message.id
-        if isinstance(self._contact, GroupchatContact):
-            reaction_id = message.stanza_id
-
-        self._reactions_bar = ReactionsBar(self._contact, reaction_id)
-        self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
-        if message.reactions:
+        if self._original_message.reactions:
             self._reactions_bar.update_from_reactions(message.reactions)
 
         encryption_data = self._get_encryption_data(message.encryption)
@@ -453,7 +456,8 @@ class MessageRow(BaseRow):
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
-    def show_reactions(self) -> None:
+    def update_reactions(self) -> None:
+        self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
     def set_retracted(self, text: str) -> None:

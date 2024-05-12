@@ -106,9 +106,6 @@ class ReactionsBar(Gtk.Box):
         )
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
-        # TODO: updated reactions reflected from db?
-        # should we update ourself when sending reactions?
-
         for widget in self.get_children():
             widget.destroy()
 
