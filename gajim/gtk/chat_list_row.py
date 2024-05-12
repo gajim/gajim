@@ -310,7 +310,7 @@ class ChatListRow(Gtk.ListBoxRow):
     def get_real_unread_count(self) -> int:
         return self._unread_count
 
-    def set_stanza_id(self, stanza_id: str) -> None:
+    def set_stanza_id(self, stanza_id: str | None) -> None:
         self.stanza_id = stanza_id
 
     def set_timestamp(self, timestamp: datetime) -> None:

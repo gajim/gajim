@@ -601,7 +601,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         if message.text is None:
             return
 
-        assert message.stanza_id is not None
         assert message.id is not None
 
         nick = self._get_nick_for_received_message(event.account, message)
