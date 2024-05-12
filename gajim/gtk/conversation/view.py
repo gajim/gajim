@@ -50,6 +50,7 @@ from gajim.gtk.conversation.rows.muc_subject import MUCSubject
 from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
+from gajim.gtk.conversation.rows.widgets import MessageRowActions
 
 log = logging.getLogger('gajim.gtk.conversation_view')
 
@@ -69,7 +70,7 @@ class ConversationView(Gtk.ScrolledWindow):
         )
     }
 
-    def __init__(self) -> None:
+    def __init__(self, message_row_actions: MessageRowActions) -> None:
         Gtk.ScrolledWindow.__init__(self)
 
         self.set_overlay_scrolling(False)
@@ -89,6 +90,8 @@ class ConversationView(Gtk.ScrolledWindow):
         # performance during resize, and prevent the window from being shrunk
         # horizontally under certain conditions (applies to GroupchatControl)
         self.get_hscrollbar().hide()
+
+        self._message_row_actions = message_row_actions
 
         self._contact: ChatContactT | None = None
         self._client = None
@@ -513,7 +516,8 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def add_message_from_db(self, message: Message) -> None:
         message_row = MessageRow.from_db_row(self.contact, message)
-
+        message_row.connect(
+            'state-flags-changed', self._on_message_row_state_flags_changed)
         message_id = message.id
 
         if message_id is not None:
@@ -617,6 +621,27 @@ class ConversationView(Gtk.ScrolledWindow):
             merge = message.is_mergeable(row)
             row.set_merged(merge)
             return
+
+    def _on_message_row_state_flags_changed(
+        self,
+        row: MessageRow,
+        previous_flags: Gtk.StateFlags
+    ) -> None:
+        current_flags = self.get_state_flags()
+
+        if (current_flags & Gtk.StateFlags.BACKDROP or
+                previous_flags & Gtk.StateFlags.BACKDROP):
+            # Don't react to backdrop changes and focus changes when in background
+            return
+
+        if previous_flags & Gtk.StateFlags.PRELIGHT:
+            self._message_row_actions.hide_actions()
+        else:
+            coords = row.translate_coordinates(self, 0, 0)
+            if coords is None:
+                return
+            _x_coord, y_coord = coords
+            self._message_row_actions.update(y_coord, row)
 
     def reduce_message_count(self, before: bool) -> bool:
         success = False

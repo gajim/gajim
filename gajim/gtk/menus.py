@@ -735,16 +735,10 @@ def get_chat_row_menu(contact: types.ChatContactT,
             else:
                 show_reply = False
 
-        if show_reply:
+        if not show_reply and show_quote:
+            # Use XEP-0393 quotes if XEP-0461 message reply is not available
             menu_items.append((
-                p_('Message row action', 'Reply…'),
-                'win.reply',
-                GLib.Variant('u', pk)))
-        else:
-            if show_quote:
-                # Use XEP-0393 quotes if XEP-0461 message reply is not available
-                menu_items.append((
-                    p_('Message row action', 'Quote…'), 'win.quote', text))
+                p_('Message row action', 'Quote…'), 'win.quote', text))
 
 
     show_correction = False

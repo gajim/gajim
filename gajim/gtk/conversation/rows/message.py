@@ -36,7 +36,7 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import AvatarBox
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import MessageIcons
-from gajim.gtk.conversation.rows.widgets import MoreMenuButton
+from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
@@ -185,9 +185,6 @@ class MessageRow(BaseRow):
 
         self._set_text_direction(self.text)
 
-        more_menu_button = MoreMenuButton(self._on_more_menu_button_clicked)
-        self._bottom_box.pack_end(more_menu_button, False, True, 0)
-
         if self._original_message.corrections:
             self._set_correction()
 
@@ -274,7 +271,11 @@ class MessageRow(BaseRow):
             return self.name == our_nick
         return self.direction == ChatDirection.OUTGOING
 
-    def _on_more_menu_button_clicked(self, button: Gtk.Button) -> None:
+    def show_chat_row_menu(
+        self,
+        message_row_actions: MessageRowActions,
+        button: Gtk.Button
+    ) -> None:
         menu = get_chat_row_menu(
             contact=self._contact,
             name=self.name,
@@ -285,11 +286,23 @@ class MessageRow(BaseRow):
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
-            is_retracted=self._is_retracted
-            )
+            is_retracted=self._is_retracted,
+        )
 
         popover = GajimPopover(menu, relative_to=button)
+        popover.connect(
+            'closed',
+            self._on_more_menu_popover_closed,
+            message_row_actions
+        )
         popover.popup()
+
+    def _on_more_menu_popover_closed(
+        self,
+        _popover: GajimPopover,
+        message_row_actions: MessageRowActions
+    ) -> None:
+        message_row_actions.hide_actions()
 
     def enable_selection_mode(self) -> None:
         if isinstance(self._message_widget, MessageWidget):

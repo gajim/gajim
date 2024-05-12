@@ -38,6 +38,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gtk.conversation.message_selection import MessageSelection
+from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.view import ConversationView
 from gajim.gtk.groupchat_roster import GroupchatRoster
 from gajim.gtk.groupchat_state import GroupchatState
@@ -59,7 +60,10 @@ class ChatControl(EventHelper):
 
         self._ui = get_builder('chat_control.ui')
 
-        self._scrolled_view = ConversationView()
+        self._message_row_actions = MessageRowActions()
+        self._ui.conv_view_overlay.add_overlay(self._message_row_actions)
+
+        self._scrolled_view = ConversationView(self._message_row_actions)
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history', self._request_history)
@@ -218,6 +222,7 @@ class ChatControl(EventHelper):
         self._client = app.get_client(contact.account)
 
         self._jump_to_end_button.switch_contact(contact)
+        self._message_row_actions.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)
         self._request_history(None, True)
         self._groupchat_state.switch_contact(contact)

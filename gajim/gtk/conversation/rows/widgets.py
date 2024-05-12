@@ -4,9 +4,8 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING
 
-from collections.abc import Callable
 from datetime import datetime
 
 import cairo
@@ -27,7 +26,9 @@ from gajim.common.types import ChatContactT
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_cursor
-from gajim.gtk.util import wrap_with_event_box
+
+if TYPE_CHECKING:
+    from gajim.gtk.conversation.rows.message import MessageRow
 
 
 class SimpleLabel(Gtk.Label):
@@ -39,26 +40,135 @@ class SimpleLabel(Gtk.Label):
         self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
 
-@wrap_with_event_box
-class MoreMenuButton(Gtk.Button):
-    def __init__(self, on_click_handler: Callable[[Gtk.Button], Any]) -> None:
-        Gtk.Button.__init__(self)
-        self.set_valign(Gtk.Align.START)
-        self.set_halign(Gtk.Align.END)
-        self.set_relief(Gtk.ReliefStyle.NONE)
-        self.set_hexpand(True)
+class MessageRowActions(Gtk.EventBox):
+    def __init__(self) -> None:
+        Gtk.EventBox.__init__(
+            self,
+            halign=Gtk.Align.END,
+            valign=Gtk.Align.START,
+            margin_end=40,
+            no_show_all=True
+        )
+        self._row: MessageRow | None = None
+        self._contact: ChatContactT | None = None
 
-        self.get_style_context().add_class('conversation-more-button')
+        self._has_cursor = False
+        self._menu_button_clicked = False
 
-        image = Gtk.Image.new_from_icon_name(
+        self._timeout_id: int | None = None
+
+        self._reply_button = Gtk.Button.new_from_icon_name(
+            'lucide-reply-symbolic', Gtk.IconSize.BUTTON
+        )
+        self._reply_button.set_no_show_all(True)
+        self._reply_button.set_tooltip_text(_('Reply…'))
+        self._reply_button.connect('clicked', self._on_reply_clicked)
+
+        more_button = Gtk.Button.new_from_icon_name(
             'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
-        self.add(image)
+        more_button.connect('clicked', self._on_more_clicked)
 
-        self._click_handler_id = self.connect('clicked', on_click_handler)
-        self.connect('destroy', self._on_destroy)
+        box = Gtk.Box()
+        box.get_style_context().add_class('linked')
+        box.add(self._reply_button)
+        box.add(more_button)
 
-    def _on_destroy(self, _buton: MoreMenuButton) -> None:
-        self.disconnect(self._click_handler_id)
+        self.add(box)
+
+        self.connect('enter-notify-event', self._on_hover)
+        self.connect('leave-notify-event', self._on_hover)
+
+    def hide_actions(self) -> None:
+        # Set a 10ms timeout, which gives us enough time to inhibit hiding
+        # if the cursor enters (cursor changes from row to MessageRowActions)
+        self._timeout_id = GLib.timeout_add(10, self._hide)
+
+    def update(self, y_coord: int, row: MessageRow) -> None:
+        self._row = row
+        self._menu_button_clicked = False
+
+        if self._timeout_id is not None:
+            GLib.source_remove(self._timeout_id)
+            self._timeout_id = None
+
+        self_height = self.get_allocated_height()
+        if y_coord < self_height:
+            y_coord = self_height
+
+        # Subtract 12 to let MessageRowActions 'flow' above the row
+        adjusted_y_coord = y_coord - 12
+        if adjusted_y_coord < 0:
+            adjusted_y_coord = 0
+
+        self.set_margin_top(adjusted_y_coord)
+        self.set_no_show_all(False)
+        self.show_all()
+
+        self._reply_button.set_visible(self._get_reply_visible())
+
+    def switch_contact(self, contact: ChatContactT) -> None:
+        self._contact = contact
+
+    def _get_reply_visible(self) -> bool:
+        if isinstance(self._contact, GroupchatContact):
+            assert self._row is not None
+            if self._contact.is_joined and self._row.stanza_id is not None:
+                self_contact = self._contact.get_self()
+                assert self_contact is not None
+                return not self_contact.role.is_visitor
+            else:
+                return False
+
+        return True
+
+    def _hide(self) -> None:
+        if self._has_cursor:
+            return
+
+        assert self._row is not None
+        self._row.get_style_context().remove_class('conversation-row-hover')
+
+        self._timeout_id = None
+        self._menu_button_clicked = False
+
+        self.hide()
+
+    def _on_hover(self,
+                  _eventbox: MessageRowActions,
+                  event: Gdk.EventCrossing
+    ) -> bool:
+        if event.type == Gdk.EventType.ENTER_NOTIFY:
+            self._has_cursor = True
+            self._menu_button_clicked = False
+            assert self._row is not None
+            self._row.get_style_context().add_class('conversation-row-hover')
+
+        if (event.type == Gdk.EventType.LEAVE_NOTIFY and
+                event.detail != Gdk.NotifyType.INFERIOR):
+
+            self._has_cursor = False
+            self._timeout_id = None
+
+            if self._menu_button_clicked:
+                # A popover triggers a leave event,
+                # but we don't want to hide MessageRowActions
+                return True
+
+            assert self._row is not None
+            self._row.get_style_context().remove_class('conversation-row-hover')
+
+            self.hide()
+
+        return True
+
+    def _on_reply_clicked(self, button: Gtk.Button) -> None:
+        assert self._row is not None
+        app.window.activate_action('reply', GLib.Variant('u', self._row.pk))
+
+    def _on_more_clicked(self, button: Gtk.Button) -> None:
+        assert self._row is not None
+        self._menu_button_clicked = True
+        self._row.show_chat_row_menu(self, button)
 
 
 class DateTimeLabel(Gtk.Label):

@@ -573,6 +573,14 @@ infobar.error > revealer > box {
 	background: transparent;
 }
 
+/* Help class for emulating prelight state */
+.conversation-row-hover {
+    background-color: @theme_bg_color;
+}
+.conversation-row:selected.conversation-row-hover {
+    background-color: @theme_selected_bg_color;
+}
+
 /* FileTransferJingleRow */
 .file-transfer {
     padding: 10px;
@@ -735,32 +743,6 @@ infobar.error > revealer > box {
 .conversation-nickname {
     font-size: 90%;
     font-weight: bold;
-}
-
-/* MoreMenuButton */
-.conversation-more-button {
-    padding-top: 0px;
-    padding-bottom:0px;
-    min-height: 16px;
-    opacity: 0;
-    transition: none;
-    border: none;
-}
-.conversation-more-button:checked {
-    opacity: 1;
-    background-image: none;
-}
-.conversation-more-button:active {
-    background-image: none;
-}
-.conversation-more-button:hover {
-    border: none;
-    transition: none;
-    -gtk-icon-effect: none;
-    -gtk-icon-shadow: none;
-    background-image: none;
-    text-shadow: none;
-    box-shadow: none;
 }
 
 /* Multi-purpose elements / widgets ======================================== */
