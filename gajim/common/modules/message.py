@@ -22,7 +22,9 @@ from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
+from gajim.common.events import ReactionReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.message_util import convert_message_type
 from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
 from gajim.common.modules.message_util import get_message_timestamp
@@ -343,6 +345,20 @@ class Message(BaseModule):
             typ=convert_message_type(message.type)
         )
 
+        # XEP-0359
+        stanza.setID(message.message_id)
+        stanza.setOriginID(message.message_id)
+
+        # Mark Message as MUC PM
+        if message.is_pm:
+            stanza.setTag('x', namespace=Namespace.MUC_USER)
+
+        # XEP-0444
+        if message.reaction_data is not None:
+            stanza.setReactions(*message.reaction_data)
+            stanza.setTag('store', namespace=Namespace.MSG_HINTS)
+            return stanza
+
         if message.correct_id:
             stanza.setTag('replace', attrs={'id': message.correct_id},
                           namespace=Namespace.CORRECT)
@@ -353,14 +369,6 @@ class Message(BaseModule):
                             message.reply_data.id,
                             message.reply_data.fallback_start,
                             message.reply_data.fallback_end)
-
-        # XEP-0444
-        if message.reaction_data is not None:
-            stanza.setReactions(*message.reaction_data)
-
-        # XEP-0359
-        stanza.setID(message.message_id)
-        stanza.setOriginID(message.message_id)
 
         if message.sec_label:
             stanza.addChild(node=message.sec_label.to_node())
@@ -374,10 +382,6 @@ class Message(BaseModule):
         if not own_jid.bare_match(message.contact.jid):
             if message.has_text() and not message.is_groupchat:
                 stanza.setReceiptRequest()
-
-        # Mark Message as MUC PM
-        if message.is_pm:
-            stanza.setTag('x', namespace=Namespace.MUC_USER)
 
         # XEP-0085
         if message.chatstate is not None:
@@ -432,6 +436,29 @@ class Message(BaseModule):
 
             if message.type == MessageType.GROUPCHAT:
                 state = MessageState.PENDING
+
+        if message.reaction_data is not None:
+            reactions_id, reactions = message.reaction_data
+            reaction = mod.Reaction(
+                account_=self._account,
+                remote_jid_=remote_jid,
+                occupant_=occupant,
+                id=reactions_id,
+                direction=direction,
+                emojis=';'.join(reactions),
+                timestamp=message.timestamp,
+            )
+
+            app.storage.archive.upsert_row2(reaction)
+
+            app.ged.raise_event(
+                ReactionReceived(
+                    account=self._account,
+                    jid=remote_jid,
+                    reaction_id=reactions_id,
+                )
+            )
+            return
 
         encryption_data = None
         encryption = message.get_encryption()
