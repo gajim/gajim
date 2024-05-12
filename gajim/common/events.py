@@ -12,7 +12,6 @@ import datetime
 from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
-from dataclasses import InitVar
 from functools import cached_property
 
 from nbxmpp.const import Affiliation
@@ -378,15 +377,7 @@ class MessageCorrected(ApplicationEvent):
     name: str = field(init=False, default='message-corrected')
     account: str
     jid: JID
-    corrected_message: InitVar[mod.Message]
-
-    def __post_init__(self, corrected_message: mod.Message) -> None:
-        self._corrected_message = corrected_message
-
-    @cached_property
-    def original_message(self) -> mod.Message | None:
-        return app.storage.archive.get_corrected_message(
-            self._corrected_message)
+    message_correction: mod.Message
 
 
 @dataclass

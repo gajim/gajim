@@ -625,17 +625,14 @@ class ChatList(Gtk.ListBox, EventHelper):
         if row is None:
             return
 
-        orig_message = event.original_message
-        if orig_message is None:
-            return
-
-        if orig_message.id == row.message_id:
-            text = orig_message.get_last_correction().text
+        message_correction = event.message_correction
+        if message_correction.correction_id == row.message_id:
+            text = message_correction.text
             assert text is not None
             row.set_message_text(
                 text,
                 self._get_nick_for_received_message(
-                    event.account, orig_message))
+                    event.account, message_correction))
 
     def _on_message_moderated(self, event: events.MessageModerated) -> None:
         row = self._chats.get((event.account, event.jid))

@@ -109,10 +109,10 @@ class MessageRow(BaseRow):
     def has_receipt(self) -> bool:
         return self._has_receipt
 
-    def refresh_original_message(self, original_message: Message) -> None:
-        # After a correction, the original message is loaded again from the
-        # database so especially the message.corrections relationship has
-        # all the new corrections.
+    def refresh(self) -> None:
+        original_message = app.storage.archive.get_message_with_pk(
+            self.orig_pk)
+        assert original_message is not None
         self._original_message = original_message
         self._set_content(original_message)
 

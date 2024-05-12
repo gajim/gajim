@@ -805,17 +805,17 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def correct_message(self, original_message: Message) -> None:
-        assert original_message.id is not None
-        message_row = self._get_row_by_message_id(original_message.id)
+    def correct_message(self, message_correction: Message) -> None:
+        assert message_correction.correction_id is not None
+        message_row = self._get_row_by_message_id(
+            message_correction.correction_id)
         if message_row is None:
             return
 
-        corr_message_id = original_message.get_last_correction().id
-        if corr_message_id is not None:
-            self._message_id_row_map[corr_message_id] = message_row
+        if message_correction.id is not None:
+            self._message_id_row_map[message_correction.id] = message_row
 
-        message_row.refresh_original_message(original_message)
+        message_row.refresh()
 
         assert self._read_marker_row is not None
         timestamp = message_row.timestamp + timedelta(microseconds=1)
