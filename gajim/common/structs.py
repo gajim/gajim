@@ -92,7 +92,6 @@ class OutgoingMessage:
                  user_nick: str | None = None,
                  label: SecurityLabel | None = None,
                  control: Any | None = None,
-                 attention: bool | None = None,
                  correct_id: str | None = None,
                  reply_data: ReplyData | None = None,
                  oob_url: str | None = None,
@@ -127,7 +126,6 @@ class OutgoingMessage:
         self.user_nick = user_nick
         self.label = label
         self.control = control
-        self.attention = attention
         self.correct_id = correct_id
         self.reply_data = reply_data
 
@@ -138,7 +136,7 @@ class OutgoingMessage:
         self.timestamp = None
         self.message_id = None
         self.stanza = None
-        self.delayed = None  # TODO never set
+
         self._encryption_data: EncryptionData | None = None
 
     def get_text(self, with_fallback: bool = True) -> str | None:
@@ -199,16 +197,6 @@ class OutgoingMessage:
     @property
     def is_encrypted(self) -> bool:
         return self._encryption_data is not None
-
-    @property
-    def msg_iq(self) -> Any:
-        # Backwards compatibility for plugins
-        return self.stanza
-
-    @msg_iq.setter
-    def msg_iq(self, value: Any) -> None:
-        # Backwards compatibility for plugins
-        self.stanza = value
 
 
 @dataclass(frozen=True)

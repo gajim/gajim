@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import dataclasses
 import datetime as dt
-import time
 
 import nbxmpp
 import sqlalchemy.exc
@@ -428,19 +427,6 @@ class Message(BaseModule):
         if message.user_nick:
             stanza.setTag('nick', namespace=Namespace.NICK).setData(
                 message.user_nick)
-
-        # XEP-0203
-        # TODO: Seems delayed is not set anywhere
-        if message.delayed:
-            timestamp = time.strftime('%Y-%m-%dT%H:%M:%SZ',
-                                      time.gmtime(message.delayed))
-            stanza.addChild('delay',
-                            namespace=Namespace.DELAY2,
-                            attrs={'from': str(own_jid), 'stamp': timestamp})
-
-        # XEP-0224
-        if message.attention:
-            stanza.setTag('attention', namespace=Namespace.ATTENTION)
 
         # XEP-0066
         if message.oob_url is not None:
