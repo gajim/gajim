@@ -222,7 +222,7 @@ class Migration:
 
     def _v9(self) -> None:
         statements = [
-            'CREATE INDEX idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);',
+            'CREATE INDEX IF NOT EXISTS idx_stanza_id ON message(stanza_id, fk_remote_pk, fk_account_pk);',
             'PRAGMA user_version=9',
         ]
 
