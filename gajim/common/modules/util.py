@@ -24,6 +24,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import types
 from gajim.common.const import EME_MESSAGES
+from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import MUCData
@@ -170,3 +171,19 @@ def get_chat_type_and_direction(
         raise ValueError('Invalid message type', properties.type)
 
     return MessageType.CHAT, direction
+
+
+def get_nickname_from_message(message: mod.Message) -> str:
+    if message.resource is None:
+        nickname = message.remote.jid.localpart
+        assert nickname is not None
+        return nickname
+
+    if message.occupant is not None:
+        nickname = message.occupant.nickname
+        assert nickname is not None
+        return nickname
+
+    nickname = message.resource
+    assert nickname is not None
+    return nickname

@@ -25,6 +25,7 @@ from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.i18n import _
 from gajim.common.modules.util import ChatDirection
+from gajim.common.modules.util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
@@ -554,18 +555,11 @@ class ChatList(Gtk.ListBox, EventHelper):
         message: Message
     ) -> str:
 
-        if message.type == MessageType.CHAT:
-            if message.direction == ChatDirection.OUTGOING:
-                return _('Me')
-            return ''
+        if message.direction == ChatDirection.OUTGOING:
+            return _('Me')
 
-        if message.type == MessageType.GROUPCHAT:
-            if message.direction == ChatDirection.OUTGOING:
-                return _('Me')
-
-            nick = message.resource or message.remote.jid.localpart
-            assert nick is not None
-            return nick
+        if message.type in (MessageType.GROUPCHAT, MessageType.PM):
+            return get_nickname_from_message(message)
 
         return ''
 

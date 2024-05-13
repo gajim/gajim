@@ -24,6 +24,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.modules.util import get_nickname_from_message
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -241,21 +242,10 @@ class MessageRow(BaseRow):
                 return contact.name
             return app.nicks[contact.account]
 
-        elif db_row.type == MessageType.GROUPCHAT:
-            resource = db_row.resource
-            if resource is None:
-                # Fall back to MUC name if contact name is None
-                # (may be the case for service messages from the MUC)
-                return contact.name
-            return resource
+        if db_row.type in (MessageType.GROUPCHAT, MessageType.PM):
+            return get_nickname_from_message(db_row)
 
-        elif db_row.type == MessageType.PM:
-            resource = db_row.resource
-            assert resource is not None
-            return resource
-
-        else:
-            raise ValueError
+        raise ValueError
 
     @property
     def _muc_context(self) -> str | None:

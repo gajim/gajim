@@ -22,7 +22,6 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
-from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import get_uf_relative_time
@@ -32,6 +31,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import ChatDirection
+from gajim.common.modules.util import get_nickname_from_message
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import guess_simple_file_type
@@ -163,27 +163,23 @@ class ChatListRow(Gtk.ListBoxRow):
                 message_text = get_retraction_text(
                     message.moderation.by, message.moderation.reason)
 
-            me_nickname = None
+            # Nickname
+            nickname = None
             if (message.type == MessageType.CHAT and
                     message.direction == ChatDirection.OUTGOING):
                 self.set_nick(_('Me'))
-                me_nickname = app.nicks[self.contact.account]
+                nickname = app.nicks[self.contact.account]
 
-            if message.type == MessageType.GROUPCHAT:
-                # TODO: not joined when starting (no groupchat nick)
-                our_nick = get_group_chat_nick(
-                    self.contact.account, self.contact.jid)
-
-                if message.resource == our_nick:
+            elif message.type in (MessageType.GROUPCHAT, MessageType.PM):
+                nickname = get_nickname_from_message(message) or None
+                if message.direction == ChatDirection.OUTGOING:
                     self.set_nick(_('Me'))
-                    me_nickname = our_nick
                 else:
-                    self.set_nick(message.resource or '')
-                    me_nickname = message.resource
+                    self.set_nick(nickname)
 
             self.set_message_text(
                 message_text,
-                nickname=me_nickname,
+                nickname=nickname,
                 oob=message.oob)
 
             self.set_timestamp(message.timestamp)
@@ -302,7 +298,7 @@ class ChatListRow(Gtk.ListBoxRow):
             self._ui.message_icon.set_from_gicon(icon, Gtk.IconSize.MENU)
             self._ui.message_icon.show()
 
-    def set_nick(self, nickname: str) -> None:
+    def set_nick(self, nickname: str | None) -> None:
         self._ui.nick_label.set_visible(bool(nickname))
         self._ui.nick_label.set_text(
             _('%(nickname)s:') % {'nickname': nickname})
