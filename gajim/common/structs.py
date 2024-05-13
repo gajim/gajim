@@ -115,7 +115,7 @@ class OutgoingMessage:
 
     @property
     def is_pm(self) -> bool:
-        return self.type == MessageType.CHAT
+        return self.type == MessageType.PM
 
     def get_text(self, with_fallback: bool = True) -> str | None:
         if not with_fallback:
