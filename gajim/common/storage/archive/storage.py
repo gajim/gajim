@@ -212,6 +212,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         return obj.pk
 
+
     @with_session
     @timeit
     def insert_row(

@@ -377,7 +377,14 @@ class MessageCorrected(ApplicationEvent):
     name: str = field(init=False, default='message-corrected')
     account: str
     jid: JID
-    message_correction: mod.Message
+    pk: int
+    correction_id: str
+
+    @cached_property
+    def message(self) -> mod.Message:
+        m = app.storage.archive.get_message_with_pk(self.pk)
+        assert m is not None
+        return m
 
 
 @dataclass

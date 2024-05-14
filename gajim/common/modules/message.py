@@ -243,7 +243,8 @@ class Message(BaseModule):
         if correction_id is not None:
             event = MessageCorrected(account=self._account,
                                      jid=remote_jid,
-                                     message_correction=message_data)
+                                     pk=pk,
+                                     correction_id=correction_id)
             app.ged.raise_event(event)
             return
 
@@ -549,7 +550,8 @@ class Message(BaseModule):
         if message.correct_id is not None:
             event = MessageCorrected(account=self._account,
                                      jid=remote_jid,
-                                     message_correction=message_data)
+                                     pk=pk,
+                                     correction_id=message.correct_id)
             app.ged.raise_event(event)
             return
 

@@ -830,15 +830,15 @@ class ConversationView(Gtk.ScrolledWindow):
             if isinstance(row, MessageRow):
                 row.update_avatar()
 
-    def correct_message(self, message_correction: Message) -> None:
-        assert message_correction.correction_id is not None
-        message_row = self._get_row_by_message_id(
-            message_correction.correction_id)
+    def correct_message(self, event: events.MessageCorrected) -> None:
+        message_row = self._get_row_by_message_id(event.correction_id)
         if message_row is None:
             return
 
-        if message_correction.id is not None:
-            self._message_id_row_map[message_correction.id] = message_row
+        # Store the message row also with the correction message id
+        # because e.g. message receipts reference this id.
+        if event.message.id is not None:
+            self._message_id_row_map[event.message.id] = message_row
 
         message_row.refresh()
 
