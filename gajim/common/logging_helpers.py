@@ -225,7 +225,7 @@ def get_log_console_handler() -> LogConsoleHandler:
 
 def _redirect_output() -> None:
     debug_folder = configpaths.get('DEBUG')
-    date = datetime.today().strftime('%d%m%Y-%H%M%S')
+    date = datetime.today().strftime('%Y-%m-%d-%H%M%S')
     filename = '%s-debug.log' % date
     fd = open(debug_folder / filename, 'a', encoding='utf8')
     sys.stderr = sys.stdout = fd
