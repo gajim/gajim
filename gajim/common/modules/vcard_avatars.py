@@ -176,11 +176,14 @@ class VCardAvatars(BaseModule):
         assert isinstance(contact, GroupchatParticipant)
 
         # Custom ejabberd room config option
-        allow_query = contact.room.get_config_value('allow_query_users')
-        if allow_query is False:
-            self._log.debug('Room does not allow IQ queries: %s',
-                            contact.room.jid)
-            return
+        if contact.room.get_disco() is not None:
+            # We have no disco when we create a new room, but receive our
+            # self presence
+            allow_query = contact.room.get_config_value('allow_query_users')
+            if allow_query is False:
+                self._log.debug('Room does not allow IQ queries: %s',
+                                contact.room.jid)
+                return
 
         nick = properties.jid.resource
 
