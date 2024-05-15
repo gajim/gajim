@@ -15,7 +15,6 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
-from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
@@ -63,6 +62,7 @@ class MessageRow(BaseRow):
         self.db_timestamp = message.timestamp.timestamp()
         self.stanza_id = message.stanza_id
         self.direction = ChatDirection(message.direction)
+        self._is_outgoing = self.direction == ChatDirection.OUTGOING
 
         self.orig_pk = message.pk
 
@@ -150,8 +150,11 @@ class MessageRow(BaseRow):
         self._avatar_box.set_from_surface(avatar)
         self._avatar_box.set_name(self.name)
 
-        self._meta_box.pack_start(NicknameLabel(
-            self.name, self._message_from_us), False, True, 0)
+        self._meta_box.pack_start(
+            NicknameLabel(
+                self.name,
+                self._is_outgoing
+            ), False, True, 0)
         self._meta_box.pack_start(
             DateTimeLabel(self.timestamp), False, True, 0)
 
@@ -163,7 +166,7 @@ class MessageRow(BaseRow):
             app.preview_manager.create_preview(
                 self.text,
                 self._message_widget,
-                self._message_from_us,
+                self._is_outgoing,
                 self._muc_context)
         else:
             referenced_message = message.get_referenced_message()
@@ -173,7 +176,7 @@ class MessageRow(BaseRow):
 
             self._message_widget = MessageWidget(self._contact.account)
             self._message_widget.add_with_styling(self.text, nickname=self.name)
-            if self._contact.is_groupchat and not self._message_from_us:
+            if self._contact.is_groupchat and not self._is_outgoing:
                 self._apply_highlight(self.text)
 
         if self._ref_message_widget is not None:
@@ -253,13 +256,6 @@ class MessageRow(BaseRow):
                       GroupchatContact | GroupchatParticipant):
             return self._contact.muc_context
         return None
-
-    @property
-    def _message_from_us(self) -> bool:
-        if self._contact.is_groupchat:
-            our_nick = get_group_chat_nick(self._account, self._contact.jid)
-            return self.name == our_nick
-        return self.direction == ChatDirection.OUTGOING
 
     def show_chat_row_menu(
         self,
