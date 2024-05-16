@@ -79,13 +79,11 @@ class ReactionsBar(Gtk.Box):
 
     def _on_reaction_clicked(self, reaction_button: ReactionButton) -> None:
         if reaction_button.from_us:
-            reaction_button.toggle_from_us()
             reactions = self.get_our_reactions()
             reactions.discard(reaction_button.emoji)
             self._send_reaction(reactions)
             return
 
-        reaction_button.toggle_from_us()
         reactions = self.get_our_reactions()
         reactions.add(reaction_button.emoji)
         self._send_reaction(reactions)
@@ -169,15 +167,6 @@ class ReactionButton(Gtk.Button):
         self.add(self._box)
 
         self.show_all()
-
-    def toggle_from_us(self) -> None:
-        # TODO: should we update ourself or use updated DB reactions?
-        if self.from_us:
-            self.get_style_context().remove_class('reaction-from-us')
-        else:
-            self.get_style_context().add_class('reaction-from-us')
-
-        self.from_us = not self.from_us
 
 
 class MoreReactionsButton(Gtk.MenuButton):
