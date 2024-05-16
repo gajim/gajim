@@ -763,8 +763,9 @@ infobar.error > revealer > box {
 .reaction label {
     font-size: 90%;
 }
-.reaction-dummy-entry {
-    padding: 0px;
+.dummy-emoji-entry {
+    padding: 0;
+    border: 0;
 }
 
 /* Multi-purpose elements / widgets ======================================== */

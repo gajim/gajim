@@ -460,6 +460,9 @@ class MessageRow(BaseRow):
         self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
+    def get_our_reactions(self) -> set[str]:
+        return self._reactions_bar.get_our_reactions()
+
     def set_retracted(self, text: str) -> None:
         self.text = text
 

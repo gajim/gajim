@@ -23,6 +23,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.conversation.reactions_bar import AddReactionButton
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_cursor
@@ -64,6 +65,10 @@ class MessageRowActions(Gtk.EventBox):
         self._reply_button.set_tooltip_text(_('Reply…'))
         self._reply_button.connect('clicked', self._on_reply_clicked)
 
+        self._reaction_button = AddReactionButton()
+        self._reaction_button.connect('clicked', self._on_reaction_button_clicked)
+        self._reaction_button.connect('emoji-added', self._on_reaction_added)
+
         more_button = Gtk.Button.new_from_icon_name(
             'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
         more_button.connect('clicked', self._on_more_clicked)
@@ -71,6 +76,7 @@ class MessageRowActions(Gtk.EventBox):
         box = Gtk.Box()
         box.get_style_context().add_class('linked')
         box.add(self._reply_button)
+        box.add(self._reaction_button)
         box.add(more_button)
 
         self.add(box)
@@ -161,9 +167,33 @@ class MessageRowActions(Gtk.EventBox):
 
         return True
 
-    def _on_reply_clicked(self, button: Gtk.Button) -> None:
+    def _on_reply_clicked(self, _button: Gtk.Button) -> None:
         assert self._row is not None
         app.window.activate_action('reply', GLib.Variant('u', self._row.pk))
+
+    def _on_reaction_button_clicked(self, _button: AddReactionButton) -> None:
+        self._menu_button_clicked = True
+
+    def _on_reaction_added(self, _widget: AddReactionButton, emoji: str) -> None:
+        assert self._row is not None
+        assert self._contact is not None
+
+        self._menu_button_clicked = False
+
+        our_reactions = self._row.get_our_reactions()
+        our_reactions.add(emoji)
+
+        reaction_id = self._row.message_id
+        if isinstance(self._contact, GroupchatContact):
+            reaction_id = self._row.stanza_id
+
+        if reaction_id is None:
+            return
+
+        client = app.get_client(self._contact.account)
+        client.get_module('Reactions').send_reaction(
+            contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
+        )
 
     def _on_more_clicked(self, button: Gtk.Button) -> None:
         assert self._row is not None
