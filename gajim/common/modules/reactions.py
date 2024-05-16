@@ -14,7 +14,7 @@ from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.events import ReactionReceived
+from gajim.common.events import ReactionUpdated
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import get_chat_type_and_direction
@@ -113,7 +113,7 @@ class Reactions(BaseModule):
         app.storage.archive.upsert_row2(reaction)
 
         app.ged.raise_event(
-            ReactionReceived(
+            ReactionUpdated(
                 account=self._account,
                 jid=remote_jid,
                 reaction_id=properties.reactions.id,

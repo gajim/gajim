@@ -291,7 +291,7 @@ class ChatControl(EventHelper):
             ('message-moderated', ged.GUI2, self._on_message_moderated),
             ('receipt-received', ged.GUI2, self._on_receipt_received),
             ('displayed-received', ged.GUI2, self._on_displayed_received),
-            ('reaction-received', ged.GUI2, self._on_reaction_received),
+            ('reaction-updated', ged.GUI2, self._on_reaction_updated),
             ('message-error', ged.GUI2, self._on_message_error),
             ('call-stopped', ged.GUI2, self._on_call_stopped),
             ('jingle-request-received',
@@ -384,7 +384,7 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.set_read_marker(event.marker_id)
 
-    def _on_reaction_received(self, event: events.ReactionReceived) -> None:
+    def _on_reaction_updated(self, event: events.ReactionUpdated) -> None:
         if not self._is_event_processable(event):
             return
 

@@ -309,8 +309,8 @@ class DisplayedReceived(ApplicationEvent):
 
 
 @dataclass
-class ReactionReceived(ApplicationEvent):
-    name: str = field(init=False, default='reaction-received')
+class ReactionUpdated(ApplicationEvent):
+    name: str = field(init=False, default='reaction-updated')
     account: str
     jid: JID
     reaction_id: str
