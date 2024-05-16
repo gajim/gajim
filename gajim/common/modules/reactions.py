@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import emoji
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
@@ -62,8 +63,18 @@ class Reactions(BaseModule):
             raise NodeProcessed
 
         # Set arbitrary limit of max reactions to prevent
-        # performance problems when loading and displaying them
-        reactions = list(properties.reactions.emojis)[:10]
+        # performance problems when loading and displaying them.
+        # Check if reactions qualify as emojis.
+        reactions: list[str] = []
+        for reaction in list(properties.reactions.emojis)[:10]:
+            if emoji.is_emoji(reaction):
+                reactions.append(reaction)
+
+        if not reactions:
+            self._log.warning(
+                'Reactions did not qualify as emoji: %s', properties.reactions.emojis
+            )
+            raise NodeProcessed
 
         timestamp = get_message_timestamp(properties)
 
@@ -71,19 +82,20 @@ class Reactions(BaseModule):
         if properties.type.is_groupchat:
             muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning('Reaction message from unknown MUC: %s',
-                                  remote_jid)
+                self._log.warning('Reaction message from unknown MUC: %s', remote_jid)
                 raise NodeProcessed
 
         own_bare_jid = self._get_own_bare_jid()
 
         m_type, direction = get_chat_type_and_direction(
-            muc_data, own_bare_jid, properties)
+            muc_data, own_bare_jid, properties
+        )
 
         occupant = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
             contact = self._client.get_module('Contacts').get_contact(
-                properties.jid, groupchat=True)
+                properties.jid, groupchat=True
+            )
 
             assert isinstance(contact, GroupchatParticipant)
             occupant = get_occupant_info(
@@ -133,7 +145,7 @@ class Reactions(BaseModule):
             account=self._account,
             contact=contact,
             reaction_data=(reaction_id, reactions),
-            play_sound=False
+            play_sound=False,
         )
 
         self._client.send_message(message)
