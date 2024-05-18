@@ -158,10 +158,15 @@ class Reactions(BaseModule):
         reactions: set[str],
     ) -> None:
 
+        valid, invalid = normalize_reactions(list(reactions))
+        if invalid:
+            codepoints = ', '.join([convert_to_codepoints(i) for i in invalid])
+            self._log.warning('Trying to send invalid reactions: %s', codepoints)
+
         message = OutgoingMessage(
             account=self._account,
             contact=contact,
-            reaction_data=(reaction_id, reactions),
+            reaction_data=(reaction_id, valid),
             play_sound=False,
         )
 
