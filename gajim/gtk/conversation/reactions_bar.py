@@ -39,11 +39,17 @@ class ReactionData(NamedTuple):
 
 class ReactionsBar(Gtk.Box):
     def __init__(self, message_row: MessageRow, contact: types.ChatContactT) -> None:
-        Gtk.Box.__init__(self, spacing=3, no_show_all=True)
+        Gtk.Box.__init__(self, spacing=3, no_show_all=True, halign=Gtk.Align.START)
         self._message_row = message_row
         self._contact = contact
 
         self._reactions: list[mod.Reaction] = []
+
+        add_reaction_button = AddReactionButton()
+        add_reaction_button.get_style_context().add_class('reaction')
+        add_reaction_button.get_style_context().add_class('flat')
+        add_reaction_button.connect('emoji-added', self._on_emoji_added)
+        self.pack_end(add_reaction_button, False, False, 0)
 
     def _aggregate_reactions(
         self, reactions: list[mod.Reaction]
@@ -92,6 +98,9 @@ class ReactionsBar(Gtk.Box):
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
         for widget in self.get_children():
+            if isinstance(widget, AddReactionButton):
+                continue
+
             widget.destroy()
 
         self._reactions = reactions
@@ -107,21 +116,15 @@ class ReactionsBar(Gtk.Box):
             reaction_button = ReactionButton(emoji, data)
             reaction_button.connect('clicked', self._on_reaction_clicked)
             if index + 1 <= MAX_VISIBLE_REACTIONS:
-                self.add(reaction_button)
+                self.pack_start(reaction_button, False, False, 0)
             elif index + 1 > MAX_VISIBLE_REACTIONS and index + 1 <= MAX_TOTAL_REACTIONS:
                 if more_reactions_button is None:
                     more_reactions_button = MoreReactionsButton()
-                    self.add(more_reactions_button)
+                    self.pack_start(more_reactions_button, False, False, 0)
                 more_reactions_button.add_reaction(reaction_button)
             else:
                 log.debug('Too many reactions: %s', len(aggregated_reactions))
                 break
-
-        add_reaction_button = AddReactionButton()
-        add_reaction_button.get_style_context().add_class('reaction')
-        add_reaction_button.get_style_context().add_class('flat')
-        add_reaction_button.connect('emoji-added', self._on_emoji_added)
-        self.add(add_reaction_button)
 
         self.set_no_show_all(False)
         self.show_all()
@@ -208,7 +211,7 @@ class AddReactionButton(Gtk.Button):
         )
         self._dummy_entry.get_style_context().add_class('flat')
         self._dummy_entry.get_style_context().add_class('dummy-emoji-entry')
-        self._dummy_entry.connect('changed', self._on_changed)
+        self._dummy_entry.connect('insert-text', self._on_insert_text)
 
         box = Gtk.Box()
         box.add(icon)
@@ -222,15 +225,14 @@ class AddReactionButton(Gtk.Button):
         self.show_all()
 
     def _on_clicked(self, _button: Gtk.Button) -> None:
-        self._dummy_entry.set_text('')
         self._dummy_entry.show()
         self._dummy_entry.emit('insert-emoji')
 
-    def _on_changed(self, entry: Gtk.Entry) -> None:
+    def _on_insert_text(
+        self, entry: Gtk.Entry, text: str, _length: int, _position: int
+    ) -> int:
+        entry.stop_emission_by_name('insert-text')
         entry.hide()
-        if not entry.get_text():
-            return
-
-        emoji = entry.get_text()
-        entry.set_text('')
-        self.emit('emoji-added', emoji)
+        if text:
+            self.emit('emoji-added', text)
+        return 0
