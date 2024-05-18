@@ -7,6 +7,7 @@ from __future__ import annotations
 import math
 import re
 
+import emoji
 from gi.repository import GLib
 
 from gajim.common import regex
@@ -76,3 +77,27 @@ def format_bytes_as_hex(bytes_: bytes, line_count: int = 1) -> str:
     for pos in range(0, len(bytes_), line_length):
         lines.append(':'.join(hex_list[pos:pos + line_length]))
     return '\n'.join(lines)
+
+
+def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
+    valid: set[str] = set()
+    invalid: set[str] = set()
+    # Set arbitrary limit of max reactions to prevent
+    # performance problems when loading and displaying them.
+    reactions = reactions[:10]
+    for reaction in reactions:
+        # Remote emoji variant selectors they are not needed because
+        # reactions need to be always shown in emoji representation
+        # Further it allows us to make them equal with the version
+        # without selector
+        reaction = reaction.strip('\uFE0E\uFE0F')
+        if not emoji.is_emoji(reaction):
+            invalid.add(reaction)
+            continue
+        valid.add(reaction)
+
+    return valid, invalid
+
+
+def convert_to_codepoints(string: str) -> str:
+    return ''.join(f'\\u{ord(c):04x}' for c in string)

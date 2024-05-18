@@ -6,7 +6,6 @@
 
 from __future__ import annotations
 
-import emoji
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
@@ -24,6 +23,8 @@ from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import MessageType
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.text import convert_to_codepoints
+from gajim.common.util.text import normalize_reactions
 
 
 class Reactions(BaseModule):
@@ -112,16 +113,12 @@ class Reactions(BaseModule):
         # Set arbitrary limit of max reactions to prevent
         # performance problems when loading and displaying them.
         # Check if reactions qualify as emojis.
-        reactions: list[str] = []
-        for reaction in list(properties.reactions.emojis)[:10]:
-            if not emoji.is_emoji(reaction):
-                self._log.warning(
-                    'Reactions did not qualify as emoji: %s', reaction
-                )
-                continue
-            reactions.append(reaction)
+        valid, invalid = normalize_reactions(list(properties.reactions.emojis))
+        if invalid:
+            codepoints = ', '.join([convert_to_codepoints(i) for i in invalid])
+            self._log.warning('Reactions did not qualify as emoji: %s', codepoints)
 
-        if not reactions:
+        if not valid:
             raise NodeProcessed
 
         reaction = mod.Reaction(
@@ -130,7 +127,7 @@ class Reactions(BaseModule):
             occupant_=occupant,
             id=properties.reactions.id,
             direction=direction,
-            emojis=';'.join(reactions),
+            emojis=';'.join(valid),
             timestamp=timestamp,
         )
 
