@@ -219,6 +219,8 @@ class AddReactionButton(Gtk.Button):
         # Use connect_after to allow other widgets to connect beforehand
         self.connect_after('clicked', self._on_clicked)
 
+        self.show_all()
+
     def _on_clicked(self, _button: Gtk.Button) -> None:
         self._dummy_entry.set_text('')
         self._dummy_entry.show()
