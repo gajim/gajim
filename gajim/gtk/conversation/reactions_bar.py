@@ -85,7 +85,9 @@ class ReactionsBar(Gtk.Box):
         our_reactions: set[str] = set()
         for reaction in self._reactions:
             if reaction.direction == ChatDirection.OUTGOING:
-                our_reactions = set(reaction.emojis.split(';'))
+                our_reactions = {
+                    emoji for emoji in reaction.emojis.split(';') if emoji
+                }
                 break
 
         return our_reactions
