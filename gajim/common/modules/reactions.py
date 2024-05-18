@@ -93,6 +93,7 @@ class Reactions(BaseModule):
 
         occupant = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+            assert properties.jid is not None
             contact = self._client.get_module('Contacts').get_contact(
                 properties.jid, groupchat=True
             )
