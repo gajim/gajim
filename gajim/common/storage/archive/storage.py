@@ -44,6 +44,8 @@ from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
+from gajim.common.storage.archive.models import Occupant
+from gajim.common.storage.archive.models import Reaction
 from gajim.common.storage.archive.models import Remote
 from gajim.common.storage.archive.models import Thread
 from gajim.common.storage.base import AlchemyStorage
@@ -404,6 +406,51 @@ class MessageArchiveStorage(AlchemyStorage):
             session.delete(message.moderation)
 
         session.delete(message)
+
+    @with_session
+    @timeit
+    def delete_reaction(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        occupant_id: str | None,
+        reaction_id: str,
+        direction: ChatDirection,
+    ) -> None:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        fk_occupant_pk = None
+        if occupant_id is not None:
+            stmt = select(Occupant.pk).where(
+                Occupant.id == occupant_id,
+                Occupant.fk_remote_pk == fk_remote_pk,
+                Occupant.fk_account_pk == fk_account_pk,
+            )
+            fk_occupant_pk = session.scalar(stmt)
+            if fk_occupant_pk is None:
+                self._log.warning(
+                    'Unable to delete reaction, unknown occupant-id: %s', occupant_id
+                )
+                return
+
+        stmt = delete(Reaction).where(
+            Reaction.id == reaction_id,
+            Reaction.fk_remote_pk == fk_remote_pk,
+        )
+
+        if fk_occupant_pk is None:
+            stmt = stmt.where(Reaction.fk_occupant_pk.is_(None))
+        else:
+            stmt = stmt.where(Reaction.fk_occupant_pk == fk_occupant_pk)
+
+        stmt = stmt.where(
+            Reaction.fk_account_pk == fk_account_pk,
+            Reaction.direction == direction,
+        )
+
+        session.execute(stmt)
 
     @with_session
     @timeit

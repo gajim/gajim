@@ -58,24 +58,6 @@ class Reactions(BaseModule):
         remote_jid = properties.remote_jid
         assert remote_jid is not None
 
-        if not properties.reactions.emojis:
-            # TODO DELETE Reactions
-            raise NodeProcessed
-
-        # Set arbitrary limit of max reactions to prevent
-        # performance problems when loading and displaying them.
-        # Check if reactions qualify as emojis.
-        reactions: list[str] = []
-        for reaction in list(properties.reactions.emojis)[:10]:
-            if emoji.is_emoji(reaction):
-                reactions.append(reaction)
-
-        if not reactions:
-            self._log.warning(
-                'Reactions did not qualify as emoji: %s', properties.reactions.emojis
-            )
-            raise NodeProcessed
-
         timestamp = get_message_timestamp(properties)
 
         muc_data = None
@@ -92,6 +74,7 @@ class Reactions(BaseModule):
         )
 
         occupant = None
+        occupant_id = None
         if m_type in (MessageType.GROUPCHAT, MessageType.PM):
             assert properties.jid is not None
             contact = self._client.get_module('Contacts').get_contact(
@@ -112,6 +95,33 @@ class Reactions(BaseModule):
             if occupant is None:
                 self._log.info('Reactions not supported without occupant-id')
                 raise NodeProcessed
+
+            occupant_id = occupant.id
+
+        if not properties.reactions.emojis:
+            app.storage.archive.delete_reaction(
+                account=self._account,
+                jid=remote_jid,
+                occupant_id=occupant_id,
+                reaction_id=properties.reactions.id,
+                direction=direction,
+            )
+            self._log.info('Delete reactions: %s', properties.jid)
+            raise NodeProcessed
+
+        # Set arbitrary limit of max reactions to prevent
+        # performance problems when loading and displaying them.
+        # Check if reactions qualify as emojis.
+        reactions: list[str] = []
+        for reaction in list(properties.reactions.emojis)[:10]:
+            if emoji.is_emoji(reaction):
+                reactions.append(reaction)
+
+        if not reactions:
+            self._log.warning(
+                'Reactions did not qualify as emoji: %s', properties.reactions.emojis
+            )
+            raise NodeProcessed
 
         reaction = mod.Reaction(
             account_=self._account,
