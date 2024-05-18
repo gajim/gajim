@@ -204,8 +204,9 @@ class MessageRow(BaseRow):
             self.set_retracted(get_retraction_text(
                 message.moderation.by, message.moderation.reason))
 
-        if self._original_message.reactions:
-            self._reactions_bar.update_from_reactions(message.reactions)
+        reactions = self._original_message.reactions
+        if reactions:
+            self._reactions_bar.update_from_reactions(reactions)
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:

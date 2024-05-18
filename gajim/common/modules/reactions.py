@@ -114,13 +114,14 @@ class Reactions(BaseModule):
         # Check if reactions qualify as emojis.
         reactions: list[str] = []
         for reaction in list(properties.reactions.emojis)[:10]:
-            if emoji.is_emoji(reaction):
-                reactions.append(reaction)
+            if not emoji.is_emoji(reaction):
+                self._log.warning(
+                    'Reactions did not qualify as emoji: %s', reaction
+                )
+                continue
+            reactions.append(reaction)
 
         if not reactions:
-            self._log.warning(
-                'Reactions did not qualify as emoji: %s', properties.reactions.emojis
-            )
             raise NodeProcessed
 
         reaction = mod.Reaction(
@@ -133,6 +134,7 @@ class Reactions(BaseModule):
             timestamp=timestamp,
         )
 
+        self._log.info('Received reactions: %s', reaction)
         app.storage.archive.upsert_row2(reaction)
 
         app.ged.raise_event(
