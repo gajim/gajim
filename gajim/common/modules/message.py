@@ -280,7 +280,7 @@ class Message(BaseModule):
             self._log.warning(stanza)
             return
 
-        timestamp = self._get_message_timestamp(properties)
+        timestamp = get_message_timestamp(properties)
 
         error_data = mod.MessageError(
             account_=self._account,
