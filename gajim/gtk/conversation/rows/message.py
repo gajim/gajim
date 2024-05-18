@@ -459,7 +459,7 @@ class MessageRow(BaseRow):
 
     def send_reaction(self, emoji: str) -> None:
         reaction_id = self.message_id
-        if isinstance(self._contact, GroupchatContact):
+        if self._original_message.type == MessageType.GROUPCHAT:
             reaction_id = self.stanza_id
 
         if reaction_id is None:
