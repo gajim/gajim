@@ -200,7 +200,7 @@ class AddReactionButton(Gtk.Button):
             no_show_all=True,
         )
         self._dummy_entry.get_style_context().add_class('flat')
-        self._dummy_entry.get_style_context().add_class('reaction-dummy-entry')
+        self._dummy_entry.get_style_context().add_class('dummy-emoji-entry')
         self._dummy_entry.connect('changed', self._on_changed)
 
         box = Gtk.Box()
@@ -213,14 +213,15 @@ class AddReactionButton(Gtk.Button):
         self.connect_after('clicked', self._on_clicked)
 
     def _on_clicked(self, _button: Gtk.Button) -> None:
+        self._dummy_entry.set_text('')
         self._dummy_entry.show()
         self._dummy_entry.emit('insert-emoji')
 
     def _on_changed(self, entry: Gtk.Entry) -> None:
-        self._dummy_entry.hide()
+        entry.hide()
         if not entry.get_text():
             return
 
-        emoji = self._dummy_entry.get_text()
+        emoji = entry.get_text()
         entry.set_text('')
         self.emit('emoji-added', emoji)
