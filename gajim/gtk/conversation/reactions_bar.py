@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import NamedTuple
+from typing import TYPE_CHECKING
 
 import datetime as dt
 import logging
@@ -20,6 +21,9 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
+if TYPE_CHECKING:
+    from gajim.gtk.conversation.rows.message import MessageRow
+
 MAX_VISIBLE_REACTIONS = 5
 MAX_TOTAL_REACTIONS = 25
 MAX_USERS = 25
@@ -34,10 +38,10 @@ class ReactionData(NamedTuple):
 
 
 class ReactionsBar(Gtk.Box):
-    def __init__(self, contact: types.ChatContactT, reaction_id: str) -> None:
+    def __init__(self, message_row: MessageRow, contact: types.ChatContactT) -> None:
         Gtk.Box.__init__(self, spacing=3, no_show_all=True)
+        self._message_row = message_row
         self._contact = contact
-        self._reaction_id = reaction_id
 
         self._reactions: list[mod.Reaction] = []
 
@@ -78,26 +82,10 @@ class ReactionsBar(Gtk.Box):
         return our_reactions
 
     def _on_reaction_clicked(self, reaction_button: ReactionButton) -> None:
-        if reaction_button.from_us:
-            reactions = self.get_our_reactions()
-            reactions.discard(reaction_button.emoji)
-            self._send_reaction(reactions)
-            return
-
-        reactions = self.get_our_reactions()
-        reactions.add(reaction_button.emoji)
-        self._send_reaction(reactions)
+        self._message_row.send_reaction(reaction_button.emoji)
 
     def _on_emoji_added(self, _widget: AddReactionButton, emoji: str) -> None:
-        reactions = self.get_our_reactions()
-        reactions.add(emoji)
-        self._send_reaction(reactions)
-
-    def _send_reaction(self, reactions: set[str]) -> None:
-        client = app.get_client(self._contact.account)
-        client.get_module('Reactions').send_reaction(
-            contact=self._contact, reaction_id=self._reaction_id, reactions=reactions
-        )
+        self._message_row.send_reaction(emoji)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
         for widget in self.get_children():
@@ -229,10 +217,10 @@ class AddReactionButton(Gtk.Button):
         self._dummy_entry.emit('insert-emoji')
 
     def _on_changed(self, entry: Gtk.Entry) -> None:
+        self._dummy_entry.hide()
         if not entry.get_text():
             return
 
-        self._dummy_entry.hide()
         emoji = self._dummy_entry.get_text()
         entry.set_text('')
         self.emit('emoji-added', emoji)

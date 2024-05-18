@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import logging
 import textwrap
 from datetime import timedelta
 
@@ -44,6 +45,8 @@ from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
+
+log = logging.getLogger('gajim.gtk.conversation.rows.message')
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -87,14 +90,8 @@ class MessageRow(BaseRow):
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
-        # Reactions
-        reaction_id = message.id
-        if isinstance(self._contact, GroupchatContact):
-            reaction_id = message.stanza_id
-
-        if reaction_id is not None:
-            self._reactions_bar = ReactionsBar(self._contact, reaction_id)
-            self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+        self._reactions_bar = ReactionsBar(self, self._contact)
+        self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
         self._set_content(message)
 
@@ -459,6 +456,26 @@ class MessageRow(BaseRow):
     def update_reactions(self) -> None:
         self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
+
+    def send_reaction(self, emoji: str) -> None:
+        reaction_id = self.message_id
+        if isinstance(self._contact, GroupchatContact):
+            reaction_id = self.stanza_id
+
+        if reaction_id is None:
+            log.warning('No reaction id')
+            return
+
+        our_reactions = self.get_our_reactions()
+        if emoji in our_reactions:
+            our_reactions.discard(emoji)
+        else:
+            our_reactions.add(emoji)
+
+        client = app.get_client(self._contact.account)
+        client.get_module('Reactions').send_reaction(
+            contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
+        )
 
     def get_our_reactions(self) -> set[str]:
         return self._reactions_bar.get_our_reactions()

@@ -50,7 +50,7 @@ class MessageRowActions(Gtk.EventBox):
             margin_end=40,
             no_show_all=True,
         )
-        self._row: MessageRow | None = None
+        self._message_row: MessageRow | None = None
         self._contact: ChatContactT | None = None
 
         self._has_cursor = False
@@ -68,7 +68,8 @@ class MessageRowActions(Gtk.EventBox):
         default_reaction_button.get_style_context().add_class('image-button')
 
         choose_reaction_button = AddReactionButton()
-        choose_reaction_button.connect('clicked', self._on_reaction_button_clicked)
+        choose_reaction_button.connect(
+            'clicked', self._on_choose_reaction_button_clicked)
         choose_reaction_button.connect('emoji-added', self._on_reaction_added)
 
         self._reply_button = Gtk.Button.new_from_icon_name(
@@ -100,8 +101,8 @@ class MessageRowActions(Gtk.EventBox):
         # if the cursor enters (cursor changes from row to MessageRowActions)
         self._timeout_id = GLib.timeout_add(10, self._hide)
 
-    def update(self, y_coord: int, row: MessageRow) -> None:
-        self._row = row
+    def update(self, y_coord: int, message_row: MessageRow) -> None:
+        self._message_row = message_row
         self._menu_button_clicked = False
 
         if self._timeout_id is not None:
@@ -128,8 +129,8 @@ class MessageRowActions(Gtk.EventBox):
 
     def _get_reply_visible(self) -> bool:
         if isinstance(self._contact, GroupchatContact):
-            assert self._row is not None
-            if self._contact.is_joined and self._row.stanza_id is not None:
+            assert self._message_row is not None
+            if self._contact.is_joined and self._message_row.stanza_id is not None:
                 self_contact = self._contact.get_self()
                 assert self_contact is not None
                 return not self_contact.role.is_visitor
@@ -142,8 +143,8 @@ class MessageRowActions(Gtk.EventBox):
         if self._has_cursor:
             return
 
-        assert self._row is not None
-        self._row.get_style_context().remove_class('conversation-row-hover')
+        assert self._message_row is not None
+        self._message_row.get_style_context().remove_class('conversation-row-hover')
 
         self._timeout_id = None
         self._menu_button_clicked = False
@@ -154,8 +155,8 @@ class MessageRowActions(Gtk.EventBox):
         if event.type == Gdk.EventType.ENTER_NOTIFY:
             self._has_cursor = True
             self._menu_button_clicked = False
-            assert self._row is not None
-            self._row.get_style_context().add_class('conversation-row-hover')
+            assert self._message_row is not None
+            self._message_row.get_style_context().add_class('conversation-row-hover')
 
         if (
             event.type == Gdk.EventType.LEAVE_NOTIFY
@@ -170,49 +171,35 @@ class MessageRowActions(Gtk.EventBox):
                 # but we don't want to hide MessageRowActions
                 return True
 
-            assert self._row is not None
-            self._row.get_style_context().remove_class('conversation-row-hover')
+            assert self._message_row is not None
+            self._message_row.get_style_context().remove_class('conversation-row-hover')
 
             self.hide()
 
         return True
 
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
-        assert self._row is not None
-        app.window.activate_action('reply', GLib.Variant('u', self._row.pk))
+        assert self._message_row is not None
+        app.window.activate_action('reply', GLib.Variant('u', self._message_row.pk))
 
     def _on_specific_reaction_button_clicked(self, button: Gtk.Button) -> None:
         self._send_reaction(button.get_label())
 
-    def _on_reaction_button_clicked(self, _button: AddReactionButton) -> None:
+    def _on_choose_reaction_button_clicked(self, _button: AddReactionButton) -> None:
         self._menu_button_clicked = True
 
     def _on_reaction_added(self, _widget: AddReactionButton, emoji: str) -> None:
         self._menu_button_clicked = False
+        self._send_reaction(emoji)
 
     def _send_reaction(self, emoji: str) -> None:
-        assert self._row is not None
-        assert self._contact is not None
-
-        reaction_id = self._row.message_id
-        if isinstance(self._contact, GroupchatContact):
-            reaction_id = self._row.stanza_id
-
-        if reaction_id is None:
-            return
-
-        our_reactions = self._row.get_our_reactions()
-        our_reactions.add(emoji)
-
-        client = app.get_client(self._contact.account)
-        client.get_module('Reactions').send_reaction(
-            contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
-        )
+        assert self._message_row is not None
+        self._message_row.send_reaction(emoji)
 
     def _on_more_clicked(self, button: Gtk.Button) -> None:
-        assert self._row is not None
+        assert self._message_row is not None
         self._menu_button_clicked = True
-        self._row.show_chat_row_menu(self, button)
+        self._message_row.show_chat_row_menu(self, button)
 
 
 class DateTimeLabel(Gtk.Label):
