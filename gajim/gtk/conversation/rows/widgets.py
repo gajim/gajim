@@ -145,8 +145,10 @@ class MessageRowActions(Gtk.EventBox):
         return True
 
     def _get_reactions_visible(self) -> bool:
-        if isinstance(self._contact, GroupchatContact):
+        if (isinstance(self._contact, GroupchatContact) and
+                self._contact.muc_context == 'public'):
             return self._contact.supports(Namespace.OCCUPANT_ID)
+
         return True
 
     def _hide(self) -> None:
