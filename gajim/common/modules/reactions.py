@@ -108,6 +108,13 @@ class Reactions(BaseModule):
                 direction=direction,
             )
             self._log.info('Delete reactions: %s', properties.jid)
+            app.ged.raise_event(
+                ReactionUpdated(
+                    account=self._account,
+                    jid=remote_jid,
+                    reaction_id=properties.reactions.id,
+                )
+            )
             raise NodeProcessed
 
         # Set arbitrary limit of max reactions to prevent
