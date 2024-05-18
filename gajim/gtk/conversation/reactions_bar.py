@@ -103,6 +103,9 @@ class ReactionsBar(Gtk.Box):
             if isinstance(widget, AddReactionButton):
                 continue
 
+            if isinstance(widget, MoreReactionsButton):
+                widget.hide_popover()
+
             widget.destroy()
 
         self._reactions = reactions
@@ -189,6 +192,11 @@ class MoreReactionsButton(Gtk.MenuButton):
         self.set_popover(popover)
 
         self.show_all()
+
+    def hide_popover(self) -> None:
+        popover = self.get_popover()
+        if popover is not None:
+            popover.popdown()
 
     def add_reaction(self, reaction_button: ReactionButton) -> None:
         self._flow_box.add(reaction_button)
