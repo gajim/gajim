@@ -96,7 +96,7 @@ class ReactionsBar(Gtk.Box):
         self._message_row.send_reaction(reaction_button.emoji)
 
     def _on_emoji_added(self, _widget: AddReactionButton, emoji: str) -> None:
-        self._message_row.send_reaction(emoji)
+        self._message_row.send_reaction(emoji, toggle=False)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
         for widget in self.get_children():

@@ -152,10 +152,9 @@ class MessageRowActions(Gtk.EventBox):
         return True
 
     def _hide(self) -> None:
-        if self._has_cursor:
+        if self._has_cursor or self._message_row is None:
             return
 
-        assert self._message_row is not None
         self._message_row.get_style_context().remove_class('conversation-row-hover')
 
         self._timeout_id = None
@@ -202,11 +201,11 @@ class MessageRowActions(Gtk.EventBox):
 
     def _on_reaction_added(self, _widget: AddReactionButton, emoji: str) -> None:
         self._menu_button_clicked = False
-        self._send_reaction(emoji)
+        self._send_reaction(emoji, toggle=False)
 
-    def _send_reaction(self, emoji: str) -> None:
+    def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
         assert self._message_row is not None
-        self._message_row.send_reaction(emoji)
+        self._message_row.send_reaction(emoji, toggle)
 
     def _on_more_clicked(self, button: Gtk.Button) -> None:
         assert self._message_row is not None

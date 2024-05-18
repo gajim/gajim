@@ -458,7 +458,13 @@ class MessageRow(BaseRow):
         self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
-    def send_reaction(self, emoji: str) -> None:
+    def send_reaction(self, emoji: str, toggle: bool = True) -> None:
+        '''Adds or removes 'emoji' from this message's reactions and sends the result.
+
+        Args:
+          emoji: Reaction emoji to add or remove
+          toggle: Whether an existing emoji should be removed from the set
+        '''
         reaction_id = self.message_id
         if self._original_message.type == MessageType.GROUPCHAT:
             reaction_id = self.stanza_id
@@ -467,7 +473,14 @@ class MessageRow(BaseRow):
             log.warning('No reaction id')
             return
 
+        # Remove emoji variant selectors
+        emoji = emoji.strip('\uFE0E\uFE0F')
+
         our_reactions = self.get_our_reactions()
+        if emoji in our_reactions and not toggle:
+            log.info('Not toggling reaction <%s>', emoji)
+            return
+
         if emoji in our_reactions:
             our_reactions.discard(emoji)
         else:

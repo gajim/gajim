@@ -86,10 +86,9 @@ def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
     # performance problems when loading and displaying them.
     reactions = reactions[:10]
     for reaction in reactions:
-        # Remote emoji variant selectors they are not needed because
-        # reactions need to be always shown in emoji representation
-        # Further it allows us to make them equal with the version
-        # without selector
+        # Remove emoji variant selectors. They are not needed because
+        # reactions are required to be shown as emoji representation.
+        # Furthermore it allows us to unify both versions.
         reaction = reaction.strip('\uFE0E\uFE0F')
         if not emoji.is_emoji(reaction):
             invalid.add(reaction)
