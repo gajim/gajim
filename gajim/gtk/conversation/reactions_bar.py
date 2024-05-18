@@ -50,6 +50,9 @@ class ReactionsBar(Gtk.Box):
     ) -> dict[str, list[ReactionData]]:
         aggregated_reactions: dict[str, list[ReactionData]] = defaultdict(list)
         for reaction in reactions:
+            if not reaction.emojis:
+                continue
+
             if reaction.direction == ChatDirection.OUTGOING:
                 username = _('Me')
             else:
@@ -94,6 +97,10 @@ class ReactionsBar(Gtk.Box):
         self._reactions = reactions
 
         aggregated_reactions = self._aggregate_reactions(reactions)
+        if not aggregated_reactions:
+            self.set_no_show_all(True)
+            self.hide()
+            return
 
         more_reactions_button = None
         for index, (emoji, data) in enumerate(aggregated_reactions.items()):
