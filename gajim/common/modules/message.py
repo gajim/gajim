@@ -400,7 +400,7 @@ class Message(BaseModule):
         return stanza
 
     def store_message(self, message: OutgoingMessage) -> None:
-        if not message.has_text():
+        if not message.has_text() and message.reaction_data is None:
             return
 
         direction = ChatDirection.OUTGOING
