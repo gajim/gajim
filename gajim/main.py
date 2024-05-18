@@ -9,6 +9,7 @@ import platform
 import signal
 import sqlite3
 import sys
+import warnings
 from ctypes import byref
 from ctypes import CDLL
 from ctypes import create_string_buffer
@@ -125,6 +126,9 @@ def _run_app() -> None:
     signal.signal(signal.SIGTERM, sigint_cb)
     if sys.platform != 'win32':
         signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+    # https://gitlab.gnome.org/GNOME/pygobject/-/issues/12
+    warnings.filterwarnings('ignore', '.*g_value_get_int.*G_VALUE_HOLDS_INT', Warning)
 
     application.run(sys.argv)
 
