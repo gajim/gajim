@@ -54,7 +54,7 @@ from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
-CURRENT_USER_VERSION = 10
+CURRENT_USER_VERSION = 11
 
 
 log = logging.getLogger('gajim.c.storage.archive')
