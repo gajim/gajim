@@ -400,7 +400,13 @@ class Message(BaseModule):
         return stanza
 
     def store_message(self, message: OutgoingMessage) -> None:
-        if not message.has_text() and message.reaction_data is None:
+        if (not message.has_text() and
+                message.reaction_data is None):
+            return
+
+        if (message.type == MessageType.GROUPCHAT and
+                message.reaction_data is not None):
+            # Store reaction when the MUC reflects it
             return
 
         direction = ChatDirection.OUTGOING
