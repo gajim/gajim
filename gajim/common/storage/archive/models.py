@@ -555,7 +555,7 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     __table_args__ = (
         Index(
-            'idx_reaction',
+            'idx_reaction_id',
             'id',
             'fk_remote_pk',
             'fk_account_pk',
@@ -564,7 +564,7 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             sqlite_where=fk_occupant_pk.is_(None),
         ),
         Index(
-            'idx_reaction_gc',
+            'idx_reaction_id_gc',
             'id',
             'fk_remote_pk',
             'fk_occupant_pk',
@@ -574,13 +574,6 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             sqlite_where=fk_occupant_pk.isnot(None),
         ),
     )
-
-    def get_select_stmt(self) -> Select[Any]:
-        return select(Reaction).where(
-            Reaction.id == self.id,
-            Reaction.fk_remote_pk == self.fk_remote_pk,
-            Reaction.fk_account_pk == self.fk_account_pk,
-        )
 
 
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
