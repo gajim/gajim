@@ -140,7 +140,7 @@ class ReferencedMessageWidget(Gtk.EventBox):
         message_label = Gtk.Label(
             label=label_text,
             halign=Gtk.Align.START,
-            max_width_chars=52,
+            max_width_chars=100,
             ellipsize=Pango.EllipsizeMode.END,
         )
         message_label.get_style_context().add_class('dim-label')
