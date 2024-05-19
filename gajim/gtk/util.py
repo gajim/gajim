@@ -280,9 +280,13 @@ def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
 def get_cursor(name: str) -> Gdk.Cursor:
     display = Gdk.Display.get_default()
     assert display is not None
-    cursor = Gdk.Cursor.new_from_name(display, name)
-    if cursor is not None:
-        return cursor
+    try:
+        cursor = Gdk.Cursor.new_from_name(display, name)
+        if cursor is not None:
+            return cursor
+    except TypeError as e:
+        log.exception(e)
+
     cursor = Gdk.Cursor.new_from_name(display, 'default')
     assert cursor is not None
     return cursor
