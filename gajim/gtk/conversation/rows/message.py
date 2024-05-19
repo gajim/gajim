@@ -473,10 +473,7 @@ class MessageRow(BaseRow):
             log.warning('No reaction id')
             return
 
-        # Remove emoji variant selectors
-        emoji = emoji.strip('\uFE0E\uFE0F')
-
-        our_reactions = self.get_our_reactions()
+        our_reactions = self._reactions_bar.get_our_reactions()
         if emoji in our_reactions and not toggle:
             log.info('Not toggling reaction <%s>', emoji)
             return
@@ -490,9 +487,6 @@ class MessageRow(BaseRow):
         client.get_module('Reactions').send_reaction(
             contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
         )
-
-    def get_our_reactions(self) -> set[str]:
-        return self._reactions_bar.get_our_reactions()
 
     def set_retracted(self, text: str) -> None:
         self.text = text

@@ -243,6 +243,9 @@ class AddReactionButton(Gtk.Button):
     ) -> int:
         entry.stop_emission_by_name('insert-text')
         entry.hide()
+
+        # Remove emoji variant selectors
+        text = text.strip('\uFE0E\uFE0F')
         if text:
             self.emit('emoji-added', text)
         return 0
