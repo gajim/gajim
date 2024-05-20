@@ -141,7 +141,7 @@ class Message(BaseModule):
         stanza_id = self._get_stanza_id(properties)
         origin_id = properties.origin_id
 
-        if (m_type == MessageType.CHAT and
+        if (m_type in (MessageType.CHAT, MessageType.PM) and
                 direction == ChatDirection.OUTGOING and
                 origin_id is not None):
             if app.storage.archive.check_if_message_id_exists(
@@ -168,7 +168,7 @@ class Message(BaseModule):
                 return
 
         occupant = self._get_occupant_info(
-            remote_jid, direction, timestamp, properties)
+            remote_jid, m_type, direction, timestamp, properties)
 
         assert properties.bodies is not None
         message_text = properties.bodies.get(None)
@@ -282,12 +282,13 @@ class Message(BaseModule):
     def _get_occupant_info(
         self,
         remote_jid: JID,
+        message_type: MessageType,
         direction: ChatDirection,
         timestamp: dt.datetime,
         properties: MessageProperties
     ) -> mod.Occupant | None:
 
-        if not properties.type.is_groupchat:
+        if message_type not in (MessageType.GROUPCHAT, MessageType.PM):
             return None
 
         if properties.jid.is_bare:
@@ -324,7 +325,7 @@ class Message(BaseModule):
 
         contact = self._client.get_module('Contacts').get_contact(
             properties.remote_jid, groupchat=True)
-        if contact.supports(Namespace.OCCUPANT_ID):
+        if contact.room.supports(Namespace.OCCUPANT_ID):
             return properties.occupant_id
         return None
 
