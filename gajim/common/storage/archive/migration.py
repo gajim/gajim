@@ -279,7 +279,14 @@ class Migration:
             )
             return
 
-        remote_jid = JID.from_string(archive_row.remote.jid)
+        try:
+            remote_jid = JID.from_string(archive_row.remote.jid)
+        except Exception as error:
+            log.warning(
+                'Invalid JID found, unable to migrate archive state: %s', error
+            )
+            return
+
         remote_pk = self._get_remote_pk(conn, remote_jid)
 
         to_stanza_id = archive_row.last_mam_id
