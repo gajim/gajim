@@ -10,7 +10,6 @@ import datetime as dt
 import nbxmpp
 import sqlalchemy.exc
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
@@ -23,17 +22,19 @@ from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
+from gajim.common.events import ReactionUpdated
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.message_util import convert_message_type
+from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_eme_message
+from gajim.common.modules.message_util import get_message_timestamp
+from gajim.common.modules.message_util import get_occupant_info
 from gajim.common.modules.misc import parse_oob
-from gajim.common.modules.util import convert_message_type
-from gajim.common.modules.util import get_chat_type_and_direction
-from gajim.common.modules.util import get_eme_message
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
-from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import OutgoingMessage
 
 
@@ -112,20 +113,23 @@ class Message(BaseModule):
             # TODO: Check where in Gajim and plugins we depend on that behavior
             stanza.setFrom(stanza.getTo())
 
+        timestamp = get_message_timestamp(properties)
+        remote_jid = properties.remote_jid
+        jid = properties.jid
+        assert remote_jid is not None
+        assert jid is not None
+
         muc_data = None
         if properties.type.is_groupchat:
-            muc_data = self._client.get_module('MUC').get_muc_data(
-                properties.remote_jid)
+            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning('Groupchat message from unknown MUC: %s',
-                 properties.remote_jid)
+                self._log.warning(
+                    'Groupchat message from unknown MUC: %s', remote_jid
+                )
                 return
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, self._client.get_own_jid(), properties)
-        timestamp = self._get_message_timestamp(properties)
-        remote_jid = properties.remote_jid
-        assert remote_jid is not None
 
         user_delay_ts = None
         if properties.user_timestamp is not None:
@@ -167,8 +171,23 @@ class Message(BaseModule):
                                         stanza_id=stanza_id))
                 return
 
-        occupant = self._get_occupant_info(
-            remote_jid, m_type, direction, timestamp, properties)
+        occupant = None
+        if (m_type in (MessageType.GROUPCHAT, MessageType.PM)
+                and not jid.is_bare):
+
+            contact = self._client.get_module('Contacts').get_contact(
+                    jid, groupchat=True)
+            assert isinstance(contact, GroupchatParticipant)
+
+            occupant = get_occupant_info(
+                self._account,
+                remote_jid,
+                self._get_own_bare_jid(),
+                direction,
+                timestamp,
+                contact,
+                properties
+            )
 
         assert properties.bodies is not None
         message_text = properties.bodies.get(None)
@@ -219,7 +238,7 @@ class Message(BaseModule):
             direction=direction,
             timestamp=timestamp,
             state=MessageState.ACKNOWLEDGED,
-            resource=properties.jid.resource,
+            resource=jid.resource,
             text=message_text,
             id=message_id,
             stanza_id=stanza_id,
@@ -254,81 +273,6 @@ class Message(BaseModule):
                                             from_mam=properties.is_mam_message,
                                             pk=pk))
 
-    def _get_message_timestamp(
-        self,
-        properties: MessageProperties
-    ) -> dt.datetime:
-        timestamp = properties.timestamp
-        if properties.is_mam_message:
-            timestamp = properties.mam.timestamp
-        return dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc)
-
-    def _get_real_jid(
-        self,
-        properties: MessageProperties,
-        contact: GroupchatParticipant,
-    ) -> JID | None:
-
-        if properties.is_mam_message:
-            if properties.muc_user is None:
-                return None
-            return properties.muc_user.jid
-
-        real_jid = contact.real_jid
-        if real_jid is None:
-            return None
-        return real_jid.new_as_bare()
-
-    def _get_occupant_info(
-        self,
-        remote_jid: JID,
-        message_type: MessageType,
-        direction: ChatDirection,
-        timestamp: dt.datetime,
-        properties: MessageProperties
-    ) -> mod.Occupant | None:
-
-        if message_type not in (MessageType.GROUPCHAT, MessageType.PM):
-            return None
-
-        if properties.jid.is_bare:
-            return None
-
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.jid, groupchat=True)
-        assert isinstance(contact, GroupchatParticipant)
-
-        if direction == ChatDirection.OUTGOING:
-            real_jid = self._client.get_own_jid().new_as_bare()
-        else:
-            real_jid = self._get_real_jid(properties, contact)
-
-        occupant_id = self._get_occupant_id(properties) or real_jid
-        if occupant_id is None:
-            return None
-
-        resource = properties.jid.resource
-        assert resource is not None
-
-        return mod.Occupant(
-            account_=self._account,
-            remote_jid_=remote_jid,
-            id=str(occupant_id),
-            real_remote_jid_=real_jid or VALUE_MISSING,
-            nickname=resource,
-            updated_at=timestamp,
-        )
-
-    def _get_occupant_id(self, properties: MessageProperties) -> str | None:
-        if properties.occupant_id is None:
-            return None
-
-        contact = self._client.get_module('Contacts').get_contact(
-            properties.remote_jid, groupchat=True)
-        if contact.room.supports(Namespace.OCCUPANT_ID):
-            return properties.occupant_id
-        return None
-
     def _message_error_received(self,
                                 _con: types.xmppClient,
                                 stanza: nbxmpp.Message,
@@ -343,7 +287,7 @@ class Message(BaseModule):
             self._log.warning(stanza)
             return
 
-        timestamp = self._get_message_timestamp(properties)
+        timestamp = get_message_timestamp(properties)
 
         error_data = mod.MessageError(
             account_=self._account,
@@ -408,6 +352,20 @@ class Message(BaseModule):
             typ=convert_message_type(message.type)
         )
 
+        # XEP-0359
+        stanza.setID(message.message_id)
+        stanza.setOriginID(message.message_id)
+
+        # Mark Message as MUC PM
+        if message.is_pm:
+            stanza.setTag('x', namespace=Namespace.MUC_USER)
+
+        # XEP-0444
+        if message.reaction_data is not None:
+            stanza.setReactions(*message.reaction_data)
+            stanza.setTag('store', namespace=Namespace.MSG_HINTS)
+            return stanza
+
         if message.correct_id:
             stanza.setTag('replace', attrs={'id': message.correct_id},
                           namespace=Namespace.CORRECT)
@@ -418,10 +376,6 @@ class Message(BaseModule):
                             message.reply_data.id,
                             message.reply_data.fallback_start,
                             message.reply_data.fallback_end)
-
-        # XEP-0359
-        stanza.setID(message.message_id)
-        stanza.setOriginID(message.message_id)
 
         if message.sec_label:
             stanza.addChild(node=message.sec_label.to_node())
@@ -435,10 +389,6 @@ class Message(BaseModule):
         if not own_jid.bare_match(message.contact.jid):
             if message.has_text() and not message.is_groupchat:
                 stanza.setReceiptRequest()
-
-        # Mark Message as MUC PM
-        if message.is_pm:
-            stanza.setTag('x', namespace=Namespace.MUC_USER)
 
         # XEP-0085
         if message.chatstate is not None:
@@ -457,7 +407,13 @@ class Message(BaseModule):
         return stanza
 
     def store_message(self, message: OutgoingMessage) -> None:
-        if not message.has_text():
+        if (not message.has_text() and
+                message.reaction_data is None):
+            return
+
+        if (message.type == MessageType.GROUPCHAT and
+                message.reaction_data is not None):
+            # Store reaction when the MUC reflects it
             return
 
         direction = ChatDirection.OUTGOING
@@ -493,6 +449,29 @@ class Message(BaseModule):
 
             if message.type == MessageType.GROUPCHAT:
                 state = MessageState.PENDING
+
+        if message.reaction_data is not None:
+            reactions_id, reactions = message.reaction_data
+            reaction = mod.Reaction(
+                account_=self._account,
+                remote_jid_=remote_jid,
+                occupant_=occupant,
+                id=reactions_id,
+                direction=direction,
+                emojis=';'.join(reactions),
+                timestamp=message.timestamp,
+            )
+
+            app.storage.archive.upsert_row2(reaction)
+
+            app.ged.raise_event(
+                ReactionUpdated(
+                    account=self._account,
+                    jid=remote_jid,
+                    reaction_id=reactions_id,
+                )
+            )
+            return
 
         encryption_data = None
         encryption = message.get_encryption()

@@ -13,6 +13,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -23,6 +24,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.conversation.reactions_bar import AddReactionButton
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_cursor
@@ -47,15 +49,31 @@ class MessageRowActions(Gtk.EventBox):
             halign=Gtk.Align.END,
             valign=Gtk.Align.START,
             margin_end=40,
-            no_show_all=True
+            no_show_all=True,
         )
-        self._row: MessageRow | None = None
+        self._message_row: MessageRow | None = None
         self._contact: ChatContactT | None = None
 
         self._has_cursor = False
         self._menu_button_clicked = False
 
         self._timeout_id: int | None = None
+
+        self._default_reaction_button = Gtk.Button(
+            label='👍', tooltip_text=_('React with 👍')
+        )
+        self._default_reaction_button.set_no_show_all(True)
+        self._default_reaction_button.connect(
+            'clicked', self._on_specific_reaction_button_clicked
+        )
+        self._default_reaction_button.get_style_context().remove_class('text-button')
+        self._default_reaction_button.get_style_context().add_class('image-button')
+
+        self._choose_reaction_button = AddReactionButton()
+        self._choose_reaction_button.set_no_show_all(True)
+        self._choose_reaction_button.connect(
+            'clicked', self._on_choose_reaction_button_clicked)
+        self._choose_reaction_button.connect('emoji-added', self._on_reaction_added)
 
         self._reply_button = Gtk.Button.new_from_icon_name(
             'lucide-reply-symbolic', Gtk.IconSize.BUTTON
@@ -65,11 +83,14 @@ class MessageRowActions(Gtk.EventBox):
         self._reply_button.connect('clicked', self._on_reply_clicked)
 
         more_button = Gtk.Button.new_from_icon_name(
-            'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON)
+            'feather-more-horizontal-symbolic', Gtk.IconSize.BUTTON
+        )
         more_button.connect('clicked', self._on_more_clicked)
 
         box = Gtk.Box()
         box.get_style_context().add_class('linked')
+        box.add(self._default_reaction_button)
+        box.add(self._choose_reaction_button)
         box.add(self._reply_button)
         box.add(more_button)
 
@@ -83,8 +104,8 @@ class MessageRowActions(Gtk.EventBox):
         # if the cursor enters (cursor changes from row to MessageRowActions)
         self._timeout_id = GLib.timeout_add(10, self._hide)
 
-    def update(self, y_coord: int, row: MessageRow) -> None:
-        self._row = row
+    def update(self, y_coord: int, message_row: MessageRow) -> None:
+        self._message_row = message_row
         self._menu_button_clicked = False
 
         if self._timeout_id is not None:
@@ -104,6 +125,8 @@ class MessageRowActions(Gtk.EventBox):
         self.set_no_show_all(False)
         self.show_all()
 
+        self._default_reaction_button.set_visible(self._get_reactions_visible())
+        self._choose_reaction_button.set_visible(self._get_reactions_visible())
         self._reply_button.set_visible(self._get_reply_visible())
 
     def switch_contact(self, contact: ChatContactT) -> None:
@@ -111,8 +134,8 @@ class MessageRowActions(Gtk.EventBox):
 
     def _get_reply_visible(self) -> bool:
         if isinstance(self._contact, GroupchatContact):
-            assert self._row is not None
-            if self._contact.is_joined and self._row.stanza_id is not None:
+            assert self._message_row is not None
+            if self._contact.is_joined and self._message_row.stanza_id is not None:
                 self_contact = self._contact.get_self()
                 assert self_contact is not None
                 return not self_contact.role.is_visitor
@@ -121,30 +144,35 @@ class MessageRowActions(Gtk.EventBox):
 
         return True
 
+    def _get_reactions_visible(self) -> bool:
+        if (isinstance(self._contact, GroupchatContact) and
+                self._contact.muc_context == 'public'):
+            return self._contact.supports(Namespace.OCCUPANT_ID)
+
+        return True
+
     def _hide(self) -> None:
-        if self._has_cursor:
+        if self._has_cursor or self._message_row is None:
             return
 
-        assert self._row is not None
-        self._row.get_style_context().remove_class('conversation-row-hover')
+        self._message_row.get_style_context().remove_class('conversation-row-hover')
 
         self._timeout_id = None
         self._menu_button_clicked = False
 
         self.hide()
 
-    def _on_hover(self,
-                  _eventbox: MessageRowActions,
-                  event: Gdk.EventCrossing
-    ) -> bool:
+    def _on_hover(self, _eventbox: MessageRowActions, event: Gdk.EventCrossing) -> bool:
         if event.type == Gdk.EventType.ENTER_NOTIFY:
             self._has_cursor = True
             self._menu_button_clicked = False
-            assert self._row is not None
-            self._row.get_style_context().add_class('conversation-row-hover')
+            assert self._message_row is not None
+            self._message_row.get_style_context().add_class('conversation-row-hover')
 
-        if (event.type == Gdk.EventType.LEAVE_NOTIFY and
-                event.detail != Gdk.NotifyType.INFERIOR):
+        if (
+            event.type == Gdk.EventType.LEAVE_NOTIFY
+            and event.detail != Gdk.NotifyType.INFERIOR
+        ):
 
             self._has_cursor = False
             self._timeout_id = None
@@ -154,21 +182,35 @@ class MessageRowActions(Gtk.EventBox):
                 # but we don't want to hide MessageRowActions
                 return True
 
-            assert self._row is not None
-            self._row.get_style_context().remove_class('conversation-row-hover')
+            assert self._message_row is not None
+            self._message_row.get_style_context().remove_class('conversation-row-hover')
 
             self.hide()
 
         return True
 
-    def _on_reply_clicked(self, button: Gtk.Button) -> None:
-        assert self._row is not None
-        app.window.activate_action('reply', GLib.Variant('u', self._row.pk))
+    def _on_reply_clicked(self, _button: Gtk.Button) -> None:
+        assert self._message_row is not None
+        app.window.activate_action('reply', GLib.Variant('u', self._message_row.pk))
+
+    def _on_specific_reaction_button_clicked(self, button: Gtk.Button) -> None:
+        self._send_reaction(button.get_label())
+
+    def _on_choose_reaction_button_clicked(self, _button: AddReactionButton) -> None:
+        self._menu_button_clicked = True
+
+    def _on_reaction_added(self, _widget: AddReactionButton, emoji: str) -> None:
+        self._menu_button_clicked = False
+        self._send_reaction(emoji, toggle=False)
+
+    def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
+        assert self._message_row is not None
+        self._message_row.send_reaction(emoji, toggle)
 
     def _on_more_clicked(self, button: Gtk.Button) -> None:
-        assert self._row is not None
+        assert self._message_row is not None
         self._menu_button_clicked = True
-        self._row.show_chat_row_menu(self, button)
+        self._message_row.show_chat_row_menu(self, button)
 
 
 class DateTimeLabel(Gtk.Label):
@@ -210,9 +252,7 @@ class NicknameLabel(Gtk.Label):
 
 class MessageIcons(Gtk.Box):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self,
-                         orientation=Gtk.Orientation.HORIZONTAL,
-                         spacing=3)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
 
         self._encryption_image = Gtk.Image()
         self._encryption_image.set_no_show_all(True)
@@ -225,23 +265,25 @@ class MessageIcons(Gtk.Box):
         self._security_label.set_max_width_chars(20)
 
         self._correction_image = Gtk.Image.new_from_icon_name(
-            'document-edit-symbolic', Gtk.IconSize.MENU)
+            'document-edit-symbolic', Gtk.IconSize.MENU
+        )
         self._correction_image.set_no_show_all(True)
         self._correction_image.get_style_context().add_class('dim-label')
 
         self._message_state_image = Gtk.Image()
         self._message_state_image.set_no_show_all(True)
-        self._message_state_image.get_style_context().add_class(
-            'dim-label')
+        self._message_state_image.get_style_context().add_class('dim-label')
 
         self._marker_image = Gtk.Image.new_from_icon_name(
-            'feather-check-symbolic', Gtk.IconSize.MENU)
+            'feather-check-symbolic', Gtk.IconSize.MENU
+        )
         self._marker_image.set_no_show_all(True)
         self._marker_image.get_style_context().add_class('dim-label')
         self._marker_image.set_tooltip_text(p_('Message state', 'Received'))
 
         self._error_image = Gtk.Image.new_from_icon_name(
-            'dialog-warning-symbolic', Gtk.IconSize.MENU)
+            'dialog-warning-symbolic', Gtk.IconSize.MENU
+        )
         self._error_image.get_style_context().add_class('warning-color')
         self._error_image.set_no_show_all(True)
 
@@ -256,11 +298,7 @@ class MessageIcons(Gtk.Box):
     def set_encryption_icon_visible(self, visible: bool) -> None:
         self._encryption_image.set_visible(visible)
 
-    def set_encrytion_icon_data(self,
-                                icon: str,
-                                color: str,
-                                tooltip: str
-                                ) -> None:
+    def set_encrytion_icon_data(self, icon: str, color: str, tooltip: str) -> None:
 
         context = self._encryption_image.get_style_context()
         for trust_data in TRUST_SYMBOL_DATA.values():
@@ -289,8 +327,7 @@ class MessageIcons(Gtk.Box):
         else:
             icon_name = 'feather-check-symbolic'
             tooltip_text = _('Received')
-        self._message_state_image.set_from_icon_name(
-            icon_name, Gtk.IconSize.MENU)
+        self._message_state_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
         self._message_state_image.set_tooltip_text(tooltip_text)
         self._message_state_image.show()
 
@@ -343,18 +380,18 @@ class AvatarBox(Gtk.EventBox):
         if window is not None:
             window.set_cursor(get_cursor('pointer'))
 
-    def _on_avatar_clicked(self,
-                           _widget: Gtk.Widget,
-                           event: Gdk.EventButton,
-                           ) -> int:
+    def _on_avatar_clicked(
+        self,
+        _widget: Gtk.Widget,
+        event: Gdk.EventButton,
+    ) -> int:
 
         if event.type == Gdk.EventType.BUTTON_PRESS:
             if not isinstance(self._contact, GroupchatContact):
                 return Gdk.EVENT_STOP
 
             if event.button == Gdk.BUTTON_PRIMARY:
-                app.window.activate_action(
-                    'mention', GLib.Variant('s', self._name))
+                app.window.activate_action('mention', GLib.Variant('s', self._name))
             elif event.button == Gdk.BUTTON_SECONDARY:
                 self._show_participant_menu(self._name, event)
 
@@ -373,9 +410,9 @@ class AvatarBox(Gtk.EventBox):
             return
 
         contact = self._contact.get_resource(nick)
-        menu = get_groupchat_participant_menu(self._contact.account,
-                                              self_contact,
-                                              contact)
+        menu = get_groupchat_participant_menu(
+            self._contact.account, self_contact, contact
+        )
 
         popover = GajimPopover(menu, relative_to=self, event=event)
         popover.popup()

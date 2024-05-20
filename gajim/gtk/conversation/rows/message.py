@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+import logging
 import textwrap
 from datetime import timedelta
 
@@ -23,7 +24,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
-from gajim.common.modules.util import get_nickname_from_message
+from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -32,6 +33,7 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.conversation.reactions_bar import ReactionsBar
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import AvatarBox
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
@@ -43,6 +45,8 @@ from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
+
+log = logging.getLogger('gajim.gtk.conversation.rows.message')
 
 MERGE_TIMEFRAME = timedelta(seconds=120)
 
@@ -86,6 +90,9 @@ class MessageRow(BaseRow):
         self.grid.attach(self._meta_box, 1, 0, 1, 1)
         self.grid.attach(self._bottom_box, 1, 1, 1, 1)
 
+        self._reactions_bar = ReactionsBar(self, self._contact)
+        self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
+
         self._set_content(message)
 
     @classmethod
@@ -110,12 +117,13 @@ class MessageRow(BaseRow):
     def has_receipt(self) -> bool:
         return self._has_receipt
 
-    def refresh(self) -> None:
+    def refresh(self, *, complete: bool = True) -> None:
         original_message = app.storage.archive.get_message_with_pk(
             self.orig_pk)
         assert original_message is not None
         self._original_message = original_message
-        self._set_content(original_message)
+        if complete:
+            self._set_content(original_message)
 
     def _set_content(self, message: Message) -> None:
         self.set_merged(False)
@@ -195,6 +203,10 @@ class MessageRow(BaseRow):
         if message.moderation is not None:
             self.set_retracted(get_retraction_text(
                 message.moderation.by, message.moderation.reason))
+
+        reactions = self._original_message.reactions
+        if reactions:
+            self._reactions_bar.update_from_reactions(reactions)
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
@@ -441,6 +453,40 @@ class MessageRow(BaseRow):
         self._message_icons.hide_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
+
+    def update_reactions(self) -> None:
+        self.refresh(complete=False)
+        self._reactions_bar.update_from_reactions(self._original_message.reactions)
+
+    def send_reaction(self, emoji: str, toggle: bool = True) -> None:
+        '''Adds or removes 'emoji' from this message's reactions and sends the result.
+
+        Args:
+          emoji: Reaction emoji to add or remove
+          toggle: Whether an existing emoji should be removed from the set
+        '''
+        reaction_id = self.message_id
+        if self._original_message.type == MessageType.GROUPCHAT:
+            reaction_id = self.stanza_id
+
+        if reaction_id is None:
+            log.warning('No reaction id')
+            return
+
+        our_reactions = self._reactions_bar.get_our_reactions()
+        if emoji in our_reactions and not toggle:
+            log.info('Not toggling reaction <%s>', emoji)
+            return
+
+        if emoji in our_reactions:
+            our_reactions.discard(emoji)
+        else:
+            our_reactions.add(emoji)
+
+        client = app.get_client(self._contact.account)
+        client.get_module('Reactions').send_reaction(
+            contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
+        )
 
     def set_retracted(self, text: str) -> None:
         self.text = text

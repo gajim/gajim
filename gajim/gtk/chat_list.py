@@ -24,9 +24,9 @@ from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import get_retraction_text
 from gajim.common.i18n import _
-from gajim.common.modules.util import ChatDirection
-from gajim.common.modules.util import get_nickname_from_message
+from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 

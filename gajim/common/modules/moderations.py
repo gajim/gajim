@@ -30,7 +30,7 @@ from gajim.common.events import MessageModerated
 from gajim.common.events import MessageReceived
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
-from gajim.common.modules.util import get_chat_type_and_direction
+from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType

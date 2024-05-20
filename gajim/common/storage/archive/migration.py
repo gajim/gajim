@@ -116,6 +116,8 @@ class Migration:
             self._v9()
         if user_version < 10:
             self._v10()
+        if user_version < 11:
+            self._v11()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -265,6 +267,10 @@ class Migration:
             'PRAGMA foreign_keys=ON',
             'PRAGMA user_version=10'
         ])
+
+    def _v11(self) -> None:
+        mod.Base.metadata.create_all(self._engine)
+        self._execute_multiple(['PRAGMA user_version=11'])
 
     def _process_archive_row(
         self,

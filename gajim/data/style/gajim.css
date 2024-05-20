@@ -745,6 +745,29 @@ infobar.error > revealer > box {
     font-weight: bold;
 }
 
+/* ReactionsBar */
+.reaction {
+    border: 1px solid @borders;
+    border-radius: 18px;
+    padding: 2px 6px;
+    outline: none;
+ }
+ .reaction:hover {
+    border-color: @theme_selected_bg_color;
+    background: alpha(@theme_selected_bg_color, 0.3);
+ }
+ .reaction-from-us {
+    border-color: alpha(@theme_selected_bg_color, 0.9);
+    background: alpha(@theme_selected_bg_color, 0.1);
+}
+.reaction label {
+    font-size: 90%;
+}
+.dummy-emoji-entry {
+    padding: 0;
+    border: 0;
+}
+
 /* Multi-purpose elements / widgets ======================================== */
 
 /* ContactFlowBox */

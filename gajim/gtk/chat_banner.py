@@ -26,7 +26,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.util import ChatDirection
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 
 from gajim.gtk.builder import get_builder

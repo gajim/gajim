@@ -15,19 +15,12 @@ from logging import LoggerAdapter
 
 import nbxmpp
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
-from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.const import EME_MESSAGES
-from gajim.common.storage.archive import models as mod
-from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import MessageType
-from gajim.common.structs import MUCData
 
 
 def from_xs_boolean(value: str | bool) -> bool:
@@ -87,13 +80,6 @@ def store_publish(func: Any):
     return func_wrapper
 
 
-def get_eme_message(eme_data: EMEData) -> str:
-    try:
-        return EME_MESSAGES[eme_data.namespace]
-    except KeyError:
-        return EME_MESSAGES['fallback'] % eme_data.name
-
-
 class LogAdapter(LoggerAdapter):
     def process(self, msg: str, kwargs: Any) -> tuple[str, Any]:
         return f'({self.extra["account"]}) {msg}', kwargs
@@ -134,56 +120,3 @@ def delete_nodes(stanza: Message,
     nodes = stanza.getTags(name, namespace=namespace)
     for node in nodes:
         stanza.delChild(node)
-
-
-def convert_message_type(type_: MessageType) -> str:
-    if type_ in (MessageType.CHAT, MessageType.PM):
-        return 'chat'
-    return 'groupchat'
-
-
-def get_chat_type_and_direction(
-    muc_data: MUCData | None, own_jid: JID, properties: MessageProperties
-) -> tuple[MessageType, ChatDirection]:
-
-    if properties.type.is_groupchat:
-        assert muc_data is not None
-        direction = ChatDirection.INCOMING
-        if muc_data.occupant_id is not None:
-            if muc_data.occupant_id == properties.occupant_id:
-                direction = ChatDirection.OUTGOING
-
-        elif muc_data.nick == properties.jid.resource:
-            direction = ChatDirection.OUTGOING
-
-        return MessageType.GROUPCHAT, direction
-
-    assert properties.from_ is not None
-    if properties.from_.bare_match(own_jid):
-        direction = ChatDirection.OUTGOING
-    else:
-        direction = ChatDirection.INCOMING
-
-    if properties.is_muc_pm:
-        return MessageType.PM, direction
-
-    if not properties.type.is_chat:
-        raise ValueError('Invalid message type', properties.type)
-
-    return MessageType.CHAT, direction
-
-
-def get_nickname_from_message(message: mod.Message) -> str:
-    if message.resource is None:
-        nickname = message.remote.jid.localpart
-        assert nickname is not None
-        return nickname
-
-    if message.occupant is not None:
-        nickname = message.occupant.nickname
-        assert nickname is not None
-        return nickname
-
-    nickname = message.resource
-    assert nickname is not None
-    return nickname

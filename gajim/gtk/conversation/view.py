@@ -855,6 +855,15 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is not None:
             message_row.set_retracted(text)
 
+    def update_message_reactions(self, reaction_id: str) -> None:
+        if isinstance(self._contact, GroupchatContact):
+            message_row = self.get_row_by_stanza_id(reaction_id)
+        else:
+            message_row = self._get_row_by_message_id(reaction_id)
+
+        if message_row is not None:
+            message_row.update_reactions()
+
     def set_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is None:

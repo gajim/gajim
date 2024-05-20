@@ -30,13 +30,13 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.util import ChatDirection
-from gajim.common.modules.util import get_nickname_from_message
+from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.preview_helpers import filename_from_uri
 from gajim.common.preview_helpers import format_geo_coords
 from gajim.common.preview_helpers import guess_simple_file_type
 from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.archive import models as mod
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT

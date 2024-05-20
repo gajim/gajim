@@ -44,6 +44,8 @@ from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
+from gajim.common.storage.archive.models import Occupant
+from gajim.common.storage.archive.models import Reaction
 from gajim.common.storage.archive.models import Remote
 from gajim.common.storage.archive.models import Thread
 from gajim.common.storage.base import AlchemyStorage
@@ -52,7 +54,7 @@ from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 
-CURRENT_USER_VERSION = 10
+CURRENT_USER_VERSION = 11
 
 
 log = logging.getLogger('gajim.c.storage.archive')
@@ -295,6 +297,28 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
+    def upsert_row2(self, session: Session, row: Any) -> int | None:
+        return self._upsert_row2(session, row)
+
+    def _upsert_row2(
+        self,
+        session: Session,
+        row: Any,
+    ) -> int | None:
+        self._set_foreign_keys(session, row)
+        self._log_row(row)
+        table = row.__class__
+
+        stmt = insert(table).values(**row.get_insert_values())
+        stmt = stmt.on_conflict_do_update(
+            set_=row.get_upsert_values(),
+            where=sa.text('excluded.timestamp > timestamp'))
+        stmt = stmt.returning(table.pk)
+        pk = session.scalar(stmt)
+        return pk
+
+    @with_session
+    @timeit
     def get_message_with_pk(
         self, session: Session, pk: int, options: Any = None
     ) -> Message | None:
@@ -382,6 +406,51 @@ class MessageArchiveStorage(AlchemyStorage):
             session.delete(message.moderation)
 
         session.delete(message)
+
+    @with_session
+    @timeit
+    def delete_reaction(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        occupant_id: str | None,
+        reaction_id: str,
+        direction: ChatDirection,
+    ) -> None:
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        fk_occupant_pk = None
+        if occupant_id is not None:
+            stmt = select(Occupant.pk).where(
+                Occupant.id == occupant_id,
+                Occupant.fk_remote_pk == fk_remote_pk,
+                Occupant.fk_account_pk == fk_account_pk,
+            )
+            fk_occupant_pk = session.scalar(stmt)
+            if fk_occupant_pk is None:
+                self._log.warning(
+                    'Unable to delete reaction, unknown occupant-id: %s', occupant_id
+                )
+                return
+
+        stmt = delete(Reaction).where(
+            Reaction.id == reaction_id,
+            Reaction.fk_remote_pk == fk_remote_pk,
+        )
+
+        if fk_occupant_pk is None:
+            stmt = stmt.where(Reaction.fk_occupant_pk.is_(None))
+        else:
+            stmt = stmt.where(Reaction.fk_occupant_pk == fk_occupant_pk)
+
+        stmt = stmt.where(
+            Reaction.fk_account_pk == fk_account_pk,
+            Reaction.direction == direction,
+        )
+
+        session.execute(stmt)
 
     @with_session
     @timeit
