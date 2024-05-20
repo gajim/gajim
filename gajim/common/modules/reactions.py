@@ -53,8 +53,23 @@ class Reactions(BaseModule):
         if properties.reactions is None:
             return
 
+        if properties.type.is_normal or properties.type.is_headline:
+            self._log.warning(
+                'Reaction with undefined message type %s', properties.type
+            )
+            raise NodeProcessed
+
         if properties.type.is_error:
-            return
+            # TODO: Maybe inform the user and delete
+            # the reactions from the database
+            # But this handler here is only executed if the
+            # server adds the message content to the error
+            raise NodeProcessed
+
+        assert properties.jid is not None
+        if (properties.type.is_groupchat and properties.jid.is_bare):
+            # Reactions from the bare groupchat jid are not defined
+            raise NodeProcessed
 
         remote_jid = properties.remote_jid
         assert remote_jid is not None

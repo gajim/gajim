@@ -24,6 +24,7 @@ from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.events import ReactionUpdated
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.message_util import convert_message_type
 from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
@@ -112,20 +113,23 @@ class Message(BaseModule):
             # TODO: Check where in Gajim and plugins we depend on that behavior
             stanza.setFrom(stanza.getTo())
 
+        timestamp = get_message_timestamp(properties)
+        remote_jid = properties.remote_jid
+        jid = properties.jid
+        assert remote_jid is not None
+        assert jid is not None
+
         muc_data = None
         if properties.type.is_groupchat:
-            muc_data = self._client.get_module('MUC').get_muc_data(
-                properties.remote_jid)
+            muc_data = self._client.get_module('MUC').get_muc_data(remote_jid)
             if muc_data is None:
-                self._log.warning('Groupchat message from unknown MUC: %s',
-                 properties.remote_jid)
+                self._log.warning(
+                    'Groupchat message from unknown MUC: %s', remote_jid
+                )
                 return
 
         m_type, direction = get_chat_type_and_direction(
             muc_data, self._client.get_own_jid(), properties)
-        timestamp = get_message_timestamp(properties)
-        remote_jid = properties.remote_jid
-        assert remote_jid is not None
 
         user_delay_ts = None
         if properties.user_timestamp is not None:
@@ -168,9 +172,12 @@ class Message(BaseModule):
                 return
 
         occupant = None
-        if m_type in (MessageType.GROUPCHAT, MessageType.PM):
+        if (m_type in (MessageType.GROUPCHAT, MessageType.PM)
+                and not jid.is_bare):
+
             contact = self._client.get_module('Contacts').get_contact(
-                    properties.jid, groupchat=True)
+                    jid, groupchat=True)
+            assert isinstance(contact, GroupchatParticipant)
 
             occupant = get_occupant_info(
                 self._account,
@@ -231,7 +238,7 @@ class Message(BaseModule):
             direction=direction,
             timestamp=timestamp,
             state=MessageState.ACKNOWLEDGED,
-            resource=properties.jid.resource,
+            resource=jid.resource,
             text=message_text,
             id=message_id,
             stanza_id=stanza_id,
