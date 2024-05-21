@@ -283,6 +283,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._client.disconnect_all_from_obj(self)
 
         if self._contact is not None:
+            self._store_draft()
             self._contact.disconnect_all_from_obj(self)
 
         self._contact = None
