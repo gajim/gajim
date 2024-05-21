@@ -679,7 +679,7 @@ def get_subscription_request_msg(account: str | None = None) -> str:
     return Template(message).safe_substitute({'name': app.nicks[account]})
 
 
-def get_retraction_text(by: str | JID | None,
+def get_moderation_text(by: str | JID | None,
                         reason: str | None) -> str:
 
     by_text = ''
@@ -1231,7 +1231,7 @@ def is_role_change_allowed(self_contact: types.GroupchatParticipant,
     return self_contact.affiliation >= contact.affiliation
 
 
-def is_retraction_allowed(self_contact: types.GroupchatParticipant,
+def is_moderation_allowed(self_contact: types.GroupchatParticipant,
                           contact: types.GroupchatParticipant) -> bool:
 
     if self_contact.role < Role.MODERATOR:

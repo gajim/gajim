@@ -212,7 +212,7 @@ MAIN_WIN_ACTIONS = [
     ('delete-message-locally', 'a{sv}', True),
     ('correct-message', None, False),
     ('copy-message', 's', True),
-    ('retract-message', 'a{sv}', False),
+    ('moderate-message', 'a{sv}', False),
     ('quote', 's', False),
     ('quote-next', None, True),
     ('quote-prev', None, True),

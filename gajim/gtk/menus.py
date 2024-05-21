@@ -26,7 +26,7 @@ from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
 from gajim.common.helpers import filesystem_path_from_uri
 from gajim.common.helpers import is_affiliation_change_allowed
-from gajim.common.helpers import is_retraction_allowed
+from gajim.common.helpers import is_moderation_allowed
 from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
@@ -46,9 +46,9 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
+from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
-from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util import GajimMenu
 from gajim.gtk.util import MenuItemListT
 
@@ -695,7 +695,7 @@ def get_chat_row_menu(contact: types.ChatContactT,
                       pk: int | None,
                       corrected_pk: int | None,
                       state: MessageState,
-                      is_retracted: bool
+                      is_moderated: bool
                       ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -749,29 +749,29 @@ def get_chat_row_menu(contact: types.ChatContactT,
         menu_items.append((
             p_('Message row action', 'Correct…'), 'win.correct-message', None))
 
-    retract_possible = False
+    moderate_possible = False
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
         self_contact = contact.get_self()
         assert self_contact is not None
-        is_allowed = is_retraction_allowed(self_contact, resource_contact)
+        is_allowed = is_moderation_allowed(self_contact, resource_contact)
 
         disco_info = app.storage.cache.get_last_disco_info(contact.jid)
         assert disco_info is not None
 
         if (disco_info.has_message_moderation and is_allowed
-                and not is_retracted):
-            retract_possible = True
+                and not is_moderated):
+            moderate_possible = True
 
-    if (retract_possible and stanza_id is not None
+    if (moderate_possible and stanza_id is not None
             and state == MessageState.ACKNOWLEDGED):
-        param = RetractMessageParam(
+        param = ModerateMessageParam(
             account=contact.account,
             jid=contact.jid,
             stanza_id=stanza_id)
         menu_items.append((
-            p_('Message row action', 'Retract…'),
-            'win.retract-message',
+            p_('Message row action', 'Moderate…'),
+            'win.moderate-message',
             param))
 
     menu_items.append(

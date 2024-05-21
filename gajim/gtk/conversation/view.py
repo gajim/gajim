@@ -850,10 +850,10 @@ class ConversationView(Gtk.ScrolledWindow):
             self._read_marker_row.set_timestamp(
                 message_row.timestamp - timedelta(microseconds=1), force=True)
 
-    def show_message_retraction(self, stanza_id: str, text: str) -> None:
+    def show_message_moderation(self, stanza_id: str, text: str) -> None:
         message_row = self.get_row_by_stanza_id(stanza_id)
         if message_row is not None:
-            message_row.set_retracted(text)
+            message_row.set_moderated(text)
 
     def update_message_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):

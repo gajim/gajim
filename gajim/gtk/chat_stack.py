@@ -552,7 +552,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         app.window.get_action('quote').set_enabled(joined)
         app.window.get_action('mention').set_enabled(joined)
         app.window.get_action('reply').set_enabled(joined)
-        app.window.get_action('retract-message').set_enabled(joined)
+        app.window.get_action('moderate-message').set_enabled(joined)
 
     def _update_participant_actions(self,
                                     contact: GroupchatParticipant) -> None:

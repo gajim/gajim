@@ -23,7 +23,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_groupchat_name
-from gajim.common.helpers import get_retraction_text
+from gajim.common.helpers import get_moderation_text
 from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
@@ -160,7 +160,7 @@ class ChatListRow(Gtk.ListBoxRow):
                 assert message_text is not None
 
             if message.moderation is not None:
-                message_text = get_retraction_text(
+                message_text = get_moderation_text(
                     message.moderation.by, message.moderation.reason)
 
             # Nickname

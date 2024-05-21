@@ -26,7 +26,7 @@ from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import XmppUriQuery
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import get_retraction_text
+from gajim.common.helpers import get_moderation_text
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -366,10 +366,10 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        text = get_retraction_text(
+        text = get_moderation_text(
             event.moderation.by,
             event.moderation.reason)
-        self._scrolled_view.show_message_retraction(
+        self._scrolled_view.show_message_moderation(
             event.moderation.stanza_id, text)
 
     def _on_receipt_received(self, event: events.ReceiptReceived) -> None:

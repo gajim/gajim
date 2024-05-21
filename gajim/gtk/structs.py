@@ -65,7 +65,7 @@ class AccountJidParam(VariantMixin):
 
 
 @dataclass
-class RetractMessageParam(VariantMixin):
+class ModerateMessageParam(VariantMixin):
     account: str
     jid: JID
     stanza_id: str

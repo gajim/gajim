@@ -16,7 +16,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
-from gajim.common.helpers import get_retraction_text
+from gajim.common.helpers import get_moderation_text
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
@@ -74,7 +74,7 @@ class MessageRow(BaseRow):
         self._original_text = message.text
         self._original_message = message
 
-        self._is_retracted = message.moderation is not None
+        self._is_moderated = message.moderation is not None
         self._has_receipt = False
 
         self._avatar_box = AvatarBox(contact)
@@ -127,7 +127,7 @@ class MessageRow(BaseRow):
 
     def _set_content(self, message: Message) -> None:
         self.set_merged(False)
-        self.get_style_context().remove_class('retracted-message')
+        self.get_style_context().remove_class('moderated-message')
         self.get_style_context().remove_class('gajim-mention-highlight')
 
         for widget in self._meta_box.get_children():
@@ -201,7 +201,7 @@ class MessageRow(BaseRow):
             self._set_correction()
 
         if message.moderation is not None:
-            self.set_retracted(get_retraction_text(
+            self.set_moderated(get_moderation_text(
                 message.moderation.by, message.moderation.reason))
 
         reactions = self._original_message.reactions
@@ -284,7 +284,7 @@ class MessageRow(BaseRow):
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
-            is_retracted=self._is_retracted,
+            is_moderated=self._is_moderated,
         )
 
         popover = GajimPopover(menu, relative_to=button)
@@ -488,7 +488,7 @@ class MessageRow(BaseRow):
             contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
         )
 
-    def set_retracted(self, text: str) -> None:
+    def set_moderated(self, text: str) -> None:
         self.text = text
 
         if isinstance(self._message_widget, PreviewWidget):
@@ -498,9 +498,9 @@ class MessageRow(BaseRow):
             self._set_text_direction(text)
 
         self._message_widget.add_with_styling(text)
-        self.get_style_context().add_class('retracted-message')
+        self.get_style_context().add_class('moderated-message')
 
-        self._is_retracted = True
+        self._is_moderated = True
 
     def _set_correction(self) -> None:
         original_text = textwrap.fill(self._original_text,

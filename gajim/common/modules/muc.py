@@ -72,7 +72,7 @@ class MUC(BaseModule):
         'approve_voice_request',
         'destroy',
         'request_disco_info',
-        'retract_message'
+        'moderate_message'
     ]
 
     def __init__(self, con: types.Client) -> None:

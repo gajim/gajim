@@ -22,7 +22,7 @@ from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_group_chat_nick
-from gajim.common.helpers import get_retraction_text
+from gajim.common.helpers import get_moderation_text
 from gajim.common.i18n import _
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
@@ -633,7 +633,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             return
 
         if event.moderation.stanza_id == row.stanza_id:
-            text = get_retraction_text(
+            text = get_moderation_text(
                 event.moderation.by,
                 event.moderation.reason)
             row.set_message_text(text)

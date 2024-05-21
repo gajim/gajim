@@ -609,7 +609,7 @@ infobar.error > revealer > box {
 
 /* Conversation row styles */
 .merged { padding-top: 1px; }
-.retracted-message { opacity: 0.4; }
+.moderated-message { opacity: 0.4; }
 .transparent-selection > selection {
     background-color: transparent;
     color: @theme_fg_color;

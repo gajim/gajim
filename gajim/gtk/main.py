@@ -60,7 +60,7 @@ from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
-from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
 from gajim.gtk.util import resize_window
@@ -464,7 +464,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ('preview-copy-link', self._on_preview_action),
             ('preview-open-link', self._on_preview_action),
             ('copy-message', self._on_copy_message),
-            ('retract-message', self._on_retract_message),
+            ('moderate-message', self._on_moderate_message),
             ('delete-message-locally', self._on_delete_message_locally),
             ('add-workspace', self._add_workspace),
             ('edit-workspace', self._edit_workspace),
@@ -713,24 +713,27 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         clip.set_text(param.get_string(), -1)
 
     @actionmethod
-    def _on_retract_message(self,
+    def _on_moderate_message(self,
                             _action: Gio.SimpleAction,
-                            params: RetractMessageParam
+                            params: ModerateMessageParam
                             ) -> None:
 
-        def _on_retract(reason: str) -> None:
+        def _on_moderate(reason: str) -> None:
             client = app.get_client(params.account)
-            client.get_module('MUC').retract_message(
-                params.jid, params.stanza_id, reason or None)
+            client.get_module('MUC').moderate_message(
+                params.jid,
+                params.stanza_id,
+                reason or None
+            )
 
         InputDialog(
-            _('Retract Message'),
-            _('Retract message?'),
-            _('Why do you want to retract this message?'),
+            _('Moderate Message'),
+            _('Moderate message?'),
+            _('Why do you want to moderate this message?'),
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
-                               text=_('_Retract'),
-                               callback=_on_retract)],
+                               text=_('_Moderate'),
+                               callback=_on_moderate)],
             input_str=_('Spam'),
             transient_for=app.window).show()
 
