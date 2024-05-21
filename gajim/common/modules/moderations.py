@@ -124,9 +124,6 @@ class Moderations(BaseModule):
         remote_jid = properties.remote_jid
         assert remote_jid is not None
 
-        timestamp = dt.datetime.fromtimestamp(
-            properties.moderation.stamp, dt.timezone.utc)
-
         occupant_data = None
         if moderator_occupant_id is not None:
             occupant_data = mod.Occupant(
@@ -134,7 +131,7 @@ class Moderations(BaseModule):
                 remote_jid_=remote_jid,
                 id=moderator_occupant_id,
                 nickname=moderator_nickname,
-                updated_at=timestamp,
+                updated_at=properties.moderation.stamp,
             )
 
         moderation_data = mod.Moderation(
@@ -144,7 +141,7 @@ class Moderations(BaseModule):
             stanza_id=properties.moderation.stanza_id,
             by=properties.moderation.by,
             reason=properties.moderation.reason,
-            timestamp=timestamp,
+            timestamp=properties.moderation.stamp,
         )
 
         pk = app.storage.archive.insert_row(
