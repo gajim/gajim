@@ -665,6 +665,11 @@ class MUC(BaseModule):
         try:
             presence = self._process_user_presence(properties)
         except KeyError:
+            if (properties.type.is_unavailable
+                    and properties.muc_user.role.is_none):
+                # prosody allows broadcasting "unavailable" presences from
+                # offline room members
+                return
             # Sometimes it seems to happen that we get unavailable presence
             # from occupants we don’t know
             log.warning('Unexpected presence received')
