@@ -140,8 +140,12 @@ class ReactionButton(Gtk.Button):
         Gtk.Button.__init__(self)
         self.emoji = emoji
 
+        # Add emoji presentation selector, otherwise depending on the font
+        # emojis might be displayed in its text variant
+        emoji_presentation_form = f'{emoji}\uFE0F'
+
         format_string = app.settings.get('date_time_format')
-        tooltip_markup = f'<span size="200%">{emoji}</span>\n'
+        tooltip_markup = f'<span size="200%">{emoji_presentation_form}</span>\n'
 
         self.from_us = False
         for reaction in reaction_data[:MAX_USERS]:
@@ -160,9 +164,7 @@ class ReactionButton(Gtk.Button):
         if self.from_us:
             self.get_style_context().add_class('reaction-from-us')
 
-        # Add emoji presentation selector, otherwise depending on the font
-        # emojis might be displayed in its text variant
-        emoji_label = Gtk.Label(label=f'{emoji}\uFE0F')
+        emoji_label = Gtk.Label(label=emoji_presentation_form)
         count_label = Gtk.Label(label=str(len(reaction_data)))
         count_label.get_style_context().add_class('monospace')
 
