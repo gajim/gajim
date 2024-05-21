@@ -65,11 +65,11 @@ modules:
   - name: python3-pycparser
     buildsystem: simple
     build-commands:
-      - pip3 install pycparser-2.21-py2.py3-none-any.whl
+      - pip3 install pycparser-2.22-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/p/pycparser/pycparser-2.21-py2.py3-none-any.whl
-        sha256: 8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9
+        url: https://files.pythonhosted.org/packages/py3/p/pycparser/pycparser-2.22-py3-none-any.whl
+        sha256: c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 
   - name: python3-cffi
     buildsystem: simple
@@ -94,22 +94,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-42.0.5-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-42.0.7-cp39-abi3-manylinux_2_28_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.5-cp39-abi3-manylinux_2_28_aarch64.whl
-        sha256: 7367d7b2eca6513681127ebad53b2582911d1736dc2ffc19f2c3ae49997496bc
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.7-cp39-abi3-manylinux_2_28_aarch64.whl
+        sha256: 31adb7d06fe4383226c3e963471f6837742889b3c4caa55aac20ad951bc8ffda
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-42.0.5-cp39-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-42.0.7-cp39-abi3-manylinux_2_28_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.5-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: cd2030f6650c089aeb304cf093f3244d34745ce0cfcc39f20c6fbfe030102e2a
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.7-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: efd0bf5205240182e0f13bcaea41be4fdf5c22c5129fc7ced4a0282ac86998c9
 
   - name: python3-jeepney
     buildsystem: simple
@@ -133,11 +133,11 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install zipp-3.18.1-py3-none-any.whl
+      - pip3 install zipp-3.18.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.18.1-py3-none-any.whl
-        sha256: 206f5a15f2af3dbaee80769fb7dc6f249695e940acca08dfb2a4769fe61e538b
+        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.18.2-py3-none-any.whl
+        sha256: dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e
 
   # jaraco.classes dependency
   - name: python3-more-itertools
@@ -174,11 +174,11 @@ modules:
   - name: python3-backports.tarfile
     buildsystem: simple
     build-commands:
-      - pip3 install backports.tarfile-1.1.0-py3-none-any.whl
+      - pip3 install backports.tarfile-1.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/b/backports.tarfile/backports.tarfile-1.1.0-py3-none-any.whl
-        sha256: b2f4df351db942d094db94588bbf2c6938697a5f190f44c934acc697da56008b
+        url: https://files.pythonhosted.org/packages/py3/b/backports.tarfile/backports.tarfile-1.1.1-py3-none-any.whl
+        sha256: 73e0179647803d3726d82e76089d01d8549ceca9bace469953fcb4d97cf2d417
 
   - name: python3-jaraco.context
     buildsystem: simple
@@ -201,13 +201,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-25.1.0-py3-none-any.whl
+      - pip3 install keyring-25.2.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.1.0-py3-none-any.whl
-        sha256: 26fc12e6a329d61d24aa47b22a7c5c3f35753df7d8f2860973cf94f4e1fb3427
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.2.1-py3-none-any.whl
+        sha256: 2458681cdefc0dbc0b7eb6cf75d0b98e59f9ad9b2d4edd319d18f68bdca95e50
 
   - name: python3-css-parser
     buildsystem: simple
@@ -285,11 +285,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-1.45.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.2.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-1.45.0-py2.py3-none-any.whl
-        sha256: 1ce29e30240cc289a027011103a8c83885b15ef2f316a60bcc7c5300afa144f1
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.2.1-py2.py3-none-any.whl
+        sha256: 7d617a1b30e80c41f3b542347651fcf90bb0a36f3a398be58b4f06b79c8d85bc
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -312,20 +312,20 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.29-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.30-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.29-py3-none-any.whl
-        sha256: dc4ee2d4ee43251905f88637d5281a8d52e916a021384ec10758826f5cbae305
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.30-py3-none-any.whl
+        sha256: 7108d569d3990c71e26a42f60474b4c02c8586c4681af5fd67e51a044fdea86a
 
   - name: python3-emoji
     buildsystem: simple
     build-commands:
-      - pip3 install emoji-2.11.1-py2.py3-none-any.whl
+      - pip3 install emoji-2.12.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/e/emoji/emoji-2.11.1-py2.py3-none-any.whl
-        sha256: b7ba25299bbf520cc8727848ae66b986da32aee27dc2887eaea2bff07226ce49
+        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.12.1-py3-none-any.whl
+        sha256: a00d62173bdadc2510967a381810101624a2f0986145b8da0cffa42e29430235
 
   # gssapi dependency
   - name: python3-decorator
