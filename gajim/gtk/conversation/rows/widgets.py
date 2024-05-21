@@ -133,26 +133,36 @@ class MessageRowActions(Gtk.EventBox):
         self._contact = contact
 
     def _get_reply_visible(self) -> bool:
+        assert self._message_row is not None
+
         if isinstance(self._contact, GroupchatContact):
-            assert self._message_row is not None
-            if self._contact.is_joined and self._message_row.stanza_id is not None:
-                self_contact = self._contact.get_self()
-                assert self_contact is not None
-                return not self_contact.role.is_visitor
-            else:
+            if self._message_row.stanza_id is None:
                 return False
 
-        return True
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            if self_contact.role.is_visitor:
+                return False
+
+            return True
+
+        return self._message_row.message_id is not None
 
     def _get_reactions_visible(self) -> bool:
+        assert self._message_row is not None
+
         if isinstance(self._contact, GroupchatContact):
-            if not self._contact.supports(Namespace.SID):
+            if self._message_row.stanza_id is None:
                 return False
 
             if self._contact.muc_context == 'public':
                 return self._contact.supports(Namespace.OCCUPANT_ID)
+            return True
 
-        return True
+        return self._message_row.message_id is not None
 
     def _hide(self) -> None:
         if self._has_cursor or self._message_row is None:
