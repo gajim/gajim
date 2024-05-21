@@ -143,7 +143,10 @@ class Message(BaseModule):
             self._log.debug('Generating id for message')
 
         stanza_id = self._get_stanza_id(properties)
-        origin_id = properties.origin_id
+
+        # Fallback to message-id in case the MUC strips origin-id
+        # https://dev.gajim.org/gajim/gajim/-/issues/11837
+        origin_id = properties.origin_id or properties.id
 
         if (m_type in (MessageType.CHAT, MessageType.PM) and
                 direction == ChatDirection.OUTGOING and
