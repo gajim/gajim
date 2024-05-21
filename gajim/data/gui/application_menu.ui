@@ -35,7 +35,7 @@
       <attribute name="label" translatable="yes">_View</attribute>
       <section>
         <item>
-          <attribute name="label" translatable="yes">_XML Console</attribute>
+          <attribute name="label" translatable="yes">_Debug Console</attribute>
           <attribute name="action">app.xml-console</attribute>
         </item>
         <item>

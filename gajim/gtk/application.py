@@ -721,7 +721,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_xml_console_action(_action: Gio.SimpleAction,
                                _param: GLib.Variant | None) -> None:
-        open_window('XMLConsoleWindow')
+        open_window('DebugConsoleWindow')
 
     @staticmethod
     def _on_manage_proxies_action(_action: Gio.SimpleAction,

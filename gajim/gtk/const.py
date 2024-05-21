@@ -168,7 +168,7 @@ WINDOW_MODULES = {
     'SynchronizeAccounts': 'gajim.gtk.synchronize_accounts',
     'Themes': 'gajim.gtk.themes',
     'WorkspaceDialog': 'gajim.gtk.workspace_dialog',
-    'XMLConsoleWindow': 'gajim.gtk.xml_console',
+    'DebugConsoleWindow': 'gajim.gtk.debug_console',
 }
 
 

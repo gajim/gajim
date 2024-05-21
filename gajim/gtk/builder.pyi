@@ -322,6 +322,29 @@ class DbMigrationBuilder(Builder):
     error_view: Gtk.TextView
 
 
+class DebugConsoleBuilder(Builder):
+    popover: Gtk.Popover
+    stack: Gtk.Stack
+    paned: Gtk.Paned
+    search_revealer: Gtk.Revealer
+    search_entry: Gtk.SearchEntry
+    search_forward: Gtk.ToolButton
+    search_backward: Gtk.ToolButton
+    scrolled: Gtk.ScrolledWindow
+    protocol_view: GtkSource.View
+    jump_to_end_button: Gtk.Button
+    scrolled_input: Gtk.ScrolledWindow
+    input_entry: GtkSource.View
+    actionbox: Gtk.Box
+    send: Gtk.Button
+    account_label: Gtk.Label
+    paste: Gtk.Button
+    menubutton: Gtk.MenuButton
+    log_view: GtkSource.View
+    headerbar: Gtk.HeaderBar
+    search_toggle: Gtk.ToggleButton
+
+
 class EmojiChooserBuilder(Builder):
     box: Gtk.Box
     search: Gtk.SearchEntry
@@ -979,29 +1002,6 @@ class WorkspaceDialogBuilder(Builder):
     save_button: Gtk.Button
 
 
-class XmlConsoleBuilder(Builder):
-    popover: Gtk.Popover
-    stack: Gtk.Stack
-    paned: Gtk.Paned
-    search_revealer: Gtk.Revealer
-    search_entry: Gtk.SearchEntry
-    search_forward: Gtk.ToolButton
-    search_backward: Gtk.ToolButton
-    scrolled: Gtk.ScrolledWindow
-    protocol_view: GtkSource.View
-    jump_to_end_button: Gtk.Button
-    scrolled_input: Gtk.ScrolledWindow
-    input_entry: GtkSource.View
-    actionbox: Gtk.Box
-    send: Gtk.Button
-    account_label: Gtk.Label
-    paste: Gtk.Button
-    menubutton: Gtk.MenuButton
-    log_view: GtkSource.View
-    headerbar: Gtk.HeaderBar
-    search_toggle: Gtk.ToggleButton
-
-
 @overload
 def get_builder(file_name: Literal['account_page.ui'], widgets: list[str] = ...) -> AccountPageBuilder: ...  # noqa
 @overload
@@ -1038,6 +1038,8 @@ def get_builder(file_name: Literal['contact_info.ui'], widgets: list[str] = ...)
 def get_builder(file_name: Literal['contact_tooltip.ui'], widgets: list[str] = ...) -> ContactTooltipBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['db_migration.ui'], widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['debug_console.ui'], widgets: list[str] = ...) -> DebugConsoleBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['emoji_chooser.ui'], widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
 @overload
@@ -1132,8 +1134,6 @@ def get_builder(file_name: Literal['themes_window.ui'], widgets: list[str] = ...
 def get_builder(file_name: Literal['video_preview.ui'], widgets: list[str] = ...) -> VideoPreviewBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['workspace_dialog.ui'], widgets: list[str] = ...) -> WorkspaceDialogBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['xml_console.ui'], widgets: list[str] = ...) -> XmlConsoleBuilder: ...  # noqa
 
 
 def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...

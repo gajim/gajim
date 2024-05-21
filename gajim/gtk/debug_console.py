@@ -35,7 +35,7 @@ from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
 
 
-class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
+class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
@@ -44,7 +44,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self.set_default_size(800, 600)
         self.set_resizable(True)
         self.set_show_menubar(False)
-        self.set_name('XMLConsoleWindow')
+        self.set_name('DebugConsoleWindow')
 
         self._selected_account = 'AllAccounts'
         self._selected_send_account: str | None = None
@@ -60,7 +60,7 @@ class XMLConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._incoming = True
         self._outgoing = True
 
-        self._ui = get_builder('xml_console.ui')
+        self._ui = get_builder('debug_console.ui')
         self.set_titlebar(self._ui.headerbar)
         self._set_titlebar()
         self.add(self._ui.stack)
