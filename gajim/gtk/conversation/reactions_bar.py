@@ -160,7 +160,9 @@ class ReactionButton(Gtk.Button):
         if self.from_us:
             self.get_style_context().add_class('reaction-from-us')
 
-        emoji_label = Gtk.Label(label=emoji)
+        # Add emoji presentation selector, otherwise depending on the font
+        # emojis might be displayed in its text variant
+        emoji_label = Gtk.Label(label=f'{emoji}\uFE0F')
         count_label = Gtk.Label(label=str(len(reaction_data)))
         count_label.get_style_context().add_class('monospace')
 
