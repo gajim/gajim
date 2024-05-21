@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -525,6 +525,10 @@ msgid "Add Proxy"
 msgstr "Proksi:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "échec lors de la publication de votre vCard"
 
@@ -550,6 +554,10 @@ msgstr "Oberiant"
 
 msgid "Add new line"
 msgstr ""
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Add some details…"
@@ -697,6 +705,22 @@ msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Bez ez eus bet ur fazi en ur grouiñ ar gont"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Kont"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1012,6 +1036,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1148,6 +1175,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Kevreadenn"
 
 #, fuzzy
 msgid "Chat List"
@@ -1437,10 +1468,6 @@ msgstr "_Titour-stad:"
 msgid "Contact Connected"
 msgstr "Darempred luget"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Kevreadenn"
-
 msgid "Contact Disconnected"
 msgstr "Darempred diluget"
 
@@ -1658,6 +1685,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Deactivated"
@@ -1944,9 +1978,8 @@ msgstr "O tebriñ"
 msgid "Edit Name…"
 msgstr "Anv:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Kemmañ ar _strolladoù"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2028,6 +2061,9 @@ msgstr "War enaou emañ ar sifrañ"
 #, fuzzy
 msgid "Encryption error"
 msgstr "War enaou emañ ar sifrañ"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2420,10 +2456,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2627,6 +2659,9 @@ msgstr "Perzhiad-ez"
 
 msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3143,10 +3178,6 @@ msgid "Message"
 msgstr "Kemennadenn"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Kemennadennoù"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "korf ar gemennadenn"
 
@@ -3160,6 +3191,10 @@ msgstr "Kemennadenn gaset"
 #, fuzzy
 msgid "Message composition"
 msgstr "korf ar gemennadenn"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Kemennadenn gaset"
 
 #, python-format
 msgid ""
@@ -3332,6 +3367,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Anv-arveriad-ez direizh"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Kont ebet hegerz"
 
@@ -3348,7 +3387,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3737,6 +3776,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 
@@ -4036,6 +4079,9 @@ msgstr "Adlugañ bremañ?"
 msgid "Re_gister"
 msgstr "_Emezelañ"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Lenn pennad _Wikipedia"
 
@@ -4062,6 +4108,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Abeg"
+
+#, fuzzy
+msgid "Received"
+msgstr "Kemennadenn gentañ"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4190,6 +4240,9 @@ msgstr "Dilemel an darempred diouzh ar roll"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4209,6 +4262,9 @@ msgstr "Lemel ar gont %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4443,6 +4499,10 @@ msgstr ""
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "titour stad"
 
 msgid "Scroll up"
 msgstr ""
@@ -4749,6 +4809,10 @@ msgid "Show Content"
 msgstr "Diskouez an darempredoù _ezlinenn"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Munudoù"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Titour-stad"
 
@@ -4815,6 +4879,10 @@ msgstr "Klikit evit enlakaat ur boulomell (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5500,9 +5568,6 @@ msgstr "Perzhiad-ez"
 msgid "Toggle participants list"
 msgstr "Perzhiad-ez"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5659,6 +5724,10 @@ msgid "Unknown command: %s"
 msgstr "Urzhioù: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Aozadur D-Bus dianav: %s"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Da _heul al lesanv:"
 
@@ -5732,6 +5801,10 @@ msgstr "Enrollañ ar restr dindan..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Enrollañ ar restr dindan..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "N'eo ket bet kavet ar servij"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5933,6 +6006,10 @@ msgid "Workspace Settings"
 msgstr "Actions a_vancées"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Actions a_vancées"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Darempredoù"
 
@@ -5968,6 +6045,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Dec'h"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Dec'h"
+
 msgid "You"
 msgstr "C'hwi"
 
@@ -5976,6 +6057,9 @@ msgid "You (%s) joined the group chat"
 msgstr "Er strollad"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6019,6 +6103,9 @@ msgstr "Anavezet oc'h bremañ gant an anv %s"
 msgid "You are offline."
 msgstr "Ezlinenn"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Er strollad"
@@ -6045,6 +6132,9 @@ msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "N'hellit ket ebarzhiñ ur sal-flapiñ keit ha ma n'oc'h ket luget."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
 msgstr ""
@@ -6130,6 +6220,15 @@ msgstr "Gant berzh eo bet krouet ho kont nevez!"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Penndibaboù"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Gant berzh eo bet krouet ho kont nevez!"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "N'eus ket tu da gas ho kemennadenn keit ha ma n'oc'h ket luget."
@@ -6445,6 +6544,10 @@ msgid "_Show Certificate"
 msgstr "Anv-arveriad-ez direizh"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Dorioù"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Kelaouiñ ac'hanon p'eo echu un treuzkas"
 
@@ -6469,9 +6572,6 @@ msgstr "_Koumanantiñ"
 #, fuzzy
 msgid "_Type"
 msgstr "Doare:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6949,6 +7049,14 @@ msgstr ""
 #~ msgstr "Kas ur restr"
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Kemmañ ar _strolladoù"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Oberiant"
 
@@ -6960,6 +7068,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Darempredoù"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Abeg"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Kemennadennoù"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -6967,3 +7083,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Lugañ"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Dec'h"

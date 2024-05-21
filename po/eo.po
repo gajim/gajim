@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -527,6 +527,10 @@ msgid "Add Proxy"
 msgstr "Prokura servilo:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Aldoni kontakton..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Konektado malsukcesis"
 
@@ -553,6 +557,10 @@ msgstr "Nova mesaĝo"
 #, fuzzy
 msgid "Add new line"
 msgstr "Nova mesaĝo"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Konektado malsukcesis"
 
 #, fuzzy
 msgid "Add some details…"
@@ -698,6 +706,22 @@ msgstr "Eraro okazis dum kreado de konto"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Eraro okazis dum kreado de konto"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Eraro okazis dum kreado de konto"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Konto"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1016,6 +1040,9 @@ msgstr "%s ne estas valida protokola detalnivelo"
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1155,6 +1182,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Konekto"
 
 #, fuzzy
 msgid "Chat List"
@@ -1444,10 +1475,6 @@ msgstr "_Statmesaĝo:"
 msgid "Contact Connected"
 msgstr "Kontakto konektita"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Konekto"
-
 msgid "Contact Disconnected"
 msgstr "Kontakto malkonektita"
 
@@ -1667,6 +1694,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Konektado malsukcesis"
 
 msgid "Deactivated"
 msgstr "Malŝaltita"
@@ -1953,9 +1987,8 @@ msgstr "Manĝas"
 msgid "Edit Name…"
 msgstr "Nomo:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Aranĝi _Grupojn"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2037,6 +2070,9 @@ msgstr "Ĉifrado ebligata"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Ĉifrado ebligata"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2429,10 +2465,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2637,6 +2669,9 @@ msgstr "Partoprenanto"
 
 msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3164,10 +3199,6 @@ msgid "Message"
 msgstr "Mesaĝo"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Mesaĝoj"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "mesaĝenhavo"
 
@@ -3181,6 +3212,10 @@ msgstr "Mesaĝo sendita"
 #, fuzzy
 msgid "Message composition"
 msgstr "mesaĝenhavo"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Mesaĝo sendita"
 
 #, python-format
 msgid ""
@@ -3351,6 +3386,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Malkorekta salutnomo"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Neniu konto disponeblas"
 
@@ -3367,7 +3406,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3756,6 +3795,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Montri ĉiujn nelegitajn _eventojn"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Montri ĉiujn nelegitajn _eventojn"
 
@@ -4056,6 +4099,9 @@ msgstr "Ĉu rekonektu nun?"
 msgid "Re_gister"
 msgstr "Re_gistri"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Legi _vikipedian artikolon"
 
@@ -4082,6 +4128,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Kialo"
+
+#, fuzzy
+msgid "Received"
+msgstr "Unua mesaĝo ricevita"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4211,6 +4261,9 @@ msgstr "Forigas kontakton el kontaktlisto"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4230,6 +4283,9 @@ msgstr "Forigado de konto %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4466,6 +4522,10 @@ msgstr "Skanas %d / %d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "statmesaĝo"
 
 msgid "Scroll up"
 msgstr ""
@@ -4773,6 +4833,10 @@ msgid "Show Content"
 msgstr "Montri _senkonektajn kontaktojn"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Detalaĵoj"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Defaŭlta statmesaĝo"
 
@@ -4845,6 +4909,10 @@ msgstr "Klaku por enigi mienon (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Montri ĉiujn nelegitajn _eventojn"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5532,9 +5600,6 @@ msgstr "Partoprenanto"
 msgid "Toggle participants list"
 msgstr "Partoprenanto"
 
-msgid "Topic"
-msgstr "Temo"
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5692,6 +5757,10 @@ msgid "Unknown command: %s"
 msgstr "Komandoj: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Nekonata versio de D-BUS: %s"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Post kaŝnomo:"
 
@@ -5765,6 +5834,10 @@ msgstr "Konservi dosieron kiel..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Konservi dosieron kiel..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Neniu servo estas trovita"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5967,6 +6040,10 @@ msgid "Workspace Settings"
 msgstr "Kromaj agoj"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Kromaj agoj"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Renomigado de kontakto"
 
@@ -6002,6 +6079,10 @@ msgstr "Jes"
 msgid "Yesterday"
 msgstr "Hieraŭ"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Hieraŭ"
+
 msgid "You"
 msgstr "Vi"
 
@@ -6010,6 +6091,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s aliĝis al la babilejo"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6053,6 +6137,9 @@ msgstr "Vi nomiĝas %s"
 msgid "You are offline."
 msgstr "senkonekta"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "%s aliĝis al la babilejo"
@@ -6079,6 +6166,9 @@ msgstr "_Permesi al tiu kontakto vidi mian staton"
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Vi ne povas aliĝi al babilejo dum vi estas senkonekta."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6166,6 +6256,15 @@ msgstr "Via nova konto estas sukcese kreita"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Agordo"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Via nova konto estas sukcese kreita"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Via mesaĝo ne povas esti sendita dum vi senkonektas."
@@ -6482,6 +6581,10 @@ msgid "_Show Certificate"
 msgstr "Malkorekta salutnomo"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Montri Trans_portilojn"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Avizi min kiam dosiero estas transdonita"
 
@@ -6506,9 +6609,6 @@ msgstr "_Aboni"
 #, fuzzy
 msgid "_Type"
 msgstr "Tipo:"
-
-msgid "_Undo"
-msgstr "_Malfari"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6980,6 +7080,14 @@ msgstr ""
 #~ msgstr "Publicas vizitkarton..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Aranĝi _Grupojn"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktiva"
 
@@ -6991,10 +7099,28 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Kontaktoj"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Kialo"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Mesaĝoj"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Topic"
+#~ msgstr "Temo"
+
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "E_nsaluti"
+
+#~ msgid "_Undo"
+#~ msgstr "_Malfari"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Hieraŭ"

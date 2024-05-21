@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -469,6 +469,9 @@ msgstr ""
 msgid "Add Proxy"
 msgstr ""
 
+msgid "Add Reaction…"
+msgstr ""
+
 msgid "Add Setting"
 msgstr ""
 
@@ -491,6 +494,9 @@ msgid "Add new Theme"
 msgstr ""
 
 msgid "Add new line"
+msgstr ""
+
+msgid "Add reaction"
 msgstr ""
 
 msgid "Add some details…"
@@ -613,6 +619,21 @@ msgstr ""
 
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr ""
+
+msgid "And more..."
 msgstr ""
 
 msgid "Anonymous login not supported"
@@ -884,6 +905,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1004,6 +1028,9 @@ msgid "Chat Banner: Foreground Color"
 msgstr ""
 
 msgid "Chat Banner: Text Font"
+msgstr ""
+
+msgid "Chat Details and Settings"
 msgstr ""
 
 msgid "Chat List"
@@ -1252,9 +1279,6 @@ msgstr ""
 msgid "Contact Connected"
 msgstr ""
 
-msgid "Contact Details and Settings"
-msgstr ""
-
 msgid "Contact Disconnected"
 msgstr ""
 
@@ -1427,6 +1451,12 @@ msgid "D-Bus Interface"
 msgstr ""
 
 msgid "Dark Theme"
+msgstr ""
+
+msgid "Database Migration"
+msgstr ""
+
+msgid "Database migration failed"
 msgstr ""
 
 msgid "Deactivated"
@@ -1671,7 +1701,7 @@ msgstr ""
 msgid "Edit Name…"
 msgstr ""
 
-msgid "Edit workspace…"
+msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 msgid "Edit…"
@@ -1744,6 +1774,9 @@ msgid "Encryption (OMEMO)"
 msgstr ""
 
 msgid "Encryption error"
+msgstr ""
+
+msgid "Encryption is not available in private chats"
 msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
@@ -2078,9 +2111,6 @@ msgstr ""
 msgid "Gajim - Error"
 msgstr ""
 
-msgid "Gajim Team"
-msgstr ""
-
 msgid "Gajim Themes"
 msgstr ""
 
@@ -2254,6 +2284,9 @@ msgid "Hide chat list"
 msgstr ""
 
 msgid "Hide this menu"
+msgstr ""
+
+msgid "Hide/show the main window menu"
 msgstr ""
 
 msgid "Home"
@@ -2700,9 +2733,6 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-msgid "Message Correction: Background Color"
-msgstr ""
-
 msgid "Message Receipts (✔)"
 msgstr ""
 
@@ -2713,6 +2743,9 @@ msgid "Message Sent"
 msgstr ""
 
 msgid "Message composition"
+msgstr ""
+
+msgid "Message content unknown"
 msgstr ""
 
 #, python-format
@@ -2857,6 +2890,9 @@ msgstr ""
 msgid "No automatic preview"
 msgstr ""
 
+msgid "No certificate"
+msgstr ""
+
 msgid "No commands available"
 msgstr ""
 
@@ -2873,7 +2909,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3207,6 +3243,9 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr ""
 
+msgid "Pending"
+msgstr ""
+
 msgid "Pending Event"
 msgstr ""
 
@@ -3460,6 +3499,9 @@ msgstr ""
 msgid "Re_gister"
 msgstr ""
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr ""
 
@@ -3483,6 +3525,9 @@ msgstr ""
 
 #, python-format
 msgid "Reason: %s"
+msgstr ""
+
+msgid "Received"
 msgstr ""
 
 msgctxt "Message state"
@@ -3586,6 +3631,9 @@ msgstr ""
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -3602,6 +3650,9 @@ msgstr ""
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 msgid "Report"
@@ -3802,6 +3853,9 @@ msgid "Scanning %(current)d / %(total)d ..."
 msgstr ""
 
 msgid "Scroll down"
+msgstr ""
+
+msgid "Scroll to this message"
 msgstr ""
 
 msgid "Scroll up"
@@ -4056,6 +4110,9 @@ msgstr ""
 msgid "Show Content"
 msgstr ""
 
+msgid "Show Details"
+msgstr ""
+
 msgid "Show Inactive Devices"
 msgstr ""
 
@@ -4110,6 +4167,9 @@ msgid "Show a list of emojis"
 msgstr ""
 
 msgid "Show a live preview to test your video source"
+msgstr ""
+
+msgid "Show all reactions"
 msgstr ""
 
 msgid "Show all warnings"
@@ -4707,9 +4767,6 @@ msgstr ""
 msgid "Toggle participants list"
 msgstr ""
 
-msgid "Topic"
-msgstr ""
-
 msgctxt "File transfer state"
 msgid "Transferred: "
 msgstr ""
@@ -4852,6 +4909,9 @@ msgstr ""
 msgid "Unknown command: %s"
 msgstr ""
 
+msgid "Unknown error."
+msgstr ""
+
 msgid "Unknown language"
 msgstr ""
 
@@ -4911,6 +4971,9 @@ msgid "Upload Files"
 msgstr ""
 
 msgid "Upload File…"
+msgstr ""
+
+msgid "Upload could not be completed."
 msgstr ""
 
 msgid "Uploading Avatar Failed"
@@ -5092,6 +5155,9 @@ msgstr ""
 msgid "Workspace Settings"
 msgstr ""
 
+msgid "Workspace settings…"
+msgstr ""
+
 msgid "Workspaces"
 msgstr ""
 
@@ -5122,6 +5188,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
+#, python-format
+msgid "Yesterday (%s)"
+msgstr ""
+
 msgid "You"
 msgstr ""
 
@@ -5130,6 +5200,9 @@ msgid "You (%s) joined the group chat"
 msgstr ""
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, python-format
@@ -5169,6 +5242,9 @@ msgstr ""
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, python-format
 msgid "You can join this group chat instead: %s"
 msgstr ""
@@ -5189,6 +5265,9 @@ msgid "You cannot see this contact's online status"
 msgstr ""
 
 msgid "You cannot synchronize with an account unless it is connected."
+msgstr ""
+
+msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -5262,6 +5341,14 @@ msgid "Your account has has been removed successfully."
 msgstr ""
 
 msgid "Your archiving preferences have successfully been saved."
+msgstr ""
+
+msgid "Your chat history database has been migrated successfully."
+msgstr ""
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
 msgstr ""
 
 msgid "Your message can not be sent until you are connected."
@@ -5520,6 +5607,9 @@ msgstr ""
 msgid "_Show Certificate"
 msgstr ""
 
+msgid "_Show menu bar"
+msgstr ""
+
 msgid "_Show notification when file transfer is complete"
 msgstr ""
 
@@ -5539,9 +5629,6 @@ msgid "_Subscribe"
 msgstr ""
 
 msgid "_Type"
-msgstr ""
-
-msgid "_Undo"
 msgstr ""
 
 msgid "_Unregister account from service"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -523,6 +523,10 @@ msgid "Add Proxy"
 msgstr "Proxy toevoegen"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "Contact toevoegen…"
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Instellingen"
 
@@ -548,6 +552,10 @@ msgstr "Nieuwe regel toevoegen"
 
 msgid "Add new line"
 msgstr "Nieuwe regel toevoegen"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Instellingen"
 
 #, fuzzy
 msgid "Add some details…"
@@ -698,6 +706,22 @@ msgstr "Er is een fout opgetreden bij het aanmaken van de account"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Er is een fout opgetreden bij het aanmaken van de account"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Accountrijlettertype"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1008,6 +1032,9 @@ msgstr "CRL is nog niet geldig"
 msgid "CRL signature failure"
 msgstr "CRL-handtekeningsfout"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1149,6 +1176,10 @@ msgstr "Banier voorgrondkleur"
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Gespreksbanner"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Verbindingsopties"
 
 #, fuzzy
 msgid "Chat List"
@@ -1426,10 +1457,6 @@ msgstr "Bericht van contact"
 msgid "Contact Connected"
 msgstr "Contact verbonden"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Verbindingsopties"
-
 msgid "Contact Disconnected"
 msgstr "Contact heeft de verbinding verbroken"
 
@@ -1643,6 +1670,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "_Donker thema"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Registratie mislukt"
 
 msgid "Deactivated"
 msgstr "Uitgeschakeld"
@@ -1929,9 +1963,8 @@ msgstr "Eten"
 msgid "Edit Name…"
 msgstr "Voornaam"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "_Groepen bewerken…"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2021,6 +2054,9 @@ msgstr "Versleutelingsfout"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Versleutelingsfout"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2404,10 +2440,6 @@ msgstr "Er is geen verbinding beschikbaar"
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim-thema’s"
-
 msgid "Gajim Themes"
 msgstr "Gajim-thema’s"
 
@@ -2618,6 +2650,9 @@ msgstr "Videosessie in-/uitschakelen"
 
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3151,10 +3186,6 @@ msgid "Message"
 msgstr "Bericht"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Contactrij achtergrondkleur"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "Ontvangst_bevestigingen weergeven (✔)"
 
@@ -3168,6 +3199,10 @@ msgstr "Bericht verzonden"
 
 msgid "Message composition"
 msgstr "Bericht opstellen"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Bericht verzonden"
 
 #, fuzzy, python-format
 msgid ""
@@ -3336,6 +3371,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Certificaat"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Geen accounts beschikbaar"
 
@@ -3352,7 +3391,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3736,6 +3775,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Toon alle wachtende gebeurt_enissen"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Toon alle wachtende gebeurt_enissen"
 
@@ -4027,6 +4070,9 @@ msgstr "Nu opnieuw inloggen?"
 msgid "Re_gister"
 msgstr "Re_gistreren"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia-artikel lezen"
 
@@ -4054,6 +4100,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Reden"
+
+# Eerste bericht ontvangen?
+#, fuzzy
+msgid "Received"
+msgstr "Eerste ontvangen bericht"
 
 # Eerste bericht ontvangen?
 #, fuzzy
@@ -4177,6 +4228,9 @@ msgstr "Verwijdert contact van rooster"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4196,6 +4250,9 @@ msgstr "Account %s wordt verwijderd"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4436,6 +4493,10 @@ msgstr "Onderzoeken van %(current)d / %(total)d…"
 
 msgid "Scroll down"
 msgstr "Omlaag scrollen"
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "Statusbericht instellen"
 
 msgid "Scroll up"
 msgstr "Omhoog scrollen"
@@ -4737,6 +4798,10 @@ msgid "Show Content"
 msgstr "Alleen actieve contacten weergeven"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Details"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "_Audio-invoerapparaat"
 
@@ -4811,6 +4876,10 @@ msgstr "Een lijst van emoji’s weergeven (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Alle waarschuwingen weergeven"
 
 msgid "Show all warnings"
 msgstr "Alle waarschuwingen weergeven"
@@ -5509,9 +5578,6 @@ msgstr "Videosessie in-/uitschakelen"
 msgid "Toggle participants list"
 msgstr "Deelnemer"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5668,6 +5734,10 @@ msgid "Unknown command: %s"
 msgstr "Opdrachten"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Onbekende SSL-fout: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Onbekend nummer"
 
@@ -5740,6 +5810,10 @@ msgstr "Bestand uploaden…"
 
 msgid "Upload File…"
 msgstr "Bestand uploaden…"
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "De dienst kon niet gevonden worden"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5944,6 +6018,10 @@ msgid "Workspace Settings"
 msgstr "Gea_vanceerde Acties"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Gea_vanceerde Acties"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Contact hernoemen"
 
@@ -5979,6 +6057,10 @@ msgstr "Ja"
 msgid "Yesterday"
 msgstr "Gisteren"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Gisteren"
+
 msgid "You"
 msgstr "Jij"
 
@@ -5987,6 +6069,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s neemt nu deel aan het groepsgesprek"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6037,6 +6122,9 @@ msgstr "Je bent nu {show}{status}"
 msgid "You are offline."
 msgstr "offline"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Je kan in plaats daarvan aan dit groepsgesprek deelnemen: xmpp:%s?join"
@@ -6066,6 +6154,9 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Het is niet mogelijk met een account te synchroniseren zonder dat deze "
 "verbonden is."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6153,6 +6244,15 @@ msgstr "Je nieuwe account is aangemaakt"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Je archiefvoorkeuren zijn opgeslagen!"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Je nieuwe account is aangemaakt"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Je bericht kan niet worden verzonden totdat je verbinding hebt."
@@ -6466,6 +6566,10 @@ msgid "_Show Certificate"
 msgstr "Certificaat bekijken…"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Transporten weergeven"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
 
@@ -6488,9 +6592,6 @@ msgstr "_Abonneer"
 
 msgid "_Type"
 msgstr "_Type"
-
-msgid "_Undo"
-msgstr "_Ongedaan maken"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6953,6 +7054,14 @@ msgstr ""
 #~ msgstr "Profiel wordt verzonden…"
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "_Groepen bewerken…"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim-thema’s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Actief"
 
@@ -6963,6 +7072,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Invite New Contact"
 #~ msgstr "Contacten uitnodigen"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Reden"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Contactrij achtergrondkleur"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organisatorische eenheid (OU)"
@@ -6982,3 +7099,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Inloggen"
+
+#~ msgid "_Undo"
+#~ msgstr "_Ongedaan maken"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Gisteren"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -518,6 +518,10 @@ msgid "Add Proxy"
 msgstr "Prox_y:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "Kişi _ekle"
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Bağlantı Kurulamıyor"
 
@@ -544,6 +548,10 @@ msgstr "Yeni posta yarat"
 #, fuzzy
 msgid "Add new line"
 msgstr "Yeni posta yarat"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Add some details…"
@@ -693,6 +701,22 @@ msgstr "Aralık yeniden konumlandırılması sırasında bir hata oluştu."
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Aralık yeniden konumlandırılması sırasında bir hata oluştu."
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Aralık yeniden konumlandırılması sırasında bir hata oluştu."
+
+#, fuzzy
+msgid "And more..."
+msgstr "Hesap sırası"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1021,6 +1045,9 @@ msgstr "Sertifika henüz geçerli değil"
 msgid "CRL signature failure"
 msgstr "Hata: Yanlış imza"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1162,6 +1189,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Sohbet Sancak"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Bağlantı"
 
 #, fuzzy
 msgid "Chat List"
@@ -1454,10 +1485,6 @@ msgid "Contact Connected"
 msgstr "Kişinin bağlantısı kesildi"
 
 #, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Bağlantı"
-
-#, fuzzy
 msgid "Contact Disconnected"
 msgstr "Kişinin bağlantısı kesildi"
 
@@ -1671,6 +1698,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Kayıt başarısız"
 
 msgid "Deactivated"
 msgstr ""
@@ -1953,9 +1987,8 @@ msgstr "Yemelik"
 msgid "Edit Name…"
 msgstr "İlk Ad:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Kişisel ilanlar sayfayı yazımla"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2036,6 +2069,9 @@ msgstr "Üyelik isteği"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Üyelik isteği"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2426,10 +2462,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2635,6 +2667,9 @@ msgstr "Katılan"
 
 msgid "Hide this menu"
 msgstr "Menüyi gizle"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3146,10 +3181,6 @@ msgid "Message"
 msgstr "İleti"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "İletler"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "iletinin içindekiler"
 
@@ -3164,6 +3195,10 @@ msgstr "Ileti alınıyor"
 #, fuzzy
 msgid "Message composition"
 msgstr "İletin içindekiler"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Ileti alınıyor"
 
 #, python-format
 msgid ""
@@ -3332,6 +3367,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "%(nickname)s Girdi"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Hiç bir hesap bulunmiyor"
 
@@ -3348,7 +3387,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3739,6 +3778,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Bütün Bekleyen _Olayları Göster"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Bütün Bekleyen _Olayları Göster"
 
@@ -4041,6 +4084,9 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 msgid "Re_gister"
 msgstr "_Kaydol"
 
+msgid "React with 👍"
+msgstr ""
+
 #, fuzzy
 msgid "Read _Wikipedia Article"
 msgstr "Makale okunmuş"
@@ -4068,6 +4114,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Neden"
+
+#, fuzzy
+msgid "Received"
+msgstr "Üyelik ileti _kaydet"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4194,6 +4244,9 @@ msgstr "Kişiyi listeden sil"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4212,6 +4265,9 @@ msgstr "XMPP hesabı %s@%s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4450,6 +4506,10 @@ msgstr "İndirilen dosya: %(current)li  / %(total)li"
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "durum ileti"
 
 msgid "Scroll up"
 msgstr ""
@@ -4757,6 +4817,10 @@ msgid "Show Content"
 msgstr "Sadece _Çecredeki Kişileri Göster"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Ayrıntılar"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Ses giriş aygıtı"
 
@@ -4823,6 +4887,10 @@ msgstr "Gajim açılırken bağlan"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Bütün Bekleyen _Olayları Göster"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5507,9 +5575,6 @@ msgstr "Katılan"
 msgid "Toggle participants list"
 msgstr "Katılan"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5673,6 +5738,10 @@ msgid "Unknown command: %s"
 msgstr "komut"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "<b>Bir hata oluştu:</b>"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Bilinmeyen Parça"
 
@@ -5748,6 +5817,10 @@ msgstr "Dosya Farklı Kaydet..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Dosya Farklı Kaydet..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Hizmet bulunamadı"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5953,6 +6026,10 @@ msgid "Workspace Settings"
 msgstr "İlerlemiş aksiyonlar"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "İlerlemiş aksiyonlar"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Kişiyi yeniden adlandır"
 
@@ -5988,6 +6065,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr ""
 
+#, python-format
+msgid "Yesterday (%s)"
+msgstr ""
+
 msgid "You"
 msgstr "Sen"
 
@@ -5996,6 +6077,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s grup sohbete katıldı"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, python-format
@@ -6039,6 +6123,9 @@ msgstr "Adınızı %s olarak değiştirdiniz"
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "%s grup sohbete katıldı"
@@ -6063,6 +6150,9 @@ msgid "You cannot see this contact's online status"
 msgstr "Seni kişi listeme eklemek isterdim"
 
 msgid "You cannot synchronize with an account unless it is connected."
+msgstr ""
+
+msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -6144,6 +6234,15 @@ msgid "Your account has has been removed successfully."
 msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
 
 msgid "Your archiving preferences have successfully been saved."
+msgstr ""
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
 msgstr ""
 
 #, fuzzy
@@ -6460,6 +6559,10 @@ msgid "_Show Certificate"
 msgstr "%(nickname)s Girdi"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "_XML Konsolu Göster"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
 
@@ -6484,9 +6587,6 @@ msgstr "_Üye yap"
 #, fuzzy
 msgid "_Type"
 msgstr "_Türü:"
-
-msgid "_Undo"
-msgstr "_Geri Al"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6954,6 +7054,14 @@ msgstr ""
 #~ msgstr "Profil gönderiliyor…"
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Kişisel ilanlar sayfayı yazımla"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktif"
 
@@ -6965,6 +7073,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Kişi Davet _Et"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Neden"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "İletler"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -6972,3 +7088,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
+
+#~ msgid "_Undo"
+#~ msgstr "_Geri Al"

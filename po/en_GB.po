@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -529,6 +529,10 @@ msgid "Add Proxy"
 msgstr "Proxy:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Add Contact..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Registration failed"
 
@@ -555,6 +559,10 @@ msgstr "Create new post"
 #, fuzzy
 msgid "Add new line"
 msgstr "Create new post"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Registration failed"
 
 #, fuzzy
 msgid "Add some details…"
@@ -708,6 +716,22 @@ msgstr "An error occurred during account creation"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "An error occurred during account creation"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "An error occurred during account creation"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Account"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1028,6 +1052,9 @@ msgstr "CRL is not yet valid"
 msgid "CRL signature failure"
 msgstr "CRL signature failure"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1167,6 +1194,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Connection"
 
 #, fuzzy
 msgid "Chat List"
@@ -1456,10 +1487,6 @@ msgstr "Chat message:"
 msgid "Contact Connected"
 msgstr "Contact Connected"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Connection"
-
 msgid "Contact Disconnected"
 msgstr "Contact Disconnected"
 
@@ -1678,6 +1705,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Registration failed"
 
 msgid "Deactivated"
 msgstr "Deactivated"
@@ -1966,9 +2000,8 @@ msgstr "Eating"
 msgid "Edit Name…"
 msgstr "First Name:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Edit _Groups"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2051,6 +2084,9 @@ msgstr "E2E encryption enabled"
 #, fuzzy
 msgid "Encryption error"
 msgstr "E2E encryption enabled"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2439,10 +2475,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2646,6 +2678,9 @@ msgstr "Participant"
 
 msgid "Hide this menu"
 msgstr "Hide this menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3172,10 +3207,6 @@ msgid "Message"
 msgstr "Message"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Messages"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "message contents"
 
@@ -3189,6 +3220,10 @@ msgstr "Message Sent"
 #, fuzzy
 msgid "Message composition"
 msgstr "Message content"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Message Sent"
 
 #, python-format
 msgid ""
@@ -3361,6 +3396,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Self signed certificate"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "No account available"
 
@@ -3377,7 +3416,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3764,6 +3803,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Show All Pending _Events"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Show All Pending _Events"
 
@@ -4065,6 +4108,9 @@ msgstr "Relogin now?"
 msgid "Re_gister"
 msgstr "Re_gister"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Read _Wikipedia Article"
 
@@ -4092,6 +4138,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Reason"
+
+#, fuzzy
+msgid "Received"
+msgstr "First Message Received"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4218,6 +4268,9 @@ msgstr "Removes contact from roster"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4237,6 +4290,9 @@ msgstr "Removing %s account"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4475,6 +4531,10 @@ msgstr "Scanning %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "status message"
 
 msgid "Scroll up"
 msgstr ""
@@ -4780,6 +4840,10 @@ msgid "Show Content"
 msgstr "Show Only _Active Contacts"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Details"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Default Message"
 
@@ -4852,6 +4916,10 @@ msgstr "Show a list of emoticons (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Show All Pending _Events"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5545,9 +5613,6 @@ msgstr "Participant"
 msgid "Toggle participants list"
 msgstr "Participant"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5706,6 +5771,10 @@ msgid "Unknown command: %s"
 msgstr "Commands: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Unknown SSL error: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Unknown Title"
 
@@ -5780,6 +5849,10 @@ msgstr "Save File as..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Save File as..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "The service could not be found"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5983,6 +6056,10 @@ msgid "Workspace Settings"
 msgstr "Advanced Actions"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Advanced Actions"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Rename Contact"
 
@@ -6018,6 +6095,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Yesterday"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Yesterday"
+
 msgid "You"
 msgstr "You"
 
@@ -6026,6 +6107,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s has joined the group chat"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6071,6 +6155,9 @@ msgstr "You are now known as %s"
 msgid "You are offline."
 msgstr "offline"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "You can join this room instead: %s"
@@ -6096,6 +6183,9 @@ msgstr "You cannot add yourself to your roster."
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "You cannot synchronise with an account unless it is connected."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6183,6 +6273,15 @@ msgstr "Your new account has been successfully created"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Preferences"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Your new account has been successfully created"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Your message can not be sent until you are connected."
@@ -6499,6 +6598,10 @@ msgid "_Show Certificate"
 msgstr "Self signed certificate"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Show Trans_ports"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Notify me when a file transfer is complete"
 
@@ -6522,9 +6625,6 @@ msgstr "_Subscribe"
 #, fuzzy
 msgid "_Type"
 msgstr "_Type:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6997,6 +7097,14 @@ msgstr ""
 #~ msgstr "Sending profile..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Edit _Groups"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Active"
 
@@ -7008,6 +7116,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Invite _Contacts"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Reason"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Messages"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7015,3 +7131,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Log on"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Yesterday"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -529,6 +529,10 @@ msgid "Add Proxy"
 msgstr "Proxy:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Pridať kontakt..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Registrácia zlyhala"
 
@@ -555,6 +559,10 @@ msgstr "Vytvoriť novú správu"
 #, fuzzy
 msgid "Add new line"
 msgstr "Vytvoriť novú správu"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Add some details…"
@@ -709,6 +717,22 @@ msgstr "Vyskytla sa chyba počas tvorby účtu"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Vyskytla sa chyba počas tvorby účtu"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Vyskytla sa chyba počas tvorby účtu"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Účet"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1028,6 +1052,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr "Zlyhanie CRL podpisu"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1167,6 +1194,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Spojenie"
 
 #, fuzzy
 msgid "Chat List"
@@ -1457,10 +1488,6 @@ msgstr "Správa kontaktu:"
 msgid "Contact Connected"
 msgstr "Kontakt pripojený"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Spojenie"
-
 msgid "Contact Disconnected"
 msgstr "Kontakt odpojený"
 
@@ -1679,6 +1706,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Registrácia zlyhala"
 
 msgid "Deactivated"
 msgstr "Deaktivovaná"
@@ -1967,9 +2001,8 @@ msgstr "Jem"
 msgid "Edit Name…"
 msgstr "Prvé meno:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Upraviť _skupiny"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2053,6 +2086,9 @@ msgstr "E2E šifrovanie povolené"
 #, fuzzy
 msgid "Encryption error"
 msgstr "E2E šifrovanie povolené"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2441,10 +2477,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2648,6 +2680,9 @@ msgstr "Prepnúť video reláciu"
 
 msgid "Hide this menu"
 msgstr "Skryť toto menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3168,10 +3203,6 @@ msgid "Message"
 msgstr "Správa"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Správy"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "obsah správy"
 
@@ -3185,6 +3216,10 @@ msgstr "Správa odoslaná"
 #, fuzzy
 msgid "Message composition"
 msgstr "Obsah správy"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Správa odoslaná"
 
 #, python-format
 msgid ""
@@ -3357,6 +3392,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Certifikát podpísaný sám sebou"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Žiadne účty nie sú dostupné"
 
@@ -3373,7 +3412,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3760,6 +3799,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Zobraziť všetky čakajúce _udalosti"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Zobraziť všetky čakajúce _udalosti"
 
@@ -4061,6 +4104,9 @@ msgstr "Prihlásiť znovu?"
 msgid "Re_gister"
 msgstr "Re_gistrácia"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Čítať článok na _Wikipédii"
 
@@ -4087,6 +4133,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Dôvod"
+
+#, fuzzy
+msgid "Received"
+msgstr "Prvá prijatá správa"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4213,6 +4263,9 @@ msgstr "Odstráni kontakt zo zoznamu"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4233,6 +4286,9 @@ msgstr "Odstraňuje sa účet %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4471,6 +4527,10 @@ msgstr "Prieskúmava sa %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "správa o stave"
 
 msgid "Scroll up"
 msgstr ""
@@ -4777,6 +4837,10 @@ msgid "Show Content"
 msgstr "Zobraziť len _aktívne kontakty"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Podrobnosti"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Vstupné zariadenie zvuku"
 
@@ -4849,6 +4913,10 @@ msgstr "Zobraziť zoznam emotikon (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Zobraziť všetky čakajúce _udalosti"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5544,9 +5612,6 @@ msgstr "Prepnúť video reláciu"
 msgid "Toggle participants list"
 msgstr "Účastník"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5704,6 +5769,10 @@ msgid "Unknown command: %s"
 msgstr "príkaz"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Neznáma chyba SSL: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Neznámy titulok"
 
@@ -5778,6 +5847,10 @@ msgstr "Uložiť súbor ako..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Uložiť súbor ako..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Služba nebola nájdená"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5982,6 +6055,10 @@ msgid "Workspace Settings"
 msgstr "Pokročilé akcie"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Pokročilé akcie"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Premenovať kontakt"
 
@@ -6017,6 +6094,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Pred %i dňami"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Pred %i dňami"
+
 msgid "You"
 msgstr "Vy"
 
@@ -6025,6 +6106,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s sa pripojil do diskusnej skupiny"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6069,6 +6153,9 @@ msgstr "Teraz ste známy ako %s"
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Môžete sa prihlásiť do tejto miestnosti namiesto: %s"
@@ -6094,6 +6181,9 @@ msgstr "Nemôžete pridať seba do vášho zoznamu kontaktov."
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Nemôžete sa synchronizovať s kontaktom ak nie je prihlásený."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6181,6 +6271,15 @@ msgstr "Váš nový účet bol úspešne vytvorený"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Predvoľby"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Váš nový účet bol úspešne vytvorený"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Vašu správu nie je možné odoslať, pokiaľ nebudete pripojený."
@@ -6496,6 +6595,10 @@ msgid "_Show Certificate"
 msgstr "Certifikát podpísaný sám sebou"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Zobraziť trans_porty"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Upozorniť ma, keď sa dokončí prenos"
 
@@ -6519,9 +6622,6 @@ msgstr "_Zapísať"
 #, fuzzy
 msgid "_Type"
 msgstr "_Typ:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6995,6 +7095,14 @@ msgstr ""
 #~ msgstr "Odosielanie profilu..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Upraviť _skupiny"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktívne"
 
@@ -7006,6 +7114,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Pozvať _kontakty"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Dôvod"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Správy"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7013,3 +7129,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Prihlásiť znovu?"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Pred %i dňami"

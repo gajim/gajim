@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2023-07-02 10:51+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -493,6 +493,10 @@ msgstr "Топты қосу…"
 msgid "Add Proxy"
 msgstr "Проксиді қосу"
 
+#, fuzzy
+msgid "Add Reaction…"
+msgstr "Контактты қосу…"
+
 msgid "Add Setting"
 msgstr "Баптауды қосу"
 
@@ -516,6 +520,10 @@ msgstr "Жаңа теманы қосу"
 
 msgid "Add new line"
 msgstr "Жаңа жолды жасау"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Баптауды қосу"
 
 msgid "Add some details…"
 msgstr "Қосымша ақпаратты қосу…"
@@ -642,6 +650,22 @@ msgstr "Пароліңізді өзгерту талабы кезінде қат
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "%(path)s жерінде файлды жасау кезінде қате орын алды: %(error)s"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "%(path)s жерінде файлды жасау кезінде қате орын алды: %(error)s"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Тіркелгі атауы..."
 
 msgid "Anonymous login not supported"
 msgstr "Анонимді кіруге қолдау көрсетілмейді"
@@ -916,6 +940,9 @@ msgstr "CRL мерзімі әлі басталмаған"
 msgid "CRL signature failure"
 msgstr "CRL қолтаңба қатесі"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr "Қоңырау"
 
@@ -1043,6 +1070,10 @@ msgstr "Чат баннері: Алдыңғы көрініс түсі"
 
 msgid "Chat Banner: Text Font"
 msgstr "Чат баннері: Мәтін қарібі"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Байланыс баптаулары"
 
 msgid "Chat List"
 msgstr "Чаттар тізімі"
@@ -1297,10 +1328,6 @@ msgstr "Контакт адрестері"
 msgid "Contact Connected"
 msgstr "Контакт байланысқан"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Байланыс баптаулары"
-
 msgid "Contact Disconnected"
 msgstr "Контакт байланыспаған"
 
@@ -1477,6 +1504,13 @@ msgstr "D-Bus интерфейсі"
 
 msgid "Dark Theme"
 msgstr "Қараңғы тема"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Тіркелу сәтсіз"
 
 msgid "Deactivated"
 msgstr "Сөндірілген"
@@ -1727,8 +1761,8 @@ msgstr "Тамақ ішуде"
 msgid "Edit Name…"
 msgstr "Атын түзету…"
 
-msgid "Edit workspace…"
-msgstr "Жұмыс кеңістігін өңдеу…"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 msgid "Edit…"
 msgstr "Түзету…"
@@ -1812,6 +1846,9 @@ msgstr "Шифрлеу қатесі"
 
 msgid "Encryption error"
 msgstr "Шифрлеу қатесі"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2149,10 +2186,6 @@ msgstr "Gajim %s нұсқасы қолжетімді"
 msgid "Gajim - Error"
 msgstr "Gajim - Қате"
 
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim темалары"
-
 msgid "Gajim Themes"
 msgstr "Gajim темалары"
 
@@ -2336,6 +2369,9 @@ msgstr "Чаттар тізімін жасыру"
 
 msgid "Hide this menu"
 msgstr "Бұл мәзірді жасыру"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 msgid "Home"
 msgstr "Үй парағы"
@@ -2812,9 +2848,6 @@ msgstr "Атап өту: Хабарлама фонының түсі"
 msgid "Message"
 msgstr "Хабарлама"
 
-msgid "Message Correction: Background Color"
-msgstr "Түзетілген хабарлама: Фон түсі"
-
 msgid "Message Receipts (✔)"
 msgstr "Жеткізу туралы хабарландырулар (✔)"
 
@@ -2826,6 +2859,10 @@ msgstr "Хабарлама жіберілді"
 
 msgid "Message composition"
 msgstr "Хабарлама мазмұны"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Хабарлама жіберілді"
 
 #, python-format
 msgid ""
@@ -2975,6 +3012,10 @@ msgstr "Қосымша талаптар жоқ"
 msgid "No automatic preview"
 msgstr "Автоматты алдын ала қарау жоқ"
 
+#, fuzzy
+msgid "No certificate"
+msgstr "Сертификат"
+
 msgid "No commands available"
 msgstr "Қолжетімді командалар жоқ"
 
@@ -2995,7 +3036,7 @@ msgstr ""
 "Ешбір контакт қалмады.\n"
 "Сондай-ақ, XMPP адресін теруге болады."
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3334,6 +3375,10 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "Аялдатылған"
 
+#, fuzzy
+msgid "Pending"
+msgstr "Оқылмаған оқиға"
+
 msgid "Pending Event"
 msgstr "Оқылмаған оқиға"
 
@@ -3601,6 +3646,9 @@ msgstr "Қазір қайта кіру керек пе?"
 msgid "Re_gister"
 msgstr "_Тіркелу"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "_Википедия мақаласын оқу"
 
@@ -3625,6 +3673,10 @@ msgstr "Бұзылу себебі"
 #, python-format
 msgid "Reason: %s"
 msgstr "Себебі: %s"
+
+#, fuzzy
+msgid "Received"
+msgstr "Алынған"
 
 msgctxt "Message state"
 msgid "Received"
@@ -3728,6 +3780,10 @@ msgstr "Контакттар тізімінен өшіру"
 msgid "Remove this workspace"
 msgstr "Бұл жұмыс кеңістігін өшіру"
 
+#, fuzzy
+msgid "Remove your group chat avatar"
+msgstr "Профиль суретіңізді өшіру"
+
 msgid "Remove your profile picture"
 msgstr "Профиль суретіңізді өшіру"
 
@@ -3746,6 +3802,9 @@ msgstr "Тіркелгі өшірілуде..."
 msgctxt "Group chat name"
 msgid "Repairs"
 msgstr "Жөндеулер"
+
+msgid "Reply…"
+msgstr ""
 
 msgid "Report"
 msgstr "Есеп жіберу"
@@ -3948,6 +4007,10 @@ msgstr "Сканерлеуде %(current)d / %(total)d ..."
 
 msgid "Scroll down"
 msgstr "Төмен айналдыру"
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "Қалып-күй хабарламасын орнату"
 
 msgid "Scroll up"
 msgstr "Жоғары айналдыру"
@@ -4209,6 +4272,10 @@ msgid "Show Content"
 msgstr "Мазмұнды көрсету"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Көбірек"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Аудио енгізу құрылғысы"
 
@@ -4266,6 +4333,10 @@ msgstr "Смайликтер тізімін көрсету"
 
 msgid "Show a live preview to test your video source"
 msgstr "Бейне көзін тексеру үшін тірі алдын ала қарауды көрсету"
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Барлық ескертулерді көрсету"
 
 msgid "Show all warnings"
 msgstr "Барлық ескертулерді көрсету"
@@ -4901,9 +4972,6 @@ msgstr "Чаттар тізімін көрсету/жасыру"
 msgid "Toggle participants list"
 msgstr "Қатысушылар тізімін көрсету/жасыру"
 
-msgid "Topic"
-msgstr "Тақырып"
-
 msgctxt "File transfer state"
 msgid "Transferred: "
 msgstr "Тасымалданды: "
@@ -5048,6 +5116,10 @@ msgstr "Белгісіз атауы"
 msgid "Unknown command: %s"
 msgstr "Белгісіз команда: %s"
 
+#, fuzzy
+msgid "Unknown error."
+msgstr "Белгісіз SSL қатесі \"%s\""
+
 msgid "Unknown language"
 msgstr "Белгісіз тіл"
 
@@ -5109,6 +5181,10 @@ msgstr "Файлдарды жүктеп салу"
 
 msgid "Upload File…"
 msgstr "Файлды жүктеп жіберу…"
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Таңдалған суретті жүктеу мүмкін емес."
 
 msgid "Uploading Avatar Failed"
 msgstr "Аватарды жаңарту сәтсіз аяқталды"
@@ -5296,6 +5372,10 @@ msgstr "Жұмыс істеудемін"
 msgid "Workspace Settings"
 msgstr "Жұмыс кеңістігінің баптаулары"
 
+#, fuzzy
+msgid "Workspace settings…"
+msgstr "Жұмыс кеңістігінің баптаулары"
+
 msgid "Workspaces"
 msgstr "Жұмыс кеңістіктері"
 
@@ -5326,6 +5406,10 @@ msgstr "Иә"
 msgid "Yesterday"
 msgstr "Кеше"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Кеше"
+
 msgid "You"
 msgstr "Сіз"
 
@@ -5334,6 +5418,10 @@ msgid "You (%s) joined the group chat"
 msgstr "Сіз (%s) чат бөлмесіне кірдіңіз"
 
 msgid "You are a visitor"
+msgstr "Сіз келушісіз"
+
+#, fuzzy
+msgid "You are a visitor."
 msgstr "Сіз келушісіз"
 
 #, python-format
@@ -5376,6 +5464,9 @@ msgstr "Сіз енді {show}{status} ретінде белгілі болас�
 msgid "You are offline."
 msgstr "Сіз желіде емессіз."
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Оның орнына мына топтық чатқа кіре аласыз: xmpp:%s?join"
@@ -5397,6 +5488,9 @@ msgstr "Бұл контакттың желідегі қалып-күйін кө�
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Байланыспаған тіркелгімен синхрондай алмайсыз."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Сізде бұл бумада файлдарды жасауға рұқсаттарыңыз жоқ."
@@ -5474,6 +5568,15 @@ msgstr "Сіздің тіркелгіңіз сәтті өшірілді."
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Сіздің архивтеу баптауларыңыз сәтті сақталды."
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Сіздің тіркелгіңіз сәтті өшірілді."
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Хабарламаңыз байланыс орнатпағанша жіберілмейді."
@@ -5733,6 +5836,10 @@ msgstr "_Жіберу"
 msgid "_Show Certificate"
 msgstr "Сертификатты көр_сету"
 
+#, fuzzy
+msgid "_Show menu bar"
+msgstr "Тапсырмалар панелінде көрсету"
+
 msgid "_Show notification when file transfer is complete"
 msgstr "Файлдармен алмасу аяқталғанда е_скерту"
 
@@ -5753,9 +5860,6 @@ msgstr "Жаз_ылу"
 
 msgid "_Type"
 msgstr "_Түрі"
-
-msgid "_Undo"
-msgstr "Болд_ырмау"
 
 msgid "_Unregister account from service"
 msgstr "Қызметтен тіркелгі _тіркелуін алып тастау"
@@ -6192,6 +6296,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Edit Profile…"
 #~ msgstr "Профильді түзету…"
 
+#~ msgid "Edit workspace…"
+#~ msgstr "Жұмыс кеңістігін өңдеу…"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim темалары"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Белсенді"
@@ -6201,6 +6312,13 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Invite New Contact"
 #~ msgstr "Жаңа контактты шақыру"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Себебі: %s"
+
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Түзетілген хабарлама: Фон түсі"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Ұйым бөлімі (OU)"
@@ -6214,8 +6332,18 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
 
+#~ msgid "Topic"
+#~ msgstr "Тақырып"
+
 #~ msgid "_Login"
 #~ msgstr "_Кіру"
 
+#~ msgid "_Undo"
+#~ msgstr "Болд_ырмау"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Кеше"

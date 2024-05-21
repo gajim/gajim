@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -535,6 +535,10 @@ msgid "Add Proxy"
 msgstr "Μεσολαβητής:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Προσθήκη επαφής..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
@@ -561,6 +565,10 @@ msgstr "Δημιουργία νέου προφίλ"
 #, fuzzy
 msgid "Add new line"
 msgstr "Δημιουργία νέου προφίλ"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 msgid "Add some details…"
@@ -708,6 +716,22 @@ msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λο�
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Σφάλμα κατά τη διάρκεια δημιουργίας λογαριασμού"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Λογαριασμός"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1024,6 +1048,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1162,6 +1189,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Πανό:"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Σύνδεση"
 
 #, fuzzy
 msgid "Chat List"
@@ -1451,10 +1482,6 @@ msgstr "Μήνυμα κατά_στασης:"
 msgid "Contact Connected"
 msgstr "Σύνδεση επαφής"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Σύνδεση"
-
 msgid "Contact Disconnected"
 msgstr "Αποσύνδεση επαφής"
 
@@ -1674,6 +1701,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 msgid "Deactivated"
 msgstr "Ανενεργό"
@@ -1963,9 +1997,8 @@ msgstr "Τρώω"
 msgid "Edit Name…"
 msgstr "Όνομα:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Επεξεργασία _ομάδων"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2047,6 +2080,9 @@ msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2441,10 +2477,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2648,6 +2680,9 @@ msgstr "Συμμετέχων"
 
 msgid "Hide this menu"
 msgstr "Απόκρυψη αυτού του μενού"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3171,10 +3206,6 @@ msgid "Message"
 msgstr "Μήνυμα"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Μηνύματα"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "περιεχόμενα μηνύματος"
 
@@ -3188,6 +3219,10 @@ msgstr "Το μήνυμα στάλθηκε"
 #, fuzzy
 msgid "Message composition"
 msgstr "περιεχόμενα μηνύματος"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Το μήνυμα στάλθηκε"
 
 #, python-format
 msgid ""
@@ -3360,6 +3395,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Μη έγκυρο όνομα χρήστη"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
 
@@ -3376,7 +3415,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3764,6 +3803,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
@@ -4065,6 +4108,9 @@ msgstr "Νέα είσοδος τώρα;"
 msgid "Re_gister"
 msgstr "_Εγγραφή"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Ανάγνωση άρθρου της _Wikipedia"
 
@@ -4091,6 +4137,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Αιτία"
+
+#, fuzzy
+msgid "Received"
+msgstr "Λήφθηκε το πρώτο μήνυμα"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4219,6 +4269,9 @@ msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4238,6 +4291,9 @@ msgstr "Aφαίρεση του λογαριασμού %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4477,6 +4533,10 @@ msgstr "Σάρωση %d / %d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "μήνυμα κατάστασης"
 
 msgid "Scroll up"
 msgstr ""
@@ -4785,6 +4845,10 @@ msgid "Show Content"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "<b>Λεπτομέρειες</b>"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
@@ -4851,6 +4915,10 @@ msgstr "Κάντε κλικ για να εισάγετε φατσούλα (Alt+M
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5539,9 +5607,6 @@ msgstr "Συμμετέχων"
 msgid "Toggle participants list"
 msgstr "Συμμετέχων"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5701,6 +5766,10 @@ msgid "Unknown command: %s"
 msgstr "Εντολές: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Άγνωστη έκδοση του D-Bus: %s"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Άγνωστος τύπος %s "
 
@@ -5774,6 +5843,10 @@ msgstr "Αποθήκευση αρχείου ως..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Αποθήκευση αρχείου ως..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5976,6 +6049,10 @@ msgid "Workspace Settings"
 msgstr "Προχωρημένες ενέργειες"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Προχωρημένες ενέργειες"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "_Μετονομασία αρχείων"
 
@@ -6010,6 +6087,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Χθες"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Χθες"
+
 msgid "You"
 msgstr "You"
 
@@ -6018,6 +6099,9 @@ msgid "You (%s) joined the group chat"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6063,6 +6147,9 @@ msgstr "Είστε τώρα γνωστός ως %s"
 msgid "You are offline."
 msgstr "αποσυνδεδεμένος"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
@@ -6093,6 +6180,9 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Δε μπορείτε να συμμετάσχετε σε μια ομαδική συζήτηση εκτός αν είστε "
 "συνδεδεμένος."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6180,6 +6270,15 @@ msgstr "Ο νέος σας λογαριασμός δημιουργήθηκε μ�
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Προτιμήσεις"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Ο νέος σας λογαριασμός δημιουργήθηκε με επιτυχία"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Δε μπορεί να σταλεί το μήνυμα σας εκτός αν είστε συνδεδεμένος."
@@ -6497,6 +6596,10 @@ msgid "_Show Certificate"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Προβολή ιδιοτήτων εκτυπωτή"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
@@ -6521,9 +6624,6 @@ msgstr "_Εγγραφή"
 #, fuzzy
 msgid "_Type"
 msgstr "Τύπος:"
-
-msgid "_Undo"
-msgstr ""
 
 #, fuzzy
 msgid "_Unregister account from service"
@@ -7007,6 +7107,14 @@ msgstr ""
 #~ msgstr "Όνομα προφίλ:"
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Επεξεργασία _ομάδων"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Ενεργό"
 
@@ -7018,6 +7126,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Επαφές"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Αιτία"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Μηνύματα"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7025,3 +7141,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Σύνδεση"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Χθες"

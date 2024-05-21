@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2009-10-29 10:21+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -534,6 +534,10 @@ msgid "Add Proxy"
 msgstr "Proxyserver:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Lägg till kontakt..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Registreringen misslyckades"
 
@@ -560,6 +564,10 @@ msgstr "Skapa ny post"
 #, fuzzy
 msgid "Add new line"
 msgstr "Skapa ny post"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Registreringen misslyckades"
 
 #, fuzzy
 msgid "Add some details…"
@@ -710,6 +718,22 @@ msgstr "Ett fel uppstod när kontot skapades"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Ett fel uppstod när kontot skapades"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Ett fel uppstod när kontot skapades"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Konto"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1029,6 +1053,9 @@ msgstr "Spärrlistan är ännu inte giltig"
 msgid "CRL signature failure"
 msgstr "Fel i spärrlistans signatur"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1170,6 +1197,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Banderoll:"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Anslutning"
 
 #, fuzzy
 msgid "Chat List"
@@ -1459,10 +1490,6 @@ msgstr "Chattmeddelande:"
 msgid "Contact Connected"
 msgstr "Kontakt loggade in"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Anslutning"
-
 msgid "Contact Disconnected"
 msgstr "Kontakt loggade ut"
 
@@ -1681,6 +1708,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Registreringen misslyckades"
 
 msgid "Deactivated"
 msgstr "Inaktiverad"
@@ -1969,9 +2003,8 @@ msgstr "Äter"
 msgid "Edit Name…"
 msgstr "Förnamn:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Redigera _grupper"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2053,6 +2086,9 @@ msgstr "Kryptering aktiverad"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Kryptering aktiverad"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2442,10 +2478,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "gajim-remote"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
@@ -2649,6 +2681,9 @@ msgstr "Deltagare"
 
 msgid "Hide this menu"
 msgstr "Dölj denna meny"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3171,10 +3206,6 @@ msgid "Message"
 msgstr "Meddelande"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Meddelanden"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "meddelandeinnehåll"
 
@@ -3188,6 +3219,10 @@ msgstr "Meddelande skickat"
 #, fuzzy
 msgid "Message composition"
 msgstr "Meddelandeinnehåll"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Meddelande skickat"
 
 #, python-format
 msgid ""
@@ -3360,6 +3395,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Självsignerat certifikat"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Inget konto tillgängligt"
 
@@ -3376,7 +3415,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3763,6 +3802,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Visa alla väntande _händelser"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Visa alla väntande _händelser"
 
@@ -4065,6 +4108,9 @@ msgstr "Återanslut nu?"
 msgid "Re_gister"
 msgstr "Re_gistrera"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Läs _Wikipedia Artikel"
 
@@ -4091,6 +4137,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Anledning"
+
+#, fuzzy
+msgid "Received"
+msgstr "Första meddelandet mottaget"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4217,6 +4267,9 @@ msgstr "Ta bort en kontakt från kontaktlista"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4236,6 +4289,9 @@ msgstr "Tar bort %s konto"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4477,6 +4533,10 @@ msgstr "Söker av %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "statusmeddelande"
 
 msgid "Scroll up"
 msgstr ""
@@ -4784,6 +4844,10 @@ msgid "Show Content"
 msgstr "Visa endast _aktiva kontakter"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Detaljer"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Standardmeddelande"
 
@@ -4850,6 +4914,10 @@ msgstr "Visa en lista över känsloikoner (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Visa alla väntande _händelser"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5542,9 +5610,6 @@ msgstr "Deltagare"
 msgid "Toggle participants list"
 msgstr "Deltagare"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5703,6 +5768,10 @@ msgid "Unknown command: %s"
 msgstr "Kommandon: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Okänt SSL-fel: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Okänd titel"
 
@@ -5777,6 +5846,10 @@ msgstr "Spara fil som..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Spara fil som..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Denna tjänst kunde inte hittas"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5980,6 +6053,10 @@ msgid "Workspace Settings"
 msgstr "Avancerade åtgärder"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Avancerade åtgärder"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Byt namn på kontakt"
 
@@ -6015,6 +6092,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Igår"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Igår"
+
 msgid "You"
 msgstr "Du"
 
@@ -6023,6 +6104,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s har gått in i gruppchatten"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6070,6 +6154,9 @@ msgstr "Du är nu känd som %s"
 msgid "You are offline."
 msgstr "frånkopplad"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Du kan gå in i detta rum istället: %s"
@@ -6095,6 +6182,9 @@ msgstr "Du kan inte lägga till dig själv i din kontaktlista."
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Du kan inte synkronisera med ett konto utan att vara ansluten."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6182,6 +6272,15 @@ msgstr "Ditt nya konto har skapats"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Inställningar"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Ditt nya konto har skapats"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Ditt meddelande kan inte skickas förrän du är ansluten."
@@ -6499,6 +6598,10 @@ msgid "_Show Certificate"
 msgstr "Självsignerat certifikat"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Visa _transporter"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Meddela mig när en filöverföring är färdig"
 
@@ -6522,9 +6625,6 @@ msgstr "_Prenumerera"
 #, fuzzy
 msgid "_Type"
 msgstr "_Typ:"
-
-msgid "_Undo"
-msgstr ""
 
 #, fuzzy
 msgid "_Unregister account from service"
@@ -7004,6 +7104,14 @@ msgstr ""
 #~ msgstr "Skickar profil..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Redigera _grupper"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "gajim-remote"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktiv"
 
@@ -7015,6 +7123,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Bjud in _kontakter"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Anledning"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Meddelanden"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7022,3 +7138,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Ans_lut"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Igår"

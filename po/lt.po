@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -518,6 +518,10 @@ msgid "Add Proxy"
 msgstr "Proksis:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Registracija nesėkminga"
 
@@ -544,6 +548,10 @@ msgstr "Kurti naują pranešimą"
 #, fuzzy
 msgid "Add new line"
 msgstr "Kurti naują pranešimą"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Add some details…"
@@ -693,6 +701,22 @@ msgstr "An error occurred during account creation"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "An error occurred during account creation"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "An error occurred during account creation"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Prieiga"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1005,6 +1029,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1143,6 +1170,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Prisijungimas"
 
 #, fuzzy
 msgid "Chat List"
@@ -1427,10 +1458,6 @@ msgstr "Būklės pranešimas:"
 msgid "Contact Connected"
 msgstr "Contact Connected"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Prisijungimas"
-
 msgid "Contact Disconnected"
 msgstr "Contact Disconnected"
 
@@ -1650,6 +1677,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Registracija nesėkminga"
 
 msgid "Deactivated"
 msgstr "Deactivated"
@@ -1932,9 +1966,8 @@ msgstr "Eating"
 msgid "Edit Name…"
 msgstr "Vardas:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Redaguoti _Grupes"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2015,6 +2048,9 @@ msgstr "Encryption enabled"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Encryption enabled"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2404,10 +2440,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2609,6 +2641,9 @@ msgstr "Participant"
 
 msgid "Hide this menu"
 msgstr "Hide this menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3130,10 +3165,6 @@ msgid "Message"
 msgstr ""
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Messages"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "message contents"
 
@@ -3147,6 +3178,10 @@ msgstr "Message Sent"
 #, fuzzy
 msgid "Message composition"
 msgstr "message contents"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Message Sent"
 
 #, python-format
 msgid ""
@@ -3315,6 +3350,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Blogas CA sertifikatas"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "No such account available"
 
@@ -3331,7 +3370,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3717,6 +3756,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Rodyti Visus Laukiančius Į_vykius"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Rodyti Visus Laukiančius Į_vykius"
 
@@ -4015,6 +4058,9 @@ msgstr "Relogin now?"
 msgid "Re_gister"
 msgstr "Re_gister"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Read _Wikipedia Article"
 
@@ -4041,6 +4087,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Reason"
+
+#, fuzzy
+msgid "Received"
+msgstr "First Message Received"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4167,6 +4217,9 @@ msgstr "Removes contact from roster"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4186,6 +4239,9 @@ msgstr "Gajim account %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4421,6 +4477,10 @@ msgstr ""
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "status message"
 
 msgid "Scroll up"
 msgstr ""
@@ -4726,6 +4786,10 @@ msgid "Show Content"
 msgstr "Rodyti Tik _Aktyvius Kontaktus"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Gajim"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Žinutė pagal nutylėjimą"
 
@@ -4798,6 +4862,10 @@ msgstr "Rodyti šypsenėlių sąrašą (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Rodyti Visus Laukiančius Į_vykius"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5477,9 +5545,6 @@ msgstr "Participant"
 msgid "Toggle participants list"
 msgstr "Participant"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5635,6 +5700,10 @@ msgid "Unknown command: %s"
 msgstr "Commands: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Kambario nustatymai"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "A_fter nickname:"
 
@@ -5708,6 +5777,10 @@ msgstr "Save File as..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Save File as..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "The service could not be found"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5909,6 +5982,10 @@ msgid "Workspace Settings"
 msgstr "Išplėstiniai veiksmai"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Išplėstiniai veiksmai"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Removes contact from roster"
 
@@ -5944,6 +6021,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Yesterday"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Yesterday"
+
 msgid "You"
 msgstr "You"
 
@@ -5952,6 +6033,9 @@ msgid "You (%s) joined the group chat"
 msgstr "You have not joined a groupchat."
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, python-format
@@ -5994,6 +6078,9 @@ msgstr "You are now known as %s"
 msgid "You are offline."
 msgstr "offline"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Unable to join group chat"
@@ -6018,6 +6105,9 @@ msgid "You cannot see this contact's online status"
 msgstr "Norėšiau jus įtraukti į savo kontaktų sąrašą."
 
 msgid "You cannot synchronize with an account unless it is connected."
+msgstr ""
+
+msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
 #, fuzzy
@@ -6103,6 +6193,15 @@ msgstr "Your new account has been successfully created"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Nustatymai"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Your new account has been successfully created"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 #, fuzzy
 msgid "Your message can not be sent until you are connected."
@@ -6418,6 +6517,10 @@ msgid "_Show Certificate"
 msgstr "Blogas CA sertifikatas"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Rodyti _Pernašas"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Pranešti, kai failo siuntimas bus baigtas"
 
@@ -6441,9 +6544,6 @@ msgstr ""
 #, fuzzy
 msgid "_Type"
 msgstr "_Tipas:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6912,6 +7012,14 @@ msgstr ""
 #~ msgstr "Sending profile..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Redaguoti _Grupes"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Active"
 
@@ -6923,10 +7031,18 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Kviesti Kontaktus"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Reason"
+
 #, fuzzy
-#~ msgid "Show Gajim"
-#~ msgstr "Gajim"
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Messages"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Prisijungti"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Yesterday"

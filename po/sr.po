@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -532,6 +532,10 @@ msgid "Add Proxy"
 msgstr "Прок_си:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Додај контакт..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Регистрација неуспела"
 
@@ -558,6 +562,10 @@ msgstr "Направи нову објаву"
 #, fuzzy
 msgid "Add new line"
 msgstr "Направи нову објаву"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Регистрација неуспела"
 
 #, fuzzy
 msgid "Add some details…"
@@ -713,6 +721,22 @@ msgstr "Појавила се грешка при креирању налога"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Појавила се грешка при креирању налога"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Појавила се грешка при креирању налога"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Налог"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1033,6 +1057,9 @@ msgstr "CRL није још валидан"
 msgid "CRL signature failure"
 msgstr "Грешка у CRL сертификата"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1172,6 +1199,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Веза"
 
 #, fuzzy
 msgid "Chat List"
@@ -1461,10 +1492,6 @@ msgstr "Порука разговора:"
 msgid "Contact Connected"
 msgstr "Контакт На Вези"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Веза"
-
 msgid "Contact Disconnected"
 msgstr "Контакт Отишао Са Везе"
 
@@ -1684,6 +1711,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Гајим - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Регистрација неуспела"
 
 msgid "Deactivated"
 msgstr "Деактивирано"
@@ -1972,9 +2006,8 @@ msgstr "Једем"
 msgid "Edit Name…"
 msgstr "Име:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Измени групе"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2060,6 +2093,9 @@ msgstr "Захтев за претплатом"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Захтев за претплатом"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2448,10 +2484,6 @@ msgid "Gajim - Error"
 msgstr "Гајим - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Гајим - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Гајим - %s"
 
@@ -2655,6 +2687,9 @@ msgstr "Учесник"
 
 msgid "Hide this menu"
 msgstr "Сакриј овај мени"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3179,10 +3214,6 @@ msgid "Message"
 msgstr "Порука"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Поруке"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "садржај поруке"
 
@@ -3196,6 +3227,10 @@ msgstr "Порука Послата"
 #, fuzzy
 msgid "Message composition"
 msgstr "Садржај поруке"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Порука Послата"
 
 #, python-format
 msgid ""
@@ -3368,6 +3403,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Самопотписани сертификат"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Нема доступних налога"
 
@@ -3384,7 +3423,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3771,6 +3810,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Прикажи св_е догађаје на чекању"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Прикажи св_е догађаје на чекању"
 
@@ -4071,6 +4114,9 @@ msgstr "Отићи са везе и повезати се одмах?"
 msgid "Re_gister"
 msgstr "Ре_гистрација"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Прочитајте чланак на _Википедији"
 
@@ -4098,6 +4144,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Разлог"
+
+#, fuzzy
+msgid "Received"
+msgstr "Примљена Прва Порука"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4224,6 +4274,9 @@ msgstr "Уклања контакт са листе"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4244,6 +4297,9 @@ msgstr "Уклањање рачуна %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4484,6 +4540,10 @@ msgstr "Скенирање %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "статусна порука"
 
 msgid "Scroll up"
 msgstr ""
@@ -4788,6 +4848,10 @@ msgid "Show Content"
 msgstr "Прикажи само _активне контакте"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Гајим"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Подразумевана порука"
 
@@ -4860,6 +4924,10 @@ msgstr "Прикажи листу смајлија (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Прикажи св_е догађаје на чекању"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5553,9 +5621,6 @@ msgstr "Учесник"
 msgid "Toggle participants list"
 msgstr "Учесник"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5714,6 +5779,10 @@ msgid "Unknown command: %s"
 msgstr "наредба"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Непозната SSL грешка: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Непознат наслов"
 
@@ -5788,6 +5857,10 @@ msgstr "Сними датотеку као..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Сними датотеку као..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Услуга не може бити нађена"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5991,6 +6064,10 @@ msgid "Workspace Settings"
 msgstr "Регистрација неуспела"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Регистрација неуспела"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Преименуј контакт"
 
@@ -6026,6 +6103,10 @@ msgstr "Да"
 msgid "Yesterday"
 msgstr "Јуче"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Јуче"
+
 msgid "You"
 msgstr "Ви"
 
@@ -6034,6 +6115,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s се придружио групном разговору"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6080,6 +6164,9 @@ msgstr "Од сада сте познати као %s"
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Можете се прикључити соби %s уместо ове"
@@ -6105,6 +6192,9 @@ msgstr "Не можете додати себе у Вашу листу конт�
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Не можете се синхронизовати са налогом ако нисте повезани."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6192,6 +6282,15 @@ msgstr "Ваш нови налог је успешно направљен"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Подешавања"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Ваш нови налог је успешно направљен"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 #, fuzzy
 msgid "Your message can not be sent until you are connected."
@@ -6506,6 +6605,10 @@ msgid "_Show Certificate"
 msgstr "Самопотписани сертификат"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Прикажи транс_порте"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Обавести ме када се заврши пренос датотеке"
 
@@ -6529,9 +6632,6 @@ msgstr "_Претплати се"
 #, fuzzy
 msgid "_Type"
 msgstr "Врс_та:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7005,6 +7105,14 @@ msgstr ""
 #~ msgstr "Слање профила..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Измени групе"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Гајим - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Активно"
 
@@ -7016,10 +7124,18 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Позови контакте"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Разлог"
+
 #, fuzzy
-#~ msgid "Show Gajim"
-#~ msgstr "Гајим"
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Поруке"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Отићи са везе и повезати се одмах?"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Јуче"

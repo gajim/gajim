@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -538,6 +538,10 @@ msgid "Add Proxy"
 msgstr "Proxy:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Tilslutning fejlede"
 
@@ -564,6 +568,10 @@ msgstr "Lav en ny post"
 #, fuzzy
 msgid "Add new line"
 msgstr "Lav en ny post"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Tilslutning fejlede"
 
 #, fuzzy
 msgid "Add some details…"
@@ -717,6 +725,22 @@ msgstr "Under oprettelsen af kontoen opstod der en fejl"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Under oprettelsen af kontoen opstod der en fejl"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Under oprettelsen af kontoen opstod der en fejl"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Konto"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1039,6 +1063,9 @@ msgstr "CRL er endnu ikke gyldigt"
 msgid "CRL signature failure"
 msgstr "CRL signatur fejl"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1178,6 +1205,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Tilslutning"
 
 #, fuzzy
 msgid "Chat List"
@@ -1465,10 +1496,6 @@ msgstr "Samtale besked:"
 msgid "Contact Connected"
 msgstr "Kontakt er Tilsluttet"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Tilslutning"
-
 msgid "Contact Disconnected"
 msgstr "Kontakt er ikke Tilsluttet"
 
@@ -1687,6 +1714,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Tilslutning fejlede"
 
 msgid "Deactivated"
 msgstr "Ikke aktiveret"
@@ -1973,9 +2007,8 @@ msgstr "Spiser"
 msgid "Edit Name…"
 msgstr "Fornavn:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Ændre _Grupper"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2062,6 +2095,9 @@ msgstr "Abonnement forespørgsel"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Abonnement forespørgsel"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2449,10 +2485,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2655,6 +2687,9 @@ msgstr "Deltager"
 
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3181,10 +3216,6 @@ msgid "Message"
 msgstr "Besked"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Beskeder"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "besked indhold"
 
@@ -3198,6 +3229,10 @@ msgstr "Besked er Sendt"
 #, fuzzy
 msgid "Message composition"
 msgstr "Besked indhold"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Besked er Sendt"
 
 #, python-format
 msgid ""
@@ -3370,6 +3405,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Selvsigneret certifikat"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Ingen konto tilgængelig"
 
@@ -3386,7 +3425,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3773,6 +3812,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Vis Alle Ventende Hænd_elser"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Vis Alle Ventende Hænd_elser"
 
@@ -4073,6 +4116,9 @@ msgstr "Log ind igen nu?"
 msgid "Re_gister"
 msgstr "Re_gistrer"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Læs _Wikipedia Artikel"
 
@@ -4100,6 +4146,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Grund"
+
+#, fuzzy
+msgid "Received"
+msgstr "Første Besked er Modtaget"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4226,6 +4276,9 @@ msgstr "Fjerner kontakt fra kontaktvinduet"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4245,6 +4298,9 @@ msgstr "Fjerne kontoen med navnet %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4484,6 +4540,10 @@ msgstr "Skanner %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "status besked"
 
 msgid "Scroll up"
 msgstr ""
@@ -4789,6 +4849,10 @@ msgid "Show Content"
 msgstr "Vis Kun _Aktive Kontakter"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Detaljer"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Standard Besked"
 
@@ -4861,6 +4925,10 @@ msgstr "Hvis en liste over følelsesikoner (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Vis Alle Ventende Hænd_elser"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5554,9 +5622,6 @@ msgstr "Deltager"
 msgid "Toggle participants list"
 msgstr "Deltager"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5715,6 +5780,10 @@ msgid "Unknown command: %s"
 msgstr "Kommando"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Ukendt SSL fejl: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Ukendt Titel"
 
@@ -5789,6 +5858,10 @@ msgstr "Gem Fil som..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Gem Fil som..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Tjenesten findes ikke"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5993,6 +6066,10 @@ msgid "Workspace Settings"
 msgstr "Avancerede Handlinger"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Avancerede Handlinger"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Omdøb Kontakt"
 
@@ -6028,6 +6105,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "I går"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "I går"
+
 msgid "You"
 msgstr "Du"
 
@@ -6036,6 +6117,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s deltager nu i gruppe samtalen"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6081,6 +6165,9 @@ msgstr "Du er nu kendt som %s"
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Du kan deltage i dette rum i stedet: %s"
@@ -6106,6 +6193,9 @@ msgstr "Du kan ikke tilføje dig selv til kontaktvinduet."
 
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Du kan kun synkronisere med en konto hvis du er tilsluttet."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6193,6 +6283,15 @@ msgstr "Din nye konto er blevet oprettet med succes"
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Indstillinger"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Din nye konto er blevet oprettet med succes"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Din besked kan ikke blive sendt før du er tilsluttet."
@@ -6507,6 +6606,10 @@ msgid "_Show Certificate"
 msgstr "Selvsigneret certifikat"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Vis Trans_porter"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Påmind mig når en filoverførsel er færdig"
 
@@ -6530,9 +6633,6 @@ msgstr "_Abonner"
 #, fuzzy
 msgid "_Type"
 msgstr "_Type:"
-
-msgid "_Undo"
-msgstr "_Fortryd"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7004,6 +7104,14 @@ msgstr ""
 #~ msgstr "Sender profil..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Ændre _Grupper"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktiv"
 
@@ -7015,6 +7123,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Inviter _Kontakter"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Grund"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Beskeder"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7022,3 +7138,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Log ind igen nu?"
+
+#~ msgid "_Undo"
+#~ msgstr "_Fortryd"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "I går"

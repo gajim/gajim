@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
-"PO-Revision-Date: 2023-11-15 07:57+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"PO-Revision-Date: 2023-12-15 09:52+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
-"\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
+">\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -497,6 +497,10 @@ msgstr "Dodaj grupę…"
 msgid "Add Proxy"
 msgstr "Dodaj proxy"
 
+#, fuzzy
+msgid "Add Reaction…"
+msgstr "Dodaj kontakt…"
+
 msgid "Add Setting"
 msgstr "Dodaj ustawienie"
 
@@ -520,6 +524,10 @@ msgstr "Dodaj nowy motyw"
 
 msgid "Add new line"
 msgstr "Dodaj nowy wiersz"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Dodaj ustawienie"
 
 msgid "Add some details…"
 msgstr "Dodaj trochę szczegółów…"
@@ -646,6 +654,22 @@ msgstr "Wystąpił błąd w trakcie próby zmiany Twojego hasła."
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Wystąpił błąd w trakcie próby utworzenia pliku w %(path)s: %(error)s"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Wystąpił błąd w trakcie próby utworzenia pliku w %(path)s: %(error)s"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Nazwa konta…"
 
 msgid "Anonymous login not supported"
 msgstr "Logowanie anonimowe nieobsługiwane"
@@ -916,6 +940,9 @@ msgstr "CRL nie jest prawidłowy"
 msgid "CRL signature failure"
 msgstr "Błąd podpisu CRL"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr "Rozmowa"
 
@@ -1041,6 +1068,10 @@ msgstr "Baner rozmowy: kolor pierwszoplanowy"
 
 msgid "Chat Banner: Text Font"
 msgstr "Baner rozmowy: kolor tekstu"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Szczegóły kontaktu i ustawienia"
 
 msgid "Chat List"
 msgstr "Lista kontaktów"
@@ -1304,9 +1335,6 @@ msgstr "Adresy kontaktowe"
 msgid "Contact Connected"
 msgstr "Kontakt połączył się"
 
-msgid "Contact Details and Settings"
-msgstr "Szczegóły kontaktu i ustawienia"
-
 msgid "Contact Disconnected"
 msgstr "Kontakt rozłączył się"
 
@@ -1480,6 +1508,13 @@ msgstr "Interfejs D-Bus"
 
 msgid "Dark Theme"
 msgstr "Ciemny motyw"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Rejestracja nie powiodła się"
 
 msgid "Deactivated"
 msgstr "Nieaktywny"
@@ -1727,8 +1762,8 @@ msgstr "Jem"
 msgid "Edit Name…"
 msgstr "Edytuj nazwę…"
 
-msgid "Edit workspace…"
-msgstr "Edytuj obszar roboczy…"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 msgid "Edit…"
 msgstr "Edytuj…"
@@ -1812,6 +1847,9 @@ msgstr "Szyfrowanie (OMEMO)"
 
 msgid "Encryption error"
 msgstr "Błąd szyfrowania"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2148,9 +2186,6 @@ msgstr "Gajim %s jest dostępny"
 msgid "Gajim - Error"
 msgstr "Gajim — błąd"
 
-msgid "Gajim Team"
-msgstr "Zespół Gajima"
-
 msgid "Gajim Themes"
 msgstr "Motywy Gajima"
 
@@ -2335,6 +2370,9 @@ msgstr "Ukryj listę rozmów"
 
 msgid "Hide this menu"
 msgstr "Ukryj to menu"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 msgid "Home"
 msgstr "Dom"
@@ -2806,9 +2844,6 @@ msgstr "Wzmianka: kolor tła wiadomości"
 msgid "Message"
 msgstr "Wiadomość"
 
-msgid "Message Correction: Background Color"
-msgstr "Poprawka wiadomości: kolor tła"
-
 msgid "Message Receipts (✔)"
 msgstr "Potwierdzenie otrzymania (✔)"
 
@@ -2820,6 +2855,10 @@ msgstr "Wiadomość została wysłana"
 
 msgid "Message composition"
 msgstr "Pisanie wiadomości"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Wiadomość została wysłana"
 
 #, python-format
 msgid ""
@@ -2970,6 +3009,10 @@ msgstr "Brak dodatkowych wymagań"
 msgid "No automatic preview"
 msgstr "Brak automatycznego podglądu"
 
+#, fuzzy
+msgid "No certificate"
+msgstr "Certyfikat"
+
 msgid "No commands available"
 msgstr "Żadne polecenia nie są dostępne"
 
@@ -2990,7 +3033,8 @@ msgstr ""
 "Nie ma więcej kontaktów.\n"
 "Możesz również wpisać adres XMPP."
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+#, fuzzy
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 "Nie odnaleziono urządzeń, dla których można zaszyfrować tę wiadomość. Trwa "
 "wyszukiwanie urządzeń…"
@@ -3332,6 +3376,10 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "Wstrzymany"
 
+#, fuzzy
+msgid "Pending"
+msgstr "Oczekujące zdarzenie"
+
 msgid "Pending Event"
 msgstr "Oczekujące zdarzenie"
 
@@ -3593,6 +3641,9 @@ msgstr "Zalogować ponownie teraz?"
 msgid "Re_gister"
 msgstr "Za_rejestruj"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Przeczytaj artykuł na _Wikipedii"
 
@@ -3617,6 +3668,10 @@ msgstr "Powód zniszczenia"
 #, python-format
 msgid "Reason: %s"
 msgstr "Powód: %s"
+
+#, fuzzy
+msgid "Received"
+msgstr "Otrzymana"
 
 msgctxt "Message state"
 msgid "Received"
@@ -3719,6 +3774,10 @@ msgstr "Usuń z listy kontaktów"
 msgid "Remove this workspace"
 msgstr "Usuń ten obszar roboczy"
 
+#, fuzzy
+msgid "Remove your group chat avatar"
+msgstr "Usuń swój obrazek profilowy"
+
 msgid "Remove your profile picture"
 msgstr "Usuń swój obrazek profilowy"
 
@@ -3738,6 +3797,9 @@ msgstr "Usuwanie konta…"
 msgctxt "Group chat name"
 msgid "Repairs"
 msgstr "Naprawy"
+
+msgid "Reply…"
+msgstr ""
 
 msgid "Report"
 msgstr "Zgłoś"
@@ -3940,6 +4002,10 @@ msgstr "Skanowanie %(current)d / %(total)d…"
 
 msgid "Scroll down"
 msgstr "Przewiń w dół"
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "Ustaw wiadomość statusu"
 
 msgid "Scroll up"
 msgstr "Przewiń w górę"
@@ -4203,6 +4269,10 @@ msgstr "Pokaż informacje o kontakcie"
 msgid "Show Content"
 msgstr "Pokaż treść"
 
+#, fuzzy
+msgid "Show Details"
+msgstr "Szczegóły"
+
 msgid "Show Inactive Devices"
 msgstr "Pokaż nieaktywne urządzenia"
 
@@ -4260,6 +4330,10 @@ msgstr "Pokaż listę emoji"
 
 msgid "Show a live preview to test your video source"
 msgstr "Pokaż podgląd na żywo, żeby przetestować źródło wideo"
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Pokazuj wszystkie ostrzeżenia"
 
 msgid "Show all warnings"
 msgstr "Pokazuj wszystkie ostrzeżenia"
@@ -4906,9 +4980,6 @@ msgstr "Przełącz listę rozmów"
 msgid "Toggle participants list"
 msgstr "Przełącz listę uczestników"
 
-msgid "Topic"
-msgstr "Temat"
-
 msgctxt "File transfer state"
 msgid "Transferred: "
 msgstr "Przesłano: "
@@ -5051,6 +5122,10 @@ msgstr "Nieznany tytuł"
 msgid "Unknown command: %s"
 msgstr "Nieznane polecenie: %s"
 
+#, fuzzy
+msgid "Unknown error."
+msgstr "Nieznany błąd SSL „%s”"
+
 msgid "Unknown language"
 msgstr "Nieznany język"
 
@@ -5111,6 +5186,10 @@ msgstr "Wyślij pliki"
 
 msgid "Upload File…"
 msgstr "Udostępnij plik…"
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Wybrany obraz nie mógł być załadowany."
 
 msgid "Uploading Avatar Failed"
 msgstr "Wysyłanie awataru nie powiodło się"
@@ -5298,6 +5377,10 @@ msgstr "Praca"
 msgid "Workspace Settings"
 msgstr "Ustawienia obszaru roboczego"
 
+#, fuzzy
+msgid "Workspace settings…"
+msgstr "Ustawienia obszaru roboczego"
+
 msgid "Workspaces"
 msgstr "Obszary robocze"
 
@@ -5328,6 +5411,10 @@ msgstr "Tak"
 msgid "Yesterday"
 msgstr "Wczoraj"
 
+#, python-format
+msgid "Yesterday (%s)"
+msgstr "Wczoraj (%s)"
+
 msgid "You"
 msgstr "Ty"
 
@@ -5336,6 +5423,10 @@ msgid "You (%s) joined the group chat"
 msgstr "Dołączyłeś (jako %s) do rozmowy grupowej"
 
 msgid "You are a visitor"
+msgstr "Jesteś gościem"
+
+#, fuzzy
+msgid "You are a visitor."
 msgstr "Jesteś gościem"
 
 #, python-format
@@ -5380,6 +5471,9 @@ msgstr "Jesteś teraz {show}{status}"
 msgid "You are offline."
 msgstr "Jesteś niedostępny."
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Możesz zamiast tego dołączyć do tej rozmowy grupowej: %s"
@@ -5403,6 +5497,9 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Nie możesz zsynchronizować się z kontem dopóki nie jest ono połączone "
 "z siecią."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Nie masz uprawnień do tworzenia plików w tym folderze."
@@ -5480,6 +5577,15 @@ msgstr "Twoje konto zostało pomyślnie usunięte."
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Twoje preferencje archiwizacji zostały pomyślnie zapisane."
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Twoje konto zostało pomyślnie usunięte."
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Nie możesz wysłać wiadomości dopóki nie będziesz połączony."
@@ -5739,6 +5845,10 @@ msgstr "_Wyślij"
 msgid "_Show Certificate"
 msgstr "_Pokaż certyfikat"
 
+#, fuzzy
+msgid "_Show menu bar"
+msgstr "Pokaż na pasku zadań"
+
 msgid "_Show notification when file transfer is complete"
 msgstr "_Pokaż powiadomienie gdy przesyłanie pliku dobiegnie końca"
 
@@ -5759,9 +5869,6 @@ msgstr "_Autoryzuj"
 
 msgid "_Type"
 msgstr "_Typ"
-
-msgid "_Undo"
-msgstr "_Cofnij"
 
 msgid "_Unregister account from service"
 msgstr "_Wyrejestruj konto z usługi"
@@ -6228,6 +6335,12 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Edit Profile…"
 #~ msgstr "Edytuj profil…"
 
+#~ msgid "Edit workspace…"
+#~ msgstr "Edytuj obszar roboczy…"
+
+#~ msgid "Gajim Team"
+#~ msgstr "Zespół Gajima"
+
 #~ msgid "Inactive"
 #~ msgstr "Nieaktywny"
 
@@ -6236,6 +6349,13 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Invite New Contact"
 #~ msgstr "Zaproś nowy kontakt"
+
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Ostatnio widziany: %s"
+
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Poprawka wiadomości: kolor tła"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Jednostka Organizacyjna (OU)"
@@ -6249,11 +6369,21 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Przełącz na pierwszy — dziewiąty obszar roboczy"
 
+#~ msgid "Topic"
+#~ msgstr "Temat"
+
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Upuściłeś coś, czego Gajim nie potrafi obsłużyć: %s"
 
 #~ msgid "_Login"
 #~ msgstr "Za_loguj"
 
+#~ msgid "_Undo"
+#~ msgstr "_Cofnij"
+
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Wczoraj"

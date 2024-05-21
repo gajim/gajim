@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -500,6 +500,10 @@ msgid "Add Proxy"
 msgstr "Prox_y:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Afegeix Contacte..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Connectors"
 
@@ -525,6 +529,10 @@ msgstr "Activa"
 
 msgid "Add new line"
 msgstr ""
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Connectors"
 
 #, fuzzy
 msgid "Add some details…"
@@ -673,6 +681,22 @@ msgstr "Cliqui per a canviar la contrasenya del compte"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Cliqui per a canviar la contrasenya del compte"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Cliqui per a canviar la contrasenya del compte"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Fila del compte "
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -972,6 +996,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1107,6 +1134,10 @@ msgstr ""
 #, fuzzy
 msgid "Chat Banner: Text Font"
 msgstr "Banner del Xat"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Connexió"
 
 #, fuzzy
 msgid "Chat List"
@@ -1380,10 +1411,6 @@ msgstr "_Copia adreça JID/Email"
 msgid "Contact Connected"
 msgstr ""
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Connexió"
-
 msgid "Contact Disconnected"
 msgstr ""
 
@@ -1591,6 +1618,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Personalització Temes Gajim"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "_No Disponible"
 
 msgid "Deactivated"
 msgstr ""
@@ -1858,7 +1892,7 @@ msgstr ""
 msgid "Edit Name…"
 msgstr "Nom:"
 
-msgid "Edit workspace…"
+msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
 #, fuzzy
@@ -1936,6 +1970,9 @@ msgstr "Connexió"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Connexió"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2308,10 +2345,6 @@ msgid "Gajim - Error"
 msgstr ""
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Personalització Temes Gajim"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Personalització Temes Gajim"
 
@@ -2509,6 +2542,9 @@ msgid "Hide chat list"
 msgstr "Accions Ocupant"
 
 msgid "Hide this menu"
+msgstr ""
+
+msgid "Hide/show the main window menu"
 msgstr ""
 
 #, fuzzy
@@ -3002,9 +3038,6 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-msgid "Message Correction: Background Color"
-msgstr ""
-
 msgid "Message Receipts (✔)"
 msgstr ""
 
@@ -3016,6 +3049,9 @@ msgid "Message Sent"
 msgstr ""
 
 msgid "Message composition"
+msgstr ""
+
+msgid "Message content unknown"
 msgstr ""
 
 #, python-format
@@ -3180,6 +3216,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Certificat de client"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Transferència de Fitxers"
 
@@ -3196,7 +3236,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3572,6 +3612,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Events _Personals"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Events _Personals"
 
@@ -3857,6 +3901,9 @@ msgstr ""
 msgid "Re_gister"
 msgstr ""
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr ""
 
@@ -3881,6 +3928,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Versió:"
+
+#, fuzzy
+msgid "Received"
+msgstr "Envia Missatge Privat"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4004,6 +4055,9 @@ msgstr "Esborra transferència de fitxer de la llista."
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4023,6 +4077,9 @@ msgstr "Fusiona comptes"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4252,6 +4309,10 @@ msgstr ""
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "_Canvia Missatge d'Estat"
 
 msgid "Scroll up"
 msgstr ""
@@ -4545,6 +4606,10 @@ msgid "Show Content"
 msgstr "Mostra Contactes Actius"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Gajim"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Disponible per parlar"
 
@@ -4611,6 +4676,10 @@ msgstr "Mostra una llista d'emoticones (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Show all warnings"
 msgstr ""
@@ -5256,9 +5325,6 @@ msgstr "Accions Ocupant"
 msgid "Toggle participants list"
 msgstr "Accions Ocupant"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5414,6 +5480,10 @@ msgid "Unknown command: %s"
 msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Sobrenom:"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Sobrenom:"
 
@@ -5482,6 +5552,9 @@ msgid "Upload Files"
 msgstr "Envia _Fitxer"
 
 msgid "Upload File…"
+msgstr ""
+
+msgid "Upload could not be completed."
 msgstr ""
 
 msgid "Uploading Avatar Failed"
@@ -5676,6 +5749,10 @@ msgid "Workspace Settings"
 msgstr "Connectors"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Connectors"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Afegeix un contacte nou"
 
@@ -5708,6 +5785,10 @@ msgstr "Sí"
 msgid "Yesterday"
 msgstr ""
 
+#, python-format
+msgid "Yesterday (%s)"
+msgstr ""
+
 msgid "You"
 msgstr ""
 
@@ -5716,6 +5797,9 @@ msgid "You (%s) joined the group chat"
 msgstr ""
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, python-format
@@ -5757,6 +5841,9 @@ msgstr ""
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Grups de xat"
@@ -5781,6 +5868,9 @@ msgid "You cannot see this contact's online status"
 msgstr "Voldria afegir-te a la meva llista de contactes."
 
 msgid "You cannot synchronize with an account unless it is connected."
+msgstr ""
+
+msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -5859,6 +5949,15 @@ msgid "Your account has has been removed successfully."
 msgstr "El compte s'ha configurat correctament"
 
 msgid "Your archiving preferences have successfully been saved."
+msgstr ""
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "El compte s'ha configurat correctament"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
 msgstr ""
 
 msgid "Your message can not be sent until you are connected."
@@ -6165,6 +6264,10 @@ msgid "_Show Certificate"
 msgstr "Certificat de client"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Mostra Transports"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
@@ -6187,9 +6290,6 @@ msgstr ""
 #, fuzzy
 msgid "_Type"
 msgstr "_Tipus:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6589,6 +6689,10 @@ msgstr ""
 #~ msgstr "Perfil"
 
 #, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Personalització Temes Gajim"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Activa"
 
@@ -6600,6 +6704,6 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Convida _Contactes"
 
-#, fuzzy
-#~ msgid "Show Gajim"
-#~ msgstr "Gajim"
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Versió:"

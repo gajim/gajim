@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -529,6 +529,10 @@ msgid "Add Proxy"
 msgstr "Proxy:"
 
 #, fuzzy
+msgid "Add Reaction…"
+msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
 msgid "Add Setting"
 msgstr "Konexioak huts egin du"
 
@@ -555,6 +559,10 @@ msgstr "Mezu berria sortu"
 #, fuzzy
 msgid "Add new line"
 msgstr "Mezu berria sortu"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Add some details…"
@@ -703,6 +711,22 @@ msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
 #, fuzzy, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Errore bat gertatu da kontua sortzen zen bitartean"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Kontua"
 
 msgid "Anonymous login not supported"
 msgstr ""
@@ -1017,6 +1041,9 @@ msgstr ""
 msgid "CRL signature failure"
 msgstr ""
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr ""
 
@@ -1158,6 +1185,10 @@ msgstr ""
 
 msgid "Chat Banner: Text Font"
 msgstr ""
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Konektatu"
 
 #, fuzzy
 msgid "Chat List"
@@ -1447,10 +1478,6 @@ msgstr "Egoera mezua:"
 msgid "Contact Connected"
 msgstr "Kontaktua Konektatuta"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Konektatu"
-
 msgid "Contact Disconnected"
 msgstr "Kontaktua Deskonektatuta"
 
@@ -1669,6 +1696,13 @@ msgstr ""
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Deactivated"
@@ -1955,9 +1989,8 @@ msgstr "Jaten"
 msgid "Edit Name…"
 msgstr "Lehen Izena:"
 
-#, fuzzy
-msgid "Edit workspace…"
-msgstr "Editatu _Taldeak"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 #, fuzzy
 msgid "Edit…"
@@ -2039,6 +2072,9 @@ msgstr "Enkriptazioa aktibatuta"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Enkriptazioa aktibatuta"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2432,10 +2468,6 @@ msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
 #, fuzzy
-msgid "Gajim Team"
-msgstr "Gajim - %s"
-
-#, fuzzy
 msgid "Gajim Themes"
 msgstr "Gajim - %s"
 
@@ -2639,6 +2671,9 @@ msgstr "Partaidea"
 
 msgid "Hide this menu"
 msgstr "Ezkutatu Menua"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -3166,10 +3201,6 @@ msgid "Message"
 msgstr "Mezua"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Mezuak"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "mezuaren edukia"
 
@@ -3183,6 +3214,10 @@ msgstr "Mezua Bidaltzean"
 #, fuzzy
 msgid "Message composition"
 msgstr "mezuaren edukia"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Mezua Bidaltzean"
 
 #, python-format
 msgid ""
@@ -3353,6 +3388,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Baliogabeko izena"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Ez dago konturik erabilgarri"
 
@@ -3369,7 +3408,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3758,6 +3797,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Ikusi Gabeko _Gertaerak"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Ikusi Gabeko _Gertaerak"
 
@@ -4057,6 +4100,9 @@ msgstr "Birkargatu orain?"
 msgid "Re_gister"
 msgstr "Erre_gistratu"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Irakurri _Wikipedia Artikuloa"
 
@@ -4083,6 +4129,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Arrazoia"
+
+#, fuzzy
+msgid "Received"
+msgstr "Lehen Mezu Jasoa"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4212,6 +4262,9 @@ msgstr "Zerrendatik kontaktua ezabatu"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4231,6 +4284,9 @@ msgstr "%s kontua ezabatzen"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4468,6 +4524,10 @@ msgstr "Eskaneatzen  %d / %d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "egoera mezua"
 
 msgid "Scroll up"
 msgstr ""
@@ -4775,6 +4835,10 @@ msgid "Show Content"
 msgstr "Ikusi _Deskonektatutako Kontaktuak"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Zehaztapenak"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Berezko Egoera Mezuak"
 
@@ -4847,6 +4911,10 @@ msgstr "Sakatu emoticon bat ezartzeko (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Ikusi Gabeko _Gertaerak"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5536,9 +5604,6 @@ msgstr "Partaidea"
 msgid "Toggle participants list"
 msgstr "Partaidea"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5696,6 +5761,10 @@ msgid "Unknown command: %s"
 msgstr "Azalpenak: %s"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "D-Bus bertsioa aurkitugabea: %s"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Izengoitiaren on_doren:"
 
@@ -5769,6 +5838,10 @@ msgstr "Gorde Bezala..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Gorde Bezala..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Zerbitzua ezin izan da aurkitu"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5971,6 +6044,10 @@ msgid "Workspace Settings"
 msgstr "Ekintza Aurreratuak"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Ekintza Aurreratuak"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Berridatzi Kontaktua"
 
@@ -6006,6 +6083,10 @@ msgstr ""
 msgid "Yesterday"
 msgstr "Atzo"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Atzo"
+
 msgid "You"
 msgstr "Zu"
 
@@ -6014,6 +6095,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s gelan sartu da"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -6057,6 +6141,9 @@ msgstr "Orain %s bezala ezaguna zara"
 msgid "You are offline."
 msgstr "deskonektatuta"
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "%s gelan sartu da"
@@ -6083,6 +6170,9 @@ msgstr "Nire zerrendara gehitu nahi zaitut."
 #, fuzzy
 msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Ezin duzu txat talde batera sartu konektatuta ez zauden bitartean."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6170,6 +6260,15 @@ msgstr "Zure kontu berria egoki sortua izan da."
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "_Hobespenak"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Zure kontu berria egoki sortua izan da."
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Zure mezua ezin da bidali konektatu harte"
@@ -6486,6 +6585,10 @@ msgid "_Show Certificate"
 msgstr "Baliogabeko izena"
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Trans_porteak Erakutsi"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Jakinarazi  fitxeroa transferitu denean"
 
@@ -6510,9 +6613,6 @@ msgstr "_Harpidetu"
 #, fuzzy
 msgid "_Type"
 msgstr "Mota:"
-
-msgid "_Undo"
-msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6989,6 +7089,14 @@ msgstr ""
 #~ msgstr "Profila bidaltzen..."
 
 #, fuzzy
+#~ msgid "Edit workspace…"
+#~ msgstr "Editatu _Taldeak"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Gajim - %s"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktibatuta"
 
@@ -7000,6 +7108,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Kontaktua"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Arrazoia"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Mezuak"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7007,3 +7123,7 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Log aktibatua"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Atzo"

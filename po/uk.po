@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-14 20:07+0000\n"
+"POT-Creation-Date: 2024-05-21 14:06+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -502,6 +502,10 @@ msgstr "Додати групу…"
 msgid "Add Proxy"
 msgstr "Додати проксі"
 
+#, fuzzy
+msgid "Add Reaction…"
+msgstr "Додати _контакт…"
+
 msgid "Add Setting"
 msgstr "Додати налаштування"
 
@@ -525,6 +529,10 @@ msgstr "Додати нову тему"
 
 msgid "Add new line"
 msgstr "Додати новий рядок"
+
+#, fuzzy
+msgid "Add reaction"
+msgstr "Додати налаштування"
 
 msgid "Add some details…"
 msgstr "Додати подробиці…"
@@ -656,6 +664,22 @@ msgstr "Під час спроби зміни пароля сталася пом
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
 msgstr "Під час спроби створення файлу %(path)s сталася помилка: %(error)s"
+
+#, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
+"in group \"{group}\""
+msgstr ""
+
+#, fuzzy, python-brace-format
+msgid ""
+"An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
+"{error}"
+msgstr "Під час спроби створення файлу %(path)s сталася помилка: %(error)s"
+
+#, fuzzy
+msgid "And more..."
+msgstr "Назва облікового запису..."
 
 msgid "Anonymous login not supported"
 msgstr "Анонімний вхід не підтримується"
@@ -943,6 +967,9 @@ msgstr "Строк дії CRL ще не почався"
 msgid "CRL signature failure"
 msgstr "Помилка під час роботи з підписом списку відкликаних сертифікатів"
 
+msgid "C_opy"
+msgstr ""
+
 msgid "Call"
 msgstr "Дзвінок"
 
@@ -1072,6 +1099,10 @@ msgstr "Заголовок балачки: колір тексту"
 
 msgid "Chat Banner: Text Font"
 msgstr "Заголовок балачки: шрифт"
+
+#, fuzzy
+msgid "Chat Details and Settings"
+msgstr "Налаштування з'єднання"
 
 #, fuzzy
 msgid "Chat List"
@@ -1327,10 +1358,6 @@ msgstr "Контактні адреси"
 msgid "Contact Connected"
 msgstr "Контакт з'єднано"
 
-#, fuzzy
-msgid "Contact Details and Settings"
-msgstr "Налаштування з'єднання"
-
 msgid "Contact Disconnected"
 msgstr "Контакт від'єднано"
 
@@ -1516,6 +1543,13 @@ msgstr "Інтерфейс D-Bus"
 
 msgid "Dark Theme"
 msgstr "Темна тема"
+
+msgid "Database Migration"
+msgstr ""
+
+#, fuzzy
+msgid "Database migration failed"
+msgstr "Спроба з’єднання завершилася невдало"
 
 msgid "Deactivated"
 msgstr "Вимкнено"
@@ -1776,8 +1810,8 @@ msgstr "Їм"
 msgid "Edit Name…"
 msgstr "Змінити ім'я…"
 
-msgid "Edit workspace…"
-msgstr "Редагувати робочий простір…"
+msgid "Edit your message (Esc to cancel)…"
+msgstr ""
 
 msgid "Edit…"
 msgstr "Змінити…"
@@ -1860,6 +1894,9 @@ msgstr "Вимагається шифрування"
 #, fuzzy
 msgid "Encryption error"
 msgstr "Вимагається шифрування"
+
+msgid "Encryption is not available in private chats"
+msgstr ""
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -2216,10 +2253,6 @@ msgstr "З'єднання недоступне"
 msgid "Gajim - Error"
 msgstr "Gajim - %s"
 
-#, fuzzy
-msgid "Gajim Team"
-msgstr "Теми Gajim"
-
 msgid "Gajim Themes"
 msgstr "Теми Gajim"
 
@@ -2422,6 +2455,9 @@ msgstr "Перемкнути відео сессію"
 
 msgid "Hide this menu"
 msgstr "Сховати це меню"
+
+msgid "Hide/show the main window menu"
+msgstr ""
 
 #, fuzzy
 msgid "Home"
@@ -2961,10 +2997,6 @@ msgid "Message"
 msgstr "Повідомлення"
 
 #, fuzzy
-msgid "Message Correction: Background Color"
-msgstr "Повідомлення"
-
-#, fuzzy
 msgid "Message Receipts (✔)"
 msgstr "вміст повідомлення"
 
@@ -2978,6 +3010,10 @@ msgstr "Повідомлення надіслано"
 #, fuzzy
 msgid "Message composition"
 msgstr "Вміст повідомлення"
+
+#, fuzzy
+msgid "Message content unknown"
+msgstr "Повідомлення надіслано"
 
 #, fuzzy, python-format
 msgid ""
@@ -3149,6 +3185,10 @@ msgid "No automatic preview"
 msgstr ""
 
 #, fuzzy
+msgid "No certificate"
+msgstr "Сертифікат"
+
+#, fuzzy
 msgid "No commands available"
 msgstr "Немає жодного облікового запису"
 
@@ -3165,7 +3205,7 @@ msgid ""
 "You can also type an XMPP address."
 msgstr ""
 
-msgid "No devices found to encypt this message to. Querying for devices now…"
+msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
@@ -3554,6 +3594,10 @@ msgid "Paused"
 msgstr ""
 
 #, fuzzy
+msgid "Pending"
+msgstr "Показати усі _події з черги"
+
+#, fuzzy
 msgid "Pending Event"
 msgstr "Показати усі _події з черги"
 
@@ -3855,6 +3899,9 @@ msgstr "Повторно увійти зараз?"
 msgid "Re_gister"
 msgstr "За_реєструватися"
 
+msgid "React with 👍"
+msgstr ""
+
 msgid "Read _Wikipedia Article"
 msgstr "Прочитати статтю у В_ікіпедії"
 
@@ -3882,6 +3929,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "Reason: %s"
 msgstr "Підстава"
+
+#, fuzzy
+msgid "Received"
+msgstr "Перше отримане повідомлення"
 
 #, fuzzy
 msgctxt "Message state"
@@ -4006,6 +4057,9 @@ msgstr "Вилучає контакт з реєстру"
 msgid "Remove this workspace"
 msgstr ""
 
+msgid "Remove your group chat avatar"
+msgstr ""
+
 msgid "Remove your profile picture"
 msgstr ""
 
@@ -4026,6 +4080,9 @@ msgstr "Вилучення облікового запису %s"
 
 msgctxt "Group chat name"
 msgid "Repairs"
+msgstr ""
+
+msgid "Reply…"
 msgstr ""
 
 #, fuzzy
@@ -4266,6 +4323,10 @@ msgstr "Пошук %(current)d / %(total)d.."
 
 msgid "Scroll down"
 msgstr ""
+
+#, fuzzy
+msgid "Scroll to this message"
+msgstr "повідомлення про стан"
 
 msgid "Scroll up"
 msgstr ""
@@ -4567,6 +4628,10 @@ msgid "Show Content"
 msgstr "Показувати лише _активні контакти"
 
 #, fuzzy
+msgid "Show Details"
+msgstr "Подробиці"
+
+#, fuzzy
 msgid "Show Inactive Devices"
 msgstr "Пристрій введення звуку"
 
@@ -4639,6 +4704,10 @@ msgstr "Показати список емоційок (Alt+M)"
 
 msgid "Show a live preview to test your video source"
 msgstr ""
+
+#, fuzzy
+msgid "Show all reactions"
+msgstr "Показати усі _події з черги"
 
 #, fuzzy
 msgid "Show all warnings"
@@ -5333,9 +5402,6 @@ msgstr "Перемкнути відео сессію"
 msgid "Toggle participants list"
 msgstr "Учасник"
 
-msgid "Topic"
-msgstr ""
-
 #, fuzzy
 msgctxt "File transfer state"
 msgid "Transferred: "
@@ -5495,6 +5561,10 @@ msgid "Unknown command: %s"
 msgstr "команда"
 
 #, fuzzy
+msgid "Unknown error."
+msgstr "Невідома помилка SSL: %d"
+
+#, fuzzy
 msgid "Unknown language"
 msgstr "Невідома назва"
 
@@ -5569,6 +5639,10 @@ msgstr "Зберегти файл як..."
 #, fuzzy
 msgid "Upload File…"
 msgstr "Зберегти файл як..."
+
+#, fuzzy
+msgid "Upload could not be completed."
+msgstr "Не вдалося знайти службу"
 
 #, fuzzy
 msgid "Uploading Avatar Failed"
@@ -5772,6 +5846,10 @@ msgid "Workspace Settings"
 msgstr "Додаткові дії"
 
 #, fuzzy
+msgid "Workspace settings…"
+msgstr "Додаткові дії"
+
+#, fuzzy
 msgid "Workspaces"
 msgstr "Перейменувати контакт"
 
@@ -5807,6 +5885,10 @@ msgstr "Так"
 msgid "Yesterday"
 msgstr "Вчора"
 
+#, fuzzy, python-format
+msgid "Yesterday (%s)"
+msgstr "Вчора"
+
 msgid "You"
 msgstr "Ви"
 
@@ -5815,6 +5897,9 @@ msgid "You (%s) joined the group chat"
 msgstr "%s приєднався до групової балачки"
 
 msgid "You are a visitor"
+msgstr ""
+
+msgid "You are a visitor."
 msgstr ""
 
 #, fuzzy, python-format
@@ -5861,6 +5946,9 @@ msgstr "Ви тепер {show} {status}"
 msgid "You are offline."
 msgstr ""
 
+msgid "You are offline. Go online to send messages…"
+msgstr ""
+
 #, fuzzy, python-format
 msgid "You can join this group chat instead: %s"
 msgstr "Ви можете приєднатися замість цієї кімнати до %s"
@@ -5889,6 +5977,9 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 "Можливістю синхронізації можна скористатися, лише якщо обліковий запис "
 "з’єднано з сервером."
+
+msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -5976,6 +6067,15 @@ msgstr "Ваш новий обліковий запис було успішно 
 #, fuzzy
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Налаштування архівації збережено!"
+
+#, fuzzy
+msgid "Your chat history database has been migrated successfully."
+msgstr "Ваш новий обліковий запис було успішно створено"
+
+msgid ""
+"Your chat history is being migrated.\n"
+"This may take a while…"
+msgstr ""
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Ваше повідомлення не може бути відправлене до встановлення з'єднання."
@@ -6292,6 +6392,10 @@ msgid "_Show Certificate"
 msgstr "Перегляд сертифікату..."
 
 #, fuzzy
+msgid "_Show menu bar"
+msgstr "Показувати транс_порти"
+
+#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "П_овідомити мене про завершення передавання файлу"
 
@@ -6315,9 +6419,6 @@ msgstr "_Підписатися"
 #, fuzzy
 msgid "_Type"
 msgstr "Тип:"
-
-msgid "_Undo"
-msgstr "_Скасувати"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6803,6 +6904,13 @@ msgstr ""
 #~ msgid "Edit Profile…"
 #~ msgstr "Змінити профіль…"
 
+#~ msgid "Edit workspace…"
+#~ msgstr "Редагувати робочий простір…"
+
+#, fuzzy
+#~ msgid "Gajim Team"
+#~ msgstr "Теми Gajim"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Активний"
@@ -6815,6 +6923,14 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Запросити _контакти"
 
+#, fuzzy, python-format
+#~ msgid "Last seen %s"
+#~ msgstr "Підстава"
+
+#, fuzzy
+#~ msgid "Message Correction: Background Color"
+#~ msgstr "Повідомлення"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -6822,3 +6938,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Повторно увійти зараз?"
+
+#~ msgid "_Undo"
+#~ msgstr "_Скасувати"
+
+#, fuzzy
+#~ msgid "yesterday "
+#~ msgstr "Вчора"
