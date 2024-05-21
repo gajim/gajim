@@ -721,6 +721,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         def _on_moderate(reason: str) -> None:
             client = app.get_client(params.account)
             client.get_module('MUC').moderate_message(
+                params.namespace,
                 params.jid,
                 params.stanza_id,
                 reason or None

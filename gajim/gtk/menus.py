@@ -749,7 +749,6 @@ def get_chat_row_menu(contact: types.ChatContactT,
         menu_items.append((
             p_('Message row action', 'Correct…'), 'win.correct-message', None))
 
-    moderate_possible = False
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
         self_contact = contact.get_self()
@@ -759,20 +758,25 @@ def get_chat_row_menu(contact: types.ChatContactT,
         disco_info = app.storage.cache.get_last_disco_info(contact.jid)
         assert disco_info is not None
 
-        if (disco_info.has_message_moderation and is_allowed
-                and not is_moderated):
-            moderate_possible = True
+        if (
+            disco_info.has_message_moderation and
+            stanza_id is not None and
+            state == MessageState.ACKNOWLEDGED and
+            not is_moderated and
+            is_allowed
+        ):
 
-    if (moderate_possible and stanza_id is not None
-            and state == MessageState.ACKNOWLEDGED):
-        param = ModerateMessageParam(
-            account=contact.account,
-            jid=contact.jid,
-            stanza_id=stanza_id)
-        menu_items.append((
-            p_('Message row action', 'Moderate…'),
-            'win.moderate-message',
-            param))
+            ns = disco_info.moderation_namespace
+            assert ns is not None
+            param = ModerateMessageParam(
+                account=contact.account,
+                jid=contact.jid,
+                stanza_id=stanza_id,
+                namespace=ns)
+            menu_items.append((
+                p_('Message row action', 'Moderate…'),
+                'win.moderate-message',
+                param))
 
     menu_items.append(
         (p_('Message row action', 'Select Messages…'),

@@ -69,6 +69,7 @@ class ModerateMessageParam(VariantMixin):
     account: str
     jid: JID
     stanza_id: str
+    namespace: str
 
 
 @dataclass
