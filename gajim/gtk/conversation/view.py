@@ -648,51 +648,6 @@ class ConversationView(Gtk.ScrolledWindow):
             _x_coord, y_coord = coords
             self._message_row_actions.update(y_coord, row)
 
-    def reduce_message_count(self, before: bool) -> bool:
-        success = False
-        row_count = len(self._list_box.get_children())
-        while row_count > self._max_row_count:
-            if before:
-                if self._reduce_messages_before():
-                    row_count -= 1
-                    success = True
-            else:
-                self._reduce_messages_after()
-                row_count -= 1
-                success = True
-
-        return success
-
-    def _reduce_messages_before(self) -> bool:
-        success = False
-
-        # We want to keep relevant DateRows when removing rows
-        row1 = self._get_row_at_index(2)
-        row2 = self._get_row_at_index(3)
-
-        if row1.type == 'date' and row2.type == 'date':
-            # First two rows are date rows,
-            # it’s safe to remove the fist row
-            row1.destroy()
-            success = True
-
-        if row1.type == 'date' and row2.type != 'date':
-            # First one is a date row, keep it and
-            # remove the second row instead
-            row2.destroy()
-            success = True
-
-        if row1.type != 'date':
-            # Not a date row, safe to remove
-            row1.destroy()
-            success = True
-
-        return success
-
-    def _reduce_messages_after(self) -> None:
-        row = self._get_row_at_index(len(self._list_box.get_children()) - 1)
-        row.destroy()
-
     def remove_message(self, pk: int) -> None:
         row = self.get_row_by_pk(pk)
         if row is None:
