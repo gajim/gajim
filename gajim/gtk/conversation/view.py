@@ -827,11 +827,6 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._read_marker_row.set_timestamp(timestamp)
 
-    def update_avatars(self) -> None:
-        for row in cast(list[BaseRow], self._list_box.get_children()):
-            if isinstance(row, MessageRow):
-                row.update_avatar()
-
     def correct_message(self, event: events.MessageCorrected) -> None:
         message_row = self._get_row_by_message_id(event.correction_id)
         if message_row is None:
@@ -897,7 +892,3 @@ class ConversationView(Gtk.ScrolledWindow):
             if value:
                 return
             self.remove_rows_by_type('muc-user-status')
-
-    def remove(self, widget: Gtk.Widget) -> None:
-        self._list_box.remove(widget)
-        widget.destroy()
