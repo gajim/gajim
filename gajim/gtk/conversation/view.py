@@ -805,7 +805,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def iter_rows(self) -> Generator[BaseRow, None, None]:
         yield from cast(list[BaseRow], self._list_box.get_children())
 
-    def remove_rows_by_type(self, row_type: str) -> None:
+    def _remove_rows_by_type(self, row_type: str) -> None:
         for row in self.iter_rows():
             if row.type == row_type:
                 row.destroy()
@@ -885,10 +885,10 @@ class ConversationView(Gtk.ScrolledWindow):
         if setting == 'print_join_left':
             if value:
                 return
-            self.remove_rows_by_type('muc-user-joined')
-            self.remove_rows_by_type('muc-user-left')
+            self._remove_rows_by_type('muc-user-joined')
+            self._remove_rows_by_type('muc-user-left')
 
         if setting == 'print_status':
             if value:
                 return
-            self.remove_rows_by_type('muc-user-status')
+            self._remove_rows_by_type('muc-user-status')
