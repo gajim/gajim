@@ -105,8 +105,8 @@ class ConversationView(Gtk.ScrolledWindow):
         # Keeps track of date rows we have added to the list
         self._active_date_rows: set[datetime] = set()
 
-        # message_id -> row mapping
         self._message_id_row_map: dict[str, MessageRow] = {}
+        self._stanza_id_row_map: dict[str, MessageRow] = {}
 
         self._read_marker_row = None
         self._scroll_hint_row = None
@@ -270,6 +270,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._row_count = 0
         self._active_date_rows = set()
         self._message_id_row_map = {}
+        self._stanza_id_row_map = {}
         self._read_marker_row = None
         self._scroll_hint_row = None
 
@@ -519,6 +520,10 @@ class ConversationView(Gtk.ScrolledWindow):
         message_row.connect(
             'state-flags-changed', self._on_message_row_state_flags_changed)
         message_id = message.id
+        stanza_id = message.stanza_id
+
+        if stanza_id is not None:
+            self._stanza_id_row_map[stanza_id] = message_row
 
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
@@ -707,6 +712,8 @@ class ConversationView(Gtk.ScrolledWindow):
         if row is None:
             return
 
+        if event.stanza_id is not None:
+            self._stanza_id_row_map[event.stanza_id] = row
         row.set_acknowledged(event.stanza_id)
         self._check_for_merge(row)
 
@@ -735,8 +742,11 @@ class ConversationView(Gtk.ScrolledWindow):
         adj = self.get_vadjustment()
         adj.set_value(adj.get_upper() - adj.get_page_size())
 
-    def _get_row_by_message_id(self, id_: str) -> MessageRow | None:
-        return self._message_id_row_map.get(id_)
+    def _get_row_by_message_id(self, message_id: str) -> MessageRow | None:
+        return self._message_id_row_map.get(message_id)
+
+    def _get_row_by_stanza_id(self, stanza_id: str) -> MessageRow | None:
+        return self._stanza_id_row_map.get(stanza_id)
 
     def _get_message_row_by_direction(
         self,
@@ -792,14 +802,6 @@ class ConversationView(Gtk.ScrolledWindow):
 
         return None
 
-    def get_row_by_stanza_id(self, stanza_id: str) -> MessageRow | None:
-        for row in cast(list[BaseRow], self._list_box.get_children()):
-            if not isinstance(row, MessageRow):
-                continue
-            if row.stanza_id == stanza_id:
-                return row
-        return None
-
     def iter_rows(self) -> Generator[BaseRow, None, None]:
         yield from cast(list[BaseRow], self._list_box.get_children())
 
@@ -851,13 +853,13 @@ class ConversationView(Gtk.ScrolledWindow):
                 message_row.timestamp - timedelta(microseconds=1), force=True)
 
     def show_message_moderation(self, stanza_id: str, text: str) -> None:
-        message_row = self.get_row_by_stanza_id(stanza_id)
+        message_row = self._get_row_by_stanza_id(stanza_id)
         if message_row is not None:
             message_row.set_moderated(text)
 
     def update_message_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):
-            message_row = self.get_row_by_stanza_id(reaction_id)
+            message_row = self._get_row_by_stanza_id(reaction_id)
         else:
             message_row = self._get_row_by_message_id(reaction_id)
 
