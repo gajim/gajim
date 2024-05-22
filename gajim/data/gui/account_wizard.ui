@@ -502,8 +502,8 @@
         <property name="can-focus">False</property>
         <property name="halign">center</property>
         <property name="label" translatable="yes">Certificate Verification Failed</property>
+        <property name="justify">center</property>
         <property name="wrap">True</property>
-        <property name="xalign">0</property>
         <style>
           <class name="large-header"/>
         </style>
