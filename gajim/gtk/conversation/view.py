@@ -653,6 +653,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if row is None:
             return
 
+        self._remove_from_maps(row)
         index = row.get_index()
         row.destroy()
         decendant_row = self._list_box.get_row_at_index(index)
@@ -661,6 +662,15 @@ class ConversationView(Gtk.ScrolledWindow):
             # Checks for same sender etc. are not necessary, since we simply
             # unset merged state.
             decendant_row.set_merged(False)
+
+    def _remove_from_maps(self, row: MessageRow) -> None:
+        for key, val in dict(self._message_id_row_map).items():
+            if val is row:
+                del self._message_id_row_map[key]
+
+        for key, val in dict(self._stanza_id_row_map).items():
+            if val is row:
+                del self._stanza_id_row_map[key]
 
     def acknowledge_message(self, event: events.MessageAcknowledged) -> None:
         row = self.get_row_by_pk(event.pk)
