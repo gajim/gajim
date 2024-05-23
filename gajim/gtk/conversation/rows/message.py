@@ -287,7 +287,7 @@ class MessageRow(BaseRow):
             is_moderated=self._is_moderated,
         )
 
-        popover = GajimPopover(menu, relative_to=button)
+        popover = GajimPopover(menu, relative_to=button, position=Gtk.PositionType.TOP)
         popover.connect(
             'closed',
             self._on_more_menu_popover_closed,
