@@ -59,21 +59,24 @@ class MessageRowActions(Gtk.EventBox):
 
         self._timeout_id: int | None = None
 
-        self._default_reaction_button = Gtk.Button(
-            label='👍', tooltip_text=_('React with 👍')
-        )
-        self._default_reaction_button.set_no_show_all(True)
-        self._default_reaction_button.connect(
-            'clicked', self._on_specific_reaction_button_clicked
-        )
-        self._default_reaction_button.get_style_context().remove_class('text-button')
-        self._default_reaction_button.get_style_context().add_class('image-button')
+        self._reaction_buttons: list[Gtk.Button] = []
 
-        self._choose_reaction_button = AddReactionButton()
-        self._choose_reaction_button.set_no_show_all(True)
-        self._choose_reaction_button.connect(
-            'clicked', self._on_choose_reaction_button_clicked)
-        self._choose_reaction_button.connect('emoji-added', self._on_reaction_added)
+        for emoji in ['👍', '❤', '🤣']:
+            button = Gtk.Button(
+                label=emoji, tooltip_text=_('React with %s') % emoji, no_show_all=True
+            )
+            button.connect('clicked', self._on_specific_reaction_button_clicked)
+            button.get_style_context().remove_class('text-button')
+            button.get_style_context().add_class('image-button')
+            self._reaction_buttons.append(button)
+
+        choose_reaction_button = AddReactionButton()
+        choose_reaction_button.set_no_show_all(True)
+        choose_reaction_button.connect(
+            'clicked', self._on_choose_reaction_button_clicked
+        )
+        choose_reaction_button.connect('emoji-added', self._on_reaction_added)
+        self._reaction_buttons.append(choose_reaction_button)
 
         self._reply_button = Gtk.Button.new_from_icon_name(
             'lucide-reply-symbolic', Gtk.IconSize.BUTTON
@@ -89,8 +92,10 @@ class MessageRowActions(Gtk.EventBox):
 
         box = Gtk.Box()
         box.get_style_context().add_class('linked')
-        box.add(self._default_reaction_button)
-        box.add(self._choose_reaction_button)
+
+        for button in self._reaction_buttons:
+            box.add(button)
+
         box.add(self._reply_button)
         box.add(more_button)
 
@@ -125,8 +130,10 @@ class MessageRowActions(Gtk.EventBox):
         self.set_no_show_all(False)
         self.show_all()
 
-        self._default_reaction_button.set_visible(self._get_reactions_visible())
-        self._choose_reaction_button.set_visible(self._get_reactions_visible())
+        reactions_visible = self._get_reactions_visible()
+        for button in self._reaction_buttons:
+            button.set_visible(reactions_visible)
+
         self._reply_button.set_visible(self._get_reply_visible())
 
     def switch_contact(self, contact: ChatContactT) -> None:
