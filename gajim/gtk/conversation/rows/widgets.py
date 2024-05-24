@@ -62,12 +62,8 @@ class MessageRowActions(Gtk.EventBox):
         self._reaction_buttons: list[Gtk.Button] = []
 
         for emoji in ['👍', '❤', '🤣']:
-            button = Gtk.Button(
-                label=emoji, tooltip_text=_('React with %s') % emoji, no_show_all=True
-            )
-            button.connect('clicked', self._on_specific_reaction_button_clicked)
-            button.get_style_context().remove_class('text-button')
-            button.get_style_context().add_class('image-button')
+            button = QuickReactionButton(emoji)
+            button.connect('clicked', self._on_quick_reaction_button_clicked)
             self._reaction_buttons.append(button)
 
         choose_reaction_button = AddReactionButton()
@@ -213,8 +209,8 @@ class MessageRowActions(Gtk.EventBox):
         assert self._message_row is not None
         app.window.activate_action('reply', GLib.Variant('u', self._message_row.pk))
 
-    def _on_specific_reaction_button_clicked(self, button: Gtk.Button) -> None:
-        self._send_reaction(button.get_label())
+    def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
+        self._send_reaction(button.emoji)
 
     def _on_choose_reaction_button_clicked(self, _button: AddReactionButton) -> None:
         self._menu_button_clicked = True
@@ -231,6 +227,26 @@ class MessageRowActions(Gtk.EventBox):
         assert self._message_row is not None
         self._menu_button_clicked = True
         self._message_row.show_chat_row_menu(self, button)
+
+
+class QuickReactionButton(Gtk.Button):
+    def __init__(self, emoji: str) -> None:
+
+        self.emoji = emoji
+
+        # Add emoji presentation selector, otherwise depending on the font
+        # emojis might be displayed in its text variant
+        emoji_presentation_form = f'{emoji}\uFE0F'
+
+        Gtk.Button.__init__(
+            self,
+            label=emoji_presentation_form,
+            tooltip_text=_('React with %s') % emoji_presentation_form,
+            no_show_all=True
+        )
+
+        self.get_style_context().remove_class('text-button')
+        self.get_style_context().add_class('image-button')
 
 
 class DateTimeLabel(Gtk.Label):
