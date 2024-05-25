@@ -8,7 +8,9 @@ from typing import Any
 from typing import NamedTuple
 from typing import TypeVar
 
+import base64
 import dataclasses
+import logging
 from dataclasses import dataclass
 from dataclasses import fields
 from datetime import datetime
@@ -32,6 +34,8 @@ from gajim.common.const import URIType
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
 from gajim.common.util.datetime import utc_now
+
+log = logging.getLogger('gajim.c.structs')
 
 _T = TypeVar('_T')
 
@@ -271,6 +275,33 @@ class VariantMixin:
         if __types:
             vdict['__types'] = GLib.Variant('a{ss}', __types)
         return GLib.Variant('a{sv}', vdict)
+
+    def serialize(self) -> str:
+        variant = self.to_variant()
+        variant_g_bytes = variant.get_data_as_bytes()
+        variant_data = variant_g_bytes.get_data()
+        assert variant_data is not None
+        return base64.b64encode(variant_data).decode()
+
+    @classmethod
+    def from_serialized_string(
+        cls: type[_T],
+        serialized_data: str,
+        variant_type: GLib.VariantType
+    ) -> _T | None:
+        try:
+            data = base64.b64decode(serialized_data.encode())
+            g_bytes = GLib.Bytes.new(data)
+            variant = GLib.Variant.new_from_bytes(
+                variant_type,
+                g_bytes,
+                True
+            )
+        except Exception as e:
+            log.error('Could not decode serialized variant %s', e)
+            return None
+
+        return cls.from_variant(variant)
 
     @classmethod
     def from_variant(cls: type[_T], variant: GLib.Variant) -> _T:

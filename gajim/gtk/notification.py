@@ -17,9 +17,11 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import TYPE_CHECKING
 
 import hashlib
 import logging
+import platform
 import sys
 import textwrap
 from pathlib import Path
@@ -52,9 +54,20 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
 from gajim.gtk.util import add_css_to_widget
 from gajim.gtk.util import get_total_screen_geometry
+from gajim.gtk.util import load_icon_surface
+
+if sys.platform == 'win32' or TYPE_CHECKING:
+    from windows_toasts import InteractableWindowsToaster
+    from windows_toasts import Toast
+    from windows_toasts import ToastActivatedEventArgs
+    from windows_toasts import ToastButton
+    from windows_toasts import ToastDisplayImage
+    from windows_toasts import ToastImage
+    from windows_toasts import ToastImagePosition
+
+MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
 
 log = logging.getLogger('gajim.gtk.notification')
-
 
 NOTIFICATION_ICONS: dict[str, str] = {
     'incoming-message': 'gajim-chat-msg-recv',
@@ -134,7 +147,7 @@ class DummyBackend(NotificationBackend):
         pass
 
 
-class Windows(NotificationBackend):
+class WindowsLegacy(NotificationBackend):
     def __init__(self):
         NotificationBackend.__init__(self)
         self._active_notification = None
@@ -266,6 +279,114 @@ class PopupNotification(Gtk.Window):
     def _on_destroy(self, _widget: Gtk.Window) -> None:
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
+
+
+class WindowsToastNotification(NotificationBackend):
+    def __init__(self):
+        NotificationBackend.__init__(self)
+        self._toaster = InteractableWindowsToaster(applicationText='Gajim')
+
+    def _send(self, event: events.Notification) -> None:
+        toast = Toast()
+        toast.text_fields = [
+            event.title,
+            event.text
+        ]
+
+        toast_image = self._get_toast_image(event)
+        toast_display_image = ToastDisplayImage(
+            image=toast_image,
+            position=ToastImagePosition.AppLogo,
+        )
+        toast.AddImage(toast_display_image)
+
+        for button in self._get_toast_buttons(event):
+            toast.AddAction(button)
+
+        toast.on_activated = self._on_activated
+
+        self._toaster.show_toast(toast)
+
+    def _withdraw(self, details: list[Any]) -> None:
+        self._toaster.clear_toasts()
+
+    def _on_activated(self, event: ToastActivatedEventArgs) -> None:
+        # Calls need to be executed with GLib.idle_add to avoid threading issues,
+        # because Toasts run in a different thread.
+        if event.arguments is None:
+            GLib.idle_add(app.window.present_with_time, Gtk.get_current_event_time())
+            return
+
+        if event.arguments.startswith('open-event-'):
+            serialized_data = event.arguments.split('open-event-')[1]
+            params = OpenEventActionParams.from_serialized_string(
+                serialized_data, GLib.VariantType('a{sv}'))
+            if params is not None:
+                GLib.idle_add(
+                    app.app.activate_action,
+                    f'{params.account}-open-event',
+                    params.to_variant()
+                )
+                return
+
+        elif event.arguments.startswith('mark-as-read-'):
+            serialized_data = event.arguments.split('mark-as-read-')[1]
+            params = AccountJidParam.from_serialized_string(
+                serialized_data, GLib.VariantType('a{sv}'))
+            if params is not None:
+                GLib.idle_add(
+                    app.app.activate_action,
+                    f'{params.account}-mark-as-read',
+                    params.to_variant()
+                )
+                return
+
+        GLib.idle_add(app.window.present_with_time, Gtk.get_current_event_time())
+
+    def _get_toast_image(self, event: events.Notification) -> ToastImage:
+        if event.type == 'incoming-message':
+            assert event.jid is not None
+            surface = _get_surface_for_notification(event.account, event.jid)
+            return ToastImage(_get_path_for_icon(surface))
+
+        if event.icon_name is not None:
+            surface = load_icon_surface(event.icon_name, 32)
+            assert surface is not None
+            return ToastImage(_get_path_for_icon(surface))
+
+        icon_name = event.sub_type or event.type
+        icon_name = NOTIFICATION_ICONS.get(icon_name, 'mail-unread')
+        surface = load_icon_surface(icon_name, 32)
+        assert surface is not None
+        return ToastImage(_get_path_for_icon(surface))
+
+    def _get_toast_buttons(self, event: events.Notification) -> list[ToastButton]:
+        toast_buttons: list[ToastButton] = []
+
+        jid = '' if event.jid is None else str(event.jid)
+
+        params = OpenEventActionParams(type=event.type,
+                                       sub_type=event.sub_type or '',
+                                       account=event.account,
+                                       jid=jid)
+
+        button = ToastButton(
+            content=_('Open'),
+            arguments=f'open-event-{params.serialize()}'
+        )
+        toast_buttons.append(button)
+
+        if event.type == 'incoming-message':
+            assert isinstance(event.jid, JID)
+            params = AccountJidParam(account=event.account, jid=event.jid)
+
+            button = ToastButton(
+                content=_('Mark as Read'),
+                arguments=f'mark-as-read-{params.serialize()}'
+            )
+            toast_buttons.append(button)
+
+        return toast_buttons
 
 
 class Linux(NotificationBackend):
@@ -463,7 +584,9 @@ def _get_path_for_icon(surface: cairo.ImageSurface) -> Path:
 
 def get_notification_backend() -> NotificationBackend:
     if sys.platform == 'win32':
-        return Windows()
+        if int(platform.version().split('.')[2]) < MIN_WINDOWS_TOASTS_WIN_VERSION:
+            return WindowsLegacy()
+        return WindowsToastNotification()
 
     if sys.platform == 'darwin':
         return DummyBackend()

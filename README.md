@@ -26,6 +26,7 @@
 - [SQLAlchemy](https://pypi.org/project/SQLAlchemy/) (>=2.0.0)
 - [sqlite](https://www.sqlite.org/) (>=3.35.0)
 - [PyWinRT](https://github.com/pywinrt/pywinrt) (Only on Windows)
+- [windows-toasts](https://github.com/DatGuy1/Windows-Toasts) (Only on Windows)
 
 ### Optional Runtime Requirements
 

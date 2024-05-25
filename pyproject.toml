@@ -41,6 +41,7 @@ dependencies = [
   "winrt-Windows.Foundation; platform_system == 'Windows'",
   "winrt-Windows.UI; platform_system == 'Windows'",
   "winrt-Windows.UI.ViewManagement; platform_system == 'Windows'",
+  "windows-toasts; platform_system == 'Windows'",
 ]
 dynamic = ["version"]
 
@@ -180,6 +181,7 @@ exclude = [
   "test/dialogs/groupchat_info.py",
   "test/gui/test_menus.py",
   "test/gui/test_nick_completion.py",
+  "typings/windows_toasts/*",
 ]
 
 [tool.ruff]

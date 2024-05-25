@@ -54,6 +54,7 @@ emoji
 winrt-Windows.Foundation
 winrt-Windows.UI
 winrt-Windows.UI.ViewManagement
+windows-toasts
 "
 # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
 # Env variable described in https://www.msys2.org/docs/python/
