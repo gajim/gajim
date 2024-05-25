@@ -268,7 +268,7 @@
                         <property name="halign">center</property>
                         <property name="valign">center</property>
                         <property name="margin-start">2</property>
-                        <property name="icon-name">go-down</property>
+                        <property name="icon-name">go-down-symbolic</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
