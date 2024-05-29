@@ -416,8 +416,6 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_avatar.set_from_surface(avatar)
 
         format_string = app.settings.get('time_format')
-        if self.timestamp.date() < dt.datetime.today().date():
-            format_string = app.settings.get('date_time_format')
         self._ui.row_time_label.set_text(self.timestamp.strftime(format_string))
 
         text = db_row.text
