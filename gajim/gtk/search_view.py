@@ -80,7 +80,7 @@ class SearchView(Gtk.Box):
             row.set_header(RowHeader(
                 row.account, row.remote_jid, row.timestamp))
         else:
-            if before.jid != row.jid:
+            if before.remote_jid != row.remote_jid:
                 row.set_header(RowHeader(
                     row.account, row.remote_jid, row.timestamp))
             elif before.local_timestamp.date() != row.local_timestamp.date():
@@ -388,9 +388,9 @@ class ResultRow(Gtk.ListBoxRow):
         self.remote_jid = db_row.remote.jid
         self.direction = ChatDirection(db_row.direction)
 
-        self.jid = db_row.remote.jid
+        jid = db_row.remote.jid
         if (db_row.direction == ChatDirection.OUTGOING):
-            self.jid = JID.from_string(self._client.get_own_jid().bare)
+            jid = JID.from_string(self._client.get_own_jid().bare)
 
         self.pk = db_row.pk
         self.timestamp = db_row.timestamp
@@ -399,7 +399,7 @@ class ResultRow(Gtk.ListBoxRow):
         self.type = MessageType(db_row.type)
 
         self.contact = self._client.get_module('Contacts').get_contact(
-            self.jid, groupchat=self.type == MessageType.GROUPCHAT)
+            jid, groupchat=self.type == MessageType.GROUPCHAT)
         assert isinstance(
             self.contact,
             BareContact | GroupchatContact | GroupchatParticipant)
@@ -410,7 +410,7 @@ class ResultRow(Gtk.ListBoxRow):
 
         contact_name = self.contact.name
         if self.type == MessageType.GROUPCHAT:
-            contact_name = db_row.resource
+            contact_name = db_row.resource or self.remote_jid.localpart
             assert contact_name is not None
 
         self._ui.row_name_label.set_text(contact_name)
