@@ -83,7 +83,7 @@ class SearchView(Gtk.Box):
             if before.jid != row.jid:
                 row.set_header(RowHeader(
                     row.account, row.remote_jid, row.timestamp))
-            elif before.timestamp.date() != row.timestamp.date():
+            elif before.local_timestamp.date() != row.local_timestamp.date():
                 row.set_header(RowHeader(
                     row.account, row.remote_jid, row.timestamp))
             else:
@@ -368,10 +368,12 @@ class RowHeader(Gtk.Box):
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         self._ui.header_name_label.set_text(contact.name or '')
 
+        local_timestamp = timestamp.astimezone()
+
         format_string = app.settings.get('time_format')
-        if timestamp.date() < dt.datetime.today().date():
-            format_string = app.settings.get('date_time_format')
-        self._ui.header_date_label.set_text(timestamp.strftime(format_string))
+        if local_timestamp.date() <= dt.datetime.today().date():
+            format_string = app.settings.get('date_format')
+        self._ui.header_date_label.set_text(local_timestamp.strftime(format_string))
 
         self.show_all()
 
@@ -392,6 +394,7 @@ class ResultRow(Gtk.ListBoxRow):
 
         self.pk = db_row.pk
         self.timestamp = db_row.timestamp
+        self.local_timestamp = db_row.timestamp.astimezone()
 
         self.type = MessageType(db_row.type)
 
@@ -416,7 +419,8 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_avatar.set_from_surface(avatar)
 
         format_string = app.settings.get('time_format')
-        self._ui.row_time_label.set_text(self.timestamp.strftime(format_string))
+        self._ui.row_time_label.set_text(
+            self.local_timestamp.strftime(format_string))
 
         text = db_row.text
         if db_row.corrections:
