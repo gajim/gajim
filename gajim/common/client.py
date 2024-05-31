@@ -191,6 +191,7 @@ class Client(Observable, ClientModules):
             self.update_presence()
 
         self.notify('state-changed', SimpleClientState.CONNECTED)
+        self.notify('resume-successful')
 
     def _set_client_available(self) -> None:
         self._set_state(ClientState.AVAILABLE)

@@ -158,6 +158,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
+            client.connect_signal('resume-successful',
+                                  self._on_client_resume_successful)
 
     def get_action(self, name: str) -> Gio.SimpleAction:
         action = self.lookup_action(name)
@@ -234,6 +236,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._main_stack.add_account_page(event.account)
         client = app.get_client(event.account)
         client.connect_signal('state-changed', self._on_client_state_changed)
+        client.connect_signal('resume-successful',
+                              self._on_client_resume_successful)
 
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
@@ -293,6 +297,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         app.app.set_account_actions_state(client.account, state.is_connected)
         app.app.update_app_actions_state()
+
+    def _on_client_resume_successful(self,
+                                     client: Client,
+                                     _signal_name: str) -> None:
+
+        app.app.update_feature_actions_state(client.account)
 
     def _on_allow_gajim_update(self,
                                event: events.AllowGajimUpdateCheck) -> None:

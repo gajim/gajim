@@ -43,7 +43,6 @@ from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import InvalidJid
 
 import gajim
@@ -486,9 +485,19 @@ class GajimApplication(Gtk.Application, CoreApplication):
         for action_name in ONLINE_ACCOUNT_ACTIONS:
             self.set_action_state(f'{account}-{action_name}', new_state)
 
+        # Disable all feature actions on disconnect
         if not new_state:
             for action_name in FEATURE_ACCOUNT_ACTIONS:
                 self.set_action_state(f'{account}-{action_name}', new_state)
+
+    def update_feature_actions_state(self, account: str) -> None:
+        client = app.get_client(account)
+        mam_available = client.get_module('MAM').available
+        blocking_available = client.get_module('Blocking').supported
+
+        self.set_action_state(f'{account}-archive', mam_available)
+        self.set_action_state(f'{account}-blocking', blocking_available)
+        self.set_action_state(f'{account}-block-contact', blocking_available)
 
     def update_app_actions_state(self) -> None:
         active_accounts = bool(app.get_connected_accounts(exclude_local=True))
@@ -514,14 +523,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             self.set_accels_for_action(action, accels)
 
     def _on_feature_discovered(self, event: events.FeatureDiscovered) -> None:
-        if event.feature == Namespace.MAM_2:
-            action = '%s-archive' % event.account
-            self.set_action_state(action, True)
-        elif event.feature == Namespace.BLOCKING:
-            action = '%s-blocking' % event.account
-            self.set_action_state(action, True)
-            action = '%s-block-contact' % event.account
-            self.set_action_state(action, True)
+        self.update_feature_actions_state(event.account)
 
     def create_account(self,
                        account: str,
