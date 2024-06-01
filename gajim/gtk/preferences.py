@@ -729,7 +729,7 @@ class StunServerDialog(SettingsDialog):
 class Audio(PreferenceBox):
     def __init__(self, *args: Any) -> None:
 
-        deps_installed = app.is_installed('AV')
+        deps_installed = app.is_installed('GST')
 
         audio_input_devices = {}
         audio_output_devices = {}
