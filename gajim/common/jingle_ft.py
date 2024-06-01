@@ -369,6 +369,8 @@ class JingleFileTransfer(JingleContent):
                               action: str
                               ) -> None:
         log.info('__on_transport_accept')
+        if content.getTag('transport').getNamespace() == Namespace.JINGLE_IBB:
+            self.__state_changed(State.TRANSFERRING)
 
     def __on_transport_replace(self,
                                stanza: nbxmpp.Node,
