@@ -25,7 +25,6 @@ from nbxmpp.modules.chat_markers import ChatMarkers
 from nbxmpp.modules.chatstates import Chatstates
 from nbxmpp.modules.correction import Correction
 from nbxmpp.modules.delay import Delay
-from nbxmpp.modules.delimiter import Delimiter
 from nbxmpp.modules.discovery import Discovery
 from nbxmpp.modules.eme import EME
 from nbxmpp.modules.entity_caps import EntityCaps
@@ -179,8 +178,6 @@ class BaseModule(EventHelper):
     def _nbxmpp(self, name: Literal['Correction']) -> Correction: ...
     @overload
     def _nbxmpp(self, name: Literal['Delay']) -> Delay: ...
-    @overload
-    def _nbxmpp(self, name: Literal['Delimiter']) -> Delimiter: ...
     @overload
     def _nbxmpp(self, name: Literal['Discovery']) -> Discovery: ...
     @overload

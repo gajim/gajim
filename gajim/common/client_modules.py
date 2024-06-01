@@ -23,7 +23,6 @@ if TYPE_CHECKING:
     from gajim.common.modules.chat_markers import ChatMarkers
     from gajim.common.modules.chatstates import Chatstate
     from gajim.common.modules.contacts import Contacts
-    from gajim.common.modules.delimiter import Delimiter
     from gajim.common.modules.discovery import Discovery
     from gajim.common.modules.entity_time import EntityTime
     from gajim.common.modules.gateway import Gateway
@@ -84,8 +83,6 @@ class ClientModules:
     def get_module(self, name: Literal['Chatstate']) -> Chatstate: ...
     @overload
     def get_module(self, name: Literal['Contacts']) -> Contacts: ...
-    @overload
-    def get_module(self, name: Literal['Delimiter']) -> Delimiter: ...
     @overload
     def get_module(self, name: Literal['Discovery']) -> Discovery: ...
     @overload

@@ -15,6 +15,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.vcard4 import VCard
+from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import AnnotationNote
 from nbxmpp.structs import SoftwareVersionResult
 from nbxmpp.task import Task
@@ -211,7 +212,9 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if note is not None:
             self._ui.textview_annotation.get_buffer().set_text(note.data)
 
-        if app.account_supports_private_storage(self.account):
+        server_disco = self._client.get_module('Discovery').server_info
+        if (server_disco is not None and
+                server_disco.supports(Namespace.PRIVATE)):
             # Hide the Notes page if private storage is not available, because
             # roster notes cannot be stored without.
             # Since there is no disco mechanism for private storage, we rely on

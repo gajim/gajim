@@ -425,10 +425,8 @@ class Client(Observable, ClientModules):
     def connect_machine(self) -> None:
         log.info('Connect machine state: %s', self._connect_machine_calls)
         if self._connect_machine_calls == 1:
-            self.get_module('Delimiter').get_roster_delimiter()
-        elif self._connect_machine_calls == 2:
             self.get_module('Roster').request_roster()
-        elif self._connect_machine_calls == 3:
+        elif self._connect_machine_calls == 2:
             self._finish_connect()
 
     def _finish_connect(self) -> None:

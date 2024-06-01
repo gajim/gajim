@@ -373,8 +373,8 @@ def get_accounts_sorted() -> list[str]:
 
 
 def get_enabled_accounts_with_labels(
-        connected_only: bool = False,
-        private_storage_only: bool = False) -> list[list[str]]:
+    connected_only: bool = False
+) -> list[list[str]]:
     '''
     Returns a list with [account, account_label] entries.
     Order by account_label
@@ -382,8 +382,6 @@ def get_enabled_accounts_with_labels(
     accounts: list[list[str]] = []
     for acc in connections:
         if connected_only and not account_is_connected(acc):
-            continue
-        if private_storage_only and not account_supports_private_storage(acc):
             continue
 
         accounts.append([acc, get_account_label(acc)])
@@ -394,12 +392,6 @@ def get_enabled_accounts_with_labels(
 
 def get_account_label(account: str) -> str:
     return settings.get_account_setting(account, 'account_label') or account
-
-
-def account_supports_private_storage(account: str) -> bool:
-    # If Delimiter module is not available we can assume
-    # Private Storage is not available
-    return connections[account].get_module('Delimiter').available
 
 
 def account_is_connected(account: str) -> bool:
