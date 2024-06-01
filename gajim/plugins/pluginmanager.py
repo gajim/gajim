@@ -540,7 +540,11 @@ class PluginManager(metaclass=Singleton):
                     continue
 
                 if not manifest.is_usable:
-                    log.info('Skipped plugin with not suitable requirements')
+                    log.info(
+                        'Skipped plugin with not suitable requirements: %s %s',
+                        manifest.short_name,
+                        manifest.requirements
+                    )
                     continue
 
                 same_plugin = manifests.get(manifest.short_name)
