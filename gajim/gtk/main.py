@@ -647,7 +647,16 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         transient_for=self)
                     return
 
-                shutil.copyfile(preview.orig_path, target_path)
+                try:
+                    shutil.copyfile(preview.orig_path, target_path)
+                except PermissionError as e:
+                    ErrorDialog(
+                        _('Could not save file'),
+                        _('You do not have permissions for this directory.\n'
+                          'Error: %s.') % e,
+                        transient_for=self)
+                    return
+
                 app.settings.set('last_save_dir', str(target_path.parent))
 
             if not preview.orig_exists:
