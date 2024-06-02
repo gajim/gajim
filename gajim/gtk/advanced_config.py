@@ -225,9 +225,9 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                 continue
 
             for setting in settings:
-                value = app.settings.get(setting)
+                value = app.settings.get(setting)  # pyright: ignore
                 default = APP_SETTINGS[setting]
-                is_default = bool(value == default)
+                is_default = bool(value == default)  # pyright: ignore
 
                 if isinstance(value, bool):
                     value = BOOL_DICT[value]

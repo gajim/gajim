@@ -220,7 +220,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             default_integrations=False,
             shutdown_timeout=0,
             auto_session_tracking=False,
-            before_send=self._before_send,
+            before_send=self._before_send,  # pyright: ignore
             debug=False)
 
         sentry_sdk.set_context('os', {

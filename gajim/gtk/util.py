@@ -653,7 +653,7 @@ def get_pixbuf_from_data(file_data: bytes) -> GdkPixbuf.Pixbuf | None:
         log.warning('loading avatar using pixbufloader failed, trying to '
                     'convert avatar image using pillow')
         try:
-            avatar = Image.open(BytesIO(file_data)).convert('RGBA')
+            avatar = Image.open(BytesIO(file_data)).convert('RGBA')  # pyright: ignore
             array = GLib.Bytes.new(avatar.tobytes())  # pyright: ignore
             width, height = avatar.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
@@ -707,7 +707,7 @@ def load_pixbuf(path: str | Path,
     except GLib.Error:
         try:
             with open(path, 'rb') as im_handle:
-                img = Image.open(im_handle)
+                img = Image.open(im_handle)  # pyright: ignore
                 avatar = img.convert('RGBA')
         except (NameError, OSError, UnidentifiedImageError):
             log.warning('Pillow convert failed: %s', path)
