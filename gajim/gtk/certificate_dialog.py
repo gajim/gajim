@@ -108,8 +108,8 @@ class CertificateBox(Gtk.Box):
                 self._ib_organization = str(attribute.value)
 
         if package_version('cryptography>=42.0.0'):
-            self._issued = str(cert.not_valid_before_utc.strftime('%c %Z'))  # pyright: ignore # noqa: E501
-            self._expires = str(cert.not_valid_after_utc.strftime('%c %Z'))  # pyright: ignore # noqa: E501
+            self._issued = str(cert.not_valid_before_utc.strftime('%c %Z'))
+            self._expires = str(cert.not_valid_after_utc.strftime('%c %Z'))
         else:
             self._issued = str(cert.not_valid_before.strftime('%c %Z'))
             self._expires = str(cert.not_valid_after.strftime('%c %Z'))

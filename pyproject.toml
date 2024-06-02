@@ -162,7 +162,6 @@ exclude = [
   "gajim/gtk/add_contact.py",
   "gajim/gtk/adhoc.py",
   "gajim/gtk/advanced_config.py",
-  "gajim/gtk/certificate_dialog.py",
   "gajim/gtk/component_search.py",
   "gajim/gtk/dataform.py",
   "gajim/gtk/discovery.py",
