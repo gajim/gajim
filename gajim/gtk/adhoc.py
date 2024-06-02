@@ -13,6 +13,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.const import AdHocAction
+from nbxmpp.const import AdHocNoteType
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules import dataforms
@@ -334,31 +335,46 @@ class Completed(Page):
         self.set_valign(Gtk.Align.FILL)
         self.complete = True
         self.title = _('Completed')
+        self._severity = AdHocNoteType.INFO
 
-        self._notes: list[MultiLineLabel] = []
         self._dataform_widget = None
 
-        icon = Gtk.Image.new_from_icon_name('object-select-symbolic',
-                                            Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class('success-color')
-        icon.show()
+        self._icon = SeverityIcon(self._severity)
+        self._icon.show()
 
-        label = Gtk.Label(label='Completed')
-        label.show()
+        self._label = Gtk.Label(label=_('Completed'))
+        self._label.show()
 
         self._icon_text = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self._icon_text.set_spacing(12)
         self._icon_text.set_halign(Gtk.Align.CENTER)
-        self._icon_text.add(icon)
-        self._icon_text.add(label)
+        self._icon_text.add(self._icon)
+        self._icon_text.add(self._label)
         self.add(self._icon_text)
+
+        self._notes = Gtk.Grid(row_spacing=6, column_spacing=12)
+        self._notes.insert_column(0)
+        self._notes.insert_column(1)
+        self._notes.set_vexpand(False)
+        self._notes.set_hexpand(True)
+        notes_box = Gtk.Box()
+        notes_box.set_halign(Gtk.Align.CENTER)
+        notes_box.set_vexpand(False)
+        notes_box.add(self._notes)
+        self.add(notes_box)
 
         self.show_all()
 
     def process_stage(self, stage_data: AdHocCommand) -> None:
+        self._reset_severity()
         self._show_notes(stage_data.notes)
         self._show_form(stage_data.data)
         self._show_icon_text(stage_data.data is None)
+        self._show_icon(len(stage_data.notes) <= 1)
+
+    def _set_status(self, status: str):
+        self.title = status
+        self._label.set_label(status)
 
     def _show_icon_text(self, show: bool) -> None:
         if show:
@@ -367,6 +383,13 @@ class Completed(Page):
         else:
             self.set_valign(Gtk.Align.FILL)
             self._icon_text.hide()
+
+        if self._severity == AdHocNoteType.INFO:
+            self._set_status(_('Completed'))
+        elif self._severity == AdHocNoteType.WARN:
+            self._set_status(_('Warning'))
+        elif self._severity == AdHocNoteType.ERROR:
+            self._set_status(_('Error'))
 
     def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
@@ -383,16 +406,40 @@ class Completed(Page):
         self.add(self._dataform_widget)
 
     def _show_notes(self, notes: list[AdHocCommandNote]):
-        for note in self._notes:
-            self.remove(note)
-        self._notes = []
+        self._notes.foreach(self._remove_note_cell)
 
-        for note in notes:
+        for i, note in enumerate(notes):
+            if len(notes) > 1:
+                icon = SeverityIcon(note.type)
+                icon.show()
+                self._notes.attach(icon, 0, i, 1, 1)
+
             label = MultiLineLabel(label=note.text)
             label.set_justify(Gtk.Justification.CENTER)
+            label.set_vexpand(False)
             label.show()
-            self._notes.append(label)
-            self.add(label)
+            self._notes.attach(label, 1, i, 1, 1)
+
+            self._bump_severity(note.type)
+
+    def _show_icon(self, show: bool):
+        if show:
+            self._icon.set_severity(self._severity)
+        else:
+            self._icon.hide()
+
+    def _reset_severity(self):
+        self._severity = AdHocNoteType.INFO
+
+    def _bump_severity(self, severity: AdHocNoteType):
+        if ((severity == AdHocNoteType.WARN and
+                self._severity != AdHocNoteType.ERROR) or
+                severity == AdHocNoteType.ERROR):
+            self._severity = severity
+
+    def _remove_note_cell(self, cell: Gtk.Widget) -> None:
+        self._notes.remove(cell)
+        cell.destroy()
 
     def get_visible_buttons(self) -> list[str]:
         return ['commands']
@@ -426,3 +473,27 @@ class RequestCommandList(ProgressPage):
         ProgressPage.__init__(self)
         self.set_title(_('Requesting Command List'))
         self.set_text(_('Requesting Command List'))
+
+
+class SeverityIcon(Gtk.Image):
+    def __init__(self, severity: AdHocNoteType) -> None:
+        Gtk.Image.__init__(self)
+        self.set_severity(severity)
+
+    def set_severity(self, severity: AdHocNoteType) -> None:
+        ctx = self.get_style_context()
+        ctx.remove_class('success-color')
+        ctx.remove_class('warning-color')
+        ctx.remove_class('error-color')
+        if severity == AdHocNoteType.INFO:
+            self.set_from_icon_name('object-select-symbolic',
+                    Gtk.IconSize.DIALOG)
+            ctx.add_class('success-color')
+        elif severity == AdHocNoteType.WARN:
+            self.set_from_icon_name('dialog-warning-symbolic',
+                    Gtk.IconSize.DIALOG)
+            ctx.add_class('warning-color')
+        elif severity == AdHocNoteType.ERROR:
+            self.set_from_icon_name('dialog-error-symbolic',
+                    Gtk.IconSize.DIALOG)
+            ctx.add_class('error-color')
