@@ -1,4 +1,3 @@
-
 # Copyright (C) 2009-2014 Yann Leboulanger <asterix AT lagaule.org>
 #
 # This file is part of Gajim.
@@ -187,9 +186,9 @@ def build_accounts_menu() -> None:
         return
 
     if len(accounts_list) > 1:
-        modify_accounts_item = Gio.MenuItem.new(_('_Modify Accounts…'),
+        manage_accounts_item = Gio.MenuItem.new(_('_Manage Accounts…'),
                                                 'app.accounts::')
-        acc_menu.append_item(modify_accounts_item)
+        acc_menu.append_item(manage_accounts_item)
         add_contact_item = Gio.MenuItem.new(_('Add _Contact…'),
                                             'app.add-contact::')
         acc_menu.append_item(add_contact_item)
@@ -198,9 +197,9 @@ def build_accounts_menu() -> None:
             acc_menu.append_submenu(label, get_account_menu(acc))
     else:
         acc_menu = get_account_menu(accounts_list[0])
-        modify_account_item = Gio.MenuItem.new(_('_Modify Account…'),
+        manage_account_item = Gio.MenuItem.new(_('_Manage Account…'),
                                                'app.accounts::')
-        acc_menu.insert_item(0, modify_account_item)
+        acc_menu.insert_item(0, manage_account_item)
         add_contact_item = Gio.MenuItem.new(_('Add _Contact…'),
                                             'app.add-contact::')
         acc_menu.insert_item(1, add_contact_item)
