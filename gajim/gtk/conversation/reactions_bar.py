@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import NamedTuple
 from typing import TYPE_CHECKING
 
@@ -18,6 +19,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
@@ -42,6 +44,12 @@ class ReactionsBar(Gtk.Box):
         Gtk.Box.__init__(self, spacing=3, no_show_all=True, halign=Gtk.Align.START)
         self._message_row = message_row
         self._contact = contact
+        if isinstance(self._contact, GroupchatContact):
+            self._contact.connect('state-changed', self._on_muc_state_changed)
+
+        self._client = app.get_client(self._contact.account)
+        self._client.connect_signal('state-changed', self._on_client_state_changed)
+        self.set_sensitive(self._get_reactions_enabled())
 
         self._reactions: list[mod.Reaction] = []
 
@@ -50,6 +58,27 @@ class ReactionsBar(Gtk.Box):
         add_reaction_button.get_style_context().add_class('flat')
         add_reaction_button.connect('emoji-added', self._on_emoji_added)
         self.pack_end(add_reaction_button, False, False, 0)
+
+    def _on_client_state_changed(self, *args: Any) -> None:
+        self.set_sensitive(self._get_reactions_enabled())
+
+    def _on_muc_state_changed(self, *args: Any) -> None:
+        self.set_sensitive(self._get_reactions_enabled())
+
+    def _get_reactions_enabled(self) -> bool:
+        if not app.account_is_connected(self._contact.account):
+            return False
+
+        if isinstance(self._contact, GroupchatContact):
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            if self_contact.role.is_visitor:
+                return False
+
+        return True
 
     def _aggregate_reactions(
         self, reactions: list[mod.Reaction]
