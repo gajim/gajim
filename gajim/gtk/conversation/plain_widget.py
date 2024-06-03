@@ -57,7 +57,9 @@ class MessageLabel(Gtk.Label):
         self.set_selectable(selectable)
         self.set_line_wrap(True)
         self.set_xalign(0)
-        self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        # WrapMode.WORD_CHAR can cause a segfault
+        # https://gitlab.gnome.org/GNOME/pango/-/issues/798
+        self.set_line_wrap_mode(Pango.WrapMode.WORD)
         self.set_track_visited_links(False)
 
         self._account = account
