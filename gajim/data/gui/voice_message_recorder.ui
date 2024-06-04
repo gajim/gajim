@@ -54,7 +54,7 @@
                 <property name="can-focus">False</property>
                 <property name="margin-start">5</property>
                 <property name="margin-end">5</property>
-                <property name="label" translatable="yes">0:00</property>
+                <property name="label">0:00</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -127,10 +127,11 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="cancel_button">
-                    <property name="label" translatable="yes">Cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="_on_cancel_clicked" swapped="no"/>
                   </object>
                   <packing>
@@ -186,11 +187,12 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="send_button">
-                    <property name="label" translatable="yes">Send</property>
+                    <property name="label" translatable="yes">_Send</property>
                     <property name="visible">True</property>
                     <property name="sensitive">False</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">True</property>
+                    <property name="use-underline">True</property>
                     <signal name="clicked" handler="_on_send_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
