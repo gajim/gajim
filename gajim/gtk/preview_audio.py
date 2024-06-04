@@ -62,6 +62,7 @@ class AudioWidget(Gtk.Box):
         app.preview_manager.register_audio_stop_func(self._id, self._set_ready)
 
         self._seek_pos = -1.0
+        self._cursor_pos = 0.0
         self._offset_backward = -10e9  # in ns
         self._offset_forward = 10e9
         self._pause_seek = False
@@ -97,6 +98,7 @@ class AudioWidget(Gtk.Box):
             self._audio_analyzer = AudioAnalyzer(
                 file_path, self._update_duration, self._update_samples)
         else:
+            self._audio_visualizer.set_samples(self._state.samples)
             self._update_ui()
 
         self._ui.speed_bar_adj.configure(
@@ -125,6 +127,42 @@ class AudioWidget(Gtk.Box):
         self.connect('destroy', self._on_destroy)
         self.show_all()
 
+    def load_audio_file(self, file_path: Path) -> None:
+        assert self._playbin is not None
+
+        self._playbin.send_event(Gst.Event.new_eos())
+        self._playbin.set_state(Gst.State.NULL)
+
+        self._playbin.set_property('uri', file_path.as_uri())
+
+        self._audio_analyzer = AudioAnalyzer(
+            file_path, self._update_duration, self._update_samples)
+
+        self._playbin.set_state(Gst.State.READY)
+        self._is_ready = True
+        self._next_state_is_playing = False
+        self._seek(-1.0)
+        self._query.set_position(Gst.Format.TIME, 0)
+
+        self._ui.seek_bar.set_value(0.0)
+        self._update_ui()
+
+    def set_pause(self, paused: bool) -> None:
+        assert Gst is not None
+        assert self._playbin is not None
+        if paused:
+            self._playbin.set_state(Gst.State.PAUSED)
+            self._remove_seek_bar_update_idle()
+            self._ui.play_icon.set_from_icon_name(
+                'media-playback-start-symbolic',
+                Gtk.IconSize.BUTTON)
+        else:
+            self._playbin.set_state(Gst.State.PLAYING)
+            self._add_seek_bar_update_idle()
+            self._ui.play_icon.set_from_icon_name(
+                'media-playback-pause-symbolic',
+                Gtk.IconSize.BUTTON)
+
     def _enable_controls(self, status: bool) -> None:
         self._ui.seek_bar.set_sensitive(status)
         self._ui.progress_label.set_sensitive(status)
@@ -136,18 +174,15 @@ class AudioWidget(Gtk.Box):
         self._ui.speed_menubutton.set_sensitive(status)
 
     def _update_ui(self) -> None:
+
         if not self._state.duration > 0:
             log.debug('Could not successfully load audio. Duration is zero.')
             return
 
         self._enable_controls(True)
 
-        if len(self._state.samples) > 0:
-            self._audio_visualizer.update_params(
-                self._state.samples,
-                self._state.position / self._state.duration)
-            self._audio_visualizer.draw_graph(
-                self._state.position / self._state.duration)
+        self._audio_visualizer.render_static_graph(
+            self._state.position / self._state.duration)
 
         self._ui.seek_bar_adj.configure(
             value=self._state.position,
@@ -168,6 +203,7 @@ class AudioWidget(Gtk.Box):
                         samples: AudioSampleT,
                         ) -> None:
         self._state.samples = samples
+        self._audio_visualizer.set_samples(self._state.samples)
         self._state.is_audio_analyzed = True
         self._update_ui()
 
@@ -191,7 +227,13 @@ class AudioWidget(Gtk.Box):
             'autoaudiosink', 'autoaudiosink')
 
         pipeline_elements = [
-            audio_sink, audioconvert, scaletempo, audioresample, autoaudiosink]
+            audio_sink,
+            audioconvert,
+            scaletempo,
+            audioresample,
+            autoaudiosink
+        ]
+
         if any(element is None for element in pipeline_elements):
             # If it fails there will be
             # * a delay until playback starts
@@ -228,7 +270,8 @@ class AudioWidget(Gtk.Box):
             audio_sink.add_pad(ghost_pad)
             self._playbin.set_property('audio-sink', audio_sink)
 
-        self._playbin.set_property('uri', file_path.as_uri())
+        if file_path.is_file():
+            self._playbin.set_property('uri', file_path.as_uri())
         self._playbin.no_more_pads()
 
         state_return = self._playbin.set_state(Gst.State.READY)
@@ -257,14 +300,14 @@ class AudioWidget(Gtk.Box):
         self._audio_visualizer = AudioVisualizerWidget(
             width,
             height,
-            SEEK_BAR_PADDING,
+            SEEK_BAR_PADDING
         )
         self._ui.drawing_box.add(self._audio_visualizer)
 
     def _on_visualizer_button_press_event(self,
-                                    drawing_area: Gtk.DrawingArea,
-                                    event: Gdk.EventButton
-                                    ) -> None:
+                                          drawing_area: Gtk.DrawingArea,
+                                          event: Gdk.EventButton
+                                          ) -> None:
         width = drawing_area.get_allocation().width - 2 * SEEK_BAR_PADDING
 
         if self._is_LTR:
@@ -298,7 +341,7 @@ class AudioWidget(Gtk.Box):
                 self._state.position = position
                 self._ui.seek_bar.set_value(self._state.position)
 
-            self._audio_visualizer.draw_graph(
+            self._audio_visualizer.render_static_graph(
                 position / self._state.duration,
                 self._seek_pos / self._state.duration)
 
@@ -370,20 +413,21 @@ class AudioWidget(Gtk.Box):
 
         return False
 
-    def _set_pause(self, paused: bool) -> None:
-        assert self._playbin is not None
-        if paused:
-            self._playbin.set_state(Gst.State.PAUSED)
-            self._remove_seek_bar_update_idle()
-            self._ui.play_icon.set_from_icon_name(
-                'media-playback-start-symbolic',
-                Gtk.IconSize.BUTTON)
-        else:
-            self._playbin.set_state(Gst.State.PLAYING)
-            self._add_seek_bar_update_idle()
-            self._ui.play_icon.set_from_icon_name(
-                'media-playback-pause-symbolic',
-                Gtk.IconSize.BUTTON)
+    def _error_info(self, message: Gst.Message) -> tuple[str, int]:
+        structure = message.get_structure()
+        assert structure is not None
+        gerror = structure.get_value('gerror')
+        assert gerror is not None
+        return gerror.domain, gerror.code
+
+    def _handle_error_on_playback(self, message: Gst.Message):
+        domain, code = self._error_info(message)
+        if domain == 'gst-resource-error-quark':
+            if code == 10:
+                # On Windows: AUDCLNT_E_DEVICE_INVALIDATED (10)
+                # GST_RESOURCE_ERROR_WRITE (10)
+                # used when the resource can't be written to.
+                self._set_ready()
 
     def _set_ready(self) -> None:
         assert self._playbin is not None
@@ -447,7 +491,7 @@ class AudioWidget(Gtk.Box):
                                0)
 
         self._ui.seek_bar.set_value(self._state.position)
-        self._audio_visualizer.draw_graph(
+        self._audio_visualizer.render_static_graph(
             self._state.position / self._state.duration)
 
     def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
@@ -475,8 +519,10 @@ class AudioWidget(Gtk.Box):
                     return
 
                 # Continue from state PAUSED --> PLAYING
-                self._set_pause(False)
+                self.set_pause(False)
                 self._next_state_is_playing = False
+        elif message.type == Gst.MessageType.ERROR:
+            self._handle_error_on_playback(message)
 
     def _on_speed_change(self,
                          _range: Gtk.Range,
@@ -512,7 +558,7 @@ class AudioWidget(Gtk.Box):
 
     def _on_seek_bar_button_pressed(self,
                                     _scale: Gtk.Scale,
-                                    event: Gdk.EventButton,
+                                    _event: Gdk.EventButton,
                                     ) -> None:
         assert self._cursor_pos is not None
         # There are two cases when the user clicks on the seek bar:
@@ -569,14 +615,14 @@ class AudioWidget(Gtk.Box):
         if not (self._get_paused() or self._get_ready()):
             self._seek_pos = value
         else:
-            self._audio_visualizer.draw_graph(
+            self._audio_visualizer.render_static_graph(
                 self._state.position / self._state.duration)
 
     def _on_play_clicked(self, _button: Gtk.Button) -> None:
         app.preview_manager.stop_audio_except(self._id)
         if self._get_ready():
             # The order is always READY -> PAUSE -> PLAYING
-            self._set_pause(True)
+            self.set_pause(True)
             self._next_state_is_playing = True
 
             if self._state.is_eos:
@@ -593,7 +639,7 @@ class AudioWidget(Gtk.Box):
             self._seek(0.0)
             self._ui.seek_bar.set_value(0.0)
 
-        self._set_pause(not self._get_paused())
+        self.set_pause(not self._get_paused())
 
     def _on_rewind_clicked(self, _button: Gtk.Button) -> None:
         new_pos = self._get_constrained_position(

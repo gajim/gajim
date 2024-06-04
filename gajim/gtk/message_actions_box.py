@@ -46,6 +46,7 @@ from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util import open_window
+from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
 
 log = logging.getLogger('gajim.gtk.messageactionsbox')
 
@@ -78,6 +79,15 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         app.settings.bind_signal('show_send_message_button',
                                  self._ui.send_message_button,
                                  'set_visible')
+
+        self.voice_message_recorder_button = VoiceMessageRecorderButton()
+        self._ui.action_box.pack_end(
+            self.voice_message_recorder_button,
+            False,
+            True,
+            0)
+        self._ui.action_box.reorder_child(
+            self.voice_message_recorder_button, 3)
 
         self._security_label_selector = SecurityLabelSelector()
         self._ui.action_box.pack_start(

@@ -31,7 +31,7 @@ class AudioAnalyzer:
                  samples_callback: Callable[[AudioSampleT], None]
                  ) -> None:
 
-        self._playbin = Gst.ElementFactory.make('playbin', 'bin')
+        self._playbin = Gst.ElementFactory.make('playbin')
 
         if self._playbin is None:
             log.debug('Could not create GST playbin for AudioAnalyzer')
@@ -47,7 +47,8 @@ class AudioAnalyzer:
         self._level: Gst.Element | None = None
         self._bus_watch_id: int = 0
 
-        self._setup_audio_analyzer(filepath)
+        if filepath.is_file():
+            self._setup_audio_analyzer(filepath)
 
     def _setup_audio_analyzer(self, file_path: Path) -> None:
         assert isinstance(self._playbin, Gst.Bin)
@@ -57,7 +58,13 @@ class AudioAnalyzer:
         self._level = Gst.ElementFactory.make('level', 'level')
         fakesink = Gst.ElementFactory.make('fakesink', 'fakesink')
 
-        pipeline_elements = [audio_sink, audioconvert, self._level, fakesink]
+        pipeline_elements = [
+            audio_sink,
+            audioconvert,
+            self._level,
+            fakesink,
+        ]
+
         if any(element is None for element in pipeline_elements):
             log.error('Could not set up pipeline for AudioAnalyzer')
             return
@@ -80,8 +87,9 @@ class AudioAnalyzer:
         audio_sink.add_pad(ghost_pad)
 
         self._playbin.set_property('audio-sink', audio_sink)
-        file_uri = file_path.as_uri()
-        self._playbin.set_property('uri', file_uri)
+        if file_path.is_file():
+            file_uri = file_path.as_uri()
+            self._playbin.set_property('uri', file_uri)
         self._playbin.no_more_pads()
 
         self._level.set_property('message', True)
@@ -122,10 +130,9 @@ class AudioAnalyzer:
 
         if message.src is self._level:
             structure = message.get_structure()
-            if structure is None or structure.get_name() != 'level':
-                return
-
-            if not structure.has_field('rms'):
+            if (structure is None
+                    or structure.get_name() != 'level'
+                    or not structure.has_field('rms')):
                 return
 
             # RMS: Root Mean Square = Average Power
@@ -137,7 +144,9 @@ class AudioAnalyzer:
             # The sound pressure level L is defined as
             # L = 10 log_10((p/p_0)^2) dB, where p is the RMS value
             # of the sound pressure.
-            if self._num_channels == 1:
+            if self._num_channels == 0:
+                self._samples.append((0, 0))
+            elif self._num_channels == 1:
                 lin_val = math.pow(10, rms_values[0] / 10 / 2)
                 self._samples.append((lin_val, lin_val))
             else:

@@ -990,6 +990,21 @@ class VideoPreviewBuilder(Builder):
     video_preview_placeholder: Gtk.Box
 
 
+class VoiceMessageRecorderBuilder(Builder):
+    popover: Gtk.Popover
+    box: Gtk.Box
+    error_label: Gtk.Label
+    progression_box: Gtk.Box
+    time_label: Gtk.Label
+    visualization_box: Gtk.Box
+    audio_player_box: Gtk.Box
+    record_control_box: Gtk.Box
+    cancel_button: Gtk.Button
+    record_toggle_button: Gtk.Button
+    record_toggle_button_image: Gtk.Image
+    send_button: Gtk.Button
+
+
 class WorkspaceDialogBuilder(Builder):
     box: Gtk.Box
     preview: Gtk.Image
@@ -1132,6 +1147,8 @@ def get_builder(file_name: Literal['systray_context_menu.ui'], widgets: list[str
 def get_builder(file_name: Literal['themes_window.ui'], widgets: list[str] = ...) -> ThemesWindowBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['video_preview.ui'], widgets: list[str] = ...) -> VideoPreviewBuilder: ...  # noqa
+@overload
+def get_builder(file_name: Literal['voice_message_recorder.ui'], widgets: list[str] = ...) -> VoiceMessageRecorderBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['workspace_dialog.ui'], widgets: list[str] = ...) -> WorkspaceDialogBuilder: ...  # noqa
 

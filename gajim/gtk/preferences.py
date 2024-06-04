@@ -253,6 +253,11 @@ class General(PreferenceBox):
                     'show_send_message_button'),
 
             Setting(SettingKind.SWITCH,
+                    _('Show Voice Message Button'),
+                    SettingType.CONFIG,
+                    'show_voice_message_button'),
+
+            Setting(SettingKind.SWITCH,
                     _('Send Messages with Control+Enter'),
                     SettingType.CONFIG,
                     'send_on_ctrl_enter'),
