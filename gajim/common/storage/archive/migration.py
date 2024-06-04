@@ -208,10 +208,7 @@ class Migration:
 
             stmt = sa.select(LastArchiveMessage)
 
-            accounts = app.settings.get_accounts()
-            account_jids = [app.get_jid_from_account(account) for account in accounts]
-            account_jids = [JID.from_string(a) for a in account_jids]
-            account_pks = [self._get_account_pk(conn, j) for j in account_jids]
+            account_pks = self._get_account_pks(conn)
 
             for archive_row in self._archive.get_session().scalars(stmt):
                 self._process_archive_row(conn, archive_row, account_pks)
@@ -271,6 +268,21 @@ class Migration:
     def _v11(self) -> None:
         mod.Base.metadata.create_all(self._engine)
         self._execute_multiple(['PRAGMA user_version=11'])
+
+    def _get_account_pks(self, conn: sa.Connection) -> list[int]:
+        account_pks: list[int] = []
+        for account in app.settings.get_accounts():
+            jid_str = app.get_jid_from_account(account)
+            try:
+                jid = JID.from_string(jid_str)
+            except Exception:
+                log.warning('Unable to parse account: %s', jid_str)
+                continue
+
+            pk = self._get_account_pk(conn, jid)
+            account_pks.append(pk)
+
+        return account_pks
 
     def _process_archive_row(
         self,
