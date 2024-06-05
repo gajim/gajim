@@ -17,6 +17,7 @@ from collections.abc import Callable
 from pathlib import Path
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 try:
     from gi.repository import Gst
@@ -305,7 +306,7 @@ class VoiceMessageRecorder:
                 # used when resource fails to open for reading.
                 self._error_callback(
                     GST_ERROR_ON_START,
-                    'Is a microphone plugged in and accessible?'
+                    _('Is a microphone plugged in and accessible?')
                 )
 
     def _handle_error_on_recording(self, message: Gst.Message | None):
@@ -321,7 +322,8 @@ class VoiceMessageRecorder:
                 # used when the resource can't be read from.
                 self._error_callback(
                     GST_ERROR_ON_RECORDING,
-                    'Is a microphone plugged in and accessible?')
+                    _('Is a microphone plugged in and accessible?')
+                )
 
         if domain == 'gst-stream-error-quark':
             if code == 1:
@@ -330,7 +332,8 @@ class VoiceMessageRecorder:
                 # Make sure you add a custom message to the error call.
                 self._error_callback(
                     GST_ERROR_ON_RECORDING,
-                    'General Stream Error.')
+                    _('Error in audio data stream.')
+                )
 
     def _handle_error_on_stop(self, message: Gst.Message | None) -> None:
         if message is not None and not self._is_error(message):
