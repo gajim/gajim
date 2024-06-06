@@ -2,13 +2,13 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # Gabriel Papp <gabriel.papp@gmx.com>, 2010.
-# Róbert Somogyvári <cr04ch@disroot.org>, 2022, 2023.
+# Róbert Somogyvári <cr04ch@disroot.org>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
-"PO-Revision-Date: 2023-11-30 05:58+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"PO-Revision-Date: 2024-06-06 05:51+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -484,9 +484,8 @@ msgstr "Csoport hozzáadása…"
 msgid "Add Proxy"
 msgstr "Proxy hozzáadása"
 
-#, fuzzy
 msgid "Add Reaction…"
-msgstr "Névjegy felvétele…"
+msgstr "Új visszajelzés…"
 
 msgid "Add Setting"
 msgstr "Hozzáadás"
@@ -512,9 +511,8 @@ msgstr "Új téma"
 msgid "Add new line"
 msgstr "Új sor"
 
-#, fuzzy
 msgid "Add reaction"
-msgstr "Hozzáadás"
+msgstr "Új visszajelzés"
 
 msgid "Add some details…"
 msgstr "Részletezés…"
@@ -646,16 +644,19 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"Nem sikerült a társalgó ({group}) {occupant_jid} fiókját "
+"„{affiliation_or_role}”-ként beállítani"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
-msgstr "Hiba történt a fájl létrehozása során: %(path)s: %(error)s"
+msgstr ""
+"Hiba történt a fiók ({occupant_jid}) „{affiliation_or_role}”-kénti "
+"beállításakor: {error}"
 
-#, fuzzy
 msgid "And more..."
-msgstr "Fióknév…"
+msgstr "Továbbiak…"
 
 msgid "Anonymous login not supported"
 msgstr "Nem lehet névtelenül bejelentkezni"
@@ -927,7 +928,7 @@ msgid "CRL signature failure"
 msgstr "CRL-aláírási hiba"
 
 msgid "C_opy"
-msgstr ""
+msgstr "Más_olás"
 
 msgid "Call"
 msgstr "Hívás"
@@ -1057,7 +1058,6 @@ msgstr "A beszélgetés felső sávja: előtérszín"
 msgid "Chat Banner: Text Font"
 msgstr "A beszélgetés felső sávja: betűkészlet"
 
-#, fuzzy
 msgid "Chat Details and Settings"
 msgstr "Tulajdonságok"
 
@@ -1501,14 +1501,16 @@ msgid "Dark Theme"
 msgstr "Sötét téma"
 
 msgid "Database Migration"
-msgstr ""
+msgstr "Adatbázis áttelepítése"
 
-#, fuzzy
 msgid "Database migration failed"
-msgstr "Sikertelen regisztráció"
+msgstr "Az adatbázis áttelepítése nem sikerült"
 
 msgid "Deactivated"
 msgstr "Kikapcsolva"
+
+msgid "Debug Console"
+msgstr "Hibakereső"
 
 msgid "Debug Logging"
 msgstr "Hibakeresési naplózás"
@@ -1756,7 +1758,7 @@ msgid "Edit Name…"
 msgstr "Név módosítása…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "Üzenetszerkesztés (ESC: mégsem)…"
 
 msgid "Edit…"
 msgstr "Módosítás…"
@@ -1838,7 +1840,7 @@ msgid "Encryption error"
 msgstr "Titkosítási hiba"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "A privát beszélgetések nem titkosíthatók"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr "Az alapértelmezett titkosítási módszer névjegyenként felülírható"
@@ -1867,6 +1869,9 @@ msgstr "Hiba"
 
 msgid "Error Loading Image"
 msgstr "Képbetöltési hiba"
+
+msgid "Error in audio data stream."
+msgstr "Hiba a hangadatfolyamban."
 
 #, python-format
 msgid "Error message: %s"
@@ -2360,7 +2365,7 @@ msgid "Hide this menu"
 msgstr "E menü elrejtése"
 
 msgid "Hide/show the main window menu"
-msgstr ""
+msgstr "A főablak menüjének mutatása/elrejtése"
 
 msgid "Home"
 msgstr "Otthoni"
@@ -2563,6 +2568,9 @@ msgstr "Meghívás a társalgóba"
 
 msgid "Invitees"
 msgstr "Meghívottak"
+
+msgid "Is a microphone plugged in and accessible?"
+msgstr "Be van dugva és használható a mikrofon?"
 
 msgid "Issued by"
 msgstr "Kibocsátó"
@@ -2840,9 +2848,8 @@ msgstr "Üzenet elküldve"
 msgid "Message composition"
 msgstr "Üzenetszerkesztés"
 
-#, fuzzy
 msgid "Message content unknown"
-msgstr "Üzenet elküldve"
+msgstr "Az üzenet tartalma ismeretlen"
 
 #, python-format
 msgid ""
@@ -2877,9 +2884,19 @@ msgstr "A hang-/videóhíváshoz szükséges összetevők hiányoznak"
 msgid "Missing necessary encryption plugin"
 msgstr "A titkosítás bővítménye hiányzik"
 
+msgid "Moderate Message"
+msgstr "Üzenet moderálása"
+
+msgid "Moderate message?"
+msgstr "Az üzenet moderálandó?"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
 msgstr "Moderált"
+
+msgctxt "Message row action"
+msgid "Moderate…"
+msgstr "Moderálás…"
 
 msgid "Moderation"
 msgstr "Moderálás"
@@ -2990,9 +3007,8 @@ msgstr "Nincs további követelmény"
 msgid "No automatic preview"
 msgstr "Nincs automatikus előnézet"
 
-#, fuzzy
 msgid "No certificate"
-msgstr "Tanúsítvány"
+msgstr "Nincs tanúsítvány"
 
 msgid "No commands available"
 msgstr "Nincsenek parancsok"
@@ -3014,7 +3030,6 @@ msgstr ""
 "Nincs a feltételnek megfelelő névjegy.\n"
 "XMPP-címet is meg lehet adni."
 
-#, fuzzy
 msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 "Nincs eszköz, amelyre az üzenet titkosítható lenne. Az eszközök lekérdezése…"
@@ -3353,9 +3368,8 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "Szüneteltetve"
 
-#, fuzzy
 msgid "Pending"
-msgstr "Várakozó események"
+msgstr "Függőben"
 
 msgid "Pending Event"
 msgstr "Várakozó események"
@@ -3616,8 +3630,9 @@ msgstr "Bejelentkezés újra?"
 msgid "Re_gister"
 msgstr "Re_gisztrálás"
 
-msgid "React with 👍"
-msgstr ""
+#, python-format
+msgid "React with %s"
+msgstr "Visszajelzés így: %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Szócikk a _Wikipédián"
@@ -3644,7 +3659,6 @@ msgstr "A megszűnés oka"
 msgid "Reason: %s"
 msgstr "Ok: %s"
 
-#, fuzzy
 msgid "Received"
 msgstr "Kézbesítve"
 
@@ -3664,6 +3678,12 @@ msgstr "Címzett: %s"
 
 msgid "Recognize your account by color"
 msgstr "A fiók megkülönböztető színének kiválasztása"
+
+msgid "Record"
+msgstr "Felvétel"
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr "Hangüzenet felvétele… (nyomva tartva azonnali felvétel)"
 
 msgid "Redirect"
 msgstr "Átirányítás"
@@ -3751,9 +3771,8 @@ msgstr "Törlés a névjegyekből"
 msgid "Remove this workspace"
 msgstr "A munkaterület törlése"
 
-#, fuzzy
 msgid "Remove your group chat avatar"
-msgstr "Profilkép törlése"
+msgstr "A társalgóbeli profilkép törlése"
 
 msgid "Remove your profile picture"
 msgstr "Profilkép törlése"
@@ -3775,7 +3794,7 @@ msgid "Repairs"
 msgstr "Javítások"
 
 msgid "Reply…"
-msgstr ""
+msgstr "Válasz…"
 
 msgid "Report"
 msgstr "Jelentés"
@@ -3876,16 +3895,6 @@ msgstr ""
 "A legutóbbi munkamenet jelenléti állapotának és állapotüzenetének "
 "visszaállítása"
 
-msgid "Retract Message"
-msgstr "Üzenet visszavonása"
-
-msgid "Retract message?"
-msgstr "Vissza kell vonni az üzenetet?"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "Visszavonás…"
-
 msgid "Revoke Member"
 msgstr "Tagság elvétele"
 
@@ -3981,9 +3990,8 @@ msgstr "Vizsgálat: %(current)d / %(total)d…"
 msgid "Scroll down"
 msgstr "Görgetés le"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "Állapotüzenet beállítása"
+msgstr "Ugrás ehhez az üzenethez"
 
 msgid "Scroll up"
 msgstr "Görgetés fel"
@@ -4241,9 +4249,8 @@ msgstr "A névjegy tulajdonságainak megjelenítése"
 msgid "Show Content"
 msgstr "Tartalom megjelenítése"
 
-#, fuzzy
 msgid "Show Details"
-msgstr "Tulajdonságok"
+msgstr "Részletes információ"
 
 msgid "Show Inactive Devices"
 msgstr "Inaktív eszközök megjelenítése"
@@ -4281,8 +4288,8 @@ msgstr "Téma megjelenítése"
 msgid "Show Transfers"
 msgstr "Fájlátvitelek"
 
-msgid "Show XML console"
-msgstr "XML-parancssor"
+msgid "Show Voice Message Button"
+msgstr "Hangüzenet gomb megjelenítése"
 
 msgid "Show _Features"
 msgstr "_Tulajdonságok"
@@ -4303,9 +4310,8 @@ msgstr "Hangulatjelek"
 msgid "Show a live preview to test your video source"
 msgstr "Élőkép megjelenítése a videóforrás kipróbálásához"
 
-#, fuzzy
 msgid "Show all reactions"
-msgstr "Minden figyelmeztetés megjelenítése"
+msgstr "Minden visszajelzés megjelenítése"
 
 msgid "Show all warnings"
 msgstr "Minden figyelmeztetés megjelenítése"
@@ -4316,6 +4322,9 @@ msgstr "Beszélgetéslista megjelenítése"
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
 "A beszélgetésállapot (pl. „éppen ír…”) jelzése a beszélgetőtárs neve után"
+
+msgid "Show debug console"
+msgstr "Hibakereső ablak megnyitása"
 
 msgid "Show in Taskbar"
 msgstr "Megjelenés a feladatsávon"
@@ -4485,6 +4494,9 @@ msgid ""
 msgstr ""
 "Beszélgetés kezdeményezése, belépés egy társalgóba vagy új társalgó "
 "keresése. XMPP-cím is megadható."
+
+msgid "Start/Stop recording"
+msgstr "Felvétel indítása/leállítása"
 
 msgid "Start/stop playback"
 msgstr "Lejátszás indítása/leállítása"
@@ -5081,9 +5093,8 @@ msgstr "Ismeretlen cím"
 msgid "Unknown command: %s"
 msgstr "Ismeretlen parancs: %s"
 
-#, fuzzy
 msgid "Unknown error."
-msgstr "Ismeretlen SSL-hiba: „%s”"
+msgstr "Ismeretlen hiba."
 
 msgid "Unknown language"
 msgstr "Ismeretlen nyelv"
@@ -5146,9 +5157,8 @@ msgstr "Fájlfeltöltés"
 msgid "Upload File…"
 msgstr "Fájlfeltöltés…"
 
-#, fuzzy
 msgid "Upload could not be completed."
-msgstr "A kiválasztott kép nem tölthető be."
+msgstr "Nem sikerült a feltöltés."
 
 msgid "Uploading Avatar Failed"
 msgstr "A profilkép feltöltése nem sikerült"
@@ -5276,8 +5286,17 @@ msgstr "Látogatók"
 msgid "Visual Notifications"
 msgstr "Vizuális értesítések"
 
+msgid "Voice Message"
+msgstr "Hangüzenet"
+
+msgid "Voice Messages are not available"
+msgstr "Nem lehet hangüzenetet küldeni"
+
 msgid "Waiting…"
 msgstr "Várakozás…"
+
+msgid "Warning"
+msgstr "Figyelmeztetés"
 
 msgid "Wav Sounds"
 msgstr "Wav hangfájlok"
@@ -5314,8 +5333,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "Melyik kiszolgálót érdemes választani?"
 
-msgid "Why do you want to retract this message?"
-msgstr "Miért kell visszavonni ezt az üzenetet?"
+msgid "Why do you want to moderate this message?"
+msgstr "Mi az üzenet moderálásának az oka?"
 
 msgid "Width of group chat roster in pixel"
 msgstr "A társalgó résztvevőit megjelenítő panel szélessége pixelben"
@@ -5335,18 +5354,14 @@ msgstr "Munkavégzés"
 msgid "Workspace Settings"
 msgstr "Munkaterület beállításai"
 
-#, fuzzy
 msgid "Workspace settings…"
-msgstr "Munkaterület beállításai"
+msgstr "A munkaterület beállításai…"
 
 msgid "Workspaces"
 msgstr "Munkaterületek"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML-parancssor"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML-parancssor a kommunikáció protokollszintű követéséhez"
@@ -5383,9 +5398,8 @@ msgstr "%s néven beléptem a társalgóba"
 msgid "You are a visitor"
 msgstr "Szerepkör: vendég"
 
-#, fuzzy
 msgid "You are a visitor."
-msgstr "Szerepkör: vendég"
+msgstr "Szerepkör: vendég."
 
 #, python-format
 msgid ""
@@ -5430,7 +5444,7 @@ msgid "You are offline."
 msgstr "Nincs élő kapcsolat."
 
 msgid "You are offline. Go online to send messages…"
-msgstr ""
+msgstr "Nincs kapcsolat. Az üzenetküldéshez be kell jelentkezni…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
@@ -5455,7 +5469,15 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr "Kapcsolódás nélkül a fiók nem szinkronizálható."
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr "Offline félnek nem lehet privát üzenetet küldeni."
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
+"Nincs hozzáférési engedély ehhez a könyvtárhoz.\n"
+"Hiba: %s."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "A könyvtár jogosultságai nem teszik lehetővé fájlok létrehozását."
@@ -5533,14 +5555,15 @@ msgstr "A fiók törlése sikerült."
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Az archiválási beállítások mentése sikerült."
 
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
-msgstr "A fiók törlése sikerült."
+msgstr "A beszélgetések előzményeinek áttelepítése sikerült."
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"A beszélgetések előzményei áttelepülnek.\n"
+"Ez eltarthat egy ideig…"
 
 msgid "Your message can not be sent until you are connected."
 msgstr "Az üzenet elküldéséhez előbb kapcsolódni kell."
@@ -5645,6 +5668,9 @@ msgstr "Hivat_kozás másolása"
 msgid "_Create"
 msgstr "_Létrehozás"
 
+msgid "_Debug Console"
+msgstr "_Hibakeresés"
+
 msgid "_Decline"
 msgstr "_Elutasítás"
 
@@ -5712,11 +5738,14 @@ msgstr "_Elhagyás"
 msgid "_Log In"
 msgstr "Beje_lentkezés"
 
-msgid "_Modify Accounts…"
-msgstr "Fiókok _módosítása…"
+msgid "_Manage Accounts…"
+msgstr "Fiókok kezelése…"
 
-msgid "_Modify Account…"
-msgstr "Fiók _módosítása…"
+msgid "_Manage Account…"
+msgstr "Fiók kezelése…"
+
+msgid "_Moderate"
+msgstr "_Moderálás"
 
 msgid "_Name"
 msgstr "_Név"
@@ -5779,9 +5808,6 @@ msgstr "_Kérelem"
 msgid "_Reset Value"
 msgstr "_Alaphelyzetbe"
 
-msgid "_Retract"
-msgstr "_Visszavonás"
-
 msgid "_Save"
 msgstr "_Mentés"
 
@@ -5800,9 +5826,8 @@ msgstr "_Küldés"
 msgid "_Show Certificate"
 msgstr "A tanú_sítvány részletei"
 
-#, fuzzy
 msgid "_Show menu bar"
-msgstr "Megjelenés a feladatsávon"
+msgstr "Menu_sáv megjelenítése"
 
 msgid "_Show notification when file transfer is complete"
 msgstr "Ér_tesítés a fájlátvitel befejezése után"
@@ -5842,9 +5867,6 @@ msgstr "Tanúsítvány _megtekintése"
 
 msgid "_Wiki (Online)"
 msgstr "_Wiki (Online)"
-
-msgid "_XML Console"
-msgstr "_XML-parancssor"
 
 msgid "accuracy"
 msgstr "pontosság"
@@ -5894,7 +5916,7 @@ msgid "countrycode"
 msgstr "országkód"
 
 msgid "dark skin tone"
-msgstr "fekete bőrű"
+msgstr "sötét bőrtónus"
 
 msgid "datum"
 msgstr "irányjel"
@@ -5951,7 +5973,7 @@ msgstr "libsoup verzió: %s"
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
 msgid "light skin tone"
-msgstr "fehér bőrű"
+msgstr "világos bőrtónus"
 
 msgid "locality"
 msgstr "fekvés"
@@ -5963,13 +5985,13 @@ msgid "macOS"
 msgstr "macOS"
 
 msgid "medium skin tone"
-msgstr "kreol bőrű"
+msgstr "közepes bőrtónus"
 
 msgid "medium-dark skin tone"
-msgstr "barna bőrű"
+msgstr "közepesen sötét bőrtónus"
 
 msgid "medium-light skin tone"
-msgstr "világos bőrű"
+msgstr "közepesen világos bőrtónus"
 
 msgctxt "Group chat address"
 msgid "news"
@@ -6318,6 +6340,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Szervezeti egység (OU): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "Visszavonás…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Küldés"
+
 #~ msgid "Show Gajim"
 #~ msgstr "A főablak megnyitása"
 
@@ -6332,6 +6362,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "_Login"
 #~ msgstr "_Bejelentkezés"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "Fiók _módosítása…"
+
+#~ msgid "_Retract"
+#~ msgstr "_Visszavonás"
 
 #~ msgid "_Undo"
 #~ msgstr "_Visszavonás"

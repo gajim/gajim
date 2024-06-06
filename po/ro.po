@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
-"PO-Revision-Date: 2024-03-16 03:33+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"PO-Revision-Date: 2024-05-31 21:52+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -497,9 +497,8 @@ msgstr "Adăugați grup…"
 msgid "Add Proxy"
 msgstr "Adăugați Proxy"
 
-#, fuzzy
 msgid "Add Reaction…"
-msgstr "Adăugați Contact…"
+msgstr "Adăugați Reacția…"
 
 msgid "Add Setting"
 msgstr "Adăugați setarea"
@@ -525,9 +524,8 @@ msgstr "Adăugați o nouă temă"
 msgid "Add new line"
 msgstr "Adăugați o nouă linie"
 
-#, fuzzy
 msgid "Add reaction"
-msgstr "Adăugați setarea"
+msgstr "Adăugați reacția"
 
 msgid "Add some details…"
 msgstr "Adăugați câteva detalii…"
@@ -662,18 +660,19 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"A apărut o eroare în timpul încercării de a face {occupant_jid} "
+"{affiliation_or_role} în grupul \"{group}\""
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
 msgstr ""
-"A apărut o eroare în timpul încercării de a crea un fișier la %(path)s: "
-"%(error)s"
+"S-a produs o eroare în timpul încercării de a face {occupant_jid} "
+"{affiliation_or_role}: {error}"
 
-#, fuzzy
 msgid "And more..."
-msgstr "Numele contului..."
+msgstr "Și multe altele..."
 
 msgid "Anonymous login not supported"
 msgstr "Nu se acceptă autentificarea anonimă"
@@ -947,7 +946,7 @@ msgid "CRL signature failure"
 msgstr "Eșecul semnăturii CRL"
 
 msgid "C_opy"
-msgstr ""
+msgstr "C_opie"
 
 msgid "Call"
 msgstr "Sunați la"
@@ -1078,9 +1077,8 @@ msgstr "Banner de chat: Culoare de prim-plan"
 msgid "Chat Banner: Text Font"
 msgstr "Banner de chat: Font de text"
 
-#, fuzzy
 msgid "Chat Details and Settings"
-msgstr "Detalii de Contact și Setări"
+msgstr "Detalii și Setări pentru chat"
 
 msgid "Chat List"
 msgstr "Lista de chat"
@@ -1519,14 +1517,16 @@ msgid "Dark Theme"
 msgstr "Tema întunecată"
 
 msgid "Database Migration"
-msgstr ""
+msgstr "Migrarea bazei de date"
 
-#, fuzzy
 msgid "Database migration failed"
-msgstr "Înregistrarea a eșuat"
+msgstr "Migrarea bazei de date a eșuat"
 
 msgid "Deactivated"
 msgstr "Dezactivat"
+
+msgid "Debug Console"
+msgstr "Consola Debug"
 
 msgid "Debug Logging"
 msgstr "Jurnalizare de depanare"
@@ -1778,7 +1778,7 @@ msgid "Edit Name…"
 msgstr "Editați numele…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "Editați-vă mesajul (Esc pentru a anula)…"
 
 msgid "Edit…"
 msgstr "Editați…"
@@ -1863,7 +1863,7 @@ msgid "Encryption error"
 msgstr "Eroare de criptare"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "Criptarea nu este disponibilă în discuțiile private"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr ""
@@ -1896,6 +1896,9 @@ msgstr "Eroare"
 
 msgid "Error Loading Image"
 msgstr "Eroare la încărcarea imaginii"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2389,7 +2392,7 @@ msgid "Hide this menu"
 msgstr "Ascundeți acest meniu"
 
 msgid "Hide/show the main window menu"
-msgstr ""
+msgstr "Ascundeți/afișează meniul ferestrei principale"
 
 msgid "Home"
 msgstr "Acasă"
@@ -2599,6 +2602,9 @@ msgstr "Invitați la acest chat"
 
 msgid "Invitees"
 msgstr "Invitați"
+
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
 
 msgid "Issued by"
 msgstr "Emis de"
@@ -2879,9 +2885,8 @@ msgstr "Mesaj trimis"
 msgid "Message composition"
 msgstr "Compoziția mesajelor"
 
-#, fuzzy
 msgid "Message content unknown"
-msgstr "Mesaj trimis"
+msgstr "Conținutul mesajului necunoscut"
 
 #, python-format
 msgid ""
@@ -2917,9 +2922,19 @@ msgstr "Dependențe lipsă pentru Audio/Video"
 msgid "Missing necessary encryption plugin"
 msgstr "Lipsește plugin-ul de criptare necesar"
 
+msgid "Moderate Message"
+msgstr "Mesajul moderat"
+
+msgid "Moderate message?"
+msgstr "Moderați mesajul?"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
 msgstr "Moderat"
+
+msgctxt "Message row action"
+msgid "Moderate…"
+msgstr "Moderat…"
 
 msgid "Moderation"
 msgstr "Moderare"
@@ -3031,9 +3046,8 @@ msgstr "Nu există cerințe suplimentare"
 msgid "No automatic preview"
 msgstr "Nu există previzualizare automată"
 
-#, fuzzy
 msgid "No certificate"
-msgstr "Certificat"
+msgstr "Fără certificat"
 
 msgid "No commands available"
 msgstr "Nu există comenzi disponibile"
@@ -3055,7 +3069,6 @@ msgstr ""
 "Nu au mai rămas contacte.\n"
 "De asemenea, puteți introduce o adresă XMPP."
 
-#, fuzzy
 msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 "Nu s-au găsit dispozitive pe care să fie criptat acest mesaj. Se caută "
@@ -3398,9 +3411,8 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "Pauză"
 
-#, fuzzy
 msgid "Pending"
-msgstr "Eveniment în așteptare"
+msgstr "În așteptare"
 
 msgid "Pending Event"
 msgstr "Eveniment în așteptare"
@@ -3663,8 +3675,9 @@ msgstr "Re-Autentificare acum?"
 msgid "Re_gister"
 msgstr "Re_gistrare"
 
-msgid "React with 👍"
-msgstr ""
+#, python-format
+msgid "React with %s"
+msgstr "Reacționează cu %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Citiți articolul _Wikipedia"
@@ -3691,9 +3704,8 @@ msgstr "Motivul distrugerii"
 msgid "Reason: %s"
 msgstr "Motiv: %s"
 
-#, fuzzy
 msgid "Received"
-msgstr "Primit"
+msgstr "Primită"
 
 msgctxt "Message state"
 msgid "Received"
@@ -3711,6 +3723,12 @@ msgstr "Destinatarul: %s"
 
 msgid "Recognize your account by color"
 msgstr "Recunoașteți contul dumneavoastră după culoare"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "Redirecționare"
@@ -3798,9 +3816,8 @@ msgstr "Eliminarea din lista de contacte"
 msgid "Remove this workspace"
 msgstr "Eliminați acest spațiu de lucru"
 
-#, fuzzy
 msgid "Remove your group chat avatar"
-msgstr "Îndepărtați imaginea de profil"
+msgstr "Îndepărtați-vă avatarul de chat de grup"
 
 msgid "Remove your profile picture"
 msgstr "Îndepărtați imaginea de profil"
@@ -3823,7 +3840,7 @@ msgid "Repairs"
 msgstr "Reparații"
 
 msgid "Reply…"
-msgstr ""
+msgstr "Răspundeți…"
 
 msgid "Report"
 msgstr "Raport"
@@ -3922,16 +3939,6 @@ msgstr "Restabilirea ultimei stări"
 msgid "Restore status and status message of your last session"
 msgstr "Restaurați starea și mesajul de stare din ultima sesiune"
 
-msgid "Retract Message"
-msgstr "Retragerea mesajului"
-
-msgid "Retract message?"
-msgstr "Retragerea mesajului?"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "Retrageți…"
-
 msgid "Revoke Member"
 msgstr "Revocare Membru"
 
@@ -4027,9 +4034,8 @@ msgstr "Scanare %(current)d / %(total)d ..."
 msgid "Scroll down"
 msgstr "Derulați în jos"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "Setați mesajul de stare"
+msgstr "Derulați până la acest mesaj"
 
 msgid "Scroll up"
 msgstr "Derulați în sus"
@@ -4293,9 +4299,8 @@ msgstr "Afișați informațiile de contact"
 msgid "Show Content"
 msgstr "Arată conținutul"
 
-#, fuzzy
 msgid "Show Details"
-msgstr "Detalii"
+msgstr "Afișați detaliile"
 
 msgid "Show Inactive Devices"
 msgstr "Afișarea Dispozitivelor Inactive"
@@ -4333,8 +4338,9 @@ msgstr "Afișați Subiectul"
 msgid "Show Transfers"
 msgstr "Afișați transferurile"
 
-msgid "Show XML console"
-msgstr "Afișați consola XML"
+#, fuzzy
+msgid "Show Voice Message Button"
+msgstr "Afișați butonul Trimite mesaj"
 
 msgid "Show _Features"
 msgstr "Afișați _Funcții"
@@ -4355,9 +4361,8 @@ msgstr "Afișați o listă de emoticoane"
 msgid "Show a live preview to test your video source"
 msgstr "Afișați o previzualizare live pentru a testa sursa video"
 
-#, fuzzy
 msgid "Show all reactions"
-msgstr "Afișați toate avertismentele"
+msgstr "Afișați toate reacțiile"
 
 msgid "Show all warnings"
 msgstr "Afișați toate avertismentele"
@@ -4369,6 +4374,9 @@ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
 "Afișați starea de chat (de exemplu, \"tastează...\") lângă numele "
 "contactului dumneavoastră"
+
+msgid "Show debug console"
+msgstr "Afișați consola de depanare"
 
 msgid "Show in Taskbar"
 msgstr "Afișare în bara de activități"
@@ -4542,6 +4550,9 @@ msgid ""
 msgstr ""
 "Începeți un chat nou, alăturați-vă unui chat de grup sau căutați noi chat-"
 "uri de grup la nivel global. De asemenea, puteți introduce o adresă XMPP."
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr "Pornirea/oprirea redării"
@@ -4895,13 +4906,12 @@ msgstr ""
 "Aceasta este tema pe care o utilizați în prezent.\n"
 "Doriți să ștergeți această temă?"
 
-#, fuzzy
 msgid "This is your XMPP address"
-msgstr "Doar moderatorii vă pot vedea adresa XMPP"
+msgstr "Aceasta este adresa ta XMPP"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated%s."
-msgstr "Acest mesaj a fost retras de %s."
+msgstr "Acest mesaj a fost moderat%s."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5108,9 +5118,8 @@ msgstr "Nu se poate obține certificatul emitentului local"
 msgid "Unable to properly remove the plugin"
 msgstr "Imposibilitatea de a elimina în mod corespunzător plugin-ul"
 
-#, fuzzy
 msgid "Unable to save profile"
-msgstr "Nu s-a putut accesa fișierul"
+msgstr "Nu se poate salva profilul"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nu se poate verifica primul certificat"
@@ -5118,7 +5127,6 @@ msgstr "Nu se poate verifica primul certificat"
 msgid "Unblock"
 msgstr "Deblocați"
 
-#, fuzzy
 msgid "Unencrypted"
 msgstr "Necriptat"
 
@@ -5153,9 +5161,8 @@ msgstr "Titlu necunoscut"
 msgid "Unknown command: %s"
 msgstr "Comandă necunoscută: %s"
 
-#, fuzzy
 msgid "Unknown error."
-msgstr "Eroare SSL necunoscută \"%s\""
+msgstr "Eroare necunoscută."
 
 msgid "Unknown language"
 msgstr "Limbă necunoscută"
@@ -5218,9 +5225,8 @@ msgstr "Încărcați fișiere"
 msgid "Upload File…"
 msgstr "Încărcați fișierul…"
 
-#, fuzzy
 msgid "Upload could not be completed."
-msgstr "Imaginea selectată nu a putut fi încărcată."
+msgstr "Încărcarea nu a putut fi finalizată."
 
 msgid "Uploading Avatar Failed"
 msgstr "Încărcarea Avatarului a eșuat"
@@ -5281,12 +5287,11 @@ msgstr "Utilizați keyring-ul sistemului dumneavoastră pentru a stoca parolele"
 msgid "User %s not found"
 msgstr "Utilizatorul %s nu a fost găsit"
 
-#, fuzzy
 msgid "User Interface"
-msgstr "Interfață D-Bus"
+msgstr "Interfață Utilizator"
 
 msgid "User Interface Font Size"
-msgstr ""
+msgstr "Dimensiunea fontului interfeței utilizatorului"
 
 msgid "Users"
 msgstr "Utilizatori"
@@ -5350,8 +5355,20 @@ msgstr "Vizitatori"
 msgid "Visual Notifications"
 msgstr "Notificări vizuale"
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "Trimiteți un mesaj"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Apelurile video nu sunt disponibile pe Windows"
+
 msgid "Waiting…"
 msgstr "Așteptând…"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Avertisment de securitate"
 
 msgid "Wav Sounds"
 msgstr "Sunete Wav"
@@ -5388,8 +5405,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "Ce server ar trebui să aleg?"
 
-msgid "Why do you want to retract this message?"
-msgstr "De ce doriți să retrageți acest mesaj?"
+msgid "Why do you want to moderate this message?"
+msgstr "De ce doriți să moderați acest mesaj?"
 
 msgid "Width of group chat roster in pixel"
 msgstr "Lățimea listei de chat de grup în pixeli"
@@ -5409,18 +5426,14 @@ msgstr "De lucru"
 msgid "Workspace Settings"
 msgstr "Setări ale spațiului de lucru"
 
-#, fuzzy
 msgid "Workspace settings…"
-msgstr "Setări ale spațiului de lucru"
+msgstr "Setările spațiului de lucru…"
 
 msgid "Workspaces"
 msgstr "Spațiul de lucru"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "Consolă XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "Consola XML pentru a vedea ce se întâmplă la nivelul protocolului"
@@ -5457,9 +5470,8 @@ msgstr "V-ați alăturat (%s) grupului de chat"
 msgid "You are a visitor"
 msgstr "Sunteți vizitator"
 
-#, fuzzy
 msgid "You are a visitor."
-msgstr "Sunteți vizitator"
+msgstr "Sunteți un vizitator."
 
 #, python-format
 msgid ""
@@ -5505,7 +5517,7 @@ msgid "You are offline."
 msgstr "Sunteți offline."
 
 msgid "You are offline. Go online to send messages…"
-msgstr ""
+msgstr "Sunteți offline. Intrați online pentru a trimite mesaje…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
@@ -5531,6 +5543,13 @@ msgstr "Nu puteți sincroniza cu un cont decât dacă acesta este conectat."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+"Nu puteți trimite mesaje private contactelor dacă acestea sunt offline."
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
@@ -5610,14 +5629,15 @@ msgstr "Contul dumneavoastră a fost eliminat cu succes."
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Preferințele dumneavoastră de arhivare au fost salvate cu succes."
 
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
-msgstr "Contul dumneavoastră a fost eliminat cu succes."
+msgstr "Baza de date cu istoricul de chat a fost migrat cu succes."
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"Istoricul de chat este în curs de migrare.\n"
+"Acest lucru poate dura ceva timp…"
 
 msgid "Your message can not be sent until you are connected."
 msgstr ""
@@ -5639,6 +5659,8 @@ msgid ""
 "Your server does not offer a group chat service. Please specify the address "
 "of a different server."
 msgstr ""
+"Serverul dumneavoastră nu oferă un serviciu de chat în grup. Vă rugăm să "
+"specificați adresa unui alt server."
 
 msgid "ZIP files"
 msgstr "Fișiere ZIP"
@@ -5721,6 +5743,9 @@ msgstr "_Copiați link-ul"
 msgid "_Create"
 msgstr "_Creați"
 
+msgid "_Debug Console"
+msgstr "_Consola de depanare"
+
 msgid "_Decline"
 msgstr "_Declinați"
 
@@ -5788,11 +5813,16 @@ msgstr "_Plecați"
 msgid "_Log In"
 msgstr "_Autentificare"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "_Modifică conturile…"
 
-msgid "_Modify Account…"
-msgstr "_Modifică contul…"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "_Adăugați cont…"
+
+msgid "_Moderate"
+msgstr "_Moderat"
 
 msgid "_Name"
 msgstr "_Nume"
@@ -5831,9 +5861,8 @@ msgstr "_Portul"
 msgid "_Preferences"
 msgstr "_Preferințe"
 
-#, fuzzy
 msgid "_Privacy Policy (Online)"
-msgstr "_Wiki (online)"
+msgstr "_Politica de confidențialitate (online)"
 
 msgid "_Purge"
 msgstr "_Purjare"
@@ -5856,9 +5885,6 @@ msgstr "_Solicitare"
 msgid "_Reset Value"
 msgstr "_Resetați valoarea"
 
-msgid "_Retract"
-msgstr "_Retrageți"
-
 msgid "_Save"
 msgstr "_Salvați"
 
@@ -5877,9 +5903,8 @@ msgstr "_Trimiteți"
 msgid "_Show Certificate"
 msgstr "_Arată certificatul"
 
-#, fuzzy
 msgid "_Show menu bar"
-msgstr "Afișare în bara de activități"
+msgstr "_Afișează bara de meniu"
 
 msgid "_Show notification when file transfer is complete"
 msgstr ""
@@ -5920,9 +5945,6 @@ msgstr "_Vezi certificat"
 
 msgid "_Wiki (Online)"
 msgstr "_Wiki (online)"
-
-msgid "_XML Console"
-msgstr "Consolă XML"
 
 msgid "accuracy"
 msgstr "acuratețe"
@@ -6387,6 +6409,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unitatea organizațională (OU): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "Retrageți…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Trimiteți"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Afișați Gajim"
 
@@ -6401,6 +6431,12 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "_Login"
 #~ msgstr "_Autentificare"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "_Modifică contul…"
+
+#~ msgid "_Retract"
+#~ msgstr "_Retrageți"
 
 #~ msgid "_Undo"
 #~ msgstr "_Anulați"

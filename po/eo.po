@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -1706,6 +1706,10 @@ msgid "Deactivated"
 msgstr "Malŝaltita"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML-konzolo"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Aliĝi"
 
@@ -2105,6 +2109,9 @@ msgstr "Ekarto"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Elektu bildon"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2895,6 +2902,9 @@ msgstr "Kontaktoj"
 msgid "Invitees"
 msgstr "In_viti al"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3252,8 +3262,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Statmesaĝo"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "statmesaĝo"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderiganto"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderiganto"
 
 #, fuzzy
@@ -4099,7 +4122,8 @@ msgstr "Ĉu rekonektu nun?"
 msgid "Re_gister"
 msgstr "Re_gistri"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4150,6 +4174,12 @@ msgid "Recipient: %s"
 msgstr "Ricevanto: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4398,18 +4428,6 @@ msgid "Restore last state"
 msgstr "Lasta stato: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Statmesaĝo"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "statmesaĝo"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4882,8 +4900,8 @@ msgid "Show Transfers"
 msgstr "Montri Trans_portilojn"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Montri _XML-konzolon"
+msgid "Show Voice Message Button"
+msgstr "Sendi mesaĝon"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4924,6 +4942,10 @@ msgstr "Konta korektado"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Montri _XML-konzolon"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5110,6 +5132,9 @@ msgstr "Babili"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5979,8 +6004,20 @@ msgid "Visual Notifications"
 msgstr "<b>Bildavizoj</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Sendi mesaĝon"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Konekto mankas"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Laboras"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Malpermesas %s"
 
 msgid "Wav Sounds"
 msgstr "Wav-sonoj"
@@ -6017,7 +6054,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
 
 msgid "Width of group chat roster in pixel"
@@ -6049,9 +6086,6 @@ msgstr "Renomigado de kontakto"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML-konzolo"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6169,6 +6203,12 @@ msgstr "Vi ne povas aliĝi al babilejo dum vi estas senkonekta."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Vi ne havas permeson krei dosierojn en ĉi tiu dosierujo."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6390,6 +6430,10 @@ msgid "_Create"
 msgstr "Malŝaltita"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML-konzolo"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Senkonekta"
 
@@ -6474,12 +6518,16 @@ msgid "_Log In"
 msgstr "E_nsaluti"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Korekti konton"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Korekti konton"
+msgid "_Manage Account…"
+msgstr "_Aldoni kontakton..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderiganto"
 
 #, fuzzy
 msgid "_Name"
@@ -6556,9 +6604,6 @@ msgstr "_Voĉo"
 msgid "_Reset Value"
 msgstr "_Reŝargi kolorojn per defaŭlto"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Havas "
@@ -6631,10 +6676,6 @@ msgstr "Malkorekta salutnomo"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "naŭ"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML-konzolo"
 
 msgid "accuracy"
 msgstr ""
@@ -7108,6 +7149,10 @@ msgstr ""
 #~ msgstr "Mesaĝoj"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Sendi"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7117,6 +7162,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "E_nsaluti"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Korekti konton"
 
 #~ msgid "_Undo"
 #~ msgstr "_Malfari"

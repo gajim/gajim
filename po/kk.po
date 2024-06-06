@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2023-07-02 10:51+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -1515,6 +1515,10 @@ msgstr "Тіркелу сәтсіз"
 msgid "Deactivated"
 msgstr "Сөндірілген"
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML консолі"
+
 msgid "Debug Logging"
 msgstr "Жөндеу журналы"
 
@@ -1878,6 +1882,9 @@ msgstr "Қате"
 
 msgid "Error Loading Image"
 msgstr "Суретті жүктеу қатесі"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2578,6 +2585,9 @@ msgstr "Алдыңғы чатқа ауысу"
 msgid "Invitees"
 msgstr "Шақырылғандар"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr "Кім берген"
 
@@ -2897,8 +2907,21 @@ msgstr "Аудио/видео үшін тәуелділіктер жоқ"
 msgid "Missing necessary encryption plugin"
 msgstr "Қажетті шифрлеу плагині жоқ"
 
+#, fuzzy
+msgid "Moderate Message"
+msgstr "Хабарламаны кері қайтарып алу"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "Хабарламаны қайтарып алу керек пе?"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Модерацияланады"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Модерацияланады"
 
 msgid "Moderation"
@@ -3646,8 +3669,9 @@ msgstr "Қазір қайта кіру керек пе?"
 msgid "Re_gister"
 msgstr "_Тіркелу"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "%s контактімен қоңырау"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Википедия мақаласын оқу"
@@ -3694,6 +3718,12 @@ msgstr "Алушы: %s"
 
 msgid "Recognize your account by color"
 msgstr "Тіркелгіңізді түспен ерекшелеу"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "Қайта бағдарлау"
@@ -3902,16 +3932,6 @@ msgstr "Соңғы қалып-күйді қалпына келтіру"
 
 msgid "Restore status and status message of your last session"
 msgstr "Соңғы сеанстың күйін мен күй хабарын қалпына келтіру"
-
-msgid "Retract Message"
-msgstr "Хабарламаны кері қайтарып алу"
-
-msgid "Retract message?"
-msgstr "Хабарламаны қайтарып алу керек пе?"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "Кері қайтарып алу…"
 
 msgid "Revoke Member"
 msgstr "Мүше құқығын алып тастау"
@@ -4312,8 +4332,9 @@ msgstr "Тақырыпты көрсету"
 msgid "Show Transfers"
 msgstr "Алмасуларды көрсету"
 
-msgid "Show XML console"
-msgstr "XML консолін көрсету"
+#, fuzzy
+msgid "Show Voice Message Button"
+msgstr "Хабарламаны жіберу батырмасын көрсету"
 
 msgid "Show _Features"
 msgstr "_Мүмкіндіктерін көрсету"
@@ -4346,6 +4367,10 @@ msgstr "Чаттар тізімін көрсету"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr "Контакт атыңыздың жанында чат күйін көрсету (мысалы, \"теруде...\")"
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "XML консолін көрсету"
 
 msgid "Show in Taskbar"
 msgstr "Тапсырмалар панелінде көрсету"
@@ -4519,6 +4544,9 @@ msgid ""
 msgstr ""
 "Жаңа сөйлесуді бастау, топтық чатқа қосылу немесе бүкіл әлем бойынша жаңа "
 "топтық сөйлесулерді іздеу. XMPP адресін де енгізуге болады."
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr "Ойнатуды бастау/тоқтату"
@@ -5313,8 +5341,20 @@ msgstr "Келушілер"
 msgid "Visual Notifications"
 msgstr "Визуалды хабарламалар"
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "Хабарламаны жіберу"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+
 msgid "Waiting…"
 msgstr "Күтуде…"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Қауіпсіздік ескертуі"
 
 msgid "Wav Sounds"
 msgstr "Wav дыбыстары"
@@ -5351,7 +5391,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "Қай серверді таңдауым керек?"
 
-msgid "Why do you want to retract this message?"
+#, fuzzy
+msgid "Why do you want to moderate this message?"
 msgstr "Бұл хабарламаны неліктен қайтарып алғыңыз келеді?"
 
 msgid "Width of group chat roster in pixel"
@@ -5381,9 +5422,6 @@ msgstr "Жұмыс кеңістіктері"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML консолі"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "Хаттама қабатында не болып жатқанын көру үшін XML консолі"
@@ -5491,6 +5529,12 @@ msgstr "Байланыспаған тіркелгімен синхрондай �
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Сізде бұл бумада файлдарды жасауға рұқсаттарыңыз жоқ."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Сізде бұл бумада файлдарды жасауға рұқсаттарыңыз жоқ."
@@ -5680,6 +5724,10 @@ msgstr "Сі_лтемені көшіріп алу"
 msgid "_Create"
 msgstr "Жа_сау"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "XML ко_нсолі"
+
 msgid "_Decline"
 msgstr "Тай_дыру"
 
@@ -5747,11 +5795,17 @@ msgstr "_Кету"
 msgid "_Log In"
 msgstr "_Кіру"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "Тіркелгілерді тү_зету…"
 
-msgid "_Modify Account…"
-msgstr "Тіркелгіні тү_зету…"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "_Тіркелгіні қосу…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Модерацияланады"
 
 msgid "_Name"
 msgstr "_Аты"
@@ -5815,9 +5869,6 @@ msgstr "_Сұрау"
 msgid "_Reset Value"
 msgstr "Мәнді та_стау"
 
-msgid "_Retract"
-msgstr "Ке_рі қайтарып алу"
-
 msgid "_Save"
 msgstr "_Сақтау"
 
@@ -5878,9 +5929,6 @@ msgstr "Серти_фикатты қарау"
 
 msgid "_Wiki (Online)"
 msgstr "_Вики (Онлайн)"
-
-msgid "_XML Console"
-msgstr "XML ко_нсолі"
 
 msgid "accuracy"
 msgstr "дәлдігі"
@@ -6326,6 +6374,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Ұйым бөлімі (OU): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "Кері қайтарып алу…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Жіберу"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim-ді көрсету"
 
@@ -6337,6 +6393,12 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "_Login"
 #~ msgstr "_Кіру"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "Тіркелгіні тү_зету…"
+
+#~ msgid "_Retract"
+#~ msgstr "Ке_рі қайтарып алу"
 
 #~ msgid "_Undo"
 #~ msgstr "Болд_ырмау"

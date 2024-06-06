@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -1726,6 +1726,10 @@ msgid "Deactivated"
 msgstr "Ikke aktiveret"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML Konsol"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Jogger"
 
@@ -2130,6 +2134,9 @@ msgstr "Fejl"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Vælg billede"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2912,6 +2919,9 @@ msgstr "Inviter _Kontakter"
 msgid "Invitees"
 msgstr "In_viter"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3271,8 +3281,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Status Besked"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "status besked"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderator"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderator"
 
 #, fuzzy
@@ -4116,7 +4139,8 @@ msgstr "Log ind igen nu?"
 msgid "Re_gister"
 msgstr "Re_gistrer"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4168,6 +4192,12 @@ msgid "Recipient: %s"
 msgstr "Modtager: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4417,18 +4447,6 @@ msgid "Restore last state"
 msgstr "Sidste status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Status Besked"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "status besked"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4898,8 +4916,8 @@ msgid "Show Transfers"
 msgstr "Vis Trans_porter"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Vis _XML Konsol"
+msgid "Show Voice Message Button"
+msgstr "Send besked"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4940,6 +4958,10 @@ msgstr "Påmindelse"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Vis _XML Konsol"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5127,6 +5149,9 @@ msgstr "Start Samtale"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -6004,8 +6029,20 @@ msgid "Visual Notifications"
 msgstr "<b>Synlige Påmindelser</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Send besked"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Tilslutning er ikke tilgængelig"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Advarsel"
 
 msgid "Wav Sounds"
 msgstr "Wav Lyde"
@@ -6043,7 +6080,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Vil du virkelig slette den valgte besked?"
 
 msgid "Width of group chat roster in pixel"
@@ -6075,9 +6112,6 @@ msgstr "Omdøb Kontakt"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML Konsol"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6196,6 +6230,12 @@ msgstr "Du kan kun synkronisere med en konto hvis du er tilsluttet."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Du har ikke rettigheder til at oprette filer i dette katalog."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6417,6 +6457,10 @@ msgid "_Create"
 msgstr "Kreativ"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML Konsol"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Afkoblet"
 
@@ -6499,12 +6543,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Ændre Konto"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Ændre Konto"
+msgid "_Manage Account…"
+msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderator"
 
 #, fuzzy
 msgid "_Name"
@@ -6581,9 +6629,6 @@ msgstr "_Stemme"
 msgid "_Reset Value"
 msgstr "_Nulstil til Standard Farver"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Har"
@@ -6655,10 +6700,6 @@ msgstr "Selvsigneret certifikat"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Online"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML Konsol"
 
 msgid "accuracy"
 msgstr ""
@@ -7132,12 +7173,20 @@ msgstr ""
 #~ msgstr "Beskeder"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Send"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Log ind igen nu?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Ændre Konto"
 
 #~ msgid "_Undo"
 #~ msgstr "_Fortryd"

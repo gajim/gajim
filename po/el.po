@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1713,6 +1713,10 @@ msgid "Deactivated"
 msgstr "Ανενεργό"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML Κονσόλα"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Συμμετοχή"
 
@@ -2116,6 +2120,9 @@ msgstr "Σφάλμα:"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Επιλογή εικόνας"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2902,6 +2909,9 @@ msgstr "Επαφές"
 msgid "Invitees"
 msgstr "Αδυναμία φόρτωσης"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3261,8 +3271,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Μήνυμα κατάστασης"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "μήνυμα κατάστασης"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Διαχειριστής"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Διαχειριστής"
 
 #, fuzzy
@@ -4108,7 +4131,8 @@ msgstr "Νέα είσοδος τώρα;"
 msgid "Re_gister"
 msgstr "_Εγγραφή"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4159,6 +4183,12 @@ msgid "Recipient: %s"
 msgstr "Παραλήπτης: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4408,18 +4438,6 @@ msgid "Restore last state"
 msgstr "Τελευταία κατάσταση: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Μήνυμα κατάστασης"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "μήνυμα κατάστασης"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4894,8 +4912,8 @@ msgid "Show Transfers"
 msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Κονσόλα _XML"
+msgid "Show Voice Message Button"
+msgstr "Αποστολή μηνύματος"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4930,6 +4948,10 @@ msgstr "Τροποποίηση λογαριασμού"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Κονσόλα _XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5115,6 +5137,9 @@ msgstr "Έναρξη κουβέντας"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5988,8 +6013,20 @@ msgid "Visual Notifications"
 msgstr "<b>Οπτικές γνωστοποιήσεις</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Αποστολή μηνύματος"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "To Session bus δεν είναι διαθέσιμο"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Δουλειά"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
 msgid "Wav Sounds"
 msgstr "Αρχεία ήχου Wav"
@@ -6026,7 +6063,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
 msgid "Width of group chat roster in pixel"
@@ -6058,9 +6095,6 @@ msgstr "_Μετονομασία αρχείων"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML Κονσόλα"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6183,6 +6217,12 @@ msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Δε μπορείτε να δημιουργήσετε αρχεία σε αυτό τον κατάλογο."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6404,6 +6444,10 @@ msgid "_Create"
 msgstr "Ανενεργό"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML Κονσόλα"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "Απ_οσυνδεδεμένος"
 
@@ -6489,12 +6533,16 @@ msgid "_Log In"
 msgstr "_Σύνδεση"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Επεξεργασία λογαριασμού"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Επεξεργασία λογαριασμού"
+msgid "_Manage Account…"
+msgstr "_Προσθήκη επαφής..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Διαχειριστής"
 
 #, fuzzy
 msgid "_Name"
@@ -6571,9 +6619,6 @@ msgstr "_Φωνή"
 msgid "_Reset Value"
 msgstr "Επανα_φορά προεπιλεγμένων χρωμάτων"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Έχει"
@@ -6648,10 +6693,6 @@ msgstr "Μη έγκυρο όνομα χρήστη"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Συνδεδεμένος"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML Κονσόλα"
 
 msgid "accuracy"
 msgstr ""
@@ -7135,12 +7176,20 @@ msgstr ""
 #~ msgstr "Μηνύματα"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Αποστολή"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Σύνδεση"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Επεξεργασία λογαριασμού"
 
 #, fuzzy
 #~ msgid "yesterday "

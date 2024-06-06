@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1560,6 +1560,10 @@ msgstr "Falha ao registrar"
 msgid "Deactivated"
 msgstr "Desativado"
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "Console XML"
+
 msgid "Debug Logging"
 msgstr "Debug Logging"
 
@@ -1948,6 +1952,9 @@ msgstr "Erro"
 
 msgid "Error Loading Image"
 msgstr "Erro Carregando a Imagem"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2710,6 +2717,9 @@ msgstr "Mudar para a guia anterior"
 msgid "Invitees"
 msgstr "Convidar"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 #, fuzzy
 msgid "Issued by"
 msgstr "Emitido por"
@@ -3067,8 +3077,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Mensagem de status"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "mensagem de status"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderador"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderador"
 
 #, fuzzy
@@ -3908,8 +3931,9 @@ msgstr "Re-autenticar agora?"
 msgid "Re_gister"
 msgstr "Re_gistrar"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "Chamada com %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Ler artigo da _Wikipedia"
@@ -3958,6 +3982,12 @@ msgstr "Conteúdo: %s"
 
 msgid "Recognize your account by color"
 msgstr "Reconheça sua conta por cor"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "Redirecionar"
@@ -4205,18 +4235,6 @@ msgid "Restore status and status message of your last session"
 msgstr ""
 "Se verificado, o status e a mensagem de status utilizados na última sessão "
 "serão restaurados"
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Mensagem de status"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "mensagem de status"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr ""
 
 msgid "Revoke Member"
 msgstr "Revogar Membro"
@@ -4676,8 +4694,8 @@ msgid "Show Transfers"
 msgstr "Exibir trans_portes"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Exibir console _XML"
+msgid "Show Voice Message Button"
+msgstr "Enviar mensagem"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4716,6 +4734,10 @@ msgstr "Mostrar localização"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Exibir console _XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4903,6 +4925,9 @@ msgid ""
 msgstr ""
 "Iniciar um novo chat, entrar em um chat de grupo ou buscar por novos grupos "
 "de chat globalmente. Você também pode entrar com um endereço XMPP."
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr ""
@@ -5790,8 +5815,20 @@ msgid "Visual Notifications"
 msgstr "Notificações Visuais"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Enviar mensagem"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Conexão não disponível"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Escrevendo"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Segurança"
 
 msgid "Wav Sounds"
 msgstr "Sons wav"
@@ -5831,7 +5868,7 @@ msgid "Which server should I choose?"
 msgstr "Qual servidor devo escolher?"
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Você quer excluir permanentemente esta mensagem?"
 
 #, fuzzy
@@ -5865,9 +5902,6 @@ msgstr "Adicionar Workspace"
 #, fuzzy
 msgid "X11"
 msgstr "X11 X11"
-
-msgid "XML Console"
-msgstr "Console XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "Console XML para ver o que está acontecendo na camada de protocolo"
@@ -5989,6 +6023,12 @@ msgstr "Você não pode sincronizar com uma conta a menos que esteja conectado."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Você não tem permissão para criar este diretório."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6195,6 +6235,10 @@ msgstr "Copiar Localização"
 msgid "_Create"
 msgstr "_Criar"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "Console XML"
+
 msgid "_Decline"
 msgstr "_Recusar"
 
@@ -6274,11 +6318,17 @@ msgstr "_Sair"
 msgid "_Log In"
 msgstr "Entrar"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "_Modificar Contas…"
 
-msgid "_Modify Account…"
-msgstr "_Modificar Conta…"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "_Adicionar Conta…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderador"
 
 msgid "_Name"
 msgstr "_Nome"
@@ -6350,9 +6400,6 @@ msgstr "_Voz"
 msgid "_Reset Value"
 msgstr "Voltar para as cores _padrões"
 
-msgid "_Retract"
-msgstr ""
-
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -6420,10 +6467,6 @@ msgstr "Certificado próprio"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Conectado"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "Console XML"
 
 #, fuzzy
 msgid "accuracy"
@@ -6915,6 +6958,10 @@ msgstr ""
 #~ msgstr "Unidade Organizacional (UA): "
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Enviar"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -6928,6 +6975,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Entrar"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "_Modificar Conta…"
 
 #~ msgid "_Undo"
 #~ msgstr "_Desfazer"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -1682,6 +1682,10 @@ msgid "Deactivated"
 msgstr "Uitgeschakeld"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML-console"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Joggen"
 
@@ -2089,6 +2093,9 @@ msgstr "Fout"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Kies afbeelding"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2880,6 +2887,9 @@ msgstr "Wisselen naar het vorig tabblad"
 msgid "Invitees"
 msgstr "Uit_nodigen"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr "Uitgegeven door"
 
@@ -3242,8 +3252,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Statusbericht"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "statusbericht"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Beheerder"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Beheerder"
 
 #, fuzzy
@@ -4070,7 +4093,8 @@ msgstr "Nu opnieuw inloggen?"
 msgid "Re_gister"
 msgstr "Re_gistreren"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4123,6 +4147,12 @@ msgid "Recipient: %s"
 msgstr "Ontvanger: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4370,18 +4400,6 @@ msgid "Restore status and status message of your last session"
 msgstr ""
 "Indien aangevinkt zullen de status en het statusbericht gebruikt in de "
 "vorige sessie worden hersteld"
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Statusbericht"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "statusbericht"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr ""
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4849,8 +4867,8 @@ msgid "Show Transfers"
 msgstr "Transporten weergeven"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "_XML-console weergeven"
+msgid "Show Voice Message Button"
+msgstr "Bericht verzenden"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4890,6 +4908,10 @@ msgstr "Locatie:"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "_XML-console weergeven"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5073,6 +5095,9 @@ msgstr "Nieuw gesprek beginnen"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5953,8 +5978,20 @@ msgid "Visual Notifications"
 msgstr "Visuele meldingen"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Bericht verzenden"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Videosessies zijn niet beschikbaar"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Schrijven"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Waarschuwing"
 
 msgid "Wav Sounds"
 msgstr "WAV-geluiden"
@@ -5992,7 +6029,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Wil je dit bericht voorgoed verwijderen"
 
 #, fuzzy
@@ -6027,9 +6064,6 @@ msgstr "Contact hernoemen"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML-console"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML-console om na te kijken wat er gebeurt in de protocollaag"
@@ -6157,6 +6191,12 @@ msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6375,6 +6415,10 @@ msgstr "Verwijzingslocatie kopiëren"
 msgid "_Create"
 msgstr "Creatief"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "XML-console"
+
 msgid "_Decline"
 msgstr "_Weigeren"
 
@@ -6459,12 +6503,16 @@ msgid "_Log In"
 msgstr "_Log in"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Account Be_werken..."
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Account Be_werken..."
+msgid "_Manage Account…"
+msgstr "Account toevoegen…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Beheerder"
 
 msgid "_Name"
 msgstr "_Naam"
@@ -6540,9 +6588,6 @@ msgstr "Stem aanv_ragen"
 msgid "_Reset Value"
 msgstr "He_rstellen naar standaardwaarden"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Opslaan _als"
@@ -6613,10 +6658,6 @@ msgstr "Certificaat bekijken…"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Online"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML-console"
 
 msgid "accuracy"
 msgstr "precisie"
@@ -7089,6 +7130,10 @@ msgstr ""
 #~ msgstr "Organisatorische eenheid (OU)"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "Ver_zenden"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7099,6 +7144,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Inloggen"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Account Be_werken..."
 
 #~ msgid "_Undo"
 #~ msgstr "_Ongedaan maken"

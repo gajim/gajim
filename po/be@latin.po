@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -1706,6 +1706,10 @@ msgid "Deactivated"
 msgstr "Niadziejny"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "Kansol XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Dałučysia"
 
@@ -2108,6 +2112,9 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Abiary vyjavu"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2898,6 +2905,9 @@ msgstr "Kantakty"
 msgid "Invitees"
 msgstr "_Zaprasi"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3257,8 +3267,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Paviedamleńnie statusu"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "paviedamlennie statusu"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Maderatar"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Maderatar"
 
 #, fuzzy
@@ -4104,7 +4127,8 @@ msgstr "Pieradałučycca?"
 msgid "Re_gister"
 msgstr "_Zarehistrujsia"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4155,6 +4179,12 @@ msgid "Recipient: %s"
 msgstr "Atrymoŭca: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4401,18 +4431,6 @@ msgid "Restore last state"
 msgstr "Apošni status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Paviedamleńnie statusu"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "paviedamlennie statusu"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4885,8 +4903,8 @@ msgid "Show Transfers"
 msgstr "Pakažy _transparty"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Pakažy _kansol XML"
+msgid "Show Voice Message Button"
+msgstr "Dašli paviedamleńnie"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4927,6 +4945,10 @@ msgstr "Madyfikacyja kontu"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Pakažy _kansol XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5113,6 +5135,9 @@ msgstr "Pačni razmovu"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5981,8 +6006,20 @@ msgid "Visual Notifications"
 msgstr "<b>Vizualnyja nahadvańni</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Dašli paviedamleńnie"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Złučeńnia niama"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Pracuju"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Blakavańnie %s"
 
 msgid "Wav Sounds"
 msgstr "Fajły ŭ Wav"
@@ -6019,7 +6056,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 
 msgid "Width of group chat roster in pixel"
@@ -6051,9 +6088,6 @@ msgstr "Źmiani nazvu kantaktu"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "Kansol XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6173,6 +6207,12 @@ msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Nie staje pravoŭ dla stvareńnia fajłaŭ u hetym katalohu."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6394,6 +6434,10 @@ msgid "_Create"
 msgstr "Niadziejny"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "Kansol XML"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "Adł_učany"
 
@@ -6478,12 +6522,16 @@ msgid "_Log In"
 msgstr "_Dałučysia"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Madyfikuj kont"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Madyfikuj kont"
+msgid "_Manage Account…"
+msgstr "_Dadaj kantakt..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Maderatar"
 
 #, fuzzy
 msgid "_Name"
@@ -6560,9 +6608,6 @@ msgstr "_Daj hołas"
 msgid "_Reset Value"
 msgstr "_Viarni zvyčajnyja kolery"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Nie razmaŭlaju "
@@ -6635,10 +6680,6 @@ msgstr "Niapravilnaje imia karystalnika"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Dałučany"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "Kansol XML"
 
 msgid "accuracy"
 msgstr ""
@@ -7114,12 +7155,20 @@ msgstr ""
 #~ msgstr "Paviedamleńni"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Vyšli"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Dałučysia"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Madyfikuj kont"
 
 #, fuzzy
 #~ msgid "yesterday "

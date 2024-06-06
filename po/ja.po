@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2024-03-22 13:05+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1512,6 +1512,10 @@ msgstr "登録に失敗しました"
 msgid "Deactivated"
 msgstr "無効"
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML コンソール"
+
 msgid "Debug Logging"
 msgstr "デバッグ記録"
 
@@ -1862,6 +1866,9 @@ msgstr "エラー"
 
 msgid "Error Loading Image"
 msgstr "画像読み込みのエラー"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2565,6 +2572,9 @@ msgstr "この談話室に招待"
 msgid "Invitees"
 msgstr "招待者"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr "証明者"
 
@@ -2882,8 +2892,21 @@ msgstr "音声/ビデオの依存関係がありません"
 msgid "Missing necessary encryption plugin"
 msgstr "必要な暗号化プラグインが見当たりません"
 
+#, fuzzy
+msgid "Moderate Message"
+msgstr "メッセージを撤回"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "メッセージを撤回しますか ?"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "司会あり"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "司会あり"
 
 msgid "Moderation"
@@ -3630,8 +3653,9 @@ msgstr "今すぐ再ログインしますか ?"
 msgid "Re_gister"
 msgstr "登録 (_G)"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "%s さんと通話"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia の項を読む (_W)"
@@ -3679,6 +3703,12 @@ msgstr "受取人: %s"
 
 msgid "Recognize your account by color"
 msgstr "アカウントを色で識別します"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "リダイレクト"
@@ -3889,16 +3919,6 @@ msgstr "以前の状態を復元"
 
 msgid "Restore status and status message of your last session"
 msgstr "最後のセッションで用いられた状況と状況メッセージを復元します"
-
-msgid "Retract Message"
-msgstr "メッセージを撤回"
-
-msgid "Retract message?"
-msgstr "メッセージを撤回しますか ?"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "撤回…"
 
 # (Mako)「会員」では排他的なニュアンスが強いのでしかたなくカタカナ語で
 msgid "Revoke Member"
@@ -4295,8 +4315,9 @@ msgstr "題を表示する"
 msgid "Show Transfers"
 msgstr "中継先を表示"
 
-msgid "Show XML console"
-msgstr "XML コンソールを表示"
+#, fuzzy
+msgid "Show Voice Message Button"
+msgstr "メッセージ送信ボタンを表示する"
 
 msgid "Show _Features"
 msgstr "特徴を表示 (_U)"
@@ -4329,6 +4350,10 @@ msgstr "チャット一覧を表示"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "XML コンソールを表示"
 
 msgid "Show in Taskbar"
 msgstr "タスクバーに表示する"
@@ -4500,6 +4525,9 @@ msgid ""
 msgstr ""
 "チャットを開始、談話室に参加または新しい談話室を広域に検索します。XMPP アドレ"
 "スを入力することもできます。"
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr "再生を開始/停止"
@@ -5294,8 +5322,20 @@ msgstr "傍聴者"
 msgid "Visual Notifications"
 msgstr "目への通知"
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "メッセージを送信"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Windows ではビデオチャットは有効ではありません"
+
 msgid "Waiting…"
 msgstr "待機中…"
+
+#, fuzzy
+msgid "Warning"
+msgstr "セキュリティ警告"
 
 msgid "Wav Sounds"
 msgstr "WAV サウンド"
@@ -5332,7 +5372,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "どのサーバーを選びますか ?"
 
-msgid "Why do you want to retract this message?"
+#, fuzzy
+msgid "Why do you want to moderate this message?"
 msgstr "なぜこのメッセージを撤回したいのですか ?"
 
 msgid "Width of group chat roster in pixel"
@@ -5362,9 +5403,6 @@ msgstr "作業空間"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML コンソール"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "プロトコル層で何が起こったか確認できる XML コンソール"
@@ -5473,6 +5511,12 @@ msgstr "接続していないと、相手先に合わせることはできませ
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "このディレクトリにファイルを作成する権限がありません。"
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "このディレクトリにファイルを作成する権限がありません。"
@@ -5662,6 +5706,10 @@ msgstr "リンクをコピー (_C)"
 msgid "_Create"
 msgstr "作成 (_C)"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "XML コンソール (_X)"
+
 msgid "_Decline"
 msgstr "拒否 (_D)"
 
@@ -5729,11 +5777,17 @@ msgstr "退出 (_L)"
 msgid "_Log In"
 msgstr "ログイン (_L)"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "アカウントを修正…(_M)"
 
-msgid "_Modify Account…"
-msgstr "アカウントを修正…(_M)"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "アカウントを追加…(_A)"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "司会あり"
 
 msgid "_Name"
 msgstr "名前 (_N)"
@@ -5800,9 +5854,6 @@ msgstr "申し込み (_R)"
 msgid "_Reset Value"
 msgstr "値をリセット (_R)"
 
-msgid "_Retract"
-msgstr "撤回 (_R)"
-
 msgid "_Save"
 msgstr "保存 (_S)"
 
@@ -5864,9 +5915,6 @@ msgstr "証明書を表示 (_V)"
 
 msgid "_Wiki (Online)"
 msgstr "Wiki (オンライン) (_W)"
-
-msgid "_XML Console"
-msgstr "XML コンソール (_X)"
 
 msgid "accuracy"
 msgstr "精度"
@@ -6334,6 +6382,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "部門 (OU): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "撤回…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "送信 (_S)"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
 
@@ -6345,6 +6401,12 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "_Login"
 #~ msgstr "ログイン (_L)"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "アカウントを修正…(_M)"
+
+#~ msgid "_Retract"
+#~ msgstr "撤回 (_R)"
 
 #~ msgid "_Undo"
 #~ msgstr "元に戻す (_U)"

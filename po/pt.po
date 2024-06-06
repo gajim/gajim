@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -1549,6 +1549,10 @@ msgstr "Falhou ao registrar"
 msgid "Deactivated"
 msgstr "Desativado"
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "Console XML"
+
 msgid "Debug Logging"
 msgstr "Registro de Depuração"
 
@@ -1929,6 +1933,9 @@ msgstr "Erro"
 
 msgid "Error Loading Image"
 msgstr "Erro ao Carregar a Imagem"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2642,6 +2649,9 @@ msgstr "Mudar para a aba anterior"
 msgid "Invitees"
 msgstr "Convidados"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr "Publicado por"
 
@@ -2971,8 +2981,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Recolher Mensagem"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "Recolher mensagem?"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderador"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderador"
 
 msgid "Moderation"
@@ -3754,8 +3777,9 @@ msgstr "Re-Logar agora?"
 msgid "Re_gister"
 msgstr "Re_gistar"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "Chamada com %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Ler Artigo na _Wikipedia"
@@ -3803,6 +3827,12 @@ msgstr "Destinatário: %s"
 
 msgid "Recognize your account by color"
 msgstr "Reconheça sua conta pela cor"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "Redirecionar"
@@ -4017,17 +4047,6 @@ msgstr "Restaurar o último estado"
 
 msgid "Restore status and status message of your last session"
 msgstr "Restaurar status e mensagem de status de sua última sessão"
-
-msgid "Retract Message"
-msgstr "Recolher Mensagem"
-
-msgid "Retract message?"
-msgstr "Recolher mensagem?"
-
-#, fuzzy
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "_Retrair"
 
 msgid "Revoke Member"
 msgstr "Revogar Membro"
@@ -4444,8 +4463,9 @@ msgstr "Mostrar Assunto"
 msgid "Show Transfers"
 msgstr "Mostrar Transferências"
 
-msgid "Show XML console"
-msgstr "Mostrar console XML"
+#, fuzzy
+msgid "Show Voice Message Button"
+msgstr "Mostrar Botão de Envio de Mensagem"
 
 msgid "Show _Features"
 msgstr "Mostrar _Recursos"
@@ -4484,6 +4504,10 @@ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
 "Mostrar o estado de bate-papo do contato (por exemplo, digitando) no banner "
 "da guia de bate-papos"
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Mostrar console XML"
 
 msgid "Show in Taskbar"
 msgstr "Mostrar na Barra de Tarefas"
@@ -4662,6 +4686,9 @@ msgstr ""
 "Inicie um novo bate-papo, participe de um bate-papo em grupo ou pesquise "
 "novos bate-papos em grupo globalmente. Você também pode inserir um endereço "
 "XMPP."
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr "Iniciar/Parar reprodução"
@@ -5485,8 +5512,20 @@ msgstr "Visitantes"
 msgid "Visual Notifications"
 msgstr "Notificações Visuais"
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "Enviar Mensagem"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "As chamadas de vídeo não estão disponíveis no Windows"
+
 msgid "Waiting…"
 msgstr "Aguardando…"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Avisos de Segurança"
 
 msgid "Wav Sounds"
 msgstr "Sons Wav"
@@ -5522,7 +5561,8 @@ msgstr "Se deve verificar se há um certificado válido"
 msgid "Which server should I choose?"
 msgstr "Qual servidor devo escolher?"
 
-msgid "Why do you want to retract this message?"
+#, fuzzy
+msgid "Why do you want to moderate this message?"
 msgstr "Por que você deseja retirar esta mensagem?"
 
 msgid "Width of group chat roster in pixel"
@@ -5553,9 +5593,6 @@ msgstr "Minha Área-de-Trabalho"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "Console XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "Console XML para ver o que está acontecendo na camada de protocolo"
@@ -5670,6 +5707,12 @@ msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Você não tem permissões para criar arquivos neste diretório."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Você não tem permissões para criar arquivos neste diretório."
@@ -5861,6 +5904,10 @@ msgstr "_Copiar Link"
 msgid "_Create"
 msgstr "_Criar"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "_Console XML"
+
 msgid "_Decline"
 msgstr "_Desistir"
 
@@ -5929,11 +5976,17 @@ msgstr "_Sair"
 msgid "_Log In"
 msgstr "_Logar"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "_Modificar Contas…"
 
-msgid "_Modify Account…"
-msgstr "_Modificar Conta…"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "_Adicionar Contato…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderador"
 
 msgid "_Name"
 msgstr "_Nome"
@@ -5998,9 +6051,6 @@ msgstr "_Solicitar"
 msgid "_Reset Value"
 msgstr "_Redefinir Valor"
 
-msgid "_Retract"
-msgstr "_Retrair"
-
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -6062,9 +6112,6 @@ msgstr "_Visualizar Certificado"
 
 msgid "_Wiki (Online)"
 msgstr "_Wiki (Online)"
-
-msgid "_XML Console"
-msgstr "_Console XML"
 
 msgid "accuracy"
 msgstr "precisão"
@@ -6535,6 +6582,15 @@ msgstr "…ou solte aqui"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unidade Organizacional (OU): "
 
+#, fuzzy
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "_Retrair"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Enviar"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Mostrar Gajim"
 
@@ -6547,6 +6603,12 @@ msgstr "…ou solte aqui"
 
 #~ msgid "_Login"
 #~ msgstr "_Login"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "_Modificar Conta…"
+
+#~ msgid "_Retract"
+#~ msgstr "_Retrair"
 
 #~ msgid "_Undo"
 #~ msgstr "_Desfazer"

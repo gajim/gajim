@@ -4,138 +4,137 @@
 # Nafallo Bjälevik, 2007.
 # Oscar Hellström <oscar@oscarh.net>, 2005.
 # Daniel Nylander <po@danielnylander.se>, 2007, 2009.
-#
+# John Doe <imsv@linuxkompis.se>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
-"PO-Revision-Date: 2009-10-29 10:21+0100\n"
-"Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
-"Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"PO-Revision-Date: 2024-06-05 15:17+0000\n"
+"Last-Translator: John Doe <imsv@linuxkompis.se>\n"
+"Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
+">\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0\n"
 
-#, fuzzy
 msgid " (Video Call)"
-msgstr "Privat Chatt"
+msgstr " (Videosamtal)"
 
-#, fuzzy
 msgid " (Voice Call)"
-msgstr "Förfrågan om Filöverföring"
+msgstr " (Röstsamtal)"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr ""
+msgstr " by {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr ""
+msgstr "%(contact)s avböjde din inbjudan till  %(chat)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(contact)s invited you to %(chat)s"
-msgstr "$Contact har bjudit in dig till gruppchatten %(room_jid)s"
+msgstr "%(contact)s bjöd in dig till %(chat)s"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s dagar, %(hours)s timmar"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr ""
+msgstr "%(minutes)s min %(seconds)s sek"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr "%s föreslog att lägga till dig i min kontaktlista."
+msgstr ""
+"%(name)s %(jid)s föreslog att jag skulle lägga till dig i min kontaktlista."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr "Jag vill lägga till dig i min kontaktlista."
+msgstr "%(name)s (%(jid)s) vill lägga till några kontakter i din kontaktlista."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr "<b>%s</b> vill att du <b>%s</b> några kontakter i din kontaktlista."
+msgstr "%(name)s (%(jid)s) vill ta bort vissa kontakter från din kontaktlista."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
-msgstr "<b>%s</b> vill att du <b>%s</b> några kontakter i din kontaktlista."
+msgstr "%(name)s (%(jid)s) vill ändra några kontakter i din kontaktlista."
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr ""
+msgstr "%(name)s avbröt överföringen (%(reason)s)"
 
 #, fuzzy, python-format
 msgid "%(nickname)s:"
-msgstr "Smeknamn:"
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "%(owner_or_admin_or_member)s av den här gruppchatten"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr "Överföringen av %(filename)s från %(name)s har stannat."
+msgstr "%(progress)s %% (%(time)s återstår)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(received)s of %(max)s"
-msgstr "Överföringen av %(filename)s från %(name)s har stannat."
+msgstr "%(received)s av %(max)s"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
-"%(type)s-kryptering %(status)s aktiv %(authenticated)s.\n"
-"Din chattsession %(logged)s att loggas."
+msgstr "%(type)s kryptering är aktiv %(authenticated)s."
 
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (Du)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s (desynced)"
-msgstr "inte i synk"
+msgstr "%s (avsynkroniserad)"
 
 #, python-format
 msgid "%s and %s are typing…"
-msgstr ""
+msgstr "%s och %s skriver…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s asks you to share your status"
-msgstr "Nu kommer \"%s\" veta din status."
+msgstr "%s ber dig att dela din status"
 
 #, python-format
 msgid "%s can be joined by invite only."
-msgstr ""
+msgstr "%s kan endast gås med i via en inbjudan."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s group chats found"
-msgstr "%s kunde inte hittas"
+msgstr "%s gruppchattar hittades"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has been invited to this group chat"
-msgstr "%(nick)s har tagits bort från rummet (%(reason)s)"
+msgstr "%s har blivit inbjuden till den här gruppchatten"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has joined"
-msgstr "%s har lämnat"
+msgstr "%s har anslutit"
 
 #, python-format
 msgid "%s has read up to this point"
-msgstr ""
+msgstr "%s har läst fram till den här punkten"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
 msgstr "%s är en fil men den borde vara en katalog"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s is already in your contact list"
-msgstr "Denna kontakt finns redan i din kontaktlista."
+msgstr "%s finns redan i din kontaktlista"
 
 #, python-format
 msgid "%s is calling"
@@ -1720,6 +1719,10 @@ msgid "Deactivated"
 msgstr "Inaktiverad"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML-konsol"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Joggar"
 
@@ -2122,6 +2125,9 @@ msgstr "Fel."
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Välj Bild"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2902,6 +2908,9 @@ msgstr "Bjud in _kontakter"
 msgid "Invitees"
 msgstr "Bjud _in"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3261,8 +3270,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Statusmeddelande"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "statusmeddelande"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderator"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderator"
 
 #, fuzzy
@@ -4108,7 +4130,8 @@ msgstr "Återanslut nu?"
 msgid "Re_gister"
 msgstr "Re_gistrera"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4159,6 +4182,12 @@ msgid "Recipient: %s"
 msgstr "Mottagare: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4409,18 +4438,6 @@ msgid "Restore last state"
 msgstr "Senaste status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Statusmeddelande"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "statusmeddelande"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4893,8 +4910,8 @@ msgid "Show Transfers"
 msgstr "Visa _transporter"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Visa _XML-konsoll"
+msgid "Show Voice Message Button"
+msgstr "Skicka meddelande"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4929,6 +4946,10 @@ msgstr "Notifiering"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Visa _XML-konsoll"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5117,6 +5138,9 @@ msgstr "Starta Chatt"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5991,8 +6015,20 @@ msgid "Visual Notifications"
 msgstr "<b>Visuella notifieringar</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Skicka meddelande"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Sessionsbus inte tillgänglig"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Skriver"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Bannlyser %s"
 
 msgid "Wav Sounds"
 msgstr "Wav-ljud"
@@ -6030,7 +6066,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Vill du verkligen ta bort det valda meddelandet?"
 
 msgid "Width of group chat roster in pixel"
@@ -6062,9 +6098,6 @@ msgstr "Byt namn på kontakt"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML-konsol"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6185,6 +6218,12 @@ msgstr "Du kan inte synkronisera med ett konto utan att vara ansluten."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Du har inte rättigheter att skapa filer i den här katalogen."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6406,6 +6445,10 @@ msgid "_Create"
 msgstr "Kreativ"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML-konsol"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Frånkopplad"
 
@@ -6491,12 +6534,16 @@ msgid "_Log In"
 msgstr "Ans_lut"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Redigera konto"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Redigera konto"
+msgid "_Manage Account…"
+msgstr "_Lägg till kontakt..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderator"
 
 #, fuzzy
 msgid "_Name"
@@ -6573,9 +6620,6 @@ msgstr "_Röst"
 msgid "_Reset Value"
 msgstr "_Återställ till standardfärger"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Har "
@@ -6648,10 +6692,6 @@ msgstr "Självsignerat certifikat"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Ansluten"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML-konsol"
 
 msgid "accuracy"
 msgstr ""
@@ -7132,12 +7172,20 @@ msgstr ""
 #~ msgstr "Meddelanden"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Skicka"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Ans_lut"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Redigera konto"
 
 #, fuzzy
 #~ msgid "yesterday "

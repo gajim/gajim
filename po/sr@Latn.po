@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -1726,6 +1726,10 @@ msgid "Deactivated"
 msgstr "Deaktivirano"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML Konzola"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Džogira"
 
@@ -2130,6 +2134,9 @@ msgstr "Greška"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Odaberite sliku"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2914,6 +2921,9 @@ msgstr "Pozovi kontakte"
 msgid "Invitees"
 msgstr "Pozo_vi"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3272,8 +3282,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Statusna poruka"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "statusna poruka"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderator"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderator"
 
 #, fuzzy
@@ -4118,7 +4141,8 @@ msgstr "Otići sa veze i povezati se odmah?"
 msgid "Re_gister"
 msgstr "Re_gistracija"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4170,6 +4194,12 @@ msgid "Recipient: %s"
 msgstr "Primaoc: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4420,18 +4450,6 @@ msgid "Restore last state"
 msgstr "Poslednji status: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Statusna poruka"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "statusna poruka"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4902,8 +4920,8 @@ msgid "Show Transfers"
 msgstr "Prikaži trans_porte"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Prikaži _XML Konzolu"
+msgid "Show Voice Message Button"
+msgstr "Pošalji poruku"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4944,6 +4962,10 @@ msgstr "Obaveštenje"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Prikaži _XML Konzolu"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5132,6 +5154,9 @@ msgstr "Započni razgovor"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -6008,8 +6033,20 @@ msgid "Visual Notifications"
 msgstr "<b>Vizualna obaveštenja</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Pošalji poruku"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Veza nije dostupna"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Piše"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Zabranjujem %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Zvukovi"
@@ -6047,7 +6084,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Da li zaista želite da izbrišete označenu poruku?"
 
 msgid "Width of group chat roster in pixel"
@@ -6079,9 +6116,6 @@ msgstr "Preimenuj kontakt"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML Konzola"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6199,6 +6233,12 @@ msgstr "Ne možete se sinhronizovati sa nalogom ako niste povezani."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Nemate privilegija za pisanje u ovoj fascikli"
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6420,6 +6460,10 @@ msgid "_Create"
 msgstr "Kreativan"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML Konzola"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Nije na vezi"
 
@@ -6503,12 +6547,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Izmeni nalog"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Izmeni nalog"
+msgid "_Manage Account…"
+msgstr "_Dodaj kontakt..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderator"
 
 #, fuzzy
 msgid "_Name"
@@ -6585,9 +6633,6 @@ msgstr "_Glas"
 msgid "_Reset Value"
 msgstr "_Ponovo učitaj podrazumevane boje"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Imam "
@@ -6659,10 +6704,6 @@ msgstr "Samopotpisani sertifikat"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Na vezi"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML Konzola"
 
 msgid "accuracy"
 msgstr ""
@@ -7138,12 +7179,20 @@ msgstr ""
 #~ msgstr "Poruke"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Pošalji"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Otići sa veze i povezati se odmah?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Izmeni nalog"
 
 #, fuzzy
 #~ msgid "yesterday "

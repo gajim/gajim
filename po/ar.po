@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2023-10-17 17:18+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -1468,6 +1468,9 @@ msgstr ""
 msgid "Deactivated"
 msgstr ""
 
+msgid "Debug Console"
+msgstr ""
+
 msgid "Debug Logging"
 msgstr ""
 
@@ -1811,6 +1814,9 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
+msgstr ""
+
+msgid "Error in audio data stream."
 msgstr ""
 
 #, python-format
@@ -2481,6 +2487,9 @@ msgstr ""
 msgid "Invitees"
 msgstr ""
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -2783,8 +2792,18 @@ msgstr ""
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
+msgid "Moderate Message"
+msgstr ""
+
+msgid "Moderate message?"
+msgstr ""
+
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr ""
+
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr ""
 
 msgid "Moderation"
@@ -3505,7 +3524,8 @@ msgstr ""
 msgid "Re_gister"
 msgstr ""
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -3551,6 +3571,12 @@ msgid "Recipient: %s"
 msgstr ""
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -3755,16 +3781,6 @@ msgid "Restore last state"
 msgstr ""
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-msgid "Retract Message"
-msgstr ""
-
-msgid "Retract message?"
-msgstr ""
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 msgid "Revoke Member"
@@ -4156,7 +4172,7 @@ msgstr ""
 msgid "Show Transfers"
 msgstr ""
 
-msgid "Show XML console"
+msgid "Show Voice Message Button"
 msgstr ""
 
 msgid "Show _Features"
@@ -4186,6 +4202,9 @@ msgid "Show chat list"
 msgstr ""
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+msgstr ""
+
+msgid "Show debug console"
 msgstr ""
 
 msgid "Show in Taskbar"
@@ -4346,6 +4365,9 @@ msgstr ""
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5105,7 +5127,16 @@ msgstr ""
 msgid "Visual Notifications"
 msgstr ""
 
+msgid "Voice Message"
+msgstr ""
+
+msgid "Voice Messages are not available"
+msgstr ""
+
 msgid "Waiting…"
+msgstr ""
+
+msgid "Warning"
 msgstr ""
 
 msgid "Wav Sounds"
@@ -5141,7 +5172,7 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr ""
 
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr ""
 
 msgid "Width of group chat roster in pixel"
@@ -5169,9 +5200,6 @@ msgid "Workspaces"
 msgstr ""
 
 msgid "X11"
-msgstr ""
-
-msgid "XML Console"
 msgstr ""
 
 msgid "XML console to see what's happening on the protocol layer"
@@ -5275,6 +5303,12 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -5459,6 +5493,9 @@ msgstr ""
 msgid "_Create"
 msgstr ""
 
+msgid "_Debug Console"
+msgstr ""
+
 msgid "_Decline"
 msgstr ""
 
@@ -5526,10 +5563,13 @@ msgstr ""
 msgid "_Log In"
 msgstr ""
 
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr ""
 
-msgid "_Modify Account…"
+msgid "_Manage Account…"
+msgstr ""
+
+msgid "_Moderate"
 msgstr ""
 
 msgid "_Name"
@@ -5593,9 +5633,6 @@ msgstr ""
 msgid "_Reset Value"
 msgstr ""
 
-msgid "_Retract"
-msgstr ""
-
 msgid "_Save"
 msgstr ""
 
@@ -5654,9 +5691,6 @@ msgid "_View Certificate"
 msgstr ""
 
 msgid "_Wiki (Online)"
-msgstr ""
-
-msgid "_XML Console"
 msgstr ""
 
 msgid "accuracy"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1718,6 +1718,10 @@ msgid "Deactivated"
 msgstr "Deaktivovaná"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "XML konzola"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Klusám"
 
@@ -2121,6 +2125,9 @@ msgstr "Chyba"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Vybrať obrázok"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2903,6 +2910,9 @@ msgstr "Pozvať _kontakty"
 msgid "Invitees"
 msgstr "Poz_vať"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3258,8 +3268,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Správa o stave"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "správa o stave"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderátor"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderátor"
 
 #, fuzzy
@@ -4104,7 +4127,8 @@ msgstr "Prihlásiť znovu?"
 msgid "Re_gister"
 msgstr "Re_gistrácia"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4155,6 +4179,12 @@ msgid "Recipient: %s"
 msgstr "Príjemca: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4403,18 +4433,6 @@ msgid "Restore last state"
 msgstr "Posledný stav: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Správa o stave"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "správa o stave"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4886,8 +4904,8 @@ msgid "Show Transfers"
 msgstr "Zobraziť trans_porty"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Zobraziť _XML konzolu"
+msgid "Show Voice Message Button"
+msgstr "Poslať správu"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4928,6 +4946,10 @@ msgstr "Umiestnenie:"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Zobraziť _XML konzolu"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5115,6 +5137,9 @@ msgstr "Začať rozhovor"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5993,8 +6018,20 @@ msgid "Visual Notifications"
 msgstr "<b>Vizuálne oznámenie</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Poslať správu"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Pripojenie nie je dostupné"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Píšem"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Zakazujem %s"
 
 msgid "Wav Sounds"
 msgstr "Wav zvuky"
@@ -6032,7 +6069,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Skutočne si želáte zmazať vybraných správ?"
 
 msgid "Width of group chat roster in pixel"
@@ -6064,9 +6101,6 @@ msgstr "Premenovať kontakt"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "XML konzola"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6184,6 +6218,12 @@ msgstr "Nemôžete sa synchronizovať s kontaktom ak nie je prihlásený."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Nemáte oprávnenie vytvoriť súbor v tomto priečinku."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6405,6 +6445,10 @@ msgid "_Create"
 msgstr "Tvorivý"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "XML konzola"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Odhlásený"
 
@@ -6488,12 +6532,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Upraviť účet"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Upraviť účet"
+msgid "_Manage Account…"
+msgstr "_Pridať kontakt..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderátor"
 
 #, fuzzy
 msgid "_Name"
@@ -6570,9 +6618,6 @@ msgstr "_Hlas"
 msgid "_Reset Value"
 msgstr "Náv_rat k pôvodnému nastaveniu farieb"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Má"
@@ -6644,10 +6689,6 @@ msgstr "Certifikát podpísaný sám sebou"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Prítomný"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "XML konzola"
 
 msgid "accuracy"
 msgstr ""
@@ -7123,12 +7164,20 @@ msgstr ""
 #~ msgstr "Správy"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Poslať"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Prihlásiť znovu?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Upraviť účet"
 
 #, fuzzy
 #~ msgid "yesterday "

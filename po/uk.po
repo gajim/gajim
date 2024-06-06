@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -1555,6 +1555,10 @@ msgid "Deactivated"
 msgstr "Вимкнено"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "Консоль XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Налагоджувальне журналювання"
 
@@ -1926,6 +1930,9 @@ msgstr "Помилка"
 
 msgid "Error Loading Image"
 msgstr "Помилка завантаження зображення"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2692,6 +2699,9 @@ msgstr "Запросити _контакти"
 msgid "Invitees"
 msgstr "_Запросити"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3053,8 +3063,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Повідомлення про стан"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "повідомлення про стан"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Модератор"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Модератор"
 
 #, fuzzy
@@ -3899,8 +3922,9 @@ msgstr "Повторно увійти зараз?"
 msgid "Re_gister"
 msgstr "За_реєструватися"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "Дзвінок з %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Прочитати статтю у В_ікіпедії"
@@ -3951,6 +3975,12 @@ msgid "Recipient: %s"
 msgstr "Отримувач: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4197,18 +4227,6 @@ msgid "Restore last state"
 msgstr "Попередній стан: %"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Повідомлення про стан"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "повідомлення про стан"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4677,8 +4695,8 @@ msgid "Show Transfers"
 msgstr "Показувати транс_порти"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Показати _XML-консоль"
+msgid "Show Voice Message Button"
+msgstr "Надіслати повідомлення"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4719,6 +4737,10 @@ msgstr "Положення:"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Показати _XML-консоль"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4905,6 +4927,9 @@ msgstr "Почати балачку"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5783,8 +5808,20 @@ msgid "Visual Notifications"
 msgstr "Візуальні сповіщення"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Надіслати повідомлення"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Відео сесія недоступна"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Пишу"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Попередження"
 
 msgid "Wav Sounds"
 msgstr "Звуки wav"
@@ -5822,7 +5859,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Ви справді бажаєте вилучити виділене повідомлення?"
 
 msgid "Width of group chat roster in pixel"
@@ -5855,9 +5892,6 @@ msgstr "Перейменувати контакт"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "Консоль XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -5980,6 +6014,12 @@ msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Ваш користувач не має права на створення файлів у цьому каталозі."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6201,6 +6241,10 @@ msgid "_Create"
 msgstr "Творчий"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "Консоль XML"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Поза мережею"
 
@@ -6284,12 +6328,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Змінити обліковий запис"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Змінити обліковий запис"
+msgid "_Manage Account…"
+msgstr "_Додати контакт..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Модератор"
 
 #, fuzzy
 msgid "_Name"
@@ -6366,9 +6414,6 @@ msgstr "_Запит голосу"
 msgid "_Reset Value"
 msgstr "_Скинути до типових"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Зберегти _як"
@@ -6441,10 +6486,6 @@ msgstr "Перегляд сертифікату..."
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "В мережі"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "Консоль XML"
 
 msgid "accuracy"
 msgstr "точність"
@@ -6932,12 +6973,20 @@ msgstr ""
 #~ msgstr "Повідомлення"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Надіслати"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Повторно увійти зараз?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Змінити обліковий запис"
 
 #~ msgid "_Undo"
 #~ msgstr "_Скасувати"

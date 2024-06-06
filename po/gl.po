@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:51+0200\n"
 "Last-Translator: Iván Méndez López <>\n"
 "Language-Team:  <softwarelibre@udc.es>\n"
@@ -1709,6 +1709,10 @@ msgid "Deactivated"
 msgstr "Inactivo"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "Consola XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Entrar"
 
@@ -2107,6 +2111,9 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Elixir unha imaxe"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2897,6 +2904,9 @@ msgstr "Contactos"
 msgid "Invitees"
 msgstr "Con_vidar"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3256,8 +3266,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Mensaxe de estado"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "mensaxe de estado"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderador"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderador"
 
 #, fuzzy
@@ -4102,7 +4125,8 @@ msgstr "Quere reconectarse agora?"
 msgid "Re_gister"
 msgstr "_Subscribir"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4153,6 +4177,12 @@ msgid "Recipient: %s"
 msgstr "Destinatario: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4399,18 +4429,6 @@ msgid "Restore last state"
 msgstr "Último estado: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Mensaxe de estado"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "mensaxe de estado"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4883,8 +4901,8 @@ msgid "Show Transfers"
 msgstr "Amosar os trans_portes"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Amosar a consola de _XML"
+msgid "Show Voice Message Button"
+msgstr "Enviar a mensaxe"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4925,6 +4943,10 @@ msgstr "Modificar a conta"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Amosar a consola de _XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5111,6 +5133,9 @@ msgstr "Iniciar a charla"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5983,8 +6008,20 @@ msgid "Visual Notifications"
 msgstr "<b>Notificacións visuais</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Enviar a mensaxe"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Conexión non dispoñíbel"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "A traballar"
+
+#, fuzzy
+msgid "Warning"
+msgstr "A expulsar %s"
 
 msgid "Wav Sounds"
 msgstr "Sons Wav"
@@ -6021,7 +6058,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
 
 msgid "Width of group chat roster in pixel"
@@ -6053,9 +6090,6 @@ msgstr "Renomear o contacto"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "Consola XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6173,6 +6207,12 @@ msgstr "Non pode entrar nunha sala de charla até que non se conecte."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Non ten autorización para crear ficheiros neste directorio."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6393,6 +6433,10 @@ msgid "_Create"
 msgstr "Inactivo"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "Consola XML"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "D_esconectado"
 
@@ -6477,12 +6521,16 @@ msgid "_Log In"
 msgstr "_Conectar"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Modificar conta"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Modificar conta"
+msgid "_Manage Account…"
+msgstr "_Engadir un contacto..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderador"
 
 #, fuzzy
 msgid "_Name"
@@ -6559,9 +6607,6 @@ msgstr "_Voz"
 msgid "_Reset Value"
 msgstr "_Restabelecer as cores predeterminadas"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Ten "
@@ -6634,10 +6679,6 @@ msgstr "O nome de usuario non é válido"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "nove"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "Consola XML"
 
 msgid "accuracy"
 msgstr ""
@@ -7116,12 +7157,20 @@ msgstr ""
 #~ msgstr "Mensaxes"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Enviar"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Conectar"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Modificar conta"
 
 #, fuzzy
 #~ msgid "yesterday "

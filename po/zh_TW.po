@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -1713,6 +1713,10 @@ msgid "Deactivated"
 msgstr "未啟用的"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr " XML 主控臺"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "慢跑"
 
@@ -2116,6 +2120,9 @@ msgstr "錯誤"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "選擇圖像"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2905,6 +2912,9 @@ msgstr "邀請聯絡人(_C)"
 msgid "Invitees"
 msgstr "邀請(_V)"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3264,8 +3274,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "狀態訊息"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "狀態訊息"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "主持人"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "主持人"
 
 #, fuzzy
@@ -4106,7 +4129,8 @@ msgstr "現在重新登入?"
 msgid "Re_gister"
 msgstr "註冊(_G)"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4158,6 +4182,12 @@ msgid "Recipient: %s"
 msgstr "接收者:  %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4404,18 +4434,6 @@ msgid "Restore last state"
 msgstr "最後狀態"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "狀態訊息"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "狀態訊息"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4886,8 +4904,8 @@ msgid "Show Transfers"
 msgstr "顯示代理(_P)"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "顯示 XML 主控臺(_X)"
+msgid "Show Voice Message Button"
+msgstr "傳送訊息"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4924,6 +4942,10 @@ msgstr "位置: %s"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "顯示 XML 主控臺(_X)"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5111,6 +5133,9 @@ msgstr "開始聊天"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5985,8 +6010,20 @@ msgid "Visual Notifications"
 msgstr "<b>可視化提示</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "傳送訊息"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "連線無法使用"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "寫作"
+
+#, fuzzy
+msgid "Warning"
+msgstr "將封禁 %s"
 
 msgid "Wav Sounds"
 msgstr "Wav聲音"
@@ -6024,7 +6061,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "您確定要刪除所選取的訊息?"
 
 msgid "Width of group chat roster in pixel"
@@ -6056,9 +6093,6 @@ msgstr "重新命名聯絡人"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr " XML 主控臺"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6176,6 +6210,12 @@ msgstr "這個帳號連線後您才可以與之同步"
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "您沒有權限在這個目錄裡建立檔案。"
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6395,6 +6435,10 @@ msgid "_Create"
 msgstr "創造"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr " XML 主控臺"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "離線(_O)"
 
@@ -6477,12 +6521,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "修改帳號資訊(_M)"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "修改帳號資訊(_M)"
+msgid "_Manage Account…"
+msgstr "加入聯絡人(_A)…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "主持人"
 
 #, fuzzy
 msgid "_Name"
@@ -6559,9 +6607,6 @@ msgstr "要求語音(_R)"
 msgid "_Reset Value"
 msgstr "恢復為預設顏色設定(_R)"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "儲存在: %s"
@@ -6634,10 +6679,6 @@ msgstr "檢視憑證…"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "線上"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr " XML 主控臺"
 
 msgid "accuracy"
 msgstr ""
@@ -7115,12 +7156,20 @@ msgstr ""
 #~ msgstr "訊息"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "傳送(_S)"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "現在重新登入?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "修改帳號資訊(_M)"
 
 #, fuzzy
 #~ msgid "yesterday "

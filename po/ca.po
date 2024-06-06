@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1629,6 +1629,10 @@ msgstr "_No Disponible"
 msgid "Deactivated"
 msgstr ""
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "_Copia la ubicació de l'enllaç"
+
 msgid "Debug Logging"
 msgstr ""
 
@@ -2002,6 +2006,9 @@ msgid "Error"
 msgstr ""
 
 msgid "Error Loading Image"
+msgstr ""
+
+msgid "Error in audio data stream."
 msgstr ""
 
 #, python-format
@@ -2755,6 +2762,9 @@ msgstr "Convida _Contactes"
 msgid "Invitees"
 msgstr "Con_vida"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3087,8 +3097,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "missatge"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderadors"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderadors"
 
 #, fuzzy
@@ -3901,7 +3924,8 @@ msgstr ""
 msgid "Re_gister"
 msgstr ""
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -3949,6 +3973,12 @@ msgid "Recipient: %s"
 msgstr ""
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4189,18 +4219,6 @@ msgid "Restore last state"
 msgstr ""
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "_Canvia Missatge d'Estat"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "missatge"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4655,8 +4673,8 @@ msgid "Show Transfers"
 msgstr "Mostra Transports"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "_Copia la ubicació de l'enllaç"
+msgid "Show Voice Message Button"
+msgstr "Envia missatge"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4690,6 +4708,10 @@ msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -4864,6 +4886,9 @@ msgstr ""
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5690,7 +5715,18 @@ msgstr ""
 msgid "Visual Notifications"
 msgstr "Afegeix _Notificació Especial..."
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "Envia missatge"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Transferència de Fitxers"
+
 msgid "Waiting…"
+msgstr ""
+
+msgid "Warning"
 msgstr ""
 
 msgid "Wav Sounds"
@@ -5726,7 +5762,7 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr ""
 
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr ""
 
 msgid "Width of group chat roster in pixel"
@@ -5757,9 +5793,6 @@ msgid "Workspaces"
 msgstr "Afegeix un contacte nou"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML Console"
 msgstr ""
 
 msgid "XML console to see what's happening on the protocol layer"
@@ -5871,6 +5904,12 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -6078,6 +6117,10 @@ msgid "_Create"
 msgstr ""
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "Desconnectat"
 
@@ -6158,12 +6201,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Modifica Compte..."
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Modifica Compte..."
+msgid "_Manage Account…"
+msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderadors"
 
 #, fuzzy
 msgid "_Name"
@@ -6239,9 +6286,6 @@ msgstr "Sol.licita Veu"
 msgid "_Reset Value"
 msgstr "_Reinicia a configuració per defecte"
 
-msgid "_Retract"
-msgstr ""
-
 msgid "_Save"
 msgstr ""
 
@@ -6312,10 +6356,6 @@ msgstr "Certificat de client"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Connectat"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "accuracy"
 msgstr ""
@@ -6707,3 +6747,11 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Versió:"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "Envia"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Modifica Compte..."

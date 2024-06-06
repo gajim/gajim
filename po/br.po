@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -1698,6 +1698,10 @@ msgid "Deactivated"
 msgstr "Dizoberiant"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "Diskouez ar gonsol _XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "E_barzhiñ"
 
@@ -2096,6 +2100,9 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Pegañ ar skeudenn"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Error message: %s"
@@ -2876,6 +2883,9 @@ msgstr "Darempredoù"
 msgid "Invitees"
 msgstr "Diwelus"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3232,8 +3242,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Titour-stad"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "titour stad"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Kasour-ez"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Kasour-ez"
 
 #, fuzzy
@@ -4079,7 +4102,8 @@ msgstr "Adlugañ bremañ?"
 msgid "Re_gister"
 msgstr "_Emezelañ"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4130,6 +4154,12 @@ msgid "Recipient: %s"
 msgstr "Resever:"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4376,18 +4406,6 @@ msgid "Restore last state"
 msgstr "Stad diwezhañ: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Titour-stad"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "titour stad"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4858,8 +4876,8 @@ msgid "Show Transfers"
 msgstr "Dorioù"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "Diskouez ar gonsol _XML"
+msgid "Show Voice Message Button"
+msgstr "Kas ur gemennadenn"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4894,6 +4912,10 @@ msgstr "Kemmañ ar gont"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Diskouez ar gonsol _XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5078,6 +5100,9 @@ msgstr "Kregiñ da flapiñ"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5945,8 +5970,20 @@ msgid "Visual Notifications"
 msgstr "<b>Kelaouennoù dre welet</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Kas ur gemennadenn"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "N'eus ket tu en em lugañ"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "O labourat"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Argas %s"
 
 msgid "Wav Sounds"
 msgstr "Sonioù wav"
@@ -5983,7 +6020,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
 msgid "Width of group chat roster in pixel"
@@ -6014,9 +6051,6 @@ msgid "Workspaces"
 msgstr "Darempredoù"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML Console"
 msgstr ""
 
 msgid "XML console to see what's happening on the protocol layer"
@@ -6134,6 +6168,12 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr "N'hellit ket ebarzhiñ ur sal-flapiñ keit ha ma n'oc'h ket luget."
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -6353,6 +6393,10 @@ msgid "_Create"
 msgstr "Dizoberiant"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "Diskouez ar gonsol _XML"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Ezlinenn"
 
@@ -6437,12 +6481,16 @@ msgid "_Log In"
 msgstr "_Lugañ"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "_Kemmañ ar gont..."
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "_Kemmañ ar gont..."
+msgid "_Manage Account…"
+msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Kasour-ez"
 
 #, fuzzy
 msgid "_Name"
@@ -6519,9 +6567,6 @@ msgstr "Goulenn treuzkas"
 msgid "_Reset Value"
 msgstr "_Distreiñ gant al livioù dre-ziouer"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Enrollet e-barzh: %s"
@@ -6594,10 +6639,6 @@ msgstr "Anv-arveriad-ez direizh"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "_Kenderc'hel"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "Diskouez ar gonsol _XML"
 
 msgid "accuracy"
 msgstr ""
@@ -7077,12 +7118,20 @@ msgstr ""
 #~ msgstr "Kemennadennoù"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Kas"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Lugañ"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "_Kemmañ ar gont..."
 
 #, fuzzy
 #~ msgid "yesterday "

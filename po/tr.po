@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -1710,6 +1710,10 @@ msgid "Deactivated"
 msgstr ""
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "_XML Konsolu Göster"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "Koşuda"
 
@@ -2104,6 +2108,9 @@ msgstr "Hata"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Resim seç"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Error message: %s"
@@ -2883,6 +2890,9 @@ msgstr "Kişi Davet _Et"
 msgid "Invitees"
 msgstr "Davet _et"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3234,8 +3244,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "durum ileti"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "durum ileti"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderatör"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderatör"
 
 #, fuzzy
@@ -4084,7 +4107,8 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 msgid "Re_gister"
 msgstr "_Kaydol"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 #, fuzzy
@@ -4136,6 +4160,12 @@ msgid "Recipient: %s"
 msgstr "Alıcı: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4381,18 +4411,6 @@ msgid "Restore last state"
 msgstr "Son durum: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "durum ileti"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "durum ileti"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4866,8 +4884,8 @@ msgid "Show Transfers"
 msgstr "_XML Konsolu Göster"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "_XML Konsolu Göster"
+msgid "Show Voice Message Button"
+msgstr "Mesajı gönder"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4902,6 +4920,10 @@ msgstr "Yer:"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5090,6 +5112,9 @@ msgstr "Sohbet _Başla"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5963,8 +5988,20 @@ msgid "Visual Notifications"
 msgstr "<b>Görsel Bildirimler</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Mesajı gönder"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "%s yazılıyor..."
+
+#, fuzzy
+msgid "Warning"
+msgstr "ben burdaysam"
 
 msgid "Wav Sounds"
 msgstr "Wav Sesleri"
@@ -6003,7 +6040,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
 
 msgid "Width of group chat roster in pixel"
@@ -6035,10 +6072,6 @@ msgstr "Kişiyi yeniden adlandır"
 
 msgid "X11"
 msgstr ""
-
-#, fuzzy
-msgid "XML Console"
-msgstr "_XML Konsolu Göster"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6153,6 +6186,12 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr ""
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr ""
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
 
 msgid "You do not have permissions to create files in this directory."
@@ -6370,6 +6409,10 @@ msgid "_Create"
 msgstr "Yaratıcı"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "_XML Konsolu Göster"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "Bağlı _değil"
 
@@ -6453,12 +6496,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "%s hesaptan"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "%s hesaptan"
+msgid "_Manage Account…"
+msgstr "Kişi _ekle"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderatör"
 
 #, fuzzy
 msgid "_Name"
@@ -6534,9 +6581,6 @@ msgstr "_Ses"
 msgid "_Reset Value"
 msgstr "Öntanımlı değerlerine geri al"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "Sahip"
@@ -6609,10 +6653,6 @@ msgstr "%(nickname)s Girdi"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Çevrimiçi"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "_XML Konsolu Göster"
 
 msgid "accuracy"
 msgstr ""
@@ -7082,12 +7122,20 @@ msgstr ""
 #~ msgstr "İletler"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Gönder"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "%(nick)s durumu şimdi %(status)s"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "%s hesaptan"
 
 #~ msgid "_Undo"
 #~ msgstr "_Geri Al"

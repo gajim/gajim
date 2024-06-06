@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1761,6 +1761,10 @@ msgid "Deactivated"
 msgstr "מנוטרלת"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "מסוף XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "ג׳וגינג"
 
@@ -2179,6 +2183,9 @@ msgstr "שגיאה"
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "בחירת תמונה"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2988,6 +2995,9 @@ msgstr "הזמן _אנשי קשר"
 msgid "Invitees"
 msgstr "ה_זמן"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3359,8 +3369,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "הודעת מצב"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "cli"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "אחראי"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "אחראי"
 
 #, fuzzy
@@ -4208,7 +4231,8 @@ msgstr "להתחבר מחדש עכשיו?"
 msgid "Re_gister"
 msgstr "ה_רשמה"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4264,6 +4288,12 @@ msgid "Recipient: %s"
 msgstr "נמען: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4521,18 +4551,6 @@ msgid "Restore last state"
 msgstr "לפי מצב אחרון"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "הודעת מצב"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "cli"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -5010,8 +5028,8 @@ msgid "Show Transfers"
 msgstr "הצג מו_בילים"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "הצג _מסוף XML"
+msgid "Show Voice Message Button"
+msgstr "מסירת הודעה"
 
 #, fuzzy
 msgid "Show _Features"
@@ -5052,6 +5070,10 @@ msgstr "מיקום: "
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "הצג _מסוף XML"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5241,6 +5263,9 @@ msgstr "התחלת שיחה"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -6137,8 +6162,20 @@ msgid "Visual Notifications"
 msgstr "<b>התראות חזותיות</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "מסירת הודעה"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "סשנים חזותיים אינם זמינים"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "כותב"
+
+#, fuzzy
+msgid "Warning"
+msgstr "אזהרה: %s"
 
 msgid "Wav Sounds"
 msgstr "צלילי Wav"
@@ -6176,7 +6213,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
 
 msgid "Width of group chat roster in pixel"
@@ -6209,9 +6246,6 @@ msgstr "שינוי שם איש קשר"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr "מסוף XML"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6345,6 +6379,12 @@ msgstr "אין באפשרותך להסתנכרן עם חשבון אלא אם כ�
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6568,6 +6608,10 @@ msgid "_Create"
 msgstr "יצירתי"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr "מסוף XML"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "לא מ_קוון"
 
@@ -6652,12 +6696,16 @@ msgid "_Log In"
 msgstr ""
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "ה_תאם חשבון..."
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "ה_תאם חשבון..."
+msgid "_Manage Account…"
+msgstr "הוסף _איש קשר..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "אחראי"
 
 #, fuzzy
 msgid "_Name"
@@ -6735,9 +6783,6 @@ msgstr "_בקש ביטוי"
 msgid "_Reset Value"
 msgstr "_אפס לברירת מחדל"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "נשמר בתוך: ‎%s"
@@ -6810,10 +6855,6 @@ msgstr "הצג תעודה..."
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "מקוון"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr "מסוף XML"
 
 msgid "accuracy"
 msgstr "דיוק"
@@ -7291,6 +7332,10 @@ msgstr ""
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "הודעות"
 
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "_שלח"
+
 # In Hebrew: גאג'ים
 #, fuzzy
 #~ msgid "Show Gajim"
@@ -7299,6 +7344,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "להתחבר מחדש עכשיו?"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "ה_תאם חשבון..."
 
 #, fuzzy
 #~ msgid "yesterday "

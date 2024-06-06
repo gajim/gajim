@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
-"PO-Revision-Date: 2024-05-21 14:02+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"PO-Revision-Date: 2024-06-06 01:17+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -37,11 +37,11 @@ msgstr " (语音通话)"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr " 由 {actor}"
+msgstr " {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr "%(contact)s 拒绝了您将其邀请到 %(chat)s"
+msgstr "%(contact)s 拒绝了您的 %(chat)s 邀请"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
@@ -67,7 +67,7 @@ msgstr "%(name)s (%(jid)s) 想在您的联系人列表中添加一些联系人�
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr "%(name)s (%(jid)s) 想从您的联系人列表中移除一些联系人。"
+msgstr "%(name)s (%(jid)s) 想从您的联系人列表中删除一些联系人。"
 
 #, python-format
 msgid ""
@@ -80,11 +80,11 @@ msgstr "%(name)s 取消了传输 (%(reason)s)"
 
 #, python-format
 msgid "%(nickname)s:"
-msgstr "%(nickname)s:"
+msgstr "%(nickname)s："
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr "此群聊的 %(owner_or_admin_or_member)s"
+msgstr "此群聊的%(owner_or_admin_or_member)s"
 
 #, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
@@ -141,7 +141,7 @@ msgstr "%s 是一个文件但它应该是一个目录"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr "%s 已经在您的联系人列表中了"
+msgstr "%s 已在您的联系人列表中"
 
 #, python-format
 msgid "%s is calling"
@@ -218,19 +218,19 @@ msgstr "(%(filesize_unit)s/s)"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
-msgstr "** {nick} 的从属关系被设置为 {affiliation}{actor}{reason}"
+msgstr "**{actor} 已将 {nick} 的从属关系设为{affiliation}{reason}"
 
 #, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr "** {nick} 的角色被设置为 {role}{actor}{reason}"
+msgstr "**{actor} 已将 {nick} 的角色设为{role}{reason}"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr "** 您的从属关系被设置为 {affiliation}{actor}{reason}"
+msgstr "**{actor} 已将您的从属关系设为{affiliation}{reason}"
 
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr "** 您的角色被设置为 {role}{actor}{reason}"
+msgstr "**{actor} 已将您的角色设为{role}{reason}"
 
 msgid "1 Day"
 msgstr "1 天"
@@ -266,10 +266,10 @@ msgid "8 hours"
 msgstr "8 小时"
 
 msgid ": Affiliation changed"
-msgstr ": 从属关系已更改"
+msgstr "：从属关系已更改"
 
 msgid ": Group chat configuration changed to members-only"
-msgstr ": 群聊配置更改为仅成员进入"
+msgstr "：群聊配置更改为仅成员进入"
 
 msgid "<Description>"
 msgstr "<描述>"
@@ -330,11 +330,11 @@ msgid ""
 "resource)\n"
 msgstr ""
 "<b>XMPP 地址</b>\n"
-"&lt;user@domain/resource&gt; (只有此资源匹配)\n"
-"&lt;user@domain&gt; (任何资源均匹配)\n"
-"&lt;domain/resource&gt; (只有此资源匹配)\n"
-"&lt;domain&gt; (域名本身匹配，任何 user@domain 或 domain/resource 或包含子域"
-"名的地址也匹配)。\n"
+"&lt;user@domain/resource&gt;（只有该资源匹配）\n"
+"&lt;user@domain&gt;（任何资源匹配）\n"
+"&lt;domain/resource&gt;（只有该资源匹配）\n"
+"&lt;domain&gt;（域名本身匹配，任何 user@domain 或 domain/resource 或包含子域"
+"名的地址也匹配）。\n"
 
 msgid "<empty>"
 msgstr "<空白>"
@@ -357,7 +357,7 @@ msgid "A fully-featured XMPP chat client"
 msgstr "功能齐全的 XMPP 聊天客户端"
 
 msgid "A list of active, completed and stopped file transfers"
-msgstr "当前活动、已完成和已停止传输的文件列表"
+msgstr "当前活动、已完成和已停止的文件传输列表"
 
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
@@ -378,7 +378,7 @@ msgid "ALSA: %s"
 msgstr "ALSA: %s"
 
 msgid "API Preferences. Possible values: \"http\", \"iq\""
-msgstr "API 首选项。可能的值: \"http\"，\"iq\""
+msgstr "API 首选项。可能的值：“http”、“iq”"
 
 msgctxt "User status"
 msgid "A_way"
@@ -395,10 +395,10 @@ msgid "Abuse"
 msgstr "滥用"
 
 msgid "Accept"
-msgstr "同意"
+msgstr "接受"
 
 msgid "Accept all Contact Requests"
-msgstr "同意所有联系人请求"
+msgstr "接受所有联系人请求"
 
 msgid "Account"
 msgstr "账号"
@@ -414,7 +414,7 @@ msgid "Account Name..."
 msgstr "账号名称…"
 
 msgid "Account Removal Failed"
-msgstr "移除账号失败"
+msgstr "账号移除失败"
 
 msgid "Account Removed"
 msgstr "账号已移除"
@@ -441,11 +441,11 @@ msgid "Account is being created"
 msgstr "账号创建中"
 
 msgid "Account is not connected."
-msgstr "账号处于未连接状态。"
+msgstr "账号未连接。"
 
 #, python-format
 msgid "Account: %s"
-msgstr "账号: %s"
+msgstr "账号：%s"
 
 msgid "Accounts"
 msgstr "账号"
@@ -492,9 +492,8 @@ msgstr "添加分组…"
 msgid "Add Proxy"
 msgstr "添加代理"
 
-#, fuzzy
 msgid "Add Reaction…"
-msgstr "添加联系人…"
+msgstr "添加回应…"
 
 msgid "Add Setting"
 msgstr "添加设置"
@@ -520,9 +519,8 @@ msgstr "添加新主题"
 msgid "Add new line"
 msgstr "添加新换行"
 
-#, fuzzy
 msgid "Add reaction"
-msgstr "添加设置"
+msgstr "添加回应"
 
 msgid "Add some details…"
 msgstr "添加一些详情…"
@@ -614,25 +612,25 @@ msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
-"允许 Gajim 通过 D-Bus 广播有用的信息。这也将允许其他应用远程控制 Gajim。"
+"允许 Gajim 通过 D-Bus 广播有用的信息。这也允许其他应用程序远程控制 Gajim。"
 
 msgid "Allows opening file:/ URIs when clicked."
 msgstr "允许单击打开 file:/ URI。"
 
 msgid "Alternate venue (optional)..."
-msgstr "替代地点(可选)…"
+msgstr "替代地址（可选）…"
 
 msgid "Always"
 msgstr "总是"
 
 msgid "An Error Occurred"
-msgstr "出现错误"
+msgstr "出错"
 
 msgid "An entry with this XMPP Address already exists"
 msgstr "已经存在一个包含此 XMPP 地址的条目"
 
 msgid "An error occurred"
-msgstr "出现错误"
+msgstr "出错"
 
 msgid "An error occurred during account creation"
 msgstr "创建账号时出错"
@@ -641,27 +639,27 @@ msgid "An error occurred while exporting your messages"
 msgstr "导出消息时出错"
 
 msgid "An error occurred while trying to change your password."
-msgstr "试图更改密码时出错。"
+msgstr "尝试更改密码时出错。"
 
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
-msgstr "在尝试创建位于 %(path)s 的文件时发生错误: %(error)s"
+msgstr "尝试在 %(path)s 创建文件时出错：%(error)s"
 
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"尝试给群组“{group}”中的 {occupant_jid} 分配 {affiliation_or_role} 时出错"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
-msgstr "在尝试创建位于 %(path)s 的文件时发生错误: %(error)s"
+msgstr "尝试给 {occupant_jid} 分配 {affiliation_or_role} 时出错：{error}"
 
-#, fuzzy
 msgid "And more..."
-msgstr "账号名称…"
+msgstr "以及更多…"
 
 msgid "Anonymous login not supported"
 msgstr "不支持匿名登录"
@@ -673,10 +671,10 @@ msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "任何参与者都可以看到您的完整 XMPP 地址"
 
 msgid "Anyone can join"
-msgstr "任何人都可加入"
+msgstr "任何用户都可以加入"
 
 msgid "Anyone can join this group chat"
-msgstr "任何人都可加入此群聊"
+msgstr "任何用户都可以加入此群聊"
 
 msgid "Application verification failure"
 msgstr "应用程序验证失败"
@@ -697,7 +695,7 @@ msgid "Archive empty"
 msgstr "存档为空"
 
 msgid "Archive is malformed"
-msgstr "存档已畸形"
+msgstr "存档格式错误"
 
 msgctxt "Group chat feature"
 msgid "Archiving"
@@ -765,10 +763,10 @@ msgid "Audio/Video"
 msgstr "音频/视频"
 
 msgid "Authentication aborted"
-msgstr "验证中断"
+msgstr "验证已中止"
 
 msgid "Authentication currently not possible"
-msgstr "验证当前不可行"
+msgstr "当前无法进行验证"
 
 msgid "Authentication failed"
 msgstr "验证失败"
@@ -807,7 +805,7 @@ msgid "Auto Not Available"
 msgstr "自动没空"
 
 msgid "Autodetect"
-msgstr "自动侦测"
+msgstr "自动检测"
 
 msgid "Autojoin"
 msgstr "自动加入"
@@ -816,16 +814,16 @@ msgid "Automatic Status"
 msgstr "自动调整状态"
 
 msgid "Automatic Status Change"
-msgstr "自动状态变化"
+msgstr "自动状态更改"
 
 msgid "Automatic preview disabled"
 msgstr "自动预览已禁用"
 
 msgid "Automatic preview disabled (file too big)"
-msgstr "自动预览已禁用 (文件太大)"
+msgstr "自动预览已禁用（文件太大）"
 
 msgid "Automatic spell-checking for your messages"
-msgstr "自动对消息执行拼写检查"
+msgstr "自动拼写检查您的消息"
 
 msgid "Automatically accept all contact requests"
 msgstr "自动接受所有的联系人请求"
@@ -838,7 +836,7 @@ msgid "Available"
 msgstr "在线"
 
 msgid "Avatar file size too big"
-msgstr "头像文件尺寸太大"
+msgstr "头像文件太大"
 
 msgctxt "User status"
 msgid "Away"
@@ -864,7 +862,7 @@ msgid "Ban…"
 msgstr "封禁…"
 
 msgid "Behaviour of Application Window"
-msgstr "应用窗口行为"
+msgstr "应用程序窗口的行为"
 
 msgid "Birthday"
 msgstr "生日"
@@ -913,7 +911,7 @@ msgid "Browse"
 msgstr "浏览"
 
 msgid "Browse history by date"
-msgstr "按照日期浏览记录"
+msgstr "按照日期浏览聊天记录"
 
 #, python-format
 msgid "Browsing %(address)s using account %(account)s"
@@ -927,13 +925,13 @@ msgid "CRL has expired"
 msgstr "证书吊销列表已过期"
 
 msgid "CRL is not yet valid"
-msgstr "证书吊销列表还未生效"
+msgstr "证书吊销列表尚未生效"
 
 msgid "CRL signature failure"
-msgstr "吊销证书列表签名失败"
+msgstr "证书吊销列表签名失败"
 
 msgid "C_opy"
-msgstr ""
+msgstr "复制(_O)"
 
 msgid "Call"
 msgstr "通话"
@@ -952,10 +950,10 @@ msgid "Call with %s"
 msgstr "与 %s 的通话"
 
 msgid "Calling (Video)…"
-msgstr "通话中 (视频)…"
+msgstr "正在呼叫（视频）…"
 
 msgid "Calling…"
-msgstr "通话中…"
+msgstr "正在呼叫…"
 
 msgid "Cancel"
 msgstr "取消"
@@ -1051,17 +1049,16 @@ msgid ""
 msgstr "在群聊中使用昵称补全(Tab)时，在昵称后添加的字符。"
 
 msgid "Chat Banner: Background Color"
-msgstr "聊天横幅: 背景颜色"
+msgstr "聊天横幅：背景颜色"
 
 msgid "Chat Banner: Foreground Color"
-msgstr "聊天横幅: 前景颜色"
+msgstr "聊天横幅：前景颜色"
 
 msgid "Chat Banner: Text Font"
-msgstr "聊天横幅: 文字字体"
+msgstr "聊天横幅：文字字体"
 
-#, fuzzy
 msgid "Chat Details and Settings"
-msgstr "联系人详情及设置"
+msgstr "聊天详情及设置"
 
 msgid "Chat List"
 msgstr "聊天列表"
@@ -1070,10 +1067,10 @@ msgid "Chat history"
 msgstr "聊天记录"
 
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "通过 OMEMO 或者 OpenPGP 运用端到端加密技术保证聊天的安全"
+msgstr "通过 OMEMO 或 OpenPGP 端对端加密安全聊天"
 
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "通过 OMEMO 或 OpenGPG 端对端加密安全聊天。"
+msgstr "通过 OMEMO 或 OpenPGP 端对端加密安全聊天。"
 
 msgid "Chats"
 msgstr "聊天"
@@ -1158,7 +1155,7 @@ msgid ""
 "(Ctrl + Double Click to deselect)"
 msgstr ""
 "单击消息以选择\n"
-"(Ctrl + 双击以取消选择)"
+"（Ctrl + 双击以取消选择）"
 
 msgid "Click on contacts you would like to invite to this group chat."
 msgstr "单击您要邀请加入此群聊的联系人。"
@@ -1220,7 +1217,7 @@ msgid "Common Name (CN)"
 msgstr "通用名称 (CN)"
 
 msgid "Common Name (CN): "
-msgstr "通用名称 (CN): "
+msgstr "通用名称 (CN)： "
 
 #, python-format
 msgid ""
@@ -1251,7 +1248,7 @@ msgid "Completed"
 msgstr "已完成"
 
 msgid "Composing Only"
-msgstr "仅编辑时"
+msgstr "仅输入消息时"
 
 msgid "Computer"
 msgstr "电脑"
@@ -1278,7 +1275,7 @@ msgid "Connect on startup"
 msgstr "启动时连接"
 
 msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr "通过枢纽连接其他通讯软件(Facebook，IRC 等)"
+msgstr "通过传输连接到其他通讯软件（Facebook、IRC…）"
 
 msgid "Connecting"
 msgstr "正在连接"
@@ -1333,22 +1330,22 @@ msgid "Contact List Exchange"
 msgstr "联系人列表交换"
 
 msgid "Contact List: Contact Background Color"
-msgstr "联系人列表: 联系人背景颜色"
+msgstr "联系人列表：联系人背景颜色"
 
 msgid "Contact List: Contact Font"
-msgstr "联系人列表: 联系人字体"
+msgstr "联系人列表：联系人字体"
 
 msgid "Contact List: Contact Foreground Color"
-msgstr "联系人列表: 联系人前景颜色"
+msgstr "联系人列表：联系人前景颜色"
 
 msgid "Contact List: Group Background Color"
-msgstr "联系人列表: 分组背景颜色"
+msgstr "联系人列表：分组背景颜色"
 
 msgid "Contact List: Group Font"
-msgstr "联系人列表: 分组字体"
+msgstr "联系人列表：分组字体"
 
 msgid "Contact List: Group Foreground Color"
-msgstr "联系人列表: 分组前景颜色"
+msgstr "联系人列表：分组前景颜色"
 
 msgid "Contact Unsubscribed"
 msgstr "联系人已退订"
@@ -1363,19 +1360,19 @@ msgid "Contacts"
 msgstr "联系人"
 
 msgid "Conversation: Nickname Color (Incoming)"
-msgstr "对话: 昵称颜色 (呼入)"
+msgstr "对话：昵称颜色（呼入）"
 
 msgid "Conversation: Nickname Color (Outgoing)"
-msgstr "对话: 昵称颜色 (呼出)"
+msgstr "对话：昵称颜色（呼出）"
 
 msgid "Conversation: Text Color"
-msgstr "对话: 文本颜色"
+msgstr "对话：文本颜色"
 
 msgid "Conversation: Text Font"
-msgstr "对话: 文本字体"
+msgstr "对话：文本字体"
 
 msgid "Conversation: URL Color"
-msgstr "对话: URL 颜色"
+msgstr "对话：URL 颜色"
 
 msgid "Conversations"
 msgstr "对话"
@@ -1480,10 +1477,10 @@ msgid "Creating thumbnail failed"
 msgstr "创建缩略图失败"
 
 msgid "Credentials expired"
-msgstr "证书已过期"
+msgstr "凭证已过期"
 
 msgid "Current Developers"
-msgstr "当前开发者"
+msgstr "当前开发人员"
 
 msgid "D-Bus Interface"
 msgstr "D-Bus 接口"
@@ -1492,14 +1489,16 @@ msgid "Dark Theme"
 msgstr "深色主题"
 
 msgid "Database Migration"
-msgstr ""
+msgstr "数据库迁移"
 
-#, fuzzy
 msgid "Database migration failed"
-msgstr "注册失败"
+msgstr "数据库迁移失败"
 
 msgid "Deactivated"
 msgstr "已停用"
+
+msgid "Debug Console"
+msgstr "调试控制台"
 
 msgid "Debug Logging"
 msgstr "调试日志"
@@ -1581,7 +1580,7 @@ msgid "Description"
 msgstr "描述"
 
 msgid "Description: "
-msgstr "描述: "
+msgstr "描述： "
 
 msgid "Destroy Group Chat…"
 msgstr "解散群聊…"
@@ -1608,20 +1607,20 @@ msgstr "拨打此号码"
 
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
-msgstr "目录 URL 缺少 \"%s\""
+msgstr "目录 URL 缺少“%s”"
 
 msgid "Direct Messages"
 msgstr "直接消息"
 
 msgid "Direct transfer (not encrypted)"
-msgstr "直接传输 (不加密)"
+msgstr "直接传输（未加密）"
 
 msgid "Directory"
 msgstr "目录"
 
 #, python-format
 msgid "Directory \"%s\" is not writable"
-msgstr "目录 \"%s\" 无法写入"
+msgstr "目录“%s”无法写入"
 
 msgid "Disable Account"
 msgstr "禁用账号"
@@ -1726,7 +1725,7 @@ msgstr "下载中…"
 
 #, python-format
 msgid "Draft: %s"
-msgstr "草稿: %s"
+msgstr "草稿：%s"
 
 msgid "Drop files here"
 msgstr "拖放文件到这里"
@@ -1744,7 +1743,7 @@ msgid "Edit Name…"
 msgstr "编辑名称…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "编辑您的消息（Esc 取消）…"
 
 msgid "Edit…"
 msgstr "编辑…"
@@ -1754,8 +1753,8 @@ msgid ""
 "Either a custom URL with %%s in it (where %%s is the word/phrase) or "
 "\"WIKTIONARY\" (which means use Wikitionary)."
 msgstr ""
-"使用包含 %%s 的自定义 URL( %%s 即是单词/短语)，或者 'WIKTIONARY' 以使用 "
-"Wiktionary。"
+"使用包含 %%s 的自定义 URL（%%s 是单词/短语），或“WIKTIONARY”（即使用 "
+"Wikitionary）。"
 
 msgid "Email"
 msgstr "电子邮件"
@@ -1794,7 +1793,7 @@ msgid ""
 msgstr "允许 Gajim 为了文件传输请求您的路由器进行端口转发"
 
 msgid "Enables Gajim to spell check your messages while composing"
-msgstr "允许 Gajim 在您编写消息时进行拼写检查"
+msgstr "允许 Gajim 在您输入消息时进行拼写检查"
 
 msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
@@ -1802,7 +1801,7 @@ msgid ""
 msgstr "允许 Gajim 以安全的方式保存密码而不是明文"
 
 msgid "Enables libappindicator, an alternative tray icon provider"
-msgstr "启用 libappindicator，一个托盘区图标的替代提供方案"
+msgstr "启用 libappindicator，托盘图标替代提供方案"
 
 #, python-format
 msgid "Encrypted (%s)"
@@ -1812,7 +1811,7 @@ msgid "Encrypted Certificate"
 msgstr "加密证书"
 
 msgid "Encrypting file…"
-msgstr "正加密文件…"
+msgstr "正在加密文件…"
 
 msgid "Encryption (OMEMO)"
 msgstr "加密 (OMEMO)"
@@ -1821,7 +1820,7 @@ msgid "Encryption error"
 msgstr "加密错误"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "私人聊天中无法使用加密功能"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr "未单独对联系人指定加密方式时采用的默认加密方式"
@@ -1851,15 +1850,18 @@ msgstr "错误"
 msgid "Error Loading Image"
 msgstr "加载图片错误"
 
+msgid "Error in audio data stream."
+msgstr "音频数据流出错。"
+
 #, python-format
 msgid "Error message: %s"
-msgstr "错误消息: %s"
+msgstr "错误消息：%s"
 
 msgid "Error opening file"
 msgstr "打开文件错误"
 
 msgid "Error received: {}"
-msgstr "收到错误: {}"
+msgstr "收到错误：{}"
 
 msgid "Error while Exporting"
 msgstr "导出时错误"
@@ -1881,11 +1883,11 @@ msgstr "错误！"
 
 #, python-format
 msgid "Error: %s"
-msgstr "错误: %s"
+msgstr "错误：%s"
 
 #, python-format
 msgid "Error: cannot open %s for reading"
-msgstr "错误: 无法打开文件 %s 以读取"
+msgstr "错误：无法打开 %s 进行读取"
 
 msgid "Even more features via plugins"
 msgstr "通过插件增加更多功能"
@@ -1912,7 +1914,7 @@ msgid "Expires on"
 msgstr "截止日期"
 
 msgid "Expires on: "
-msgstr "截止日期: "
+msgstr "截止日期： "
 
 msgid "Export"
 msgstr "导出"
@@ -1927,7 +1929,7 @@ msgid "Export your chat history from Gajim"
 msgstr "从 Gajim 导出您的聊天记录"
 
 msgid "Exporting History..."
-msgstr "正在导出记录…"
+msgstr "正在导出聊天记录…"
 
 msgid "Exporting your messages..."
 msgstr "正在导出您的消息…"
@@ -1958,13 +1960,13 @@ msgid "Family"
 msgstr "家人"
 
 msgid "Feature not available on Windows"
-msgstr "此功能在 Windows 下不可用"
+msgstr "Windows 系统无法使用此功能"
 
 msgid "Features"
 msgstr "功能"
 
 msgid "Features:"
-msgstr "功能:"
+msgstr "功能："
 
 msgid "Feedback"
 msgstr "反馈"
@@ -1979,7 +1981,7 @@ msgid "File"
 msgstr "文件"
 
 msgid "File Name: "
-msgstr "文件名: "
+msgstr "文件名： "
 
 msgid "File Offered"
 msgstr "文件已提供"
@@ -2031,13 +2033,13 @@ msgstr "文件为空"
 
 #, python-format
 msgid "File is too large, maximum allowed file size is: %s"
-msgstr "文件太大，最大允许的文件尺寸为: %s"
+msgstr "文件太大，允许的最大文件大小为：%s"
 
 msgid "File size unknown"
-msgstr "文件尺寸未知"
+msgstr "文件大小未知"
 
 msgid "File too big, will use direct transfer (not encrypted)"
-msgstr "文件过大，将使用直接传输 (不加密)"
+msgstr "文件太大，将使用直接传输（未加密）"
 
 msgid "File transfer stopped"
 msgstr "文件传输已停止"
@@ -2047,11 +2049,11 @@ msgstr "文件传输"
 
 #, python-format
 msgid "File: %s"
-msgstr "文件: %s"
+msgstr "文件：%s"
 
 #, python-format
 msgid "Filename: %s"
-msgstr "文件名: %s"
+msgstr "文件名：%s"
 
 msgid "Filetransfer Preference"
 msgstr "文件传输首选项"
@@ -2079,7 +2081,7 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
-"已完成聊天记录同步:\n"
+"已完成聊天记录同步：\n"
 "%s 条消息已下载"
 
 msgid "For example: \"Julia is now online\""
@@ -2113,11 +2115,11 @@ msgid "Format your message"
 msgstr "为您的消息应用格式"
 
 msgid "Forward 10 seconds"
-msgstr "快进10秒"
+msgstr "快进 10 秒"
 
 msgctxt "User status"
 msgid "Free for Chat"
-msgstr "和我聊天吧"
+msgstr "有空聊天"
 
 msgid "From"
 msgstr "从"
@@ -2141,11 +2143,11 @@ msgstr "功能齐全的 XMPP 聊天客户端"
 
 #, python-format
 msgid "GLib Version: %s"
-msgstr "GLib 版本: %s"
+msgstr "GLib 版本：%s"
 
 #, python-format
 msgid "GTK Version: %s"
-msgstr "GTK 版本: %s"
+msgstr "GTK 版本：%s"
 
 msgid "Gajim"
 msgstr "Gajim"
@@ -2168,8 +2170,8 @@ msgid ""
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-"Gajim 旨在成为一个易于使用且功能齐全的 XMPP 客户端。尽情的与您的朋友和家人聊"
-"天，轻松分享图片和想法，或者和您的群组讨论新闻。"
+"Gajim 旨在成为易于使用且功能齐全的 XMPP 客户端。尽情地与您的朋友或家人聊天，"
+"轻松分享图片和想法，或与您的群组讨论新闻。"
 
 msgid "Gajim can not read this file"
 msgstr "Gajim 无法读取此文件"
@@ -2184,7 +2186,7 @@ msgstr ""
 msgid ""
 "Gajim integrates well with your other devices: simply continue conversations "
 "on your mobile device."
-msgstr "Gajim 可与您的其他设备集成: 在您的移动设备上轻松继续对话。"
+msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
 
 msgid "Gajim is fully synchronised with the archive."
 msgstr "Gajim 与存档已完全同步。"
@@ -2199,13 +2201,13 @@ msgstr "Gajim 即将退出"
 
 #, python-format
 msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: 没有可用的更新 (上一次检查: %s)"
+msgstr "Gajim：没有可用的更新（上次检查：%s）"
 
 msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: 没有可用的更新 (上一次检查: 从未)"
+msgstr "Gajim：没有可用的更新（上次检查：从未）"
 
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: 在首选项中禁用更新检查"
+msgstr "Gajim：在首选项中禁用更新检查"
 
 msgid "Gathering information…"
 msgstr "正在收集信息…"
@@ -2276,7 +2278,7 @@ msgstr "群聊不存在"
 
 #, python-format
 msgid "Group chat has been destroyed%s"
-msgstr "群聊已被解散%s"
+msgstr "群聊已解散%s"
 
 msgid "Group chat is closed"
 msgstr "群聊已关闭"
@@ -2337,7 +2339,7 @@ msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
 msgid "Hide/show the main window menu"
-msgstr ""
+msgstr "隐藏/显示主窗口菜单"
 
 msgid "Home"
 msgstr "主页"
@@ -2349,7 +2351,7 @@ msgid "Hostname"
 msgstr "主机名"
 
 msgid "How far back should the chat history be synchronised?"
-msgstr "聊天历史记录应该同步多久？"
+msgstr "应该同步多久前的聊天记录？"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim 应该保存您的聊天记录多久"
@@ -2358,7 +2360,7 @@ msgid "I can see contact's online status"
 msgstr "我可以看到联系人的在线状态"
 
 msgid "I would like to add you to my contact list."
-msgstr "我想添加您到我的联系人列表。"
+msgstr "我想将您添加到我的联系人列表。"
 
 msgid "I would like to add you to my roster."
 msgstr "我想将您添加到我的联系人列表。"
@@ -2381,7 +2383,7 @@ msgstr "空闲时间"
 
 #, python-format
 msgid "Idle since: %s"
-msgstr "空闲开始自: %s"
+msgstr "空闲自：%s"
 
 msgid ""
 "If enabled, Gajim makes the window flash (the default behaviour in most "
@@ -2405,8 +2407,8 @@ msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
-"如果启用， Gajim 在使用 Jingle 时会尝试使用 STUN 服务器。服务器可以由"
-"\"stun_server\"选项给出，或由 XMPP 服务器给出。"
+"如果启用， Gajim 在使用 Jingle 时会尝试使用 STUN 服务器。服务器可以"
+"由“stun_server”选项给出，或由 XMPP 服务器给出。"
 
 msgid ""
 "If enabled, you will be able to set a negative priority to your account in "
@@ -2424,7 +2426,7 @@ msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
 msgstr ""
-"如果您现在退出，正在传输的文件将会丢失。\n"
+"如果现在退出，将丢失正在传输的文件。\n"
 "仍要退出？"
 
 msgid "Ignore Unknown Contacts"
@@ -2453,7 +2455,7 @@ msgid "Incoming Call"
 msgstr "来电"
 
 msgid "Incoming Call (Video)"
-msgstr "来电 (视频)"
+msgstr "来电（视频）"
 
 msgid "Increase User Interface Font Size"
 msgstr "增大用户界面字体大小"
@@ -2471,7 +2473,7 @@ msgid "Insert Emoji"
 msgstr "插入表情符号"
 
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
-msgstr "安装 <tt>sentry-sdk</tt> 以便于问题汇报操作。"
+msgstr "安装 <tt>sentry-sdk</tt> 以方便报告问题。"
 
 msgid "Install Plugin from ZIP-File"
 msgstr "从 ZIP 文件安装插件"
@@ -2515,7 +2517,7 @@ msgstr "无效 XMPP 地址"
 
 #, python-format
 msgid "Invalid address: %s"
-msgstr "无效地址: %s"
+msgstr "无效地址：%s"
 
 msgid "Invalid domain name"
 msgstr "无效的域名"
@@ -2533,7 +2535,10 @@ msgid "Invite to this chat"
 msgstr "邀请加入此聊天"
 
 msgid "Invitees"
-msgstr "受邀者"
+msgstr "受邀用户"
+
+msgid "Is a microphone plugged in and accessible?"
+msgstr "麦克风是否插好并可使用？"
 
 msgid "Issued by"
 msgstr "颁发者"
@@ -2545,7 +2550,7 @@ msgid "Issued on"
 msgstr "颁发日期"
 
 msgid "Issued on: "
-msgstr "颁发日期: "
+msgstr "颁发日期： "
 
 msgid "Issued to"
 msgstr "颁发对象"
@@ -2591,7 +2596,7 @@ msgid "Join Group Chat as…"
 msgstr "加入群聊以…"
 
 msgid "Join Group Chat?"
-msgstr "加入群聊吗？"
+msgstr "加入群聊？"
 
 msgid "Join Groupchat…"
 msgstr "加入群聊…"
@@ -2641,7 +2646,7 @@ msgstr "最后但同样重要的"
 
 #, python-format
 msgid "Last seen: %s"
-msgstr "最后上线: %s"
+msgstr "最后活跃：%s"
 
 msgid "Leave Group Chat"
 msgstr "离开群聊"
@@ -2672,13 +2677,13 @@ msgid "Loading Avatar Failed"
 msgstr "加载头像失败"
 
 msgid "Loading Preview…"
-msgstr "加载预览中…"
+msgstr "正在加载预览…"
 
 msgid "Loading avatar image failed"
 msgstr "加载头像图片失败"
 
 msgid "Loading…"
-msgstr "加载中…"
+msgstr "正在加载…"
 
 msgid "Local System Time"
 msgstr "本地系统时间"
@@ -2699,7 +2704,7 @@ msgid "Location at %s"
 msgstr "位于 %s"
 
 msgid "Location:"
-msgstr "位置:"
+msgstr "位置："
 
 msgid "Log"
 msgstr "日志"
@@ -2773,7 +2778,7 @@ msgid "Me"
 msgstr "本人"
 
 msgid "Media Playback"
-msgstr "媒体回放"
+msgstr "媒体播放"
 
 msgid "Member"
 msgstr "成员"
@@ -2791,7 +2796,7 @@ msgid "Members Only"
 msgstr "仅成员进入"
 
 msgid "Mention: Message Background Color"
-msgstr "提及: 消息背景颜色"
+msgstr "提及：消息背景颜色"
 
 msgid "Message"
 msgstr "消息"
@@ -2806,18 +2811,17 @@ msgid "Message Sent"
 msgstr "消息已发送"
 
 msgid "Message composition"
-msgstr "消息构成"
+msgstr "消息输入"
 
-#, fuzzy
 msgid "Message content unknown"
-msgstr "消息已发送"
+msgstr "消息内容未知"
 
 #, python-format
 msgid ""
 "Message corrected. Original message:\n"
 "%s"
 msgstr ""
-"消息已更正。原始消息:\n"
+"消息已更正。原始消息：\n"
 "%s"
 
 msgid "Messages are archived on the server"
@@ -2844,9 +2848,19 @@ msgstr "缺失音频/视频所需的依赖"
 msgid "Missing necessary encryption plugin"
 msgstr "缺失必要的加密插件"
 
+msgid "Moderate Message"
+msgstr "撤回消息"
+
+msgid "Moderate message?"
+msgstr "撤回消息？"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
 msgstr "有审核"
+
+msgctxt "Message row action"
+msgid "Moderate…"
+msgstr "撤回…"
 
 msgid "Moderation"
 msgstr "审核权"
@@ -2957,9 +2971,8 @@ msgstr "没有额外的请求"
 msgid "No automatic preview"
 msgstr "无自动预览"
 
-#, fuzzy
 msgid "No certificate"
-msgstr "证书"
+msgstr "没有证书"
 
 msgid "No commands available"
 msgstr "没有可用命令"
@@ -2981,7 +2994,6 @@ msgstr ""
 "没有剩下联系人。\n"
 "您也可以输入一个 XMPP 地址。"
 
-#, fuzzy
 msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr "未找到可加密此消息的设备。正在查询设备…"
 
@@ -3068,7 +3080,7 @@ msgid "Note to myself"
 msgstr "给自己的备注"
 
 msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr "注意: 匿名账号并非在所有服务器有效"
+msgstr "注意：并非所有服务器都能提供匿名账号"
 
 msgid "Notes"
 msgstr "备注"
@@ -3180,10 +3192,10 @@ msgid "Organization (O)"
 msgstr "组织 (O)"
 
 msgid "Organization (O): "
-msgstr "组织 (O): "
+msgstr "组织 (O)： "
 
 msgid "Organize your chats with workspaces"
-msgstr "用工作区组织您的聊天"
+msgstr "用工作区管理您的聊天"
 
 msgctxt "Gender"
 msgid "Other"
@@ -3230,11 +3242,11 @@ msgid ""
 "PEP node %(node)s was not removed:\n"
 "%(message)s"
 msgstr ""
-"PEP 节点 %(node)s 没有被移除:\n"
+"PEP 节点 %(node)s 未移除：\n"
 "%(message)s"
 
 msgid "PEP node was not removed"
-msgstr "PEP 节点没有被移除"
+msgstr "PEP 节点未移除"
 
 msgid "PKCS12 Files"
 msgstr "PKCS12 文件"
@@ -3247,7 +3259,7 @@ msgstr "暂停(_U)/继续"
 
 #, python-format
 msgid "Pango Version: %s"
-msgstr "Pango 版本: %s"
+msgstr "Pango 版本：%s"
 
 msgctxt "Group chat contact role"
 msgid "Participant"
@@ -3261,7 +3273,7 @@ msgid "Participants"
 msgstr "参与者"
 
 msgid "Participants asking for voice:"
-msgstr "参与者请求发言权:"
+msgstr "参与者请求发言权："
 
 msgid "Participants entering this group chat are allowed to send messages"
 msgstr "允许进入此群聊的参与者发送消息"
@@ -3297,7 +3309,7 @@ msgid "Passwords do not match"
 msgstr "密码不匹配"
 
 msgid "Past Developers"
-msgstr "既往开发者"
+msgstr "过去的开发人员"
 
 msgid "Paste Last Input"
 msgstr "粘贴上一次输入"
@@ -3318,15 +3330,14 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "已暂停"
 
-#, fuzzy
 msgid "Pending"
-msgstr "待处理事件"
+msgstr "待处理"
 
 msgid "Pending Event"
 msgstr "待处理事件"
 
 msgid "Pending Voice Requests"
-msgstr "待处理发言权请求"
+msgstr "待处理的发言权请求"
 
 msgid "Permanently"
 msgstr "永久"
@@ -3366,13 +3377,13 @@ msgid "Play Sounds"
 msgstr "播放声音"
 
 msgid "Play sounds even when you are Away, Busy, etc."
-msgstr "即使在状态为离开、忙碌时也播放声音。"
+msgstr "即使在离开、忙碌等状态时也播放声音。"
 
 msgid "Play sounds to notify about events"
 msgstr "播放声音来通知事件"
 
 msgid "Please choose an account"
-msgstr "请选择一个账号"
+msgstr "请选择账号"
 
 msgid "Please enter an XMPP address"
 msgstr "请输入一个 XMPP 地址"
@@ -3389,9 +3400,9 @@ msgid ""
 "%(jid)s\n"
 "(Account: %(account)s)"
 msgstr ""
-"请输入以下账号的密码\n"
+"请输入您的密码\n"
 "%(jid)s\n"
-"(账号: %(account)s)"
+"（账号：%(account)s）"
 
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
@@ -3402,14 +3413,14 @@ msgid ""
 "Gajim will export all messages from the selected account to a directory of "
 "your choice."
 msgstr ""
-"请选择您的一个账号。\n"
+"请选择您的账号。\n"
 "Gajim 会从选定的账号导出所有消息到您指定的目录。"
 
 msgid "Please use these settings with caution!"
 msgstr "请谨慎使用这些设置！"
 
 msgid "Please use yyyy-mm-dd"
-msgstr "请使用 年-月-日 的格式"
+msgstr "请使用 yyyy-mm-dd 格式"
 
 msgid "Plugin Settings"
 msgstr "插件设置"
@@ -3433,10 +3444,10 @@ msgid "Plugins Updated Successfully"
 msgstr "插件已更新成功"
 
 msgid "Plugins: No updates available"
-msgstr "插件: 无可用的更新"
+msgstr "插件：没有可用的更新"
 
 msgid "Plugins: Update check disabled in preferences"
-msgstr "插件: 更新检查在首选项中被禁用"
+msgstr "插件：在首选项中禁用更新检查"
 
 msgid "Port"
 msgstr "端口"
@@ -3445,7 +3456,7 @@ msgid "Port must be a number between 0 and 65535"
 msgstr "端口必须为一个 0 到 65535 之间的数字"
 
 msgid "Post Office Box"
-msgstr "邮件箱"
+msgstr "邮政信箱"
 
 msgid "Postal Code"
 msgstr "邮政编码"
@@ -3461,7 +3472,7 @@ msgid "Preferences"
 msgstr "首选项"
 
 msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr "在聊天窗口中进行文件拖放时首选的文件传输机制"
+msgstr "在聊天窗口中拖放文件的首选文件传输机制"
 
 msgid "Presets"
 msgstr "预设"
@@ -3476,7 +3487,7 @@ msgid "Preview in Public Group Chats"
 msgstr "在公开群聊中预览"
 
 msgid "Preview new messages in notification popup?"
-msgstr "在弹出提示中预览消息？"
+msgstr "在通知弹窗中预览新消息？"
 
 msgid "Previous"
 msgstr "上个"
@@ -3497,7 +3508,7 @@ msgid "Profile"
 msgstr "个人资料"
 
 msgid "Profile application with cprofile"
-msgstr "使用 cprofile 的预置文件应用"
+msgstr "使用 cprofile 配置文件应用程序"
 
 msgid "Progress"
 msgstr "进度"
@@ -3522,7 +3533,7 @@ msgid "Proxy Type"
 msgstr "代理服务器类型"
 
 msgid "Proxy, custom hostname and port"
-msgstr "代理服务器，自定义主机名和端口"
+msgstr "代理服务器、自定义主机名和端口"
 
 msgid "Public"
 msgstr "公开"
@@ -3539,11 +3550,11 @@ msgid "Public Key Information"
 msgstr "公钥信息"
 
 msgid "Public Key: "
-msgstr "公钥: "
+msgstr "公钥： "
 
 #, python-format
 msgid "Pulse: %s"
-msgstr "脉冲: %s"
+msgstr "脉冲：%s"
 
 msgid "Purge Chat History…"
 msgstr "清空聊天记录…"
@@ -3553,7 +3564,7 @@ msgstr "清空所有聊天记录"
 
 #, python-format
 msgid "PyGObject Version: %s"
-msgstr "PyGObject 版本: %s"
+msgstr "PyGObject 版本：%s"
 
 msgid "Quit"
 msgstr "退出"
@@ -3580,8 +3591,9 @@ msgstr "现在重新登录？"
 msgid "Re_gister"
 msgstr "注册(_G)"
 
-msgid "React with 👍"
-msgstr ""
+#, python-format
+msgid "React with %s"
+msgstr "用 %s 回应"
 
 msgid "Read _Wikipedia Article"
 msgstr "阅读 Wikipedia 文章(_W)"
@@ -3596,19 +3608,18 @@ msgid "Reason"
 msgstr "原因"
 
 msgid "Reason (optional)"
-msgstr "原因 (可选)"
+msgstr "原因（可选）"
 
 msgid "Reason (optional)..."
-msgstr "原因 (可选)…"
+msgstr "原因（可选）…"
 
 msgid "Reason for destruction"
 msgstr "解散的原因"
 
 #, python-format
 msgid "Reason: %s"
-msgstr "原因: %s"
+msgstr "原因：%s"
 
-#, fuzzy
 msgid "Received"
 msgstr "已收到"
 
@@ -3617,17 +3628,23 @@ msgid "Received"
 msgstr "已收到"
 
 msgid "Recent history"
-msgstr "最近的历史记录"
+msgstr "最近的聊天记录"
 
 msgid "Recipient: "
-msgstr "接收者: "
+msgstr "接收者： "
 
 #, python-format
 msgid "Recipient: %s"
-msgstr "接收者: %s"
+msgstr "接收者：%s"
 
 msgid "Recognize your account by color"
 msgstr "用颜色辨识您的账号"
+
+msgid "Record"
+msgstr "录制"
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr "录制语音消息…（按住按钮可直接录制）"
 
 msgid "Redirect"
 msgstr "重定向"
@@ -3651,7 +3668,7 @@ msgid "Reject file transfer"
 msgstr "拒绝文件传输"
 
 msgid "Remember Last Status"
-msgstr "记住上次的状态"
+msgstr "记住上次状态"
 
 msgid "Remote server not found"
 msgstr "找不到远程服务器"
@@ -3681,7 +3698,7 @@ msgid "Remove Group..."
 msgstr "移除分组…"
 
 msgid "Remove History…"
-msgstr "移除历史记录…"
+msgstr "移除聊天记录…"
 
 msgid "Remove Notification"
 msgstr "移除通知"
@@ -3713,9 +3730,8 @@ msgstr "从联系人列表移除"
 msgid "Remove this workspace"
 msgstr "移除此工作区"
 
-#, fuzzy
 msgid "Remove your group chat avatar"
-msgstr "移除您的个人资料图片"
+msgstr "移除您的群聊头像"
 
 msgid "Remove your profile picture"
 msgstr "移除您的个人资料图片"
@@ -3723,7 +3739,7 @@ msgstr "移除您的个人资料图片"
 #, python-format
 msgid "Removed %s contact"
 msgid_plural "Removed %s contacts"
-msgstr[0] "已删除 %s 位联系人"
+msgstr[0] "已移除 %s 位联系人"
 
 msgid "Remove…"
 msgstr "移除…"
@@ -3736,7 +3752,7 @@ msgid "Repairs"
 msgstr "修理"
 
 msgid "Reply…"
-msgstr ""
+msgstr "回复…"
 
 msgid "Report"
 msgstr "报告"
@@ -3772,32 +3788,32 @@ msgid "Required"
 msgstr "必要"
 
 msgid "Requires: Gspell"
-msgstr "需要: Gspell"
+msgstr "需要：Gspell"
 
 msgid ""
 "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 "ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-"需要: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"需要：farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 "ugly-1.0, gst-libav, gstreamer-gtk3-plugin"
 
 msgid "Requires: gnome-keyring or kwallet"
-msgstr "需要: gnome-keyring 或 kwallet"
+msgstr "需要：gnome-keyring 或 kwallet"
 
 msgid "Requires: gsound"
-msgstr "需要: gsound"
+msgstr "需要：gsound"
 
 msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "需要: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "需要：gstreamer-1.0, gst-plugins-base-1.0"
 
 msgid "Requires: gupnpigd-1.0"
-msgstr "需要: gupnpigd-1.0"
+msgstr "需要：gupnpigd-1.0"
 
 msgid "Requires: libappindicator3"
-msgstr "需要: libappindicator3"
+msgstr "需要：libappindicator3"
 
 msgid "Requires: libxss"
-msgstr "需要: libxss"
+msgstr "需要：libxss"
 
 msgid "Reserved Name"
 msgstr "保留名称"
@@ -3835,16 +3851,6 @@ msgstr "恢复上次状态"
 msgid "Restore status and status message of your last session"
 msgstr "恢复您上次会话的状态和状态信息"
 
-msgid "Retract Message"
-msgstr "撤回消息"
-
-msgid "Retract message?"
-msgstr "撤回消息？"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "撤回…"
-
 msgid "Revoke Member"
 msgstr "撤销成员"
 
@@ -3852,14 +3858,14 @@ msgid "Revoke Voice"
 msgstr "撤销发言权"
 
 msgid "Rewind 10 seconds"
-msgstr "回退10秒"
+msgstr "回放 10 秒"
 
 msgid "Role"
 msgstr "角色"
 
 msgctxt "Profile"
 msgid "Role"
-msgstr "角色"
+msgstr "职能"
 
 msgid "SHA-1"
 msgstr "SHA-1"
@@ -3927,11 +3933,11 @@ msgstr "扫描二维码"
 
 #, python-format
 msgid "Scan this QR code to join %s."
-msgstr "扫描此二维码来加入 %s 。"
+msgstr "扫描此二维码加入 %s。"
 
 #, python-format
 msgid "Scan this QR code to start a chat with %s."
-msgstr "扫描此二维码来与 %s 开始聊天。"
+msgstr "扫描此二维码与 %s 开始聊天。"
 
 #, python-format
 msgid "Scanning %(current)d / %(total)d ..."
@@ -3940,9 +3946,8 @@ msgstr "正在扫描 %(current)d / %(total)d …"
 msgid "Scroll down"
 msgstr "向下滚动"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "设置状态信息"
+msgstr "滚动到此消息"
 
 msgid "Scroll up"
 msgstr "向上滚动"
@@ -3966,14 +3971,14 @@ msgid "Search contacts..."
 msgstr "搜索联系人…"
 
 msgid "Search for Gajim updates periodically?"
-msgstr "定期搜索 Gajim 更新吗？"
+msgstr "定期搜索 Gajim 更新？"
 
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
 msgstr ""
 "全局搜索群聊\n"
-"(按下回车开始搜索)"
+"（按 Enter 键开始搜索）"
 
 msgid "Searching"
 msgstr "正在搜索"
@@ -4013,7 +4018,7 @@ msgid "Select a security label for your message…"
 msgstr "为您的消息选择一个安全标签…"
 
 msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "选择音频输出(比如扬声器、耳机)"
+msgstr "选择音频输出（例如扬声器、耳机）"
 
 msgid "Select an emoji"
 msgstr "选择表情符号"
@@ -4028,17 +4033,17 @@ msgid "Select the contacts you want to synchronise"
 msgstr "选择您想要同步的联系人"
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr "选择您的音频输入(例如麦克风)"
+msgstr "选择音频输入（例如麦克风）"
 
 msgid "Select your video input device (e.g. webcam, screen capture)"
-msgstr "选择您的视频输入设备(例如网络摄像头、屏幕录制)"
+msgstr "选择视频输入设备（例如网络摄像头、屏幕捕获）"
 
 msgid "Selected image could not be loaded."
-msgstr "无法加载选定的图片。"
+msgstr "无法加载所选图片。"
 
 #, python-format
 msgid "Selected security label: %s"
-msgstr "选定的安全标签: %s"
+msgstr "选定的安全标签：%s"
 
 msgid "Self signed certificate"
 msgstr "自签名的证书"
@@ -4067,7 +4072,7 @@ msgstr "发送文件"
 
 #, python-format
 msgid "Send File (max. %s)…"
-msgstr "发送文件 (最大 %s)…"
+msgstr "发送文件（最大 %s）…"
 
 msgid "Send File Directly…"
 msgstr "直接发送文件…"
@@ -4088,7 +4093,7 @@ msgid "Send Message Receipts"
 msgstr "发送消息回执"
 
 msgid "Send Messages with Control+Enter"
-msgstr "用 Control+Enter 发送消息"
+msgstr "用 Ctrl+Enter 发送消息"
 
 msgid "Send Read Markers"
 msgstr "发送已读标记"
@@ -4103,14 +4108,14 @@ msgid "Send the message"
 msgstr "发送消息"
 
 msgid "Sender: "
-msgstr "发送者: "
+msgstr "发送者： "
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
-msgstr "已发送联系人: \"%(jid)s\" (%(name)s)"
+msgstr "已发送联系人：“%(jid)s”（%(name)s）"
 
 msgid "Sent contacts:"
-msgstr "已发送联系人:"
+msgstr "已发送联系人："
 
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr "完全分离配置文件（甚至包括历史数据库和插件）"
@@ -4119,7 +4124,7 @@ msgid "Serial Number"
 msgstr "序列号"
 
 msgid "Serial Number: "
-msgstr "序列号: "
+msgstr "序列号： "
 
 msgid "Server"
 msgstr "服务器"
@@ -4135,7 +4140,7 @@ msgstr "服务器软件"
 
 #, python-format
 msgid "Server Software: %s\n"
-msgstr "服务器软件: %s\n"
+msgstr "服务器软件：%s\n"
 
 msgid "Server Uptime"
 msgstr "服务器正常运行时间"
@@ -4181,7 +4186,7 @@ msgid "Share Status"
 msgstr "分享状态"
 
 msgid "Share Video"
-msgstr "共享视频"
+msgstr "分享视频"
 
 msgid "Share my online status"
 msgstr "分享我的在线状态"
@@ -4198,9 +4203,8 @@ msgstr "显示联系人信息"
 msgid "Show Content"
 msgstr "显示内容"
 
-#, fuzzy
 msgid "Show Details"
-msgstr "详情"
+msgstr "显示详情"
 
 msgid "Show Inactive Devices"
 msgstr "显示非活动设备"
@@ -4238,8 +4242,8 @@ msgstr "显示话题"
 msgid "Show Transfers"
 msgstr "显示传输"
 
-msgid "Show XML console"
-msgstr "显示 XML 控制台"
+msgid "Show Voice Message Button"
+msgstr "显示语音消息按钮"
 
 msgid "Show _Features"
 msgstr "显示功能(_F)"
@@ -4258,9 +4262,8 @@ msgstr "显示表情符号列表"
 msgid "Show a live preview to test your video source"
 msgstr "显示一个实时预览来测试您的视频来源"
 
-#, fuzzy
 msgid "Show all reactions"
-msgstr "显示所有警告"
+msgstr "显示所有回应"
 
 msgid "Show all warnings"
 msgstr "显示所有警告"
@@ -4270,6 +4273,9 @@ msgstr "显示聊天列表"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"
+
+msgid "Show debug console"
+msgstr "显示调试控制台"
 
 msgid "Show in Taskbar"
 msgstr "在任务栏显示"
@@ -4297,10 +4303,10 @@ msgstr "仅显示严重错误"
 
 msgid ""
 "Show previews automatically in public group chats (may disclose your data)"
-msgstr "在公开群聊中自动显示预览 (可能会泄露您的数据)"
+msgstr "在公开群聊中自动显示预览（可能会泄露您的数据）"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
-msgstr "显示任何包含图片的 URL 的预览 (可能不安全)"
+msgstr "显示任何包含图片的 URL 的预览（可能不安全）"
 
 msgid "Show previews for files"
 msgstr "显示文件预览"
@@ -4309,7 +4315,7 @@ msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr "为表情符号快捷短语显示建议，例如 :+1:"
 
 msgid "Show the application's version"
-msgstr "显示应用版本"
+msgstr "显示应用程序的版本"
 
 msgid "Show window in the taskbar"
 msgstr "在任务栏中显示窗口"
@@ -4339,7 +4345,7 @@ msgid "Sign up Anonymously"
 msgstr "匿名注册"
 
 msgid "Sign up for a new account on a server of your choice"
-msgstr "在您选定的服务器上注册一个新账号"
+msgstr "在您选择的服务器上注册新账号"
 
 msgid "Signup not allowed"
 msgstr "不允许注册"
@@ -4379,7 +4385,7 @@ msgstr "垃圾消息"
 
 #, python-format
 msgid "Speed: %s"
-msgstr "速度: %s"
+msgstr "速度：%s"
 
 msgid "Spell Checker"
 msgstr "拼写检查工具"
@@ -4433,11 +4439,14 @@ msgid ""
 "You can also enter an XMPP address."
 msgstr "开始新聊天，加入群聊或者全局搜索新的群聊。您也可以输入一个 XMPP 地址。"
 
+msgid "Start/Stop recording"
+msgstr "开始/停止录制"
+
 msgid "Start/stop playback"
-msgstr "开始/停止回放"
+msgstr "开始/停止播放"
 
 msgid "State"
-msgstr "州"
+msgstr "省份"
 
 msgid "Status"
 msgstr "状态"
@@ -4446,10 +4455,10 @@ msgid "Status Message"
 msgstr "状态信息"
 
 msgid "Status Message: Text Color"
-msgstr "状态信息: 文本颜色"
+msgstr "状态信息：文本颜色"
 
 msgid "Status Message: Text Font"
-msgstr "状态信息: 文本字体"
+msgstr "状态信息：文本字体"
 
 msgid "Status Messages in Participants List"
 msgstr "参与者列表的状态信息"
@@ -4462,23 +4471,23 @@ msgstr "状态信息…"
 
 msgctxt "File transfer state"
 msgid "Status: "
-msgstr "状态: "
+msgstr "状态： "
 
 #, python-format
 msgid "Status: %s"
-msgstr "状态: %s"
+msgstr "状态：%s"
 
 msgid "Status: Away Color"
-msgstr "状态: 离开颜色"
+msgstr "状态：离开颜色"
 
 msgid "Status: DND Color"
-msgstr "状态: 请勿打扰颜色"
+msgstr "状态：忙碌颜色"
 
 msgid "Status: Offline Color"
-msgstr "状态: 离开颜色"
+msgstr "状态：离线颜色"
 
 msgid "Status: Online Color"
-msgstr "状态: 在线颜色"
+msgstr "状态：在线颜色"
 
 msgid "Stop File Transfers"
 msgstr "停止文件传输"
@@ -4502,10 +4511,10 @@ msgid "Subject Alt Names"
 msgstr "主题备用名称"
 
 msgid "Subject Alt Names: "
-msgstr "主题备用名称: "
+msgstr "主题备用名称： "
 
 msgid "Subject issuer mismatch"
-msgstr "主体发布者不匹配"
+msgstr "主题颁发者不匹配"
 
 msgid "Submit"
 msgstr "提交"
@@ -4521,7 +4530,7 @@ msgid "Subscription Request"
 msgstr "订阅请求"
 
 msgid "Subscription:"
-msgstr "订阅:"
+msgstr "订阅："
 
 msgid "Support"
 msgstr "支持"
@@ -4582,7 +4591,7 @@ msgstr "TLS 版本"
 
 #, python-format
 msgid "TLS verification failed: %s"
-msgstr "TLS 验证失败: %s"
+msgstr "TLS 验证失败：%s"
 
 msgid "Tabbed chat window"
 msgstr "标签页式聊天窗口"
@@ -4681,14 +4690,14 @@ msgid ""
 "from other servers as well."
 msgstr ""
 "有很多服务器可供选择。\n"
-"在一个服务器上创建账号可让您和其他服务器上的联系人交流。"
+"在服务器上创建账号可让您和其他服务器上的联系人交流。"
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim 插件有更新"
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
-msgstr "获取消息时发生了错误: %s"
+msgstr "尝试获取消息时出错：%s"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "没有适用于选定加密的加密方式。"
@@ -4705,7 +4714,7 @@ msgstr "此地址没有服务或无应答。请检查地址后重试。"
 msgid ""
 "There was an error while attempting to verify the SSL certificate of your "
 "XMPP server (%s)."
-msgstr "尝试验证 XMPP 服务器的 SSL 证书时发生错误(%s)。"
+msgstr "尝试验证 XMPP 服务器 (%s) 的 SSL 证书时出错。"
 
 msgid "This Device"
 msgstr "此设备"
@@ -4760,7 +4769,7 @@ msgid "This group chat will be destroyed once the last participant left"
 msgstr "最后一位参与者离开后，将会解散此群聊"
 
 msgid "This is a public group chat. Encryption is not available."
-msgstr "这是一个公开群聊。加密不可用。"
+msgstr "这是公开群聊。加密不可用。"
 
 msgid ""
 "This is the theme you are currently using.\n"
@@ -4774,7 +4783,7 @@ msgstr "这是您的 XMPP 地址"
 
 #, python-format
 msgid "This message has been moderated%s."
-msgstr "此消息已由 %s 审核。"
+msgstr "此消息已 %s 撤回。"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4852,7 +4861,7 @@ msgstr "直到“没空”前的时间"
 
 msgctxt "Profile"
 msgid "Title"
-msgstr "头衔"
+msgstr "职称"
 
 msgctxt "Contact subscription"
 msgid "To"
@@ -4874,7 +4883,7 @@ msgstr "切换参与者列表"
 
 msgctxt "File transfer state"
 msgid "Transferred: "
-msgstr "已传输: "
+msgstr "已传输： "
 
 msgctxt "File transfer state"
 msgid "Transferring"
@@ -4913,13 +4922,13 @@ msgid "Trying to create account..."
 msgstr "正在尝试创建账号…"
 
 msgid "Trying to gather information on this address…"
-msgstr "正在尝试获得此地址的信息…"
+msgstr "正在尝试收集此地址的信息…"
 
 msgid "Trying to remove account..."
 msgstr "正在尝试移除账号…"
 
 msgid "Tune:"
-msgstr "音乐:"
+msgstr "音乐："
 
 msgid "Turn Camera off"
 msgstr "关闭摄像头"
@@ -4939,7 +4948,7 @@ msgstr "输入来搜索值…"
 
 msgctxt "File transfer type"
 msgid "Type: "
-msgstr "类型: "
+msgstr "类型： "
 
 msgid "UPnP-IGD Port Forwarding"
 msgstr "UPnP-IGD 端口转发"
@@ -4954,7 +4963,7 @@ msgid "Unable to decode issuer public key"
 msgstr "无法解码颁发者的公钥"
 
 msgid "Unable to decrypt CRL's signature"
-msgstr "无法解密 CRL 的签名"
+msgstr "无法解密证书吊销列表的签名"
 
 msgid "Unable to decrypt certificate's signature"
 msgstr "无法解密证书签名"
@@ -4969,7 +4978,7 @@ msgid "Unable to get local issuer certificate"
 msgstr "无法获得本地颁发者证书"
 
 msgid "Unable to properly remove the plugin"
-msgstr "无法正确的移除插件"
+msgstr "无法正确移除插件"
 
 msgid "Unable to save profile"
 msgstr "无法保存配置文件"
@@ -5012,11 +5021,10 @@ msgstr "未知标题"
 
 #, python-format
 msgid "Unknown command: %s"
-msgstr "未知的命令: %s"
+msgstr "未知的命令：%s"
 
-#, fuzzy
 msgid "Unknown error."
-msgstr "未知的 SSL 错误 '%s'"
+msgstr "未知错误。"
 
 msgid "Unknown language"
 msgstr "未知语言"
@@ -5079,16 +5087,15 @@ msgstr "上传文件"
 msgid "Upload File…"
 msgstr "上传文件…"
 
-#, fuzzy
 msgid "Upload could not be completed."
-msgstr "无法加载选定的图片。"
+msgstr "上传未完成。"
 
 msgid "Uploading Avatar Failed"
 msgstr "上传头像失败"
 
 #, python-format
 msgid "Uploading avatar image failed: %s"
-msgstr "上传头像图片失败: %s"
+msgstr "上传头像图片失败：%s"
 
 msgid "Uploading via HTTP File Upload…"
 msgstr "正在使用 HTTP 文件上传…"
@@ -5123,7 +5130,7 @@ msgid ""
 "before:yyyy-mm-dd\n"
 "after:yyyy-mm-dd"
 msgstr ""
-"使用筛选器来缩小您的搜索:\n"
+"使用筛选器缩小搜索范围：\n"
 "from:username\n"
 "before:yyyy-mm-dd\n"
 "after:yyyy-mm-dd"
@@ -5187,7 +5194,7 @@ msgid "Video Resolution"
 msgstr "视频分辨率"
 
 msgid "Video calls are not available on Windows"
-msgstr "视频聊天在 Windows 系统不可用"
+msgstr "Windows 系统无法进行视频通话"
 
 msgid "Video test"
 msgstr "视频测试"
@@ -5209,15 +5216,24 @@ msgstr "访客"
 msgid "Visual Notifications"
 msgstr "可视化通知"
 
+msgid "Voice Message"
+msgstr "语音消息"
+
+msgid "Voice Messages are not available"
+msgstr "语音消息不可用"
+
 msgid "Waiting…"
 msgstr "等待中…"
+
+msgid "Warning"
+msgstr "警告"
 
 msgid "Wav Sounds"
 msgstr "Wav 声音"
 
 #, python-format
 msgid "Web Search URL is missing a \"%s\""
-msgstr "网络搜索 URL 缺少 \"%s\""
+msgstr "网络搜索 URL 缺少“%s”"
 
 msgid "Web _Search for it"
 msgstr "在互联网上搜索(_S)"
@@ -5240,12 +5256,12 @@ msgstr "参与者应该去哪里聊天"
 msgid ""
 "Whether to check for a valid certificate before downloading (not safe to "
 "disable)"
-msgstr "下载前是否检查有效证书 (禁用会不安全)"
+msgstr "下载前检查证书是否有效（禁用会不安全）"
 
 msgid "Which server should I choose?"
 msgstr "我应该选择哪个服务器呢？"
 
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "为什么要撤回此消息？"
 
 msgid "Width of group chat roster in pixel"
@@ -5266,18 +5282,14 @@ msgstr "工作中"
 msgid "Workspace Settings"
 msgstr "工作区设置"
 
-#, fuzzy
 msgid "Workspace settings…"
-msgstr "工作区设置"
+msgstr "工作区设置…"
 
 msgid "Workspaces"
 msgstr "工作区"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML 控制台"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML 控制台可用来查看协议层发生了什么"
@@ -5292,7 +5304,7 @@ msgid "XMPP Chat Client"
 msgstr "XMPP 聊天客户端"
 
 msgid "YYYY-MM-DD"
-msgstr "格式: YYYY-MM-DD"
+msgstr "格式：YYYY-MM-DD"
 
 msgid "Yes"
 msgstr "是"
@@ -5312,11 +5324,10 @@ msgid "You (%s) joined the group chat"
 msgstr "您 (%s) 已加入群聊"
 
 msgid "You are a visitor"
-msgstr "您现在是访客"
+msgstr "您是访客"
 
-#, fuzzy
 msgid "You are a visitor."
-msgstr "您现在是访客"
+msgstr "您是访客。"
 
 #, python-format
 msgid ""
@@ -5358,11 +5369,11 @@ msgid "You are offline."
 msgstr "您已离线。"
 
 msgid "You are offline. Go online to send messages…"
-msgstr ""
+msgstr "您已离线。上线发送消息…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
-msgstr "作为替代，您可以加入此群聊: %s"
+msgstr "您可以改为加入此群聊：%s"
 
 msgid "You can not join a group chat unless you are connected."
 msgstr "您必须连接网络才能加入群聊。"
@@ -5383,7 +5394,15 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr "只有连接后才能与账号同步。"
 
 msgid "You can’t send private messages to contacts if they are offline."
+msgstr "如果联系人处于离线状态，则无法向其发送私信。"
+
+#, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
 msgstr ""
+"您没有此目录的权限。\n"
+"错误：%s。"
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "您没有权限在这个目录里创建文件。"
@@ -5394,7 +5413,7 @@ msgstr "您没有合适的权限在这个目录里创建文件。"
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
-msgstr "已将您封禁{actor}{reason}"
+msgstr "{actor} 封禁了您{reason}"
 
 #, python-format
 msgid "You have been invited to %s"
@@ -5402,18 +5421,18 @@ msgstr "您已受邀加入 %s"
 
 #, python-brace-format
 msgid "You have been kicked{actor}{reason}"
-msgstr "已将您踢出{actor}{reason}"
+msgstr "{actor} 踢出了您{reason}"
 
 #, python-brace-format
 msgid "You have been removed from the group chat{actor}{reason}"
-msgstr "已将您从群聊移除{actor}{reason}"
+msgstr "{actor} 从群聊中移除了您{reason}"
 
 msgid "You have insufficient permissions"
 msgstr "您没有足够的权限"
 
 #, python-brace-format
 msgid "You have left due to an error{reason}"
-msgstr "您由于错误而离开{reason}"
+msgstr "您因错误而离开{reason}"
 
 msgid "You have to be connected to create a group chat."
 msgstr "您必须连接网络才能创建群聊。"
@@ -5450,7 +5469,7 @@ msgid "Your Nickname"
 msgstr "您的昵称"
 
 msgid "Your XMPP address (e.g. user@example.org)"
-msgstr "您的 XMPP 地址(例如 user@example.org)"
+msgstr "您的 XMPP 地址（例如：user@example.org）"
 
 msgid "Your account has has been removed successfully."
 msgstr "您的账号已经移除成功。"
@@ -5458,14 +5477,15 @@ msgstr "您的账号已经移除成功。"
 msgid "Your archiving preferences have successfully been saved."
 msgstr "您的存档首选项已成功保存。"
 
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
-msgstr "您的账号已经移除成功。"
+msgstr "您的聊天记录数据库已成功迁移。"
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"正在迁移您的聊天记录。\n"
+"这可能需要一段时间…"
 
 msgid "Your message can not be sent until you are connected."
 msgstr "连接之后您的消息才能发送。"
@@ -5568,6 +5588,9 @@ msgstr "复制链接(_C)"
 msgid "_Create"
 msgstr "创建(_C)"
 
+msgid "_Debug Console"
+msgstr "调试控制台(_D)"
+
 msgid "_Decline"
 msgstr "拒绝(_D)"
 
@@ -5635,11 +5658,14 @@ msgstr "离开(_L)"
 msgid "_Log In"
 msgstr "登录(_L)"
 
-msgid "_Modify Accounts…"
-msgstr "修改账号(_M)…"
+msgid "_Manage Accounts…"
+msgstr "管理账号(_M)…"
 
-msgid "_Modify Account…"
-msgstr "修改账号(_M)…"
+msgid "_Manage Account…"
+msgstr "管理账号(_M)…"
+
+msgid "_Moderate"
+msgstr "撤回(_M)"
 
 msgid "_Name"
 msgstr "名称(_N)"
@@ -5702,9 +5728,6 @@ msgstr "请求(_R)"
 msgid "_Reset Value"
 msgstr "恢复为默认值(_R)"
 
-msgid "_Retract"
-msgstr "撤回(_R)"
-
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -5723,9 +5746,8 @@ msgstr "发送(_S)"
 msgid "_Show Certificate"
 msgstr "显示证书(_S)"
 
-#, fuzzy
 msgid "_Show menu bar"
-msgstr "在任务栏显示"
+msgstr "显示菜单栏(_S)"
 
 msgid "_Show notification when file transfer is complete"
 msgstr "文件传输完成时显示通知(_S)"
@@ -5766,14 +5788,11 @@ msgstr "查看证书(_V)"
 msgid "_Wiki (Online)"
 msgstr "Wiki(在线)(_W)"
 
-msgid "_XML Console"
-msgstr "XML 控制台(_X)"
-
 msgid "accuracy"
 msgstr "准确性"
 
 msgid "alt"
-msgstr "alt"
+msgstr "海拔高度"
 
 msgid "and NOT authenticated"
 msgstr "且未被认证"
@@ -5791,17 +5810,17 @@ msgid "audio output"
 msgstr "音频输出"
 
 msgid "bearing"
-msgstr "方向"
+msgstr "方位"
 
 msgid "bold"
 msgstr "加粗"
 
 msgid "building"
-msgstr "楼宇"
+msgstr "建筑"
 
 #, python-format
 msgid "cairo Version: %s"
-msgstr "cairo 版本: %s"
+msgstr "cairo 版本：%s"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 msgid "chat;messaging;im;xmpp;voip;"
@@ -5820,17 +5839,17 @@ msgid "dark skin tone"
 msgstr "较深肤色"
 
 msgid "datum"
-msgstr "数据"
+msgstr "基准"
 
 msgid "description"
 msgstr "描述"
 
 #, python-format
 msgid "e.g. %s"
-msgstr "例如 %s"
+msgstr "例如：%s"
 
 msgid "error"
-msgstr "错误"
+msgstr "误差"
 
 msgid "example.org"
 msgstr "example.org"
@@ -5843,7 +5862,7 @@ msgid "file transfers list"
 msgstr "文件传输列表"
 
 msgid "floor"
-msgstr "层"
+msgstr "楼层"
 
 msgid ""
 "has invited you to a group chat.\n"
@@ -5869,7 +5888,7 @@ msgstr "纬度"
 
 #, python-format
 msgid "libsoup Version: %s"
-msgstr "libsoup 版本: %s"
+msgstr "libsoup 版本：%s"
 
 #. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
 #. You can use the hex value to find the matching string.
@@ -5877,7 +5896,7 @@ msgid "light skin tone"
 msgstr "较浅肤色"
 
 msgid "locality"
-msgstr "地区"
+msgstr "地点"
 
 msgid "lon"
 msgstr "经度"
@@ -5909,11 +5928,11 @@ msgstr "邮政编码"
 
 #, python-format
 msgid "pycairo Version: %s"
-msgstr "pycairo 版本: %s"
+msgstr "pycairo 版本：%s"
 
 #, python-format
 msgid "python-nbxmpp Version: %s"
-msgstr "python-nbxmpp 版本: %s"
+msgstr "python-nbxmpp 版本：%s"
 
 msgid "region"
 msgstr "地区"
@@ -5923,7 +5942,7 @@ msgid "repairs"
 msgstr "修理"
 
 msgid "room"
-msgstr "群聊"
+msgstr "房间"
 
 msgid "speed"
 msgstr "速度"
@@ -5961,15 +5980,15 @@ msgstr "我们要感谢所有的软件包维护者。"
 
 #, python-brace-format
 msgid "{nick} has been banned{actor}{reason}"
-msgstr "{nick} 被封禁{actor}{reason}"
+msgstr "{actor} 封禁了 {nick}{reason}"
 
 #, python-brace-format
 msgid "{nick} has been kicked{actor}{reason}"
-msgstr "{nick} 被踢出{actor}{reason}"
+msgstr "{actor} 踢出了 {nick}{reason}"
 
 #, python-brace-format
 msgid "{nick} has been removed from the group chat{by}{reason}"
-msgstr "{nick} 被从群聊移除{by}{reason}"
+msgstr "{by} 从群聊中移除了 {nick}{reason}"
 
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
@@ -5981,7 +6000,7 @@ msgstr "{nick} 已离开{reason}"
 
 #, python-brace-format
 msgid "{nick} is now known as {new_nick}"
-msgstr "{nick} 现在改名为 {new_nick}"
+msgstr "{nick} 现在昵称为 {new_nick}"
 
 #, python-brace-format
 msgid "{nick} is now {show}"
@@ -6238,6 +6257,14 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "组织单元 (OU): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "撤回…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "发送(_S)"
+
 #~ msgid "Show Gajim"
 #~ msgstr "显示 Gajim"
 
@@ -6252,6 +6279,12 @@ msgstr "…或者把图片拖放到这里"
 
 #~ msgid "_Login"
 #~ msgstr "登录(_L)"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "修改账号(_M)…"
+
+#~ msgid "_Retract"
+#~ msgstr "撤回(_R)"
 
 #~ msgid "_Undo"
 #~ msgstr "撤销(_U)"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -1709,6 +1709,10 @@ msgid "Deactivated"
 msgstr "Inaktiboa"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr " XML Konsola"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Sartu"
 
@@ -2107,6 +2111,9 @@ msgstr ""
 #, fuzzy
 msgid "Error Loading Image"
 msgstr "Aukeratu Irudia"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2897,6 +2904,9 @@ msgstr "Kontaktua"
 msgid "Invitees"
 msgstr "Honera gonbidatu"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
@@ -3254,8 +3264,21 @@ msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
+msgid "Moderate Message"
+msgstr "Egoera Mezua"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "egoera mezua"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderatzailea"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderatzailea"
 
 #, fuzzy
@@ -4100,7 +4123,8 @@ msgstr "Birkargatu orain?"
 msgid "Re_gister"
 msgstr "Erre_gistratu"
 
-msgid "React with 👍"
+#, python-format
+msgid "React with %s"
 msgstr ""
 
 msgid "Read _Wikipedia Article"
@@ -4151,6 +4175,12 @@ msgid "Recipient: %s"
 msgstr "Hartzailea: %s"
 
 msgid "Recognize your account by color"
+msgstr ""
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
 
 msgid "Redirect"
@@ -4400,18 +4430,6 @@ msgid "Restore last state"
 msgstr "Azken egoera: %s"
 
 msgid "Restore status and status message of your last session"
-msgstr ""
-
-#, fuzzy
-msgid "Retract Message"
-msgstr "Egoera Mezua"
-
-#, fuzzy
-msgid "Retract message?"
-msgstr "egoera mezua"
-
-msgctxt "Message row action"
-msgid "Retract…"
 msgstr ""
 
 #, fuzzy
@@ -4884,8 +4902,8 @@ msgid "Show Transfers"
 msgstr "Trans_porteak Erakutsi"
 
 #, fuzzy
-msgid "Show XML console"
-msgstr "_XML Konsola Ikusarazi"
+msgid "Show Voice Message Button"
+msgstr "Bidali mezua"
 
 #, fuzzy
 msgid "Show _Features"
@@ -4926,6 +4944,10 @@ msgstr "Kontu Eraldaketa"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "_XML Konsola Ikusarazi"
 
 #, fuzzy
 msgid "Show in Taskbar"
@@ -5112,6 +5134,9 @@ msgstr "Elkarrizketa Hasi"
 msgid ""
 "Start a new chat, join a group chat or search for new group chats globally. "
 "You can also enter an XMPP address."
+msgstr ""
+
+msgid "Start/Stop recording"
 msgstr ""
 
 msgid "Start/stop playback"
@@ -5983,8 +6008,20 @@ msgid "Visual Notifications"
 msgstr "<b>Ikusizko Jakinarazketa</b>"
 
 #, fuzzy
+msgid "Voice Message"
+msgstr "Bidali mezua"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Konexioa ez erablgarri"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Lanean"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Debekatzen %s"
 
 msgid "Wav Sounds"
 msgstr "Wav Soinuak"
@@ -6021,7 +6058,7 @@ msgid "Which server should I choose?"
 msgstr ""
 
 #, fuzzy
-msgid "Why do you want to retract this message?"
+msgid "Why do you want to moderate this message?"
 msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
 msgid "Width of group chat roster in pixel"
@@ -6053,9 +6090,6 @@ msgstr "Berridatzi Kontaktua"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML Console"
-msgstr " XML Konsola"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
@@ -6173,6 +6207,12 @@ msgstr "Ezin duzu txat talde batera sartu konektatuta ez zauden bitartean."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 
 #, fuzzy
 msgid "You do not have permissions to create files in this directory."
@@ -6394,6 +6434,10 @@ msgid "_Create"
 msgstr "Inaktiboa"
 
 #, fuzzy
+msgid "_Debug Console"
+msgstr " XML Konsola"
+
+#, fuzzy
 msgid "_Decline"
 msgstr "_Deskonektatuta"
 
@@ -6478,12 +6522,16 @@ msgid "_Log In"
 msgstr "_Log aktibatua"
 
 #, fuzzy
-msgid "_Modify Accounts…"
+msgid "_Manage Accounts…"
 msgstr "Kontua E_raldatu"
 
 #, fuzzy
-msgid "_Modify Account…"
-msgstr "Kontua E_raldatu"
+msgid "_Manage Account…"
+msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderatzailea"
 
 #, fuzzy
 msgid "_Name"
@@ -6560,9 +6608,6 @@ msgstr "_Ahotsa"
 msgid "_Reset Value"
 msgstr "Be_rezko Koloreak Ezarri"
 
-msgid "_Retract"
-msgstr ""
-
 #, fuzzy
 msgid "_Save"
 msgstr "daukadanean"
@@ -6635,10 +6680,6 @@ msgstr "Baliogabeko izena"
 #, fuzzy
 msgid "_Wiki (Online)"
 msgstr "bederatzi"
-
-#, fuzzy
-msgid "_XML Console"
-msgstr " XML Konsola"
 
 msgid "accuracy"
 msgstr ""
@@ -7117,12 +7158,20 @@ msgstr ""
 #~ msgstr "Mezuak"
 
 #, fuzzy
+#~ msgid "Send"
+#~ msgstr "_Bidali"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Log aktibatua"
+
+#, fuzzy
+#~ msgid "_Modify Account…"
+#~ msgstr "Kontua E_raldatu"
 
 #, fuzzy
 #~ msgid "yesterday "

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-21 14:06+0000\n"
+"POT-Creation-Date: 2024-06-05 17:59+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -1519,6 +1519,10 @@ msgstr "Registrace selhala"
 msgid "Deactivated"
 msgstr "Neaktivní"
 
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML Konzole"
+
 msgid "Debug Logging"
 msgstr "Logging ladění"
 
@@ -1877,6 +1881,9 @@ msgstr "Chyba"
 
 msgid "Error Loading Image"
 msgstr "Chyba při načítání obrázku"
+
+msgid "Error in audio data stream."
+msgstr ""
 
 #, python-format
 msgid "Error message: %s"
@@ -2577,6 +2584,9 @@ msgstr "Přepnout na předchozí konverzaci"
 msgid "Invitees"
 msgstr "Pozvaní"
 
+msgid "Is a microphone plugged in and accessible?"
+msgstr ""
+
 msgid "Issued by"
 msgstr "Vystaveno"
 
@@ -2896,8 +2906,21 @@ msgstr "Chybí závislosti pro audio/video"
 msgid "Missing necessary encryption plugin"
 msgstr "Chybí nezbytný zásuvný modul pro šifrování"
 
+#, fuzzy
+msgid "Moderate Message"
+msgstr "Odvolat zprávu"
+
+#, fuzzy
+msgid "Moderate message?"
+msgstr "Odvolat zprávu?"
+
 msgctxt "Group chat feature"
 msgid "Moderated"
+msgstr "Moderováno"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate…"
 msgstr "Moderováno"
 
 msgid "Moderation"
@@ -3643,8 +3666,9 @@ msgstr "Zkusit se znovu přihlásit?"
 msgid "Re_gister"
 msgstr "Re_gistrace"
 
-msgid "React with 👍"
-msgstr ""
+#, fuzzy, python-format
+msgid "React with %s"
+msgstr "Hovor s %s"
 
 msgid "Read _Wikipedia Article"
 msgstr "Číst článkek na _Wikipedia"
@@ -3691,6 +3715,12 @@ msgstr "Příjemce: %s"
 
 msgid "Recognize your account by color"
 msgstr "Rozpoznejte svůj účet podle barvy"
+
+msgid "Record"
+msgstr ""
+
+msgid "Record Voice Message… (hold button to record directly)"
+msgstr ""
 
 msgid "Redirect"
 msgstr "Přesměrovat"
@@ -3900,16 +3930,6 @@ msgstr "Obnovit poslední stav"
 
 msgid "Restore status and status message of your last session"
 msgstr "Obnovit stav a zprávu o stavu Vaší poslední relace"
-
-msgid "Retract Message"
-msgstr "Odvolat zprávu"
-
-msgid "Retract message?"
-msgstr "Odvolat zprávu?"
-
-msgctxt "Message row action"
-msgid "Retract…"
-msgstr "Odvolat…"
 
 msgid "Revoke Member"
 msgstr "Odebrat člena"
@@ -4312,8 +4332,9 @@ msgstr "Zobrazit předmět"
 msgid "Show Transfers"
 msgstr "Zobrazit přenosy"
 
-msgid "Show XML console"
-msgstr "Zobrazit konzoli XML"
+#, fuzzy
+msgid "Show Voice Message Button"
+msgstr "Zobrazit tlačítko pro odesílání zpráv"
 
 msgid "Show _Features"
 msgstr "Zobrazit vlastnosti"
@@ -4346,6 +4367,10 @@ msgstr "Zobrazit seznam konverzací"
 
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr "Zobrazovat stav konverzace (např. „píše…“) vedle jména kontaktu"
+
+#, fuzzy
+msgid "Show debug console"
+msgstr "Zobrazit konzoli XML"
 
 msgid "Show in Taskbar"
 msgstr "Zobrazit na hlavním panelu"
@@ -4511,6 +4536,9 @@ msgid ""
 msgstr ""
 "Začněte novou konverzaci, připojte se ke skupinové nebo je vyhledejte. "
 "Můžete také přímo zadat adresu XMPP."
+
+msgid "Start/Stop recording"
+msgstr ""
 
 msgid "Start/stop playback"
 msgstr "Přehrát/pozastavit"
@@ -5305,8 +5333,20 @@ msgstr "Návštěvníci"
 msgid "Visual Notifications"
 msgstr "Vizuální upozornění"
 
+#, fuzzy
+msgid "Voice Message"
+msgstr "Poslat zprávu"
+
+#, fuzzy
+msgid "Voice Messages are not available"
+msgstr "Video hovory nejsou na Windows dostupné"
+
 msgid "Waiting…"
 msgstr "Čekám…"
+
+#, fuzzy
+msgid "Warning"
+msgstr "Bezpečnostní varování"
 
 msgid "Wav Sounds"
 msgstr "Waw soubory"
@@ -5342,7 +5382,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "Který server mám vybrat?"
 
-msgid "Why do you want to retract this message?"
+#, fuzzy
+msgid "Why do you want to moderate this message?"
 msgstr "Proč si přejete stáhnout tuto zprávu?"
 
 msgid "Width of group chat roster in pixel"
@@ -5372,9 +5413,6 @@ msgstr "Pracovní plochy"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML Console"
-msgstr "XML Konzole"
 
 msgid "XML console to see what's happening on the protocol layer"
 msgstr "XML konzole pro zobrazení dění na vrstvě protokolu"
@@ -5482,6 +5520,12 @@ msgstr "Nemůžete synchronyzovat účet pokud nění připojen."
 
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
+
+#, fuzzy, python-format
+msgid ""
+"You do not have permissions for this directory.\n"
+"Error: %s."
+msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
@@ -5669,6 +5713,10 @@ msgstr "Zkopírovat odkaz"
 msgid "_Create"
 msgstr "Vytvořit"
 
+#, fuzzy
+msgid "_Debug Console"
+msgstr "Konzole XML"
+
 msgid "_Decline"
 msgstr "Odmítnout"
 
@@ -5736,11 +5784,17 @@ msgstr "Odejít"
 msgid "_Log In"
 msgstr "Přihlásit se"
 
-msgid "_Modify Accounts…"
+#, fuzzy
+msgid "_Manage Accounts…"
 msgstr "Upravit účty…"
 
-msgid "_Modify Account…"
-msgstr "Upravit účet…"
+#, fuzzy
+msgid "_Manage Account…"
+msgstr "Přidat účet…"
+
+#, fuzzy
+msgid "_Moderate"
+msgstr "Moderováno"
 
 msgid "_Name"
 msgstr "Jméno"
@@ -5804,9 +5858,6 @@ msgstr "Žádost"
 msgid "_Reset Value"
 msgstr "Obnovit výchozí hodnotu"
 
-msgid "_Retract"
-msgstr "Odvolat"
-
 msgid "_Save"
 msgstr "Uložit"
 
@@ -5867,9 +5918,6 @@ msgstr "Zobrazit certifikát"
 
 msgid "_Wiki (Online)"
 msgstr "Wiki (online)"
-
-msgid "_XML Console"
-msgstr "Konzole XML"
 
 msgid "accuracy"
 msgstr "přesnost"
@@ -6376,6 +6424,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Organizační jednotka (OJ): "
 
+#~ msgctxt "Message row action"
+#~ msgid "Retract…"
+#~ msgstr "Odvolat…"
+
+#, fuzzy
+#~ msgid "Send"
+#~ msgstr "Ode_slat"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Zobrazit Gajim"
 
@@ -6390,6 +6446,12 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "_Login"
 #~ msgstr "Přihlášení"
+
+#~ msgid "_Modify Account…"
+#~ msgstr "Upravit účet…"
+
+#~ msgid "_Retract"
+#~ msgstr "Odvolat"
 
 #~ msgid "_Undo"
 #~ msgstr "Vrátit"
