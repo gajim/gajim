@@ -12,7 +12,7 @@
 - [Gtk3](https://gitlab.gnome.org/GNOME/gtk) (>=3.24.30)
 - [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [keyring](https://pypi.org/project/keyring/)
-- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=4.5.3)
+- [nbxmpp](https://pypi.org/project/nbxmpp/) (>=5.0.0)
 - [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.0.0)
 - [packaging](https://pypi.org/project/packaging/)
 - [Pango](https://gitlab.gnome.org/GNOME/pango) (>=1.50.0)
