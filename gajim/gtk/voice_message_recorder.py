@@ -446,12 +446,14 @@ class VoiceMessageRecorder:
 
     def _merge_opus_m4a_command(self) -> str:
         log.info('Merging opus files started')
+
+        # Use as_posix() on file path to convert "\" to "/" on Windows
         sources = ''
         for i in range(1, self._output_file_counter + 1):
             if i in self._output_files_invalid:
                 continue
             source = ' ! '.join([
-                f'filesrc location={self._file_path}.part{i}',
+                f'filesrc location={self._file_path.as_posix()}.part{i}',
                 'qtdemux',
                 'opusdec',
                 'c. '
@@ -465,7 +467,7 @@ class VoiceMessageRecorder:
             'audioresample',
             'opusenc audio-type=voice',
             'mp4mux ',
-            f'filesink location={self._file_path} {sources}'
+            f'filesink location={self._file_path.as_posix()} {sources}'
         ])
         return command
 
