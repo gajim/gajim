@@ -133,11 +133,11 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install zipp-3.18.2-py3-none-any.whl
+      - pip3 install zipp-3.19.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.18.2-py3-none-any.whl
-        sha256: dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e
+        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.19.2-py3-none-any.whl
+        sha256: f091755f667055f2d02b32c53771a7a6c8b47e1fdbc4b72a8b9072b3eef8015c
 
   # jaraco.classes dependency
   - name: python3-more-itertools
@@ -174,11 +174,11 @@ modules:
   - name: python3-backports.tarfile
     buildsystem: simple
     build-commands:
-      - pip3 install backports.tarfile-1.1.1-py3-none-any.whl
+      - pip3 install backports.tarfile-1.2.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/b/backports.tarfile/backports.tarfile-1.1.1-py3-none-any.whl
-        sha256: 73e0179647803d3726d82e76089d01d8549ceca9bace469953fcb4d97cf2d417
+        url: https://files.pythonhosted.org/packages/py3/b/backports.tarfile/backports.tarfile-1.2.0-py3-none-any.whl
+        sha256: 77e284d754527b01fb1e6fa8a1afe577858ebe4e9dad8919e34c862cb399bc34
 
   - name: python3-jaraco.context
     buildsystem: simple
@@ -276,29 +276,29 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2024.2.2-py3-none-any.whl
+      - pip3 install certifi-2024.6.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.2.2-py3-none-any.whl
-        sha256: dc383c07b76109f368f6106eee2b593b04a011ea4d55f652c6ca24a754d1cdd1
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.6.2-py3-none-any.whl
+        sha256: ddc6c8ce995e6987e7faf5e3f1b02b302836a0e5d98ece18392cb1a36c72ad56
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.2.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.5.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.2.1-py2.py3-none-any.whl
-        sha256: 7d617a1b30e80c41f3b542347651fcf90bb0a36f3a398be58b4f06b79c8d85bc
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.5.1-py2.py3-none-any.whl
+        sha256: 1f87acdce4a43a523ae5aa21a3fc37522d73ebd9ec04b1dbf01aa3d173852def
 
   - name: python3-typing-extensions
     buildsystem: simple
     build-commands:
-      - pip3 install typing_extensions-4.11.0-py3-none-any.whl
+      - pip3 install typing_extensions-4.12.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.11.0-py3-none-any.whl
-        sha256: c1f94d72897edaf4ce775bb7558d5b79d8126906a14ea5ed1635921406c0387a
+        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.12.2-py3-none-any.whl
+        sha256: 04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d
 
   - name: python3-greenlet
     buildsystem: simple
@@ -360,11 +360,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.26.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-5.27.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.26.1-py3-none-any.whl
-        sha256: da612f2720c0183417194eeaa2523215c4fcc1a1949772dc65f05047e08d5932
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.27.1-py3-none-any.whl
+        sha256: 4ac7249a1530a2ed50e24201d6630125ced04b30619262f06224616e0030b6cf
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -388,11 +388,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-4.5.4-py3-none-any.whl
+      - pip3 install nbxmpp-5.0.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-4.5.4-py3-none-any.whl
-        sha256: 6e7060efdf791bee2a45c34cb954b5013d58f5678597640161822592eef15cc5
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-5.0.0-py3-none-any.whl
+        sha256: cd4fd6a9c1f606435207f1644e3c8f3ae79773bafc43d413115a75e8b63c3dc5
 
   - name: gajim
     buildsystem: simple
