@@ -109,7 +109,7 @@ pip install dist/name_of_wheel.whl
 
 ### Packages
 
-- [Arch Linux](https://www.archlinux.org/packages/community/any/gajim/)
+- [Arch Linux](https://www.archlinux.org/packages/extra/any/gajim/)
 - [Debian](https://packages.debian.org/stable/gajim)
 - [Fedora](https://packages.fedoraproject.org/pkgs/gajim/)
 - [Ubuntu](https://packages.ubuntu.com/gajim)
