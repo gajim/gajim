@@ -363,8 +363,23 @@ class Migration:
             )
             return
 
-        account_jid = JID.from_string(log_row.account.jid)
-        remote_jid = JID.from_string(log_row.remote.jid)
+        try:
+            account_jid = JID.from_string(log_row.account.jid)
+        except Exception:
+            log.warning(
+                'Unable to migrate message because of invalid account jid: %s',
+                log_row.account.jid,
+            )
+            return
+
+        try:
+            remote_jid = JID.from_string(log_row.remote.jid)
+        except Exception:
+            log.warning(
+                'Unable to migrate message because of invalid remote jid: %s',
+                log_row.remote.jid,
+            )
+            return
 
         account_pk = self._get_account_pk(conn, account_jid)
         remote_pk = self._get_remote_pk(conn, remote_jid)
