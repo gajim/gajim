@@ -48,7 +48,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         self._timedelta: timedelta | None = None
         self._now = datetime.now(timezone.utc)
         self._query_id: str | None = None
-        self._start: datetime | None = None
+        self._start: datetime = ArchiveState.ALL
         self._end: datetime | None = None
 
         mam_start = None
@@ -81,7 +81,6 @@ class HistorySyncAssistant(Assistant, EventHelper):
 
         # pylint: disable=line-too-long
         self.register_events([
-            ('archiving-count-received', ged.GUI1, self._received_count),
             ('archiving-interval-finished', ged.GUI1, self._received_finished),
             ('raw-mam-message-received',
              ged.PRECORE,
@@ -145,6 +144,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         log.info('Start: %s', self._start)
         log.info('End: %s', self._end)
 
+        # Archive count query
         self._client.get_module('MAM').make_query(
             self._client.get_own_jid().bare,
             start=self._start,
