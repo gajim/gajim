@@ -355,7 +355,8 @@ class MessageArchiveStorage(AlchemyStorage):
         if len(result) == 1:
             return result[0]
 
-        self._log.warning('Found more than one message with message id %s', message_id)
+        self._log.warning(
+            'Found %s messages with message id %s', len(result), message_id)
         return None
 
     @with_session
@@ -381,7 +382,8 @@ class MessageArchiveStorage(AlchemyStorage):
         if len(result) == 1:
             return result[0]
 
-        self._log.warning('Found more than one message with stanza id %s', stanza_id)
+        self._log.warning(
+            'Found %s messages with stanza id %s', len(result), stanza_id)
         return None
 
     @with_session
