@@ -335,7 +335,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
               'conversations will not be encrypted. Connecting PLAIN is '
               'strongly discouraged.') % {
                   'account': event.account,
-                  'server': app.get_hostname_from_account(event.account)},
+                  'server': app.get_hostname_from_account(
+                    event.account, prefer_custom=True)},
             [DialogButton.make('Cancel',
                                text=_('_Abort'),
                                callback=event.abort),

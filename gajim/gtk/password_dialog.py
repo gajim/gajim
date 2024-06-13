@@ -48,15 +48,14 @@ class PasswordDialog(Gtk.ApplicationWindow):
 
     def _process_event(self) -> None:
         own_jid = self._client.get_own_jid().bare
-        account_name = app.settings.get_account_setting(
-            self.account, 'name')
+        account_label = app.get_account_label(self.account)
 
         self._ui.header.set_text(_('Password Required'))
         self._ui.message_label.set_text(
             _('Please enter your password for\n'
               '%(jid)s\n(Account: %(account)s)') % {
                 'jid': own_jid,
-                'account': account_name})
+                'account': account_label})
         self._ui.save_pass_checkbutton.show()
 
         is_keyring_available = passwords.is_keyring_available()

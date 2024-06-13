@@ -70,7 +70,7 @@ SETTING_TYPE = bool | int | str | object
 
 log = logging.getLogger('gajim.c.settings')
 
-CURRENT_USER_VERSION = 5
+CURRENT_USER_VERSION = 6
 
 CREATE_SQL = '''
     CREATE TABLE settings (
@@ -340,6 +340,7 @@ class Settings:
                      VALUES ('workspaces', ?)'''
             self._con.execute(sql, (json.dumps(INITAL_WORKSPACE),))
             self._settings['workspaces'] = INITAL_WORKSPACE
+            self._commit_settings('workspaces')
             self._set_user_version(1)
 
         if version < 2:
@@ -357,6 +358,7 @@ class Settings:
                 workspace['chats'] = open_chats
                 workspace.pop('open_chats', None)
 
+            self._commit_settings('workspaces')
             self._set_user_version(2)
 
         if version < 3:
@@ -364,6 +366,9 @@ class Settings:
             for account_settings in self._account_settings.values():
                 if account_settings['account'].get('active') is None:
                     account_settings['account']['active'] = True
+
+            for account in self._account_settings:
+                self._commit_account_settings(account)
 
             self._set_user_version(3)
 
@@ -376,11 +381,31 @@ class Settings:
             if value is not None:
                 self._settings['app']['date_format'] = value
 
+            self._commit_settings('app')
             self._set_user_version(4)
 
         if version < 5:
             self._settings['app'].pop('muclumbus_api_http_uri', None)
+            self._commit_settings('app')
             self._set_user_version(5)
+
+        if version < 6:
+            for account_settings in self._account_settings.values():
+                settings = account_settings['account']
+                localpart = settings.get('name', '')
+                domain = settings.get('hostname', '')
+                try:
+                    address = JID.from_string(f'{localpart}@{domain}')
+                except Exception as error:
+                    log.warning('Unable to migrate address: %s', error)
+                    continue
+
+                settings['address'] = str(address)
+
+            for account in self._account_settings:
+                self._commit_account_settings(account)
+
+            self._set_user_version(6)
 
     def _migrate_old_config(self) -> None:
         if self._in_memory:
@@ -770,9 +795,8 @@ class Settings:
 
     def account_exists(self, jid: str) -> bool:
         for account in self._account_settings:
-            name = self.get_account_setting(account, 'name')
-            hostname = self.get_account_setting(account, 'hostname')
-            if jid == f'{name}@{hostname}':
+            address = self.get_account_setting(account, 'address')
+            if jid == JID.from_string(address):
                 return True
         return False
 
@@ -785,10 +809,10 @@ class Settings:
 
     def get_account_from_jid(self, jid: JID) -> str:
         for account in self._account_settings:
-            name = self.get_account_setting(account, 'name')
-            hostname = self.get_account_setting(account, 'hostname')
-            if jid.localpart == name and jid.domain == hostname:
+            address = self.get_account_setting(account, 'address')
+            if jid == JID.from_string(address):
                 return account
+
         raise ValueError(f'No account found for: {jid}')
 
     @overload

@@ -496,7 +496,7 @@ class ServiceDiscoveryWindow:
         self._account = account
         self.parent = parent
         if not jid:
-            jid = app.settings.get_account_setting(account, 'hostname')
+            jid = app.get_hostname_from_account(account)
             node = None
 
         self.jid = None

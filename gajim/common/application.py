@@ -19,6 +19,7 @@ from gi.repository import GLib
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.http import HTTPRequest
+from nbxmpp.protocol import JID
 from packaging.version import Version as V
 
 from gajim import IS_PORTABLE
@@ -113,8 +114,7 @@ class CoreApplication(ged.EventHelper):
         for account in app.settings.get_active_accounts():
             app.connections[account] = Client(account)
             app.to_be_removed[account] = []
-            app.nicks[account] = app.settings.get_account_setting(account,
-                                                                  'name')
+            app.nicks[account] = app.get_default_nick(account)
 
         from gajim.plugins.pluginmanager import PluginManager
         from gajim.plugins.repository import PluginRepository
@@ -339,8 +339,7 @@ class CoreApplication(ged.EventHelper):
 
     def create_account(self,
                        account: str,
-                       username: str | None,
-                       domain: str,
+                       address: JID,
                        password: str,
                        proxy_name: str | None,
                        custom_host: tuple[str,
@@ -350,18 +349,17 @@ class CoreApplication(ged.EventHelper):
                        ) -> None:
 
         if anonymous:
-            username = 'anon'
+            address = address.new_with(localpart='anon')
 
-        if not username:
+        if not address.localpart:
             raise ValueError('Username must be set')
 
-        account_label = f'{username}@{domain}'
+        account_label = str(address)
 
         config: dict[str, str | int | bool] = {
-            'name': username,
+            'address': str(address),
             'resource': f'gajim.{get_random_string(8)}',
             'account_label': account_label,
-            'hostname': domain,
             'anonymous_auth': anonymous,
         }
 
@@ -392,7 +390,7 @@ class CoreApplication(ged.EventHelper):
             app.connections[account])
 
         app.to_be_removed[account] = []
-        app.nicks[account] = app.settings.get_account_setting(account, 'name')
+        app.nicks[account] = app.get_default_nick(account)
         app.settings.set_account_setting(account, 'active', True)
 
         app.ged.raise_event(AccountEnabled(account=account))

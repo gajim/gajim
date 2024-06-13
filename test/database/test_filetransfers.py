@@ -36,8 +36,8 @@ class ForeignKeyTest(unittest.TestCase):
         app.settings = Settings(in_memory=True)
         app.settings.init()
         app.settings.add_account('testacc1')
-        app.settings.set_account_setting('testacc1', 'name', 'user')
-        app.settings.set_account_setting('testacc1', 'hostname', 'domain.org')
+        app.settings.set_account_setting(
+            'testacc1', 'address', 'user@domain.org')
 
     def test_filetransfer_join(self) -> None:
         now = datetime.now(timezone.utc)

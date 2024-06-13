@@ -34,8 +34,8 @@ class ErrorTest(unittest.TestCase):
         app.settings = Settings(in_memory=True)
         app.settings.init()
         app.settings.add_account('testacc1')
-        app.settings.set_account_setting('testacc1', 'name', 'user')
-        app.settings.set_account_setting('testacc1', 'hostname', 'domain.org')
+        app.settings.set_account_setting(
+            'testacc1', 'address', 'user@domain.org')
 
     def test_insert_error(self) -> None:
         error_data1 = MessageError(

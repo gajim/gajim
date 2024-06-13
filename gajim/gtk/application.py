@@ -527,8 +527,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     def create_account(self,
                        account: str,
-                       username: str | None,
-                       domain: str,
+                       address: JID,
                        password: str,
                        proxy_name: str | None,
                        custom_host: tuple[str,
@@ -539,8 +538,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         CoreApplication.create_account(self,
                                        account,
-                                       username,
-                                       domain,
+                                       address,
                                        password,
                                        proxy_name,
                                        custom_host,
@@ -646,7 +644,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_services_action(_action: Gio.SimpleAction,
                             param: GLib.Variant) -> None:
         account = param.get_string()
-        server_jid = app.settings.get_account_setting(account, 'hostname')
+        server_jid = app.get_hostname_from_account(account)
         if account not in app.interface.instances:
             app.interface.instances[account] = {'disco': {}}
 

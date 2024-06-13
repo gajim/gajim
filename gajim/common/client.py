@@ -63,9 +63,9 @@ class Client(Observable, ClientModules):
         self._client = None
         self._account = account
         self.name = account
-        self._hostname = app.settings.get_account_setting(self._account,
-                                                          'hostname')
-        self._user = app.settings.get_account_setting(self._account, 'name')
+
+        address = app.settings.get_account_setting(self._account, 'address')
+        self._address = JID.from_string(address)
 
         self._priority = 0
         self._connect_machine_calls = 0
@@ -154,8 +154,8 @@ class Client(Observable, ClientModules):
         log.info('Create new nbxmpp client')
         self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
-        self._client.set_domain(self._hostname)
-        self._client.set_username(self._user)
+        self._client.set_domain(self._address.domain)
+        self._client.set_username(self._address.localpart)
         self._client.set_resource(get_resource(self._account))
         self._client.set_http_session(create_http_session())
         self._client.set_supported_fallback_ns([Namespace.REPLY])

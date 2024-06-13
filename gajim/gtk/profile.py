@@ -291,8 +291,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         client.get_module('UserNickname').set_nickname(nick, public=public)
 
         if not nick:
-            nick = app.settings.get_account_setting(
-                self.account, 'name')
+            nick = app.get_default_nick(self.account)
         app.nicks[self.account] = nick
 
     def _on_set_avatar_result(self, task: Task) -> None:

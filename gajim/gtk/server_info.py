@@ -74,7 +74,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         ])
 
         self._version = ''
-        self._hostname = app.get_hostname_from_account(account)
+        self._hostname = app.get_hostname_from_account(account, prefer_custom=True)
         self._ui.server_hostname.set_text(self._hostname)
 
         domain = self._client.get_own_jid().domain

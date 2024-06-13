@@ -32,6 +32,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from nbxmpp.idlequeue import IdleQueue
+from nbxmpp.protocol import JID
 
 import gajim
 from gajim.common import config as c_config
@@ -456,20 +457,28 @@ def get_jid_from_account(account_name: str) -> str:
     '''
     Return the jid we use in the given account
     '''
-    name = settings.get_account_setting(account_name, 'name')
-    hostname = settings.get_account_setting(account_name, 'hostname')
-    return name + '@' + hostname
+    return settings.get_account_setting(account_name, 'address')
 
 
-def get_hostname_from_account(account_name: str, use_srv: bool = False) -> str:
-    '''
-    Returns hostname (if custom hostname is used, that is returned)
-    '''
-    if use_srv and connections[account_name].connected_hostname:
-        return connections[account_name].connected_hostname
-    if settings.get_account_setting(account_name, 'use_custom_host'):
-        return settings.get_account_setting(account_name, 'custom_host')
-    return settings.get_account_setting(account_name, 'hostname')
+def get_default_nick(account_name: str) -> str:
+    address = settings.get_account_setting(account_name, 'address')
+    jid = JID.from_string(address)
+    assert jid.localpart is not None
+    return jid.localpart
+
+
+def get_hostname_from_account(
+    account_name: str,
+    prefer_custom: bool = False
+) -> str:
+    if prefer_custom:
+        if settings.get_account_setting(account_name, 'use_custom_host'):
+            return settings.get_account_setting(account_name, 'custom_host')
+
+    address = settings.get_account_setting(account_name, 'address')
+    jid = JID.from_string(address)
+    assert jid.domain is not None
+    return jid.domain
 
 
 def get_priority(account: str, show: str) -> int:

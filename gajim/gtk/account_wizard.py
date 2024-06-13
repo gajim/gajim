@@ -273,16 +273,15 @@ class AccountWizard(Assistant):
         return get_global_proxy()
 
     def _get_base_client(self,
-                         domain: str,
-                         username: str | None,
+                         address: JID,
                          mode: Mode,
                          advanced: bool,
                          ignore_all_errors: bool
                          ) -> Client:
 
         client = Client(log_context='Account Wizard')
-        client.set_domain(domain)
-        client.set_username(username)
+        client.set_domain(address.domain)
+        client.set_username(address.localpart)
         client.set_mode(mode)
         client.set_ignore_tls_errors(ignore_all_errors)
         client.set_accepted_certificates(
@@ -328,13 +327,12 @@ class AccountWizard(Assistant):
     def _test_credentials(self, ignore_all_errors: bool = False) -> None:
         self._show_progress_page(_('Connecting...'),
                                  _('Connecting to server...'))
-        address, password = self.get_page('login').get_credentials()
-        jid = JID.from_string(address)
+        jid, password = self.get_page('login').get_credentials()
+        address = JID.from_string(jid)
         advanced = self.get_page('login').is_advanced()
 
         self._client = self._get_base_client(
-            jid.domain,
-            jid.localpart,
+            address,
             Mode.LOGIN_TEST,
             advanced,
             ignore_all_errors)
@@ -350,9 +348,10 @@ class AccountWizard(Assistant):
         domain = self.get_page('signup').get_server()
         advanced = self.get_page('signup').is_advanced()
 
+        address = JID(domain=domain)
+
         self._client = self._get_base_client(
-            domain,
-            None,
+            address,
             Mode.ANONYMOUS_TEST,
             advanced,
             ignore_all_errors)
@@ -367,9 +366,10 @@ class AccountWizard(Assistant):
         domain = self.get_page('signup').get_server()
         advanced = self.get_page('signup').is_advanced()
 
+        address = JID(domain=domain)
+
         self._client = self._get_base_client(
-            domain,
-            None,
+            address,
             Mode.REGISTER,
             advanced,
             ignore_all_errors)
@@ -384,9 +384,10 @@ class AccountWizard(Assistant):
         if client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
+        address = JID(localpart=client.username, domain=client.domain)
+
         app.app.create_account(account,
-                               client.username,
-                               client.domain,
+                               address,
                                client.password,
                                proxy_name,
                                client.custom_host)
@@ -407,9 +408,10 @@ class AccountWizard(Assistant):
         if client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
+        address = JID(domain=client.domain)
+
         app.app.create_account(account,
-                               None,
-                               client.domain,
+                               address,
                                client.password,
                                proxy_name,
                                client.custom_host,
@@ -556,9 +558,10 @@ class AccountWizard(Assistant):
         if self._client.proxy is not None:
             proxy_name = self.get_page('advanced').get_proxy()
 
+        address = JID(localpart=username, domain=self._client.domain)
+
         app.app.create_account(account,
-                               username,
-                               self._client.domain,
+                               address,
                                password,
                                proxy_name,
                                self._client.custom_host)

@@ -33,12 +33,12 @@ class CorrectionsTest(unittest.TestCase):
         app.settings = Settings(in_memory=True)
         app.settings.init()
         app.settings.add_account('testacc1')
-        app.settings.set_account_setting('testacc1', 'name', 'user')
-        app.settings.set_account_setting('testacc1', 'hostname', 'domain.org')
+        app.settings.set_account_setting(
+            'testacc1', 'address', 'user@domain.org')
 
         app.settings.add_account('testacc2')
-        app.settings.set_account_setting('testacc2', 'name', 'user2')
-        app.settings.set_account_setting('testacc2', 'hostname', 'domain.org')
+        app.settings.set_account_setting(
+            'testacc2', 'address', 'user2@domain.org')
 
     def _create_base_occupant(self, occupant_id: str) -> Occupant:
         return Occupant(

@@ -38,8 +38,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         self._ignored_errors = ignored_errors
         self._client = client
         self._cert = cert
-        self._server = app.settings.get_account_setting(self.account,
-                                                        'hostname')
+        self._server = app.get_hostname_from_account(self.account)
 
         self._process_error()
 
