@@ -228,12 +228,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         encryption = contact.settings.get('encryption')
         encryption_available = self._is_encryption_available(contact)
-        if not encryption_available and encryption:
-            # Disable encryption if chat was encrypted before, but due to
-            # changed circumstances, encryption is not applicable anymore
-            # (i.e. group chat configuration changed).
-            contact.settings.set('encryption', '')
-            encryption = ''
 
         action = app.window.get_action('set-encryption')
         action.set_state(GLib.Variant('s', encryption))
@@ -509,10 +503,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         else:
             icon_name = 'channel-insecure-symbolic'
-            if isinstance(contact, GroupchatContact):
-                tooltip = _('This is a public group chat. '
-                            'Encryption is not available.')
-            elif isinstance(contact, GroupchatParticipant):
+            if isinstance(contact, GroupchatParticipant):
                 tooltip = _('Encryption is not available in private chats')
             else:
                 raise ValueError('Unexpected contact type: %s', type(contact))
@@ -524,9 +515,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
     @staticmethod
     def _is_encryption_available(contact: ChatContactT) -> bool:
-        if isinstance(contact, GroupchatContact):
-            return contact.encryption_available
-        elif isinstance(contact, GroupchatParticipant):
+        if isinstance(contact, GroupchatParticipant):
             return False
         return True
 
@@ -558,9 +547,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         tooltip = _('%(type)s encryption is active %(authenticated)s.') % {
             'type': enc_type,
             'authenticated': authenticated_string}
-
-        if isinstance(self._contact, GroupchatContact) and visible:
-            visible = self._contact.encryption_available
 
         self._ui.encryption_details_button.set_visible(visible)
         self._ui.encryption_details_button.set_tooltip_text(tooltip)
