@@ -101,13 +101,6 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-webp-pixbuf-loader \
         "${MINGW_PACKAGE_PREFIX}"-sqlite3
 
-    # Temporarily downgrade gobject-introspection, see:
-    # https://github.com/msys2/MINGW-packages/issues/21044
-    build_pacman --noconfirm -U \
-        https://repo.msys2.org/mingw/mingw64/"${MINGW_PACKAGE_PREFIX}"-glib2-2.80.0-1-any.pkg.tar.zst \
-        https://repo.msys2.org/mingw/mingw64/"${MINGW_PACKAGE_PREFIX}"-gobject-introspection-runtime-1.78.1-1-any.pkg.tar.zst \
-        https://repo.msys2.org/mingw/mingw64/"${MINGW_PACKAGE_PREFIX}"-gobject-introspection-1.78.1-1-any.pkg.tar.zst
-
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/gajim/omemo-dr.git
