@@ -378,14 +378,16 @@ class MessageRow(BaseRow):
         return False
 
     def is_same_securitylabels(self, message: MessageRow) -> bool:
-        if message.securitylabel == self.securitylabel:
+        sec1 = message.securitylabel
+        sec2 = self.securitylabel
+
+        if sec1 is None and sec2 is None:
             return True
-        if (message.securitylabel is not None and
-                self.securitylabel is not None):
-            if (message.securitylabel.displaymarking ==
-                    self.securitylabel.displaymarking):
-                return True
-        return False
+
+        if sec1 is None or sec2 is None:
+            return False
+
+        return sec1.label_hash == sec2.label_hash
 
     def is_same_state(self, message: MessageRow) -> bool:
         return message.state == self.state
