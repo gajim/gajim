@@ -37,7 +37,7 @@ VISUALIZATION_UPDATE_DELAY = int(100 / ANIMATION_PERIOD)
 class VoiceMessageRecorderButton(Gtk.MenuButton):
 
     def __init__(self) -> None:
-        Gtk.MenuButton.__init__(self, relief=Gtk.ReliefStyle.NONE)
+        Gtk.MenuButton.__init__(self, relief=Gtk.ReliefStyle.NONE, no_show_all=True)
         self.get_style_context().add_class('message-actions-box-button')
         self.set_visible(app.settings.get('show_voice_message_button'))
 
