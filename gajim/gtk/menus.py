@@ -55,6 +55,40 @@ UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
 
 
+def get_main_menu() -> GajimMenu:
+    main_menu = GajimMenu()
+
+    gajim_menu_items: MenuItemListT = [
+        (_('_Start / Join Chat…'), 'app.start-chat', GLib.Variant('as', ['', ''])),
+        (_('Create _Group Chat…'), 'app.create-groupchat', GLib.Variant('s', '')),
+        (_('Pl_ugins'), 'app.plugins', None),
+        (_('_Preferences'), 'app.preferences', None),
+        (_('_Quit'), 'app.quit', None),
+    ]
+    main_menu.append_submenu('_Gajim', GajimMenu.from_list(gajim_menu_items))
+
+    main_menu.add_submenu(_('_Accounts'))
+
+    view_menu_items: MenuItemListT = [
+        (_('_Debug Console'), 'app.xml-console', None),
+        (_('_File Transfer'), 'app.file-transfer', None),
+        (_('_Show menu bar'), 'win.toggle-menu-bar', None),
+    ]
+    main_menu.append_submenu(_('_View'), GajimMenu.from_list(view_menu_items))
+
+    help_menu_items: MenuItemListT = [
+        (_('_Wiki (Online'), 'app.content', None),
+        (_('FA_Q (Online)'), 'app.faq', None),
+        (_('_Privacy Policy (Online)'), 'app.privacy-policy', None),
+        (_('Join Support Chat'), 'app.join-support-chat', None),
+        (_('_Keyboard Shortcuts'), 'app.shortcuts', None),
+        (_('_Features'), 'app.features', None),
+        (_('_About'), 'app.about', None),
+    ]
+    main_menu.append_submenu(_('_Help'), GajimMenu.from_list(help_menu_items))
+
+    return main_menu
+
 def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
     jid = contact.jid

@@ -98,10 +98,6 @@ class AppPageBuilder(Builder):
     notify_after_plugin_updates: Gtk.CheckButton
 
 
-class ApplicationMenuBuilder(Builder):
-    pass
-
-
 class AssistantBuilder(Builder):
     main_grid: Gtk.Grid
     content_area: Gtk.Box
@@ -1027,8 +1023,6 @@ def get_builder(file_name: Literal['add_contact.ui'], widgets: list[str] = ...) 
 def get_builder(file_name: Literal['advanced_configuration.ui'], widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['app_page.ui'], widgets: list[str] = ...) -> AppPageBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['application_menu.ui'], widgets: list[str] = ...) -> ApplicationMenuBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['assistant.ui'], widgets: list[str] = ...) -> AssistantBuilder: ...  # noqa
 @overload

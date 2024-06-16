@@ -67,7 +67,6 @@ from gajim.gtk import structs
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.avatar import AvatarStorage
-from gajim.gtk.builder import get_builder
 from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
 from gajim.gtk.const import APP_ACTIONS
@@ -79,6 +78,7 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
+from gajim.gtk.menus import get_main_menu
 from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_app_windows
@@ -225,8 +225,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         icon_theme.append_search_path(str(configpaths.get('ICONS')))
         load_user_iconsets()
 
-        builder = get_builder('application_menu.ui')
-        self.set_menubar(cast(Gio.Menu, builder.get_object('menubar')))
+        self.set_menubar(get_main_menu())
 
         from gajim.gtk import notification
         notification.init()

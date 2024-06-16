@@ -54,6 +54,7 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.filechoosers import FileSaveDialog
+from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
@@ -99,6 +100,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.main_grid.add(self._main_stack)
 
         self._chat_page = self._main_stack.get_chat_page()
+
+        self._ui.left_grid.attach(MainMenuButton(), 0, 0, 1, 1)
 
         self._app_page = self._main_stack.get_app_page()
         self._app_side_bar = AppSideBar(self._app_page)
