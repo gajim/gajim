@@ -799,6 +799,9 @@ class PopoverSetting(GenericSetting):
 
         self.set_value(row.value)
 
+        if self.type_ == SettingType.VALUE:
+            self._on_setting_changed(row.value)
+
     def on_row_activated(self) -> None:
         self._popover.popup()
 
