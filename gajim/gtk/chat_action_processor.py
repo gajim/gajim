@@ -124,6 +124,10 @@ class ChatActionProcessor(Gtk.Popover):
         return text_buffer.get_text(start, end, True)
 
     def _replace_text(self, selected_action: str) -> None:
+        if not selected_action:
+            # selected_action may be an empty string under certain conditions
+            return
+
         assert self._start_mark is not None
         text_buffer = self._message_input.get_buffer()
         start_iter = text_buffer.get_iter_at_mark(self._start_mark)
