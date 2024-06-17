@@ -456,42 +456,51 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_clear(self, _button: Gtk.Button) -> None:
         self._ui.protocol_view.get_buffer().set_text('')
 
-    def _set_account(self, value: str, _data: Any) -> None:
-        self._selected_account = value
-        self._set_titlebar()
+    def _apply_filters(self) -> None:
+        table = self._ui.protocol_view.get_buffer().get_tag_table()
 
         active_accounts = app.settings.get_active_accounts()
         active_accounts.append('AccountWizard')
-
-        table = self._ui.protocol_view.get_buffer().get_tag_table()
-
-        if value == 'AllAccounts':
-            for account in active_accounts:
-                tag = table.lookup(account)
-                if tag is not None:
-                    tag.set_property('invisible', False)
-            return
-
         for account in active_accounts:
             tag = table.lookup(account)
-            if tag is not None:
-                tag.set_property('invisible', account != value)
+            if tag is None:
+                continue
+
+            if self._selected_account == 'AllAccounts':
+                visible = True
+            else:
+                visible = account == self._selected_account
+
+            if visible:
+                tag.set_priority(0)
+            else:
+                tag.set_priority(table.get_size() - 1)
+
+            tag.set_property('invisible', not visible)
+
+        for data in ['presence', 'message', 'iq', 'stream', 'incoming', 'outgoing']:
+            visible = getattr(self, f'_{data}')
+
+            tag = table.lookup(data)
+            if tag is None:
+                continue
+
+            if data in ('incoming', 'outgoing'):
+                if visible:
+                    tag.set_priority(0)
+                else:
+                    tag.set_priority(table.get_size() - 1)
+
+            tag.set_property('invisible', not visible)
+
+    def _set_account(self, value: str, _data: Any) -> None:
+        self._selected_account = value
+        self._set_titlebar()
+        self._apply_filters()
 
     def _on_setting(self, value: bool, data: str) -> None:
         setattr(self, f'_{data}', value)
-        value = not value
-        table = self._ui.protocol_view.get_buffer().get_tag_table()
-        tag = table.lookup(data)
-        if tag is None:
-            return
-
-        if data in ('incoming', 'outgoing'):
-            if value:
-                tag.set_priority(table.get_size() - 1)
-            else:
-                tag.set_priority(0)
-
-        tag.set_property('invisible', value)
+        self._apply_filters()
 
     def _on_stanza_received(self, event: StanzaReceived):
         self._print_stanza(event, 'incoming')
