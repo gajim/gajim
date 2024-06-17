@@ -689,15 +689,26 @@ class ConversationView(Gtk.ScrolledWindow):
                 highlight_row = row
                 break
 
-        if highlight_row is not None:
-            highlight_row.get_style_context().remove_class(
-                'conversation-row-highlight')
-            highlight_row.get_style_context().add_class(
-                'conversation-row-highlight')
-            # This scrolls the ListBox to the highlighted row
-            highlight_row.grab_focus()
+        if highlight_row is None:
+            return
 
-            GLib.timeout_add(1500, self._remove_highligh_class, highlight_row)
+        # Scroll ListBox to row and highlight it
+        coordinates = highlight_row.translate_coordinates(self._list_box, 0, 0)
+        if coordinates is None:
+            return
+
+        _x_coord, y_coord = coordinates
+        _minimum_height, natural_height = highlight_row.get_preferred_height()
+        adjustment = self._list_box.get_adjustment()
+        adjustment.set_value(
+            y_coord - (adjustment.get_page_size() - natural_height) / 2)
+
+        highlight_row.get_style_context().remove_class(
+            'conversation-row-highlight')
+        highlight_row.get_style_context().add_class(
+            'conversation-row-highlight')
+
+        GLib.timeout_add(1500, self._remove_highligh_class, highlight_row)
 
     def _remove_highligh_class(self, highlight_row: BaseRow) -> None:
         highlight_row.get_style_context().remove_class(
