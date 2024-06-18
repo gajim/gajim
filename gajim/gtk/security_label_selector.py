@@ -4,8 +4,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.modules.security_labels import SecurityLabel
@@ -20,28 +18,24 @@ from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
 
 
-class SecurityLabelSelector(Gtk.ComboBox):
+class SecurityLabelSelector(Gtk.ComboBoxText):
     def __init__(self) -> None:
-        Gtk.ComboBox.__init__(self, no_show_all=True)
+        Gtk.ComboBoxText.__init__(self, no_show_all=True)
+
         self._account: str | None = None
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
 
+        text_renderer = self.get_cells()[0]
+        text_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
+        text_renderer.set_property('max-width-chars', 20)
+
         self.set_valign(Gtk.Align.CENTER)
         self.set_tooltip_text(_('Select a security label for your message…'))
-
-        label_store = Gtk.ListStore(str)
-        self.set_model(label_store)
-        label_cell_renderer = Gtk.CellRendererText()
-        label_cell_renderer.set_property('ellipsize', Pango.EllipsizeMode.END)
-        label_cell_renderer.set_property('max-width-chars', 14)
-        self.pack_start(label_cell_renderer, True)
-        self.add_attribute(label_cell_renderer, 'text', 0)
 
         app.ged.register_event_handler(
             'sec-catalog-received', ged.GUI1, self._sec_labels_received)
 
-        self.connect('changed', self._on_changed)
         self.connect('destroy', self._on_destroy)
 
     def switch_contact(self, contact: ChatContactT) -> None:
@@ -66,16 +60,6 @@ class SecurityLabelSelector(Gtk.ComboBox):
                                      ged.GUI1,
                                      self._sec_labels_received)
         app.check_finalize(self)
-
-    def _on_changed(self, _combo: Gtk.ComboBox) -> None:
-        iter_ = self.get_active_iter()
-        if iter_ is None:
-            return
-
-        model = self.get_model()
-        label_text = model.get_value(iter_, 0)
-        self.set_tooltip_text(
-            _('Selected security label: %s') % f'\n{label_text}')
 
     def _on_client_state_changed(self,
                                  _client: Client,
@@ -111,25 +95,19 @@ class SecurityLabelSelector(Gtk.ComboBox):
                 self._account, 'enable_security_labels'):
             return
 
-        model = cast(Gtk.ListStore, self.get_model())
-        model.clear()
+        self.remove_all()
 
-        selection = 0
-        label_list = event.catalog.get_label_names()
-        default = event.catalog.default
-        for index, label in enumerate(label_list):
-            model.append([label])
-            if label == default:
-                selection = index
+        for selector in event.catalog.get_label_names():
+            self.append(selector, selector)
 
-        self.set_active(selection)
+        self.set_active_id(event.catalog.default)
         self.set_no_show_all(False)
         self.show_all()
 
     def get_seclabel(self) -> SecurityLabel | None:
-        index = self.get_active()
-        if index == -1:
-            return None
+        selector = self.get_active_text()
+        if selector is None:
+            return
 
         assert self._contact is not None
         assert self._client is not None
@@ -137,10 +115,7 @@ class SecurityLabelSelector(Gtk.ComboBox):
         catalog = self._client.get_module('SecLabels').get_catalog(jid)
         if catalog is None:
             return None
-
-        labels, label_list = catalog.labels, catalog.get_label_names()
-        label_name = label_list[index]
-        return labels[label_name]
+        return catalog.labels[selector]
 
     def _update(self) -> None:
         assert self._account is not None
