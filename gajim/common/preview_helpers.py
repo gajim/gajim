@@ -255,39 +255,6 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     return image_width, image_height
 
 
-def pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf | None:
-    loader = GdkPixbuf.PixbufLoader()
-    try:
-        loader.write(data)
-        loader.close()
-    except GLib.Error:
-        # Fallback to Pillow
-        input_file = BytesIO(data)
-        image = Image.open(BytesIO(data)).convert('RGBA')
-        array = GLib.Bytes.new(image.tobytes())  # pyright: ignore
-        width, height = image.size
-        pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(array,
-                                                 GdkPixbuf.Colorspace.RGB,
-                                                 True,
-                                                 8,
-                                                 width,
-                                                 height,
-                                                 width * 4)
-        image.close()
-        input_file.close()
-        return pixbuf
-
-    pixbuf = loader.get_pixbuf()
-    if pixbuf is None:
-        return None
-
-    pixbuf = pixbuf.apply_embedded_orientation()
-    if pixbuf is None:
-        return pixbuf
-
-    return pixbuf
-
-
 def parse_fragment(fragment_string: str) -> tuple[bytes, bytes]:
     if not fragment_string:
         raise ValueError('Invalid fragment')

@@ -17,7 +17,6 @@ from datetime import datetime
 from functools import lru_cache
 from functools import wraps
 from importlib import import_module
-from io import BytesIO
 from pathlib import Path
 from re import Match
 
@@ -47,6 +46,7 @@ from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.helpers import format_idle_time
 from gajim.common.helpers import URL_REGEX
 from gajim.common.i18n import _
+from gajim.common.image_helpers import get_pixbuf_from_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -635,36 +635,6 @@ def get_avatar_for_message(
         return self_contact.get_avatar(size, scale, add_show=False)
 
     return contact.get_avatar(size, scale, add_show=False)
-
-
-def get_pixbuf_from_data(file_data: bytes) -> GdkPixbuf.Pixbuf | None:
-    # TODO: This already exists in preview_helpery pixbuf_from_data
-    '''
-    Get image data and returns GdkPixbuf.Pixbuf
-    '''
-    pixbufloader = GdkPixbuf.PixbufLoader()
-    try:
-        pixbufloader.write(file_data)
-        pixbufloader.close()
-        pixbuf = pixbufloader.get_pixbuf()
-    except GLib.Error:
-        pixbufloader.close()
-
-        log.warning('loading avatar using pixbufloader failed, trying to '
-                    'convert avatar image using pillow')
-        try:
-            avatar = Image.open(BytesIO(file_data)).convert('RGBA')  # pyright: ignore
-            array = GLib.Bytes.new(avatar.tobytes())  # pyright: ignore
-            width, height = avatar.size
-            pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-                array, GdkPixbuf.Colorspace.RGB,
-                True, 8, width, height, width * 4)
-        except Exception:
-            log.warning('Could not use pillow to convert avatar image, '
-                        'image cannot be displayed', exc_info=True)
-            return None
-
-    return pixbuf
 
 
 def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
