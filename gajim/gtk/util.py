@@ -17,7 +17,6 @@ from datetime import datetime
 from functools import lru_cache
 from functools import wraps
 from importlib import import_module
-from pathlib import Path
 from re import Match
 
 import cairo
@@ -32,8 +31,6 @@ from nbxmpp import JID
 from nbxmpp import util as nbxmpp_util
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import TuneData
-from PIL import Image
-from PIL import UnidentifiedImageError
 
 from gajim.common import app
 from gajim.common import configpaths
@@ -46,7 +43,6 @@ from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.helpers import format_idle_time
 from gajim.common.helpers import URL_REGEX
 from gajim.common.i18n import _
-from gajim.common.image_helpers import get_pixbuf_from_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -635,70 +631,6 @@ def get_avatar_for_message(
         return self_contact.get_avatar(size, scale, add_show=False)
 
     return contact.get_avatar(size, scale, add_show=False)
-
-
-def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
-    if height == width:
-        return size, size
-    if height > width:
-        ratio = height / float(width)
-        return int(size / ratio), size
-
-    ratio = width / float(height)
-    return size, int(size / ratio)
-
-
-def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf,
-                 size: int) -> GdkPixbuf.Pixbuf | None:
-    width, height = scale_with_ratio(size,
-                                     pixbuf.get_width(),
-                                     pixbuf.get_height())
-    return pixbuf.scale_simple(width, height,
-                               GdkPixbuf.InterpType.BILINEAR)
-
-
-def scale_pixbuf_from_data(data: bytes,
-                           size: int
-                           ) -> GdkPixbuf.Pixbuf | None:
-    pixbuf = get_pixbuf_from_data(data)
-    assert pixbuf is not None
-    return scale_pixbuf(pixbuf, size)
-
-
-def load_pixbuf(path: str | Path,
-                size: int | None = None
-                ) -> GdkPixbuf.Pixbuf | None:
-    try:
-        if size is None:
-            return GdkPixbuf.Pixbuf.new_from_file(str(path))
-        return GdkPixbuf.Pixbuf.new_from_file_at_scale(
-            str(path), size, size, True)
-
-    except GLib.Error:
-        try:
-            with open(path, 'rb') as im_handle:
-                img = Image.open(im_handle)  # pyright: ignore
-                avatar = img.convert('RGBA')
-        except (NameError, OSError, UnidentifiedImageError):
-            log.warning('Pillow convert failed: %s', path)
-            log.debug('Error', exc_info=True)
-            return None
-
-        array = GLib.Bytes.new(avatar.tobytes())  # pyright: ignore
-        width, height = avatar.size
-        pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
-            array, GdkPixbuf.Colorspace.RGB, True,
-            8, width, height, width * 4)
-        if size is not None:
-            width, height = scale_with_ratio(size, width, height)
-            return pixbuf.scale_simple(width,
-                                       height,
-                                       GdkPixbuf.InterpType.BILINEAR)
-        return pixbuf
-
-    except RuntimeError as error:
-        log.warning('Loading pixbuf failed: %s', error)
-        return None
 
 
 def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:

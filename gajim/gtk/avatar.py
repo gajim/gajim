@@ -25,6 +25,8 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import get_groupchat_name
+from gajim.common.image_helpers import get_pixbuf_from_file
+from gajim.common.image_helpers import scale_with_ratio
 from gajim.common.util.classes import Singleton
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
@@ -33,10 +35,8 @@ from gajim.gtk.util import get_contact_color
 from gajim.gtk.util import get_css_show_class
 from gajim.gtk.util import get_first_graphemes
 from gajim.gtk.util import load_icon_surface
-from gajim.gtk.util import load_pixbuf
 from gajim.gtk.util import make_rgba
 from gajim.gtk.util import rgba_to_float
-from gajim.gtk.util import scale_with_ratio
 
 log = logging.getLogger('gajim.gtk.avatar')
 
@@ -530,7 +530,7 @@ class AvatarStorage(metaclass=Singleton):
 
     @staticmethod
     def _load_for_publish(path: str) -> tuple[bool, bytes] | None:
-        pixbuf = load_pixbuf(path)
+        pixbuf = get_pixbuf_from_file(path)
         if pixbuf is None:
             return None
 
@@ -586,7 +586,7 @@ class AvatarStorage(metaclass=Singleton):
         if path is None:
             return None
 
-        pixbuf = load_pixbuf(path, size)
+        pixbuf = get_pixbuf_from_file(path, size)
         if pixbuf is None:
             return None
 
