@@ -375,7 +375,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         if referenced_message is not None:
             self._enable_reply_mode(referenced_message)
 
-        #TODO: Set seclabel
+        if message.security_label is not None:
+            self._security_label_selector.set_seclabel(
+                message.security_label.label_hash)
 
     def get_last_message_id(self, contact: ChatContactT) -> str | None:
         return self._last_message_id.get(contact)

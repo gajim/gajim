@@ -117,6 +117,18 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
             return None
         return catalog.labels[selector]
 
+    def set_seclabel(self, label_hash: str) -> None:
+        assert self._contact is not None
+        assert self._client is not None
+        jid = self._contact.jid.bare
+        catalog = self._client.get_module('SecLabels').get_catalog(jid)
+        if catalog is None:
+            return None
+
+        for selector, label in catalog.labels.items():
+            if label.get_label_hash() == label_hash:
+                self.set_active_id(selector)
+
     def _update(self) -> None:
         assert self._account is not None
         assert self._client is not None
