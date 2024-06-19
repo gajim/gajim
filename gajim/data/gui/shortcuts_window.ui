@@ -91,7 +91,7 @@
               <object class="GtkShortcutsShortcut">
                 <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;M</property>
-                <property name="title" translatable="yes">Hide/show the main window menu</property>
+                <property name="title" translatable="yes">Toggle Menu Bar</property>
               </object>
             </child>
           </object>

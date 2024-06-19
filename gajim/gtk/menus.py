@@ -72,7 +72,7 @@ def get_main_menu() -> GajimMenu:
     view_menu_items: MenuItemListT = [
         (_('_Debug Console'), 'app.xml-console', None),
         (_('_File Transfer'), 'app.file-transfer', None),
-        (_('_Show menu bar'), 'win.toggle-menu-bar', None),
+        (_('_Toggle Menu Bar'), 'win.toggle-menu-bar', None),
     ]
     main_menu.append_submenu(_('_View'), GajimMenu.from_list(view_menu_items))
 
