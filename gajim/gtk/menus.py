@@ -77,7 +77,7 @@ def get_main_menu() -> GajimMenu:
     main_menu.append_submenu(_('_View'), GajimMenu.from_list(view_menu_items))
 
     help_menu_items: MenuItemListT = [
-        (_('_Wiki (Online'), 'app.content', None),
+        (_('_Wiki (Online)'), 'app.content', None),
         (_('FA_Q (Online)'), 'app.faq', None),
         (_('_Privacy Policy (Online)'), 'app.privacy-policy', None),
         (_('Join Support Chat'), 'app.join-support-chat', None),
