@@ -398,7 +398,7 @@ class Settings:
                     address = JID.from_string(f'{localpart}@{domain}')
                 except Exception as error:
                     log.warning('Unable to migrate address: %s', error)
-                    address = JID.from_string('unknown@unknown.com')
+                    address = JID.from_string('unknown@unknown.invalid')
 
                 settings['address'] = str(address)
 
