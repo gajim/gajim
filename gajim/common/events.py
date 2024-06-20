@@ -600,7 +600,7 @@ class PingReply(ApplicationEvent):
 class SecCatalogReceived(ApplicationEvent):
     name: str = field(init=False, default='sec-catalog-received')
     account: str
-    jid: str
+    jid: JID
     catalog: Catalog
 
 

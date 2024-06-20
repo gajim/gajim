@@ -22,7 +22,6 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
     def __init__(self) -> None:
         Gtk.ComboBoxText.__init__(self, no_show_all=True)
 
-        self._account: str | None = None
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
 
@@ -39,21 +38,19 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         self.connect('destroy', self._on_destroy)
 
     def switch_contact(self, contact: ChatContactT) -> None:
-        app.settings.disconnect_signals(self)
-        if self._client is not None:
-            self._client.disconnect_all_from_obj(self)
+        self.clear()
 
-        self._account = contact.account
         self._client = app.get_client(contact.account)
         self._contact = contact
 
         app.settings.connect_signal(
             'enable_security_labels',
             self._on_setting_changed,
-            account=self._account)
+            account=self._contact.account)
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
-        self._update()
+
+        self._update_combo_box()
 
     def _on_destroy(self, _widget: SecurityLabelSelector) -> None:
         app.ged.remove_event_handler('sec-catalog-received',
@@ -64,9 +61,11 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
     def _on_client_state_changed(self,
                                  _client: Client,
                                  _signal_name: str,
-                                 _state: SimpleClientState
+                                 state: SimpleClientState
                                  ) -> None:
-        self._update()
+
+        if state == SimpleClientState.CONNECTED:
+            self._update_combo_box()
 
     def _on_setting_changed(self,
                             state: bool,
@@ -74,45 +73,56 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
                             _account: str | None,
                             _jid: JID | None
                             ) -> None:
-        self.set_no_show_all(not state)
+
         if state:
-            self.show_all()
+            self._update_combo_box()
         else:
             self.hide()
-        self._update()
+            self.remove_all()
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
-        if self._account is None or self._account != event.account:
+        if self._contact is None or self._contact.account != event.account:
             return
 
-        if self._contact is None:
+        if event.jid != self._contact.jid:
             return
 
-        if event.jid != self._contact.jid.bare:
-            return
+        self._update_combo_box()
+
+    def _update_combo_box(self) -> None:
+
+        assert self._contact is not None
+        assert self._client is not None
 
         if not app.settings.get_account_setting(
-                self._account, 'enable_security_labels'):
+                self._contact.account, 'enable_security_labels'):
             return
+
+        catalog = self._client.get_module('SecLabels').get_catalog(
+            self._contact.jid)
 
         self.remove_all()
 
-        for selector in event.catalog.get_label_names():
-            self.append(selector, selector)
+        if catalog is not None:
+            for selector in catalog.get_label_names():
+                self.append(selector, selector)
+            self.set_active_id(catalog.default)
 
-        self.set_active_id(event.catalog.default)
-        self.set_no_show_all(False)
-        self.show_all()
+        self.show()
 
     def get_seclabel(self) -> SecurityLabel | None:
+        assert self._contact is not None
+        if not app.settings.get_account_setting(
+                self._contact.account, 'enable_security_labels'):
+            return
+
         selector = self.get_active_text()
         if selector is None:
             return
 
-        assert self._contact is not None
         assert self._client is not None
-        jid = self._contact.jid.bare
-        catalog = self._client.get_module('SecLabels').get_catalog(jid)
+        catalog = self._client.get_module('SecLabels').get_catalog(
+            self._contact.jid)
         if catalog is None:
             return None
         return catalog.labels[selector]
@@ -120,8 +130,9 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
     def set_seclabel(self, label_hash: str) -> None:
         assert self._contact is not None
         assert self._client is not None
-        jid = self._contact.jid.bare
-        catalog = self._client.get_module('SecLabels').get_catalog(jid)
+
+        catalog = self._client.get_module('SecLabels').get_catalog(
+            self._contact.jid)
         if catalog is None:
             return None
 
@@ -129,13 +140,10 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
             if label.get_label_hash() == label_hash:
                 self.set_active_id(selector)
 
-    def _update(self) -> None:
-        assert self._account is not None
-        assert self._client is not None
-        assert self._contact is not None
+    def clear(self) -> None:
+        app.settings.disconnect_signals(self)
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
 
-        chat_active = app.window.is_chat_active(
-            self._account, self._contact.jid)
-        if chat_active:
-            self._client.get_module('SecLabels').get_catalog(
-                self._contact.jid.bare)
+        self._client = None
+        self._contact = None

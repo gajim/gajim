@@ -296,6 +296,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._store_draft()
             self._contact.disconnect_all_from_obj(self)
 
+        self._security_label_selector.clear()
+
         self._contact = None
         self._client = None
 
