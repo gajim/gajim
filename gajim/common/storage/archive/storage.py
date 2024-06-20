@@ -110,6 +110,10 @@ class MessageArchiveStorage(AlchemyStorage):
         jids = session.scalars(select(Remote))
         self._jid_pks = {j.jid: j.pk for j in jids}
 
+    def _get_active_account_pks(self, session: Session) -> list[int]:
+        accounts = app.settings.get_active_accounts()
+        return [self._get_account_pk(session, account) for account in accounts]
+
     def _get_account_pk(self, session: Session, account: str) -> int:
         pk = self._account_pks.get(account)
         if pk is not None:
@@ -696,18 +700,16 @@ class MessageArchiveStorage(AlchemyStorage):
         if after is None:
             after = FIRST_UTC_DATETIME
 
-        fk_account_pk = None
-        if account is not None:
-            fk_account_pk = self._get_account_pk(session, account)
+        if account is None:
+            fk_account_pks = self._get_active_account_pks(session)
+        else:
+            fk_account_pks = [self._get_account_pk(session, account)]
 
         fk_remote_pk = None
         if jid is not None:
             fk_remote_pk = self._get_jid_pk(session, jid)
 
-        stmt = select(Message)
-
-        if fk_account_pk is not None:
-            stmt = stmt.where(Message.fk_account_pk == fk_account_pk)
+        stmt = select(Message).where(Message.fk_account_pk.in_(fk_account_pks))
 
         if fk_remote_pk is not None:
             stmt = stmt.where(Message.fk_remote_pk == fk_remote_pk)
