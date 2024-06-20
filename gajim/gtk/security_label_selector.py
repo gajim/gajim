@@ -137,6 +137,8 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
             return None
 
         for selector, label in catalog.labels.items():
+            if label is None:
+                continue
             if label.get_label_hash() == label_hash:
                 self.set_active_id(selector)
 
