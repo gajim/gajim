@@ -180,9 +180,9 @@ class ReactionButton(Gtk.Button):
         for reaction in reaction_data[:MAX_USERS]:
             if reaction.from_us:
                 self.from_us = True
-            tooltip_markup += (
-                f'{reaction.username} ({reaction.timestamp.strftime(format_string)})\n'
-            )
+
+            dt_str = reaction.timestamp.astimezone().strftime(format_string)
+            tooltip_markup += (f'{reaction.username} ({dt_str})\n')
         if len(reaction_data) > MAX_USERS:
             tooltip_markup += _('And more...')
 
