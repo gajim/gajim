@@ -6,6 +6,7 @@
 * [ ] Run `./scripts/update_flatpak_manifest.py`
 * [ ] Run `./scripts/bump_version.py x.x.x`
 * [ ] Push release tag `x.x.x`
+* [ ] Upload .msixbundle to Windows store
 
 ## Update
 * [ ] Website: Write announcement post with changelog
