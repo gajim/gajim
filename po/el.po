@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -2688,9 +2688,6 @@ msgstr "Συμμετέχων"
 msgid "Hide this menu"
 msgstr "Απόκρυψη αυτού του μενού"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "_Ξένιος υπολογιστής:"
@@ -4663,10 +4660,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Η υπηρεσία δεν ήταν δυνατό να βρεθεί"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Απαγορεύοντας την πρόσβαση στον %s"
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5627,6 +5620,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Συμμετέχων"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6641,10 +6637,6 @@ msgid "_Show Certificate"
 msgstr "Μη έγκυρο όνομα χρήστη"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Προβολή ιδιοτήτων εκτυπωτή"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Ειδοποίησε με όταν έχει ολοκληρωθεί μια μεταφορά αρχείου"
 
@@ -6665,6 +6657,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Εγγραφή"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
 #, fuzzy
 msgid "_Type"
@@ -7174,6 +7170,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Μηνύματα"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Απαγορεύοντας την πρόσβαση στον %s"
 
 #, fuzzy
 #~ msgid "Send"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -2649,9 +2649,6 @@ msgstr "Participant"
 msgid "Hide this menu"
 msgstr "Hide this menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Asmeninė svetainė:</b>"
@@ -4605,10 +4602,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "The service could not be found"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Saved in: %s"
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5565,6 +5558,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participant"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6562,10 +6558,6 @@ msgid "_Show Certificate"
 msgstr "Blogas CA sertifikatas"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Rodyti _Pernašas"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Pranešti, kai failo siuntimas bus baigtas"
 
@@ -6585,6 +6577,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr ""
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Rodyti _Pernašas"
 
 #, fuzzy
 msgid "_Type"
@@ -7079,6 +7075,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Saved in: %s"
 
 #, fuzzy
 #~ msgid "Send"

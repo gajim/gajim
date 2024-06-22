@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2017-08-01 14:04+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -2551,9 +2551,6 @@ msgstr "Accions Ocupant"
 msgid "Hide this menu"
 msgstr ""
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Pàgina d'inici:"
@@ -4434,10 +4431,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr ""
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr ""
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5345,6 +5338,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Accions Ocupant"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6308,10 +6304,6 @@ msgid "_Show Certificate"
 msgstr "Certificat de client"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Mostra Transports"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
@@ -6330,6 +6322,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr ""
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Mostra Transports"
 
 #, fuzzy
 msgid "_Type"

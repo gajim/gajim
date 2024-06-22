@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-06 01:17+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-22 06:05+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -2338,9 +2338,6 @@ msgstr "隐藏聊天列表"
 msgid "Hide this menu"
 msgstr "隐藏本菜单"
 
-msgid "Hide/show the main window menu"
-msgstr "隐藏/显示主窗口菜单"
-
 msgid "Home"
 msgstr "主页"
 
@@ -4041,10 +4038,6 @@ msgstr "选择视频输入设备（例如网络摄像头、屏幕捕获）"
 msgid "Selected image could not be loaded."
 msgstr "无法加载所选图片。"
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "选定的安全标签：%s"
-
 msgid "Self signed certificate"
 msgstr "自签名的证书"
 
@@ -4783,7 +4776,7 @@ msgstr "这是您的 XMPP 地址"
 
 #, python-format
 msgid "This message has been moderated%s."
-msgstr "此消息已 %s 撤回。"
+msgstr "此消息已%s 撤回。"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4877,6 +4870,9 @@ msgstr "为了发送加密的消息，您需要决定是否信任您的联系人
 
 msgid "Toggle Chat List"
 msgstr "切换聊天列表"
+
+msgid "Toggle Menu Bar"
+msgstr "切换菜单栏"
 
 msgid "Toggle participants list"
 msgstr "切换参与者列表"
@@ -5746,9 +5742,6 @@ msgstr "发送(_S)"
 msgid "_Show Certificate"
 msgstr "显示证书(_S)"
 
-msgid "_Show menu bar"
-msgstr "显示菜单栏(_S)"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "文件传输完成时显示通知(_S)"
 
@@ -5766,6 +5759,9 @@ msgstr "停止共享(_S)"
 
 msgid "_Subscribe"
 msgstr "订阅(_S)"
+
+msgid "_Toggle Menu Bar"
+msgstr "切换菜单栏(_T)"
 
 msgid "_Type"
 msgstr "输入(_T)"
@@ -6235,6 +6231,9 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim 团队"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "隐藏/显示主窗口菜单"
+
 #~ msgid "Inactive"
 #~ msgstr "不活跃"
 
@@ -6260,6 +6259,10 @@ msgstr "…或者把图片拖放到这里"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "撤回…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "选定的安全标签：%s"
 
 #, fuzzy
 #~ msgid "Send"

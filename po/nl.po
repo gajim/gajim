@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2015-04-24 00:10+0100\n"
 "Last-Translator: Nathan Follens <nthn@unseen.is>\n"
 "Language-Team: none\n"
@@ -2658,9 +2658,6 @@ msgstr "Videosessie in-/uitschakelen"
 msgid "Hide this menu"
 msgstr "Verberg dit menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Website"
@@ -4621,10 +4618,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "De dienst kon niet gevonden worden"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Waarschuwing"
-
 msgid "Self signed certificate"
 msgstr "Zelfgetekend certificaat"
 
@@ -5598,6 +5591,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Videosessie in-/uitschakelen"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6611,10 +6607,6 @@ msgid "_Show Certificate"
 msgstr "Certificaat bekijken…"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Transporten weergeven"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
 
@@ -6634,6 +6626,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Abonneer"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Transporten weergeven"
 
 msgid "_Type"
 msgstr "_Type"
@@ -7128,6 +7124,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Organisatorische eenheid (OU)"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Waarschuwing"
 
 #, fuzzy
 #~ msgid "Send"

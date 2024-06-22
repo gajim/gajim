@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2296,9 +2296,6 @@ msgstr ""
 msgid "Hide this menu"
 msgstr ""
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 msgid "Home"
 msgstr ""
 
@@ -3969,10 +3966,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr ""
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr ""
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -4789,6 +4782,9 @@ msgid ""
 msgstr ""
 
 msgid "Toggle Chat List"
+msgstr ""
+
+msgid "Toggle Menu Bar"
 msgstr ""
 
 msgid "Toggle participants list"
@@ -5649,9 +5645,6 @@ msgstr ""
 msgid "_Show Certificate"
 msgstr ""
 
-msgid "_Show menu bar"
-msgstr ""
-
 msgid "_Show notification when file transfer is complete"
 msgstr ""
 
@@ -5668,6 +5661,9 @@ msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
+msgstr ""
+
+msgid "_Toggle Menu Bar"
 msgstr ""
 
 msgid "_Type"

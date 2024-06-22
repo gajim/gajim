@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-03-22 13:05+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-11 06:17+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -493,9 +493,8 @@ msgstr "グループを追加…"
 msgid "Add Proxy"
 msgstr "プロキシを追加"
 
-#, fuzzy
 msgid "Add Reaction…"
-msgstr "相手先を追加…"
+msgstr "リアクションを追加…"
 
 msgid "Add Setting"
 msgstr "設定を追加"
@@ -521,9 +520,8 @@ msgstr "新しいテーマを追加"
 msgid "Add new line"
 msgstr "改行を追加"
 
-#, fuzzy
 msgid "Add reaction"
-msgstr "設定を追加"
+msgstr "リアクションを追加"
 
 msgid "Add some details…"
 msgstr "詳細を追加…"
@@ -654,16 +652,19 @@ msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"グループ \"{group}\" で、{occupant_jid} を {affiliation_or_role} にしようとす"
+"る際にエラーが起こりました"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
-msgstr "%(path)s にファイルを作成する際にエラーが起きました: %(error)s"
+msgstr ""
+"{occupant_jid} を {affiliation_or_role} にしようとする際にエラーが起こりまし"
+"た: {error}"
 
-#, fuzzy
 msgid "And more..."
-msgstr "アカウント名前…"
+msgstr "つづく…"
 
 msgid "Anonymous login not supported"
 msgstr "匿名ログインに対応していません"
@@ -937,7 +938,7 @@ msgid "CRL signature failure"
 msgstr "証明書失効リストの署名の失敗"
 
 msgid "C_opy"
-msgstr ""
+msgstr "コピー (_O)"
 
 msgid "Call"
 msgstr "通話"
@@ -1065,9 +1066,8 @@ msgstr "チャットバナー: 文字色"
 msgid "Chat Banner: Text Font"
 msgstr "チャットバナー: フォント"
 
-#, fuzzy
 msgid "Chat Details and Settings"
-msgstr "相手先の詳細と設定"
+msgstr "チャットの詳細と設定"
 
 msgid "Chat List"
 msgstr "チャット一覧"
@@ -1503,18 +1503,16 @@ msgid "Dark Theme"
 msgstr "ダークテーマ"
 
 msgid "Database Migration"
-msgstr ""
+msgstr "データベースの移行"
 
-#, fuzzy
 msgid "Database migration failed"
-msgstr "登録に失敗しました"
+msgstr "データベースの移行に失敗しました"
 
 msgid "Deactivated"
 msgstr "無効"
 
-#, fuzzy
 msgid "Debug Console"
-msgstr "XML コンソール"
+msgstr "デバッグコンソール"
 
 msgid "Debug Logging"
 msgstr "デバッグ記録"
@@ -1759,7 +1757,7 @@ msgid "Edit Name…"
 msgstr "名前を編集…"
 
 msgid "Edit your message (Esc to cancel)…"
-msgstr ""
+msgstr "メッセージを編集 (Esc で中止)…"
 
 msgid "Edit…"
 msgstr "編集…"
@@ -1837,7 +1835,7 @@ msgid "Encryption error"
 msgstr "暗号化のエラー"
 
 msgid "Encryption is not available in private chats"
-msgstr ""
+msgstr "私信では暗号化は利用できません"
 
 msgid "Encryption method to use unless overridden on a per-contact basis"
 msgstr "相手先ごとに上書きされない場合に使用される暗号化方式"
@@ -1868,7 +1866,7 @@ msgid "Error Loading Image"
 msgstr "画像読み込みのエラー"
 
 msgid "Error in audio data stream."
-msgstr ""
+msgstr "音声データストリームでエラーが発生しました。"
 
 #, python-format
 msgid "Error message: %s"
@@ -2365,9 +2363,6 @@ msgstr "チャット一覧を隠す"
 msgid "Hide this menu"
 msgstr "このメニューを表示しない"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 msgid "Home"
 msgstr "自宅"
 
@@ -2573,7 +2568,7 @@ msgid "Invitees"
 msgstr "招待者"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
+msgstr "マイクは接続されていてアクセス可能ですか ?"
 
 msgid "Issued by"
 msgstr "証明者"
@@ -2855,9 +2850,8 @@ msgstr "メッセージを送信した"
 msgid "Message composition"
 msgstr "メッセージ作成"
 
-#, fuzzy
 msgid "Message content unknown"
-msgstr "メッセージを送信した"
+msgstr "メッセージの内容は不明"
 
 #, python-format
 msgid ""
@@ -2892,22 +2886,19 @@ msgstr "音声/ビデオの依存関係がありません"
 msgid "Missing necessary encryption plugin"
 msgstr "必要な暗号化プラグインが見当たりません"
 
-#, fuzzy
 msgid "Moderate Message"
-msgstr "メッセージを撤回"
+msgstr "メッセージを抑制"
 
-#, fuzzy
 msgid "Moderate message?"
-msgstr "メッセージを撤回しますか ?"
+msgstr "メッセージを抑制しますか ?"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
 msgstr "司会あり"
 
-#, fuzzy
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr "司会あり"
+msgstr "抑制…"
 
 msgid "Moderation"
 msgstr "司会"
@@ -3020,9 +3011,8 @@ msgstr "追加要件なし"
 msgid "No automatic preview"
 msgstr "自動プレビューは無効"
 
-#, fuzzy
 msgid "No certificate"
-msgstr "証明書"
+msgstr "証明書がありません"
 
 msgid "No commands available"
 msgstr "使用できるアカウントはありません"
@@ -3044,7 +3034,6 @@ msgstr ""
 "相手先がありません。\n"
 "XMPP アドレスを入力できます。"
 
-#, fuzzy
 msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 "このメッセージを暗号化するデバイスが見つかりませんでした。デバイスを問い合わ"
@@ -3388,9 +3377,8 @@ msgctxt "File transfer state"
 msgid "Paused"
 msgstr "一時停止しました"
 
-#, fuzzy
 msgid "Pending"
-msgstr "保留中のイベント"
+msgstr "保留中"
 
 msgid "Pending Event"
 msgstr "保留中のイベント"
@@ -3653,9 +3641,9 @@ msgstr "今すぐ再ログインしますか ?"
 msgid "Re_gister"
 msgstr "登録 (_G)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "React with %s"
-msgstr "%s さんと通話"
+msgstr "%s でリアクション"
 
 msgid "Read _Wikipedia Article"
 msgstr "_Wikipedia の項を読む (_W)"
@@ -3705,10 +3693,10 @@ msgid "Recognize your account by color"
 msgstr "アカウントを色で識別します"
 
 msgid "Record"
-msgstr ""
+msgstr "録音"
 
 msgid "Record Voice Message… (hold button to record directly)"
-msgstr ""
+msgstr "音声メッセージを録音… (ボタンを長押しするとすぐに録音)"
 
 msgid "Redirect"
 msgstr "リダイレクト"
@@ -3817,7 +3805,7 @@ msgid "Repairs"
 msgstr "修理"
 
 msgid "Reply…"
-msgstr ""
+msgstr "返信…"
 
 msgid "Report"
 msgstr "報告"
@@ -4016,9 +4004,8 @@ msgstr "走査中 %(current)d / %(total)d..."
 msgid "Scroll down"
 msgstr "スクロールダウン"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "状況メッセージを設定"
+msgstr "このメッセージにスクロール"
 
 msgid "Scroll up"
 msgstr "スクロールアップ"
@@ -4112,10 +4099,6 @@ msgstr ""
 
 msgid "Selected image could not be loaded."
 msgstr "選択された画像を読み込めませんでした。"
-
-#, python-format
-msgid "Selected security label: %s"
-msgstr "選択された安全性ラベル: %s"
 
 msgid "Self signed certificate"
 msgstr "自己署名証明書"
@@ -4275,9 +4258,8 @@ msgstr "相手先の情報を表示"
 msgid "Show Content"
 msgstr "内容を表示"
 
-#, fuzzy
 msgid "Show Details"
-msgstr "詳細"
+msgstr "詳細を表示"
 
 msgid "Show Inactive Devices"
 msgstr "休止中のデバイスを表示する"
@@ -4315,9 +4297,8 @@ msgstr "題を表示する"
 msgid "Show Transfers"
 msgstr "中継先を表示"
 
-#, fuzzy
 msgid "Show Voice Message Button"
-msgstr "メッセージ送信ボタンを表示する"
+msgstr "音声メッセージボタンを表示"
 
 msgid "Show _Features"
 msgstr "特徴を表示 (_U)"
@@ -4338,9 +4319,8 @@ msgstr "絵文字の一覧を表示"
 msgid "Show a live preview to test your video source"
 msgstr "ビデオ入力のテストのためにライブビューを表示します"
 
-#, fuzzy
 msgid "Show all reactions"
-msgstr "すべての警告を表示"
+msgstr "すべてのリアクションを表示"
 
 msgid "Show all warnings"
 msgstr "すべての警告を表示"
@@ -4351,9 +4331,8 @@ msgstr "チャット一覧を表示"
 msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"
 
-#, fuzzy
 msgid "Show debug console"
-msgstr "XML コンソールを表示"
+msgstr "デバッグコンソールを表示"
 
 msgid "Show in Taskbar"
 msgstr "タスクバーに表示する"
@@ -4527,7 +4506,7 @@ msgstr ""
 "スを入力することもできます。"
 
 msgid "Start/Stop recording"
-msgstr ""
+msgstr "録音を開始/停止"
 
 msgid "Start/stop playback"
 msgstr "再生を開始/停止"
@@ -4876,7 +4855,7 @@ msgstr "これはあなたの XMPP アドレスです"
 
 #, python-format
 msgid "This message has been moderated%s."
-msgstr "このメッセージは %s さんによって制限されました。"
+msgstr "このメッセージは %s さんによって抑制されました。"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4979,6 +4958,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 msgid "Toggle participants list"
 msgstr "参加者一覧を表示/非表示"
@@ -5126,9 +5108,8 @@ msgstr "不明"
 msgid "Unknown command: %s"
 msgstr "未知のコマンド: %s"
 
-#, fuzzy
 msgid "Unknown error."
-msgstr "未知の SSL エラー: \"%s\""
+msgstr "未知のエラーです。"
 
 msgid "Unknown language"
 msgstr "未知の言語"
@@ -5191,9 +5172,8 @@ msgstr "ファイルをアップロード"
 msgid "Upload File…"
 msgstr "ファイルをアップロード…"
 
-#, fuzzy
 msgid "Upload could not be completed."
-msgstr "選択された画像を読み込めませんでした。"
+msgstr "アップロードを完了できませんでした。"
 
 msgid "Uploading Avatar Failed"
 msgstr "アバターのアップロードに失敗しました"
@@ -5322,20 +5302,17 @@ msgstr "傍聴者"
 msgid "Visual Notifications"
 msgstr "目への通知"
 
-#, fuzzy
 msgid "Voice Message"
-msgstr "メッセージを送信"
+msgstr "音声メッセージ"
 
-#, fuzzy
 msgid "Voice Messages are not available"
-msgstr "Windows ではビデオチャットは有効ではありません"
+msgstr "音声メッセージは利用できません"
 
 msgid "Waiting…"
 msgstr "待機中…"
 
-#, fuzzy
 msgid "Warning"
-msgstr "セキュリティ警告"
+msgstr "警告"
 
 msgid "Wav Sounds"
 msgstr "WAV サウンド"
@@ -5372,9 +5349,8 @@ msgstr ""
 msgid "Which server should I choose?"
 msgstr "どのサーバーを選びますか ?"
 
-#, fuzzy
 msgid "Why do you want to moderate this message?"
-msgstr "なぜこのメッセージを撤回したいのですか ?"
+msgstr "なぜこのメッセージを抑制したいのですか ?"
 
 msgid "Width of group chat roster in pixel"
 msgstr "談話室の名簿の幅(ピクセル)"
@@ -5394,9 +5370,8 @@ msgstr "仕事中"
 msgid "Workspace Settings"
 msgstr "作業空間の設定"
 
-#, fuzzy
 msgid "Workspace settings…"
-msgstr "作業空間の設定"
+msgstr "作業空間の設定…"
 
 msgid "Workspaces"
 msgstr "作業空間"
@@ -5440,9 +5415,8 @@ msgstr "あなた (%s) が談話室に参加しました"
 msgid "You are a visitor"
 msgstr "あなたは傍聴者です"
 
-#, fuzzy
 msgid "You are a visitor."
-msgstr "あなたは傍聴者です"
+msgstr "あなたは傍聴者です。"
 
 #, python-format
 msgid ""
@@ -5485,7 +5459,7 @@ msgid "You are offline."
 msgstr "オフラインです。"
 
 msgid "You are offline. Go online to send messages…"
-msgstr ""
+msgstr "オフラインです。メッセージを送るにはオンラインにしてください…"
 
 #, python-format
 msgid "You can join this group chat instead: %s"
@@ -5510,13 +5484,15 @@ msgid "You cannot synchronize with an account unless it is connected."
 msgstr "接続していないと、相手先に合わせることはできません。"
 
 msgid "You can’t send private messages to contacts if they are offline."
-msgstr ""
+msgstr "相手先がオフラインの場合、私信を送ることはできません。"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You do not have permissions for this directory.\n"
 "Error: %s."
-msgstr "このディレクトリにファイルを作成する権限がありません。"
+msgstr ""
+"このディレクトリにファイルを作成する権限がありません。\n"
+"エラー: %s"
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "このディレクトリにファイルを作成する権限がありません。"
@@ -5594,14 +5570,15 @@ msgstr "アカウントを無事に除去しました。"
 msgid "Your archiving preferences have successfully been saved."
 msgstr "書庫の設定を保存しました。"
 
-#, fuzzy
 msgid "Your chat history database has been migrated successfully."
-msgstr "アカウントを無事に除去しました。"
+msgstr "会話履歴データベースの移行に成功しました。"
 
 msgid ""
 "Your chat history is being migrated.\n"
 "This may take a while…"
 msgstr ""
+"会話履歴を移行しています。\n"
+"しばらくお待ちください…"
 
 msgid "Your message can not be sent until you are connected."
 msgstr "接続するまでメッセージは送信されません。"
@@ -5706,9 +5683,8 @@ msgstr "リンクをコピー (_C)"
 msgid "_Create"
 msgstr "作成 (_C)"
 
-#, fuzzy
 msgid "_Debug Console"
-msgstr "XML コンソール (_X)"
+msgstr "デバッグコンソール (_D)"
 
 msgid "_Decline"
 msgstr "拒否 (_D)"
@@ -5777,17 +5753,14 @@ msgstr "退出 (_L)"
 msgid "_Log In"
 msgstr "ログイン (_L)"
 
-#, fuzzy
 msgid "_Manage Accounts…"
-msgstr "アカウントを修正…(_M)"
+msgstr "アカウントを管理…(_M)"
 
-#, fuzzy
 msgid "_Manage Account…"
-msgstr "アカウントを追加…(_A)"
+msgstr "アカウントを管理…(_M)"
 
-#, fuzzy
 msgid "_Moderate"
-msgstr "司会あり"
+msgstr "抑制 (_M)"
 
 msgid "_Name"
 msgstr "名前 (_N)"
@@ -5872,10 +5845,6 @@ msgstr "送信 (_S)"
 msgid "_Show Certificate"
 msgstr "証明書を表示 (_S)"
 
-#, fuzzy
-msgid "_Show menu bar"
-msgstr "タスクバーに表示する"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "ファイル転送が完了したら通知する (_S)"
 
@@ -5895,6 +5864,10 @@ msgstr "通知をやめる (_S)"
 msgid "_Subscribe"
 msgstr "継読 (_S)"
 
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "メニューバーを表示"
+
 msgid "_Type"
 msgstr "種類 (_T)"
 
@@ -5913,6 +5886,7 @@ msgstr "表示 (_V)"
 msgid "_View Certificate"
 msgstr "証明書を表示 (_V)"
 
+#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Wiki (オンライン) (_W)"
 
@@ -6359,6 +6333,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim チーム"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "主ウィンドウのメニューを表示する/しない"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "有効"
@@ -6385,6 +6362,10 @@ msgstr "…またはここにドロップ"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "撤回…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "選択された安全性ラベル: %s"
 
 #, fuzzy
 #~ msgid "Send"

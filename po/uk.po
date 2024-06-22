@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -2463,9 +2463,6 @@ msgstr "Перемкнути відео сессію"
 msgid "Hide this menu"
 msgstr "Сховати це меню"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Домашня сторінка:"
@@ -4450,10 +4447,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Не вдалося знайти службу"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Попередження"
-
 msgid "Self signed certificate"
 msgstr "Сертифікат є самопідписаним"
 
@@ -5422,6 +5415,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Перемкнути відео сессію"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6437,10 +6433,6 @@ msgid "_Show Certificate"
 msgstr "Перегляд сертифікату..."
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Показувати транс_порти"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "П_овідомити мене про завершення передавання файлу"
 
@@ -6460,6 +6452,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Підписатися"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Показувати транс_порти"
 
 #, fuzzy
 msgid "_Type"
@@ -6971,6 +6967,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Повідомлення"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Попередження"
 
 #, fuzzy
 #~ msgid "Send"

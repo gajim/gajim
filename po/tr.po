@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -2675,9 +2675,6 @@ msgstr "Katılan"
 msgid "Hide this menu"
 msgstr "Menüyi gizle"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Ana Sayfa:</b>"
@@ -4635,10 +4632,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Hizmet bulunamadı"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "ben burdaysam"
-
 #, fuzzy
 msgid "Self signed certificate"
 msgstr "%(nickname)s Girdi"
@@ -5595,6 +5588,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Katılan"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6603,10 +6599,6 @@ msgid "_Show Certificate"
 msgstr "%(nickname)s Girdi"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "_XML Konsolu Göster"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
 
@@ -6627,6 +6619,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Üye yap"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "_Type"
@@ -7120,6 +7116,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "İletler"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "ben burdaysam"
 
 #, fuzzy
 #~ msgid "Send"

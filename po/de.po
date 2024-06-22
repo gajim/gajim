@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-05 19:17+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-20 23:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -2401,9 +2401,6 @@ msgstr "Chatliste verstecken"
 msgid "Hide this menu"
 msgstr "Dieses Menü ausblenden"
 
-msgid "Hide/show the main window menu"
-msgstr "Hauptfenster zeigen/verstecken"
-
 msgid "Home"
 msgstr "Privat"
 
@@ -4140,10 +4137,6 @@ msgstr "Wähle dein Videoaufnahmegerät (z.B. Webcam, Bildschirm teilen)"
 msgid "Selected image could not be loaded."
 msgstr "Das gewählte Bild konnte nicht geladen werden."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Gewähltes Vertraulichkeitslabel: %s"
-
 msgid "Self signed certificate"
 msgstr "Selbstsigniertes Zertifikat"
 
@@ -5035,6 +5028,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Chatliste ein-/ausblenden"
 
+msgid "Toggle Menu Bar"
+msgstr "Menüleiste zeigen/verstecken"
+
 msgid "Toggle participants list"
 msgstr "Teilnehmerliste zeigen/verstecken"
 
@@ -5924,9 +5920,6 @@ msgstr "_Senden"
 msgid "_Show Certificate"
 msgstr "Zertifikat _anzeigen"
 
-msgid "_Show menu bar"
-msgstr "Menülei_ste anzeigen"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "Be_nachrichtige mich, wenn eine Dateiübertragung abgeschlossen wurde"
 
@@ -5944,6 +5937,9 @@ msgstr "Nicht mehr _teilen"
 
 msgid "_Subscribe"
 msgstr "_Abonnieren"
+
+msgid "_Toggle Menu Bar"
+msgstr "Menülei_ste zeigen/verstecken"
 
 msgid "_Type"
 msgstr "_Typ"
@@ -6424,6 +6420,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim Team"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Hauptfenster zeigen/verstecken"
+
 #~ msgid "Inactive"
 #~ msgstr "Inaktiv"
 
@@ -6452,6 +6451,10 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Scan this QR code to add %s to your contact list."
 #~ msgstr "Scanne diesen QR-Code, um %s zu deiner Kontaktliste hinzuzufügen."
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Gewähltes Vertraulichkeitslabel: %s"
 
 #, fuzzy
 #~ msgid "Send"

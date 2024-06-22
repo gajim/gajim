@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-06 05:51+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-21 06:17+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -2376,9 +2376,6 @@ msgstr "Ukryj listę rozmów"
 msgid "Hide this menu"
 msgstr "Ukryj to menu"
 
-msgid "Hide/show the main window menu"
-msgstr "Ukryj/pokaż menu okna głównego"
-
 msgid "Home"
 msgstr "Dom"
 
@@ -4110,10 +4107,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Wybrany obraz nie mógł być załadowany."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Wybrana etykieta bezpieczeństwa: %s"
-
 msgid "Self signed certificate"
 msgstr "Certyfikat podpisany przez wystawcę"
 
@@ -4989,6 +4982,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Przełącz listę rozmów"
+
+msgid "Toggle Menu Bar"
+msgstr "Przełącz pasek menu"
 
 msgid "Toggle participants list"
 msgstr "Przełącz listę uczestników"
@@ -5872,9 +5868,6 @@ msgstr "_Wyślij"
 msgid "_Show Certificate"
 msgstr "_Pokaż certyfikat"
 
-msgid "_Show menu bar"
-msgstr "Pokaż pasek _menu"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "_Pokaż powiadomienie gdy przesyłanie pliku dobiegnie końca"
 
@@ -5892,6 +5885,9 @@ msgstr "_Przestać udostępniać"
 
 msgid "_Subscribe"
 msgstr "_Autoryzuj"
+
+msgid "_Toggle Menu Bar"
+msgstr "_Przełącz pasek menu"
 
 msgid "_Type"
 msgstr "_Typ"
@@ -6364,6 +6360,9 @@ msgstr "…lub upuść tutaj"
 #~ msgid "Gajim Team"
 #~ msgstr "Zespół Gajima"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Ukryj/pokaż menu okna głównego"
+
 #~ msgid "Inactive"
 #~ msgstr "Nieaktywny"
 
@@ -6389,6 +6388,10 @@ msgstr "…lub upuść tutaj"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Wycofaj…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Wybrana etykieta bezpieczeństwa: %s"
 
 #, fuzzy
 #~ msgid "Send"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -2667,9 +2667,6 @@ msgstr "Perzhiad-ez"
 msgid "Hide this menu"
 msgstr "Kuzhat ar meuziad-mañ"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Lec'hienn hiniennel:"
@@ -4629,10 +4626,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "N'eo ket bet kavet ar servij"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Argas %s"
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5588,6 +5581,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Perzhiad-ez"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6589,10 +6585,6 @@ msgid "_Show Certificate"
 msgstr "Anv-arveriad-ez direizh"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Dorioù"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Kelaouiñ ac'hanon p'eo echu un treuzkas"
 
@@ -6613,6 +6605,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Koumanantiñ"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Dorioù"
 
 #, fuzzy
 msgid "_Type"
@@ -7116,6 +7112,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Kemennadennoù"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Argas %s"
 
 #, fuzzy
 #~ msgid "Send"

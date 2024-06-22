@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -2493,9 +2493,6 @@ msgstr "Bate-papo de voz de alternância"
 msgid "Hide this menu"
 msgstr "Esconder este menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Página Inicial"
@@ -4456,10 +4453,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "O serviço não pode ser encontrado"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Segurança"
-
 msgid "Self signed certificate"
 msgstr "Certificado próprio"
 
@@ -5437,6 +5430,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Bate-papo de voz de alternância"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6421,10 +6417,6 @@ msgid "_Show Certificate"
 msgstr "Certificado próprio"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Exibir trans_portes"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Notificar-me quando a transmissão do arquivo terminar"
 
@@ -6443,6 +6435,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Inscrever"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Exibir trans_portes"
 
 msgid "_Type"
 msgstr "_Tipo"
@@ -6956,6 +6952,10 @@ msgstr ""
 
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unidade Organizacional (UA): "
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Segurança"
 
 #, fuzzy
 #~ msgid "Send"

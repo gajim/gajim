@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2024-05-31 21:52+0000\n"
 "Last-Translator: Serge Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -2378,9 +2378,6 @@ msgstr "Скрыть список чатов"
 msgid "Hide this menu"
 msgstr "Скрыть это меню"
 
-msgid "Hide/show the main window menu"
-msgstr "Скрыть/показать меню главного окна"
-
 msgid "Home"
 msgstr "Дом"
 
@@ -4111,10 +4108,6 @@ msgstr "Выберите видео устройство (веб-камера, �
 msgid "Selected image could not be loaded."
 msgstr "Выбранное изображение не может быть загружено."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Выбранная метка конфиденциальности: %s"
-
 msgid "Self signed certificate"
 msgstr "Сертификат подписан самим владельцем"
 
@@ -4985,6 +4978,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Переключить список чатов"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 msgid "Toggle participants list"
 msgstr "Переключение вида списка участников"
@@ -5868,9 +5864,6 @@ msgstr "_Отправить"
 msgid "_Show Certificate"
 msgstr "_Показать сертификат"
 
-msgid "_Show menu bar"
-msgstr "_Показать панель меню"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "_Показывать уведомление при успешной передаче файла"
 
@@ -5888,6 +5881,10 @@ msgstr "_Прекратить доступ"
 
 msgid "_Subscribe"
 msgstr "_Подписаться"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "_Показать панель меню"
 
 msgid "_Type"
 msgstr "_Тип"
@@ -5907,6 +5904,7 @@ msgstr "_Вид"
 msgid "_View Certificate"
 msgstr "_Просмотреть сертификат"
 
+#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "_Википедия (В сети)"
 
@@ -6346,6 +6344,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Gajim Team"
 #~ msgstr "Темы Gajim"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Скрыть/показать меню главного окна"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Активен"
@@ -6372,6 +6373,10 @@ msgstr "…или перетащите его сюда"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Отзыв…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Выбранная метка конфиденциальности: %s"
 
 #, fuzzy
 #~ msgid "Send"

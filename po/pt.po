@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -2439,9 +2439,6 @@ msgstr "Alternar Lista de Bate-papo"
 msgid "Hide this menu"
 msgstr "Ocultar este menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 msgid "Home"
 msgstr "Início"
 
@@ -4247,10 +4244,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "A imagem selecionada não pôde ser carregada."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Rótulo de segurança selecionado: %s"
-
 msgid "Self signed certificate"
 msgstr "Certificado autoassinado"
 
@@ -5162,6 +5155,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Alternar Lista de Bate-papo"
 
+msgid "Toggle Menu Bar"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Alternar lista de participantes"
 
@@ -6070,10 +6066,6 @@ msgstr "_Enviar"
 msgid "_Show Certificate"
 msgstr "_Exibir o Certificado"
 
-#, fuzzy
-msgid "_Show menu bar"
-msgstr "Mostrar na Barra de Tarefas"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "_Mostrar notificação quando a transferência do arquivo for concluída"
 
@@ -6091,6 +6083,10 @@ msgstr "_Parar Compartilhamento"
 
 msgid "_Subscribe"
 msgstr "_Subscrever"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Mostrar na Barra de Tarefas"
 
 msgid "_Type"
 msgstr "_Tipo"
@@ -6110,6 +6106,7 @@ msgstr "_Visualizar"
 msgid "_View Certificate"
 msgstr "_Visualizar Certificado"
 
+#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "_Wiki (Online)"
 
@@ -6586,6 +6583,10 @@ msgstr "…ou solte aqui"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "_Retrair"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Rótulo de segurança selecionado: %s"
 
 #, fuzzy
 #~ msgid "Send"

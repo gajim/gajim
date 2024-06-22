@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -2698,9 +2698,6 @@ msgstr "Sudionik"
 msgid "Hide this menu"
 msgstr "Sakrij ovaj izbornik"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Osobna Stranica:</b>"
@@ -4676,10 +4673,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Usluga nije pronađena"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Zabranjujem pristup %s"
-
 msgid "Self signed certificate"
 msgstr "Osobno potpisan certifikat"
 
@@ -5650,6 +5643,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Sudionik"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6659,10 +6655,6 @@ msgid "_Show Certificate"
 msgstr "Osobno potpisan certifikat"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Prikaži _Prijenose"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Obavijesti me kada se završi prijenos datoteka"
 
@@ -6682,6 +6674,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Pretplatiti se"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Prikaži _Prijenose"
 
 #, fuzzy
 msgid "_Type"
@@ -7185,6 +7181,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Poruke"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Zabranjujem pristup %s"
 
 #, fuzzy
 #~ msgid "Send"

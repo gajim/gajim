@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -2697,9 +2697,6 @@ msgstr "Učesnik"
 msgid "Hide this menu"
 msgstr "Sakrij ovaj meni"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Lična strana:</b>"
@@ -4672,10 +4669,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Usluga ne može biti nađena"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Zabranjujem %s"
-
 msgid "Self signed certificate"
 msgstr "Samopotpisani sertifikat"
 
@@ -5647,6 +5640,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Učesnik"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6655,10 +6651,6 @@ msgid "_Show Certificate"
 msgstr "Samopotpisani sertifikat"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Prikaži trans_porte"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Obavesti me kada se završi prenos datoteke"
 
@@ -6678,6 +6670,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Pretplati se"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Prikaži trans_porte"
 
 #, fuzzy
 msgid "_Type"
@@ -7177,6 +7173,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Poruke"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Zabranjujem %s"
 
 #, fuzzy
 #~ msgid "Send"

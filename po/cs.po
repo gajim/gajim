@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -2376,9 +2376,6 @@ msgstr "Schovat seznam konverzací"
 msgid "Hide this menu"
 msgstr "Skryje toto menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 msgid "Home"
 msgstr "Domov"
 
@@ -4124,10 +4121,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Vybraný soubor nebylo možné načíst."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Zvolená bezpečnostní známka: %s"
-
 msgid "Self signed certificate"
 msgstr "Sám sebou podepsaný certifikát"
 
@@ -4988,6 +4981,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Přepnout seznam konverzací"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 msgid "Toggle participants list"
 msgstr "Přepnout seznam účastníků"
@@ -5876,10 +5872,6 @@ msgstr "Ode_slat"
 msgid "_Show Certificate"
 msgstr "Zobrazit certifikát"
 
-#, fuzzy
-msgid "_Show menu bar"
-msgstr "Zobrazit na hlavním panelu"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "Upozornit při dokončení přenosu souboru"
 
@@ -5897,6 +5889,10 @@ msgstr "Přestat sdílet"
 
 msgid "_Subscribe"
 msgstr "_Žádat autorizaci"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Zobrazit na hlavním panelu"
 
 msgid "_Type"
 msgstr "Typ"
@@ -5916,6 +5912,7 @@ msgstr "Zobrazit"
 msgid "_View Certificate"
 msgstr "Zobrazit certifikát"
 
+#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Wiki (online)"
 
@@ -6427,6 +6424,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Odvolat…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Zvolená bezpečnostní známka: %s"
 
 #, fuzzy
 #~ msgid "Send"

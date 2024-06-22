@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-06 01:17+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-20 23:17+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -2408,9 +2408,6 @@ msgstr "Masquer la liste des discussions"
 msgid "Hide this menu"
 msgstr "Cacher ce menu"
 
-msgid "Hide/show the main window menu"
-msgstr "Cacher/montrer le fenêtre de menu principal"
-
 msgid "Home"
 msgstr "Domicile"
 
@@ -4156,10 +4153,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "L'image sélectionnée n'a pas pu être chargée."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Label de sécurité sélectionné : %s"
-
 msgid "Self signed certificate"
 msgstr "Certificat auto-signé"
 
@@ -5040,6 +5033,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Basculer l'affichage de la liste des discussions"
+
+msgid "Toggle Menu Bar"
+msgstr "Afficher/cacher la barre de menu"
 
 msgid "Toggle participants list"
 msgstr "Afficher/masquer la liste des participants"
@@ -5939,9 +5935,6 @@ msgstr "En_voyer"
 msgid "_Show Certificate"
 msgstr "Voir le _certificat"
 
-msgid "_Show menu bar"
-msgstr "_Afficher la barre de menu"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "Afficher une notification lorsque le tran_sfert de fichier est terminé"
 
@@ -5959,6 +5952,9 @@ msgstr "Ne plus _partager"
 
 msgid "_Subscribe"
 msgstr "_Ajouter"
+
+msgid "_Toggle Menu Bar"
+msgstr "_Afficher/cacher la barre de menu"
 
 msgid "_Type"
 msgstr "_Type"
@@ -6428,6 +6424,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Gajim Team"
 #~ msgstr "L'équipe Gajim"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Cacher/montrer le fenêtre de menu principal"
+
 #~ msgid "Inactive"
 #~ msgstr "Inactif"
 
@@ -6453,6 +6452,10 @@ msgstr "... ou bien déposez ici"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Rétracter…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Label de sécurité sélectionné : %s"
 
 #, fuzzy
 #~ msgid "Send"

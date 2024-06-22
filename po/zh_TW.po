@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -2685,9 +2685,6 @@ msgstr "切換視訊作業階段"
 msgid "Hide this menu"
 msgstr "隱藏本選單"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "首頁:"
@@ -4658,10 +4655,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "找不到該服務"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "將封禁 %s"
-
 msgid "Self signed certificate"
 msgstr "自簽名的證書"
 
@@ -5623,6 +5616,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "切換視訊作業階段"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6630,10 +6626,6 @@ msgid "_Show Certificate"
 msgstr "檢視憑證…"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "顯示代理(_P)"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "檔案傳輸完成時提醒我(_N)"
 
@@ -6653,6 +6645,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "訂閱(_S)"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "顯示代理(_P)"
 
 #, fuzzy
 msgid "_Type"
@@ -7154,6 +7150,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "訊息"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "將封禁 %s"
 
 #, fuzzy
 #~ msgid "Send"

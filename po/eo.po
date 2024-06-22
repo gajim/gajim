@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -2677,9 +2677,6 @@ msgstr "Partoprenanto"
 msgid "Hide this menu"
 msgstr "Kaŝi tiun ĉi menuon"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Hejmpaĝo:"
@@ -4651,10 +4648,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Neniu servo estas trovita"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Malpermesas %s"
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5620,6 +5613,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Partoprenanto"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6626,10 +6622,6 @@ msgid "_Show Certificate"
 msgstr "Malkorekta salutnomo"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Montri Trans_portilojn"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Avizi min kiam dosiero estas transdonita"
 
@@ -6650,6 +6642,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Aboni"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Montri Trans_portilojn"
 
 #, fuzzy
 msgid "_Type"
@@ -7147,6 +7143,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Mesaĝoj"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Malpermesas %s"
 
 #, fuzzy
 #~ msgid "Send"

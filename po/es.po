@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-05 10:17+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-21 15:17+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -1888,7 +1888,7 @@ msgid "Error Loading Image"
 msgstr "Error cargando imagen"
 
 msgid "Error in audio data stream."
-msgstr ""
+msgstr "Error en datos de audio."
 
 #, python-format
 msgid "Error message: %s"
@@ -2380,9 +2380,6 @@ msgstr "Ocultar lista de chat"
 msgid "Hide this menu"
 msgstr "Oculta este menú"
 
-msgid "Hide/show the main window menu"
-msgstr "Ocultar/mostrar el menú de la ventana principal"
-
 msgid "Home"
 msgstr "Casa"
 
@@ -2588,7 +2585,7 @@ msgid "Invitees"
 msgstr "Invitados"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
+msgstr "¿Está el micrófono conectado y accesible?"
 
 msgid "Issued by"
 msgstr "Emitido por"
@@ -4113,10 +4110,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "No se ha podido cargar la imagen seleccionada."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Etiquetas de seguridad seleccionadas: %s"
-
 msgid "Self signed certificate"
 msgstr "Certificado autofirmado"
 
@@ -4982,6 +4975,9 @@ msgstr ""
 
 msgid "Toggle Chat List"
 msgstr "Alternar lista de chat"
+
+msgid "Toggle Menu Bar"
+msgstr "Alternar barra de menú"
 
 msgid "Toggle participants list"
 msgstr "Alternar lista de participantes"
@@ -5862,9 +5858,6 @@ msgstr "_Enviar"
 msgid "_Show Certificate"
 msgstr "Mostrar certificado"
 
-msgid "_Show menu bar"
-msgstr "Mostrar barra de menú"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "Mostrar notificación cuando una transferencia finalice"
 
@@ -5882,6 +5875,9 @@ msgstr "Dejar de compartir"
 
 msgid "_Subscribe"
 msgstr "_Añadir"
+
+msgid "_Toggle Menu Bar"
+msgstr "Alternar barra de menú"
 
 msgid "_Type"
 msgstr "_Tipo"
@@ -6351,6 +6347,9 @@ msgstr "…o soltarla aqui"
 #~ msgid "Gajim Team"
 #~ msgstr "Equipo Gajim"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Ocultar/mostrar el menú de la ventana principal"
+
 #~ msgid "Inactive"
 #~ msgstr "Inactivo"
 
@@ -6376,6 +6375,10 @@ msgstr "…o soltarla aqui"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Retirar…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Etiquetas de seguridad seleccionadas: %s"
 
 #, fuzzy
 #~ msgid "Send"

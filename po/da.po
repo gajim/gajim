@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -2695,9 +2695,6 @@ msgstr "Deltager"
 msgid "Hide this menu"
 msgstr "Skjul denne menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Hjemmeside:</b>"
@@ -4668,10 +4665,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Tjenesten findes ikke"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Advarsel"
-
 msgid "Self signed certificate"
 msgstr "Selvsigneret certifikat"
 
@@ -5642,6 +5635,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Deltager"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6651,10 +6647,6 @@ msgid "_Show Certificate"
 msgstr "Selvsigneret certifikat"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Vis Trans_porter"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Påmind mig når en filoverførsel er færdig"
 
@@ -6674,6 +6666,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Abonner"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Vis Trans_porter"
 
 #, fuzzy
 msgid "_Type"
@@ -7171,6 +7167,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Beskeder"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Advarsel"
 
 #, fuzzy
 #~ msgid "Send"

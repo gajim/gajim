@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-06 05:51+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-21 08:17+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -2364,9 +2364,6 @@ msgstr "A beszélgetéslista elrejtése"
 msgid "Hide this menu"
 msgstr "E menü elrejtése"
 
-msgid "Hide/show the main window menu"
-msgstr "A főablak menüjének mutatása/elrejtése"
-
 msgid "Home"
 msgstr "Otthoni"
 
@@ -4085,10 +4082,6 @@ msgstr "A videobemeneti eszköz (pl. webkamera, képernyőfelvevő) kiválasztá
 msgid "Selected image could not be loaded."
 msgstr "A kiválasztott kép nem tölthető be."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "A kiválasztott biztonsági címke: %s"
-
 msgid "Self signed certificate"
 msgstr "Saját aláírású tanúsítvány"
 
@@ -4946,7 +4939,10 @@ msgstr ""
 "a címzett eszközét."
 
 msgid "Toggle Chat List"
-msgstr "Oldalsáv ki-/be"
+msgstr "Az oldalsáv mutatása/elrejtése"
+
+msgid "Toggle Menu Bar"
+msgstr "A menüsáv mutatása/elrejtése"
 
 msgid "Toggle participants list"
 msgstr "Résztvevők megjelenítése/elrejtése"
@@ -5826,9 +5822,6 @@ msgstr "_Küldés"
 msgid "_Show Certificate"
 msgstr "A tanú_sítvány részletei"
 
-msgid "_Show menu bar"
-msgstr "Menu_sáv megjelenítése"
-
 msgid "_Show notification when file transfer is complete"
 msgstr "Ér_tesítés a fájlátvitel befejezése után"
 
@@ -5846,6 +5839,9 @@ msgstr "_Megosztás kikapcsolása"
 
 msgid "_Subscribe"
 msgstr "_Feliratkozás"
+
+msgid "_Toggle Menu Bar"
+msgstr "_Menüsáv ki/be"
 
 msgid "_Type"
 msgstr "_Típus"
@@ -6318,6 +6314,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim Team"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "A főablak menüjének mutatása/elrejtése"
+
 #~ msgid "Inactive"
 #~ msgstr "Inaktív"
 
@@ -6343,6 +6342,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Visszavonás…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "A kiválasztott biztonsági címke: %s"
 
 #, fuzzy
 #~ msgid "Send"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2695,9 +2695,6 @@ msgstr "Учесник"
 msgid "Hide this menu"
 msgstr "Сакриј овај мени"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Лична страна:"
@@ -4668,10 +4665,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Услуга не може бити нађена"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Забрањујем %s"
-
 msgid "Self signed certificate"
 msgstr "Самопотписани сертификат"
 
@@ -5641,6 +5634,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Учесник"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6650,10 +6646,6 @@ msgid "_Show Certificate"
 msgstr "Самопотписани сертификат"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Прикажи транс_порте"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Обавести ме када се заврши пренос датотеке"
 
@@ -6673,6 +6665,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Претплати се"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Прикажи транс_порте"
 
 #, fuzzy
 msgid "_Type"
@@ -7172,6 +7168,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Поруке"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Забрањујем %s"
 
 #, fuzzy
 #~ msgid "Send"

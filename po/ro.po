@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-05-31 21:52+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
 "ro/>\n"
@@ -1898,7 +1898,7 @@ msgid "Error Loading Image"
 msgstr "Eroare la încărcarea imaginii"
 
 msgid "Error in audio data stream."
-msgstr ""
+msgstr "Eroare în fluxul de date audio."
 
 #, python-format
 msgid "Error message: %s"
@@ -2391,9 +2391,6 @@ msgstr "Ascundeți lista de chat"
 msgid "Hide this menu"
 msgstr "Ascundeți acest meniu"
 
-msgid "Hide/show the main window menu"
-msgstr "Ascundeți/afișează meniul ferestrei principale"
-
 msgid "Home"
 msgstr "Acasă"
 
@@ -2604,7 +2601,7 @@ msgid "Invitees"
 msgstr "Invitați"
 
 msgid "Is a microphone plugged in and accessible?"
-msgstr ""
+msgstr "Este un microfon conectat și accesibil?"
 
 msgid "Issued by"
 msgstr "Emis de"
@@ -3725,10 +3722,12 @@ msgid "Recognize your account by color"
 msgstr "Recunoașteți contul dumneavoastră după culoare"
 
 msgid "Record"
-msgstr ""
+msgstr "Înregistrare"
 
 msgid "Record Voice Message… (hold button to record directly)"
 msgstr ""
+"Înregistrare mesaj vocal... (țineți apăsat butonul pentru a înregistra "
+"direct)"
 
 msgid "Redirect"
 msgstr "Redirecționare"
@@ -4131,10 +4130,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Imaginea selectată nu a putut fi încărcată."
 
-#, python-format
-msgid "Selected security label: %s"
-msgstr "Eticheta de securitate selectată: %s"
-
 msgid "Self signed certificate"
 msgstr "Certificat cu semnătură proprie"
 
@@ -4338,7 +4333,6 @@ msgstr "Afișați Subiectul"
 msgid "Show Transfers"
 msgstr "Afișați transferurile"
 
-#, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Afișați butonul Trimite mesaj"
 
@@ -4552,7 +4546,7 @@ msgstr ""
 "uri de grup la nivel global. De asemenea, puteți introduce o adresă XMPP."
 
 msgid "Start/Stop recording"
-msgstr ""
+msgstr "Începeți/opriți înregistrarea"
 
 msgid "Start/stop playback"
 msgstr "Pornirea/oprirea redării"
@@ -5016,6 +5010,9 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
 
+msgid "Toggle Menu Bar"
+msgstr ""
+
 msgid "Toggle participants list"
 msgstr "Comutați lista participanților"
 
@@ -5355,20 +5352,17 @@ msgstr "Vizitatori"
 msgid "Visual Notifications"
 msgstr "Notificări vizuale"
 
-#, fuzzy
 msgid "Voice Message"
-msgstr "Trimiteți un mesaj"
+msgstr "Mesaj vocal"
 
-#, fuzzy
 msgid "Voice Messages are not available"
-msgstr "Apelurile video nu sunt disponibile pe Windows"
+msgstr "Mesajele vocale nu sunt disponibile"
 
 msgid "Waiting…"
 msgstr "Așteptând…"
 
-#, fuzzy
 msgid "Warning"
-msgstr "Avertisment de securitate"
+msgstr "Avertisment"
 
 msgid "Wav Sounds"
 msgstr "Sunete Wav"
@@ -5545,11 +5539,13 @@ msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 "Nu puteți trimite mesaje private contactelor dacă acestea sunt offline."
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You do not have permissions for this directory.\n"
 "Error: %s."
-msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
+msgstr ""
+"Nu aveți permisiuni pentru acest director.\n"
+"Eroare: %s."
 
 msgid "You do not have permissions to create files in this directory."
 msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
@@ -5813,13 +5809,11 @@ msgstr "_Plecați"
 msgid "_Log In"
 msgstr "_Autentificare"
 
-#, fuzzy
 msgid "_Manage Accounts…"
-msgstr "_Modifică conturile…"
+msgstr "_Gestionați conturile…"
 
-#, fuzzy
 msgid "_Manage Account…"
-msgstr "_Adăugați cont…"
+msgstr "_Gestionați contul…"
 
 msgid "_Moderate"
 msgstr "_Moderat"
@@ -5903,9 +5897,6 @@ msgstr "_Trimiteți"
 msgid "_Show Certificate"
 msgstr "_Arată certificatul"
 
-msgid "_Show menu bar"
-msgstr "_Afișează bara de meniu"
-
 msgid "_Show notification when file transfer is complete"
 msgstr ""
 "_Afișează o notificare atunci când transferul de fișiere este finalizat"
@@ -5925,6 +5916,10 @@ msgstr "_Opriți distribuirea"
 msgid "_Subscribe"
 msgstr "_Abonează-te"
 
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "_Afișează bara de meniu"
+
 msgid "_Type"
 msgstr "_Tip"
 
@@ -5943,6 +5938,7 @@ msgstr "_Vezi"
 msgid "_View Certificate"
 msgstr "_Vezi certificat"
 
+#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "_Wiki (online)"
 
@@ -6387,6 +6383,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Gajim Team"
 #~ msgstr "Echipa Gajim"
 
+#~ msgid "Hide/show the main window menu"
+#~ msgstr "Ascundeți/afișează meniul ferestrei principale"
+
 #~ msgid "Inactive"
 #~ msgstr "Inactiv"
 
@@ -6412,6 +6411,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Retrageți…"
+
+#, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Eticheta de securitate selectată: %s"
 
 #, fuzzy
 #~ msgid "Send"

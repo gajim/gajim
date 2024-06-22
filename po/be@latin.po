@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -2680,9 +2680,6 @@ msgstr "Udzielnik"
 msgid "Hide this menu"
 msgstr "Schavaj hetaje menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Chatniaja staronka:"
@@ -4654,10 +4651,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Niemahčyma znajści servis"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Blakavańnie %s"
-
 msgid "Self signed certificate"
 msgstr ""
 
@@ -5622,6 +5615,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Udzielnik"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6630,10 +6626,6 @@ msgid "_Show Certificate"
 msgstr "Niapravilnaje imia karystalnika"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Pakažy _transparty"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Nahadaj mnie ab zakančeńni pieradačy fajła"
 
@@ -6654,6 +6646,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Aŭtaryzuj"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Pakažy _transparty"
 
 #, fuzzy
 msgid "_Type"
@@ -7153,6 +7149,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Paviedamleńni"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Blakavańnie %s"
 
 #, fuzzy
 #~ msgid "Send"

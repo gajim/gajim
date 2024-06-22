@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
-"PO-Revision-Date: 2024-06-05 15:17+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"PO-Revision-Date: 2024-06-13 12:17+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
 ">\n"
@@ -29,11 +29,11 @@ msgstr " (Röstsamtal)"
 
 #, python-brace-format
 msgid " by {actor}"
-msgstr " by {actor}"
+msgstr " av {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr "%(contact)s avböjde din inbjudan till  %(chat)s"
+msgstr "%(contact)s avböjde din inbjudan till %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
@@ -71,7 +71,7 @@ msgstr "%(name)s (%(jid)s) vill ändra några kontakter i din kontaktlista."
 msgid "%(name)s cancelled the transfer (%(reason)s)"
 msgstr "%(name)s avbröt överföringen (%(reason)s)"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
 
@@ -138,7 +138,7 @@ msgstr "%s finns redan i din kontaktlista"
 
 #, python-format
 msgid "%s is calling"
-msgstr ""
+msgstr "%s ringer"
 
 #, python-format
 msgid "%s is not a valid loglevel"
@@ -149,56 +149,58 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+"%s är online med flera enheter.\n"
+"Välj den enhet du vill skicka filerna till."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s is typing…"
-msgstr "Skriver"
+msgstr "%s skriver…"
 
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s min sedan"
+msgstr[1] "%s min sedan"
 
 #, python-format
 msgid "%s participants are typing…"
-msgstr ""
+msgstr "%s deltagare skriver…"
 
 #, python-format
 msgid "%s s"
-msgstr ""
+msgstr "%s s"
 
 #, python-format
 msgid "%s stopped sharing their status"
-msgstr ""
+msgstr "%s slutade dela sin status"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s stopped the transfer"
-msgstr "Fjärrkontakten stoppade överföringen"
+msgstr "%s avbröt överföringen"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s wants to send you a file"
-msgstr "%s vill skicka en fil till dig."
+msgstr "%s vill skicka en fil till dig"
 
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
-msgstr ""
+msgstr "%sE"
 
 #, python-format
 msgctxt "positive latitude"
 msgid "%sN"
-msgstr ""
+msgstr "%sN"
 
 #, python-format
 msgctxt "negative latitude"
 msgid "%sS"
-msgstr ""
+msgstr "%sS"
 
 #, python-format
 msgctxt "negative longitude"
 msgid "%sW"
-msgstr ""
+msgstr "%sW"
 
 #. Translators:
 #. This should make the string KB/s,
@@ -211,67 +213,64 @@ msgstr "(%(filesize_unit)s/s)"
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
+"** Anknytning till {nick} har ställts in till {affiliation}{actor}{reason}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr "** Rollen för %(nick)s har ställts in till %(role)s av %(actor)s"
+msgstr "** Rollen för {nick} har satts till {role}{actor}{reason}"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr ""
+msgstr "** Din tillhörighet har ställts in på {affiliation}{actor}{reason}"
 
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr "** Rollen för %(nick)s har ställts in till %(role)s av %(actor)s"
+msgstr "** Din roll har satts till {role}{actor}{reason}"
 
 msgid "1 Day"
-msgstr ""
+msgstr "1 Dag"
 
 msgid "1 Month"
-msgstr ""
+msgstr "1 Månad"
 
 msgid "1 Week"
-msgstr ""
+msgstr "1 Vecka"
 
 msgid "1 Year"
-msgstr ""
+msgstr "1 År"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1 timme"
 
 msgid "2 Days"
-msgstr ""
+msgstr "2 Dagar"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2 Timmar"
 
 msgid "3 Months"
-msgstr ""
+msgstr "3 Månader"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 Minuter"
 
 msgid "6 Months"
-msgstr ""
+msgstr "6 Månader"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 Timmar"
 
-#, fuzzy
 msgid ": Affiliation changed"
-msgstr "Anknytning: "
+msgstr ": Tillhörighet ändrad"
 
-#, fuzzy
 msgid ": Group chat configuration changed to members-only"
-msgstr "rumskonfigurationen har ändrats till members-only"
+msgstr ": Gruppchattkonfigurationen ändrad till endast medlemmar"
 
-#, fuzzy
 msgid "<Description>"
-msgstr "Beskrivning"
+msgstr "<Beskrivning>"
 
-#, fuzzy
 msgid "<Plugin Name>"
-msgstr "Registreringen misslyckades"
+msgstr "<Namn för plugin>"
 
 #, python-format
 msgid ""
@@ -281,53 +280,42 @@ msgstr ""
 "<b>\"%(title)s\"</b> av <i>%(artist)s</i>\n"
 "från <i>%(source)s</i>"
 
-#, fuzzy
 msgid "<b>#</b>"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>#</b>"
 
-#, fuzzy
 msgid "<b>*</b>"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>*</b>"
 
-#, fuzzy
 msgid "<b>0</b>"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>0</b>"
 
-#, fuzzy
 msgid "<b>1</b>"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>1</b>"
 
-#, fuzzy
 msgid "<b>2</b> abc"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>2</b> abc"
 
-#, fuzzy
 msgid "<b>3</b> def"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>3</b> def"
 
-#, fuzzy
 msgid "<b>4</b> ghi"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>4</b> ghi"
 
-#, fuzzy
 msgid "<b>5</b> jkl"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>5</b> jkl"
 
-#, fuzzy
 msgid "<b>6</b> mno"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>6</b> mno"
 
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>7</b> pqrs"
 
-#, fuzzy
 msgid "<b>8</b> tuv"
-msgstr "<b>Typsnitt</b>"
+msgstr "<b>8</b> tuv"
 
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>9</b> wxyz"
 
-#, fuzzy
 msgid ""
 "<b>XMPP Address</b>\n"
 "&lt;user@domain/resource&gt; (only that resource matches)\n"
@@ -336,26 +324,24 @@ msgid ""
 "&lt;domain&gt; (the domain itself matches, as does any user@domain or domain/"
 "resource)\n"
 msgstr ""
-"Kan vara en av följande:\n"
-"1. användare@domän/resurs (endast den resursen matchar).\n"
-"2. användare@domän (alla resurser matchar).\n"
-"3. domän/resurs (endast den resursen matchar).\n"
-"4. domän (domänen i sig matchar, så gör även alla användare@domän,\n"
-"domän/resurs eller adress som innehåller en underdomän)."
+"<b>XMPP-adress</b>\n"
+"&lt;användare@domän/resurs&gt; (endast den resursen matchar)\n"
+"&lt;användare@domän&gt; (någon resurs matchar)\n"
+"&lt;domän/resurs&gt; (bara den resursen matchar)\n"
+"&lt;domän&gt; (domänen i sig matchar, liksom alla användare@domän eller "
+"domän/resurs)\n"
 
 msgid "<empty>"
-msgstr ""
+msgstr "<tom>"
 
-#, fuzzy
 msgid "<error>"
-msgstr "Fel."
+msgstr "<fel>"
 
 msgid "A Feature Comparison of Various Servers"
-msgstr ""
+msgstr "En funktionsjämförelse av olika servrar"
 
-#, fuzzy
 msgid "A Group Chat needs at least one Owner"
-msgstr "?Gruppchatt kontaktroll:Ingen"
+msgstr "En gruppchatt behöver minst en ägare"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -365,135 +351,115 @@ msgstr ""
 "skriva över den."
 
 msgid "A fully-featured XMPP chat client"
-msgstr ""
+msgstr "En fullfjädrad XMPP-chattklient"
 
 msgid "A list of active, completed and stopped file transfers"
 msgstr "En lista över aktiva, färdigställda och stoppade filöverföringar"
 
-#, fuzzy
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
 "chats."
-msgstr "En semikolonseparerad lista av ord som blir upplysta i gruppchatt."
-
-#, fuzzy
-msgid "A new group chat has been created"
-msgstr "Ett nytt rum har skapats"
-
-#, fuzzy
-msgid "A restart may be required for some settings to take effect"
 msgstr ""
-"<b>OBSERVERA:</b> Du bör starta om Gajim för att vissa inställningar ska bli "
-"aktiva"
+"En lista med ord (separerade med semikolon) som kommer att markeras i "
+"gruppchattar."
+
+msgid "A new group chat has been created"
+msgstr "En ny gruppchatt har skapats"
+
+msgid "A restart may be required for some settings to take effect"
+msgstr "En omstart kan behövas för att vissa inställningar ska träda i kraft"
 
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "En inställning som inte är relaterad till sekretess har ändrats"
 
-#, fuzzy, python-format
+#, python-format
 msgid "ALSA: %s"
-msgstr "Storlek: %s"
+msgstr "ALSA: %s"
 
 msgid "API Preferences. Possible values: \"http\", \"iq\""
-msgstr ""
+msgstr "API-inställningar. Möjliga värden: \"http\", \"iq\""
 
-#, fuzzy
 msgctxt "User status"
 msgid "A_way"
-msgstr "Fr_ånvarande"
+msgstr "F_rånvarande"
 
 msgid "Abort"
-msgstr ""
+msgstr "Avbryt"
 
 msgctxt "File transfer state"
 msgid "Aborted"
-msgstr ""
+msgstr "Avbruten"
 
 msgid "Abuse"
-msgstr ""
+msgstr "Missbruk"
 
-#, fuzzy
 msgid "Accept"
 msgstr "Acceptera"
 
-#, fuzzy
 msgid "Accept all Contact Requests"
-msgstr "Förfrågan om Filöverföring"
+msgstr "Acceptera alla kontaktförfrågningar"
 
 msgid "Account"
 msgstr "Konto"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Account %s is still connected"
-msgstr "Konto \"%s\" är anslutet till servern"
+msgstr "Kontot %s är fortfarande anslutet"
 
-#, fuzzy
 msgid "Account Added"
-msgstr "Konto"
+msgstr "Konto har lagts till"
 
-#, fuzzy
 msgid "Account Name..."
-msgstr "Konto"
+msgstr "Kontonamn..."
 
-#, fuzzy
 msgid "Account Removal Failed"
-msgstr "Inget konto tillgängligt"
+msgstr "Det gick inte att ta bort kontot"
 
-#, fuzzy
 msgid "Account Removed"
-msgstr "Konto"
+msgstr "Konto borttaget"
 
-#, fuzzy
 msgid "Account Settings…"
-msgstr "Registreringen misslyckades"
+msgstr "Kontoinställningar…"
 
-#, fuzzy
 msgid "Account Wizard"
-msgstr "Känsloikoner inaktiverade"
+msgstr "Kontoguiden"
 
-#, fuzzy
 msgid "Account disabled"
-msgstr "Känsloikoner inaktiverade"
+msgstr "Konto inaktiverat"
 
-#, fuzzy
 msgid "Account exists already"
-msgstr "Känsloikoner inaktiverade"
+msgstr "Kontot finns redan"
 
 msgid "Account has been added successfully"
 msgstr "Kontot har lagts till"
 
-#, fuzzy
 msgid "Account has to be connected"
-msgstr "Konto \"%s\" är anslutet till servern"
+msgstr "Kontot måste vara anslutet"
 
-#, fuzzy
 msgid "Account is being created"
-msgstr "Konto \"%s\" är anslutet till servern"
+msgstr "Kontot skapas"
 
-#, fuzzy
 msgid "Account is not connected."
-msgstr "Konto \"%s\" är anslutet till servern"
+msgstr "Kontot är inte anslutet."
 
-#, fuzzy, python-format
+#, python-format
 msgid "Account: %s"
-msgstr "Konton"
+msgstr "Konto: %s"
 
 msgid "Accounts"
 msgstr "Konton"
 
 msgid "Action for left-clicking a preview"
-msgstr ""
+msgstr "Åtgärd när du vänsterklickar på en förhandsgranskning"
 
-#, fuzzy
 msgid "Action on Close"
-msgstr "Gajim"
+msgstr "Åtgärd vid stängning"
 
-#, fuzzy
 msgid "Action when closing Gajim’s window"
-msgstr "Stäng alltid Gajim"
+msgstr "Åtgärd när du stänger Gajims fönster"
 
-#, fuzzy
 msgid "Activate"
-msgstr "Aktiverad"
+msgstr "Aktivera"
 
 msgid "Activated"
 msgstr "Aktiverad"
@@ -504,178 +470,143 @@ msgstr "Aktiv"
 msgid "Add"
 msgstr "Lägg till"
 
-#, fuzzy
 msgid "Add Account"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till konto"
 
-#, fuzzy
 msgid "Add Contact"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till kontakt"
 
-#, fuzzy
 msgid "Add Contact…"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till kontakt…"
 
-#, fuzzy
 msgid "Add Entry"
-msgstr "Proxyserver:"
+msgstr "Lägg till post"
 
-#, fuzzy
 msgid "Add Files…"
-msgstr "Fil: "
+msgstr "Lägg till filer…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Redigera _grupper"
+msgstr "Lägg till grupp…"
 
-#, fuzzy
 msgid "Add Proxy"
-msgstr "Proxyserver:"
+msgstr "Lägg till proxy"
 
-#, fuzzy
 msgid "Add Reaction…"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till reaktion…"
 
-#, fuzzy
 msgid "Add Setting"
-msgstr "Registreringen misslyckades"
+msgstr "Lägg till inställning"
 
 msgid "Add Workspace"
-msgstr ""
+msgstr "Lägg till arbetsyta"
 
-#, fuzzy
 msgid "Add _Contact…"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till _Kontakt…"
 
 msgid "Add a checkmark to received messages"
-msgstr ""
+msgstr "Lägg till en bock för mottagna meddelanden"
 
 msgid "Add a name and color for your account"
-msgstr ""
+msgstr "Lägg till ett namn och en färg för ditt konto"
 
 msgid "Add a setting you would like to change"
-msgstr ""
+msgstr "Lägg till en inställning som du vill ändra"
 
-#, fuzzy
 msgid "Add new Theme"
-msgstr "Skapa ny post"
+msgstr "Lägg till nytt tema"
 
-#, fuzzy
 msgid "Add new line"
-msgstr "Skapa ny post"
+msgstr "Lägg till en ny rad"
 
-#, fuzzy
 msgid "Add reaction"
-msgstr "Registreringen misslyckades"
+msgstr "Lägg till reaktion"
 
-#, fuzzy
 msgid "Add some details…"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till några detaljer…"
 
-#, fuzzy
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr ""
-"Lägg till detta certifikat till listan över pålitliga certifikat.\n"
-"SHA1-fingeravtryck för certifikatet:\n"
+msgstr "Lägg till det här certifikatet i listan över _betrodda certifikat"
 
-#, fuzzy
 msgid "Add to Contact List…"
-msgstr "_Lägg till kontakt..."
+msgstr "Lägg till i kontaktlistan…"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Added %s contact"
 msgid_plural "Added %s contacts"
-msgstr[0] "_Lägg till kontakt"
-msgstr[1] "_Lägg till kontakt"
+msgstr[0] "Lade till %s kontakt"
+msgstr[1] "Lade till %s kontakter"
 
 msgid "Address"
 msgstr "Adress"
 
-#, fuzzy
 msgctxt "Profile"
 msgid "Address"
 msgstr "Adress"
 
-#, fuzzy
 msgid "Address does not belong to a group chat server"
-msgstr "Det här är ingen gruppchatt"
+msgstr "Adressen tillhör inte en gruppchattserver"
 
-#, fuzzy
 msgid "Adjust to Status"
-msgstr "_Justera efter status"
+msgstr "Justera till Status"
 
-#, fuzzy
 msgid "Adjust to status"
-msgstr "_Justera efter status"
+msgstr "Justera till status"
 
-#, fuzzy
 msgid "Admin"
-msgstr "_Admin"
+msgstr "Admin"
 
-#, fuzzy
 msgid "Administration"
-msgstr "Administratör"
+msgstr "Administrering"
 
-#, fuzzy
 msgctxt "Group chat contact affiliation"
 msgid "Administrator"
 msgstr "Administratör"
 
-#, fuzzy
 msgctxt "Group chat contact affiliation"
 msgid "Administrators"
-msgstr "Administratör"
+msgstr "Administratörer"
 
 msgid "Advanced"
 msgstr "Avancerat"
 
-#, fuzzy
 msgid "Advanced Configuration Editor (ACE)"
-msgstr "Avancerad konfigurationsredigerare"
+msgstr "Avancerad konfigurationsredigerare (\"ACE\")"
 
-#, fuzzy
 msgid "Advanced Configuration Editor… "
-msgstr "Avancerad konfigurationsredigerare"
+msgstr "Avancerad konfigurationsredigerare... "
 
-#, fuzzy
 msgid "Advanced Settings"
-msgstr "Avancerade åtgärder"
+msgstr "Avancerade inställningar"
 
-#, fuzzy
 msgid "Advanced settings"
-msgstr "Avancerade åtgärder"
+msgstr "Avancerade inställningar"
 
-#, fuzzy
 msgid "Affiliation"
-msgstr "Anknytning: "
+msgstr "Anknytning"
 
-#, fuzzy
 msgid "Affiliations"
-msgstr "Anknytning: "
+msgstr "Tillhörigheter"
 
 msgid "Algorithm"
-msgstr ""
+msgstr "Algoritm"
 
 msgid "All"
 msgstr "Alla"
 
-#, fuzzy
 msgid "All Accounts"
-msgstr "Konton"
+msgstr "Alla konton"
 
-#, fuzzy
 msgid "All Chat States"
-msgstr "Alla statusar"
+msgstr "Alla chattillstånd"
 
-#, fuzzy
 msgid "All chat and group chat windows will be closed."
-msgstr "Alla chatts- och gruppchattsfönster kommer stängas. Vill du fortsätta?"
+msgstr "Alla chatt- och gruppchattfönster kommer att stängas."
 
 msgid "All files"
 msgstr "Alla filer"
 
 msgid "All other group chat participants can see your XMPP address"
-msgstr ""
+msgstr "Alla deltagare i gruppchatten kan se din XMPP-adress"
 
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
@@ -2688,9 +2619,6 @@ msgstr "Deltagare"
 msgid "Hide this menu"
 msgstr "Dölj denna meny"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Webbplats:</b>"
@@ -4661,10 +4589,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Denna tjänst kunde inte hittas"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Bannlyser %s"
-
 msgid "Self signed certificate"
 msgstr "Självsignerat certifikat"
 
@@ -5629,6 +5553,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Deltagare"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6642,10 +6569,6 @@ msgid "_Show Certificate"
 msgstr "Självsignerat certifikat"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Visa _transporter"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Meddela mig när en filöverföring är färdig"
 
@@ -6665,6 +6588,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Prenumerera"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Visa _transporter"
 
 #, fuzzy
 msgid "_Type"
@@ -7170,6 +7097,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Meddelanden"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Bannlyser %s"
 
 #, fuzzy
 #~ msgid "Send"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -2686,9 +2686,6 @@ msgstr "Participant"
 msgid "Hide this menu"
 msgstr "Hide this menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "Homepage:"
@@ -4659,10 +4656,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "The service could not be found"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Banning %s"
-
 msgid "Self signed certificate"
 msgstr "Self signed certificate"
 
@@ -5633,6 +5626,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Participant"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6643,10 +6639,6 @@ msgid "_Show Certificate"
 msgstr "Self signed certificate"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Show Trans_ports"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Notify me when a file transfer is complete"
 
@@ -6666,6 +6658,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Subscribe"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Show Trans_ports"
 
 #, fuzzy
 msgid "_Type"
@@ -7164,6 +7160,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Banning %s"
 
 #, fuzzy
 #~ msgid "Send"

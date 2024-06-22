@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -2688,9 +2688,6 @@ msgstr "Prepnúť video reláciu"
 msgid "Hide this menu"
 msgstr "Skryť toto menu"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "<b>Domovská stránka:</b>"
@@ -4655,10 +4652,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "Služba nebola nájdená"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "Zakazujem %s"
-
 msgid "Self signed certificate"
 msgstr "Certifikát podpísaný sám sebou"
 
@@ -5632,6 +5625,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "Prepnúť video reláciu"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6640,10 +6636,6 @@ msgid "_Show Certificate"
 msgstr "Certifikát podpísaný sám sebou"
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "Zobraziť trans_porty"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "_Upozorniť ma, keď sa dokončí prenos"
 
@@ -6663,6 +6655,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Zapísať"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "Zobraziť trans_porty"
 
 #, fuzzy
 msgid "_Type"
@@ -7162,6 +7158,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Správy"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "Zakazujem %s"
 
 #, fuzzy
 #~ msgid "Send"

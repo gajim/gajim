@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-05 17:59+0000\n"
+"POT-Creation-Date: 2024-06-20 21:18+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -2758,9 +2758,6 @@ msgstr "הפעלת סשן וידאו"
 msgid "Hide this menu"
 msgstr "הסתר תפריט זה"
 
-msgid "Hide/show the main window menu"
-msgstr ""
-
 #, fuzzy
 msgid "Home"
 msgstr "עמוד בית:"
@@ -4777,10 +4774,6 @@ msgstr ""
 msgid "Selected image could not be loaded."
 msgstr "השירות לא היה יכול להימצא"
 
-#, fuzzy, python-format
-msgid "Selected security label: %s"
-msgstr "אזהרה: %s"
-
 msgid "Self signed certificate"
 msgstr "תעודה חתומה באופן עצמי"
 
@@ -5769,6 +5762,9 @@ msgstr ""
 #, fuzzy
 msgid "Toggle Chat List"
 msgstr "הפעלת סשן וידאו"
+
+msgid "Toggle Menu Bar"
+msgstr ""
 
 #, fuzzy
 msgid "Toggle participants list"
@@ -6806,10 +6802,6 @@ msgid "_Show Certificate"
 msgstr "הצג תעודה..."
 
 #, fuzzy
-msgid "_Show menu bar"
-msgstr "הצג מו_בילים"
-
-#, fuzzy
 msgid "_Show notification when file transfer is complete"
 msgstr "הו_דע לי כאשר העברת קובץ הושלמה"
 
@@ -6829,6 +6821,10 @@ msgstr ""
 
 msgid "_Subscribe"
 msgstr "הי_רשם"
+
+#, fuzzy
+msgid "_Toggle Menu Bar"
+msgstr "הצג מו_בילים"
 
 #, fuzzy
 msgid "_Type"
@@ -7331,6 +7327,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "הודעות"
+
+#, fuzzy, python-format
+#~ msgid "Selected security label: %s"
+#~ msgstr "אזהרה: %s"
 
 #, fuzzy
 #~ msgid "Send"
