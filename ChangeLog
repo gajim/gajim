@@ -1,3 +1,33 @@
+Gajim 1.9.1 (22 Jun 2024)
+
+  New
+
+  * Menu: Add main menu button (#11811)
+
+  Improvements
+
+  * ChatFunctionPage: Show MUC address when displaying error
+  * SecurityLabels: Allow correction of labels
+  * Use different icon for context menu on contact list page
+  * Unify wording for 'Toggle Menu Bar'
+  * ConversationView: Use better method for scrolling to row (#11094, #11840)
+
+  Change
+
+  * Raise nbxmpp version
+
+  Bug Fixes
+
+  * Reactions: Show timestamp in correct timezone (#11875)
+  * Search: Don’t search messages of disabled accounts (#11876)
+  * DebugConsole: Fix filtering stanzas when combining accounts and types
+  * VoiceMessageRecorderButton: Honor visibility setting on startup (#11872)
+  * SecurityLabels: Fix merging messages with same security label
+  * ChatActionProcessor: Make handling selected action more robust (#11871)
+  * Settings: Store account jid in dedicated setting (#11864)
+  * Migration: Don’t fail on invalid JIDs (#11862)
+  * HistorySync: Make full sync option work again
+
 Gajim 1.9.0 (10 Jun 2024)
 
   New
