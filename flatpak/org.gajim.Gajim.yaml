@@ -143,23 +143,23 @@ modules:
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-10.2.0-py3-none-any.whl
+      - pip3 install more_itertools-10.3.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.2.0-py3-none-any.whl
-        sha256: 686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684
+        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.3.0-py3-none-any.whl
+        sha256: ea6a02e24a9161e51faad17a8782b92a0df82c12c1c8886fec7f0c3fa1a1b320
 
   # keyring dependency
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-7.1.0-py3-none-any.whl
+      - pip3 install importlib_metadata-7.2.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-7.1.0-py3-none-any.whl
-        sha256: 30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-7.2.0-py3-none-any.whl
+        sha256: 04e4aad329b8b948a5711d394fa8759cb80f009225441b4f2a02bd4d8e5f426c
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -267,11 +267,11 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.2.1-py3-none-any.whl
+      - pip3 install urllib3-2.2.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.2.1-py3-none-any.whl
-        sha256: 450b20ec296a467077128bff42b73080516e71b56ff59a60a02bef2232c4fa9d
+        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.2.2-py3-none-any.whl
+        sha256: a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472
 
   - name: python3-certifi
     buildsystem: simple
@@ -285,11 +285,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.5.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.6.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.5.1-py2.py3-none-any.whl
-        sha256: 1f87acdce4a43a523ae5aa21a3fc37522d73ebd9ec04b1dbf01aa3d173852def
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.6.0-py2.py3-none-any.whl
+        sha256: 422b91cb49378b97e7e8d0e8d5a1069df23689d45262b86f54988a7db264e874
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -312,11 +312,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.30-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.31-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.30-py3-none-any.whl
-        sha256: 7108d569d3990c71e26a42f60474b4c02c8586c4681af5fd67e51a044fdea86a
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.31-py3-none-any.whl
+        sha256: 69f3e3c08867a8e4856e92d7afb618b95cdee18e0bc1647b77599722c9a28911
 
   - name: python3-emoji
     buildsystem: simple
@@ -388,11 +388,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-5.0.0-py3-none-any.whl
+      - pip3 install nbxmpp-5.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-5.0.0-py3-none-any.whl
-        sha256: cd4fd6a9c1f606435207f1644e3c8f3ae79773bafc43d413115a75e8b63c3dc5
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-5.0.1-py3-none-any.whl
+        sha256: 2940a7daac02a9777d2559a5deadbcf0db131ea430ce632baaa25cdb73cd0e1c
 
   - name: gajim
     buildsystem: simple
