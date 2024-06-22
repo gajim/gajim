@@ -8,6 +8,7 @@ import binascii
 import hashlib
 import logging
 import mimetypes
+import sys
 from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import unquote
@@ -199,7 +200,9 @@ def guess_mime_type(file_path: Path | str,
     # The mimetypes module maps extensions to mime types
     # it does no guessing based on file content
     mime_type, _ = mimetypes.guess_type(file_path)
-    if mime_type is None:
+    if mime_type is None and not sys.platform == 'win32':
+        # Does not work on Windows see
+        # https://gitlab.gnome.org/GNOME/glib/-/issues/3399
         # Gio does also guess based on file content
         extension, _ = Gio.content_type_guess(file_path, data)
         mime_type = Gio.content_type_get_mime_type(extension)
