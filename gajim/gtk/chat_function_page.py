@@ -222,7 +222,11 @@ class ChatFunctionPage(Gtk.Box):
                 is_bookmark = self._client.get_module('Bookmarks').is_bookmark(
                     self._contact.jid)
                 self._forget_button.set_visible(is_bookmark)
-            self._widget = ErrorWidget(mode=mode, error_text=data)
+
+            error_text = str(self._contact.jid)
+            if data is not None:
+                error_text = f'{error_text}\n{data}'
+            self._widget = ErrorWidget(mode=mode, error_text=error_text)
 
         assert self._widget is not None
         self._content_box.add(self._widget)
