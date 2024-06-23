@@ -133,6 +133,7 @@ class MessageRowActions(Gtk.EventBox):
         self._reply_button.set_visible(self._get_reply_visible())
 
     def switch_contact(self, contact: ChatContactT) -> None:
+        self._message_row = None
         self._contact = contact
 
     def _get_reply_visible(self) -> bool:
