@@ -595,9 +595,7 @@ class MessageArchiveStorage(AlchemyStorage):
     ) -> Message | None:
         '''
         Load the last correctable message of a conversation by message_id.
-        Conditions: max 5 min old
         '''
-        # TODO this could match multiple rows, better is to search with the pk
 
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
@@ -612,6 +610,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.id == message_id,
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
+                Message.direction == ChatDirection.OUTGOING,
                 Message.timestamp > min_time,
                 Message.state == MessageState.ACKNOWLEDGED,
             )
