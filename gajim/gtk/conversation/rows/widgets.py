@@ -203,7 +203,6 @@ class MessageRowActions(Gtk.EventBox):
             event.type == Gdk.EventType.LEAVE_NOTIFY
             and event.detail != Gdk.NotifyType.INFERIOR
         ):
-
             self._has_cursor = False
             self._timeout_id = None
 
@@ -212,8 +211,8 @@ class MessageRowActions(Gtk.EventBox):
                 # but we don't want to hide MessageRowActions
                 return True
 
-            assert self._message_row is not None
-            self._message_row.get_style_context().remove_class('conversation-row-hover')
+            if self._message_row is not None:
+                self._message_row.get_style_context().remove_class('conversation-row-hover')
 
             self.hide()
 
