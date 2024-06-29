@@ -457,6 +457,11 @@ class ChatStack(Gtk.Stack, EventHelper):
         else:
             text = ''
 
+        if isinstance(contact, GroupchatContact):
+            resource = data.resource
+        else:
+            resource = None
+
         app.ged.raise_event(
             events.Notification(account=contact.account,
                                 jid=contact.jid,
@@ -464,7 +469,9 @@ class ChatStack(Gtk.Stack, EventHelper):
                                 sub_type=msg_type,
                                 title=title,
                                 text=text,
-                                sound=sound))
+                                sound=sound,
+                                resource=resource)
+        )
 
     def _connect_actions(self) -> None:
         actions = [

@@ -49,6 +49,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
 
+from gajim.gtk.avatar import merge_avatars
 from gajim.gtk.builder import get_builder
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
@@ -199,7 +200,7 @@ class PopupNotification(Gtk.Window):
 
         if event.type == 'incoming-message':
             assert event.jid is not None
-            pixbuf = _get_pixbuf_icon(event.account, event.jid)
+            pixbuf = _get_pixbuf_icon(event.account, event.jid, event.resource)
             self._ui.image.set_from_pixbuf(pixbuf)
         else:
             icon_name = self._get_icon_name(event)
@@ -346,7 +347,8 @@ class WindowsToastNotification(NotificationBackend):
     def _get_toast_image(self, event: events.Notification) -> ToastImage:
         if event.type == 'incoming-message':
             assert event.jid is not None
-            surface = _get_surface_for_notification(event.account, event.jid)
+            surface = _get_surface_for_notification(
+                event.account, event.jid, event.resource)
             return ToastImage(_get_path_for_icon(surface))
 
         if event.icon_name is not None:
@@ -514,9 +516,9 @@ class Linux(NotificationBackend):
             assert event.jid is not None
 
             if app.is_flatpak():
-                return _get_bytes_icon(event.account, event.jid)
+                return _get_bytes_icon(event.account, event.jid, event.resource)
 
-            return _get_file_icon(event.account, event.jid)
+            return _get_file_icon(event.account, event.jid, event.resource)
 
         if event.icon_name is not None:
             return Gio.ThemedIcon.new(event.icon_name)
@@ -538,21 +540,37 @@ class Linux(NotificationBackend):
         return ','.join(map(str, details))
 
 
+def _get_participant_surface(
+        gc_contact: GroupchatContact,
+        resource: str) -> cairo.ImageSurface:
+    size = AvatarSize.NOTIFICATION
+    muc_avatar = gc_contact.get_avatar(size, 1)
+    participant_avatar = gc_contact.get_resource(resource).get_avatar(
+        size, 1, add_show=False)
+
+    return merge_avatars(muc_avatar, participant_avatar)
+
+
 def _get_surface_for_notification(account: str,
-                                  jid: JID | str) -> cairo.ImageSurface:
+                                  jid: JID | str,
+                                  resource: str | None) -> cairo.ImageSurface:
     size = AvatarSize.NOTIFICATION
     client = app.get_client(account)
     contact = client.get_module('Contacts').get_contact(jid)
     if isinstance(contact, GroupchatContact):
-        return contact.get_avatar(size, 1)
+        if resource:
+            return _get_participant_surface(contact, resource)
+        else:
+            return contact.get_avatar(size, 1)
 
     assert not isinstance(contact, ResourceContact)
     return contact.get_avatar(size, 1, add_show=False)
 
 
-def _get_pixbuf_icon(account: str, jid: JID | str) -> GdkPixbuf.Pixbuf:
+def _get_pixbuf_icon(
+        account: str, jid: JID | str, resource: str | None) -> GdkPixbuf.Pixbuf:
     size = AvatarSize.NOTIFICATION
-    surface = _get_surface_for_notification(account, jid)
+    surface = _get_surface_for_notification(account, jid, resource)
     pixbuf = Gdk.pixbuf_get_from_surface(surface,
                                          0,
                                          0,
@@ -562,14 +580,16 @@ def _get_pixbuf_icon(account: str, jid: JID | str) -> GdkPixbuf.Pixbuf:
     return pixbuf
 
 
-def _get_bytes_icon(account: str, jid: JID | str) -> Gio.BytesIcon:
-    pixbuf = _get_pixbuf_icon(account, jid)
+def _get_bytes_icon(
+        account: str, jid: JID | str, resource: str | None) -> Gio.BytesIcon:
+    pixbuf = _get_pixbuf_icon(account, jid, resource)
     _, data = pixbuf.save_to_bufferv('png')
     return Gio.BytesIcon(bytes=GLib.Bytes.new(data))
 
 
-def _get_file_icon(account: str, jid: JID | str) -> Gio.FileIcon:
-    surface = _get_surface_for_notification(account, jid)
+def _get_file_icon(
+        account: str, jid: JID | str, resource: str | None) -> Gio.FileIcon:
+    surface = _get_surface_for_notification(account, jid, resource)
     path = _get_path_for_icon(surface)
     return Gio.FileIcon(file=Gio.File.new_for_path(str(path)))
 

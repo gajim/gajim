@@ -224,6 +224,45 @@ def add_status_to_avatar(surface: cairo.ImageSurface,
     return context.get_target()
 
 
+def merge_avatars(
+    avatar1: cairo.ImageSurface,
+    avatar2: cairo.ImageSurface,
+) -> cairo.ImageSurface:
+    '''
+    Includes avatar2 in the bottom right corner of avatar1
+    '''
+    new_surface = cairo.ImageSurface(
+        cairo.Format.ARGB32,
+        avatar1.get_width(),
+        avatar1.get_height(),
+    )
+    context = cairo.Context(new_surface)
+    context.set_source_surface(avatar1, 0, 0)
+    context.paint()
+
+    context.scale(0.5, 0.5)
+    context.set_source_rgb(255, 255, 255)
+    context.set_operator(cairo.Operator.CLEAR)
+    context.arc(
+        avatar1.get_width() * 1.5,
+        avatar1.get_height() * 1.5,
+        avatar1.get_width() / CIRCLE_FILL_RATIO / 2,
+        0,
+        2 * pi,
+    )
+    context.fill()
+
+    context = cairo.Context(new_surface)
+    context.scale(0.5, 0.5)
+    context.set_source_surface(
+        avatar2,
+        avatar1.get_width(),
+        avatar1.get_height(),
+    )
+    context.paint()
+    return new_surface
+
+
 @functools.lru_cache(maxsize=128)
 def get_show_circle(show: str | types.PresenceShowT,
                     size: int,

@@ -108,6 +108,7 @@ class Notification(ApplicationEvent):
     sub_type: str | None = None
     sound: str | None = None
     icon_name: str | None = None
+    resource: str | None = None
 
 
 @dataclass
