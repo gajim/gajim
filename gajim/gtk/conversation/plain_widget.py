@@ -100,7 +100,6 @@ class MessageLabel(Gtk.Label):
     def print_text_with_styling(self, block: PlainBlock) -> None:
         text = self._build_link_markup(block.text, block.uris)
         self.set_markup(text)
-
         if len(self.get_text()) > MAX_MESSAGE_LENGTH:
             # Limit message styling processing
             return
@@ -108,7 +107,9 @@ class MessageLabel(Gtk.Label):
         self.set_attributes(make_pango_attributes(block))
 
         stripped = text.strip()
-        if emoji.purely_emoji(stripped):
+        # https://github.com/carpedm20/emoji/issues/300
+        # purely_emoji() return True for the empty string
+        if stripped and emoji.purely_emoji(stripped):
             emoji_count = emoji.emoji_count(stripped)
             if emoji_count == 1:
                 classname = 'gajim-single-emoji-msg'
