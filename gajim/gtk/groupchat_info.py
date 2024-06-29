@@ -8,7 +8,6 @@ import logging
 import time
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.namespaces import Namespace
@@ -151,8 +150,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.author_label.set_visible(has_author)
 
         has_subject = bool(muc_subject.text)
-        subject = GLib.markup_escape_text(muc_subject.text)
-        self._ui.subject.set_markup(make_href_markup(subject))
+        self._ui.subject.set_markup(make_href_markup(muc_subject.text))
         self._ui.subject.set_visible(has_subject)
         self._ui.subject_label.set_visible(has_subject)
 
@@ -187,7 +185,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
         # Set description
         has_desc = bool(info.muc_description)
-        self._ui.description.set_text(info.muc_description or '')
+        self._ui.description.set_markup(make_href_markup(info.muc_description))
         self._ui.description.set_visible(has_desc)
         self._ui.description_label.set_visible(has_desc)
 

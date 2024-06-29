@@ -652,10 +652,15 @@ def get_thumbnail_size(pixbuf: GdkPixbuf.Pixbuf, size: int) -> tuple[int, int]:
     return image_width, image_height
 
 
-def make_href_markup(string: str) -> str:
+def make_href_markup(string: str | None) -> str:
+    if not string:
+        return ''
+
     url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
     assert isinstance(url_color, str)
     color = convert_rgb_to_hex(url_color)
+
+    string = GLib.markup_escape_text(string)
 
     def _to_href(match: Match[str]) -> str:
         url = match.group()

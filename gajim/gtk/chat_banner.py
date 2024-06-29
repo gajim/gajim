@@ -37,6 +37,7 @@ from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import make_href_markup
 
 
 class ChatBanner(Gtk.Box, EventHelper):
@@ -304,7 +305,7 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._ui.name_label.set_tooltip_text(tooltip_text)
 
-    def _get_muc_description_text(self) -> str:
+    def _get_muc_description_text(self) -> str | None:
         contact = self._contact
         assert isinstance(contact, GroupchatContact)
 
@@ -312,8 +313,8 @@ class ChatBanner(Gtk.Box, EventHelper):
         if not typing or not app.settings.get('show_chatstate_in_banner'):
             disco_info = app.storage.cache.get_last_disco_info(contact.jid)
             if disco_info is None:
-                return ''
-            return disco_info.muc_description or ''
+                return None
+            return disco_info.muc_description
 
         composers = tuple(c.name for c in typing)
         n = len(composers)
@@ -333,7 +334,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         else:
             assert not isinstance(contact, GroupchatContact)
             text = contact.status or ''
-        self._ui.description_label.set_text(text)
+        self._ui.description_label.set_markup(make_href_markup(text))
         self._ui.description_label.set_visible(bool(text))
 
     def _update_account_badge(self) -> None:
