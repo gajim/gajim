@@ -48,6 +48,7 @@ class MessageRowActions(Gtk.EventBox):
             self,
             halign=Gtk.Align.END,
             valign=Gtk.Align.START,
+            margin_start=40,
             margin_end=40,
             no_show_all=True,
         )
