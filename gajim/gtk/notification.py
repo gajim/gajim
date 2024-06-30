@@ -24,6 +24,7 @@ import logging
 import platform
 import sys
 import textwrap
+import winreg
 from pathlib import Path
 
 import cairo
@@ -67,6 +68,7 @@ if sys.platform == 'win32' or TYPE_CHECKING:
     from windows_toasts import ToastImagePosition
 
 MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
+WINDOWS_TOAST_NOTIFIER_AUMID = 'Gajim.ToastNotification'
 
 log = logging.getLogger('gajim.gtk.notification')
 
@@ -285,7 +287,30 @@ class PopupNotification(Gtk.Window):
 class WindowsToastNotification(NotificationBackend):
     def __init__(self):
         NotificationBackend.__init__(self)
-        self._toaster = InteractableWindowsToaster(applicationText='Gajim')
+        self._register_notifier_aumid()
+
+        self._toaster = InteractableWindowsToaster(
+            applicationText='Gajim',
+            notifierAUMID=WINDOWS_TOAST_NOTIFIER_AUMID
+        )
+
+    def _register_notifier_aumid(self) -> None:
+        '''Register an AUMID for Gajim's toast notifications.
+        This allows notifications issued by Gajim to have the right icon and title.
+        Code taken from: https://github.com/DatGuy1/Windows-Toasts/blob/main/scripts/register_hkey_aumid.py
+        '''
+        key_path = f'SOFTWARE\\Classes\\AppUserModelId\\{WINDOWS_TOAST_NOTIFIER_AUMID}'
+
+        winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
+        with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, key_path) as master_key:
+            winreg.SetValueEx(master_key, 'DisplayName', 0, winreg.REG_SZ, 'Gajim')
+            # winreg.SetValueEx(
+            #     master_key,
+            #     'IconUri',
+            #     0,
+            #     winreg.REG_SZ,
+            #     str(icon_path.resolve())
+            # )
 
     def _send(self, event: events.Notification) -> None:
         toast = Toast()
