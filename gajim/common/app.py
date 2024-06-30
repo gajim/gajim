@@ -155,6 +155,10 @@ def is_portable() -> bool:
     return gajim.IS_PORTABLE
 
 
+def is_ms_store() -> bool:
+    return gajim.IS_MS_STORE
+
+
 def is_display(display: Display) -> bool:
     # XWayland reports as Display X11, so try with env var
     is_wayland = os.environ.get('XDG_SESSION_TYPE') == 'wayland'

@@ -296,6 +296,10 @@ class CoreApplication(ged.EventHelper):
         if not app.settings.get('check_for_update'):
             return
 
+        if sys.platform == 'win32' and app.is_ms_store():
+            # Gajim updates are handled by MS Store directly
+            return
+
         now = datetime.now()
         last_check = app.settings.get('last_update_check')
         if not last_check:

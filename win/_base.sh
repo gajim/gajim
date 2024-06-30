@@ -109,6 +109,7 @@ qrcode
 css_parser
 sentry-sdk
 emoji
+winrt-Windows.ApplicationModel
 winrt-Windows.Foundation
 winrt-Windows.UI
 winrt-Windows.UI.ViewManagement
