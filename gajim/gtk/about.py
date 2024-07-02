@@ -18,6 +18,7 @@ from gajim.common.helpers import get_gobject_version
 from gajim.common.helpers import get_soup_version
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
+from gajim.common.util.app import get_extended_app_version
 
 from gajim.gtk.util import get_gtk_version
 
@@ -27,7 +28,7 @@ class AboutDialog(Gtk.AboutDialog):
         Gtk.AboutDialog.__init__(self)
         self.set_transient_for(app.window)
         self.set_name('Gajim')
-        self.set_version(app.version)
+        self.set_version(get_extended_app_version())
         self.set_copyright('Copyright © 2003-2024 Gajim Team')
         self.set_license_type(Gtk.License.GPL_3_0_ONLY)
         self.set_website('https://gajim.org/')
