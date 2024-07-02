@@ -117,6 +117,10 @@ class MessageRow(BaseRow):
     def has_receipt(self) -> bool:
         return self._has_receipt
 
+    @property
+    def is_merged(self) -> bool:
+        return self._merged
+
     def refresh(self, *, complete: bool = True) -> None:
         original_message = app.storage.archive.get_message_with_pk(
             self.orig_pk)
