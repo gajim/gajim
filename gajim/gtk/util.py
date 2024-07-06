@@ -38,7 +38,6 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import Display
 from gajim.common.const import LOCATION_DATA
-from gajim.common.const import StyleAttr
 from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.helpers import format_idle_time
 from gajim.common.helpers import URL_REGEX
@@ -656,18 +655,13 @@ def make_href_markup(string: str | None) -> str:
     if not string:
         return ''
 
-    url_color = app.css_config.get_value('.gajim-url', StyleAttr.COLOR)
-    assert isinstance(url_color, str)
-    color = convert_rgb_to_hex(url_color)
-
     string = GLib.markup_escape_text(string)
 
     def _to_href(match: Match[str]) -> str:
         url = match.group()
         if '://' not in url:
-            url = 'https://' + url
-        return (f'<a href="{url}"><span foreground="{color}">'
-                f'{match.group()}</span></a>')
+            url = f'https://{url}'
+        return f'<a href="{url}">{match.group()}</a>'
 
     return URL_REGEX.sub(_to_href, string)
 

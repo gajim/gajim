@@ -45,10 +45,6 @@ CSS_STYLE_OPTIONS: list[StyleOption] = [
                 '.gajim-conversation-text',
                 StyleAttr.COLOR),
 
-    StyleOption(_('Conversation: URL Color'),
-                '.gajim-url',
-                StyleAttr.COLOR),
-
     StyleOption(_('Conversation: Nickname Color (Incoming)'),
                 '.gajim-incoming-nickname',
                 StyleAttr.COLOR),
