@@ -131,8 +131,16 @@ class MessageRowActions(Gtk.EventBox):
         self.set_no_show_all(False)
         self.show_all()
 
+        message_row_width = self._message_row.get_allocated_width()
         reactions_visible = self._get_reactions_visible()
+
         for button in self._reaction_buttons:
+            if (isinstance(button, QuickReactionButton) and reactions_visible and
+                    message_row_width < 600):
+                # Don't show QuickReactionButtons on narrow screens
+                button.set_visible(False)
+                continue
+
             button.set_visible(reactions_visible)
 
         self._reply_button.set_visible(self._get_reply_visible())
