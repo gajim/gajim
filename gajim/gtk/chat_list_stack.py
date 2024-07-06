@@ -293,24 +293,25 @@ class ChatListStack(Gtk.Stack, EventHelper):
         us = contact.get_self()
         assert us is not None
         affiliation = us.affiliation
-        text = _('If you close this chat, you will leave "%s".') % contact.name
+        text = _('By closing this chat, you will leave "%s".') % contact.name
         if Namespace.REGISTER in muc_disco.features and not affiliation.is_none:
             buttons.append(
                 DialogButton.make(
                     'Delete',
-                    text=_('_Leave permanently'),
+                    text=_('Leave _Permanently'),
                     callback=partial(_leave, unregister=True),
                 )
             )
 
-            text += _('\nIf you choose to leave it permanently, you may need '
-                      'to be invited to be able to join this group chat again')
-            if affiliation.is_member:
-                text += '.'
-            elif affiliation.is_admin:
-                text += _(', and you will lose your administrator affiliation.')
+            text += '\n'
+            text += _('You may need an invite to join this group chat again, '
+                      'if you choose to leave it permanently.')
+            if affiliation.is_admin:
+                text += '\n'
+                text += _('Additionally, you will lose your administrator affiliation.')
             elif affiliation.is_owner:
-                text += _(', and you will lose your owner affiliation.')
+                text += '\n'
+                text += _('Additionally, you will lose your owner affiliation.')
 
         ConfirmationCheckDialog(
             _('Leave Group Chat'),
