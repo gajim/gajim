@@ -42,6 +42,7 @@ from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.helpers import get_default_muc_config
 from gajim.common.helpers import get_group_chat_nick
+from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
 from gajim.common.modules.contacts import GroupchatContact
@@ -346,7 +347,8 @@ class MUC(BaseModule):
 
     def leave(self,
               room_jid: JID,
-              reason: str | None = None
+              reason: str | None = None,
+              unregister: bool = False,
               ) -> None:
         self._log.info('Leave MUC: %s', room_jid)
 
@@ -372,6 +374,23 @@ class MUC(BaseModule):
         room = self._get_contact(room_jid)
         room.set_not_joined()
         room.notify('room-left')
+
+        if not unregister:
+            return
+
+        contact = self._con.get_module('Contacts').get_contact(room_jid)
+        assert isinstance(contact, GroupchatContact)
+        self._con.get_module('Register').unregister(
+            jid=contact.jid,
+            callback=self._unregister_callback,
+        )
+
+    def _unregister_callback(self, task: Task) -> None:
+        try:
+            task.finish()
+        except StanzaError as error:
+            self._log.error('Error while unregistering from MUC: %s',
+                            to_user_string(error))
 
     def abort_join(self, room_jid: JID) -> None:
         self._remove_rejoin_timeout(room_jid)

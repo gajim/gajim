@@ -333,7 +333,8 @@ class ChatPage(Gtk.Box):
                          _chat_list: ChatList,
                          account: str,
                          jid: JID,
-                         type_: str
+                         type_: str,
+                         unregister: bool,
                          ) -> None:
 
         if self._chat_control.is_loaded(account, jid):
@@ -341,7 +342,7 @@ class ChatPage(Gtk.Box):
 
         if type_ == 'groupchat' and app.account_is_connected(account):
             client = app.get_client(account)
-            client.get_module('MUC').leave(jid)
+            client.get_module('MUC').leave(jid, unregister=unregister)
 
     def remove_chats_for_account(self, account: str) -> None:
         chat_list = self._chat_list_stack.get_current_chat_list()

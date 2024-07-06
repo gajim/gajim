@@ -6,11 +6,14 @@ from __future__ import annotations
 
 from typing import cast
 
+from functools import partial
+
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
+from nbxmpp import Namespace
 
 from gajim.common import app
 from gajim.common import events
@@ -41,7 +44,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
                             ()),
         'chat-removed': (GObject.SignalFlags.RUN_LAST,
                          None,
-                         (str, object, str)),
+                         (str, object, str, bool)),
     }
 
     def __init__(self,
@@ -252,15 +255,19 @@ class ChatListStack(Gtk.Stack, EventHelper):
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
 
-        def _leave(not_ask_again: bool) -> None:
+        def _leave(not_ask_again: bool, unregister: bool = False) -> None:
             if not_ask_again:
                 app.settings.set('confirm_close_muc', False)
-            _remove()
+            _remove(unregister)
 
-        def _remove() -> None:
+        def _remove(unregister: bool = False) -> None:
             chat_list.remove_chat(account, jid, emit_unread=False)
             self.store_open_chats(workspace_id)
-            self.emit('chat-removed', account, jid, type_)
+            self.emit('chat-removed',
+                      account,
+                      jid,
+                      type_,
+                      unregister)
 
         if type_ != 'groupchat' or not app.settings.get('confirm_close_muc'):
             _remove()
@@ -275,16 +282,42 @@ class ChatListStack(Gtk.Stack, EventHelper):
             _remove()
             return
 
+        buttons = [
+            DialogButton.make('Cancel'),
+            DialogButton.make(
+                'Accept', text=_('_Leave'), callback=_leave),
+        ]
+
+        muc_disco = contact.get_disco()
+        assert muc_disco is not None
+        us = contact.get_self()
+        assert us is not None
+        affiliation = us.affiliation
+        text = _('If you close this chat, you will leave "%s".') % contact.name
+        if Namespace.REGISTER in muc_disco.features and not affiliation.is_none:
+            buttons.append(
+                DialogButton.make(
+                    'Delete',
+                    text=_('_Leave permanently'),
+                    callback=partial(_leave, unregister=True),
+                )
+            )
+
+            text += _('\nIf you choose to leave it permanently, you may need '
+                      'to be invited to be able to join this group chat again')
+            if affiliation.is_member:
+                text += '.'
+            elif affiliation.is_admin:
+                text += _(', and you will lose your administrator affiliation.')
+            elif affiliation.is_owner:
+                text += _(', and you will lose your owner affiliation.')
+
         ConfirmationCheckDialog(
             _('Leave Group Chat'),
             _('Are you sure you want to leave this group chat?'),
-            _('If you close this chat, you will leave '
-              '"%s".') % contact.name,
+            text,
             _('_Do not ask me again'),
-            [DialogButton.make('Cancel'),
-             DialogButton.make('Accept',
-                               text=_('_Leave'),
-                               callback=_leave)],
+            buttons,
             transient_for=app.window).show()
 
     def remove_chats_for_account(self, account: str) -> None:
