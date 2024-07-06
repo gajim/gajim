@@ -303,11 +303,12 @@ class WindowsToastNotification(NotificationBackend):
         key_path = f'SOFTWARE\\Classes\\AppUserModelId\\{WINDOWS_TOAST_NOTIFIER_AUMID}'
 
         image_path = (
-            Path(sys.executable).parent
+            Path(sys.executable).parent.parent
             / 'share'
             / 'icons'
             / 'hicolor'
             / '96x96'
+            / 'apps'
             / 'org.gajim.Gajim.png'
         )
         winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
