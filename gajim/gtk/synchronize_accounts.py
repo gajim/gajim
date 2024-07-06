@@ -31,6 +31,10 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         self.set_transient_for(get_app_window('AccountsWindow'))
 
         self.account = account
+
+        self._ui = get_builder('synchronize_accounts.ui')
+        self.add(self._ui.stack)
+
         if not app.account_is_available(account):
             self._ui.connection_warning_label.show()
             self._ui.select_contacts_button.set_sensitive(False)
@@ -42,8 +46,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         self._remote_account = None
         self._remote_client = None
 
-        self._ui = get_builder('synchronize_accounts.ui')
-        self.add(self._ui.stack)
+
 
         # Accounts
         model = Gtk.ListStore(str, str, bool)
