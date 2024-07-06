@@ -454,7 +454,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                               self_contact,
                                               contact)
 
-        popover = GajimPopover(menu, relative_to=self, event=event)
+        popover = GajimPopover(menu, relative_to=self._roster, event=event)
         popover.popup()
 
     def _on_muc_state_changed(self,
