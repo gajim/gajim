@@ -41,9 +41,6 @@ from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
 from gajim.gtk.video_preview import VideoPreview
 
-# if app.is_installed('GSPELL'):
-#     from gi.repository import Gspell  # pylint: disable=ungrouped-imports
-
 log = logging.getLogger('gajim.gtk.preferences')
 
 
