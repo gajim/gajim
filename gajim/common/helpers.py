@@ -709,6 +709,12 @@ def get_account_proxy(account: str, fallback=True) -> ProxyData | None:
 
 
 def get_proxy(proxy_name: str) -> ProxyData | None:
+    if proxy_name == 'no-proxy':
+        return ProxyData(type='direct',
+                         host='',
+                         username=None,
+                         password=None)
+
     try:
         settings = app.settings.get_proxy_settings(proxy_name)
     except ValueError:

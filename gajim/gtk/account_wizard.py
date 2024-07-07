@@ -829,12 +829,13 @@ class AdvancedSettings(Page):
         app.app.activate_action('manage-proxies', None)
 
     def update_proxy_list(self) -> None:
-        model = Gtk.ListStore(str)
+        model = Gtk.ListStore(str, str)
         self._ui.proxies_combobox.set_model(model)
+        model.append(['', _('System')])
+        model.append(['no-proxy', _('No Proxy')])
         proxies = app.settings.get_proxies()
-        proxies.insert(0, _('No Proxy'))
         for proxy in proxies:
-            model.append([proxy])
+            model.append([proxy, proxy])
         self._ui.proxies_combobox.set_active(0)
 
     def get_proxy(self) -> str:

@@ -917,7 +917,9 @@ class Miscellaneous(PreferenceBox):
 
     @staticmethod
     def _get_proxies() -> dict[str, str]:
-        return {proxy: proxy for proxy in app.settings.get_proxies()}
+        proxies = {proxy: proxy for proxy in app.settings.get_proxies()}
+        proxies['no-proxy'] = _('No Proxy')
+        return proxies
 
     @staticmethod
     def _on_proxy_edit(*args: Any) -> None:
