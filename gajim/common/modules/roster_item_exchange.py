@@ -32,7 +32,8 @@ class RosterItemExchange(BaseModule):
                           ns=Namespace.ROSTERX),
             StanzaHandler(name='message',
                           callback=self.received_item,
-                          ns=Namespace.ROSTERX),
+                          ns=Namespace.ROSTERX,
+                          priority=48),
         ]
 
     def received_item(self,
@@ -82,7 +83,7 @@ class RosterItemExchange(BaseModule):
             exchange_items_list[jid] = [name, groups]
 
         if not exchange_items_list:
-            raise nbxmpp.NodeProcessed
+            return
 
         self._log.info('Items: %s', exchange_items_list)
 
@@ -91,8 +92,6 @@ class RosterItemExchange(BaseModule):
             jid=properties.jid,
             exchange_items_list=exchange_items_list,
             action=action))
-
-        raise nbxmpp.NodeProcessed
 
     def send_contacts(self,
                       contacts: list[types.ChatContactT],
