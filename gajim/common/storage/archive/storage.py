@@ -870,11 +870,11 @@ class MessageArchiveStorage(AlchemyStorage):
     @timeit
     def get_recent_muc_nicks(
         self, session: Session, account: str, jid: JID
-    ) -> set[str]:
+    ) -> list[str]:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        recent = datetime.now(timezone.utc) - timedelta(days=90)
+        recent = datetime.now(timezone.utc) - timedelta(days=30)
 
         stmt = (
             select(Message.resource)
@@ -886,10 +886,11 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.resource.isnot(None),
                 Message.correction_id.is_(None),
             )
+            .order_by(sa.desc(Message.timestamp))
         )
 
         self._explain(session, stmt)
-        return set(session.scalars(stmt))
+        return list(session.scalars(stmt))
 
     @with_session
     @timeit

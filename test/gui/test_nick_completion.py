@@ -10,10 +10,12 @@ class Test(unittest.TestCase):
 
     def test_generate_suggestions(self):
         participant_names = [
-            'aaaa',
-            'xaaaz',
-            'xxx',
-            'xxxxz'
+            'Hugo',
+            'Herbert',
+            'Robert',
+            'Daisy',
+            'xavier',
+            '7user',
         ]
 
         participants: list[MagicMock] = []
@@ -26,7 +28,7 @@ class Test(unittest.TestCase):
 
         app.storage.archive = MagicMock()
         app.storage.archive.get_recent_muc_nicks = MagicMock(
-            return_value=['fooo'])
+            return_value=['Daisy', 'Robert'])
 
         gen = GroupChatNickCompletion()
         contact = MagicMock()
@@ -34,13 +36,13 @@ class Test(unittest.TestCase):
 
         gen.switch_contact(contact)
 
-        r = gen._generate_suggestions(prefix='x')
-        self.assertEqual(r, ['xaaaz', 'xxx', 'xxxxz'])
+        r = gen._generate_suggestions(prefix='h')  # type: ignore
+        self.assertEqual(r, ['Herbert', 'Hugo'])
 
-        r = gen._generate_suggestions(prefix='')
-        self.assertEqual(r, ['fooo', 'aaaa', 'xaaaz', 'xxx', 'xxxxz'])
+        r = gen._generate_suggestions(prefix='')  # type: ignore
+        self.assertEqual(r, ['Daisy', 'Robert', '7user', 'Herbert', 'Hugo', 'xavier'])
 
-        r = gen._generate_suggestions(prefix='m')
+        r = gen._generate_suggestions(prefix='m')  # type: ignore
         self.assertEqual(r, [])
 
 
