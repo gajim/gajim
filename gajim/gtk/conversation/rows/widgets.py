@@ -118,10 +118,11 @@ class MessageRowActions(Gtk.EventBox):
         if y_coord < self_height:
             y_coord = self_height
 
-        # Subtract some space to let MessageRowActions 'flow' above the row
+        # Subtract some space to let MessageRowActions 'flow' above the row,
+        # but make sure to make offset smaller than row height.
         offset = 12
         if self._message_row.is_merged:
-            offset = 28
+            offset = min(28, self_height - 6)
 
         adjusted_y_coord = y_coord - offset
         if adjusted_y_coord < 0:
