@@ -48,6 +48,12 @@
 - [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
 - [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
 
+#### For Voice Messages
+
+- [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
+- [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
+- [gst-plugins-good](https://gitlab.freedesktop.org/gstreamer/gst-plugins-good)
+
 ### Build Requirements
 
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
