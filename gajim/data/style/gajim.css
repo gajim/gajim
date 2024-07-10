@@ -425,6 +425,16 @@ infobar.error > revealer > box {
     color: @insensitive_fg_color;
 }
 
+/* Groupchat Roster */
+.groupchat-roster *:hover {
+	background-color: @theme_bg_color;
+}
+
+.groupchat-roster *:selected {
+	color: @theme_fg_color;
+	background-color: @theme_bg_color;
+}
+
 /* ChatList */
 .chatlist {
     background: transparent;
@@ -435,6 +445,9 @@ infobar.error > revealer > box {
     margin: 0 10px 3px 10px;
     border: 2px solid transparent;
     border-radius: 6px;
+}
+.chatlist-row:hover{
+	background-color: @theme_bg_color;
 }
 .chatlist-row:active,
 .chatlist-row:selected:active {
