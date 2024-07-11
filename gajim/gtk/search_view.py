@@ -57,6 +57,8 @@ class SearchView(Gtk.Box):
         self._first_date: dt.datetime | None = None
         self._last_date: dt.datetime | None = None
 
+        self._last_search_string = ''
+
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
         self.add(self._ui.search_box)
@@ -109,9 +111,16 @@ class SearchView(Gtk.Box):
         self._ui.results_scrolled.get_vadjustment().set_value(0)
 
     def _on_search(self, entry: Gtk.Entry) -> None:
+        text = entry.get_text()
+        if text == self._last_search_string:
+            # Return early if search string did not change
+            # (prevents burst of db queries when holding enter).
+            return
+
+        self._last_search_string = text
+
         self._clear_results()
         self._ui.date_hint.hide()
-        text = entry.get_text()
         if not text:
             return
 
