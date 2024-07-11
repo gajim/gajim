@@ -268,18 +268,18 @@ class ChatListRow(Gtk.ListBoxRow):
         icon = None
         if icon_name is not None:
             icon = Gio.Icon.new_for_string(icon_name)
-        if oob:
-            if app.preview_manager.is_previewable(text, oob):
-                scheme = urlparse(text).scheme
-                if scheme == 'geo':
-                    location = split_geo_uri(text)
-                    icon = Gio.Icon.new_for_string('mark-location')
-                    text = format_geo_coords(
-                        float(location.lat), float(location.lon))
-                else:
-                    file_name = filename_from_uri(text)
-                    icon, file_type = guess_simple_file_type(text)
-                    text = f'{file_type} ({file_name})'
+
+        if app.preview_manager.is_previewable(text, oob or []):
+            scheme = urlparse(text).scheme
+            if scheme == 'geo':
+                location = split_geo_uri(text)
+                icon = Gio.Icon.new_for_string('mark-location')
+                text = format_geo_coords(
+                    float(location.lat), float(location.lon))
+            else:
+                file_name = filename_from_uri(text)
+                icon, file_type = guess_simple_file_type(text)
+                text = f'{file_type} ({file_name})'
 
         text = GLib.markup_escape_text(text)
         if text.startswith('/me ') and nickname is not None:
