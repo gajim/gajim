@@ -6,6 +6,13 @@ Make sure to follow the [setup guide](https://flatpak.org/setup/) before install
 
 *Note: Remove `--user` if you want a system-wide installation.*
 
+For file system access (e.g. for sending files), you may need to install additional 'xdg-desktop-portals'. Some examples:
+
+* xdg-desktop-portal
+* xdg-desktop-portal-kde
+* xdg-desktop-portal-gtk
+* xdg-desktop-portal-gnome
+
 ### Stable
 
 ```bash
