@@ -402,7 +402,11 @@ class OMEMOStorage(Store):
 
     def remove_old_signed_pre_keys(self, timestamp: int) -> None:
         query = '''DELETE FROM signed_prekeys
-                   WHERE timestamp < datetime(?, "unixepoch")'''
+                   WHERE prekey_id NOT IN (
+                    SELECT prekey_id FROM signed_prekeys
+                    ORDER BY timestamp desc LIMIT 3
+                   )'''
+
         self._con.execute(query, (timestamp,))
         self._con.commit()
 

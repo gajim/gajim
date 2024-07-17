@@ -133,7 +133,7 @@ class OMEMO(BaseModule):
         omemo_config = OMEMOConfig(default_prekey_amount=100,
                                    min_prekey_amount=80,
                                    spk_archive_seconds=86400 * 15,
-                                   spk_cycle_seconds=86400,
+                                   spk_cycle_seconds=86400 * 30,
                                    unacknowledged_count=2000)
 
         self._backend = OMEMOSessionManager(
