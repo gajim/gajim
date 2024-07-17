@@ -601,7 +601,8 @@ infobar.error > revealer > box {
 }
 
 /* CommandRow */
-.conversation-command-row label {
+.conversation-command-row .gajim-command-error,
+.conversation-command-row .gajim-command-output {
     font-weight: 600;
     border-radius: 6px;
     padding: 12px;

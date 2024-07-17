@@ -135,8 +135,10 @@ class ChatCommands(Observable):
         command_name = arg_list[0]
         command = self._commands.get(command_name)
         if command is None or type_ not in command[0]:
+            unknown_command = _('Unknown command: %s') % command_name
+            hint = _('Use "//" to start a message with a slash "/".')
             self.notify('command-not-found',
-                        _('Unknown command: %s') % command_name)
+                        f'{unknown_command}\n{hint}')
             raise CommandFailed
 
         try:

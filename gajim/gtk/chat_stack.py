@@ -877,7 +877,7 @@ class ChatStack(Gtk.Stack, EventHelper):
         self._chat_control.clear()
 
     def _on_command_signal(self,
-                           chat_commands: ChatCommands,
+                           _chat_commands: ChatCommands,
                            signal_name: str,
                            text: str
                            ) -> None:
