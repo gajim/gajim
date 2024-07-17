@@ -407,7 +407,7 @@ class OMEMOStorage(Store):
                     ORDER BY timestamp desc LIMIT 3
                    )'''
 
-        self._con.execute(query, (timestamp,))
+        self._con.execute(query)
         self._con.commit()
 
     def load_session(self, recipient_id: str, device_id: int) -> SessionRecord:
