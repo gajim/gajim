@@ -84,9 +84,9 @@ class SecretPasswordStorage:
         if not is_keyring_available():
             return
 
-        log.info('Request password from keyring')
-
         account_jid = app.get_jid_from_account(account_name)
+
+        log.info('Request password from keyring for %s', account_jid)
 
         try:
             # For security reasons remove clear-text password
