@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -550,6 +550,12 @@ msgstr[0] "Додано %d контакт"
 msgstr[1] "Додано %d контакти"
 msgstr[2] "Додано %d контактів"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Адреса"
 
@@ -957,6 +963,11 @@ msgstr "Перегляд %(address)s з використанням обліко�
 msgctxt "User status"
 msgid "Busy"
 msgstr "Зайнятий"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr ""
+"Якщо ви закриєте це вікно, вас буде від’єднано від групової балачки «%s»."
 
 msgid "CRL has expired"
 msgstr "Строк дії CRL завершився"
@@ -1416,9 +1427,6 @@ msgstr "Розмова: колір тексту"
 
 msgid "Conversation: Text Font"
 msgstr "Розмова: шрифт тексту"
-
-msgid "Conversation: URL Color"
-msgstr "Розмова: колір URL"
 
 msgid "Conversations"
 msgstr "Розмови"
@@ -2559,11 +2567,6 @@ msgstr ""
 "облікового запису. БУДЬТЕ ОБЕРЕЖНІ за умови входу з від’ємним пріоритетом: у "
 "такому разі ви НЕ отримуватимете повідомлень від вашого сервера."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr ""
-"Якщо ви закриєте це вікно, вас буде від’єднано від групової балачки «%s»."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2826,6 +2829,9 @@ msgstr "Підстава"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Полишити групові балачки"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5676,6 +5682,9 @@ msgstr "Спроба надсилання конфіденційного пов�
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6059,6 +6068,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "Ви полишили такі групові балачки:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -6934,6 +6948,9 @@ msgstr ""
 
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:_Доступний"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Розмова: колір URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Копіювати місцезнаходження"

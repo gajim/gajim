@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-20 23:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-17 23:17+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
@@ -549,6 +549,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "%s contact ajouté"
 msgstr[1] "%s contacts ajoutés"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "De plus, vous perdrez votre affiliation d'administrateur·ice."
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "De plus, vous perdrez votre affiliation de propriétaire."
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -949,6 +955,10 @@ msgstr "Parcourt %(address)s en utilisant le compte %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Occupé⋅e"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "En fermant cette discussion, vous quitterez \"%s\"."
 
 msgid "CRL has expired"
 msgstr "CRL a expiré"
@@ -1413,9 +1423,6 @@ msgstr "Conversation : couleur du texte"
 
 msgid "Conversation: Text Font"
 msgstr "Conversation : police du texte"
-
-msgid "Conversation: URL Color"
-msgstr "Conversation : couleur des URLs"
 
 msgid "Conversations"
 msgstr "Discussions"
@@ -2495,10 +2502,6 @@ msgstr ""
 "connecté avec une priorité négative, vous ne recevrez AUCUN message de votre "
 "serveur."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Si vous fermez cette discussion, vous quitterez \"%s\"."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2733,6 +2736,9 @@ msgstr "Vu pour la dernière fois : %s"
 
 msgid "Leave Group Chat"
 msgstr "Quitter le salon de discussion"
+
+msgid "Leave _Permanently"
+msgstr "Quitter _Définitivement"
 
 msgid "Left Click Action"
 msgstr "Action du clic gauche"
@@ -5260,6 +5266,9 @@ msgstr "L'envoi de l'image de profil a échoué : %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Envoi du fichier via l’envoi de fichiers par HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr "Utilisez \"//\" pour commencer un message avec un slash \"/\"."
+
 msgid "Use GSSAPI"
 msgstr "Utiliser GSSAPI"
 
@@ -5622,6 +5631,13 @@ msgstr ""
 
 msgid "You left this group chat"
 msgstr "Vous avez quitté ce salon de discussion"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+"Vous pourriez avoir besoin d'une invitation pour rejoindre à nouveau ce "
+"salon, si vous choisissez de le quitter définitivement."
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Vous devez être propriétaire du salon pour modifier la configuration"
@@ -6205,6 +6221,15 @@ msgstr "{nick} est maintenant {show}{status}"
 msgid "…or drop it here"
 msgstr "... ou bien déposez ici"
 
+#~ msgid ""
+#~ "\n"
+#~ "If you choose to leave it permanently, you may need to be invited to be "
+#~ "able to join this group chat again"
+#~ msgstr ""
+#~ "\n"
+#~ "Si vous choisissez de le quitter définitivement, vous pourriez avoir "
+#~ "besoin d'être invité à nouveau pour rejoindre ce salon"
+
 #, fuzzy
 #~ msgctxt "Profile"
 #~ msgid ":Note"
@@ -6411,6 +6436,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:_Disponible"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Conversation : couleur des URLs"
 
 #~ msgid "Copy Location"
 #~ msgstr "Copier l'emplacement"

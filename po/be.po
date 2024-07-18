@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -579,6 +579,12 @@ msgstr[0] "Дадаць _чалавека"
 msgstr[1] "Дадаць _чалавека"
 msgstr[2] "Дадаць _чалавека"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 #, fuzzy
 msgid "Address"
 msgstr "_Адрас:"
@@ -1030,6 +1036,10 @@ msgstr "Прагляд %s для рахунка %s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Заняты"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Калі Вы закрыеце гэтае вакно, Вы выйдзеце з гэтай групавой размовы."
 
 msgid "CRL has expired"
 msgstr ""
@@ -1541,10 +1551,6 @@ msgstr "Журнал размоў"
 
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "Журнал размоў"
-
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "Журнал размоў"
 
 #, fuzzy
@@ -2764,10 +2770,6 @@ msgstr ""
 "Вы ўвайшлі з адмоўным прыярытэтам, Вы не будзеце атрымліваць паведамленняў "
 "ад Вашага сервера."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Калі Вы закрыеце гэтае вакно, Вы выйдзеце з гэтай групавой размовы."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -3028,6 +3030,9 @@ msgstr "Прычына"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Сысці з групавых размоў"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5870,6 +5875,9 @@ msgstr "Памылка адпраўкі прыватнага паведамле�
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6250,6 +6258,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "Вы сышлі з наступных групавых размоў:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7111,6 +7124,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?user status:_Available"
 #~ msgstr "?transfer status:Прыпыненая"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Журнал размоў"
 
 #, fuzzy
 #~ msgid "Copy Location"

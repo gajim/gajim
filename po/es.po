@@ -2,14 +2,15 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # El gran Pirujo <boina@disroot.org>, 2022, 2023, 2024.
-# Juan <jumase@disroot.org>, 2022.
+# Juan <jumase@disroot.org>, 2022, 2024.
 # André <git@apitzsch.eu>, 2023.
+# Juan M Sevilla <jumase@disroot.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-21 15:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-17 21:04+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -542,6 +543,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "Añadir %s Contacto"
 msgstr[1] "Añadir %s Contactos"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "además, perderás la afiliación de administrador."
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "además, perderás la afiliación de propietario."
+
 msgid "Address"
 msgstr "Dirección"
 
@@ -933,6 +940,10 @@ msgstr "Navegar por %(address)s usando la cuenta %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Ocupado"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Cerrando esta conversación, abandonarás \"%s\"."
 
 msgid "CRL has expired"
 msgstr "El CRL ha expirado"
@@ -1395,9 +1406,6 @@ msgstr "Conversation: Color de texto"
 
 msgid "Conversation: Text Font"
 msgstr "Conversation: Tipografía de texto"
-
-msgid "Conversation: URL Color"
-msgstr "Conversation: Color de URL"
 
 msgid "Conversations"
 msgstr "Conversaciones"
@@ -2465,10 +2473,6 @@ msgstr ""
 "en la ventana Cuentas. TEN CUIDADO, cuando inicies sesión con una prioridad "
 "negativa, NO recibirás ningún mensaje de tu servidor."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Si cierras esta conversación, abandonarás \"%s\"."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2698,6 +2702,9 @@ msgstr "Visto por última vez: %s"
 
 msgid "Leave Group Chat"
 msgstr "Abandonar grupo"
+
+msgid "Leave _Permanently"
+msgstr "Abandonar _permanentemente"
 
 msgid "Left Click Action"
 msgstr "Accion con el Click Izquierdo"
@@ -3199,7 +3206,7 @@ msgstr "Abrir"
 
 msgctxt "Group chat feature"
 msgid "Open"
-msgstr "Abrir"
+msgstr "Abierto"
 
 msgid "Open Email Composer"
 msgstr "Abrir el compositor de correo"
@@ -3443,10 +3450,10 @@ msgid "Play sounds to notify about events"
 msgstr "Reproducir sonidos para notificar eventos"
 
 msgid "Please choose an account"
-msgstr "Por favor, crear una cuenta"
+msgstr "Por favor, elegir una cuenta"
 
 msgid "Please enter an XMPP address"
-msgstr "Por favor, entra una dirección XMPP"
+msgstr "Por favor, ingresar una dirección XMPP"
 
 msgid "Please enter your credentials or Sign Up"
 msgstr "Por favor ingresa tus credenciales o regístrate"
@@ -5201,6 +5208,9 @@ msgstr "La carga de la imagen del avatar ha fallado: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Subida a través de carga de archivos HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr "Usar \"//\" para empezar un mensaje con una barra \"/\"."
+
 msgid "Use GSSAPI"
 msgstr "Usar GSSAPI"
 
@@ -5550,6 +5560,13 @@ msgstr "Tienes que invitar a la gente para que se pueda unir"
 
 msgid "You left this group chat"
 msgstr "Has dejado este grupo"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+"Puedes necesitar una invitación para unirte otra vez a este grupo, si eliges "
+"abandonarlo permanentemente."
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Necesitas permisos de Propietario para cambiar la configuración"
@@ -6123,6 +6140,15 @@ msgstr "{nick} es ahora {show}{status}"
 msgid "…or drop it here"
 msgstr "…o soltarla aqui"
 
+#~ msgid ""
+#~ "\n"
+#~ "If you choose to leave it permanently, you may need to be invited to be "
+#~ "able to join this group chat again"
+#~ msgstr ""
+#~ "\n"
+#~ "Si eliges abandonarlo permanentemente, puedes necesitar ser invitado para "
+#~ "poder unirte de nuevo al grupo"
+
 #, fuzzy
 #~ msgctxt "Profile"
 #~ msgid ":Note"
@@ -6328,6 +6354,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:Disponible"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Conversation: Color de URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Copiar ubicación"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-21 08:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-18 06:17+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -529,6 +529,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "%s névjegy lett hozzáadva"
 msgstr[1] "%s névjegy lett hozzáadva"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "Ezenfelül a meglévő adminisztrátori jogosultság is megszűnik."
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "Ezenfelül a meglévő tulajdonosi jogosultság is megszűnik."
+
 msgid "Address"
 msgstr "Cím"
 
@@ -917,6 +923,10 @@ msgstr "%(address)s tallózása %(account)s fiókkal"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Elfoglalt"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "A beszélgetés bezárása a társalgó („%s”) elhagyásával jár."
 
 msgid "CRL has expired"
 msgstr "A CRL lejárt"
@@ -1382,9 +1392,6 @@ msgstr "Beszélgetés: szövegszín"
 
 msgid "Conversation: Text Font"
 msgstr "Beszélgetés: betűkészlet"
-
-msgid "Conversation: URL Color"
-msgstr "Beszélgetés: hivatkozás színe"
 
 msgid "Conversations"
 msgstr "Beszélgetések"
@@ -2445,10 +2452,6 @@ msgstr ""
 "beállításakor. VIGYÁZAT: negatív prioritás esetén semmilyen üzenet nem "
 "érkezik meg a kiszolgálótól."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "A beszélgetés bezárása a társalgó („%s”) elhagyásával jár."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2679,7 +2682,10 @@ msgid "Last seen: %s"
 msgstr "Legutóbb látva: %s"
 
 msgid "Leave Group Chat"
-msgstr "Társalgó elhagyása"
+msgstr "Távozás a társalgóból"
+
+msgid "Leave _Permanently"
+msgstr "_Végleges távozás"
 
 msgid "Left Click Action"
 msgstr "Bal egérgomb művelete"
@@ -5166,6 +5172,9 @@ msgstr "A profilkép feltöltése nem sikerült: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Fájl feltöltése HTTP protokollal…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr "Dupla perjellel („//”) lehet perjellel („/”) kezdődő üzenet írni."
+
 msgid "Use GSSAPI"
 msgstr "GSSAPI használata"
 
@@ -5514,6 +5523,13 @@ msgstr "Csak meghívóval lehet belépni a társalgóba"
 msgid "You left this group chat"
 msgstr "A társalgó el lett hagyva"
 
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+"Végleges távozás esetén csak egy újabb meghívóval lehet ismét belépni a "
+"társalgóba."
+
 msgid "You need Owner permission to change the configuration"
 msgstr "A beállítás megváltoztatásához tulajdonosi engedély kell"
 
@@ -5729,7 +5745,7 @@ msgid "_Later"
 msgstr "_Később"
 
 msgid "_Leave"
-msgstr "_Elhagyás"
+msgstr "_Távozás"
 
 msgid "_Log In"
 msgstr "Beje_lentkezés"
@@ -6090,6 +6106,15 @@ msgstr "{nick} mostantól {show}{status}"
 msgid "…or drop it here"
 msgstr "…vagy ide is ejthető egy kép"
 
+#~ msgid ""
+#~ "\n"
+#~ "If you choose to leave it permanently, you may need to be invited to be "
+#~ "able to join this group chat again"
+#~ msgstr ""
+#~ "\n"
+#~ "Végleges távozás esetén csak egy újabb meghívóval lehet ismét belépni a "
+#~ "társalgóba"
+
 #, fuzzy
 #~ msgctxt "Profile"
 #~ msgid ":Note"
@@ -6295,6 +6320,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "_Elérhető"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Beszélgetés: hivatkozás színe"
 
 #~ msgid "Copy Location"
 #~ msgstr "Hely másolása"

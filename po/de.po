@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-20 23:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-18 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -557,6 +557,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "%s Kontakt hinzugefügt"
 msgstr[1] "%s Kontakte hinzugefügt"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "Außerdem wirst du deine Administratorenrechte verlieren."
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "Außerdem wirst du deine Eigentümerrechte verlieren."
+
 msgid "Address"
 msgstr "Adresse"
 
@@ -948,6 +954,10 @@ msgstr "Durchsuche %(address)s über das Konto %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Beschäftigt"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Wenn du diesen Chat schließt, wirst du \"%s\" verlassen."
 
 msgid "CRL has expired"
 msgstr "CRL ist abgelaufen"
@@ -1410,9 +1420,6 @@ msgstr "Unterhaltung: Textfarbe"
 
 msgid "Conversation: Text Font"
 msgstr "Unterhaltung: Schriftart"
-
-msgid "Conversation: URL Color"
-msgstr "Unterhaltung: URL-Farbe"
 
 msgid "Conversations"
 msgstr "Unterhaltungen"
@@ -2488,10 +2495,6 @@ msgstr ""
 "Kontobearbeitungsfenster setzen. VORSICHT: Wenn du mit einer negativen "
 "Priorität angemeldet bist, erhälst du KEINE Nachrichten mehr vom Server."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Wenn du diesen Chat schließt, wirst du \"%s\" verlassen."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2729,6 +2732,9 @@ msgstr "Zuletzt gesehen: %s"
 
 msgid "Leave Group Chat"
 msgstr "Gruppenchat verlassen"
+
+msgid "Leave _Permanently"
+msgstr "Dauerhaft _verlassen"
 
 msgid "Left Click Action"
 msgstr "Aktion für Linksklick"
@@ -5254,6 +5260,11 @@ msgstr "Beim Hochladen des Kontaktbilds ist ein Fehler aufgetreten: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Sende via HTTP Datei-Upload…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+"Du kannst \"//\" nutzen, um eine Nachricht mit Schrägstrich \"/\" zu "
+"beginnen."
+
 msgid "Use GSSAPI"
 msgstr "GSSAPI verwenden"
 
@@ -5607,6 +5618,13 @@ msgstr "Nur Eingeladene können beitreten"
 
 msgid "You left this group chat"
 msgstr "Du hast diesen Gruppenchat verlassen"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+"Falls du den Gruppenchat permanent verlässt brauchst du ggf. eine Einladung, "
+"um dem Chat erneut beitreten zu können."
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Du musst Eigentümer sein, um die Konfiguration ändern zu können"
@@ -6400,6 +6418,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "Verfügb_ar"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Unterhaltung: URL-Farbe"
 
 #~ msgid "Copy Location"
 #~ msgstr "Link-Adresse kopieren"

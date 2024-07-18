@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2023-10-17 17:18+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -519,6 +519,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr ""
 
@@ -900,6 +906,10 @@ msgstr ""
 
 msgctxt "User status"
 msgid "Busy"
+msgstr ""
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
 msgstr ""
 
 msgid "CRL has expired"
@@ -1340,9 +1350,6 @@ msgid "Conversation: Text Color"
 msgstr ""
 
 msgid "Conversation: Text Font"
-msgstr ""
-
-msgid "Conversation: URL Color"
 msgstr ""
 
 msgid "Conversations"
@@ -2369,10 +2376,6 @@ msgid ""
 "priority, you will NOT receive any message from your server."
 msgstr ""
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr ""
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2595,6 +2598,9 @@ msgid "Last seen: %s"
 msgstr ""
 
 msgid "Leave Group Chat"
+msgstr ""
+
+msgid "Leave _Permanently"
 msgstr ""
 
 msgid "Left Click Action"
@@ -5011,6 +5017,9 @@ msgstr ""
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -5344,6 +5353,11 @@ msgid "You have to invite people so they can join"
 msgstr ""
 
 msgid "You left this group chat"
+msgstr ""
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
 msgstr ""
 
 msgid "You need Owner permission to change the configuration"

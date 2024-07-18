@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -581,6 +581,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "Kontaktua _Sartu"
 msgstr[1] "Kontaktua _Sartu"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Helbidea"
 
@@ -1031,6 +1037,10 @@ msgstr "Begiratzen %s  %s kontua erabiliz"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Lanpetuta"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Leiho hau isten baduzu, gela honetatik deskonektatuko zara."
 
 msgid "CRL has expired"
 msgstr ""
@@ -1546,10 +1556,6 @@ msgstr "Elkarrizketaren Historiala"
 
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "Elkarrizketaren Historiala"
-
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "Elkarrizketaren Historiala"
 
 #, fuzzy
@@ -2766,10 +2772,6 @@ msgstr ""
 "lehentasun negatiboarekin konektatzean, EZ duzu mezurik jasoko "
 "zerbitzariarengandik. "
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Leiho hau isten baduzu, gela honetatik deskonektatuko zara."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -3030,6 +3032,9 @@ msgstr "Arrazoia"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Txat Taldea Berria"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5875,6 +5880,9 @@ msgstr "Mezu pribatua bidaltzeak huts egin du"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6252,6 +6260,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "%s gelan zaude dagoeneko"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7116,6 +7129,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?user status:_Available"
 #~ msgstr "Gelditua"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Elkarrizketaren Historiala"
 
 #, fuzzy
 #~ msgid "Copy Location"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -593,6 +593,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "Tilføj Kont_akt"
 msgstr[1] "Tilføj Kont_akt"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 #, fuzzy
 msgid "Address"
 msgstr "_Adresse:"
@@ -1053,6 +1059,11 @@ msgstr "Gennemse %(address)s med konto %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Travlt"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr ""
+"Hvis du lukker dette vindue vil du blive frakoblet fra denne gruppe samtale."
 
 msgid "CRL has expired"
 msgstr "CRL er udløbet"
@@ -1564,10 +1575,6 @@ msgstr "Samtale Historie"
 
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "Samtale med "
-
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "Samtale med "
 
 #, fuzzy
@@ -2782,11 +2789,6 @@ msgstr ""
 "konto i kontoændrings vinduet. VÆR FORSIGTIG, når du er logget med en "
 "negativ prioritet vil du IKKE modtage nogen beskeder fra din server."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr ""
-"Hvis du lukker dette vindue vil du blive frakoblet fra denne gruppe samtale."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -3045,6 +3047,9 @@ msgstr "Grund"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Forlad Gruppesamtaler"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5895,6 +5900,9 @@ msgstr "Sending af privat besked fejlede"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6275,6 +6283,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "Du forlod de følgende gruppesamtaler:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7131,6 +7144,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?user status:_Available"
 #~ msgstr "?transfer status:Midlertidig stoppet"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Samtale med "
 
 #, fuzzy
 #~ msgid "Copy Location"

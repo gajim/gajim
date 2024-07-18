@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -585,6 +585,12 @@ msgstr[0] "Pridaných %s kontaktov"
 msgstr[1] "Pridaných %s kontaktov"
 msgstr[2] "Pridaných %s kontaktov"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 #, fuzzy
 msgid "Address"
 msgstr "_Adresa:"
@@ -1042,6 +1048,10 @@ msgstr "Prehliadanie %(address)s s použitím účtu %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Zaneprázdnený"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Ak zatvoríte okno, budete odpojený z tejto diskusnej skupiny."
 
 msgid "CRL has expired"
 msgstr "CRL vypršal"
@@ -1556,10 +1566,6 @@ msgstr "História konverzácie"
 
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "Rozhovor s "
-
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "Rozhovor s "
 
 #, fuzzy
@@ -2775,10 +2781,6 @@ msgstr ""
 "účtov. BUĎTE OPATRNÝ, keď sa prihlásite s zápornou prioritou, tak nebudete "
 "dostávať ŽIADNE správy z vášho servera."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Ak zatvoríte okno, budete odpojený z tejto diskusnej skupiny."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -3036,6 +3038,9 @@ msgstr "Dôvod"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "Opustiť diskusnú skupinu"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5884,6 +5889,9 @@ msgstr "Odoslanie súkromnej správy sa nepodarilo"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6263,6 +6271,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "Opustili ste nasledujúce diskusné skupiny:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7122,6 +7135,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "?user status:_Available"
 #~ msgstr "?stav prenosu:Pozastavené"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Rozhovor s "
 
 #, fuzzy
 #~ msgid "Copy Location"

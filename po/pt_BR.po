@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2023-02-21 22:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -559,6 +559,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "Adicionado contato %s"
 msgstr[1] "Adicionado contatos %s"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Endereço"
 
@@ -957,6 +963,10 @@ msgstr "Navegando %(address)s usando conta %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Ocupado"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Se você fechar esta janela, você sairá de '%s'."
 
 msgid "CRL has expired"
 msgstr "CRL expirou"
@@ -1421,9 +1431,6 @@ msgstr "Conversa: Cor do Texto"
 
 msgid "Conversation: Text Font"
 msgstr "Conversa: Fonte de Texto"
-
-msgid "Conversation: URL Color"
-msgstr "Conversa: Cor do URL"
 
 msgid "Conversations"
 msgstr "Conversas"
@@ -2584,10 +2591,6 @@ msgstr ""
 "autenticado com uma prioridade negativa, você NÃO poderá receber nenhuma "
 "mensagem do seu servidor."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Se você fechar esta janela, você sairá de '%s'."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2843,6 +2846,9 @@ msgstr "Razão"
 
 msgid "Leave Group Chat"
 msgstr "Sair da conversa em grupo"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5685,6 +5691,9 @@ msgstr "Falha ao enviar uma mensagem privada"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Enviando via Upload de Arquivo HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6068,6 +6077,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "Você saiu das seguintes salas:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -6913,6 +6927,9 @@ msgstr ""
 
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:_Disponível"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Conversa: Cor do URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Copiar Localização"

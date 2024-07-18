@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -610,6 +610,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "הוסף איש קשר %d"
 msgstr[1] "הוספו %d אנשי קשר"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 #, fuzzy
 msgid "Address"
 msgstr "_כתובת:"
@@ -1075,6 +1081,10 @@ msgstr "עיון בשירותים בכתובת ‫%(address)s באמצעות ח�
 msgctxt "User status"
 msgid "Busy"
 msgstr "עסוק"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "כאשר תסגור את חלון זה, אתה תנותק מתוך שיחת קבוצה זו."
 
 # CRL what? (Certificate?)
 msgid "CRL has expired"
@@ -1597,11 +1607,6 @@ msgstr "היסטוריית שיחה"
 # direction_mark needed
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "שיחה עם "
-
-# direction_mark needed
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "שיחה עם "
 
 # direction_mark needed
@@ -2857,10 +2862,6 @@ msgstr ""
 "חשבון. יש להיזהר, בעת התחברותך יחד עם עדיפות שלילית, לא תתקבלנה שום הודעה "
 "מתוך השרת שלך."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "כאשר תסגור את חלון זה, אתה תנותק מתוך שיחת קבוצה זו."
-
 #, fuzzy
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
@@ -3126,6 +3127,9 @@ msgstr "סיבה"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "עזוב שיחות קבוצה"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -6027,6 +6031,9 @@ msgstr "מסירת הודעה פרטית נכשלה"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6425,6 +6432,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "עזבת את שיחות הקבוצה הבאות:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7291,6 +7303,11 @@ msgstr ""
 
 #~ msgid "?user status:_Available"
 #~ msgstr "_זמין"
+
+# direction_mark needed
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "שיחה עם "
 
 #, fuzzy
 #~ msgid "Copy Location"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-11 06:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-06-23 22:13+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -537,6 +537,12 @@ msgid "Added %s contact"
 msgid_plural "Added %s contacts"
 msgstr[0] "%s 件の相手先を追加しました"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "アドレス"
 
@@ -927,6 +933,10 @@ msgstr "アカウント %(account)s で %(address)s を閲覧"
 msgctxt "User status"
 msgid "Busy"
 msgstr "取り込み中"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "このウィンドウを閉じると、\"%s\" を退出します。"
 
 msgid "CRL has expired"
 msgstr "証明書失効リストは有効期限が切れています"
@@ -1382,10 +1392,6 @@ msgstr "会話: 文字色"
 # (Mako) 語順が問題。コロンでごまかしてみる
 msgid "Conversation: Text Font"
 msgstr "会話: フォント"
-
-# (Mako) 語順が問題。コロンでごまかしてみる
-msgid "Conversation: URL Color"
-msgstr "会話: URL の文字色"
 
 # (Mako) 語順が問題。コロンでごまかしてみる
 msgid "Conversations"
@@ -2446,10 +2452,6 @@ msgstr ""
 "ます。【注意】負の優先順位のままログインすると、サーバーからどんなメッセージ"
 "も受信しません。"
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "このウィンドウを閉じると、\"%s\" を退出します。"
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2681,6 +2683,10 @@ msgstr "最後に見たのは: %s"
 
 msgid "Leave Group Chat"
 msgstr "談話室から退出"
+
+#, fuzzy
+msgid "Leave _Permanently"
+msgstr "永久に"
 
 msgid "Left Click Action"
 msgstr "左クリック動作"
@@ -4960,7 +4966,7 @@ msgid "Toggle Chat List"
 msgstr "チャット一覧を表示する/しない"
 
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "メニューバーを表示/非表示"
 
 msgid "Toggle participants list"
 msgstr "参加者一覧を表示/非表示"
@@ -5184,6 +5190,9 @@ msgstr "アバター画像のアップロードに失敗しました: %s"
 
 msgid "Uploading via HTTP File Upload…"
 msgstr "「HTTP ファイルアップロード」でアップロードしています…"
+
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI を使う"
@@ -5533,6 +5542,11 @@ msgstr "他の人が参加できるよう招待する必要があります"
 msgid "You left this group chat"
 msgstr "この談話室から退出しました"
 
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+
 msgid "You need Owner permission to change the configuration"
 msgstr "設定を変更するには主宰者の権限が必要です"
 
@@ -5864,9 +5878,8 @@ msgstr "通知をやめる (_S)"
 msgid "_Subscribe"
 msgstr "継読 (_S)"
 
-#, fuzzy
 msgid "_Toggle Menu Bar"
-msgstr "メニューバーを表示"
+msgstr "メニューバーを表示/非表示 (_T)"
 
 msgid "_Type"
 msgstr "種類 (_T)"
@@ -5886,7 +5899,6 @@ msgstr "表示 (_V)"
 msgid "_View Certificate"
 msgstr "証明書を表示 (_V)"
 
-#, fuzzy
 msgid "_Wiki (Online)"
 msgstr "Wiki (オンライン) (_W)"
 
@@ -6320,6 +6332,10 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "在席 (_A)"
+
+# (Mako) 語順が問題。コロンでごまかしてみる
+#~ msgid "Conversation: URL Color"
+#~ msgstr "会話: URL の文字色"
 
 #~ msgid "Copy Location"
 #~ msgstr "場所をコピー"

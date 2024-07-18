@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -584,6 +584,12 @@ msgid "Added %s contact"
 msgid_plural "Added %s contacts"
 msgstr[0] "加入了 %s 聯絡人"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 #, fuzzy
 msgid "Address"
 msgstr "位址(_A):"
@@ -1041,6 +1047,10 @@ msgstr "用帳號 %(account)s 瀏覽位址 %(address)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "忙碌"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "如果關閉此視窗，您將中斷此聊天室的連線。"
 
 msgid "CRL has expired"
 msgstr "證書吊銷清單已過期"
@@ -1551,10 +1561,6 @@ msgstr "對話命令歷程"
 
 #, fuzzy
 msgid "Conversation: Text Font"
-msgstr "對話，與"
-
-#, fuzzy
-msgid "Conversation: URL Color"
 msgstr "對話，與"
 
 #, fuzzy
@@ -2774,10 +2780,6 @@ msgstr ""
 "如果為真，您將可以在修改帳號視窗中為您的帳號可以設定一個負的優先等級。注意!當"
 "您使用負的優先等級登入時您將不能從伺服器收到任何訊息。"
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "如果關閉此視窗，您將中斷此聊天室的連線。"
-
 #, fuzzy
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
@@ -3039,6 +3041,9 @@ msgstr "原因"
 #, fuzzy
 msgid "Leave Group Chat"
 msgstr "離開聊天室"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr ""
@@ -5876,6 +5881,9 @@ msgstr "傳送私有訊息失敗"
 msgid "Uploading via HTTP File Upload…"
 msgstr ""
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr ""
 
@@ -6255,6 +6263,11 @@ msgstr ""
 #, fuzzy
 msgid "You left this group chat"
 msgstr "您離開了下列聊天室:"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -7114,6 +7127,10 @@ msgstr ""
 
 #~ msgid "?user status:_Available"
 #~ msgstr "線上(_A)"
+
+#, fuzzy
+#~ msgid "Conversation: URL Color"
+#~ msgstr "對話，與"
 
 #, fuzzy
 #~ msgid "Copy Location"

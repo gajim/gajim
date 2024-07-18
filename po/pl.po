@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-21 06:17+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-18 06:17+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
 "\n"
@@ -543,6 +543,12 @@ msgstr[0] "Dodano %s kontakt"
 msgstr[1] "Dodano %s kontakty"
 msgstr[2] "Dodano %s kontaktów"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "Dodatkowo, utracisz swoją przynależność administratora."
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "Dodatkowo, utracisz swoją przynależność właściciela."
+
 msgid "Address"
 msgstr "Adres"
 
@@ -931,6 +937,10 @@ msgstr "Przeglądanie %(address)s przy użyciu konta %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Zajęty"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Zamykając tę rozmowę, opuścisz „%s”."
 
 msgid "CRL has expired"
 msgstr "CRL wygasł"
@@ -1391,9 +1401,6 @@ msgstr "Rozmowa: kolor tekstu"
 
 msgid "Conversation: Text Font"
 msgstr "Rozmowa: czcionka tekstu"
-
-msgid "Conversation: URL Color"
-msgstr "Rozmowa: kolor URL"
 
 msgid "Conversations"
 msgstr "Rozmowy"
@@ -2460,10 +2467,6 @@ msgstr ""
 "w oknie Konta. UWAŻAJ, gdy jesteś zalogowany z negatywnym priorytetem, NIE "
 "będziesz otrzymywał żadnych wiadomości z twojego serwera."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Jeśli zamkniesz tę rozmowę, opuścisz „%s”."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2694,6 +2697,9 @@ msgstr "Ostatnio widziany: %s"
 
 msgid "Leave Group Chat"
 msgstr "Opuść rozmowę grupową"
+
+msgid "Leave _Permanently"
+msgstr "Opuść _na stałe"
 
 msgid "Left Click Action"
 msgstr "Akcja kliknięcia lewym przyciskiem"
@@ -5208,6 +5214,9 @@ msgstr "Wysyłanie awatara nie powiodło się: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Wysyłanie pliku przez HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr "Użyj „//” aby rozpocząć wiadomość ukośnikiem („/”)."
+
 msgid "Use GSSAPI"
 msgstr "Użyj GSSAPI"
 
@@ -5558,6 +5567,13 @@ msgstr "Musisz zaprosić ludzi, żeby mogli dołączyć"
 
 msgid "You left this group chat"
 msgstr "Opuściłeś rozmowę grupową"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
+"Możesz potrzebować zaproszenia aby dołączyć do tej rozmowy grupowej ponownie "
+"jeśli zdecydujesz się opuścić ją na stałe."
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Potrzebujesz uprawnień właściciela, żeby móc zmieniać konfigurację"
@@ -6347,6 +6363,9 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "_Dostępny"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Rozmowa: kolor URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Kopiuj adres odnośnika"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -548,6 +548,12 @@ msgstr[0] "Přidán %s kontakt"
 msgstr[1] "Přidáno %s kontaktů"
 msgstr[2] "Přidáno %s kontaktů"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Adresa"
 
@@ -934,6 +940,10 @@ msgstr "Procházím %(address)s pomocí účtu %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Zaneprázdněný"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Pokud zavřete okno této konverzace, odejdete z \"%s\"."
 
 msgid "CRL has expired"
 msgstr "Platnost CRL certifikátu vypršela"
@@ -1388,9 +1398,6 @@ msgstr "Konverzace: barva textu"
 
 msgid "Conversation: Text Font"
 msgstr "Konverzace: písmo"
-
-msgid "Conversation: URL Color"
-msgstr "Konverzace: barva URL"
 
 msgid "Conversations"
 msgstr "Konverzace"
@@ -2461,10 +2468,6 @@ msgstr ""
 "Buďte opatrní. Když jste přihlášeni se zápornou prioritou, nedostanete od "
 "serveru žádnou zprávu."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Pokud zavřete okno této konverzace, odejdete z \"%s\"."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2697,6 +2700,9 @@ msgstr "Důvod: %s"
 
 msgid "Leave Group Chat"
 msgstr "Opustit skupinovou konverzaci"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr "Akce kliknutí levého tlačítka"
@@ -5212,6 +5218,9 @@ msgstr "Nahrávání profilového obrázku selhalo: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Odesílám přes HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr "Použít GSSAPI"
 
@@ -5561,6 +5570,11 @@ msgstr "Musíte pozvat účastníky, aby se mohli připojit"
 
 msgid "You left this group chat"
 msgstr "Opustili jste tuto skupinovou konverzaci"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Potřebujete vlastnická oprávnění, abyste mohli měnit toto nastavení"
@@ -6383,6 +6397,9 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "?user status:_Available"
 #~ msgstr "?transfer status:Pozastaveno"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Konverzace: barva URL"
 
 #, fuzzy
 #~ msgid "Copy Location"

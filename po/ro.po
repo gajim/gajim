@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -543,6 +543,12 @@ msgstr[0] "Adăugat %s contact"
 msgstr[1] "Adăugate %s contacte"
 msgstr[2] "Adăugate %s de contacte"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Adresă"
 
@@ -935,6 +941,10 @@ msgstr "Navigarea pe %(address)s utilizând contul %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Ocupată"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Dacă închideți acest chat, veți lăsa \"%s\"."
 
 msgid "CRL has expired"
 msgstr "CRL a expirat"
@@ -1398,9 +1408,6 @@ msgstr "Conversație: Culoarea textului"
 
 msgid "Conversation: Text Font"
 msgstr "Conversație: Font de text"
-
-msgid "Conversation: URL Color"
-msgstr "Conversație: Culoare URL"
 
 msgid "Conversations"
 msgstr "Conversații"
@@ -2477,10 +2484,6 @@ msgstr ""
 "dumneavoastră în fereastra Conturi. ATENȚIE, atunci când vă conectați cu o "
 "prioritate negativă, NU veți primi niciun mesaj de la server."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Dacă închideți acest chat, veți lăsa \"%s\"."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2714,6 +2717,10 @@ msgstr "Ultima vizualizare: %s"
 
 msgid "Leave Group Chat"
 msgstr "Părăsiți grupul de chat"
+
+#, fuzzy
+msgid "Leave _Permanently"
+msgstr "Permanent"
 
 msgid "Left Click Action"
 msgstr "Acțiunea clic stânga"
@@ -5235,6 +5242,9 @@ msgstr "Încărcarea imaginii avatar a eșuat: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Încărcarea prin HTTP File Upload…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr "Utilizați GSSAPI"
 
@@ -5586,6 +5596,11 @@ msgstr "Trebuie să inviți oamenii pentru ca ei să se poată alătura"
 
 msgid "You left this group chat"
 msgstr "Ai părăsit acest grup de chat"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -6370,6 +6385,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "_Disponibil"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Conversație: Culoare URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Copiați locația"

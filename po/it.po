@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2024-01-12 12:10+0000\n"
 "Last-Translator: pjammo <adrianoghr@hotmail.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -554,6 +554,12 @@ msgid_plural "Added %s contacts"
 msgstr[0] "%s contatto aggiunto"
 msgstr[1] "%s contatti aggiunti"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Indirizzo"
 
@@ -941,6 +947,10 @@ msgstr "Consultazione di %(address)s tramite l'account %(account)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "Occupato"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Chiudendo questa finestra abbandonerai '%s'."
 
 msgid "CRL has expired"
 msgstr "La CRL è scaduta"
@@ -1401,9 +1411,6 @@ msgstr "Conversazione: Colore testo"
 
 msgid "Conversation: Text Font"
 msgstr "Conversazione: Font testo"
-
-msgid "Conversation: URL Color"
-msgstr "Conversazione: Colore URL"
 
 msgid "Conversations"
 msgstr "Conversazioni"
@@ -2509,10 +2516,6 @@ msgstr ""
 "priorità negativa agli account. ATTENZIONE: accedendo con priorità negativa "
 "NON sarà possibile ricevere messaggi dal server."
 
-#, fuzzy, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Chiudendo questa finestra abbandonerai '%s'."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2754,6 +2757,9 @@ msgstr "Motivo: %s"
 
 msgid "Leave Group Chat"
 msgstr "Abbandona Conversazione di Gruppo"
+
+msgid "Leave _Permanently"
+msgstr ""
 
 msgid "Left Click Action"
 msgstr "Azione tasto sinistro del mouse"
@@ -5486,6 +5492,9 @@ msgstr "Caricamento immagine avatar fallito: %s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "Caricamento File tramite HTTP…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr "Usa GSSAPI"
 
@@ -5855,6 +5864,11 @@ msgstr "È necessario invitare le persone affinché si uniscano"
 
 msgid "You left this group chat"
 msgstr "Hai abbandonato il gruppo"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr ""
@@ -6656,6 +6670,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "_Disponibile"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Conversazione: Colore URL"
 
 #~ msgid "Copy Location"
 #~ msgstr "Copia Posizione"

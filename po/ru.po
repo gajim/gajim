@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
 "PO-Revision-Date: 2024-05-31 21:52+0000\n"
 "Last-Translator: Serge Kazorin <kazorin@basealt.ru>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -545,6 +545,12 @@ msgstr[0] "Добавлен %s контакт"
 msgstr[1] "Добавлено %s контакта"
 msgstr[2] "Добавлено %s контактов"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr ""
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr ""
+
 msgid "Address"
 msgstr "Адрес"
 
@@ -934,6 +940,10 @@ msgstr "Просмотр %(address)s с учетной записью %(account)
 msgctxt "User status"
 msgid "Busy"
 msgstr "Занят"
+
+#, fuzzy, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "Если Вы закроете этот чат, то выйдете из комнаты «%s»."
 
 msgid "CRL has expired"
 msgstr "CRL просрочен"
@@ -1394,9 +1404,6 @@ msgstr "Беседа: Цвет текста"
 
 msgid "Conversation: Text Font"
 msgstr "Беседа: Шрифт текста"
-
-msgid "Conversation: URL Color"
-msgstr "Беседа: Цвет ссылок"
 
 msgid "Conversations"
 msgstr "Беседы"
@@ -2466,10 +2473,6 @@ msgstr ""
 "ОСТОРОЖНЫ, при подключении с отрицательным приоритетом, Вы НЕ получите "
 "никаких сообщений от сервера."
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "Если Вы закроете этот чат, то выйдете из комнаты «%s»."
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2703,6 +2706,10 @@ msgstr "Был(а): %s"
 
 msgid "Leave Group Chat"
 msgstr "Покинуть групповой чат"
+
+#, fuzzy
+msgid "Leave _Permanently"
+msgstr "Навсегда"
 
 msgid "Left Click Action"
 msgstr "Действие при щелчке левой кнопкой мыши"
@@ -5204,6 +5211,9 @@ msgstr "Не удалось отправить изображение авата
 msgid "Uploading via HTTP File Upload…"
 msgstr "Отправка через HTTP File Upload…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr ""
+
 msgid "Use GSSAPI"
 msgstr "Использовать GSSAPI"
 
@@ -5552,6 +5562,11 @@ msgstr "Для присоединения участников необходи�
 
 msgid "You left this group chat"
 msgstr "Вы покинули этот групповой чат"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr ""
 
 msgid "You need Owner permission to change the configuration"
 msgstr "Для изменения параметров конфигурации необходимы права владельца"
@@ -6330,6 +6345,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "Д_оступен"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "Беседа: Цвет ссылок"
 
 #~ msgid "Copy Location"
 #~ msgstr "Копировать местоположение"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-20 21:18+0000\n"
-"PO-Revision-Date: 2024-06-22 06:05+0000\n"
+"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"PO-Revision-Date: 2024-07-18 01:32+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -536,6 +536,12 @@ msgid "Added %s contact"
 msgid_plural "Added %s contacts"
 msgstr[0] "已添加 %s 位联系人"
 
+msgid "Additionally, you will lose your administrator affiliation."
+msgstr "此外，您将失去管理员从属关系。"
+
+msgid "Additionally, you will lose your owner affiliation."
+msgstr "此外，您将失去所有者从属关系。"
+
 msgid "Address"
 msgstr "地址"
 
@@ -920,6 +926,10 @@ msgstr "正在使用账号 %(account)s 浏览 %(address)s"
 msgctxt "User status"
 msgid "Busy"
 msgstr "忙碌"
+
+#, python-format
+msgid "By closing this chat, you will leave \"%s\"."
+msgstr "关闭此聊天，您将离开“%s”。"
 
 msgid "CRL has expired"
 msgstr "证书吊销列表已过期"
@@ -1370,9 +1380,6 @@ msgstr "对话：文本颜色"
 
 msgid "Conversation: Text Font"
 msgstr "对话：文本字体"
-
-msgid "Conversation: URL Color"
-msgstr "对话：URL 颜色"
 
 msgid "Conversations"
 msgstr "对话"
@@ -2415,10 +2422,6 @@ msgstr ""
 "如果启用， 您将能够在账号窗口中为您的账号可以设置一个负的优先级。注意！当您使"
 "用负的优先级账号登入时，您将“不会”从服务器收到任何消息。"
 
-#, python-format
-msgid "If you close this chat, you will leave \"%s\"."
-msgstr "如果您关闭此聊天，您将离开“%s”。"
-
 msgid ""
 "If you quit now, the file(s) being transferred will be lost.\n"
 "Do you still want to quit?"
@@ -2647,6 +2650,9 @@ msgstr "最后活跃：%s"
 
 msgid "Leave Group Chat"
 msgstr "离开群聊"
+
+msgid "Leave _Permanently"
+msgstr "永久离开(_P)"
 
 msgid "Left Click Action"
 msgstr "左键单击操作"
@@ -5096,6 +5102,9 @@ msgstr "上传头像图片失败：%s"
 msgid "Uploading via HTTP File Upload…"
 msgstr "正在使用 HTTP 文件上传…"
 
+msgid "Use \"//\" to start a message with a slash \"/\"."
+msgstr "使用“//”以斜杠“/”开始消息。"
+
 msgid "Use GSSAPI"
 msgstr "使用 GSSAPI"
 
@@ -5438,6 +5447,11 @@ msgstr "您必须邀请别人才能加入"
 
 msgid "You left this group chat"
 msgstr "您离开了此群聊"
+
+msgid ""
+"You may need an invite to join this group chat again, if you choose to leave "
+"it permanently."
+msgstr "如果您选择永久离开此群聊，可能需要邀请才能再次加入。"
 
 msgid "You need Owner permission to change the configuration"
 msgstr "您需要所有者权限才能更改配置"
@@ -6009,6 +6023,14 @@ msgstr "{nick} 现在是{show}{status}"
 msgid "…or drop it here"
 msgstr "…或者把图片拖放到这里"
 
+#~ msgid ""
+#~ "\n"
+#~ "If you choose to leave it permanently, you may need to be invited to be "
+#~ "able to join this group chat again"
+#~ msgstr ""
+#~ "\n"
+#~ "如果您选择永久离开，可能需要别人邀请您才能再次加入此群聊"
+
 #, fuzzy
 #~ msgctxt "Profile"
 #~ msgid ":Note"
@@ -6214,6 +6236,9 @@ msgstr "…或者把图片拖放到这里"
 
 #~ msgid "?user status:_Available"
 #~ msgstr "在线(_A)"
+
+#~ msgid "Conversation: URL Color"
+#~ msgstr "对话：URL 颜色"
 
 #~ msgid "Copy Location"
 #~ msgstr "复制位置"
