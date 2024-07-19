@@ -1,3 +1,45 @@
+Gajim 1.9.2 (19 Jul 2024)
+
+  New
+
+  * Optionally unregister from group chats on close
+  * Make HTTP links clickable in room descriptions
+  * Show participant avatar in MUC notifications
+  * Windows: Add native Windows notifications (#11789, #10662)
+
+  Improvements
+
+  * ChatCommands: Improve styling and add hint for double slash usage
+  * Proxies: Add option to ignore system proxies
+  * MessageRowActons: Hide quick reactions on narrow screens (#11888)
+  * Notifications: Register AUMID on Windows
+  * MessageRowActions: Adjust floating offset for merged messages (#11897)
+  * AboutDialog: Add package information
+  * Dataforms: Improv display of simple forms
+  * Don't check for updates if running from MS Store (#11881)
+
+  Change
+
+  * Remove gajim-url theme parameter (#11894)
+
+  Performance
+
+  * MessageRowActions: Fix memory leak
+
+  Bug Fixes
+
+  * OMEMO: Don’t delete signed pre keys before catchup
+  * SearchView: Prevent burst of db queries when holding enter (#11902)
+  * ChatListRow: Indicate received file for encrypted messages
+  * Fix nickname completion in group chats (#11895)
+  * RosterItemExchange: Display optional message in the chat (#11900)
+  * GroupchatRoster: Fix menu not pointing to cursor (#11890)
+  * SynchronizeAccounts: Fix dialog for starting with unavailable account (#11901)
+  * MessageRowActions: Fix widget margin in RTL mode (#11891)
+  * Remove unnecessary space between quotes (#11886)
+  * MessageRowActions: Make on_hover method more robust (#11884)
+  * Corrections: Load correct message (#11883)
+
 Gajim 1.9.1 (22 Jun 2024)
 
   New
