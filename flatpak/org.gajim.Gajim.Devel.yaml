@@ -162,11 +162,11 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-7.2.0-py3-none-any.whl
+      - pip3 install importlib_metadata-8.0.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-7.2.0-py3-none-any.whl
-        sha256: 04e4aad329b8b948a5711d394fa8759cb80f009225441b4f2a02bd4d8e5f426c
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.0.0-py3-none-any.whl
+        sha256: 15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -267,8 +267,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-10.3.0.tar.gz
-        sha256: 9d2455fbf44c914840c793e89aa82d0e1763a14253a000743719ae5946814b2d
+        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-10.4.0.tar.gz
+        sha256: 166c1cd4d24309b30d61f79f4a9114b7b2313d7450912277855ff5dfd7cd4a06
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -283,20 +283,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2024.6.2-py3-none-any.whl
+      - pip3 install certifi-2024.7.4-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.6.2-py3-none-any.whl
-        sha256: ddc6c8ce995e6987e7faf5e3f1b02b302836a0e5d98ece18392cb1a36c72ad56
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.7.4-py3-none-any.whl
+        sha256: c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.6.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.10.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.6.0-py2.py3-none-any.whl
-        sha256: 422b91cb49378b97e7e8d0e8d5a1069df23689d45262b86f54988a7db264e874
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.10.0-py2.py3-none-any.whl
+        sha256: 87b3d413c87d8e7f816cc9334bff255a83d8b577db2b22042651c30c19c09190
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -367,11 +367,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.27.1-py3-none-any.whl
+      - pip3 install --no-deps protobuf-5.27.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.27.1-py3-none-any.whl
-        sha256: 4ac7249a1530a2ed50e24201d6630125ced04b30619262f06224616e0030b6cf
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.27.2-py3-none-any.whl
+        sha256: 54330f07e4949d09614707c48b06d1a22f8ffb5763c159efd5c0928326a91470
 
   - name: python3-omemo-dr
     buildsystem: simple
