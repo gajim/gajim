@@ -320,6 +320,7 @@ class DbMigrationBuilder(Builder):
 
 class DebugConsoleBuilder(Builder):
     popover: Gtk.Popover
+    stanza_presets_listbox: Gtk.ListBox
     stack: Gtk.Stack
     paned: Gtk.Paned
     search_revealer: Gtk.Revealer

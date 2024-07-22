@@ -7,63 +7,11 @@
     <property name="can-focus">False</property>
     <property name="valign">start</property>
     <child>
-      <object class="GtkListBox">
+      <object class="GtkListBox" id="stanza_presets_listbox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="selection-mode">none</property>
         <signal name="row-activated" handler="_on_row_activated" swapped="no"/>
-        <child>
-          <object class="GtkListBoxRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Message</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkListBoxRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Presence</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkListBoxRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Iq</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkListBoxRow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label">Disco Info</property>
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
     <style>

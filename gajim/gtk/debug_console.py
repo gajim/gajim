@@ -12,6 +12,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import ged
@@ -33,6 +34,36 @@ from gajim.gtk.util import at_the_end
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
+
+STANZA_PRESETS = {
+    'Presence': (
+        '<presence xmlns="jabber:client">\n'
+        '<show></show>\n'
+        '<status></status>\n'
+        '<priority></priority>\n'
+        '</presence>'
+    ),
+    'Message': (
+        '<message to="" type="" xmlns="jabber:client">\n'
+        '<body></body>\n'
+        '</message>'
+    ),
+    'Iq': (
+        '<iq to="" type="" xmlns="jabber:client">\n'
+        '<query xmlns=""></query>\n'
+        '</iq>'
+    ),
+    'XEP-0030: Disco Info Query': (
+        '<iq to="" type="get" xmlns="jabber:client">\n'
+        f'<query xmlns="{Namespace.DISCO_INFO}">'
+        '</query>\n</iq>'
+    ),
+    'XEP-0092: Software Version Query': (
+        '<iq to="" type="get" xmlns="jabber:client">\n'
+        f'<query xmlns="{Namespace.VERSION}">'
+        '</query>\n</iq>'
+    ),
+}
 
 
 class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
@@ -84,6 +115,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.actionbox.reorder_child(self._combo, 1)
 
         self._create_tags()
+        self._add_stanza_presets()
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language('xml')
@@ -196,6 +228,15 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         for tag_name in tags:
             self._ui.protocol_view.get_buffer().create_tag(tag_name)
 
+    def _add_stanza_presets(self) -> None:
+        for stanza_type in STANZA_PRESETS:
+            row = Gtk.ListBoxRow()
+            label = Gtk.Label(label=stanza_type, halign=Gtk.Align.START)
+            row.add(label)
+            self._ui.stanza_presets_listbox.add(row)
+
+        self._ui.stanza_presets_listbox.show_all()
+
     def _add_log_record(self, message: str) -> None:
         buf = self._ui.log_view.get_buffer()
         end_iter = buf.get_end_iter()
@@ -232,33 +273,11 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         assert isinstance(child, Gtk.Label)
         text = child.get_text()
 
-        input_text = None
-        if text == 'Presence':
-            input_text = (
-                '<presence xmlns="jabber:client">\n'
-                '<show></show>\n'
-                '<status></status>\n'
-                '<priority></priority>\n'
-                '</presence>')
-        elif text == 'Message':
-            input_text = (
-                '<message to="" type="" xmlns="jabber:client">\n'
-                '<body></body>\n'
-                '</message>')
-        elif text == 'Iq':
-            input_text = (
-                '<iq to="" type="" xmlns="jabber:client">\n'
-                '<query xmlns=""></query>\n'
-                '</iq>')
-        elif text == 'Disco Info':
-            input_text = (
-                '<iq to="" type="get" xmlns="jabber:client">\n'
-                '<query xmlns="http://jabber.org/protocol/disco#info">'
-                '</query>\n</iq>')
+        stanza_string = STANZA_PRESETS.get(text)
 
-        if input_text is not None:
+        if stanza_string is not None:
             buffer_ = self._ui.input_entry.get_buffer()
-            buffer_.set_text(input_text)
+            buffer_.set_text(stanza_string)
             self._ui.input_entry.grab_focus()
 
     def _on_send(self, *args: Any) -> None:
