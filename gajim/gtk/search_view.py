@@ -110,6 +110,10 @@ class SearchView(Gtk.Box):
         self._ui.results_listbox.set_header_func(self._header_func)
         self._ui.results_scrolled.get_vadjustment().set_value(0)
 
+    def _on_search_all_toggled(self, _checkbutton: Gtk.CheckButton) -> None:
+        # Reset state to allow changing scope while not changing search string
+        self._last_search_string = ''
+
     def _on_search(self, entry: Gtk.Entry) -> None:
         text = entry.get_text()
         if text == self._last_search_string:
