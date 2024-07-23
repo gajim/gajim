@@ -55,9 +55,6 @@ def get_chat_type_and_direction(
     if properties.is_muc_pm:
         return MessageType.PM, direction
 
-    if not properties.type.is_chat:
-        raise ValueError('Invalid message type', properties.type)
-
     return MessageType.CHAT, direction
 
 

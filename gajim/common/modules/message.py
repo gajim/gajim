@@ -89,9 +89,10 @@ class Message(BaseModule):
                           properties: MessageProperties
                           ) -> None:
 
-        if (properties.is_pubsub or
-                properties.type.is_error or
-                properties.type.is_normal):
+        if properties.is_pubsub or properties.type.is_error:
+            return
+
+        if properties.type.is_normal and not properties.body:
             return
 
         # Check if a child of the message contains any
