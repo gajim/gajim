@@ -81,7 +81,7 @@ class FileTransferSelector(Gtk.Box):
                   'files to.') % self._contact.name)
 
         if app.is_flatpak():
-            target = 'application/vnd.portal.files'
+            target = 'application/vnd.portal.filetransfer'
         else:
             target = 'text/uri-list'
 
