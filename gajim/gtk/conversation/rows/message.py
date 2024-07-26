@@ -8,7 +8,6 @@ import logging
 import textwrap
 from datetime import timedelta
 
-import cairo
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -20,11 +19,8 @@ from gajim.common.helpers import get_moderation_text
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
-from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.modules.contacts import ResourceContact
-from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -45,6 +41,8 @@ from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import get_avatar_for_message
+from gajim.gtk.util import get_contact_name_for_message
 
 log = logging.getLogger('gajim.gtk.conversation.rows.message')
 
@@ -61,6 +59,7 @@ class MessageRow(BaseRow):
         self.set_selectable(True)
         self.type = 'chat'
         self._contact = contact
+        self._message = message
 
         self.timestamp = message.timestamp.astimezone()
         self.db_timestamp = message.timestamp.timestamp()
@@ -156,9 +155,14 @@ class MessageRow(BaseRow):
         assert message.text is not None
         self.text = message.text
 
-        self.name = self._get_contact_name(message, self._contact)
+        self.name = get_contact_name_for_message(message, self._contact)
 
-        avatar = self._get_avatar(self.direction, self.name)
+        avatar = get_avatar_for_message(
+            message,
+            self._contact,
+            self.get_scale_factor(),
+            AvatarSize.ROSTER
+        )
         self._avatar_box.set_from_surface(avatar)
         self._avatar_box.set_name(self.name)
 
@@ -247,25 +251,6 @@ class MessageRow(BaseRow):
             self._bottom_box.set_halign(Gtk.Align.FILL)
             self._message_widget.set_direction(Gtk.TextDirection.LTR)
 
-    @staticmethod
-    def _get_contact_name(
-        db_row: Message,
-        contact: ChatContactT
-    ) -> str:
-
-        if isinstance(contact, BareContact) and contact.is_self:
-            return _('Me')
-
-        if db_row.type == MessageType.CHAT:
-            if db_row.direction == ChatDirection.INCOMING:
-                return contact.name
-            return app.nicks[contact.account]
-
-        if db_row.type in (MessageType.GROUPCHAT, MessageType.PM):
-            return get_nickname_from_message(db_row)
-
-        raise ValueError
-
     @property
     def _muc_context(self) -> str | None:
         if isinstance(self._contact,
@@ -345,26 +330,6 @@ class MessageRow(BaseRow):
                 text, self._contact.nickname, self._client.get_own_jid().bare):
             self.get_style_context().add_class(
                 'gajim-mention-highlight')
-
-    def _get_avatar(self,
-                    direction: ChatDirection,
-                    name: str
-                    ) -> cairo.ImageSurface | None:
-
-        scale = self.get_scale_factor()
-        if isinstance(self._contact, GroupchatContact):
-            contact = self._contact.get_resource(name)
-            return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
-
-        if direction == ChatDirection.OUTGOING:
-            contact = self._client.get_module('Contacts').get_contact(
-                str(self._client.get_own_jid().bare))
-        else:
-            contact = self._contact
-
-        assert not isinstance(contact, GroupchatContact | ResourceContact)
-        avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
-        return avatar
 
     def is_same_sender(self, message: MessageRow) -> bool:
         return message.name == self.name
@@ -518,7 +483,12 @@ class MessageRow(BaseRow):
         self._message_icons.set_correction_icon_visible(True)
 
     def update_avatar(self) -> None:
-        avatar = self._get_avatar(self.direction, self.name)
+        avatar = get_avatar_for_message(
+            self._message,
+            self._contact,
+            self.get_scale_factor(),
+            AvatarSize.ROSTER
+        )
         self._avatar_box.set_from_surface(avatar)
 
     def set_merged(self, merged: bool) -> None:
