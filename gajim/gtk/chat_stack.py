@@ -370,6 +370,12 @@ class ChatStack(Gtk.Stack, EventHelper):
             return
 
         if app.window.is_chat_active(event.account, event.jid):
+            client = app.get_client(event.account)
+            contact = client.get_module('Contacts').get_contact(event.jid)
+            client.get_module('ChatMarkers').send_displayed_marker(
+                contact,
+                event.message.id,
+                event.message.stanza_id)
             return
 
         message = event.message
