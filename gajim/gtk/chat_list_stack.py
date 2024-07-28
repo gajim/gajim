@@ -282,16 +282,18 @@ class ChatListStack(Gtk.Stack, EventHelper):
             _remove()
             return
 
+        muc_disco = contact.get_disco()
+        us = contact.get_self()
+        if muc_disco is None or us is None:
+            _remove()
+            return
+
         buttons = [
             DialogButton.make('Cancel'),
             DialogButton.make(
                 'Accept', text=_('_Leave'), callback=_leave),
         ]
 
-        muc_disco = contact.get_disco()
-        assert muc_disco is not None
-        us = contact.get_self()
-        assert us is not None
         affiliation = us.affiliation
         text = _('By closing this chat, you will leave "%s".') % contact.name
         if Namespace.REGISTER in muc_disco.features and not affiliation.is_none:
