@@ -210,8 +210,11 @@ class MessageRowActions(Gtk.EventBox):
         if event.type == Gdk.EventType.ENTER_NOTIFY:
             self._has_cursor = True
             self._menu_button_clicked = False
-            assert self._message_row is not None
-            self._message_row.get_style_context().add_class('conversation-row-hover')
+            if self._message_row is not None:
+                # message_row may be None if MessageRowActions are entered without
+                # hovering a MessageRow before (e.g. by switching chats via shortcut)
+                self._message_row.get_style_context().add_class('conversation-row-hover')
+            return True
 
         if (
             event.type == Gdk.EventType.LEAVE_NOTIFY
