@@ -10,10 +10,13 @@ function main {
     set_build_root
     install_pre_deps
     create_root
-    install_deps
+    install_mingw_deps
+    install_python_deps
+    post_install_deps
     install_gajim
     cleanup_install
-    build_installer
+    build_exe_installer
+    build_msix_installer
 }
 
 main "$@";

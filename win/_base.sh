@@ -63,7 +63,7 @@ function create_root {
     build_pacman --noconfirm -S base
 }
 
-function install_deps {
+function install_mingw_deps {
     build_pacman --noconfirm -S \
         "${MINGW_PACKAGE_PREFIX}"-python \
         "${MINGW_PACKAGE_PREFIX}"-python-pip \
@@ -101,6 +101,9 @@ function install_deps {
         "${MINGW_PACKAGE_PREFIX}"-webp-pixbuf-loader \
         "${MINGW_PACKAGE_PREFIX}"-sqlite3
 
+}
+
+function install_python_deps {
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/gajim/omemo-dr.git
@@ -120,6 +123,9 @@ windows-toasts
     SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install precis-i18n
     SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
+}
+
+function post_install_deps {
     # remove the large png icons, they should be used rarely and svg works fine
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/512x512"
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/256x256"
@@ -333,9 +339,13 @@ function makepri {
     "$(find /c/Program\ Files\ \(x86\)/Windows\ Kits/10/bin/*/x64/ -name makepri.exe -print | sort | tail -n 1)" "$@"
 }
 
-function build_installer {
+function build_exe_installer {
     MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim.nsi"
     MSYSTEM='MINGW64' /usr/bin/bash -lc "cd ${BUILD_ROOT} && makensis -NOCD -DVERSION=\"$QL_VERSION_DESC\" -DARCH=\"${MSYSTEM_CARCH}\" -DPREFIX=\"${MSYSTEM_PREFIX:1}\" ${MISC}/gajim-portable.nsi"
+
+}
+
+function build_msix_installer {
     (
         cd ${BUILD_ROOT}
         rm -rf assets bundle filemapping.txt assets.resfiles appxmanifest.xml resources.pri
