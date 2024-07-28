@@ -10,8 +10,8 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.helpers import get_os_info
 from gajim.common.modules.base import BaseModule
+from gajim.common.util.version import get_os_info
 
 
 class SoftwareVersion(BaseModule):

@@ -42,7 +42,7 @@ from sqlalchemy.engine.interfaces import DBAPIConnection
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 
-from gajim.common.helpers import python_version
+from gajim.common.util.version import python_version
 
 log = logging.getLogger('gajim.c.storage')
 

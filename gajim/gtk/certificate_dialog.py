@@ -22,9 +22,9 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
-from gajim.common.helpers import package_version
 from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
+from gajim.common.util.version import package_version
 
 from gajim.gtk.builder import get_builder
 

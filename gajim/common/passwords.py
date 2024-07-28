@@ -19,7 +19,7 @@ import logging
 import keyring
 
 from gajim.common import app
-from gajim.common.helpers import package_version
+from gajim.common.util.version import package_version
 
 __all__ = [
     'init',

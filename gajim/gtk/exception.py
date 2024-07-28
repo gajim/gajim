@@ -30,13 +30,13 @@ from nbxmpp.http import HTTPRequest
 import gajim
 from gajim.common import app
 from gajim.common.helpers import determine_proxy
-from gajim.common.helpers import get_glib_version
-from gajim.common.helpers import get_gobject_version
-from gajim.common.helpers import get_os_name
-from gajim.common.helpers import get_os_version
-from gajim.common.helpers import get_soup_version
 from gajim.common.i18n import _
 from gajim.common.util.http import create_http_request
+from gajim.common.util.version import get_glib_version
+from gajim.common.util.version import get_gobject_version
+from gajim.common.util.version import get_os_name
+from gajim.common.util.version import get_os_version
+from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import get_gtk_version

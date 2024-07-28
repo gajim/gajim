@@ -20,14 +20,11 @@ from __future__ import annotations
 from typing import Any
 from typing import TYPE_CHECKING
 
-import functools
 import hashlib
-import importlib.metadata
 import inspect
 import json
 import logging
 import os
-import platform
 import random
 import re
 import socket
@@ -55,8 +52,6 @@ from cryptography.hazmat.backends import default_backend
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import GObject
-from gi.repository import Soup
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import ConnectionProtocol
@@ -69,9 +64,6 @@ from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
-from packaging.requirements import Requirement
-from packaging.specifiers import SpecifierSet
-from packaging.version import Version as V
 from qrcode.image.pil import PilImage as QrcPilImage
 
 from gajim.common import app
@@ -111,7 +103,6 @@ log = logging.getLogger('gajim.c.helpers')
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
-CURRENT_PYTHON_VERSION = platform.python_version()
 
 
 class InvalidFormat(Exception):
@@ -554,21 +545,6 @@ def get_random_string(count: int = 16) -> str:
     return ''.join(random.choice(allowed) for char in range(count))
 
 
-@functools.lru_cache(maxsize=1)
-def get_os_info() -> str:
-    info = 'N/A'
-    if sys.platform in ('win32', 'darwin'):
-        info = f'{platform.system()} {platform.release()}'
-
-    elif sys.platform == 'linux':
-        try:
-            import distro
-            info = distro.name(pretty=True)
-        except ImportError:
-            info = platform.system()
-    return info
-
-
 def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
     '''
     Check whether 'text' contains 'nickname', 'own_jid', or any string of the
@@ -748,12 +724,6 @@ def determine_proxy() -> ProxyData | None:
         proxies.append(account_proxy)
 
     return proxies[0] if proxies else None
-
-
-def version_condition(current_version: str, required_version: str) -> bool:
-    if V(current_version) < V(required_version):
-        return False
-    return True
 
 
 def call_counter(func):
@@ -1473,62 +1443,6 @@ def get_start_of_day(date_time: datetime) -> datetime:
                              minute=0,
                              second=0,
                              microsecond=0)
-
-
-def get_os_name() -> str:
-    if sys.platform in ('win32', 'darwin'):
-        return platform.system()
-    if os.name == 'posix':
-        try:
-            import distro
-            return distro.name(pretty=True)
-        except ImportError:
-            return platform.system()
-    return ''
-
-
-def get_os_version() -> str:
-    if sys.platform in ('win32', 'darwin'):
-        return platform.version()
-    if os.name == 'posix':
-        try:
-            import distro
-            return distro.version(pretty=True)
-        except ImportError:
-            return platform.release()
-    return ''
-
-
-def get_gobject_version() -> str:
-    return '.'.join(map(str, GObject.pygobject_version))
-
-
-def get_glib_version() -> str:
-    return '.'.join(map(str, [GLib.MAJOR_VERSION,
-                              GLib.MINOR_VERSION,
-                              GLib.MICRO_VERSION]))
-
-
-def get_soup_version() -> str:
-    return '.'.join(map(str, [Soup.get_major_version(),
-                              Soup.get_minor_version(),
-                              Soup.get_micro_version()]))
-
-
-def package_version(requirement: str) -> bool:
-    req = Requirement(requirement)
-
-    try:
-        installed_version = importlib.metadata.version(req.name)
-    except importlib.metadata.PackageNotFoundError:
-        return False
-
-    return installed_version in req.specifier
-
-
-def python_version(specifier_set: str) -> bool:
-    spec = SpecifierSet(specifier_set)
-    return CURRENT_PYTHON_VERSION in spec
 
 
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:

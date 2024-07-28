@@ -19,12 +19,12 @@ from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.helpers import open_directory
-from gajim.common.helpers import package_version
 from gajim.common.i18n import _
 from gajim.common.multimedia_helpers import AudioInputManager
 from gajim.common.multimedia_helpers import AudioOutputManager
 from gajim.common.multimedia_helpers import VideoInputManager
 from gajim.common.setting_values import BoolSettings
+from gajim.common.util.version import package_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
