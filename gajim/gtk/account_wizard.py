@@ -64,7 +64,8 @@ log = logging.getLogger('gajim.gtk.account_wizard')
 class AccountWizard(Assistant):
     def __init__(self) -> None:
         Assistant.__init__(self, height=500)
-
+        self._client: Client | None = None
+        self._method: str = 'login'
         self._destroyed: bool = False
 
         self.add_button('signup', _('Sign Up'), complete=True,
@@ -95,9 +96,6 @@ class AccountWizard(Assistant):
         self.show_all()
 
         self.update_proxy_list()
-
-        self._client: Client | None = None
-        self._method: str = 'login'
 
     @overload
     def get_page(self, name: Literal['login']) -> Login:
