@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2024-07-14 21:17+0000\n"
+"PO-Revision-Date: 2024-07-28 14:04+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
 ">\n"
@@ -1495,17 +1495,14 @@ msgstr "Kontaktinformation"
 msgid "Copy Email Address"
 msgstr "_Kopiera JID/e-postadress"
 
-#, fuzzy
 msgid "Copy Link"
-msgstr "_Kopiera länkplats"
+msgstr "Kopiera länk"
 
-#, fuzzy
 msgid "Copy Link Location"
-msgstr "_Kopiera länkplats"
+msgstr "Kopiera länkadress"
 
-#, fuzzy
 msgid "Copy Path"
-msgstr "Rummets JID"
+msgstr "Kopiera sökväg"
 
 #, fuzzy
 msgid "Copy Text"
