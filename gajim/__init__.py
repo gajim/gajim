@@ -15,7 +15,7 @@ try:
     from winrt.windows.applicationmodel import AppInfo
     _current_appinfo = AppInfo.current()  # type: ignore
     has_ms_appinfo = True
-except (AttributeError, ImportError, OSError):
+except Exception:
     pass
 
 IS_MS_STORE = has_ms_appinfo
