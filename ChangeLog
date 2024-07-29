@@ -1,3 +1,23 @@
+Gajim 1.9.3 (28 Jul 2024)
+
+  Improvements
+
+  * DebugConsole: Dynamically add stanza presets and add XEP-0092 query
+
+  Change
+
+  * Make Chatlist and Groupchat Roster style consistent
+
+  Bug Fixes
+
+  * Fix Gajim not starting when installed via MS Store
+  * Send read marker when receiving a message in a chat that has the focus.
+  * AccountWizard: Avoid crash on destroy by moving attribute declaration to top (#11927)
+  * MessageRowActions: Fix issue with row hover in conjunction with switching chats (#11925)
+  * Use correct mimetype for DND in flatpak
+  * Messages: Treat type=normal messages as chat messages
+  * SearchView: Fix search when changing scope for the same search string (#11915)
+
 Gajim 1.9.2 (19 Jul 2024)
 
   New
