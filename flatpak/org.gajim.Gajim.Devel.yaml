@@ -162,11 +162,11 @@ modules:
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-8.0.0-py3-none-any.whl
+      - pip3 install importlib_metadata-8.2.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.0.0-py3-none-any.whl
-        sha256: 15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.2.0-py3-none-any.whl
+        sha256: 11901fa0c2f97919b288679932bb64febaeacf289d18ac84dd68cb2e74213369
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -292,11 +292,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.10.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.11.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.10.0-py2.py3-none-any.whl
-        sha256: 87b3d413c87d8e7f816cc9334bff255a83d8b577db2b22042651c30c19c09190
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.11.0-py2.py3-none-any.whl
+        sha256: d964710e2dbe015d9dc4ff0ad16225d68c3b36936b742a6fe0504565b760a3b7
 
   - name: python3-typing-extensions
     buildsystem: simple
