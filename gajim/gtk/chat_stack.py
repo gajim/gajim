@@ -39,6 +39,8 @@ from gajim.common.util.text import remove_invalid_xml_chars
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
+from gajim.gtk.const import DND_TARGET_FLATPAK
+from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.control import ChatControl
 from gajim.gtk.dialogs import ErrorDialog
@@ -117,9 +119,9 @@ class ChatStack(Gtk.Stack, EventHelper):
         overlay.connect('drag-leave', self._on_drag_leave)
 
         if app.is_flatpak():
-            target = 'application/vnd.portal.files'
+            target = DND_TARGET_FLATPAK
         else:
-            target = 'text/uri-list'
+            target = DND_TARGET_URI_LIST
 
         uri_entry = Gtk.TargetEntry.new(
             target,
@@ -772,7 +774,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             return False
 
         for targ in context.list_targets():
-            if targ.name() in {'text/uri-list', 'application/vnd.portal.files'}:
+            if targ.name() in {DND_TARGET_URI_LIST, DND_TARGET_FLATPAK}:
                 self._drop_area.set_no_show_all(False)
                 self._drop_area.show_all()
                 return True

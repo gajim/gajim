@@ -30,6 +30,8 @@ from gajim.common.preview_helpers import get_icon_for_mime_type
 from gajim.common.preview_helpers import guess_mime_type
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.const import DND_TARGET_FLATPAK
+from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.resource_selector import ResourceSelector
@@ -81,9 +83,9 @@ class FileTransferSelector(Gtk.Box):
                   'files to.') % self._contact.name)
 
         if app.is_flatpak():
-            target = 'application/vnd.portal.filetransfer'
+            target = DND_TARGET_FLATPAK
         else:
-            target = 'text/uri-list'
+            target = DND_TARGET_URI_LIST
 
         uri_entry = Gtk.TargetEntry.new(
             target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)

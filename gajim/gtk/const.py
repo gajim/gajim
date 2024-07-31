@@ -45,6 +45,9 @@ DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
 # Drag and drop target type URI list (for dropped files)
 TARGET_TYPE_URI_LIST = 80
 
+DND_TARGET_URI_LIST = 'text/uri-list'
+DND_TARGET_FLATPAK = 'application/vnd.portal.filetransfer'
+
 MAX_MESSAGE_LENGTH = 5000
 
 
