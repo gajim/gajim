@@ -96,6 +96,7 @@ class SearchView(Gtk.Box):
         self._clear()
 
     def _clear(self) -> None:
+        self._last_search_string = ''
         self._ui.search_entry.set_text('')
         self._clear_results()
 
