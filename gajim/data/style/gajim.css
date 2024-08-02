@@ -426,11 +426,11 @@ infobar.error > revealer > box {
 }
 
 /* Groupchat Roster */
-.groupchat-roster *:hover {
+.groupchat-roster treeview:hover {
 	background-color: @theme_bg_color;
 }
 
-.groupchat-roster *:selected {
+.groupchat-roster treeview:selected {
 	color: @theme_fg_color;
 	background-color: @theme_bg_color;
 }
