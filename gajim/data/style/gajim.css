@@ -556,6 +556,9 @@ infobar.error > revealer > box {
 }
 
 /* MessageInputTextView */
+.message-input-textview {
+    background-color: transparent;
+}
 .message-input-border {
     border: 2px solid @theme_unfocused_bg_color;
     border-radius: 4px;

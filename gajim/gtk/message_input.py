@@ -72,6 +72,7 @@ class MessageInputTextView(GtkSource.View):
         )
 
         self.get_style_context().add_class('gajim-conversation-text')
+        self.get_style_context().add_class('message-input-textview')
 
         self._contact: ChatContactT | None = None
 
