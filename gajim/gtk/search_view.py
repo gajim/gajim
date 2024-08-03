@@ -189,7 +189,7 @@ class SearchView(Gtk.Box):
         filters: list[str] = []
         start = 0
         new_text = ''
-        for search_filter in re.finditer(filter_name + r'(:\")(.*?)\"', text):
+        for search_filter in re.finditer(filter_name + r'(:\")(.*?)\"\s', text):
             end, new_start = search_filter.span()
             new_text += text[start:end]
             filters.append(search_filter.group(2))

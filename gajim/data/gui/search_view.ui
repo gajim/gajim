@@ -214,9 +214,9 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="tooltip-text" translatable="yes">Use filters to narrow down your search:
-from:"username"
-before:"yyyy-mm-dd"
-after:"yyyy-mm-dd"</property>
+from:"username" search term
+before:"yyyy-mm-dd" search term
+after:"yyyy-mm-dd" search term</property>
         <property name="halign">center</property>
         <property name="primary-icon-name">edit-find-symbolic</property>
         <property name="primary-icon-activatable">False</property>
