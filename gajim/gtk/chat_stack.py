@@ -20,20 +20,21 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import events
 from gajim.common import helpers
-from gajim.common import preview_helpers
 from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
-from gajim.common.preview_helpers import format_geo_coords
-from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
+from gajim.common.util.preview import filename_from_uri
+from gajim.common.util.preview import format_geo_coords
+from gajim.common.util.preview import guess_simple_file_type
+from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.text import remove_invalid_xml_chars
 
 from gajim.gtk.chat_banner import ChatBanner
@@ -426,8 +427,8 @@ class ChatStack(Gtk.Stack, EventHelper):
                 text = format_geo_coords(
                     float(location.lat), float(location.lon))
             else:
-                file_name = preview_helpers.filename_from_uri(text)
-                _icon, file_type = preview_helpers.guess_simple_file_type(text)
+                file_name = filename_from_uri(text)
+                _icon, file_type = guess_simple_file_type(text)
                 text = f'{file_type} ({file_name})'
 
         sound: str | None = None

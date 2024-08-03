@@ -16,11 +16,11 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.preview import Preview
-from gajim.common.preview_helpers import contains_audio_streams
-from gajim.common.preview_helpers import format_geo_coords
-from gajim.common.preview_helpers import get_icon_for_mime_type
-from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.types import GdkPixbufType
+from gajim.common.util.preview import contains_audio_streams
+from gajim.common.util.preview import format_geo_coords
+from gajim.common.util.preview import get_icon_for_mime_type
+from gajim.common.util.preview import split_geo_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_preview_menu

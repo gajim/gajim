@@ -894,7 +894,7 @@ def parse_uri(uri: str) -> URI:
         return URI(URIType.TEL, uri)
 
     if scheme == 'geo':
-        # TODO: unify with .preview_helpers.split_geo_uri
+        # TODO: unify with .util.preview.split_geo_uri
         # https://rfc-editor.org/rfc/rfc5870#section-3.3
         lat, _, lon_alt = urlparts.path.partition(',')
         if not lat or not lon_alt:

@@ -19,14 +19,14 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
-from gajim.common.preview_helpers import filename_from_uri
-from gajim.common.preview_helpers import format_geo_coords
-from gajim.common.preview_helpers import guess_simple_file_type
-from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
+from gajim.common.util.preview import filename_from_uri
+from gajim.common.util.preview import format_geo_coords
+from gajim.common.util.preview import guess_simple_file_type
+from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.text import quote_text
 
 from gajim.gtk.util import get_avatar_for_message

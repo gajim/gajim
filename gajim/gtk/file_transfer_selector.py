@@ -26,8 +26,8 @@ from gajim.common.image_helpers import create_thumbnail
 from gajim.common.image_helpers import get_pixbuf_from_data
 from gajim.common.modules.contacts import BareContact
 from gajim.common.preview import PREVIEWABLE_MIME_TYPES
-from gajim.common.preview_helpers import get_icon_for_mime_type
-from gajim.common.preview_helpers import guess_mime_type
+from gajim.common.util.preview import get_icon_for_mime_type
+from gajim.common.util.preview import guess_mime_type
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.const import DND_TARGET_FLATPAK

@@ -34,16 +34,16 @@ from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
 from gajim.common.image_helpers import create_thumbnail
 from gajim.common.image_helpers import get_pixbuf_from_data
-from gajim.common.preview_helpers import aes_decrypt
-from gajim.common.preview_helpers import filename_from_uri
-from gajim.common.preview_helpers import get_image_paths
-from gajim.common.preview_helpers import get_previewable_mime_types
-from gajim.common.preview_helpers import guess_mime_type
-from gajim.common.preview_helpers import parse_fragment
-from gajim.common.preview_helpers import split_geo_uri
 from gajim.common.storage.archive import models as mod
 from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
+from gajim.common.util.preview import aes_decrypt
+from gajim.common.util.preview import filename_from_uri
+from gajim.common.util.preview import get_image_paths
+from gajim.common.util.preview import get_previewable_mime_types
+from gajim.common.util.preview import guess_mime_type
+from gajim.common.util.preview import parse_fragment
+from gajim.common.util.preview import split_geo_uri
 
 log = logging.getLogger('gajim.c.preview')
 

@@ -28,7 +28,7 @@ from gajim.common.helpers import sanitize_filename
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 
-log = logging.getLogger('gajim.c.preview_helpers')
+log = logging.getLogger('gajim.c.util.preview')
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
