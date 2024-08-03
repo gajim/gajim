@@ -24,7 +24,7 @@ from nbxmpp.simplexml import Node
 from gajim.common import app
 from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
-from gajim.common.image_helpers import scale_pixbuf_from_data
+from gajim.common.util.image import scale_pixbuf_from_data
 
 from gajim.gtk.util import make_href_markup
 from gajim.gtk.util import MaxWidthComboBoxText

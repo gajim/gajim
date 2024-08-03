@@ -32,11 +32,11 @@ from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
-from gajim.common.image_helpers import create_thumbnail
-from gajim.common.image_helpers import get_pixbuf_from_data
 from gajim.common.storage.archive import models as mod
 from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
+from gajim.common.util.image import create_thumbnail
+from gajim.common.util.image import get_pixbuf_from_data
 from gajim.common.util.preview import aes_decrypt
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths

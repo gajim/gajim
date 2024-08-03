@@ -17,7 +17,7 @@ from PIL import Image
 from PIL import ImageFile
 from PIL import UnidentifiedImageError
 
-log = logging.getLogger('gajim.c.image_helpers')
+log = logging.getLogger('gajim.c.util.image')
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
 
@@ -121,7 +121,6 @@ def scale_pixbuf_from_data(data: bytes, size: int) -> GdkPixbuf.Pixbuf | None:
 
 
 def create_thumbnail(data: bytes, size: int, mime_type: str) -> bytes | None:
-
     try:
         thumbnail = create_thumbnail_with_pil(data, size)
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):

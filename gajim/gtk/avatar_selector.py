@@ -24,7 +24,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.helpers import get_file_path_from_dnd_dropped_uri
 from gajim.common.i18n import _
-from gajim.common.image_helpers import scale_with_ratio
+from gajim.common.util.image import scale_with_ratio
 
 from gajim.gtk import types
 from gajim.gtk.const import DND_TARGET_FLATPAK

@@ -25,9 +25,9 @@ from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.helpers import get_groupchat_name
-from gajim.common.image_helpers import get_pixbuf_from_file
-from gajim.common.image_helpers import scale_with_ratio
 from gajim.common.util.classes import Singleton
+from gajim.common.util.image import get_pixbuf_from_file
+from gajim.common.util.image import scale_with_ratio
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util import convert_rgb_string_to_float
