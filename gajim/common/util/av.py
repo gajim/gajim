@@ -15,7 +15,7 @@ except Exception:
 
 from gajim.common.i18n import _
 
-log = logging.getLogger('gajim.c.multimedia_helpers')
+log = logging.getLogger('gajim.c.util.av')
 
 
 class DeviceManager:
