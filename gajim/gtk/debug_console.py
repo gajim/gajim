@@ -244,24 +244,30 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
         if event.keyval == Gdk.KEY_Escape:
-            if self._ui.search_revealer.get_child_revealed():
-                self._ui.search_revealer.set_reveal_child(False)
+            if self._ui.search_toggle.get_active():
+                self._ui.search_toggle.set_active(False)
                 return
+
             self.destroy()
+
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Return or
                 event.keyval == Gdk.KEY_KP_Enter):
             self._on_send()
+
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Up):
             self._on_paste_previous()
+
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_Down):
             self._on_paste_next()
+
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_f):
             self._ui.search_toggle.set_active(
-                not self._ui.search_revealer.get_child_revealed())
+                not self._ui.search_toggle.get_active())
+
         if event.keyval == Gdk.KEY_F3:
             self._find(Direction.NEXT)
 
