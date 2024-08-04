@@ -213,10 +213,6 @@
         <property name="width-request">200</property>
         <property name="visible">True</property>
         <property name="can-focus">True</property>
-        <property name="tooltip-text" translatable="yes">Use filters to narrow down your search:
-from:"username" search term
-before:"yyyy-mm-dd" search term
-after:"yyyy-mm-dd" search term</property>
         <property name="halign">center</property>
         <property name="primary-icon-name">edit-find-symbolic</property>
         <property name="primary-icon-activatable">False</property>
@@ -246,15 +242,15 @@ after:"yyyy-mm-dd" search term</property>
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="date_hint">
+      <object class="GtkBox" id="search_filters_box">
+        <property name="width-request">260</property>
+        <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="label" translatable="yes">Please use yyyy-mm-dd</property>
-        <property name="wrap">True</property>
-        <property name="max-width-chars">22</property>
-        <style>
-          <class name="dim-label"/>
-        </style>
+        <property name="margin-top">6</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -342,6 +338,182 @@ after:"yyyy-mm-dd" search term</property>
     <style>
       <class name="search-view"/>
     </style>
+  </object>
+  <object class="GtkPopover" id="filter_date_selector_popover">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkCalendar" id="filter_date_calendar">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="filter_date_calendar_reset_button">
+            <property name="label" translatable="yes">Reset</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="halign">center</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <style>
+          <class name="padding-6"/>
+        </style>
+      </object>
+    </child>
+  </object>
+  <!-- n-columns=3 n-rows=3 -->
+  <object class="GtkGrid" id="search_filters_grid">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="margin-top">6</property>
+    <property name="row-spacing">6</property>
+    <property name="column-spacing">12</property>
+    <child>
+      <object class="GtkLabel" id="filter_from_desc_label">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">From</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">Before</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">After</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="filter_from_entry">
+        <property name="can-focus">True</property>
+        <property name="no-show-all">True</property>
+        <property name="placeholder-text" translatable="yes">User name…</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">0</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="filter_before_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Set date…</property>
+        <property name="halign">end</property>
+        <property name="popover">filter_date_selector_popover</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">x-office-calendar-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">2</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="filter_after_button">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="focus-on-click">False</property>
+        <property name="receives-default">True</property>
+        <property name="tooltip-text" translatable="yes">Set date…</property>
+        <property name="halign">end</property>
+        <property name="popover">filter_date_selector_popover</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon-name">x-office-calendar-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">2</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="filter_before_label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="label">-</property>
+        <property name="single-line-mode">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="filter_after_label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="halign">start</property>
+        <property name="hexpand">True</property>
+        <property name="label">-</property>
+        <property name="single-line-mode">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">1</property>
+        <property name="top-attach">1</property>
+      </packing>
+    </child>
   </object>
   <object class="GtkBox" id="header_box">
     <property name="visible">True</property>

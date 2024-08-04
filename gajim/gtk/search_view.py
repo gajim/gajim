@@ -9,8 +9,8 @@ from typing import Any
 import datetime as dt
 import itertools
 import logging
-import re
 from collections.abc import Iterator
+from dataclasses import dataclass
 
 import cairo
 from gi.repository import GObject
@@ -22,6 +22,7 @@ from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
@@ -62,6 +63,12 @@ class SearchView(Gtk.Box):
         self._ui = get_builder('search_view.ui')
         self._ui.results_listbox.set_header_func(self._header_func)
         self.add(self._ui.search_box)
+
+        self._search_filters = SearchFilters()
+        self._search_filters.connect('filter-changed', self._on_search_filters_changed)
+        self._search_filters.connect(
+            'filter-activated', self._on_search_filters_activated)
+        self._ui.search_filters_box.add(self._search_filters)
 
         self._ui.connect_signals(self)
 
@@ -115,6 +122,13 @@ class SearchView(Gtk.Box):
         # Reset state to allow changing scope while not changing search string
         self._last_search_string = ''
 
+    def _on_search_filters_changed(self, _search_filters: SearchFilters) -> None:
+        # Reset search string to allow new searches after changed filters
+        self._last_search_string = ''
+
+    def _on_search_filters_activated(self, _search_filters: SearchFilters) -> None:
+        self._ui.search_entry.activate()
+
     def _on_search(self, entry: Gtk.Entry) -> None:
         text = entry.get_text()
         if text == self._last_search_string:
@@ -125,40 +139,8 @@ class SearchView(Gtk.Box):
         self._last_search_string = text
 
         self._clear_results()
-        self._ui.date_hint.hide()
         if not text:
             return
-
-        # from:user
-        # This works only for MUC, because contact_name is not
-        # available for single contacts in logs.db.
-        text, from_filters = self._strip_filters(text, 'from')
-
-        # before:date
-        text, before_filters = self._strip_filters(text, 'before')
-        if before_filters is not None:
-            try:
-                before_filters = min(dt.datetime.fromisoformat(date) for
-                                     date in before_filters)
-            except ValueError:
-                self._ui.date_hint.show()
-                return
-
-        # after:date
-        text, after_filters = self._strip_filters(text, 'after')
-        if after_filters is not None:
-            try:
-                after_filters = min(dt.datetime.fromisoformat(date) for
-                                    date in after_filters)
-                # if only the day is specified, we want to look after the
-                # end of that day.
-                # if precision is increased,we do want to look during the
-                # day as well.
-                if after_filters.hour == after_filters.minute == 0:
-                    after_filters += dt.timedelta(days=1)
-            except ValueError:
-                self._ui.date_hint.show()
-                return
 
         everywhere = self._ui.search_checkbutton.get_active()
         context = self._account is not None and self._jid is not None
@@ -173,29 +155,17 @@ class SearchView(Gtk.Box):
             account = self._account
             jid = self._jid
 
+        search_filter = self._search_filters.get_filters()
+
         self._results_iterator = app.storage.archive.search_archive(
                 account,
                 jid,
                 text,
-                from_users=from_filters,
-                before=before_filters,
-                after=after_filters)
+                from_users=search_filter.usernames,
+                before=search_filter.before,
+                after=search_filter.after)
 
         self._add_results()
-
-    @staticmethod
-    def _strip_filters(text: str,
-                       filter_name: str) -> tuple[str, list[str] | None]:
-        filters: list[str] = []
-        start = 0
-        new_text = ''
-        for search_filter in re.finditer(filter_name + r'(:\")(.*?)\"\s', text):
-            end, new_start = search_filter.span()
-            new_text += text[start:end]
-            filters.append(search_filter.group(2))
-            start = new_start
-        new_text += text[start:]
-        return new_text, filters or None
 
     def _add_results(self) -> None:
         assert self._results_iterator is not None
@@ -367,6 +337,8 @@ class SearchView(Gtk.Box):
 
         self._ui.calendar_button.set_sensitive(True)
 
+        self._search_filters.set_context(account, jid)
+
 
 class RowHeader(Gtk.Box):
     def __init__(self, account: str, jid: JID, timestamp: dt.datetime) -> None:
@@ -472,3 +444,111 @@ class ResultRow(Gtk.ListBoxRow):
 
         assert not isinstance(contact, GroupchatContact | ResourceContact)
         return contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
+
+
+@dataclass
+class SearchFilterData:
+    usernames: list[str] | None
+    before: dt.datetime | None
+    after: dt.datetime | None
+
+
+class SearchFilters(Gtk.Expander):
+
+    __gsignals__ = {
+        'filter-changed': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            ()
+        ),
+        'filter-activated': (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (),
+        ),
+    }
+
+    def __init__(self) -> None:
+        Gtk.Expander.__init__(self, label=_('Message Filters'))
+
+        self._after: dt.datetime | None = None
+        self._before: dt.datetime | None = None
+
+        self._ui = get_builder('search_view.ui')
+        self.add(self._ui.search_filters_grid)
+
+        self._ui.filter_from_entry.connect('changed', self._on_filter_from_changed)
+        self._ui.filter_from_entry.connect('activate', self._on_from_entry_activated)
+        self._ui.filter_date_calendar.connect('day-selected', self._on_date_selected)
+        self._ui.filter_date_calendar_reset_button.connect(
+            'clicked', self._on_date_reset_clicked)
+        self.show_all()
+
+    def _on_filter_from_changed(self, _entry: Gtk.Entry) -> None:
+        self._update_state()
+
+    def _on_from_entry_activated(self, _entry: Gtk.Entry) -> None:
+        self.emit('filter-activated')
+
+    def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
+        year, month, day = calendar.get_date()
+        datetime = dt.datetime(year, python_month(month), day, tzinfo=dt.timezone.utc)
+        date_format = app.settings.get('date_format')
+
+        if self._ui.filter_before_button.get_active():
+            self._before = datetime
+            self._ui.filter_before_label.set_text(datetime.strftime(date_format))
+
+        if self._ui.filter_after_button.get_active():
+            self._after = datetime
+            self._ui.filter_after_label.set_text(datetime.strftime(date_format))
+
+        self._update_state()
+        self.emit('filter-activated')
+
+    def _on_date_reset_clicked(self, _button: Gtk.Button) -> None:
+        if self._ui.filter_before_button.get_active():
+            self._before = None
+            self._ui.filter_before_label.set_text('-')
+
+        if self._ui.filter_after_button.get_active():
+            self._after = None
+            self._ui.filter_after_label.set_text('-')
+
+        self._ui.filter_date_selector_popover.popdown()
+        self._update_state()
+        self.emit('filter-activated')
+
+    def _update_state(self) -> None:
+        from_filter = self._ui.filter_from_entry.get_text()
+
+        if any((from_filter, self._before, self._after)):
+            self.set_label(_('Message Filters (Active)'))
+        else:
+            self.set_label(_('Message Filters'))
+
+        self.emit('filter-changed')
+
+    def set_context(self, account: str | None, jid: JID | None) -> None:
+        if account is None or jid is None:
+            self._ui.filter_from_desc_label.hide()
+            self._ui.filter_from_entry.hide()
+            return
+
+        client = app.get_client(account)
+        contact = client.get_module('Contacts').get_contact(jid)
+        visible = not isinstance(contact, BareContact)
+        self._ui.filter_from_desc_label.set_visible(visible)
+        self._ui.filter_from_entry.set_visible(visible)
+
+    def get_filters(self) -> SearchFilterData:
+        usernames: list[str] = []
+        username = self._ui.filter_from_entry.get_text() or None
+        if username is not None:
+            usernames.append(username)
+
+        return SearchFilterData(
+            usernames=usernames or None,
+            before=self._before,
+            after=self._after,
+        )

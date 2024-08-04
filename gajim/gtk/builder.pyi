@@ -853,10 +853,20 @@ class SearchViewBuilder(Builder):
     calendar_button: Gtk.MenuButton
     search_entry: Gtk.SearchEntry
     search_checkbutton: Gtk.CheckButton
-    date_hint: Gtk.Label
+    search_filters_box: Gtk.Box
     results_scrolled: Gtk.ScrolledWindow
     results_listbox: Gtk.ListBox
     placeholder: Gtk.Box
+    filter_date_selector_popover: Gtk.Popover
+    filter_date_calendar: Gtk.Calendar
+    filter_date_calendar_reset_button: Gtk.Button
+    search_filters_grid: Gtk.Grid
+    filter_from_desc_label: Gtk.Label
+    filter_from_entry: Gtk.Entry
+    filter_before_button: Gtk.MenuButton
+    filter_after_button: Gtk.MenuButton
+    filter_before_label: Gtk.Label
+    filter_after_label: Gtk.Label
     header_box: Gtk.Box
     header_name_label: Gtk.Label
     header_date_label: Gtk.Label
