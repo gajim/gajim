@@ -706,6 +706,7 @@ class Signup(Page):
         self.title: str = _('Create New Account')
 
         self._servers: list[dict[str, Any]] = []
+        self._provider_list_request: HTTPRequest | None = None
 
         self._ui = get_builder('account_wizard.ui')
         self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
@@ -721,7 +722,16 @@ class Signup(Page):
 
         self.pack_start(self._ui.signup_grid, True, True, 0)
 
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_destroy(self, widget: Signup) -> None:
+        if self._provider_list_request is None:
+            return
+
+        if not self._provider_list_request.is_finished():
+            self._provider_list_request.cancel()
 
     def focus(self) -> None:
         self._ui.server_comboboxtext_sign_up_entry.grab_focus()
@@ -733,8 +743,8 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up.set_sensitive(False)
         self._ui.update_provider_list_icon.get_style_context().add_class('spin')
 
-        request = create_http_request()
-        request.send(
+        self._provider_list_request = create_http_request()
+        self._provider_list_request.send(
             'GET',
             app.settings.get_app_setting('providers_list_url'),
             timeout=15,
