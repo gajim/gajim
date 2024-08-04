@@ -737,6 +737,7 @@ class Signup(Page):
         request.send(
             'GET',
             app.settings.get_app_setting('providers_list_url'),
+            timeout=15,
             callback=self._on_download_provider_list_finished
         )
 
