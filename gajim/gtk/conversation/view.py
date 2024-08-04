@@ -26,7 +26,6 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import types
 from gajim.common.const import Direction
-from gajim.common.helpers import get_start_of_day
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -34,6 +33,7 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
+from gajim.common.util.datetime import get_start_of_day
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.call import CallRow

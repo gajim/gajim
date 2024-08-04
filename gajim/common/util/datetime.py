@@ -4,17 +4,20 @@
 
 from __future__ import annotations
 
-from datetime import datetime
-from datetime import timezone
+import datetime as dt
 
-FIRST_UTC_DATETIME = datetime(1970, 1, 1, tzinfo=timezone.utc)
+FIRST_UTC_DATETIME = dt.datetime(1970, 1, 1, tzinfo=dt.timezone.utc)
 FIRST_LOCAL_DATETIME = FIRST_UTC_DATETIME.astimezone()
 
 
-def convert_epoch_to_local_datetime(utc_timestamp: float) -> datetime:
-    utc = datetime.fromtimestamp(utc_timestamp, tz=timezone.utc)
+def convert_epoch_to_local_datetime(utc_timestamp: float) -> dt.datetime:
+    utc = dt.datetime.fromtimestamp(utc_timestamp, tz=dt.timezone.utc)
     return utc.astimezone()
 
 
-def utc_now() -> datetime:
-    return datetime.now(timezone.utc)
+def utc_now() -> dt.datetime:
+    return dt.datetime.now(dt.timezone.utc)
+
+
+def get_start_of_day(datetime: dt.datetime) -> dt.datetime:
+    return datetime.replace(hour=0, minute=0, second=0, microsecond=0)

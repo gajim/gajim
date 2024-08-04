@@ -1438,13 +1438,6 @@ def get_random_muc_localpart() -> str:
     return result
 
 
-def get_start_of_day(date_time: datetime) -> datetime:
-    return date_time.replace(hour=0,
-                             minute=0,
-                             second=0,
-                             microsecond=0)
-
-
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     assert jid.domain is not None
     domain = jid.domain[:50]
