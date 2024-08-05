@@ -57,7 +57,12 @@ from gajim.gtk.util import add_css_to_widget
 from gajim.gtk.util import get_total_screen_geometry
 from gajim.gtk.util import load_icon_surface
 
-if sys.platform == 'win32' or TYPE_CHECKING:
+MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
+
+if ((sys.platform == 'win32' and
+        int(platform.version().split('.')[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION) or
+        TYPE_CHECKING):
+    # Importing windows_toasts on an unsupported Windows version will throw an Exception
     import winreg
 
     from windows_toasts import InteractableWindowsToaster
@@ -68,7 +73,7 @@ if sys.platform == 'win32' or TYPE_CHECKING:
     from windows_toasts import ToastImage
     from windows_toasts import ToastImagePosition
 
-MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
+
 WINDOWS_TOAST_NOTIFIER_AUMID = 'Gajim.ToastNotification'
 
 log = logging.getLogger('gajim.gtk.notification')
@@ -639,9 +644,9 @@ def _get_path_for_icon(surface: cairo.ImageSurface) -> Path:
 
 def get_notification_backend() -> NotificationBackend:
     if sys.platform == 'win32':
-        if int(platform.version().split('.')[2]) < MIN_WINDOWS_TOASTS_WIN_VERSION:
-            return WindowsLegacy()
-        return WindowsToastNotification()
+        if int(platform.version().split('.')[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION:
+            return WindowsToastNotification()
+        return WindowsLegacy()
 
     if sys.platform == 'darwin':
         return DummyBackend()
