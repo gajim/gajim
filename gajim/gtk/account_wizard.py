@@ -9,6 +9,7 @@ from typing import cast
 from typing import Literal
 from typing import overload
 
+import json
 import logging
 
 from gi.repository import Gdk
@@ -24,6 +25,7 @@ from nbxmpp.const import StreamError
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import RegisterStanzaError
 from nbxmpp.errors import StanzaError
+from nbxmpp.http import HTTPRequest
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
 from nbxmpp.stringprep import saslprep
@@ -31,17 +33,17 @@ from nbxmpp.structs import ProxyData
 from nbxmpp.task import Task
 
 from gajim.common import app
-from gajim.common import configpaths
-from gajim.common import helpers
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import SASL_ERRORS
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.helpers import get_country_flag_from_code
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
 from gajim.common.helpers import open_uri
 from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
+from gajim.common.util.http import create_http_request
 from gajim.common.util.http import create_http_session
 
 from gajim.gtk.accounts import AccountsWindow
@@ -150,6 +152,7 @@ class AccountWizard(Assistant):
                 self._test_credentials()
 
         elif button_name == 'signup':
+            self.get_page('signup').update_providers_list()
             self.show_page('signup', Gtk.StackTransitionType.SLIDE_LEFT)
 
     def _on_assistant_button_clicked(self,
@@ -604,7 +607,6 @@ class Login(Page):
             'changed', self._set_complete)
         self._ui.log_in_password_entry.connect(
             'activate', self._on_password_entry_activate)
-        self._create_server_completion()
 
         self._ui.log_in_button.connect('clicked', self._on_login)
         self._ui.sign_up_button.connect('clicked', self._on_signup)
@@ -621,34 +623,8 @@ class Login(Page):
     def _on_signup(self, *args: Any) -> None:
         self.emit('clicked', 'signup')
 
-    def _create_server_completion(self) -> None:
-        # Parse servers.json
-        file_path = configpaths.get('DATA') / 'other' / 'servers.json'
-        self._servers = helpers.load_json(file_path, default=[])
-
-        # Create a separate model for the address entry, because it will
-        # be updated with our localpart@
-        address_model = Gtk.ListStore(str)
-        for server in self._servers:
-            address_model.append((server,))
-        self._ui.log_in_address_entry.get_completion().set_model(address_model)
-
     def _on_address_changed(self, entry: Gtk.Entry) -> None:
-        self._update_completion(entry)
         self._set_complete()
-
-    def _update_completion(self, entry: Gtk.Entry) -> None:
-        text = entry.get_text()
-        if '@' not in text:
-            self._show_icon(False)
-            return
-        text = text.split('@', 1)[0]
-
-        model = cast(Gtk.ListStore, entry.get_completion().get_model())
-        model.clear()
-
-        for server in self._servers:
-            model.append([f'{text}@{server}'])
 
     def _show_icon(self, show: bool) -> None:
         icon = 'dialog-warning-symbolic' if show else None
@@ -729,9 +705,11 @@ class Signup(Page):
         self.complete: bool = False
         self.title: str = _('Create New Account')
 
+        self._servers: list[dict[str, Any]] = []
+        self._provider_list_request: HTTPRequest | None = None
+
         self._ui = get_builder('account_wizard.ui')
         self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
-        self._create_server_completion()
 
         self._ui.recommendation_link1.connect(
             'activate-link', self._on_activate_link)
@@ -744,25 +722,126 @@ class Signup(Page):
 
         self.pack_start(self._ui.signup_grid, True, True, 0)
 
+        self.connect('destroy', self._on_destroy)
+
         self.show_all()
+
+    def _on_destroy(self, widget: Signup) -> None:
+        if self._provider_list_request is None:
+            return
+
+        if not self._provider_list_request.is_finished():
+            self._provider_list_request.cancel()
 
     def focus(self) -> None:
         self._ui.server_comboboxtext_sign_up_entry.grab_focus()
 
-    def _create_server_completion(self) -> None:
-        # Parse servers.json
-        file_path = configpaths.get('DATA') / 'other' / 'servers.json'
-        servers = helpers.load_json(file_path, default=[])
+    def update_providers_list(self) -> None:
+        if len(self._servers) > 0 or self._provider_list_request is not None:
+            # A request has already been started
+            return
 
-        # Create servers_model for comboboxes and entries
-        servers_model = Gtk.ListStore(str)
-        for server in servers:
-            servers_model.append((server,))
+        self._ui.server_comboboxtext_sign_up.set_sensitive(False)
+        self._ui.update_provider_list_icon.get_style_context().add_class('spin')
+
+        self._provider_list_request = create_http_request()
+        self._provider_list_request.send(
+            'GET',
+            app.settings.get_app_setting('providers_list_url'),
+            timeout=15,
+            callback=self._on_download_provider_list_finished
+        )
+
+    def _on_download_provider_list_finished(self, request: HTTPRequest) -> None:
+        self._ui.server_comboboxtext_sign_up.set_sensitive(True)
+        self._ui.update_provider_list_icon.get_style_context().remove_class('spin')
+
+        if not request.is_complete():
+            self._ui.update_provider_list_icon.set_from_icon_name(
+                'dialog-error-symbolic', Gtk.IconSize.BUTTON
+            )
+            self._ui.update_provider_list_icon.set_tooltip_text(
+                _('Could not update providers list')
+            )
+            log.warning('Provider list download failed: %s', request.get_error_string())
+            return
+
+        self._ui.update_provider_list_icon.set_from_icon_name(
+            'feather-check-symbolic', Gtk.IconSize.BUTTON
+        )
+        self._ui.update_provider_list_icon.set_tooltip_text(
+            _('Providers list is up to date')
+        )
+
+        self._servers = json.loads(request.get_data())
+        self._create_server_completion()
+
+    def _create_server_completion(self) -> None:
+        servers_model = Gtk.ListStore(str, str)
+
+        for server in self._servers:
+            server_locations = ' '.join(get_country_flag_from_code(
+                location) for location in server['serverLocations'])
+            servers_model.append((server['jid'], server_locations))
+
+        self._ui.server_comboboxtext_sign_up_entry.get_completion().set_model(
+            servers_model)
 
         # Sign up combobox and entry
         self._ui.server_comboboxtext_sign_up.set_model(servers_model)
-        self._ui.server_comboboxtext_sign_up_entry.get_completion().set_model(
-            servers_model)
+        cell_area = self._ui.server_comboboxtext_sign_up.get_area()
+        assert cell_area is not None
+
+        language_renderer = Gtk.CellRendererText(xalign=1)
+        cell_area.add(language_renderer)
+        cell_area.attribute_connect(language_renderer, 'text', 1)
+
+        self._ui.server_comboboxtext_sign_up.connect(
+            'changed', self._on_sign_up_server_changed)
+
+    def _on_sign_up_server_changed(self, combo: Gtk.ComboBox) -> None:
+        if len(self._servers) == 0:
+            return
+
+        selection = combo.get_active()
+        server_data = self._servers[selection]
+        if server_data['jid'] != self._ui.server_comboboxtext_sign_up_entry.get_text():
+            # Entry was changed manually
+            self._clear_server_info_box()
+            return
+
+        self._show_server_infos(server_data)
+
+    def _show_server_infos(self, server_data: dict[str, Any]) -> None:
+        self._clear_server_info_box()
+
+        heading = Gtk.Label(label=_('Provider Infos'), halign=Gtk.Align.START)
+        heading.get_style_context().add_class('bold')
+        self._ui.sign_up_info_grid.attach(heading, 0, 0, 2, 1)
+
+        provider_category = server_data['category']
+        image = Gtk.Image.new_from_icon_name(
+            'feather-check-symbolic', Gtk.IconSize.BUTTON)
+        label = Gtk.Label(
+            label=_('Provider Category: %s') % provider_category,
+            halign=Gtk.Align.START,
+            hexpand=True
+        )
+        self._ui.sign_up_info_grid.attach(image, 0, 1, 1, 1)
+        self._ui.sign_up_info_grid.attach(label, 1, 1, 1, 1)
+
+        providers_link = Gtk.LinkButton(
+            label=_('More infos at providers.xmpp.net'),
+            uri=f'https://providers.xmpp.net/provider/{server_data["jid"]}/',
+            halign=Gtk.Align.START)
+        self._ui.sign_up_info_grid.attach(providers_link, 0, 2, 2, 1)
+
+        self._ui.sign_up_info_grid.attach(Gtk.Separator(), 0, 3, 2, 1)
+        self._ui.sign_up_info_grid.show_all()
+
+    def _clear_server_info_box(self) -> None:
+        for child in self._ui.sign_up_info_grid.get_children():
+            child.destroy()
 
     def _on_visit_server(self, _button: Gtk.Button) -> int:
         server = self._ui.server_comboboxtext_sign_up_entry.get_text().strip()

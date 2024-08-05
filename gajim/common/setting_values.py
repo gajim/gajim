@@ -145,6 +145,7 @@ StringSettings = Literal[
     'muclumbus_api_jid',
     'muclumbus_api_pref',
     'preview_leftclick_action',
+    'providers_list_url',
     'roster_theme',
     'search_engine',
     'show_main_window_on_startup',
@@ -240,6 +241,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'preview_max_file_size': 10485760,
     'preview_size': 300,
     'preview_verify_https': True,
+    'providers_list_url': 'https://data.xmpp.net/providers/v2/providers-B.json',
     'print_status_in_chats': False,
     'remote_control': False,
     'roster_theme': 'default',
@@ -696,6 +698,8 @@ ADVANCED_SETTINGS = {
         'notify_on_all_muc_messages': '',
         'plugins_repository_enabled': _(
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
+        'providers_list_url': _(
+            'Endpoint for retrieving a list of providers for sign up'),
         'save_main_window_position': _(
             'If enabled, Gajim will save the main window position when hiding '
             'it, and restore it when showing the window again.'),

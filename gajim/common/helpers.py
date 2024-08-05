@@ -1468,5 +1468,47 @@ def format_idle_time(idle_time: datetime) -> str:
     return idle_date.strftime(app.settings.get('date_format'))
 
 
+def get_country_flag_from_code(country_code: str) -> str:
+        '''Returns a flag emoji for a two-letter country code.'''
+        emoji_letters = {
+            'A': '🇦',
+            'B': '🇧',
+            'C': '🇨',
+            'D': '🇩',
+            'E': '🇪',
+            'F': '🇫',
+            'G': '🇬',
+            'H': '🇭',
+            'I': '🇮',
+            'J': '🇯',
+            'K': '🇰',
+            'L': '🇱',
+            'M': '🇲',
+            'N': '🇳',
+            'O': '🇴',
+            'P': '🇵',
+            'Q': '🇶',
+            'R': '🇷',
+            'S': '🇸',
+            'T': '🇹',
+            'U': '🇺',
+            'V': '🇻',
+            'W': '🇼',
+            'X': '🇽',
+            'Y': '🇾',
+            'Z': '🇿',
+        }
+
+        if len(country_code) != 2:
+            return country_code.upper()
+
+        first = emoji_letters.get(country_code[0].upper())
+        second = emoji_letters.get(country_code[1].upper())
+        if first is None or second is None:
+            return country_code.upper()
+
+        return f'{first}{second}'
+
+
 def get_uuid() -> str:
     return str(uuid.uuid4())

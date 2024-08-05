@@ -55,10 +55,12 @@ class AccountWizardBuilder(Builder):
     recommendation_link1: Gtk.Label
     recommendation_link2: Gtk.Label
     signup_grid: Gtk.Grid
+    sign_up_advanced_checkbutton: Gtk.CheckButton
+    sign_up_anonymously: Gtk.CheckButton
+    sign_up_info_grid: Gtk.Grid
     server_comboboxtext_sign_up: Gtk.ComboBoxText
     server_comboboxtext_sign_up_entry: Gtk.Entry
-    sign_up_anonymously: Gtk.CheckButton
-    sign_up_advanced_checkbutton: Gtk.CheckButton
+    update_provider_list_icon: Gtk.Image
 
 
 class AddContactBuilder(Builder):

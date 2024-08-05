@@ -409,7 +409,7 @@
         <property name="visible">True</property>
         <property name="can-focus">True</property>
         <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Sign up for a new account on a server of your choice</property>
+        <property name="tooltip-text" translatable="yes">Sign up for a new account with a provider of your choice</property>
         <property name="use-underline">True</property>
       </object>
       <packing>
@@ -519,7 +519,7 @@
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="halign">center</property>
-        <property name="label" translatable="yes">The following warnings came up while trying to verify the server's certificate</property>
+        <property name="label" translatable="yes">The following warnings came up while trying to verify the provider's certificate</property>
         <property name="wrap">True</property>
         <property name="max-width-chars">42</property>
       </object>
@@ -592,7 +592,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Which server should I choose?</property>
+            <property name="label" translatable="yes">Which provider should I choose?</property>
             <style>
               <class name="bold"/>
             </style>
@@ -607,10 +607,10 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">There are plenty of servers to choose from.
-Creating an account on one server allows you to communicate with contacts from other servers as well.</property>
+            <property name="label" translatable="yes">There are plenty of providers to choose from.
+Creating an account with one provider allows you to communicate with contacts from other providers as well.</property>
             <property name="wrap">True</property>
-            <property name="max-width-chars">40</property>
+            <property name="max-width-chars">36</property>
             <property name="xalign">0</property>
           </object>
           <packing>
@@ -621,7 +621,7 @@ Creating an account on one server allows you to communicate with contacts from o
         </child>
         <child>
           <object class="GtkButton" id="visit_server_button">
-            <property name="label" translatable="yes">Visit Server's Website</property>
+            <property name="label" translatable="yes">Visit Provider's Website</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
             <property name="no-show-all">True</property>
@@ -641,7 +641,7 @@ Creating an account on one server allows you to communicate with contacts from o
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-top">3</property>
-            <property name="label" translatable="yes">Listing of Servers</property>
+            <property name="label" translatable="yes">Listing of providers</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -659,7 +659,7 @@ Creating an account on one server allows you to communicate with contacts from o
           <object class="GtkLabel" id="recommendation_link1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label">&lt;a href='https://xmpp.org/getting-started/'&gt;xmpp.org/getting-started&lt;/a&gt;</property>
+            <property name="label">&lt;a href='https://providers.xmpp.net'&gt;providers.xmpp.net&lt;/a&gt;</property>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
             <property name="wrap-mode">word-char</property>
@@ -677,7 +677,7 @@ Creating an account on one server allows you to communicate with contacts from o
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="margin-top">3</property>
-            <property name="label" translatable="yes">A Feature Comparison of Various Servers</property>
+            <property name="label" translatable="yes">A feature comparison of various providers</property>
             <property name="wrap">True</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -695,7 +695,7 @@ Creating an account on one server allows you to communicate with contacts from o
           <object class="GtkLabel" id="recommendation_link2">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label">&lt;a href='https://conversations.im/compliance/'&gt;conversations.im/compliance&lt;/a&gt;</property>
+            <property name="label">&lt;a href='https://compliance.conversations.im'&gt;compliance.conversations.im&lt;/a&gt;</property>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
             <property name="wrap-mode">word-char</property>
@@ -711,7 +711,7 @@ Creating an account on one server allows you to communicate with contacts from o
       </object>
     </child>
   </object>
-  <!-- n-columns=3 n-rows=5 -->
+  <!-- n-columns=2 n-rows=6 -->
   <object class="GtkGrid" id="signup_grid">
     <property name="visible">True</property>
     <property name="can-focus">False</property>
@@ -738,7 +738,7 @@ Creating an account on one server allows you to communicate with contacts from o
       <object class="GtkLabel">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label" translatable="yes">_Please choose a server</property>
+        <property name="label" translatable="yes">_Please choose a provider</property>
         <property name="use-markup">True</property>
         <property name="use-underline">True</property>
         <style>
@@ -748,64 +748,6 @@ Creating an account on one server allows you to communicate with contacts from o
       <packing>
         <property name="left-attach">0</property>
         <property name="top-attach">1</property>
-        <property name="width">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Which server should I choose?</property>
-        <property name="popover">server_recommendations</property>
-        <child>
-          <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">dialog-information-symbolic</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBoxText" id="server_comboboxtext_sign_up">
-        <property name="width-request">300</property>
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="has-entry">True</property>
-        <child internal-child="entry">
-          <object class="GtkEntry" id="server_comboboxtext_sign_up_entry">
-            <property name="can-focus">True</property>
-            <property name="activates-default">True</property>
-            <property name="placeholder-text" translatable="yes">example.org</property>
-            <property name="completion">entrycompletion2</property>
-            <property name="input-purpose">url</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkCheckButton" id="sign_up_anonymously">
-        <property name="label" translatable="yes">Sign up Anonymously</property>
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">False</property>
-        <property name="tooltip-text" translatable="yes">Note: Anonymous accounts are not possible on all servers</property>
-        <property name="halign">start</property>
-        <property name="valign">start</property>
-        <property name="draw-indicator">True</property>
-      </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">3</property>
         <property name="width">2</property>
       </packing>
     </child>
@@ -822,21 +764,115 @@ Creating an account on one server allows you to communicate with contacts from o
       </object>
       <packing>
         <property name="left-attach">0</property>
+        <property name="top-attach">5</property>
+        <property name="width">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkCheckButton" id="sign_up_anonymously">
+        <property name="label" translatable="yes">Sign up Anonymously</property>
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="receives-default">False</property>
+        <property name="tooltip-text" translatable="yes">Note: Anonymous accounts are not possible with all providers</property>
+        <property name="halign">start</property>
+        <property name="valign">start</property>
+        <property name="draw-indicator">True</property>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
         <property name="top-attach">4</property>
         <property name="width">2</property>
       </packing>
     </child>
     <child>
-      <placeholder/>
+      <!-- n-columns=2 n-rows=1 -->
+      <object class="GtkGrid" id="sign_up_info_grid">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">12</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">3</property>
+        <property name="width">2</property>
+      </packing>
     </child>
     <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <child>
-      <placeholder/>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkComboBoxText" id="server_comboboxtext_sign_up">
+            <property name="width-request">300</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="has-entry">True</property>
+            <child internal-child="entry">
+              <object class="GtkEntry" id="server_comboboxtext_sign_up_entry">
+                <property name="can-focus">True</property>
+                <property name="activates-default">True</property>
+                <property name="placeholder-text" translatable="yes">example.org</property>
+                <property name="completion">entrycompletion2</property>
+                <property name="input-purpose">url</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkImage" id="update_provider_list_icon">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="tooltip-text" translatable="yes">Updating provider list…</property>
+            <property name="icon-name">view-refresh-symbolic</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">Which provider should I choose?</property>
+            <property name="popover">server_recommendations</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">dialog-information-symbolic</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left-attach">0</property>
+        <property name="top-attach">2</property>
+      </packing>
     </child>
     <child>
       <placeholder/>
