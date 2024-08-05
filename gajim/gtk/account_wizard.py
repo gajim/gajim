@@ -737,7 +737,8 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up_entry.grab_focus()
 
     def update_providers_list(self) -> None:
-        if len(self._servers) > 0:
+        if len(self._servers) > 0 or self._provider_list_request is not None:
+            # A request has already been started
             return
 
         self._ui.server_comboboxtext_sign_up.set_sensitive(False)
