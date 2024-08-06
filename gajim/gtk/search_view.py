@@ -511,6 +511,12 @@ class SearchFilters(Gtk.Expander):
 
         self._ui.filter_from_entry.connect('changed', self._on_filter_from_changed)
         self._ui.filter_from_entry.connect('activate', self._on_from_entry_activated)
+
+        self._ui.filter_after_button.connect(
+            'toggled', self._on_filter_calendar_toggled)
+        self._ui.filter_before_button.connect(
+            'toggled', self._on_filter_calendar_toggled)
+
         self._ui.filter_date_calendar.connect('day-selected', self._on_date_selected)
         self._ui.filter_date_calendar_reset_button.connect(
             'clicked', self._on_date_reset_clicked)
@@ -521,6 +527,9 @@ class SearchFilters(Gtk.Expander):
 
     def _on_from_entry_activated(self, _entry: Gtk.Entry) -> None:
         self.emit('filter-activated')
+
+    def _on_filter_calendar_toggled(self, button: Gtk.ToggleButton) -> None:
+        self._ui.filter_date_selector_popover.set_relative_to(button)
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
         year, month, day = calendar.get_date()
