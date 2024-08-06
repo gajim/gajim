@@ -11,6 +11,7 @@ import itertools
 import logging
 from collections.abc import Iterator
 from dataclasses import dataclass
+from enum import Enum
 
 import cairo
 from gi.repository import GObject
@@ -37,6 +38,12 @@ from gajim.gtk.util import gtk_month
 from gajim.gtk.util import python_month
 
 log = logging.getLogger('gajim.gtk.search_view')
+
+
+class PlaceholderMode(Enum):
+    INITIAL = 'initial'
+    SEARCHING = 'searching'
+    NO_RESULTS = 'no_results'
 
 
 class SearchView(Gtk.Box):
@@ -119,6 +126,8 @@ class SearchView(Gtk.Box):
         self._ui.results_listbox.set_header_func(self._header_func)
         self._ui.results_scrolled.get_vadjustment().set_value(0)
 
+        self._set_placeholder_mode(PlaceholderMode.INITIAL)
+
     def _on_search_all_toggled(self, _checkbutton: Gtk.CheckButton) -> None:
         # Reset state to allow changing scope while not changing search string
         self._last_search_string = ''
@@ -158,6 +167,7 @@ class SearchView(Gtk.Box):
 
         search_filter = self._search_filters.get_filters()
 
+        self._set_placeholder_mode(PlaceholderMode.SEARCHING)
         self._results_iterator = app.storage.archive.search_archive(
                 account,
                 jid,
@@ -168,11 +178,32 @@ class SearchView(Gtk.Box):
 
         self._add_results()
 
+    def _set_placeholder_mode(self, placeholder_mode: PlaceholderMode) -> None:
+        if placeholder_mode == PlaceholderMode.SEARCHING:
+            icon_name = 'view-refresh-symbolic'
+            text = _('Searching…')
+
+        elif placeholder_mode == PlaceholderMode.NO_RESULTS:
+            icon_name = 'action-unavailable-symbolic'
+            text = _('No results')
+        else:
+            # PlaceholderMode.INITIAL
+            icon_name = 'system-search-symbolic'
+            text = _('Search your conversation')
+
+        self._ui.placeholder_image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
+        self._ui.placeholder_label.set_text(text)
+
     def _add_results(self) -> None:
         assert self._results_iterator is not None
+        has_results = False
         for db_row in itertools.islice(self._results_iterator, 25):
+            has_results = True
             result_row = ResultRow(db_row)
             self._ui.results_listbox.add(result_row)
+
+        if not has_results:
+            self._set_placeholder_mode(PlaceholderMode.NO_RESULTS)
 
     def _on_edge_reached(self,
                          _scrolledwin: Gtk.ScrolledWindow,

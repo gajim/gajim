@@ -859,6 +859,8 @@ class SearchViewBuilder(Builder):
     results_scrolled: Gtk.ScrolledWindow
     results_listbox: Gtk.ListBox
     placeholder: Gtk.Box
+    placeholder_image: Gtk.Image
+    placeholder_label: Gtk.Label
     filter_date_selector_popover: Gtk.Popover
     filter_date_calendar: Gtk.Calendar
     filter_date_calendar_reset_button: Gtk.Button
