@@ -105,6 +105,7 @@ class SearchView(Gtk.Box):
     def _clear(self) -> None:
         self._last_search_string = ''
         self._ui.search_entry.set_text('')
+        self._search_filters.reset()
         self._clear_results()
 
     def _clear_results(self) -> None:
@@ -528,6 +529,19 @@ class SearchFilters(Gtk.Expander):
             self.set_label(_('Message Filters'))
 
         self.emit('filter-changed')
+
+    def reset(self) -> None:
+        self._before = None
+        self._after = None
+
+        self._ui.filter_before_label.set_text('-')
+        self._ui.filter_after_label.set_text('-')
+
+        self._ui.filter_from_desc_label.hide()
+        self._ui.filter_from_entry.hide()
+        self._ui.filter_from_entry.set_text('')
+
+        self.set_label(_('Message Filters'))
 
     def set_context(self, account: str | None, jid: JID | None) -> None:
         if account is None or jid is None:
