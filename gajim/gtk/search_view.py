@@ -363,13 +363,13 @@ class SearchView(Gtk.Box):
         self._account = account
         self._jid = jid
 
+        self._search_filters.set_context(account, jid)
+
         if self._account is None and self._jid is None:
             self._ui.calendar_button.set_sensitive(False)
             return
 
         self._ui.calendar_button.set_sensitive(True)
-
-        self._search_filters.set_context(account, jid)
 
 
 class RowHeader(Gtk.Box):
@@ -577,8 +577,6 @@ class SearchFilters(Gtk.Expander):
         self._ui.filter_before_label.set_text('-')
         self._ui.filter_after_label.set_text('-')
 
-        self._ui.filter_from_desc_label.hide()
-        self._ui.filter_from_entry.hide()
         self._ui.filter_from_entry.set_text('')
 
         self.set_label(_('Message Filters'))
