@@ -144,6 +144,9 @@ infobar.error > revealer > box {
     animation-timing-function: linear;
     animation-iteration-count: infinite;
 }
+.opacity-0 {
+    opacity: 0;
+}
 
 /* General purpose classes ================================================= */
 .dialog-margin > box { margin: 18px;}
@@ -525,6 +528,7 @@ infobar.error > revealer > box {
 .search-view-row {
     padding: 4px 3px 4px 6px;
     border-radius: 4px;
+    transition: opacity 500ms ease-in-out;
 }
 .search-view-row-grid textview {
 	background: transparent;

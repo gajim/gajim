@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 import cairo
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
@@ -179,7 +180,10 @@ class SearchView(Gtk.Box):
         self._add_results()
 
     def _set_placeholder_mode(self, placeholder_mode: PlaceholderMode) -> None:
+        self._ui.placeholder_image.get_style_context().remove_class('spin')
+
         if placeholder_mode == PlaceholderMode.SEARCHING:
+            self._ui.placeholder_image.get_style_context().add_class('spin')
             icon_name = 'view-refresh-symbolic'
             text = _('Searching…')
 
@@ -422,7 +426,9 @@ class ResultRow(Gtk.ListBoxRow):
             self.contact,
             BareContact | GroupchatContact | GroupchatParticipant)
 
-        self.get_style_context().add_class('search-view-row')
+        style_context = self.get_style_context()
+        style_context.add_class('search-view-row')
+        style_context.add_class('opacity-0')
         self._ui = get_builder('search_view.ui')
         self.add(self._ui.result_row_grid)
 
@@ -450,6 +456,7 @@ class ResultRow(Gtk.ListBoxRow):
         message_widget.add_with_styling(text, nickname=contact_name)
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
+        GLib.timeout_add(100, style_context.remove_class, 'opacity-0')
         self.show_all()
 
     def _get_client(self, account_jid: str) -> Client:
