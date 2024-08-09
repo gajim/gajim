@@ -508,7 +508,7 @@ class SearchFilters(Gtk.Expander):
     }
 
     def __init__(self) -> None:
-        Gtk.Expander.__init__(self, label=_('Message Filters'))
+        Gtk.Expander.__init__(self, label=_('Search Filters'))
 
         self._after: dt.datetime | None = None
         self._before: dt.datetime | None = None
@@ -571,9 +571,9 @@ class SearchFilters(Gtk.Expander):
         from_filter = self._ui.filter_from_entry.get_text()
 
         if any((from_filter, self._before, self._after)):
-            self.set_label(_('Message Filters (Active)'))
+            self.set_label(_('Search Filters (Active)'))
         else:
-            self.set_label(_('Message Filters'))
+            self.set_label(_('Search Filters'))
 
         self.emit('filter-changed')
 
@@ -586,7 +586,7 @@ class SearchFilters(Gtk.Expander):
 
         self._ui.filter_from_entry.set_text('')
 
-        self.set_label(_('Message Filters'))
+        self.set_label(_('Search Filters'))
 
     def set_context(self, account: str | None, jid: JID | None) -> None:
         if account is None or jid is None:
