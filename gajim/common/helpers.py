@@ -340,15 +340,6 @@ def determine_proxy() -> ProxyData | None:
     return proxies[0] if proxies else None
 
 
-def call_counter(func):
-    def helper(self, restart=False):
-        if restart:
-            self._connect_machine_calls = 0
-        self._connect_machine_calls += 1
-        return func(self)
-    return helper
-
-
 def load_json(path: Path,
               key: str | None = None,
               default: Any | None = None) -> Any:

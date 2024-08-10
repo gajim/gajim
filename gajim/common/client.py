@@ -21,7 +21,6 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import modules
 from gajim.common import passwords
 from gajim.common.client_modules import ClientModules
@@ -55,6 +54,15 @@ log = logging.getLogger('gajim.client')
 
 
 IgnoredTlsErrorsT = set[Gio.TlsCertificateFlags] | None
+
+
+def call_counter(func: Any):
+    def helper(self, restart: bool = False) -> Any:
+        if restart:
+            self._connect_machine_calls = 0
+        self._connect_machine_calls += 1
+        return func(self)
+    return helper
 
 
 class Client(Observable, ClientModules):
@@ -422,7 +430,7 @@ class Client(Observable, ClientModules):
         if include_muc:
             self.get_module('MUC').update_presence()
 
-    @helpers.call_counter
+    @call_counter
     def connect_machine(self) -> None:
         log.info('Connect machine state: %s', self._connect_machine_calls)
         if self._connect_machine_calls == 1:
