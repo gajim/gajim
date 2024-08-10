@@ -37,6 +37,9 @@ from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.modules.base import BaseModule
 from gajim.common.socks5 import Socks5SenderClient
+from gajim.common.util.jid import get_full_jid_from_iq
+from gajim.common.util.jid import get_jid_from_iq
+from gajim.common.util.jid import parse_jid
 
 log = logging.getLogger('gajim.c.m.bytestream')
 
@@ -120,11 +123,11 @@ class Bytestream(BaseModule):
 
     @staticmethod
     def _ft_get_from(iq_obj: Iq) -> str | None:
-        return helpers.get_full_jid_from_iq(iq_obj)
+        return get_full_jid_from_iq(iq_obj)
 
     @staticmethod
     def _ft_get_streamhost_jid_attr(streamhost: nbxmpp.Node) -> str:
-        return helpers.parse_jid(streamhost.getAttr('jid'))
+        return parse_jid(streamhost.getAttr('jid'))
 
     def send_file_approval(self, file_props: FileProp) -> None:
         '''
@@ -562,10 +565,10 @@ class Bytestream(BaseModule):
                              _properties: IqProperties
                              ) -> None:
         id_ = iq_obj.getAttr('id')
-        frm = helpers.get_full_jid_from_iq(iq_obj)
+        frm = get_full_jid_from_iq(iq_obj)
         query = iq_obj.getTag('query')
         app.proxy65_manager.error_cb(frm, query)
-        jid = helpers.get_jid_from_iq(iq_obj)
+        jid = get_jid_from_iq(iq_obj)
         id_ = id_[3:]
         file_props = FilesProp.getFilePropBySid(id_)
         if not file_props:

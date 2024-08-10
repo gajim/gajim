@@ -33,12 +33,12 @@ from gajim.common.const import URIType
 from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import parse_uri
 from gajim.common.helpers import to_user_string
-from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
+from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_filter import ChatFilter

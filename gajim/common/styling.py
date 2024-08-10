@@ -17,7 +17,7 @@ from gi.repository import GLib
 from gajim.common import regex
 from gajim.common.const import URIType
 from gajim.common.helpers import parse_uri as analyze_uri
-from gajim.common.helpers import validate_jid
+from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import escape_iri_query
 
 PRE = '`'

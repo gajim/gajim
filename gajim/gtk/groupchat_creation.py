@@ -22,8 +22,8 @@ from gajim.common.events import AccountDisconnected
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_random_muc_localpart
 from gajim.common.helpers import to_user_string
-from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
+from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog

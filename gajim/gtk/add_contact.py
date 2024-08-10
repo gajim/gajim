@@ -20,9 +20,9 @@ from nbxmpp.structs import DiscoInfo
 from gajim.common import app
 from gajim.common import types
 from gajim.common.helpers import get_subscription_request_msg
-from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.util import as_task
+from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage

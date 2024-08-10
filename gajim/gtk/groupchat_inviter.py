@@ -19,9 +19,9 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
-from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contacts_flowbox import ContactsFlowBox

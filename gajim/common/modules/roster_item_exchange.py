@@ -14,11 +14,12 @@ from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import types
 from gajim.common.events import RosterItemExchangeEvent
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
+from gajim.common.util.jid import InvalidFormat
+from gajim.common.util.jid import parse_jid
 
 
 class RosterItemExchange(BaseModule):
@@ -57,8 +58,8 @@ class RosterItemExchange(BaseModule):
 
         for item in items_list:
             try:
-                jid = helpers.parse_jid(item.getAttr('jid'))
-            except helpers.InvalidFormat:
+                jid = parse_jid(item.getAttr('jid'))
+            except InvalidFormat:
                 self._log.warning('Invalid JID: %s, ignoring it',
                                   item.getAttr('jid'))
                 continue

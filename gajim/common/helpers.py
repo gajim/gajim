@@ -59,8 +59,6 @@ from nbxmpp.const import ConnectionType
 from nbxmpp.const import Role
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import InvalidJid
-from nbxmpp.protocol import Iq
 from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
@@ -85,6 +83,7 @@ from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
 from gajim.common.structs import URI
+from gajim.common.util.jid import validate_jid
 
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
@@ -103,59 +102,6 @@ log = logging.getLogger('gajim.c.helpers')
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
-
-
-class InvalidFormat(Exception):
-    pass
-
-
-def parse_jid(jidstring: str) -> str:
-    try:
-        return str(validate_jid(jidstring))
-    except Exception as error:
-        raise InvalidFormat(error)
-
-
-def idn_to_ascii(host: str) -> str:
-    '''
-    Convert IDN (Internationalized Domain Names) to ACE (ASCII-compatible
-    encoding)
-    '''
-    from encodings import idna
-    labels = idna.dots.split(host)
-    converted_labels: list[str] = []
-    for label in labels:
-        if label:
-            converted_labels.append(idna.ToASCII(label).decode('utf-8'))
-        else:
-            converted_labels.append('')
-    return '.'.join(converted_labels)
-
-
-def ascii_to_idn(host: str) -> str:
-    '''
-    Convert ACE (ASCII-compatible encoding) to IDN (Internationalized Domain
-    Names)
-    '''
-    from encodings import idna
-    labels = idna.dots.split(host)
-    converted_labels: list[str] = []
-    for label in labels:
-        converted_labels.append(idna.ToUnicode(label))
-    return '.'.join(converted_labels)
-
-
-def parse_resource(resource: str) -> str | None:
-    '''
-    Perform stringprep on resource and return it
-    '''
-    if not resource:
-        return None
-
-    try:
-        return resource.encode('OpaqueString').decode('utf-8')
-    except UnicodeError:
-        raise InvalidFormat('Invalid character in resource.')
 
 
 def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
@@ -505,26 +451,6 @@ def statuses_unified() -> bool:
         elif reference != get_client_status(account):
             return False
     return True
-
-
-def get_full_jid_from_iq(iq_obj: Iq) -> str | None:
-    '''
-    Return the full jid (with resource) from an iq
-    '''
-    jid = iq_obj.getFrom()
-    if jid is None:
-        return None
-    return parse_jid(str(iq_obj.getFrom()))
-
-
-def get_jid_from_iq(iq_obj: Iq) -> str | None:
-    '''
-    Return the jid (without resource) from an iq
-    '''
-    jid = get_full_jid_from_iq(iq_obj)
-    if jid is None:
-        return None
-    return app.get_jid_without_resource(jid)
 
 
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
@@ -1132,24 +1058,6 @@ def get_default_muc_config() -> dict[str, bool | str]:
         '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': False,
         'muc#roomconfig_enablearchiving': True,
     }
-
-
-def validate_jid(jid: str | JID, type_: str | None = None) -> JID:
-    try:
-        jid = JID.from_string(str(jid))
-    except InvalidJid as error:
-        raise ValueError(error)
-
-    if type_ is None:
-        return jid
-    if type_ == 'bare' and jid.is_bare:
-        return jid
-    if type_ == 'full' and jid.is_full:
-        return jid
-    if type_ == 'domain' and jid.is_domain:
-        return jid
-
-    raise ValueError(f'Not a {type_} JID')
 
 
 def to_user_string(error: CommonError | StanzaError) -> str:

@@ -44,9 +44,10 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoIdentity
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.const import StyleAttr
 from gajim.common.i18n import _
+from gajim.common.util.jid import InvalidFormat
+from gajim.common.util.jid import parse_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.component_search import ComponentSearch
@@ -726,8 +727,8 @@ class ServiceDiscoveryWindow:
             # User selected one of the entries so do auto-visit
             jid = self._ui.address_comboboxtext_entry.get_text()
             try:
-                jid = helpers.parse_jid(jid)
-            except helpers.InvalidFormat as s:
+                jid = parse_jid(jid)
+            except InvalidFormat as s:
                 ErrorDialog(_('Invalid Server Name'), str(s))
                 return
             self.travel(jid, None)
@@ -735,8 +736,8 @@ class ServiceDiscoveryWindow:
     def _on_go_button_clicked(self, widget):
         jid = self._ui.address_comboboxtext_entry.get_text()
         try:
-            jid = helpers.parse_jid(jid)
-        except helpers.InvalidFormat as s:
+            jid = parse_jid(jid)
+        except InvalidFormat as s:
             ErrorDialog(_('Invalid Server Name'),
                         str(s),
                         transient_for=self.window)

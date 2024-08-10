@@ -41,6 +41,8 @@ from gajim.common.jingle_session import JingleStates
 from gajim.common.jingle_transport import JingleTransportIBB
 from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.modules.base import BaseModule
+from gajim.common.util.jid import get_full_jid_from_iq
+from gajim.common.util.jid import InvalidFormat
 
 logger = logging.getLogger('gajim.c.m.jingle')
 
@@ -97,8 +99,8 @@ class Jingle(BaseModule):
         '''
         # get data
         try:
-            jid = helpers.get_full_jid_from_iq(stanza)
-        except helpers.InvalidFormat:
+            jid = get_full_jid_from_iq(stanza)
+        except InvalidFormat:
             logger.warning('Invalid JID: %s, ignoring it', stanza.getFrom())
             return
         id_ = stanza.getID()

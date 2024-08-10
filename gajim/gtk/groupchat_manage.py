@@ -16,9 +16,9 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
-from gajim.common.helpers import validate_jid
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
