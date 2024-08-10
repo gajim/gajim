@@ -236,7 +236,9 @@ class MessageRowActions(Gtk.EventBox):
         return True
 
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
-        assert self._message_row is not None
+        if self._message_row is None:
+            return
+
         app.window.activate_action('reply', GLib.Variant('u', self._message_row.pk))
 
     def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
@@ -250,11 +252,15 @@ class MessageRowActions(Gtk.EventBox):
         self._send_reaction(emoji, toggle=False)
 
     def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
-        assert self._message_row is not None
+        if self._message_row is None:
+            return
+
         self._message_row.send_reaction(emoji, toggle)
 
     def _on_more_clicked(self, button: Gtk.Button) -> None:
-        assert self._message_row is not None
+        if self._message_row is None:
+            return
+
         self._menu_button_clicked = True
         self._message_row.show_chat_row_menu(self, button)
 
