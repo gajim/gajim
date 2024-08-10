@@ -39,7 +39,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Display
 from gajim.common.const import LOCATION_DATA
 from gajim.common.ged import EventHelper as CommonEventHelper
-from gajim.common.helpers import format_idle_time
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -50,6 +49,7 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import VariantMixin
 from gajim.common.styling import PlainBlock
+from gajim.common.util.user_strings import format_idle_time
 
 from gajim.gtk.const import WINDOW_MODULES
 

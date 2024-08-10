@@ -22,11 +22,9 @@ from nbxmpp.structs import MucSubject
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import XmppUriQuery
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import get_moderation_text
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -35,6 +33,9 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.user_strings import get_moderation_text
+from gajim.common.util.user_strings import get_uf_affiliation
+from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
@@ -747,7 +748,7 @@ class ChatControl(EventHelper):
             self,
             event: events.MUCUserAffiliationChanged) -> None:
 
-        affiliation = helpers.get_uf_affiliation(event.affiliation)
+        affiliation = get_uf_affiliation(event.affiliation)
 
         reason = event.reason
         reason = '' if reason is None else f': {reason}'
@@ -787,7 +788,7 @@ class ChatControl(EventHelper):
         self.add_info_message(
             self.__format_affiliation_change(
                 event.nick,
-                helpers.get_uf_affiliation(event.affiliation)),
+                get_uf_affiliation(event.affiliation)),
             event.timestamp)
 
     @staticmethod
@@ -815,7 +816,7 @@ class ChatControl(EventHelper):
                                        event: events.MUCUserRoleChanged
                                        ) -> None:
 
-        role = helpers.get_uf_role(event.role)
+        role = get_uf_role(event.role)
         nick = event.nick
 
         reason = event.reason

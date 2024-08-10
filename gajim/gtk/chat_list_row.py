@@ -23,8 +23,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
 from gajim.common.helpers import get_groupchat_name
-from gajim.common.helpers import get_moderation_text
-from gajim.common.helpers import get_uf_relative_time
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -40,6 +38,8 @@ from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import format_geo_coords
 from gajim.common.util.preview import guess_simple_file_type
 from gajim.common.util.preview import split_geo_uri
+from gajim.common.util.user_strings import get_moderation_text
+from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_chat_list_row_menu

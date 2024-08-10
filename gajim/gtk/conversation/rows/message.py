@@ -15,7 +15,6 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Trust
 from gajim.common.const import TRUST_SYMBOL_DATA
-from gajim.common.helpers import get_moderation_text
 from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
 from gajim.common.i18n import is_rtl_text
@@ -27,6 +26,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
+from gajim.common.util.user_strings import get_moderation_text
 
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.reactions_bar import ReactionsBar

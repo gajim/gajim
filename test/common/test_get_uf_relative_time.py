@@ -5,9 +5,9 @@ from datetime import timedelta
 from datetime import timezone
 
 from gajim.common import app
-from gajim.common.helpers import get_uf_relative_time
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
+from gajim.common.util.user_strings import get_uf_relative_time
 
 local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
 

@@ -27,7 +27,6 @@ from gi.repository import Pango
 from nbxmpp import JID
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.file_props import FileProp
@@ -35,6 +34,8 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.user_strings import get_uf_affiliation
+from gajim.common.util.user_strings import get_uf_sub
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
@@ -94,7 +95,7 @@ class GCTooltip:
 
         # Affiliation
         if not contact.affiliation.is_none:
-            uf_affiliation = helpers.get_uf_affiliation(contact.affiliation)
+            uf_affiliation = get_uf_affiliation(contact.affiliation)
             uf_affiliation = \
                 _('%(owner_or_admin_or_member)s of this group chat') \
                 % {'owner_or_admin_or_member': uf_affiliation}
@@ -161,7 +162,7 @@ class ContactTooltip:
 
         if contact.subscription and contact.subscription != 'both':
             # 'both' is the normal subscription value, just omit it
-            self._ui.sub.set_text(helpers.get_uf_sub(contact.subscription))
+            self._ui.sub.set_text(get_uf_sub(contact.subscription))
             self._ui.sub.show()
             self._ui.sub_label.show()
 

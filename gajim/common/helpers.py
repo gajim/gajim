@@ -33,9 +33,6 @@ import uuid
 import weakref
 from collections import defaultdict
 from collections.abc import Callable
-from datetime import datetime
-from datetime import timedelta
-from datetime import timezone
 from pathlib import Path
 from string import Template
 
@@ -47,7 +44,6 @@ from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
-from nbxmpp.const import Chatstate
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Role
@@ -64,10 +60,7 @@ from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import VOWELS
-from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
-from gajim.common.i18n import ngettext
-from gajim.common.i18n import p_
 from gajim.common.util.text import get_random_string
 
 if TYPE_CHECKING:
@@ -84,128 +77,6 @@ if os.name == 'nt':
         pass
 
 log = logging.getLogger('gajim.c.helpers')
-
-
-def get_uf_sub(sub: str) -> str:
-    if sub == 'none':
-        return p_('Contact subscription', 'None')
-
-    if sub == 'to':
-        return p_('Contact subscription', 'To')
-
-    if sub == 'from':
-        return p_('Contact subscription', 'From')
-
-    if sub == 'both':
-        return p_('Contact subscription', 'Both')
-
-    return p_('Contact subscription', 'Unknown')
-
-
-def get_uf_ask(ask: str | None) -> str:
-    if ask is None:
-        return p_('Contact subscription', 'None')
-
-    if ask == 'subscribe':
-        return p_('Contact subscription', 'Subscribe')
-
-    return ask
-
-
-def get_uf_role(role: Role | str, plural: bool = False) -> str:
-    ''' plural determines if you get Moderators or Moderator'''
-    if not isinstance(role, str):
-        role = role.value
-
-    if role == 'none':
-        return p_('Group chat contact role', 'None')
-    if role == 'moderator':
-        if plural:
-            return p_('Group chat contact role', 'Moderators')
-        return p_('Group chat contact role', 'Moderator')
-    if role == 'participant':
-        if plural:
-            return p_('Group chat contact role', 'Participants')
-        return p_('Group chat contact role', 'Participant')
-    if role == 'visitor':
-        if plural:
-            return p_('Group chat contact role', 'Visitors')
-        return p_('Group chat contact role', 'Visitor')
-    return ''
-
-
-def get_uf_affiliation(affiliation: Affiliation | str,
-                       plural: bool = False
-                       ) -> str:
-    '''Get a nice and translated affilition for muc'''
-    if not isinstance(affiliation, str):
-        affiliation = affiliation.value
-
-    if affiliation == 'none':
-        return p_('Group chat contact affiliation', 'None')
-    if affiliation == 'owner':
-        if plural:
-            return p_('Group chat contact affiliation', 'Owners')
-        return p_('Group chat contact affiliation', 'Owner')
-    if affiliation == 'admin':
-        if plural:
-            return p_('Group chat contact affiliation', 'Administrators')
-        return p_('Group chat contact affiliation', 'Administrator')
-    if affiliation == 'member':
-        if plural:
-            return p_('Group chat contact affiliation', 'Members')
-        return p_('Group chat contact affiliation', 'Member')
-    return ''
-
-
-def get_uf_relative_time(date_time: datetime,
-                         now: datetime | None = None
-                         ) -> str:
-
-    if now is None:  # used by unittest
-        now = datetime.now()
-    timespan = now - date_time
-
-    if timespan < timedelta(minutes=1):
-        return _('Just now')
-    if timespan < timedelta(minutes=15):
-        minutes = int(timespan.seconds / 60)
-        return ngettext('%s min ago',
-                        '%s mins ago',
-                        minutes,
-                        str(minutes),
-                        str(minutes))
-    today = now.date()
-    if date_time.date() == today:
-        format_string = app.settings.get('time_format')
-        return date_time.strftime(format_string)
-    yesterday = now.date() - timedelta(days=1)
-    if date_time.date() == yesterday:
-        return _('Yesterday')
-    if timespan < timedelta(days=7):  # this week
-        return date_time.strftime('%a')  # weekday
-    if timespan < timedelta(days=365):  # this year
-        return date_time.strftime('%b %d')
-    return str(date_time.year)
-
-
-def chatstate_to_string(chatstate: Chatstate | None) -> str:
-    if chatstate is None:
-        return ''
-
-    if chatstate == Chatstate.ACTIVE:
-        return ''
-
-    if chatstate == Chatstate.COMPOSING:
-        return _('is composing a message…')
-
-    if chatstate in (Chatstate.INACTIVE, Chatstate.GONE):
-        return _('is doing something else')
-
-    if chatstate == Chatstate.PAUSED:
-        return _('paused composing a message')
-
-    raise ValueError('unknown value: %s' % chatstate)
 
 
 def sanitize_filename(filename: str) -> str:
@@ -458,31 +329,6 @@ def get_optional_features(account: str) -> list[str]:
 def jid_is_blocked(account: str, jid: str) -> bool:
     client = app.get_client(account)
     return jid in client.get_module('Blocking').blocked
-
-
-def get_subscription_request_msg(account: str | None = None) -> str:
-    if account is None:
-        return _('I would like to add you to my contact list.')
-
-    message = app.settings.get_account_setting(
-        account, 'subscription_request_msg')
-    if message:
-        return message
-
-    message = _('Hello, I am $name. %s') % message
-    return Template(message).safe_substitute({'name': app.nicks[account]})
-
-
-def get_moderation_text(by: str | JID | None,
-                        reason: str | None) -> str:
-
-    by_text = ''
-    if by is not None:
-        by_text = (' by %s') % by
-    text = _('This message has been moderated%s.') % by_text
-    if reason is not None:
-        text += ' ' + _('Reason: %s') % reason
-    return text
 
 
 def get_global_proxy() -> ProxyData | None:
@@ -909,23 +755,6 @@ def get_random_muc_localpart() -> str:
             result = f'{result}{CONSONANTS[random.randrange(len(CONSONANTS))]}'
         is_vowel = not is_vowel
     return result
-
-
-def format_idle_time(idle_time: datetime) -> str:
-    now = datetime.now(timezone.utc)
-
-    now_date = now.date()
-    idle_date = idle_time.date()
-
-    if idle_date == now_date:
-        return idle_time.strftime(app.settings.get('time_format'))
-    if idle_date == now_date - timedelta(days=1):
-        return _('Yesterday (%s)') % idle_time.strftime(
-            app.settings.get('time_format'))
-    if idle_date >= now_date - timedelta(days=6):
-        return idle_time.strftime(f'%a {app.settings.get("time_format")}')
-
-    return idle_date.strftime(app.settings.get('date_format'))
 
 
 def get_uuid() -> str:

@@ -22,11 +22,11 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import MUCNicknameChanged
-from gajim.common.helpers import get_uf_affiliation
-from gajim.common.helpers import get_uf_role
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.util.user_strings import get_uf_affiliation
+from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_groupchat_participant_menu
