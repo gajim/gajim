@@ -26,7 +26,6 @@ import json
 import logging
 import os
 import random
-import re
 import socket
 import sys
 import unicodedata
@@ -85,9 +84,6 @@ if os.name == 'nt':
         pass
 
 log = logging.getLogger('gajim.c.helpers')
-
-URL_REGEX = re.compile(
-    r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
 
 
 def get_uf_sub(sub: str) -> str:

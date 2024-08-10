@@ -40,11 +40,11 @@ from gajim.common.const import Display
 from gajim.common.const import LOCATION_DATA
 from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.helpers import format_idle_time
-from gajim.common.helpers import URL_REGEX
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.regex import URL_REGEX
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType

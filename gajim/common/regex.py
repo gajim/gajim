@@ -8,6 +8,9 @@ import re
 
 COMMAND_REGEX = re.compile(r'^/[a-z]+')
 
+URL_REGEX = re.compile(
+    r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
+
 INVALID_XML_CHARS_REGEX = re.compile(
     '[\x00-\x08]|[\x0b-\x0c]|[\x0e-\x1f]|[\ud800-\udfff]|[\ufffe-\uffff]')
 
