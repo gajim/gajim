@@ -21,13 +21,13 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.const import RowHeaderType
-from gajim.common.helpers import get_group_chat_nick
 from gajim.common.i18n import _
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
+from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.user_strings import get_moderation_text
 
 from gajim.gtk.chat_list_row import ChatListRow

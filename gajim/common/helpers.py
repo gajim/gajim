@@ -25,7 +25,6 @@ import inspect
 import json
 import logging
 import os
-import random
 import socket
 import sys
 import unicodedata
@@ -43,13 +42,10 @@ from cryptography.hazmat.backends import default_backend
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
-from nbxmpp.const import Affiliation
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.const import Role
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import ProxyData
 from qrcode.image.pil import PilImage as QrcPilImage
@@ -57,9 +53,7 @@ from qrcode.image.pil import PilImage as QrcPilImage
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
-from gajim.common.const import CONSONANTS
 from gajim.common.const import GIO_TLS_ERRORS
-from gajim.common.const import VOWELS
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
@@ -232,50 +226,6 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     '''
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode()).hexdigest()
-
-
-def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
-    '''
-    Check whether 'text' contains 'nickname', 'own_jid', or any string of the
-    'muc_highlight_words' setting.
-    '''
-
-    search_strings = app.settings.get('muc_highlight_words').split(';')
-    search_strings.append(nickname)
-    search_strings.append(own_jid)
-
-    search_strings = [word.lower() for word in search_strings if word]
-    text = text.lower()
-
-    for search_string in search_strings:
-        match = text.find(search_string)
-
-        while match > -1:
-            search_end = match + len(search_string)
-
-            if match == 0 and search_end == len(text):
-                # Text contains search_string only (exact match)
-                return True
-
-            char_before_allowed = bool(
-                match == 0 or
-                (not text[match - 1].isalpha() and
-                text[match - 1] not in ('/', '-')))
-
-            if char_before_allowed and search_end == len(text):
-                # search_string found at the end of text and
-                # char before search_string is allowed.
-                return True
-
-            if char_before_allowed and not text[search_end].isalpha():
-                # char_before search_string is allowed and
-                # char_after search_string is not alpha.
-                return True
-
-            start = match + 1
-            match = text.find(search_string, start)
-
-    return False
 
 
 def allow_showing_notification(account: str) -> bool:
@@ -457,33 +407,6 @@ def get_resource(account: str) -> str | None:
     return resource
 
 
-def get_default_muc_config() -> dict[str, bool | str]:
-    return {
-        # XEP-0045 options
-        # https://xmpp.org/registrar/formtypes.html
-
-        'muc#roomconfig_allowinvites': True,
-        'muc#roomconfig_allowpm': 'anyone',
-        'muc#roomconfig_changesubject': False,
-        'muc#roomconfig_enablelogging': False,
-        'muc#roomconfig_membersonly': True,
-        'muc#roomconfig_moderatedroom': False,
-        'muc#roomconfig_passwordprotectedroom': False,
-        'muc#roomconfig_persistentroom': True,
-        'muc#roomconfig_publicroom': False,
-        'muc#roomconfig_whois': 'moderators',
-
-        # Ejabberd options
-        'allow_voice_requests': False,
-        'public_list': False,
-        'mam': True,
-
-        # Prosody options
-        '{http://prosody.im/protocol/muc}roomconfig_allowmemberinvites': False,
-        'muc#roomconfig_enablearchiving': True,
-    }
-
-
 def to_user_string(error: CommonError | StanzaError) -> str:
     text = error.get_text(get_rfc5646_lang())
     if text:
@@ -493,58 +416,6 @@ def to_user_string(error: CommonError | StanzaError) -> str:
     if error.app_condition is not None:
         return f'{condition} ({error.app_condition})'
     return condition
-
-
-def get_groupchat_name(client: types.Client, jid: JID) -> str:
-    name = client.get_module('Bookmarks').get_name_from_bookmark(jid)
-    if name:
-        return name
-
-    disco_info = app.storage.cache.get_last_disco_info(jid)
-    if disco_info is not None:
-        if disco_info.muc_name:
-            return disco_info.muc_name
-
-    return jid.localpart
-
-
-def is_affiliation_change_allowed(self_contact: types.GroupchatParticipant,
-                                  contact: types.GroupchatParticipant,
-                                  target_aff: str | Affiliation) -> bool:
-    if isinstance(target_aff, str):
-        target_aff = Affiliation(target_aff)
-
-    if contact.affiliation == target_aff:
-        # Contact has already the target affiliation
-        return False
-
-    if self_contact.affiliation.is_owner:
-        return True
-
-    if not self_contact.affiliation.is_admin:
-        return False
-
-    if target_aff in (Affiliation.OWNER, Affiliation.ADMIN):
-        # Admin can’t edit admin/owner list
-        return False
-
-    return self_contact.affiliation > contact.affiliation
-
-
-def is_role_change_allowed(self_contact: types.GroupchatParticipant,
-                           contact: types.GroupchatParticipant) -> bool:
-
-    if self_contact.role < Role.MODERATOR:
-        return False
-    return self_contact.affiliation >= contact.affiliation
-
-
-def is_moderation_allowed(self_contact: types.GroupchatParticipant,
-                          contact: types.GroupchatParticipant) -> bool:
-
-    if self_contact.role < Role.MODERATOR:
-        return False
-    return self_contact.affiliation >= contact.affiliation
 
 
 def get_tls_error_phrases(tls_errors: set[Gio.TlsCertificateFlags]
@@ -731,30 +602,6 @@ def warn_about_plain_connection(account: str,
     warn = app.settings.get_account_setting(
         account, 'confirm_unencrypted_connection')
     return any(type_.is_plain and warn for type_ in connection_types)
-
-
-def get_group_chat_nick(account: str, room_jid: JID | str) -> str:
-    client = app.get_client(account)
-
-    bookmark = client.get_module('Bookmarks').get_bookmark(room_jid)
-    if bookmark is not None:
-        if bookmark.nick is not None:
-            return bookmark.nick
-
-    return app.nicks[account]
-
-
-def get_random_muc_localpart() -> str:
-    rand = random.randrange(4)
-    is_vowel = bool(random.getrandbits(1))
-    result = ''
-    for _n in range(rand * 2 + (5 - rand)):
-        if is_vowel:
-            result = f'{result}{VOWELS[random.randrange(len(VOWELS))]}'
-        else:
-            result = f'{result}{CONSONANTS[random.randrange(len(CONSONANTS))]}'
-        is_vowel = not is_vowel
-    return result
 
 
 def get_uuid() -> str:

@@ -22,8 +22,6 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import Draft
 from gajim.common.const import RowHeaderType
-from gajim.common.helpers import get_groupchat_name
-from gajim.common.helpers import message_needs_highlight
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -34,6 +32,8 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.draft import DraftStorage
 from gajim.common.types import ChatContactT
+from gajim.common.util.muc import get_groupchat_name
+from gajim.common.util.muc import message_needs_highlight
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import format_geo_coords
 from gajim.common.util.preview import guess_simple_file_type

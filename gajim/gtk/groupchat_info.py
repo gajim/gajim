@@ -18,10 +18,10 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
 from gajim.common.const import XmppUriQuery
-from gajim.common.helpers import get_groupchat_name
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder

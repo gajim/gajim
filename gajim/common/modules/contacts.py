@@ -31,7 +31,6 @@ from gajim.common import types
 from gajim.common.client_modules import ClientModules
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
-from gajim.common.helpers import get_groupchat_name
 from gajim.common.helpers import Observable
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import LogAdapter
@@ -48,6 +47,7 @@ from gajim.common.structs import MUCPresenceData
 from gajim.common.structs import PresenceData
 from gajim.common.structs import UNKNOWN_MUC_PRESENCE
 from gajim.common.structs import UNKNOWN_PRESENCE
+from gajim.common.util.muc import get_groupchat_name
 from gajim.common.util.user_strings import chatstate_to_string
 
 

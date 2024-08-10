@@ -23,9 +23,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
-from gajim.common.helpers import is_affiliation_change_allowed
-from gajim.common.helpers import is_moderation_allowed
-from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
@@ -37,6 +34,9 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.structs import URI
+from gajim.common.util.muc import is_affiliation_change_allowed
+from gajim.common.util.muc import is_moderation_allowed
+from gajim.common.util.muc import is_role_change_allowed
 from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.util.uri import filesystem_path_from_uri
 

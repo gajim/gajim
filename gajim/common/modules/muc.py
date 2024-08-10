@@ -40,8 +40,6 @@ from gajim.common.const import MUCJoinedState
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
-from gajim.common.helpers import get_default_muc_config
-from gajim.common.helpers import get_group_chat_nick
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
@@ -50,6 +48,8 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import MUCData
 from gajim.common.structs import MUCPresenceData
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.muc import get_default_muc_config
+from gajim.common.util.muc import get_group_chat_nick
 
 log = logging.getLogger('gajim.c.m.muc')
 

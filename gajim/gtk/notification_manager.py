@@ -24,11 +24,11 @@ from gajim.common.events import MucInvitation
 from gajim.common.events import Notification
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
-from gajim.common.helpers import get_groupchat_name
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util import open_window

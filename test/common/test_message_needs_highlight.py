@@ -1,7 +1,7 @@
 import unittest
 
 from gajim.common import app
-from gajim.common.helpers import message_needs_highlight
+from gajim.common.util.muc import message_needs_highlight
 
 app.settings.set('muc_highlight_words', 'test;gajim')
 JID = 'juliet@xmppserver'

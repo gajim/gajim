@@ -19,7 +19,6 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import events
-from gajim.common import helpers
 from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
 from gajim.common.i18n import _
@@ -31,6 +30,7 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 from gajim.common.structs import OutgoingMessage
 from gajim.common.types import ChatContactT
+from gajim.common.util.muc import message_needs_highlight
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import format_geo_coords
 from gajim.common.util.preview import guess_simple_file_type
@@ -443,7 +443,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             msg_type = 'group-chat-message'
             title += f' {data.resource} ({contact.name})'
             assert contact.nickname is not None
-            needs_highlight = helpers.message_needs_highlight(
+            needs_highlight = message_needs_highlight(
                 text, contact.nickname, client.get_own_jid().bare)
             if needs_highlight:
                 sound = 'muc_message_highlight'

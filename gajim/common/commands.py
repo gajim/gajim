@@ -15,11 +15,11 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import regex
-from gajim.common.helpers import is_affiliation_change_allowed
-from gajim.common.helpers import is_role_change_allowed
 from gajim.common.helpers import Observable
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.util.muc import is_affiliation_change_allowed
+from gajim.common.util.muc import is_role_change_allowed
 
 
 def split_argument_string(string: str) -> list[str]:
