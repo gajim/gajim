@@ -47,6 +47,7 @@ from gajim.common.idle import Monitor
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
 from gajim.common.util.status import get_idle_status_message
+from gajim.common.util.text import to_one_line
 
 from gajim.gtk.util import open_window
 
@@ -364,7 +365,7 @@ class Client(Observable, ClientModules):
             app.settings.set_account_setting(
                 self._account,
                 'last_status_msg',
-                helpers.to_one_line(message))
+                to_one_line(message))
 
         if self._state.is_disconnecting:
             log.warning("Can't change status while disconnect is in progress")

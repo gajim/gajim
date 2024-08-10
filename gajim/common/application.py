@@ -40,8 +40,6 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
-from gajim.common.helpers import from_one_line
-from gajim.common.helpers import get_random_string
 from gajim.common.settings import LegacyConfig
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
@@ -50,6 +48,8 @@ from gajim.common.storage.draft import DraftStorage
 from gajim.common.storage.events.storage import EventStorage
 from gajim.common.task_manager import TaskManager
 from gajim.common.util.http import create_http_request
+from gajim.common.util.text import from_one_line
+from gajim.common.util.text import get_random_string
 
 log = logging.getLogger('gajim.c.application')
 

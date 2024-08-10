@@ -37,12 +37,12 @@ from gajim.common.events import HTTPUploadError
 from gajim.common.events import HTTPUploadStarted
 from gajim.common.exceptions import FileError
 from gajim.common.filetransfer import FileTransfer
-from gajim.common.helpers import get_random_string
 from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_request
+from gajim.common.util.text import get_random_string
 
 
 class HTTPUpload(BaseModule):

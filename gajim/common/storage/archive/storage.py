@@ -33,7 +33,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.const import MAX_MESSAGE_CORRECTION_DELAY
 from gajim.common.events import DBMigration
-from gajim.common.helpers import get_random_string
 from gajim.common.storage.archive import migration
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -53,6 +52,7 @@ from gajim.common.storage.base import timeit
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
+from gajim.common.util.text import get_random_string
 
 CURRENT_USER_VERSION = 11
 

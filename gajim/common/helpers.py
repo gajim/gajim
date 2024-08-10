@@ -28,7 +28,6 @@ import os
 import random
 import re
 import socket
-import string
 import sys
 import unicodedata
 import uuid
@@ -81,6 +80,7 @@ from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
 from gajim.common.structs import URI
 from gajim.common.util.jid import validate_jid
+from gajim.common.util.text import get_random_string
 
 if TYPE_CHECKING:
     from gajim.common.modules.util import LogAdapter
@@ -202,21 +202,6 @@ def get_uf_relative_time(date_time: datetime,
     if timespan < timedelta(days=365):  # this year
         return date_time.strftime('%b %d')
     return str(date_time.year)
-
-
-def to_one_line(msg: str) -> str:
-    msg = msg.replace('\\', '\\\\')
-    return msg.replace('\n', '\\n')
-
-
-def from_one_line(msg: str) -> str:
-    # (?<!\\) is a lookbehind assertion which asks anything but '\'
-    # to match the regexp that follows it
-
-    # So here match '\\n' but not if you have a '\' before that
-    expr = re.compile(r'(?<!\\)\\n')
-    msg = expr.sub('\n', msg)
-    return msg.replace('\\\\', '\\')
 
 
 def chatstate_to_string(chatstate: Chatstate | None) -> str:
@@ -391,16 +376,6 @@ def get_auth_sha(sid: str, initiator: str, target: str) -> str:
     '''
     return hashlib.sha1(
         (f'{sid}{initiator}{target}').encode()).hexdigest()
-
-
-def get_random_string(count: int = 16) -> str:
-    '''
-    Create random string of count length
-
-    WARNING: Don't use this for security purposes
-    '''
-    allowed = string.ascii_uppercase + string.digits
-    return ''.join(random.choice(allowed) for char in range(count))
 
 
 def message_needs_highlight(text: str, nickname: str, own_jid: str) -> bool:
@@ -1293,48 +1268,6 @@ def format_idle_time(idle_time: datetime) -> str:
         return idle_time.strftime(f'%a {app.settings.get("time_format")}')
 
     return idle_date.strftime(app.settings.get('date_format'))
-
-
-def get_country_flag_from_code(country_code: str) -> str:
-        '''Returns a flag emoji for a two-letter country code.'''
-        emoji_letters = {
-            'A': '🇦',
-            'B': '🇧',
-            'C': '🇨',
-            'D': '🇩',
-            'E': '🇪',
-            'F': '🇫',
-            'G': '🇬',
-            'H': '🇭',
-            'I': '🇮',
-            'J': '🇯',
-            'K': '🇰',
-            'L': '🇱',
-            'M': '🇲',
-            'N': '🇳',
-            'O': '🇴',
-            'P': '🇵',
-            'Q': '🇶',
-            'R': '🇷',
-            'S': '🇸',
-            'T': '🇹',
-            'U': '🇺',
-            'V': '🇻',
-            'W': '🇼',
-            'X': '🇽',
-            'Y': '🇾',
-            'Z': '🇿',
-        }
-
-        if len(country_code) != 2:
-            return country_code.upper()
-
-        first = emoji_letters.get(country_code[0].upper())
-        second = emoji_letters.get(country_code[1].upper())
-        if first is None or second is None:
-            return country_code.upper()
-
-        return f'{first}{second}'
 
 
 def get_uuid() -> str:

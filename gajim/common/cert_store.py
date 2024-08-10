@@ -11,8 +11,8 @@ from gi.repository import Gio
 from gi.repository import GLib
 
 from gajim.common import configpaths
-from gajim.common.helpers import get_random_string
 from gajim.common.helpers import write_file_async
+from gajim.common.util.text import get_random_string
 
 log = logging.getLogger('gajim.c.cert_store')
 

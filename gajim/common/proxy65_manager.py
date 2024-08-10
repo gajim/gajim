@@ -16,9 +16,9 @@ from nbxmpp.idlequeue import IdleObject
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
-from gajim.common import helpers
 from gajim.common.file_props import FilesProp
 from gajim.common.socks5 import Socks5
+from gajim.common.util.text import get_random_string
 
 log = logging.getLogger('gajim.c.proxy65_manager')
 
@@ -226,7 +226,7 @@ class ProxyResolver:
         self.jid = None
         self.host = None
         self.port = None
-        self.sid = helpers.get_random_string()
+        self.sid = get_random_string()
         self.sender_jid = sender_jid
         self.testit = testit
 

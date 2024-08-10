@@ -28,7 +28,6 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common import helpers
 from gajim.common import types
 from gajim.common.events import FileRequestSent
 from gajim.common.events import Notification
@@ -46,6 +45,7 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.text import get_random_string
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
@@ -361,7 +361,7 @@ class FileTransfersWindow:
             os.remove(file_props.file_name)
 
             # Request the file to the sender
-            sid = helpers.get_random_string()
+            sid = get_random_string()
             new_file_props = FilesProp.getNewFileProp(account, sid)
             new_file_props.file_name = file_props.file_name
             new_file_props.name = file_props.name
@@ -735,7 +735,7 @@ class FileTransfersWindow:
 
         file_props = FilesProp.getNewFileProp(
             account,
-            sid=helpers.get_random_string())
+            sid=get_random_string())
         mod_date = os.path.getmtime(file_path)
         file_props.file_name = file_path
         file_props.name = file_name

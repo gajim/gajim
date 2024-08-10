@@ -30,7 +30,6 @@ from nbxmpp.protocol import Iq
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
-from gajim.common import helpers
 from gajim.common import types
 from gajim.common.file_props import FileProp
 from gajim.common.jingle_ft import JingleFileTransfer
@@ -43,6 +42,7 @@ from gajim.common.jingle_transport import JingleTransportSocks5
 from gajim.common.modules.base import BaseModule
 from gajim.common.util.jid import get_full_jid_from_iq
 from gajim.common.util.jid import InvalidFormat
+from gajim.common.util.text import get_random_string
 
 logger = logging.getLogger('gajim.c.m.jingle')
 
@@ -226,7 +226,7 @@ class Jingle(BaseModule):
                                       senders=senders)
         file_props.transport_sid = transport.sid
         file_props.algo = self.__hash_support(contact)
-        jingle.add_content('file' + helpers.get_random_string(), transfer)
+        jingle.add_content('file' + get_random_string(), transfer)
         jingle.start_session()
         return transfer.transport.sid
 

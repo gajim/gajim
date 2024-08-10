@@ -5,7 +5,9 @@
 from __future__ import annotations
 
 import math
+import random
 import re
+import string
 
 import emoji
 from gi.repository import GLib
@@ -100,3 +102,70 @@ def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:
 
 def convert_to_codepoints(string: str) -> str:
     return ''.join(f'\\u{ord(c):04x}' for c in string)
+
+
+def get_country_flag_from_code(country_code: str) -> str:
+        '''Returns a flag emoji for a two-letter country code.'''
+        emoji_letters = {
+            'A': '🇦',
+            'B': '🇧',
+            'C': '🇨',
+            'D': '🇩',
+            'E': '🇪',
+            'F': '🇫',
+            'G': '🇬',
+            'H': '🇭',
+            'I': '🇮',
+            'J': '🇯',
+            'K': '🇰',
+            'L': '🇱',
+            'M': '🇲',
+            'N': '🇳',
+            'O': '🇴',
+            'P': '🇵',
+            'Q': '🇶',
+            'R': '🇷',
+            'S': '🇸',
+            'T': '🇹',
+            'U': '🇺',
+            'V': '🇻',
+            'W': '🇼',
+            'X': '🇽',
+            'Y': '🇾',
+            'Z': '🇿',
+        }
+
+        if len(country_code) != 2:
+            return country_code.upper()
+
+        first = emoji_letters.get(country_code[0].upper())
+        second = emoji_letters.get(country_code[1].upper())
+        if first is None or second is None:
+            return country_code.upper()
+
+        return f'{first}{second}'
+
+
+def to_one_line(msg: str) -> str:
+    msg = msg.replace('\\', '\\\\')
+    return msg.replace('\n', '\\n')
+
+
+def from_one_line(msg: str) -> str:
+    # (?<!\\) is a lookbehind assertion which asks anything but '\'
+    # to match the regexp that follows it
+
+    # So here match '\\n' but not if you have a '\' before that
+    expr = re.compile(r'(?<!\\)\\n')
+    msg = expr.sub('\n', msg)
+    return msg.replace('\\\\', '\\')
+
+
+def get_random_string(count: int = 16) -> str:
+    '''
+    Create random string of length 'count'
+
+    WARNING: Don't use this for security purposes
+    '''
+    allowed = string.ascii_uppercase + string.digits
+    return ''.join(random.choice(allowed) for _char in range(count))
