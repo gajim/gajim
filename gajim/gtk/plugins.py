@@ -20,9 +20,9 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common.exceptions import PluginsystemError
-from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.types import PluginRepositoryT
+from gajim.common.util.uri import open_uri
 from gajim.plugins.events import PluginAdded
 from gajim.plugins.events import PluginRemoved
 from gajim.plugins.helpers import GajimPluginActivateException

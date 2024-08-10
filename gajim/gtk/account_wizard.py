@@ -39,12 +39,12 @@ from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
 from gajim.common.helpers import get_global_proxy
 from gajim.common.helpers import get_proxy
-from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.util.http import create_http_request
 from gajim.common.util.http import create_http_session
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
+from gajim.common.util.uri import open_uri
 
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.assistant import Assistant

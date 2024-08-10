@@ -13,11 +13,11 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common.const import URIType
-from gajim.common.helpers import open_uri
-from gajim.common.helpers import parse_uri
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
+from gajim.common.util.uri import open_uri
+from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu

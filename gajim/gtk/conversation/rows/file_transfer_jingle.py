@@ -27,13 +27,13 @@ from gajim.common.events import JingleErrorReceived
 from gajim.common.events import JingleFtCancelledReceived
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
-from gajim.common.helpers import open_file
-from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.uri import open_file
+from gajim.common.util.uri import show_in_folder
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow

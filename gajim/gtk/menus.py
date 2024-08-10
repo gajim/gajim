@@ -23,7 +23,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
-from gajim.common.helpers import filesystem_path_from_uri
 from gajim.common.helpers import is_affiliation_change_allowed
 from gajim.common.helpers import is_moderation_allowed
 from gajim.common.helpers import is_role_change_allowed
@@ -39,6 +38,7 @@ from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
+from gajim.common.util.uri import filesystem_path_from_uri
 
 from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam

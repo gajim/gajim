@@ -13,9 +13,9 @@ from gajim.common.const import ARTISTS
 from gajim.common.const import DEVS_CURRENT
 from gajim.common.const import DEVS_PAST
 from gajim.common.const import THANKS
-from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.util.app import get_extended_app_version
+from gajim.common.util.uri import open_uri
 from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_soup_version

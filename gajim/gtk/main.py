@@ -27,16 +27,16 @@ from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import open_file
-from gajim.common.helpers import open_uri
 from gajim.common.helpers import play_sound
-from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.uri import open_file
+from gajim.common.util.uri import open_uri
+from gajim.common.util.uri import show_in_folder
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 

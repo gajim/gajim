@@ -58,9 +58,9 @@ from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
 from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
-from gajim.common.helpers import open_uri
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.util.uri import open_uri
 
 from gajim.gtk import menus
 from gajim.gtk import structs

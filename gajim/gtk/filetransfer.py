@@ -34,7 +34,6 @@ from gajim.common.events import Notification
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.helpers import file_is_locked
-from gajim.common.helpers import show_in_folder
 from gajim.common.i18n import _
 from gajim.common.modules.bytestream import is_transfer_active
 from gajim.common.modules.bytestream import is_transfer_paused
@@ -46,6 +45,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import get_random_string
+from gajim.common.util.uri import show_in_folder
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
