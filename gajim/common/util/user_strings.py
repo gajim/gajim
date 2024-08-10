@@ -5,12 +5,14 @@
 import datetime as dt
 from string import Template
 
+from gi.repository import Gio
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
 from nbxmpp.const import Role
 from nbxmpp.protocol import JID
 
 from gajim.common import app
+from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
@@ -167,3 +169,7 @@ def chatstate_to_string(chatstate: Chatstate | None) -> str:
         return _('paused composing a message')
 
     raise ValueError(f'unknown value: {chatstate}')
+
+
+def get_tls_error_phrases(tls_errors: set[Gio.TlsCertificateFlags]) -> list[str]:
+    return [GIO_TLS_ERRORS[err] for err in tls_errors]

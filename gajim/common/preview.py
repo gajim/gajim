@@ -28,7 +28,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import regex
 from gajim.common.const import MIME_TYPES
-from gajim.common.helpers import get_tls_error_phrases
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
@@ -44,6 +43,7 @@ from gajim.common.util.preview import get_previewable_mime_types
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.preview import parse_fragment
 from gajim.common.util.preview import split_geo_uri
+from gajim.common.util.user_strings import get_tls_error_phrases
 
 log = logging.getLogger('gajim.c.preview')
 

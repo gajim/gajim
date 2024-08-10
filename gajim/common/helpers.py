@@ -53,7 +53,6 @@ from qrcode.image.pil import PilImage as QrcPilImage
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
-from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.util.text import get_random_string
 
@@ -407,11 +406,6 @@ def to_user_string(error: CommonError | StanzaError) -> str:
     if error.app_condition is not None:
         return f'{condition} ({error.app_condition})'
     return condition
-
-
-def get_tls_error_phrases(tls_errors: set[Gio.TlsCertificateFlags]
-                          ) -> list[str]:
-    return [GIO_TLS_ERRORS[err] for err in tls_errors]
 
 
 class Observable:
