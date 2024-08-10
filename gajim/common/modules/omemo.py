@@ -56,7 +56,6 @@ from gajim.common.events import EncryptionInfo
 from gajim.common.events import MucAdded
 from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
-from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import GroupchatContact
@@ -66,6 +65,7 @@ from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
 from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.decorators import event_filter
 from gajim.common.util.decorators import lru_cache_with_ttl
 
 ALLOWED_TAGS = [

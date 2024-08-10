@@ -19,10 +19,10 @@ from gajim.common import types
 from gajim.common.dbus.music_track import MusicTrackListener
 from gajim.common.events import MusicTrackChanged
 from gajim.common.events import SignedIn
-from gajim.common.helpers import event_filter
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.util import event_node
 from gajim.common.modules.util import store_publish
+from gajim.common.util.decorators import event_filter
 
 
 class UserTune(BaseModule):

@@ -38,7 +38,6 @@ from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
-from functools import wraps
 from pathlib import Path
 from string import Template
 from urllib.parse import unquote
@@ -79,6 +78,7 @@ from gajim.common.i18n import get_rfc5646_lang
 from gajim.common.i18n import ngettext
 from gajim.common.i18n import p_
 from gajim.common.structs import URI
+from gajim.common.util.decorators import catch_exceptions
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_random_string
 
@@ -581,57 +581,6 @@ def load_json(path: Path,
     if key is None:
         return json_dict
     return json_dict.get(key, default)
-
-
-def delay_execution(milliseconds):
-    # Delay the first call for `milliseconds`
-    # ignore all other calls while the delay is active
-    def delay_execution_decorator(func):
-        @wraps(func)
-        def func_wrapper(*args, **kwargs):
-            def timeout_wrapper():
-                func(*args, **kwargs)
-                delattr(func_wrapper, 'source_id')
-
-            if hasattr(func_wrapper, 'source_id'):
-                return
-            func_wrapper.source_id = GLib.timeout_add(
-                milliseconds, timeout_wrapper)
-        return func_wrapper
-    return delay_execution_decorator
-
-
-def event_filter(filter_: Any):
-    def event_filter_decorator(func: Any) -> Any:
-        @wraps(func)
-        def func_wrapper(self, event: Any, *args: Any, **kwargs: Any) -> Any:
-            for attr in filter_:
-                if '=' in attr:
-                    attr1, attr2 = attr.split('=')
-                else:
-                    attr1, attr2 = attr, attr
-                try:
-                    if getattr(event, attr1) != getattr(self, attr2):
-                        return None
-                except AttributeError:
-                    if getattr(event, attr1) != getattr(self, f'_{attr2}'):
-                        return None
-
-            return func(self, event, *args, **kwargs)
-        return func_wrapper
-    return event_filter_decorator
-
-
-def catch_exceptions(func):
-    @wraps(func)
-    def func_wrapper(self, *args, **kwargs):
-        try:
-            result = func(self, *args, **kwargs)
-        except Exception as error:
-            log.exception(error)
-            return None
-        return result
-    return func_wrapper
 
 
 def is_known_uri_scheme(scheme: str) -> bool:

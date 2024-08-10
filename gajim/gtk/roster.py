@@ -28,9 +28,9 @@ from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import RosterPush
 from gajim.common.events import RosterReceived
-from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog

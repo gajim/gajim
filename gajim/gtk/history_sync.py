@@ -24,8 +24,8 @@ from gajim.common import ged
 from gajim.common.const import ArchiveState
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import RawMamMessageReceived
-from gajim.common.helpers import event_filter
 from gajim.common.i18n import _
+from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
