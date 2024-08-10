@@ -34,6 +34,7 @@ from gajim.common.file_props import FileProp
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import BareContact
+from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
@@ -199,7 +200,7 @@ class ContactTooltip:
             halign=Gtk.Align.START,
             valign=Gtk.Align.CENTER)
 
-        show_string = helpers.get_uf_show(contact.show.value)
+        show_string = get_uf_show(contact.show.value)
 
         resource_string = ''
         if contact.jid.resource is not None:

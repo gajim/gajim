@@ -34,6 +34,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
+from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
@@ -871,7 +872,7 @@ class ChatControl(EventHelper):
         nick = event.nick
         status = event.status
         status = '' if not status else f' - {status}'
-        show = helpers.get_uf_show(event.show_value)
+        show = get_uf_show(event.show_value)
 
         if event.is_self:
             message = _('You are now {show}{status}').format(show=show,

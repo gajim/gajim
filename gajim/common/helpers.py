@@ -71,9 +71,6 @@ from gajim.common import types
 from gajim.common.const import CONSONANTS
 from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
-from gajim.common.const import SHOW_LIST
-from gajim.common.const import SHOW_STRING
-from gajim.common.const import SHOW_STRING_MNEMONIC
 from gajim.common.const import URIType
 from gajim.common.const import VOWELS
 from gajim.common.const import XmppUriQuery
@@ -102,12 +99,6 @@ log = logging.getLogger('gajim.c.helpers')
 
 URL_REGEX = re.compile(
     r"(www\.(?!\.)|[a-z][a-z0-9+.-]*://)[^\s<>'\"]+[^!,\.\s<>\)'\"\]]")
-
-
-def get_uf_show(show: str, use_mnemonic: bool = False) -> str:
-    if use_mnemonic:
-        return SHOW_STRING_MNEMONIC[show]
-    return SHOW_STRING[show]
 
 
 def get_uf_sub(sub: str) -> str:
@@ -392,65 +383,6 @@ def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
 
     from gajim.common import sound
     sound.play(path_to_soundfile, loop)
-
-
-def get_client_status(account: str) -> str:
-    client = app.get_client(account)
-    if client.state.is_disconnected:
-        return 'offline'
-
-    if (client.state.is_reconnect_scheduled or
-            client.state.is_connecting or
-            client.state.is_connected):
-        return 'connecting'
-
-    return client.status
-
-
-def get_global_show() -> str:
-    maxi = 0
-    for client in app.get_clients():
-        if not app.settings.get_account_setting(client.account,
-                                                'sync_with_global_status'):
-            continue
-        status = get_client_status(client.account)
-        index = SHOW_LIST.index(status)
-        if index > maxi:
-            maxi = index
-    return SHOW_LIST[maxi]
-
-
-def get_global_status_message() -> str:
-    maxi = 0
-    status_message = ''
-    for client in app.get_clients():
-        if not app.settings.get_account_setting(client.account,
-                                                'sync_with_global_status'):
-            continue
-        index = SHOW_LIST.index(client.status)
-        if index > maxi:
-            maxi = index
-            status_message = client.status_message
-    return status_message
-
-
-def statuses_unified() -> bool:
-    '''
-    Test if all statuses are the same
-    '''
-    reference = None
-    for client in app.get_clients():
-        account = client.account
-        if not app.settings.get_account_setting(account,
-                                                'sync_with_global_status'):
-            continue
-
-        if reference is None:
-            reference = get_client_status(account)
-
-        elif reference != get_client_status(account):
-            return False
-    return True
 
 
 def get_auth_sha(sid: str, initiator: str, target: str) -> str:
@@ -1307,19 +1239,6 @@ def warn_about_plain_connection(account: str,
     warn = app.settings.get_account_setting(
         account, 'confirm_unencrypted_connection')
     return any(type_.is_plain and warn for type_ in connection_types)
-
-
-def get_idle_status_message(state: str, status_message: str) -> str:
-    message = app.settings.get(f'auto{state}_message')
-    if not message:
-        return status_message
-
-    message = message.replace('$S', '%(status)s')
-    message = message.replace('$T', '%(time)s')
-    return message % {
-        'status': status_message,
-        'time': app.settings.get(f'auto{state}time')
-    }
 
 
 def get_group_chat_nick(account: str, room_jid: JID | str) -> str:

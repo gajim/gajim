@@ -13,11 +13,13 @@ from gi.repository import GLib
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common import helpers
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.status import get_client_status
+from gajim.common.util.status import get_global_show
+from gajim.common.util.status import get_global_status_message
 
 log = logging.getLogger('gajim.c.dbus.remote_control')
 
@@ -225,13 +227,13 @@ class GajimRemote(Server):
     @staticmethod
     def get_status(account: str) -> str:
         if not account:
-            return helpers.get_global_show()
-        return helpers.get_client_status(account)
+            return get_global_show()
+        return get_client_status(account)
 
     @staticmethod
     def get_status_message(account: str) -> str:
         if not account:
-            return str(helpers.get_global_status_message())
+            return get_global_status_message()
         return app.get_client(account).status_message
 
     @staticmethod

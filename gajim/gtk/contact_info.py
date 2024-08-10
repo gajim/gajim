@@ -30,11 +30,11 @@ from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import get_uf_affiliation
 from gajim.common.helpers import get_uf_role
-from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
+from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_settings import ContactSettings

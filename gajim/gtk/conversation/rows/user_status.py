@@ -7,9 +7,9 @@ from __future__ import annotations
 from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
-from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.conversation.message_widget import MessageWidget

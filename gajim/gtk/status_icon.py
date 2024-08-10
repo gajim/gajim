@@ -28,9 +28,9 @@ from gajim.common.client import Client
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.helpers import get_global_show
-from gajim.common.helpers import get_uf_show
 from gajim.common.i18n import _
+from gajim.common.util.status import get_global_show
+from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import get_icon_name

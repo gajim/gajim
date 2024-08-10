@@ -13,11 +13,11 @@ from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
-from gajim.common.helpers import get_client_status
-from gajim.common.helpers import get_global_show
-from gajim.common.helpers import get_uf_show
-from gajim.common.helpers import statuses_unified
 from gajim.common.i18n import _
+from gajim.common.util.status import get_client_status
+from gajim.common.util.status import get_global_show
+from gajim.common.util.status import get_uf_show
+from gajim.common.util.status import statuses_unified
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.util import EventHelper
