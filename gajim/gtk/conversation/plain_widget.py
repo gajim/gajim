@@ -60,7 +60,7 @@ class MessageLabel(Gtk.Label):
         self.set_xalign(0)
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
-        if os.environ['GAJIM_FORCE_WORD_WRAP']:
+        if os.environ.get('GAJIM_FORCE_WORD_WRAP'):
             self.set_line_wrap_mode(Pango.WrapMode.WORD)
         else:
             self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
