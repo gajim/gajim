@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 import logging
+import os
 
 import emoji
 from gi.repository import Gdk
@@ -59,7 +60,10 @@ class MessageLabel(Gtk.Label):
         self.set_xalign(0)
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
-        self.set_line_wrap_mode(Pango.WrapMode.WORD)
+        if os.environ['GAJIM_FORCE_WORD_WRAP']:
+            self.set_line_wrap_mode(Pango.WrapMode.WORD)
+        else:
+            self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_track_visited_links(False)
 
         self._account = account
