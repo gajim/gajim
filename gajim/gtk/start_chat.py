@@ -296,7 +296,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 return Gdk.EVENT_STOP
 
             if self._current_listbox_is(Search.GLOBAL):
-                if self._ui.search_entry.is_focus():
+                if (self._ui.search_entry.is_focus() and
+                        self._ui.search_entry.get_text()):
                     self._global_search_listbox.remove_all()
                     self._start_search()
 
