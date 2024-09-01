@@ -38,6 +38,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_group_chat_nick
+from gajim.common.util.text import get_country_flag_from_code
 from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.builder import get_builder
@@ -977,27 +978,77 @@ class GlobalSearch(Gtk.ListBox):
 
 class ResultRow(Gtk.ListBoxRow):
     def __init__(self, item: MuclumbusItem) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        self.set_activatable(True)
+        Gtk.ListBoxRow.__init__(self, activatable=True)
         self.get_style_context().add_class('start-chat-row')
+
         self.is_new = False
         self.jid = JID.from_string(item.jid)
         self.groupchat = True
 
-        name_label = Gtk.Label(label=item.name)
-        name_label.set_halign(Gtk.Align.START)
-        name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        name_label.set_max_width_chars(40)
+        name_label = Gtk.Label(
+            label=item.name,
+            halign=Gtk.Align.START,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=40
+        )
         name_label.get_style_context().add_class('bold16')
-        jid_label = Gtk.Label(label=item.jid)
-        jid_label.set_halign(Gtk.Align.START)
-        jid_label.set_ellipsize(Pango.EllipsizeMode.END)
-        jid_label.set_max_width_chars(40)
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.add(name_label)
-        box.add(jid_label)
 
-        self.add(box)
+        description_label = Gtk.Label(
+            label=item.description,
+            halign=Gtk.Align.START,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=40
+        )
+        description_label.get_style_context().add_class('dim-label')
+
+        main_box = Gtk.Box(spacing=12)
+        self.add(main_box)
+
+        name_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL,
+            hexpand=True,
+            tooltip_text=item.jid
+        )
+        name_box.add(name_label)
+        name_box.add(description_label)
+
+        main_box.add(name_box)
+
+        language_code = item.language.upper()
+        if len(language_code) < 2:
+            language_code = ''
+
+        if len(language_code) > 2:
+            # Fix if no ISO code has been provided
+            language_code = language_code[:2]
+
+        if language_code == 'EN':
+            # Fix for most used languages/countries
+            language_code = 'GB'
+
+        language_label = Gtk.Label(
+            label=get_country_flag_from_code(language_code),
+            tooltip_text=_('Language: %s') % item.language
+        )
+        main_box.add(language_label)
+
+        users_box = Gtk.Box(
+            spacing=6,
+            tooltip_text=_('Participants Count')
+        )
+        users_box.get_style_context().add_class('dim-label')
+
+        users_icon = Gtk.Image.new_from_icon_name(
+            'system-users-symbolic',
+            Gtk.IconSize.BUTTON
+        )
+        users_box.add(users_icon)
+
+        users_count_label = Gtk.Label(label=item.nusers)
+        users_box.add(users_count_label)
+
+        main_box.add(users_box)
+
         self.show_all()
 
 
