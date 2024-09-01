@@ -218,7 +218,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if not model[iter_][Column.IS_CONTACT]:
             return True
 
-        return self._filter_string in model[iter_][Column.TEXT].lower()
+        nickname = model[iter_][Column.TEXT].split('\n')[0]
+        return self._filter_string in nickname.lower()
 
     def _get_group_iter(self, group_name: str) -> Gtk.TreeIter | None:
         try:
