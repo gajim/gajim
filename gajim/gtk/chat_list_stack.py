@@ -120,7 +120,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
 
     def get_current_chat_list(self) -> ChatList | None:
         workspace_id = self.get_visible_child_name()
-        if workspace_id == 'empty' or workspace_id is None:
+        if workspace_id == 'default' or workspace_id is None:
             return None
 
         return self._chat_lists[workspace_id]
