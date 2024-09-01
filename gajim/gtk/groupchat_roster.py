@@ -531,7 +531,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             'user-status-show-changed': self._on_user_status_show_changed,
         })
 
-        for participant in self._contact.get_participants():
+        # Convert (copy) participants iterator to list,
+        # since it may change during iteration, see #11970
+        for participant in list(self._contact.get_participants()):
             self._add_contact(participant)
 
         self._enable_sort(True)
