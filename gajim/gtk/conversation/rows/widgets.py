@@ -101,6 +101,9 @@ class MessageRowActions(Gtk.EventBox):
         self.connect('enter-notify-event', self._on_hover)
         self.connect('leave-notify-event', self._on_hover)
 
+        self.add_events(Gdk.EventMask.SCROLL_MASK)
+        self.connect('scroll-event', self._on_scroll)
+
     def hide_actions(self) -> None:
         # Set a 10ms timeout, which gives us enough time to inhibit hiding
         # if the cursor enters (cursor changes from row to MessageRowActions)
@@ -234,6 +237,16 @@ class MessageRowActions(Gtk.EventBox):
             self.hide()
 
         return True
+
+    def _on_scroll(self, _widget: MessageRowActions, event: Gdk.EventScroll) -> bool:
+        # Emulate scroll behavior if cursor rests on MessageRowActions while scrolling
+        if event.direction == Gdk.ScrollDirection.UP:
+            app.window.activate_action('scroll-view-up')
+
+        if event.direction == Gdk.ScrollDirection.DOWN:
+            app.window.activate_action('scroll-view-down')
+
+        return Gdk.EVENT_PROPAGATE
 
     def _on_reply_clicked(self, _button: Gtk.Button) -> None:
         if self._message_row is None:
