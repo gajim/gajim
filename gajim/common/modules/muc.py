@@ -506,11 +506,6 @@ class MUC(BaseModule):
         if muc_data is None:
             return
 
-        if properties.jid.resource != muc_data.nick:
-            self._log.warning('Unknown error presence')
-            self._log.warning(stanza)
-            return
-
         room = self._get_contact(room_jid)
 
         if muc_data.state == MUCJoinedState.JOINING:
