@@ -523,16 +523,16 @@ class ListSingleField(Field):
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.add(self._treeview)
 
-        self.connect('cursor-changed', self._on_cursor_changed)
+        self._widget.connect('cursor-changed', self._on_cursor_changed)
 
-    def _on_cursor_changed(self, *_args) -> None:
+    def _on_cursor_changed(self, *_args: Any) -> None:
         model, treeiter = self._treeview.get_selection().get_selected()
         if treeiter is None:
             return None
         self._field.value = model[treeiter][1]
         self._validate(delay=False)
 
-    def _on_row_activated(self, *_args) -> None:
+    def _on_row_activated(self, *_args: Any) -> None:
         self.emit('row-activated')
 
     def add(self,
