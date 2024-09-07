@@ -513,6 +513,11 @@ infobar.error > revealer > box {
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
 }
+.chatstate-indicator-button {
+    background: @theme_unfocused_bg_color;
+    border: 1px solid @unfocused_borders;
+    padding: 2px 6px;
+}
 .header-box label {
 	padding: 12px 18px 6px 18px;
 	font-weight: bold;

@@ -68,7 +68,6 @@ BoolSettings = Literal[
     'show_main_menu',
     'save_main_window_position',
     'send_on_ctrl_enter',
-    'show_chatstate_in_banner',
     'show_help_start_chat',
     'show_in_taskbar',
     'show_notifications',
@@ -248,7 +247,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'save_main_window_position': True,
     'search_engine': 'https://duckduckgo.com/?q=%s',
     'send_on_ctrl_enter': False,
-    'show_chatstate_in_banner': True,
     'show_help_start_chat': True,
     'show_in_taskbar': True,
     'show_main_menu': True,
@@ -706,8 +704,6 @@ ADVANCED_SETTINGS = {
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),
-        'show_chatstate_in_banner': _(
-            'Show chat state (e.g. "is typing…") next to your contact’s name'),
         'stun_server': _('STUN server to use when using Jingle'),
         'time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'trayicon_notification_on_events': _(

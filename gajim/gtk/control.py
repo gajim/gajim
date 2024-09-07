@@ -38,6 +38,7 @@ from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.conversation.chatstate_indicator import ChatstateIndicator
 from gajim.gtk.conversation.jump_to_end_button import JumpToEndButton
 from gajim.gtk.conversation.message_selection import MessageSelection
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
@@ -78,6 +79,9 @@ class ChatControl(EventHelper):
         self._message_selection.connect('copy', self._on_copy_selection)
         self._message_selection.connect('cancel', self._on_cancel_selection)
         self._ui.conv_view_overlay.add_overlay(self._message_selection)
+
+        self._chatstate_indicator = ChatstateIndicator()
+        self._ui.conv_view_overlay.add_overlay(self._chatstate_indicator)
 
         self._jump_to_end_button = JumpToEndButton()
         self._jump_to_end_button.connect('clicked', self._on_jump_to_end)
@@ -226,6 +230,7 @@ class ChatControl(EventHelper):
 
         self._client = app.get_client(contact.account)
 
+        self._chatstate_indicator.switch_contact(contact)
         self._jump_to_end_button.switch_contact(contact)
         self._message_row_actions.switch_contact(contact)
         self._scrolled_view.switch_contact(contact)

@@ -286,44 +286,18 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert self._contact is not None
 
         name = self._get_name_from_contact(self._contact)
-
-        chatstate = ''
-        if app.settings.get('show_chatstate_in_banner'):
-            chatstate = self._contact.chatstate_string
-
-        label_text = f'<span>{GLib.markup_escape_text(name)}</span>'
-        if chatstate:
-            escaped_chatstate = GLib.markup_escape_text(chatstate)
-            label_markup = '<span size="60%" weight="light"> {}</span>'
-            label_text += label_markup.format(escaped_chatstate)
-
-        self._ui.name_label.set_markup(label_text)
-
-        tooltip_text = name
-        if chatstate:
-            tooltip_text = f'{name} {chatstate}'
-
-        self._ui.name_label.set_tooltip_text(tooltip_text)
+        self._ui.name_label.set_markup(f'<span>{GLib.markup_escape_text(name)}</span>')
+        self._ui.name_label.set_tooltip_text(name)
 
     def _get_muc_description_text(self) -> str | None:
         contact = self._contact
         assert isinstance(contact, GroupchatContact)
 
-        typing = contact.get_composers()
-        if not typing or not app.settings.get('show_chatstate_in_banner'):
-            disco_info = app.storage.cache.get_last_disco_info(contact.jid)
-            if disco_info is None:
-                return None
-            return disco_info.muc_description
+        disco_info = app.storage.cache.get_last_disco_info(contact.jid)
+        if disco_info is None:
+            return None
 
-        composers = tuple(c.name for c in typing)
-        n = len(composers)
-        if n == 1:
-            return _('%s is typing…') % composers[0]
-        elif n == 2:
-            return _('%s and %s are typing…') % composers
-        else:
-            return _('%s participants are typing…') % n
+        return disco_info.muc_description
 
     def _update_description_label(self) -> None:
         contact = self._contact
