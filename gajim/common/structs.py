@@ -23,6 +23,7 @@ from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
 from nbxmpp.structs import EncryptionData
+from nbxmpp.structs import HatData
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.util import generate_id
@@ -158,6 +159,7 @@ class PresenceData:
     priority: int
     idle_datetime: datetime | None
     available: bool
+    hats: HatData | None
 
     @classmethod
     def from_presence(cls, properties: PresenceProperties) -> PresenceData:
@@ -170,14 +172,16 @@ class PresenceData:
                    status=properties.status,
                    priority=properties.priority,
                    idle_datetime=idle_datetime,
-                   available=properties.type.is_available)
+                   available=properties.type.is_available,
+                   hats=properties.hats)
 
 
 UNKNOWN_PRESENCE = PresenceData(show=PresenceShowExt.OFFLINE,
                                 status='',
                                 priority=0,
                                 idle_datetime=None,
-                                available=False)
+                                available=False,
+                                hats=None)
 
 
 @dataclass(frozen=True)
@@ -190,13 +194,13 @@ class MUCPresenceData:
     role: Role
     real_jid: JID | None
     occupant_id: str | None
+    hats: HatData | None
 
     @classmethod
     def from_presence(cls,
                       properties: PresenceProperties,
                       occupant_id: str | None
                       ) -> MUCPresenceData:
-
         idle_datetime = None
         if properties.idle_timestamp is not None:
             idle_datetime = convert_epoch_to_local_datetime(
@@ -209,7 +213,8 @@ class MUCPresenceData:
                    affiliation=properties.muc_user.affiliation,
                    role=properties.muc_user.role,
                    real_jid=properties.muc_user.jid,
-                   occupant_id=occupant_id)
+                   occupant_id=occupant_id,
+                   hats=properties.hats)
 
 
 UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
@@ -219,7 +224,8 @@ UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        affiliation=Affiliation.NONE,
                                        role=Role.NONE,
                                        real_jid=None,
-                                       occupant_id=None)
+                                       occupant_id=None,
+                                       hats=None)
 
 
 class VariantMixin:

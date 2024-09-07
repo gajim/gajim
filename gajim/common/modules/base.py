@@ -39,6 +39,7 @@ from nbxmpp.modules.location import Location
 from nbxmpp.modules.mam import MAM
 from nbxmpp.modules.message import BaseMessage
 from nbxmpp.modules.mood import Mood
+from nbxmpp.modules.muc.hats import Hats
 from nbxmpp.modules.muc.moderation import Moderation
 from nbxmpp.modules.muc.muc import MUC
 from nbxmpp.modules.muclumbus import Muclumbus
@@ -186,6 +187,8 @@ class BaseModule(EventHelper):
     def _nbxmpp(self, name: Literal['EntityCaps']) -> EntityCaps: ...
     @overload
     def _nbxmpp(self, name: Literal['EntityTime']) -> EntityTime: ...
+    @overload
+    def _nbxmpp(self, name: Literal['Hats']) -> Hats: ...
     @overload
     def _nbxmpp(self, name: Literal['HTTPAuth']) -> HTTPAuth: ...
     @overload

@@ -565,6 +565,7 @@ class GroupchatRosterTooltipBuilder(Builder):
     fillelement: Gtk.Label
     status: Gtk.Label
     affiliation: Gtk.Label
+    hats_box: Gtk.Box
 
 
 class GroupchatStateBuilder(Builder):

@@ -250,6 +250,7 @@ class ChatControl(EventHelper):
                 'user-left': self._on_user_left,
                 'user-affiliation-changed': self._on_user_affiliation_changed,
                 'user-role-changed': self._on_user_role_changed,
+                'user-hats-changed': self._on_user_hats_changed,
                 'user-status-show-changed': self._on_user_status_show_changed,
                 'user-nickname-changed': self._on_user_nickname_changed,
                 'room-kicked': self._on_room_kicked,
@@ -613,6 +614,9 @@ class ChatControl(EventHelper):
             elif isinstance(row, events.MUCUserRoleChanged):
                 self._process_muc_user_role_changed(row)
 
+            elif isinstance(row, events.MUCUserHatsChanged):
+                self._process_muc_user_hats_changed(row)
+
             elif isinstance(row, events.MUCUserStatusShowChanged):
                 self._process_muc_user_status_show_changed(row)
 
@@ -837,6 +841,32 @@ class ChatControl(EventHelper):
                                                         role=role,
                                                         actor=actor,
                                                         reason=reason)
+        self.add_info_message(message, event.timestamp)
+
+    def _on_user_hats_changed(self,
+                              _contact: GroupchatContact,
+                              _signal_name: str,
+                              user_contact: GroupchatParticipant,
+                              event: events.MUCUserHatsChanged,
+                              ) -> None:
+
+        self._process_muc_user_hats_changed(event)
+
+    def _process_muc_user_hats_changed(self,
+                                       event: events.MUCUserHatsChanged
+                                       ) -> None:
+
+        if event.hats:
+            hats = ', '.join(event.hats)
+            if event.is_self:
+                message = _('** Your hats are now ') + hats
+            else:
+                message = _('** The hats of %s are now %s') % (event.nick, hats)
+        else:
+            if event.is_self:
+                message = _('** You lost all your hats!')
+            else:
+                message = _('** %s lost all their hats!') % (event.nick,)
         self.add_info_message(message, event.timestamp)
 
     def _on_user_status_show_changed(self,

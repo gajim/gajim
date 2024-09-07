@@ -225,6 +225,10 @@ infobar.error > revealer > box {
     font-size: 80%;
     font-weight: bold;
 }
+.hat-badge {
+  background-color:#295a72;
+  font-size: 100%;
+}
 
 .group {
     color: rgb(242, 242, 242);

@@ -102,6 +102,23 @@ class GCTooltip:
             self._ui.affiliation.set_text(uf_affiliation)
             self._ui.affiliation.show()
 
+        if contact.hats is not None:
+            for child in self._ui.hats_box.get_children():
+                child.destroy()
+
+            for hat in contact.hats.get_hats()[:5]:
+                # Limit to 5 hats
+                hat_badge = Gtk.Label(
+                    label=f'🎓 {GLib.markup_escape_text(hat.title)}',
+                    ellipsize=Pango.EllipsizeMode.END,
+                    max_width_chars=20,
+                )
+                hat_badge.set_halign(Gtk.Align.START)
+                hat_badge.get_style_context().add_class('badge')
+                hat_badge.get_style_context().add_class('hat-badge')
+                self._ui.hats_box.add(hat_badge)
+                self._ui.hats_box.show_all()
+
         # Avatar
         scale = self._ui.tooltip_grid.get_scale_factor()
         surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)

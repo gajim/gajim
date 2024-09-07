@@ -55,6 +55,7 @@ class Column(IntEnum):
 
 CONTACT_SIGNALS = {
     'user-affiliation-changed',
+    'user-hats-changed',
     'user-avatar-update',
     'user-joined',
     'user-left',
@@ -523,6 +524,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         assert self._contact is not None
         self._contact.multi_connect({
             'user-affiliation-changed': self._update_contact,
+            'user-hats-changed': self._update_contact,
             'user-avatar-update': self._on_user_avatar_update,
             'user-joined': self._on_user_joined,
             'user-left': self._on_user_left,
@@ -594,6 +596,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             # escape markup entities and make them small italic and fg color
             name += (f'\n<span size="small" style="italic" alpha="70%">'
                      f'{GLib.markup_escape_text(status)}</span>')
+
+        if contact.hats is not None:
+            name += ' <span size="x-large">🎓</span>'
 
         self._store[iter_][Column.TEXT] = name
 

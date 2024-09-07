@@ -778,6 +778,22 @@ class MUC(BaseModule):
             app.storage.events.store(occupant.room, event)
             signals_and_events.append(('user-status-show-changed', event))
 
+        if occupant.hats != presence.hats:
+            if presence.hats:
+                hats = [h.title for h in presence.hats.get_hats()]
+            else:
+                hats = None
+            event = events.MUCUserHatsChanged(
+                timestamp=timestamp,
+                is_self=properties.is_muc_self_presence,
+                nick=occupant.name,
+                hats=hats,
+            )
+
+            app.storage.events.store(occupant, event)
+            app.storage.events.store(occupant.room, event)
+            signals_and_events.append(('user-hats-changed', event))
+
         occupant.update_presence(presence)
         for signal, event in signals_and_events:
             occupant.notify(signal, event)

@@ -22,6 +22,7 @@ from nbxmpp.const import Role
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import HatData
 from nbxmpp.structs import LocationData
 from nbxmpp.structs import MucSubject
 from nbxmpp.structs import TuneData
@@ -798,6 +799,7 @@ class GroupchatContact(CommonContact):
         contact.connect('user-left', self._on_user_signal)
         contact.connect('user-affiliation-changed', self._on_user_signal)
         contact.connect('user-role-changed', self._on_user_signal)
+        contact.connect('user-hats-changed', self._on_user_signal)
         contact.connect('user-status-show-changed', self._on_user_signal)
         contact.connect('user-avatar-update', self._on_user_signal)
         return contact
@@ -1071,6 +1073,10 @@ class GroupchatParticipant(CommonContact):
         data = self.get_module('MUC').get_muc_data(self.room.jid)
         assert data is not None
         return data.nick == self.name
+
+    @property
+    def hats(self) -> HatData | None:
+        return self._presence.hats
 
 
 def can_add_to_roster(

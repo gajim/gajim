@@ -728,6 +728,15 @@ class MUCRoomDestroyed(ApplicationEvent):
 
 
 @dataclass
+class MUCUserHatsChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-hats-changed')
+    timestamp: datetime.datetime
+    is_self: bool
+    nick: str
+    hats: list[str] | None
+
+
+@dataclass
 class MUCUserJoined(ApplicationEvent):
     name: str = field(init=False, default='muc-user-joined')
     timestamp: datetime.datetime

@@ -35,6 +35,7 @@ EVENT_CLASSES: dict[str, Any] = {
     'muc-user-role-changed': events.MUCUserRoleChanged,
     'muc-user-affiliation-changed': events.MUCUserAffiliationChanged,
     'muc-user-status-show-changed': events.MUCUserStatusShowChanged,
+    'muc-user-hats-changed': events.MUCUserHatsChanged,
     'room-affiliation-changed': events.MUCAffiliationChanged,
 }
 
