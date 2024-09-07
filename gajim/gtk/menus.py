@@ -575,7 +575,7 @@ def get_chat_list_row_menu(workspace_id: str,
 
     if app.window.get_chat_unread_count(account, jid, include_silent=True):
         params = AccountJidParam(account=account, jid=jid)
-        menu.add_item(_('Mark as read'), 'win.mark-as-read', params)
+        menu.add_item(_('Mark as read'), f'app.{account}-mark-as-read', params)
 
     if contact.is_muted:
         menu.add_item(
