@@ -311,8 +311,15 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
                 # set jabber:client as toplevel namespace
                 # Use type Protocol so nbxmpp counts the stanza for
                 # stream management
-                node = nbxmpp.Protocol(node=stanza,
-                                       attrs={'xmlns': 'jabber:client'})
+                try:
+                    node = nbxmpp.Protocol(
+                        node=stanza,
+                        attrs={'xmlns': 'jabber:client'}
+                    )
+                except Exception as error:
+                    ErrorDialog(_('Invalid Stanza'), str(error))
+                    return
+
             client = app.get_client(self._selected_send_account)
             assert isinstance(node, nbxmpp.Protocol)
             client.connection.send_stanza(node)
