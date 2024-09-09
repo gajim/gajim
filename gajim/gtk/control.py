@@ -192,20 +192,12 @@ class ChatControl(EventHelper):
     ) -> None:
         row = self._scrolled_view.get_row_by_pk(pk)
         if row is None:
-            m = app.storage.archive.get_message_with_pk(pk)
-            if m is None:
-                log.info('Message with pk %s was not found in DB', pk)
-                return
-
             # Clear view and reload conversation around timestamp
             self._scrolled_view.reset()
             self._scrolled_view.block_signals(True)
-            messages: list[Message] = []
-            messages.append(m)
-            messages.extend(app.storage.archive.get_conversation_before_after(
-                self.contact.account, self.contact.jid, True, timestamp, 50))
-            messages.extend(app.storage.archive.get_conversation_before_after(
-                self.contact.account, self.contact.jid, False, timestamp, 50))
+            messages = app.storage.archive.get_conversation_around_timestamp(
+                self.contact.account, self.contact.jid, timestamp
+            )
             self._add_messages(messages)
             self._scrolled_view.set_history_complete(False, False)
 

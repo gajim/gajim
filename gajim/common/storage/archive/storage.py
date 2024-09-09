@@ -23,6 +23,7 @@ import sqlalchemy as sa
 from nbxmpp import JID
 from sqlalchemy import delete
 from sqlalchemy import select
+from sqlalchemy import union_all
 from sqlalchemy import update
 from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import Engine
@@ -555,6 +556,53 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._explain(session, stmt)
         return session.scalars(stmt).all()
+
+    @with_session
+    @timeit
+    def get_conversation_around_timestamp(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        timestamp: datetime
+    ) -> list[Message]:
+        '''
+        Loads messages around a primary key
+
+        :param account:
+            The account
+        :param jid:
+            The jid for which we request the conversation
+        :param timestamp:
+            The timestamp in the conversation
+        '''
+
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+
+        base_stmt = select(Message.pk).where(
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+            Message.correction_id.is_(None),
+        )
+
+        preceding_query = base_stmt.where(
+            Message.timestamp <= timestamp,
+        ).order_by(
+            sa.desc(Message.timestamp), sa.desc(Message.pk)
+        ).limit(50).subquery()
+
+        following_query = base_stmt.where(
+            Message.timestamp > timestamp,
+        ).order_by(
+            sa.asc(Message.timestamp), sa.asc(Message.pk)
+        ).limit(50).subquery()
+
+        u_stmt = union_all(select(preceding_query), select(following_query))
+        stmt = select(Message).where(Message.pk.in_(u_stmt.scalar_subquery()))
+
+        self._explain(session, stmt)
+        return list(session.scalars(stmt).all())
 
     @with_session
     @timeit
