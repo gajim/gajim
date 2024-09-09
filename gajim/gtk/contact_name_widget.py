@@ -147,13 +147,15 @@ class ContactNameWidget(Gtk.Box):
 
     def update_displayed_name(self, name: str) -> None:
         if self._contact is not None:
-            assert isinstance(self._contact, BareContact | GroupchatContact)
-            # Name editing is not possible for GroupchatParticipant
-            if name == '':
-                name = self._contact.original_name
+            if isinstance(self._contact, BareContact | GroupchatContact):
+                # Name editing is not possible for GroupchatParticipant
+                if name == '':
+                    name = self._contact.original_name
 
-            if name != self._contact.original_name:
-                name = f'{name} ({self._contact.original_name})'
+                if name != self._contact.original_name:
+                    name = f'{name} ({self._contact.original_name})'
+            else:
+                name = self._contact.name
 
         self._entry.set_text(name)
 
