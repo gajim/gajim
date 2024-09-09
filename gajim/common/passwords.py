@@ -123,8 +123,9 @@ class SecretPasswordStorage:
         account_jid = app.get_jid_from_account(account_name)
 
         keyring_errors = (
+            keyring.errors.InitError,
+            keyring.errors.KeyringLocked,
             keyring.errors.PasswordDeleteError,
-            keyring.errors.InitError
         )
         try:
             _interface.backend.delete_password('gajim', account_name)
