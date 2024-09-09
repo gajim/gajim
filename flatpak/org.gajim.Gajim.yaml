@@ -77,39 +77,39 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/c/cffi/cffi-1.16.0.tar.gz
-        sha256: bcb3ef43e58665bbda2fb198698fcae6776483e0c4a631aa5647806c25e02cc0
+        url: https://files.pythonhosted.org/packages/source/c/cffi/cffi-1.17.1.tar.gz
+        sha256: 1c39c6016c32bc48dd54561950ebd6836e1670f2ae46128f67cf49e789c52824
 
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.7-py3-none-any.whl
+      - pip3 install idna-3.8-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.7-py3-none-any.whl
-        sha256: 82fee1fc78add43492d3a1898bfa6d8a904cc97d8427f683ed8e798d07761aa0
+        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.8-py3-none-any.whl
+        sha256: 050b4e5baadcd44d760cedbd2b8e639f2ff89bbc7a5730fcc662954303377aac
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-42.0.7-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-43.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.7-cp39-abi3-manylinux_2_28_aarch64.whl
-        sha256: 31adb7d06fe4383226c3e963471f6837742889b3c4caa55aac20ad951bc8ffda
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
+        sha256: d03a475165f3134f773d1388aeb19c2d25ba88b6a9733c5c590b9ff7bbfa2e0c
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-42.0.7-cp39-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-43.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-42.0.7-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: efd0bf5205240182e0f13bcaea41be4fdf5c22c5129fc7ced4a0282ac86998c9
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 511f4273808ab590912a93ddb4e3914dfd8a388fed883361b02dea3791f292e1
 
   - name: python3-jeepney
     buildsystem: simple
@@ -133,33 +133,33 @@ modules:
   - name: python3-zipp
     buildsystem: simple
     build-commands:
-      - pip3 install zipp-3.19.2-py3-none-any.whl
+      - pip3 install zipp-3.20.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.19.2-py3-none-any.whl
-        sha256: f091755f667055f2d02b32c53771a7a6c8b47e1fdbc4b72a8b9072b3eef8015c
+        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.20.1-py3-none-any.whl
+        sha256: 9960cd8967c8f85a56f920d5d507274e74f9ff813a0ab8889a5b5be2daf44064
 
   # jaraco.classes dependency
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-10.3.0-py3-none-any.whl
+      - pip3 install more_itertools-10.5.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.3.0-py3-none-any.whl
-        sha256: ea6a02e24a9161e51faad17a8782b92a0df82c12c1c8886fec7f0c3fa1a1b320
+        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.5.0-py3-none-any.whl
+        sha256: 037b0d3203ce90cca8ab1defbbdac29d5f993fc20131f3664dc8d6acfa872aef
 
   # keyring dependency
   - name: python3-importlib-metadata
     buildsystem: simple
     build-commands:
-      - pip3 install importlib_metadata-8.2.0-py3-none-any.whl
+      - pip3 install importlib_metadata-8.4.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.2.0-py3-none-any.whl
-        sha256: 11901fa0c2f97919b288679932bb64febaeacf289d18ac84dd68cb2e74213369
+        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.4.0-py3-none-any.whl
+        sha256: 66f342cc6ac9818fc6ff340576acd24d65ba0b3efabb2b4ac08b598965a4a2f1
 
   - name: python3-jaraco.classes
     buildsystem: simple
@@ -183,31 +183,31 @@ modules:
   - name: python3-jaraco.context
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco.context-5.3.0-py3-none-any.whl
+      - pip3 install jaraco.context-6.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.context/jaraco.context-5.3.0-py3-none-any.whl
-        sha256: 3e16388f7da43d384a1a7cd3452e72e14732ac9fe459678773a3608a812bf266
+        url: https://files.pythonhosted.org/packages/py3/j/jaraco.context/jaraco.context-6.0.1-py3-none-any.whl
+        sha256: f797fc481b490edb305122c9181830a3a5b76d84ef6d1aef2fb9b47ab956f9e4
 
   - name: python3-jaraco.functools
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco.functools-4.0.1-py3-none-any.whl
+      - pip3 install jaraco.functools-4.0.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.functools/jaraco.functools-4.0.1-py3-none-any.whl
-        sha256: 3b24ccb921d6b593bdceb56ce14799204f473976e2a9d4b15b04d0f2c2326664
+        url: https://files.pythonhosted.org/packages/py3/j/jaraco.functools/jaraco.functools-4.0.2-py3-none-any.whl
+        sha256: c9d16a3ed4ccb5a889ad8e0b7a343401ee5b2a71cee6ed192d3f68bc351e94e3
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-25.2.1-py3-none-any.whl
+      - pip3 install keyring-25.3.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.2.1-py3-none-any.whl
-        sha256: 2458681cdefc0dbc0b7eb6cf75d0b98e59f9ad9b2d4edd319d18f68bdca95e50
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.3.0-py3-none-any.whl
+        sha256: 8d963da00ccdf06e356acd9bf3b743208878751032d8599c6cc89eb51310ffae
 
   - name: python3-css-parser
     buildsystem: simple
@@ -276,20 +276,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2024.7.4-py3-none-any.whl
+      - pip3 install certifi-2024.8.30-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.7.4-py3-none-any.whl
-        sha256: c198e21b1289c2ab85ee4e67bb4b4ef3ead0892059901a8d5b622f24a1101e90
+        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2024.8.30-py3-none-any.whl
+        sha256: 922820b53db7a7257ffbda3f597266d435245903d80737e34f8a45ff3e3230d8
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.11.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.13.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.11.0-py2.py3-none-any.whl
-        sha256: d964710e2dbe015d9dc4ff0ad16225d68c3b36936b742a6fe0504565b760a3b7
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.13.0-py2.py3-none-any.whl
+        sha256: 6beede8fc2ab4043da7f69d95534e320944690680dd9a963178a49de71d726c6
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -312,11 +312,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.31-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.34-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.31-py3-none-any.whl
-        sha256: 69f3e3c08867a8e4856e92d7afb618b95cdee18e0bc1647b77599722c9a28911
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.34-py3-none-any.whl
+        sha256: 7286c353ee6475613d8beff83167374006c6b3e3f0e6491bfe8ca610eb1dec0f
 
   - name: python3-emoji
     buildsystem: simple
@@ -360,11 +360,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.27.2-py3-none-any.whl
+      - pip3 install --no-deps protobuf-5.28.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.27.2-py3-none-any.whl
-        sha256: 54330f07e4949d09614707c48b06d1a22f8ffb5763c159efd5c0928326a91470
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.28.0-py3-none-any.whl
+        sha256: 510ed78cd0980f6d3218099e874714cdf0d8a95582e7b059b06cabad855ed0a0
 
   - name: python3-omemo-dr
     buildsystem: simple
