@@ -397,7 +397,7 @@ class Field(GObject.GObject):
         self._warning_image.set_tooltip_text(str(error))
         self._warning_image.set_visible(not is_valid)
 
-    def _validate(self) -> None:
+    def _validate(self, delay: bool = True) -> None:
         self._form_grid.validate(False)
         if self._validate_source_id is not None:
             GLib.source_remove(self._validate_source_id)
@@ -408,7 +408,10 @@ class Field(GObject.GObject):
             self._form_grid.validate(is_valid)
             self._validate_source_id = None
 
-        self._validate_source_id = GLib.timeout_add(200, _start_validation)
+        if delay:
+            self._validate_source_id = GLib.timeout_add(200, _start_validation)
+        else:
+            _start_validation()
 
     def destroy(self) -> None:
         if self._validate_source_id is not None:
@@ -503,9 +506,14 @@ class ListSingleField(Field):
         self._widget.set_active_id(field.value)
         self._widget.connect('changed', self._changed)
 
+    def _changed(self, widget: MaxWidthComboBoxText) -> None:
+        self._field.value = widget.get_active_id()
+        self._validate()
+
     def _setup_treeview(self, field: DataField) -> None:
         self._treeview = ListSingleTreeView(field, self)
         self._treeview.connect('row-activated', self._on_row_activated)
+        self._treeview.connect('cursor-changed', self._on_cursor_changed)
 
         self._widget = Gtk.ScrolledWindow()
         self._widget.set_propagate_natural_height(True)
@@ -516,11 +524,15 @@ class ListSingleField(Field):
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.add(self._treeview)
 
-    def _changed(self, widget: MaxWidthComboBoxText) -> None:
-        self._field.value = widget.get_active_id()
-        self._validate()
 
-    def _on_row_activated(self, *_args) -> None:
+    def _on_cursor_changed(self, *_args: Any) -> None:
+        model, treeiter = self._treeview.get_selection().get_selected()
+        if treeiter is None:
+            return None
+        self._field.value = model[treeiter][1]
+        self._validate(delay=False)
+
+    def _on_row_activated(self, *_args: Any) -> None:
         self.emit('row-activated')
 
     def add(self,
@@ -565,13 +577,6 @@ class ListSingleTreeView(Gtk.TreeView):
             self.set_tooltip_column(2)
 
         self.set_model(self._store)
-        self.connect('cursor-changed', self._on_cursor_changed)
-
-    def _on_cursor_changed(self, *_args) -> None:
-        model, treeiter = self.get_selection().get_selected()
-        if treeiter is None:
-            return None
-        self._field.value = model[treeiter][1]
 
 
 class ListMultiField(Field):
