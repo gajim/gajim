@@ -105,6 +105,8 @@ FORM = '''
          var='invitelist'>
     <desc>Tell all your friends about your new bot!</desc>
     <required/>
+    <value>juliet@capulet.com</value>
+    <value>benvolio@montague.net</value>
   </field>
   <field var='ocr' type='text-single' label='Fill in what you see'>
     <media xmlns='urn:xmpp:media-element'>

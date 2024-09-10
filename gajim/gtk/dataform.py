@@ -426,7 +426,7 @@ class BooleanField(Field):
 
         if self.read_only:
             label = _('Yes') if field.value else _('No')
-            self._widget = Gtk.Label(label=label)
+            self._widget = Gtk.Label(label=label, selectable=True)
             self._widget.set_xalign(0)
         else:
             self._widget = Gtk.CheckButton()
@@ -481,6 +481,12 @@ class ListSingleField(Field):
         Field.__init__(self, field, form_grid, options)
 
         self._unique = treeview
+
+        if self.read_only:
+            self._widget = Gtk.Label(label=field.value, selectable=True)
+            self._widget.set_xalign(0)
+            return
+
         if treeview:
             self._setup_treeview(field)
         else:
@@ -621,12 +627,16 @@ class ListMultiTreeView(Gtk.TreeView):
         cell.connect('toggled', self._toggled)
         col.pack_start(cell, True)
         col.set_attributes(cell, active=3)
-        self.append_column(col)
+
+        if not multi_field.read_only:
+            self.append_column(col)
 
         self.set_headers_visible(False)
 
         for option in field.options:
             label, value = option
+            if multi_field.read_only and value not in field.values:
+                continue
             self._store.append(
                 [label, value, label, value in field.values])
 
@@ -691,7 +701,9 @@ class JidMultiField(Field):
         self._scrolled_window.add(self._treeview)
 
         self._widget.pack_start(self._scrolled_window, True, True, 0)
-        self._widget.pack_end(self._toolbar, False, False, 0)
+
+        if not self._read_only:
+            self._widget.pack_end(self._toolbar, False, False, 0)
 
     def _add_clicked(self, _widget: Gtk.ToolButton) -> None:
         model = self._treeview.get_model()
@@ -779,7 +791,7 @@ class TextSingleField(Field):
         Field.__init__(self, field, form_grid, options)
 
         if self.read_only:
-            self._widget = Gtk.Label(label=field.value)
+            self._widget = Gtk.Label(label=field.value, selectable=True)
             self._widget.set_xalign(0)
             self._widget.set_selectable(True)
         else:
@@ -804,9 +816,9 @@ class TextPrivateField(TextSingleField):
                  ) -> None:
 
         TextSingleField.__init__(self, field, form_grid, options)
-        assert isinstance(self._widget, Gtk.Entry)
-        self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
-        self._widget.set_visibility(False)
+        if isinstance(self._widget, Gtk.Entry):
+            self._widget.set_input_purpose(Gtk.InputPurpose.PASSWORD)
+            self._widget.set_visibility(False)
 
 
 class JidSingleField(TextSingleField):
