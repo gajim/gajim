@@ -513,6 +513,7 @@ class ListSingleField(Field):
     def _setup_treeview(self, field: DataField) -> None:
         self._treeview = ListSingleTreeView(field, self)
         self._treeview.connect('row-activated', self._on_row_activated)
+        self._treeview.connect('cursor-changed', self._on_cursor_changed)
 
         self._widget = Gtk.ScrolledWindow()
         self._widget.set_propagate_natural_height(True)
@@ -523,7 +524,6 @@ class ListSingleField(Field):
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.add(self._treeview)
 
-        self._widget.connect('cursor-changed', self._on_cursor_changed)
 
     def _on_cursor_changed(self, *_args: Any) -> None:
         model, treeiter = self._treeview.get_selection().get_selected()
