@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -30,6 +30,10 @@ msgstr " (Video hovor)"
 
 msgid " (Voice Call)"
 msgstr " Hlasový hovor"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Změněno %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -344,11 +348,12 @@ msgstr "<prázdné>"
 msgid "<error>"
 msgstr "Chyba"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "Porovnání vlastností různých serverů"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "Žádný"
+
+#, fuzzy
+msgid "A feature comparison of various providers"
+msgstr "Porovnání vlastností různých serverů"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -605,6 +610,9 @@ msgstr "Vztah"
 msgid "Affiliations"
 msgstr "Vztahy"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -736,9 +744,6 @@ msgstr "Archivuji předvolby pro %s"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Jste si jisti, že chcete opustit tuto skupinovou konverzaci?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Opravdu chcete ukončit Gajim?"
 
 msgid "Artists"
 msgstr "Umělci"
@@ -880,6 +885,9 @@ msgstr "Zabanovat %s"
 
 msgid "Ban…"
 msgstr "Zabanovat…"
+
+msgid "Before"
+msgstr ""
 
 msgid "Behaviour of Application Window"
 msgstr "Chování okna aplikace"
@@ -1474,6 +1482,10 @@ msgstr "Nezda"
 msgid "Could not save file to selected directory."
 msgstr "Nemáte oprávnění k vytváření souborů v tomto adresáři."
 
+#, fuzzy
+msgid "Could not update providers list"
+msgstr "Nelze získat přístup k souboru (%s)"
+
 msgid "Country"
 msgstr "Země"
 
@@ -1868,6 +1880,9 @@ msgstr "Šifrování je vyžadováno"
 
 msgid "End call"
 msgstr "Ukončit hovor"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr ""
 
 msgid "Enter a password to join this chat"
 msgstr "Zadejte heslo pro připojení k této konverzaci"
@@ -2717,7 +2732,8 @@ msgstr ""
 "Čárkami oddělený seznam počítačů a místních síťových rozhraní pro přenos "
 "souborů v případě překladu adres / přesměrování portů."
 
-msgid "Listing of Servers"
+#, fuzzy
+msgid "Listing of providers"
 msgstr "Výpis serverů"
 
 msgid "Live Preview"
@@ -2943,6 +2959,9 @@ msgstr "Upravit"
 msgid "Modify Gateway…"
 msgstr "Upravit gateway…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 msgid "Move Chat"
 msgstr "Přesunout konverzaci"
 
@@ -3147,7 +3166,8 @@ msgstr "Poznámka"
 msgid "Note to myself"
 msgstr "Poznámky"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+#, fuzzy
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr "Poznámka: Anonymní účty nejsou povolené na všech serverech"
 
 msgid "Notes"
@@ -3491,9 +3511,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Prosíme, používejte tato nastavení opatrně!"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "Použijte prosím formát rrrr-mm-dd"
-
 msgid "Plugin Settings"
 msgstr "Nastavení zásuvných modulů"
 
@@ -3592,6 +3609,17 @@ msgid "Project discussion"
 msgstr "Diskuze o projektu"
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Informace o serveru"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 msgid "Prox_y"
@@ -4043,6 +4071,14 @@ msgid "Search"
 msgstr "Najít"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Zpráva odeslána"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Zpráva přijata"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Účastníci"
 
@@ -4064,6 +4100,9 @@ msgid ""
 msgstr ""
 "Hledat skupinové konverzace globálně\n"
 "(stiskněte Enter pro zahájení vyhledávání)"
+
+msgid "Search your conversation"
+msgstr ""
 
 msgid "Searching"
 msgstr "Hledám"
@@ -4245,6 +4284,10 @@ msgstr "Gateway služby"
 
 msgid "Set configuration directory"
 msgstr "Zvolit adresář nastavení"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Moderováno"
 
 msgid "Set status message"
 msgstr "Nastavit zprávu o stavu"
@@ -4439,7 +4482,8 @@ msgstr "Registrovat se"
 msgid "Sign up Anonymously"
 msgstr "Registrovat se anonymně"
 
-msgid "Sign up for a new account on a server of your choice"
+#, fuzzy
+msgid "Sign up for a new account with a provider of your choice"
 msgstr "Zaregistrujte si nový účet na Vámi zvoleném serveru"
 
 msgid "Signup not allowed"
@@ -4638,6 +4682,14 @@ msgstr "Podpora pro více účtů"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Podpora pro vyhledávání služeb včetně uzlů a uživatelů"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 msgid "Switch Workspace"
 msgstr "Změnit pracovní plochu"
 
@@ -4745,8 +4797,9 @@ msgstr ""
 "Soubor %s byl přijat, ale zdá se, že byl cestou poškozen.\n"
 "Přejete si jej stáhnout znovu?"
 
+#, fuzzy
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 "Při pokusu o ověření certifikátu serveru se objevila následující varování"
@@ -4784,10 +4837,11 @@ msgstr "Motivy vzhledu"
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
+#, fuzzy
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 "Na výběr je ze spousty serverů.\n"
 "Vytvoření účtu na jednom serveru Vám umožní komunikovat i s kontakty z "
@@ -5194,6 +5248,9 @@ msgstr "Aktualizace"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Aktualizace budou nainstalovány po restartování"
 
+msgid "Updating provider list…"
+msgstr ""
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "Nahrát soubory"
@@ -5245,17 +5302,6 @@ msgstr "Použít určený profil v konfiguračním adresáři"
 msgid "Use file transfer proxies"
 msgstr "Použij proxy při přenosu souborů"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"Použijte filtry pro zúžení vyhledávání:\n"
-"od: uživatelské jméno\n"
-"před: rrrr-mm-dd\n"
-"po:rrrr-mm-dd"
-
 msgid "Use proxy auth_entication"
 msgstr "Použít při_hlášení k proxy"
 
@@ -5275,6 +5321,10 @@ msgstr "Rozhraní D-Bus"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "Uživatelské jméno"
 
 msgid "Users"
 msgstr "Uživatelé"
@@ -5321,7 +5371,8 @@ msgstr "Video hovory nejsou na Windows dostupné"
 msgid "Video test"
 msgstr "Test videa"
 
-msgid "Visit Server's Website"
+#, fuzzy
+msgid "Visit Provider's Website"
 msgstr "Navštívit webové stránky serveru"
 
 msgid "Visit Website"
@@ -5384,7 +5435,8 @@ msgid ""
 msgstr ""
 "Zkontrolovat platný certifikát před stažením (nedoporučuje se zakazovat)"
 
-msgid "Which server should I choose?"
+#, fuzzy
+msgid "Which provider should I choose?"
 msgstr "Který server mám vybrat?"
 
 #, fuzzy
@@ -5467,9 +5519,6 @@ msgstr ""
 "Chystáte se připojit k účtu %(account)s (%(server)s) pomocí nezabezpečené "
 "metody připojení. To znamená, že konverzace nebudou šifrovány. Připojení "
 "PLAIN se důrazně nedoporučuje."
-
-msgid "You are about to quit Gajim"
-msgstr "Chystáte se ukončit Gajim"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5748,9 +5797,6 @@ msgstr "Zrušit účet"
 msgid "_Do not ask me again"
 msgstr "Příště se neptat"
 
-msgid "_Don’t ask again"
-msgstr "Znovu se neptat"
-
 msgid "_Download"
 msgstr "Stáhnout"
 
@@ -5772,6 +5818,9 @@ msgstr "Otevřený konverzaci"
 
 msgid "_Help"
 msgstr "Nápověda"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 msgid "_Host"
 msgstr "Počítač"
@@ -5801,6 +5850,10 @@ msgstr "Upravit účty…"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "Přidat účet…"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Minimalizovat"
 
 #, fuzzy
 msgid "_Moderate"
@@ -5834,7 +5887,8 @@ msgstr "Otevřít složku"
 msgid "_Overwrite"
 msgstr "Přepsat"
 
-msgid "_Please choose a server"
+#, fuzzy
+msgid "_Please choose a provider"
 msgstr "Vyberte prosím server"
 
 msgid "_Port"
@@ -5855,6 +5909,9 @@ msgstr "Zavřít"
 
 msgid "_Re-Login"
 msgstr "Znovu se přihlásit"
+
+msgid "_Remember my decision"
+msgstr ""
 
 msgid "_Remove"
 msgstr "Odst_ranit"
@@ -6398,6 +6455,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "?user status:_Available"
 #~ msgstr "?transfer status:Pozastaveno"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Opravdu chcete ukončit Gajim?"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Konverzace: barva URL"
 
@@ -6438,6 +6498,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Organizační jednotka (OJ): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "Použijte prosím formát rrrr-mm-dd"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Odvolat…"
@@ -6459,8 +6522,26 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Topic"
 #~ msgstr "Téma"
 
+#, fuzzy
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "Použijte filtry pro zúžení vyhledávání:\n"
+#~ "od: uživatelské jméno\n"
+#~ "před: rrrr-mm-dd\n"
+#~ "po:rrrr-mm-dd"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Chystáte se ukončit Gajim"
+
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nahráli jste něco, co Gajim nemohl zpracovat: %s"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "Znovu se neptat"
 
 #~ msgid "_Login"
 #~ msgstr "Přihlášení"

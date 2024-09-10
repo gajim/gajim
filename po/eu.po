@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -24,6 +24,10 @@ msgstr "Txat Pribatua"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Fitxeroa Transferitzeko Baimena"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Aldatu _Izengoitia"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -346,12 +350,12 @@ msgstr ""
 msgid "<error>"
 msgstr "Avahi error"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "Inor ez"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -652,6 +656,9 @@ msgstr "Afizioak: "
 msgid "Affiliations"
 msgstr "Afizioak: "
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -797,10 +804,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
-msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
-
-#, fuzzy
-msgid "Are you sure you want to quit Gajim?"
 msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 
 msgid "Artists"
@@ -968,6 +971,9 @@ msgid "Ban %s"
 msgstr "Debekatutako Zerrenda"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1651,6 +1657,10 @@ msgid "Could not save file to selected directory."
 msgstr "Ez duzu baimenik kokapen honetan fitxerorik sortzeko."
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "Ezin izan da irudia kargatu"
+
+#, fuzzy
 msgid "Country"
 msgstr "Estatua:"
 
@@ -2094,6 +2104,9 @@ msgid "Encryption required"
 msgstr "Enkriptazioa aktibatuta"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3050,7 +3063,7 @@ msgstr ""
 "Overrides the host we send for File Transfer in case of address translation/"
 "port forwarding."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3305,6 +3318,9 @@ msgstr "_Eraldatu"
 msgid "Modify Gateway…"
 msgstr "Kontua E_raldatu"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Fitxeroa Transferitzeko Baimena"
@@ -3532,7 +3548,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3919,9 +3935,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Konexioak huts egin du"
@@ -4036,6 +4049,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Zerbitzaria"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4559,6 +4583,14 @@ msgid "Search"
 msgstr "Bilatu"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Mezua Bidaltzean"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Lehen Mezu Jasoa"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Partaideak"
 
@@ -4580,6 +4612,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4798,6 +4833,10 @@ msgstr "Zerbitzaria"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Gelaren Konfigurazioa"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Moderatzailea"
 
 #, fuzzy
 msgid "Set status message"
@@ -5024,7 +5063,7 @@ msgstr "_Konektatuta"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5253,6 +5292,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Zerbitzaria Aurkitua %s kontua erabiliz"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Berridatzi Kontaktua"
@@ -5371,7 +5418,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5413,9 +5460,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5852,6 +5899,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5912,13 +5962,6 @@ msgstr "Konfigurazio Aurreratuaren Editorea"
 msgid "Use file transfer proxies"
 msgstr "Erabili proxy fitxero transferentzia"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Erabili autentifikazioa"
@@ -5939,6 +5982,10 @@ msgstr "_Izena"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Izena"
 
 msgid "Users"
 msgstr "Erabiltzaileak"
@@ -5991,7 +6038,7 @@ msgstr "Konexioa ez erablgarri"
 msgid "Video test"
 msgstr ""
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6058,7 +6105,7 @@ msgid ""
 "disable)"
 msgstr ""
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6144,10 +6191,6 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr "Metakontaktu bat sortuko duzu. Jarraitu nahi al duzu?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6475,10 +6518,6 @@ msgid "_Do not ask me again"
 msgstr "E_z galdetu berriro  "
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "E_z galdetu berriro  "
-
-#, fuzzy
 msgid "_Download"
 msgstr "E_z galdetu berriro  "
 
@@ -6505,6 +6544,9 @@ msgstr "Libre _Hitz Egiteko"
 #, fuzzy
 msgid "_Help"
 msgstr "_Laguntza"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6537,6 +6579,10 @@ msgstr "Kontua E_raldatu"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6577,7 +6623,7 @@ msgid "_Overwrite"
 msgstr ""
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Mezu berria sortu"
 
 #, fuzzy
@@ -6600,6 +6646,9 @@ msgid "_Quit"
 msgstr "At_era"
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7131,6 +7180,10 @@ msgstr ""
 #~ msgstr "Gelditua"
 
 #, fuzzy
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Elkarrizketaren Historiala"
 
@@ -7181,6 +7234,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Ziur al zaude \"%s\" gelatik atera nahi duzula?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "E_z galdetu berriro  "
 
 #, fuzzy
 #~ msgid "_Login"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -28,6 +28,10 @@ msgstr "בדיקת וידאו"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "בקשה לשיחה קולית"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "שנה שם _כינוי..."
 
 #, python-brace-format
 msgid " by {actor}"
@@ -372,12 +376,12 @@ msgstr "<ריק>"
 msgid "<error>"
 msgstr "שגיאה"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "אין"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -683,6 +687,9 @@ msgstr "<b>השתייכות:</b>"
 msgid "Affiliations"
 msgstr "<b>יישומים</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -833,9 +840,6 @@ msgstr "העדפות גנזך עבור ‫%s"
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "האם אתה בטוח כי ברצונך לעזוב את שיחת קבוצה \"%s\"?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 
 msgid "Artists"
 msgstr ""
@@ -1010,6 +1014,9 @@ msgid "Ban %s"
 msgstr "רשימת אסירה"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1703,6 +1710,10 @@ msgid "Could not save file to selected directory."
 msgstr "אין לך הרשאות ליצור קבצים במדור זה."
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "לא היתה אפשרות להטעין תמונה"
+
+#, fuzzy
 msgid "Country"
 msgstr "ארץ"
 
@@ -2164,6 +2175,9 @@ msgid "Encryption required"
 msgstr "בקשת הרשמה"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3146,7 +3160,7 @@ msgstr ""
 "רשימה אשר מופרדת על ידי פסיק, של מארחים אותם אנו שולחים, בנוסף לממשק מקומי, "
 "לשם העברת קובץ במקרה של address translation/port forwarding."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3408,6 +3422,9 @@ msgstr "התאמה"
 msgid "Modify Gateway…"
 msgstr "ה_תאם חשבון..."
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "בקשה לשיחה קולית"
@@ -3633,7 +3650,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -4021,9 +4038,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "תוספים"
@@ -4139,6 +4153,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "שרת"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4682,6 +4707,14 @@ msgid "Search"
 msgstr "חיפוש"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "הודעה נשלחה"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "הודעה ראשונה אשר התקבלה"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "משתתפים"
 
@@ -4703,6 +4736,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4922,6 +4958,10 @@ msgstr "שרת"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "cli"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "אחראי"
 
 #, fuzzy
 msgid "Set status message"
@@ -5151,7 +5191,7 @@ msgstr "התח_ברות"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5384,6 +5424,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "מציאת שירות באמצעות חשבון ‫%s"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "שינוי שם איש קשר"
@@ -5509,7 +5557,7 @@ msgstr ""
 "האם ברצונך להטעינו מחדש?"
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5555,9 +5603,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -6002,6 +6050,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -6064,13 +6115,6 @@ msgstr "cli"
 msgid "Use file transfer proxies"
 msgstr "השתמש בצירי (proxy) העברת קובץ"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "השתמש באימות _proxy"
 
@@ -6090,6 +6134,10 @@ msgstr "שם _משתמש:"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "שם _משתמש:"
 
 msgid "Users"
 msgstr "משתמשים"
@@ -6144,7 +6192,7 @@ msgstr "סשנים חזותיים אינם זמינים"
 msgid "Video test"
 msgstr "בדיקת וידאו"
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6212,7 +6260,7 @@ msgid ""
 "disable)"
 msgstr "התעלם משגיאה זו עבור תעודה זו."
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6312,10 +6360,6 @@ msgstr ""
 "משמעות הדבר היא כי כל השיחות אשר יוחלפו עם הקצה השני לא יהיו מוצפנות. רצוי "
 "להימנע מחיבורים מטיפוס זה.\n"
 "האם אתה בטוח כי ברצונך להתחבר?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6648,10 +6692,6 @@ msgid "_Do not ask me again"
 msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "אל ת_שאל אותי שוב"
-
-#, fuzzy
 msgid "_Download"
 msgstr "אל ת_שאל אותי שוב"
 
@@ -6678,6 +6718,9 @@ msgstr "_חופשי לשיחה"
 #, fuzzy
 msgid "_Help"
 msgstr "_עזרה"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6710,6 +6753,11 @@ msgstr "ה_תאם חשבון..."
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "הוסף _איש קשר..."
+
+# In Hebrew: גאג'ים
+#, fuzzy
+msgid "_Minimize"
+msgstr "‫Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6752,7 +6800,7 @@ msgid "_Overwrite"
 msgstr "להחליף?"
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "אנא צור מוטיב חדש עם השם הרצוי עליך."
 
 #, fuzzy
@@ -6774,6 +6822,9 @@ msgid "_Quit"
 msgstr ""
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7304,6 +7355,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "_זמין"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
+
 # direction_mark needed
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7357,6 +7411,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "‫Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
 #~ msgid "_Login"

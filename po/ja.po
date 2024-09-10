@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2024-06-23 22:13+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-01 03:17+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -26,6 +26,10 @@ msgstr " (ビデオチャット)"
 
 msgid " (Voice Call)"
 msgstr " (音声チャット)"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "%s が変更"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -343,11 +347,12 @@ msgstr "<なし>"
 msgid "<error>"
 msgstr "<エラー>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "サーバーの特徴の比較"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "談話室には少なくとも1人の主宰者が必要です"
+
+#, fuzzy
+msgid "A feature comparison of various providers"
+msgstr "サーバーの特徴の比較"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -538,10 +543,10 @@ msgid_plural "Added %s contacts"
 msgstr[0] "%s 件の相手先を追加しました"
 
 msgid "Additionally, you will lose your administrator affiliation."
-msgstr ""
+msgstr "加えて、管理者ではなくなります。"
 
 msgid "Additionally, you will lose your owner affiliation."
-msgstr ""
+msgstr "加えて、主宰者ではなくなります。"
 
 msgid "Address"
 msgstr "アドレス"
@@ -593,6 +598,9 @@ msgstr "分掌"
 
 msgid "Affiliations"
 msgstr "分掌"
+
+msgid "After"
+msgstr ""
 
 msgid "Algorithm"
 msgstr "アルゴリズム"
@@ -727,9 +735,6 @@ msgstr "%s の書庫の設定"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "本当にこの談話室から退出しますか ?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "本当に Gajim を終了しますか ?"
 
 msgid "Artists"
 msgstr "アーティスト"
@@ -874,6 +879,9 @@ msgstr "%s を締め出す"
 msgid "Ban…"
 msgstr "締め出す…"
 
+msgid "Before"
+msgstr ""
+
 msgid "Behaviour of Application Window"
 msgstr "アプリケーションウィンドウの挙動"
 
@@ -934,9 +942,9 @@ msgctxt "User status"
 msgid "Busy"
 msgstr "取り込み中"
 
-#, fuzzy, python-format
+#, python-format
 msgid "By closing this chat, you will leave \"%s\"."
-msgstr "このウィンドウを閉じると、\"%s\" を退出します。"
+msgstr "この会話を閉じると、\"%s\" を退出します。"
 
 msgid "CRL has expired"
 msgstr "証明書失効リストは有効期限が切れています"
@@ -1466,6 +1474,10 @@ msgstr "ファイルを保存できませんでした"
 msgid "Could not save file to selected directory."
 msgstr "選択されたディレクトリにファイルを保存できませんでした。"
 
+#, fuzzy
+msgid "Could not update providers list"
+msgstr "ファイルを開けませんでした (%s)"
+
 msgid "Country"
 msgstr "国"
 
@@ -1560,7 +1572,7 @@ msgid "Default for chats and private group chats"
 msgstr "チャットと非公開談話室でのデフォルト"
 
 msgid "Default for group chats"
-msgstr "グループチャットのデフォルト"
+msgstr "談話室のデフォルト"
 
 msgid "Default for new group chats"
 msgstr "新しい談話室のデフォルト"
@@ -1851,6 +1863,9 @@ msgstr "暗号化が必要です"
 
 msgid "End call"
 msgstr "通話を終了"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr ""
 
 msgid "Enter a password to join this chat"
 msgstr "この談話室に参加するにはパスワードを入れてください"
@@ -2684,9 +2699,8 @@ msgstr "最後に見たのは: %s"
 msgid "Leave Group Chat"
 msgstr "談話室から退出"
 
-#, fuzzy
 msgid "Leave _Permanently"
-msgstr "永久に"
+msgstr "永久に退出 (_P)"
 
 msgid "Left Click Action"
 msgstr "左クリック動作"
@@ -2701,7 +2715,8 @@ msgstr ""
 "ローカルのインターフェースに加えて、アドレス変換 / ポートフォワーディングの場"
 "合にファイル転送に用いるホストの一覧 (コンマで区切る)。"
 
-msgid "Listing of Servers"
+#, fuzzy
+msgid "Listing of providers"
 msgstr "サーバーの一覧"
 
 msgid "Live Preview"
@@ -2923,6 +2938,9 @@ msgstr "変更"
 msgid "Modify Gateway…"
 msgstr "中継口を修正…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 msgid "Move Chat"
 msgstr "チャットを移動"
 
@@ -3127,7 +3145,8 @@ msgstr "備考"
 msgid "Note to myself"
 msgstr "自分自身へのメモ"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+#, fuzzy
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr "注意: 匿名アカウントはすべてのサーバーで可能というわけではありません"
 
 msgid "Notes"
@@ -3473,9 +3492,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "これらの設定には注意してください。"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "yyyy-mm-dd を使用してください"
-
 msgid "Plugin Settings"
 msgstr "プラグインの設定"
 
@@ -3575,6 +3591,17 @@ msgstr "プロジェクトについての議論"
 
 msgid "Protocol"
 msgstr "プロトコル"
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "サーバー情報"
+
+msgid "Providers list is up to date"
+msgstr ""
 
 msgid "Prox_y"
 msgstr "プロキシ (_Y)"
@@ -3788,9 +3815,8 @@ msgstr "相手先一覧から除去"
 msgid "Remove this workspace"
 msgstr "この作業空間を除去"
 
-#, fuzzy
 msgid "Remove your group chat avatar"
-msgstr "プロフィール画像を除去します"
+msgstr "談話室のアバターを削除"
 
 msgid "Remove your profile picture"
 msgstr "プロフィール画像を除去します"
@@ -4022,6 +4048,14 @@ msgstr "スクロールアップしてさらに会話履歴を読み込む…"
 msgid "Search"
 msgstr "検索"
 
+#, fuzzy
+msgid "Search Filters"
+msgstr "メッセージを送信した"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "メッセージを受信した"
+
 msgid "Search Participants…"
 msgstr "参加者を検索…"
 
@@ -4043,6 +4077,9 @@ msgid ""
 msgstr ""
 "談話室を全体的に検索します\n"
 "(リターンで検索開始)"
+
+msgid "Search your conversation"
+msgstr ""
 
 msgid "Searching"
 msgstr "検索"
@@ -4221,6 +4258,10 @@ msgstr "サービス中継"
 
 msgid "Set configuration directory"
 msgstr "設定ファイルのディレクトリを指定"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "抑制…"
 
 msgid "Set status message"
 msgstr "状況メッセージを設定"
@@ -4414,7 +4455,8 @@ msgstr "登録"
 msgid "Sign up Anonymously"
 msgstr "匿名で登録"
 
-msgid "Sign up for a new account on a server of your choice"
+#, fuzzy
+msgid "Sign up for a new account with a provider of your choice"
 msgstr "選んだサーバーに新しいアカウントを登録します"
 
 msgid "Signup not allowed"
@@ -4613,6 +4655,14 @@ msgstr "複数アカウントに対応"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "ノードやユーザー検索などのサービス探索に対応"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 msgid "Switch Workspace"
 msgstr "作業空間を切替"
 
@@ -4720,8 +4770,9 @@ msgstr ""
 "ファイル %s を受け取りました。しかし、途中で損傷しているようです。\n"
 "もう一度ダウンロードしますか ?"
 
+#, fuzzy
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr "サーバー証明書の検証中に次の警告が発生しました"
 
@@ -4759,10 +4810,11 @@ msgstr "テーマ"
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "まだ信頼を決定していないデバイスがあります。"
 
+#, fuzzy
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 "選択できるサーバーはたくさんあります。\n"
 "ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できま"
@@ -5168,6 +5220,9 @@ msgstr "更新"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "更新は次の Gajim の起動時にインストールされます"
 
+msgid "Updating provider list…"
+msgstr ""
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "アップロード"
@@ -5192,7 +5247,7 @@ msgid "Uploading via HTTP File Upload…"
 msgstr "「HTTP ファイルアップロード」でアップロードしています…"
 
 msgid "Use \"//\" to start a message with a slash \"/\"."
-msgstr ""
+msgstr "メッセージをスラッシュ \"/\" で始めるには \"//\" を使ってください。"
 
 msgid "Use GSSAPI"
 msgstr "GSSAPI を使う"
@@ -5218,17 +5273,6 @@ msgstr "設定ディレクトリ内の設定ファイルを指定"
 msgid "Use file transfer proxies"
 msgstr "ファイル転送のプロキシを使う"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"検索を絞り込むにはフィルターを使用してください:\n"
-"from:ユーザー名\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-
 msgid "Use proxy auth_entication"
 msgstr "プロキシの認証を使用する (_E)"
 
@@ -5247,6 +5291,10 @@ msgstr "ユーザーインターフェース"
 
 msgid "User Interface Font Size"
 msgstr "ユーザーインターフェースのフォントサイズ"
+
+#, fuzzy
+msgid "User name…"
+msgstr "ユーザー名 (_U)"
 
 msgid "Users"
 msgstr "ユーザー数"
@@ -5293,7 +5341,8 @@ msgstr "Windows ではビデオチャットは有効ではありません"
 msgid "Video test"
 msgstr "ビデオのテスト"
 
-msgid "Visit Server's Website"
+#, fuzzy
+msgid "Visit Provider's Website"
 msgstr "サーバーのウェブサイトを開く"
 
 msgid "Visit Website"
@@ -5355,7 +5404,8 @@ msgstr ""
 "ダウンロード前に正しい証明書を確認するかどうか (無効にすると安全ではありませ"
 "ん)"
 
-msgid "Which server should I choose?"
+#, fuzzy
+msgid "Which provider should I choose?"
 msgstr "どのサーバーを選びますか ?"
 
 msgid "Why do you want to moderate this message?"
@@ -5436,9 +5486,6 @@ msgstr ""
 "安全でない接続でアカウント %(account)s (サーバー %(server)s) に接続しようとし"
 "ています。これは、会話が暗号化されないことを意味します。PLAIN 接続はまったく"
 "推奨しません。"
-
-msgid "You are about to quit Gajim"
-msgstr "Gajim を終了しようとしています"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5546,6 +5593,8 @@ msgid ""
 "You may need an invite to join this group chat again, if you choose to leave "
 "it permanently."
 msgstr ""
+"永久に退出することを選択すると、このグループ チャットに再度参加するための招待"
+"が必要になる場合があります。"
 
 msgid "You need Owner permission to change the configuration"
 msgstr "設定を変更するには主宰者の権限が必要です"
@@ -5721,9 +5770,6 @@ msgstr "アカウントを無効化 (_A)"
 msgid "_Do not ask me again"
 msgstr "次回から質問しない (_D)"
 
-msgid "_Don’t ask again"
-msgstr "次回から質問しない (_D)"
-
 msgid "_Download"
 msgstr "ダウンロード (_D)"
 
@@ -5745,6 +5791,9 @@ msgstr "チャット可 (_F)"
 
 msgid "_Help"
 msgstr "ヘルプ (_H)"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 msgid "_Host"
 msgstr "ホスト名 (_H)"
@@ -5772,6 +5821,10 @@ msgstr "アカウントを管理…(_M)"
 
 msgid "_Manage Account…"
 msgstr "アカウントを管理…(_M)"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "最小化"
 
 msgid "_Moderate"
 msgstr "抑制 (_M)"
@@ -5808,7 +5861,8 @@ msgstr "フォルダを開く (_O)"
 msgid "_Overwrite"
 msgstr "上書き (_O)"
 
-msgid "_Please choose a server"
+#, fuzzy
+msgid "_Please choose a provider"
 msgstr "サーバーを選択してください (_P)"
 
 msgid "_Port"
@@ -5828,6 +5882,9 @@ msgstr "終了 (_Q)"
 
 msgid "_Re-Login"
 msgstr "再ログイン (_R)"
+
+msgid "_Remember my decision"
+msgstr ""
 
 msgid "_Remove"
 msgstr "除去 (_R)"
@@ -6333,6 +6390,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "?user status:_Available"
 #~ msgstr "在席 (_A)"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "本当に Gajim を終了しますか ?"
+
 # (Mako) 語順が問題。コロンでごまかしてみる
 #~ msgid "Conversation: URL Color"
 #~ msgstr "会話: URL の文字色"
@@ -6375,6 +6435,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "部門 (OU): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "yyyy-mm-dd を使用してください"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "撤回…"
@@ -6395,6 +6458,24 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Topic"
 #~ msgstr "話題"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "検索を絞り込むにはフィルターを使用してください:\n"
+#~ "from:ユーザー名\n"
+#~ "before:yyyy-mm-dd\n"
+#~ "after:yyyy-mm-dd"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Gajim を終了しようとしています"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "次回から質問しない (_D)"
 
 #~ msgid "_Login"
 #~ msgstr "ログイン (_L)"

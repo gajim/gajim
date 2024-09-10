@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -25,6 +25,10 @@ msgstr " (Apel video)"
 
 msgid " (Voice Call)"
 msgstr " (Apel vocal)"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Schimbat de %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -343,11 +347,12 @@ msgstr "<gol>"
 msgid "<error>"
 msgstr "<eroare>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "O comparație de caracteristici a diferitelor servere"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "Un chat de grup are nevoie de cel puțin un proprietar"
+
+#, fuzzy
+msgid "A feature comparison of various providers"
+msgstr "O comparație de caracteristici a diferitelor servere"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -600,6 +605,9 @@ msgstr "Afiliere"
 msgid "Affiliations"
 msgstr "Afilieri"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr "Algoritm"
 
@@ -735,9 +743,6 @@ msgstr "Preferințe de arhivare pentru %s"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Ești sigur că vrei să părăsești acest grup de chat?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Ești sigur că vrei să renunți la Gajim?"
 
 msgid "Artists"
 msgstr "Artiști"
@@ -881,6 +886,9 @@ msgstr "Interzis %s"
 
 msgid "Ban…"
 msgstr "Interzis…"
+
+msgid "Before"
+msgstr ""
 
 msgid "Behaviour of Application Window"
 msgstr "Comportamentul ferestrei aplicației"
@@ -1481,6 +1489,10 @@ msgstr "Nu s-a putut salva fișierul"
 msgid "Could not save file to selected directory."
 msgstr "Nu s-a putut salva fișierul în directorul selectat."
 
+#, fuzzy
+msgid "Could not update providers list"
+msgstr "Datei konnte nicht geöffnet werden (%s)"
+
 msgid "Country"
 msgstr "Țara"
 
@@ -1882,6 +1894,9 @@ msgstr "Criptare necesară"
 
 msgid "End call"
 msgstr "Terminarea apelului"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr ""
 
 msgid "Enter a password to join this chat"
 msgstr "Introduceți o parolă pentru a vă alătura acestui chat"
@@ -2736,7 +2751,8 @@ msgstr ""
 "interfețele locale pentru transferuri de fișiere (în cazul traducerii de "
 "adrese/transferului de porturi)."
 
-msgid "Listing of Servers"
+#, fuzzy
+msgid "Listing of providers"
 msgstr "Lista de servere"
 
 msgid "Live Preview"
@@ -2957,6 +2973,9 @@ msgstr "Modificați"
 msgid "Modify Gateway…"
 msgstr "Modificare Gateway…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 msgid "Move Chat"
 msgstr "Mutați chat-ul"
 
@@ -3160,7 +3179,8 @@ msgstr "Nota"
 msgid "Note to myself"
 msgstr "Notă pentru mine însumi"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+#, fuzzy
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr "Notă: Conturile anonime nu sunt posibile pe toate serverele"
 
 msgid "Notes"
@@ -3505,9 +3525,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Vă rugăm să utilizați aceste setări cu prudență!"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "Vă rugăm să folosiți aaaa-ll-zz"
-
 msgid "Plugin Settings"
 msgstr "Setări Plugin"
 
@@ -3607,6 +3624,17 @@ msgstr "Discuția proiectului"
 
 msgid "Protocol"
 msgstr "Protocolul"
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Informații despre server"
+
+msgid "Providers list is up to date"
+msgstr ""
 
 msgid "Prox_y"
 msgstr "Prox_i"
@@ -4052,6 +4080,14 @@ msgstr "Derulează în sus pentru a încărca mai mult istoric de chat…"
 msgid "Search"
 msgstr "Căutare"
 
+#, fuzzy
+msgid "Search Filters"
+msgstr "Mesaj trimis"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Mesaj primit"
+
 msgid "Search Participants…"
 msgstr "Căutare Participanți…"
 
@@ -4073,6 +4109,9 @@ msgid ""
 msgstr ""
 "Căutați chat-uri de grup la nivel global\n"
 "(apăsați Return pentru a începe căutarea)"
+
+msgid "Search your conversation"
+msgstr ""
 
 msgid "Searching"
 msgstr "Căutând"
@@ -4254,6 +4293,10 @@ msgstr "Portal de servicii"
 
 msgid "Set configuration directory"
 msgstr "Setați directorul de configurare"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Moderat…"
 
 msgid "Set status message"
 msgstr "Setați mesajul de stare"
@@ -4455,7 +4498,8 @@ msgstr "Înscrieți-vă"
 msgid "Sign up Anonymously"
 msgstr "Înregistrați-vă în mod anonim"
 
-msgid "Sign up for a new account on a server of your choice"
+#, fuzzy
+msgid "Sign up for a new account with a provider of your choice"
 msgstr "Înscrieți-vă pentru un cont nou pe un server ales de dumneavoastră"
 
 msgid "Signup not allowed"
@@ -4656,6 +4700,14 @@ msgstr ""
 "Suport pentru descoperirea serviciilor, inclusiv a nodurilor și căutarea de "
 "utilizatori"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 msgid "Switch Workspace"
 msgstr "Comutați spațiul de lucru"
 
@@ -4764,8 +4816,9 @@ msgstr ""
 "Fișierul %s a fost primit, dar se pare că a fost deteriorat pe parcurs.\n"
 "Doriți să îl descărcați din nou?"
 
+#, fuzzy
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 "Următoarele avertismente au apărut în timpul încercării de verificare a "
@@ -4807,10 +4860,11 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 "Există dispozitive pentru care nu ați luat încă o decizie de încredere."
 
+#, fuzzy
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 "Există o mulțime de servere din care puteți alege.\n"
 "Crearea unui cont pe un server vă permite să comunicați și cu contactele de "
@@ -5219,6 +5273,9 @@ msgstr "Actualizări"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Actualizările vor fi instalate data viitoare când Gajim va fi pornit"
 
+msgid "Updating provider list…"
+msgstr ""
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "Încărcați"
@@ -5269,17 +5326,6 @@ msgstr "Utilizați profilul definit în directorul de configurare"
 msgid "Use file transfer proxies"
 msgstr "Utilizați proxy-uri de transfer de fișiere"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"Utilizați filtrele pentru a restrânge căutarea:\n"
-"de la:nume de utilizator\n"
-"înainte de:aaaa-ll-zz\n"
-"după: aaaa-ll-zz"
-
 msgid "Use proxy auth_entication"
 msgstr "Utilizați proxy auth_entication"
 
@@ -5299,6 +5345,10 @@ msgstr "Interfață Utilizator"
 
 msgid "User Interface Font Size"
 msgstr "Dimensiunea fontului interfeței utilizatorului"
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Utilizator"
 
 msgid "Users"
 msgstr "Utilizatori"
@@ -5345,7 +5395,8 @@ msgstr "Apelurile video nu sunt disponibile pe Windows"
 msgid "Video test"
 msgstr "Test video"
 
-msgid "Visit Server's Website"
+#, fuzzy
+msgid "Visit Provider's Website"
 msgstr "Vizitați site-ul web al serverului"
 
 msgid "Visit Website"
@@ -5406,7 +5457,8 @@ msgstr ""
 "Dacă se verifică dacă se verifică un certificat valid înainte de descărcare "
 "(nu este sigur să fie dezactivat)"
 
-msgid "Which server should I choose?"
+#, fuzzy
+msgid "Which provider should I choose?"
 msgstr "Ce server ar trebui să aleg?"
 
 msgid "Why do you want to moderate this message?"
@@ -5486,9 +5538,6 @@ msgstr ""
 "Sunteți pe cale să vă conectați la contul %(account)s (%(server)s) utilizând "
 "o metodă de conectare nesigură. Acest lucru înseamnă că conversațiile nu vor "
 "fi criptate. Conectarea PLAIN este puternic descurajată."
-
-msgid "You are about to quit Gajim"
-msgstr "Ești pe cale să renunți la Gajim"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5778,9 +5827,6 @@ msgstr "_Dezactivați contul"
 msgid "_Do not ask me again"
 msgstr "Nu mă mai întreba din nou"
 
-msgid "_Don’t ask again"
-msgstr "_Nu mă mai întreba din nou"
-
 msgid "_Download"
 msgstr "_Descărcare"
 
@@ -5802,6 +5848,9 @@ msgstr "_Liber pentru Chat"
 
 msgid "_Help"
 msgstr "_Ajutor"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 msgid "_Host"
 msgstr "_Gazdă"
@@ -5829,6 +5878,10 @@ msgstr "_Gestionați conturile…"
 
 msgid "_Manage Account…"
 msgstr "_Gestionați contul…"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Minimalizați"
 
 msgid "_Moderate"
 msgstr "_Moderat"
@@ -5861,7 +5914,8 @@ msgstr "_Deschideți dosarul"
 msgid "_Overwrite"
 msgstr "_Suprascrieți"
 
-msgid "_Please choose a server"
+#, fuzzy
+msgid "_Please choose a provider"
 msgstr "Vă rugăm să alegeți un server"
 
 msgid "_Port"
@@ -5881,6 +5935,9 @@ msgstr "_Ieșiți"
 
 msgid "_Re-Login"
 msgstr "_Re-Autentificare"
+
+msgid "_Remember my decision"
+msgstr ""
 
 msgid "_Remove"
 msgstr "_Îndepărtați"
@@ -6386,6 +6443,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "?user status:_Available"
 #~ msgstr "_Disponibil"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Ești sigur că vrei să renunți la Gajim?"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversație: Culoare URL"
 
@@ -6426,6 +6486,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unitatea organizațională (OU): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "Vă rugăm să folosiți aaaa-ll-zz"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Retrageți…"
@@ -6447,8 +6510,26 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Topic"
 #~ msgstr "Subiect"
 
+#, fuzzy
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "Utilizați filtrele pentru a restrânge căutarea:\n"
+#~ "de la:nume de utilizator\n"
+#~ "înainte de:aaaa-ll-zz\n"
+#~ "după: aaaa-ll-zz"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Ești pe cale să renunți la Gajim"
+
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Nu mă mai întreba din nou"
 
 #~ msgid "_Login"
 #~ msgstr "_Autentificare"

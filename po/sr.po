@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,6 +23,10 @@ msgstr "Приватни Разговори"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Захтев за преносом датотеке"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Промени _надимак..."
 
 #, python-brace-format
 msgid " by {actor}"
@@ -349,12 +353,12 @@ msgstr ""
 msgid "<error>"
 msgstr "Грешка"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "?Улога контакта у групном разговору:Никаква"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -660,6 +664,9 @@ msgstr "<b>Везаност:</b>"
 msgid "Affiliations"
 msgstr "<b>Апликације</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -810,9 +817,6 @@ msgstr ""
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Јесте ли сигурни да желите напустити групни разговор \"%s\"?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Јесте ли сигурни да желите затворити Гајим?"
 
 msgid "Artists"
 msgstr ""
@@ -982,6 +986,9 @@ msgid "Ban %s"
 msgstr "Листа забрана"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1666,6 +1673,10 @@ msgid "Could not save file to selected directory."
 msgstr "Немате привилегија за писање у овој фасцикли"
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "Не могу учитати слику"
+
+#, fuzzy
 msgid "Country"
 msgstr "Налог"
 
@@ -2115,6 +2126,9 @@ msgid "Encryption required"
 msgstr "Захтев за претплатом"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3064,7 +3078,7 @@ msgstr ""
 "Листа хостова одвојена зарезима, коју шаљемо, уз локалне интерефејсе, за "
 "трансфер датотека, у случају прослеђивања порта/НАТовања."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3319,6 +3333,9 @@ msgstr "Измените"
 msgid "Modify Gateway…"
 msgstr "_Измени налог..."
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Захтев за преносом датотеке"
@@ -3546,7 +3563,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3933,9 +3950,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Регистрација неуспела"
@@ -4051,6 +4065,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Сервер"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4575,6 +4600,14 @@ msgid "Search"
 msgstr "Претрага"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Порука Послата"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Примљена Прва Порука"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Учесници"
 
@@ -4596,6 +4629,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4811,6 +4847,10 @@ msgstr "Сервер"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Конфигурација собе"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Модератор"
 
 #, fuzzy
 msgid "Set status message"
@@ -5038,7 +5078,7 @@ msgstr "Пријављивању"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5267,6 +5307,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Откривање услуга са налога %s"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Преименуј контакт"
@@ -5386,7 +5434,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5429,9 +5477,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5871,6 +5919,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5931,13 +5982,6 @@ msgstr "Напредна измена конфигурације"
 msgid "Use file transfer proxies"
 msgstr "Користи прокси за пренос датотека"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "Користи прокси пријављивање"
 
@@ -5957,6 +6001,10 @@ msgstr "_Корисничко име:"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Корисничко име:"
 
 msgid "Users"
 msgstr "Корисници"
@@ -6010,7 +6058,7 @@ msgstr "Веза није доступна"
 msgid "Video test"
 msgstr ""
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6078,7 +6126,7 @@ msgid ""
 "disable)"
 msgstr "Игнориши ову грешку за овај сертификат."
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6168,10 +6216,6 @@ msgstr ""
 "везе. Ово значи да ће сва Ваша преписка бити нешифрована. Овакав тип везе се "
 "не препоручује.\n"
 "Да ли сте сигурни да желите да се повежете овако?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Јесте ли сигурни да желите затворити Гајим?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6498,10 +6542,6 @@ msgid "_Do not ask me again"
 msgstr "_Не питај ме више"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "_Не питај ме више"
-
-#, fuzzy
 msgid "_Download"
 msgstr "_Не питај ме више"
 
@@ -6528,6 +6568,9 @@ msgstr "_Слободан за разговор"
 #, fuzzy
 msgid "_Help"
 msgstr "_Помоћ"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6559,6 +6602,10 @@ msgstr "_Измени налог..."
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Додај контакт..."
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Гајим"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6599,7 +6646,7 @@ msgid "_Overwrite"
 msgstr ""
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Молимо Вас направите нову чисту тему са жељеним именом."
 
 #, fuzzy
@@ -6621,6 +6668,9 @@ msgid "_Quit"
 msgstr ""
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7146,6 +7196,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?статус преноса:Паузиран"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Јесте ли сигурни да желите затворити Гајим?"
+
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Разговор са "
@@ -7193,6 +7246,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send"
 #~ msgstr "_Пошаљи"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Јесте ли сигурни да желите затворити Гајим?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Не питај ме више"
 
 #, fuzzy
 #~ msgid "_Login"

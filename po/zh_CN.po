@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2024-07-18 01:32+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-12 01:17+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -34,6 +34,10 @@ msgstr " (视频通话)"
 
 msgid " (Voice Call)"
 msgstr " (语音通话)"
+
+#, python-format
+msgid " by %s"
+msgstr " 由 %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -342,11 +346,11 @@ msgstr "<空白>"
 msgid "<error>"
 msgstr "<错误>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "各个服务器的功能比较"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "群聊至少需要一位所有者"
+
+msgid "A feature comparison of various providers"
+msgstr "各种提供者的功能比较"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -593,6 +597,9 @@ msgstr "从属关系"
 msgid "Affiliations"
 msgstr "从属关系"
 
+msgid "After"
+msgstr "之后"
+
 msgid "Algorithm"
 msgstr "算法"
 
@@ -722,9 +729,6 @@ msgstr "%s 的存档首选项"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "是否确定要离开此群聊？"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "是否确定要退出 Gajim？"
 
 msgid "Artists"
 msgstr "艺术家"
@@ -866,6 +870,9 @@ msgstr "封禁 %s"
 
 msgid "Ban…"
 msgstr "封禁…"
+
+msgid "Before"
+msgstr "之前"
 
 msgid "Behaviour of Application Window"
 msgstr "应用程序窗口的行为"
@@ -1453,6 +1460,9 @@ msgstr "无法保存文件"
 msgid "Could not save file to selected directory."
 msgstr "无法在选定的目录中保存文件。"
 
+msgid "Could not update providers list"
+msgstr "无法更新提供者列表"
+
 msgid "Country"
 msgstr "国家/地区"
 
@@ -1837,6 +1847,9 @@ msgstr "需要加密"
 
 msgid "End call"
 msgstr "结束通话"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr "用于检索注册提供者列表的终点"
 
 msgid "Enter a password to join this chat"
 msgstr "输入密码以加入此聊天"
@@ -2667,8 +2680,8 @@ msgstr ""
 "除了用于文件传输的本地接口（在地址转换/端口转发的情况下）之外，还包括发送主机"
 "的列表（逗号分隔）。"
 
-msgid "Listing of Servers"
-msgstr "当前服务器列表"
+msgid "Listing of providers"
+msgstr "提供者列表"
 
 msgid "Live Preview"
 msgstr "实时预览"
@@ -2882,6 +2895,9 @@ msgstr "修改"
 msgid "Modify Gateway…"
 msgstr "修改网关…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr "更多信息请访问 providers.xmpp.net"
+
 msgid "Move Chat"
 msgstr "移动聊天"
 
@@ -3082,8 +3098,8 @@ msgstr "备注"
 msgid "Note to myself"
 msgstr "给自己的备注"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr "注意：并非所有服务器都能提供匿名账号"
+msgid "Note: Anonymous accounts are not possible with all providers"
+msgstr "注意：并非所有提供者都可以使用匿名账号"
 
 msgid "Notes"
 msgstr "备注"
@@ -3422,9 +3438,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "请谨慎使用这些设置！"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "请使用 yyyy-mm-dd 格式"
-
 msgid "Plugin Settings"
 msgstr "插件设置"
 
@@ -3522,6 +3535,16 @@ msgstr "项目讨论"
 
 msgid "Protocol"
 msgstr "协议"
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr "提供者类别：%s"
+
+msgid "Provider Infos"
+msgstr "提供者信息"
+
+msgid "Providers list is up to date"
+msgstr "提供者列表是最新的"
 
 msgid "Prox_y"
 msgstr "代理服务器(_Y)"
@@ -3961,6 +3984,12 @@ msgstr "向上滚动来加载更多聊天记录…"
 msgid "Search"
 msgstr "搜索"
 
+msgid "Search Filters"
+msgstr "搜索筛选器"
+
+msgid "Search Filters (Active)"
+msgstr "搜索筛选器（活动）"
+
 msgid "Search Participants…"
 msgstr "搜索参与者…"
 
@@ -3982,6 +4011,9 @@ msgid ""
 msgstr ""
 "全局搜索群聊\n"
 "（按 Enter 键开始搜索）"
+
+msgid "Search your conversation"
+msgstr "搜索您的对话"
 
 msgid "Searching"
 msgstr "正在搜索"
@@ -4159,6 +4191,9 @@ msgstr "服务网关"
 
 msgid "Set configuration directory"
 msgstr "设置配置文件目录"
+
+msgid "Set date…"
+msgstr "设置日期…"
 
 msgid "Set status message"
 msgstr "设置状态信息"
@@ -4343,8 +4378,8 @@ msgstr "注册"
 msgid "Sign up Anonymously"
 msgstr "匿名注册"
 
-msgid "Sign up for a new account on a server of your choice"
-msgstr "在您选择的服务器上注册新账号"
+msgid "Sign up for a new account with a provider of your choice"
+msgstr "向您选择的提供者注册新账号"
 
 msgid "Signup not allowed"
 msgstr "不允许注册"
@@ -4540,6 +4575,19 @@ msgstr "支持多个账号"
 msgid "Support for service discovery including nodes and search for users"
 msgstr "支持包括用户搜索和节点在内的服务发现功能"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+"是否确定要退出 Gajim？\n"
+"如果这样做，您将无法发送和接收消息。\n"
+"\n"
+"或者，您可以最小化 Gajim 的窗口，或者完全隐藏窗口。使用 Gajim "
+"的系统托盘图标恢复窗口。"
+
 msgid "Switch Workspace"
 msgstr "切换工作区"
 
@@ -4646,9 +4694,9 @@ msgstr ""
 "是否要重新下载？"
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
-msgstr "尝试验证服务器证书时遇到下列错误"
+msgstr "尝试验证提供者的证书时出现以下警告"
 
 msgid "The last message was written on a mobile client"
 msgstr "最近的消息是在移动客户端上编写的"
@@ -4684,12 +4732,12 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr "有您还未决定是否信任的设备。"
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
-"有很多服务器可供选择。\n"
-"在服务器上创建账号可让您和其他服务器上的联系人交流。"
+"有很多提供者可供选择。\n"
+"在一个提供者处创建账号，您也可以与其他提供者的联系人交流。"
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim 插件有更新"
@@ -5079,6 +5127,9 @@ msgstr "更新"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "下次启动 Gajim 时将安装更新"
 
+msgid "Updating provider list…"
+msgstr "正在更新提供者列表…"
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "上传"
@@ -5129,17 +5180,6 @@ msgstr "使用配置目录中定义的配置文件"
 msgid "Use file transfer proxies"
 msgstr "使用文件传输代理服务器"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"使用筛选器缩小搜索范围：\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-
 msgid "Use proxy auth_entication"
 msgstr "使用代理身份验证(_E)"
 
@@ -5158,6 +5198,9 @@ msgstr "用户界面"
 
 msgid "User Interface Font Size"
 msgstr "用户界面字体大小"
+
+msgid "User name…"
+msgstr "用户名…"
 
 msgid "Users"
 msgstr "用户"
@@ -5204,8 +5247,8 @@ msgstr "Windows 系统无法进行视频通话"
 msgid "Video test"
 msgstr "视频测试"
 
-msgid "Visit Server's Website"
-msgstr "访问服务器站点"
+msgid "Visit Provider's Website"
+msgstr "访问提供者的网站"
 
 msgid "Visit Website"
 msgstr "访问网站"
@@ -5263,8 +5306,8 @@ msgid ""
 "disable)"
 msgstr "下载前检查证书是否有效（禁用会不安全）"
 
-msgid "Which server should I choose?"
-msgstr "我应该选择哪个服务器呢？"
+msgid "Which provider should I choose?"
+msgstr "我应该选择哪个提供者？"
 
 msgid "Why do you want to moderate this message?"
 msgstr "为什么要撤回此消息？"
@@ -5342,9 +5385,6 @@ msgid ""
 msgstr ""
 "您将通过不安全的连接方式连接到账号 %(account)s (%(server)s)。这意味着对话不会"
 "被加密。强烈建议不要通过 PLAIN 方式连接。"
-
-msgid "You are about to quit Gajim"
-msgstr "您即将退出 Gajim"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5622,9 +5662,6 @@ msgstr "禁用账号(_D)"
 msgid "_Do not ask me again"
 msgstr "不再询问(_D)"
 
-msgid "_Don’t ask again"
-msgstr "不再询问(_D)"
-
 msgid "_Download"
 msgstr "下载(_D)"
 
@@ -5646,6 +5683,9 @@ msgstr "有空聊天(_F)"
 
 msgid "_Help"
 msgstr "帮助(_H)"
+
+msgid "_Hide (Tray Icon)"
+msgstr "隐藏(托盘图标)(_H)"
 
 msgid "_Host"
 msgstr "主机(_H)"
@@ -5673,6 +5713,9 @@ msgstr "管理账号(_M)…"
 
 msgid "_Manage Account…"
 msgstr "管理账号(_M)…"
+
+msgid "_Minimize"
+msgstr "最小化(_M)"
 
 msgid "_Moderate"
 msgstr "撤回(_M)"
@@ -5705,8 +5748,8 @@ msgstr "打开文件夹(_O)"
 msgid "_Overwrite"
 msgstr "覆盖(_O)"
 
-msgid "_Please choose a server"
-msgstr "请选择一个服务器(_P)"
+msgid "_Please choose a provider"
+msgstr "请选择提供者(_P)"
 
 msgid "_Port"
 msgstr "端口(_P)"
@@ -5725,6 +5768,9 @@ msgstr "退出(_Q)"
 
 msgid "_Re-Login"
 msgstr "重新登录(_R)"
+
+msgid "_Remember my decision"
+msgstr "记住我的决定(_R)"
 
 msgid "_Remove"
 msgstr "移除(_R)"
@@ -6237,6 +6283,9 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "?user status:_Available"
 #~ msgstr "在线(_A)"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "是否确定要退出 Gajim？"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "对话：URL 颜色"
 
@@ -6281,6 +6330,9 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "组织单元 (OU): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "请使用 yyyy-mm-dd 格式"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "撤回…"
@@ -6302,8 +6354,25 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "Topic"
 #~ msgstr "话题"
 
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "使用筛选器缩小搜索范围：\n"
+#~ "发送者：“用户名”搜索词\n"
+#~ "之前：“yyyy-mm-dd”搜索词\n"
+#~ "之后：“yyyy-mm-dd”搜索词"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "您即将退出 Gajim"
+
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "您拖放了 Gajim 无法处理的对象: %s"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "不再询问(_D)"
 
 #~ msgid "_Login"
 #~ msgstr "登录(_L)"

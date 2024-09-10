@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the Gajim package.
 # Sally <sallyahaj@yahoo.com>, 2023.
 # Daniel Brötzmann <mailtrash@posteo.de>, 2023.
+# Ahmed Mohammed <iramosu@protonmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2023-10-17 17:18+0000\n"
-"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
-">\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-28 10:18+0000\n"
+"Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
+"Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/>"
+"\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,182 +22,192 @@ msgstr ""
 "X-Generator: Weblate 5.0\n"
 
 msgid " (Video Call)"
-msgstr " (مكالمة فيديو)"
+msgstr " (مكالمة مرئية)"
 
 msgid " (Voice Call)"
 msgstr " (مكالمة صوتية)"
 
+#, python-format
+msgid " by %s"
+msgstr " بواسطة %s"
+
 #, python-brace-format
 msgid " by {actor}"
-msgstr " المستخدم {actor}"
+msgstr " بواسطة {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
-msgstr ""
+msgstr "رفض %(contact)s دعوتك إلى %(chat)s"
 
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
-msgstr ""
+msgstr "دعاك %(contact)s إلى %(chat)s"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
-msgstr ""
+msgstr "%(days)s أيام، و%(hours)s ساعات"
 
 #, python-format
 msgid "%(minutes)s min %(seconds)s s"
-msgstr ""
+msgstr "%(minutes)s دقيقة، و%(seconds)s ثانية"
 
 #, python-format
 msgid "%(name)s %(jid)s suggested me to add you to my contact list."
-msgstr ""
+msgstr "اقترح %(name)s %(jid)s إضافتك لقائمة المتراسلين."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr ""
+msgstr "يرغب %(name)s (%(jid)s) بإضافة متراسلين لقائمتك."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to delete some contacts from your contact list."
-msgstr ""
+msgstr "يرغب %(name)s (%(jid)s) بحذف متراسلين من قائمتك."
 
 #, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to modify some contacts in your contact list."
-msgstr ""
+msgstr "يرغب %(name)s (%(jid)s) بتعديل بعض المتراسلين في قائمتك."
 
 #, python-format
 msgid "%(name)s cancelled the transfer (%(reason)s)"
-msgstr ""
+msgstr "ألغى %(name)s النقل (%(reason)s)"
 
 #, python-format
 msgid "%(nickname)s:"
-msgstr ""
+msgstr "%(nickname)s:"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
-msgstr ""
+msgstr "%(owner_or_admin_or_member)s مجموعة الدردشة هذه"
 
 #, python-format
 msgid "%(progress)s %% (%(time)s remaining)"
-msgstr ""
+msgstr "%(progress)s٪ (تبقى %(time)s)"
 
 #, python-format
 msgid "%(received)s of %(max)s"
-msgstr ""
+msgstr "%(received)s من %(max)s"
 
-#, python-format
+#, fuzzy, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
-msgstr ""
+msgstr "تعمية %(type)s مُفَعَّلة %(authenticated)s."
 
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s (أنت)"
 
 #, python-format
 msgid "%s (desynced)"
-msgstr ""
+msgstr "%s (غير مزامن)"
 
 #, python-format
 msgid "%s and %s are typing…"
-msgstr ""
+msgstr "%s و%s يكتبان…"
 
 #, python-format
 msgid "%s asks you to share your status"
-msgstr ""
+msgstr "يرغب %s منك مشاركة حالتك"
 
 #, python-format
 msgid "%s can be joined by invite only."
-msgstr ""
+msgstr "يمكن الانضمام إلى %s من خلال الدعوة فقط."
 
 #, python-format
 msgid "%s group chats found"
-msgstr ""
+msgstr "عُثِر على %s مجموعات دردشة"
 
 #, python-format
 msgid "%s has been invited to this group chat"
-msgstr ""
+msgstr "دَعاك %s للانضمام إلى مجموعة الدردشة هذه"
 
 #, python-format
 msgid "%s has joined"
-msgstr ""
+msgstr "انضم %s"
 
 #, python-format
 msgid "%s has read up to this point"
-msgstr ""
+msgstr "قَرَأ %s إلى هذه النقطة"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
-msgstr ""
+msgstr "%s عبارة عن ملف لكن ينبغي أن يكون دليلًا"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr ""
+msgstr "%s موجود بالفعل في قائمة متراسليك"
 
 #, python-format
 msgid "%s is calling"
-msgstr ""
+msgstr "%s يتصل"
 
 #, python-format
 msgid "%s is not a valid loglevel"
-msgstr ""
+msgstr "مستوى السجل %s غير صالح"
 
 #, python-format
 msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+"%s نشط بعدة أجهزة.\n"
+"اختر الجهاز الذي ترغب بإرسال الملفات إليه."
 
 #, python-format
 msgid "%s is typing…"
-msgstr ""
+msgstr "%s يكتب…"
 
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "منذ أقل من دقيقة"
+msgstr[1] "منذ دقيقة"
+msgstr[2] "منذ دقيقتين"
+msgstr[3] "منذ %s دقائق"
+msgstr[4] "منذ %s دقيقة"
+msgstr[5] "منذ %s دقيقة"
 
 #, python-format
 msgid "%s participants are typing…"
-msgstr ""
+msgstr "%s مشاركين يكتبون…"
 
 #, python-format
 msgid "%s s"
-msgstr ""
+msgstr "%s ث"
 
 #, python-format
 msgid "%s stopped sharing their status"
-msgstr ""
+msgstr "أوقف %s مشاركة الحالة"
 
 #, python-format
 msgid "%s stopped the transfer"
-msgstr ""
+msgstr "أوقف %s عملية النقل"
 
 #, python-format
 msgid "%s wants to send you a file"
-msgstr ""
+msgstr "يرغب %s بأن يرسل لك ملفًا"
 
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
-msgstr ""
+msgstr "%sشرق"
 
 #, python-format
 msgctxt "positive latitude"
 msgid "%sN"
-msgstr ""
+msgstr "%sشمال"
 
 #, python-format
 msgctxt "negative latitude"
 msgid "%sS"
-msgstr ""
+msgstr "%sجنوب"
 
 #, python-format
 msgctxt "negative longitude"
 msgid "%sW"
-msgstr ""
+msgstr "%sغرب"
 
 #. Translators:
 #. This should make the string KB/s,
@@ -204,110 +215,112 @@ msgstr ""
 #. Only the 's' after / (which means second) should be translated.
 #, python-format
 msgid "(%(filesize_unit)s/s)"
-msgstr ""
+msgstr "(%(filesize_unit)s/ث)"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
-msgstr ""
+msgstr "** عُيّن انتماء {nick} إلى {affiliation}{actor}{reason}"
 
 #, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr ""
+msgstr "** عُيّن دور {nick} إلى {role}{actor}{reason}"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr ""
+msgstr "** عُيّن انتمائك إلى {affiliation}{actor}{reason}"
 
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr ""
+msgstr "** عُيّن دورك إلى {role}{actor}{reason}"
 
 msgid "1 Day"
-msgstr ""
+msgstr "يوم واحد"
 
 msgid "1 Month"
-msgstr ""
+msgstr "شهر واحد"
 
 msgid "1 Week"
-msgstr ""
+msgstr "أسبوع واحد"
 
 msgid "1 Year"
-msgstr ""
+msgstr "سنة واحدة"
 
 msgid "1 hour"
-msgstr ""
+msgstr "ساعة واحدة"
 
 msgid "2 Days"
-msgstr ""
+msgstr "يومان"
 
 msgid "2 hours"
-msgstr ""
+msgstr "ساعتان"
 
 msgid "3 Months"
-msgstr ""
+msgstr "3 أشهر"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 دقيقة"
 
 msgid "6 Months"
-msgstr ""
+msgstr "6 أشهر"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 ساعات"
 
 msgid ": Affiliation changed"
-msgstr ""
+msgstr ": غُيِّر الانتماء"
 
 msgid ": Group chat configuration changed to members-only"
-msgstr ""
+msgstr ": غُيِّر ضبط مجموعة الدردشة للأعضاء فقط"
 
 msgid "<Description>"
-msgstr ""
+msgstr "<الوصف>"
 
 msgid "<Plugin Name>"
-msgstr ""
+msgstr "<اسم الملحق>"
 
 #, python-format
 msgid ""
 "<b>\"%(title)s\"</b> by <i>%(artist)s</i>\n"
 "from <i>%(source)s</i>"
 msgstr ""
+"<b>\"%(title)s\"</b> بواسطة <i>%(artist)s</i>\n"
+"من <i>%(source)s</i>"
 
 msgid "<b>#</b>"
-msgstr ""
+msgstr "<b>#</b>"
 
 msgid "<b>*</b>"
-msgstr ""
+msgstr "<b>*</b>"
 
 msgid "<b>0</b>"
-msgstr ""
+msgstr "<b>0</b>"
 
 msgid "<b>1</b>"
-msgstr ""
+msgstr "<b>1</b>"
 
 msgid "<b>2</b> abc"
-msgstr ""
+msgstr "<b>2</b> أ‌ب‌ت‌ث"
 
 msgid "<b>3</b> def"
-msgstr ""
+msgstr "<b>3</b> ج‌ح‌خ"
 
 msgid "<b>4</b> ghi"
-msgstr ""
+msgstr "<b>4</b> دذرز"
 
 msgid "<b>5</b> jkl"
-msgstr ""
+msgstr "<b>5</b> س‌ش‌ص"
 
 msgid "<b>6</b> mno"
-msgstr ""
+msgstr "<b>6</b> ض‌ط‌ظ"
 
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>7</b> ع‌غ‌ف‌ق"
 
 msgid "<b>8</b> tuv"
-msgstr ""
+msgstr "<b>8</b> ك‌ل‌م"
 
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>9</b> ن‌ﻫ‌وي"
 
 msgid ""
 "<b>XMPP Address</b>\n"
@@ -317,455 +330,476 @@ msgid ""
 "&lt;domain&gt; (the domain itself matches, as does any user@domain or domain/"
 "resource)\n"
 msgstr ""
+"<b>عنوان بروتوكول الحضور والمراسلة القابل للتوسعة (XMPP)</b>\n"
+"&lt;مستخدم@نطاق/مورد&gt; (الموارد المتطابقة فقط)\n"
+"&lt;مستخدم@نطاق&gt; (أي تطابق للموارد)\n"
+"&lt;نطاق/موردد&gt; (تطابقات ذلك المورد فقط)\n"
+"&lt;نطاق&gt; (تطابق للنطاق نفسه فقط، كما في أي مستخدم@نطاق أو نطاق/مورد)\n"
 
 msgid "<empty>"
-msgstr ""
+msgstr "<فارغ>"
 
 msgid "<error>"
-msgstr ""
-
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
+msgstr "<خطأ>"
 
 msgid "A Group Chat needs at least one Owner"
-msgstr ""
+msgstr "تحتاج مجموعة الدردشة لمالك واحد على الأقل"
+
+msgid "A feature comparison of various providers"
+msgstr "مقارنة للمزايا بين موفرين مختلفين"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
 "overwrite it."
-msgstr ""
+msgstr "هناك ملف يحمل هذا الاسم بالفعل، ولا صلاحية لك لتغييره."
 
 msgid "A fully-featured XMPP chat client"
-msgstr ""
+msgstr "عميل بروتوكول الحضور والمراسلة القابل للتوسعة (XMPP) متكامل المزايا"
 
 msgid "A list of active, completed and stopped file transfers"
-msgstr ""
+msgstr "قائمة عمليات نقل الملفات النشطة، والمكتملة، والمتوقفة"
 
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
 "chats."
 msgstr ""
+"قائمة من الكلمات (مفصولة بفاصلة منقوطة أجنبية ;) ليتم إبرازها في مجموعات "
+"الدردشة."
 
 msgid "A new group chat has been created"
-msgstr ""
+msgstr "أُنشِأَت مجموعة دردشة جديدة"
 
 msgid "A restart may be required for some settings to take effect"
-msgstr ""
+msgstr "قد يتعين عليك إعادة التشغيل كي تصبح الإعدادات سارية"
 
 msgid "A setting not related to privacy has been changed"
-msgstr ""
+msgstr "غُيّر إعداد غير متعلق بالخصوصية"
 
 #, python-format
 msgid "ALSA: %s"
-msgstr ""
+msgstr "بنية لينكس الصوتية المتقدمة (ALSA): %s"
 
 msgid "API Preferences. Possible values: \"http\", \"iq\""
-msgstr ""
+msgstr "تفضيلات واجهة برمجة التطبيقات. القيم الممكنة: ‏\"http\"، \"iq\""
 
 msgctxt "User status"
 msgid "A_way"
-msgstr ""
+msgstr "_غائب"
 
 msgid "Abort"
-msgstr ""
+msgstr "اجهض"
 
 msgctxt "File transfer state"
 msgid "Aborted"
-msgstr ""
+msgstr "مجهض"
 
 msgid "Abuse"
-msgstr ""
+msgstr "إساءة"
 
 msgid "Accept"
-msgstr ""
+msgstr "اقبل"
 
 msgid "Accept all Contact Requests"
-msgstr ""
+msgstr "اقبل كل طلبات المتراسلين"
 
 msgid "Account"
-msgstr ""
+msgstr "الحساب"
 
 #, python-format
 msgid "Account %s is still connected"
-msgstr ""
+msgstr "حساب %s ما زال مُتَّصِلًا"
 
 msgid "Account Added"
-msgstr ""
+msgstr "أُضيف الحساب"
 
 msgid "Account Name..."
-msgstr ""
+msgstr "اسم الحساب…"
 
 msgid "Account Removal Failed"
-msgstr ""
+msgstr "فشلت إزالة الحساب"
 
 msgid "Account Removed"
-msgstr ""
+msgstr "أُزيل الحساب"
 
 msgid "Account Settings…"
-msgstr ""
+msgstr "إعدادات الحساب…"
 
 msgid "Account Wizard"
-msgstr ""
+msgstr "معالج الحساب"
 
 msgid "Account disabled"
-msgstr ""
+msgstr "عُطِّل الحساب"
 
 msgid "Account exists already"
-msgstr ""
+msgstr "الحساب موجود بالفعل"
 
 msgid "Account has been added successfully"
-msgstr ""
+msgstr "أُضيف الحساب بنجاح"
 
 msgid "Account has to be connected"
-msgstr ""
+msgstr "ينبغي أن يكون الحساب متصلًا"
 
 msgid "Account is being created"
-msgstr ""
+msgstr "الحساب يُنشأ"
 
 msgid "Account is not connected."
-msgstr ""
+msgstr "الحساب ليس متصلًا."
 
 #, python-format
 msgid "Account: %s"
-msgstr ""
+msgstr "الحساب: %s"
 
 msgid "Accounts"
-msgstr ""
+msgstr "الحسابات"
 
 msgid "Action for left-clicking a preview"
-msgstr ""
+msgstr "الإجراء المتخذ عند النقر باليسار على معاينة"
 
 msgid "Action on Close"
-msgstr ""
+msgstr "الإجراء عند الإغلاق"
 
 msgid "Action when closing Gajim’s window"
-msgstr ""
+msgstr "الإجراء المتخذ عند إغلاق نافذة غاجِم"
 
 msgid "Activate"
-msgstr ""
+msgstr "نَشِّط"
 
 msgid "Activated"
-msgstr ""
+msgstr "مُنَشِّط"
 
 msgid "Active"
-msgstr ""
+msgstr "نَشِط"
 
 msgid "Add"
-msgstr ""
+msgstr "أضِف"
 
 msgid "Add Account"
-msgstr ""
+msgstr "أضف حسابًا"
 
 msgid "Add Contact"
-msgstr ""
+msgstr "أضِف مُتراسِلًا"
 
 msgid "Add Contact…"
-msgstr ""
+msgstr "أضِف مُتراسِلًا…"
 
 msgid "Add Entry"
-msgstr ""
+msgstr "أضِف مدخلة"
 
 msgid "Add Files…"
-msgstr ""
+msgstr "أضِف مِلفات…"
 
 msgid "Add Group…"
-msgstr ""
+msgstr "أضِف مجموعة…"
 
 msgid "Add Proxy"
-msgstr ""
+msgstr "أضِف وسيط بروكسي"
 
 msgid "Add Reaction…"
-msgstr ""
+msgstr "أضِف تفاعلًا…"
 
 msgid "Add Setting"
-msgstr ""
+msgstr "أضِف إعدادًا"
 
 msgid "Add Workspace"
-msgstr ""
+msgstr "أضِف مساحة عمل"
 
 msgid "Add _Contact…"
-msgstr ""
+msgstr "أضِف _مُتراسِلًا…"
 
 msgid "Add a checkmark to received messages"
-msgstr ""
+msgstr "أضِف علامة صح للرسائل المُستلمة"
 
 msgid "Add a name and color for your account"
-msgstr ""
+msgstr "أضِف اسمًا ولونًا لحسابك"
 
 msgid "Add a setting you would like to change"
-msgstr ""
+msgstr "أضِف إعدادًا تود تغييره"
 
 msgid "Add new Theme"
-msgstr ""
+msgstr "أضِف سمة جديدة"
 
 msgid "Add new line"
-msgstr ""
+msgstr "أضِف سطرًا جديدًا"
 
 msgid "Add reaction"
-msgstr ""
+msgstr "أضِف تفاعلًا"
 
 msgid "Add some details…"
-msgstr ""
+msgstr "أضِف بعض التفاصيل…"
 
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr ""
+msgstr "أضِف هذه الشهادة لقائمة الشهادات المو_ثوقة"
 
 msgid "Add to Contact List…"
-msgstr ""
+msgstr "أضِف لقائمة المُتراسلين…"
 
 #, python-format
 msgid "Added %s contact"
 msgid_plural "Added %s contacts"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "لم تُضِف مُتراسلين"
+msgstr[1] "أضفت مُتراسلًا"
+msgstr[2] "أضفت مُتراسلَين"
+msgstr[3] "أضفت %s مُتراسلين"
+msgstr[4] "أضفت %s مُتراسِلًا"
+msgstr[5] "أضفت %s مُتراسِل"
 
 msgid "Additionally, you will lose your administrator affiliation."
-msgstr ""
+msgstr "بالإضافة، فستخسر ارتباطك بصفة إداري."
 
 msgid "Additionally, you will lose your owner affiliation."
-msgstr ""
+msgstr "بالإضافة، فستخسر ارتباطك بصفة مالِك."
 
 msgid "Address"
-msgstr ""
+msgstr "العنوان"
 
 msgctxt "Profile"
 msgid "Address"
-msgstr ""
+msgstr "العنوان"
 
 msgid "Address does not belong to a group chat server"
-msgstr ""
+msgstr "لا ينتمي هذا العنوان لخادوم مجموعة الدردشة"
 
 msgid "Adjust to Status"
-msgstr ""
+msgstr "ضَبِّط حسب الحالة"
 
 msgid "Adjust to status"
-msgstr ""
+msgstr "ضَبِّط حسب الحالة"
 
 msgid "Admin"
-msgstr ""
+msgstr "إداري"
 
 msgid "Administration"
-msgstr ""
+msgstr "إدارة"
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrator"
-msgstr ""
+msgstr "مدير"
 
 msgctxt "Group chat contact affiliation"
 msgid "Administrators"
-msgstr ""
+msgstr "الإداريون"
 
 msgid "Advanced"
-msgstr ""
+msgstr "متقدم"
 
 msgid "Advanced Configuration Editor (ACE)"
-msgstr ""
+msgstr "محرر التضبيطات المتقدم (ACE)"
 
 msgid "Advanced Configuration Editor… "
-msgstr ""
+msgstr "محرر التضبيطات المتقدم… "
 
 msgid "Advanced Settings"
-msgstr ""
+msgstr "الإعدادات المتقدمة"
 
 msgid "Advanced settings"
-msgstr ""
+msgstr "إعدادات متقدمة"
 
 msgid "Affiliation"
-msgstr ""
+msgstr "الانتماء"
 
 msgid "Affiliations"
-msgstr ""
+msgstr "الانتماءات"
+
+msgid "After"
+msgstr "بعد"
 
 msgid "Algorithm"
-msgstr ""
+msgstr "الخوارزمية"
 
 msgid "All"
-msgstr ""
+msgstr "الكل"
 
 msgid "All Accounts"
-msgstr ""
+msgstr "كل الحسابات"
 
 msgid "All Chat States"
-msgstr ""
+msgstr "كل حالات الدردشات"
 
 msgid "All chat and group chat windows will be closed."
-msgstr ""
+msgstr "ستُغلق نوافذ كل الدردشات ومجموعات الدردشة."
 
 msgid "All files"
-msgstr ""
+msgstr "كل الملفات"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr ""
+"سيرى كل مشاركي مجموعة الدردشة الآخرون عنوان بروتوكول الحضور والمراسلة القابل "
+"للتوسعة (XMPP) الخاص بك"
 
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
 msgstr ""
+"يسمح لغاجِم بث معلومات مفيدة عبر D-Bus. كما يسمح للتطبيقات الأخرى بالتحكم "
+"بغاجِم عن بعد."
 
 msgid "Allows opening file:/ URIs when clicked."
-msgstr ""
+msgstr "يسمح بفتح معرفات file:/ عند النقر."
 
 msgid "Alternate venue (optional)..."
-msgstr ""
+msgstr "مكان اجتماع بديل (اختياري)…"
 
 msgid "Always"
-msgstr ""
+msgstr "دائمًا"
 
 msgid "An Error Occurred"
-msgstr ""
+msgstr "حدث خطأ"
 
 msgid "An entry with this XMPP Address already exists"
 msgstr ""
+"هناك مدخلة بعنوان عنوان بروتوكول الحضور والمراسلة القابل للتوسعة (XMPP) هذا "
+"بالفعل"
 
 msgid "An error occurred"
-msgstr ""
+msgstr "حدث خطأ"
 
 msgid "An error occurred during account creation"
-msgstr ""
+msgstr "حدث خطأ أثناء إنشاء الحساب"
 
 msgid "An error occurred while exporting your messages"
-msgstr ""
+msgstr "حدث خطأ أثناء تصدير رسائلك"
 
 msgid "An error occurred while trying to change your password."
-msgstr ""
+msgstr "حدث خطأ أثناء محاولة تغيير كلمة سرك."
 
 #, python-format
 msgid "An error occurred while trying to create a file at %(path)s: %(error)s"
-msgstr ""
+msgstr "حدث خطأ أثناء إنشاء الملف في %(path)s: %(error)s"
 
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role} "
 "in group \"{group}\""
 msgstr ""
+"حدث خطأ أثناء محاولة جعل {occupant_jid} {affiliation_or_role} في المجموعة "
+"«{group}»"
 
 #, python-brace-format
 msgid ""
 "An error occurred while trying to make {occupant_jid} {affiliation_or_role}: "
 "{error}"
-msgstr ""
+msgstr "حدث خطأ اثناء محاولة جعل {occupant_jid} {affiliation_or_role}: {error}"
 
 msgid "And more..."
-msgstr ""
+msgstr "والمزيد…"
 
 msgid "Anonymous login not supported"
-msgstr ""
+msgstr "الولوج المجهول غير مدعوم"
 
 msgid "Another process is using this file."
-msgstr ""
+msgstr "تستخدم عمليّة أخرى هذا الملف."
 
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr ""
+"يمكن لأي مشارك رؤية عنوان بروتوكول الحضور والمراسلة القابل للتوسعة (XMPP) "
+"الخاص بك كاملًا"
 
 msgid "Anyone can join"
-msgstr ""
+msgstr "يمكن لأي أحد الانضمام"
 
 msgid "Anyone can join this group chat"
-msgstr ""
+msgstr "يمكن لأي أحد الانضمام لمجموعة المحادثة هذه"
 
 msgid "Application verification failure"
-msgstr ""
+msgstr "أخفق التحقق من التطبيق"
 
 msgid "Apply"
-msgstr ""
+msgstr "طَبِّق"
 
 msgid "Approve"
-msgstr ""
+msgstr "أقِر"
 
 msgid "Archive"
-msgstr ""
+msgstr "الأرشيف"
 
 msgid "Archive corrupted"
-msgstr ""
+msgstr "تعطب الأرشيف"
 
 msgid "Archive empty"
-msgstr ""
+msgstr "الأرشيف فارغ"
 
 msgid "Archive is malformed"
-msgstr ""
+msgstr "الأرشيف مشوه"
 
 msgctxt "Group chat feature"
 msgid "Archiving"
-msgstr ""
+msgstr "الأرشفة"
 
 msgid "Archiving Preferences"
-msgstr ""
+msgstr "تفضيلات الأرشفة"
 
 msgid "Archiving Preferences Error"
-msgstr ""
+msgstr "خطأ في تفضيلات الأرشفة"
 
 msgid "Archiving Preferences Saved"
-msgstr ""
+msgstr "حُفِظت تفضيلات الأرشفة"
 
 #, python-format
 msgid "Archiving Preferences for %s"
-msgstr ""
+msgstr "تفضيلات الأرشفة لـ %s"
 
 msgid "Are you sure you want to leave this group chat?"
-msgstr ""
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr ""
+msgstr "هل أنت متأكد من مغادرة مجموعة الدردشة هذه؟"
 
 msgid "Artists"
-msgstr ""
+msgstr "الفنانون"
 
 msgid "Ask For Status Message on…"
-msgstr ""
+msgstr "اطلب رسالة الحالة على…"
 
 msgid "Ask before closing a group chat tab/window."
-msgstr ""
+msgstr "اسأل قبل إغلاق نافذة/لسان مجموعة الدردشة."
 
 msgid "Ask before quitting when Gajim’s window is closed"
-msgstr ""
+msgstr "اسأل قبل الخروج من غاجِم حين تكون النافذة مغلقة"
 
 msgid "Attention Message Received"
-msgstr ""
+msgstr "استُلِمَت رسالة الانتباه"
 
 msgid "Audio"
-msgstr ""
+msgstr "الصوت"
 
 msgid "Audio / Video Calls"
-msgstr ""
+msgstr "المكالمات الصوتية/المرئية"
 
 msgid "Audio File"
-msgstr ""
+msgstr "ملف سمعي"
 
 msgid "Audio Input Device"
-msgstr ""
+msgstr "جهاز الإدخال الصوتي"
 
 msgid "Audio Output Device"
-msgstr ""
+msgstr "جهاز الإخراج الصوتي"
 
 msgid "Audio Preview"
-msgstr ""
+msgstr "معاينة الصوت"
 
 msgid "Audio preview is not available"
-msgstr ""
+msgstr "معاينة الصوت غير متوفرة"
 
 msgid "Audio test"
-msgstr ""
+msgstr "اختبار الصوت"
 
 msgid "Audio/Video"
-msgstr ""
+msgstr "الصوت/المرئية"
 
 msgid "Authentication aborted"
-msgstr ""
+msgstr "أُجهِض الاستيثاق"
 
 msgid "Authentication currently not possible"
-msgstr ""
+msgstr "الاستيثاق غير ممكن حاليًا"
 
 msgid "Authentication failed"
-msgstr ""
+msgstr "فشل الاستيثاق"
 
 msgid "Authentication mechanism not supported"
-msgstr ""
+msgstr "آلية الاستيثاق غير مدعومة"
 
 msgid "Authentication mechanism too weak"
-msgstr ""
+msgstr "آلية الاستيثاق ضعيفة جدًا"
 
 msgid "Author"
-msgstr ""
+msgstr "المؤلِّف"
 
 msgid "Authority and issuer serial number mismatch"
 msgstr ""
@@ -846,6 +880,9 @@ msgid "Ban %s"
 msgstr ""
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1424,6 +1461,9 @@ msgstr ""
 msgid "Could not save file to selected directory."
 msgstr ""
 
+msgid "Could not update providers list"
+msgstr ""
+
 msgid "Country"
 msgstr ""
 
@@ -1804,6 +1844,9 @@ msgstr ""
 msgid "End call"
 msgstr ""
 
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr ""
+
 msgid "Enter a password to join this chat"
 msgstr ""
 
@@ -2121,7 +2164,7 @@ msgid "GTK Version: %s"
 msgstr ""
 
 msgid "Gajim"
-msgstr ""
+msgstr "غاجم"
 
 #, python-format
 msgid "Gajim %s is available"
@@ -2614,7 +2657,7 @@ msgid ""
 "file transfers (in case of address translation/port forwarding)."
 msgstr ""
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -2826,6 +2869,9 @@ msgstr ""
 msgid "Modify Gateway…"
 msgstr ""
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 msgid "Move Chat"
 msgstr ""
 
@@ -3022,7 +3068,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3355,9 +3401,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 msgid "Plugin Settings"
 msgstr ""
 
@@ -3454,6 +3497,16 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+msgid "Provider Infos"
+msgstr ""
+
+msgid "Providers list is up to date"
 msgstr ""
 
 msgid "Prox_y"
@@ -3893,6 +3946,12 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
+msgid "Search Filters"
+msgstr ""
+
+msgid "Search Filters (Active)"
+msgstr ""
+
 msgid "Search Participants…"
 msgstr ""
 
@@ -3911,6 +3970,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 msgid "Searching"
@@ -4090,6 +4152,9 @@ msgstr ""
 msgid "Set configuration directory"
 msgstr ""
 
+msgid "Set date…"
+msgstr ""
+
 msgid "Set status message"
 msgstr ""
 
@@ -4192,7 +4257,7 @@ msgid "Show a live preview to test your video source"
 msgstr ""
 
 msgid "Show all reactions"
-msgstr ""
+msgstr "اعرض كل التفاعلات"
 
 msgid "Show all warnings"
 msgstr ""
@@ -4271,7 +4336,7 @@ msgstr ""
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 msgid "Signup not allowed"
@@ -4468,6 +4533,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 msgid "Switch Workspace"
 msgstr ""
 
@@ -4572,7 +4645,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -4610,9 +4683,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -4994,6 +5067,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr ""
@@ -5044,13 +5120,6 @@ msgstr ""
 msgid "Use file transfer proxies"
 msgstr ""
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr ""
 
@@ -5068,6 +5137,9 @@ msgid "User Interface"
 msgstr ""
 
 msgid "User Interface Font Size"
+msgstr ""
+
+msgid "User name…"
 msgstr ""
 
 msgid "Users"
@@ -5115,7 +5187,7 @@ msgstr ""
 msgid "Video test"
 msgstr ""
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -5174,7 +5246,7 @@ msgid ""
 "disable)"
 msgstr ""
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 msgid "Why do you want to moderate this message?"
@@ -5250,9 +5322,6 @@ msgid ""
 "You are about to connect to the account %(account)s (%(server)s) using an "
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
-msgstr ""
-
-msgid "You are about to quit Gajim"
 msgstr ""
 
 #, python-format
@@ -5527,9 +5596,6 @@ msgstr ""
 msgid "_Do not ask me again"
 msgstr ""
 
-msgid "_Don’t ask again"
-msgstr ""
-
 msgid "_Download"
 msgstr ""
 
@@ -5550,6 +5616,9 @@ msgid "_Free for Chat"
 msgstr ""
 
 msgid "_Help"
+msgstr ""
+
+msgid "_Hide (Tray Icon)"
 msgstr ""
 
 msgid "_Host"
@@ -5577,6 +5646,9 @@ msgid "_Manage Accounts…"
 msgstr ""
 
 msgid "_Manage Account…"
+msgstr ""
+
+msgid "_Minimize"
 msgstr ""
 
 msgid "_Moderate"
@@ -5610,7 +5682,7 @@ msgstr ""
 msgid "_Overwrite"
 msgstr ""
 
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr ""
 
 msgid "_Port"
@@ -5629,6 +5701,9 @@ msgid "_Quit"
 msgstr ""
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"

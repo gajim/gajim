@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -24,6 +24,10 @@ msgstr "Прыватная размова"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Запыт на перадачу файла"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Змяніць м_янушку"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -345,12 +349,12 @@ msgstr ""
 msgid "<error>"
 msgstr "Памылка Avahi"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "?Роля чалавека:Няма"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -651,6 +655,9 @@ msgstr "<b>Праграмы</b>"
 msgid "Affiliations"
 msgstr "<b>Праграмы</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -795,10 +802,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
-msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
-
-#, fuzzy
-msgid "Are you sure you want to quit Gajim?"
 msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
 
 msgid "Artists"
@@ -967,6 +970,9 @@ msgid "Ban %s"
 msgstr "Чорны спіс"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1646,6 +1652,10 @@ msgid "Could not save file to selected directory."
 msgstr "Вы не маеце права ствараць файлы ў гэтай дырэкторыі."
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "Немагчыма загрузіць малюнак"
+
+#, fuzzy
 msgid "Country"
 msgstr "Краіна:"
 
@@ -2092,6 +2102,9 @@ msgid "Encryption required"
 msgstr "Шыфраванне дзейнічае"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3048,7 +3061,7 @@ msgstr ""
 "Вызначае вузел, якому мы адпраўляем файлы, у выпадку трансляцыі адрасоў / "
 "перанакіравання портаў."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3305,6 +3318,9 @@ msgstr "_Змяніць"
 msgid "Modify Gateway…"
 msgstr "Змяніць рахунак"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Запыт на перадачу файла"
@@ -3532,7 +3548,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3919,9 +3935,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Памылка злучэння"
@@ -4037,6 +4050,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Сервер"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4557,6 +4581,14 @@ msgid "Search"
 msgstr "Пошук"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Паведамленне адпраўленае"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Атрыманае першае паведамленне"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Удзельнікі"
 
@@ -4578,6 +4610,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4796,6 +4831,10 @@ msgstr "Сервер"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Настаўленні пакоя"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Мадэратар"
 
 #, fuzzy
 msgid "Set status message"
@@ -5022,7 +5061,7 @@ msgstr "_Злучыцца"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5251,6 +5290,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Пошук сервісаў для рахунка %s"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Змяніць імя чалавека"
@@ -5369,7 +5416,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5411,9 +5458,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5847,6 +5894,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5907,13 +5957,6 @@ msgstr "Адмысловы рэдактар настаўленняў"
 msgid "Use file transfer proxies"
 msgstr "Ужыць проксі для перадачы файлаў"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Use proxy auth_entication"
 msgstr "Аўтарызацыя"
@@ -5934,6 +5977,10 @@ msgstr "_Імя карыстальніка:"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Імя карыстальніка:"
 
 msgid "Users"
 msgstr "Карыстальнікі"
@@ -5986,7 +6033,7 @@ msgstr "Няма злучэння"
 msgid "Video test"
 msgstr ""
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6053,7 +6100,7 @@ msgid ""
 "disable)"
 msgstr ""
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6140,10 +6187,6 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr "Вы ствараеце мета-кантакт. Вы сапраўды хочаце працягнуць?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6471,10 +6514,6 @@ msgid "_Do not ask me again"
 msgstr "_Больш не пытацца"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "_Больш не пытацца"
-
-#, fuzzy
 msgid "_Download"
 msgstr "_Больш не пытацца"
 
@@ -6501,6 +6540,9 @@ msgstr "_Магу размаўляць"
 #, fuzzy
 msgid "_Help"
 msgstr "_Даведка"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6533,6 +6575,10 @@ msgstr "Змяніць рахунак"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Дадаць чалавека..."
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6573,7 +6619,7 @@ msgid "_Overwrite"
 msgstr ""
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Стварыць новы допіс"
 
 #, fuzzy
@@ -6596,6 +6642,9 @@ msgid "_Quit"
 msgstr "_Выйсці"
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7126,6 +7175,10 @@ msgstr ""
 #~ msgstr "?transfer status:Прыпыненая"
 
 #, fuzzy
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Журнал размоў"
 
@@ -7176,6 +7229,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Вы сапраўды хочаце сысці з групавой размовы \"%s\"?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Больш не пытацца"
 
 #, fuzzy
 #~ msgid "_Login"

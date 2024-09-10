@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -24,6 +24,10 @@ msgstr "Lyd / Billede"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Filoverførsel Forespørgsel"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Ændre _Kælenavn..."
 
 #, python-brace-format
 msgid " by {actor}"
@@ -354,12 +358,12 @@ msgstr ""
 msgid "<error>"
 msgstr "Fejl"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "?Group Chat Contact Role:Ingen"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -665,6 +669,9 @@ msgstr "<b>Tilknytning:</b>"
 msgid "Affiliations"
 msgstr "<b>Programmer</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -814,9 +821,6 @@ msgstr ""
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Er du sikker på du vil forlade gruppe samtalen \"%s\"?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Er du sikker på du vil afslutte Gajim?"
 
 msgid "Artists"
 msgstr ""
@@ -988,6 +992,9 @@ msgid "Ban %s"
 msgstr "Blokeret %s"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1670,6 +1677,10 @@ msgid "Could not save file to selected directory."
 msgstr "Du har ikke rettigheder til at oprette filer i dette katalog."
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "Kunne ikke laste billede"
+
+#, fuzzy
 msgid "Country"
 msgstr "Konto"
 
@@ -2118,6 +2129,9 @@ msgid "Encryption required"
 msgstr "Abonnement forespørgsel"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3066,7 +3080,7 @@ msgstr ""
 "grænseflader, for filoverførsler i tilfælde af adresse omskrivning/port "
 "videresending."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3321,6 +3335,9 @@ msgstr "Ændre"
 msgid "Modify Gateway…"
 msgstr "_Ændre Konto"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Filoverførsel Forespørgsel"
@@ -3548,7 +3565,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3935,9 +3952,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Tilslutning fejlede"
@@ -4052,6 +4066,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Server"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4575,6 +4600,14 @@ msgid "Search"
 msgstr "Søg"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Besked er Sendt"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Første Besked er Modtaget"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Deltagere"
 
@@ -4596,6 +4629,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4811,6 +4847,10 @@ msgstr "Server"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "Rum Konfigurering"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Moderator"
 
 #, fuzzy
 msgid "Set status message"
@@ -5039,7 +5079,7 @@ msgstr "Logge _ind"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5268,6 +5308,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Opdag Tjenester med kontoen %s"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Omdøb Kontakt"
@@ -5387,7 +5435,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5430,9 +5478,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5872,6 +5920,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5932,13 +5983,6 @@ msgstr "Avanceret Konfigurations Behandler"
 msgid "Use file transfer proxies"
 msgstr "Brug fil transport proxy"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "Brug proxy godkendelse"
 
@@ -5958,6 +6002,10 @@ msgstr "_Brugernavn:"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Brugernavn:"
 
 msgid "Users"
 msgstr "Brugere"
@@ -6012,7 +6060,7 @@ msgstr "Tilslutning er ikke tilgængelig"
 msgid "Video test"
 msgstr ""
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6080,7 +6128,7 @@ msgid ""
 "disable)"
 msgstr "Ignorer denne fejl for dette certifikat."
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6169,10 +6217,6 @@ msgstr ""
 "Du er ved at sende din adgangskode på en usikker forbindelse. Du bør "
 "installere PyOpenSSL for at forhindre dette. Er du sikker på du vil gøre "
 "dette?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Er du sikker på du vil afslutte Gajim?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6497,10 +6541,6 @@ msgid "_Do not ask me again"
 msgstr "_Spørg mig ikke igen"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "_Spørg mig ikke igen"
-
-#, fuzzy
 msgid "_Download"
 msgstr "Ikke spørg mig ige_n"
 
@@ -6527,6 +6567,9 @@ msgstr "_Tilgængelig for samtale"
 #, fuzzy
 msgid "_Help"
 msgstr "_Hjælp"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6558,6 +6601,10 @@ msgstr "_Ændre Konto"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Tilføj Kontakt..."
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6598,7 +6645,7 @@ msgid "_Overwrite"
 msgstr ""
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Opret et nyt tema med dit ønskede navn."
 
 #, fuzzy
@@ -6621,6 +6668,9 @@ msgid "_Quit"
 msgstr "_Afslut"
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7145,6 +7195,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?transfer status:Midlertidig stoppet"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Er du sikker på du vil afslutte Gajim?"
+
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Samtale med "
@@ -7196,6 +7249,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Er du sikker på du vil afslutte Gajim?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Spørg mig ikke igen"
 
 #, fuzzy
 #~ msgid "_Login"

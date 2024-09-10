@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -25,6 +25,10 @@ msgstr "Video test"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Požiadavka na hlasový rozhovor"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Zmeniť p_rezývku..."
 
 #, python-brace-format
 msgid " by {actor}"
@@ -349,12 +353,12 @@ msgstr ""
 msgid "<error>"
 msgstr "Chyba"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "?Rola kontaktu v diskusnej skupine: žiadna"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -657,6 +661,9 @@ msgstr "<b>Pričlenenie:</b>"
 msgid "Affiliations"
 msgstr "<b>Aplikácie</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -804,9 +811,6 @@ msgstr ""
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Ste si istý, že chcete opustiť diskusnú skupinu \"%s\"?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Ste si istý, že chcete ukončiť program Gajim?"
 
 msgid "Artists"
 msgstr ""
@@ -977,6 +981,9 @@ msgid "Ban %s"
 msgstr "Čierna listina"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1661,6 +1668,10 @@ msgid "Could not save file to selected directory."
 msgstr "Nemáte oprávnenie vytvoriť súbor v tomto priečinku."
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "Nie je možné načítať obrázok"
+
+#, fuzzy
 msgid "Country"
 msgstr "Účet"
 
@@ -2108,6 +2119,9 @@ msgid "Encryption required"
 msgstr "E2E šifrovanie povolené"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3053,7 +3067,7 @@ msgid ""
 "file transfers (in case of address translation/port forwarding)."
 msgstr ""
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3308,6 +3322,9 @@ msgstr "Upraviť"
 msgid "Modify Gateway…"
 msgstr "_Upraviť účet"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Požiadavka na hlasový rozhovor"
@@ -3535,7 +3552,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3922,9 +3939,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "Registrácia zlyhala"
@@ -4040,6 +4054,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Server"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4562,6 +4587,14 @@ msgid "Search"
 msgstr "Hľadať"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Správa odoslaná"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Prvá prijatá správa"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Účastníci"
 
@@ -4583,6 +4616,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4799,6 +4835,10 @@ msgstr "Server"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s konfiguračná chyba"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Moderátor"
 
 #, fuzzy
 msgid "Set status message"
@@ -5027,7 +5067,7 @@ msgstr "Prihlás_il sa"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5256,6 +5296,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "Prehliadanie služieb s použitím účtu %s"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Premenovať kontakt"
@@ -5375,7 +5423,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5418,9 +5466,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5861,6 +5909,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5921,13 +5972,6 @@ msgstr "Editor rozšírenej konfigurácie"
 msgid "Use file transfer proxies"
 msgstr "Použiť proxy pre prenos súborov"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "Použiť proxy aut_entifikáciu"
 
@@ -5947,6 +5991,10 @@ msgstr "_Používateľské meno:"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Používateľské meno:"
 
 msgid "Users"
 msgstr "Používatelia"
@@ -6001,7 +6049,7 @@ msgstr "Pripojenie nie je dostupné"
 msgid "Video test"
 msgstr "Video test"
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6069,7 +6117,7 @@ msgid ""
 "disable)"
 msgstr "Ignorovať túto chybu pre tento certifikát."
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6157,10 +6205,6 @@ msgid ""
 msgstr ""
 "Práve sa chystáte poslať vaše heslo cez nezabezpečené spojenie. Mali by ste "
 "tomu predíssť nainštalovaním PyOpenSSL. Ste si istý, že to chcete urobiť?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Ste si istý, že chcete ukončiť program Gajim?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6486,10 +6530,6 @@ msgid "_Do not ask me again"
 msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "Znovu sa už _nepýtať"
-
-#, fuzzy
 msgid "_Download"
 msgstr "Znovu sa už _nepýtať"
 
@@ -6516,6 +6556,9 @@ msgstr "_Mám čas na debatu"
 #, fuzzy
 msgid "_Help"
 msgstr "_Pomocník"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6547,6 +6590,10 @@ msgstr "_Upraviť účet"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Pridať kontakt..."
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6587,7 +6634,7 @@ msgid "_Overwrite"
 msgstr ""
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Vytvorte, prosím, čisto novú tému z vami požadovaným názvom."
 
 #, fuzzy
@@ -6610,6 +6657,9 @@ msgid "_Quit"
 msgstr "_Koniec"
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7136,6 +7186,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?stav prenosu:Pozastavené"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Ste si istý, že chcete ukončiť program Gajim?"
+
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Rozhovor s "
@@ -7187,6 +7240,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Ste si istý, že chcete ukončiť program Gajim?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
 #~ msgid "_Login"

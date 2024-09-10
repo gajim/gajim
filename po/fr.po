@@ -7,13 +7,14 @@
 # nicoco <nicoco@nicoco.fr>, 2023.
 # franck-x <dev@monanderos.fr>, 2023.
 # Codimp <contact@lithio.fr>, 2024.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2024-07-17 23:17+0000\n"
-"Last-Translator: Codimp <contact@lithio.fr>\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-12 21:17+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
 "\n"
 "Language: fr\n"
@@ -30,6 +31,10 @@ msgstr " (Appel vidéo)"
 
 msgid " (Voice Call)"
 msgstr " (Appel audio)"
+
+#, python-format
+msgid " by %s"
+msgstr " par %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -348,11 +353,11 @@ msgstr "<vide>"
 msgid "<error>"
 msgstr "<error>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "Comparaison des fonctionnalités disponibles sur divers serveurs"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "Un salon de discussion a besoin d'au moins un propriétaire"
+
+msgid "A feature comparison of various providers"
+msgstr "Comparaison des fonctionnalités disponibles sur divers serveurs"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -607,6 +612,9 @@ msgstr "Affiliation"
 msgid "Affiliations"
 msgstr "Affiliations"
 
+msgid "After"
+msgstr "Après"
+
 msgid "Algorithm"
 msgstr "Algorithme"
 
@@ -747,9 +755,6 @@ msgstr "Sauvegarde des préférences pour %s"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Êtes-vous sûr de vouloir quitter ce salon ?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Êtes-vous sûr de vouloir quitter Gajim ?"
 
 msgid "Artists"
 msgstr "Artistes"
@@ -893,6 +898,9 @@ msgstr "Bannit %s"
 
 msgid "Ban…"
 msgstr "Bannir…"
+
+msgid "Before"
+msgstr "Avant"
 
 msgid "Behaviour of Application Window"
 msgstr "Comportement de la fenêtre de l'application"
@@ -1497,6 +1505,9 @@ msgid "Could not save file to selected directory."
 msgstr ""
 "Vous n’avez pas les permissions pour créer des fichiers dans ce dossier."
 
+msgid "Could not update providers list"
+msgstr "Impossible de mettre à jour la liste des serveurs"
+
 msgid "Country"
 msgstr "Pays"
 
@@ -1900,6 +1911,9 @@ msgstr "Chiffrement requis"
 
 msgid "End call"
 msgstr "Terminer l'appel"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr "Adresse pour récupérer une liste de serveurs pour l'inscription"
 
 msgid "Enter a password to join this chat"
 msgstr "Saisissez un mot de passe pour rejoindre cette discussion"
@@ -2754,7 +2768,7 @@ msgstr ""
 "interfaces locales, pour les transferts de fichiers (dans le cas de "
 "traduction d'adresse / redirection de port)."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr "Liste de serveurs"
 
 msgid "Live Preview"
@@ -2974,6 +2988,9 @@ msgstr "Modifier"
 msgid "Modify Gateway…"
 msgstr "Modifier la passerelle…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr "Plus d'infos sur providers.xmpp.net"
+
 msgid "Move Chat"
 msgstr "Déplacer la discussion"
 
@@ -3178,7 +3195,7 @@ msgstr "Notes"
 msgid "Note to myself"
 msgstr "Note pour moi-même"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 "Remarque : la création de comptes anonymes n'est pas possible sur tous les "
 "serveurs"
@@ -3527,9 +3544,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Utilisez ces paramètres avec précaution !"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "Veuillez utiliser aaaa-mm-jj"
-
 msgid "Plugin Settings"
 msgstr "Paramètres de l'extension"
 
@@ -3630,6 +3644,16 @@ msgstr "Discussions autour du projet"
 
 msgid "Protocol"
 msgstr "Protocole"
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr "Catégorie de serveur : %s"
+
+msgid "Provider Infos"
+msgstr "Informations sur le serveur"
+
+msgid "Providers list is up to date"
+msgstr "La liste des serveurs est à jour"
 
 msgid "Prox_y"
 msgstr "Serveur _mandataire"
@@ -4074,6 +4098,12 @@ msgstr "Faites défiler pour charger plus d'historique de discussion…"
 msgid "Search"
 msgstr "Chercher"
 
+msgid "Search Filters"
+msgstr "Filtres de recherche"
+
+msgid "Search Filters (Active)"
+msgstr "Filtres de recherche (Actif)"
+
 msgid "Search Participants…"
 msgstr "Rechercher des participant·es…"
 
@@ -4095,6 +4125,9 @@ msgid ""
 msgstr ""
 "Rechercher un salon de discussion au niveau mondial\n"
 "(appuyez sur Entrée pour lancer la recherche)"
+
+msgid "Search your conversation"
+msgstr "Chercher votre conversation"
 
 msgid "Searching"
 msgstr "Recherche en cours"
@@ -4192,7 +4225,7 @@ msgid "Send File Directly…"
 msgstr "Enregistrer un fichier directement …"
 
 msgid "Send Files"
-msgstr "Envoyer des _fichiers"
+msgstr "Envoyer des fichiers"
 
 msgid "Send Files Directly"
 msgstr "Envoyer les fichiers directement (via Jingle)"
@@ -4276,6 +4309,9 @@ msgstr "Passerelle de service"
 
 msgid "Set configuration directory"
 msgstr "Définir le répertoire de configuration"
+
+msgid "Set date…"
+msgstr "Définir la date…"
 
 msgid "Set status message"
 msgstr "Définir le message d'état"
@@ -4478,7 +4514,7 @@ msgstr "S'inscrire"
 msgid "Sign up Anonymously"
 msgstr "Se connecter anonymement"
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr "Créez un nouveau compte sur un serveur de votre choix"
 
 msgid "Signup not allowed"
@@ -4680,6 +4716,20 @@ msgstr ""
 "Support pour la découverte des services incluant les nœuds et la recherche "
 "d'utilisateurs/trices"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+"Êtes-vous sur de vouloir quitter Gajim ?\n"
+"Vous ne pourrez plus envoyer ni recevoir de messages si vous le faites.\n"
+"\n"
+"Sinon, vous pouvez soit minimiser la fenêtre de Gajim, ou la cacher "
+"complétement. Utilisez l'icône Gajim dans la barre d'état pour restaurer la "
+"fenêtre."
+
 msgid "Switch Workspace"
 msgstr "Changer d'espace de travail"
 
@@ -4789,7 +4839,7 @@ msgstr ""
 "Voulez-vous le re-télécharger de nouveau ?"
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 "Les avertissements suivants sont survenus en essayant de vérifier le "
@@ -4831,9 +4881,9 @@ msgstr ""
 "niveau de confiance à leur accorder."
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 "Il y a de nombreux serveurs parmi lesquels choisir.\n"
 "Créer un compte sur un serveur vous permettra de communiquer avec des "
@@ -5243,6 +5293,9 @@ msgstr "Mises à jour"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Les mises à jour seront appliquées au prochain démarrage de Gajim"
 
+msgid "Updating provider list…"
+msgstr "Mise à jour de la liste de serveurs en cours…"
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "Téléversement"
@@ -5293,17 +5346,6 @@ msgstr "Utilise un profil défini dans le dossier de configuration"
 msgid "Use file transfer proxies"
 msgstr "Utiliser les serveurs mandataires pour les transferts de fichiers"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"Utilisez des filtres pour affiner votre recherche :\n"
-"from:nom d'utilisateur/trice\n"
-"before:aaaa-mm-jj\n"
-"after:aaaa-mm-jj"
-
 msgid "Use proxy auth_entication"
 msgstr "Utiliser l'auth_entification"
 
@@ -5324,6 +5366,9 @@ msgstr "Interface utilisateur·ice"
 
 msgid "User Interface Font Size"
 msgstr "Taille de police de l'interface"
+
+msgid "User name…"
+msgstr "Nom d'utilisateur·ice…"
 
 msgid "Users"
 msgstr "Utilisateurs/trices"
@@ -5370,8 +5415,8 @@ msgstr "Les appels vidéo ne sont pas disponibles sous Windows"
 msgid "Video test"
 msgstr "Test vidéo"
 
-msgid "Visit Server's Website"
-msgstr "Visiter le site Web du serveur"
+msgid "Visit Provider's Website"
+msgstr "Visiter le site web du serveur"
 
 msgid "Visit Website"
 msgstr "Visitez le site Web"
@@ -5431,7 +5476,7 @@ msgstr ""
 "Vérifier si le certificat est valide avant le téléchargement (il n'est pas "
 "sûr de le désactiver)"
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr "Quel serveur devrais-je choisir ?"
 
 msgid "Why do you want to moderate this message?"
@@ -5512,9 +5557,6 @@ msgstr ""
 "Vous êtes sur le point de vous connecter au compte %(account)s (%(server)s) "
 "de façon non-sécurisée. Cela signifie que vos conversations ne seront pas "
 "chiffrées. Une connexion non chiffrée est vraiment déconseillée."
-
-msgid "You are about to quit Gajim"
-msgstr "Vous êtes sur le point de quitter Gajim"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5817,9 +5859,6 @@ msgstr "_Désactiver le compte"
 msgid "_Do not ask me again"
 msgstr "_Ne plus me poser la question"
 
-msgid "_Don’t ask again"
-msgstr "_Ne plus me poser la question"
-
 msgid "_Download"
 msgstr "_Télécharger"
 
@@ -5841,6 +5880,9 @@ msgstr "Dis_ponible pour discuter"
 
 msgid "_Help"
 msgstr "_Aide"
+
+msgid "_Hide (Tray Icon)"
+msgstr "_Cacher (Icône de barre d'état)"
 
 msgid "_Host"
 msgstr "Nom d'_Hôte"
@@ -5868,6 +5910,9 @@ msgstr "_Gérer les comptes…"
 
 msgid "_Manage Account…"
 msgstr "_Gérer le compte…"
+
+msgid "_Minimize"
+msgstr "Minimiser"
 
 msgid "_Moderate"
 msgstr "_Modérer"
@@ -5900,7 +5945,7 @@ msgstr "_Ouvrir le répertoire de destination"
 msgid "_Overwrite"
 msgstr "É_craser"
 
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Veuillez choisir un _serveur"
 
 msgid "_Port"
@@ -5920,6 +5965,9 @@ msgstr "_Quitter"
 
 msgid "_Re-Login"
 msgstr "_Reconnexion"
+
+msgid "_Remember my decision"
+msgstr "_Se souvenir de ma décision"
 
 msgid "_Remove"
 msgstr "_Supprimer"
@@ -6437,6 +6485,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:_Disponible"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Êtes-vous sûr de vouloir quitter Gajim ?"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversation : couleur des URLs"
 
@@ -6477,6 +6528,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unité d'organisation (OU) : "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "Veuillez utiliser aaaa-mm-jj"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Rétracter…"
@@ -6497,6 +6551,23 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Topic"
 #~ msgstr "Sujet"
+
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "Utilisez des filtres pour affiner votre recherche :\n"
+#~ "from: \"nom d'utilisateur/trice\"\n"
+#~ "before: \"aaaa-mm-jj\"\n"
+#~ "after: \"aaaa-mm-jj\""
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Vous êtes sur le point de quitter Gajim"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Ne plus me poser la question"
 
 #~ msgid "_Login"
 #~ msgstr "_Identifiant"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -25,6 +25,10 @@ msgstr " (Видео қоңырауы)"
 
 msgid " (Voice Call)"
 msgstr " (Дауыс қоңырауы)"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "%s өзгерткен"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -340,11 +344,12 @@ msgstr "<бос>"
 msgid "<error>"
 msgstr "<error>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "Әр түрлі серверлердің ерекшеліктерін салыстыру"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "Топтық чатқа кемінде бір иесі қажет"
+
+#, fuzzy
+msgid "A feature comparison of various providers"
+msgstr "Әр түрлі серверлердің ерекшеліктерін салыстыру"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -594,6 +599,9 @@ msgstr "Қатысуы"
 msgid "Affiliations"
 msgstr "Қатысулар"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr "Алгоритм"
 
@@ -724,9 +732,6 @@ msgstr "%s үшін архивтеу баптаулары"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Осы топ чатынан шығуды шынымен қалайсыз ба?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
 
 msgid "Artists"
 msgstr "Суретшілер"
@@ -872,6 +877,9 @@ msgstr "%s бұғаттау"
 
 msgid "Ban…"
 msgstr "Банға салу…"
+
+msgid "Before"
+msgstr ""
 
 msgid "Behaviour of Application Window"
 msgstr "Қолданба терезесінің мінез-құлығы"
@@ -1462,6 +1470,10 @@ msgstr "Файлды сақтау мүмкін емес"
 msgid "Could not save file to selected directory."
 msgstr "Файлды көрсетілген бумада сақтау мүмкін емес."
 
+#, fuzzy
+msgid "Could not update providers list"
+msgstr "Файлды ашу мүмкін емес (%s)"
+
 msgid "Country"
 msgstr "Ел"
 
@@ -1859,6 +1871,9 @@ msgstr "Шифрлеу талап етіледі"
 
 msgid "End call"
 msgstr "Қоңырауды аяқтау"
+
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr ""
 
 msgid "Enter a password to join this chat"
 msgstr "Осы чатқа қосылу үшін парольді енгізіңіз"
@@ -2706,7 +2721,8 @@ msgstr ""
 "Жергілікті интерфейстерге қоса, (үтірмен ажыратылған) хост аттары, (адрес/"
 "порттар бағдарлауы кезінде) Файлдармен алмасу үшін оларды жібереміз."
 
-msgid "Listing of Servers"
+#, fuzzy
+msgid "Listing of providers"
 msgstr "Серверлер тізімі"
 
 msgid "Live Preview"
@@ -2930,6 +2946,9 @@ msgstr "Түзету"
 msgid "Modify Gateway…"
 msgstr "Шлюзді өзгерту…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 msgid "Move Chat"
 msgstr "Чатты жылжыту"
 
@@ -3133,7 +3152,8 @@ msgstr "Естеліктер"
 msgid "Note to myself"
 msgstr "Өзіме естелік"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+#, fuzzy
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr "Ескерту: Анонимді тіркелгілер барлық серверлерде рұқсат етіле бермейді"
 
 msgid "Notes"
@@ -3478,9 +3498,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Бұл баптауларды абайлап пайдаланыңыз!"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "yyyy-mm-dd пішімін қолданыңыз"
-
 msgid "Plugin Settings"
 msgstr "Плагин баптаулары"
 
@@ -3579,6 +3596,17 @@ msgid "Project discussion"
 msgstr "Жобаны талқылау"
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Сервер ақпараты"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 msgid "Prox_y"
@@ -4025,6 +4053,14 @@ msgid "Search"
 msgstr "Іздеу"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Хабарлама жіберілді"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Хабарлама алынды"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Қатысушылар"
 
@@ -4046,6 +4082,9 @@ msgid ""
 msgstr ""
 "Топтық чаттарды глобалдық деңгейде іздеу\n"
 "(іздеуді бастау үшін Enter батырмасын басыңыз)"
+
+msgid "Search your conversation"
+msgstr ""
 
 msgid "Searching"
 msgstr "Іздеу"
@@ -4223,6 +4262,10 @@ msgstr "Қызмет шлюзі"
 
 msgid "Set configuration directory"
 msgstr "Баптау бумасын орнату"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Модерацияланады"
 
 msgid "Set status message"
 msgstr "Қалып-күй хабарламасын орнату"
@@ -4422,7 +4465,8 @@ msgstr "Тіркелу"
 msgid "Sign up Anonymously"
 msgstr "Анонимді түрде тіркелу"
 
-msgid "Sign up for a new account on a server of your choice"
+#, fuzzy
+msgid "Sign up for a new account with a provider of your choice"
 msgstr "Жаңа тіркелгіге өз таңдауыңыз бойынша серверге тіркелу"
 
 msgid "Signup not allowed"
@@ -4623,6 +4667,14 @@ msgstr ""
 "Қызметтерді табуды қолдау, соның ішінде тораптарды қолдау мен "
 "пайдаланушыларды іздеу"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 msgid "Switch Workspace"
 msgstr "Жұмыс кеңістігін ауыстыру"
 
@@ -4730,8 +4782,9 @@ msgstr ""
 "%s файлы алынды, бірақ ол зақымдалған сияқты.\n"
 "Оны қайтадан жүктеп алғыңыз келе ме?"
 
+#, fuzzy
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr "Сервер сертификатын тексеру кезінде келесі ескертулер пайда болды"
 
@@ -4768,10 +4821,11 @@ msgstr "Темалар"
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
+#, fuzzy
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 "Таңдау үшін көптеген серверлер бар.\n"
 "Бір серверде тіркелгі жасау басқа серверлердегі контактілермен де "
@@ -5177,6 +5231,9 @@ msgstr "Жаңартулар"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Жаңартулар Gajim келесі жолы іске қосылғанда орнатылады"
 
+msgid "Updating provider list…"
+msgstr ""
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "Жүктеп салу"
@@ -5228,17 +5285,6 @@ msgstr "Баптау бумасында анықталған профильді 
 msgid "Use file transfer proxies"
 msgstr "Файлдармен алмасу үшін прокси қолдану"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"Іздеуіңізді нақтылау үшін сүзгілерді қолданыңыз:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-
 msgid "Use proxy auth_entication"
 msgstr "Прокси _аутентификациясын қолдану"
 
@@ -5258,6 +5304,10 @@ msgstr "D-Bus интерфейсі"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "_Пайдаланушы аты"
 
 msgid "Users"
 msgstr "Пайдаланушылар"
@@ -5304,7 +5354,8 @@ msgstr "Видео қоңыраулар Windows жүйесінде қол жет
 msgid "Video test"
 msgstr "Видео сынау"
 
-msgid "Visit Server's Website"
+#, fuzzy
+msgid "Visit Provider's Website"
 msgstr "Сервер веб-сайтын шолу"
 
 msgid "Visit Website"
@@ -5368,7 +5419,8 @@ msgstr ""
 "Жүктеп алу алдында жарамды сертификатты тексеру керек пе (бұны сөндіру "
 "қауіпсіз емес)"
 
-msgid "Which server should I choose?"
+#, fuzzy
+msgid "Which provider should I choose?"
 msgstr "Қай серверді таңдауым керек?"
 
 #, fuzzy
@@ -5449,9 +5501,6 @@ msgstr ""
 "Сіз %(account)s (%(server)s) тіркелгіге қауіпсіз емес түрде байланысты "
 "орнатуды қаладыңыз. Бұл дегеніміз, сіздің барлық сөйлесулеріңіз шифрленбеген "
 "түрде жүреді. Шифрлеусіз байланысу қатаң түрде ҰСЫНЫЛМАЙДЫ."
-
-msgid "You are about to quit Gajim"
-msgstr "Gajim-нан шығуды қаладыңыз"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5734,9 +5783,6 @@ msgstr "Тіркелгіні сөн_діру"
 msgid "_Do not ask me again"
 msgstr "М_ені қайта сұрамау"
 
-msgid "_Don’t ask again"
-msgstr "Келесіде сұра_мау"
-
 msgid "_Download"
 msgstr "Жү_ктеп алу"
 
@@ -5758,6 +5804,9 @@ msgstr "Чат үшін б_ос"
 
 msgid "_Help"
 msgstr "_Көмек"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 msgid "_Host"
 msgstr "_Хост"
@@ -5787,6 +5836,10 @@ msgstr "Тіркелгілерді тү_зету…"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "_Тіркелгіні қосу…"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Қайыру"
 
 #, fuzzy
 msgid "_Moderate"
@@ -5820,7 +5873,8 @@ msgstr "_Буманы ашу"
 msgid "_Overwrite"
 msgstr "Үстінен жа_зу"
 
-msgid "_Please choose a server"
+#, fuzzy
+msgid "_Please choose a provider"
 msgstr "Серверді _таңдаңыз"
 
 msgid "_Port"
@@ -5841,6 +5895,9 @@ msgstr "_Шығу"
 
 msgid "_Re-Login"
 msgstr "Қа_йта кіру"
+
+msgid "_Remember my decision"
+msgstr ""
 
 msgid "_Remove"
 msgstr "Өші_ру"
@@ -6324,6 +6381,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "?user status:_Available"
 #~ msgstr "?user status:_Осында"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Сөйлесу: Сілтемелер түсі"
 
@@ -6363,6 +6423,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Ұйым бөлімі (OU): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "yyyy-mm-dd пішімін қолданыңыз"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Кері қайтарып алу…"
@@ -6383,6 +6446,24 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Topic"
 #~ msgstr "Тақырып"
+
+#, fuzzy
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "Іздеуіңізді нақтылау үшін сүзгілерді қолданыңыз:\n"
+#~ "from:username\n"
+#~ "before:yyyy-mm-dd\n"
+#~ "after:yyyy-mm-dd"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Gajim-нан шығуды қаладыңыз"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "Келесіде сұра_мау"
 
 #~ msgid "_Login"
 #~ msgstr "_Кіру"

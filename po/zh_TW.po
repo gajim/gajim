@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -27,6 +27,10 @@ msgstr "視訊測試"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "語音聊天請求"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "變更暱稱(_N)…"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -351,12 +355,12 @@ msgstr "<empty>"
 msgid "<error>"
 msgstr "錯誤"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
-
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
 msgstr "無"
+
+msgid "A feature comparison of various providers"
+msgstr ""
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -656,6 +660,9 @@ msgstr "<b>歸屬:</b>"
 msgid "Affiliations"
 msgstr "<b>應用程式</b>"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -802,9 +809,6 @@ msgstr "%s 的存檔偏好設定"
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "您確定要離開聊天室\"%s\"嗎?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "您確定您要離開 Gajim 嗎?"
 
 msgid "Artists"
 msgstr ""
@@ -976,6 +980,9 @@ msgid "Ban %s"
 msgstr "封禁名單"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 msgid "Behaviour of Application Window"
@@ -1656,6 +1663,10 @@ msgid "Could not save file to selected directory."
 msgstr "您沒有權限在這個目錄裡建立檔案。"
 
 #, fuzzy
+msgid "Could not update providers list"
+msgstr "無法讀取圖片"
+
+#, fuzzy
 msgid "Country"
 msgstr "帳號"
 
@@ -2103,6 +2114,9 @@ msgid "Encryption required"
 msgstr "認證請求"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3059,7 +3073,7 @@ msgstr ""
 "逗號分割的清單。在有位址翻譯/連接埠轉發的情況下，除了本地介面，還將向其中\n"
 "的主機傳送檔案傳輸請求。"
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3314,6 +3328,9 @@ msgstr "修改"
 msgid "Modify Gateway…"
 msgstr "修改帳號資訊(_M)"
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "語音聊天請求"
@@ -3539,7 +3556,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3926,9 +3943,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr ""
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 #, fuzzy
 msgid "Plugin Settings"
 msgstr "外掛程式"
@@ -4043,6 +4057,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "伺服器"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4565,6 +4590,14 @@ msgid "Search"
 msgstr "搜尋"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "訊息已傳送"
+
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "最初收到的訊息"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "參與者"
 
@@ -4586,6 +4619,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4799,6 +4835,10 @@ msgstr "伺服器"
 #, fuzzy
 msgid "Set configuration directory"
 msgstr "%s 設定錯誤"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "主持人"
 
 #, fuzzy
 msgid "Set status message"
@@ -5023,7 +5063,7 @@ msgstr "登入(I)"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5252,6 +5292,14 @@ msgstr ""
 msgid "Support for service discovery including nodes and search for users"
 msgstr "正在使用帳號 %s 來發掘服務"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "重新命名聯絡人"
@@ -5371,7 +5419,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5414,9 +5462,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5853,6 +5901,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5913,13 +5964,6 @@ msgstr "進階設定編輯器"
 msgid "Use file transfer proxies"
 msgstr "使用檔案傳輸代理伺服器"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "代理伺服器需要認證"
 
@@ -5939,6 +5983,10 @@ msgstr "使用者名稱(_U):"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "使用者名稱(_U):"
 
 msgid "Users"
 msgstr "使用者"
@@ -5993,7 +6041,7 @@ msgstr "連線無法使用"
 msgid "Video test"
 msgstr "視訊測試"
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6061,7 +6109,7 @@ msgid ""
 "disable)"
 msgstr "忽略這個證書的這個錯誤。"
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6149,10 +6197,6 @@ msgid ""
 msgstr ""
 "您即將透過不安全的連線與帳號 %(account)s (%(server)s) 連接。這意味著您的所有"
 "對話都會不經加密地被交換。您確定要這樣做嗎？"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "您確定您要離開 Gajim 嗎?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6475,10 +6519,6 @@ msgid "_Do not ask me again"
 msgstr "不要再問我了(_D)"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "不要再問我了(_D)"
-
-#, fuzzy
 msgid "_Download"
 msgstr "不要再問我了(_D)"
 
@@ -6505,6 +6545,9 @@ msgstr "和我聊天吧(_F)"
 #, fuzzy
 msgid "_Help"
 msgstr "求助(_H)"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6536,6 +6579,10 @@ msgstr "修改帳號資訊(_M)"
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "加入聯絡人(_A)…"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6577,7 +6624,7 @@ msgid "_Overwrite"
 msgstr "覆寫？"
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "請用您想要的名稱新增一個主題。"
 
 #, fuzzy
@@ -6599,6 +6646,9 @@ msgid "_Quit"
 msgstr ""
 
 msgid "_Re-Login"
+msgstr ""
+
+msgid "_Remember my decision"
 msgstr ""
 
 msgid "_Remove"
@@ -7128,6 +7178,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "線上(_A)"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "您確定您要離開 Gajim 嗎?"
+
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "對話，與"
@@ -7179,6 +7232,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "您確定您要離開 Gajim 嗎?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "不要再問我了(_D)"
 
 #, fuzzy
 #~ msgid "_Login"

@@ -2,22 +2,22 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # Stéphan Kochen <stephan@kochen.nl>, 2005.
-#
-#
+# Gerard Kusters <gk1mst+gajim-translate@hotmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2015-04-24 00:10+0100\n"
-"Last-Translator: Nathan Follens <nthn@unseen.is>\n"
-"Language-Team: none\n"
-"Language: \n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-27 21:18+0000\n"
+"Last-Translator: Gerard Kusters <gk1mst+gajim-translate@hotmail.com>\n"
+"Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/>"
+"\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0\n"
 
 #, fuzzy
 msgid " (Video Call)"
@@ -26,6 +26,10 @@ msgstr "Videotest"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Audiogespreksverzoek"
+
+#, fuzzy, python-format
+msgid " by %s"
+msgstr "Bijnaam veranderen"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -55,7 +59,7 @@ msgstr "%s heeft me aangeraden je aan mijn rooster toe te voegen."
 #, fuzzy, python-format
 msgid ""
 "%(name)s (%(jid)s) would like to add some contacts to your contact list."
-msgstr "Ik wil je graag toevoegen aan mijn contacten."
+msgstr "zou graag enkele contacten toevoegen aan je contactenlijst."
 
 #, fuzzy, python-format
 msgid ""
@@ -94,7 +98,7 @@ msgstr "%(type)s-versleuteling is actief %(authenticated)s."
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
-msgstr ""
+msgstr "%s(Jij)"
 
 #, fuzzy, python-format
 msgid "%s (desynced)"
@@ -102,7 +106,7 @@ msgstr "gedesynchroniseerd"
 
 #, python-format
 msgid "%s and %s are typing…"
-msgstr ""
+msgstr "%s en %s zijn aan het typen…"
 
 #, fuzzy, python-format
 msgid "%s asks you to share your status"
@@ -110,7 +114,7 @@ msgstr "‘%s’ zal nu je status zien."
 
 #, python-format
 msgid "%s can be joined by invite only."
-msgstr ""
+msgstr "%s kan alleen op uitnodiging worden toegetreden."
 
 #, fuzzy, python-format
 msgid "%s group chats found"
@@ -120,21 +124,21 @@ msgstr "%s groepsgesprekken gevonden"
 msgid "%s has been invited to this group chat"
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s has joined"
-msgstr "%s heeft het groepsgesprek verlaten"
+msgstr "%s is toegetreden"
 
 #, python-format
 msgid "%s has read up to this point"
-msgstr ""
+msgstr "%s heeft tot op dit punt gelezen"
 
 #, python-format
 msgid "%s is a file but it should be a directory"
 msgstr "%s is een bestand maar zou een map moeten zijn"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s is already in your contact list"
-msgstr "Dit contact staat al in je rooster."
+msgstr "%s staat al in je contactenlijst"
 
 #, python-format
 msgid "%s is calling"
@@ -149,20 +153,22 @@ msgid ""
 "%s is online with multiple devices.\n"
 "Choose the device you would like to send the files to."
 msgstr ""
+"%s is online met meerdere apparaten.\n"
+"Kies het apparaat waarnaar u de bestanden wilt verzenden."
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s is typing…"
-msgstr "Schrijven"
+msgstr "%s is aan het typen…"
 
 #, python-format
 msgid "%s min ago"
 msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s minuut geleden"
+msgstr[1] "%s minuten geleden"
 
 #, python-format
 msgid "%s participants are typing…"
-msgstr ""
+msgstr "%s deelnemers typen…"
 
 #, python-format
 msgid "%s s"
@@ -170,11 +176,11 @@ msgstr ""
 
 #, python-format
 msgid "%s stopped sharing their status"
-msgstr ""
+msgstr "%s gestopt met het delen van hun status"
 
-#, fuzzy, python-format
+#, python-format
 msgid "%s stopped the transfer"
-msgstr "Contact heeft de overdracht gestopt"
+msgstr "%s heeft de overdracht gestopt"
 
 #, fuzzy, python-format
 msgid "%s wants to send you a file"
@@ -225,54 +231,49 @@ msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Je rol is ingesteld op {role}{actor}{reason}"
 
 msgid "1 Day"
-msgstr ""
+msgstr "1 Dag"
 
-#, fuzzy
 msgid "1 Month"
-msgstr "Een maand"
+msgstr "1 Maand"
 
 msgid "1 Week"
 msgstr ""
 
-#, fuzzy
 msgid "1 Year"
-msgstr "Een jaar"
+msgstr "1 Jaar"
 
 msgid "1 hour"
-msgstr ""
+msgstr "1 uur"
 
 msgid "2 Days"
-msgstr ""
+msgstr "2 Dagen"
 
 msgid "2 hours"
-msgstr ""
+msgstr "2 uren"
 
-#, fuzzy
 msgid "3 Months"
-msgstr "Een maand"
+msgstr "3 Maanden"
 
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minuten"
 
-#, fuzzy
 msgid "6 Months"
-msgstr "Een maand"
+msgstr "6 Maanden"
 
 msgid "8 hours"
-msgstr ""
+msgstr "8 uren"
 
 msgid ": Affiliation changed"
 msgstr ": aansluiting veranderd"
 
-#, fuzzy
 msgid ": Group chat configuration changed to members-only"
-msgstr ": gespreksconfiguratie veranderd naar alleen-leden"
+msgstr ": Configuratie van groepschat gewijzigd naar alleen voor leden"
 
 msgid "<Description>"
 msgstr "<Beschrijving>"
 
 msgid "<Plugin Name>"
-msgstr "<Naam van plug-in>"
+msgstr "<Plugin Naam>"
 
 #, python-format
 msgid ""
@@ -298,27 +299,26 @@ msgid "<b>2</b> abc"
 msgstr "<b>2</b> abc"
 
 msgid "<b>3</b> def"
-msgstr "<b>3</b> def"
+msgstr ""
 
 msgid "<b>4</b> ghi"
-msgstr "<b>4</b> ghi"
+msgstr ""
 
 msgid "<b>5</b> jkl"
-msgstr "<b>5</b> jkl"
+msgstr ""
 
 msgid "<b>6</b> mno"
-msgstr "<b>6</b> mno"
+msgstr ""
 
 msgid "<b>7</b> pqrs"
-msgstr "<b>7</b> pqrs"
+msgstr ""
 
 msgid "<b>8</b> tuv"
-msgstr "<b>8</b> tuv"
+msgstr ""
 
 msgid "<b>9</b> wxyz"
-msgstr "<b>9</b> wxyz"
+msgstr ""
 
-#, fuzzy
 msgid ""
 "<b>XMPP Address</b>\n"
 "&lt;user@domain/resource&gt; (only that resource matches)\n"
@@ -327,25 +327,24 @@ msgid ""
 "&lt;domain&gt; (the domain itself matches, as does any user@domain or domain/"
 "resource)\n"
 msgstr ""
-"<b>Jabber-ID</b>\n"
+"<b>XMPP Adres</b>\n"
 "&lt;gebruiker@domein/bron&gt; (alleen die bron komt overeen).\n"
 "&lt;gebruiker@domein&gt; (eender welke bron komt overeen).\n"
 "&lt;domein/bron&gt; (alleen die bron komt overeen).\n"
-"&lt;domein&gt; (het domein zelf komt overeen, net als gelijk welke "
-"gebruiker@domein of domein/bron)\n"
+"&lt;domein&gt; (het domein zelf komt overeen, net als gelijk welke gebruiker@"
+"domein of domein/bron)\n"
 
 msgid "<empty>"
 msgstr "<leeg>"
 
-#, fuzzy
 msgid "<error>"
-msgstr "fout"
-
-msgid "A Feature Comparison of Various Servers"
-msgstr ""
+msgstr "<fout>"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Een groepsgesprek heeft minstens één eigenaar nodig"
+
+msgid "A feature comparison of various providers"
+msgstr "Een vergelijking van de functies van verschillende aanbieders"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -355,7 +354,7 @@ msgstr ""
 "overschrijven."
 
 msgid "A fully-featured XMPP chat client"
-msgstr ""
+msgstr "Een volledig uitgeruste XMPP-chatclient"
 
 msgid "A list of active, completed and stopped file transfers"
 msgstr "Een lijst van actieve, afgeronde en gestopte bestandsoverdrachten"
@@ -642,6 +641,9 @@ msgstr "Aansluiting"
 msgid "Affiliations"
 msgstr "Aansluitingen"
 
+msgid "After"
+msgstr ""
+
 msgid "Algorithm"
 msgstr ""
 
@@ -792,9 +794,6 @@ msgstr "Archiefvoorkeuren voor %s"
 #, fuzzy
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 
 msgid "Artists"
 msgstr "Artiesten"
@@ -960,6 +959,9 @@ msgid "Ban %s"
 msgstr "Banlijst"
 
 msgid "Ban…"
+msgstr ""
+
+msgid "Before"
 msgstr ""
 
 #, fuzzy
@@ -1627,6 +1629,10 @@ msgstr "Kon bestand niet openen"
 msgid "Could not save file to selected directory."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
+#, fuzzy
+msgid "Could not update providers list"
+msgstr "Kon bestand niet openen"
+
 msgid "Country"
 msgstr "Land"
 
@@ -2077,6 +2083,9 @@ msgid "Encryption required"
 msgstr "Versleutelingsfout"
 
 msgid "End call"
+msgstr ""
+
+msgid "Endpoint for retrieving a list of providers for sign up"
 msgstr ""
 
 msgid "Enter a password to join this chat"
@@ -3035,7 +3044,7 @@ msgstr ""
 "interfaces, voor bestandsoverdrachten in het geval van adresvertaling of "
 "port forwarding."
 
-msgid "Listing of Servers"
+msgid "Listing of providers"
 msgstr ""
 
 msgid "Live Preview"
@@ -3292,6 +3301,9 @@ msgstr "Bewerken"
 msgid "Modify Gateway…"
 msgstr "Account Be_werken..."
 
+msgid "More infos at providers.xmpp.net"
+msgstr ""
+
 #, fuzzy
 msgid "Move Chat"
 msgstr "Audiogespreksverzoek"
@@ -3513,7 +3525,7 @@ msgstr ""
 msgid "Note to myself"
 msgstr ""
 
-msgid "Note: Anonymous accounts are not possible on all servers"
+msgid "Note: Anonymous accounts are not possible with all providers"
 msgstr ""
 
 msgid "Notes"
@@ -3897,9 +3909,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Let op: wees voorzichtig in het gebruik van deze opties!"
 
-msgid "Please use yyyy-mm-dd"
-msgstr ""
-
 msgid "Plugin Settings"
 msgstr "Plug-in-instellingen"
 
@@ -4008,6 +4017,17 @@ msgid "Project discussion"
 msgstr ""
 
 msgid "Protocol"
+msgstr ""
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr ""
+
+#, fuzzy
+msgid "Provider Infos"
+msgstr "Serverinfo"
+
+msgid "Providers list is up to date"
 msgstr ""
 
 #, fuzzy
@@ -4528,6 +4548,15 @@ msgid "Search"
 msgstr "Zoeken"
 
 #, fuzzy
+msgid "Search Filters"
+msgstr "Bericht verzonden"
+
+# Eerste bericht ontvangen?
+#, fuzzy
+msgid "Search Filters (Active)"
+msgstr "Eerste ontvangen bericht"
+
+#, fuzzy
 msgid "Search Participants…"
 msgstr "Deelnemers"
 
@@ -4549,6 +4578,9 @@ msgstr ""
 msgid ""
 "Search for group chats globally\n"
 "(press Return to start search)"
+msgstr ""
+
+msgid "Search your conversation"
 msgstr ""
 
 #, fuzzy
@@ -4758,6 +4790,10 @@ msgstr "Server"
 
 msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
+
+#, fuzzy
+msgid "Set date…"
+msgstr "Beheerder"
 
 #, fuzzy
 msgid "Set status message"
@@ -4987,7 +5023,7 @@ msgstr "_inlog"
 msgid "Sign up Anonymously"
 msgstr ""
 
-msgid "Sign up for a new account on a server of your choice"
+msgid "Sign up for a new account with a provider of your choice"
 msgstr ""
 
 #, fuzzy
@@ -5212,6 +5248,14 @@ msgstr ""
 "Ondersteuning voor dienstontdekking, inclusief knooppunten en zoeken naar "
 "gebruikers"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+
 #, fuzzy
 msgid "Switch Workspace"
 msgstr "Contact hernoemen"
@@ -5334,7 +5378,7 @@ msgstr ""
 "Wil je het opnieuw downloaden?"
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
 msgstr ""
 
@@ -5376,9 +5420,9 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
 
 msgid "There are updates for Gajim’s plugins"
@@ -5825,6 +5869,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+msgid "Updating provider list…"
+msgstr ""
+
 #, fuzzy
 msgctxt "Noun"
 msgid "Upload"
@@ -5884,13 +5931,6 @@ msgstr "Gebruik opgegeven profiel in configuratiemap"
 msgid "Use file transfer proxies"
 msgstr "Gebruik bestandsoverdrachtsproxies"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-
 msgid "Use proxy auth_entication"
 msgstr "Gebruik proxy-auth_enticatie"
 
@@ -5910,6 +5950,10 @@ msgstr "Gebr_uikersnaam"
 
 msgid "User Interface Font Size"
 msgstr ""
+
+#, fuzzy
+msgid "User name…"
+msgstr "Gebr_uikersnaam"
 
 msgid "Users"
 msgstr "Gebruikers"
@@ -5962,7 +6006,7 @@ msgstr "Videosessies zijn niet beschikbaar"
 msgid "Video test"
 msgstr "Videotest"
 
-msgid "Visit Server's Website"
+msgid "Visit Provider's Website"
 msgstr ""
 
 msgid "Visit Website"
@@ -6029,7 +6073,7 @@ msgid ""
 "disable)"
 msgstr "Negeer deze fout voor dit certificaat."
 
-msgid "Which server should I choose?"
+msgid "Which provider should I choose?"
 msgstr ""
 
 #, fuzzy
@@ -6122,10 +6166,6 @@ msgstr ""
 "over een onveilige verbinding. Dit betekent dat al je gesprekken "
 "onversleuteld worden verstuurd. Dit soort verbinding wordt sterk afgeraden.\n"
 "Ben je zeker dat je wil doorgaan?"
-
-#, fuzzy
-msgid "You are about to quit Gajim"
-msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 
 #, fuzzy, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -6455,10 +6495,6 @@ msgid "_Do not ask me again"
 msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
-msgid "_Don’t ask again"
-msgstr "Vraag mij _dit niet nogmaals"
-
-#, fuzzy
 msgid "_Download"
 msgstr "Vraag mij _dit niet nogmaals"
 
@@ -6485,6 +6521,9 @@ msgstr "Open voor _gesprek"
 #, fuzzy
 msgid "_Help"
 msgstr "Hulp"
+
+msgid "_Hide (Tray Icon)"
+msgstr ""
 
 #, fuzzy
 msgid "_Host"
@@ -6518,6 +6557,10 @@ msgstr "Account Be_werken..."
 #, fuzzy
 msgid "_Manage Account…"
 msgstr "Account toevoegen…"
+
+#, fuzzy
+msgid "_Minimize"
+msgstr "Gajim afsluiten"
 
 #, fuzzy
 msgid "_Moderate"
@@ -6558,7 +6601,7 @@ msgid "_Overwrite"
 msgstr "Overschrijven?"
 
 #, fuzzy
-msgid "_Please choose a server"
+msgid "_Please choose a provider"
 msgstr "Kies een bijnaam"
 
 #, fuzzy
@@ -6581,6 +6624,9 @@ msgstr "_Afsluiten"
 #, fuzzy
 msgid "_Re-Login"
 msgstr "Inloggen"
+
+msgid "_Remember my decision"
+msgstr ""
 
 msgid "_Remove"
 msgstr "_Verwijderen"
@@ -7095,6 +7141,9 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?gebruikersstatus:_Aanwezig"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Gesprekslettertype"
@@ -7157,6 +7206,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Wisselen naar het eerste - negende tabblad"
+
+#, fuzzy
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
+#, fuzzy
+#~ msgid "_Don’t ask again"
+#~ msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
 #~ msgid "_Login"

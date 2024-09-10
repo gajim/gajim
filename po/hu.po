@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-17 19:19+0000\n"
-"PO-Revision-Date: 2024-07-18 06:17+0000\n"
+"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"PO-Revision-Date: 2024-08-11 22:17+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -24,6 +24,10 @@ msgstr " (Videóhívás)"
 
 msgid " (Voice Call)"
 msgstr " (Hanghívás)"
+
+#, python-format
+msgid " by %s"
+msgstr " %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -334,11 +338,11 @@ msgstr "<üres>"
 msgid "<error>"
 msgstr "<hiba>"
 
-msgid "A Feature Comparison of Various Servers"
-msgstr "Egy kiszolgálókat összehasonlító webhely"
-
 msgid "A Group Chat needs at least one Owner"
 msgstr "Legalább egy tulajdonosa kell legyen egy társalgónak"
+
+msgid "A feature comparison of various providers"
+msgstr "Egy szolgáltatókat összehasonlító webhely"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -586,6 +590,9 @@ msgstr "Tagsági szint"
 msgid "Affiliations"
 msgstr "Tagság"
 
+msgid "After"
+msgstr "Újabb, mint"
+
 msgid "Algorithm"
 msgstr "Algoritmus"
 
@@ -719,9 +726,6 @@ msgstr "%s archiválási beállításai"
 
 msgid "Are you sure you want to leave this group chat?"
 msgstr "Biztos elhagyható a társalgó?"
-
-msgid "Are you sure you want to quit Gajim?"
-msgstr "Biztos leállítható a Gajim?"
 
 msgid "Artists"
 msgstr "Alkotók"
@@ -863,6 +867,9 @@ msgstr "%s kitiltása"
 
 msgid "Ban…"
 msgstr "Kitiltás…"
+
+msgid "Before"
+msgstr "Régebbi, mint"
 
 msgid "Behaviour of Application Window"
 msgstr "Az alkalmazásablak viselkedése"
@@ -1465,6 +1472,9 @@ msgstr "Sikertelen mentés"
 msgid "Could not save file to selected directory."
 msgstr "A fájlt nem lehet a kiválasztott könyvtárba menteni."
 
+msgid "Could not update providers list"
+msgstr "Nem sikerült frissíteni a szolgáltatók jegyzékét"
+
 msgid "Country"
 msgstr "Ország"
 
@@ -1858,6 +1868,9 @@ msgstr "Titkosítás szükséges"
 msgid "End call"
 msgstr "Hívás vége"
 
+msgid "Endpoint for retrieving a list of providers for sign up"
+msgstr "Végpont a regisztrációt biztosító szolgáltatók lekéréséhez"
+
 msgid "Enter a password to join this chat"
 msgstr "A társalgó jelszavának megadása"
 
@@ -2150,11 +2163,11 @@ msgid "Free for Chat"
 msgstr "Ráér beszélgetni"
 
 msgid "From"
-msgstr "Ő"
+msgstr "Tőle"
 
 msgctxt "Contact subscription"
 msgid "From"
-msgstr "Ő"
+msgstr "Tőle"
 
 msgid "Full Message View"
 msgstr "Teljes üzenet"
@@ -2700,8 +2713,8 @@ msgstr ""
 "Szóközökkel tagolt felsorolás a helyi kapcsolatok mellett fájlküldésre "
 "használandó további gépekről (címfordítás/porttovábbítás esetén)."
 
-msgid "Listing of Servers"
-msgstr "Kiszolgálók listája"
+msgid "Listing of providers"
+msgstr "Szolgáltatók jegyzéke"
 
 msgid "Live Preview"
 msgstr "Előnézet"
@@ -2918,6 +2931,9 @@ msgstr "Módosítás"
 msgid "Modify Gateway…"
 msgstr "Átjáró módosítása…"
 
+msgid "More infos at providers.xmpp.net"
+msgstr "További információ a providers.xmpp.net webhelyen"
+
 msgid "Move Chat"
 msgstr "Beszélgetés mozgatása"
 
@@ -3119,8 +3135,8 @@ msgstr "Megjegyzések"
 msgid "Note to myself"
 msgstr "Feljegyzés magamnak"
 
-msgid "Note: Anonymous accounts are not possible on all servers"
-msgstr "Figyelem: nem minden kiszolgálón lehet névtelen fiókot létrehozni"
+msgid "Note: Anonymous accounts are not possible with all providers"
+msgstr "Figyelem: nem minden szolgáltatónál lehet névtelen fiókot létrehozni"
 
 msgid "Notes"
 msgstr "Megjegyzések"
@@ -3460,9 +3476,6 @@ msgstr ""
 msgid "Please use these settings with caution!"
 msgstr "Ez a funkció körültekintéssel használandó!"
 
-msgid "Please use yyyy-mm-dd"
-msgstr "Dátumformátum: ÉÉÉÉ-HH-NN"
-
 msgid "Plugin Settings"
 msgstr "Bővítménybeállítások"
 
@@ -3561,6 +3574,16 @@ msgstr "Projektmegbeszélés"
 
 msgid "Protocol"
 msgstr "Protokoll"
+
+#, python-format
+msgid "Provider Category: %s"
+msgstr "A szolgáltató kategóriája: %s"
+
+msgid "Provider Infos"
+msgstr "Információk a szolgáltatóról"
+
+msgid "Providers list is up to date"
+msgstr "A szolgáltatók jegyzéke naprakész"
 
 msgid "Prox_y"
 msgstr "Prox_y"
@@ -4005,6 +4028,12 @@ msgstr "Felfelé görgetve korábbi üzenetek tölthetők be…"
 msgid "Search"
 msgstr "Keresés"
 
+msgid "Search Filters"
+msgstr "Találatok szűrése"
+
+msgid "Search Filters (Active)"
+msgstr "Találatok szűrése (aktív)"
+
 msgid "Search Participants…"
 msgstr "Résztvevők keresése…"
 
@@ -4026,6 +4055,9 @@ msgid ""
 msgstr ""
 "Társalgó keresése globálisan\n"
 "(az Enter gombbal indítható a keresés)"
+
+msgid "Search your conversation"
+msgstr "Beszélgetés keresése"
 
 msgid "Searching"
 msgstr "Keresés"
@@ -4205,6 +4237,9 @@ msgstr "Szolgáltatásátjáró"
 
 msgid "Set configuration directory"
 msgstr "A beállítási könyvtár megadása"
+
+msgid "Set date…"
+msgstr "Dátumválasztás…"
 
 msgid "Set status message"
 msgstr "Állapotüzenet beállítása"
@@ -4397,8 +4432,8 @@ msgstr "Regisztráció"
 msgid "Sign up Anonymously"
 msgstr "Névtelen regisztráció"
 
-msgid "Sign up for a new account on a server of your choice"
-msgstr "Új fiók létrehozása egy tetszőleges kiszolgálón"
+msgid "Sign up for a new account with a provider of your choice"
+msgstr "Új fiók létrehozása egy tetszőleges szolgáltatónál"
 
 msgid "Signup not allowed"
 msgstr "A regisztráció tiltott"
@@ -4597,6 +4632,19 @@ msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 "A csomópontokat is érintő szolgáltatásfelderítés és felhasználók keresése"
 
+msgid ""
+"Sure you want to quit Gajim?\n"
+"You won’t be able to send and receive messages if you do.\n"
+"\n"
+"Alternatively, you can either minimize Gajim’s window, or hide it "
+"completely. Use Gajim’s system tray icon to restore the window."
+msgstr ""
+"Kilépés a Gajimból?\n"
+"Kilépés után nem lehet üzenetet küldeni és fogadni.\n"
+"\n"
+"Kilépés helyett a Gajim ablaka minimalizálható vagy teljesen el is rejthető. "
+"A program tálcaikonjával lehet ablakot ismét megjeleníteni."
+
 msgid "Switch Workspace"
 msgstr "Munkaterület-váltás"
 
@@ -4705,9 +4753,11 @@ msgstr ""
 "Meg kell próbálni újra a letöltést?"
 
 msgid ""
-"The following warnings came up while trying to verify the server's "
+"The following warnings came up while trying to verify the provider's "
 "certificate"
-msgstr "Figyelmeztetések a kiszolgáló tanúsítványának ellenőrzésekor"
+msgstr ""
+"A szolgáltatói tanúsítvány ellenőrzésekor ezek a figyelmeztetések "
+"jelentkeztek"
 
 msgid "The last message was written on a mobile client"
 msgstr "A legutóbbi üzenet mobil eszközről érkezett"
@@ -4744,12 +4794,13 @@ msgid "There are devices for which you have not made a trust decision yet."
 msgstr "Néhány eszközzel kapcsolatban még hiányzik a bizalmi döntés."
 
 msgid ""
-"There are plenty of servers to choose from.\n"
-"Creating an account on one server allows you to communicate with contacts "
-"from other servers as well."
+"There are plenty of providers to choose from.\n"
+"Creating an account with one provider allows you to communicate with "
+"contacts from other providers as well."
 msgstr ""
-"Számos kiszolgáló közül lehet választani.\n"
-"Az egyes kiszolgálók felhasználói egyformán kommunikálhatnak egymással."
+"Számos szolgáltató közül lehet választani.\n"
+"A különböző szolgáltatókhoz regisztrált felhasználók szintén "
+"kommunikálhatnak egymással."
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "A bővítményekhez frissítés érhető el"
@@ -4931,7 +4982,7 @@ msgstr "Beosztás"
 
 msgctxt "Contact subscription"
 msgid "To"
-msgstr "Én"
+msgstr "Neki"
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr ""
@@ -5149,6 +5200,9 @@ msgstr "Frissítések"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "A frissítések telepítése a Gajim következő indulásakor fog megtörténni"
 
+msgid "Updating provider list…"
+msgstr "A szolgáltatók jegyzékének frissítése…"
+
 msgctxt "Noun"
 msgid "Upload"
 msgstr "Fájlfeltöltés"
@@ -5199,17 +5253,6 @@ msgstr "A megadott nevű profil használata"
 msgid "Use file transfer proxies"
 msgstr "Fájlküldő proxy használata"
 
-msgid ""
-"Use filters to narrow down your search:\n"
-"from:username\n"
-"before:yyyy-mm-dd\n"
-"after:yyyy-mm-dd"
-msgstr ""
-"Szűrőkifejezések is alkalmazhatók:\n"
-"from:felhasználónév\n"
-"before:ÉÉÉÉ-HH-NN\n"
-"after:ÉÉÉÉ-HH-NN"
-
 msgid "Use proxy auth_entication"
 msgstr "Hit_elesítés szükséges"
 
@@ -5228,6 +5271,9 @@ msgstr "Felhasználói felület"
 
 msgid "User Interface Font Size"
 msgstr "A felhasználói felület betűmérete"
+
+msgid "User name…"
+msgstr "Felhasználónév…"
 
 msgid "Users"
 msgstr "Felhasználók"
@@ -5274,8 +5320,8 @@ msgstr "A videóhívás Windows rendszeren nem lehetséges"
 msgid "Video test"
 msgstr "Videopróba"
 
-msgid "Visit Server's Website"
-msgstr "A kiszolgáló webhelyének meglátogatása"
+msgid "Visit Provider's Website"
+msgstr "A szolgáltató webhelyének meglátogatása"
 
 msgid "Visit Website"
 msgstr "Webhely megnyitása"
@@ -5335,8 +5381,8 @@ msgstr ""
 "Letöltés előtt a tanúsítvány érvényességének ellenőrzése (a tiltása "
 "veszélyes lehet)"
 
-msgid "Which server should I choose?"
-msgstr "Melyik kiszolgálót érdemes választani?"
+msgid "Which provider should I choose?"
+msgstr "Melyik szolgáltatót érdemes választani?"
 
 msgid "Why do you want to moderate this message?"
 msgstr "Mi az üzenet moderálásának az oka?"
@@ -5415,9 +5461,6 @@ msgstr ""
 "A fiók (%(account)s) nem biztonságos módon fog a kiszolgálóhoz (%(server)s) "
 "kapcsolódni. Így a beszélgetések nem lesznek titkosítva. Az ilyen "
 "kapcsolódás egyáltalán nem javasolt."
-
-msgid "You are about to quit Gajim"
-msgstr "Kilépés a programból"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
@@ -5704,9 +5747,6 @@ msgstr "Fiók _tiltása"
 msgid "_Do not ask me again"
 msgstr "_Ne kérdezze újra"
 
-msgid "_Don’t ask again"
-msgstr "_Ne kérdezze újra"
-
 msgid "_Download"
 msgstr "_Letöltés"
 
@@ -5728,6 +5768,9 @@ msgstr "_Ráér beszélgetni"
 
 msgid "_Help"
 msgstr "_Súgó"
+
+msgid "_Hide (Tray Icon)"
+msgstr "_Elrejtés (tálcaikon)"
 
 msgid "_Host"
 msgstr "_Gép"
@@ -5755,6 +5798,9 @@ msgstr "Fiókok kezelése…"
 
 msgid "_Manage Account…"
 msgstr "Fiók kezelése…"
+
+msgid "_Minimize"
+msgstr "_Minimalizálás"
 
 msgid "_Moderate"
 msgstr "_Moderálás"
@@ -5787,8 +5833,8 @@ msgstr "M_appa megnyitása"
 msgid "_Overwrite"
 msgstr "_Felülírás"
 
-msgid "_Please choose a server"
-msgstr "_Kiszolgáló választása"
+msgid "_Please choose a provider"
+msgstr "_Szolgáltató kiválasztása"
 
 msgid "_Port"
 msgstr "_Port"
@@ -5807,6 +5853,9 @@ msgstr "_Kilépés"
 
 msgid "_Re-Login"
 msgstr "Ki- és _bejelentkezés"
+
+msgid "_Remember my decision"
+msgstr "_Választás megjegyzése"
 
 msgid "_Remove"
 msgstr "_Eltávolítás"
@@ -6321,6 +6370,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "?user status:_Available"
 #~ msgstr "_Elérhető"
 
+#~ msgid "Are you sure you want to quit Gajim?"
+#~ msgstr "Biztos leállítható a Gajim?"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Beszélgetés: hivatkozás színe"
 
@@ -6367,6 +6419,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Szervezeti egység (OU): "
 
+#~ msgid "Please use yyyy-mm-dd"
+#~ msgstr "Dátumformátum: ÉÉÉÉ-HH-NN"
+
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Visszavonás…"
@@ -6388,8 +6443,25 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Topic"
 #~ msgstr "Téma"
 
+#~ msgid ""
+#~ "Use filters to narrow down your search:\n"
+#~ "from:\"username\" search term\n"
+#~ "before:\"yyyy-mm-dd\" search term\n"
+#~ "after:\"yyyy-mm-dd\" search term"
+#~ msgstr ""
+#~ "Szűrőkifejezések is alkalmazhatók:\n"
+#~ "from:\"felhasználónév\" keresési kifejezés\n"
+#~ "before:\"ÉÉÉÉ-HH-NN\" keresési kifejezés\n"
+#~ "after:\"ÉÉÉÉ-HH-NN\" keresési kifejezés"
+
+#~ msgid "You are about to quit Gajim"
+#~ msgstr "Kilépés a programból"
+
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Nem sikerült feldolgozni az ablakba ejtett fájlt: %s"
+
+#~ msgid "_Don’t ask again"
+#~ msgstr "_Ne kérdezze újra"
 
 #~ msgid "_Login"
 #~ msgstr "_Bejelentkezés"
