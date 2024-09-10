@@ -168,7 +168,7 @@ class JingleFileTransfer(JingleContent):
             timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
             id=str(uuid.uuid4()),
-            filetransfer=[ft_data],
+            filetransfers=[ft_data],
         )
 
         app.storage.archive.insert_object(message_data)
