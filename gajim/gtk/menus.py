@@ -190,7 +190,7 @@ def get_account_menu(account: str) -> GajimMenu:
         (_('Archiving Preferences'), f'app.{account}-archive', account),
         (_('Blocking List'), f'app.{account}-blocking', account),
         (_('PEP Configuration'), f'app.{account}-pep-config', account),
-        (_('Synchronise History…'), f'app.{account}-sync-history', account),
+        (_('Synchronize History…'), f'app.{account}-sync-history', account),
     ]
 
     if app.settings.get('developer_modus'):

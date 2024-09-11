@@ -66,7 +66,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         renderer1.set_property('activatable', True)
         renderer1.connect('toggled', self._on_sync_toggled)
         self._ui.contacts_treeview.insert_column_with_attributes(
-            -1, _('Synchronise'), renderer1, active=0)
+            -1, _('Synchronize'), renderer1, active=0)
         renderer2 = Gtk.CellRendererText()
         self._ui.contacts_treeview.insert_column_with_attributes(
             -1, _('Name'), renderer2, text=1)

@@ -90,7 +90,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
 
         if mam_start == ArchiveState.ALL:
             success_page.set_text(
-                _('Gajim is fully synchronised with the archive.'))
+                _('Gajim is fully synchronized with the archive.'))
             self.show_page('success')
 
         self.show_all()
@@ -210,7 +210,7 @@ class SelectTime(Page):
         heading.set_text(_('Synchronize Chat History'))
 
         label = Gtk.Label(
-            label=_('How far back should the chat history be synchronised?'))
+            label=_('How far back should the chat history be synchronized?'))
         label.set_halign(Gtk.Align.CENTER)
         label.set_line_wrap(True)
         label.set_max_width_chars(40)

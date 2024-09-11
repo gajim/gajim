@@ -713,7 +713,7 @@ class GeneralPage(GenericSettingPage):
                     _('Global Status'),
                     SettingType.ACCOUNT_CONFIG,
                     'sync_with_global_status',
-                    desc=_('Synchronise the status of all accounts')),
+                    desc=_('Synchronize the status of all accounts')),
 
             Setting(SettingKind.SWITCH,
                     _('Remember Last Status'),
@@ -1052,11 +1052,10 @@ class AdvancedPage(GenericSettingPage):
                     desc=_('Show labels describing confidentiality of '
                            'messages, if the server supports XEP-0258')),
             Setting(SettingKind.SWITCH,
-                    _('Synchronise joined group chats'),
+                    _('Synchronize joined group chats'),
                     SettingType.ACCOUNT_CONFIG,
                     'autojoin_sync',
-                    desc=_(
-                        'Synchronize joined group chats with other devices.')),
+                    desc=_('Synchronize joined group chats with other devices.')),
         ]
         GenericSettingPage.__init__(self, account, settings)
 

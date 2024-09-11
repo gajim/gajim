@@ -16,7 +16,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select the account with which you want to synchronise</property>
+            <property name="label" translatable="yes">Select the account with which you want to synchronize</property>
           </object>
           <packing>
             <property name="expand">False</property>
@@ -112,7 +112,7 @@
           <object class="GtkLabel">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select the contacts you want to synchronise</property>
+            <property name="label" translatable="yes">Select the contacts you want to synchronize</property>
           </object>
           <packing>
             <property name="expand">False</property>
