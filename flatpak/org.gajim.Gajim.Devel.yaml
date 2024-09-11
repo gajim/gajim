@@ -7,7 +7,6 @@ tags:
   - devel
   - development
   - nightly
-rename-icon: org.gajim.Gajim
 rename-desktop-file: org.gajim.Gajim.desktop
 rename-appdata-file: org.gajim.Gajim.metainfo.xml
 finish-args:
