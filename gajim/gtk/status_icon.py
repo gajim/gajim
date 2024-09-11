@@ -295,9 +295,8 @@ class AppIndicatorIcon(GtkMenuBackend):
         assert AppIndicator is not None
         self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
-            app.app.get_application_id() or 'org.gajim.Gajim',
-            AppIndicator.IndicatorCategory.COMMUNICATIONS
-        )
+            'org.gajim.Gajim',
+            AppIndicator.IndicatorCategory.COMMUNICATIONS)
         if not app.is_flatpak():
             self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
         self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
@@ -322,10 +321,7 @@ class AppIndicatorIcon(GtkMenuBackend):
             return
 
         if app.is_flatpak():
-            self._status_icon.set_icon_full(
-                app.app.get_application_id() or 'org.gajim.Gajim',
-                'online'
-            )
+            self._status_icon.set_icon_full('org.gajim.Gajim', 'online')
             return
 
         show = get_global_show()
