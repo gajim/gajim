@@ -169,9 +169,10 @@ class Bookmarks(BaseModule):
         # If another client creates a MUC, the MUC is locked until the
         # configuration is finished. Give the user some time to finish
         # the configuration.
-        timeout_id = GLib.timeout_add_seconds(
-            10, self._join_with_timeout, bookmarks)
-        self._join_timeouts.append(timeout_id)
+        if app.settings.get_account_setting(self._account, 'autojoin_sync'):
+            timeout_id = GLib.timeout_add_seconds(
+                10, self._join_with_timeout, bookmarks)
+            self._join_timeouts.append(timeout_id)
 
         # TODO: leave mucs
         # leave = [jid for jid, autojoin in changed if not autojoin]
@@ -217,7 +218,8 @@ class Bookmarks(BaseModule):
 
         self._cleanup_bookmarks(bookmarks)
         self._bookmarks = self._convert_to_dict(bookmarks)
-        self.auto_join_bookmarks(self.bookmarks)
+        if app.settings.get_account_setting(self._account, 'autojoin_sync'):
+            self.auto_join_bookmarks(self.bookmarks)
         app.ged.raise_event(
             BookmarksReceived(account=self._account))
 
@@ -269,6 +271,8 @@ class Bookmarks(BaseModule):
         self.store_bookmarks([new_bookmark])
 
     def add_or_modify(self, jid: JID, **kwargs: Any) -> None:
+        if not app.settings.get_account_setting(self._account, 'autojoin_sync'):
+            kwargs.pop('autojoin', None)
         bookmark = self._bookmarks.get(jid)
         if bookmark is not None:
             self.modify(jid, **kwargs)

@@ -206,6 +206,9 @@ class Client(Observable, ClientModules):
         self._set_state(ClientState.AVAILABLE)
         app.ged.raise_event(AccountConnected(account=self._account))
 
+        if not app.settings.get_account_setting(self._account, 'autojoin_sync'):
+            self.join_mucs()
+
     def disconnect(self,
                    gracefully: bool,
                    reconnect: bool,
@@ -638,6 +641,17 @@ class Client(Observable, ClientModules):
                                    _param: GObject.ParamSpec) -> None:
         active = application.get_property('screensaver-active')
         Monitor.set_extended_away(active)
+
+    def join_mucs(self) -> None:
+        '''Only used when autojoin_sync is False'''
+        self._log.info('Joining all MUCs in all workspaces')
+        for workspace_id in app.settings.get_workspaces():
+            for chat in app.settings.get_workspace_setting(
+                    workspace_id, 'chats'):
+                if chat['account'] != self._account:
+                    continue
+                if chat['type'] == 'groupchat':
+                    self.get_module('MUC').join(chat['jid'])
 
     def cleanup(self) -> None:
         self.disconnect_signals()

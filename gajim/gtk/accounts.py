@@ -1050,7 +1050,13 @@ class AdvancedPage(GenericSettingPage):
                     SettingType.ACCOUNT_CONFIG,
                     'enable_security_labels',
                     desc=_('Show labels describing confidentiality of '
-                           'messages, if the server supports XEP-0258'))
+                           'messages, if the server supports XEP-0258')),
+            Setting(SettingKind.SWITCH,
+                    _('Synchronise joined group chats'),
+                    SettingType.ACCOUNT_CONFIG,
+                    'autojoin_sync',
+                    desc=_(
+                        'Synchronize joined group chats with other devices.')),
         ]
         GenericSettingPage.__init__(self, account, settings)
 
