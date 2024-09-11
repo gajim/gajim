@@ -97,7 +97,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         flags = (Gio.ApplicationFlags.HANDLES_COMMAND_LINE |
                  Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID)
         Gtk.Application.__init__(self,
-                                 application_id='org.gajim.Gajim',
+                                 application_id=app.get_default_app_id(),
                                  flags=flags)
 
         # required to track screensaver state
@@ -193,7 +193,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.interface = None
 
-        GLib.set_prgname('org.gajim.Gajim')
+        GLib.set_prgname(app.get_default_app_id())
         if GLib.get_application_name() != 'Gajim':
             GLib.set_application_name('Gajim')
 

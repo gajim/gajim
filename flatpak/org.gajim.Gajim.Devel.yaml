@@ -2,11 +2,12 @@ app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
 runtime-version: '46'
 sdk: org.gnome.Sdk
-command: gajim-devel
+command: gajim
 tags:
   - devel
   - development
   - nightly
+rename-icon: org.gajim.Gajim
 rename-desktop-file: org.gajim.Gajim.desktop
 rename-appdata-file: org.gajim.Gajim.metainfo.xml
 finish-args:
@@ -404,10 +405,7 @@ modules:
       - pip3 install --no-build-isolation .
       - ./pep517build/build_metadata.py
       - ./pep517build/install_metadata.py dist/metadata --prefix=/app
-      - touch /app/share/run-as-flatpak
       - cp -t ${FLATPAK_DEST} app-overrides.json
-      - echo -e '#!/bin/sh\ngajim --gapplication-app-id=org.gajim.Gajim.Devel "$@"' > /app/bin/gajim-devel
-      - chmod 755 /app/bin/gajim-devel
     sources:
       - type: git
         url: https://dev.gajim.org/gajim/gajim.git
@@ -415,9 +413,7 @@ modules:
         path: app-overrides.json
       - type: shell
         commands:
-          - sed -i "s+<id>org.gajim.Gajim</id>+<id>org.gajim.Gajim.Devel</id>+" data/org.gajim.Gajim.metainfo.xml.in
-          - sed -i "s+<name>Gajim</name>+<name>Gajim (Nightly)</name>+" data/org.gajim.Gajim.metainfo.xml.in
-          - sed -i "s+Exec=gajim+Exec=gajim-devel+" data/org.gajim.Gajim.desktop.in
+          - ./flatpak/prepare_build.py --nightly
           - mv gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim{.Devel,}.svg
     post-install:
       - install -d /app/plugins

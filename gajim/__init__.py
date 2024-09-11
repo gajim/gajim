@@ -3,7 +3,8 @@ from pathlib import Path
 
 __version__ = '1.9.3'
 
-IS_FLATPAK = Path('/app/share/run-as-flatpak').exists()
+IS_FLATPAK = False
+IS_FLATPAK_NIGHTLY = False
 
 portable_path = Path(sys.executable).parent / 'is_portable'
 IS_PORTABLE = portable_path.exists()

@@ -151,12 +151,23 @@ def is_flatpak() -> bool:
     return gajim.IS_FLATPAK
 
 
+def is_flatpak_nightly() -> bool:
+    return gajim.IS_FLATPAK_NIGHTLY
+
+
 def is_portable() -> bool:
     return gajim.IS_PORTABLE
 
 
 def is_ms_store() -> bool:
     return gajim.IS_MS_STORE
+
+
+def get_default_app_id() -> str:
+    app_id = 'org.gajim.Gajim'
+    if is_flatpak_nightly():
+        return f'{app_id}.Devel'
+    return app_id
 
 
 def is_display(display: Display) -> bool:
