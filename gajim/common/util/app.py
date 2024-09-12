@@ -12,6 +12,8 @@ import gajim
 def get_extended_app_version() -> str:
     if gajim.IS_FLATPAK:
         package = 'Flatpak'
+    if gajim.IS_FLATPAK_NIGHTLY:
+        package = 'Flatpak Nightly'
     elif gajim.IS_PORTABLE:
         package = 'Windows Portable'
     elif gajim.IS_MS_STORE:
