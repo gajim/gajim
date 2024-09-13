@@ -2,8 +2,7 @@
 requires = [
   "setuptools >= 65.0.0",
 ]
-build-backend = "backend"
-backend-path = ["pep517build"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "gajim"
@@ -326,7 +325,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]
 "test/database/*" = ["E501"]
-"pep517build/*" = ["S603", "S607"]
+"build.py" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
 "win/*" = ["S603", "S607"]
 "scripts/*" = ["S603", "S607"]

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2017-2024 Gajim Team -->
 <component type="desktop-application">
-  <id>org.gajim.Gajim</id>
+  <id>@APP_ID@</id>
   <metadata_license>CC-BY-SA-3.0</metadata_license>
   <project_license>GPL-3.0-only</project_license>
-  <name>Gajim</name>
+  <name>@APP_NAME@</name>
   <summary>Fully-featured XMPP chat client</summary>
   <description>
     <p>Gajim aims to be an easy to use and fully-featured XMPP client.
@@ -59,7 +59,7 @@
       <caption>Plugin manager</caption>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">org.gajim.Gajim.desktop</launchable>
+  <launchable type="desktop-id">@APP_ID@.desktop</launchable>
   <developer id="gajim.org">
     <name>Gajim Team</name>
   </developer>

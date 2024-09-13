@@ -2,7 +2,6 @@ syntax: glob
 *.orig
 *.swp
 *.gmo
-*.in
 *.m4
 *.pyc
 *.pyo

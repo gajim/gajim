@@ -397,9 +397,8 @@ modules:
   - name: gajim
     buildsystem: simple
     build-commands:
+      - ./build.py --dist=flatpak --install --prefix=/app
       - pip3 install --no-build-isolation .
-      - ./pep517build/build_metadata.py
-      - ./pep517build/install_metadata.py dist/metadata --prefix=/app
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
       - type: git
@@ -407,7 +406,5 @@ modules:
         tag: 1.9.3
       - type: file
         path: app-overrides.json
-        commands:
-          - ./flatpak/prepare_build.py
     post-install:
       - install -d /app/plugins

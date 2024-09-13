@@ -1,10 +1,9 @@
 import sys
 from pathlib import Path
 
-__version__ = '1.9.3'
+from .config import *  # noqa: F403
 
-IS_FLATPAK = False
-IS_FLATPAK_NIGHTLY = False
+__version__ = '1.9.3'
 
 portable_path = Path(sys.executable).parent / 'is_portable'
 IS_PORTABLE = portable_path.exists()

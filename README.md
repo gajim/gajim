@@ -65,11 +65,23 @@ The build frontend takes care of installing all python build requirements. Bewar
 
 ## Building
 
-### Building the metadata files (Unix only)
+### Building the metadata files and translation
 
 ```bash
-./pep517build/build_metadata.py -o dist/metadata
+$ ./build.py -h
+
+usage: build.py [-h] [--dist {flatpak,flatpak-nightly}] [--install] [--prefix PREFIX]
+
+options:
+  -h, --help            show this help message and exit
+  --dist {flatpak,flatpak-nightly}
+                        Distribution
+  --install             Install metadata files
+  --prefix PREFIX       The path prefix for installation (e.g. "/usr")
+
 ```
+
+Afterwards metadata files can be found in the `dist` folder. 
 
 ### Building the wheel
 
@@ -103,9 +115,7 @@ pip install dist/name_of_wheel.whl
 
 ### Installing the metadata files (Unix only)
 
-```bash
-./pep517build/install_metadata.py dist/metadata --prefix=/usr
-```
+Use the build.py `--install` switch to install the metadata files into standard locations
 
 ## Tests
 

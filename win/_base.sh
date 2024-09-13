@@ -145,6 +145,7 @@ function install_gajim {
 
     cd ..
 
+    build_python build.py
     build_pip install .
 
     QL_VERSION=$(MSYSTEM= build_python -c \

@@ -1,13 +1,12 @@
 [Desktop Entry]
 Categories=Network;InstantMessaging;GTK;Chat;
-Name=Gajim
+Name=@APP_NAME@
 GenericName=XMPP Chat Client
 Comment=A fully-featured XMPP chat client
 #Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 Keywords=chat;messaging;im;xmpp;voip;
 Exec=gajim %u
-#Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=org.gajim.Gajim
+Icon=@APP_ICON_NAME@
 StartupNotify=false
 SingleMainWindow=true
 X-GNOME-UsesNotifications=true
@@ -19,5 +18,4 @@ Actions=StartChat;
 [Desktop Action StartChat]
 Exec=gajim --start-chat
 Name=Start a new chat
-#Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=org.gajim.Gajim
+Icon=@APP_ICON_NAME@
