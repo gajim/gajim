@@ -314,7 +314,7 @@ class WindowsToastNotification(NotificationBackend):
             / 'hicolor'
             / '96x96'
             / 'apps'
-            / 'org.gajim.Gajim.png'
+            / 'gajim.png'
         )
         winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
         with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, key_path) as master_key:

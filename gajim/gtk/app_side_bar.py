@@ -53,7 +53,7 @@ class AppRow(Gtk.ListBoxRow):
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
 
-        surface = load_icon_surface('org.gajim.Gajim', 32)
+        surface = load_icon_surface('gajim', 32)
         image = Gtk.Image.new_from_surface(surface)
 
         selection_bar = Gtk.Box()

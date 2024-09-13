@@ -906,7 +906,7 @@ class ChatPlaceholderBox(Gtk.Box):
                          spacing=18)
         self.set_valign(Gtk.Align.CENTER)
         image = Gtk.Image.new_from_icon_name(
-            'org.gajim.Gajim-symbolic', Gtk.IconSize.from_name('100'))
+            'gajim-symbolic', Gtk.IconSize.from_name('100'))
         image.set_opacity(0.2)
         self.add(image)
 

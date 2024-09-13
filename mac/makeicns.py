@@ -4,7 +4,7 @@ import shutil
 from argparse import ArgumentParser
 from subprocess import run
 
-ICON_SVG = 'gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg'
+ICON_SVG = 'gajim/data/icons/hicolor/scalable/apps/gajim.svg'
 
 
 def create_icns(icon_path: str) -> None:

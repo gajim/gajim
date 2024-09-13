@@ -611,7 +611,7 @@ class AddNewAccountPage(Gtk.Box):
         self.set_hexpand(True)
         self.set_margin_top(24)
         image = Gtk.Image.new_from_icon_name(
-            'org.gajim.Gajim-symbolic', Gtk.IconSize.from_name('100'))
+            'gajim-symbolic', Gtk.IconSize.from_name('100'))
         image.set_opacity(0.2)
         self.add(image)
 

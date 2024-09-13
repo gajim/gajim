@@ -61,7 +61,7 @@ class AboutDialog(Gtk.AboutDialog):
         self.add_credit_section(_('Thanks'), thanks)
 
         self.set_translator_credits(_('translator-credits'))
-        self.set_logo_icon_name('org.gajim.Gajim')
+        self.set_logo_icon_name('gajim')
 
         self.connect('activate-link', self._on_activate_link)
         self.connect('response', self._on_response)

@@ -33,8 +33,8 @@ META_FILES = [
 ]
 
 ICONS = [
-    Path('gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim.svg'),
-    Path('gajim/data/icons/hicolor/scalable/apps/org.gajim.Gajim-symbolic.svg'),
+    Path('gajim/data/icons/hicolor/scalable/apps/gajim.svg'),
+    Path('gajim/data/icons/hicolor/scalable/apps/gajim-symbolic.svg'),
 ]
 
 INSTALL_FILES = {
@@ -105,7 +105,8 @@ def build_meta() -> None:
 
 def build_app_icons() -> None:
     for file_path in ICONS:
-        out_path = METADATA / file_path.name
+        icon_name = file_path.name.replace('gajim', 'org.gajim.Gajim')
+        out_path = METADATA / icon_name
 
         logging.info('Copy %s >> %s', file_path, out_path)
         shutil.copy2(file_path, out_path)
