@@ -402,7 +402,8 @@ modules:
   - name: gajim
     buildsystem: simple
     build-commands:
-      - ./build.py --dist=flatpak-nightly --install --prefix=/app
+      - ./build.py --dist=flatpak-nightly
+      - ./build.py --install --prefix=/app
       - pip3 install --no-build-isolation .
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:

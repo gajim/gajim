@@ -7,6 +7,7 @@ import gzip
 import logging
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 logging.basicConfig(level='INFO', format='%(message)s')
@@ -159,6 +160,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
     METADATA.mkdir(parents=True, exist_ok=True)
 
+    if args.install:
+        install(prefix=args.prefix)
+        sys.exit()
+
     if args.dist == 'flatpak':
         configure_flatpak()
     elif args.dist == 'flatpak-nightly':
@@ -172,6 +177,3 @@ if __name__ == '__main__':
     build_meta()
     build_app_icons()
     build_translations()
-
-    if args.install:
-        install(prefix=args.prefix)

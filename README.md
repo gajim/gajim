@@ -81,7 +81,7 @@ options:
 
 ```
 
-Afterwards metadata files can be found in the `dist` folder. 
+Afterwards metadata files can be found in `dist/metadata` folder. 
 
 ### Building the wheel
 
