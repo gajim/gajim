@@ -609,7 +609,7 @@ Gajim 1.5.4 (04 Dec 2022)
 
   * DataFormWidget: Set min width on right box (#11222)
   * MUC: Add method for aborting join
-  * Message selection: Imrpove wording for deselecting messages
+  * Message selection: Improve wording for deselecting messages
   * Message selection: Improve styling
   * Features: Add entry for Audio Preview
   * Styling: Introduce URI scheme whitelisting (#11266)
@@ -820,7 +820,7 @@ Gajim 1.5.0 (19 Sep 2022)
   * Preview: Show left click action tooltip on icon (#11138)
   * ACE: Highlight non-default values (#11120)
   * XMLConsole: Use SourceView for XML input (#11121)
-  * Migration: Make archive migation more resilient
+  * Migration: Make archive migration more resilient
   * Workspaces: Move chats when removing workspace (#11098)
   * ChatList: Always show when switching workspace (#11108)
   * MessageActionsBox: Disable encryption button if MUC is public (#10959)

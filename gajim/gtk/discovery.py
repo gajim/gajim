@@ -2043,7 +2043,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
     def _on_subscribe_button_clicked(self, widget):
         '''
-        Called when 'subscribe' button is pressed. Send subscribtion request
+        Called when 'subscribe' button is pressed. Send subscription request
         '''
         model, iter_ = \
             self.window.services_treeview.get_selection().get_selected()

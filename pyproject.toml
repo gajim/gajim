@@ -82,7 +82,7 @@ skip-string-normalization = true
 target-version = ["py310", "py311", "py312"]
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,dist,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
+skip = "*__pycache__*,_build_root,build,dist,shared-modules,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
 ignore-words-list = "claus,pres,ser,trough"
 
 [tool.pyright]
