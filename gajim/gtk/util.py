@@ -146,16 +146,6 @@ def load_icon_pixbuf(icon_name: str,
     return icon
 
 
-def get_app_icon_list(scale_widget: Gtk.Widget) -> list[GdkPixbuf.Pixbuf]:
-    scale = scale_widget.get_scale_factor()
-    pixbufs: list[GdkPixbuf.Pixbuf] = []
-    for size in (16, 32, 48, 64, 128):
-        pixbuf = load_icon_pixbuf('org.gajim.Gajim', size=size, scale=scale)
-        if pixbuf is not None:
-            pixbufs.append(pixbuf)
-    return pixbufs
-
-
 def get_icon_name(name: str,
                   transport: str | None = None) -> str:
     if transport is not None:
