@@ -171,8 +171,10 @@ class Server:
 
 class GajimRemote(Server):
     def __init__(self) -> None:
+        application_id = app.app.get_application_id()
+        assert application_id is not None
         self._con = Gio.bus_get_sync(Gio.BusType.SESSION, None)
-        Gio.bus_own_name_on_connection(self._con, 'org.gajim.Gajim',
+        Gio.bus_own_name_on_connection(self._con, application_id,
                                        Gio.BusNameOwnerFlags.NONE, None, None)
         super().__init__(self._con, '/org/gajim/dbus/RemoteObject')
 

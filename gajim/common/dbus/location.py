@@ -97,7 +97,7 @@ class LocationListener:
             self._on_location_update(self.simple)
 
     def get_data(self) -> None:
-        Geoclue.Simple.new('org.gajim.Gajim',
+        Geoclue.Simple.new(app.get_default_app_id(),
                            Geoclue.AccuracyLevel.EXACT,
                            None,
                            self._on_simple_ready)

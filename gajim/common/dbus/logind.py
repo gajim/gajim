@@ -82,7 +82,7 @@ class LogindListener:
                 'Inhibit',
                 GLib.Variant('(ssss)', (
                     'shutdown',
-                    'org.gajim.Gajim',
+                    app.get_default_app_id(),
                     _('Shutting down Gajim'),
                     'delay'  # Inhibitor will delay but not block shutdown
                 )),
