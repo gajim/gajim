@@ -291,20 +291,28 @@ class GtkStatusIcon(GtkMenuBackend):
 class AppIndicatorIcon(GtkMenuBackend):
     def __init__(self) -> None:
         GtkMenuBackend.__init__(self)
-
         assert AppIndicator is not None
+
+        icon_name, _ = self._get_icon_details()
         self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
-            'org.gajim.Gajim',
+            icon_name,
             AppIndicator.IndicatorCategory.COMMUNICATIONS)
-        if not app.is_flatpak():
-            self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
+
+        self._status_icon.set_icon_theme_path(str(configpaths.get('ICONS')))
         self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
         self._status_icon.set_menu(self._ui.systray_context_menu)
         self._status_icon.set_secondary_activate_target(
             self._ui.toggle_window_menuitem)
 
         self.update_state(init=True)
+
+    def _get_icon_details(self) -> tuple[str, str]:
+        if app.is_flatpak():
+            return app.get_default_app_id(), 'online'
+
+        show = get_global_show()
+        return get_icon_name(show), show
 
     def update_state(self, init: bool = False) -> None:
         if not app.settings.get('show_trayicon'):
@@ -320,12 +328,7 @@ class AppIndicatorIcon(GtkMenuBackend):
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             return
 
-        if app.is_flatpak():
-            self._status_icon.set_icon_full('org.gajim.Gajim', 'online')
-            return
-
-        show = get_global_show()
-        icon_name = get_icon_name(show)
+        icon_name, show = self._get_icon_details()
         self._status_icon.set_icon_full(icon_name, show)
 
     def is_visible(self) -> bool:
