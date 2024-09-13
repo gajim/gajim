@@ -96,9 +96,11 @@ reportMissingModuleSource = "none"
 
 exclude = [
   "**/__pycache__",
+  ".flatpak-builder",
   ".git",
   ".venv",
   "build",
+  "debian_build",
   "gajim/__init__.py",
   "gajim/common/app.py",
   "gajim/common/client.py",
