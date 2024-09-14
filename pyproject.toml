@@ -101,6 +101,7 @@ exclude = [
   ".venv",
   "build",
   "debian_build",
+  "dist",
   "gajim/__init__.py",
   "gajim/common/app.py",
   "gajim/common/client.py",
