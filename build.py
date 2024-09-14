@@ -144,12 +144,10 @@ def install(*, prefix: Path) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        '--dist', choices=['flatpak', 'flatpak-nightly'], help='Distribution'
+        '--dist', choices=['flatpak', 'flatpak-nightly', 'win'], help='Distribution'
     )
 
-    parser.add_argument(
-        '--install', action='store_true', help='Install metadata files'
-    )
+    parser.add_argument('--install', action='store_true', help='Install metadata files')
 
     parser.add_argument(
         '--prefix',
@@ -159,10 +157,14 @@ if __name__ == '__main__':
     )
 
     args = parser.parse_args()
-    METADATA.mkdir(parents=True, exist_ok=True)
 
     if args.install:
         install(prefix=args.prefix)
+        sys.exit()
+
+    build_translations()
+
+    if args.dist == 'win':
         sys.exit()
 
     if args.dist == 'flatpak':
@@ -174,7 +176,8 @@ if __name__ == '__main__':
     configure_file(METAINFO, CONFIG_VALUES)
     configure_file(DESKTOP, CONFIG_VALUES)
 
+    METADATA.mkdir(parents=True, exist_ok=True)
+
     build_man()
     build_meta()
     build_app_icons()
-    build_translations()
