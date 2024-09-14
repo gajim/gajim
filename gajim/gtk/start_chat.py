@@ -49,7 +49,7 @@ from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import GroupBadge
 from gajim.gtk.util import IdleBadge
 
@@ -874,7 +874,7 @@ class ContactRow(Gtk.ListBoxRow):
         if self.is_new:
             icon_name = 'avatar-default'
             if self.groupchat:
-                icon_name = get_icon_name('muc-inactive')
+                icon_name = get_status_icon_name('muc-inactive')
             return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
 
         scale = self.get_scale_factor()

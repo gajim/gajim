@@ -146,12 +146,11 @@ def load_icon_pixbuf(icon_name: str,
     return icon
 
 
-def get_icon_name(name: str,
-                  transport: str | None = None) -> str:
-    if transport is not None:
-        return f'{transport}-{name}'
-
-    return f'dcraven-{name}'
+def get_status_icon_name(name: str) -> str:
+    prefix = 'gajim'
+    if app.is_flatpak():
+        prefix = app.get_default_app_id()
+    return f'{prefix}-status-{name}'
 
 
 def load_user_iconsets() -> None:

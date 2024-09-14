@@ -33,7 +33,7 @@ from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import get_icon_name
+from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import open_window
 
 if app.is_installed('APPINDICATOR'):
@@ -225,14 +225,12 @@ class GtkStatusIcon(GtkMenuBackend):
         self._status_icon.set_visible(True)
 
         if not init and app.window.get_total_unread_count():
-            icon_name = 'dcraven-message-new'
-            if app.is_flatpak():
-                icon_name = 'mail-message-new'
+            icon_name = get_status_icon_name('message-new')
             self._status_icon.set_from_icon_name(icon_name)
             return
 
         show = get_global_show()
-        icon_name = get_icon_name(show)
+        icon_name = get_status_icon_name(show)
         self._status_icon.set_from_icon_name(icon_name)
 
     def is_visible(self) -> bool:
@@ -293,10 +291,9 @@ class AppIndicatorIcon(GtkMenuBackend):
         GtkMenuBackend.__init__(self)
         assert AppIndicator is not None
 
-        icon_name, _ = self._get_icon_details()
         self._status_icon = AppIndicator.Indicator.new(
             'Gajim',
-            icon_name,
+            get_status_icon_name('offline'),
             AppIndicator.IndicatorCategory.COMMUNICATIONS)
 
         if not app.is_flatpak():
@@ -311,13 +308,6 @@ class AppIndicatorIcon(GtkMenuBackend):
 
         self.update_state(init=True)
 
-    def _get_icon_details(self) -> tuple[str, str]:
-        if app.is_flatpak():
-            return app.get_default_app_id(), 'online'
-
-        show = get_global_show()
-        return get_icon_name(show), show
-
     def update_state(self, init: bool = False) -> None:
         if not app.settings.get('show_trayicon'):
             self._status_icon.set_status(AppIndicator.IndicatorStatus.PASSIVE)
@@ -326,13 +316,12 @@ class AppIndicatorIcon(GtkMenuBackend):
         self._status_icon.set_status(AppIndicator.IndicatorStatus.ACTIVE)
 
         if not init and app.window.get_total_unread_count():
-            icon_name = 'dcraven-message-new'
-            if app.is_flatpak():
-                icon_name = 'mail-message-new'
+            icon_name = get_status_icon_name('message-new')
             self._status_icon.set_icon_full(icon_name, _('Pending Event'))
             return
 
-        icon_name, show = self._get_icon_details()
+        show = get_global_show()
+        icon_name = get_status_icon_name(show)
         self._status_icon.set_icon_full(icon_name, show)
 
     def is_visible(self) -> bool:
