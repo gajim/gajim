@@ -816,6 +816,13 @@ class EncryptionInfo(ApplicationEvent):
 
 
 @dataclass
+class DBError(ApplicationEvent):
+    name: str = field(init=False, default='db-error')
+    database_name: str
+    error: str
+
+
+@dataclass
 class DBMigration(ApplicationEvent):
     name: str = field(init=False, default='db-migration')
 

@@ -31,6 +31,7 @@ if TYPE_CHECKING:
     from gajim.gtk.certificate_dialog import CertificateDialog
     from gajim.gtk.change_password import ChangePassword
     from gajim.gtk.contact_info import ContactInfo
+    from gajim.gtk.db_error import DBErrorWindow
     from gajim.gtk.db_migration import DBMigration
     from gajim.gtk.debug_console import DebugConsoleWindow
     from gajim.gtk.dialogs import QuitDialog
@@ -67,6 +68,7 @@ if TYPE_CHECKING:
         | AdHocCommands
         | AdvancedConfig
         | DBMigration
+        | DBErrorWindow
         | DebugConsoleWindow
         | BlockingList
         | CallWindow
@@ -107,6 +109,7 @@ if TYPE_CHECKING:
         | Literal["AdHocCommands"]
         | Literal["AdvancedConfig"]
         | Literal["DBMigration"]
+        | Literal["DBErrorWindow"]
         | Literal["DebugConsoleWindow"]
         | Literal["BlockingList"]
         | Literal["CallWindow"]
@@ -284,6 +287,14 @@ def get_app_window(
     account: str | None = None,
     jid: str | JID | None = None,
 ) -> CreateGroupchatWindow | None: ...
+
+
+@overload
+def get_app_window(
+    name: Literal["DBErrorWindow"],
+    account: str | None = None,
+    jid: str | JID | None = None,
+) -> DBErrorWindow | None: ...
 
 
 @overload
@@ -530,6 +541,8 @@ def open_window(name: Literal["ContactInfo"], **kwargs: Any) -> ContactInfo: ...
 def open_window(
     name: Literal["CreateGroupchatWindow"], **kwargs: Any
 ) -> CreateGroupchatWindow: ...
+@overload
+def open_window(name: Literal["DBErrorWindow"], **kwargs: Any) -> DBErrorWindow: ...
 @overload
 def open_window(name: Literal["Features"], **kwargs: Any) -> Features: ...
 @overload

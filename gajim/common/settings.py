@@ -7,7 +7,9 @@ from typing import cast
 from typing import Literal
 from typing import NamedTuple
 from typing import overload
+from typing import ParamSpec
 from typing import TypedDict
+from typing import TypeVar
 
 import inspect
 import json
@@ -19,6 +21,7 @@ import weakref
 from collections import defaultdict
 from collections import namedtuple
 from collections.abc import Callable
+from functools import wraps
 from pathlib import Path
 
 from gi.repository import GLib
@@ -27,6 +30,7 @@ from nbxmpp.protocol import JID
 from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common.events import DBError
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import AllAccountSettings
 from gajim.common.setting_values import AllAccountSettingsT
@@ -107,6 +111,24 @@ if app.is_flatpak():
 else:
     app_overrides = '/etc/gajim/app-overrides.json'
 OVERRIDES_PATH = Path(app_overrides)
+
+T = TypeVar('T')
+P = ParamSpec('P')
+
+
+def catch_db_exceptions(func: Callable[P, T]) -> Callable[P, T]:
+    @wraps(func)
+    def func_wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            result = func(*args, **kwargs)
+        except (sqlite3.OperationalError, sqlite3.DatabaseError) as error:
+            log.exception(error)
+            app.ged.raise_event(DBError(database_name='settings', error=str(error)))
+            return None
+
+        return result
+
+    return func_wrapper
 
 
 class SettingsDictT(TypedDict):
@@ -296,6 +318,7 @@ class Settings:
         self._con.execute(f'PRAGMA user_version = {version}')
         self._commit()
 
+    @catch_db_exceptions
     def _commit(self, schedule: bool = False) -> None:
         if not schedule:
             if self._commit_scheduled is not None:
@@ -407,6 +430,7 @@ class Settings:
         self._con.close()
         self._con = cast(sqlite3.Connection, None)
 
+    @catch_db_exceptions
     def _load_settings(self) -> None:
         settings = self._con.execute('SELECT * FROM settings').fetchall()
         for row in settings:
@@ -414,6 +438,7 @@ class Settings:
             self._settings[row.name] = json.loads(row.settings,
                                                   object_hook=json_decoder)
 
+    @catch_db_exceptions
     def _load_account_settings(self) -> None:
         account_settings = self._con.execute(
             'SELECT * FROM account_settings').fetchall()
@@ -423,6 +448,7 @@ class Settings:
                 row.settings,
                 object_hook=json_decoder)
 
+    @catch_db_exceptions
     def _commit_account_settings(self,
                                  account: str,
                                  schedule: bool = True) -> None:
@@ -433,6 +459,7 @@ class Settings:
 
         self._commit(schedule=schedule)
 
+    @catch_db_exceptions
     def _commit_settings(self, name: str, schedule: bool = True) -> None:
         log.info('Set settings: %s', name)
         self._con.execute(

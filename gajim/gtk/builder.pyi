@@ -296,6 +296,12 @@ class ContactTooltipBuilder(Builder):
     sub: Gtk.Label
     resources_box: Gtk.Box
 
+class DbErrorBuilder(Builder):
+    grid: Gtk.Grid
+    database_name: Gtk.Label
+    database_error: Gtk.Label
+    reset_database_button: Gtk.Button
+
 class DbMigrationBuilder(Builder):
     box: Gtk.Box
     stack: Gtk.Stack
@@ -543,7 +549,6 @@ class GroupchatStateBuilder(Builder):
 class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
-    account_combo: Gtk.ComboBox
 
 class MainBuilder(Builder):
     main_grid: Gtk.Grid
@@ -584,6 +589,8 @@ class ManageRosterBuilder(Builder):
     main: Gtk.Box
     top_box: Gtk.Box
     search_entry: Gtk.SearchEntry
+    import_button: Gtk.MenuButton
+    export_button: Gtk.Button
     scrolled_box: Gtk.Box
     scrolled: Gtk.ScrolledWindow
     column_view: Gtk.ColumnView
@@ -591,8 +598,6 @@ class ManageRosterBuilder(Builder):
     name_col: Gtk.ColumnViewColumn
     subscription_col: Gtk.ColumnViewColumn
     ask_col: Gtk.ColumnViewColumn
-    import_button: Gtk.MenuButton
-    export_button: Gtk.Button
 
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
@@ -1043,6 +1048,10 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ContactTooltipBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["db_error.ui"], instance: Any = None, widgets: list[str] = ...
+) -> DbErrorBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["db_migration.ui"],

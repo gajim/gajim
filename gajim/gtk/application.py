@@ -216,6 +216,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             # to render colored emoji glyphs
             os.environ["PANGOCAIRO_BACKEND"] = "fontconfig"
 
+        app.ged.register_event_handler("db-error", 0, self._on_db_error)
         app.ged.register_event_handler("db-migration", 0, self._on_db_migration)
 
         if not self._init_core():
@@ -573,6 +574,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         window = get_app_window("AccountsWindow")
         if window is not None:
             window.remove_account(account)
+
+    def _on_db_error(self, event: events.DBError) -> None:
+        open_window("DBErrorWindow", event=event)
 
     def _on_db_migration(self, _event: events.DBMigration) -> None:
         open_window("DBMigration")

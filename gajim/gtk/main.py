@@ -1351,12 +1351,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.add_chat(event.account, event.jid, "chat")
 
     def quit(self) -> None:
-        if self.is_visible():
-            window_width, window_height = self.get_width(), self.get_height()
-            app.settings.set("mainwin_width", window_width)
-            app.settings.set("mainwin_height", window_height)
+        try:
+            if self.is_visible():
+                window_width, window_height = self.get_width(), self.get_height()
+                app.settings.set("mainwin_width", window_width)
+                app.settings.set("mainwin_height", window_height)
 
-        app.settings.save()
+            app.settings.save()
+        except Exception:
+            # Pass Exception here, because we catch it earlier and display it in
+            # DBErrorWindow. We can only quit Gajim from that window if we pass here,
+            # else it would be shown again.
+            pass
 
         def on_continue2(message: str | None) -> None:
             app.app.start_shutdown(message=message)

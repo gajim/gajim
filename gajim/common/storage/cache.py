@@ -109,6 +109,9 @@ class CacheStorage(SqliteStorage):
         self._clean_caps_table()
         self._load_caps_data()
 
+    def reset_storage(self) -> None:
+        self._reinit_storage()
+
     @staticmethod
     def _namedtuple_factory(cursor: sqlite3.Cursor,
                             row: tuple[Any, ...]) -> NamedTuple:

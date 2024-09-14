@@ -138,6 +138,7 @@ WINDOW_MODULES = {
     "AddContact": "gajim.gtk.add_contact",
     "AdHocCommands": "gajim.gtk.adhoc",
     "AdvancedConfig": "gajim.gtk.advanced_config",
+    "DBErrorWindow": "gajim.gtk.db_error",
     "DBMigration": "gajim.gtk.db_migration",
     "DebugConsoleWindow": "gajim.gtk.debug_console",
     "BlockingList": "gajim.gtk.blocking",

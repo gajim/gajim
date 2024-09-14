@@ -66,8 +66,11 @@ class CoreApplication(ged.EventHelper):
         app.init_process_pool()
         configpaths.create_paths()
 
-        app.settings = Settings()
-        app.settings.init()
+        try:
+            app.settings = Settings()
+            app.settings.init()
+        except Exception:
+            return False
 
         passwords.init()
 
@@ -243,11 +246,15 @@ class CoreApplication(ged.EventHelper):
 
     def _shutdown_core(self) -> None:
         # Commit any outstanding SQL transactions
-        app.process_pool.shutdown(cancel_futures=True)
-        app.storage.archive.cleanup_chat_history()
-        app.storage.cache.shutdown()
-        app.storage.archive.shutdown()
-        app.settings.shutdown()
+        try:
+            app.process_pool.shutdown(cancel_futures=True)
+            app.storage.archive.cleanup_chat_history()
+            app.storage.cache.shutdown()
+            app.storage.archive.shutdown()
+            app.settings.shutdown()
+        except Exception as error:
+            log.exception(error)
+
         self.end_profiling()
         configpaths.cleanup_temp()
         logind.shutdown()
