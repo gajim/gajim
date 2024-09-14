@@ -34,6 +34,14 @@ META_FILES = [
 ICONS = [
     Path('gajim/data/icons/hicolor/scalable/apps/gajim.svg'),
     Path('gajim/data/icons/hicolor/scalable/apps/gajim-symbolic.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-away.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-chat.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-connecting.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-dnd.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-message-new.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-offline.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-online.svg'),
+    Path('gajim/data/icons/hicolor/scalable/status/gajim-status-xa.svg'),
 ]
 
 INSTALL_FILES = {
@@ -43,6 +51,17 @@ INSTALL_FILES = {
     'org.gajim.Gajim.metainfo.xml': 'share/metainfo',
     'org.gajim.Gajim-symbolic.svg': 'share/icons/hicolor/scalable/apps',
     'org.gajim.Gajim.svg': 'share/icons/hicolor/scalable/apps',
+}
+
+INSTALL_FLATPAK_ICONS = {
+    'org.gajim.Gajim-status-away.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-chat.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-connecting.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-dnd.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-message-new.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-offline.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-online.svg': 'share/icons/hicolor/scalable/apps',
+    'org.gajim.Gajim-status-xa.svg': 'share/icons/hicolor/scalable/apps',
 }
 
 
@@ -130,8 +149,8 @@ def build_translations() -> None:
         subprocess.run(['msgfmt', str(po_file), '-o', str(mo_file)], check=True)
 
 
-def install(*, prefix: Path) -> None:
-    for file, path in INSTALL_FILES.items():
+def install(*, prefix: Path, files: dict[str, str]) -> None:
+    for file, path in files.items():
         src = METADATA / file
         dest_dir = prefix / path
         logging.info('Copy %s to %s', src, dest_dir)
@@ -140,8 +159,8 @@ def install(*, prefix: Path) -> None:
         shutil.copy(src, dest_dir / file)
 
 
-def rename(*, prefix: Path, new_app_id: str) -> None:
-    for file_name, path in INSTALL_FILES.items():
+def rename(*, prefix: Path, files: dict[str, str], new_app_id: str) -> None:
+    for file_name, path in files.items():
         dest_dir = prefix / path
         file = dest_dir / file_name
         new_file_name = file_name.replace('org.gajim.Gajim', new_app_id)
@@ -172,10 +191,20 @@ def cmd_build(args: argparse.Namespace) -> None:
 
 
 def cmd_install(args: argparse.Namespace) -> None:
-    install(prefix=args.prefix)
+    install(prefix=args.prefix, files=INSTALL_FILES)
+
+    if args.dist.startswith('flatpak'):
+        install(prefix=args.prefix, files=INSTALL_FLATPAK_ICONS)
 
     if args.dist == 'flatpak-nightly':
-        rename(prefix=args.prefix, new_app_id='org.gajim.Gajim.Devel')
+        rename(
+            prefix=args.prefix, files=INSTALL_FILES, new_app_id='org.gajim.Gajim.Devel'
+        )
+        rename(
+            prefix=args.prefix,
+            files=INSTALL_FLATPAK_ICONS,
+            new_app_id='org.gajim.Gajim.Devel',
+        )
 
 
 if __name__ == '__main__':
