@@ -1,6 +1,7 @@
 include COPYING
 include ChangeLog
-recursive-include pep517build *
+include build.py
+recursive-include gajim *.in
 recursive-include po *
 recursive-include data *.1 *.in
 recursive-include test *
