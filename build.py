@@ -131,7 +131,7 @@ def build_translations() -> None:
         subprocess.run(['msgfmt', str(po_file), '-o', str(mo_file)], check=True)
 
 
-def install(*, prefix: Path) -> None:
+def install(*, prefix: Path, dist: str | None) -> None:
     for file, path in INSTALL_FILES.items():
         src = METADATA / file
         dest_dir = prefix / path
@@ -139,6 +139,19 @@ def install(*, prefix: Path) -> None:
         if not dest_dir.exists():
             dest_dir.mkdir(parents=True)
         shutil.copy(src, dest_dir / file)
+
+    if dist == 'flatpak-nightly':
+        rename(prefix=prefix, new_app_id='org.gajim.Gajim.Devel')
+
+
+def rename(*, prefix: Path, new_app_id: str) -> None:
+    for file_name, path in INSTALL_FILES.items():
+        dest_dir = prefix / path
+        file = dest_dir / file_name
+        new_file_name = file_name.replace('org.gajim.Gajim', new_app_id)
+        new_file = dest_dir / new_file_name
+        logging.info('Rename File %s to %s', file, new_file)
+        file.rename(new_file)
 
 
 if __name__ == '__main__':
@@ -159,7 +172,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.install:
-        install(prefix=args.prefix)
+        install(prefix=args.prefix, dist=args.dist)
         sys.exit()
 
     build_translations()

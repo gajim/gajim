@@ -7,9 +7,6 @@ tags:
   - devel
   - development
   - nightly
-rename-icon: org.gajim.Gajim
-rename-desktop-file: org.gajim.Gajim.desktop
-rename-appdata-file: org.gajim.Gajim.metainfo.xml
 finish-args:
   - --share=ipc
   - --share=network
@@ -403,7 +400,7 @@ modules:
     buildsystem: simple
     build-commands:
       - ./build.py --dist=flatpak-nightly
-      - ./build.py --install --prefix=/app
+      - ./build.py --dist=flatpak-nightly --install --prefix=/app
       - pip3 install --no-build-isolation .
       - cp -t ${FLATPAK_DEST} app-overrides.json
     sources:
