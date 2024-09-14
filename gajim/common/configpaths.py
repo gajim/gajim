@@ -15,6 +15,7 @@ from typing import cast
 
 import importlib.resources
 import os
+import shutil
 import sys
 import tempfile
 from collections.abc import Generator
@@ -84,6 +85,17 @@ def create_paths() -> None:
                     parent_path.mkdir(mode=0o700)
             print(('creating %s directory') % path)
             path.mkdir(mode=0o700)
+
+
+def cleanup_temp() -> None:
+    tmpdir = _paths['TMP'].parent
+    for path in tmpdir.glob('gajim-*'):
+        if not path.is_dir():
+            continue
+        try:
+            shutil.rmtree(path, ignore_errors=True)
+        except Exception:
+            pass
 
 
 class ConfigPaths:
@@ -161,7 +173,7 @@ class ConfigPaths:
             self.cache_root = self.data_root = self.custom_config_root
 
         user_dir_paths = [
-            ('TMP', Path(tempfile.gettempdir()), None, None),
+            ('TMP', Path(tempfile.mkdtemp(prefix='gajim-')), None, None),
             ('MY_CONFIG', Path(), PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CACHE', Path(), PathLocation.CACHE, PathType.FOLDER),
             ('MY_DATA', Path(), PathLocation.DATA, PathType.FOLDER),

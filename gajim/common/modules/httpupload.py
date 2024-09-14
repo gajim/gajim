@@ -10,7 +10,6 @@ from typing import cast
 
 import mimetypes
 import os
-import tempfile
 from collections import defaultdict
 from collections.abc import Callable
 from pathlib import Path
@@ -31,6 +30,7 @@ from nbxmpp.task import Task
 from nbxmpp.util import convert_tls_error_flags
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import types
 from gajim.common.const import FTState
 from gajim.common.events import HTTPUploadError
@@ -420,8 +420,8 @@ class HTTPFileTransfer(FileTransfer):
 
     @staticmethod
     def _get_temp_path() -> Path:
-        tempdir = tempfile.gettempdir()
-        return Path(tempdir) / get_random_string(16)
+        tempdir = configpaths.get('TMP')
+        return tempdir / get_random_string(16)
 
     def set_error(self, domain: str, text: str = '') -> None:
         if not text:

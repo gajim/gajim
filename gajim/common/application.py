@@ -249,6 +249,7 @@ class CoreApplication(ged.EventHelper):
         app.storage.archive.shutdown()
         app.settings.shutdown()
         self.end_profiling()
+        configpaths.cleanup_temp()
         logind.shutdown()
 
     def _quit_app(self) -> None:

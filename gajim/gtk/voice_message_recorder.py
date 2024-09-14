@@ -11,12 +11,12 @@ import datetime
 import logging
 import math
 import sys
-import tempfile
 from collections import deque
 from collections.abc import Callable
 from pathlib import Path
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common.i18n import _
 
 try:
@@ -116,8 +116,7 @@ class VoiceMessageRecorder:
 
         # Voice message storage location
         self._filetype = 'm4a'
-        self._temp_dir = tempfile.TemporaryDirectory(prefix='gajim-')
-        self._output_dir = Path(self._temp_dir.name)
+        self._output_dir = configpaths.get('TMP')
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         self._file_name = f'voice-message-{timestamp}.{self._filetype}'
         self._file_path: Path = self._output_dir / self._file_name
@@ -176,7 +175,7 @@ class VoiceMessageRecorder:
         return self._pipeline_setup_failed
 
     def cleanup(self) -> None:
-        self._temp_dir.cleanup()
+        self._file_path.unlink()
         self._pipeline.get_bus().disconnect(self._id)
 
     def start_recording(self) -> None:

@@ -7,10 +7,8 @@ from __future__ import annotations
 from typing import Any
 
 import logging
-import tempfile
 import uuid
 from collections import defaultdict
-from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -21,6 +19,7 @@ from nbxmpp.const import Chatstate
 from nbxmpp.modules.security_labels import SecurityLabel
 
 from gajim.common import app
+from gajim.common import configpaths
 from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.commands import CommandFailed
@@ -769,7 +768,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             log.info('No image pasted')
             return
 
-        temp_dir = Path(tempfile.gettempdir())
+        temp_dir = configpaths.get('TMP')
         image_path = temp_dir / f'{uuid.uuid4()}.png'
 
         try:
