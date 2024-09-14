@@ -1,6 +1,6 @@
 include COPYING
 include ChangeLog
-include build.py
+include make.py
 recursive-include gajim *.in
 recursive-include po *
 recursive-include data *.1 *.in

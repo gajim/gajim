@@ -16,7 +16,7 @@ test-other:
   image: gajim-test
   stage: test
   script:
-    - ./build.py
+    - ./make.py
     - pyproject-build
     - appstream-util validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
@@ -90,7 +90,7 @@ build-unix:
     - if: '$NIGHTLY_BUILD'
     - if: '$CI_COMMIT_TAG'
   script:
-    - ./build.py
+    - ./make.py
     - pyproject-build
 
   artifacts:

@@ -7,7 +7,6 @@ import gzip
 import logging
 import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 logging.basicConfig(level='INFO', format='%(message)s')
@@ -131,7 +130,7 @@ def build_translations() -> None:
         subprocess.run(['msgfmt', str(po_file), '-o', str(mo_file)], check=True)
 
 
-def install(*, prefix: Path, dist: str | None) -> None:
+def install(*, prefix: Path) -> None:
     for file, path in INSTALL_FILES.items():
         src = METADATA / file
         dest_dir = prefix / path
@@ -139,9 +138,6 @@ def install(*, prefix: Path, dist: str | None) -> None:
         if not dest_dir.exists():
             dest_dir.mkdir(parents=True)
         shutil.copy(src, dest_dir / file)
-
-    if dist == 'flatpak-nightly':
-        rename(prefix=prefix, new_app_id='org.gajim.Gajim.Devel')
 
 
 def rename(*, prefix: Path, new_app_id: str) -> None:
@@ -154,31 +150,10 @@ def rename(*, prefix: Path, new_app_id: str) -> None:
         file.rename(new_file)
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        '--dist', choices=['flatpak', 'flatpak-nightly', 'win'], help='Distribution'
-    )
-
-    parser.add_argument('--install', action='store_true', help='Install metadata files')
-
-    parser.add_argument(
-        '--prefix',
-        type=Path,
-        default='/usr',
-        help='The path prefix for installation (e.g. "/usr")',
-    )
-
-    args = parser.parse_args()
-
-    if args.install:
-        install(prefix=args.prefix, dist=args.dist)
-        sys.exit()
-
-    build_translations()
-
+def cmd_build(args: argparse.Namespace) -> None:
     if args.dist == 'win':
-        sys.exit()
+        build_translations()
+        return
 
     if args.dist == 'flatpak':
         configure_flatpak()
@@ -194,3 +169,45 @@ if __name__ == '__main__':
     build_man()
     build_meta()
     build_app_icons()
+
+
+def cmd_install(args: argparse.Namespace) -> None:
+    install(prefix=args.prefix)
+
+    if args.dist == 'flatpak-nightly':
+        rename(prefix=args.prefix, new_app_id='org.gajim.Gajim.Devel')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    subparsers = parser.add_subparsers(
+        required=True, metavar='commands', dest='command'
+    )
+
+    build_parser = subparsers.add_parser('build', help='Build Gajim')
+    build_parser.add_argument(
+        '--dist',
+        choices=['unix', 'flatpak', 'flatpak-nightly', 'win'],
+        default='unix',
+        help='Distribution',
+    )
+    build_parser.set_defaults(func=cmd_build)
+
+    install_parser = subparsers.add_parser('install', help='Install metadata files')
+    install_parser.add_argument(
+        '--dist',
+        choices=['unix', 'flatpak', 'flatpak-nightly'],
+        default='unix',
+        help='Distribution',
+    )
+    install_parser.add_argument(
+        '--prefix',
+        type=Path,
+        default='/usr',
+        help='The path prefix for installation (e.g. "/usr")',
+    )
+    install_parser.set_defaults(func=cmd_install)
+
+    args = parser.parse_args()
+    args.func(args)

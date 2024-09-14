@@ -68,17 +68,9 @@ The build frontend takes care of installing all python build requirements. Bewar
 ### Building the metadata files and translation
 
 ```bash
-$ ./build.py -h
+$ ./make.py build -h
 
-usage: build.py [-h] [--dist {flatpak,flatpak-nightly}] [--install] [--prefix PREFIX]
-
-options:
-  -h, --help            show this help message and exit
-  --dist {flatpak,flatpak-nightly}
-                        Distribution
-  --install             Install metadata files
-  --prefix PREFIX       The path prefix for installation (e.g. "/usr")
-
+usage: make.py build [-h] [--dist {unix,flatpak,flatpak-nightly,win}]
 ```
 
 Afterwards metadata files can be found in `dist/metadata` folder. 
@@ -115,7 +107,17 @@ pip install dist/name_of_wheel.whl
 
 ### Installing the metadata files (Unix only)
 
-Use the build.py `--install` switch to install the metadata files into standard locations
+```bash
+$ ./make.py install -h
+
+usage: make.py install [-h] [--dist {unix,flatpak,flatpak-nightly}] [--prefix PREFIX]
+
+options:
+  -h, --help            show this help message and exit
+  --dist {unix,flatpak,flatpak-nightly}
+                        Distribution
+  --prefix PREFIX       The path prefix for installation (e.g. "/usr")
+```
 
 ## Tests
 
