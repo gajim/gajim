@@ -34,7 +34,7 @@ def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:
 
 
 def _check_required_deps() -> None:
-    error_message = 'Gajim needs {lib} to run. Quitting… (Error: {error})'
+    error_message = 'Gajim needs {0} to run. Quitting… (Error: {1})'
 
     try:
         import nbxmpp
