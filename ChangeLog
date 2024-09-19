@@ -1,3 +1,61 @@
+Gajim 1.9.4 (19 Sep 2024)
+
+  New
+
+  * Add setting to prevent sync of group chats
+  * XEP-0317 (Hats)
+  * Integrate providers.xmpp.net into account creation wizard
+  * Search: Add user interface for message filters
+
+  Improvements
+
+  * Create a common directory for temporary files
+  * Unify usage of 'synchronise'/'synchronize' strings
+  * Control: Improve query to load messages around a timestamp
+  * Dataforms: Improve read only form presentation (#11758)
+  * Indicate modified contact name in info dialogs (#11777)
+  * StartChat: Show description, user count, and language in search results (#11963)
+  * Add Quit dialog for setting window preference (#11481)
+  * Search: Add fade-in effect for results and make search icon spin
+  * Search: Indicate search state with placeholder
+  * Message rows: Use transition for row highlight (#11932)
+
+  Change
+
+  * Raise nbxmpp version to 5.0.4
+  * Build: Move all configure/build/installation steps into single script
+  * ChatControl: Show typing indicator in a separate widget (#11913)
+  * Search: Use quotes to mark search filter content (#11355)
+
+  Bug Fixes
+
+  * Parse xmpp IRI correctly
+  * Display error message correctly when missing dependencies
+  * MUC: Display errors related to nickname change (#11930)
+  * DBus: Use correct app id
+  * JingleFileTransfer: Fix message data argument
+  * Dataforms: Fix completion of single list forms
+  * Catch KeyringLocked error when trying to delete a password (#11978)
+  * Debug Console: Catch errors before trying to send stanzas (#11976#11301)
+  * Menu: Fix 'Mark as read' action not sending read marker
+  * MessageRowActions: Enable scrolling while cursor rests on action (#11968)
+  * GroupchatRoster: Fix loading roster while participants are added/removed (#11970)
+  * StartChat: Only search s.j.n if there is a search string
+  * GroupchatRoster: Fix filtering for participants with status set (#11958)
+  * ChatListStack: Fix default workspace id when getting current chat list (#11969)
+  * Fix wrapping lines for long words
+  * MessageRowActions: Make actions more robust (#11950)
+  * Notifications: Prevent loading of windows_toasts on unsupported Windows versions (#11944)
+  * Debug Console: Fix Ctrl+F hotkey (#11940)
+  * MessageInputTextView: Make background transparent
+  * GroupChatRoster: Fix hover style scope to avoid hidden scrollbar thumb (#11936)
+  * Search: Allow to search for same string again
+
+  Notes
+
+  Attention to all package maintainers, this changes how Gajim is build.
+  Please check README.md for more information.
+
 Gajim 1.9.3 (28 Jul 2024)
 
   Improvements

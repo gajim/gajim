@@ -80,6 +80,9 @@
     <control>pointing</control>
   </recommends>
   <releases>
+    <release version="1.9.4" date="2024-09-19">
+      <url>https://dev.gajim.org/gajim/gajim/-/releases/1.9.4</url>
+    </release>
     <release version="1.9.3" date="2024-07-29">
       <url>https://dev.gajim.org/gajim/gajim/-/releases/1.9.3</url>
     </release>
