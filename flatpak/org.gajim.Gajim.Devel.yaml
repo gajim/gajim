@@ -1,6 +1,6 @@
 app-id: org.gajim.Gajim.Devel
 runtime: org.gnome.Platform
-runtime-version: '46'
+runtime-version: '47'
 sdk: org.gnome.Sdk
 command: gajim
 tags:
@@ -87,11 +87,11 @@ modules:
   - name: python3-idna
     buildsystem: simple
     build-commands:
-      - pip3 install idna-3.8-py3-none-any.whl
+      - pip3 install idna-3.10-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.8-py3-none-any.whl
-        sha256: 050b4e5baadcd44d760cedbd2b8e639f2ff89bbc7a5730fcc662954303377aac
+        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.10-py3-none-any.whl
+        sha256: 946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
 
   - name: python3-cryptography
     buildsystem: simple
@@ -133,16 +133,6 @@ modules:
         url: https://files.pythonhosted.org/packages/py3/S/SecretStorage/SecretStorage-3.3.3-py3-none-any.whl
         sha256: f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99
 
-  # importlib-metadata dependency
-  - name: python3-zipp
-    buildsystem: simple
-    build-commands:
-      - pip3 install zipp-3.20.1-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/z/zipp/zipp-3.20.1-py3-none-any.whl
-        sha256: 9960cd8967c8f85a56f920d5d507274e74f9ff813a0ab8889a5b5be2daf44064
-
   # jaraco.classes dependency
   - name: python3-more-itertools
     buildsystem: simple
@@ -156,15 +146,6 @@ modules:
         sha256: 037b0d3203ce90cca8ab1defbbdac29d5f993fc20131f3664dc8d6acfa872aef
 
   # keyring dependency
-  - name: python3-importlib-metadata
-    buildsystem: simple
-    build-commands:
-      - pip3 install importlib_metadata-8.4.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/importlib_metadata/importlib_metadata-8.4.0-py3-none-any.whl
-        sha256: 66f342cc6ac9818fc6ff340576acd24d65ba0b3efabb2b4ac08b598965a4a2f1
-
   - name: python3-jaraco.classes
     buildsystem: simple
     build-commands:
@@ -173,16 +154,6 @@ modules:
       - type: file
         url: https://files.pythonhosted.org/packages/py3/j/jaraco.classes/jaraco.classes-3.4.0-py3-none-any.whl
         sha256: f662826b6bed8cace05e7ff873ce0f9283b5c924470fe664fff1c2f00f581790
-
-  # jaraco.context dependency
-  - name: python3-backports.tarfile
-    buildsystem: simple
-    build-commands:
-      - pip3 install backports.tarfile-1.2.0-py3-none-any.whl
-    sources:
-      - type: file
-        url: https://files.pythonhosted.org/packages/py3/b/backports.tarfile/backports.tarfile-1.2.0-py3-none-any.whl
-        sha256: 77e284d754527b01fb1e6fa8a1afe577858ebe4e9dad8919e34c862cb399bc34
 
   - name: python3-jaraco.context
     buildsystem: simple
@@ -205,13 +176,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-25.3.0-py3-none-any.whl
+      - pip3 install keyring-25.4.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.3.0-py3-none-any.whl
-        sha256: 8d963da00ccdf06e356acd9bf3b743208878751032d8599c6cc89eb51310ffae
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.4.0-py3-none-any.whl
+        sha256: a2a630d5c9bef5d3f0968d15ef4e42b894a83e17494edcb67b154c36491c9920
 
   - name: python3-css-parser
     buildsystem: simple
@@ -242,12 +213,13 @@ modules:
         sha256: ca2d039e1ebd148647017a7f548862350bc9af01986d39f10cfdc8e95f07881a
 
   - name: gspell
+    buildsystem: meson
     cleanup:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.12/gspell-1.12.2.tar.xz
-        sha256: b4e993bd827e4ceb6a770b1b5e8950fce3be9c8b2b0cbeb22fdf992808dd2139
+        url: https://download.gnome.org/sources/gspell/1.14/gspell-1.14.0.tar.xz
+        sha256: 64ea1d8e9edc1c25b45a920e80daf67559d1866ffcd7f8432fecfea6d0fe8897
 
   - name: farstream
     rm-configure: true
@@ -271,11 +243,11 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.2.2-py3-none-any.whl
+      - pip3 install urllib3-2.2.3-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.2.2-py3-none-any.whl
-        sha256: a448b2f64d686155468037e1ace9f2d2199776e17f0a46610480d311f73e3472
+        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.2.3-py3-none-any.whl
+        sha256: ca899ca043dcb1bafa3e262d73aa25c465bfb49e0bd9dd5d59f1d0acba2f8fac
 
   - name: python3-certifi
     buildsystem: simple
@@ -289,11 +261,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.13.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.14.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.13.0-py2.py3-none-any.whl
-        sha256: 6beede8fc2ab4043da7f69d95534e320944690680dd9a963178a49de71d726c6
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.14.0-py2.py3-none-any.whl
+        sha256: b8bc3dc51d06590df1291b7519b85c75e2ced4f28d9ea655b6d54033503b5bf4
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -310,17 +282,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.0.3.tar.gz
-        sha256: 43374442353259554ce33599da8b692d5aa96f8976d567d4badf263371fbe491
+        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.1.0.tar.gz
+        sha256: b395121e9bbe8d02a750886f108d540abe66075e61e22f7353d9acb0b81be0f0
 
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.34-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.35-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.34-py3-none-any.whl
-        sha256: 7286c353ee6475613d8beff83167374006c6b3e3f0e6491bfe8ca610eb1dec0f
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.35-py3-none-any.whl
+        sha256: 2ab3f0336c0387662ce6221ad30ab3a5e6499aab01b9790879b6578fd9b8faa1
 
   - name: python3-emoji
     buildsystem: simple
@@ -364,11 +336,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.28.0-py3-none-any.whl
+      - pip3 install --no-deps protobuf-5.28.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.28.0-py3-none-any.whl
-        sha256: 510ed78cd0980f6d3218099e874714cdf0d8a95582e7b059b06cabad855ed0a0
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.28.2-py3-none-any.whl
+        sha256: 52235802093bd8a2811abbe8bf0ab9c5f54cca0a751fdd3f6ac2a21438bffece
 
   - name: python3-omemo-dr
     buildsystem: simple
