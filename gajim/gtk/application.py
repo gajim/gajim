@@ -273,16 +273,15 @@ class GajimApplication(Gtk.Application, CoreApplication):
             app.log('uri_handler').info('open %s', uri)
             if not uri.startswith('xmpp:'):
                 continue
-            # remove xmpp:
-            uri = uri[5:]
-            try:
-                jid, cmd = uri.split('?')
-            except ValueError:
-                # No query argument
-                jid, cmd = uri, 'message'
 
             try:
-                jid = JID.from_string(jid)
+                iri, cmd = uri.split('?')
+            except ValueError:
+                # No query argument
+                iri, cmd = uri, 'message'
+
+            try:
+                jid = JID.from_iri(iri)
             except InvalidJid as error:
                 app.log('uri_handler').warning('Invalid JID %s: %s', uri, error)
                 continue
