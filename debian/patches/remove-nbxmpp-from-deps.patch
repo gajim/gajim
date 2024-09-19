@@ -15,7 +15,7 @@ index f0fbbc2c6..58207a0c6 100644
    "css-parser",
    "emoji>=2.6.0",
    "keyring",
--  "nbxmpp>=5.0.1,<6.0.0",
+-  "nbxmpp>=5.0.4,<6.0.0",
    "omemo-dr>=1.0.0,<2.0.0",
    "packaging",
    "pillow>=9.1.0",
