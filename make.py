@@ -185,6 +185,7 @@ def cmd_build(args: argparse.Namespace) -> None:
 
     METADATA.mkdir(parents=True, exist_ok=True)
 
+    build_translations()
     build_man()
     build_meta()
     build_app_icons()
