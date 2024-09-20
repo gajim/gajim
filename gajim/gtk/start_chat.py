@@ -986,7 +986,7 @@ class ResultRow(Gtk.ListBoxRow):
         self.groupchat = True
 
         name_label = Gtk.Label(
-            label=item.name,
+            label=item.name or self.jid.localpart or item.jid,
             halign=Gtk.Align.START,
             ellipsize=Pango.EllipsizeMode.END,
             max_width_chars=40
