@@ -196,6 +196,38 @@ class ReferencedMessageWidget(Gtk.EventBox):
         )
 
 
+class ReferencedMessageNotFoundWidget(Gtk.EventBox):
+    def __init__(self) -> None:
+        Gtk.EventBox.__init__(self)
+
+        main_box = Gtk.Box(spacing=12, hexpand=True)
+        main_box.get_style_context().add_class('referenced-message')
+        self.add(main_box)
+
+        quote_bar = Gtk.Box(width_request=4)
+        quote_bar.set_name('quote-bar')
+        main_box.add(quote_bar)
+
+        content_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, halign=Gtk.Align.START
+        )
+        main_box.add(content_box)
+
+        message_box = Gtk.Box(spacing=12)
+        message_label = Gtk.Label(
+            label=_('The referenced message is not available.'),
+            halign=Gtk.Align.START,
+            max_width_chars=100,
+            ellipsize=Pango.EllipsizeMode.END,
+        )
+        message_label.get_style_context().add_class('dim-label')
+
+        message_box.add(message_label)
+        content_box.add(message_box)
+
+        self.show_all()
+
+
 class ReplyBox(Gtk.Box):
     def __init__(self) -> None:
         Gtk.Box.__init__(self, spacing=12, no_show_all=True)

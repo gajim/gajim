@@ -38,6 +38,7 @@ from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
+from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
@@ -185,10 +186,13 @@ class MessageRow(BaseRow):
                 self._is_outgoing,
                 self._muc_context)
         else:
-            referenced_message = message.get_referenced_message()
-            if referenced_message is not None:
-                self._ref_message_widget = ReferencedMessageWidget(
-                    self._contact, referenced_message)
+            if message.reply is not None:
+                referenced_message = message.get_referenced_message()
+                if referenced_message is None:
+                    self._ref_message_widget = ReferencedMessageNotFoundWidget()
+                else:
+                    self._ref_message_widget = ReferencedMessageWidget(
+                        self._contact, referenced_message)
 
             self._message_widget = MessageWidget(self._contact.account)
             self._message_widget.add_with_styling(self.text, nickname=self.name)
