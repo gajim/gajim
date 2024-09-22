@@ -8,6 +8,7 @@ import time
 from datetime import datetime
 
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.structs import MucSubject
 
 from gajim.common.const import AvatarSize
@@ -55,12 +56,17 @@ class MUCSubject(BaseRow):
         date = ''
         if subject.timestamp is not None:
             time_str = time.strftime('%c', time.localtime(subject.timestamp))
-            date = f' ({time_str})'
+            date = f'{time_str}\n'
 
-        meta_str = f'{author}{date}'
-        meta = Gtk.Label(label=meta_str)
-        meta.set_halign(Gtk.Align.START)
-        meta.set_selectable(True)
+        meta_str = f'{author}\n{date}'
+        meta = Gtk.Label(
+            halign=Gtk.Align.START,
+            label=meta_str,
+            selectable=True,
+            wrap=True,
+            wrap_mode=Pango.WrapMode.WORD_CHAR,
+            xalign=0,
+        )
         meta.get_style_context().add_class('small-label')
         subject_box.add(meta)
 
