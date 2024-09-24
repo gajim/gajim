@@ -82,7 +82,9 @@ class PreviewWidget(Gtk.Box):
         return self._preview.uri
 
     @ensure_not_destroyed
-    def update_progress(self, _preview: Preview, progress: float) -> None:
+    def update_progress(self, preview: Preview, progress: float) -> None:
+        self._preview = preview
+
         self._ui.preview_stack.set_visible_child_name('preview')
         self._ui.download_button.hide()
 
