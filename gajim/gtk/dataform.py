@@ -846,24 +846,27 @@ class TextMultiField(Field):
         Field.__init__(self, field, form_grid, options)
         self._label.set_valign(Gtk.Align.START)
 
-        self._widget = Gtk.ScrolledWindow()
-        self._widget.set_policy(Gtk.PolicyType.NEVER,
-                                Gtk.PolicyType.AUTOMATIC)
-        self._widget.set_propagate_natural_height(True)
-        self._widget.set_min_content_height(100)
-        self._widget.set_max_content_height(300)
+        length = len(field.value)
 
         if self.read_only:
-            self._textview = MultiLineLabel(label=field.value)
-            self._textview.set_xalign(0)
-            self._textview.set_yalign(0)
+            self._textview = MultiLineLabel(label=field.value, xalign=0)
+
         else:
             self._textview = Gtk.TextView()
             self._textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
             self._textview.get_buffer().set_text(field.value)
             self._textview.get_buffer().connect('changed', self._changed)
 
-        self._widget.add(self._textview)
+        if self.read_only and length < 500:
+            self._widget = self._textview
+        else:
+            self._widget = Gtk.ScrolledWindow()
+            self._widget.set_policy(Gtk.PolicyType.NEVER,
+                                    Gtk.PolicyType.AUTOMATIC)
+            self._widget.set_propagate_natural_height(True)
+            self._widget.set_min_content_height(100)
+
+            self._widget.add(self._textview)
 
     def _changed(self, widget: Gtk.TextBuffer) -> None:
         self._field.value = widget.get_text(*widget.get_bounds(), False)
