@@ -491,13 +491,6 @@ class MultiLineLabel(Gtk.Label):
         self.set_single_line_mode(False)
         self.set_selectable(True)
 
-    # make sure full width is used when fitting into GtkGrid
-    def do_get_preferred_width(self):
-        layout = self.get_layout()
-        layout.set_width(-1)
-        width, _ = layout.get_pixel_size()
-        return width, width
-
 
 class MaxWidthComboBoxText(Gtk.ComboBoxText):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
