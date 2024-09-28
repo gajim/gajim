@@ -328,6 +328,7 @@ class DebugConsoleBuilder(Builder):
     search_entry: Gtk.SearchEntry
     search_forward: Gtk.ToolButton
     search_backward: Gtk.ToolButton
+    search_results_label: Gtk.Label
     scrolled: Gtk.ScrolledWindow
     protocol_view: GtkSource.View
     jump_to_end_button: Gtk.Button
@@ -460,8 +461,8 @@ class GroupchatDetailsBuilder(Builder):
     main_grid: Gtk.Grid
     header_revealer: Gtk.Revealer
     header_image: Gtk.Image
-    edit_name_button: Gtk.Button
     contact_name_header_label: Gtk.Label
+    edit_name_button: Gtk.Button
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box

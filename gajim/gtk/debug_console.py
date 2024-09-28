@@ -8,6 +8,7 @@ import time
 
 import nbxmpp
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -82,7 +83,6 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._filter_dialog: SettingsDialog | None = None
         self._sent_stanzas = SentSzanzas()
         self._last_selected_ts = 0
-        self._last_search: str = ''
 
         self._presence = True
         self._message = True
@@ -128,6 +128,12 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.protocol_view.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
             self._ui.log_view.get_buffer().set_style_scheme(style_scheme)
+
+        self._search_settings = GtkSource.SearchSettings(wrap_around=True)
+        self._search_context = GtkSource.SearchContext.new(
+            self._ui.protocol_view.get_buffer(),
+            self._search_settings
+        )
 
         for record in app.logging_records:
             self._add_log_record(record)
@@ -265,11 +271,15 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         if (event.state & Gdk.ModifierType.CONTROL_MASK and
                 event.keyval == Gdk.KEY_f):
-            self._ui.search_toggle.set_active(
-                not self._ui.search_toggle.get_active())
+            self._ui.search_toggle.set_active(True)
+            self._ui.search_entry.grab_focus()
 
         if event.keyval == Gdk.KEY_F3:
             self._find(Direction.NEXT)
+
+        if (event.state & Gdk.ModifierType.SHIFT_MASK and
+            event.keyval == Gdk.KEY_F3):
+            self._find(Direction.PREV)
 
     def _on_row_activated(self,
                           _listbox: Gtk.ListBox,
@@ -370,41 +380,58 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._find(direction)
 
     def _find(self, direction: Direction) -> None:
-        search_str = self._ui.search_entry.get_text()
+        self._search_settings.set_search_text(self._ui.search_entry.get_text())
         textbuffer = self._ui.protocol_view.get_buffer()
-        cursor_mark = textbuffer.get_insert()
-        current_pos = textbuffer.get_iter_at_mark(cursor_mark)
-
-        if current_pos.get_offset() == textbuffer.get_char_count():
-            current_pos = textbuffer.get_start_iter()
 
         last_pos_mark = textbuffer.get_mark('last_pos')
         if last_pos_mark is not None:
             current_pos = textbuffer.get_iter_at_mark(last_pos_mark)
-
-        if search_str != self._last_search:
+        else:
             current_pos = textbuffer.get_start_iter()
 
         if direction == Direction.NEXT:
-            match = current_pos.forward_search(
-                search_str,
-                Gtk.TextSearchFlags.VISIBLE_ONLY |
-                Gtk.TextSearchFlags.CASE_INSENSITIVE,
-                None)
+            self._search_context.forward_async(
+                current_pos, None, self._on_search_finished, direction)
         else:
-            current_pos.backward_cursor_position()
-            match = current_pos.backward_search(
-                search_str,
-                Gtk.TextSearchFlags.VISIBLE_ONLY |
-                Gtk.TextSearchFlags.CASE_INSENSITIVE,
-                None)
+            self._search_context.backward_async(
+                current_pos, None, self._on_search_finished, direction)
 
-        if match is not None:
-            match_start, match_end = match
-            textbuffer.select_range(match_start, match_end)
+    def _on_search_finished(
+        self,
+        _context: GtkSource.SearchContext,
+        result: Gio.AsyncResult,
+        direction: Direction
+    ) -> None:
+
+        if direction == Direction.NEXT:
+            match = self._search_context.forward_finish(result)
+        else:
+            match = self._search_context.backward_finish(result)
+
+        match_found, match_start, match_end, _has_wrapped_around = match
+
+        if not match_found:
+            self._ui.search_results_label.set_text(_('No results'))
+            return
+
+        occurrences_count = self._search_context.get_occurrences_count()
+        if occurrences_count == -1:
+            # Text scan may not be complete yet
+            occurrences_count = '?'
+
+        occurrence_positon = self._search_context.get_occurrence_position(
+            match_start, match_end)
+        self._ui.search_results_label.set_text(
+            _('%s of %s') % (occurrence_positon, occurrences_count)
+        )
+
+        textbuffer = self._ui.protocol_view.get_buffer()
+
+        if direction == Direction.NEXT:
             mark = textbuffer.create_mark('last_pos', match_end, True)
-            self._ui.protocol_view.scroll_to_mark(mark, 0, True, 0.5, 0.5)
-        self._last_search = search_str
+        else:
+            mark = textbuffer.create_mark('last_pos', match_start, True)
+        self._ui.protocol_view.scroll_to_mark(mark, 0, True, 0.5, 0.5)
 
     @staticmethod
     def _get_accounts() -> list[tuple[str | None, str]]:
