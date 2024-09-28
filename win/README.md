@@ -33,3 +33,12 @@ Afterwards press CTRL + SHIFT + I, to  activate GtkInspector
 Follow the steps in the Development section, but instead of `./dev_env.sh` execute `./build.sh`.
 
 Both the installer and the portable installer should appear in `C:\msys64\home\USER\gajim\win\_build_root`.
+
+## Register Development App from msixbundle
+
+To test Gajim's Microsoft Store msix bundle, the following steps are necessary:
+
+* Either build the msixbundle locally by running `./build.sh` as described above, or download a nightly build and place it in `C:\msys64\home\USER\gajim\win\_build_root\Gajim.msixbundle`
+* Run `./unpack_msixbundle.sh`, which unpacks the bundle to `C:\msys64\home\USER\gajim\win\_build_root\unpack\Gajim`
+* Open `C:\msys64\home\USER\gajim\win\_build_root\unpack\Gajim` in a PowerShell
+* Now register the app by running `Add-AppxPackage –Register AppxManifest.xml` from a PowerShell

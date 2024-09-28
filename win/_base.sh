@@ -379,3 +379,13 @@ function build_msix_installer {
         makeappx bundle -d bundle/ -p Gajim.msixbundle -o
     )
 }
+
+function unpack_msixbundle {
+    (
+        cd ${BUILD_ROOT}
+        mkdir -p "${BUILD_ROOT}"/unpack
+        makeappx unbundle -p Gajim.msixbundle -d "${BUILD_ROOT}"/unpack
+        makeappx unpack -p "${BUILD_ROOT}"/unpack/Gajim_x64.msix -d "${BUILD_ROOT}"/unpack/Gajim
+        echo Unpacked msixbundle to "${BUILD_ROOT}"/unpack/Gajim
+    )
+}
