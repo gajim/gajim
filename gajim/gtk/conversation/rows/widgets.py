@@ -118,8 +118,7 @@ class MessageRowActions(Gtk.EventBox):
             self._timeout_id = None
 
         self_height = self.get_allocated_height()
-        if y_coord < self_height:
-            y_coord = self_height
+        y_coord = max(y_coord, self_height)
 
         # Subtract some space to let MessageRowActions 'flow' above the row,
         # but make sure to make offset smaller than row height.
@@ -128,8 +127,7 @@ class MessageRowActions(Gtk.EventBox):
             offset = min(28, self_height - 6)
 
         adjusted_y_coord = y_coord - offset
-        if adjusted_y_coord < 0:
-            adjusted_y_coord = 0
+        adjusted_y_coord = max(adjusted_y_coord, 0)
 
         self.set_margin_top(adjusted_y_coord)
         self.set_no_show_all(False)
