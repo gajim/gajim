@@ -52,7 +52,7 @@ repository = "https://dev.gajim.org/gajim/gajim"
 
 [project.optional-dependencies]
 dev = [
-  "ruff>=0.3.2",
+  "ruff>=0.6.8",
   "codespell[toml]>=2.3.0",
   "isort>=5.13.2",
   "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
@@ -298,6 +298,7 @@ ignore = [
   "SIM201", # Use x instead of not x
   "SIM212", # Use `value if value else ''` instead of `'' if not value else value`
   "SIM300", # Yoda conditions are discouraged use x instead
+  "UP031",  # Use format specifiers instead of percent format
   "UP037",  # Remove quotes from type annotation
 ]
 
