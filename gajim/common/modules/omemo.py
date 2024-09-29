@@ -522,12 +522,11 @@ class OMEMO(BaseModule):
                 self._request_bundle_ttl(jid, device_id)
 
     def _has_trusted_keys(self, jid: str) -> bool:
-        if self.backend.get_identity_infos(
+        infos = self.backend.get_identity_infos(
                 jid,
                 only_active=True,
-                trust=[OMEMOTrust.VERIFIED, OMEMOTrust.BLIND]):
-            return True
-        return False
+                trust=[OMEMOTrust.VERIFIED, OMEMOTrust.BLIND])
+        return bool(infos)
 
     def set_bundle(self, bundle: OMEMOBundle | None = None) -> None:
         if bundle is None:

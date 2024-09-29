@@ -233,9 +233,7 @@ def allow_showing_notification(account: str) -> bool:
     if app.settings.get('show_notifications_away'):
         return True
     client = app.get_client(account)
-    if client.status == 'online':
-        return True
-    return False
+    return client.status == 'online'
 
 
 def allow_sound_notification(account: str, sound_event: str) -> bool:
@@ -244,7 +242,7 @@ def allow_sound_notification(account: str, sound_event: str) -> bool:
     client = app.get_client(account)
     if client.status != 'online' and not app.settings.get('sounddnd'):
         return False
-    if app.settings.get_soundevent_settings(sound_event)['enabled']:
+    if app.settings.get_soundevent_settings(sound_event)['enabled']:  # noqa: SIM103
         return True
     return False
 

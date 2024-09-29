@@ -164,10 +164,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
 
         httpupload = app.window.get_action_enabled('send-file-httpupload')
         jingle = app.window.get_action_enabled('send-file-jingle')
-        if not httpupload and not jingle:
-            return False
-
-        return True
+        return httpupload or jingle
 
     def _remove_timeout_ids(self) -> None:
         if self._time_label_update_timeout_id is not None:

@@ -274,7 +274,7 @@ class PreviewManager:
                     log.info('%s not in allowed mime types', mime_type)
                     return False
 
-                if mime_type == 'application/octet-stream' and uri != oob_url:
+                if mime_type == 'application/octet-stream' and uri != oob_url:  # noqa: SIM103
                     # guess_mime_type yields 'application/octet-stream' for
                     # paths without suffix. Check oob_url to make sure we
                     # display a preview for files sent via http upload.

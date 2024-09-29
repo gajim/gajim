@@ -257,9 +257,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         setting = model[treeiter][Column.NAME]
         desc = ADVANCED_SETTINGS['app'][setting]
 
-        if search_string in setting or search_string in desc.lower():
-            return True
-        return False
+        return search_string in setting or search_string in desc.lower()
 
     def _on_search_entry_changed(self, _entry: Gtk.SearchEntry) -> None:
         self.modelfilter.refilter()

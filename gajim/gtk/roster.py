@@ -412,10 +412,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         if app.settings.get('showoffline'):
             return True
 
-        if contact.show is PresenceShowExt.OFFLINE:
-            return False
-
-        return True
+        return contact.show is not PresenceShowExt.OFFLINE
 
     def _set_model(self) -> None:
         self._roster.set_model(self._modelfilter)

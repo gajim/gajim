@@ -252,9 +252,7 @@ class Windows(IdleMonitor):
             return False
 
         threshold = time.time() - 10
-        if threshold > self._locked_time:
-            return True
-        return False
+        return threshold > self._locked_time
 
 
 class IdleMonitorManager(GObject.Object):

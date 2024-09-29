@@ -165,10 +165,7 @@ class MessageRowActions(Gtk.EventBox):
 
             self_contact = self._contact.get_self()
             assert self_contact is not None
-            if self_contact.role.is_visitor:
-                return False
-
-            return True
+            return not self_contact.role.is_visitor
 
         return self._message_row.message_id is not None
 

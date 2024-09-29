@@ -310,9 +310,7 @@ class ChatControl(EventHelper):
         if event.account != self._contact.account:
             return False
 
-        if event.jid != self._contact.jid:
-            return False
-        return True
+        return event.jid == self._contact.jid
 
     def _on_presence_received(self, event: events.PresenceReceived) -> None:
         if not self._is_event_processable(event):
