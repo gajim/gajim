@@ -506,10 +506,8 @@ class MaxWidthComboBoxText(Gtk.ComboBoxText):
         minimum_width, natural_width = Gtk.ComboBoxText.do_get_preferred_width(
             self)
 
-        if natural_width > self._max_width:
-            natural_width = self._max_width
-        if minimum_width > self._max_width:
-            minimum_width = self._max_width
+        natural_width = min(natural_width, self._max_width)
+        minimum_width = min(minimum_width, self._max_width)
         return minimum_width, natural_width
 
 

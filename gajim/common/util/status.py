@@ -34,8 +34,8 @@ def get_global_show() -> str:
             continue
         status = get_client_status(client.account)
         index = SHOW_LIST.index(status)
-        if index > maxi:
-            maxi = index
+        maxi = max(index, maxi)
+
     return SHOW_LIST[maxi]
 
 
