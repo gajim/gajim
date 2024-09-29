@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 
 import calendar
@@ -918,7 +919,7 @@ class MessageArchiveStorage(AlchemyStorage):
     @timeit
     def get_recent_muc_nicks(
         self, session: Session, account: str, jid: JID
-    ) -> list[str]:
+    ) -> Sequence[str]:
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
@@ -938,7 +939,7 @@ class MessageArchiveStorage(AlchemyStorage):
         )
 
         self._explain(session, stmt)
-        return list(session.scalars(stmt))
+        return cast(Sequence[str], session.scalars(stmt).all())
 
     @with_session
     @timeit
