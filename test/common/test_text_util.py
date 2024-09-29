@@ -24,8 +24,8 @@ class Test(unittest.TestCase):
     def test_escape_iri_path_segment(self) -> None:
         self.assertEqual(escape_iri_path_segment(''), '', '<empty string>')
 
-        über = 'u\u0308ber'
-        self.assertEqual(escape_iri_path_segment(über), über)
+        ueber = 'u\u0308ber'
+        self.assertEqual(escape_iri_path_segment(ueber), ueber)
 
         segment = ''.join(chr(c) for c in range(0x20, 0x7F))
         self.assertEqual(

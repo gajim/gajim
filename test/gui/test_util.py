@@ -14,9 +14,9 @@ class Test(unittest.TestCase):
         self.assertEqual(
             get_first_grapheme('ab'), 'a', 'ab -> a')
 
-        über = 'u\u0308ber'
+        ueber = 'u\u0308ber'
         self.assertEqual(
-            get_first_grapheme(über), 'u\u0308', über + ' -> ü')
+            get_first_grapheme(ueber), 'u\u0308', ueber + ' -> ü')
 
         woman = '\U0001F469'
         zwj = '\u200D'
