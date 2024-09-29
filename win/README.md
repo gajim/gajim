@@ -41,4 +41,8 @@ To test Gajim's Microsoft Store msix bundle, the following steps are necessary:
 * Either build the msixbundle locally by running `./build.sh` as described above, or download a nightly build and place it in `C:\msys64\home\USER\gajim\win\_build_root\Gajim.msixbundle`
 * Run `./unpack_msixbundle.sh`, which unpacks the bundle to `C:\msys64\home\USER\gajim\win\_build_root\unpack\Gajim`
 * Open `C:\msys64\home\USER\gajim\win\_build_root\unpack\Gajim` in a PowerShell
+* For easier debugging, change `bin\Gajim.exe` to `bin\Gajim-Debug.exe` in `AppxManifest.xml`, like this: `<Application Id="Gajim" Executable="bin\Gajim-Debug.exe" EntryPoint="Windows.FullTrustApplication">`
 * Now register the app by running `Add-AppxPackage –Register AppxManifest.xml` from a PowerShell
+* Registering the app again requires a version bump in `AppxManifest.xml` (or uninstalling the Gajim app)
+
+To modify code, you can replace `.pyc` files by their equivalent `.py` files from this repo. Gajim's code within the App installation can be found in `C:\msys64\home\USER\gajim\win\_build_root\unpack\Gajim\lib\python3.11\site-packages\gajim`. Code changes do not require to re-register the app.
