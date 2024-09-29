@@ -39,6 +39,7 @@ dependencies = [
   "SQLAlchemy>=2.0.0",
   "winrt-Windows.ApplicationModel; platform_system == 'Windows'",
   "winrt-Windows.Foundation; platform_system == 'Windows'",
+  "winrt-Windows.Storage; platform_system == 'Windows'",
   "winrt-Windows.UI; platform_system == 'Windows'",
   "winrt-Windows.UI.ViewManagement; platform_system == 'Windows'",
   "windows-toasts; platform_system == 'Windows'",
