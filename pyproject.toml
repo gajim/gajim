@@ -52,7 +52,7 @@ repository = "https://dev.gajim.org/gajim/gajim"
 [project.optional-dependencies]
 dev = [
   "ruff>=0.3.2",
-  "codespell[toml]>=2.2.6",
+  "codespell[toml]>=2.3.0",
   "isort>=5.13.2",
   "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
   "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
@@ -82,8 +82,8 @@ skip-string-normalization = true
 target-version = ["py310", "py311", "py312"]
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,dist,shared-modules,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
-ignore-words-list = "claus,pres,ser,trough"
+skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
+ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin"
 
 [tool.pyright]
 pythonVersion = "3.10"
