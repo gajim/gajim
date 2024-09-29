@@ -73,7 +73,7 @@ def is_transfer_stopped(file_props: FileProp) -> bool:
         return True
     if file_props.completed:
         return True
-    if not file_props.stopped:
+    if not file_props.stopped:  # noqa: SIM103
         return False
     return True
 
@@ -371,7 +371,7 @@ class Bytestream(BaseModule):
             if ip_l & (255 << 24 | 240 << 16) == (172 << 24 | 16 << 16):
                 return True
             # 192.168
-            if ip_l & (255 << 24 | 255 << 16) == (192 << 24 | 168 << 16):
+            if ip_l & (255 << 24 | 255 << 16) == (192 << 24 | 168 << 16):  # noqa: SIM103
                 return True
             return False
 

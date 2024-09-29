@@ -463,9 +463,7 @@ def get_transport_name_from_jid(
 
 def jid_is_transport(jid: str) -> bool:
     # if not '@' or '@' starts the jid then it is transport
-    if jid.find('@') <= 0:
-        return True
-    return False
+    return jid.find('@') <= 0
 
 
 def get_jid_from_account(account_name: str) -> str:

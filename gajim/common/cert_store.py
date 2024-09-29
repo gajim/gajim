@@ -69,9 +69,7 @@ class CertificateStore:
                     tls_errors.remove(Gio.TlsCertificateFlags.UNKNOWN_CA)
                     break
 
-        if not tls_errors:
-            return True
-        return False
+        return not tls_errors
 
     @staticmethod
     def _on_certificate_write_finished(_successful: bool,

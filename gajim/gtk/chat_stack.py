@@ -163,10 +163,7 @@ class ChatStack(Gtk.Stack, EventHelper):
             self._chat_function_page.process_escape()
             return True
 
-        if self._message_action_box.process_escape():
-            return True
-
-        return False
+        return self._message_action_box.process_escape()
 
     def get_chat_control(self) -> ChatControl:
         return self._chat_control

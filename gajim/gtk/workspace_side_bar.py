@@ -91,10 +91,7 @@ class WorkspaceSideBar(Gtk.ListBox):
             self.row_before = self._get_last_workspace_row()
             self.row_after = None
 
-        if self.drag_row in (self.row_before, self.row_after):
-            return False
-
-        return True
+        return self.drag_row not in (self.row_before, self.row_after)
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
