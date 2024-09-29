@@ -36,14 +36,14 @@ def get_pixbuf_from_file(
     except GLib.Error:
         try:
             with open(path, 'rb') as image_handle:
-                img = Image.open(image_handle)  # pyright: ignore
+                img = Image.open(image_handle)
                 converted_image = img.convert('RGBA')
         except (NameError, OSError, UnidentifiedImageError):
             log.warning('Pillow convert failed: %s', path)
             log.debug('Error', exc_info=True)
             return None
 
-        array = GLib.Bytes.new(converted_image.tobytes())  # pyright: ignore
+        array = GLib.Bytes.new(converted_image.tobytes())
         width, height = converted_image.size
         pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
             array, GdkPixbuf.Colorspace.RGB, True, 8, width, height, width * 4
@@ -76,8 +76,8 @@ def get_pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf | None:
             'Trying to convert image data using Pillow.'
         )
         try:
-            image = Image.open(BytesIO(data)).convert('RGBA')  # pyright: ignore
-            array = GLib.Bytes.new(image.tobytes())  # pyright: ignore
+            image = Image.open(BytesIO(data)).convert('RGBA')
+            array = GLib.Bytes.new(image.tobytes())
             width, height = image.size
             pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
                 array, GdkPixbuf.Colorspace.RGB, True, 8, width, height, width * 4
@@ -179,7 +179,7 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
     input_file = BytesIO(data)
     output_file = BytesIO()
     try:
-        image = Image.open(input_file)  # type: ignore
+        image = Image.open(input_file)
     except (Image.DecompressionBombError, Image.DecompressionBombWarning) as error:
         log.warning('Decompression bomb detected: %s', error)
         raise
@@ -202,8 +202,8 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
             assert isinstance(image, ImageFile.ImageFile)
             resize_gif(image, output_file, (size, size))
         else:
-            image.thumbnail((size, size))  # type: ignore
-            image.save(  # type: ignore
+            image.thumbnail((size, size))
+            image.save(
                 output_file,
                 format=image.format,
                 exif=image.info.get('exif', b''),  # type: ignore
@@ -244,7 +244,7 @@ def resize_gif(
 ) -> None:
     frames, result = extract_and_resize_frames_from_gif(image, resize_to)
 
-    frames[0].save(  # type: ignore
+    frames[0].save(
         output_file,
         format='GIF',
         optimize=True,
@@ -285,12 +285,12 @@ def extract_and_resize_frames_from_gif(
             # pasting it on top of the preceding frames.
 
             if result['mode'] == 'partial':
-                new_frame.paste(last_frame)  # type: ignore
+                new_frame.paste(last_frame)
 
-            new_frame.paste(image, (0, 0), image.convert('RGBA'))  # type: ignore
+            new_frame.paste(image, (0, 0), image.convert('RGBA'))
 
             # This method preservs aspect ratio
-            new_frame.thumbnail(resize_to, Image.Resampling.LANCZOS)  # type: ignore
+            new_frame.thumbnail(resize_to, Image.Resampling.LANCZOS)
             frames.append(new_frame)
 
             i += 1
