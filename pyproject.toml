@@ -261,6 +261,7 @@ ignore = [
   "C901",   # too complex
   "COM812", # Trailing comma missing
   "FBT003", # Boolean positional value in function call
+  "ICN001", # Unconventional-import-alias
   "N802",   # Function name should be lower case
   "N806",   # Variable should be lower case
   "N817",   # CamelCase imported as acronym
@@ -332,7 +333,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "test/database/*" = ["E501"]
 "make.py" = ["S603", "S607"]
 "mac/*" = ["S603", "S607"]
-"win/*" = ["S603", "S607"]
+"win/*" = ["S603", "S605", "S607"]
 "scripts/*" = ["S603", "S607"]
 "launch.py" = ["S603", "S607"]
 
