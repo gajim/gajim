@@ -17,6 +17,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import TYPE_CHECKING
 
 import hashlib
@@ -63,8 +64,6 @@ if ((sys.platform == 'win32' and
         int(platform.version().split('.')[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION) or
         TYPE_CHECKING):
     # Importing windows_toasts on an unsupported Windows version will throw an Exception
-    import winreg
-
     from windows_toasts import InteractableWindowsToaster
     from windows_toasts import Toast
     from windows_toasts import ToastActivatedEventArgs
@@ -72,9 +71,6 @@ if ((sys.platform == 'win32' and
     from windows_toasts import ToastDisplayImage
     from windows_toasts import ToastImage
     from windows_toasts import ToastImagePosition
-
-
-WINDOWS_TOAST_NOTIFIER_AUMID = 'Gajim.ToastNotification'
 
 log = logging.getLogger('gajim.gtk.notification')
 
@@ -293,19 +289,26 @@ class PopupNotification(Gtk.Window):
 class WindowsToastNotification(NotificationBackend):
     def __init__(self):
         NotificationBackend.__init__(self)
-        self._register_notifier_aumid()
+
+        if app.is_ms_store():
+            from winrt.windows.applicationmodel import AppInfo
+            aumid = cast(str, AppInfo.current.app_user_model_id)  # type: ignore
+        else:
+            # Non MS Store version has to register an AUMID manually
+            aumid = 'Gajim.ToastNotification'
+            self._register_notifier_aumid(aumid)
 
         self._toaster = InteractableWindowsToaster(
             applicationText='Gajim',
-            notifierAUMID=WINDOWS_TOAST_NOTIFIER_AUMID
+            notifierAUMID=aumid
         )
 
-    def _register_notifier_aumid(self) -> None:
+    def _register_notifier_aumid(self, aumid: str) -> None:
         '''Register an AUMID for Gajim's toast notifications.
         This allows notifications issued by Gajim to have the right icon and title.
         Code taken from: https://github.com/DatGuy1/Windows-Toasts/blob/main/scripts/register_hkey_aumid.py
         '''
-        key_path = f'SOFTWARE\\Classes\\AppUserModelId\\{WINDOWS_TOAST_NOTIFIER_AUMID}'
+        key_path = f'SOFTWARE\\Classes\\AppUserModelId\\{aumid}'
 
         image_path = (
             Path(sys.executable).parent.parent
@@ -316,6 +319,8 @@ class WindowsToastNotification(NotificationBackend):
             / 'apps'
             / 'gajim.png'
         )
+
+        import winreg
         winreg.ConnectRegistry(None, winreg.HKEY_CURRENT_USER)
         with winreg.CreateKeyEx(winreg.HKEY_CURRENT_USER, key_path) as master_key:
             winreg.SetValueEx(master_key, 'DisplayName', 0, winreg.REG_SZ, 'Gajim')
