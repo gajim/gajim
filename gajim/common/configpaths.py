@@ -35,6 +35,10 @@ def get(key: str) -> Path:
     return _paths[key]
 
 
+def get_temp_dir() -> Path:
+    return _paths.get_temp_dir()
+
+
 def get_plugin_dirs() -> list[Path]:
     if gajim.IS_FLATPAK:
         return [Path(_paths['PLUGINS_BASE']),
@@ -88,7 +92,7 @@ def create_paths() -> None:
 
 
 def cleanup_temp() -> None:
-    tmpdir = _paths['TMP'].parent
+    tmpdir = _paths.get_temp_dir().parent
     for path in tmpdir.glob('gajim-*'):
         if not path.is_dir():
             continue
@@ -101,6 +105,8 @@ def cleanup_temp() -> None:
 class ConfigPaths:
     def __init__(self) -> None:
         self._paths: dict[str, PathTupleT] = {}
+        self._temp_dir: Path | None = None
+
         self.profile = ''
         self.profile_separation = False
         self.custom_config_root: Path | None = None
@@ -173,7 +179,6 @@ class ConfigPaths:
             self.cache_root = self.data_root = self.custom_config_root
 
         user_dir_paths = [
-            ('TMP', Path(tempfile.mkdtemp(prefix='gajim-')), None, None),
             ('MY_CONFIG', Path(), PathLocation.CONFIG, PathType.FOLDER),
             ('MY_CACHE', Path(), PathLocation.CACHE, PathType.FOLDER),
             ('MY_DATA', Path(), PathLocation.DATA, PathType.FOLDER),
@@ -230,6 +235,11 @@ class ConfigPaths:
 
         for path in paths:
             self.add(*path)
+
+    def get_temp_dir(self) -> Path:
+        if self._temp_dir is None or not self._temp_dir.exists():
+            self._temp_dir = Path(tempfile.mkdtemp(prefix='gajim-'))
+        return self._temp_dir
 
 
 _paths = ConfigPaths()

@@ -768,7 +768,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             log.info('No image pasted')
             return
 
-        temp_dir = configpaths.get('TMP')
+        temp_dir = configpaths.get_temp_dir()
         image_path = temp_dir / f'{uuid.uuid4()}.png'
 
         try:

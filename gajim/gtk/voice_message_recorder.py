@@ -116,10 +116,9 @@ class VoiceMessageRecorder:
 
         # Voice message storage location
         self._filetype = 'm4a'
-        self._output_dir = configpaths.get('TMP')
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         self._file_name = f'voice-message-{timestamp}.{self._filetype}'
-        self._file_path: Path = self._output_dir / self._file_name
+        self._file_path: Path = configpaths.get_temp_dir() / self._file_name
 
         if self._audio_input_device == 'wasapisrc':
             self._audiosrc.set_property('role', 'comms')
@@ -185,7 +184,7 @@ class VoiceMessageRecorder:
             self._new_recording = False
             timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
             self._file_name = f'voice-message-{timestamp}.{self._filetype}'
-            self._file_path = self._output_dir / self._file_name
+            self._file_path = configpaths.get_temp_dir() / self._file_name
 
         self._output_file_counter += 1
         self._filesink.set_property(

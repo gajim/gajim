@@ -420,7 +420,7 @@ class HTTPFileTransfer(FileTransfer):
 
     @staticmethod
     def _get_temp_path() -> Path:
-        tempdir = configpaths.get('TMP')
+        tempdir = configpaths.get_temp_dir()
         return tempdir / get_random_string(16)
 
     def set_error(self, domain: str, text: str = '') -> None:
