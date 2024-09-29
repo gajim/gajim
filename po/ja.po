@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-11 18:56+0000\n"
-"PO-Revision-Date: 2024-08-01 03:17+0000\n"
+"PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -350,9 +350,8 @@ msgstr "<エラー>"
 msgid "A Group Chat needs at least one Owner"
 msgstr "談話室には少なくとも1人の主宰者が必要です"
 
-#, fuzzy
 msgid "A feature comparison of various providers"
-msgstr "サーバーの特徴の比較"
+msgstr "プロバイダーの特徴の比較"
 
 msgid ""
 "A file with this name already exists and you do not have permission to "
@@ -600,7 +599,7 @@ msgid "Affiliations"
 msgstr "分掌"
 
 msgid "After"
-msgstr ""
+msgstr "後"
 
 msgid "Algorithm"
 msgstr "アルゴリズム"
@@ -880,7 +879,7 @@ msgid "Ban…"
 msgstr "締め出す…"
 
 msgid "Before"
-msgstr ""
+msgstr "前"
 
 msgid "Behaviour of Application Window"
 msgstr "アプリケーションウィンドウの挙動"
@@ -1474,9 +1473,8 @@ msgstr "ファイルを保存できませんでした"
 msgid "Could not save file to selected directory."
 msgstr "選択されたディレクトリにファイルを保存できませんでした。"
 
-#, fuzzy
 msgid "Could not update providers list"
-msgstr "ファイルを開けませんでした (%s)"
+msgstr "プロバイダー一覧を更新できませんでした"
 
 msgid "Country"
 msgstr "国"
@@ -1865,7 +1863,7 @@ msgid "End call"
 msgstr "通話を終了"
 
 msgid "Endpoint for retrieving a list of providers for sign up"
-msgstr ""
+msgstr "登録用プロバイダー一覧を取得するためのエンドポイント"
 
 msgid "Enter a password to join this chat"
 msgstr "この談話室に参加するにはパスワードを入れてください"
@@ -2715,9 +2713,8 @@ msgstr ""
 "ローカルのインターフェースに加えて、アドレス変換 / ポートフォワーディングの場"
 "合にファイル転送に用いるホストの一覧 (コンマで区切る)。"
 
-#, fuzzy
 msgid "Listing of providers"
-msgstr "サーバーの一覧"
+msgstr "プロバイダーの一覧"
 
 msgid "Live Preview"
 msgstr "ライブプレビュー"
@@ -2939,7 +2936,7 @@ msgid "Modify Gateway…"
 msgstr "中継口を修正…"
 
 msgid "More infos at providers.xmpp.net"
-msgstr ""
+msgstr "詳細は、providers.xmpp.net をご覧ください"
 
 msgid "Move Chat"
 msgstr "チャットを移動"
@@ -3145,9 +3142,8 @@ msgstr "備考"
 msgid "Note to myself"
 msgstr "自分自身へのメモ"
 
-#, fuzzy
 msgid "Note: Anonymous accounts are not possible with all providers"
-msgstr "注意: 匿名アカウントはすべてのサーバーで可能というわけではありません"
+msgstr "注意: 匿名アカウントはすべてのプロバイダーで可能というわけではありません"
 
 msgid "Notes"
 msgstr "備考"
@@ -3594,14 +3590,13 @@ msgstr "プロトコル"
 
 #, python-format
 msgid "Provider Category: %s"
-msgstr ""
+msgstr "プロバイダーの分類: %s"
 
-#, fuzzy
 msgid "Provider Infos"
-msgstr "サーバー情報"
+msgstr "プロバイダー情報"
 
 msgid "Providers list is up to date"
-msgstr ""
+msgstr "プロバイダーの一覧は最新です"
 
 msgid "Prox_y"
 msgstr "プロキシ (_Y)"
@@ -4048,13 +4043,11 @@ msgstr "スクロールアップしてさらに会話履歴を読み込む…"
 msgid "Search"
 msgstr "検索"
 
-#, fuzzy
 msgid "Search Filters"
-msgstr "メッセージを送信した"
+msgstr "検索フィルター"
 
-#, fuzzy
 msgid "Search Filters (Active)"
-msgstr "メッセージを受信した"
+msgstr "検索フィルター (適用)"
 
 msgid "Search Participants…"
 msgstr "参加者を検索…"
@@ -4079,7 +4072,7 @@ msgstr ""
 "(リターンで検索開始)"
 
 msgid "Search your conversation"
-msgstr ""
+msgstr "会話を検索"
 
 msgid "Searching"
 msgstr "検索"
@@ -4259,9 +4252,8 @@ msgstr "サービス中継"
 msgid "Set configuration directory"
 msgstr "設定ファイルのディレクトリを指定"
 
-#, fuzzy
 msgid "Set date…"
-msgstr "抑制…"
+msgstr "日付を設定…"
 
 msgid "Set status message"
 msgstr "状況メッセージを設定"
@@ -4455,9 +4447,8 @@ msgstr "登録"
 msgid "Sign up Anonymously"
 msgstr "匿名で登録"
 
-#, fuzzy
 msgid "Sign up for a new account with a provider of your choice"
-msgstr "選んだサーバーに新しいアカウントを登録します"
+msgstr "選んだプロバイダーに新しいアカウントを登録します"
 
 msgid "Signup not allowed"
 msgstr "登録は許可されていません"
@@ -4662,6 +4653,13 @@ msgid ""
 "Alternatively, you can either minimize Gajim’s window, or hide it "
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
+"本当に Gajim を終了しますか ?\n"
+"そうするとメッセージの送受信ができなくなります。\n"
+"\n"
+"その代わりに、Gajim "
+"のウィンドウを最小化するか完全に非表示にすることもできます。 "
+"ウィンドウを元に戻すには、システムトレイの Gajim "
+"のアイコンを使用してください。"
 
 msgid "Switch Workspace"
 msgstr "作業空間を切替"
@@ -4770,11 +4768,10 @@ msgstr ""
 "ファイル %s を受け取りました。しかし、途中で損傷しているようです。\n"
 "もう一度ダウンロードしますか ?"
 
-#, fuzzy
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
-msgstr "サーバー証明書の検証中に次の警告が発生しました"
+msgstr "プロバイダーの証明書の検証中に次の警告が発生しました"
 
 msgid "The last message was written on a mobile client"
 msgstr "最新のメッセージはモバイルクライアントで書かれました"
@@ -4810,15 +4807,14 @@ msgstr "テーマ"
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "まだ信頼を決定していないデバイスがあります。"
 
-#, fuzzy
 msgid ""
 "There are plenty of providers to choose from.\n"
 "Creating an account with one provider allows you to communicate with "
 "contacts from other providers as well."
 msgstr ""
-"選択できるサーバーはたくさんあります。\n"
-"ひとつのサーバーにアカウントを作成すれば、他のサーバーの相手先と通信できま"
-"す。"
+"選択できるプロバイダーはたくさんあります。\n"
+"ひとつのプロバイダーにアカウントを作成すれば、他のプロバイダーの相手先と通信"
+"できます。"
 
 msgid "There are updates for Gajim’s plugins"
 msgstr "Gajim プラグインの更新があります"
@@ -5221,7 +5217,7 @@ msgid "Updates will be installed next time Gajim is started"
 msgstr "更新は次の Gajim の起動時にインストールされます"
 
 msgid "Updating provider list…"
-msgstr ""
+msgstr "プロバイダー一覧を更新中…"
 
 msgctxt "Noun"
 msgid "Upload"
@@ -5292,9 +5288,8 @@ msgstr "ユーザーインターフェース"
 msgid "User Interface Font Size"
 msgstr "ユーザーインターフェースのフォントサイズ"
 
-#, fuzzy
 msgid "User name…"
-msgstr "ユーザー名 (_U)"
+msgstr "ユーザー名…"
 
 msgid "Users"
 msgstr "ユーザー数"
@@ -5341,9 +5336,8 @@ msgstr "Windows ではビデオチャットは有効ではありません"
 msgid "Video test"
 msgstr "ビデオのテスト"
 
-#, fuzzy
 msgid "Visit Provider's Website"
-msgstr "サーバーのウェブサイトを開く"
+msgstr "プロバイダーのウェブサイトを開く"
 
 msgid "Visit Website"
 msgstr "ウェブサイトを開く"
@@ -5404,9 +5398,8 @@ msgstr ""
 "ダウンロード前に正しい証明書を確認するかどうか (無効にすると安全ではありませ"
 "ん)"
 
-#, fuzzy
 msgid "Which provider should I choose?"
-msgstr "どのサーバーを選びますか ?"
+msgstr "どのプロバイダーを選びますか ?"
 
 msgid "Why do you want to moderate this message?"
 msgstr "なぜこのメッセージを抑制したいのですか ?"
@@ -5793,7 +5786,7 @@ msgid "_Help"
 msgstr "ヘルプ (_H)"
 
 msgid "_Hide (Tray Icon)"
-msgstr ""
+msgstr "隠す (トレイアイコン) (_H)"
 
 msgid "_Host"
 msgstr "ホスト名 (_H)"
@@ -5822,9 +5815,8 @@ msgstr "アカウントを管理…(_M)"
 msgid "_Manage Account…"
 msgstr "アカウントを管理…(_M)"
 
-#, fuzzy
 msgid "_Minimize"
-msgstr "最小化"
+msgstr "最小化 (_M)"
 
 msgid "_Moderate"
 msgstr "抑制 (_M)"
@@ -5861,9 +5853,8 @@ msgstr "フォルダを開く (_O)"
 msgid "_Overwrite"
 msgstr "上書き (_O)"
 
-#, fuzzy
 msgid "_Please choose a provider"
-msgstr "サーバーを選択してください (_P)"
+msgstr "プロバイダーを選択してください (_P)"
 
 msgid "_Port"
 msgstr "ポート番号 (_P)"
@@ -5884,7 +5875,7 @@ msgid "_Re-Login"
 msgstr "再ログイン (_R)"
 
 msgid "_Remember my decision"
-msgstr ""
+msgstr "決定を記憶する (_R)"
 
 msgid "_Remove"
 msgstr "除去 (_R)"

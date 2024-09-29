@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-08-11 18:56+0000\n"
-"PO-Revision-Date: 2024-09-10 13:17+0000\n"
+"PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
 ">\n"
@@ -4260,14 +4260,13 @@ msgid "Scanning %(current)d / %(total)d ..."
 msgstr "Söker av %(current)d / %(total)d.."
 
 msgid "Scroll down"
-msgstr ""
+msgstr "Bläddra ner"
 
-#, fuzzy
 msgid "Scroll to this message"
-msgstr "statusmeddelande"
+msgstr "Bläddra till det här meddelandet"
 
 msgid "Scroll up"
-msgstr ""
+msgstr "Bläddra upp"
 
 msgid "Scroll up to load more chat history…"
 msgstr ""
