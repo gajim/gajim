@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import TYPE_CHECKING
 
 import hashlib
@@ -292,7 +291,8 @@ class WindowsToastNotification(NotificationBackend):
 
         if app.is_ms_store():
             from winrt.windows.applicationmodel import AppInfo
-            aumid = cast(str, AppInfo.current.app_user_model_id)  # type: ignore
+            assert AppInfo.current is not None
+            aumid = AppInfo.current.app_user_model_id
         else:
             # Non MS Store version has to register an AUMID manually
             aumid = 'Gajim.ToastNotification'

@@ -13,8 +13,7 @@ IS_PORTABLE = portable_path.exists()
 has_ms_appinfo = False
 try:
     from winrt.windows.applicationmodel import AppInfo
-    _current_appinfo = AppInfo.current  # type: ignore
-    has_ms_appinfo = True
+    has_ms_appinfo = AppInfo.current is not None
 except Exception:
     pass
 
