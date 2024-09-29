@@ -90,15 +90,15 @@ def parse_zone_names(content: str) -> list[tuple[str, str]]:
 def parse_country_names(content: str) -> dict[str, str]:
     logging.info('Parse country data')
 
-    countrys: dict[str, str] = {}
+    countries: dict[str, str] = {}
 
     data = csv.reader(io.StringIO(content), delimiter = '\t')
     for row in data:
         if not row or row[0].startswith('#'):
             continue
-        countrys[row[0]] = row[1]
+        countries[row[0]] = row[1]
 
-    return countrys
+    return countries
 
 
 def merge_zone_data(
