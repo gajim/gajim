@@ -1,3 +1,27 @@
+Gajim 1.9.5 (30 Sep 2024)
+
+  Improvements
+
+  * DebugConsole: Show "Log" when opening the dialog
+  * DebugConsole: Improve search for XML logs (#11992, #11181)
+  * Datafroms: Display text-multi fields without scrolled window
+  * Inform user when referenced message cannot be found
+
+  Change
+
+  * Move chat state indicator above message input
+  * Windows: Disable file system virtualization for MS Store app
+
+  Bug Fixes
+
+  * Windows: Fix Notification AUMID for MS Store install (#11965)
+  * Windows: Fix detecting MS Store version
+  * Preview: Update preview object while updating progress (#11991)
+  * Dataforms: Don’t try to calculate label size (#11990)
+  * Groupchat: Wrap long nicknames in subject row
+  * StartChat: Fix global search results missing the name in some cases (#11985)
+  * Build: Build translations for all distributions again
+
 Gajim 1.9.4 (19 Sep 2024)
 
   New
