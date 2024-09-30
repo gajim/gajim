@@ -22,6 +22,30 @@
     <property name="visible">True</property>
     <property name="can-focus">False</property>
     <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="can-focus">True</property>
+        <property name="shadow-type">in</property>
+        <child>
+          <object class="GtkSourceView" id="log_view">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="editable">False</property>
+            <property name="left-margin">6</property>
+            <property name="right-margin">6</property>
+            <property name="top-margin">6</property>
+            <property name="bottom-margin">6</property>
+            <property name="monospace">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="name">log</property>
+        <property name="title" translatable="yes">Log</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
@@ -379,29 +403,6 @@
       <packing>
         <property name="name">protocol</property>
         <property name="title" translatable="yes">Protocol</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="shadow-type">in</property>
-        <child>
-          <object class="GtkSourceView" id="log_view">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="editable">False</property>
-            <property name="left-margin">6</property>
-            <property name="right-margin">6</property>
-            <property name="top-margin">6</property>
-            <property name="bottom-margin">6</property>
-            <property name="monospace">True</property>
-          </object>
-        </child>
-      </object>
-      <packing>
-        <property name="name">log</property>
-        <property name="title" translatable="yes">Log</property>
         <property name="position">1</property>
       </packing>
     </child>
