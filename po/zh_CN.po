@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-08-12 01:17+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
@@ -173,6 +173,10 @@ msgid_plural "%s mins ago"
 msgstr[0] "%s 分钟前"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s 位参与者正在输入…"
 
@@ -220,6 +224,10 @@ msgstr "西经 %s"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "**{actor} 已将 {nick} 的从属关系设为{affiliation}{reason}"
@@ -228,6 +236,13 @@ msgstr "**{actor} 已将 {nick} 的从属关系设为{affiliation}{reason}"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "**{actor} 已将 {nick} 的角色设为{role}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "**{actor} 已将您的从属关系设为{affiliation}{reason}"
@@ -235,6 +250,9 @@ msgstr "**{actor} 已将您的从属关系设为{affiliation}{reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "**{actor} 已将您的角色设为{role}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 天"
@@ -274,12 +292,6 @@ msgstr "：从属关系已更改"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr "：群聊配置更改为仅成员进入"
-
-msgid "<Description>"
-msgstr "<描述>"
-
-msgid "<Plugin Name>"
-msgstr "<插件名称>"
 
 #, python-format
 msgid ""
@@ -340,11 +352,11 @@ msgstr ""
 "&lt;domain&gt;（域名本身匹配，任何 user@domain 或 domain/resource 或包含子域"
 "名的地址也匹配）。\n"
 
-msgid "<empty>"
-msgstr "<空白>"
-
 msgid "<error>"
 msgstr "<错误>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "群聊至少需要一位所有者"
@@ -1759,6 +1771,10 @@ msgstr "用餐中"
 msgid "Edit Name…"
 msgstr "编辑名称…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "编辑名称…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "编辑您的消息（Esc 取消）…"
 
@@ -2208,7 +2224,8 @@ msgid ""
 "on your mobile device."
 msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim 与存档已完全同步。"
 
 msgid ""
@@ -2367,7 +2384,8 @@ msgstr "主页面"
 msgid "Hostname"
 msgstr "主机名"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr "应该同步多久前的聊天记录？"
 
 msgid "How long Gajim should keep your chat history"
@@ -2525,6 +2543,10 @@ msgstr "无效节点"
 msgid "Invalid Server Name"
 msgstr "无效服务器名"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "无效名称"
+
 msgid "Invalid XMPP Address"
 msgstr "无效 XMPP 地址"
 
@@ -2653,6 +2675,10 @@ msgstr "踢出…"
 
 msgid "Label"
 msgstr "标签"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "最后但同样重要的"
@@ -3291,6 +3317,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "参与者"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "参与者"
+
 msgid "Participants asking for voice:"
 msgstr "参与者请求发言权："
 
@@ -3859,6 +3889,9 @@ msgstr "重置所有聊天为当前默认值"
 msgid "Reset all group chats to the current default value"
 msgstr "重置所有群聊为当前默认值"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "重置所有值为默认"
 
@@ -3944,6 +3977,9 @@ msgstr "另存为…"
 
 msgid "Save as…"
 msgstr "另存为…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "保存头像失败"
@@ -4061,10 +4097,12 @@ msgstr "选择表情符号"
 msgid "Select playback speed"
 msgstr "选择播放速度"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "选择您想要与之同步的账号"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "选择您想要同步的联系人"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4304,9 +4342,6 @@ msgstr "显示所有警告"
 
 msgid "Show chat list"
 msgstr "显示聊天列表"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"
 
 msgid "Show debug console"
 msgstr "显示调试控制台"
@@ -4585,8 +4620,8 @@ msgstr ""
 "是否确定要退出 Gajim？\n"
 "如果这样做，您将无法发送和接收消息。\n"
 "\n"
-"或者，您可以最小化 Gajim 的窗口，或者完全隐藏窗口。使用 Gajim "
-"的系统托盘图标恢复窗口。"
+"或者，您可以最小化 Gajim 的窗口，或者完全隐藏窗口。使用 Gajim 的系统托盘图标"
+"恢复窗口。"
 
 msgid "Switch Workspace"
 msgstr "切换工作区"
@@ -4609,15 +4644,6 @@ msgstr "切换至上个未读聊天"
 msgid "Sync Threshold"
 msgstr "同步阈值"
 
-msgid "Synchronise"
-msgstr "同步"
-
-msgid "Synchronise History…"
-msgstr "同步聊天记录…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "同步所有账号状态"
-
 msgid "Synchronize"
 msgstr "同步"
 
@@ -4626,6 +4652,21 @@ msgstr "同步账号"
 
 msgid "Synchronize Chat History"
 msgstr "同步聊天记录"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "同步聊天记录…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "任何用户都可以加入此群聊"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "同步所有账号状态"
 
 msgid "Synchronizing Chat History…"
 msgstr "同步聊天记录中…"
@@ -4700,6 +4741,10 @@ msgstr "尝试验证提供者的证书时出现以下警告"
 
 msgid "The last message was written on a mobile client"
 msgstr "最近的消息是在移动客户端上编写的"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "语音消息不可用"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "服务器指定或修改了您的群聊昵称"
@@ -6082,6 +6127,15 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid ":Note"
 #~ msgstr "备注"
 
+#~ msgid "<Description>"
+#~ msgstr "<描述>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<插件名称>"
+
+#~ msgid "<empty>"
+#~ msgstr "<空白>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "无"
 
@@ -6348,8 +6402,14 @@ msgstr "…或者把图片拖放到这里"
 #~ msgid "Show Gajim"
 #~ msgstr "显示 Gajim"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "切换至第一至第九工作区"
+
+#~ msgid "Synchronise"
+#~ msgstr "同步"
 
 #~ msgid "Topic"
 #~ msgstr "话题"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -175,6 +175,10 @@ msgstr[1] "před %s minutami"
 msgstr[2] "před %s minutami"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -222,6 +226,10 @@ msgstr "%sZ"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Vztah {nick} byl nastaven na {affiliation}{actor}{reason}"
@@ -230,6 +238,13 @@ msgstr "** Vztah {nick} byl nastaven na {affiliation}{actor}{reason}"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Postavení {nick} bylo nastaveno na {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Váš vztah byl nastaven na {affiliation}{actor}{reason}"
@@ -237,6 +252,9 @@ msgstr "** Váš vztah byl nastaven na {affiliation}{actor}{reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Vaše postavení bylo nastaveno na {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 den"
@@ -276,12 +294,6 @@ msgstr ": Příslušnost byla změněna"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Nastavení skupinové konverzace bylo změněno na vstup pouze pro členy"
-
-msgid "<Description>"
-msgstr "<Popis>"
-
-msgid "<Plugin Name>"
-msgstr "<Jméno zásuvného modulu>"
 
 #, python-format
 msgid ""
@@ -342,11 +354,11 @@ msgstr ""
 "4. doména (samotná doména odpovídá, stejně jako kterýkoliv uživatel@doména,\n"
 "doména/zdroj, nebo adresa obsahující poddoménu).\n"
 
-msgid "<empty>"
-msgstr "<prázdné>"
-
 msgid "<error>"
 msgstr "Chyba"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Žádný"
@@ -1789,6 +1801,10 @@ msgstr "Jím"
 msgid "Edit Name…"
 msgstr "Upravit jméno…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Upravit jméno…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2246,7 +2262,8 @@ msgstr ""
 "Gajim se dobře integruje s Vašimi ostatními zařízeními: jednoduše pokračujte "
 "v konverzacích na svém mobilním zařízení."
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim je plně synchronizován s archivem."
 
 msgid ""
@@ -2407,7 +2424,8 @@ msgstr "Domovská stránka"
 msgid "Hostname"
 msgstr "Jméno počítače"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr "Kolik z historie konverzace má být synchronizováno?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2573,6 +2591,10 @@ msgstr "Neplatný uzel"
 msgid "Invalid Server Name"
 msgstr "Neplatné jméno serveru"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Neplatné jméno"
+
 msgid "Invalid XMPP Address"
 msgstr "Neplatná adresa XMPP"
 
@@ -2705,6 +2727,10 @@ msgstr "Vyhodit…"
 
 msgid "Label"
 msgstr "Označení"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "V neposlední řadě"
@@ -3360,6 +3386,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Účastníci"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Účastníci"
+
 msgid "Participants asking for voice:"
 msgstr "Účastníci žádající o hlas:"
 
@@ -3944,6 +3974,9 @@ msgstr "Resetovat všechny konverzace na aktuální výchozí hodnoty"
 msgid "Reset all group chats to the current default value"
 msgstr "Resetovat všechny skupinové konverzace na aktuální výchozí hodnoty"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "Resetovat na výchozí hodnoty"
 
@@ -4029,6 +4062,9 @@ msgstr "Uložit jako..."
 
 msgid "Save as…"
 msgstr "Uložit jako…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "Ukládání profilového obrázku selhalo"
@@ -4150,10 +4186,12 @@ msgstr "Vyberte emotikon"
 msgid "Select playback speed"
 msgstr "Zvolit rychlost přehrávání"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Vybrat účet pro synchronizaci"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "JID kontaktu, se kterým chcete komunikovat"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4406,9 +4444,6 @@ msgstr "Zobrazit všechna varování"
 
 msgid "Show chat list"
 msgstr "Zobrazit seznam konverzací"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr "Zobrazovat stav konverzace (např. „píše…“) vedle jména kontaktu"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4711,15 +4746,6 @@ msgstr "Přepnout na předchozí nepřečtenou konverzaci"
 msgid "Sync Threshold"
 msgstr "Práh synchronizace"
 
-msgid "Synchronise"
-msgstr "Synchronizovat"
-
-msgid "Synchronise History…"
-msgstr "Synchronizovat historii…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Synchronizovat stav všech účtů"
-
 msgid "Synchronize"
 msgstr "Synchronizovat"
 
@@ -4728,6 +4754,21 @@ msgstr "Synchronizovat účty"
 
 msgid "Synchronize Chat History"
 msgstr "Synchronizovat historii konverzace"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Synchronizovat historii…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "Kdokoli se smí připojit do této skupinové konverzace"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Synchronizovat stav všech účtů"
 
 msgid "Synchronizing Chat History…"
 msgstr "Synchronizuje se historie konverzace…"
@@ -4806,6 +4847,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Poslední zpráva byla napsána na mobilním klientu"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Video hovory nejsou na Windows dostupné"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Server přidělil nebo změnil vaši přezdívku v této skupinové konverzaci"
@@ -6220,6 +6265,15 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid ":Note"
 #~ msgstr "Poznámky"
 
+#~ msgid "<Description>"
+#~ msgstr "<Popis>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Jméno zásuvného modulu>"
+
+#~ msgid "<empty>"
+#~ msgstr "<prázdné>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Ask (for Subscription):Není"
 
@@ -6516,8 +6570,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Show Gajim"
 #~ msgstr "Zobrazit Gajim"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr "Zobrazovat stav konverzace (např. „píše…“) vedle jména kontaktu"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Přepnout na první až devátou pracovní plochu"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synchronizovat"
 
 #~ msgid "Topic"
 #~ msgstr "Téma"

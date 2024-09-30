@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -161,6 +161,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -208,6 +212,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -216,12 +224,22 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr ""
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
 
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
+msgstr ""
+
+msgid "** Your hats are now "
 msgstr ""
 
 msgid "1 Day"
@@ -261,12 +279,6 @@ msgid ": Affiliation changed"
 msgstr ""
 
 msgid ": Group chat configuration changed to members-only"
-msgstr ""
-
-msgid "<Description>"
-msgstr "<Descrition>"
-
-msgid "<Plugin Name>"
 msgstr ""
 
 #, python-format
@@ -320,11 +332,11 @@ msgid ""
 "resource)\n"
 msgstr ""
 
-msgid "<empty>"
-msgstr "<vacui>"
-
 msgid "<error>"
 msgstr "<errore>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr ""
@@ -1725,6 +1737,9 @@ msgstr ""
 msgid "Edit Name…"
 msgstr ""
 
+msgid "Edit display name…"
+msgstr ""
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2166,7 +2181,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2325,7 +2340,7 @@ msgstr "Hem-págine"
 msgid "Hostname"
 msgstr ""
 
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr ""
 
 msgid "How long Gajim should keep your chat history"
@@ -2473,6 +2488,9 @@ msgstr ""
 msgid "Invalid Server Name"
 msgstr ""
 
+msgid "Invalid Stanza"
+msgstr ""
+
 msgid "Invalid XMPP Address"
 msgstr ""
 
@@ -2600,6 +2618,10 @@ msgstr ""
 
 msgid "Label"
 msgstr "Etiquette"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr ""
@@ -3227,6 +3249,9 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr ""
 
+msgid "Participants Count"
+msgstr ""
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -3789,6 +3814,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr ""
 
@@ -3873,6 +3901,9 @@ msgid "Save as..."
 msgstr ""
 
 msgid "Save as…"
+msgstr ""
+
+msgid "Save display name"
 msgstr ""
 
 msgid "Saving Avatar Failed"
@@ -3989,10 +4020,10 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+msgid "Select the account with which you want to synchronize"
 msgstr ""
 
-msgid "Select the contacts you want to synchronise"
+msgid "Select the contacts you want to synchronize"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4231,9 +4262,6 @@ msgid "Show all warnings"
 msgstr ""
 
 msgid "Show chat list"
-msgstr ""
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 msgstr ""
 
 msgid "Show debug console"
@@ -4530,15 +4558,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr ""
-
-msgid "Synchronise History…"
-msgstr ""
-
-msgid "Synchronise the status of all accounts"
-msgstr ""
-
 msgid "Synchronize"
 msgstr ""
 
@@ -4546,6 +4565,18 @@ msgid "Synchronize Accounts"
 msgstr ""
 
 msgid "Synchronize Chat History"
+msgstr ""
+
+msgid "Synchronize History…"
+msgstr ""
+
+msgid "Synchronize joined group chats"
+msgstr ""
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+msgid "Synchronize the status of all accounts"
 msgstr ""
 
 msgid "Synchronizing Chat History…"
@@ -4618,6 +4649,9 @@ msgid ""
 msgstr ""
 
 msgid "The last message was written on a mobile client"
+msgstr ""
+
+msgid "The referenced message is not available."
 msgstr ""
 
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -5966,3 +6000,9 @@ msgstr ""
 
 msgid "…or drop it here"
 msgstr ""
+
+#~ msgid "<Description>"
+#~ msgstr "<Descrition>"
+
+#~ msgid "<empty>"
+#~ msgstr "<vacui>"

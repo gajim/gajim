@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
-"PO-Revision-Date: 2024-09-10 13:17+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"PO-Revision-Date: 2024-09-30 20:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -181,6 +181,10 @@ msgstr[0] "vor %s min"
 msgstr[1] "vor %s min"
 
 #, python-format
+msgid "%s of %s"
+msgstr "%s von %s"
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s Teilnehmer schreiben…"
 
@@ -228,6 +232,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr "** %s hat alle seine Hüte verloren!"
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -238,6 +246,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Die Rolle von {nick} wurde festgelegt auf {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr "** Die Hüte von %s sind nun %s"
+
+msgid "** You lost all your hats!"
+msgstr "** Du hast alle deine Hüte verloren!"
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -247,6 +262,9 @@ msgstr ""
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Deine Rolle wurde festgelegt auf {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr "** Deine Hüte sind nun "
 
 msgid "1 Day"
 msgstr "1 Tag"
@@ -286,12 +304,6 @@ msgstr ": Gruppenzugehörigkeit geändert"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Gruppenchat-Konfiguration wurde auf \"nur für Mitglieder\" geändert"
-
-msgid "<Description>"
-msgstr "<Description>"
-
-msgid "<Plugin Name>"
-msgstr "<Plugin Name>"
 
 #, python-format
 msgid ""
@@ -352,11 +364,11 @@ msgstr ""
 "&lt;domain&gt; (die Domain selbst sowie jeder benutzer@domain stimmen "
 "überein)\n"
 
-msgid "<empty>"
-msgstr "<leer>"
-
 msgid "<error>"
 msgstr "<Fehler>"
+
+msgid "@APP_NAME@"
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Ein Gruppenchat benötigt mindestens einen Eigentümer"
@@ -1804,6 +1816,9 @@ msgstr "Essen"
 msgid "Edit Name…"
 msgstr "Namen ändern…"
 
+msgid "Edit display name…"
+msgstr "Anzeigename ändern…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Nachricht bearbeiten (Esc zum Abbrechen)…"
 
@@ -2270,7 +2285,7 @@ msgstr ""
 "Gajim vernetzt sich gut mit deinen übrigen Geräten: Einfach auf dem PC "
 "schreiben und auf dem Handy sehen, was geschrieben wurde."
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim ist vollständig mit dem Nachrichtenarchiv synchronisiert."
 
 msgid ""
@@ -2431,9 +2446,8 @@ msgstr "Website"
 msgid "Hostname"
 msgstr "Hostname"
 
-msgid "How far back should the chat history be synchronised?"
-msgstr ""
-"Für welchen Zeitraum soll der Nachrichtenverlauf synchronisiert werden?"
+msgid "How far back should the chat history be synchronized?"
+msgstr "Für welchen Zeitraum soll der Nachrichtenverlauf synchronisiert werden?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Wie lange Gajim deinen Nachrichtenverlauf behalten soll"
@@ -2605,6 +2619,9 @@ msgstr "Ungültiger Node"
 msgid "Invalid Server Name"
 msgstr "Ungültiger Servername"
 
+msgid "Invalid Stanza"
+msgstr "Ungültige Stanza"
+
 msgid "Invalid XMPP Address"
 msgstr "Ungültige XMPP-Adresse"
 
@@ -2736,6 +2753,10 @@ msgstr "Rauswerfen…"
 
 msgid "Label"
 msgstr "Bezeichnung"
+
+#, python-format
+msgid "Language: %s"
+msgstr "Sprache: %s"
 
 msgid "Last but not least"
 msgstr "Zu guter Letzt"
@@ -3382,6 +3403,9 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Teilnehmer"
 
+msgid "Participants Count"
+msgstr "Teilnehmeranzahl"
+
 msgid "Participants asking for voice:"
 msgstr "Teilnehmer, die nach Schreibberechtigung fragen:"
 
@@ -3959,6 +3983,9 @@ msgstr "Alle Chats zur derzeitigen Standardeinstellung zurücksetzen"
 msgid "Reset all group chats to the current default value"
 msgstr "Alle Gruppenchats zur derzeitigen Standardeinstellung zurücksetzen"
 
+msgid "Reset to original name"
+msgstr "Auf Originalnamen zurücksetzen"
+
 msgid "Resets value to default"
 msgstr "Setzt die Einstellung auf den Standardwert zurück"
 
@@ -4044,6 +4071,9 @@ msgstr "Speichern unter..."
 
 msgid "Save as…"
 msgstr "Speichern unter…"
+
+msgid "Save display name"
+msgstr "Anzeigename speichern"
 
 msgid "Saving Avatar Failed"
 msgstr "Speichern des Kontaktbilds fehlgeschlagen"
@@ -4161,10 +4191,10 @@ msgstr "Emoji einfügen"
 msgid "Select playback speed"
 msgstr "Abspielgeschwindigkeit wählen"
 
-msgid "Select the account with which you want to synchronise"
+msgid "Select the account with which you want to synchronize"
 msgstr "Das Konto auswählen, mit dem du dich synchronisieren möchtest"
 
-msgid "Select the contacts you want to synchronise"
+msgid "Select the contacts you want to synchronize"
 msgstr "Kontakte auswählen, die du synchronisieren möchtest"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4414,11 +4444,6 @@ msgstr "Zeige alle Warnungen"
 
 msgid "Show chat list"
 msgstr "Chatliste zeigen"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
-"Chatstatus des Kontakts (z.B. schreibt gerade) neben dem Namen des Kontakts "
-"anzeigen"
 
 msgid "Show debug console"
 msgstr "Debug-Konsole anzeigen"
@@ -4730,15 +4755,6 @@ msgstr "Zum vorigen ungelesenen Chat wechseln"
 msgid "Sync Threshold"
 msgstr "Synchronisationsbegrenzung"
 
-msgid "Synchronise"
-msgstr "Synchronisieren"
-
-msgid "Synchronise History…"
-msgstr "Nachrichtenverlauf synchronisieren…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Synchronisiere den Status aller Konten"
-
 msgid "Synchronize"
 msgstr "Synchronisieren"
 
@@ -4747,6 +4763,19 @@ msgstr "Konten synchronisieren"
 
 msgid "Synchronize Chat History"
 msgstr "Nachrichtenverlauf synchronisieren"
+
+msgid "Synchronize History…"
+msgstr "Nachrichtenverlauf synchronisieren…"
+
+msgid "Synchronize joined group chats"
+msgstr "Beigetretene Gruppenchats synchronisieren"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+"Gruppenchats, denen ich beigetreten bin mit anderen Geräten synchronisieren."
+
+msgid "Synchronize the status of all accounts"
+msgstr "Synchronisiere den Status aller Konten"
 
 msgid "Synchronizing Chat History…"
 msgstr "Nachrichtenverlauf wird synchronisiert…"
@@ -4826,6 +4855,9 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Die letzte Nachricht wurde von einem Mobiltelefon aus geschrieben"
+
+msgid "The referenced message is not available."
+msgstr "Die referenzierte Nachricht ist nicht verfügbar"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -6266,6 +6298,15 @@ msgstr "… oder hierher ziehen"
 #~ msgid ":Note"
 #~ msgstr "Notizen"
 
+#~ msgid "<Description>"
+#~ msgstr "<Description>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Plugin Name>"
+
+#~ msgid "<empty>"
+#~ msgstr "<leer>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "Keine Kontaktanfrage"
 
@@ -6538,8 +6579,16 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim zeigen"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr ""
+#~ "Chatstatus des Kontakts (z.B. schreibt gerade) neben dem Namen des "
+#~ "Kontakts anzeigen"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Zum ersten - neunten Arbeitsbereich wechseln"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synchronisieren"
 
 #~ msgid "Topic"
 #~ msgstr "Thema"

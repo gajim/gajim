@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -166,6 +166,10 @@ msgid_plural "%s mins ago"
 msgstr[0] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -213,6 +217,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** %(nick)s 的歸屬被設定為 %(affiliation)s"
@@ -221,6 +229,13 @@ msgstr "** %(nick)s 的歸屬被設定為 %(affiliation)s"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** %(nick)s 的角色被 %(actor)s 設定為 %(role)s"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** %(nick)s 的歸屬被 %(actor)s 設定為 %(affiliation)s"
@@ -228,6 +243,9 @@ msgstr "** %(nick)s 的歸屬被 %(actor)s 設定為 %(affiliation)s"
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** %(nick)s 的角色被 %(actor)s 設定為 %(role)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -269,14 +287,6 @@ msgstr "歸屬變更"
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "聊天室配置變為\"僅成員\""
-
-#, fuzzy
-msgid "<Description>"
-msgstr "描述"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "外掛程式失敗"
 
 #, python-format
 msgid ""
@@ -348,12 +358,12 @@ msgstr ""
 "4。domain (欄位名稱本身匹配，任何 user@domain，\n"
 "domain/resource，或是包含一個子欄位名稱的位址也匹配)。"
 
-msgid "<empty>"
-msgstr "<empty>"
-
 #, fuzzy
 msgid "<error>"
 msgstr "錯誤"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2013,6 +2023,10 @@ msgstr "吃東西"
 msgid "Edit Name…"
 msgstr "名稱:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "名稱:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2527,7 +2541,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2718,7 +2732,7 @@ msgid "Hostname"
 msgstr "主機名稱(_H):"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "想做什麼?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2895,6 +2909,10 @@ msgid "Invalid Server Name"
 msgstr "無效的伺服器名稱"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "不合法的暱稱"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "無效檔案"
 
@@ -3044,6 +3062,10 @@ msgstr "踢除(_K)"
 #, fuzzy
 msgid "Label"
 msgstr "標籤"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr ""
@@ -3777,6 +3799,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "參與者"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "參與者"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4440,6 +4466,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "恢復為預設顏色設定(_R)"
@@ -4545,6 +4574,9 @@ msgstr "儲存在: %s"
 #, fuzzy
 msgid "Save as…"
 msgstr "儲存在: %s"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4680,10 +4712,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "選擇您想要與之同步的帳號"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "選擇您想要同步的聯絡人"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4977,9 +5011,6 @@ msgstr "顯示所有未處理事件(_E)"
 #, fuzzy
 msgid "Show chat list"
 msgstr "位置: %s"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5323,17 +5354,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "同步"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "同步"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "變更一個或多個帳號狀態"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "同步"
@@ -5345,6 +5365,21 @@ msgstr "同步聯絡人"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "同步"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "同步"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s 加入聊天室"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "變更一個或多個帳號狀態"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5425,6 +5460,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "連線無法使用"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6981,6 +7020,17 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "描述"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "外掛程式失敗"
+
+#~ msgid "<empty>"
+#~ msgstr "<empty>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "無"
 
@@ -7232,6 +7282,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "Synchronise"
+#~ msgstr "同步"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

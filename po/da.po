@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -167,6 +167,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -214,6 +218,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Tilhørsforholdet for %(nick)s er blevet sat til %(affiliation)s"
@@ -221,6 +229,13 @@ msgstr "** Tilhørsforholdet for %(nick)s er blevet sat til %(affiliation)s"
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** %(nick)s rolle er blevet sat til %(role)s af %(actor)s"
+
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -231,6 +246,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** %(nick)s rolle er blevet sat til %(role)s af %(actor)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -272,14 +290,6 @@ msgstr "tilknytning ændret"
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "Rum konfiguration er blevet ændret til 'kun for medlemmer'"
-
-#, fuzzy
-msgid "<Description>"
-msgstr "Beskrivelse"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "Tilslutning fejlede"
 
 #, python-format
 msgid ""
@@ -351,12 +361,12 @@ msgstr ""
 "4. domæne (domænet træffer, ligeledes et hvilken som helst bruger@domæne,\n"
 "domæne/resource, eller adresse indeholdende et subdomæne."
 
-msgid "<empty>"
-msgstr ""
-
 #, fuzzy
 msgid "<error>"
 msgstr "Fejl"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2029,6 +2039,10 @@ msgstr "Spiser"
 msgid "Edit Name…"
 msgstr "Fornavn:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Fornavn:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2538,7 +2552,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2729,7 +2743,7 @@ msgid "Hostname"
 msgstr "_Værtsnavn:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Hvad vil du gøre?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2902,6 +2916,10 @@ msgid "Invalid Server Name"
 msgstr "Ikke gyldigt server navn"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Ugyldig Kælenavn"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Ugyldig Fil"
 
@@ -3049,6 +3067,10 @@ msgid "Kick…"
 msgstr "_Kast ud"
 
 msgid "Label"
+msgstr ""
+
+#, python-format
+msgid "Language: %s"
 msgstr ""
 
 msgid "Last but not least"
@@ -3786,6 +3808,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Deltagere"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Deltagere"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4451,6 +4477,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_Nulstil til Standard Farver"
@@ -4555,6 +4584,9 @@ msgstr "Har"
 #, fuzzy
 msgid "Save as…"
 msgstr "Har"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4690,10 +4722,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Vælg den konto som du vil synkronisere med"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Vælg de kontakter som du vil synkronisere"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4993,9 +5027,6 @@ msgstr "Vis Alle Ventende Hænd_elser"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Påmindelse"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5339,17 +5370,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "Synkroniser"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Synkroniser"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Ændrer status for kontoen eller konti"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Synkroniser"
@@ -5361,6 +5381,21 @@ msgstr "Synkroniser kontakter"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Synkroniser"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Synkroniser"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s deltager nu i gruppe samtalen"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Ændrer status for kontoen eller konti"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5441,6 +5476,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Tilslutning er ikke tilgængelig"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6996,6 +7035,14 @@ msgstr "%(nick)s er nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Beskrivelse"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Tilslutning fejlede"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Ask (for Subscription):Intet"
 
@@ -7249,6 +7296,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synkroniser"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

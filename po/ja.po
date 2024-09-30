@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -172,6 +172,10 @@ msgid_plural "%s mins ago"
 msgstr[0] "%s分前"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s人の参加者が入力中…"
 
@@ -219,6 +223,10 @@ msgstr "西経%s"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/秒)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** {actor}、{nick} の分掌は {affiliation} に設定されました{reason}"
@@ -228,6 +236,13 @@ msgstr "** {actor}、{nick} の分掌は {affiliation} に設定されました{
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** {actor}、{nick} の役は {role} に設定されました{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** {actor}、あなたの分掌は {affiliation} に設定されました{reason}"
@@ -236,6 +251,9 @@ msgstr "** {actor}、あなたの分掌は {affiliation} に設定されまし�
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** {actor}、あなたの役は {role} に設定されました{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1日"
@@ -275,12 +293,6 @@ msgstr "分掌を変更しました"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr "談話室はメンバー限定に変更されました"
-
-msgid "<Description>"
-msgstr "<説明>"
-
-msgid "<Plugin Name>"
-msgstr "<プラグイン名>"
 
 #, python-format
 msgid ""
@@ -341,11 +353,11 @@ msgstr ""
 "&lt;ドメイン&gt; (ドメインの合致。どんな user@domain や domain/resource でも"
 "可)\n"
 
-msgid "<empty>"
-msgstr "<なし>"
-
 msgid "<error>"
 msgstr "<エラー>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "談話室には少なくとも1人の主宰者が必要です"
@@ -1772,6 +1784,10 @@ msgstr "食事"
 msgid "Edit Name…"
 msgstr "名前を編集…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "名前を編集…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "メッセージを編集 (Esc で中止)…"
 
@@ -2231,7 +2247,8 @@ msgid ""
 msgstr ""
 "Gajimは他のデバイスとよく連携します。モバイル端末でも会話を続けられます。"
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim は保存記録と完全に同期しました。"
 
 msgid ""
@@ -2391,7 +2408,8 @@ msgstr "ホームページ"
 msgid "Hostname"
 msgstr "ホスト名"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr "どのくらい遡りたいですか ?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2557,6 +2575,10 @@ msgstr "ノードが正しくありません"
 msgid "Invalid Server Name"
 msgstr "サーバー名が正しくありません"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "名前が正しくありません"
+
 msgid "Invalid XMPP Address"
 msgstr "XMPP アドレスが正しくありません"
 
@@ -2686,6 +2708,10 @@ msgstr "蹴り出す…"
 
 msgid "Label"
 msgstr "ラベル"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
@@ -3143,7 +3169,8 @@ msgid "Note to myself"
 msgstr "自分自身へのメモ"
 
 msgid "Note: Anonymous accounts are not possible with all providers"
-msgstr "注意: 匿名アカウントはすべてのプロバイダーで可能というわけではありません"
+msgstr ""
+"注意: 匿名アカウントはすべてのプロバイダーで可能というわけではありません"
 
 msgid "Notes"
 msgstr "備考"
@@ -3338,6 +3365,10 @@ msgstr "参加者"
 
 msgctxt "Group chat contact role"
 msgid "Participants"
+msgstr "参加者"
+
+#, fuzzy
+msgid "Participants Count"
 msgstr "参加者"
 
 msgid "Participants asking for voice:"
@@ -3915,6 +3946,9 @@ msgstr "すべての会話を現在のデフォルト値にリセットします
 msgid "Reset all group chats to the current default value"
 msgstr "すべての談話室を現在のデフォルト値にリセットします"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "値をデフォルトに戻します"
 
@@ -4003,6 +4037,9 @@ msgstr "名前を付けて保存…"
 
 msgid "Save as…"
 msgstr "名前を付けて保存…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "アバターの保存に失敗しました"
@@ -4120,10 +4157,12 @@ msgstr "絵文字を選択"
 msgid "Select playback speed"
 msgstr "再生速度を選択"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "合わせたいアカウントを選択してください"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "合わせたい相手先を選択してください"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4366,9 +4405,6 @@ msgstr "すべての警告を表示"
 
 msgid "Show chat list"
 msgstr "チャット一覧を表示"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"
 
 msgid "Show debug console"
 msgstr "デバッグコンソールを表示"
@@ -4656,10 +4692,9 @@ msgstr ""
 "本当に Gajim を終了しますか ?\n"
 "そうするとメッセージの送受信ができなくなります。\n"
 "\n"
-"その代わりに、Gajim "
-"のウィンドウを最小化するか完全に非表示にすることもできます。 "
-"ウィンドウを元に戻すには、システムトレイの Gajim "
-"のアイコンを使用してください。"
+"その代わりに、Gajim のウィンドウを最小化するか完全に非表示にすることもできま"
+"す。 ウィンドウを元に戻すには、システムトレイの Gajim のアイコンを使用してく"
+"ださい。"
 
 msgid "Switch Workspace"
 msgstr "作業空間を切替"
@@ -4682,15 +4717,6 @@ msgstr "前の未読チャットへ切替"
 msgid "Sync Threshold"
 msgstr "同期の制限"
 
-msgid "Synchronise"
-msgstr "同期"
-
-msgid "Synchronise History…"
-msgstr "履歴を同期…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "すべてのアカウントの在席状況を同期します"
-
 msgid "Synchronize"
 msgstr "同期"
 
@@ -4699,6 +4725,21 @@ msgstr "アカウントを同期"
 
 msgid "Synchronize Chat History"
 msgstr "会話履歴を同期"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "履歴を同期…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "誰でもこの談話室に参加できます"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "すべてのアカウントの在席状況を同期します"
 
 msgid "Synchronizing Chat History…"
 msgstr "会話履歴を同期…"
@@ -4775,6 +4816,10 @@ msgstr "プロバイダーの証明書の検証中に次の警告が発生しま
 
 msgid "The last message was written on a mobile client"
 msgstr "最新のメッセージはモバイルクライアントで書かれました"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "音声メッセージは利用できません"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -6179,6 +6224,15 @@ msgstr "…またはここにドロップ"
 #~ msgid ":Note"
 #~ msgstr "備考"
 
+#~ msgid "<Description>"
+#~ msgstr "<説明>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<プラグイン名>"
+
+#~ msgid "<empty>"
+#~ msgstr "<なし>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "なし"
 
@@ -6444,8 +6498,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "1--9番目の作業空間へ切替"
+
+#~ msgid "Synchronise"
+#~ msgstr "同期"
 
 #~ msgid "Topic"
 #~ msgstr "話題"

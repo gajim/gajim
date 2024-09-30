@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -172,6 +172,10 @@ msgstr[1] "%s minute în urmă"
 msgstr[2] "%s de minute în urmă"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s participanții tastează…"
 
@@ -219,6 +223,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Afilierea lui {nick} a fost setată la {affiliation}{actor}{reason}"
@@ -227,6 +235,13 @@ msgstr "** Afilierea lui {nick} a fost setată la {affiliation}{actor}{reason}"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Rolul lui {nick} a fost setat la {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Afilierea ta a fost setată la {affiliation}{actor}{reason}"
@@ -234,6 +249,9 @@ msgstr "** Afilierea ta a fost setată la {affiliation}{actor}{reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "**Rolul tău a fost setat la {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1Zi"
@@ -275,12 +293,6 @@ msgid ": Group chat configuration changed to members-only"
 msgstr ""
 ": Configurația grupului de chat a fost schimbată în configurație doar pentru "
 "membri"
-
-msgid "<Description>"
-msgstr "<Descriere>"
-
-msgid "<Plugin Name>"
-msgstr "<Nume Plugin>"
 
 #, python-format
 msgid ""
@@ -341,11 +353,11 @@ msgstr ""
 "&lt;domain&gt; (domeniul însuși se potrivește, la fel ca orice user@domain "
 "sau domain/resource)\n"
 
-msgid "<empty>"
-msgstr "<gol>"
-
 msgid "<error>"
 msgstr "<eroare>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Un chat de grup are nevoie de cel puțin un proprietar"
@@ -1796,6 +1808,10 @@ msgstr "Mâncând"
 msgid "Edit Name…"
 msgstr "Editați numele…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Editați numele…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Editați-vă mesajul (Esc pentru a anula)…"
 
@@ -2260,7 +2276,8 @@ msgstr ""
 "Gajim se integrează bine cu celelalte dispozitive: pur și simplu continuați "
 "conversațiile pe dispozitivul dumneavoastră mobil."
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim este complet sincronizat cu arhiva."
 
 msgid ""
@@ -2422,7 +2439,8 @@ msgstr "Pagina de start"
 msgid "Hostname"
 msgstr "Numele gazdei"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr ""
 "Cât de departe în trecut ar trebui să fie sincronizat istoricul de chat?"
 
@@ -2593,6 +2611,10 @@ msgstr "Nod invalid"
 msgid "Invalid Server Name"
 msgstr "Nume server invalid"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Nume invalid"
+
 msgid "Invalid XMPP Address"
 msgstr "Adresă XMPP invalidă"
 
@@ -2722,6 +2744,10 @@ msgstr "Loviți…"
 
 msgid "Label"
 msgstr "Etichetă"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "Nu în ultimul rând"
@@ -3373,6 +3399,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Participanți"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Participanți"
+
 msgid "Participants asking for voice:"
 msgstr "Participanții cer să se exprime:"
 
@@ -3955,6 +3985,9 @@ msgstr "Resetați toate chat-urile la valoarea implicită curentă"
 msgid "Reset all group chats to the current default value"
 msgstr "Resetați toate chat-urile la valoarea implicită curentă"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "Resetează valoarea la implicit"
 
@@ -4040,6 +4073,9 @@ msgstr "Salvați ca..."
 
 msgid "Save as…"
 msgstr "Salvați ca…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "Salvarea Avatarului a eșuat"
@@ -4159,10 +4195,12 @@ msgstr "Selectați un emoji"
 msgid "Select playback speed"
 msgstr "Selectați viteza de redare"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Selectați contul cu care doriți să vă sincronizați"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Selectați contactele pe care doriți să le sincronizați"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4413,11 +4451,6 @@ msgstr "Afișați toate avertismentele"
 
 msgid "Show chat list"
 msgstr "Afișați lista de chat"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
-"Afișați starea de chat (de exemplu, \"tastează...\") lângă numele "
-"contactului dumneavoastră"
 
 msgid "Show debug console"
 msgstr "Afișați consola de depanare"
@@ -4729,15 +4762,6 @@ msgstr "Treceți la chat-ul necitit anterior"
 msgid "Sync Threshold"
 msgstr "Prag de sincronizare"
 
-msgid "Synchronise"
-msgstr "Sincronizare"
-
-msgid "Synchronise History…"
-msgstr "Sincronizarea istoriei…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Sincronizați starea tuturor conturilor"
-
 msgid "Synchronize"
 msgstr "Sincronizați"
 
@@ -4746,6 +4770,21 @@ msgstr "Sincronizarea conturilor"
 
 msgid "Synchronize Chat History"
 msgstr "Sincronizarea istoricului de chat"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Sincronizarea istoriei…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "Oricine se poate alătura acestui grup de chat"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Sincronizați starea tuturor conturilor"
 
 msgid "Synchronizing Chat History…"
 msgstr "Sincronizarea istoricului de chat…"
@@ -4826,6 +4865,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Ultimul mesaj a fost scris pe un client mobil"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Mesajele vocale nu sunt disponibile"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -6242,6 +6285,15 @@ msgstr "...sau lăsați-o aici"
 #~ msgid ":Note"
 #~ msgstr "Note"
 
+#~ msgid "<Description>"
+#~ msgstr "<Descriere>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Nume Plugin>"
+
+#~ msgid "<empty>"
+#~ msgstr "<gol>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "Nici unul"
 
@@ -6504,8 +6556,16 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Show Gajim"
 #~ msgstr "Afișați Gajim"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr ""
+#~ "Afișați starea de chat (de exemplu, \"tastează...\") lângă numele "
+#~ "contactului dumneavoastră"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Treceți la primul - al nouălea spațiu de lucru"
+
+#~ msgid "Synchronise"
+#~ msgstr "Sincronizare"
 
 #~ msgid "Topic"
 #~ msgstr "Subiect"

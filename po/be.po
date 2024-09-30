@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -163,6 +163,10 @@ msgstr[1] ""
 msgstr[2] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -210,6 +214,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/с)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -218,6 +226,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "%(who)s пакараў %(nick)s: %(reason)s"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -225,6 +240,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "%(who)s пакараў %(nick)s: %(reason)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -265,14 +283,6 @@ msgstr "Адносіны: "
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
-
-#, fuzzy
-msgid "<Description>"
-msgstr "Апісанне"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "Памылка злучэння"
 
 #, python-format
 msgid ""
@@ -342,12 +352,12 @@ msgstr ""
 "4. domain (гэты домэн user@domain,\n"
 "domain/resource ці адрас паддамена)."
 
-msgid "<empty>"
-msgstr ""
-
 #, fuzzy
 msgid "<error>"
 msgstr "Памылка Avahi"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2007,6 +2017,10 @@ msgstr "Ежа"
 msgid "Edit Name…"
 msgstr "Імя:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Імя:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2518,7 +2532,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2709,7 +2723,7 @@ msgid "Hostname"
 msgstr "Назва вузла: "
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Што Вы хочаце зрабіць?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2884,6 +2898,10 @@ msgid "Invalid Server Name"
 msgstr "Няправільнае імя карыстальніка"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Няправільнае імя карыстальніка"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Няправільны файл"
 
@@ -3031,6 +3049,10 @@ msgid "Kick…"
 msgstr "_Выкінуць"
 
 msgid "Label"
+msgstr ""
+
+#, python-format
+msgid "Language: %s"
 msgstr ""
 
 msgid "Last but not least"
@@ -3770,6 +3792,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Удзельнікі"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Удзельнікі"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4433,6 +4459,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_Вярнуць звычайныя колеры"
@@ -4536,6 +4565,9 @@ msgstr "Мае "
 #, fuzzy
 msgid "Save as…"
 msgstr "Мае "
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4671,11 +4703,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
-msgstr ""
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
+msgstr "JID чалавека, з якім Вы хочаце паразмаўляць"
 
 #, fuzzy
-msgid "Select the contacts you want to synchronise"
+msgid "Select the contacts you want to synchronize"
 msgstr "JID чалавека, з якім Вы хочаце паразмаўляць"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4976,9 +5009,6 @@ msgstr "Паказаць нягледжаныя _падзеі"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Змяненне рахунка"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5321,17 +5351,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr ""
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Паказаць _адлучаных людзей"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Змяніць стан рахунка(ў)"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Паказаць _адлучаных людзей"
@@ -5343,6 +5362,21 @@ msgstr "Паказаць _адлучаных людзей"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Паказаць _адлучаных людзей"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Паказаць _адлучаных людзей"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s далучыўся да групавой размовы"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Змяніць стан рахунка(ў)"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5422,6 +5456,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Няма злучэння"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6974,6 +7012,14 @@ msgstr "%(nick)s цяпер %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Апісанне"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Памылка злучэння"
 
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Запыт (на падпіску):Няма"

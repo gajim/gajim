@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-08-27 21:18+0000\n"
 "Last-Translator: Gerard Kusters <gk1mst+gajim-translate@hotmail.com>\n"
-"Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/>"
-"\n"
+"Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
+">\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -167,6 +167,10 @@ msgstr[0] "%s minuut geleden"
 msgstr[1] "%s minuten geleden"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s deelnemers typen…"
 
@@ -214,6 +218,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Aansluiting van {nick} is ingesteld op {affiliation}{actor}{reason}"
@@ -222,6 +230,13 @@ msgstr "** Aansluiting van {nick} is ingesteld op {affiliation}{actor}{reason}"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Rol van {nick} is ingesteld op {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Je aansluiting is ingesteld op {affiliation}{actor}{reason}"
@@ -229,6 +244,9 @@ msgstr "** Je aansluiting is ingesteld op {affiliation}{actor}{reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Je rol is ingesteld op {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 Dag"
@@ -268,12 +286,6 @@ msgstr ": aansluiting veranderd"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Configuratie van groepschat gewijzigd naar alleen voor leden"
-
-msgid "<Description>"
-msgstr "<Beschrijving>"
-
-msgid "<Plugin Name>"
-msgstr "<Plugin Naam>"
 
 #, python-format
 msgid ""
@@ -331,14 +343,14 @@ msgstr ""
 "&lt;gebruiker@domein/bron&gt; (alleen die bron komt overeen).\n"
 "&lt;gebruiker@domein&gt; (eender welke bron komt overeen).\n"
 "&lt;domein/bron&gt; (alleen die bron komt overeen).\n"
-"&lt;domein&gt; (het domein zelf komt overeen, net als gelijk welke gebruiker@"
-"domein of domein/bron)\n"
-
-msgid "<empty>"
-msgstr "<leeg>"
+"&lt;domein&gt; (het domein zelf komt overeen, net als gelijk welke "
+"gebruiker@domein of domein/bron)\n"
 
 msgid "<error>"
 msgstr "<fout>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Een groepsgesprek heeft minstens één eigenaar nodig"
@@ -1980,6 +1992,10 @@ msgstr "Eten"
 msgid "Edit Name…"
 msgstr "Voornaam"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Voornaam"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2495,7 +2511,7 @@ msgstr ""
 "ook op je mobiele apparaat kunnen zien."
 
 #, fuzzy
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 "\n"
 "        Gajim is volledig gesynchroniseerd\n"
@@ -2685,7 +2701,7 @@ msgid "Hostname"
 msgstr "Hostnaam"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Hoe ver terug wil je gaan?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2865,6 +2881,10 @@ msgid "Invalid Server Name"
 msgstr "Ongeldige servernaam"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Ongeldige naam"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Ongeldig knooppunt"
 
@@ -3014,6 +3034,10 @@ msgstr "Uit_schoppen"
 
 msgid "Label"
 msgstr "Label"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "Tenslotte"
@@ -3747,6 +3771,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Deelnemers"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Deelnemers"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4397,6 +4425,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "He_rstellen naar standaardwaarden"
@@ -4503,6 +4534,9 @@ msgstr "Opslaan _als"
 #, fuzzy
 msgid "Save as…"
 msgstr "Opslaan _als"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4639,10 +4673,12 @@ msgstr "Selecteer een emoji"
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Selecteer de account waarmee je wil synchroniseren"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Selecteer de contacten die je wil synchroniseren"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4939,9 +4975,6 @@ msgstr "Alle waarschuwingen weergeven"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Locatie:"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5283,16 +5316,6 @@ msgstr "Wisselen naar het vorige ongelezen tabblad"
 msgid "Sync Threshold"
 msgstr "Drempelwaarde voor synchronisatie"
 
-msgid "Synchronise"
-msgstr "Synchroniseren"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Geschiedenis synchroniseren"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Status van alle accounts synchroniseren"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Synchroniseren"
@@ -5304,6 +5327,21 @@ msgstr "Contacten synchroniseren"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Geschiedenis synchroniseren"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Geschiedenis synchroniseren"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s neemt nu deel aan het groepsgesprek"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Status van alle accounts synchroniseren"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5384,6 +5422,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Het laatste bericht is geschreven met een mobiele cliënt"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Videosessies zijn niet beschikbaar"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6944,6 +6986,15 @@ msgstr "{nick} is nu {show}{status}"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "<Description>"
+#~ msgstr "<Beschrijving>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Plugin Naam>"
+
+#~ msgid "<empty>"
+#~ msgstr "<leeg>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Vragen (voor abonnering):Geen"
 
@@ -7206,6 +7257,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Wisselen naar het eerste - negende tabblad"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synchroniseren"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

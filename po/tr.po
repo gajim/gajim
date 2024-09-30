@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -164,6 +164,10 @@ msgid_plural "%s mins ago"
 msgstr[0] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -211,6 +215,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
@@ -219,6 +227,13 @@ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
@@ -226,6 +241,9 @@ msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "Öntanımlı veritabanı dil kodlaması %s olarak ayarlandı.\n"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -266,14 +284,6 @@ msgstr "üyelik değişti"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
-
-#, fuzzy
-msgid "<Description>"
-msgstr "Açıklama"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "Bağlantı Kurulamıyor"
 
 #, python-format
 msgid ""
@@ -336,12 +346,12 @@ msgid ""
 "resource)\n"
 msgstr ""
 
-msgid "<empty>"
-msgstr ""
-
 #, fuzzy
 msgid "<error>"
 msgstr "Hata"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2007,6 +2017,10 @@ msgstr "Yemelik"
 msgid "Edit Name…"
 msgstr "İlk Ad:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "İlk Ad:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2514,7 +2528,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2707,7 +2721,7 @@ msgid "Hostname"
 msgstr "_Bilgisayar adı:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Ne yapmak istiyorsun?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2872,6 +2886,10 @@ msgid "Invalid Server Name"
 msgstr "Geçersiz Sunucu Adı"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Geçersiz Takma ad"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Geçersiz Dosya"
 
@@ -3018,6 +3036,10 @@ msgstr ""
 #, fuzzy
 msgid "Label"
 msgstr "etiket"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr ""
@@ -3749,6 +3771,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Katılanlar"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Katılanlar"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4417,6 +4443,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "Öntanımlı değerlerine geri al"
@@ -4520,6 +4549,9 @@ msgstr "Sahip"
 #, fuzzy
 msgid "Save as…"
 msgstr "Sahip"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4655,11 +4687,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
-msgstr ""
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
+msgstr "(Burada %d seçtiğiniz varsayılıyor)\n"
 
 #, fuzzy
-msgid "Select the contacts you want to synchronise"
+msgid "Select the contacts you want to synchronize"
 msgstr "(Burada %d seçtiğiniz varsayılıyor)\n"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4954,9 +4987,6 @@ msgstr "Bütün Bekleyen _Olayları Göster"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Yer:"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5303,18 +5333,6 @@ msgid "Sync Threshold"
 msgstr ""
 
 #, fuzzy
-msgid "Synchronise"
-msgstr "Kişileri eşzamana getir"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Kişileri eşzamana getir"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Durum satırı okunamadı"
-
-#, fuzzy
 msgid "Synchronize"
 msgstr "Kişileri eşzamana getir"
 
@@ -5325,6 +5343,21 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s grup sohbete katıldı"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Durum satırı okunamadı"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5405,6 +5438,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6948,6 +6985,14 @@ msgstr "%(nick)s durumu şimdi %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Açıklama"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Bağlantı Kurulamıyor"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Ask (for Subscription):Hiç biri"
 
@@ -7198,6 +7243,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Synchronise"
+#~ msgstr "Kişileri eşzamana getir"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

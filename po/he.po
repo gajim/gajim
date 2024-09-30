@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -181,6 +181,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -228,6 +232,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/ש)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s"
@@ -235,6 +243,13 @@ msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s"
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** התפקיד של %(nick)s הוגדר אל %(role)s על ידי %(actor)s"
+
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
 
 # נקבע
 #, fuzzy, python-brace-format
@@ -244,6 +259,9 @@ msgstr "** השיוך של %(nick)s הוגדר אל %(affiliation)s על ידי 
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** התפקיד של %(nick)s הוגדר אל %(role)s על ידי %(actor)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -285,14 +303,6 @@ msgstr "שיוך שונה"
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "תצורת חדר שונתה אל חברים-בלבד"
-
-#, fuzzy
-msgid "<Description>"
-msgstr "תיאור"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "כשל תוסף"
 
 #, python-format
 msgid ""
@@ -369,12 +379,12 @@ msgstr ""
 "4. ‏domain (המתחם עצמו מתאים, עבור כל user@domain,\n"
 "‏domain/resource, או כתובת אשר מכילים מתחם משני)."
 
-msgid "<empty>"
-msgstr "<ריק>"
-
 #, fuzzy
 msgid "<error>"
 msgstr "שגיאה"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2065,6 +2075,10 @@ msgstr "אוכל"
 msgid "Edit Name…"
 msgstr "שם פרטי:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "שם פרטי:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2595,7 +2609,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2790,7 +2804,7 @@ msgid "Hostname"
 msgstr "שם מ_ארח:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "מה ברצונך לעשות?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2977,6 +2991,10 @@ msgid "Invalid Server Name"
 msgstr "שם שרת שגוי"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "שם כינוי שגוי"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "קובץ שגוי"
 
@@ -3129,6 +3147,10 @@ msgid "Kick…"
 msgstr "ב_עט"
 
 msgid "Label"
+msgstr ""
+
+#, python-format
+msgid "Language: %s"
 msgstr ""
 
 msgid "Last but not least"
@@ -3872,6 +3894,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "משתתפים"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "משתתפים"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4554,6 +4580,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_אפס לברירת מחדל"
@@ -4660,6 +4689,9 @@ msgstr "נשמר בתוך: ‎%s"
 #, fuzzy
 msgid "Save as…"
 msgstr "נשמר בתוך: ‎%s"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4797,10 +4829,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "בחר את החשבון אשר עמו ברצונך לסנכרן"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "בחירת אנשי הקשר אותם ברצונך לסנכרן"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -5104,9 +5138,6 @@ msgstr "הצג _אירועים ממתינים"
 #, fuzzy
 msgid "Show chat list"
 msgstr "מיקום: "
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5455,17 +5486,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "סנכרון"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "סנכרון"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "cli"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "סנכרון"
@@ -5479,6 +5499,22 @@ msgstr "סנכרן אנשי קשר"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "סנכרון"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "סנכרון"
+
+# הצטרף
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s נכנס/ה לשיחת קבוצה"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "cli"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5563,6 +5599,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "סשנים חזותיים אינם זמינים"
 
 # BUG: room nick
 # הקצה
@@ -7158,6 +7198,17 @@ msgstr "%(nick)s מצוי/ה כעת במצב %(status)s "
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "תיאור"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "כשל תוסף"
+
+#~ msgid "<empty>"
+#~ msgstr "<ריק>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "אין"
 
@@ -7411,6 +7462,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "‫Gajim"
+
+#~ msgid "Synchronise"
+#~ msgstr "סנכרון"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

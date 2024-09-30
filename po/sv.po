@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -167,6 +167,10 @@ msgstr[0] "%s min sedan"
 msgstr[1] "%s min sedan"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s deltagare skriver…"
 
@@ -214,6 +218,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -223,6 +231,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Rollen för {nick} har satts till {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Din tillhörighet har ställts in på {affiliation}{actor}{reason}"
@@ -230,6 +245,9 @@ msgstr "** Din tillhörighet har ställts in på {affiliation}{actor}{reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Din roll har satts till {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 Dag"
@@ -269,12 +287,6 @@ msgstr ": Tillhörighet ändrad"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Gruppchattkonfigurationen ändrad till endast medlemmar"
-
-msgid "<Description>"
-msgstr "<Beskrivning>"
-
-msgid "<Plugin Name>"
-msgstr "<Namn för plugin>"
 
 #, python-format
 msgid ""
@@ -335,11 +347,11 @@ msgstr ""
 "&lt;domän&gt; (domänen i sig matchar, liksom alla användare@domän eller "
 "domän/resurs)\n"
 
-msgid "<empty>"
-msgstr "<tom>"
-
 msgid "<error>"
 msgstr "<fel>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "En gruppchatt behöver minst en ägare"
@@ -1875,6 +1887,10 @@ msgstr "Äter"
 msgid "Edit Name…"
 msgstr "Redigera namn…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Redigera namn…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Redigera ditt meddelande (Esc för att avbryta)…"
 
@@ -2334,7 +2350,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2525,7 +2541,7 @@ msgid "Hostname"
 msgstr "_Värdnamn:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Vad vill du göra?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2687,6 +2703,10 @@ msgstr "Ogiltig nod"
 msgid "Invalid Server Name"
 msgstr "Ogiltigt servernamn"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Ogiltigt namn"
+
 msgid "Invalid XMPP Address"
 msgstr "Ogiltig XMPP-adress"
 
@@ -2821,6 +2841,10 @@ msgstr "Sparka…"
 
 msgid "Label"
 msgstr "Etikett"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "Sist men inte minst"
@@ -3503,6 +3527,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Deltagare"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Deltagare"
+
 msgid "Participants asking for voice:"
 msgstr "Deltagare som ber om röst:"
 
@@ -4092,8 +4120,8 @@ msgid ""
 "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 "ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 msgstr ""
-"Kräver: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-ugly-"
-"1.0, gst-libav och gstreamer-gtk3-plugin"
+"Kräver: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+"ugly-1.0, gst-libav och gstreamer-gtk3-plugin"
 
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Kräver: gnome-keyring eller kwallet"
@@ -4130,6 +4158,9 @@ msgstr "Återställ alla chattar till det aktuella standardvärdet"
 
 msgid "Reset all group chats to the current default value"
 msgstr "Återställ alla gruppchattar till det aktuella standardvärdet"
+
+msgid "Reset to original name"
+msgstr ""
 
 msgid "Resets value to default"
 msgstr "Återställer värdet till standard"
@@ -4231,6 +4262,9 @@ msgstr "Har "
 #, fuzzy
 msgid "Save as…"
 msgstr "Har "
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4366,10 +4400,12 @@ msgstr "Använd _känsloikoner"
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Välj kontot med vilket du vill synkronisera"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Välj kontakterna som du vill synkronisera"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4664,9 +4700,6 @@ msgstr "Visa alla väntande _händelser"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Notifiering"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5010,17 +5043,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "Synkronisera"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Synkronisera"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Ändrar status för konto eller konton"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Synkronisera"
@@ -5032,6 +5054,21 @@ msgstr "Synkronisera kontakter"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Synkronisera"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Synkronisera"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s har gått in i gruppchatten"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Ändrar status för konto eller konton"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5112,6 +5149,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Sessionsbus inte tillgänglig"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6677,6 +6718,15 @@ msgstr "%(nick)s är nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "<Description>"
+#~ msgstr "<Beskrivning>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Namn för plugin>"
+
+#~ msgid "<empty>"
+#~ msgstr "<tom>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Fråga (för prenumeration):Ingen"
 
@@ -6931,6 +6981,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synkronisera"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2022-07-18 19:52+0000\n"
 "Last-Translator: Volodymyr Smoliar <v_2e@ukr.net>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -169,6 +169,10 @@ msgstr[1] "%i хвилини тому"
 msgstr[2] "%i хвилин тому"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -216,6 +220,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -226,6 +234,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Роль {nick} було встановлено у значення {role} {actor} {reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -234,6 +249,9 @@ msgstr ""
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Вашу роль було встановлено у значення {role} {actor} {reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 день"
@@ -274,12 +292,6 @@ msgstr "змінено місце роботи"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Налаштування кімнати змінено на «лише для постійних учасників»"
-
-msgid "<Description>"
-msgstr "<Опис>"
-
-msgid "<Plugin Name>"
-msgstr "<Назва додатка>"
 
 #, python-format
 msgid ""
@@ -340,11 +352,11 @@ msgstr ""
 "&lt;домен&gt; (пошук домену або комбінацій користувач@домен чи домен/"
 "ресурс)\n"
 
-msgid "<empty>"
-msgstr "<порожньо>"
-
 msgid "<error>"
 msgstr "<помилка>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "У групової балачки має бути хоча б один власник"
@@ -1834,6 +1846,10 @@ msgstr "Їм"
 msgid "Edit Name…"
 msgstr "Змінити ім'я…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Змінити ім'я…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2309,7 +2325,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2499,7 +2515,7 @@ msgid "Hostname"
 msgstr "Назва _вузла:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Що ви хочете зробити?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2684,6 +2700,10 @@ msgid "Invalid Server Name"
 msgstr "Некоректна назва сервера"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Некоректний псевдонім"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Некоректний файл"
 
@@ -2833,6 +2853,10 @@ msgstr "_Викинути"
 #, fuzzy
 msgid "Label"
 msgstr "мітка"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr ""
@@ -3570,6 +3594,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Учасники"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Учасники"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4235,6 +4263,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_Скинути до типових"
@@ -4340,6 +4371,9 @@ msgstr "Зберегти _як"
 #, fuzzy
 msgid "Save as…"
 msgstr "Зберегти _як"
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4474,10 +4508,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Оберіть обліковий запис, з яким слід виконати синхронізацію"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Виберіть контакти, які ви бажаєте синхронізувати"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4774,9 +4810,6 @@ msgstr "Показати усі _події з черги"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Положення:"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5118,17 +5151,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "Синхронізувати"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Синхронізувати історію"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Змінює стан облікового запису або обліковий запис"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Синхронізувати"
@@ -5140,6 +5162,21 @@ msgstr "Синхронізувати контакти"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Синхронізувати історію"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Синхронізувати історію"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "Хто завгодно може приєднатися до цієї групової балачки"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Змінює стан облікового запису або обліковий запис"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5221,6 +5258,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Відео сесія недоступна"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6779,6 +6820,15 @@ msgstr "{nick} тепер {show} {status}"
 msgid "…or drop it here"
 msgstr ""
 
+#~ msgid "<Description>"
+#~ msgstr "<Опис>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Назва додатка>"
+
+#~ msgid "<empty>"
+#~ msgstr "<порожньо>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Ask (for Subscription):Немає"
 
@@ -7050,6 +7100,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#~ msgid "Synchronise"
+#~ msgstr "Синхронізувати"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

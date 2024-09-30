@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-08-13 06:17+0000\n"
 "Last-Translator: Eric Kotato <radrussianrus@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -178,6 +178,10 @@ msgstr[1] "%s минуты назад"
 msgstr[2] "%s минут назад"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s участников печатают…"
 
@@ -225,6 +229,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/c)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Ранг {nick} изменён на {affiliation} {actor} {reason}"
@@ -233,6 +241,13 @@ msgstr "** Ранг {nick} изменён на {affiliation} {actor} {reason}"
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** {nick} присвоены обязанности {role} {actor} {reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Ваш ранг изменён на {affiliation} {actor} {reason}"
@@ -240,6 +255,9 @@ msgstr "** Ваш ранг изменён на {affiliation} {actor} {reason}"
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Вам присвоены обязанности {role} {actor} {reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 день"
@@ -279,12 +297,6 @@ msgstr ": Роль изменена"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Параметры группового чата изменены на «доступ только для участников»"
-
-msgid "<Description>"
-msgstr "<Описание>"
-
-msgid "<Plugin Name>"
-msgstr "<Название плагина>"
 
 #, python-format
 msgid ""
@@ -345,11 +357,11 @@ msgstr ""
 "&lt;domain&gt; (сам домен, т.е. как любое сочетание user@domain, domain/"
 "resource, так и адрес, содержащий этот поддомен)\n"
 
-msgid "<empty>"
-msgstr "<пусто>"
-
 msgid "<error>"
 msgstr "<ошибка>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Для группового чата нужен как минимум один владелец"
@@ -1789,6 +1801,10 @@ msgstr "Принимаю пищу"
 msgid "Edit Name…"
 msgstr "Редактировать имя…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Редактировать имя…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Редактировать сообщение (ESC для отмены)…"
 
@@ -2250,7 +2266,8 @@ msgstr ""
 "Gajim хорошо интегрируется с другими устройствами: просто продолжайте "
 "общаться на своем мобильном устройстве."
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim полностью синхронизирован с архивом."
 
 msgid ""
@@ -2410,7 +2427,8 @@ msgstr "Домашняя страница"
 msgid "Hostname"
 msgstr "Имя хоста"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr ""
 "Насколько далеко назад во времени должна быть синхронизирована история чата?"
 
@@ -2581,6 +2599,10 @@ msgstr "Недопустимый узел"
 msgid "Invalid Server Name"
 msgstr "Недопустимое имя сервера"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Недопустимое имя"
+
 msgid "Invalid XMPP Address"
 msgstr "Недопустимый XMPP-адрес"
 
@@ -2712,6 +2734,10 @@ msgstr "Выгнать…"
 
 msgid "Label"
 msgstr "Метка"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "В последнюю очередь, но с не меньшей признательностью"
@@ -3359,6 +3385,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Участники"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Участники"
+
 msgid "Participants asking for voice:"
 msgstr "Участники, запрашивающие право голоса:"
 
@@ -3936,6 +3966,9 @@ msgstr "Сбросить все чаты до текущего значения 
 msgid "Reset all group chats to the current default value"
 msgstr "Сбросить все групповые чаты до текущего значения по умолчанию"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "Восстанавливает значение по умолчанию"
 
@@ -4021,6 +4054,9 @@ msgstr "Сохранить как..."
 
 msgid "Save as…"
 msgstr "Сохранить как…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "Ошибка сохранения аватара"
@@ -4140,10 +4176,12 @@ msgstr "Выберите эмодзи"
 msgid "Select playback speed"
 msgstr "Выберите скорость проигрывания"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Выберите учётную запись для объединения"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Выберите контакты для синхронизации"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4395,9 +4433,6 @@ msgstr "Показать все предупреждения"
 
 msgid "Show chat list"
 msgstr "Показать список чатов"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr "Показывать состояние чата (например, «печатает…») рядом с вашим именем"
 
 msgid "Show debug console"
 msgstr "Показать консоль отладки"
@@ -4705,15 +4740,6 @@ msgstr "Перейти к предыдущему непрочитанному ч
 msgid "Sync Threshold"
 msgstr "Порог синхронизации"
 
-msgid "Synchronise"
-msgstr "Синхронизировать"
-
-msgid "Synchronise History…"
-msgstr "Синхронизировать историю…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Синхронизировать статусы всех учётный записей"
-
 msgid "Synchronize"
 msgstr "Синхронизировать"
 
@@ -4722,6 +4748,21 @@ msgstr "Синхронизация учётных записей"
 
 msgid "Synchronize Chat History"
 msgstr "Синхронизировать историю чата"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Синхронизировать историю…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "Любой может присоединиться к этому групповому чату"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Синхронизировать статусы всех учётный записей"
 
 msgid "Synchronizing Chat History…"
 msgstr "Синхронизация истории чата…"
@@ -4801,6 +4842,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Последнее сообщение было написано на мобильном клиенте"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Видеочаты недоступны в ОС Windows"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Сервер назначил или изменил ваш псевдоним в этом групповом чате"
@@ -6211,6 +6256,15 @@ msgstr "{nick} теперь {show} {status}"
 msgid "…or drop it here"
 msgstr "…или перетащите его сюда"
 
+#~ msgid "<Description>"
+#~ msgstr "<Описание>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Название плагина>"
+
+#~ msgid "<empty>"
+#~ msgstr "<пусто>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Запрос (на подписку):Нет"
 
@@ -6468,8 +6522,15 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr ""
+#~ "Показывать состояние чата (например, «печатает…») рядом с вашим именем"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Переключиться на первую-девятую вкладку"
+
+#~ msgid "Synchronise"
+#~ msgstr "Синхронизировать"
 
 #~ msgid "Topic"
 #~ msgstr "Тема"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -170,6 +170,10 @@ msgstr[0] "%s мин бұрын"
 msgstr[1] "%s мин бұрын"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s қатысушы теруде…"
 
@@ -217,6 +221,10 @@ msgstr "%sW"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** {nick} қатысуы енді {affiliation} {actor} {reason} етіп орнатылды"
@@ -224,6 +232,13 @@ msgstr "** {nick} қатысуы енді {affiliation} {actor} {reason} еті�
 #, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** {nick} ролі енді {role} {actor} {reason} етіп орнатылды"
+
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -233,6 +248,9 @@ msgstr ""
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Сіздің роліңіз енді {role} {actor} {reason} етіп орнатылды"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 күн"
@@ -272,12 +290,6 @@ msgstr ": Қатысуы өзгертілген"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ": Топтық чатқа қатысу \"тек мүшелер үшін\" деп өзгертілген"
-
-msgid "<Description>"
-msgstr "<Сипаттамасы>"
-
-msgid "<Plugin Name>"
-msgstr "<Плагин атауы>"
 
 #, python-format
 msgid ""
@@ -338,11 +350,11 @@ msgstr ""
 "&lt;domain&gt; (доменнің өзі сәйкес, және әр user@domain немесе domain/"
 "resource)\n"
 
-msgid "<empty>"
-msgstr "<бос>"
-
 msgid "<error>"
 msgstr "<error>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Топтық чатқа кемінде бір иесі қажет"
@@ -1774,6 +1786,10 @@ msgstr "Тамақ ішуде"
 msgid "Edit Name…"
 msgstr "Атын түзету…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Атын түзету…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2237,7 +2253,8 @@ msgstr ""
 "Gajim басқа құрылғылармен жақсы үйлеседі: мобильді құрылғыда сөйлесуді "
 "жалғастырыңыз."
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim архивпен толығымен синхрондалған."
 
 msgid ""
@@ -2398,7 +2415,8 @@ msgstr "Үй парағы"
 msgid "Hostname"
 msgstr "Хост аты"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr "Сөйлесулер тарихы артқа қаншалықты синхрондалу керек?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2564,6 +2582,10 @@ msgstr "Жарамсыз торап"
 msgid "Invalid Server Name"
 msgstr "Сервердің аты қате"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Жарамсыз аты"
+
 msgid "Invalid XMPP Address"
 msgstr "XMPP адресі жарамсыз"
 
@@ -2694,6 +2716,10 @@ msgstr "Тебу…"
 
 msgid "Label"
 msgstr "Белгі"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "Соңғысы, бірақ ол да маңызды"
@@ -3346,6 +3372,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Қатысушылар"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Қатысушылар"
+
 msgid "Participants asking for voice:"
 msgstr "Дауыс сұрайтын қатысушылар:"
 
@@ -3926,6 +3956,9 @@ msgstr "Барлық чаттарды ағымдағы әдепкі мәнге �
 msgid "Reset all group chats to the current default value"
 msgstr "Барлық топтық чаттарды ағымдағы әдепкі мәнге тастау"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "Мәнді әдепкіге тастайды"
 
@@ -4011,6 +4044,9 @@ msgstr "Қалайша сақтау..."
 
 msgid "Save as…"
 msgstr "Қалайша сақтау…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "Аватарды сақтау сәтсіз аяқталды"
@@ -4132,10 +4168,12 @@ msgstr "Эмодзи таңдаңыз"
 msgid "Select playback speed"
 msgstr "Ойнату жылдамдығын таңдау"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Синхрондау үшін тіркелгіні таңдаңыз"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Синхрондау үшін контакттарды таңдаңыз"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4382,9 +4420,6 @@ msgstr "Барлық ескертулерді көрсету"
 
 msgid "Show chat list"
 msgstr "Чаттар тізімін көрсету"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr "Контакт атыңыздың жанында чат күйін көрсету (мысалы, \"теруде...\")"
 
 msgid "Show debug console"
 msgstr "Жөндеу консолін көрсету"
@@ -4696,15 +4731,6 @@ msgstr "Алдыңғы оқылмаған чатқа ауысу"
 msgid "Sync Threshold"
 msgstr "Синхрондау табалдырық мәні"
 
-msgid "Synchronise"
-msgstr "Синхрондау"
-
-msgid "Synchronise History…"
-msgstr "Тарихты синхрондау…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Барлық тіркелгілердің қалып-күйін синхрондау"
-
 msgid "Synchronize"
 msgstr "Синхрондау"
 
@@ -4713,6 +4739,21 @@ msgstr "Тіркелгілерді синхрондау"
 
 msgid "Synchronize Chat History"
 msgstr "Чат тарихын синхрондау"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Тарихты синхрондау…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "Бұл топтық чатқа кез келген адам қосыла алады"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Барлық тіркелгілердің қалып-күйін синхрондау"
 
 msgid "Synchronizing Chat History…"
 msgstr "Чат тарихын синхрондау…"
@@ -4790,6 +4831,10 @@ msgstr "Сервер сертификатын тексеру кезінде ке
 
 msgid "The last message was written on a mobile client"
 msgstr "Соңғы хабарлама мобильді клиентте жазылған"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Сервер сізге осы топтық чатта никті таңдаған немесе сіздікін өзгерткен"
@@ -6196,6 +6241,15 @@ msgstr "{nick} енді {show}{status}"
 msgid "…or drop it here"
 msgstr "…немесе оны осында тастаңыз"
 
+#~ msgid "<Description>"
+#~ msgstr "<Сипаттамасы>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Плагин атауы>"
+
+#~ msgid "<empty>"
+#~ msgstr "<бос>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Ask (for Subscription):Жоқ"
 
@@ -6441,8 +6495,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim-ді көрсету"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr "Контакт атыңыздың жанында чат күйін көрсету (мысалы, \"теруде...\")"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
+
+#~ msgid "Synchronise"
+#~ msgstr "Синхрондау"
 
 #~ msgid "Topic"
 #~ msgstr "Тақырып"

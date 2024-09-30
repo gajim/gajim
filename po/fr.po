@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2024-08-12 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
-"\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -177,6 +177,10 @@ msgstr[0] "il y a %s minute"
 msgstr[1] "il y a %s minutes"
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr "%s participants sont en train d'écrire…"
 
@@ -224,6 +228,10 @@ msgstr "%sO"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -233,6 +241,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Le rôle de {nick} a été défini à {role}{actor}{reason}"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr "** Votre affiliation a été définie à {affiliation} par {actor}{reason}"
@@ -240,6 +255,9 @@ msgstr "** Votre affiliation a été définie à {affiliation} par {actor}{reaso
 #, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Votre rôle de a été défini à {role}{actor}{reason}"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr "1 jour"
@@ -280,13 +298,6 @@ msgstr ": Affiliation changée"
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
 ": La configuration du salon est modifiée et devient réservée aux membres"
-
-# ccount). Description column
-msgid "<Description>"
-msgstr "<Description>"
-
-msgid "<Plugin Name>"
-msgstr "<Nom de l'extension>"
 
 #, python-format
 msgid ""
@@ -347,11 +358,11 @@ msgstr ""
 "&lt;domaine&gt; (le domaine complet correspond, incluant tous les "
 "pseudo@domaine ou domaine/ressource)\n"
 
-msgid "<empty>"
-msgstr "<vide>"
-
 msgid "<error>"
 msgstr "<error>"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Un salon de discussion a besoin d'au moins un propriétaire"
@@ -1812,6 +1823,10 @@ msgstr "Mange"
 msgid "Edit Name…"
 msgstr "Éditer le nom…"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Éditer le nom…"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Éditez votre message (Échap pour annuler)…"
 
@@ -2277,7 +2292,8 @@ msgstr ""
 "Gajim s'intègre bien avec vos autres appareils : continuez vos discussions "
 "sur votre appareil mobile en toute simplicité."
 
-msgid "Gajim is fully synchronised with the archive."
+#, fuzzy
+msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim est entièrement synchronisé avec l'archive."
 
 msgid ""
@@ -2438,7 +2454,8 @@ msgstr "Site perso"
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
-msgid "How far back should the chat history be synchronised?"
+#, fuzzy
+msgid "How far back should the chat history be synchronized?"
 msgstr ""
 "Jusqu'où voulez-vous remonter dans le temps pour la synchronisation "
 "d'historique de discussion ?"
@@ -2611,6 +2628,10 @@ msgstr "Nœud invalide"
 msgid "Invalid Server Name"
 msgstr "Nom de serveur invalide"
 
+#, fuzzy
+msgid "Invalid Stanza"
+msgstr "Nom invalide"
+
 msgid "Invalid XMPP Address"
 msgstr "Adresse XMPP invalide"
 
@@ -2740,6 +2761,10 @@ msgstr "Éjecter…"
 
 msgid "Label"
 msgstr "Étiquette"
+
+#, python-format
+msgid "Language: %s"
+msgstr ""
 
 msgid "Last but not least"
 msgstr "Enfin et surtout"
@@ -3392,6 +3417,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Participants/tes"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Participants/tes"
+
 msgid "Participants asking for voice:"
 msgstr "Participant·es demandant la parole :"
 
@@ -3973,6 +4002,9 @@ msgstr "Rétablir toutes les discussions à la valeur par défaut actuelle"
 msgid "Reset all group chats to the current default value"
 msgstr "Rétablir tous les salons à la valeur par défaut actuelle"
 
+msgid "Reset to original name"
+msgstr ""
+
 msgid "Resets value to default"
 msgstr "Rétablit la valeur par défaut"
 
@@ -4058,6 +4090,9 @@ msgstr "Enregistrer sous..."
 
 msgid "Save as…"
 msgstr "Enregistrer sous…"
+
+msgid "Save display name"
+msgstr ""
 
 msgid "Saving Avatar Failed"
 msgstr "L'enregistrement d'image de profil a échoué"
@@ -4176,10 +4211,12 @@ msgstr "Sélectionnez un émoji"
 msgid "Select playback speed"
 msgstr "Sélection de la vitesse de lecture"
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Sélectionnez le compte avec lequel vous voulez vous synchroniser"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Sélectionnez les contacts que vous voulez synchroniser"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4430,11 +4467,6 @@ msgstr "Afficher tous les avertissements"
 
 msgid "Show chat list"
 msgstr "Montrer la liste des discussions"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
-"Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière de "
-"la discussion"
 
 msgid "Show debug console"
 msgstr "Afficher la console de débogage"
@@ -4751,15 +4783,6 @@ msgstr "Basculer vers la précédente discussion non-lue"
 msgid "Sync Threshold"
 msgstr "Seuil de synchronisation"
 
-msgid "Synchronise"
-msgstr "Synchroniser"
-
-msgid "Synchronise History…"
-msgstr "Synchroniser l’historique…"
-
-msgid "Synchronise the status of all accounts"
-msgstr "Synchroniser le statut de tous les comptes"
-
 msgid "Synchronize"
 msgstr "Synchroniser"
 
@@ -4768,6 +4791,21 @@ msgstr "Synchroniser les comptes"
 
 msgid "Synchronize Chat History"
 msgstr "Synchroniser l’historique de discussion"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Synchroniser l’historique…"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "N’importe qui pourra rejoindre ce salon de discussion"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Synchroniser le statut de tous les comptes"
 
 msgid "Synchronizing Chat History…"
 msgstr "Synchroniser l’historique de discussion…"
@@ -4847,6 +4885,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr "Le dernier message a été écrit sur un client mobile"
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Message Vocal non disponible"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Le serveur à défini ou modifié votre pseudonyme dans ce salon"
@@ -6283,6 +6325,16 @@ msgstr "... ou bien déposez ici"
 #~ msgid ":Note"
 #~ msgstr "Notes"
 
+# ccount). Description column
+#~ msgid "<Description>"
+#~ msgstr "<Description>"
+
+#~ msgid "<Plugin Name>"
+#~ msgstr "<Nom de l'extension>"
+
+#~ msgid "<empty>"
+#~ msgstr "<vide>"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "Aucune"
 
@@ -6546,8 +6598,16 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Show Gajim"
 #~ msgstr "Montrer Gajim"
 
+#~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
+#~ msgstr ""
+#~ "Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière "
+#~ "de la discussion"
+
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Basculer vers le premier - neuvième espace de travail"
+
+#~ msgid "Synchronise"
+#~ msgstr "Synchroniser"
 
 #~ msgid "Topic"
 #~ msgstr "Sujet"

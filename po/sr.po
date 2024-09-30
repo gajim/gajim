@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -163,6 +163,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -210,6 +214,10 @@ msgstr ""
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/сек)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, fuzzy, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr "** Афилијација %(nick)s је постављена на %(affiliation)s"
@@ -217,6 +225,13 @@ msgstr "** Афилијација %(nick)s је постављена на %(affi
 #, fuzzy, python-brace-format
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "** Улога %(nick)s је постављена на %(role)s од стране %(actor)s"
+
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
 
 #, fuzzy, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -226,6 +241,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Улога %(nick)s је постављена на %(role)s од стране %(actor)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -267,14 +285,6 @@ msgstr "везаност измењена"
 #, fuzzy
 msgid ": Group chat configuration changed to members-only"
 msgstr "конфигурација собе се променила на само-чланови"
-
-#, fuzzy
-msgid "<Description>"
-msgstr "Опис"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "Регистрација неуспела"
 
 #, python-format
 msgid ""
@@ -346,12 +356,12 @@ msgstr ""
 "4. домен (само се домен поклапа, као и било који корисник@домен,\n"
 "домен/ресурс, или адреса која садржи поддомен."
 
-msgid "<empty>"
-msgstr ""
-
 #, fuzzy
 msgid "<error>"
 msgstr "Грешка"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2027,6 +2037,10 @@ msgstr "Једем"
 msgid "Edit Name…"
 msgstr "Име:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Име:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2537,7 +2551,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2728,7 +2742,7 @@ msgid "Hostname"
 msgstr "Име хоста:"
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Шта желите да урадите?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2901,6 +2915,10 @@ msgid "Invalid Server Name"
 msgstr "Неисправано име сервера"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Неисправан надимак"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Неисправна датотека"
 
@@ -3048,6 +3066,10 @@ msgid "Kick…"
 msgstr "_Избаци"
 
 msgid "Label"
+msgstr ""
+
+#, python-format
+msgid "Language: %s"
 msgstr ""
 
 msgid "Last but not least"
@@ -3784,6 +3806,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Учесници"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Учесници"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4449,6 +4475,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_Поново учитај подразумеване боје"
@@ -4555,6 +4584,9 @@ msgstr "Имам "
 #, fuzzy
 msgid "Save as…"
 msgstr "Имам "
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4690,10 +4722,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
 msgstr "Одаберите налог са којим желите да се синхронизујете"
 
-msgid "Select the contacts you want to synchronise"
+#, fuzzy
+msgid "Select the contacts you want to synchronize"
 msgstr "Одаберите контакте које желите да синхронизујете"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4992,9 +5026,6 @@ msgstr "Прикажи св_е догађаје на чекању"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Обавештење"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5338,17 +5369,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr "Синхронизуј"
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Синхронизуј"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Мења статус једног или више налога"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Синхронизуј"
@@ -5360,6 +5380,21 @@ msgstr "Синхронизуј контакте"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Синхронизуј"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Синхронизуј"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s се придружио групном разговору"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Мења статус једног или више налога"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5440,6 +5475,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Веза није доступна"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6997,6 +7036,14 @@ msgstr "%(nick)s је тренутно %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Опис"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Регистрација неуспела"
+
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "?Питај (за претплату):Ниједна"
 
@@ -7246,6 +7293,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Send"
 #~ msgstr "_Пошаљи"
+
+#~ msgid "Synchronise"
+#~ msgstr "Синхронизуј"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

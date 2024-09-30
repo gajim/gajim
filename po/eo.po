@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-11 18:56+0000\n"
+"POT-Creation-Date: 2024-09-29 21:04+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -164,6 +164,10 @@ msgstr[0] ""
 msgstr[1] ""
 
 #, python-format
+msgid "%s of %s"
+msgstr ""
+
+#, python-format
 msgid "%s participants are typing…"
 msgstr ""
 
@@ -211,6 +215,10 @@ msgstr "%sOk"
 msgid "(%(filesize_unit)s/s)"
 msgstr "(%(filesize_unit)s/s)"
 
+#, python-format
+msgid "** %s lost all their hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -219,6 +227,13 @@ msgstr ""
 msgid "** Role of {nick} has been set to {role}{actor}{reason}"
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
 
+#, python-format
+msgid "** The hats of %s are now %s"
+msgstr ""
+
+msgid "** You lost all your hats!"
+msgstr ""
+
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
 msgstr ""
@@ -226,6 +241,9 @@ msgstr ""
 #, fuzzy, python-brace-format
 msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "%(nick)s estas elpelita de %(who)s: %(reason)s"
+
+msgid "** Your hats are now "
+msgstr ""
 
 msgid "1 Day"
 msgstr ""
@@ -266,14 +284,6 @@ msgstr "Aparteneco:"
 
 msgid ": Group chat configuration changed to members-only"
 msgstr ""
-
-#, fuzzy
-msgid "<Description>"
-msgstr "Priskribo"
-
-#, fuzzy
-msgid "<Plugin Name>"
-msgstr "Konektado malsukcesis"
 
 #, python-format
 msgid ""
@@ -343,12 +353,12 @@ msgstr ""
 "4. domajno (iu kombinaĵo de risurco kaj uzulo\n"
 "kun tiu domajno aŭ subdomajno)."
 
-msgid "<empty>"
-msgstr "<malplena>"
-
 #, fuzzy
 msgid "<error>"
 msgstr "Eraro de Avahi"
+
+msgid "@APP_NAME@"
+msgstr ""
 
 #, fuzzy
 msgid "A Group Chat needs at least one Owner"
@@ -2007,6 +2017,10 @@ msgstr "Manĝas"
 msgid "Edit Name…"
 msgstr "Nomo:"
 
+#, fuzzy
+msgid "Edit display name…"
+msgstr "Nomo:"
+
 msgid "Edit your message (Esc to cancel)…"
 msgstr ""
 
@@ -2518,7 +2532,7 @@ msgid ""
 "on your mobile device."
 msgstr ""
 
-msgid "Gajim is fully synchronised with the archive."
+msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
 msgid ""
@@ -2709,7 +2723,7 @@ msgid "Hostname"
 msgstr "Servilnomo: "
 
 #, fuzzy
-msgid "How far back should the chat history be synchronised?"
+msgid "How far back should the chat history be synchronized?"
 msgstr "Kion vi volas fari?"
 
 msgid "How long Gajim should keep your chat history"
@@ -2884,6 +2898,10 @@ msgid "Invalid Server Name"
 msgstr "Malkorekta salutnomo"
 
 #, fuzzy
+msgid "Invalid Stanza"
+msgstr "Malkorekta salutnomo"
+
+#, fuzzy
 msgid "Invalid XMPP Address"
 msgstr "Malkorekta dosiero"
 
@@ -3031,6 +3049,10 @@ msgid "Kick…"
 msgstr "_Elpeli"
 
 msgid "Label"
+msgstr ""
+
+#, python-format
+msgid "Language: %s"
 msgstr ""
 
 msgid "Last but not least"
@@ -3768,6 +3790,10 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Partoprenantoj"
 
+#, fuzzy
+msgid "Participants Count"
+msgstr "Partoprenantoj"
+
 msgid "Participants asking for voice:"
 msgstr ""
 
@@ -4432,6 +4458,9 @@ msgstr ""
 msgid "Reset all group chats to the current default value"
 msgstr ""
 
+msgid "Reset to original name"
+msgstr ""
+
 #, fuzzy
 msgid "Resets value to default"
 msgstr "_Reŝargi kolorojn per defaŭlto"
@@ -4536,6 +4565,9 @@ msgstr "Havas "
 #, fuzzy
 msgid "Save as…"
 msgstr "Havas "
+
+msgid "Save display name"
+msgstr ""
 
 #, fuzzy
 msgid "Saving Avatar Failed"
@@ -4671,11 +4703,12 @@ msgstr ""
 msgid "Select playback speed"
 msgstr ""
 
-msgid "Select the account with which you want to synchronise"
-msgstr ""
+#, fuzzy
+msgid "Select the account with which you want to synchronize"
+msgstr "JID de kontakto, kun kiu vi volas interparoli"
 
 #, fuzzy
-msgid "Select the contacts you want to synchronise"
+msgid "Select the contacts you want to synchronize"
 msgstr "JID de kontakto, kun kiu vi volas interparoli"
 
 msgid "Select your audio input (e.g. microphone)"
@@ -4976,9 +5009,6 @@ msgstr "Montri ĉiujn nelegitajn _eventojn"
 #, fuzzy
 msgid "Show chat list"
 msgstr "Konta korektado"
-
-msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
-msgstr ""
 
 #, fuzzy
 msgid "Show debug console"
@@ -5321,17 +5351,6 @@ msgstr ""
 msgid "Sync Threshold"
 msgstr ""
 
-msgid "Synchronise"
-msgstr ""
-
-#, fuzzy
-msgid "Synchronise History…"
-msgstr "Montri _senkonektajn kontaktojn"
-
-#, fuzzy
-msgid "Synchronise the status of all accounts"
-msgstr "Ŝanĝas staton de konto aŭ kontoj"
-
 #, fuzzy
 msgid "Synchronize"
 msgstr "Montri _senkonektajn kontaktojn"
@@ -5343,6 +5362,21 @@ msgstr "Montri _senkonektajn kontaktojn"
 #, fuzzy
 msgid "Synchronize Chat History"
 msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
+msgid "Synchronize History…"
+msgstr "Montri _senkonektajn kontaktojn"
+
+#, fuzzy
+msgid "Synchronize joined group chats"
+msgstr "%s aliĝis al la babilejo"
+
+msgid "Synchronize joined group chats with other devices."
+msgstr ""
+
+#, fuzzy
+msgid "Synchronize the status of all accounts"
+msgstr "Ŝanĝas staton de konto aŭ kontoj"
 
 #, fuzzy
 msgid "Synchronizing Chat History…"
@@ -5422,6 +5456,10 @@ msgstr ""
 
 msgid "The last message was written on a mobile client"
 msgstr ""
+
+#, fuzzy
+msgid "The referenced message is not available."
+msgstr "Konekto mankas"
 
 #, fuzzy
 msgid "The server has assigned or modified your nickname in this group chat"
@@ -6970,6 +7008,17 @@ msgstr "%(nick)s nun estas %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy
+#~ msgid "<Description>"
+#~ msgstr "Priskribo"
+
+#, fuzzy
+#~ msgid "<Plugin Name>"
+#~ msgstr "Konektado malsukcesis"
+
+#~ msgid "<empty>"
+#~ msgstr "<malplena>"
 
 #~ msgid "?Ask (for Subscription):None"
 #~ msgstr "Nenion"
