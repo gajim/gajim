@@ -13,42 +13,31 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 
-class ChatstateIndicator(Gtk.Button):
+class ChatStateIndicator(Gtk.Box):
     def __init__(self) -> None:
-        Gtk.Button.__init__(
+        Gtk.Box.__init__(
             self,
-            halign=Gtk.Align.START,
-            valign=Gtk.Align.END,
+            spacing=24,
             margin_start=12,
-            margin_bottom=12,
-            no_show_all=True,
         )
 
         self._contact: types.ChatContactT | None = None
-
-        self.get_style_context().add_class('chatstate-indicator-button')
-        self.connect('clicked', self._on_clicked)
-
-        self._box = Gtk.Box(spacing=12)
-        self.add(self._box)
 
         self._composing_icon = Gtk.Image.new_from_icon_name(
             'content-loading-symbolic', Gtk.IconSize.BUTTON
         )
         self._composing_icon.set_no_show_all(True)
-        self._composing_icon.get_style_context().add_class('chatstate-icon')
-        self._box.add(self._composing_icon)
+        self._composing_icon.get_style_context().add_class('chat-state-icon')
+        self.add(self._composing_icon)
 
         self._label = Gtk.Label(
-            no_show_all=True,
             max_width_chars=52,
             ellipsize=Pango.EllipsizeMode.END,
         )
         self._label.get_style_context().add_class('dim-label')
         self._label.get_style_context().add_class('small-label')
-        self._box.add(self._label)
-
-        self.show_all()
+        self.add(self._label)
+        self._label.show()
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         if self._contact is not None:
@@ -64,9 +53,6 @@ class ChatstateIndicator(Gtk.Button):
     ) -> None:
         self._update_state()
 
-    def _on_clicked(self, _button: ChatstateIndicator) -> None:
-        self._label.set_visible(not self._label.get_visible())
-
     def _update_state(self) -> None:
         assert self._contact is not None
 
@@ -74,21 +60,18 @@ class ChatstateIndicator(Gtk.Button):
             visible = bool(self._contact.get_composers())
             text = self._get_muc_composing_text()
 
-            self._composing_icon.get_style_context().add_class('chatstate-icon')
+            self._composing_icon.get_style_context().add_class('chat-state-icon')
         else:
             visible = self._contact.chatstate in (Chatstate.COMPOSING, Chatstate.PAUSED)
             text = f'{self._contact.name} {self._contact.chatstate_string}'
 
             if self._contact.chatstate == Chatstate.COMPOSING:
-                self._composing_icon.get_style_context().add_class('chatstate-icon')
+                self._composing_icon.get_style_context().add_class('chat-state-icon')
             else:
-                self._composing_icon.get_style_context().remove_class('chatstate-icon')
+                self._composing_icon.get_style_context().remove_class('chat-state-icon')
 
-        self.set_visible(visible)
-        self._box.set_visible(visible)
         self._composing_icon.set_visible(visible)
-
-        self._label.set_text(text)
+        self._label.set_text(text if visible else '')
 
     def _get_muc_composing_text(self) -> str:
         assert isinstance(self._contact, GroupchatContact)

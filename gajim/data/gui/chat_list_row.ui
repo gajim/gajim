@@ -117,7 +117,7 @@
                     <property name="valign">end</property>
                     <property name="icon-name">content-loading-symbolic</property>
                     <style>
-                      <class name="chatstate-icon"/>
+                      <class name="chat-state-icon"/>
                     </style>
                   </object>
                   <packing>

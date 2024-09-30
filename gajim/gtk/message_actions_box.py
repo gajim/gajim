@@ -38,6 +38,7 @@ from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.chat_state_indicator import ChatStateIndicator
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
@@ -69,9 +70,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._ui.state_box_image.set_size_request(AvatarSize.CHAT, -1)
         self._ui.edit_box_image.set_size_request(AvatarSize.CHAT, -1)
 
+        self._chat_state_indicator = ChatStateIndicator()
+        self._ui.chat_state_box.add(self._chat_state_indicator)
+
         # For message replies
         self._reply_box = ReplyBox()
-        self._ui.box.pack_start(self._reply_box, True, True, 0)
+        self._ui.reply_box.add(self._reply_box)
 
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
@@ -244,6 +248,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._set_chatstate(True)
 
         self.msg_textview.switch_contact(contact)
+
+        self._chat_state_indicator.switch_contact(contact)
 
         self._ui.edit_box.set_visible(self._is_correcting)
         self._restore_draft()

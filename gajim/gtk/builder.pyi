@@ -648,12 +648,14 @@ class MessageActionsBoxBuilder(Builder):
     send_message_button: Gtk.Button
     formattings_button: Gtk.MenuButton
     input_scrolled: Gtk.ScrolledWindow
+    edit_box: Gtk.Box
+    edit_box_image: Gtk.Image
     state_box: Gtk.Box
     state_box_image: Gtk.Image
     state_box_label: Gtk.Label
     visitor_menu_button: Gtk.MenuButton
-    edit_box: Gtk.Box
-    edit_box_image: Gtk.Image
+    reply_box: Gtk.Box
+    chat_state_box: Gtk.Box
     visitor_popover: Gtk.Popover
 
 

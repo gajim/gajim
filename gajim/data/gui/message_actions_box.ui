@@ -211,74 +211,6 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="state_box">
-        <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkImage" id="state_box_image">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon_size">3</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="state_box_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="ellipsize">end</property>
-            <property name="xalign">0</property>
-            <style>
-              <class name="small-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="visitor_menu_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">What does this mean?</property>
-            <property name="valign">center</property>
-            <property name="margin-end">6</property>
-            <property name="popover">visitor_popover</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">dialog-information-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
       <object class="GtkBox" id="edit_box">
         <property name="can-focus">False</property>
         <property name="no-show-all">True</property>
@@ -345,7 +277,107 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="pack-type">end</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="state_box">
+        <property name="can-focus">False</property>
+        <property name="no-show-all">True</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="state_box_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="icon_size">3</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="state_box_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="small-label"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="visitor_menu_button">
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+            <property name="focus-on-click">False</property>
+            <property name="receives-default">True</property>
+            <property name="tooltip-text" translatable="yes">What does this mean?</property>
+            <property name="valign">center</property>
+            <property name="margin-end">6</property>
+            <property name="popover">visitor_popover</property>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="icon-name">dialog-information-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
         <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="reply_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="chat_state_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="pack-type">end</property>
+        <property name="position">4</property>
       </packing>
     </child>
   </object>
