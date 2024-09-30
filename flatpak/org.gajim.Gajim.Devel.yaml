@@ -167,22 +167,22 @@ modules:
   - name: python3-jaraco.functools
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco.functools-4.0.2-py3-none-any.whl
+      - pip3 install jaraco.functools-4.1.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.functools/jaraco.functools-4.0.2-py3-none-any.whl
-        sha256: c9d16a3ed4ccb5a889ad8e0b7a343401ee5b2a71cee6ed192d3f68bc351e94e3
+        url: https://files.pythonhosted.org/packages/py3/j/jaraco.functools/jaraco.functools-4.1.0-py3-none-any.whl
+        sha256: ad159f13428bc4acbf5541ad6dec511f91573b90fba04df61dafa2a1231cf649
 
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-25.4.0-py3-none-any.whl
+      - pip3 install keyring-25.4.1-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.4.0-py3-none-any.whl
-        sha256: a2a630d5c9bef5d3f0968d15ef4e42b894a83e17494edcb67b154c36491c9920
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.4.1-py3-none-any.whl
+        sha256: 5426f817cf7f6f007ba5ec722b1bcad95a75b27d780343772ad76b17cb47b0bf
 
   - name: python3-css-parser
     buildsystem: simple
@@ -282,8 +282,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.1.0.tar.gz
-        sha256: b395121e9bbe8d02a750886f108d540abe66075e61e22f7353d9acb0b81be0f0
+        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.1.1.tar.gz
+        sha256: 4ce3ac6cdb6adf7946475d7ef31777c26d94bccc377e070a7986bd2d5c515467
 
   - name: python3-SQLAlchemy
     buildsystem: simple
@@ -297,11 +297,11 @@ modules:
   - name: python3-emoji
     buildsystem: simple
     build-commands:
-      - pip3 install emoji-2.12.1-py3-none-any.whl
+      - pip3 install emoji-2.13.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.12.1-py3-none-any.whl
-        sha256: a00d62173bdadc2510967a381810101624a2f0986145b8da0cffa42e29430235
+        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.13.2-py3-none-any.whl
+        sha256: ef6f2ee63b245e934c763b1a9a0637713955aa3d9e322432e036bb60559de4d6
 
   # gssapi dependency
   - name: python3-decorator
