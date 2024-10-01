@@ -217,9 +217,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Added %s contact',
                                             'Added %s contacts',
-                                            count,
-                                            str(count),
-                                            str(count)))
+                                            count))
         elif self._action == 'modify':
             count = 0
             while iter_:
@@ -247,9 +245,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 iter_ = model.iter_next(iter_)
             InformationDialog(i18n.ngettext('Removed %s contact',
                                             'Removed %s contacts',
-                                            count,
-                                            str(count),
-                                            str(count)))
+                                            count))
         self.destroy()
 
     def _on_cancel_button_clicked(self, _button: Gtk.Button) -> None:

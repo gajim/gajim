@@ -58,25 +58,8 @@ def is_rtl_text(text: str) -> bool:
     return False
 
 
-def ngettext(s_sing: str,
-             s_plural: str,
-             n: int,
-             replace_sing: str | None = None,
-             replace_plural: str | None = None) -> str:
-    '''
-    Use as:
-        i18n.ngettext(
-            'leave room %s', 'leave rooms %s', len(rooms), 'a', 'a, b, c')
-
-    In other words this is a hack to ngettext() to support %s %d etc..
-    '''
-    text = _trans.translation.ngettext(s_sing, s_plural, n)
-    if n == 1 and replace_sing is not None:
-        return text % replace_sing
-
-    if n > 1 and replace_plural is not None:
-        return text % replace_plural
-    return text
+def ngettext(s_sing: str, s_plural: str, n: int) -> str:
+    return _trans.translation.ngettext(s_sing, s_plural, n)
 
 
 class Translation:
