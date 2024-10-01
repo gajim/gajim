@@ -33,6 +33,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
 
@@ -122,8 +123,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.protocol_view.get_buffer().set_language(lang)
         self._ui.input_entry.get_buffer().set_language(lang)
 
-        style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
-        style_scheme = style_scheme_manager.get_scheme('solarized-dark')
+        style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.protocol_view.get_buffer().set_style_scheme(style_scheme)
             self._ui.input_entry.get_buffer().set_style_scheme(style_scheme)
