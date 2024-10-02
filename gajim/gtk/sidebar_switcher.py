@@ -26,18 +26,19 @@ class SideBarSwitcher(Gtk.ListBox):
 
     def set_stack(self, stack: Gtk.Stack, rows_visible: bool = True) -> None:
         self._stack = stack
-        for page in self._stack.get_children():
-            name = self._stack.child_get_property(page, 'name')
+        for page in self._stack.get_pages():
+            page = cast(Gtk.StackPage, page)
+            name = page.get_name()
             if name is None:
                 raise ValueError('unnamed child')
-            title = self._stack.child_get_property(page, 'title')
+            title = page.get_title()
             if title is None:
                 raise ValueError('no title on child')
-            icon_name = self._stack.child_get_property(page, 'icon-name')
+            icon_name = page.get_icon_name()
 
             row = Row(name, title, icon_name, rows_visible)
 
-            self.add(row)
+            self.append(row)
             self._rows[name] = row
 
         self._select_first_row()
@@ -63,7 +64,7 @@ class SideBarSwitcher(Gtk.ListBox):
 
     def _destroy(self, _widget: SideBarSwitcher) -> None:
         for row in self._rows.values():
-            row.destroy()
+            self.remove(row)
         self._rows.clear()
         del self._stack
         app.check_finalize(self)
@@ -82,15 +83,12 @@ class Row(Gtk.ListBoxRow):
 
         box = Gtk.Box()
         if icon_name is not None:
-            image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+            image = Gtk.Image.new_from_icon_name(icon_name)
             image.get_style_context().add_class('dim-label')
-            box.add(image)
+            box.append(image)
 
         label = Gtk.Label(label=title)
         label.set_xalign(0)
-        box.add(label)
-        self.add(box)
-
-        self.show_all()
-        self.set_no_show_all(True)
+        box.append(label)
+        self.set_child(box)
         self.set_visible(visible)

@@ -28,6 +28,7 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
+from gajim.gtk.util import iterate_listbox_children
 
 
 class StyleOption(NamedTuple):
@@ -129,32 +130,36 @@ class Themes(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_title(_('Gajim Themes'))
         self.set_name('ThemesWindow')
-        self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_transient_for(transient)
         self.set_resizable(True)
         self.set_default_size(600, 400)
         self.set_modal(True)
 
-        self._ui = get_builder('themes_window.ui')
-        self.add(self._ui.theme_grid)
+        self._ui = get_builder('themes_window.ui', self)
+        self.set_child(self._ui.theme_grid)
 
         self._get_themes()
         self._ui.option_listbox.set_placeholder(self._ui.placeholder)
 
-        self._ui.connect_signals(self)
-        self.connect_after('key-press-event', self._on_key_press)
-
-        self.show_all()
+        controller = Gtk.EventControllerKey()
+        controller.connect_after('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self._fill_choose_listbox()
 
-    def _on_key_press(self,
-                      _widget: Gtk.Widget,
-                      event: Gdk.EventKey
-                      ) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+        self.show()
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _get_themes(self) -> None:
         current_theme = app.settings.get('roster_theme')
@@ -211,7 +216,8 @@ class Themes(Gtk.ApplicationWindow):
         app.ged.raise_event(StyleChanged())
 
     def _load_options(self) -> None:
-        self._ui.option_listbox.foreach(self._remove_option)
+        self._clear_options()
+
         for option in CSS_STYLE_OPTIONS:
             value = app.css_config.get_value(
                 option.selector, option.attr, pre=True)
@@ -220,7 +226,7 @@ class Themes(Gtk.ApplicationWindow):
                 continue
 
             row = Option(option, value)
-            self._ui.option_listbox.add(row)
+            self._ui.option_listbox.append(row)
 
     def _add_option(self, _listbox: Gtk.ListBox, row: Option) -> None:
         # Add theme if there is none
@@ -230,7 +236,7 @@ class Themes(Gtk.ApplicationWindow):
             self._on_add_new_theme()
 
         # Don't add an option twice
-        for option in self._ui.option_listbox.get_children():
+        for option in iterate_listbox_children(self._ui.option_listbox):
             if option == row:
                 return
 
@@ -239,19 +245,16 @@ class Themes(Gtk.ApplicationWindow):
             row.option.selector, row.option.attr)
 
         row = Option(row.option, value)
-        self._ui.option_listbox.add(row)
+        self._ui.option_listbox.append(row)
         self._ui.option_popover.popdown()
 
     def _clear_options(self) -> None:
-        self._ui.option_listbox.foreach(self._remove_option)
+        for row in iterate_listbox_children(self._ui.option_listbox):
+            self._ui.option_listbox.remove(row)
 
     def _fill_choose_listbox(self) -> None:
         for option in CSS_STYLE_OPTIONS:
-            self._ui.choose_option_listbox.add(ChooseOption(option))
-
-    def _remove_option(self, row: Gtk.ListBoxRow) -> None:
-        self._ui.option_listbox.remove(row)
-        row.destroy()
+            self._ui.choose_option_listbox.append(ChooseOption(option))
 
     def _on_add_new_theme(self, *args: Any) -> None:
         name = self._create_theme_name()
@@ -343,7 +346,7 @@ class Option(Gtk.ListBoxRow):
         label.set_text(option.label)
         label.set_hexpand(True)
         label.set_halign(Gtk.Align.START)
-        self._box.add(label)
+        self._box.append(label)
 
         if option.attr in (StyleAttr.COLOR, StyleAttr.BACKGROUND):
             assert not isinstance(value, Pango.FontDescription)
@@ -352,15 +355,13 @@ class Option(Gtk.ListBoxRow):
             assert not isinstance(value, str)
             self._init_font(value)
 
-        remove_button = Gtk.Button.new_from_icon_name(
-            'list-remove-symbolic', Gtk.IconSize.MENU)
+        remove_button = Gtk.Button.new_from_icon_name('list-remove-symbolic')
         remove_button.set_tooltip_text(_('Remove Setting'))
         remove_button.get_style_context().add_class('theme_remove_button')
         remove_button.connect('clicked', self._on_remove)
-        self._box.add(remove_button)
+        self._box.append(remove_button)
 
-        self.add(self._box)
-        self.show_all()
+        self.set_child(self._box)
 
     def _init_color(self, color: str | None) -> None:
         color_button = Gtk.ColorButton()
@@ -370,7 +371,7 @@ class Option(Gtk.ListBoxRow):
             color_button.set_rgba(rgba)
         color_button.set_halign(Gtk.Align.END)
         color_button.connect('color-set', self._on_color_set)
-        self._box.add(color_button)
+        self._box.append(color_button)
 
     def _init_font(self, desc: Pango.FontDescription | None) -> None:
         font_button = Gtk.FontButton()
@@ -378,7 +379,7 @@ class Option(Gtk.ListBoxRow):
             font_button.set_font_desc(desc)
         font_button.set_halign(Gtk.Align.END)
         font_button.connect('font-set', self._on_font_set)
-        self._box.add(font_button)
+        self._box.append(font_button)
 
     def _on_color_set(self, color_button: Gtk.ColorButton) -> None:
         color = color_button.get_rgba()
@@ -386,7 +387,7 @@ class Option(Gtk.ListBoxRow):
         app.css_config.set_value(
             self.option.selector, self.option.attr, color_string, pre=True)
         app.ged.raise_event(StyleChanged())
-        themes_win = cast(Themes, self.get_toplevel())
+        themes_win = cast(Themes, self.get_root())
         themes_win.reload_roster_theme()
 
     def _on_font_set(self, font_button: Gtk.FontButton) -> None:
@@ -395,7 +396,7 @@ class Option(Gtk.ListBoxRow):
             return
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.ged.raise_event(StyleChanged())
-        themes_win = cast(Themes, self.get_toplevel())
+        themes_win = cast(Themes, self.get_root())
         themes_win.reload_roster_theme()
 
     def _on_remove(self, *args: Any) -> None:
@@ -404,7 +405,6 @@ class Option(Gtk.ListBoxRow):
         app.css_config.remove_value(
             self.option.selector, self.option.attr, pre=True)
         app.ged.raise_event(StyleChanged())
-        self.destroy()
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, ChooseOption):
@@ -418,5 +418,4 @@ class ChooseOption(Gtk.ListBoxRow):
         self.option = option
         label = Gtk.Label(label=option.label)
         label.set_xalign(0)
-        self.add(label)
-        self.show_all()
+        self.set_child(label)

@@ -57,8 +57,6 @@ class NotificationManager(Gtk.ListBox):
         label.show()
         self.set_placeholder(label)
 
-        self.show_all()
-
         self._add_actions()
         self.connect('destroy', self._on_destroy)
 
@@ -324,12 +322,12 @@ class NotificationRow(Gtk.ListBoxRow):
         assert isinstance(
             contact, BareContact | GroupchatContact | GroupchatParticipant)
         if isinstance(contact, GroupchatContact):
-            surface = contact.get_avatar(
+            texture = contact.get_avatar(
                 AvatarSize.ROSTER, self.get_scale_factor())
         else:
-            surface = contact.get_avatar(
+            texture = contact.get_avatar(
                 AvatarSize.ROSTER, self.get_scale_factor(), add_show=False)
-        image = Gtk.Image.new_from_surface(surface)
+        image = Gtk.Image.new_from_paintable(texture)
         image.set_valign(Gtk.Align.CENTER)
         return image
 

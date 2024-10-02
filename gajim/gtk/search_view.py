@@ -13,7 +13,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from enum import Enum
 
-import cairo
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -35,6 +35,7 @@ from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
+from gajim.gtk.util import clear_listbox, convert_glib_to_py_datetime
 from gajim.gtk.util import gtk_month
 from gajim.gtk.util import python_month
 
@@ -68,17 +69,15 @@ class SearchView(Gtk.Box):
 
         self._last_search_string = ''
 
-        self._ui = get_builder('search_view.ui')
+        self._ui = get_builder('search_view.ui', self, ['calendar_popover', 'search_box'])
         self._ui.results_listbox.set_header_func(self._header_func)
-        self.add(self._ui.search_box)
+        self.append(self._ui.search_box)
 
         self._search_filters = SearchFilters()
         self._search_filters.connect('filter-changed', self._on_search_filters_changed)
         self._search_filters.connect(
             'filter-activated', self._on_search_filters_activated)
-        self._ui.search_filters_box.add(self._search_filters)
-
-        self._ui.connect_signals(self)
+        self._ui.search_filters_box.append(self._search_filters)
 
         app.ged.register_event_handler('account-enabled',
                                        ged.GUI1,
@@ -86,7 +85,6 @@ class SearchView(Gtk.Box):
         app.ged.register_event_handler('account-disabled',
                                        ged.GUI1,
                                        self._on_account_state)
-        self.show_all()
 
     def _on_account_state(self, _event: Any) -> None:
         self._clear()
@@ -120,9 +118,7 @@ class SearchView(Gtk.Box):
         # Unset the header_func to reduce load when clearing
         self._ui.results_listbox.set_header_func(None)
 
-        for row in self._ui.results_listbox.get_children():
-            self._ui.results_listbox.remove(row)
-            row.destroy()
+        clear_listbox(self._ui.results_listbox)
 
         self._ui.results_listbox.set_header_func(self._header_func)
         self._ui.results_scrolled.get_vadjustment().set_value(0)
@@ -195,7 +191,7 @@ class SearchView(Gtk.Box):
             icon_name = 'system-search-symbolic'
             text = _('Search your conversation')
 
-        self._ui.placeholder_image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
+        self._ui.placeholder_image.set_from_icon_name(icon_name)
         self._ui.placeholder_label.set_text(text)
 
     def _add_results(self) -> None:
@@ -204,7 +200,7 @@ class SearchView(Gtk.Box):
         for db_row in itertools.islice(self._results_iterator, 25):
             has_results = True
             result_row = ResultRow(db_row)
-            self._ui.results_listbox.add(result_row)
+            self._ui.results_listbox.append(result_row)
 
         if not has_results:
             self._set_placeholder_mode(PlaceholderMode.NO_RESULTS)
@@ -237,8 +233,8 @@ class SearchView(Gtk.Box):
         if last_log is None:
             return
         self._last_date = last_log.astimezone()
-        month = gtk_month(self._last_date.month)
-        self._ui.calendar.select_month(month, self._last_date.year)
+
+        self._ui.calendar.select_day(convert_glib_to_py_datetime(self._last_date))
 
     def _on_month_changed(self, calendar: Gtk.Calendar) -> None:
         # Mark days with history in calendar
@@ -260,22 +256,17 @@ class SearchView(Gtk.Box):
             calendar.mark_day(day)
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
-        year, month, day = calendar.get_date()
-        py_m = python_month(month)
-        date = dt.datetime(year, py_m, day)
+        date_time = calendar.get_date()
+        date = dt.datetime(*date_time.get_ymd())
         self._scroll_to_date(date)
 
     def _on_first_date_selected(self, _button: Gtk.Button) -> None:
         assert self._first_date is not None
-        gtk_m = gtk_month(self._first_date.month)
-        self._ui.calendar.select_month(gtk_m, self._first_date.year)
-        self._ui.calendar.select_day(self._first_date.day)
+        self._ui.calendar.select_day(convert_glib_to_py_datetime(self._first_date))
 
     def _on_last_date_selected(self, _button: Gtk.Button) -> None:
         assert self._last_date is not None
-        gtk_m = gtk_month(self._last_date.month)
-        self._ui.calendar.select_month(gtk_m, self._last_date.year)
-        self._ui.calendar.select_day(self._last_date.day)
+        self._ui.calendar.select_day(convert_glib_to_py_datetime(self._last_date))
 
     def _on_previous_date_selected(self, _button: Gtk.Button) -> None:
         delta = dt.timedelta(days=-1)
@@ -295,9 +286,8 @@ class SearchView(Gtk.Box):
         # Iterate through days until history entry found or
         # supplied end_date (first_date/last_date) reached
 
-        year, month, day = self._ui.calendar.get_date()
-        py_m = python_month(month)
-        date = dt.date(year, py_m, day)
+        g_datetime = self._ui.calendar.get_date()
+        date = dt.date(*g_datetime.get_ymd())
 
         assert self._jid is not None
         assert self._account is not None
@@ -316,12 +306,7 @@ class SearchView(Gtk.Box):
                 break
             day_has_messages = self._ui.calendar.get_day_is_marked(date.day)
 
-        gtk_m = gtk_month(date.month)
-        if gtk_m != month or date.year != year:
-            # Select month only if it's a different one
-            self._ui.calendar.select_month(gtk_m, date.year)
-
-        self._ui.calendar.select_day(date.day)
+        self._ui.calendar.select_day(convert_glib_to_py_datetime(date))
 
     def _scroll_to_date(self, date: dt.datetime) -> None:
         control = app.window.get_control()
@@ -381,8 +366,8 @@ class RowHeader(Gtk.Box):
         Gtk.Box.__init__(self)
         self.set_hexpand(True)
 
-        self._ui = get_builder('search_view.ui')
-        self.add(self._ui.header_box)
+        self._ui = get_builder('search_view.ui', self, ['header_box'])
+        self.append(self._ui.header_box)
 
         client = app.get_client(account)
         contact = client.get_module('Contacts').get_contact(jid)
@@ -396,8 +381,6 @@ class RowHeader(Gtk.Box):
         if local_timestamp.date() <= dt.datetime.today().date():
             format_string = app.settings.get('date_format')
         self._ui.header_date_label.set_text(local_timestamp.strftime(format_string))
-
-        self.show_all()
 
 
 class ResultRow(Gtk.ListBoxRow):
@@ -429,8 +412,8 @@ class ResultRow(Gtk.ListBoxRow):
         style_context = self.get_style_context()
         style_context.add_class('search-view-row')
         style_context.add_class('opacity-0')
-        self._ui = get_builder('search_view.ui')
-        self.add(self._ui.result_row_grid)
+        self._ui = get_builder('search_view.ui', self, ['result_row_grid'])
+        self.set_child(self._ui.result_row_grid)
 
         contact_name = self.contact.name
         if self.type == MessageType.GROUPCHAT:
@@ -440,7 +423,8 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_name_label.set_text(contact_name)
 
         avatar = self._get_avatar(self.direction, contact_name)
-        self._ui.row_avatar.set_from_surface(avatar)
+        self._ui.row_avatar.set_pixel_size(AvatarSize.ROSTER)
+        self._ui.row_avatar.set_from_paintable(avatar)
 
         format_string = app.settings.get('time_format')
         self._ui.row_time_label.set_text(
@@ -457,7 +441,6 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.result_row_grid.attach(message_widget, 1, 1, 2, 1)
 
         GLib.timeout_add(100, style_context.remove_class, 'opacity-0')
-        self.show_all()
 
     def _get_client(self, account_jid: str) -> Client:
         for client in app.get_clients():
@@ -468,7 +451,7 @@ class ResultRow(Gtk.ListBoxRow):
 
     def _get_avatar(self,
                     direction: ChatDirection,
-                    name: str) -> cairo.ImageSurface | None:
+                    name: str) -> Gdk.Texture | None:
 
         scale = self.get_scale_factor()
         if isinstance(self.contact, GroupchatContact):
@@ -513,21 +496,20 @@ class SearchFilters(Gtk.Expander):
         self._after: dt.datetime | None = None
         self._before: dt.datetime | None = None
 
-        self._ui = get_builder('search_view.ui')
-        self.add(self._ui.search_filters_grid)
+        self._ui = get_builder('search_view.ui', self, ['filter_date_selector_popover', 'search_filters_grid'])
+        self.set_child(self._ui.search_filters_grid)
 
         self._ui.filter_from_entry.connect('changed', self._on_filter_from_changed)
         self._ui.filter_from_entry.connect('activate', self._on_from_entry_activated)
 
-        self._ui.filter_after_button.connect(
-            'toggled', self._on_filter_calendar_toggled)
-        self._ui.filter_before_button.connect(
-            'toggled', self._on_filter_calendar_toggled)
+        # self._ui.filter_after_button.connect(
+        #     'toggled', self._on_filter_calendar_toggled)
+        # self._ui.filter_before_button.connect( TODO GT4
+        #     'toggled', self._on_filter_calendar_toggled)
 
         self._ui.filter_date_calendar.connect('day-selected', self._on_date_selected)
         self._ui.filter_date_calendar_reset_button.connect(
             'clicked', self._on_date_reset_clicked)
-        self.show_all()
 
     def _on_filter_from_changed(self, _entry: Gtk.Entry) -> None:
         self._update_state()
@@ -539,8 +521,8 @@ class SearchFilters(Gtk.Expander):
         self._ui.filter_date_selector_popover.set_relative_to(button)
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
-        year, month, day = calendar.get_date()
-        datetime = dt.datetime(year, python_month(month), day, tzinfo=dt.timezone.utc)
+        g_datetime = calendar.get_date()
+        datetime = dt.datetime(*g_datetime.get_ymd(), tzinfo=dt.timezone.utc)
         date_format = app.settings.get('date_format')
 
         if self._ui.filter_before_button.get_active():

@@ -72,7 +72,7 @@ class DataFormWidget(Gtk.ScrolledWindow):
             self._form_widget.connect('form-completed', self._on_form_completed)
         self._original_form_hash = self.get_form_hash()
 
-        self.add(self._form_widget)
+        self.set_child(self._form_widget)
 
         self.connect('destroy', self._on_destroy)
 
@@ -295,8 +295,8 @@ class SizeAdjustment:
 class Title:
     def __init__(self, title: str) -> None:
         self._label = Gtk.Label(label=title)
-        self._label.set_line_wrap(True)
-        self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_justify(Gtk.Justification.CENTER)
         self._label.get_style_context().add_class('data-form-title')
 
@@ -308,8 +308,8 @@ class Instructions:
     def __init__(self, instructions: str) -> None:
         self._label = Gtk.Label()
         self._label.set_markup(make_href_markup(instructions))
-        self._label.set_line_wrap(True)
-        self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_justify(Gtk.Justification.CENTER)
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
@@ -333,21 +333,21 @@ class Field(GObject.GObject):
 
         self._label = Gtk.Label(label=field.label)
         self._label.set_single_line_mode(False)
-        self._label.set_line_wrap(True)
-        self._label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_width_chars(15)
         self._label.set_xalign(bool(options.get('right-align')))
         self._label.set_tooltip_text(field.description)
 
         self._warning_image = Gtk.Image.new_from_icon_name(
-            'dialog-warning-symbolic', Gtk.IconSize.MENU)
-        self._warning_image.get_style_context().add_class('warning-color')
-        self._warning_image.set_no_show_all(True)
+            'dialog-warning-symbolic')
+        self._warning_image.add_css_class('warning-color')
+        self._warning_image.set_visible(False)
         self._warning_image.set_valign(Gtk.Align.CENTER)
         self._warning_image.set_tooltip_text(_('Required'))
         self._warning_box = Gtk.Box()
         self._warning_box.set_size_request(16, -1)
-        self._warning_box.add(self._warning_image)
+        self._warning_box.append(self._warning_image)
 
     @property
     def read_only(self) -> bool:
@@ -522,7 +522,7 @@ class ListSingleField(Field):
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self._widget.add(self._treeview)
+        self._widget.set_child(self._treeview)
 
 
     def _on_cursor_changed(self, *_args: Any) -> None:
@@ -596,7 +596,7 @@ class ListMultiField(Field):
         self._widget.set_min_content_height(100)
         self._widget.set_max_content_height(300)
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self._widget.add(self._treeview)
+        self._widget.set_child(self._treeview)
 
     def validate(self) -> None:
         self._validate()
@@ -684,18 +684,16 @@ class JidMultiField(Field):
 
         self._treeview = JidMutliTreeView(field, self)
 
-        self._add_button = Gtk.ToolButton(icon_name='list-add-symbolic')
+        self._add_button = Gtk.Button(icon_name='list-add-symbolic')
         self._add_button.connect('clicked', self._add_clicked)
 
-        self._remove_button = Gtk.ToolButton(icon_name='list-remove-symbolic')
+        self._remove_button = Gtk.Button(icon_name='list-remove-symbolic')
         self._remove_button.connect('clicked', self._remove_clicked)
 
-        self._toolbar = Gtk.Toolbar()
-        self._toolbar.set_icon_size(Gtk.IconSize.MENU)
-        self._toolbar.set_style(Gtk.ToolbarStyle.ICONS)
-        self._toolbar.get_style_context().add_class('inline-toolbar')
-        self._toolbar.add(self._add_button)
-        self._toolbar.add(self._remove_button)
+        self._toolbar = Gtk.Box()
+        self._toolbar.add_css_class('toolbar')
+        self._toolbar.append(self._add_button)
+        self._toolbar.append(self._remove_button)
 
         self._widget = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
 
@@ -703,19 +701,19 @@ class JidMultiField(Field):
         self._scrolled_window.set_propagate_natural_height(True)
         self._scrolled_window.set_min_content_height(100)
         self._scrolled_window.set_max_content_height(300)
-        self._scrolled_window.add(self._treeview)
+        self._scrolled_window.set_child(self._treeview)
 
-        self._widget.pack_start(self._scrolled_window, True, True, 0)
+        self._widget.append(self._scrolled_window)
 
         if not self._read_only:
-            self._widget.pack_end(self._toolbar, False, False, 0)
+            self._widget.append(self._toolbar)
 
-    def _add_clicked(self, _widget: Gtk.ToolButton) -> None:
+    def _add_clicked(self, _widget: Gtk.Button) -> None:
         model = self._treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
         model.append([''])
 
-    def _remove_clicked(self, _widget: Gtk.ToolButton) -> None:
+    def _remove_clicked(self, _widget: Gtk.Button) -> None:
         mod, paths = self._treeview.get_selection().get_selected_rows()
         for path in paths:
             iter_ = mod.get_iter(path)
@@ -866,7 +864,7 @@ class TextMultiField(Field):
             self._widget.set_propagate_natural_height(True)
             self._widget.set_min_content_height(100)
 
-            self._widget.add(self._textview)
+            self._widget.set_child(self._textview)
 
     def _changed(self, widget: Gtk.TextBuffer) -> None:
         self._field.value = widget.get_text(*widget.get_bounds(), False)
@@ -920,8 +918,8 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
             label = Gtk.Label(label=instructions)
             label.set_justify(Gtk.Justification.CENTER)
             label.set_max_width_chars(40)
-            label.set_line_wrap(True)
-            label.set_line_wrap_mode(Pango.WrapMode.WORD)
+            label.set_wrap_mode(Pango.WrapMode.WORD)
+            label.set_wrap_mode(Pango.WrapMode.WORD)
             self._grid.attach(label, 0, self._row_count, 2, 1)
             self._row_count += 1
 
@@ -935,8 +933,7 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
             self._grid.attach(button, 0, self._row_count, 2, 1)
         else:
             self._add_fields()
-        self.add(self._grid)
-        self.show_all()
+        self.set_child(self._grid)
 
     def _add_fields(self) -> None:
         for name, value in self._fields.items():
@@ -994,7 +991,6 @@ class DataFormDialog(Gtk.Dialog):
         self.set_default_response(Gtk.ResponseType.OK)
 
         self.connect('response', self._on_response)
-        self.show_all()
 
     def _on_response(self,
                      _dialog: Gtk.Window,
@@ -1054,7 +1050,7 @@ class DataFormReportedTable(Gtk.Grid):
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_vexpand(True)
         scrolled_window.set_hexpand(True)
-        scrolled_window.add(self._treeview)
+        scrolled_window.set_child(self._treeview)
 
         title = f'<big>{GLib.markup_escape_text(self._form_node.title)}</big>'
         self.attach(Gtk.Label(label=title, use_markup=True), 0, 0, 1, 1)

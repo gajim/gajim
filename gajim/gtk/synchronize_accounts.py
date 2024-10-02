@@ -22,9 +22,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
     def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(400, 550)
         self.set_resizable(True)
         self.set_title(_('Synchronize Accounts'))
@@ -32,8 +30,8 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
 
         self.account = account
 
-        self._ui = get_builder('synchronize_accounts.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('synchronize_accounts.ui', self)
+        self.set_child(self._ui.stack)
 
         if not app.account_is_available(account):
             self._ui.connection_warning_label.show()
@@ -45,8 +43,6 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
 
         self._remote_account = None
         self._remote_client = None
-
-
 
         # Accounts
         model = Gtk.ListStore(str, str, bool)
@@ -71,16 +67,25 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         self._ui.contacts_treeview.insert_column_with_attributes(
             -1, _('Name'), renderer2, text=1)
 
-        self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self._init_accounts()
 
-        self.show_all()
+        self.show()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_client_state_changed(self,
                                  _client: types.Client,

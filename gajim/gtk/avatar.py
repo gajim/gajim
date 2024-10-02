@@ -30,7 +30,7 @@ from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
-from gajim.gtk.util import convert_rgb_string_to_float
+from gajim.gtk.util import convert_rgb_string_to_float, convert_surface_to_texture
 from gajim.gtk.util import get_contact_color
 from gajim.gtk.util import get_css_show_class
 from gajim.gtk.util import get_first_graphemes
@@ -42,7 +42,7 @@ log = logging.getLogger('gajim.gtk.avatar')
 
 
 AvatarCacheT = dict[JID | str, dict[tuple[int, int, str | None, str | None],
-                                          cairo.ImageSurface]]
+                                          Gdk.Texture]]
 
 CIRCLE_RATIO = 0.18
 CIRCLE_FILL_RATIO = 0.80
@@ -117,11 +117,11 @@ def make_workspace_avatar(letter: str,
                           color: tuple[float, float, float],
                           size: int,
                           scale: int,
-                          style: str = 'round-corners') -> cairo.ImageSurface:
+                          style: str = 'round-corners') -> Gdk.Texture:
 
     surface = generate_avatar(letter, color, size, scale)
     surface.set_device_scale(scale, scale)
-    return clip(surface, style)
+    return convert_surface_to_texture(clip(surface, style))
 
 
 def add_transport_to_avatar(surface: cairo.ImageSurface,
@@ -431,26 +431,7 @@ class AvatarStorage(metaclass=Singleton):
     def invalidate_cache(self, jid: JID | str) -> None:
         self._cache.pop(jid, None)
 
-    def get_pixbuf(self,
-                   contact: (types.BareContact |
-                             types.GroupchatContact |
-                             types.GroupchatParticipant),
-                   size: int,
-                   scale: int,
-                   show: str | None = None,
-                   default: bool = False,
-                   transport_icon: str | None = None,
-                   style: str = 'circle') -> GdkPixbuf.Pixbuf | None:
-
-        surface = self.get_surface(
-            contact, size, scale, show, default, transport_icon, style)
-        return Gdk.pixbuf_get_from_surface(surface,
-                                           0,
-                                           0,
-                                           size * scale,
-                                           size * scale)
-
-    def get_surface(self,
+    def get_texture(self,
                     contact: (types.BareContact |
                               types.GroupchatContact |
                               types.GroupchatParticipant),
@@ -459,14 +440,14 @@ class AvatarStorage(metaclass=Singleton):
                     show: str | None = None,
                     default: bool = False,
                     transport_icon: str | None = None,
-                    style: str = 'circle') -> cairo.ImageSurface:
+                    style: str = 'circle') -> Gdk.Texture:
 
         jid = contact.jid
 
         if not default:
-            surface = self._cache[jid].get((size, scale, show, transport_icon))
-            if surface is not None:
-                return surface
+            texture = self._cache[jid].get((size, scale, show, transport_icon))
+            if texture is not None:
+                return texture
 
             surface = self._get_avatar_from_storage(contact, size, scale, style)
             if surface is not None:
@@ -476,8 +457,9 @@ class AvatarStorage(metaclass=Singleton):
                 if transport_icon is not None:
                     surface = add_transport_to_avatar(surface, transport_icon)
 
-                self._cache[jid][(size, scale, show, transport_icon)] = surface
-                return surface
+                texture = convert_surface_to_texture(surface)
+                self._cache[jid][(size, scale, show, transport_icon)] = texture
+                return texture
 
         name = contact.name
         color = get_contact_color(contact)
@@ -490,22 +472,23 @@ class AvatarStorage(metaclass=Singleton):
         if transport_icon is not None:
             surface = add_transport_to_avatar(surface, transport_icon)
 
-        self._cache[jid][(size, scale, show, transport_icon)] = surface
-        return surface
+        texture = convert_surface_to_texture(surface)
+        self._cache[jid][(size, scale, show, transport_icon)] = texture
+        return texture
 
-    def get_muc_surface(self,
+    def get_muc_texture(self,
                         account: str,
                         jid: JID,
                         size: int,
                         scale: int,
                         default: bool = False,
                         transport_icon: str | None = None,
-                        style: str = 'circle') -> cairo.ImageSurface:
+                        style: str = 'circle') -> Gdk.Texture:
 
         if not default:
-            surface = self._cache[jid].get((size, scale, None, transport_icon))
-            if surface is not None:
-                return surface
+            texture = self._cache[jid].get((size, scale, None, transport_icon))
+            if texture is not None:
+                return texture
 
             avatar_sha = app.storage.cache.get_muc(account, jid, 'avatar')
             if avatar_sha is not None:
@@ -518,9 +501,10 @@ class AvatarStorage(metaclass=Singleton):
                         surface = add_transport_to_avatar(
                             surface, transport_icon)
 
+                    texture = convert_surface_to_texture(surface)
                     self._cache[jid][
-                        (size, scale, None, transport_icon)] = surface
-                    return surface
+                        (size, scale, None, transport_icon)] = texture
+                    return texture
 
                 # avatar_sha set, but image is missing
                 # (e.g. avatar cache deleted)
@@ -536,17 +520,18 @@ class AvatarStorage(metaclass=Singleton):
         if transport_icon is not None:
             surface = add_transport_to_avatar(surface, transport_icon)
 
-        self._cache[jid][(size, scale, None, transport_icon)] = surface
-        return surface
+        texture = convert_surface_to_texture(surface)
+        self._cache[jid][(size, scale, None, transport_icon)] = texture
+        return texture
 
-    def get_workspace_surface(self,
+    def get_workspace_texture(self,
                               workspace_id: str,
                               size: int,
-                              scale: int) -> cairo.ImageSurface | None:
+                              scale: int) -> Gdk.Texture | None:
 
-        surface = self._cache[workspace_id].get((size, scale, None, None))
-        if surface is not None:
-            return surface
+        texture = self._cache[workspace_id].get((size, scale, None, None))
+        if texture is not None:
+            return texture
 
         name = app.settings.get_workspace_setting(workspace_id, 'name')
         color = app.settings.get_workspace_setting(workspace_id, 'color')
@@ -555,17 +540,20 @@ class AvatarStorage(metaclass=Singleton):
         if avatar_sha:
             surface = self.surface_from_filename(avatar_sha, size, scale)
             if surface is not None:
-                return clip(surface, 'round-corners')
+                surface = clip(surface, 'round-corners')
+                texture = convert_surface_to_texture(surface)
+                return texture
 
             # avatar_sha set, but image is missing
             # (e.g. avatar cache deleted)
             app.settings.set_workspace_setting(workspace_id, 'avatar_sha', '')
 
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
-        surface = make_workspace_avatar(
+        texture = make_workspace_avatar(
             name, rgba_to_float(rgba), size, scale)
-        self._cache[workspace_id][(size, scale, None, None)] = surface
-        return surface
+
+        self._cache[workspace_id][(size, scale, None, None)] = texture
+        return texture
 
     @staticmethod
     def _load_for_publish(path: str) -> tuple[bool, bytes] | None:
@@ -629,8 +617,23 @@ class AvatarStorage(metaclass=Singleton):
         if pixbuf is None:
             return None
 
-        surface = Gdk.cairo_surface_create_from_pixbuf(pixbuf, scale)
-        return fit(surface, size)
+        if pixbuf.get_n_channels() == 3:
+            cairo_format = cairo.Format.RGB24
+        else:
+            cairo_format = cairo.Format.ARGB32
+
+        surface = cairo.ImageSurface(
+            cairo_format,
+            pixbuf.get_width(),
+            pixbuf.get_height()
+        )
+
+        context = cairo.Context(surface)
+
+        Gdk.cairo_set_source_pixbuf(context, pixbuf, 0, 0)
+        context.paint()
+
+        return fit(context.get_target(), size)
 
     def _get_avatar_from_storage(self,
                                  contact: (types.BareContact |

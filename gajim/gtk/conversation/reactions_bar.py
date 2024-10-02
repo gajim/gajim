@@ -23,6 +23,8 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
+from gajim.gtk.util import iterate_children
+
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow
 
@@ -41,7 +43,7 @@ class ReactionData(NamedTuple):
 
 class ReactionsBar(Gtk.Box):
     def __init__(self, message_row: MessageRow, contact: types.ChatContactT) -> None:
-        Gtk.Box.__init__(self, spacing=3, no_show_all=True, halign=Gtk.Align.START)
+        Gtk.Box.__init__(self, spacing=3, visible=False, halign=Gtk.Align.START)
         self._message_row = message_row
         self._contact = contact
         if isinstance(self._contact, GroupchatContact):
@@ -57,7 +59,7 @@ class ReactionsBar(Gtk.Box):
         add_reaction_button.get_style_context().add_class('reaction')
         add_reaction_button.get_style_context().add_class('flat')
         add_reaction_button.connect('emoji-added', self._on_emoji_added)
-        self.pack_end(add_reaction_button, False, False, 0)
+        self.append(add_reaction_button)
 
     def _on_client_state_changed(self, *args: Any) -> None:
         self.set_sensitive(self._get_reactions_enabled())
@@ -128,20 +130,21 @@ class ReactionsBar(Gtk.Box):
         self._message_row.send_reaction(emoji, toggle=False)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
-        for widget in self.get_children():
+        for widget in iterate_children(self):
             if isinstance(widget, AddReactionButton):
                 continue
 
             if isinstance(widget, MoreReactionsButton):
                 widget.hide_popover()
+                continue
 
-            widget.destroy()
+            self.remove(widget)
 
         self._reactions = reactions
 
         aggregated_reactions = self._aggregate_reactions(reactions)
         if not aggregated_reactions:
-            self.set_no_show_all(True)
+            self.set_visible(False)
             self.hide()
             return
 
@@ -150,18 +153,18 @@ class ReactionsBar(Gtk.Box):
             reaction_button = ReactionButton(emoji, data)
             reaction_button.connect('clicked', self._on_reaction_clicked)
             if index + 1 <= MAX_VISIBLE_REACTIONS:
-                self.pack_start(reaction_button, False, False, 0)
+                self.prepend(reaction_button)
             elif index + 1 > MAX_VISIBLE_REACTIONS and index + 1 <= MAX_TOTAL_REACTIONS:
                 if more_reactions_button is None:
                     more_reactions_button = MoreReactionsButton()
-                    self.pack_start(more_reactions_button, False, False, 0)
+                    self.append(more_reactions_button)
+                    self.reorder_child_after(more_reactions_button, reaction_button)
                 more_reactions_button.add_reaction(reaction_button)
             else:
                 log.debug('Too many reactions: %s', len(aggregated_reactions))
                 break
 
-        self.set_no_show_all(False)
-        self.show_all()
+        self.show()
 
 
 class ReactionButton(Gtk.Button):
@@ -198,11 +201,9 @@ class ReactionButton(Gtk.Button):
         count_label.get_style_context().add_class('monospace')
 
         self._box = Gtk.Box(spacing=3)
-        self._box.add(emoji_label)
-        self._box.add(count_label)
-        self.add(self._box)
-
-        self.show_all()
+        self._box.append(emoji_label)
+        self._box.append(count_label)
+        self.set_child(self._box)
 
 
 class MoreReactionsButton(Gtk.MenuButton):
@@ -221,10 +222,8 @@ class MoreReactionsButton(Gtk.MenuButton):
         self._flow_box.get_style_context().add_class('padding-6')
 
         popover = Gtk.Popover()
-        popover.add(self._flow_box)
+        popover.set_child(self._flow_box)
         self.set_popover(popover)
-
-        self.show_all()
 
     def hide_popover(self) -> None:
         popover = self.get_popover()
@@ -232,8 +231,7 @@ class MoreReactionsButton(Gtk.MenuButton):
             popover.popdown()
 
     def add_reaction(self, reaction_button: ReactionButton) -> None:
-        self._flow_box.add(reaction_button)
-        self._flow_box.show_all()
+        self._flow_box.append(reaction_button)
 
 
 class AddReactionButton(Gtk.Button):
@@ -244,28 +242,24 @@ class AddReactionButton(Gtk.Button):
 
     def __init__(self) -> None:
         Gtk.Button.__init__(self, tooltip_text=_('Add reaction'))
-        icon = Gtk.Image.new_from_icon_name(
-            'lucide-smile-plus-symbolic', Gtk.IconSize.BUTTON
-        )
-        self._dummy_entry = Gtk.Entry(
+        icon = Gtk.Image.new_from_icon_name('lucide-smile-plus-symbolic')
+        self._dummy_entry = Gtk.Text(
             width_chars=0,
             editable=True,
-            no_show_all=True,
+            visible=False,
+            propagate_text_width=True,
+            css_classes=['flat', 'dummy-emoji-entry']
         )
-        self._dummy_entry.get_style_context().add_class('flat')
-        self._dummy_entry.get_style_context().add_class('dummy-emoji-entry')
         self._dummy_entry.connect('insert-text', self._on_insert_text)
 
         box = Gtk.Box()
-        box.add(icon)
-        box.add(self._dummy_entry)
-        self.add(box)
+        box.append(icon)
+        box.append(self._dummy_entry)
+        self.set_child(box)
         self.set_tooltip_text(_('Add Reaction…'))
 
         # Use connect_after to allow other widgets to connect beforehand
         self.connect_after('clicked', self._on_clicked)
-
-        self.show_all()
 
     def _on_clicked(self, _button: Gtk.Button) -> None:
         self._dummy_entry.show()

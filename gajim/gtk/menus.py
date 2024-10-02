@@ -253,6 +253,19 @@ def get_encryption_menu() -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_message_input_extra_context_menu() -> Gio.Menu:
+    menuitems: MenuItemListT = [
+        (_('Clear'), 'win.input-clear', None),
+        (_('Paste as Code Block'), 'win.paste-as-code-block', None),
+        (_('Paste as Quote'), 'win.paste-as-quote', None),
+    ]
+
+    menu = GajimMenu.from_list(menuitems)
+    extra_menu = Gio.Menu()
+    extra_menu.append_section(None, menu)
+    return extra_menu
+
+
 def get_conv_action_context_menu(account: str,
                                  selected_text: str
                                  ) -> Gtk.MenuItem:

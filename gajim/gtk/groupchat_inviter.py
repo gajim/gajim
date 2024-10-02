@@ -9,7 +9,6 @@ from typing import Any
 import locale
 
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -26,6 +25,7 @@ from gajim.common.util.jid import validate_jid
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contacts_flowbox import ContactsFlowBox
 from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import iterate_listbox_children
 
 
 class ContactRow(Gtk.ListBoxRow):
@@ -54,7 +54,7 @@ class ContactRow(Gtk.ListBoxRow):
 
         image = self._get_avatar_image(contact)
         image.set_size_request(AvatarSize.ROSTER, AvatarSize.ROSTER)
-        grid.add(image)
+        grid.attach(image, 0, 0, 1, 1)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         box.set_hexpand(True)
@@ -66,15 +66,15 @@ class ContactRow(Gtk.ListBoxRow):
         self._name_label.set_halign(Gtk.Align.START)
         self._name_label.get_style_context().add_class('bold16')
         name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-        name_box.add(self._name_label)
+        name_box.append(self._name_label)
 
         if show_account:
             account_badge = AccountBadge(account)
             account_badge.set_halign(Gtk.Align.END)
             account_badge.set_valign(Gtk.Align.START)
             account_badge.set_hexpand(True)
-            name_box.add(account_badge)
-        box.add(name_box)
+            name_box.append(account_badge)
+        box.append(name_box)
 
         self._jid_label = Gtk.Label(label=str(jid))
         self._jid_label.set_tooltip_text(str(jid))
@@ -83,24 +83,22 @@ class ContactRow(Gtk.ListBoxRow):
         self._jid_label.set_width_chars(22)
         self._jid_label.set_halign(Gtk.Align.START)
         self._jid_label.get_style_context().add_class('dim-label')
-        box.add(self._jid_label)
+        box.append(self._jid_label)
 
-        grid.add(box)
+        grid.attach(box, 1, 0, 1, 1)
 
-        self.add(grid)
-        self.show_all()
+        self.set_child(grid)
 
     def _get_avatar_image(self,
                           contact: types.BareContact | None
                           ) -> Gtk.Image:
         if contact is None:
             icon_name = 'avatar-default'
-            return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
+            return Gtk.Image.new_from_icon_name(icon_name)
 
         scale = self.get_scale_factor()
-        surface = contact.get_avatar(AvatarSize.ROSTER, scale)
-        assert not isinstance(surface, GdkPixbuf.Pixbuf)
-        return Gtk.Image.new_from_surface(surface)
+        texture = contact.get_avatar(AvatarSize.ROSTER, scale)
+        return Gtk.Image.new_from_paintable(texture)
 
     def update_jid(self, jid: str) -> None:
         self.jid = jid
@@ -120,12 +118,12 @@ class GroupChatInviter(Gtk.Box):
     def __init__(self, room_jid: str) -> None:
         Gtk.Box.__init__(self)
         self.set_size_request(-1, 250)
-        self._ui = get_builder('groupchat_inviter.ui')
-        self.add(self._ui.invite_box)
+        self._ui = get_builder('groupchat_inviter.ui', self)
+        self.append(self._ui.invite_box)
 
         self._invitees_box = ContactsFlowBox()
         self._invitees_box.connect('contact-removed', self._on_invitee_removed)
-        self._ui.invitees_scrolled.add(self._invitees_box)
+        self._ui.invitees_scrolled.set_child(self._invitees_box)
 
         self._ui.contacts_listbox.set_filter_func(self._filter_func, None)
         self._ui.contacts_listbox.set_sort_func(self._sort_func, None)
@@ -148,10 +146,10 @@ class GroupChatInviter(Gtk.Box):
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
         self._ui.search_entry.connect(
             'activate', self._on_search_activate)
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
 
-        self.show_all()
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
     def _add_accounts(self) -> None:
         for account in self._accounts:
@@ -175,7 +173,7 @@ class GroupChatInviter(Gtk.Box):
                                  str(contact.jid),
                                  contact.name,
                                  show_account)
-                self._ui.contacts_listbox.add(row)
+                self._ui.contacts_listbox.append(row)
 
     def _on_contacts_row_activated(self,
                                    listbox: Gtk.ListBox,
@@ -201,7 +199,6 @@ class GroupChatInviter(Gtk.Box):
 
         if not row.is_new:
             listbox.remove(row)
-            row.destroy()
 
         self._ui.search_entry.set_text('')
         GLib.timeout_add(50, self._select_first_row)
@@ -226,26 +223,33 @@ class GroupChatInviter(Gtk.Box):
                              str(contact.jid),
                              contact.name,
                              show_account)
-            self._ui.contacts_listbox.add(row)
+            self._ui.contacts_listbox.append(row)
         self._ui.search_entry.grab_focus()
         self.emit('listbox-changed', flowbox.has_contacts())
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> int:
-        if event.keyval == Gdk.KEY_Down:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Down:
             self._ui.search_entry.emit('next-match')
             return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_Up:
+        if keyval == Gdk.KEY_Up:
             self._ui.search_entry.emit('previous-match')
             return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_Return:
+        if keyval == Gdk.KEY_Return:
             row = self._ui.contacts_listbox.get_selected_row()
             if row is not None:
                 row.emit('activate')
             return Gdk.EVENT_STOP
 
-        self._ui.search_entry.grab_focus_without_selecting()
+        # TODO GTK4
+        # self._ui.search_entry.grab_focus_without_selecting()
 
         return Gdk.EVENT_PROPAGATE
 
@@ -275,7 +279,7 @@ class GroupChatInviter(Gtk.Box):
                              _('New Contact'),
                              show_account)
             self._new_contact_rows[account] = row
-            self._ui.contacts_listbox.add(row)
+            self._ui.contacts_listbox.append(row)
         self._new_contact_row_visible = True
 
     def _remove_new_contact_row(self) -> None:
@@ -358,10 +362,9 @@ class GroupChatInviter(Gtk.Box):
         return locale.strcoll(name1.lower(), name2.lower())
 
     def _reset(self) -> None:
-        def _remove(row: Gtk.ListBoxRow) -> None:
-            self.remove(row)
-            row.destroy()
-        self._ui.contacts_listbox.foreach(_remove)
+        for row in iterate_listbox_children(self._ui.contacts_listbox):
+            self._ui.contacts_listbox.remove(row)
+
         self._invitees_box.clear()
 
     def load_contacts(self) -> None:

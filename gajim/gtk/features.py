@@ -16,6 +16,7 @@ import sys
 
 from gi.repository import Gdk
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import passwords
@@ -35,11 +36,11 @@ class Features(Gtk.ApplicationWindow):
     def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('Features')
         self.set_title(_('Features'))
         self.set_resizable(False)
+        self.set_default_size(500, -1)
         self.set_transient_for(app.window)
 
         grid = Gtk.Grid()
@@ -53,27 +54,34 @@ class Features(Gtk.ApplicationWindow):
         grid.attach(self.feature_listbox, 0, 0, 1, 1)
 
         box = Gtk.Box()
-        box.pack_start(grid, True, True, 0)
-        box.set_property('margin', 12)
+        box.append(grid)
         box.set_spacing(18)
-        self.add(box)
+        self.set_child(box)
 
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         for feature in self._get_features():
             self._add_feature(feature)
 
-        self.show_all()
+        self.show()
 
-    def _on_key_press(self,
-                      _widget: Gtk.Widget,
-                      event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _add_feature(self, feature: Feature) -> None:
         item = FeatureItem(feature)
-        self.feature_listbox.add(item)
+        self.feature_listbox.append(item)
 
     def _get_features(self) -> list[Feature]:
         tray_icon_available = bool(
@@ -160,7 +168,7 @@ class FeatureItem(Gtk.Grid):
         feature_label = Gtk.Label(label=feature.name)
         feature_label.set_halign(Gtk.Align.START)
         self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self._box.pack_start(feature_label, True, True, 0)
+        self._box.append(feature_label)
         self._box.set_tooltip_text(feature.tooltip)
 
         feature_dependency = Gtk.Label(label=feature.dependency_u)
@@ -175,18 +183,19 @@ class FeatureItem(Gtk.Grid):
             feature_dependency.set_halign(Gtk.Align.START)
             feature_dependency.set_xalign(0.0)
             feature_dependency.set_yalign(0.0)
-            feature_dependency.set_line_wrap(True)
+            feature_dependency.set_wrap(True)
+            feature_dependency.set_wrap_mode(Pango.WrapMode.WORD)
             feature_dependency.set_max_width_chars(50)
             feature_dependency.set_selectable(True)
-            self._box.pack_start(feature_dependency, True, True, 0)
+            self._box.append(feature_dependency)
 
         self._icon = Gtk.Image()
         self._label_disabled = Gtk.Label(label=_('Disabled in Preferences'))
         self._label_disabled.get_style_context().add_class('dim-label')
         self._set_feature(feature.available, feature.enabled)
 
-        self.add(self._icon)
-        self.add(self._box)
+        self.attach(self._icon, 0, 0, 1, 1)
+        self.attach(self._box, 1, 0, 1, 1)
 
     def _set_feature(self, available: bool, enabled: bool | None) -> None:
         self._icon.get_style_context().remove_class('error-color')
@@ -195,16 +204,16 @@ class FeatureItem(Gtk.Grid):
 
         if not available:
             self._icon.set_from_icon_name(
-                'window-close-symbolic', Gtk.IconSize.MENU)
+                'window-close-symbolic')
             self._icon.get_style_context().add_class('error-color')
             return
 
         if enabled is not None and not enabled:
             self._icon.set_from_icon_name(
-                'dialog-warning-symbolic', Gtk.IconSize.MENU)
-            self._box.pack_start(self._label_disabled, True, True, 0)
+                'dialog-warning-symbolic')
+            self._box.append(self._label_disabled)
             self._icon.get_style_context().add_class('warning-color')
         else:
             self._icon.set_from_icon_name(
-                'emblem-ok-symbolic', Gtk.IconSize.MENU)
+                'emblem-ok-symbolic')
             self._icon.get_style_context().add_class('success-color')

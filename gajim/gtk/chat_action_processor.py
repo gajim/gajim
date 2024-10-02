@@ -34,10 +34,10 @@ class ChatActionProcessor(Gtk.Popover):
     def __init__(self, message_input: GtkSource.View) -> None:
         Gtk.Popover.__init__(self)
         self._menu = Gio.Menu()
-        self.bind_model(self._menu)
-        self.set_relative_to(message_input)
+        # self.bind_model(self._menu)
+        # self.set_relative_to(message_input)
         self.set_position(Gtk.PositionType.TOP)
-        self.set_modal(False)
+        # self.set_modal(False)
         self.set_size_request(250, -1)
         self.connect('closed', self._on_popover_closed)
         self.connect('destroy', self._on_destroy)
@@ -46,8 +46,8 @@ class ChatActionProcessor(Gtk.Popover):
         self._contact: types.ChatContactT | None = None
 
         self._message_input = message_input
-        self._message_input.connect('key-press-event', self._on_key_press)
-        self._message_input.connect('focus-out-event', self._on_focus_out)
+        # self._message_input.connect('key-press-event', self._on_key_press)
+        # self._message_input.connect('focus-out-event', self._on_focus_out)
         self._message_input.connect('buffer-changed', self._on_changed)
 
 
@@ -69,7 +69,7 @@ class ChatActionProcessor(Gtk.Popover):
 
     def _on_key_press(self,
                       source_view: GtkSource.View,
-                      event: Gdk.EventKey
+                      event: Any
                       ) -> bool:
         if isinstance(self._contact, GroupchatContact):
             res = self._nick_completion.process_key_press(source_view, event)

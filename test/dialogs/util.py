@@ -2,6 +2,7 @@ import logging
 from pathlib import Path
 
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
@@ -21,9 +22,9 @@ def load_style(filename: str, priority: CSSPriority) -> None:
         logging.exception('')
         return
     provider = Gtk.CssProvider()
-    provider.load_from_data(bytes(css.encode('utf-8')))
-    screen = Gdk.Screen.get_default()
-    assert screen is not None
-    Gtk.StyleContext.add_provider_for_screen(screen,
-                                             provider,
-                                             priority)
+    provider.load_from_bytes(GLib.Bytes.new(css.encode('utf-8')))
+    display = Gdk.Display.get_default()
+    assert display is not None
+    Gtk.StyleContext.add_provider_for_display(display,
+                                              provider,
+                                              priority)

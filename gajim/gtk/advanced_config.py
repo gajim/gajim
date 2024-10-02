@@ -51,13 +51,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
     def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_name('AdvancedConfig')
         self.set_title(_('Advanced Configuration Editor (ACE)'))
 
-        self._ui = get_builder('advanced_configuration.ui')
-        self.add(self._ui.box)
+        self._ui = get_builder('advanced_configuration.ui', self)
+        self.set_child(self._ui.box)
 
         treeview = self._ui.advanced_treeview
         self.treeview = treeview
@@ -98,11 +96,11 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         treeview.set_model(self.modelfilter)
 
-        self.connect_after('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
-        self.show_all()
+        # self.connect_after('key-press-event', self._on_key_press)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+        self.show()
+
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
         if event.keyval != Gdk.KEY_Escape:
             return
 

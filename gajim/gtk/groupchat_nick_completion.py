@@ -38,7 +38,7 @@ class GroupChatNickCompletion(EventHelper):
 
     def process_key_press(self,
                           source_view: GtkSource.View,
-                          event: Gdk.EventKey
+                          event: Any
                           ) -> bool:
 
         if (event.get_state() & Gdk.ModifierType.SHIFT_MASK or

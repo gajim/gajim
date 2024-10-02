@@ -26,10 +26,9 @@ class CommandOutputRow(BaseRow):
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
-        icon = Gtk.Image.new_from_icon_name('utilities-terminal-symbolic',
-                                            Gtk.IconSize.LARGE_TOOLBAR)
+        icon = Gtk.Image.new_from_icon_name('utilities-terminal-symbolic')
         icon.get_style_context().add_class('dim-label')
-        avatar_placeholder.add(icon)
+        avatar_placeholder.append(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
         timestamp_widget = DateTimeLabel(self.timestamp)
@@ -46,5 +45,3 @@ class CommandOutputRow(BaseRow):
             self._label.get_style_context().add_class('gajim-command-output')
         self._label.set_markup(markup)
         self.grid.attach(self._label, 1, 1, 1, 1)
-
-        self.show_all()

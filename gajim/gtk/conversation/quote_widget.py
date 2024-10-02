@@ -16,4 +16,4 @@ class QuoteWidget(Gtk.Box):
         quote_bar.set_size_request(3, -1)
         quote_bar.set_margin_end(6)
         quote_bar.get_style_context().add_class('conversation-quote-bar')
-        self.add(quote_bar)
+        self.append(quote_bar)

@@ -12,11 +12,11 @@ from gajim.common import app
 class MainMenuButton(Gtk.MenuButton):
     def __init__(self) -> None:
         Gtk.MenuButton.__init__(
-            self, halign=Gtk.Align.CENTER, no_show_all=True, margin_top=12
+            self, halign=Gtk.Align.CENTER, visible=False, margin_top=12
         )
 
-        image = Gtk.Image.new_from_icon_name('open-menu-symbolic', Gtk.IconSize.BUTTON)
-        self.set_image(image)
+        image = Gtk.Image.new_from_icon_name('open-menu-symbolic')
+        self.set_child(image)
 
         self.set_menu_model(app.app.get_menubar())
 

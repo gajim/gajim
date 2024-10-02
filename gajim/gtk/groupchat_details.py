@@ -33,9 +33,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_resizable(True)
         self.set_default_size(-1, 600)
         self.set_title(_('Group Chat Details'))
@@ -47,15 +45,14 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._contact.connect('avatar-update', self._on_avatar_update)
         self._contact.connect('disco-info-update', self._on_disco_info_update)
 
-        self._ui = get_builder('groupchat_details.ui')
-        self._ui.connect_signals(self)
+        self._ui = get_builder('groupchat_details.ui', self)
 
         self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self._ui.main_stack.connect('notify::visible-child-name',
                                     self._on_stack_child_changed)
-        self.add(self._ui.main_grid)
+        self.set_child(self._ui.main_grid)
 
         self._groupchat_manage: GroupchatManage | None = None
 
@@ -74,10 +71,13 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         if page is not None:
             self._switcher.set_row(page)
 
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
 
-        self.show_all()
+        self.show()
 
     def _on_disco_info_update(self,
                               _contact: GroupchatContact,
@@ -99,8 +99,9 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
-        surface = self._contact.get_avatar(AvatarSize.VCARD_HEADER, scale)
-        self._ui.header_image.set_from_surface(surface)
+        texture = self._contact.get_avatar(AvatarSize.VCARD_HEADER, scale)
+        self._ui.header_image.set_pixel_size(AvatarSize.VCARD_HEADER)
+        self._ui.header_image.set_from_paintable(texture)
 
     def _on_avatar_update(self,
                           _contact: GroupchatContact,
@@ -113,7 +114,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
     def _add_groupchat_manage(self) -> None:
         self._groupchat_manage = GroupchatManage(self.account,
                                                  self._contact)
-        self._ui.manage_box.add(self._groupchat_manage)
+        self._ui.manage_box.append(self._groupchat_manage)
         self._switcher.set_row_visible('manage', True)
 
     def _add_groupchat_info(self) -> None:
@@ -123,7 +124,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         self._groupchat_info.set_halign(Gtk.Align.FILL)
         self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
-        self._ui.info_box.add(self._groupchat_info)
+        self._ui.info_box.append(self._groupchat_info)
         self._switcher.set_row_visible('information', True)
 
     def _add_groupchat_settings(self) -> None:
@@ -131,7 +132,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         main_box.get_style_context().add_class('padding-18')
 
         settings_box = GroupChatSettings(self.account, self._contact.jid)
-        main_box.add(settings_box)
+        main_box.append(settings_box)
 
         remove_history_button = Gtk.Button(label=_('Remove History…'))
         remove_history_button.set_halign(Gtk.Align.START)
@@ -142,15 +143,15 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         remove_history_button.set_action_name('app.remove-history')
         remove_history_button.set_action_target_value(
             params.to_variant())
-        main_box.add(remove_history_button)
+        main_box.append(remove_history_button)
 
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_vexpand(True)
         scrolled_window.set_policy(Gtk.PolicyType.NEVER,
                                    Gtk.PolicyType.AUTOMATIC)
-        scrolled_window.add(main_box)
+        scrolled_window.set_child(main_box)
 
-        self._ui.settings_box.add(scrolled_window)
+        self._ui.settings_box.append(scrolled_window)
         self._switcher.set_row_visible('settings', True)
 
     def _add_groupchat_encryption(self) -> None:
@@ -160,33 +161,39 @@ class GroupchatDetails(Gtk.ApplicationWindow):
             self._switcher.set_row_visible('encryption-omemo', False)
             return
 
-        self._ui.encryption_box.add(
+        self._ui.encryption_box.append(
             OMEMOTrustManager(self._contact.account, self._contact))
         self._switcher.set_row_visible('encryption-omemo', True)
 
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)
-        self._ui.affiliation_box.add(affiliations)
+        self._ui.affiliation_box.append(affiliations)
         self._switcher.set_row_visible('affiliations', True)
 
     def _add_outcasts(self) -> None:
         affiliations = GroupchatOutcasts(self._client, self._contact)
-        self._ui.outcasts_box.add(affiliations)
+        self._ui.outcasts_box.append(affiliations)
         self._switcher.set_row_visible('outcasts', True)
 
     def _add_configuration(self) -> None:
         config = GroupchatConfig(self._client, self._contact)
-        self._ui.configuration_box.add(config)
+        self._ui.configuration_box.append(config)
         self._switcher.set_row_visible('config', True)
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._ui.contact_name_header_label.set_text(name)
 
-    def _on_key_press(self,
-                      _widget: GroupchatDetails,
-                      event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_destroy(self, _widget: GroupchatDetails) -> None:
         app.check_finalize(self)

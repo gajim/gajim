@@ -77,7 +77,7 @@ class FileTransfersWindow:
 
         self._last_progress_update = 0
 
-        self._ui = get_builder('filetransfers.ui')
+        self._ui = get_builder('filetransfers.ui', self)
         self.window = self._ui.file_transfers_window
         self._ui.notify_ft_complete.set_active(
             app.settings.get('notify_on_file_complete'))

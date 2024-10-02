@@ -74,8 +74,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
         self._tooltip = GCTooltip()
 
-        self._ui = get_builder('groupchat_roster.ui')
-        self.add(self._ui.box)
+        self._ui = get_builder('groupchat_roster.ui', self)
+        self.set_child(self._ui.box)
 
         self._contact_refs: dict[str, Gtk.TreeRowReference] = {}
         self._group_refs: dict[str, Gtk.TreeRowReference] = {}
@@ -95,8 +95,6 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
 
-        self._ui.connect_signals(self)
-
         self.register_events([
             ('theme-update', ged.GUI2, self._on_theme_update),
         ])
@@ -109,7 +107,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if not hide_roster:
-            self.show_all()
+            self.show()
             transition = Gtk.RevealerTransitionType.SLIDE_LEFT
 
         self.set_transition_type(transition)
@@ -267,11 +265,11 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
             self._group_refs[group_name] = group_ref
 
         # Avatar
-        surface = contact.get_avatar(AvatarSize.ROSTER,
+        texture = contact.get_avatar(AvatarSize.ROSTER,
                                      self.get_scale_factor())
 
         iter_ = self._store.append(group_iter,
-                                   [surface, nick, True, nick])
+                                   [texture, nick, True, nick])
         self._contact_refs[nick] = Gtk.TreeRowReference(
             self._store, self._store.get_path(iter_))
 
@@ -412,7 +410,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
 
     def _on_roster_button_press_event(self,
                                       treeview: Gtk.TreeView,
-                                      event: Gdk.EventButton
+                                      event: Any
                                       ) -> None:
 
         if event.button == Gdk.BUTTON_PRIMARY:
@@ -447,7 +445,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         # if event.button == Gdk.BUTTON_MIDDLE:
             # self.roster.emit('row-activated', nick)
 
-    def _show_contact_menu(self, nick: str, event: Gdk.EventButton) -> None:
+    def _show_contact_menu(self, nick: str, event: Any) -> None:
         assert self._contact is not None
         self_contact = self._contact.get_self()
         assert self_contact is not None
@@ -632,10 +630,10 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if iter_ is None:
             return
 
-        surface = contact.get_avatar(AvatarSize.ROSTER,
+        texture = contact.get_avatar(AvatarSize.ROSTER,
                                      self.get_scale_factor())
 
-        self._store[iter_][Column.AVATAR] = surface
+        self._store[iter_][Column.AVATAR] = texture
 
     def _on_user_avatar_update(self,
                                _contact: types.GroupchatContact,

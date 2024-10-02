@@ -109,7 +109,7 @@ class Start(Page):
 
         label1 = Gtk.Label(label='This is label 1 with some text')
         label1.set_max_width_chars(50)
-        label1.set_line_wrap(True)
+        label1.set_wrap_mode(Pango.WrapMode.WORD)
         label1.set_halign(Gtk.Align.CENTER)
         label1.set_justify(Gtk.Justification.CENTER)
         label1.set_margin_bottom(24)

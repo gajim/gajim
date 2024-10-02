@@ -25,26 +25,23 @@ class GroupChatInvitationDialog(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(
             self,
             application=app.app,
-            window_position=Gtk.WindowPosition.CENTER,
-            show_menubar=False,
-            type_hint=Gdk.WindowTypeHint.DIALOG,
             title=_('Group Chat Invitation'),
         )
 
         self.account = account
 
-        self.connect('key-press-event', self._on_key_press)
+        # self.connect('key-press-event', self._on_key_press)
 
         invitation_widget = GroupChatInvitation(account, event)
         invitation_widget.connect('accepted', self._on_invitation_widget_action)
         invitation_widget.connect('declined', self._on_invitation_widget_action)
-        self.add(invitation_widget)
-        self.show_all()
+        self.set_child(invitation_widget)
+        self.show()
 
     def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
         self.destroy()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
@@ -80,10 +77,10 @@ class GroupChatInvitation(Gtk.Box):
 
         muc_info_box = GroupChatInfoScrolled(account, minimal=True)
         muc_info_box.set_from_disco_info(event.info)
-        main_box.add(muc_info_box)
+        main_box.append(muc_info_box)
 
         separator = Gtk.Separator()
-        main_box.add(separator)
+        main_box.append(separator)
 
         contact = self._client.get_module('Contacts').get_contact(event.from_.bare)
         assert isinstance(contact, BareContact | GroupchatContact)
@@ -92,13 +89,13 @@ class GroupChatInvitation(Gtk.Box):
         contact_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=6, halign=Gtk.Align.CENTER
         )
-        contact_box.add(contact_label)
-        main_box.add(contact_box)
+        contact_box.append(contact_label)
+        main_box.append(contact_box)
 
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
             account_badge = AccountBadge(account)
-            contact_box.add(account_badge)
+            contact_box.append(account_badge)
 
         invitation_label = Gtk.Label(
             label=_('has invited you to a group chat.\nDo you want to join?'),
@@ -107,7 +104,7 @@ class GroupChatInvitation(Gtk.Box):
             max_width_chars=50,
             wrap=True,
         )
-        main_box.add(invitation_label)
+        main_box.append(invitation_label)
 
         decline_button = Gtk.Button.new_with_mnemonic(_('_Decline'))
         decline_button.set_halign(Gtk.Align.START)
@@ -123,20 +120,17 @@ class GroupChatInvitation(Gtk.Box):
 
         join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.END)
         join_box.get_style_context().add_class('linked')
-        join_box.add(self._nick_chooser)
-        join_box.add(join_button)
+        join_box.append(self._nick_chooser)
+        join_box.append(join_button)
 
         button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, margin_top=6)
-        button_box.pack_start(decline_button, False, False, 0)
-        button_box.pack_end(join_box, False, False, 0)
+        button_box.prepend(decline_button)
+        button_box.append(join_box)
 
-        main_box.add(button_box)
-        self.add(main_box)
+        main_box.append(button_box)
+        self.append(main_box)
 
-        join_button.set_can_default(True)
         join_button.grab_focus()
-
-        self.show_all()
 
     def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()

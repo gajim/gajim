@@ -8,3 +8,4 @@ class CSSSerializer:
 class Preferences:
 
     keepEmptyRules: bool
+    omitLastSemicolon: bool

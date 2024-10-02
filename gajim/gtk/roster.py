@@ -69,9 +69,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._roster_tooltip = ContactTooltip()
 
-        self._ui = get_builder('roster.ui')
+        self._ui = get_builder('roster.ui', self)
         self._ui.roster_treeview.set_model(None)
-        self.add(self._ui.roster_treeview)
+        self.set_child(self._ui.roster_treeview)
 
         self._contact_refs: dict[
             JID, list[Gtk.TreeRowReference]] = defaultdict(list)
@@ -84,23 +84,22 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._roster.set_has_tooltip(True)
         self._roster.connect('query-tooltip', self._on_query_tooltip)
 
-        # Drag and Drop
-        entries = [Gtk.TargetEntry.new(
-            'ROSTER_ITEM',
-            Gtk.TargetFlags.SAME_APP,
-            0)]
-        self._roster.enable_model_drag_source(
-            Gdk.ModifierType.BUTTON1_MASK,
-            entries,
-            Gdk.DragAction.MOVE)
-        self._roster.enable_model_drag_dest(entries, Gdk.DragAction.DEFAULT)
-        self._roster.connect('drag-drop', self._on_drag_drop)
-        self._roster.connect('drag-data-received', self._on_drag_data_received)
+        # Drag and Drop GTK4 TODO
+        # entries = [Gtk.TargetEntry.new(
+        #     'ROSTER_ITEM',
+        #     Gtk.TargetFlags.SAME_APP,
+        #     0)]
+        # self._roster.enable_model_drag_source(
+        #     Gdk.ModifierType.BUTTON1_MASK,
+        #     entries,
+        #     Gdk.DragAction.MOVE)
+        # self._roster.enable_model_drag_dest(entries, Gdk.DragAction.DEFAULT)
+        # self._roster.connect('drag-drop', self._on_drag_drop)
+        # self._roster.connect('drag-data-received', self._on_drag_data_received)
 
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
 
         self.register_events([
             ('roster-received', ged.CORE, self._on_roster_received),
@@ -155,7 +154,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     @staticmethod
     def _on_drag_drop(treeview: Gtk.TreeView,
-                      drag_context: Gdk.DragContext,
+                      drag_context: Any,
                       _x_coord: int,
                       _y_coord: int,
                       timestamp: int) -> bool:
@@ -168,10 +167,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_drag_data_received(self,
                                treeview: Gtk.TreeView,
-                               _drag_context: Gdk.DragContext,
+                               _drag_context: Any,
                                x_coord: int,
                                y_coord: int,
-                               _selection_data: Gtk.SelectionData,
+                               _selection_data: Any,
                                _info: int,
                                _timestamp: int) -> None:
 
@@ -339,7 +338,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
     def _on_roster_button_press_event(self,
                                       treeview: Gtk.TreeView,
-                                      event: Gdk.EventButton) -> None:
+                                      event: Any) -> None:
 
         if event.button == Gdk.BUTTON_PRIMARY:
             return
@@ -375,7 +374,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _show_contact_menu(self,
                            jid: str,
                            treeview: Gtk.TreeView,
-                           event: Gdk.EventButton) -> None:
+                           event: Any) -> None:
 
         contact = self._contacts.get_bare_contact(jid)
         assert isinstance(contact, BareContact)
@@ -619,9 +618,9 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             name = f'<span strikethrough="true">{name}</span>'
         self._store[iter_][Column.TEXT] = name
 
-        surface = contact.get_avatar(
+        texture = contact.get_avatar(
             AvatarSize.ROSTER, self.get_scale_factor())
-        self._store[iter_][Column.AVATAR] = surface
+        self._store[iter_][Column.AVATAR] = texture
         self._store[iter_][Column.VISIBLE] = self._get_contact_visible(contact)
 
     def _get_total_user_count(self) -> int:

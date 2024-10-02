@@ -1,295 +1,251 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkShortcutsWindow" id="shortcuts_window">
     <child>
       <object class="GtkShortcutsSection">
-        <property name="visible">1</property>
         <property name="section-name">window</property>
-        <property name="title" translatable="yes">Gajim</property>
+        <property name="title" translatable="1">Gajim</property>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">General</property>
+            <property name="title" translatable="1">General</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;n</property>
-                <property name="title" translatable="yes">Start a new chat</property>
+                <property name="title" translatable="1">Start a new chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;g</property>
-                <property name="title" translatable="yes">Create new group chat</property>
+                <property name="title" translatable="1">Create new group chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;p</property>
-                <property name="title" translatable="yes">Preferences</property>
+                <property name="title" translatable="1">Preferences</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;e</property>
-                <property name="title" translatable="yes">Plugins</property>
+                <property name="title" translatable="1">Plugins</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;t</property>
-                <property name="title" translatable="yes">File transfers</property>
+                <property name="title" translatable="1">File transfers</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;x</property>
-                <property name="title" translatable="yes">Show debug console</property>
+                <property name="title" translatable="1">Show debug console</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;q</property>
-                <property name="title" translatable="yes">Quit Gajim</property>
+                <property name="title" translatable="1">Quit Gajim</property>
               </object>
             </child>
           </object>
         </child>
-
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">User Interface</property>
+            <property name="title" translatable="1">User Interface</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;plus</property>
-                <property name="title" translatable="yes">Increase User Interface Font Size</property>
+                <property name="title" translatable="1">Increase User Interface Font Size</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;minus</property>
-                <property name="title" translatable="yes">Decrease User Interface Font Size</property>
+                <property name="title" translatable="1">Decrease User Interface Font Size</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;0</property>
-                <property name="title" translatable="yes">Reset User Interface Font Size</property>
+                <property name="title" translatable="1">Reset User Interface Font Size</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;M</property>
-                <property name="title" translatable="yes">Toggle Menu Bar</property>
+                <property name="title" translatable="1">Toggle Menu Bar</property>
               </object>
             </child>
           </object>
         </child>
-
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Message composition</property>
+            <property name="title" translatable="1">Message composition</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">Return</property>
-                <property name="title" translatable="yes">Send the message</property>
+                <property name="title" translatable="1">Send the message</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Up</property>
-                <property name="title" translatable="yes">Correct the last message</property>
+                <property name="title" translatable="1">Correct the last message</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Up</property>
-                <property name="title" translatable="yes">Quote previous message</property>
+                <property name="title" translatable="1">Quote previous message</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Down</property>
-                <property name="title" translatable="yes">Quote next message</property>
+                <property name="title" translatable="1">Quote next message</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Return &lt;primary&gt;Return</property>
-                <property name="title" translatable="yes">Add new line</property>
+                <property name="title" translatable="1">Add new line</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;m</property>
-                <property name="title" translatable="yes">Select an emoji</property>
+                <property name="title" translatable="1">Select an emoji</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">Tab</property>
-                <property name="title" translatable="yes">Complete a command or a nickname</property>
+                <property name="title" translatable="1">Complete a command or a nickname</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;u</property>
-                <property name="title" translatable="yes">Clear message entry</property>
+                <property name="title" translatable="1">Clear message entry</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Recent history</property>
+            <property name="title" translatable="1">Recent history</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Page_Up</property>
-                <property name="title" translatable="yes">Scroll up</property>
+                <property name="title" translatable="1">Scroll up</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;shift&gt;Page_Down</property>
-                <property name="title" translatable="yes">Scroll down</property>
+                <property name="title" translatable="1">Scroll down</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;f</property>
-                <property name="title" translatable="yes">Open search bar</property>
+                <property name="title" translatable="1">Open search bar</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Workspaces</property>
+            <property name="title" translatable="1">Workspaces</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;1...9</property>
-                <property name="title" translatable="yes">Switch Workspace</property>
+                <property name="title" translatable="1">Switch Workspace</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Chat List</property>
+            <property name="title" translatable="1">Chat List</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;R</property>
-                <property name="title" translatable="yes">Toggle Chat List</property>
+                <property name="title" translatable="1">Toggle Chat List</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Page_Up</property>
-                <property name="title" translatable="yes">Switch to the previous chat</property>
+                <property name="title" translatable="1">Switch to the previous chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Page_Down</property>
-                <property name="title" translatable="yes">Switch to the next chat</property>
+                <property name="title" translatable="1">Switch to the next chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;Alt&gt;1...9</property>
-                <property name="title" translatable="yes">Switch to the first - ninth chat</property>
+                <property name="title" translatable="1">Switch to the first - ninth chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;Tab</property>
-                <property name="title" translatable="yes">Switch to the previous unread chat</property>
+                <property name="title" translatable="1">Switch to the previous unread chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;Tab</property>
-                <property name="title" translatable="yes">Switch to the next unread chat</property>
+                <property name="title" translatable="1">Switch to the next unread chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;w</property>
-                <property name="title" translatable="yes">Close chat</property>
+                <property name="title" translatable="1">Close chat</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;w</property>
-                <property name="title" translatable="yes">Restore chat</property>
+                <property name="title" translatable="1">Restore chat</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Group Chat</property>
+            <property name="title" translatable="1">Group Chat</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;n</property>
-                <property name="title" translatable="yes">Change Nickname</property>
+                <property name="title" translatable="1">Change Nickname</property>
               </object>
             </child>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;&lt;shift&gt;s</property>
-                <property name="title" translatable="yes">Change Subject</property>
+                <property name="title" translatable="1">Change Subject</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkShortcutsGroup">
-            <property name="visible">1</property>
-            <property name="title" translatable="yes">Contacts</property>
+            <property name="title" translatable="1">Contacts</property>
             <child>
               <object class="GtkShortcutsShortcut">
-                <property name="visible">1</property>
                 <property name="accelerator">&lt;primary&gt;i</property>
-                <property name="title" translatable="yes">Contact information</property>
+                <property name="title" translatable="1">Contact information</property>
               </object>
             </child>
           </object>

@@ -30,8 +30,6 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_title(_('Contact List Exchange'))
 
         self.account = account
@@ -41,8 +39,8 @@ class RosterItemExchange(Gtk.ApplicationWindow):
         self._exchange_list = exchange_list
         self._jid_from = jid_from
 
-        self._ui = get_builder('roster_item_exchange.ui')
-        self.add(self._ui.roster_item_exchange)
+        self._ui = get_builder('roster_item_exchange.ui', self)
+        self.set_child(self._ui.roster_item_exchange)
 
         # Set label depending on action
         contact = self._client.get_module('Contacts').get_contact(jid_from)
@@ -110,7 +108,7 @@ class RosterItemExchange(Gtk.ApplicationWindow):
         elif action == 'delete':
             self._delete()
 
-        self._ui.connect_signals(self)
+        self.show()
 
     def _on_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
         model = self._ui.items_list_treeview.get_model()

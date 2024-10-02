@@ -30,9 +30,7 @@ class DBMigration(Gtk.ApplicationWindow):
             self,
             application=app.app,
             transient_for=app.window,
-            window_position=Gtk.WindowPosition.CENTER,
             show_menubar=False,
-            type_hint=Gdk.WindowTypeHint.DIALOG,
             resizable=True,
             width_request=600,
             height_request=300,
@@ -42,12 +40,8 @@ class DBMigration(Gtk.ApplicationWindow):
             title=_('Database Migration')
         )
 
-        self.set_keep_above(True)
-
-        self._ui = get_builder('db_migration.ui')
-        self.add(self._ui.box)
-        self._ui.connect_signals(self)
-        self.show_all()
+        self._ui = get_builder('db_migration.ui', self)
+        self.set_child(self._ui.box)
 
         self.connect('destroy', self._on_destroy)
 
@@ -62,6 +56,8 @@ class DBMigration(Gtk.ApplicationWindow):
             0,
             self._on_finished
         )
+
+        self.show()
 
     def _on_progress(self, event: DBMigrationProgress) -> None:
         self._ui.stack.set_visible_child_name('progress-page')
@@ -89,8 +85,7 @@ class DBMigration(Gtk.ApplicationWindow):
         text_buffer = self._ui.error_view.get_buffer()
         start, end = text_buffer.get_bounds()
         error_text = text_buffer.get_text(start, end, True)
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(error_text, -1)
+        self.get_clipboard().set(error_text)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
         self.destroy()

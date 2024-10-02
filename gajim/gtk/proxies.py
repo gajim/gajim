@@ -22,27 +22,35 @@ class ManageProxies(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('ManageProxies')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(500, -1)
-        self.set_show_menubar(False)
         self.set_title(_('Manage Proxies'))
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_modal(True)
 
-        self._ui = get_builder('manage_proxies.ui')
-        self.add(self._ui.box)
+        self._ui = get_builder('manage_proxies.ui', self)
+        self.set_child(self._ui.box)
 
         self._init_list()
         self._block_signal = False
 
-        self.connect_after('key-press-event', self._on_key_press)
-        self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-        self.show_all()
+        controller = Gtk.EventControllerKey()
+        controller.connect_after('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+        self.connect('destroy', self._on_destroy)
+
+        self.show()
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     @staticmethod
     def _on_destroy(*args: Any) -> None:
@@ -169,8 +177,9 @@ class ManageProxies(Gtk.ApplicationWindow):
 
     def _on_proxies_treeview_key_press_event(self,
                                              button: Gtk.Button,
-                                             event: Gdk.EventKey
+                                             event: Any
                                              ) -> None:
+        # TODO GTK4
         if event.keyval == Gdk.KEY_Delete:
             self._on_remove_proxy_button_clicked(button)
 

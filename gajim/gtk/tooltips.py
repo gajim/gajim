@@ -20,7 +20,6 @@ import logging
 import os
 from datetime import datetime
 
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -39,8 +38,10 @@ from gajim.common.util.user_strings import get_uf_sub
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
+from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import format_location
 from gajim.gtk.util import format_tune
+from gajim.gtk.util import iterate_children
 
 log = logging.getLogger('gajim.gtk.tooltips')
 
@@ -49,7 +50,7 @@ class GCTooltip:
     def __init__(self) -> None:
         self._contact = None
 
-        self._ui = get_builder('groupchat_roster_tooltip.ui')
+        self._ui = get_builder('groupchat_roster_tooltip.ui', self)
 
     def clear_tooltip(self) -> None:
         self._contact = None
@@ -69,8 +70,8 @@ class GCTooltip:
         '''
         Hide all Elements of the Tooltip Grid
         '''
-        for child in self._ui.tooltip_grid.get_children():
-            child.hide()
+        for widget in iterate_children(self._ui.tooltip_grid):
+            widget.hide()
 
     def _populate_grid(self, contact: types.GroupchatParticipant) -> None:
         '''
@@ -103,8 +104,9 @@ class GCTooltip:
             self._ui.affiliation.show()
 
         if contact.hats is not None:
-            for child in self._ui.hats_box.get_children():
-                child.destroy()
+
+            for child in iterate_children(self._ui.hats_box):
+                self._ui.hats_box.remove(child)
 
             for hat in contact.hats.get_hats()[:5]:
                 # Limit to 5 hats
@@ -116,13 +118,13 @@ class GCTooltip:
                 hat_badge.set_halign(Gtk.Align.START)
                 hat_badge.get_style_context().add_class('badge')
                 hat_badge.get_style_context().add_class('hat-badge')
-                self._ui.hats_box.add(hat_badge)
-                self._ui.hats_box.show_all()
+                self._ui.hats_box.append(hat_badge)
 
         # Avatar
         scale = self._ui.tooltip_grid.get_scale_factor()
-        surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
-        self._ui.avatar.set_from_surface(surface)
+        texture = contact.get_avatar(AvatarSize.TOOLTIP, scale)
+        self._ui.avatar.set_pixel_size(AvatarSize.TOOLTIP)
+        self._ui.avatar.set_from_paintable(texture)
         self._ui.avatar.show()
         self._ui.fillelement.show()
 
@@ -130,19 +132,20 @@ class GCTooltip:
             'gc_tooltip_populate', self, contact, self._ui.tooltip_grid)
 
     def destroy(self) -> None:
+        return
         self._ui.tooltip_grid.destroy()
 
 
 class ContactTooltip:
     def __init__(self) -> None:
         self._contact = None
-        self._ui = get_builder('contact_tooltip.ui')
+        self._ui = get_builder('contact_tooltip.ui', self)
 
     def clear_tooltip(self) -> None:
         self._contact = None
-        for widget in self._ui.resources_box.get_children():
-            widget.destroy()
-        for widget in self._ui.tooltip_grid.get_children():
+        for widget in iterate_children(self._ui.resources_box):
+            self._ui.resources_box.remove(widget)
+        for widget in iterate_children(self._ui.tooltip_grid):
             widget.hide()
 
     def get_tooltip(self,
@@ -158,9 +161,9 @@ class ContactTooltip:
     def _populate_grid(self, contact: types.BareContact) -> None:
         scale = self._ui.tooltip_grid.get_scale_factor()
 
-        surface = contact.get_avatar(AvatarSize.TOOLTIP, scale)
-        assert not isinstance(surface, GdkPixbuf.Pixbuf)
-        self._ui.avatar.set_from_surface(surface)
+        texture = contact.get_avatar(AvatarSize.TOOLTIP, scale)
+        self._ui.avatar.set_pixel_size(AvatarSize.TOOLTIP)
+        self._ui.avatar.set_from_paintable(texture)
         self._ui.avatar.show()
 
         self._ui.name.set_markup(GLib.markup_escape_text(contact.name))
@@ -174,8 +177,6 @@ class ContactTooltip:
                 self._add_resources(res)
         else:
             self._add_resources(contact)
-
-        self._ui.resources_box.show_all()
 
         if contact.subscription and contact.subscription != 'both':
             # 'both' is the normal subscription value, just omit it
@@ -214,9 +215,10 @@ class ContactTooltip:
             AvatarSize.SHOW_CIRCLE,
             self._ui.tooltip_grid.get_scale_factor())
         show_image = Gtk.Image(
-            surface=show_surface,
+            paintable=convert_surface_to_texture(show_surface),
             halign=Gtk.Align.START,
-            valign=Gtk.Align.CENTER)
+            valign=Gtk.Align.CENTER
+        )
 
         show_string = get_uf_show(contact.show.value)
 
@@ -234,9 +236,9 @@ class ContactTooltip:
         )
 
         base_box = Gtk.Box(spacing=6)
-        base_box.add(show_image)
-        base_box.add(resource_label)
-        resource_box.add(base_box)
+        base_box.append(show_image)
+        base_box.append(resource_label)
+        resource_box.append(base_box)
 
         if contact.status:
             status_label = Gtk.Label(
@@ -246,7 +248,7 @@ class ContactTooltip:
                 max_width_chars=30,
                 xalign=0,
             )
-            resource_box.add(status_label)
+            resource_box.append(status_label)
 
         if idle_datetime := contact.idle_datetime:
             current = datetime.now()
@@ -262,14 +264,14 @@ class ContactTooltip:
                 label=idle_text,
                 xalign=0,
             )
-            resource_box.add(idle_label)
+            resource_box.append(idle_label)
 
         app.plugin_manager.extension_point(
             'roster_tooltip_resource_populate',
             resource_box,
             contact)
 
-        self._ui.resources_box.add(resource_box)
+        self._ui.resources_box.append(resource_box)
 
     def _append_pep_info(self, contact: types.BareContact) -> None:
         tune = contact.get_tune()
@@ -380,7 +382,6 @@ class FileTransfersTooltip:
             ft_grid.attach(label, 1, current_row, 1, 1)
             current_row += 1
 
-        ft_grid.show_all()
         return ft_grid
 
     @staticmethod

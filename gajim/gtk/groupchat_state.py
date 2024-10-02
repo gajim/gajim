@@ -20,15 +20,14 @@ class GroupchatState(Gtk.Box):
         Gtk.Box.__init__(self)
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
-        self.set_no_show_all(True)
+        self.set_visible(False)
 
         self._contact = None
         self._client = None
 
-        self._ui = get_builder('groupchat_state.ui')
-        self._ui.connect_signals(self)
-        self.add(self._ui.groupchat_state)
-        self.show_all()
+        self._ui = get_builder('groupchat_state.ui', self)
+
+        self.append(self._ui.groupchat_state)
         self.hide()
 
     def clear(self) -> None:

@@ -37,8 +37,7 @@ VISUALIZATION_UPDATE_DELAY = int(100 / ANIMATION_PERIOD)
 class VoiceMessageRecorderButton(Gtk.MenuButton):
 
     def __init__(self) -> None:
-        Gtk.MenuButton.__init__(self, relief=Gtk.ReliefStyle.NONE, no_show_all=True)
-        self.get_style_context().add_class('message-actions-box-button')
+        Gtk.MenuButton.__init__(self, visible=False, valign=Gtk.Align.CENTER)
         self.set_visible(app.settings.get('show_voice_message_button'))
 
         app.settings.bind_signal('show_voice_message_button', self, 'set_visible')
@@ -53,8 +52,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
         action = app.window.get_action('send-file-httpupload')
         action.connect('notify::enabled', self._on_send_file_action_changed)
 
-        self.connect('pressed', self._on_direct_record_pressed)
-        self.connect('released', self._on_direct_record_released)
+        # self.connect('pressed', self._on_direct_record_pressed) GTK4 TODO
+        # self.connect('released', self._on_direct_record_released)
         self.connect('destroy', self._on_destroy)
 
         self._time_label_update_timeout_id = None
@@ -69,24 +68,25 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
         self._voice_message_recorder = VoiceMessageRecorder(self._on_error_occurred)
         self._audio_player_widget = AudioWidget(Path(''))
 
-        self._ui = get_builder('voice_message_recorder.ui')
-        self._ui.connect_signals(self)
+        self._ui = get_builder('voice_message_recorder.ui', self)
+
         self.set_popover(self._ui.popover)
         self._ui.popover.connect('closed', self._on_popover_closed)
 
         self._audio_visualizer = AudioVisualizerWidget(
-            int(self._ui.box.get_preferred_width()[1] * 0.8),
-            self._ui.visualization_box.get_preferred_height()[1],
+            100, 100,
+            # int(self._ui.box.get_preferred_width()[1] * 0.8),  TODO GTK4
+            # self._ui.visualization_box.get_preferred_height()[1],
             0,
         )
 
         self._audio_visualizer.set_parameters(1.0, ANIMATION_PERIOD)
         self._audio_visualizer.set_visible(True)
 
-        self._ui.visualization_box.add(self._audio_visualizer)
+        self._ui.visualization_box.append(self._audio_visualizer)
         self._ui.progression_box.set_visible(True)
 
-        self._ui.audio_player_box.add(self._audio_player_widget)
+        self._ui.audio_player_box.append(self._audio_player_widget)
         self._ui.audio_player_box.set_visible(False)
 
         self._update_button_state()
@@ -127,12 +127,12 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
             toggle_image_name = 'media-record-symbolic'
 
         button_image = Gtk.Image.new_from_icon_name(
-            button_image_name, Gtk.IconSize.BUTTON
+            button_image_name
         )
-        self.set_image(button_image)
+        self.set_child(button_image)
 
         self._ui.record_toggle_button_image.set_from_icon_name(
-            toggle_image_name, Gtk.IconSize.BUTTON
+            toggle_image_name
         )
 
     def _is_audio_input_device_found(self) -> bool:
@@ -352,11 +352,11 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
 
         self._stop_and_reset_recording()
         app.window.activate_action(
-            'send-file', GLib.Variant('as', [self.audio_rec_file_path]))
+            'win.send-file', GLib.Variant('as', [self.audio_rec_file_path]))
 
     def _on_send_clicked(self, _button: Gtk.Button) -> None:
         self._stop_recording()
         app.window.activate_action(
-            'send-file', GLib.Variant('as', [self.audio_rec_file_path]))
+            'win.send-file', GLib.Variant('as', [self.audio_rec_file_path]))
 
 

@@ -12,14 +12,14 @@ from gajim.gtk.builder import get_builder
 class NickChooser(Gtk.MenuButton):
     def __init__(self) -> None:
         Gtk.MenuButton.__init__(self)
-        self._ui = get_builder('groupchat_nick_chooser.ui')
-        self.add(self._ui.button_content)
+        self._ui = get_builder('groupchat_nick_chooser.ui', self)
+        self.set_child(self._ui.button_content)
         self.set_receives_default(False)
         self.set_popover(self._ui.popover)
 
         self._ui.popover.set_default_widget(
             self._ui.apply_button)
-        self.connect('toggled', self._on_nickname_button_toggled)
+        # self.connect('toggled', self._on_nickname_button_toggled) TODO GTK4
         self._ui.entry.connect('changed', self._on_nickname_changed)
         self._ui.apply_button.connect('clicked', self._on_apply_nickname)
 

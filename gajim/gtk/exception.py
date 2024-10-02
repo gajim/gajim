@@ -93,9 +93,6 @@ class ExceptionDialog(Gtk.ApplicationWindow):
                  ) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_resizable(True)
         self.set_default_size(700, -1)
         self.set_title(_('Gajim - Error'))
@@ -103,16 +100,15 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         self._traceback_data = (type_, value, tb)
         self._sentry_available = app.is_installed('SENTRY_SDK')
 
-        self._ui = get_builder('exception_dialog.ui')
-        self.add(self._ui.exception_box)
+        self._ui = get_builder('exception_dialog.ui', self)
+        self.set_child(self._ui.exception_box)
 
         if not self._sentry_available:
-            self._ui.user_feedback_box.set_no_show_all(True)
-            self._ui.infobar.set_no_show_all(False)
+            self._ui.user_feedback_box.set_visible(False)
             self._ui.infobar.set_revealed(True)
 
         self._ui.report_button.grab_focus()
-        self._ui.report_button.grab_default()
+        self.set_default_widget(self._ui.report_button)
 
         trace = StringIO()
         traceback.print_exception(type_, value, tb, None, trace)
@@ -121,16 +117,26 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         buffer_ = self._ui.exception_view.get_buffer()
         buffer_.set_text(self._issue_text)
 
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
-        self.show_all()
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
+        self.show()
 
         if self._sentry_available:
             self._ui.user_feedback_entry.grab_focus()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
         if self._sentry_available and determine_proxy() is None:
@@ -256,5 +262,9 @@ class ExceptionDialog(Gtk.ApplicationWindow):
 
 
 def init() -> None:
-    if sys.platform == 'win32' or not sys.stderr.isatty():
+    # TODO GTK4
+    # Change back once port is done
+    # if sys.platform == 'win32' or not sys.stderr.isatty():
+    #     sys.excepthook = _hook
+    if not sys.stderr.isatty():
         sys.excepthook = _hook

@@ -46,7 +46,8 @@ from gajim.common.events import FileProgress
 from gajim.common.file_props import FileProp
 
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.filetransfer import FileTransfersWindow
+
+# from gajim.gtk.filetransfer import FileTransfersWindow
 
 log = logging.getLogger('gajim.interface')
 
@@ -203,7 +204,7 @@ class Interface:
 
     def run(self, _application: Gtk.Application) -> None:
         # get instances for windows/dialogs that will show_all()/hide()
-        self.instances['file_transfers'] = FileTransfersWindow()
+        # self.instances['file_transfers'] = FileTransfersWindow() GTK4 TODO
 
         if sys.platform == 'win32':
             timeout, in_seconds = 20, None

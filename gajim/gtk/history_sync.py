@@ -204,7 +204,7 @@ class SelectTime(Page):
         heading = Gtk.Label()
         heading.get_style_context().add_class('large-header')
         heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
+        heading.set_wrap_mode(Pango.WrapMode.WORD)
         heading.set_halign(Gtk.Align.CENTER)
         heading.set_justify(Gtk.Justification.CENTER)
         heading.set_text(_('Synchronize Chat History'))
@@ -212,7 +212,7 @@ class SelectTime(Page):
         label = Gtk.Label(
             label=_('How far back should the chat history be synchronized?'))
         label.set_halign(Gtk.Align.CENTER)
-        label.set_line_wrap(True)
+        label.set_wrap_mode(Pango.WrapMode.WORD)
         label.set_max_width_chars(40)
 
         listbox = Gtk.ListBox()
@@ -259,7 +259,7 @@ class Progress(Page):
         self._received = 0
 
         surface = load_icon_surface('folder-download-symbolic', size=64)
-        image = Gtk.Image.new_from_surface(surface)
+        image = Gtk.Image.new_from_paintable(surface)
 
         self._progress_bar = Gtk.ProgressBar()
         self._progress_bar.set_show_text(True)

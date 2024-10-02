@@ -12,6 +12,7 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.errors import ChangePasswordStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
@@ -57,8 +58,6 @@ class ChangePassword(Assistant):
 
         self.connect('button-clicked', self._on_button_clicked)
         self.connect('destroy', self._on_destroy)
-
-        self.show_all()
 
     @overload
     def get_page(self, name: Literal['password']) -> EnterPassword: ...
@@ -133,13 +132,13 @@ class EnterPassword(Page):
         heading = Gtk.Label(label=_('Change Password'))
         heading.get_style_context().add_class('large-header')
         heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
+        heading.set_wrap_mode(Pango.WrapMode.WORD)
         heading.set_halign(Gtk.Align.CENTER)
         heading.set_justify(Gtk.Justification.CENTER)
 
         label = Gtk.Label(label=_('Please enter your new password.'))
         label.set_max_width_chars(50)
-        label.set_line_wrap(True)
+        label.set_wrap_mode(Pango.WrapMode.WORD)
         label.set_halign(Gtk.Align.CENTER)
         label.set_justify(Gtk.Justification.CENTER)
         label.set_margin_bottom(12)
@@ -162,12 +161,11 @@ class EnterPassword(Page):
             _('Confirm new password...'))
         self._password2_entry.connect('changed', self._on_changed)
 
-        self.pack_start(heading, False, True, 0)
-        self.pack_start(label, False, True, 0)
-        self.pack_start(self._password1_entry, True, True, 0)
-        self.pack_start(self._password2_entry, True, True, 0)
+        self.append(heading)
+        self.append(label)
+        self.append(self._password1_entry)
+        self.append(self._password2_entry)
         self._hide_warning()
-        self.show_all()
 
     def _hide_warning(self) -> None:
         self._password1_entry.set_icon_from_icon_name(
@@ -221,8 +219,6 @@ class NextStage(Page):
         self.title = _('Change Password')
         self._current_form = None
 
-        self.show_all()
-
     def _on_is_valid(self, _widget: Gtk.Widget, is_valid: bool) -> None:
         self.complete = is_valid
         self.update_page_complete()
@@ -230,12 +226,10 @@ class NextStage(Page):
     def set_form(self, form: SimpleDataForm) -> None:
         if self._current_form is not None:
             self.remove(self._current_form)
-            self._current_form.destroy()
         self._current_form = DataFormWidget(form)
         self._current_form.connect('is-valid', self._on_is_valid)
         self._current_form.validate()
-        self.pack_start(self._current_form, True, True, 0)
-        self._current_form.show_all()
+        self.append(self._current_form)
 
     def get_submit_form(self) -> SimpleDataForm:
         assert self._current_form is not None

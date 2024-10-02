@@ -36,6 +36,7 @@ from gajim.gtk.settings import PopoverSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import get_app_window
+from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import open_window
 
 log = logging.getLogger('gajim.gtk.accounts')
@@ -45,7 +46,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
     def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('AccountsWindow')
         self.set_default_size(700, 550)
@@ -58,18 +58,21 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self._settings = Settings()
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        box.add(self._menu)
-        box.add(self._settings)
-        self.add(box)
+        box.append(self._menu)
+        box.append(self._settings)
+        self.set_child(box)
 
         for account in app.get_accounts_sorted():
             self.add_account(account, initial=True)
 
         self._menu.connect('menu-activated', self._on_menu_activated)
         self.connect('destroy', self._on_destroy)
-        self.connect_after('key-press-event', self._on_key_press)
 
-        self.show_all()
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
+        self.show()
 
     def _on_menu_activated(self,
                            _listbox: Gtk.ListBox,
@@ -83,11 +86,17 @@ class AccountsWindow(Gtk.ApplicationWindow):
         else:
             self._settings.set_page(name)
 
-    def _on_key_press(self,
-                      _widget: AccountsWindow,
-                      event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_destroy(self, _widget: AccountsWindow) -> None:
         self._check_relogin()
@@ -180,7 +189,7 @@ class Settings(Gtk.ScrolledWindow):
         self._stack.get_style_context().add_class('settings-stack')
         self._stack.add_named(AddNewAccountPage(), 'add-account')
 
-        self.add(self._stack)
+        self.set_child(self._stack)
         self._page_signal_ids: dict[GenericSettingPage, int] = {}
         self._pages: dict[str, list[GenericSettingPage]] = defaultdict(list)
 
@@ -234,16 +243,16 @@ class AccountMenu(Gtk.Box):
 
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        scrolled.add(self._accounts_listbox)
+        scrolled.set_child(self._accounts_listbox)
         self._stack.add_named(scrolled, 'accounts')
-        self.add(self._stack)
+        self.append(self._stack)
 
     @staticmethod
     def _sort_func(row1: AccountRow, row2: AccountRow) -> int:
         return locale.strcoll(row1.label.lower(), row2.label.lower())
 
     def add_account(self, row: AccountRow) -> None:
-        self._accounts_listbox.add(row)
+        self._accounts_listbox.append(row)
         sub_menu = AccountSubMenu(row.account)
         self._stack.add_named(sub_menu, f'{row.account}-menu')
 
@@ -259,8 +268,8 @@ class AccountMenu(Gtk.Box):
         sub_menu = self._stack.get_child_by_name(f'{row.account}-menu')
         assert sub_menu is not None
         self._stack.remove(sub_menu)
-        row.destroy()
-        sub_menu.destroy()
+        # row.destroy() GTK4 TODO
+        # sub_menu.destroy()
 
     def _on_account_row_activated(self,
                                   _listbox: Gtk.ListBox,
@@ -313,21 +322,21 @@ class AccountSubMenu(Gtk.ListBox):
 
         self._account = account
 
-        self.add(AccountLabelMenuItem(self, self._account))
-        self.add(BackMenuItem())
-        self.add(PageMenuItem('general', _('General')))
-        self.add(PageMenuItem('privacy', _('Privacy')))
-        self.add(PageMenuItem('encryption-omemo', _('Encryption (OMEMO)')))
-        self.add(PageMenuItem('connection', _('Connection')))
-        self.add(PageMenuItem('advanced', _('Advanced')))
-        self.add(RemoveMenuItem())
+        self.append(AccountLabelMenuItem(self, self._account))
+        self.append(BackMenuItem())
+        self.append(PageMenuItem('general', _('General')))
+        self.append(PageMenuItem('privacy', _('Privacy')))
+        self.append(PageMenuItem('encryption-omemo', _('Encryption (OMEMO)')))
+        self.append(PageMenuItem('connection', _('Connection')))
+        self.append(PageMenuItem('advanced', _('Advanced')))
+        self.append(RemoveMenuItem())
 
     @property
     def account(self) -> str:
         return self._account
 
     def select_row_by_name(self, row_name: str) -> None:
-        for row in self.get_children():
+        for row in iterate_listbox_children(self):
             if not isinstance(row, PageMenuItem):
                 continue
             if row.name == row_name:
@@ -346,7 +355,7 @@ class MenuItem(Gtk.ListBoxRow):
                             spacing=12)
         self._label = Gtk.Label()
 
-        self.add(self._box)
+        self.set_child(self._box)
 
     @property
     def name(self) -> str:
@@ -357,14 +366,13 @@ class RemoveMenuItem(MenuItem):
     def __init__(self) -> None:
         super().__init__('remove')
         self._label.set_text(_('Remove'))
-        image = Gtk.Image.new_from_icon_name('user-trash-symbolic',
-                                             Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name('user-trash-symbolic')
 
         self.set_selectable(False)
         image.get_style_context().add_class('error-color')
 
-        self._box.add(image)
-        self._box.add(self._label)
+        self._box.append(image)
+        self._box.append(self._label)
 
 
 class AccountLabelMenuItem(MenuItem):
@@ -376,16 +384,15 @@ class AccountLabelMenuItem(MenuItem):
         self.set_sensitive(False)
         self.set_activatable(False)
 
-        image = Gtk.Image.new_from_icon_name('avatar-default-symbolic',
-                                             Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name('avatar-default-symbolic')
         image.get_style_context().add_class('insensitive-fg-color')
 
         self._label.get_style_context().add_class('accounts-label-row')
         self._label.set_ellipsize(Pango.EllipsizeMode.END)
         self._label.set_xalign(0)
 
-        self._box.add(image)
-        self._box.add(self._label)
+        self._box.append(image)
+        self._box.append(self._label)
 
         parent.connect('update', self._update_account_label)
 
@@ -404,12 +411,11 @@ class BackMenuItem(MenuItem):
 
         self._label.set_text(_('Back'))
 
-        image = Gtk.Image.new_from_icon_name('go-previous-symbolic',
-                                             Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name('go-previous-symbolic')
         image.get_style_context().add_class('insensitive-fg-color')
 
-        self._box.add(image)
-        self._box.add(self._label)
+        self._box.append(image)
+        self._box.append(self._label)
 
 
 class PageMenuItem(MenuItem):
@@ -429,11 +435,11 @@ class PageMenuItem(MenuItem):
         else:
             icon = 'dialog-error-symbolic'
 
-        image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name(icon)
         self._label.set_text(label)
 
-        self._box.add(image)
-        self._box.add(self._label)
+        self._box.append(image)
+        self._box.append(self._label)
 
 
 class Account:
@@ -461,8 +467,6 @@ class Account:
             self._menu.set_page(self._account, page_name)
 
     def show(self) -> None:
-        self._menu.show_all()
-        self._settings.show_all()
         self.select()
 
     def remove(self) -> None:
@@ -505,8 +509,7 @@ class AccountRow(Gtk.ListBoxRow):
         self._label.set_xalign(0)
         self._label.set_width_chars(18)
 
-        next_icon = Gtk.Image.new_from_icon_name('go-next-symbolic',
-                                                 Gtk.IconSize.MENU)
+        next_icon = Gtk.Image.new_from_icon_name('go-next-symbolic')
         next_icon.get_style_context().add_class('insensitive-fg-color')
 
         account_enabled = app.settings.get_account_setting(
@@ -525,12 +528,12 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch.connect(
             'state-set', self._on_enable_switch, self._account)
 
-        box.add(self._switch)
-        box.add(self._switch_state_label)
-        box.add(Gtk.Separator())
-        box.add(self._label)
-        box.add(next_icon)
-        self.add(box)
+        box.append(self._switch)
+        box.append(self._switch_state_label)
+        box.append(Gtk.Separator())
+        box.append(self._label)
+        box.append(next_icon)
+        self.set_child(box)
 
     @property
     def account(self) -> str:
@@ -610,16 +613,16 @@ class AddNewAccountPage(Gtk.Box):
         self.set_vexpand(True)
         self.set_hexpand(True)
         self.set_margin_top(24)
-        image = Gtk.Image.new_from_icon_name(
-            'gajim-symbolic', Gtk.IconSize.from_name('100'))
+        image = Gtk.Image.new_from_icon_name('gajim-symbolic')
+        image.set_pixel_size(100)
         image.set_opacity(0.2)
-        self.add(image)
+        self.append(image)
 
         button = Gtk.Button(label=_('Add Account'))
         button.get_style_context().add_class('suggested-action')
         button.set_action_name('app.add-account')
         button.set_halign(Gtk.Align.CENTER)
-        self.add(button)
+        self.append(button)
 
 
 class GenericSettingPage(Gtk.Box):
@@ -643,7 +646,7 @@ class GenericSettingPage(Gtk.Box):
             self.listbox.add_setting(setting)
         self.listbox.update_states()
 
-        self.pack_end(self.listbox, True, True, 0)
+        self.append(self.listbox)
 
     def connect_signal(self, stack: Gtk.Stack) -> int:
         return stack.connect('notify::visible-child',
@@ -939,7 +942,7 @@ class EncryptionOMEMOPage(GenericSettingPage):
         heading = Gtk.Label(label=_('Trust Management'))
         heading.get_style_context().add_class('bold')
         heading.set_xalign(0)
-        self.add(heading)
+        self.append(heading)
 
         btbv_label = Gtk.Label()
         btbv_label.set_xalign(0)
@@ -947,12 +950,12 @@ class EncryptionOMEMOPage(GenericSettingPage):
         link_text = _('Read more about blind trust')
         markup = f'<a href="{wiki_url}">{link_text}</a>'
         btbv_label.set_markup(markup)
-        self.add(btbv_label)
+        self.append(btbv_label)
 
         omemo_trust_manager = OMEMOTrustManager(account)
         omemo_trust_manager.set_margin_top(18)
-        self.pack_end(omemo_trust_manager, True, True, 0)
-        self.reorder_child(omemo_trust_manager, 0)
+        self.append(omemo_trust_manager)
+        self.reorder_child_after(omemo_trust_manager, None)
 
 
 class ConnectionPage(GenericSettingPage):

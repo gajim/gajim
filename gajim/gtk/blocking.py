@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import cast
+from typing import Any, cast
 
 import logging
 
@@ -26,30 +26,30 @@ class BlockingList(Gtk.ApplicationWindow):
     def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_title(_('Blocking List for %s') % account)
-
-        self.connect_after('key-press-event', self._on_key_press)
 
         self.account = account
         self._client = app.get_client(account)
         self._prev_blocked_jids: set[JID] = set()
 
-        self._ui = get_builder('blocking_list.ui')
-        self.add(self._ui.blocking_grid)
+        self._ui = get_builder('blocking_list.ui', self)
+        self.set_child(self._ui.blocking_grid)
 
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self._set_grid_state(False)
-        self._ui.connect_signals(self)
-        self.show_all()
 
         self._activate_spinner()
 
         self._client.get_module('Blocking').request_blocking_list(
             callback=self._on_blocking_list_received)
+
+        self.show()
 
     def _show_error(self, error: str) -> None:
         ErrorDialog(_('Error!'), error)
@@ -93,10 +93,10 @@ class BlockingList(Gtk.ApplicationWindow):
         iter_ = self._ui.blocking_store.get_iter(path)
         self._ui.blocking_store.set_value(iter_, 0, new_text)
 
-    def _on_add(self, _button: Gtk.ToolButton) -> None:
+    def _on_add(self, _button: Any) -> None:
         self._ui.blocking_store.append([''])
 
-    def _on_remove(self, _button: Gtk.ToolButton) -> None:
+    def _on_remove(self, _button: Any) -> None:
         selected_rows = self._ui.block_view.get_selection().get_selected_rows()
         mod, paths = selected_rows
         for path in paths:
@@ -128,6 +128,14 @@ class BlockingList(Gtk.ApplicationWindow):
         self._spinner.hide()
         self._spinner.stop()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False

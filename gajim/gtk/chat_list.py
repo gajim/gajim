@@ -8,9 +8,9 @@ from typing import Any
 from typing import cast
 
 import logging
+from collections.abc import Iterator
 from datetime import datetime
 
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -32,6 +32,8 @@ from gajim.common.util.user_strings import get_moderation_text
 
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import get_listbox_row_count
+from gajim.gtk.util import iterate_listbox_children
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
@@ -63,18 +65,21 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._context_menu_visible = False
         self._mouseover = False
         self._pinned_order_change = False
-        self.connect('enter-notify-event', self._on_mouse_focus_changed)
-        self.connect('leave-notify-event', self._on_mouse_focus_changed)
+
+        hover_controller = Gtk.EventControllerMotion()
+        hover_controller.connect('enter', self._on_cursor_enter)
+        hover_controller.connect('leave', self._on_cursor_leave)
+        self.add_controller(hover_controller)
 
         # Drag and Drop
-        entries = [Gtk.TargetEntry.new(
-            'CHAT_LIST_ITEM',
-            Gtk.TargetFlags.SAME_APP,
-            0)]
-        self.drag_dest_set(
-            Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP,
-            entries,
-            Gdk.DragAction.MOVE)
+        # entries = [Gtk.TargetEntry.new(
+        #     'CHAT_LIST_ITEM',
+        #     Gtk.TargetFlags.SAME_APP,
+        #     0)]
+        # self.drag_dest_set(
+        #     Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP,
+        #     entries,
+        #     Gdk.DragAction.MOVE)
 
         self._drag_row: ChatListRow | None = None
         self._chat_order: list[ChatListRow] = []
@@ -85,16 +90,21 @@ class ChatList(Gtk.ListBox, EventHelper):
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
-        self.connect('drag-data-received', self._on_drag_data_received)
+        # self.connect('drag-data-received', self._on_drag_data_received)
         self.connect('destroy', self._on_destroy)
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_row_state)
 
-        self.show_all()
-
     @property
     def workspace_id(self) -> str:
         return self._workspace_id
+
+    def get_row_count(self) -> int:
+        return get_listbox_row_count(self)
+
+    def _iterate_rows(self) -> Iterator[ChatListRow]:
+        for row in iterate_listbox_children(self):
+            yield cast(ChatListRow, row)
 
     def get_unread_count(self) -> int:
         return sum(chats.unread_count for chats in self._chats.values())
@@ -194,12 +204,12 @@ class ChatList(Gtk.ListBox, EventHelper):
         if pinned:
             self._chat_order.insert(position, row)
 
-        row.connect('drag-begin', self._on_row_drag_begin)
+        # row.connect('drag-begin', self._on_row_drag_begin) TODO GTK4
         row.connect('unread-changed', self._on_row_unread_changed)
         row.connect('context-menu-state-changed',
                     self._on_context_menu_state_changed)
 
-        self.add(row)
+        self.append(row)
 
     def select_chat(self, account: str, jid: JID) -> None:
         row = self._chats[(account, jid)]
@@ -226,12 +236,12 @@ class ChatList(Gtk.ListBox, EventHelper):
             while True:
                 if direction == Direction.NEXT:
                     index += 1
-                    if index >= len(self.get_children()):
+                    if index >= self.get_row_count():
                         index = 0
                 else:
                     index -= 1
                     if index < 0:
-                        index = len(self.get_children()) - 1
+                        index = self.get_row_count() - 1
 
                 row = self.get_row_at_index(index)
                 if row is None:
@@ -256,7 +266,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             if direction == Direction.NEXT:
                 next_row = self.get_row_at_index(0)
             else:
-                last = len(self.get_children()) - 1
+                last = self.get_row_count() - 1
                 next_row = self.get_row_at_index(last)
             assert isinstance(next_row, ChatListRow)
             self.select_chat(next_row.account, next_row.jid)
@@ -272,7 +282,7 @@ class ChatList(Gtk.ListBox, EventHelper):
             self.select_chat(row.account, row.jid)
 
     def get_chat_list_rows(self) -> list[ChatListRow]:
-        return cast(list[ChatListRow], self.get_children())
+        return list(self._iterate_rows())
 
     def remove_chat(self,
                     account: str,
@@ -284,7 +294,8 @@ class ChatList(Gtk.ListBox, EventHelper):
         if row.is_pinned:
             self._chat_order.remove(row)
         self.remove(row)
-        row.destroy()
+        # TODO GTK4
+        # row.destroy()
         if emit_unread:
             self._emit_unread_changed()
 
@@ -353,14 +364,14 @@ class ChatList(Gtk.ListBox, EventHelper):
         return cast(ChatListRow, row_after)
 
     def _get_last_row(self) -> ChatListRow:
-        index = len(self.get_children()) - 1
+        index = self.get_row_count() - 1
         last_row = self.get_row_at_index(index)
         assert last_row is not None
         return cast(ChatListRow, last_row)
 
     def _on_row_drag_begin(self,
                            row: ChatListRow,
-                           _drag_context: Gdk.DragContext
+                           _drag_context: Any
                            ) -> None:
 
         self._drag_row = row
@@ -378,10 +389,10 @@ class ChatList(Gtk.ListBox, EventHelper):
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
-                               _drag_context: Gdk.DragContext,
+                               _drag_context: Any,
                                _x_coord: int,
                                y_coord: int,
-                               selection_data: Gtk.SelectionData,
+                               selection_data: Any,
                                _info: int,
                                _time: int
                                ) -> None:
@@ -530,19 +541,17 @@ class ChatList(Gtk.ListBox, EventHelper):
 
         self.invalidate_sort()
 
-    def _on_mouse_focus_changed(self,
-                                _widget: Gtk.ListBox,
-                                event: Gdk.EventCrossing
-                                ) -> None:
+    def _on_cursor_enter(
+        self,
+        _controller: Gtk.EventControllerMotion,
+        _x: int,
+        _y: int,
+    ) -> None:
+        self._mouseover = True
+        self._schedule_check_sort_inhibit()
 
-        if event.type == Gdk.EventType.ENTER_NOTIFY:
-            self._mouseover = True
-
-        if event.type == Gdk.EventType.LEAVE_NOTIFY:
-            if event.detail != Gdk.NotifyType.INFERIOR:
-                # Not hovering a Gtk.ListBoxRow (row is INFERIOR)
-                self._mouseover = False
-
+    def _on_cursor_leave(self, _controller: Gtk.EventControllerMotion) -> None:
+        self._mouseover = False
         self._schedule_check_sort_inhibit()
 
     @staticmethod
@@ -688,13 +697,11 @@ class ChatList(Gtk.ListBox, EventHelper):
             _('File'), icon_name='text-x-generic-symbolic')
 
     def _on_account_changed(self, *args: Any) -> None:
-        rows = cast(list[ChatListRow], self.get_children())
-        for row in rows:
+        for row in self._iterate_rows():
             row.update_account_identifier()
 
     def _on_bookmarks_received(self, _event: events.BookmarksReceived) -> None:
-        rows = cast(list[ChatListRow], self.get_children())
-        for row in rows:
+        for row in self._iterate_rows():
             row.update_name()
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:

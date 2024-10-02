@@ -39,7 +39,7 @@ class PlainWidget(Gtk.Box):
         self._account = account
 
         self._text_widget = MessageLabel(self._account, selectable)
-        self.add(self._text_widget)
+        self.append(self._text_widget)
 
     def set_selectable(self, selectable: bool) -> None:
         self._text_widget.set_selectable(selectable)
@@ -56,24 +56,25 @@ class MessageLabel(Gtk.Label):
         Gtk.Label.__init__(self)
         self.set_hexpand(True)
         self.set_selectable(selectable)
-        self.set_line_wrap(True)
+        self.set_wrap_mode(Pango.WrapMode.WORD)
         self.set_xalign(0)
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
         if os.environ.get('GAJIM_FORCE_WORD_WRAP'):
-            self.set_line_wrap_mode(Pango.WrapMode.WORD)
+            self.set_wrap_mode(Pango.WrapMode.WORD)
         else:
-            self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.set_track_visited_links(False)
+            self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
         self._account = account
 
         self.get_style_context().add_class('gajim-conversation-text')
 
-        self.connect('populate-popup', self._on_populate_popup)
         self.connect('activate-link', self._on_activate_link)
-        self.connect('focus-in-event', self._on_focus_in)
-        self.connect('focus-out-event', self._on_focus_out)
+
+        # TODO GTK4
+        # self.connect('populate-popup', self._on_populate_popup)
+        # self.connect('focus-in-event', self._on_focus_in)
+        # self.connect('focus-out-event', self._on_focus_out)
 
     def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
         uri = label.get_current_uri()

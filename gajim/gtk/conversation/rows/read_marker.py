@@ -34,7 +34,7 @@ class ReadMarkerRow(BaseRow):
         self.label.get_style_context().add_class(
             'conversation-read-marker')
         self.grid.attach(self.label, 0, 0, 1, 1)
-        self.set_no_show_all(True)
+        self.set_visible(False)
 
     def _on_nickname_update(self,
                             contact: ChatContactT,
@@ -50,8 +50,9 @@ class ReadMarkerRow(BaseRow):
         self.timestamp = timestamp
 
         self.changed()
-        self.set_no_show_all(False)
-        self.show_all()
+        # TODO GTK4
+        # self.set_no_show_all(False)
+        # self.show_all()
 
     def set_last_incoming_timestamp(self, timestamp: datetime) -> None:
         if timestamp > self._last_incoming_timestamp:

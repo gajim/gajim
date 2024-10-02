@@ -8,7 +8,6 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.app_page import AppPage
-from gajim.gtk.util import load_icon_surface
 
 
 class AppSideBar(Gtk.ListBox):
@@ -23,9 +22,7 @@ class AppSideBar(Gtk.ListBox):
         app_page.connect('unread-count-changed', self._on_unread_count_changed)
 
         self._app_row = AppRow()
-        self.add(self._app_row)
-
-        self.show_all()
+        self.append(self._app_row)
 
         # Use idle_add to unselect listbox selection on startup
         GLib.idle_add(self.unselect_all)
@@ -49,27 +46,25 @@ class AppRow(Gtk.ListBoxRow):
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
             'unread-counter')
-        self._unread_label.set_no_show_all(True)
+        self._unread_label.set_visible(False)
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
 
-        surface = load_icon_surface('gajim', 32)
-        image = Gtk.Image.new_from_surface(surface)
+        image = Gtk.Image(icon_name='gajim', pixel_size=32)
 
         selection_bar = Gtk.Box()
         selection_bar.set_size_request(6, -1)
         selection_bar.get_style_context().add_class('selection-bar')
 
         item_box = Gtk.Box()
-        item_box.add(selection_bar)
-        item_box.add(image)
+        item_box.append(selection_bar)
+        item_box.append(image)
 
         overlay = Gtk.Overlay()
-        overlay.add(item_box)
+        overlay.set_child(item_box)
         overlay.add_overlay(self._unread_label)
 
-        self.add(overlay)
-        self.show_all()
+        self.set_child(overlay)
 
     def set_unread_count(self, count: int) -> None:
         if count < 1000:

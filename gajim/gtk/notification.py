@@ -196,7 +196,7 @@ class PopupNotification(Gtk.Window):
         self._timeout_id: int | None = None
         self._event = event
 
-        self._ui = get_builder('popup_notification_window.ui')
+        self._ui = get_builder('popup_notification_window.ui', self)
         self.add(self._ui.eventbox)
 
         self._add_background_color(event)
@@ -239,7 +239,7 @@ class PopupNotification(Gtk.Window):
         bg_color = app.css_config.get_value(css_class, StyleAttr.COLOR)
         bar_class = '''
             .popup-bar {
-                background-color: %s
+                background-color: %s;
             }''' % bg_color
         add_css_to_widget(self._ui.color_bar, bar_class)
         self._ui.color_bar.get_style_context().add_class('popup-bar')
@@ -260,7 +260,7 @@ class PopupNotification(Gtk.Window):
 
     def _on_button_press(self,
                          _widget: Gtk.Widget,
-                         event: Gdk.EventButton
+                         event: Any
                          ) -> None:
         if event.button == Gdk.BUTTON_PRIMARY:
 

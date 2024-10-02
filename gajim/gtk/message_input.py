@@ -15,6 +15,7 @@ from typing import Any
 import logging
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -31,6 +32,7 @@ from gajim.common.types import ChatContactT
 
 from gajim.gtk.chat_action_processor import ChatActionProcessor
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
+from gajim.gtk.menus import get_message_input_extra_context_menu
 from gajim.gtk.util import scroll_to_end
 
 if app.is_installed('GSPELL') or typing.TYPE_CHECKING:
@@ -64,10 +66,7 @@ class MessageInputTextView(GtkSource.View):
             self,
             accepts_tab=True,
             wrap_mode=Gtk.WrapMode.WORD_CHAR,
-            border_width=0,
-            margin_left=3,
             margin_top=3,
-            margin_right=3,
             margin_bottom=3
         )
 
@@ -82,11 +81,15 @@ class MessageInputTextView(GtkSource.View):
 
         self._chat_action_processor = ChatActionProcessor(self)
 
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect('enter', self._on_focus_enter)
+        focus_controller.connect('leave', self._on_focus_leave)
+        self.add_controller(focus_controller)
+
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
-        self.connect('focus-in-event', self._on_focus_in)
-        self.connect('focus-out-event', self._on_focus_out)
         self.connect('destroy', self._on_destroy)
-        self.connect('populate-popup', self._on_populate_popup)
+
+        self.set_extra_menu(get_message_input_extra_context_menu())
 
         app.plugin_manager.gui_extension_point('message_input', self)
 
@@ -121,25 +124,15 @@ class MessageInputTextView(GtkSource.View):
         self._on_text_changed()
         self.emit('buffer-changed')
 
-    def _on_focus_in(self,
-                     _widget: Gtk.Widget,
-                     _event: Gdk.EventFocus
-                     ) -> bool:
-
+    def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:
         scrolled = self.get_parent()
         assert scrolled
-        scrolled.get_style_context().add_class('message-input-focus')
-        return False
+        scrolled.add_css_class('message-input-focus')
 
-    def _on_focus_out(self,
-                      _widget: Gtk.Widget,
-                      _event: Gdk.EventFocus
-                      ) -> bool:
-
+    def _on_focus_leave(self, _focus_controller: Gtk.EventControllerFocus) -> None:
         scrolled = self.get_parent()
         assert scrolled
-        scrolled.get_style_context().remove_class('message-input-focus')
-        return False
+        scrolled.remove_css_class('message-input-focus')
 
     def _clear_tags(self) -> None:
         to_remove: list[Gtk.TextTag] = []
@@ -271,37 +264,13 @@ class MessageInputTextView(GtkSource.View):
 
     def undo(self, *args: Any) -> None:
         buf = self.get_buffer()
-        if buf.can_undo():
+        if buf.get_can_undo():
             buf.undo()
 
     def redo(self, *args: Any) -> None:
         buf = self.get_buffer()
-        if buf.can_redo():
+        if buf.get_can_redo():
             buf.redo()
-
-    def _on_populate_popup(self,
-                           _textview: MessageInputTextView,
-                           menu: Gtk.Widget
-                           ) -> None:
-        assert isinstance(menu, Gtk.Menu)
-        item = Gtk.SeparatorMenuItem()
-        menu.prepend(item)
-
-        item = Gtk.MenuItem.new_with_mnemonic(_('_Clear'))
-        menu.prepend(item)
-        item.connect('activate', self.clear)
-
-        paste_code_block_item = Gtk.MenuItem.new_with_label(
-            _('Paste as Code Block'))
-        paste_code_block_item.connect(
-            'activate', self._paste_clipboard_as_code_block)
-        menu.append(paste_code_block_item)
-
-        paste_item = Gtk.MenuItem.new_with_label(_('Paste as Quote'))
-        paste_item.connect('activate', self._paste_clipboard_as_quote)
-        menu.append(paste_item)
-
-        menu.show_all()
 
     def mention_participant(self, name: str) -> None:
         gc_refer_to_nick_char = app.settings.get('gc_refer_to_nick_char')
@@ -318,19 +287,37 @@ class MessageInputTextView(GtkSource.View):
         self.insert_text(f'```\n{text}\n```')
         self.grab_focus()
 
-    def _paste_clipboard_as_quote(self, _item: Gtk.MenuItem) -> None:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = clipboard.wait_for_text()
-        if text is None:
-            return
-        self.insert_as_quote(text)
+    def paste_as_quote(self) -> None:
+        clipboard = self.get_clipboard()
+        clipboard.read_text_async(
+            None,
+            self._on_clipboard_read_text_finished,
+            'paste-as-quote'
+        )
 
-    def _paste_clipboard_as_code_block(self, _item: Gtk.MenuItem) -> None:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        text = clipboard.wait_for_text()
+    def paste_as_code_block(self) -> None:
+        clipboard = self.get_clipboard()
+        clipboard.read_text_async(
+            None,
+            self._on_clipboard_read_text_finished,
+            'paste-as-code-block'
+        )
+
+    def _on_clipboard_read_text_finished(
+        self,
+        clipboard: Gdk.Clipboard,
+        result: Gio.AsyncResult,
+        action_name: str
+    ) -> None:
+        text = clipboard.read_text_finish(result)
         if text is None:
+            log.info('No text pasted')
             return
-        self.insert_as_code_block(text)
+
+        if action_name == 'paste-as-quote':
+            self.insert_as_quote(text)
+        elif action_name == 'paste-as-code-block':
+            self.insert_as_code_block(text)
 
 
 class TextBufferManager(GObject.Object):

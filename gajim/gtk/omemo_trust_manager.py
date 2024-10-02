@@ -33,6 +33,7 @@ from gajim.common.modules.omemo import compose_trust_uri
 from .builder import get_builder
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
+from .util import clear_listbox
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.omemo_trust_dialog')
@@ -66,16 +67,13 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
         self._account = account
         self._contact = contact
 
-        self._ui = get_builder('omemo_trust_manager.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('omemo_trust_manager.ui', self)
+        self.append(self._ui.stack)
 
         self._ui.list.set_filter_func(self._filter_func, None)
         self._ui.list.set_sort_func(self._sort_func, None)
 
-        self._ui.connect_signals(self)
-
         self.connect('destroy', self._on_destroy)
-        self.show_all()
 
         self.register_events([
             ('account-connected', ged.GUI2, self._on_account_state),
@@ -124,7 +122,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
     def update(self) -> None:
         assert self._contact is not None
-        self._ui.list.foreach(self._ui.list.remove)
+        clear_listbox(self._ui.list)
 
         if isinstance(self._contact, BareContact) and self._contact.is_self:
             self._ui.clear_devices_button.show()
@@ -188,7 +186,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
         for identity_info in self._omemo.backend.get_identity_infos(
                 str(contact.jid)):
-            self._ui.list.add(KeyRow(contact, identity_info))
+            self._ui.list.append(KeyRow(contact, identity_info))
 
     def _load_qrcode(self) -> None:
         uri = compose_trust_uri(
@@ -276,10 +274,9 @@ class KeyRow(Gtk.ListBoxRow):
         last_seen_label.get_style_context().add_class('dim-label')
         grid.attach(last_seen_label, 2, 3, 1, 1)
 
-        self.add(grid)
+        self.set_child(grid)
 
         self.connect('destroy', self._on_destroy)
-        self.show_all()
 
     def _on_destroy(self, *args: Any) -> None:
         app.check_finalize(self)
@@ -310,7 +307,7 @@ class KeyRow(Gtk.ListBoxRow):
         self._trust = trust
         icon_name, tooltip, css_class = TRUST_DATA[trust]
         image = cast(Gtk.Image, self._trust_button.get_child())
-        image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        image.set_from_icon_name(icon_name)
         image.get_style_context().add_class(css_class)
         image.set_tooltip_text(tooltip)
 
@@ -347,15 +344,16 @@ class TrustButton(Gtk.MenuButton):
 
     def update(self) -> None:
         icon_name, tooltip, css_class = TRUST_DATA[self._row.trust]
-        image = cast(Gtk.Image, self.get_child())
-        image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
-        image.get_style_context().remove_class(self._css_class)
+        # TODO GTK4
+        # image = cast(Gtk.Image, self.get_child())
+        # image.set_from_icon_name(icon_name)
+        # image.get_style_context().remove_class(self._css_class)
 
         if not self._row.active:
             css_class = 'omemo-inactive-color'
             tooltip = f'{_("Inactive")} - {tooltip}'
 
-        image.get_style_context().add_class(css_class)
+        # image.get_style_context().add_class(css_class)
         self._css_class = css_class
         self.set_tooltip_text(tooltip)
 
@@ -367,8 +365,7 @@ class TrustPopver(Gtk.Popover):
         self._listbox = Gtk.ListBox()
         self._listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.update()
-        self.add(self._listbox)
-        self._listbox.show_all()
+        self.set_child(self._listbox)
         self._listbox.connect('row-activated', self._activated)
         self.get_style_context().add_class('omemo-trust-popover')
 
@@ -383,14 +380,15 @@ class TrustPopver(Gtk.Popover):
             self.update()
 
     def update(self) -> None:
-        self._listbox.foreach(self._listbox.remove)
+        clear_listbox(self._listbox)
+
         if self._row.trust != OMEMOTrust.VERIFIED:
-            self._listbox.add(VerifiedOption())
+            self._listbox.append(VerifiedOption())
         if self._row.trust != OMEMOTrust.BLIND:
-            self._listbox.add(BlindOption())
+            self._listbox.append(BlindOption())
         if self._row.trust != OMEMOTrust.UNTRUSTED:
-            self._listbox.add(NotTrustedOption())
-        self._listbox.add(DeleteOption())
+            self._listbox.append(NotTrustedOption())
+        self._listbox.append(DeleteOption())
 
 
 class MenuOption(Gtk.ListBoxRow):
@@ -411,14 +409,13 @@ class MenuOption(Gtk.ListBoxRow):
         box = Gtk.Box()
         box.set_spacing(6)
 
-        image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name(icon)
         label = Gtk.Label(label=label_text)
         image.get_style_context().add_class(color)
 
-        box.add(image)
-        box.add(label)
-        self.add(box)
-        self.show_all()
+        box.append(image)
+        box.append(label)
+        self.set_child(box)
 
 
 class BlindOption(MenuOption):

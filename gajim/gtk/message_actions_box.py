@@ -62,7 +62,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._correcting: dict[ChatContactT, str | None] = defaultdict(lambda: None)
         self._last_message_id: dict[ChatContactT, str | None] = {}
 
-        self._ui = get_builder('message_actions_box.ui')
+        self._ui = get_builder('message_actions_box.ui', self)
         self.get_style_context().add_class('message-actions-box')
 
         self.attach(self._ui.box, 0, 0, 1, 1)
@@ -71,11 +71,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._ui.edit_box_image.set_size_request(AvatarSize.CHAT, -1)
 
         self._chat_state_indicator = ChatStateIndicator()
-        self._ui.chat_state_box.add(self._chat_state_indicator)
+        self._ui.chat_state_box.append(self._chat_state_indicator)
 
         # For message replies
         self._reply_box = ReplyBox()
-        self._ui.reply_box.add(self._reply_box)
+        self._ui.reply_box.append(self._reply_box)
 
         self._ui.send_message_button.set_visible(
             app.settings.get('show_send_message_button'))
@@ -84,35 +84,33 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
                                  'set_visible')
 
         self.voice_message_recorder_button = VoiceMessageRecorderButton()
-        self._ui.action_box.pack_end(
-            self.voice_message_recorder_button,
-            False,
-            True,
-            0)
-        self._ui.action_box.reorder_child(
-            self.voice_message_recorder_button, 3)
+        self._ui.action_box.append(
+            self.voice_message_recorder_button)
+        self._ui.action_box.reorder_child_after(
+            self.voice_message_recorder_button, self._ui.input_scrolled)
 
         self._security_label_selector = SecurityLabelSelector()
-        self._ui.action_box.pack_start(
-            self._security_label_selector, False, True, 0)
+        self._ui.action_box.append(
+            self._security_label_selector)
 
         self.msg_textview = MessageInputTextView()
-        self.msg_textview.connect('buffer-changed',
-                                  self._on_buffer_changed)
-        self.msg_textview.connect('key-press-event',
-                                  self._on_msg_textview_key_press_event)
-        self.msg_textview.connect('paste-clipboard',
-                                  self._on_paste_clipboard)
+        self.msg_textview.connect('buffer-changed', self._on_buffer_changed)
+        self.msg_textview.connect('paste-clipboard', self._on_paste_clipboard)
 
-        self._ui.input_scrolled.add(self.msg_textview)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_msg_textview_key_pressed)
+        self.msg_textview.add_controller(controller)
+
+        self._ui.input_scrolled.set_child(self.msg_textview)
 
         self._ui.sendfile_button.set_tooltip_text(
             _('No File Transfer available'))
         self._ui.formattings_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
 
-        self.show_all()
-        self._ui.connect_signals(self)
+        emoji_chooser = Gtk.EmojiChooser()
+        emoji_chooser.connect('emoji-picked', self._on_emoji_picked)
+        self._ui.emoticons_button.set_popover(emoji_chooser)
 
         self._connect_actions()
 
@@ -130,6 +128,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
+    def _on_emoji_picked(self, _emoji_chooser: Gtk.EmojiChooser, text: str) -> None:
+        self.msg_textview.insert_text(text)
+
     def _connect_actions(self) -> None:
         actions = [
             'input-bold',
@@ -137,6 +138,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             'input-strike',
             'input-clear',
             'show-emoji-chooser',
+            'paste-as-quote',
+            'paste-as-code-block',
             'quote',
             'mention',
             'reply',
@@ -183,6 +186,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         elif action_name == 'quote':
             assert param
             self.msg_textview.insert_as_quote(param.get_string())
+
+        elif action_name == 'paste-as-quote':
+            self.msg_textview.paste_as_quote()
+
+        elif action_name == 'paste-as-code-block':
+            self.msg_textview.paste_as_code_block()
 
         elif action_name == 'reply':
             assert param
@@ -428,7 +437,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._ui.state_box_label.set_text(
                 _('You are offline. Go online to send messages…'))
             self._ui.state_box_image.set_from_icon_name(
-                'network-offline-symbolic', Gtk.IconSize.BUTTON)
+                'network-offline-symbolic')
 
         if isinstance(self._contact, GroupchatContact):
             state = self._contact.is_joined
@@ -442,14 +451,14 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
                     self._ui.state_box_label.set_text(
                         _('You are a visitor.'))
                     self._ui.state_box_image.set_from_icon_name(
-                        'feather-mic-off-symbolic', Gtk.IconSize.BUTTON)
+                        'feather-mic-off-symbolic')
 
         if isinstance(self._contact, GroupchatParticipant):
             state = self._contact.is_available
             self._ui.state_box_label.set_text(
                 _('You can’t send private messages to contacts if they are offline.'))
             self._ui.state_box_image.set_from_icon_name(
-                'network-offline-symbolic', Gtk.IconSize.BUTTON)
+                'network-offline-symbolic')
 
         self._ui.state_box.set_visible(not state)
 
@@ -528,8 +537,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         self._ui.encryption_menu_button.set_sensitive(is_available)
         self._ui.encryption_menu_button.set_tooltip_text(tooltip)
-        self._ui.encryption_image.set_from_icon_name(
-            icon_name, Gtk.IconSize.MENU)
+        self._ui.encryption_image.set_from_icon_name(icon_name)
 
     @staticmethod
     def _is_encryption_available(contact: ChatContactT) -> bool:
@@ -573,8 +581,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         self._ui.encryption_details_button.set_visible(visible)
         self._ui.encryption_details_button.set_tooltip_text(tooltip)
-        self._ui.encryption_details_image.set_from_icon_name(
-            icon_name, Gtk.IconSize.MENU)
+        self._ui.encryption_details_image.set_from_icon_name(icon_name)
 
     def _on_encryption_details_clicked(self, _button: Gtk.Button) -> None:
         contact = self.get_current_contact()
@@ -663,9 +670,83 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         client.get_module('Chatstate').set_chatstate(
             self._contact, Chatstate.COMPOSING)
 
+    def _on_msg_textview_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType
+    ) -> bool:
+        # pylint: disable=too-many-nested-blocks
+        if state & Gdk.ModifierType.SHIFT_MASK:
+            if state & Gdk.ModifierType.CONTROL_MASK:
+                if keyval == Gdk.KEY_ISO_Left_Tab:
+                    app.window.select_next_chat(
+                        Direction.PREV, unread_first=True)
+                    return Gdk.EVENT_STOP
+
+        if state & Gdk.ModifierType.CONTROL_MASK:
+            if keyval == Gdk.KEY_Tab:
+                app.window.select_next_chat(Direction.NEXT, unread_first=True)
+                return Gdk.EVENT_STOP
+
+            if keyval == Gdk.KEY_z:
+                self.msg_textview.undo()
+                return Gdk.EVENT_STOP
+
+            if keyval == Gdk.KEY_y:
+                self.msg_textview.redo()
+                return Gdk.EVENT_STOP
+
+            if keyval == Gdk.KEY_Up:
+                self.toggle_message_correction()
+                return Gdk.EVENT_STOP
+
+        if keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
+            if state & Gdk.ModifierType.SHIFT_MASK:
+                self.msg_textview.insert_newline()
+                return Gdk.EVENT_STOP
+
+            if state & Gdk.ModifierType.CONTROL_MASK:
+                if not app.settings.get('send_on_ctrl_enter'):
+                    self.msg_textview.insert_newline()
+                    return Gdk.EVENT_STOP
+            else:
+                if app.settings.get('send_on_ctrl_enter'):
+                    self.msg_textview.insert_newline()
+                    return Gdk.EVENT_STOP
+
+            assert self._contact is not None
+
+            # Reset IMContext to clear preedit state
+            self.msg_textview.reset_im_context()
+
+            message = self.msg_textview.get_text()
+
+            try:
+                handled = app.commands.parse(self._contact.type_string, message)
+            except CommandFailed:
+                return Gdk.EVENT_STOP
+
+            if handled:
+                self.msg_textview.clear()
+                return Gdk.EVENT_STOP
+
+            if not app.account_is_available(self._contact.account):
+                # we are not connected
+                ErrorDialog(
+                    _('No Connection Available'),
+                    _('Your message can not be sent until you are connected.'))
+                return Gdk.EVENT_STOP
+
+            app.window.activate_action('win.send-message', None)
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
+
     def _on_msg_textview_key_press_event(self,
                                          textview: MessageInputTextView,
-                                         event: Gdk.EventKey
+                                         event: Any
                                          ) -> bool:
         # pylint: disable=too-many-nested-blocks
         event_state = event.get_state()
@@ -730,14 +811,14 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
                     _('Your message can not be sent until you are connected.'))
                 return True
 
-            app.window.activate_action('send-message', None)
+            app.window.activate_action('win.send-message', None)
             return True
 
         return False
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()
-        app.window.activate_action('muc-request-voice', None)
+        app.window.activate_action('win.muc-request-voice', None)
 
     def _enable_reply_mode(self, original_message: mod.Message) -> None:
         assert self._contact is not None
@@ -754,23 +835,52 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         return message_reply
 
-    def _on_paste_clipboard(self,
-                            texview: MessageInputTextView
-                            ) -> None:
+    def _on_paste_clipboard(self, textview: MessageInputTextView) -> None:
+        clipboard = self.get_clipboard()
+        formats = clipboard.get_formats()
+        mime_types = formats.get_mime_types()
 
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-
-        uris = clipboard.wait_for_uris()
-        if uris:
-            app.window.activate_action('send-file', GLib.Variant('as', uris))
-            # prevent TextView from pasting the URIs as text:
-            texview.stop_emission_by_name('paste-clipboard')
+        if mime_types is None:
+            log.warning('Could not determine clipboard mime types')
             return
 
-        log.info('No URIs pasted')
+        if 'text/uri-list' in mime_types:
+            # Prevent TextView from pasting the URIs as text:
+            textview.stop_emission_by_name('paste-clipboard')
+            # TODO GTK4
+            # gtypes = formats.get_gtypes()
+            # clipboard.read_value_async(
+            #     gtypes[0],
+            #     0,
+            #     None,
+            #     self._on_clipboard_read_value_finished
+            # )
+            return
 
-        image = clipboard.wait_for_image()
-        if image is None:
+        if 'image/png' in mime_types:
+            clipboard.read_texture_async(
+                None, self._on_clipboard_read_texture_finished
+            )
+
+    def _on_clipboard_read_value_finished(
+        self,
+        clipboard: Gdk.Clipboard,
+        result: Gio.AsyncResult,
+    ) -> None:
+        uris = clipboard.read_value_finish(result)
+        if uris is None:
+            log.info('No URIs pasted')
+            return
+
+        app.window.activate_action('win.send-file', GLib.Variant('as', uris))
+
+    def _on_clipboard_read_texture_finished(
+        self,
+        clipboard: Gdk.Clipboard,
+        result: Gio.AsyncResult,
+    ) -> None:
+        texture = clipboard.read_texture_finish(result)
+        if texture is None:
             log.info('No image pasted')
             return
 
@@ -778,7 +888,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         image_path = temp_dir / f'{uuid.uuid4()}.png'
 
         try:
-            success = image.savev(str(image_path), 'png', [], [])
+            success = texture.save_to_png(str(image_path))
             if not success:
                 log.error('Could not process pasted image')
                 return
@@ -787,4 +897,4 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             return
 
         app.window.activate_action(
-            'send-file', GLib.Variant('as', [image_path.as_uri()]))
+            'win.send-file', GLib.Variant('as', [image_path.as_uri()]))

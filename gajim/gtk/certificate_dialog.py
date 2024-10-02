@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from typing import Any
 from typing import cast
 
 import logging
@@ -44,27 +45,36 @@ class CertificateDialog(Gtk.ApplicationWindow):
         self.set_application(app.app)
         self.set_show_menubar(False)
         self.set_resizable(True)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_title(_('Certificate'))
 
-        self.add(CertificateBox(account, cert))
+        self.set_child(CertificateBox(account, cert))
 
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self.set_transient_for(transient_for)
-        self.show_all()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+        self.show()
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
 
 class CertificateBox(Gtk.Box):
     def __init__(self, account: str, certificate: Gio.TlsCertificate) -> None:
         Gtk.Box.__init__(self)
 
-        self._ui = get_builder('certificate.ui')
+        self._ui = get_builder('certificate.ui', self)
         self._headline = _('Certificate for \n%s') % account
 
         cert = get_x509_cert_from_gio_cert(certificate)
@@ -154,9 +164,7 @@ class CertificateBox(Gtk.Box):
         self._ui.data_sha1.set_text(self._sha1)
         self._ui.data_sha256.set_text(self._sha256)
 
-        self.add(self._ui.certificate_box)
-
-        self._ui.connect_signals(self)
+        self.append(self._ui.certificate_box)
 
     def _on_copy_cert_info_button_clicked(self, _widget: Gtk.Button) -> None:
         clipboard_text = \
@@ -178,5 +186,7 @@ class CertificateBox(Gtk.Box):
             self._sha256 + '\n\n' + \
             _('Public Key: ') + self._pk_algorithm + ' ' + self._pk_size
 
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(clipboard_text, -1)
+        default_display = Gdk.Display.get_default()
+        if default_display is not None:
+            clipboard = default_display.get_clipboard()
+            clipboard.set(clipboard_text)

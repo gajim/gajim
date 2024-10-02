@@ -20,7 +20,7 @@ from gajim.common.types import ChatContactT
 
 class SecurityLabelSelector(Gtk.ComboBoxText):
     def __init__(self) -> None:
-        Gtk.ComboBoxText.__init__(self, no_show_all=True)
+        Gtk.ComboBoxText.__init__(self, visible=False)
 
         self._client: Client | None = None
         self._contact: ChatContactT | None = None

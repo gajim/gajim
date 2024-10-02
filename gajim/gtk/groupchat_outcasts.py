@@ -48,21 +48,19 @@ class GroupchatOutcasts(Gtk.Box):
         assert self_contact is not None
         self._own_affiliation = self_contact.affiliation.value
 
-        self._ui = get_builder('groupchat_outcast.ui')
+        self._ui = get_builder('groupchat_outcast.ui', self)
 
         self._treeview = self._ui.outcast_treeview
         self._store = self._ui.outcast_store
 
-        self.add(self._ui.main_box)
+        self.append(self._ui.main_box)
         self._apply_button = ApplyButtonBox(_('Apply'),
                                             on_clicked=self._on_apply)
-        self._ui.button_box.pack_end(self._apply_button, False, False, 0)
+        self._ui.button_box.append(self._apply_button)
 
         if self._own_affiliation in ('admin', 'owner'):
             self._ui.add_button.set_sensitive(True)
             self._ui.add_button.set_tooltip_text('')
-
-        self._ui.connect_signals(self)
 
         self._client.get_module('MUC').get_affiliation(
             self._contact.jid,

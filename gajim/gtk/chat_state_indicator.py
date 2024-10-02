@@ -24,11 +24,11 @@ class ChatStateIndicator(Gtk.Box):
         self._contact: types.ChatContactT | None = None
 
         self._composing_icon = Gtk.Image.new_from_icon_name(
-            'content-loading-symbolic', Gtk.IconSize.BUTTON
+            'content-loading-symbolic'
         )
-        self._composing_icon.set_no_show_all(True)
+        self._composing_icon.set_visible(False)
         self._composing_icon.get_style_context().add_class('chat-state-icon')
-        self.add(self._composing_icon)
+        self.append(self._composing_icon)
 
         self._label = Gtk.Label(
             max_width_chars=52,
@@ -36,8 +36,7 @@ class ChatStateIndicator(Gtk.Box):
         )
         self._label.get_style_context().add_class('dim-label')
         self._label.get_style_context().add_class('small-label')
-        self.add(self._label)
-        self._label.show()
+        self.append(self._label)
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         if self._contact is not None:

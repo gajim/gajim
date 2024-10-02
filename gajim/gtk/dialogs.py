@@ -169,7 +169,8 @@ class ConfirmationDialog(Gtk.MessageDialog):
                     Gtk.Button, self.get_widget_for_response(button.response))
                 widget.get_style_context().add_class(button.action.value)
 
-        self.format_secondary_markup(sec_text)
+        self.props.secondary_use_markup = True
+        self.props.secondary_text = sec_text
 
         self.connect('response', self._on_response)
 
@@ -192,9 +193,6 @@ class ConfirmationDialog(Gtk.MessageDialog):
         if button.callback is not None:
             button.callback(*button.args, **button.kwargs)
         self.destroy()
-
-    def show(self) -> None:
-        self.show_all()
 
 
 class ConfirmationCheckDialog(ConfirmationDialog):
@@ -221,13 +219,13 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         self._checkbutton.set_margin_end(30)
         label = self._checkbutton.get_child()
         assert isinstance(label, Gtk.Label)
-        label.set_line_wrap(True)
+        label.set_wrap_mode(Pango.WrapMode.WORD)
         label.set_max_width_chars(50)
         label.set_halign(Gtk.Align.START)
-        label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        label.set_wrap_mode(Pango.WrapMode.WORD)
         label.set_margin_start(10)
 
-        self.get_content_area().add(self._checkbutton)
+        self.get_content_area().append(self._checkbutton)
 
     def _on_response(self,
                      _dialog: Gtk.MessageDialog,
@@ -305,7 +303,7 @@ class InputDialog(ConfirmationDialog):
             self._entry.set_text(input_str)
             self._entry.select_region(0, -1)  # select all
 
-        self.get_content_area().add(self._entry)
+        self.get_content_area().append(self._entry)
 
     def _on_response(self,
                      _dialog: Gtk.MessageDialog,
@@ -322,23 +320,21 @@ class QuitDialog(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(
             self,
             application=app.app,
-            window_position=Gtk.WindowPosition.CENTER,
             show_menubar=False,
-            type_hint=Gdk.WindowTypeHint.DIALOG,
             modal=True,
             transient_for=app.window,
             title=_('Quit Gajim')
         )
 
-        self._ui = get_builder('quit_dialog.ui')
-        self._ui.connect_signals(self)
-        self.add(self._ui.box)
+        self._ui = get_builder('quit_dialog.ui', self)
 
-        self.connect('key-press-event', self._on_key_press)
+        self.set_child(self._ui.box)
 
-        self.show_all()
+        # self.connect('key-press-event', self._on_key_press)
 
-    def _on_key_press(self, _widget: QuitDialog, event: Gdk.EventKey) -> None:
+        self.show()
+
+    def _on_key_press(self, _widget: QuitDialog, event: Any) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
@@ -363,11 +359,10 @@ class ShortcutsWindow:
     def __init__(self):
         transient = app.app.get_active_window()
         assert transient
-        builder = get_builder('shortcuts_window.ui')
+        builder = get_builder('shortcuts_window.ui', self)
         self.window = cast(Gtk.Window, builder.get_object('shortcuts_window'))
         self.window.connect('destroy', self._on_window_destroy)
         self.window.set_transient_for(transient)
-        self.window.show_all()
         self.window.present()
 
     def _on_window_destroy(self, _widget: Gtk.Widget) -> None:

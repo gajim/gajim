@@ -34,6 +34,7 @@ from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import iterate_children
 from gajim.gtk.util import MultiLineLabel
 
 log = logging.getLogger('gajim.gtk.adhoc')
@@ -195,6 +196,7 @@ class Commands(Page):
         self._scrolled.get_style_context().add_class('gajim-scrolled')
         self._scrolled.set_max_content_height(400)
         self._scrolled.set_max_content_width(400)
+        self._scrolled.set_propagate_natural_height(True)
         self._scrolled.set_policy(Gtk.PolicyType.NEVER,
                                   Gtk.PolicyType.AUTOMATIC)
         self._treeview = Gtk.TreeView()
@@ -211,9 +213,8 @@ class Commands(Page):
         self._treeview.connect('row-activated', self._on_row_activate)
         self._treeview.set_search_equal_func(self._search_func)
 
-        self._scrolled.add(self._treeview)
-        self.pack_start(self._scrolled, True, True, 0)
-        self.show_all()
+        self._scrolled.set_child(self._treeview)
+        self.append(self._scrolled)
 
     @staticmethod
     def _search_func(model: Gtk.TreeModel,
@@ -261,7 +262,6 @@ class Stage(Page):
         self._notes: list[Gtk.Label] = []
         self._last_stage_data: AdHocCommand | None = None
         self.default = None
-        self.show_all()
 
     @property
     def stage_data(self) -> tuple[AdHocCommand,
@@ -289,7 +289,6 @@ class Stage(Page):
     def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
-            self._dataform_widget.destroy()
         if form is None:
             return
         form = dataforms.extend_form(node=form)
@@ -297,8 +296,7 @@ class Stage(Page):
         self._dataform_widget = DataFormWidget(form, options)
         self._dataform_widget.connect('is-valid', self._on_is_valid)
         self._dataform_widget.validate()
-        self._dataform_widget.show_all()
-        self.add(self._dataform_widget)
+        self.append(self._dataform_widget)
 
     def _show_notes(self, notes: list[AdHocCommandNote] | None):
         for note in self._notes:
@@ -315,7 +313,7 @@ class Stage(Page):
                 wrap_mode=Pango.WrapMode.WORD_CHAR)
             label.show()
             self._notes.append(label)
-            self.add(label)
+            self.append(label)
 
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
         self.complete = is_valid
@@ -348,9 +346,9 @@ class Completed(Page):
         self._icon_text = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self._icon_text.set_spacing(12)
         self._icon_text.set_halign(Gtk.Align.CENTER)
-        self._icon_text.add(self._icon)
-        self._icon_text.add(self._label)
-        self.add(self._icon_text)
+        self._icon_text.append(self._icon)
+        self._icon_text.append(self._label)
+        self.append(self._icon_text)
 
         self._notes = Gtk.Grid(row_spacing=6, column_spacing=12)
         self._notes.insert_column(0)
@@ -360,10 +358,8 @@ class Completed(Page):
         notes_box = Gtk.Box()
         notes_box.set_halign(Gtk.Align.CENTER)
         notes_box.set_vexpand(False)
-        notes_box.add(self._notes)
-        self.add(notes_box)
-
-        self.show_all()
+        notes_box.append(self._notes)
+        self.append(notes_box)
 
     def process_stage(self, stage_data: AdHocCommand) -> None:
         self._reset_severity()
@@ -379,7 +375,7 @@ class Completed(Page):
     def _show_icon_text(self, show: bool) -> None:
         if show:
             self.set_valign(Gtk.Align.CENTER)
-            self._icon_text.show_all()
+            self._icon_text.set_visible(True)
         else:
             self.set_valign(Gtk.Align.FILL)
             self._icon_text.hide()
@@ -394,7 +390,6 @@ class Completed(Page):
     def _show_form(self, form: Node | None) -> None:
         if self._dataform_widget is not None:
             self.remove(self._dataform_widget)
-            self._dataform_widget.destroy()
         if form is None:
             return
 
@@ -402,11 +397,11 @@ class Completed(Page):
 
         self._dataform_widget = DataFormWidget(
             form, options={'read-only': True})
-        self._dataform_widget.show_all()
-        self.add(self._dataform_widget)
+        self.append(self._dataform_widget)
 
     def _show_notes(self, notes: list[AdHocCommandNote]):
-        self._notes.foreach(self._remove_note_cell)
+        for note in iterate_children(self._notes):
+            self._notes.remove(note)
 
         for i, note in enumerate(notes):
             if len(notes) > 1:
@@ -436,10 +431,6 @@ class Completed(Page):
                 self._severity != AdHocNoteType.ERROR) or
                 severity == AdHocNoteType.ERROR):
             self._severity = severity
-
-    def _remove_note_cell(self, cell: Gtk.Widget) -> None:
-        self._notes.remove(cell)
-        cell.destroy()
 
     def get_visible_buttons(self) -> list[str]:
         return ['commands']
@@ -486,14 +477,11 @@ class SeverityIcon(Gtk.Image):
         ctx.remove_class('warning-color')
         ctx.remove_class('error-color')
         if severity == AdHocNoteType.INFO:
-            self.set_from_icon_name('object-select-symbolic',
-                    Gtk.IconSize.DIALOG)
+            self.set_from_icon_name('object-select-symbolic')
             ctx.add_class('success-color')
         elif severity == AdHocNoteType.WARN:
-            self.set_from_icon_name('dialog-warning-symbolic',
-                    Gtk.IconSize.DIALOG)
+            self.set_from_icon_name('dialog-warning-symbolic')
             ctx.add_class('warning-color')
         elif severity == AdHocNoteType.ERROR:
-            self.set_from_icon_name('dialog-error-symbolic',
-                    Gtk.IconSize.DIALOG)
+            self.set_from_icon_name('dialog-error-symbolic')
             ctx.add_class('error-color')

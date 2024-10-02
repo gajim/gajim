@@ -6,7 +6,6 @@ from typing import Any
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -32,14 +31,13 @@ class CodeWidget(Gtk.Box):
         header.set_spacing(6)
         header.get_style_context().add_class('code-widget-header')
         self._lang_label = Gtk.Label()
-        header.add(self._lang_label)
+        header.append(self._lang_label)
 
-        copy_button = Gtk.Button.new_from_icon_name(
-            'edit-copy-symbolic', Gtk.IconSize.MENU)
+        copy_button = Gtk.Button.new_from_icon_name('edit-copy-symbolic')
         copy_button.set_tooltip_text(_('Copy code snippet'))
         copy_button.connect('clicked', self._on_copy)
-        header.add(copy_button)
-        self.add(header)
+        header.append(copy_button)
+        self.append(header)
 
         self._textview = CodeTextview()
         self._scrolled = Gtk.ScrolledWindow()
@@ -50,14 +48,12 @@ class CodeWidget(Gtk.Box):
         self._scrolled.set_propagate_natural_width(True)
         self._scrolled.set_propagate_natural_height(True)
         self._scrolled.set_max_content_height(400)
-        self._scrolled.add(self._textview)
+        self._scrolled.set_child(self._textview)
 
-        self.add(self._scrolled)
+        self.append(self._scrolled)
 
     def _on_copy(self, _button: Gtk.Button) -> None:
-        text = self._textview.get_code()
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(text, -1)
+        self.get_clipboard().set(self._textview.get_code())
 
     def add_content(self, block: PreBlock):
         code, lang = self._prepare_code(block.text)

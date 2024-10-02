@@ -25,13 +25,11 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('SSLErrorDialog')
         self.set_application(app.app)
-        self.set_show_menubar(False)
         self.set_resizable(False)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_title(_('SSL Certificate Verification Error'))
 
-        self._ui = get_builder('ssl_error_dialog.ui')
-        self.add(self._ui.ssl_error_box)
+        self._ui = get_builder('ssl_error_dialog.ui', self)
+        self.set_child(self._ui.ssl_error_box)
 
         self.account = account
         self._error = error
@@ -42,8 +40,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
 
         self._process_error()
 
-        self._ui.connect_signals(self)
-        self.show_all()
+        self.show()
 
     def _process_error(self) -> None:
         self._ui.intro_text.set_text(
@@ -61,7 +58,7 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
             self._ui.connect_button.set_sensitive(True)
 
         else:
-            self._ui.connect_button.set_no_show_all(True)
+            self._ui.connect_button.set_visible(False)
             self._ui.connect_button.hide()
 
     def _on_view_cert_clicked(self, _button: Gtk.Button) -> None:

@@ -81,13 +81,12 @@ class ChatStack(Gtk.Stack, EventHelper):
         app.commands.connect('command-result', self._on_command_signal)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        box.add(self._chat_banner)
-        box.add(Gtk.Separator(margin_start=6, margin_end=6))
-        box.add(self._chat_control.widget)
-        box.add(self._message_action_box)
+        box.append(self._chat_banner)
+        box.append(Gtk.Separator(margin_start=6, margin_end=6))
+        box.append(self._chat_control.widget)
+        box.append(self._message_action_box)
 
-        dnd_icon = Gtk.Image.new_from_icon_name(
-            'mail-attachment-symbolic', Gtk.IconSize.DIALOG)
+        dnd_icon = Gtk.Image.new_from_icon_name('mail-attachment-symbolic')
         dnd_icon.set_vexpand(True)
         dnd_icon.set_valign(Gtk.Align.END)
         dnd_label = Gtk.Label(label=_('Drop files or contacts'))
@@ -98,47 +97,46 @@ class ChatStack(Gtk.Stack, EventHelper):
 
         self._drop_area = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        self._drop_area.set_no_show_all(True)
+        self._drop_area.set_visible(False)
         self._drop_area.set_hexpand(True)
         self._drop_area.set_vexpand(True)
         self._drop_area.get_style_context().add_class('solid-background')
-        self._drop_area.add(dnd_icon)
-        self._drop_area.add(dnd_label)
+        self._drop_area.append(dnd_icon)
+        self._drop_area.append(dnd_label)
 
         overlay = Gtk.Overlay()
         overlay.add_overlay(self._drop_area)
-        overlay.add(box)
-        overlay.connect('drag-data-received', self._on_drag_data_received)
-        overlay.connect('drag-motion', self._on_drag_motion)
-        overlay.connect('drag-leave', self._on_drag_leave)
+        overlay.set_child(box)
+        # overlay.connect('drag-data-received', self._on_drag_data_received)
+        # overlay.connect('drag-motion', self._on_drag_motion)
+        # overlay.connect('drag-leave', self._on_drag_leave) TODO GTK4
 
         if app.is_flatpak():
             target = DND_TARGET_FLATPAK
         else:
             target = DND_TARGET_URI_LIST
 
-        uri_entry = Gtk.TargetEntry.new(
-            target,
-            Gtk.TargetFlags.OTHER_APP,
-            TARGET_TYPE_URI_LIST)
-        dnd_list = [uri_entry,
-                    Gtk.TargetEntry.new(
-                        'OBJECT_DROP',
-                        Gtk.TargetFlags.SAME_APP,
-                        0)]
-        dst_targets = Gtk.TargetList.new([uri_entry])
-        dst_targets.add_text_targets(0)
+        # uri_entry = Gtk.TargetEntry.new(
+        #     target,
+        #     Gtk.TargetFlags.OTHER_APP,
+        #     TARGET_TYPE_URI_LIST)
+        # dnd_list = [uri_entry,
+        #             Gtk.TargetEntry.new(
+        #                 'OBJECT_DROP',
+        #                 Gtk.TargetFlags.SAME_APP,
+        #                 0)]
+        # dst_targets = Gtk.TargetList.new([uri_entry])
+        # dst_targets.add_text_targets(0)
 
-        overlay.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            dnd_list,
-            Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        overlay.drag_dest_set_target_list(dst_targets)
+        # overlay.drag_dest_set(
+        #     Gtk.DestDefaults.ALL,
+        #     dnd_list,
+        #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
+        # overlay.drag_dest_set_target_list(dst_targets)
 
         self.add_named(overlay, 'controls')
 
         self._connect_actions()
-        self.show_all()
 
         self.register_events([
             ('message-received', 85, self._on_message_received),
@@ -169,8 +167,11 @@ class ChatStack(Gtk.Stack, EventHelper):
 
     def show_chat(self, account: str, jid: JID) -> None:
         # Store (preserve) primary clipboard and restore it after switching
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_PRIMARY)
-        old_primary_clipboard = clipboard.wait_for_text()
+        # clipboard = self.get_primary_clipboard() TODO GTK4
+        # provider = clipboard.get_content()
+        # if provider is not None:
+        #     _, val = provider.get_value()
+        #     old_primary_clipboard = val
 
         self._last_quoted_id = None
 
@@ -244,10 +245,10 @@ class ChatStack(Gtk.Stack, EventHelper):
         app.plugin_manager.extension_point(
             'switch_contact', self._current_contact)
 
-        if old_primary_clipboard is not None:
-            GLib.idle_add(clipboard.set_text,
-                          old_primary_clipboard,
-                          -1)
+        # if old_primary_clipboard is not None: TODO GTK4
+        #     GLib.idle_add(clipboard.set_text,
+        #                   old_primary_clipboard,
+        #                   -1)
 
         GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
 
@@ -537,6 +538,9 @@ class ChatStack(Gtk.Stack, EventHelper):
             online and contact.supports_video and
             sys.platform != 'win32')
 
+        app.window.get_action('paste-as-quote').set_enabled(online)
+        app.window.get_action('paste-as-code-block').set_enabled(online)
+
         app.window.get_action('quote').set_enabled(online)
         app.window.get_action('mention').set_enabled(online)
         app.window.get_action('reply').set_enabled(online)
@@ -749,7 +753,7 @@ class ChatStack(Gtk.Stack, EventHelper):
                        _context: Gdk.DragContext,
                        _time: int
                        ) -> None:
-        self._drop_area.set_no_show_all(True)
+        self._drop_area.set_visible(False)
         self._drop_area.hide()
 
     def _on_drag_motion(self,
@@ -865,7 +869,7 @@ class ChatStack(Gtk.Stack, EventHelper):
     def _close_control(self) -> None:
         assert self._current_contact is not None
         app.window.activate_action(
-            'remove-chat',
+            'win.remove-chat',
             GLib.Variant('as',
                          [self._current_contact.account,
                           str(self._current_contact.jid)]))
@@ -895,15 +899,15 @@ class ChatPlaceholderBox(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
                          spacing=18)
         self.set_valign(Gtk.Align.CENTER)
-        image = Gtk.Image.new_from_icon_name(
-            'gajim-symbolic', Gtk.IconSize.from_name('100'))
+        image = Gtk.Image.new_from_icon_name('gajim-symbolic')
+        image.set_pixel_size(100)
         image.set_opacity(0.2)
-        self.add(image)
+        self.append(image)
 
         button = Gtk.Button(label=_('Start Chatting…'))
         button.set_halign(Gtk.Align.CENTER)
         button.connect('clicked', self._on_start_chatting)
-        self.add(button)
+        self.append(button)
 
     def _on_start_chatting(self, _button: Gtk.Button) -> None:
         app.app.activate_action('start-chat', GLib.Variant('as', ['', '']))

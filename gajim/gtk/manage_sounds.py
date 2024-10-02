@@ -44,8 +44,6 @@ class ManageSounds(Gtk.ApplicationWindow):
     def __init__(self, transient_for: Gtk.Window) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_name('ManageSounds')
         self.set_default_size(400, 400)
         self.set_resizable(True)
@@ -53,8 +51,8 @@ class ManageSounds(Gtk.ApplicationWindow):
         self.set_modal(True)
         self.set_title(_('Manage Sounds'))
 
-        self._ui = get_builder('manage_sounds.ui')
-        self.add(self._ui.manage_sounds)
+        self._ui = get_builder('manage_sounds.ui', self)
+        self.set_child(self._ui.manage_sounds)
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))
@@ -69,10 +67,11 @@ class ManageSounds(Gtk.ApplicationWindow):
 
         self._fill_sound_treeview()
 
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
-        self.show_all()
+        self.show()
 
     @staticmethod
     def _on_row_changed(model: Gtk.TreeModel,
@@ -151,6 +150,14 @@ class ManageSounds(Gtk.ApplicationWindow):
         snd_event_config_name = model[iter_][Column.CONFIG]
         play_sound(snd_event_config_name, None, force=True)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False

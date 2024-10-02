@@ -68,7 +68,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         chat_filter.connect('filter-changed', self._on_filter_changed)
 
         self._add_actions()
-        self.show_all()
 
         self.register_events([
             ('message-received', ged.GUI2, self._on_event),
@@ -157,7 +156,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
                              open_chat['jid'])
 
         self._chat_lists.pop(workspace_id)
-        chat_list.destroy()
+        # TODO GTK4
+        # chat_list.destroy()
 
     def _on_row_selected(self,
                          _chat_list: ChatList,

@@ -14,6 +14,7 @@ from collections.abc import Callable
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
 
@@ -43,38 +44,43 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('Assistant')
         self.set_default_size(width, height)
         self.set_resizable(True)
         self.set_transient_for(transient_for)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self._pages: dict[str, Page] = {}
         self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
         self._button_visible_func = None
 
-        self._ui = get_builder('assistant.ui')
-        self.add(self._ui.main_grid)
+        self._ui = get_builder('assistant.ui', self)
+        self.set_child(self._ui.main_grid)
 
         self._ui.stack.set_transition_duration(transition_duration)
 
-        self.connect('key-press-event', self._on_key_press_event)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self.__on_destroy)
-        self._ui.connect_signals(self)
 
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit('page-changed', page_name)
-        Gtk.ApplicationWindow.show_all(self)
+        Gtk.ApplicationWindow.show(self)
 
-    def _on_key_press_event(self,
-                            _widget: Gtk.Widget,
-                            event: Gdk.EventKey
-                            ) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -119,7 +125,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def set_default_button(self, button_name: str) -> None:
         button, _ = self._buttons[button_name]
-        button.grab_default()
+        self.set_default_widget(button)
 
     def add_button(self,
                    name: str,
@@ -128,13 +134,12 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
                    complete: bool = False
                    ) -> None:
         button = Gtk.Button(label=label,
-                            can_default=True,
-                            no_show_all=True)
+                            visible=False)
         button.connect('clicked', self.__on_button_clicked)
         if css_class is not None:
             button.get_style_context().add_class(css_class)
         self._buttons[name] = (button, complete)
-        self._ui.action_area.pack_end(button, False, False, 0)
+        self._ui.action_area.append(button)
 
     def add_pages(self, pages: dict[str, Page]):
         for name, widget in pages.items():
@@ -234,23 +239,22 @@ class DefaultPage(Page):
         self._heading = Gtk.Label()
         self._heading.get_style_context().add_class('large-header')
         self._heading.set_max_width_chars(30)
-        self._heading.set_line_wrap(True)
+        self._heading.set_wrap_mode(Pango.WrapMode.WORD)
         self._heading.set_halign(Gtk.Align.CENTER)
         self._heading.set_justify(Gtk.Justification.CENTER)
 
-        icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
+        icon = Gtk.Image.new_from_icon_name(icon_name)
         icon.get_style_context().add_class(icon_css_class)
 
         self._label = Gtk.Label()
         self._label.set_max_width_chars(50)
-        self._label.set_line_wrap(True)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_halign(Gtk.Align.CENTER)
         self._label.set_justify(Gtk.Justification.CENTER)
 
-        self.pack_start(self._heading, False, True, 0)
-        self.pack_start(icon, False, True, 0)
-        self.pack_start(self._label, False, True, 0)
-        self.show_all()
+        self.append(self._heading)
+        self.append(icon)
+        self.append(self._label)
 
     def set_heading(self, heading: str) -> None:
         self._heading.set_text(heading)
@@ -282,17 +286,15 @@ class ProgressPage(Page):
 
         self._label = Gtk.Label()
         self._label.set_max_width_chars(50)
-        self._label.set_line_wrap(True)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_halign(Gtk.Align.CENTER)
         self._label.set_justify(Gtk.Justification.CENTER)
 
         spinner = Gtk.Spinner()
         spinner.start()
 
-        self.pack_start(spinner, True, True, 0)
-        self.pack_start(self._label, False, True, 0)
-
-        self.show_all()
+        self.append(spinner)
+        self.append(self._label)
 
     def set_text(self, text: str) -> None:
         self._label.set_text(text)

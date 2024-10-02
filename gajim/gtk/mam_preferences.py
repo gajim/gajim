@@ -29,31 +29,31 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_title(_('Archiving Preferences for %s') % account)
 
-        self.connect_after('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect_after('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self.account = account
         self._client = app.get_client(account)
         self._destroyed = False
 
-        self._ui = get_builder('mam_preferences.ui')
-        self.add(self._ui.mam_box)
+        self._ui = get_builder('mam_preferences.ui', self)
+        self.set_child(self._ui.mam_box)
 
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
         self._set_mam_box_state(False)
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-        self.show_all()
 
         self._activate_spinner()
 
         self._client.get_module('MAM').request_preferences(
             callback=self._mam_prefs_received)
+
+        self.show()
 
     def _on_destroy(self, widget: MamPreferences) -> None:
         self._destroyed = True
@@ -156,8 +156,14 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
         self._spinner.hide()
         self._spinner.stop()
 
-    def _on_key_press(self,
-                      _widget: MamPreferences,
-                      event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False

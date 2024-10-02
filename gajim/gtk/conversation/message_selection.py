@@ -19,7 +19,7 @@ class MessageSelection(Gtk.Grid):
 
     def __init__(self) -> None:
         Gtk.Grid.__init__(self, row_spacing=18, column_spacing=6)
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
 
@@ -39,11 +39,11 @@ class MessageSelection(Gtk.Grid):
         self.attach(cancel_button, 1, 1, 1, 1)
 
     def _on_copy_clicked(self, _button: Gtk.Button) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
         self.emit('copy')
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
         self.emit('cancel')

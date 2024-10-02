@@ -16,6 +16,7 @@ from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
+from gajim.gtk.util import convert_surface_to_texture
 
 
 class UserStatus(BaseRow):
@@ -36,10 +37,10 @@ class UserStatus(BaseRow):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        show_icon = Gtk.Image()
+        show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
         show_icon.set_opacity(0.6)
         surface = get_show_circle(show, 16, self.get_scale_factor())
-        show_icon.set_from_surface(surface)
+        show_icon.set_from_paintable(convert_surface_to_texture(surface))
         self.grid.attach(show_icon, 1, 0, 1, 1)
 
         show = get_uf_show(show)
@@ -47,6 +48,7 @@ class UserStatus(BaseRow):
         message = _('{nick} is now {show}').format(nick=name, show=show)
 
         self._label = SimpleLabel()
+        self._label.set_valign(Gtk.Align.END)
         self._label.set_text(message)
         self._label.get_style_context().add_class('gajim-status-message')
         self.grid.attach(self._label, 2, 0, 1, 1)
@@ -61,5 +63,3 @@ class UserStatus(BaseRow):
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.END)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
-
-        self.show_all()

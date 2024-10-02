@@ -38,31 +38,29 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         EventHelper.__init__(self)
         self.set_name('CreateGroupchat')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(500, -1)
         self.set_show_menubar(False)
         self.set_resizable(True)
         self.set_title(_('Create Group Chat'))
 
-        self._ui = get_builder('groupchat_creation.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('groupchat_creation.ui', self)
+        self.set_child(self._ui.stack)
 
         self._account = account
         self._destroyed: bool = False
 
         self._create_entry_completion()
 
-        self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
 
         self.register_events([
             ('account-connected', ged.GUI2, self._on_account_state),
             ('account-disconnected', ged.GUI2, self._on_account_state)
         ])
-
-        self.show_all()
 
         if app.get_number_of_connected_accounts() == 0:
             # This can happen under rare circumstances
@@ -71,6 +69,8 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._update_accounts(account)
         self._ui.create_button.grab_focus()
+
+        self.show()
 
     def _on_account_state(self,
                           _event: AccountConnected | AccountDisconnected
@@ -135,9 +135,17 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
             return 'muc.example.org'
         return str(service_jid)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_account_combo_changed(self, combo: Gtk.ComboBox) -> None:
         self._account = combo.get_active_id()

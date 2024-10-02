@@ -57,16 +57,13 @@ class FileTransferRow(BaseRow, EventHelper):
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)
 
-        self._ui = get_builder('file_transfer.ui')
+        self._ui = get_builder('file_transfer.ui', self)
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
         self._ui.file_name.set_text(transfer.filename)
         self._ui.transfer_description.set_text(
             transfer.get_state_description())
 
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-
-        self.show_all()
 
     def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True

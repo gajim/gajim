@@ -18,6 +18,7 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
+from gajim.gtk.util import iterate_children
 
 ContentT = ParsingResult | QuoteBlock
 
@@ -41,7 +42,7 @@ class MessageWidget(Gtk.Box):
         return self._action_phrase_text
 
     def set_selectable(self, selectable: bool) -> None:
-        for widget in self.get_children():
+        for widget in iterate_children(self):
             if isinstance(widget, PlainWidget):
                 widget.set_selectable(selectable)
 
@@ -68,8 +69,7 @@ class MessageWidget(Gtk.Box):
         self.clear()
         widget = PlainWidget(self._account, self._selectable)
         widget.add_action_phrase(text, nickname)
-        widget.show_all()
-        self.add(widget)
+        self.append(widget)
 
         self._action_phrase_text = text.replace('/me', f'* {nickname}', 1)
 
@@ -80,37 +80,36 @@ class MessageWidget(Gtk.Box):
             if isinstance(block, PlainBlock):
                 widget = PlainWidget(self._account, self._selectable)
                 widget.add_content(block)
-                self.add(widget)
+                self.append(widget)
                 continue
 
             if isinstance(block, PreBlock):
                 widget = CodeWidget(self._account)
                 widget.add_content(block)
-                self.add(widget)
+                self.append(widget)
                 continue
 
             if isinstance(block, QuoteBlock):
                 message_widget = MessageWidget(self._account, self._selectable)
                 message_widget.add_content(block)
                 widget = QuoteWidget(self._account)
-                widget.add(message_widget)
-                self.add(widget)
+                widget.append(message_widget)
+                self.append(widget)
                 continue
-
-        self.show_all()
 
     def _add_read_more_button(self, text: str) -> None:
         link_button = Gtk.LinkButton(label=_('[read more]'))
         link_button.set_halign(Gtk.Align.START)
         link_button.connect('activate-link', self._on_read_more, text)
-        self.add(link_button)
+        self.append(link_button)
 
     def _on_read_more(self, _button: Gtk.LinkButton, text: str) -> bool:
         FullMessageWindow(text)
         return True
 
     def clear(self) -> None:
-        self.foreach(self.remove)
+        for child in iterate_children(self):
+            self.remove(child)
 
 
 class FullMessageWindow(Gtk.ApplicationWindow):
@@ -128,20 +127,21 @@ class FullMessageWindow(Gtk.ApplicationWindow):
 
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_hexpand(True)
-        scrolled.set_shadow_type(Gtk.ShadowType.IN)
-        scrolled.add(textview)
+        scrolled.set_child(textview)
 
         box = Gtk.Box()
-        box.add(scrolled)
+        box.append(scrolled)
 
-        self.add(box)
-        self.show_all()
+        self.set_child(box)
 
-        self.connect('key-press-event', self._on_key_press_event)
+        self.show()
+
+        # TODO GTK4
+        # self.connect('key-press-event', self._on_key_press_event)
 
     def _on_key_press_event(self,
                             _widget: Gtk.Widget,
-                            event: Gdk.EventKey
+                            event: Any
                             ) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()

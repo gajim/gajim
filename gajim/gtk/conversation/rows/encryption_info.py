@@ -29,10 +29,9 @@ class EncryptionInfoRow(BaseRow):
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
 
-        icon = Gtk.Image.new_from_icon_name('channel-secure-symbolic',
-                                            Gtk.IconSize.LARGE_TOOLBAR)
+        icon = Gtk.Image.new_from_icon_name('channel-secure-symbolic')
         icon.get_style_context().add_class('dim-label')
-        avatar_placeholder.add(icon)
+        avatar_placeholder.append(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
         timestamp_widget = DateTimeLabel(self.timestamp)
@@ -50,8 +49,6 @@ class EncryptionInfoRow(BaseRow):
             button.set_halign(Gtk.Align.START)
             button.connect('clicked', self._on_manage_trust_clicked)
             self.grid.attach(button, 1, 2, 1, 1)
-
-        self.show_all()
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         contact = self._client.get_module('Contacts').get_contact(

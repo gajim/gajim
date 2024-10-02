@@ -24,20 +24,18 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('WorkspaceDialog')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Workspace Settings'))
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_size_request(500, 600)
 
         self._workspace_id = workspace_id
 
-        self._ui = get_builder('workspace_dialog.ui')
-        self.add(self._ui.box)
+        self._ui = get_builder('workspace_dialog.ui', self)
+        self.set_child(self._ui.box)
 
         self._avatar_selector = AvatarSelector()
         self._avatar_selector.set_size_request(200, 200)
-        self._ui.image_box.add(self._avatar_selector)
+        self._ui.image_box.append(self._avatar_selector)
 
         name: str = _('My Workspace')
         color: str | None = None
@@ -68,14 +66,12 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
         self._update_avatar()
-        self._ui.save_button.grab_default()
+        # self._ui.save_button.grab_default() GTK4 TODO
 
-        self._ui.connect_signals(self)
+        # self.connect('key-press-event', self._on_key_press)
+        self.show()
 
-        self.connect('key-press-event', self._on_key_press)
-        self.show_all()
-
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 
@@ -114,17 +110,19 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         scale = self.get_scale_factor()
         if self._avatar_sha is not None:
             assert self._workspace_id is not None
-            surface = app.app.avatar_storage.get_workspace_surface(
+            texture = app.app.avatar_storage.get_workspace_texture(
                 self._workspace_id,
                 AvatarSize.WORKSPACE_EDIT,
                 scale)
         else:
-            surface = make_workspace_avatar(
+            texture = make_workspace_avatar(
                 name,
                 rgba_to_float(rgba),
                 AvatarSize.WORKSPACE_EDIT,
                 scale)
-        self._ui.preview.set_from_surface(surface)
+
+        self._ui.preview.set_pixel_size(AvatarSize.WORKSPACE_EDIT)
+        self._ui.preview.set_from_paintable(texture)
 
     def _get_avatar_data(self) -> bytes | None:
         if not self._avatar_selector.get_prepared():

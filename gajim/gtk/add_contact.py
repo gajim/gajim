@@ -216,8 +216,8 @@ class Address(Page):
         self._account = account
         self._jid = jid
 
-        self._ui = get_builder('add_contact.ui')
-        self.add(self._ui.address_box)
+        self._ui = get_builder('add_contact.ui', self)
+        self.append(self._ui.address_box)
 
         self._ui.account_combo.connect('changed', self._on_account_changed)
         self._ui.address_entry.connect('changed', self._set_complete)
@@ -243,8 +243,6 @@ class Address(Page):
             self._ui.address_entry.set_text(str(jid))
 
         self._set_complete()
-
-        self.show_all()
 
     def get_visible_buttons(self) -> list[str]:
         return ['next']
@@ -341,12 +339,10 @@ class Contact(Page):
         self._account: str | None = None
         self._contact: types.BareContact | None = None
 
-        self._ui = get_builder('add_contact.ui')
-        self.add(self._ui.contact_grid)
+        self._ui = get_builder('add_contact.ui', self)
+        self.append(self._ui.contact_grid)
 
         self._ui.contact_info_button.connect('clicked', self._on_info_clicked)
-
-        self.show_all()
 
     def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
@@ -395,13 +391,11 @@ class Gateway(Page):
         self._account: str | None = None
         self._result: DiscoInfo | None = None
 
-        self._ui = get_builder('add_contact.ui')
-        self.add(self._ui.gateway_box)
+        self._ui = get_builder('add_contact.ui', self)
+        self.append(self._ui.gateway_box)
 
         self._ui.register_button.connect('clicked', self._on_register_clicked)
         self._ui.commands_button.connect('clicked', self._on_command_clicked)
-
-        self.show_all()
 
     def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
@@ -419,8 +413,7 @@ class Gateway(Page):
                 icon_name = 'gajim-agent-sms'
             if result.gateway_type == 'irc':
                 icon_name = 'gajim-agent-irc'
-            self._ui.gateway_image.set_from_icon_name(
-                icon_name, Gtk.IconSize.DIALOG)
+            self._ui.gateway_image.set_from_icon_name(icon_name)
             gateway_name = result.gateway_name or str(self._result.jid)
             if not result.gateway_type:
                 self._ui.gateway_label.set_text(gateway_name)
@@ -439,8 +432,7 @@ class Gateway(Page):
                     icon_name = 'gajim-agent-irc'
                     identity_name = identity.name or str(self._result.jid)
                     identity_type = identity.type
-            self._ui.gateway_image.set_from_icon_name(
-                icon_name, Gtk.IconSize.DIALOG)
+            self._ui.gateway_image.set_from_icon_name(icon_name)
             if not identity_type:
                 self._ui.gateway_label.set_text(identity_name)
             else:
@@ -486,15 +478,13 @@ class GroupChat(Page):
         heading = Gtk.Label(label=_('Join Group Chat?'))
         heading.get_style_context().add_class('large-header')
         heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
+        heading.set_natural_wrap_mode(Gtk.NaturalWrapMode.WORD)
         heading.set_halign(Gtk.Align.CENTER)
         heading.set_justify(Gtk.Justification.CENTER)
-        self.pack_start(heading, False, True, 0)
+        self.append(heading)
 
         self._info_box = GroupChatInfoScrolled(minimal=True)
-        self.pack_start(self._info_box, True, True, 0)
-
-        self.show_all()
+        self.append(self._info_box)
 
     def get_visible_buttons(self) -> list[str]:
         return ['back', 'join']

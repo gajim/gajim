@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Iterator
 from typing import cast
 
 import locale
@@ -47,7 +47,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import AccountBadge, iterate_listbox_children
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import GroupBadge
@@ -70,10 +70,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('StartChatDialog')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_title(_('Start / Join Chat'))
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(-1, 600)
         self.ready_to_destroy = False
         self._parameter_form: MuclumbusResult | None = None
@@ -82,11 +80,11 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._search_stopped = False
         self._redirected = False
 
-        self._ui = get_builder('start_chat_dialog.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('start_chat_dialog.ui', self)
+        self.set_child(self._ui.stack)
 
         self._nick_chooser = NickChooser()
-        self._ui.join_box.pack_start(self._nick_chooser, True, False, 0)
+        self._ui.join_box.append(self._nick_chooser)
 
         # Helper for the case where we don't receive a disco info
         self._new_chat_row: ContactRow | None = None
@@ -120,17 +118,17 @@ class StartChatDialog(Gtk.ApplicationWindow):
         self._current_listbox = self._ui.listbox
 
         self._muc_info_box = GroupChatInfoScrolled()
-        self._ui.info_box.add(self._muc_info_box)
+        self._ui.info_box.append(self._muc_info_box)
 
-        self._ui.infobar.set_revealed(app.settings.get('show_help_start_chat'))
+        # self._ui.infobar.set_revealed(app.settings.get('show_help_start_chat')) TODO GTK4
 
         self._current_filter = 'all'
         self._chat_filter = ChatFilter()
         self._chat_filter.connect(
             'filter-changed', self._on_chat_filter_changed)
-        self._ui.filter_bar_revealer.add(self._chat_filter)
+        self._ui.filter_bar_revealer.set_child(self._chat_filter)
 
-        self.connect('key-press-event', self._on_key_press)
+        # self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
         if rows:
@@ -142,13 +140,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._ui.search_entry.set_text(initial_jid)
 
         self.select_first_row()
-        self._ui.connect_signals(self)
-        self.show_all()
+        self.show()
 
     def remove_row(self, account: str, jid: str) -> None:
-        for row in cast(list[ContactRow], self._ui.listbox.get_children()):
+        for row in cast(list[ContactRow], list(iterate_listbox_children(self._ui.listbox))):
             if row.account == account and row.jid == jid:
-                row.destroy()
+                self._ui.listbox.remove(row)
                 return
 
     def _global_search_active(self) -> bool:
@@ -201,7 +198,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _load_contacts(self, rows: list[ContactRow]) -> None:
         for row in rows:
-            self._ui.listbox.add(row)
+            self._ui.listbox.append(row)
 
         self._ui.listbox.set_sort_func(self._sort_func, None)
 
@@ -224,7 +221,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._on_select_clicked()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> int:
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> int:
         is_search = self._ui.stack.get_visible_child_name() == 'search'
         if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
             if not is_search:
@@ -567,12 +564,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _show_search_entry_error(self, state: bool):
         icon_name = 'dialog-warning-symbolic' if state else None
-        self._ui.search_entry.set_icon_from_icon_name(
-            Gtk.EntryIconPosition.SECONDARY,
-            icon_name)
-        self._ui.search_entry.set_icon_tooltip_text(
-            Gtk.EntryIconPosition.SECONDARY,
-            _('Invalid Address'))
+        # self._ui.search_entry.set_icon_from_icon_name( TODO GTK4
+        #     Gtk.EntryIconPosition.SECONDARY,
+        #     icon_name)
+        # self._ui.search_entry.set_icon_tooltip_text(
+        #     Gtk.EntryIconPosition.SECONDARY,
+        #     _('Invalid Address'))
 
     def _update_new_contact_rows(self, search_text: str) -> None:
         for row in self.new_contact_rows.values():
@@ -748,7 +745,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
 
     def _on_destroy(self, *args: Any) -> None:
         self._ui.listbox.set_filter_func(None)
-        self._ui.listbox.destroy()
         self._destroyed = True
         app.cancel_tasks(self)
         app.check_finalize(self)
@@ -780,7 +776,7 @@ class ContactRow(Gtk.ListBoxRow):
 
         image = self._get_avatar_image(contact)
         image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
-        grid.add(image)
+        grid.attach(image, 0, 0, 1, 1)
 
         self._tooltip = ContactTooltip()
         image.set_has_tooltip(True)
@@ -798,12 +794,12 @@ class ContactRow(Gtk.ListBoxRow):
         self.name_label.set_width_chars(20)
         self.name_label.set_halign(Gtk.Align.START)
         self.name_label.get_style_context().add_class('bold14')
-        meta_box.add(self.name_label)
+        meta_box.append(self.name_label)
 
         if contact and not contact.is_groupchat:
             if idle := contact.idle_datetime:
                 idle_badge = IdleBadge(idle)
-                meta_box.add(idle_badge)
+                meta_box.append(idle_badge)
 
         if contact and not contact.is_groupchat and (status := contact.status):
             self.status_label = Gtk.Label(
@@ -815,7 +811,7 @@ class ContactRow(Gtk.ListBoxRow):
             )
             self.status_label.get_style_context().add_class('dim-label')
             self.status_label.get_style_context().add_class('small-label')
-            meta_box.add(self.status_label)
+            meta_box.append(self.status_label)
 
         grid.attach(meta_box, 1, 0, 1, 3)
 
@@ -825,23 +821,22 @@ class ContactRow(Gtk.ListBoxRow):
             account_badge.set_halign(Gtk.Align.END)
             account_badge.set_valign(Gtk.Align.START)
             account_badge.set_hexpand(True)
-            badge_box.add(account_badge)
+            badge_box.append(account_badge)
 
         if contact and not contact.is_groupchat and not contact.is_pm_contact:
             groups = contact.groups
             for group in groups:
                 group_badge = GroupBadge(group)
-                badge_box.add(group_badge)
+                badge_box.append(group_badge)
 
         grid.attach(badge_box, 2, 0, 1, 3)
 
         self._grid = grid
 
-        eventbox = Gtk.EventBox()
-        eventbox.connect('button-press-event', self._popup_menu)
-        eventbox.add(grid)
-        self.add(eventbox)
-        self.show_all()
+        eventbox = Gtk.Box()
+        # eventbox.connect('button-press-event', self._popup_menu)
+        eventbox.append(grid)
+        self.set_child(eventbox)
 
     def _on_query_tooltip(self,
                           _img: Gtk.Image,
@@ -856,8 +851,8 @@ class ContactRow(Gtk.ListBoxRow):
         return v
 
     def _popup_menu(self,
-                    _widget: Gtk.EventBox,
-                    event: Gdk.EventButton
+                    _widget: Gtk.Box,
+                    event: Any
                     ) -> None:
         if not self.groupchat:
             return
@@ -875,12 +870,11 @@ class ContactRow(Gtk.ListBoxRow):
             icon_name = 'avatar-default'
             if self.groupchat:
                 icon_name = get_status_icon_name('muc-inactive')
-            return Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DND)
+            return Gtk.Image.new_from_icon_name(icon_name)
 
         scale = self.get_scale_factor()
-        surface = contact.get_avatar(AvatarSize.CHAT, scale)
-        assert not isinstance(surface, GdkPixbuf.Pixbuf)
-        return Gtk.Image.new_from_surface(surface)
+        texture = contact.get_avatar(AvatarSize.CHAT, scale)
+        return Gtk.Image.new_from_paintable(texture)
 
     def update_jid(self, jid: JID) -> None:
         self.jid = jid
@@ -904,45 +898,36 @@ class GlobalSearch(Gtk.ListBox):
         self.set_activate_on_single_click(False)
         self._progress: ProgressRow | None = None
         self._add_placeholder()
-        self.show_all()
 
     def _add_placeholder(self) -> None:
         placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
         placeholder.set_halign(Gtk.Align.CENTER)
         placeholder.set_valign(Gtk.Align.CENTER)
-        icon = Gtk.Image.new_from_icon_name('system-search-symbolic',
-                                            Gtk.IconSize.DIALOG)
+        icon = Gtk.Image.new_from_icon_name('system-search-symbolic')
         icon.get_style_context().add_class('dim-label')
         label = Gtk.Label(label=_('Search for group chats globally\n'
                                   '(press Return to start search)'))
         label.get_style_context().add_class('dim-label')
         label.set_justify(Gtk.Justification.CENTER)
         label.set_max_width_chars(35)
-        placeholder.add(icon)
-        placeholder.add(label)
-        placeholder.show_all()
+        placeholder.append(icon)
+        placeholder.append(label)
         self.set_placeholder(placeholder)
-
-    def remove_all(self) -> None:
-        def remove(row: Gtk.ListBoxRow) -> None:
-            row.destroy()
-        self.foreach(remove)
 
     def remove_progress(self) -> None:
         assert self._progress
         self.remove(self._progress)
-        self._progress.destroy()
 
     def start_search(self) -> None:
         self._progress = ProgressRow()
-        super().add(self._progress)
+        self.append(self._progress)
 
     def end_search(self) -> None:
         assert self._progress
         self._progress.stop()
 
     def add(self, row: ResultRow) -> None:
-        super().add(row)
+        self.append(row)
         if self.get_selected_row() is None:
             row_ = self.get_row_at_index(1)
             if row_ is not None:
@@ -1002,17 +987,17 @@ class ResultRow(Gtk.ListBoxRow):
         description_label.get_style_context().add_class('dim-label')
 
         main_box = Gtk.Box(spacing=12)
-        self.add(main_box)
+        self.set_child(main_box)
 
         name_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
             hexpand=True,
             tooltip_text=item.jid
         )
-        name_box.add(name_label)
-        name_box.add(description_label)
+        name_box.append(name_label)
+        name_box.append(description_label)
 
-        main_box.add(name_box)
+        main_box.append(name_box)
 
         language_code = item.language.upper()
         if len(language_code) < 2:
@@ -1030,7 +1015,7 @@ class ResultRow(Gtk.ListBoxRow):
             label=get_country_flag_from_code(language_code),
             tooltip_text=_('Language: %s') % item.language
         )
-        main_box.add(language_label)
+        main_box.append(language_label)
 
         users_box = Gtk.Box(
             spacing=6,
@@ -1039,17 +1024,14 @@ class ResultRow(Gtk.ListBoxRow):
         users_box.get_style_context().add_class('dim-label')
 
         users_icon = Gtk.Image.new_from_icon_name(
-            'system-users-symbolic',
-            Gtk.IconSize.BUTTON
+            'system-users-symbolic'
         )
-        users_box.add(users_icon)
+        users_box.append(users_icon)
 
         users_count_label = Gtk.Label(label=item.nusers)
-        users_box.add(users_count_label)
+        users_box.append(users_count_label)
 
-        main_box.add(users_box)
-
-        self.show_all()
+        main_box.append(users_box)
 
 
 class ProgressRow(Gtk.ListBoxRow):
@@ -1065,17 +1047,16 @@ class ProgressRow(Gtk.ListBoxRow):
         self._count_label = Gtk.Label(label=self._text % 0)
         self._count_label.get_style_context().add_class('bold')
         self._finished_image = Gtk.Image.new_from_icon_name(
-            'emblem-ok-symbolic', Gtk.IconSize.MENU)
+            'emblem-ok-symbolic')
         self._finished_image.get_style_context().add_class('success-color')
-        self._finished_image.set_no_show_all(True)
+        self._finished_image.set_visible(False)
 
         box = Gtk.Box()
         box.set_spacing(6)
-        box.add(self._finished_image)
-        box.add(self._spinner)
-        box.add(self._count_label)
-        self.add(box)
-        self.show_all()
+        box.append(self._finished_image)
+        box.append(self._spinner)
+        box.append(self._count_label)
+        self.set_child(box)
 
     def update(self) -> None:
         self._count += 1

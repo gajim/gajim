@@ -141,7 +141,7 @@ class VCardGrid(Gtk.Grid):
 
         self.set_column_spacing(12)
         self.set_row_spacing(12)
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.set_visible(True)
         self.set_halign(Gtk.Align.CENTER)
         self.set_size_request(300, -1)
@@ -371,9 +371,7 @@ class AdrBox(Gtk.Box):
         for field in ADR_FIELDS:
             entry = AdrEntry(prop, field)
             entry.connect('notify::text', self._on_text_changed, field)
-            self.add(entry)
-
-        self.show_all()
+            self.append(entry)
 
     def _on_text_changed(self,
                          entry: Gtk.Entry,
@@ -412,7 +410,7 @@ class AdrBoxReadOnly(Gtk.Box):
         for field in ADR_FIELDS:
             label = AdrLabel(prop, field)
             self._labels[field] = label
-            self.add(label)
+            self.append(label)
 
     def set_field(self, field: str, value: str) -> None:
         self._labels[field].set_text(value)
@@ -509,10 +507,9 @@ class RemoveButton(Gtk.Button):
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
-        image = Gtk.Image.new_from_icon_name('user-trash-symbolic',
-                                             Gtk.IconSize.MENU)
-        self.set_image(image)
-        self.set_no_show_all(True)
+        image = Gtk.Image.new_from_icon_name('user-trash-symbolic')
+        self.set_child(image)
+        self.set_visible(False)
 
 
 class VCardProperty:
@@ -535,8 +532,7 @@ class VCardProperty:
                                         self._on_type_changed)
             type_ = self._type_combobox.get_active_id()
             icon_name = self._get_icon_name(type_)
-            self._type_image = Gtk.Image.new_from_icon_name(
-                icon_name, Gtk.IconSize.MENU)
+            self._type_image = Gtk.Image.new_from_icon_name(icon_name)
             self._type_image.set_tooltip_text(TYPE_VALUES[type_])
 
             if prop.name == 'adr':
@@ -558,7 +554,7 @@ class VCardProperty:
     def _on_type_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:
         type_ = self._type_combobox.get_active_id()
         icon_name = self._get_icon_name(type_)
-        self._type_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        self._type_image.set_from_icon_name(icon_name)
         self._type_image.set_tooltip_text(TYPE_VALUES[type_])
 
     def _on_remove_clicked(self, button: Gtk.Button) -> None:
@@ -567,7 +563,7 @@ class VCardProperty:
     @property
     def row_number(self) -> int:
         grid = self._desc_label.get_parent()
-        return grid.child_get_property(self._desc_label, 'top-attach')
+        return grid.query_child(self._desc_label).row
 
     def get_base_property(self):
         return self._prop
@@ -625,7 +621,7 @@ class MultiLineProperty(VCardProperty):
         self._edit_scrolled = Gtk.ScrolledWindow()
         self._edit_scrolled.set_policy(Gtk.PolicyType.NEVER,
                                        Gtk.PolicyType.AUTOMATIC)
-        self._edit_scrolled.add(self._edit_text_view)
+        self._edit_scrolled.set_child(self._edit_text_view)
         self._edit_scrolled.set_valign(Gtk.Align.CENTER)
         self._edit_scrolled.set_size_request(-1, 100)
         self._edit_scrolled.get_style_context().add_class('profile-scrolled')
@@ -638,7 +634,7 @@ class MultiLineProperty(VCardProperty):
         self._read_scrolled = Gtk.ScrolledWindow()
         self._read_scrolled.set_policy(Gtk.PolicyType.NEVER,
                                        Gtk.PolicyType.AUTOMATIC)
-        self._read_scrolled.add(self._read_text_view)
+        self._read_scrolled.set_child(self._read_text_view)
         self._read_scrolled.set_valign(Gtk.Align.CENTER)
         self._read_scrolled.set_size_request(-1, 100)
         self._read_scrolled.get_style_context().add_class(
@@ -660,14 +656,13 @@ class DateProperty(VCardProperty):
         self._value_entry.connect('notify::text', self._on_text_changed)
 
         self._calendar_button = Gtk.MenuButton()
-        image = Gtk.Image.new_from_icon_name(
-            'x-office-calendar-symbolic', Gtk.IconSize.BUTTON)
-        self._calendar_button.set_image(image)
+        image = Gtk.Image.new_from_icon_name('x-office-calendar-symbolic')
+        # TODO GTK4
+        # self._calendar_button.set_image(image)
         self._calendar_button.connect(
             'clicked', self._on_calendar_button_clicked)
-        self._box.add(self._value_entry)
-        self._box.add(self._calendar_button)
-        self._box.show_all()
+        self._box.append(self._value_entry)
+        self._box.append(self._calendar_button)
 
         self.calendar = Gtk.Calendar(year=1980, month=5, day=15)
         self.calendar.set_visible(True)
@@ -675,7 +670,7 @@ class DateProperty(VCardProperty):
             'day-selected', self._on_calendar_day_selected)
 
         popover = Gtk.Popover()
-        popover.add(self.calendar)
+        popover.set_child(self.calendar)
         self._calendar_button.set_popover(popover)
 
         self._value_label = ValueLabel(prop, account)
@@ -719,13 +714,12 @@ class KeyProperty(VCardProperty):
         self._scrolled_window = Gtk.ScrolledWindow()
         self._scrolled_window.set_policy(Gtk.PolicyType.NEVER,
                                          Gtk.PolicyType.AUTOMATIC)
-        self._scrolled_window.add(self._value_text_view)
+        self._scrolled_window.set_child(self._value_text_view)
         self._scrolled_window.set_valign(Gtk.Align.CENTER)
         self._scrolled_window.set_size_request(350, 200)
         self._scrolled_window.get_style_context().add_class('profile-scrolled')
 
-        self._copy_button = Gtk.Button.new_from_icon_name('edit-copy-symbolic',
-                                                          Gtk.IconSize.MENU)
+        self._copy_button = Gtk.Button.new_from_icon_name('edit-copy-symbolic')
         self._copy_button.connect('clicked', self._on_copy_clicked)
         self._copy_button.set_halign(Gtk.Align.START)
         self._copy_button.set_valign(Gtk.Align.CENTER)
@@ -754,8 +748,8 @@ class GenderProperty(VCardProperty):
         self._value_entry.show()
         self._value_entry.connect('notify::text', self._on_text_changed)
 
-        value_box.add(self._value_combobox)
-        value_box.add(self._value_entry)
+        value_box.append(self._value_combobox)
+        value_box.append(self._value_entry)
 
         label_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self._identity_label = IdentityLabel(prop)
@@ -763,8 +757,8 @@ class GenderProperty(VCardProperty):
         self._sex_label = SexLabel(prop)
         self._sex_label.show()
 
-        label_box.add(self._sex_label)
-        label_box.add(self._identity_label)
+        label_box.append(self._sex_label)
+        label_box.append(self._identity_label)
 
         self._edit_widgets.append(value_box)
         self._read_widgets.append(label_box)

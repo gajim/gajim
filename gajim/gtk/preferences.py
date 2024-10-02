@@ -48,14 +48,13 @@ class Preferences(Gtk.ApplicationWindow):
     def __init__(self) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
         self.set_name('PreferencesWindow')
         self.set_default_size(900, 650)
         self.set_resizable(True)
         self.set_title(_('Preferences'))
 
-        self._ui = get_builder('preferences.ui')
+        self._ui = get_builder('preferences.ui', self)
 
         self._video_preview: VideoPreview | None = None
         self._prefs: dict[str, PreferenceBox] = {}
@@ -64,7 +63,7 @@ class Preferences(Gtk.ApplicationWindow):
         side_bar_switcher.set_stack(self._ui.stack)
         self._ui.grid.attach(side_bar_switcher, 0, 0, 1, 1)
 
-        self.add(self._ui.grid)
+        self.set_child(self._ui.grid)
 
         prefs: list[tuple[str, type[PreferenceBox]]] = [
             ('window_behaviour', WindowBehaviour),
@@ -88,17 +87,20 @@ class Preferences(Gtk.ApplicationWindow):
         self._add_prefs(prefs)
         self._add_video_preview()
 
-        self._ui.av_info_bar.set_revealed(
-            not app.is_installed('AV') or sys.platform == 'win32')
-        if sys.platform == 'win32':
-            self._ui.av_info_bar_label.set_text(
-                _('Video calls are not available on Windows'))
+        # TODO GTK4
+        # self._ui.av_info_bar.set_revealed(
+        #     not app.is_installed('AV') or sys.platform == 'win32')
+        # if sys.platform == 'win32':
+        #     self._ui.av_info_bar_label.set_text(
+        #         _('Video calls are not available on Windows'))
 
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
 
-        self.show_all()
+        self.show()
 
     def get_ui(self):
         return self._ui
@@ -107,16 +109,24 @@ class Preferences(Gtk.ApplicationWindow):
         for ui_name, klass in prefs:
             pref_box = getattr(self._ui, ui_name)
             pref = klass(self)  # pyright: ignore
-            pref_box.add(pref)
+            pref_box.attach(pref, 0, 0, 1, 1)
             self._prefs[ui_name] = pref
 
     def _add_video_preview(self) -> None:
         self._video_preview = VideoPreview()
-        self._ui.video.add(self._video_preview)
+        self._ui.video.attach(self._video_preview, 0, 0, 1, 1)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def get_video_preview(self) -> VideoPreview | None:
         return self._video_preview
@@ -145,6 +155,7 @@ class PreferenceBox(SettingsBox):
         SettingsBox.__init__(self, None)
         self.get_style_context().add_class('border')
         self.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.set_hexpand(True)
         self.set_vexpand(False)
         self.set_valign(Gtk.Align.END)
 
@@ -196,6 +207,8 @@ class WindowBehaviour(PreferenceBox):
 
     @staticmethod
     def _on_show_in_taskbar(value: bool, *args: Any) -> None:
+        # TODO: GTK4
+        return
         app.window.set_skip_taskbar_hint(not value)
 
 
@@ -520,7 +533,7 @@ class Sounds(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
     def _on_manage_sounds(self, _button: Gtk.Button) -> None:
-        open_window('ManageSounds', transient_for=self.get_toplevel())
+        open_window('ManageSounds', transient_for=self.get_root())
 
 
 class StatusMessage(PreferenceBox):
@@ -677,7 +690,7 @@ class Themes(PreferenceBox):
         popover_row.update_entries(self._get_theme_items())
 
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
-        open_window('Themes', transient=self.get_toplevel())
+        open_window('Themes', transient=self.get_root())
 
     @staticmethod
     def _on_theme_changed(value: str, *args: Any) -> None:
@@ -688,6 +701,7 @@ class Themes(PreferenceBox):
     @staticmethod
     def _on_dark_theme(value: str, *args: Any) -> None:
         app.css_config.set_dark_theme(int(value))
+        app.css_config.reload_css()
         app.ged.raise_event(StyleChanged())
 
 

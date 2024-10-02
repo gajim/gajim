@@ -46,7 +46,7 @@ class MUCJoinLeft(BaseRow):
             icon_name = 'feather-log-out-symbolic'
             icon_class = 'gajim-user-disconnected'
 
-        icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        icon = Gtk.Image.new_from_icon_name(icon_name)
         icon.get_style_context().add_class(icon_class)
         self.grid.attach(icon, 1, 0, 1, 1)
 
@@ -59,8 +59,6 @@ class MUCJoinLeft(BaseRow):
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.FILL)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
-
-        self.show_all()
 
     @staticmethod
     def _make_left_message(nick: str, reason: str | None,

@@ -40,29 +40,27 @@ class AppPage(Gtk.Box):
 
         status_header = Gtk.Label(label=_('Status'))
         status_header.get_style_context().add_class('large-header')
-        self.add(status_header)
+        self.append(status_header)
         status_label = Gtk.Label(
             label=_('Status and status message for all accounts'))
         status_label.get_style_context().add_class('dim-label')
-        self.add(status_label)
+        self.append(status_label)
 
         self._status_selector = StatusSelector()
         self._status_selector.set_halign(Gtk.Align.CENTER)
-        self.add(self._status_selector)
+        self.append(self._status_selector)
 
         self._status_message_selector = StatusMessageSelector()
         self._status_message_selector.set_halign(Gtk.Align.CENTER)
-        self.add(self._status_message_selector)
+        self.append(self._status_message_selector)
 
         update_label = Gtk.Label(label=_('Updates'))
         update_label.get_style_context().add_class('large-header')
         update_label.get_style_context().add_class('margin-top12')
-        self.add(update_label)
+        self.append(update_label)
 
         self._app_message_listbox = AppMessageListBox()
-        self.add(self._app_message_listbox)
-
-        self.show_all()
+        self.append(self._app_message_listbox)
 
     def add_app_message(self,
                         category: str,
@@ -102,8 +100,6 @@ class AppMessageListBox(Gtk.ListBox):
 
         app.settings.connect_signal('last_update_check', self._on_update_check)
 
-        self.show_all()
-
     def add_app_message(self,
                         category: str,
                         new_version: str | None = None,
@@ -111,13 +107,13 @@ class AppMessageListBox(Gtk.ListBox):
                         ) -> None:
 
         row = AppMessageRow(category, new_version, new_setup_url)
-        self.add(row)
+        self.append(row)
 
     def add_plugin_update_message(self,
                                   manifests: list[PluginManifest]
                                   ) -> None:
         row = AppMessageRow('plugin-updates', plugin_manifests=manifests)
-        self.add(row)
+        self.append(row)
 
     def remove_app_message(self, row: Gtk.ListBoxRow) -> None:
         self.remove(row)
@@ -164,24 +160,21 @@ class AppMessageRow(Gtk.ListBoxRow):
         self._plugin_manifests = plugin_manifests
         self._new_setup_url = new_setup_url
 
-        self._ui = get_builder('app_page.ui')
+        self._ui = get_builder('app_page.ui', self)
 
         if category == 'allow-gajim-update-check':
-            self.add(self._ui.gajim_update_check)
+            self.set_child(self._ui.gajim_update_check)
 
         if category == 'gajim-update-available':
-            self.add(self._ui.gajim_update)
+            self.set_child(self._ui.gajim_update)
             text = _('Gajim %s is available') % new_version
             self._ui.update_message.set_text(text)
 
         if category == 'plugin-updates':
-            self.add(self._ui.plugin_updates)
+            self.set_child(self._ui.plugin_updates)
 
         if category == 'plugin-updates-finished':
-            self.add(self._ui.plugin_updates_finished)
-
-        self._ui.connect_signals(self)
-        self.show_all()
+            self.set_child(self._ui.plugin_updates_finished)
 
     def _remove_app_message(self) -> None:
         list_box = cast(AppMessageListBox, self.get_parent())

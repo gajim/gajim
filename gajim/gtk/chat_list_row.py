@@ -98,12 +98,22 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self.get_style_context().add_class('chatlist-row')
 
-        self._ui = get_builder('chat_list_row.ui')
-        self._ui.connect_signals(self)
-        self.add(self._ui.eventbox)
+        self._ui = get_builder('chat_list_row.ui', self)
+        self.set_child(self._ui.mainbox)
+
+        self._menu_popover = GajimPopover(None)
+        self._ui.mainbox.append(self._menu_popover)
 
         self.connect('state-flags-changed', self._on_state_flags_changed)
         self.connect('destroy', self._on_destroy)
+
+        gesture_middle_click = Gtk.GestureClick(button=Gdk.BUTTON_MIDDLE)
+        gesture_middle_click.connect('pressed', self._on_row_clicked)
+        self.add_controller(gesture_middle_click)
+
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        gesture_secondary_click.connect('pressed', self._on_row_clicked)
+        self.add_controller(gesture_secondary_click)
 
         app.settings.connect_signal(
             'mute_until',
@@ -112,18 +122,18 @@ class ChatListRow(Gtk.ListBoxRow):
             self.contact.jid)
         self._on_mute_setting_changed()
 
-        # Drag and Drop
-        entries = [Gtk.TargetEntry.new(
-            'CHAT_LIST_ITEM',
-            Gtk.TargetFlags.SAME_APP,
-            0)]
-        self.drag_source_set(
-            Gdk.ModifierType.BUTTON1_MASK,
-            entries,
-            Gdk.DragAction.MOVE)
-        self.connect('drag-begin', self._on_drag_begin)
-        self.connect('drag-end', self._on_drag_end)
-        self.connect('drag-data-get', self._on_drag_data_get)
+        # Drag and Drop GTK4 TODO
+        # entries = [Gtk.TargetEntry.new(
+        #     'CHAT_LIST_ITEM',
+        #     Gtk.TargetFlags.SAME_APP,
+        #     0)]
+        # self.drag_source_set(
+        #     Gdk.ModifierType.BUTTON1_MASK,
+        #     entries,
+        #     Gdk.DragAction.MOVE)
+        # self.connect('drag-begin', self._on_drag_begin)
+        # self.connect('drag-end', self._on_drag_end)
+        # self.connect('drag-data-get', self._on_drag_data_get)
 
         if self.type == 'groupchat':
             self._ui.group_chat_indicator.show()
@@ -145,7 +155,7 @@ class ChatListRow(Gtk.ListBoxRow):
         message = app.storage.archive.get_last_conversation_row(
             self.contact.account, self.contact.jid)
         if message is None:
-            self.show_all()
+            self.show()
             return
 
         assert isinstance(
@@ -196,8 +206,6 @@ class ChatListRow(Gtk.ListBoxRow):
             self.set_message_text(
                 _('Call'), icon_name='call-start-symbolic')
             self.set_timestamp(message.timestamp)
-
-        self.show_all()
 
     @property
     def is_pinned(self) -> bool:
@@ -295,7 +303,7 @@ class ChatListRow(Gtk.ListBoxRow):
         if icon is None:
             self._ui.message_icon.hide()
         else:
-            self._ui.message_icon.set_from_gicon(icon, Gtk.IconSize.MENU)
+            self._ui.message_icon.set_from_gicon(icon)
             self._ui.message_icon.show()
 
     def set_nick(self, nickname: str | None) -> None:
@@ -324,8 +332,9 @@ class ChatListRow(Gtk.ListBoxRow):
         assert isinstance(
             self.contact,
             BareContact | GroupchatContact | GroupchatParticipant)
-        surface = self.contact.get_avatar(AvatarSize.ROSTER, scale)
-        self._ui.avatar_image.set_from_surface(surface)
+        texture = self.contact.get_avatar(AvatarSize.ROSTER, scale)
+        self._ui.avatar_image.set_pixel_size(AvatarSize.ROSTER)
+        self._ui.avatar_image.set_from_paintable(texture)
 
     def update_name(self) -> None:
         assert isinstance(
@@ -435,8 +444,10 @@ class ChatListRow(Gtk.ListBoxRow):
         state = self.get_state_flags()
         if (state & Gtk.StateFlags.PRELIGHT) != 0:
             self._ui.revealer.set_reveal_child(True)
+            self._ui.close_button.show()
         else:
             self._ui.revealer.set_reveal_child(False)
+            self._ui.close_button.hide()
 
     def _on_destroy(self, _row: ChatListRow) -> None:
         app.settings.disconnect_signals(self)
@@ -448,48 +459,41 @@ class ChatListRow(Gtk.ListBoxRow):
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
         app.window.activate_action(
-            'remove-chat',
+            'win.remove-chat',
             GLib.Variant('as', [self.account, str(self.jid)]))
 
-    def _on_row_button_press_event(self,
-                                   _widget: Gtk.EventBox,
-                                   event: Gdk.EventButton
-                                   ) -> None:
-
-        if event.button == Gdk.BUTTON_SECONDARY:
-            self._raise_context_popover(event)
-
-        elif event.button == Gdk.BUTTON_MIDDLE:
+    def _on_row_clicked(
+        self,
+        gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+        if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
             app.window.activate_action(
-                'remove-chat',
+                'win.remove-chat',
                 GLib.Variant('as', [self.account, str(self.jid)]))
+        elif gesture_click.get_current_button() == Gdk.BUTTON_SECONDARY:
+            self._raise_context_popover(x, y)
 
-    def _raise_context_popover(self, event: Gdk.EventButton):
+        return Gdk.EVENT_STOP
+
+    def _raise_context_popover(self, x: float, y: float):
         menu = get_chat_list_row_menu(
             self.workspace_id, self.account, self.jid, self._pinned)
 
-        event_widget = Gtk.get_event_widget(event)
-        x = event.x
-        if isinstance(event_widget, Gtk.Button):
-            # When the event is triggered by pressing the close button we get
-            # a x coordinate relative to the window of the close button, which
-            # would be a very low x integer as the close button is small, this
-            # leads to opening the menu far away from the mouse. We overwrite
-            # the x coordinate with an approx. position of the close button.
-            x = self.get_allocated_width() - 10
-
-        popover = GajimPopover(menu, relative_to=self)
-        popover.set_pointing_to_coord(x=x, y=event.y)
-        popover.connect('closed', self._on_context_popover_closed)
+        self._menu_popover.set_menu_model(menu)
+        self._menu_popover.set_pointing_to_coord(x=x, y=y)
+        self._menu_popover.connect('closed', self._on_context_popover_closed)
         self.emit('context-menu-state-changed', True)
-        popover.popup()
+        self._menu_popover.popup()
 
     def _on_context_popover_closed(self, _popover: Gtk.Popover) -> None:
         self.emit('context-menu-state-changed', False)
 
     def _on_drag_begin(self,
                        row: ChatListRow,
-                       drag_context: Gdk.DragContext
+                       drag_context: Any
                        ) -> None:
 
         # Use rendered ChatListRow as drag icon
@@ -504,23 +508,23 @@ class ChatListRow(Gtk.ListBoxRow):
 
     def _on_drag_end(self,
                      row: ChatListRow,
-                     _drag_context: Gdk.DragContext
+                     _drag_context: Any
                      ) -> None:
 
         app.window.highlight_dnd_targets(row, False)
 
     def _on_drag_data_get(self,
                           row: ChatListRow,
-                          _drag_context: Gdk.DragContext,
-                          selection_data: Gtk.SelectionData,
+                          _drag_context: Any,
+                          selection_data: Any,
                           _info: int,
                           _time: int
                           ) -> None:
 
         app.window.highlight_dnd_targets(row, False)
-        drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM')
+        # drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM') TODO GTK4
         byte_data = pickle.dumps((self.account, self.jid, self.workspace_id))
-        selection_data.set(drop_type, 8, byte_data)
+        # selection_data.set(drop_type, 8, byte_data)
 
     def _connect_contact_signals(self) -> None:
         self.contact.connect('chatstate-update', self._on_chatstate_update)
@@ -587,7 +591,7 @@ class ChatListRow(Gtk.ListBoxRow):
         assert isinstance(self.contact, GroupchatContact)
         if self.contact.is_joining:
             self._ui.connection_icon.set_from_icon_name(
-                'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
+                'feather-refresh-cw-symbolic')
             context.add_class('spin')
             context.add_class('dim-label')
             self._ui.connection_icon.set_tooltip_text(_('Joining Group Chat…'))
@@ -595,7 +599,7 @@ class ChatListRow(Gtk.ListBoxRow):
         elif (self.contact.is_not_joined or
                 not self._client.state.is_available):
             self._ui.connection_icon.set_from_icon_name(
-                'feather-zap-symbolic', Gtk.IconSize.MENU)
+                'feather-zap-symbolic')
             context.add_class('warning-color')
             self._ui.connection_icon.set_tooltip_text(_('Not connected'))
             self._ui.connection_icon.show()
@@ -610,7 +614,7 @@ class ChatListRow(Gtk.ListBoxRow):
 
         if signal_name == 'mam-sync-started':
             self._ui.connection_icon.set_from_icon_name(
-                'feather-refresh-cw-symbolic', Gtk.IconSize.MENU)
+                'feather-refresh-cw-symbolic')
             context.add_class('spin')
             context.add_class('info-color')
             self._ui.connection_icon.set_tooltip_text(_('Fetching messages…'))
@@ -624,7 +628,7 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self._reset_connection_icon()
         self._ui.connection_icon.set_from_icon_name(
-            'feather-zap-symbolic', Gtk.IconSize.MENU)
+            'feather-zap-symbolic')
         self._ui.connection_icon.get_style_context().add_class('error-color')
         self._ui.connection_icon.set_tooltip_text(
             _('There has been an error while trying to '
@@ -689,10 +693,8 @@ class RowHeader(Gtk.Box):
         label = Gtk.Label(label=text)
         label.set_halign(Gtk.Align.START)
 
-        self.add(label)
+        self.append(label)
 
         self.get_style_context().add_class('header-box')
         if header_type == RowHeaderType.PINNED:
             self.get_style_context().add_class('header-box-first')
-
-        self.show_all()

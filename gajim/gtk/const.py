@@ -9,14 +9,22 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 
+import sys
 from collections.abc import Callable
 from collections.abc import Iterator
 from enum import Enum
 from enum import IntEnum
 from enum import unique
 
+from gi.repository import Gdk
+
 from gajim.common.i18n import _
 from gajim.common.setting_values import AllSettingsT
+
+if sys.byteorder == 'little':
+    GDK_MEMORY_DEFAULT = Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED
+else:
+    GDK_MEMORY_DEFAULT = Gdk.MemoryFormat.A8R8G8B8_PREMULTIPLIED
 
 
 class Filter(NamedTuple):
@@ -217,6 +225,8 @@ MAIN_WIN_ACTIONS = [
     ('correct-message', None, False),
     ('copy-message', 's', True),
     ('moderate-message', 'a{sv}', False),
+    ('paste-as-quote', None, False),
+    ('paste-as-code-block', None, False),
     ('quote', 's', False),
     ('quote-next', None, True),
     ('quote-prev', None, True),

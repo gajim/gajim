@@ -59,19 +59,18 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         EventHelper.__init__(self)
 
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(650, 500)
         self.set_show_menubar(False)
         self.set_title(_('Plugins'))
 
-        self._ui = get_builder('plugins.ui')
-        self.add(self._ui.plugins_box)
+        self._ui = get_builder('plugins.ui', self)
+        self.set_child(self._ui.plugins_box)
 
         if app.is_flatpak():
             self._ui.help_button.show()
-            self._ui.download_button.set_no_show_all(True)
-            self._ui.uninstall_plugin_button.set_no_show_all(True)
-            self._ui.install_from_zip_button.set_no_show_all(True)
+            self._ui.download_button.set_visible(False)
+            self._ui.uninstall_plugin_button.set_visible(False)
+            self._ui.install_from_zip_button.set_visible(False)
 
         self._ui.liststore.set_sort_column_id(Column.NAME,
                                               Gtk.SortType.ASCENDING)
@@ -87,8 +86,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_repository_manifests()
 
         self.connect('destroy', self._on_destroy)
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
+        # self.connect('key-press-event', self._on_key_press) TODO GTK4
 
         self.register_events([
             ('plugin-removed', ged.GUI1, self._on_plugin_removed),
@@ -102,7 +100,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         app.plugin_repository.connect('download-failed',
                                       self._on_download_failed)
 
-        self.show_all()
+        self.show()
 
     def _on_render_enabled_cell(self,
                                 _tree_column: Gtk.TreeViewColumn,
@@ -154,7 +152,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
 
         return False
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
         if event.keyval == Gdk.KEY_Escape:
             self.destroy()
 

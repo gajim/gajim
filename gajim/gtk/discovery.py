@@ -523,7 +523,7 @@ class ServiceDiscoveryWindow:
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
-        self._ui = get_builder('service_discovery_window.ui')
+        self._ui = get_builder('service_discovery_window.ui', self)
         self.window = self._ui.service_discovery_window
         self.services_treeview = self._ui.services_treeview
         self.model = None
@@ -558,7 +558,7 @@ class ServiceDiscoveryWindow:
             self.address_comboboxtext.get_child().set_text(jid)
         else:
             # Don't show it at all if we didn't ask for it
-            self._ui.address_box.set_no_show_all(True)
+            self._ui.address_box.set_visible(False)
             self._ui.address_box.hide()
 
         accel_group = Gtk.AccelGroup()
@@ -2146,7 +2146,7 @@ class GroupsPostWindow:
         self.servicejid = servicejid
         self.groupid = groupid
 
-        self._ui = get_builder('groups_post_window.ui')
+        self._ui = get_builder('groups_post_window.ui', self)
         self.window = self._ui.groups_post_window
 
         self._ui.connect_signals(self)

@@ -41,37 +41,35 @@ class ContactNameWidget(Gtk.Box):
             xalign=1.0,
         )
         self._entry.connect('activate', self._on_entry_activated)
-        self.add(self._entry)
+        self.append(self._entry)
 
         self.update_displayed_name(name)
 
         button_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
-        self.add(button_box)
+        self.append(button_box)
 
         self._edit_button = Gtk.Button.new_from_icon_name(
-            'document-edit-symbolic', Gtk.IconSize.BUTTON
+            'document-edit-symbolic'
         )
         self._edit_button.set_tooltip_text(_('Edit display name…'))
         self._edit_button.connect('clicked', self._on_edit_clicked)
 
         if isinstance(self._contact, GroupchatParticipant) or not edit_mode:
-            self._edit_button.set_no_show_all(True)
+            self._edit_button.set_visible(False)
 
-        button_box.add(self._edit_button)
+        button_box.append(self._edit_button)
 
         self._clear_button = Gtk.Button.new_from_icon_name(
-            'edit-clear-symbolic', Gtk.IconSize.BUTTON
+            'edit-clear-symbolic'
         )
         self._clear_button.set_tooltip_text(_('Reset to original name'))
-        self._clear_button.set_no_show_all(True)
+        self._clear_button.set_visible(False)
         self._clear_button.connect('clicked', self._on_clear_button_clicked)
-        button_box.add(self._clear_button)
+        button_box.append(self._clear_button)
 
         if self._contact is not None:
             client = app.get_client(self._contact.account)
             client.connect_signal('state-changed', self._on_client_state_changed)
-
-        self.show_all()
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
@@ -116,9 +114,7 @@ class ContactNameWidget(Gtk.Box):
         self._entry.set_sensitive(False)
 
         self._edit_button.set_tooltip_text(_('Edit display name…'))
-        self._edit_button.set_image(
-            Gtk.Image.new_from_icon_name('document-edit-symbolic', Gtk.IconSize.BUTTON)
-        )
+        self._edit_button.set_icon_name('document-edit-symbolic')
         self._clear_button.hide()
 
     def set_contact(
@@ -140,9 +136,7 @@ class ContactNameWidget(Gtk.Box):
         self._entry.grab_focus()
 
         self._edit_button.set_tooltip_text(_('Save display name'))
-        self._edit_button.set_image(
-            Gtk.Image.new_from_icon_name('document-save-symbolic', Gtk.IconSize.BUTTON)
-        )
+        self._edit_button.set_icon_name('document-save-symbolic')
         self._clear_button.show()
 
     def update_displayed_name(self, name: str) -> None:

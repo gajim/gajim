@@ -11,6 +11,7 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
@@ -66,8 +67,6 @@ class RemoveAccount(Assistant):
         ])
 
         self._set_remove_from_server_checkbox()
-
-        self.show_all()
 
     @overload
     def get_page(self, name: Literal['remove_choice']) -> RemoveChoice: ...
@@ -161,13 +160,13 @@ class RemoveChoice(Page):
         heading = Gtk.Label(label=_('Remove Account'))
         heading.get_style_context().add_class('large-header')
         heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
+        heading.set_wrap_mode(Pango.WrapMode.WORD)
         heading.set_halign(Gtk.Align.CENTER)
         heading.set_justify(Gtk.Justification.CENTER)
 
         label = Gtk.Label(label=_('This will remove your account from Gajim.'))
         label.set_max_width_chars(50)
-        label.set_line_wrap(True)
+        label.set_wrap_mode(Pango.WrapMode.WORD)
         label.set_halign(Gtk.Align.CENTER)
         label.set_justify(Gtk.Justification.CENTER)
 
@@ -177,7 +176,7 @@ class RemoveChoice(Page):
             _('Do you want to unregister your account on <b>%s</b> as '
               'well?') % service)
         check_label.set_max_width_chars(50)
-        check_label.set_line_wrap(True)
+        check_label.set_wrap_mode(Pango.WrapMode.WORD)
         check_label.set_halign(Gtk.Align.CENTER)
         check_label.set_justify(Gtk.Justification.CENTER)
         check_label.set_margin_top(40)
@@ -186,11 +185,10 @@ class RemoveChoice(Page):
             _('_Unregister account from service'))
         self._server.set_halign(Gtk.Align.CENTER)
 
-        self.pack_start(heading, False, True, 0)
-        self.pack_start(label, False, True, 0)
-        self.pack_start(check_label, False, True, 0)
-        self.pack_start(self._server, False, True, 0)
-        self.show_all()
+        self.append(heading)
+        self.append(label)
+        self.append(check_label)
+        self.append(self._server)
 
     @property
     def remove_from_server(self) -> bool:

@@ -115,8 +115,8 @@ class FileTransferJingleRow(BaseRow):
         scale = self.get_scale_factor()
         avatar = contact.get_avatar(AvatarSize.ROSTER, scale, add_show=False)
         assert not isinstance(avatar, GdkPixbuf.Pixbuf)
-        avatar_image = Gtk.Image.new_from_surface(avatar)
-        avatar_placeholder.add(avatar_image)
+        avatar_image = Gtk.Image.new_from_paintable(avatar)
+        avatar_placeholder.append(avatar_image)
 
         name_widget = NicknameLabel(contact.name, is_self)
         name_widget.set_halign(Gtk.Align.START)
@@ -128,17 +128,13 @@ class FileTransferJingleRow(BaseRow):
 
         meta_box = Gtk.Box()
         meta_box.set_spacing(6)
-        meta_box.add(name_widget)
-        meta_box.add(timestamp_widget)
+        meta_box.append(name_widget)
+        meta_box.append(timestamp_widget)
         self.grid.attach(meta_box, 1, 0, 1, 1)
 
-        self._ui = get_builder('file_transfer_jingle.ui')
+        self._ui = get_builder('file_transfer_jingle.ui', self)
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
         self._ui.transfer_box.set_halign(Gtk.Align.START)
-
-        self._ui.connect_signals(self)
-
-        self.show_all()
 
         if message is not None:
             self._reconstruct_transfer()

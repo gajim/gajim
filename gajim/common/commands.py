@@ -311,5 +311,5 @@ class ChatCommands(Observable):
         self._change_role(args.who, args.role, None)
 
     def _me_command(self, _args: Any) -> str:
-        app.window.activate_action('send-message', None)
+        app.window.activate_action('win.send-message', None)
         return 'silent'

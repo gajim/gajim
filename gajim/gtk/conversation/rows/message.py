@@ -44,6 +44,7 @@ from gajim.gtk.util import format_fingerprint
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
+from gajim.gtk.util import iterate_children
 
 log = logging.getLogger('gajim.gtk.conversation.rows.message')
 
@@ -93,6 +94,12 @@ class MessageRow(BaseRow):
         self._reactions_bar = ReactionsBar(self, self._contact)
         self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
+        self._message_row_menu_popover = GajimPopover(
+            menu=None,
+            position=Gtk.PositionType.TOP
+        )
+        self.grid.attach(self._message_row_menu_popover, 2, 0, 1, 1)
+
         self._set_content(message)
 
     @classmethod
@@ -134,11 +141,11 @@ class MessageRow(BaseRow):
         self.get_style_context().remove_class('moderated-message')
         self.get_style_context().remove_class('gajim-mention-highlight')
 
-        for widget in self._meta_box.get_children():
-            widget.destroy()
+        for widget in iterate_children(self._meta_box):
+            self._meta_box.remove(widget)
 
-        for widget in self._bottom_box.get_children():
-            widget.destroy()
+        for widget in iterate_children(self._bottom_box):
+            self._bottom_box.remove(widget)
 
         self._corr_message = None
 
@@ -164,19 +171,19 @@ class MessageRow(BaseRow):
             self.get_scale_factor(),
             AvatarSize.ROSTER
         )
-        self._avatar_box.set_from_surface(avatar)
+        self._avatar_box.set_from_paintable(avatar)
         self._avatar_box.set_name(self.name)
 
-        self._meta_box.pack_start(
+        self._meta_box.append(
             NicknameLabel(
                 self.name,
                 self._is_outgoing
-            ), False, True, 0)
-        self._meta_box.pack_start(
-            DateTimeLabel(self.timestamp), False, True, 0)
+            ))
+        self._meta_box.append(
+            DateTimeLabel(self.timestamp))
 
         self._message_icons = MessageIcons()
-        self._meta_box.pack_start(self._message_icons, False, True, 0)
+        self._meta_box.append(self._message_icons)
 
         if app.preview_manager.is_previewable(self.text, message.oob):
             self._message_widget = PreviewWidget(self._contact.account)
@@ -201,11 +208,11 @@ class MessageRow(BaseRow):
 
         if self._ref_message_widget is not None:
             box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
-            box.add(self._ref_message_widget)
-            box.add(self._message_widget)
-            self._bottom_box.add(box)
+            box.append(self._ref_message_widget)
+            box.append(self._message_widget)
+            self._bottom_box.append(box)
         else:
-            self._bottom_box.add(self._message_widget)
+            self._bottom_box.append(self._message_widget)
 
         self._set_text_direction(self.text)
 
@@ -245,8 +252,6 @@ class MessageRow(BaseRow):
                 error_text = message.error.condition
             self.show_error(error_text)
 
-        self.show_all()
-
     def _set_text_direction(self, text: str) -> None:
         if is_rtl_text(text):
             self._bottom_box.set_halign(Gtk.Align.END)
@@ -280,13 +285,14 @@ class MessageRow(BaseRow):
             is_moderated=self._is_moderated,
         )
 
-        popover = GajimPopover(menu, relative_to=button, position=Gtk.PositionType.TOP)
-        popover.connect(
+        self._message_row_menu_popover.set_menu_model(menu)
+        # TODO GTK4: self._message_row_menu_popover.set_pointing_to(x, y)
+        self._message_row_menu_popover.connect(
             'closed',
             self._on_more_menu_popover_closed,
             message_row_actions
         )
-        popover.popup()
+        self._message_row_menu_popover.popup()
 
     def _on_more_menu_popover_closed(
         self,
@@ -467,9 +473,10 @@ class MessageRow(BaseRow):
         self.text = text
 
         if isinstance(self._message_widget, PreviewWidget):
-            self._message_widget.destroy()
+            self._bottom_box.remove(self._message_widget)
+
             self._message_widget = MessageWidget(self._account)
-            self._bottom_box.pack_start(self._message_widget, True, True, 0)
+            self._bottom_box.append(self._message_widget)
             self._set_text_direction(text)
 
         self._message_widget.add_with_styling(text)
@@ -493,17 +500,16 @@ class MessageRow(BaseRow):
             self.get_scale_factor(),
             AvatarSize.ROSTER
         )
-        self._avatar_box.set_from_surface(avatar)
+        self._avatar_box.set_from_paintable(avatar)
 
     def set_merged(self, merged: bool) -> None:
         self._merged = merged
         if merged:
             self.get_style_context().add_class('merged')
-            self._meta_box.set_no_show_all(True)
+            self._meta_box.set_visible(False)
             self._meta_box.hide()
         else:
             self.get_style_context().remove_class('merged')
-            self._meta_box.set_no_show_all(False)
             self._meta_box.show()
 
         self._avatar_box.set_merged(merged)

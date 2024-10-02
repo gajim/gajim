@@ -41,9 +41,8 @@ class GroupchatManage(Gtk.Box):
 
         self._room_config_form = None
 
-        self._ui = get_builder('groupchat_manage.ui')
-        self.add(self._ui.stack)
-        self._ui.connect_signals(self)
+        self._ui = get_builder('groupchat_manage.ui', self)
+        self.append(self._ui.stack)
 
         self._avatar_selector = AvatarSelector()
         self._avatar_selector.set_size_request(500, 500)
@@ -55,8 +54,6 @@ class GroupchatManage(Gtk.Box):
         self._ui.subject_textview.get_buffer().connect(
             'changed', self._on_subject_text_changed)
         self.connect('destroy', self._on_destroy)
-
-        self.show_all()
 
     def _on_destroy(self, *args: Any) -> None:
         del self._avatar_selector
@@ -201,7 +198,7 @@ class GroupchatManage(Gtk.Box):
             self._ui.avatar_update_button.grab_default()
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=cast(Gtk.Window, self.get_toplevel()),
+                            transient_for=cast(Gtk.Window, self.get_root()),
                             modal=True)
 
     def _on_avatar_select_file_clicked(self, _button: Gtk.Button) -> None:
@@ -211,7 +208,7 @@ class GroupchatManage(Gtk.Box):
                 self._avatar_selector.get_prepared())
 
         AvatarChooserDialog(_on_accept,
-                            transient_for=cast(Gtk.Window, self.get_toplevel()),
+                            transient_for=cast(Gtk.Window, self.get_root()),
                             modal=True)
 
     def _on_upload_avatar_result(self, task: Task) -> None:
@@ -245,12 +242,14 @@ class GroupchatManage(Gtk.Box):
         self._ui.stack.set_visible_child_name('manage')
 
     def update_avatar(self):
-        surface = app.app.avatar_storage.get_muc_surface(
+        texture = app.app.avatar_storage.get_muc_texture(
             self._account,
             self._contact.jid,
             AvatarSize.GROUP_INFO,
             self.get_scale_factor())
-        self._ui.avatar_button_image.set_from_surface(surface)
+
+        self._ui.avatar_button_image.set_pixel_size(AvatarSize.GROUP_INFO)
+        self._ui.avatar_button_image.set_from_paintable(texture)
 
     def _on_destroy_clicked(self, _button: Gtk.Button) -> None:
         self._ui.stack.set_visible_child_name('destroy')

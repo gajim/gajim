@@ -15,6 +15,7 @@ import css_parser
 from css_parser.css import CSSStyleRule
 from css_parser.css import CSSStyleSheet
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -68,6 +69,7 @@ class CSSConfig:
 
         # Delete empty rules
         css_parser.ser.prefs.keepEmptyRules = False
+        css_parser.ser.prefs.omitLastSemicolon = False
 
         # Holds the currently selected theme in the Theme Editor
         self._pre_css: CSSStyleSheet | None = None
@@ -90,17 +92,17 @@ class CSSConfig:
         self._dynamic_dict: dict[str, str] = {}
         self.refresh()
 
-        screen = Gdk.Screen.get_default()
-        assert screen is not None
-        Gtk.StyleContext.add_provider_for_screen(
-            screen,
+        display = Gdk.Display.get_default()
+        assert display is not None
+        Gtk.StyleContext.add_provider_for_display(
+            display,
             self._dynamic_provider,
             CSSPriority.APPLICATION)
 
         # Font size provider for GUI font size
         self._app_font_size_provider = Gtk.CssProvider()
-        Gtk.StyleContext.add_provider_for_screen(
-            screen,
+        Gtk.StyleContext.add_provider_for_display(
+            display,
             self._app_font_size_provider,
             CSSPriority.PRE_APPLICATION)
 
@@ -119,8 +121,8 @@ class CSSConfig:
         self._load_selected()
         self._activate_theme()
 
-        Gtk.StyleContext.add_provider_for_screen(
-            screen,
+        Gtk.StyleContext.add_provider_for_display(
+            display,
             self._provider,
             CSSPriority.USER_THEME)
 
@@ -151,6 +153,8 @@ class CSSConfig:
                 return
             value = self._system_style.prefer_dark
         settings.set_property('gtk-application-prefer-dark-theme', bool(value))
+
+    def reload_css(self) -> None:
         self._load_css()
 
     def _load_css(self) -> None:
@@ -180,12 +184,12 @@ class CSSConfig:
     def _activate_css(self, css: str, priority: CSSPriority) -> None:
         try:
             provider = Gtk.CssProvider()
-            provider.load_from_data(bytes(css.encode('utf-8')))
-            screen = Gdk.Screen.get_default()
-            assert screen is not None
-            Gtk.StyleContext.add_provider_for_screen(screen,
-                                                     provider,
-                                                     priority)
+            provider.load_from_bytes(GLib.Bytes.new(css.encode('utf-8')))
+            display = Gdk.Display.get_default()
+            assert display is not None
+            Gtk.StyleContext.add_provider_for_display(display,
+                                                      provider,
+                                                      priority)
             self._load_selected()
             self._activate_theme()
 
@@ -199,7 +203,8 @@ class CSSConfig:
             font-size: {app_font_size}rem;
         }}
         '''
-        self._app_font_size_provider.load_from_data(bytes(css.encode('utf-8')))
+        self._app_font_size_provider.load_from_bytes(
+            GLib.Bytes.new(css.encode('utf-8')))
 
     @staticmethod
     def _pango_to_css_weight(number: int) -> int:
@@ -594,7 +599,7 @@ class CSSConfig:
         log.info('Activate theme')
         self._invalidate_cache()
         assert self._css is not None
-        self._provider.load_from_data(self._css.cssText)
+        self._provider.load_from_bytes(GLib.Bytes.new(self._css.cssText))
 
     def add_new_theme(self, theme: str) -> bool:
         theme_path = self.get_theme_path(theme)
@@ -638,10 +643,10 @@ class CSSConfig:
         for index, account in enumerate(accounts):
             color = app.settings.get_account_setting(account, 'account_color')
             css_class = f'gajim_class_{index}'
-            css += f'.{css_class} {{ background-color: {color} }}\n'
+            css += f'.{css_class} {{ background-color: {color}; }}\n'
             self._dynamic_dict[account] = css_class
 
-        self._dynamic_provider.load_from_data(css.encode())
+        self._dynamic_provider.load_from_bytes(GLib.Bytes.new(css.encode()))
 
     def get_dynamic_class(self, name: str) -> str:
         return self._dynamic_dict[name]

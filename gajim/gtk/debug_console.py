@@ -73,7 +73,6 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(800, 600)
         self.set_resizable(True)
         self.set_show_menubar(False)
@@ -92,10 +91,10 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._incoming = True
         self._outgoing = True
 
-        self._ui = get_builder('debug_console.ui')
+        self._ui = get_builder('debug_console.ui', self)
         self.set_titlebar(self._ui.headerbar)
         self._set_titlebar()
-        self.add(self._ui.stack)
+        self.set_child(self._ui.stack)
 
         self._ui.paned.set_position(
             self._ui.paned.get_property('max-position'))
@@ -104,7 +103,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._combo.set_max_size(200)
         self._combo.set_hexpand(False)
         self._combo.set_halign(Gtk.Align.END)
-        self._combo.set_no_show_all(True)
+        self._combo.set_visible(False)
         self._combo.set_visible(False)
         self._combo.connect('changed', self._on_value_change)
         available_accounts = self._get_accounts()
@@ -112,8 +111,8 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             self._combo.append(account, label)
         if available_accounts:
             self._combo.set_active(0)
-        self._ui.actionbox.pack_end(self._combo, False, False, 0)
-        self._ui.actionbox.reorder_child(self._combo, 1)
+        self._ui.actionbox.append(self._combo)
+        self._ui.actionbox.reorder_child_after(self._combo)
 
         self._create_tags()
         self._add_stanza_presets()
@@ -150,11 +149,10 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         vadjustment.connect('notify::value',
                             self._on_adj_value_changed)
 
-        self.show_all()
+        self.show()
 
-        self.connect('key-press-event', self._on_key_press)
+        # self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
 
         self.register_events([
             ('stanza-received', ged.GUI1, self._on_stanza_received),
@@ -165,7 +163,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_destroy(self, *args: Any) -> None:
         get_log_console_handler().set_callback(None)
-        self._ui.popover.destroy()
+        # self._ui.popover.destroy()
         app.check_finalize(self)
 
     def _on_adj_upper_changed(self,
@@ -195,7 +193,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
             title = _('Account Wizard')
         else:
             title = app.get_jid_from_account(self._selected_account)
-        self._ui.headerbar.set_subtitle(title)
+        # self._ui.headerbar.set_subtitle(title) TODO GTK4
 
     def _on_account_changed(self,
                             event: AccountEnabled | AccountDisabled
@@ -238,17 +236,17 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         for stanza_type in STANZA_PRESETS:
             row = Gtk.ListBoxRow()
             label = Gtk.Label(label=stanza_type, halign=Gtk.Align.START)
-            row.add(label)
-            self._ui.stanza_presets_listbox.add(row)
+            row.set_child(label)
+            self._ui.stanza_presets_listbox.append(row)
 
-        self._ui.stanza_presets_listbox.show_all()
+        self._ui.stanza_presets_listbox.show()
 
     def _add_log_record(self, message: str) -> None:
         buf = self._ui.log_view.get_buffer()
         end_iter = buf.get_end_iter()
         buf.insert(end_iter, message)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
+    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
         if event.keyval == Gdk.KEY_Escape:
             if self._ui.search_toggle.get_active():
                 self._ui.search_toggle.set_active(False)
@@ -347,7 +345,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui.input_entry.grab_focus()
 
     def _on_input(self, button: Gtk.ToggleButton) -> None:
-        child2 = self._ui.paned.get_child2()
+        child2 = self._ui.paned.get_end_child()
         assert child2 is not None
         if button.get_active():
             child2.show()
@@ -372,7 +370,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_search_activate(self, _entry: Gtk.SearchEntry) -> None:
         self._find(Direction.NEXT)
 
-    def _on_search_clicked(self, button: Gtk.ToolButton) -> None:
+    def _on_search_clicked(self, button: Any) -> None:
         if button is self._ui.search_forward:
             direction = Direction.NEXT
         else:

@@ -13,7 +13,6 @@ from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
 
-from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -51,6 +50,7 @@ from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
+from gajim.gtk.util import iterate_listbox_children
 
 log = logging.getLogger('gajim.gtk.conversation_view')
 
@@ -77,7 +77,6 @@ class ConversationView(Gtk.ScrolledWindow):
         self.get_style_context().add_class('scrolled-no-border')
         self.get_style_context().add_class('no-scroll-indicator')
         self.get_style_context().add_class('scrollbar-style')
-        self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_vexpand(True)
 
         self.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -122,8 +121,8 @@ class ConversationView(Gtk.ScrolledWindow):
         self._signal_handlers_enabled = False
         self._signal_handler_ids = (0, 0)
 
-        self.add(self._list_box)
-        self.set_focus_vadjustment(Gtk.Adjustment())
+        self.set_child(self._list_box)
+        # self.set_focus_vadjustment(Gtk.Adjustment()) TODO GTK4
 
         app.window.get_action('scroll-view-up').connect(
             'activate', self._on_scroll_view)
@@ -139,8 +138,7 @@ class ConversationView(Gtk.ScrolledWindow):
                 selection_text += (f'{timestamp_formatted} - {row.name}:\n'
                                    f'{row.get_text()}\n')
 
-        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clip.set_text(selection_text, -1)
+        self.get_clipboard().set(selection_text)
 
         self.disable_row_selection()
 
@@ -213,10 +211,10 @@ class ConversationView(Gtk.ScrolledWindow):
         self.disable_row_selection()
 
         self._read_marker_row = ReadMarkerRow(self._contact)
-        self._list_box.add(self._read_marker_row)
+        self._list_box.append(self._read_marker_row)
 
         self._scroll_hint_row = ScrollHintRow(self._contact.account)
-        self._list_box.add(self._scroll_hint_row)
+        self._list_box.append(self._scroll_hint_row)
 
         app.settings.disconnect_signals(self)
 
@@ -245,7 +243,8 @@ class ConversationView(Gtk.ScrolledWindow):
             self.emit(signal_name, *args)
 
     def _reset_list_box(self) -> None:
-        self._list_box.destroy()
+        # TODO GTK4
+        # self._list_box.destroy()
         self._list_box = Gtk.ListBox()
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         self._list_box.set_sort_func(self._sort_func)
@@ -253,8 +252,8 @@ class ConversationView(Gtk.ScrolledWindow):
 
         current_child = self.get_child()
         assert current_child is not None
-        current_child.destroy()
-        self.add(self._list_box)
+        # current_child.destroy()
+        self.set_child(self._list_box)
 
     def _reset(self) -> None:
         self._current_upper = 0
@@ -378,7 +377,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def get_first_row(self
     ) -> MessageRow | CallRow | FileTransferJingleRow | None:
-        for row in self._list_box.get_children():
+        for row in iterate_listbox_children(self._list_box):
             if isinstance(row, MessageRow | CallRow | FileTransferJingleRow):
                 return row
         return None
@@ -394,7 +393,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def get_first_message_row(self
     ) -> MessageRow | None:
-        for row in self._list_box.get_children():
+        for row in iterate_listbox_children(self._list_box):
             if isinstance(row, MessageRow):
                 return row
         return None
@@ -409,7 +408,7 @@ class ConversationView(Gtk.ScrolledWindow):
         return None
 
     def get_first_event_row(self) -> InfoMessage | MUCJoinLeft | None:
-        for row in self._list_box.get_children():
+        for row in iterate_listbox_children(self._list_box):
             if isinstance(row, InfoMessage | MUCJoinLeft):
                 return row
         return None
@@ -548,7 +547,7 @@ class ConversationView(Gtk.ScrolledWindow):
         self._insert_message(message_row)
 
     def _insert_message(self, message: BaseRow) -> None:
-        self._list_box.add(message)
+        self._list_box.append(message)
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
         assert self._read_marker_row is not None
@@ -564,7 +563,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         date_row = DateRow(self.contact.account, start_of_day)
         self._active_date_rows.add(start_of_day)
-        self._list_box.add(date_row)
+        self._list_box.append(date_row)
 
         row = self._list_box.get_row_at_index(date_row.get_index() + 1)
         if row is None:
@@ -655,7 +654,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._remove_from_maps(row)
         index = row.get_index()
-        row.destroy()
+        self._list_box.remove(row)
         decendant_row = self._list_box.get_row_at_index(index)
         if isinstance(decendant_row, MessageRow):
             # Unset possible merged state if we delete a 'top level' message.
@@ -684,7 +683,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
     def scroll_to_message_and_highlight(self, pk: int) -> None:
         highlight_row = None
-        for row in cast(list[BaseRow], self._list_box.get_children()):
+        for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if row.pk == pk:
                 highlight_row = row
                 break
@@ -698,10 +697,10 @@ class ConversationView(Gtk.ScrolledWindow):
             return
 
         _x_coord, y_coord = coordinates
-        _minimum_height, natural_height = highlight_row.get_preferred_height()
+        _mimimum_site, natural_size = highlight_row.get_preferred_size()
         adjustment = self._list_box.get_adjustment()
         adjustment.set_value(
-            y_coord - (adjustment.get_page_size() - natural_height) / 2)
+            y_coord - (adjustment.get_page_size() - natural_size.height) / 2)
 
         highlight_row.get_style_context().remove_class(
             'conversation-row-highlight')
@@ -770,7 +769,7 @@ class ConversationView(Gtk.ScrolledWindow):
             pk, direction=Direction.NEXT)
 
     def get_row_by_pk(self, pk: int) -> MessageRow | None:
-        for row in cast(list[BaseRow], self._list_box.get_children()):
+        for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if not isinstance(row, MessageRow):
                 continue
             if pk in {row.pk, row.orig_pk}:
@@ -779,15 +778,15 @@ class ConversationView(Gtk.ScrolledWindow):
         return None
 
     def iter_rows(self) -> Generator[BaseRow, None, None]:
-        yield from cast(list[BaseRow], self._list_box.get_children())
+        yield from cast(list[BaseRow], iterate_listbox_children(self._list_box))
 
     def _remove_rows_by_type(self, row_type: str) -> None:
         for row in self.iter_rows():
             if row.type == row_type:
-                row.destroy()
+                self._list_box.remove(row)
 
     def update_call_rows(self) -> None:
-        for row in cast(list[BaseRow], self._list_box.get_children()):
+        for row in cast(list[BaseRow], iterate_listbox_children(self._list_box)):
             if isinstance(row, CallRow):
                 row.update()
 

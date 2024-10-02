@@ -21,30 +21,38 @@ class PasswordDialog(Gtk.ApplicationWindow):
     def __init__(self, event: PasswordRequired) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(400, -1)
-        self.set_show_menubar(False)
         self.set_name('PasswordDialog')
         self.set_title(_('Password Required'))
 
-        self._ui = get_builder('password_dialog.ui')
-        self.add(self._ui.pass_box)
+        self._ui = get_builder('password_dialog.ui', self)
+        self.set_child(self._ui.pass_box)
 
         self.account = event.client.account
         self._client = app.get_client(event.client.account)
         self._event = event
 
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
-        self.show_all()
-        self._ui.ok_button.grab_default()
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
+        self.set_default_widget(self._ui.ok_button)
 
         self._process_event()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+        self.show()
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _process_event(self) -> None:
         own_jid = self._client.get_own_jid().bare

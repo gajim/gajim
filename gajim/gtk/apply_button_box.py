@@ -20,16 +20,16 @@ class ApplyButtonBox(Gtk.Box):
                          orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
 
-        self._status_image = Gtk.Image(no_show_all=True)
-        self._spinner = Gtk.Spinner(no_show_all=True)
+        self._status_image = Gtk.Image(visible=False)
+        self._spinner = Gtk.Spinner(visible=False)
         self._button = Gtk.Button(label=button_text, sensitive=False)
         self._button.get_style_context().add_class('suggested-action')
         self._button.connect('clicked', self._on_clicked)
         self._button.connect('clicked', on_clicked)
 
-        self.add(self._status_image)
-        self.add(self._spinner)
-        self.add(self._button)
+        self.append(self._status_image)
+        self.append(self._spinner)
+        self.append(self._button)
 
     def _on_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
@@ -60,7 +60,6 @@ class ApplyButtonBox(Gtk.Box):
             icon_name = 'dialog-warning-symbolic'
             css_class = 'warning-color'
 
-        self._status_image.set_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        self._status_image.set_from_icon_name(icon_name)
         self._status_image.get_style_context().add_class(css_class)
         self._status_image.set_tooltip_text(tooltip_text)
-        self._status_image.show()

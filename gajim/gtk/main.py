@@ -91,12 +91,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._startup_finished: bool = False
 
-        self._ui = get_builder('main.ui')
+        self._ui = get_builder('main.ui', self)
 
-        self.add(self._ui.main_grid)
+        self.set_child(self._ui.main_grid)
 
         self._main_stack = MainStack()
-        self._ui.main_grid.add(self._main_stack)
+        self._ui.main_grid.attach(self._main_stack, 1, 0, 1, 1)
 
         self._chat_page = self._main_stack.get_chat_page()
 
@@ -104,21 +104,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._app_page = self._main_stack.get_app_page()
         self._app_side_bar = AppSideBar(self._app_page)
-        self._ui.app_box.add(self._app_side_bar)
+        self._ui.app_box.prepend(self._app_side_bar)
 
         self._workspace_side_bar = WorkspaceSideBar(self._chat_page)
-        self._ui.workspace_scrolled.add(self._workspace_side_bar)
+        self._ui.workspace_scrolled.set_child(self._workspace_side_bar)
 
         self._account_side_bar = AccountSideBar()
-        self._ui.account_box.add(self._account_side_bar)
+        self._ui.account_box.append(self._account_side_bar)
 
-        self.connect('motion-notify-event', self._on_window_motion_notify)
+        # self.connect('motion-notify-event', self._on_window_motion_notify)
         self.connect('notify::is-active', self._on_window_active)
-        self.connect('delete-event', self._on_window_delete)
-        self.connect('window-state-event', self._on_window_state_changed)
-        self.connect_after('key-press-event', self._on_key_press_event)
+        # self.connect('delete-event', self._on_window_delete)
+        # self.connect('window-state-event', self._on_window_state_changed) GTK4 TODO
 
-        self._ui.connect_signals(self)
+        controller = Gtk.EventControllerKey(
+            propagation_phase=Gtk.PropagationPhase.CAPTURE
+        )
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self.register_events([
             ('message-received', ged.GUI1, self._on_message_received),
@@ -191,14 +194,18 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def show(self) -> None:
         restore_main_window_position()
-        self.present_with_time(Gtk.get_current_event_time())
+        # self.present_with_time(Gtk.get_current_event_time())
+        # GTK4 TODO
+        self.present()
 
     def minimize(self) -> None:
         self.iconify()
 
     def unminimize(self) -> None:
         self.deiconify()
-        self.present_with_time(Gtk.get_current_event_time())
+        # self.present_with_time(Gtk.get_current_event_time())
+        # GTK4 TODO
+        self.present()
 
     def mark_workspace_as_read(self, workspace: str) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -222,8 +229,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         resize_window(self, window_width, window_height)
         restore_main_window_position()
 
-        self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
-        self.show_all()
+        # GdkX11.X11Surface
+        # self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
+        # TODO GTK4
+        self.show()
 
         show_main_window = app.settings.get('show_main_window_on_startup')
         if show_main_window == 'never':
@@ -251,23 +260,23 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def update_account_unread_count(self, account: str, count: int) -> None:
         self._account_side_bar.update_unread_count(account, count)
 
-    def _on_key_press_event(
+    def _on_key_pressed(
         self,
-        _window: MainWindow,
-        event: Gdk.EventKey
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType
     ) -> bool:
-
         # event.get_state() behaves different on Linux and Windows.
         # On Linux its not set in the case that only a modifier key
         # is pressed.
-
         # Filter out modifier not used for shortcuts like Numlock (MOD2)
-        modifier = event.get_state() & Gtk.accelerator_get_default_mod_mask()
-        accel_name = Gtk.accelerator_name(event.keyval, modifier)
+        modifier = state & Gtk.accelerator_get_default_mod_mask()
+        accel_name = Gtk.accelerator_name(keyval, modifier)
 
         log.info('Captured key pressed: %s', accel_name)
 
-        if event.keyval in (
+        if keyval in (
             Gdk.KEY_Control_L,
             Gdk.KEY_Control_R,
             Gdk.KEY_Alt_L,
@@ -275,22 +284,24 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             Gdk.KEY_Shift_L,
             Gdk.KEY_Shift_R,
         ):
-            return False
+            return Gdk.EVENT_PROPAGATE
 
         focused_widget = self.get_focus()
         if (isinstance(focused_widget, Gtk.TextView)
             and focused_widget.props.editable):
-                return False
+                return Gdk.EVENT_PROPAGATE
 
-        if isinstance(focused_widget, Gtk.Entry):
-            return False
+        if isinstance(focused_widget, Gtk.Entry | Gtk.SearchEntry):
+            return Gdk.EVENT_PROPAGATE
 
         message_input = self.get_chat_stack().get_message_input()
         if not message_input.get_mapped() or not message_input.is_sensitive():
-            return False
+            return Gdk.EVENT_PROPAGATE
 
         message_input.grab_focus()
-        return self.propagate_key_event(event)
+        # TODO GTK4
+        # return self.propagate_key_event(event)
+        return Gdk.EVENT_STOP
 
     def _on_client_state_changed(self,
                                  client: Client,
@@ -510,7 +521,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         control = self.get_control()
         if control.has_active_chat():
             if action_name == 'change-nickname':
-                app.window.activate_action('muc-change-nickname', None)
+                app.window.activate_action('win.muc-change-nickname', None)
                 return None
 
             if action_name == 'change-subject':
@@ -680,10 +691,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             show_in_folder(preview.orig_path)
 
         elif action_name == 'preview-copy-link':
-            display = Gdk.Display.get_default()
-            assert display is not None
-            clipboard = Gtk.Clipboard.get_default(display)
-            clipboard.set_text(preview.uri, -1)
+            self.get_clipboard().set(preview.uri)
 
         elif action_name == 'preview-open-link':
             if preview.is_aes_encrypted:
@@ -718,12 +726,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 self._ui.toggle_chat_list_button.set_tooltip_text(
                     _('Show chat list'))
                 self._ui.toggle_chat_list_icon.set_from_icon_name(
-                    'go-next-symbolic', Gtk.IconSize.BUTTON)
+                    'go-next-symbolic')
             else:
                 self._ui.toggle_chat_list_button.set_tooltip_text(
                     _('Hide chat list'))
                 self._ui.toggle_chat_list_icon.set_from_icon_name(
-                    'go-previous-symbolic', Gtk.IconSize.BUTTON)
+                    'go-previous-symbolic')
         self._chat_page.toggle_chat_list()
 
     def _on_copy_message(self,
@@ -731,8 +739,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                          param: GLib.Variant
                          ) -> None:
 
-        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clip.set_text(param.get_string(), -1)
+        self.get_clipboard().set(param.get_string())
 
     @actionmethod
     def _on_moderate_message(self,
@@ -784,7 +791,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_window_motion_notify(self,
                                  _widget: Gtk.ApplicationWindow,
-                                 _event: Gdk.EventMotion
+                                 _event: Any
                                  ) -> None:
         control = self.get_control()
         if not control.has_active_chat():
@@ -855,8 +862,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         return self._workspace_side_bar.get_active_workspace()
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
-        if not self.has_toplevel_focus():
-            return False
+        # TODO GTK4
+        # if not self.has_toplevel_focus():
+        #     return False
         if self._main_stack.get_visible_page_name() != 'chats':
             return False
         return self._chat_page.is_chat_selected(account, jid)
@@ -1408,7 +1416,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def quit(self) -> None:
         save_main_window_position()
-        window_width, window_height = self.get_size()
+        window_width, window_height = self.get_width(), self.get_height()
         app.settings.set('mainwin_width', window_width)
         app.settings.set('mainwin_height', window_height)
         app.settings.save()

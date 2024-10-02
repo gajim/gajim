@@ -43,36 +43,34 @@ class AccountPage(Gtk.Box, EventHelper):
         self._contact = client.get_module('Contacts').get_contact(jid)
         self._contact.connect('avatar-update', self._on_avatar_update)
 
-        self._ui = get_builder('account_page.ui')
-        self.add(self._ui.paned)
+        self._ui = get_builder('account_page.ui', self)
+        self.append(self._ui.paned)
 
         self._ui.our_jid_label.set_text(jid)
 
         self._status_selector = StatusSelector(account=account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.status_box.add(self._status_selector)
+        self._ui.status_box.append(self._status_selector)
 
         self._status_message_selector = StatusMessageSelector(account=account)
         self._status_message_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.status_box.add(self._status_message_selector)
+        self._ui.status_box.append(self._status_message_selector)
 
         self._notification_manager = NotificationManager(account)
-        self._ui.account_box.add(self._notification_manager)
+        self._ui.account_box.append(self._notification_manager)
 
         self._ui.notifications_menu_button.set_menu_model(
             get_account_notifications_menu(account))
 
         self._roster = Roster(account)
-        self._ui.roster_box.add(self._roster)
+        self._ui.roster_box.append(self._roster)
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        self._ui.paned.connect('button-release-event', self._on_button_release)
+        # self._ui.paned.connect('button-release-event', self._on_button_release) GTK4 TODO
 
         self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
         self._ui.account_page_menu_button.set_menu_model(
             get_account_menu(account))
-
-        self._ui.connect_signals(self)
 
         client.connect_signal('state-changed', self._on_client_state_changed)
 
@@ -92,7 +90,6 @@ class AccountPage(Gtk.Box, EventHelper):
         # pylint: enable=line-too-long
 
         self.update()
-        self.show_all()
         self.connect('destroy', self._on_destroy)
 
     def _on_destroy(self, _widget: AccountPage) -> None:
@@ -124,7 +121,7 @@ class AccountPage(Gtk.Box, EventHelper):
         self._roster.set_search_string(text)
 
     @staticmethod
-    def _on_button_release(paned: Gtk.Paned, event: Gdk.EventButton) -> None:
+    def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()
@@ -139,10 +136,11 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.account_label.set_text(account_label)
 
         assert isinstance(self._contact, BareContact)
-        surface = self._contact.get_avatar(AvatarSize.ACCOUNT_PAGE,
+        texture = self._contact.get_avatar(AvatarSize.ACCOUNT_PAGE,
                                            self.get_scale_factor(),
                                            add_show=False)
-        self._ui.avatar_image.set_from_surface(surface)
+        self._ui.avatar_image.set_pixel_size(AvatarSize.ACCOUNT_PAGE)
+        self._ui.avatar_image.set_from_paintable(texture)
 
         self._status_selector.update()
 

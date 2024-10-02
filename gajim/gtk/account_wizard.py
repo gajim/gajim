@@ -17,6 +17,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.client import Client
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -54,8 +55,10 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.util import clear_listbox
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_color_for_account
+from gajim.gtk.util import iterate_children
 from gajim.gtk.util import open_window
 
 CustomHostT = tuple[str, ConnectionProtocol, ConnectionType]
@@ -94,8 +97,6 @@ class AccountWizard(Assistant):
         self.connect('button-clicked', self._on_assistant_button_clicked)
         self.connect('page-changed', self._on_page_changed)
         self.connect('destroy', self._on_destroy)
-
-        self.show_all()
 
         self.update_proxy_list()
 
@@ -598,7 +599,7 @@ class Login(Page):
         Page.__init__(self)
         self.title = _('Add Account')
 
-        self._ui = get_builder('account_wizard.ui')
+        self._ui = get_builder('account_wizard.ui', self)
         self._ui.log_in_address_entry.connect(
             'activate', self._on_address_entry_activate)
         self._ui.log_in_address_entry.connect(
@@ -611,8 +612,7 @@ class Login(Page):
         self._ui.log_in_button.connect('clicked', self._on_login)
         self._ui.sign_up_button.connect('clicked', self._on_signup)
 
-        self.pack_start(self._ui.login_box, True, True, 0)
-        self.show_all()
+        self.append(self._ui.login_box)
 
     def focus(self) -> None:
         self._ui.log_in_address_entry.grab_focus()
@@ -708,7 +708,7 @@ class Signup(Page):
         self._servers: list[dict[str, Any]] = []
         self._provider_list_request: HTTPRequest | None = None
 
-        self._ui = get_builder('account_wizard.ui')
+        self._ui = get_builder('account_wizard.ui', self)
         self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
 
         self._ui.recommendation_link1.connect(
@@ -720,11 +720,9 @@ class Signup(Page):
         self._ui.server_comboboxtext_sign_up_entry.connect(
             'changed', self._set_complete)
 
-        self.pack_start(self._ui.signup_grid, True, True, 0)
+        self.append(self._ui.signup_grid)
 
         self.connect('destroy', self._on_destroy)
-
-        self.show_all()
 
     def _on_destroy(self, widget: Signup) -> None:
         if self._provider_list_request is None:
@@ -758,7 +756,7 @@ class Signup(Page):
 
         if not request.is_complete():
             self._ui.update_provider_list_icon.set_from_icon_name(
-                'dialog-error-symbolic', Gtk.IconSize.BUTTON
+                'dialog-error-symbolic'
             )
             self._ui.update_provider_list_icon.set_tooltip_text(
                 _('Could not update providers list')
@@ -767,7 +765,7 @@ class Signup(Page):
             return
 
         self._ui.update_provider_list_icon.set_from_icon_name(
-            'feather-check-symbolic', Gtk.IconSize.BUTTON
+            'feather-check-symbolic'
         )
         self._ui.update_provider_list_icon.set_tooltip_text(
             _('Providers list is up to date')
@@ -821,7 +819,7 @@ class Signup(Page):
 
         provider_category = server_data['category']
         image = Gtk.Image.new_from_icon_name(
-            'feather-check-symbolic', Gtk.IconSize.BUTTON)
+            'feather-check-symbolic')
         label = Gtk.Label(
             label=_('Provider Category: %s') % provider_category,
             halign=Gtk.Align.START,
@@ -837,11 +835,10 @@ class Signup(Page):
         self._ui.sign_up_info_grid.attach(providers_link, 0, 2, 2, 1)
 
         self._ui.sign_up_info_grid.attach(Gtk.Separator(), 0, 3, 2, 1)
-        self._ui.sign_up_info_grid.show_all()
 
     def _clear_server_info_box(self) -> None:
-        for child in self._ui.sign_up_info_grid.get_children():
-            child.destroy()
+        for child in iterate_children(self._ui.sign_up_info_grid):
+            self._ui.sign_up_info_grid.remove(child)
 
     def _on_visit_server(self, _button: Gtk.Button) -> int:
         server = self._ui.server_comboboxtext_sign_up_entry.get_text().strip()
@@ -891,15 +888,13 @@ class AdvancedSettings(Page):
         self.title: str = _('Advanced settings')
         self.complete: bool = False
 
-        self._ui = get_builder('account_wizard.ui')
+        self._ui = get_builder('account_wizard.ui', self)
         self._ui.manage_proxies_button.connect('clicked',
                                                self._on_proxy_manager)
         self._ui.proxies_combobox.connect('changed', self._set_complete)
         self._ui.custom_host_entry.connect('changed', self._set_complete)
         self._ui.custom_port_entry.connect('changed', self._set_complete)
-        self.pack_start(self._ui.advanced_grid, True, True, 0)
-
-        self.show_all()
+        self.append(self._ui.advanced_grid)
 
     @staticmethod
     def _on_proxy_manager(_button: Gtk.Button) -> None:
@@ -1021,10 +1016,9 @@ class SecurityWarning(Page):
         self._cert: Gio.TlsCertificate | None = None
         self._domain: str | None = None
 
-        self._ui = get_builder('account_wizard.ui')
-        self.pack_start(self._ui.security_warning_box, True, True, 0)
+        self._ui = get_builder('account_wizard.ui', self)
+        self.append(self._ui.security_warning_box)
         self._ui.view_cert_button.connect('clicked', self._on_view_cert)
-        self.show_all()
 
     @property
     def cert(self) -> Gio.TlsCertificate | None:
@@ -1038,23 +1032,21 @@ class SecurityWarning(Page):
         # Clear list
         self._cert = cert
         self._domain = domain
-        self._ui.error_list.foreach(self._ui.error_list.remove)
+        clear_listbox(self._ui.error_list)
 
         unknown_error = _('Unknown TLS error "%s"')
         for error in errors:
             error_text = GIO_TLS_ERRORS.get(error, unknown_error % error)
             box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            image = Gtk.Image.new_from_icon_name('dialog-warning-symbolic',
-                                                 Gtk.IconSize.LARGE_TOOLBAR)
+            image = Gtk.Image.new_from_icon_name('dialog-warning-symbolic')
             image.get_style_context().add_class('warning-color')
             label = Gtk.Label(label=error_text)
-            label.set_line_wrap(True)
+            label.set_wrap_mode(Pango.WrapMode.WORD)
             label.set_xalign(0)
             label.set_selectable(True)
-            box.add(image)
-            box.add(label)
-            box.show_all()
-            self._ui.error_list.add(box)
+            box.append(image)
+            box.append(label)
+            self._ui.error_list.append(box)
 
         self._ui.trust_cert_checkbutton.set_visible(
             Gio.TlsCertificateFlags.UNKNOWN_CA in errors)
@@ -1089,12 +1081,10 @@ class Form(Page):
         heading = Gtk.Label(label=_('Create Account'))
         heading.get_style_context().add_class('large-header')
         heading.set_max_width_chars(30)
-        heading.set_line_wrap(True)
+        heading.set_wrap_mode(Pango.WrapMode.WORD)
         heading.set_halign(Gtk.Align.CENTER)
         heading.set_justify(Gtk.Justification.CENTER)
-        self.pack_start(heading, False, True, 0)
-
-        self.show_all()
+        self.append(heading)
 
     @property
     def has_form(self) -> bool:
@@ -1124,8 +1114,7 @@ class Form(Page):
         self._current_form = DataFormWidget(form, options)
         self._current_form.connect('is-valid', self._on_is_valid)
         self._current_form.validate()
-        self.pack_start(self._current_form, True, True, 0)
-        self._current_form.show_all()
+        self.append(self._current_form)
 
     def get_credentials(self) -> tuple[str, str]:
         assert self._current_form is not None
@@ -1161,10 +1150,9 @@ class Redirect(Page):
         self.title: str = _('Redirect')
         self._link: str | None = None
 
-        self._ui = get_builder('account_wizard.ui')
-        self.pack_start(self._ui.redirect_box, True, True, 0)
+        self._ui = get_builder('account_wizard.ui', self)
+        self.append(self._ui.redirect_box)
         self._ui.link_button.connect('clicked', self._on_link_button)
-        self.show_all()
 
     def set_redirect(self, link: str, instructions: str) -> None:
         if instructions is None:
@@ -1191,15 +1179,13 @@ class Success(SuccessPage):
         self._label: str | None = None
         self._color: str | None = None
 
-        self._ui = get_builder('account_wizard.ui')
-        self.pack_start(self._ui.account_label_box, True, True, 0)
+        self._ui = get_builder('account_wizard.ui', self)
+        self.append(self._ui.account_label_box)
 
         self._provider = self._add_css_provider()
 
         self._ui.account_name_entry.connect('changed', self._on_name_changed)
         self._ui.account_color_button.connect('color-set', self._on_color_set)
-
-        self.show_all()
 
     def set_account(self, account: str) -> None:
         self._account = account
@@ -1236,7 +1222,7 @@ class Success(SuccessPage):
 
     def _set_badge_color(self, color: str) -> None:
         css = '.badge { background-color: %s; font-size: 100%%; }' % color
-        self._provider.load_from_data(bytes(css.encode()))
+        self._provider.load_from_bytes(GLib.Bytes.new(css.encode('utf-8')))
 
     def _save_config(self) -> None:
         assert self._account is not None

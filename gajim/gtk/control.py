@@ -60,7 +60,7 @@ class ChatControl(EventHelper):
         self._contact = None
         self._client = None
 
-        self._ui = get_builder('chat_control.ui')
+        self._ui = get_builder('chat_control.ui', self)
 
         self._message_row_actions = MessageRowActions()
         self._ui.conv_view_overlay.add_overlay(self._message_row_actions)
@@ -69,7 +69,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.connect('autoscroll-changed',
                                     self._on_autoscroll_changed)
         self._scrolled_view.connect('request-history', self._request_history)
-        self._ui.conv_view_overlay.add(self._scrolled_view)
+        self._ui.conv_view_overlay.set_child(self._scrolled_view)
 
         self._groupchat_state = GroupchatState()
         self._ui.conv_view_overlay.add_overlay(self._groupchat_state)
@@ -84,7 +84,7 @@ class ChatControl(EventHelper):
         self._ui.conv_view_overlay.add_overlay(self._jump_to_end_button)
 
         self._roster = GroupchatRoster()
-        self._ui.conv_view_paned.pack2(self._roster, False, False)
+        self._ui.conv_view_paned.set_end_child(self._roster)
 
         # Used with encryption plugins
         self.sendmessage = False
@@ -95,7 +95,6 @@ class ChatControl(EventHelper):
             'activate', self._on_jump_to_message)
 
         self.widget = cast(Gtk.Box, self._ui.get_object('control_box'))
-        self.widget.show_all()
 
     @property
     def contact(self) -> types.ChatContactT:
@@ -156,7 +155,7 @@ class ChatControl(EventHelper):
         self._scrolled_view.add_info_message(text, timestamp)
 
     def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
-        app.window.activate_action('send-file',
+        app.window.activate_action('win.send-file',
                                    GLib.Variant('as', selection.get_uris()))
 
     def clear(self) -> None:
@@ -225,7 +224,7 @@ class ChatControl(EventHelper):
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
 
-        self._message_selection.set_no_show_all(True)
+        self._message_selection.set_visible(False)
         self._message_selection.hide()
 
         self._register_events()
@@ -271,6 +270,8 @@ class ChatControl(EventHelper):
             if muc_data is not None and muc_data.subject is not None:
                 self._scrolled_view.add_muc_subject(
                     muc_data.subject, muc_data.last_subject_timestamp)
+
+        self.widget.show()
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -454,8 +455,7 @@ class ChatControl(EventHelper):
 
         pk = param.get_uint32()
         self._scrolled_view.enable_row_selection(pk)
-        self._message_selection.set_no_show_all(False)
-        self._message_selection.show_all()
+        self._message_selection.show()
 
     def _on_copy_selection(self, _widget: MessageSelection) -> None:
         self._scrolled_view.copy_selected_messages()

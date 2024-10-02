@@ -17,6 +17,7 @@ from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.status import get_client_status
 
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import iterate_listbox_children
 
 
 class AccountSideBar(Gtk.ListBox):
@@ -32,13 +33,12 @@ class AccountSideBar(Gtk.ListBox):
             self.add_account(account)
 
     def add_account(self, account: str) -> None:
-        self.add(Account(account))
+        self.append(Account(account))
 
     def remove_account(self, account: str) -> None:
-        accounts = cast(list[Account], self.get_children())
-        for row in accounts:
+        for row in cast(list[Account], iterate_listbox_children(self)):
             if row.account == account:
-                row.destroy()
+                self.remove(row)
                 return
 
     @staticmethod
@@ -53,7 +53,7 @@ class AccountSideBar(Gtk.ListBox):
         self.select_row(row)
 
     def update_unread_count(self, account: str, count: int) -> None:
-        for row in cast(list[Account], self.get_children()):
+        for row in cast(list[Account], iterate_listbox_children(self)):
             if row.account == account:
                 row.set_unread_count(count)
                 break
@@ -89,12 +89,12 @@ class Account(Gtk.ListBoxRow, EventHelper):
         self._unread_label = Gtk.Label()
         self._unread_label.get_style_context().add_class(
             'unread-counter')
-        self._unread_label.set_no_show_all(True)
+        self._unread_label.set_visible(False)
         self._unread_label.set_halign(Gtk.Align.END)
         self._unread_label.set_valign(Gtk.Align.START)
 
         self._account_color_bar = Gtk.Box()
-        self._account_color_bar.set_no_show_all(True)
+        self._account_color_bar.set_visible(False)
         self._account_color_bar.set_size_request(6, -1)
         self._account_color_bar.get_style_context().add_class(
             'account-identifier-bar')
@@ -103,17 +103,16 @@ class Account(Gtk.ListBoxRow, EventHelper):
         self._account_box = Gtk.Box(spacing=3)
         self._account_box.set_tooltip_text(
             _('Account: %s') % app.get_account_label(account))
-        self._account_box.add(selection_bar)
-        self._account_box.add(self._image)
-        self._account_box.add(self._account_color_bar)
+        self._account_box.append(selection_bar)
+        self._account_box.append(self._image)
+        self._account_box.append(self._account_color_bar)
         self._set_account_color()
 
         overlay = Gtk.Overlay()
-        overlay.add(self._account_box)
+        overlay.set_child(self._account_box)
         overlay.add_overlay(self._unread_label)
 
-        self.add(overlay)
-        self.show_all()
+        self.set_child(overlay)
 
     def _on_account_label_changed(self, value: str, *args: Any) -> None:
         self._account_box.set_tooltip_text(
@@ -141,7 +140,7 @@ class Account(Gtk.ListBoxRow, EventHelper):
 
 class AccountAvatar(Gtk.Image):
     def __init__(self, account: str) -> None:
-        Gtk.Image.__init__(self)
+        Gtk.Image.__init__(self, pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
 
         self._account = account
 
@@ -163,12 +162,13 @@ class AccountAvatar(Gtk.Image):
     def _update_image(self) -> None:
         assert not isinstance(self._contact, ResourceContact)
         status = get_client_status(self._account)
-        surface = app.app.avatar_storage.get_surface(
+        texture = app.app.avatar_storage.get_texture(
             self._contact,
             AvatarSize.ACCOUNT_SIDE_BAR,
             self.get_scale_factor(),
             status)
-        self.set_from_surface(surface)
+        self.set_pixel_size(AvatarSize.ACCOUNT_SIDE_BAR)
+        self.set_from_paintable(texture)
 
     def _on_destroy(self, _widget: Gtk.Image) -> None:
         self._contact.disconnect_all_from_obj(self)

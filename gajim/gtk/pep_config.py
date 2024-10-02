@@ -38,15 +38,12 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_name('PEPConfig')
         self.set_default_size(700, 800)
         self.set_resizable(True)
-        self.set_transient_for(app.window)
 
-        self._ui = get_builder('pep_config.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('pep_config.ui', self)
+        self.set_child(self._ui.stack)
 
         self.account = account
         self.set_title(_('PEP Service Configuration (%s)') % self.account)
@@ -73,10 +70,13 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             ('style-changed', ged.GUI1, self._on_style_changed)
         ])
 
-        self.show_all()
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
+
+        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         selection = self._ui.services_treeview.get_selection()
@@ -88,9 +88,17 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         if style_scheme is not None:
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+    def _on_key_pressed(
+            self,
+            _event_controller_key: Gtk.EventControllerKey,
+            keyval: int,
+            _keycode: int,
+            _state: Gdk.ModifierType
+        ) -> bool:
+            if keyval == Gdk.KEY_Escape:
+                self.destroy()
+                return True
+            return False
 
     def _on_services_selection_changed(self,
                                        _selection: Gtk.TreeSelection
@@ -206,8 +214,8 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         form = dataforms.extend_form(node=result.form)  # pyright: ignore
         self._dataform_widget = DataFormWidget(form)  # pyright: ignore
         self._dataform_widget.set_propagate_natural_height(True)
-        self._dataform_widget.show_all()
-        self._ui.form_box.add(self._dataform_widget)
+        self._dataform_widget.show()
+        self._ui.form_box.append(self._dataform_widget)
         self._ui.form_label.set_text(result.node)
 
         self._ui.stack.set_visible_child_name('config')

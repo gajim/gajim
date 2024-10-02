@@ -9,11 +9,12 @@ from __future__ import annotations
 
 from typing import Any
 
+import datetime
 import logging
 import math
 import sys
 import textwrap
-from datetime import datetime
+from collections.abc import Iterator
 from functools import lru_cache
 from functools import wraps
 from importlib import import_module
@@ -51,6 +52,7 @@ from gajim.common.structs import VariantMixin
 from gajim.common.styling import PlainBlock
 from gajim.common.util.user_strings import format_idle_time
 
+from gajim.gtk.const import GDK_MEMORY_DEFAULT
 from gajim.gtk.const import WINDOW_MODULES
 
 log = logging.getLogger('gajim.gtk.util')
@@ -61,12 +63,19 @@ MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
 def set_urgency_hint(window: Gtk.Window, setting: bool) -> None:
+    return # TODO: GTK4
     if app.settings.get('use_urgency_hint'):
         window.set_urgency_hint(setting)
 
 
 def icon_exists(name: str) -> bool:
     return Gtk.IconTheme.get_default().has_icon(name)
+
+
+def get_icon_theme() -> Gtk.IconTheme:
+    display = Gdk.Display.get_default()
+    assert display is not None
+    return Gtk.IconTheme.get_for_display(display)
 
 
 def load_icon_info(icon_name: str,
@@ -81,7 +90,9 @@ def load_icon_info(icon_name: str,
         log.warning('Could not determine scale factor')
         scale = 1
 
-    icon_theme = Gtk.IconTheme.get_default()
+    icon_theme = get_icon_theme()
+
+    return None # GTK4 TODO
 
     try:
         iconinfo = icon_theme.lookup_icon_for_scale(
@@ -99,7 +110,7 @@ def load_icon_surface(
         icon_name: str,
         size: int = 16,
         scale: int | None = None,
-        flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
+        flags: Gtk.IconLookupFlags = None
 ) -> cairo.ImageSurface | None:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
@@ -124,7 +135,7 @@ def load_icon_surface(
 def load_icon_pixbuf(icon_name: str,
                      size: int = 16,
                      scale: int | None = None,
-                     flags: Gtk.IconLookupFlags = Gtk.IconLookupFlags.FORCE_SIZE
+                     flags: Gtk.IconLookupFlags = None
                      ) -> GdkPixbuf.Pixbuf | None:
 
     icon_info = load_icon_info(icon_name, size, scale, flags)
@@ -172,10 +183,10 @@ def get_total_screen_geometry() -> tuple[int, int]:
     total_height = 0
     display = Gdk.Display.get_default()
     assert display is not None
-    monitors = display.get_n_monitors()
-    for num in range(monitors):
-        monitor = display.get_monitor(num)
-        assert monitor is not None
+    monitors = display.get_monitors()
+    for num in range(monitors.get_n_items()):
+        monitor = monitors.get_item(num)
+        assert isinstance(monitor, Gdk.Monitor)
         geometry = monitor.get_geometry()
         total_width += geometry.width
         total_height = max(total_height, geometry.height)
@@ -193,7 +204,7 @@ def resize_window(window: Gtk.Window, width: int, height: int) -> None:
 
     width = min(width, screen_w)
     height = min(height, screen_h)
-    window.resize(abs(width), abs(height))
+    window.set_default_size(abs(width), abs(height))
 
 
 def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
@@ -204,11 +215,13 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     pos_x = max(pos_x, 0)
     pos_y = max(pos_y, 0)
 
-    width, height = window.get_size()
+    width = window.get_width()
+    height = window.get_height()
     if pos_x + width > screen_w:
         pos_x = screen_w - width
     if pos_y + height > screen_h:
         pos_y = screen_h - height
+    return # TODO GTK4
     window.move(pos_x, pos_y)
 
 
@@ -217,6 +230,9 @@ def save_main_window_position() -> None:
         return
     if app.is_display(Display.WAYLAND):
         return
+
+    # TODO GTK4
+    return
     x_pos, y_pos = app.window.get_position()
     log.debug('Saving main window position: %s %s', x_pos, y_pos)
     app.settings.set('mainwin_x_position', x_pos)
@@ -261,21 +277,6 @@ def get_completion_liststore(entry: Gtk.Entry) -> Gtk.ListStore:
     return liststore
 
 
-def get_cursor(name: str) -> Gdk.Cursor:
-    display = Gdk.Display.get_default()
-    assert display is not None
-    try:
-        cursor = Gdk.Cursor.new_from_name(display, name)
-        if cursor is not None:
-            return cursor
-    except TypeError as e:
-        log.exception(e)
-
-    cursor = Gdk.Cursor.new_from_name(display, 'default')
-    assert cursor is not None
-    return cursor
-
-
 def scroll_to_end(widget: Gtk.ScrolledWindow) -> bool:
     '''Scrolls to the end of a GtkScrolledWindow.
 
@@ -316,10 +317,10 @@ def get_image_button(icon_name: str, tooltip: str,
                      toggle: bool = False) -> Gtk.Button:
     if toggle:
         button = Gtk.ToggleButton()
-        image = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name(icon_name)
         button.set_image(image)
     else:
-        button = Gtk.Button.new_from_icon_name(icon_name, Gtk.IconSize.MENU)
+        button = Gtk.Button.new_from_icon_name(icon_name)
     button.set_tooltip_text(tooltip)
     return button
 
@@ -486,8 +487,8 @@ def find_widget(name: str, container: Gtk.Container) -> Gtk.Widget | None:
 class MultiLineLabel(Gtk.Label):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         Gtk.Label.__init__(self, *args, **kwargs)
-        self.set_line_wrap(True)
-        self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+        self.set_wrap_mode(Pango.WrapMode.WORD)
+        self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_single_line_mode(False)
         self.set_selectable(True)
 
@@ -551,9 +552,9 @@ def get_css_show_class(show: str) -> str:
     return '.gajim-status-offline'
 
 
-def add_css_to_widget(widget: Any, css: str) -> None:
+def add_css_to_widget(widget: Gtk.Widget, css: str) -> None:
     provider = Gtk.CssProvider()
-    provider.load_from_data(bytes(css.encode()))
+    provider.load_from_bytes(GLib.Bytes.new(css.encode('utf-8')))
     context = widget.get_style_context()
     context.add_provider(provider,
                          Gtk.STYLE_PROVIDER_PRIORITY_USER)
@@ -594,7 +595,7 @@ def get_avatar_for_message(
         contact: types.ChatContactT,
         scale: int,
         size: AvatarSize
-    ) -> cairo.ImageSurface | None:
+    ) -> Gdk.Texture | None:
 
     if isinstance(contact, GroupchatContact):
         name = get_contact_name_for_message(db_row, contact)
@@ -747,29 +748,12 @@ def connect_destroy(sender: Any, *args: Any, **kwargs: Any) -> int:
     return _connect_destroy(sender, sender.connect, *args, **kwargs)
 
 
-def wrap_with_event_box(klass: Any) -> Any:
-    @wraps(klass)
-    def klass_wrapper(*args: Any, **kwargs: Any) -> Gtk.EventBox:
-        widget = klass(*args, **kwargs)
-        event_box = Gtk.EventBox()
-
-        def _on_realize(*args: Any) -> None:
-            window = event_box.get_window()
-            assert window is not None
-            window.set_cursor(get_cursor('pointer'))
-
-        event_box.connect_after('realize', _on_realize)
-        event_box.add(widget)
-        return event_box
-    return klass_wrapper
-
-
 class GroupBadge(Gtk.Label):
     def __init__(self, group: str) -> None:
         Gtk.Label.__init__(
             self,
             ellipsize=Pango.EllipsizeMode.END,
-            no_show_all=True,
+            visible=False,
             halign=Gtk.Align.END,
             valign=Gtk.Align.CENTER,
             hexpand=True,
@@ -782,13 +766,13 @@ class GroupBadge(Gtk.Label):
 
 
 class IdleBadge(Gtk.Label):
-    def __init__(self, idle: datetime | None = None) -> None:
+    def __init__(self, idle: datetime.datetime | None = None) -> None:
         Gtk.Label.__init__(
             self,
             halign=Gtk.Align.START,
             hexpand=True,
             ellipsize=Pango.EllipsizeMode.NONE,
-            no_show_all=True,
+            visible=False,
         )
         self.set_size_request(50, -1)
         self.get_style_context().add_class('dim-label')
@@ -798,7 +782,7 @@ class IdleBadge(Gtk.Label):
 
         self.show()
 
-    def set_idle(self, idle: datetime) -> None:
+    def set_idle(self, idle: datetime.datetime) -> None:
         self.set_text(_('Last seen: %s') % format_idle_time(idle))
         format_string = app.settings.get('date_time_format')
         self.set_tooltip_text(idle.strftime(format_string))
@@ -811,7 +795,7 @@ class AccountBadge(Gtk.Label):
         self.set_max_width_chars(12)
         self.set_size_request(50, -1)
         self.get_style_context().add_class('badge')
-        self.set_no_show_all(True)
+        self.set_visible(False)
 
         if account is not None:
             self.set_account(account)
@@ -821,13 +805,12 @@ class AccountBadge(Gtk.Label):
         label = app.get_account_label(account)
         self.set_text(label)
 
-        style_context = self.get_style_context()
-        for style_class in style_context.list_classes():
+        for style_class in self.get_css_classes():
             if style_class != 'badge':
-                style_context.remove_class(style_class)
+                self.remove_css_class(style_class)
 
         account_class = app.css_config.get_dynamic_class(account)
-        style_context.add_class(account_class)
+        self.add_css_class(account_class)
 
         self.set_tooltip_text(_('Account: %s') % label)
         app.settings.disconnect_signals(self)
@@ -958,32 +941,70 @@ class GdkRectangle(Gdk.Rectangle):
         self.width = width
 
 
-class GajimPopover(Gtk.Popover):
+class GajimPopover(Gtk.PopoverMenu):
     def __init__(self,
                  menu: Gio.MenuModel | None = None,
-                 relative_to: Gtk.Widget | None = None,
                  position: Gtk.PositionType = Gtk.PositionType.RIGHT,
-                 event: Gdk.EventButton | None = None) -> None:
+                 event: Any | None = None) -> None:
 
-        Gtk.Popover.__init__(self)
+        Gtk.Popover.__init__(self, autohide=True)
 
         if menu is not None:
-            self.bind_model(menu)
+            self.set_menu_model(menu)
 
-        self.set_relative_to(relative_to)
         self.set_position(position)
         if event is not None:
             self.set_pointing_from_event(event)
 
-        self.connect('closed', self._destroy)
-
-    def set_pointing_from_event(self, event: Gdk.EventButton) -> None:
+    def set_pointing_from_event(self, event: Any) -> None:
         self.set_pointing_to_coord(event.x, event.y)
 
     def set_pointing_to_coord(self, x: float, y: float) -> None:
         rectangle = GdkRectangle(x=int(x), y=int(y))
         self.set_pointing_to(rectangle)
 
-    def _destroy(self, popover: Gtk.Popover) -> None:
-        app.check_finalize(popover)
-        GLib.idle_add(popover.set_relative_to, None)
+
+def iterate_listbox_children(listbox: Gtk.ListBox) -> Iterator[Gtk.Widget]:
+    index = 0
+    while child := listbox.get_row_at_index(index):
+        yield child
+        index += 1
+
+
+def clear_listbox(listbox: Gtk.ListBox) -> None:
+    '''Gtk.ListBox.remove_all() does not work if backed by a model.'''
+    for row in iterate_listbox_children(listbox):
+        listbox.remove(row)
+
+
+def get_listbox_row_count(listbox: Gtk.ListBox) -> int:
+    return len(list(iterate_listbox_children(listbox)))
+
+
+def iterate_children(widget: Gtk.Widget) -> Iterator[Gtk.Widget]:
+    child = widget.get_first_child()
+    if child is None:
+        return
+    yield child
+
+    while child := child.get_next_sibling():
+        yield child
+
+
+def convert_surface_to_texture(surface: cairo.ImageSurface) -> Gdk.Texture:
+    memoryv = surface.get_data()
+    assert memoryv is not None
+    return Gdk.MemoryTexture.new(
+        width=surface.get_width(),
+        height=surface.get_height(),
+        format=GDK_MEMORY_DEFAULT,
+        bytes=GLib.Bytes.new(memoryv.tobytes()),
+        stride=surface.get_stride()
+    )
+
+
+def convert_glib_to_py_datetime(dt: datetime.datetime | datetime.date) -> GLib.DateTime:
+    iso = dt.isoformat()
+    g_dt = GLib.DateTime.new_from_iso8601(iso)
+    assert g_dt is not None
+    return g_dt

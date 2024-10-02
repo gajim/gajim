@@ -27,6 +27,7 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
+from gajim.gtk.util import iterate_children
 from gajim.gtk.util import make_href_markup
 
 log = logging.getLogger('gajim.gtk.groupchat_info')
@@ -127,16 +128,13 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._contact: GroupchatContact | None = None
         self._info: DiscoInfo | None = None
 
-        self._ui = get_builder('groupchat_info_scrolled.ui')
-        self.add(self._ui.info_grid)
-        self._ui.connect_signals(self)
+        self._ui = get_builder('groupchat_info_scrolled.ui', self)
+        self.set_child(self._ui.info_grid)
 
         self._contact_name_widget = ContactNameWidget(edit_mode=edit_mode)
         self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
 
-        self._ui.name_box.add(self._contact_name_widget)
-
-        self.show_all()
+        self._ui.name_box.append(self._contact_name_widget)
 
     def get_account(self) -> str | None:
         return self._account
@@ -192,10 +190,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
             name = get_groupchat_name(client, info.jid)
             contact = client.get_module('Contacts').get_contact(
                 info.jid, groupchat=True)
-            surface = contact.get_avatar(
+            assert isinstance(contact, GroupchatContact)
+            texture = contact.get_avatar(
                 AvatarSize.GROUP_INFO,
                 self.get_scale_factor())
-            self._ui.avatar_image.set_from_surface(surface)
+            self._ui.avatar_image.set_pixel_size(AvatarSize.GROUP_INFO)
+            self._ui.avatar_image.set_from_paintable(texture)
 
         self._contact_name_widget.update_displayed_name(name or '')
 
@@ -220,7 +220,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._ui.users_image.set_visible(has_users)
 
         # Set contacts
-        self._ui.contact_box.foreach(self._ui.contact_box.remove)
+        for widget in iterate_children(self._ui.contact_box):
+            self._ui.contact_box.remove(widget)
+
         has_contacts = bool(info.muc_contacts)
         if has_contacts:
             for contact in info.muc_contacts:
@@ -229,7 +231,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                 except Exception as e:
                     log.debug('Bad MUC contact address %s: %s', contact, str(e))
                 else:
-                    self._ui.contact_box.add(self._get_contact_button(jid))
+                    self._ui.contact_box.append(self._get_contact_button(jid))
 
         self._ui.contact_box.set_visible(has_contacts)
         self._ui.contact_label.set_visible(has_contacts)
@@ -281,15 +283,13 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                 grid.attach(self._get_feature_icon(icon, tooltip), 0, row, 1, 1)
                 grid.attach(self._get_feature_label(name), 1, row, 1, 1)
                 row += 1
-        grid.show_all()
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
         if self._contact is not None:
             jid = self._contact.jid
         else:
             jid = self._info.jid
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(jid.to_iri(XmppUriQuery.JOIN.value), -1)
+        self.get_clipboard().set(jid.to_iri(XmppUriQuery.JOIN.value))
 
     @staticmethod
     def _on_activate_log_link(button: Gtk.LinkButton) -> int:
@@ -309,7 +309,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
 
     @staticmethod
     def _get_feature_icon(icon: str, tooltip: str) -> Gtk.Image:
-        image = Gtk.Image.new_from_icon_name(icon, Gtk.IconSize.MENU)
+        image = Gtk.Image.new_from_icon_name(icon)
         image.set_valign(Gtk.Align.CENTER)
         image.set_halign(Gtk.Align.END)
         image.set_tooltip_text(tooltip)

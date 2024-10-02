@@ -22,6 +22,7 @@ class Builder:
 
     def __init__(self,
                  filename: str | None = None,
+                 instance: Any = None,
                  widgets: list[str] | None = None,
                  domain: str | None = None,
                  gettext_: Any | None = None) -> None:
@@ -29,7 +30,7 @@ class Builder:
         if filename is None:
             filename = self.filename
 
-        self._builder = Gtk.Builder()
+        self._builder = Gtk.Builder(instance)
 
         if domain is None:
             domain = i18n.DOMAIN
@@ -75,5 +76,9 @@ class Builder:
         return self._builder.get_object(name)
 
 
-def get_builder(file_name: str, widgets: list[str] | None = None) -> Builder:
-    return Builder(file_name, widgets)
+def get_builder(
+    file_name: str,
+    instance: Any = None,
+    widgets: list[str] | None = None,
+) -> Builder:
+    return Builder(file_name, instance, widgets)

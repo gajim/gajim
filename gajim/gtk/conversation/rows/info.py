@@ -36,8 +36,7 @@ class InfoMessage(BaseRow):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        icon = Gtk.Image.new_from_icon_name('feather-info-symbolic',
-                                            Gtk.IconSize.MENU)
+        icon = Gtk.Image.new_from_icon_name('feather-info-symbolic')
         icon.get_style_context().add_class('gajim-status-message')
         self.grid.attach(icon, 1, 0, 1, 1)
 
@@ -50,5 +49,3 @@ class InfoMessage(BaseRow):
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.END)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
-
-        self.show_all()

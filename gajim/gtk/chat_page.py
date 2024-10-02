@@ -10,7 +10,6 @@ from typing import TYPE_CHECKING
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -44,9 +43,8 @@ class ChatPage(Gtk.Box):
     def __init__(self):
         Gtk.Box.__init__(self)
 
-        self._ui = get_builder('chat_paned.ui')
-        self.add(self._ui.paned)
-        self._ui.connect_signals(self)
+        self._ui = get_builder('chat_paned.ui', self)
+        self.append(self._ui.paned)
 
         self._chat_stack = ChatStack()
         self._ui.right_grid.attach(self._chat_stack, 0, 0, 1, 1)
@@ -62,18 +60,19 @@ class ChatPage(Gtk.Box):
         self._search_revealer.set_hexpand_set(True)
         self._search_revealer.set_transition_type(
             Gtk.RevealerTransitionType.SLIDE_LEFT)
-        self._search_revealer.add(self._search_view)
+        self._search_revealer.set_child(self._search_view)
         self._ui.right_grid.attach(self._search_revealer, 1, 0, 1, 1)
 
         self._restore_occupants_list = False
 
-        self._ui.section_label_eventbox.connect(
-            'enter-notify-event', self._on_section_label_hover)
-        self._ui.section_label_eventbox.connect(
-            'leave-notify-event', self._on_section_label_hover)
+        section_hover_controller = Gtk.EventControllerMotion()
+        section_hover_controller.connect('enter', self._on_section_label_enter)
+        section_hover_controller.connect('leave', self._on_section_label_leave)
+        self._ui.section_label_eventbox.add_controller(section_hover_controller)
 
+        # TODO GTK4
         self._chat_filter = ChatFilter(icons=True)
-        self._ui.filter_bar.add(self._chat_filter)
+        self._ui.filter_bar.append(self._chat_filter)
         self._ui.filter_bar_toggle.connect(
             'toggled', self._on_filter_revealer_toggled)
 
@@ -85,20 +84,19 @@ class ChatPage(Gtk.Box):
         self._chat_list_stack.connect('chat-removed', self._on_chat_removed)
         self._chat_list_stack.connect('notify::visible-child-name',
                                       self._on_chat_list_changed)
-        self._ui.chat_list_scrolled.add(self._chat_list_stack)
+        self._ui.chat_list_scrolled.set_child(self._chat_list_stack)
 
         self._ui.start_chat_menu_button.set_menu_model(
             get_start_chat_button_menu())
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        self._ui.paned.connect('button-release-event', self._on_button_release)
+        # self._ui.paned.connect('button-release-event', self._on_button_release) GTK4 TODO
+        self.toggle_chat_list()
 
         self._startup_finished: bool = False
         self._closed_chat_memory: list[tuple[str, JID, str]] = []
 
         self._add_actions()
-
-        self.show_all()
 
     def _add_actions(self):
         actions = [
@@ -124,7 +122,7 @@ class ChatPage(Gtk.Box):
         return self._chat_stack
 
     @staticmethod
-    def _on_button_release(paned: Gtk.Paned, event: Gdk.EventButton) -> None:
+    def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()
@@ -136,23 +134,20 @@ class ChatPage(Gtk.Box):
         self._ui.filter_bar_revealer.set_reveal_child(active)
         self._chat_filter.reset()
 
-    def _on_section_label_hover(self,
-                                _eventbox: Gtk.EventBox,
-                                event: Gdk.EventCrossing
-                                ) -> bool:
+    def _on_section_label_enter(
+        self,
+        controller: Gtk.EventControllerMotion,
+        _x: int,
+        _y: int,
+    ) -> None:
+        self._ui.workspace_settings_button.set_visible(True)
 
-        if event.type == Gdk.EventType.ENTER_NOTIFY:
-            self._ui.workspace_settings_button.set_visible(True)
-
-        if (event.type == Gdk.EventType.LEAVE_NOTIFY and
-                event.detail != Gdk.NotifyType.INFERIOR):
-            self._ui.workspace_settings_button.set_visible(False)
-
-        return True
+    def _on_section_label_leave(self, controller: Gtk.EventControllerMotion) -> None:
+        self._ui.workspace_settings_button.set_visible(False)
 
     @staticmethod
     def _on_edit_workspace_clicked(_button: Gtk.Button) -> None:
-        app.window.activate_action('edit-workspace', GLib.Variant('s', ''))
+        app.window.activate_action('win.edit-workspace', GLib.Variant('s', ''))
 
     def _on_chat_selected(self,
                           _chat_list_stack: ChatListStack,
@@ -374,6 +369,6 @@ class ChatPage(Gtk.Box):
         return False
 
     def toggle_chat_list(self) -> None:
-        chat_list = self._ui.paned.get_child1()
+        chat_list = self._ui.paned.get_start_child()
         assert chat_list is not None
         chat_list.set_visible(not chat_list.get_visible())

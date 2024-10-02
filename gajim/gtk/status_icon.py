@@ -56,14 +56,15 @@ class StatusIcon:
                                         self._on_setting_changed)
             self._backend = AppIndicatorIcon()
             log.info('Use AppIndicator3 backend')
-        elif app.is_display(Display.WAYLAND):
+        # elif app.is_display(Display.WAYLAND):
+        else:
             self._backend = NoneBackend()
             log.info('libappindicator not found or disabled')
-        else:
-            app.settings.connect_signal('show_trayicon',
-                                        self._on_setting_changed)
-            self._backend = GtkStatusIcon()
-            log.info('Use GtkStatusIcon backend')
+        # else:
+        #     app.settings.connect_signal('show_trayicon',
+        #                                 self._on_setting_changed)
+        #     self._backend = GtkStatusIcon()
+        #     log.info('Use GtkStatusIcon backend')
 
     @staticmethod
     def _can_use_libindicator() -> bool:
@@ -106,7 +107,7 @@ class GtkMenuBackend(EventHelper):
         EventHelper.__init__(self)
         self._popup_menus: list[Gtk.Menu] = []
 
-        self._ui = get_builder('systray_context_menu.ui')
+        self._ui = get_builder('systray_context_menu.ui', self)
         self._ui.sounds_mute_menuitem.set_active(
             not app.settings.get('sounds_on'))
         self._add_status_menu()

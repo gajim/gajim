@@ -20,6 +20,7 @@ from gajim.common.util.status import get_uf_show
 from gajim.common.util.status import statuses_unified
 
 from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import EventHelper
 
 
@@ -32,23 +33,23 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         self._compact = compact
         self._create_popover()
 
-        self._current_show_icon = Gtk.Image()
+        self._current_show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
         surface = get_show_circle(
             'offline',
             AvatarSize.SHOW_CIRCLE,
             self.get_scale_factor())
-        self._current_show_icon.set_from_surface(surface)
+        self._current_show_icon.set_from_paintable(convert_surface_to_texture(surface))
 
         box = Gtk.Box(spacing=6)
-        box.add(self._current_show_icon)
+        box.append(self._current_show_icon)
         if not self._compact:
             self._current_show_label = Gtk.Label(label=get_uf_show('offline'))
             self._current_show_label.set_ellipsize(Pango.EllipsizeMode.END)
             self._current_show_label.set_halign(Gtk.Align.START)
             self._current_show_label.set_xalign(0)
-            box.add(self._current_show_label)
-            box.show_all()
-        self.add(box)
+            box.append(self._current_show_label)
+
+        self.set_child(box)
 
         self.connect('destroy', self._on_destroy)
 
@@ -88,33 +89,31 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
 
         for item in popover_items:
             if item == 'separator':
-                popover_box.add(Gtk.Separator())
+                popover_box.append(Gtk.Separator())
                 continue
 
-            show_icon = Gtk.Image()
+            show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
             show_label = Gtk.Label()
             show_label.set_halign(Gtk.Align.START)
 
             surface = get_show_circle(
                 item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
-            show_icon.set_from_surface(surface)
+            show_icon.set_from_paintable(convert_surface_to_texture(surface))
             show_label.set_text_with_mnemonic(
                 get_uf_show(item, use_mnemonic=True))
 
             show_box = Gtk.Box(spacing=6)
-            show_box.add(show_icon)
-            show_box.add(show_label)
+            show_box.append(show_icon)
+            show_box.append(show_label)
 
             button = Gtk.Button()
             button.set_name(item)
-            button.set_relief(Gtk.ReliefStyle.NONE)
-            button.add(show_box)
+            button.set_child(show_box)
             button.connect('clicked', self._on_change_status)
-            popover_box.add(button)
+            popover_box.append(button)
 
-        popover_box.show_all()
         self._status_popover = Gtk.Popover()
-        self._status_popover.add(popover_box)
+        self._status_popover.set_child(popover_box)
         self.set_popover(self._status_popover)
 
     def _on_change_status(self, button: Gtk.Button) -> None:
@@ -130,7 +129,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
 
         surface = get_show_circle(
             show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
-        self._current_show_icon.set_from_surface(surface)
+        self._current_show_icon.set_from_paintable(convert_surface_to_texture(surface))
 
         uf_show = get_uf_show(show)
         if statuses_unified():
@@ -145,5 +144,5 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
                 self._current_show_label.set_text(show_label)
 
     def _on_destroy(self, widget: StatusSelector) -> None:
-        self._status_popover.destroy()
+        # self._status_popover.destroy() GTK4 TODO
         app.check_finalize(self)

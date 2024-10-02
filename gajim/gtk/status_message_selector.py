@@ -36,15 +36,13 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
         self._entry.connect('changed', self._on_changed)
 
         self._button = Gtk.Button.new_from_icon_name(
-            'object-select-symbolic', Gtk.IconSize.BUTTON)
+            'object-select-symbolic')
         self._button.set_tooltip_text(_('Set status message'))
         self._button.connect('clicked', self._set_status_message)
-        self.add(self._entry)
-        self.add(self._button)
+        self.append(self._entry)
+        self.append(self._button)
 
         self.connect('destroy', self._on_destroy)
-
-        self.show_all()
 
         self.register_event('our-show', ged.GUI1, self._on_our_show)
         self.register_event('account-enabled',

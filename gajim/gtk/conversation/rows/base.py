@@ -33,14 +33,14 @@ class BaseRow(Gtk.ListBoxRow):
         self.get_style_context().add_class('conversation-row')
 
         self.grid = Gtk.Grid(row_spacing=3, column_spacing=12)
-        self.add(self.grid)
+        self.set_child(self.grid)
 
         if widget == 'label':
             self.label = Gtk.Label()
             self.label.set_selectable(True)
-            self.label.set_line_wrap(True)
+            self.label.set_wrap_mode(Pango.WrapMode.WORD)
             self.label.set_xalign(0)
-            self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
+            self.label.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
         self.connect('destroy', self.__destroy)
 

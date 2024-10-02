@@ -62,7 +62,6 @@ class HistoryExport(Assistant):
             _('An error occurred while exporting your messages'))
 
         self.connect('button-clicked', self._on_button_clicked)
-        self.show_all()
 
     @overload
     def get_page(self, name: Literal['error']) -> ErrorPage: ...
@@ -172,9 +171,8 @@ class SelectAccountDir(Page):
 
         self.title = _('Export Chat History')
 
-        self._ui = get_builder('history_export.ui')
-        self.add(self._ui.select_account_box)
-        self._ui.connect_signals(self)
+        self._ui = get_builder('history_export.ui', self)
+        self.append(self._ui.select_account_box)
 
         accounts = app.get_enabled_accounts_with_labels()
         liststore = cast(Gtk.ListStore, self._ui.account_combo.get_model())
@@ -189,8 +187,6 @@ class SelectAccountDir(Page):
         self._ui.file_chooser_button.set_current_folder(self._export_directory)
 
         self._set_complete()
-
-        self.show_all()
 
     def _on_account_changed(self, combobox: Gtk.ComboBox) -> None:
         account = combobox.get_active_id()

@@ -8,7 +8,6 @@ from typing import cast
 
 import logging
 
-import cairo
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -31,6 +30,7 @@ from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
 
@@ -57,9 +57,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def __init__(self, account: str) -> None:
         Gtk.ApplicationWindow.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_resizable(True)
         self.set_default_size(700, 600)
         self.set_name('ProfileWindow')
@@ -76,7 +74,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._contact = self._client.get_module('Contacts').get_contact(
             self._jid)
 
-        self._ui = get_builder('profile.ui')
+        self._ui = get_builder('profile.ui', self)
 
         menu = Gio.Menu()
         for action, label in MENU_DICT.items():
@@ -86,7 +84,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._add_actions()
 
         self._avatar_selector: AvatarSelector | None = None
-        self._current_avatar: cairo.ImageSurface | None = None
+        self._current_avatar: Gdk.Texture | None = None
         self._current_vcard: VCard | None = None
         self._avatar_nick_public: bool | None = None
 
@@ -95,13 +93,13 @@ class ProfileWindow(Gtk.ApplicationWindow):
         # Avatar - upload new avatar
         self._new_avatar: None | bool | Avatar = False
 
+        self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
         self._ui.nickname_entry.set_text(app.nicks[account])
 
         self._vcard_grid = VCardGrid(self.account)
-        self._ui.profile_box.add(self._vcard_grid)
+        self._ui.profile_box.append(self._vcard_grid)
 
-        self.add(self._ui.profile_stack)
-        self.show_all()
+        self.set_child(self._ui.profile_stack)
 
         self._load_avatar()
 
@@ -129,15 +127,18 @@ class ProfileWindow(Gtk.ApplicationWindow):
             callback=self._on_access_model_received,
             user_data=Namespace.NICK)
 
-        self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self.connect('destroy', self._on_destroy)
+
+        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         self._running_tasks.clear()
         self._avatar_selector = None
-        self._ui.privacy_popover.destroy()
+        # self._ui.privacy_popover.destroy()
         app.check_finalize(self)
 
     def _on_client_state_changed(self,
@@ -193,12 +194,20 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._current_avatar = self._contact.get_avatar(AvatarSize.VCARD,
                                                         scale,
                                                         add_show=False)
-        self._ui.avatar_image.set_from_surface(self._current_avatar)
+        self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._ui.avatar_image.show()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _add_actions(self) -> None:
         for action in MENU_DICT:
@@ -219,8 +228,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def _on_edit_clicked(self, *args: Any) -> None:
         self._vcard_grid.set_editable(True)
         self._ui.edit_button.hide()
-        self._ui.add_entry_button.set_no_show_all(False)
-        self._ui.add_entry_button.show_all()
+        # self._ui.add_entry_button.set_no_show_all(False)
+        # self._ui.add_entry_button.show_all()
         self._ui.cancel_button.show()
         self._ui.save_button.show()
         self._ui.remove_avatar_button.show()
@@ -238,7 +247,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.edit_avatar_button.hide()
         self._ui.privacy_button.hide()
         self._ui.nickname_entry.set_sensitive(False)
-        self._ui.avatar_image.set_from_surface(self._current_avatar)
+        self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
         self._vcard_grid.set_vcard(self._current_vcard.copy())  # pyright: ignore # noqa: E501
         self._new_avatar = False
@@ -311,7 +320,7 @@ class ProfileWindow(Gtk.ApplicationWindow):
                     error.app_condition == 'payload-too-big'):
                 text = _('Avatar file size too big')
 
-            self._ui.avatar_image.set_from_surface(self._current_avatar)
+            self._ui.avatar_image.set_from_paintable(self._current_avatar)
             self._new_avatar = False
 
             self._show_error_page(title, text)
@@ -339,29 +348,27 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def _on_remove_avatar(self, _button: Gtk.Button) -> None:
         scale = self.get_scale_factor()
         assert isinstance(self._contact, BareContact)
-        surface = self._contact.get_avatar(AvatarSize.VCARD,
+        texture = self._contact.get_avatar(AvatarSize.VCARD,
                                            scale,
                                            add_show=False,
                                            default=True)
 
-        self._ui.avatar_image.set_from_surface(surface)
+        self._ui.avatar_image.set_from_paintable(texture)
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, button: Gtk.Button) -> None:
+    def _on_edit_avatar(self, _button: Gtk.Button) -> None:
         def _on_file_selected(paths: list[str]) -> None:
             if self._avatar_selector is None:
                 self._avatar_selector = AvatarSelector()
-                self._ui.avatar_selector_box.add(self._avatar_selector)
+                self._ui.avatar_selector_box.append(self._avatar_selector)
 
             self._avatar_selector.prepare_crop_area(paths[0])
             self._ui.avatar_update_button.set_sensitive(
                 self._avatar_selector.get_prepared())
             self._ui.profile_stack.set_visible_child_name('avatar_selector')
 
-        AvatarChooserDialog(_on_file_selected,
-                            transient_for=cast(Gtk.Window,
-                                               button.get_toplevel()))
+        AvatarChooserDialog(_on_file_selected, transient_for=self)
 
     def _on_cancel_update_avatar(self, _button: Gtk.Button) -> None:
         self._show_profile_page()
@@ -393,7 +400,9 @@ class ProfileWindow(Gtk.ApplicationWindow):
         if surface is None:
             return
 
-        self._ui.avatar_image.set_from_surface(clip_circle(surface))
+        self._ui.avatar_image.set_from_paintable(
+            convert_surface_to_texture(clip_circle(surface))
+        )
         self._ui.remove_avatar_button.show()
         self._show_profile_page()
 

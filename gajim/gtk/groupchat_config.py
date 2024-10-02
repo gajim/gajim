@@ -36,17 +36,15 @@ class GroupchatConfig(Gtk.Box):
 
         self._own_affiliation = self_contact.affiliation
 
-        self._ui = get_builder('groupchat_config.ui')
+        self._ui = get_builder('groupchat_config.ui', self)
 
         self._apply_button = ApplyButtonBox(_('Apply'), self._on_apply)
         self._apply_button.set_halign(Gtk.Align.END)
         self._apply_button.get_style_context().add_class('margin-18')
 
-        self._ui.config_box.pack_end(self._apply_button, False, True, 0)
+        self._ui.config_box.append(self._apply_button)
 
-        self.add(self._ui.stack)
-
-        self.show_all()
+        self.append(self._ui.stack)
 
         if self._own_affiliation.is_owner:
             self._ui.stack.set_visible_child_name('loading')
@@ -55,16 +53,14 @@ class GroupchatConfig(Gtk.Box):
         else:
             self._ui.error_label.set_text(
                 _('You need Owner permission to change the configuration'))
-            self._ui.error_image.set_from_icon_name('dialog-error',
-                                                    Gtk.IconSize.DIALOG)
+            self._ui.error_image.set_from_icon_name('dialog-error')
             self._ui.stack.set_visible_child_name('error')
 
     def _set_form(self, form: Any) -> None:
         self._data_form_widget = DataFormWidget(form)
         self._data_form_widget.connect('is-valid', self._on_is_valid)
         self._data_form_widget.get_style_context().add_class('padding-12')
-        self._data_form_widget.show_all()
-        self._ui.config_box.add(self._data_form_widget)
+        self._ui.config_box.prepend(self._data_form_widget)
         self._ui.stack.set_visible_child_name('config')
 
     def _on_is_valid(self, _widget: Any, is_valid: bool) -> None:
@@ -78,8 +74,7 @@ class GroupchatConfig(Gtk.Box):
             result = task.finish()
         except StanzaError as error:
             self._ui.error_label.set_text(str(error))
-            self._ui.error_image.set_from_icon_name('dialog-error',
-                                                    Gtk.IconSize.DIALOG)
+            self._ui.error_image.set_from_icon_name('dialog-error')
             self._ui.stack.set_visible_child_name('error')
             return
 

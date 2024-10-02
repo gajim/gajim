@@ -38,9 +38,8 @@ class VideoPreview(Gtk.Box):
         self._av_sink: Gst.Element | None = None
         self._av_widget: Gtk.Widget | None = None
 
-        self._ui = get_builder('video_preview.ui')
-        self.add(self._ui.video_preview_box)
-        self.show_all()
+        self._ui = get_builder('video_preview.ui', self)
+        self.append(self._ui.video_preview_box)
 
         self.connect('destroy', self._on_destroy)
 
@@ -89,7 +88,7 @@ class VideoPreview(Gtk.Box):
             self._ui.video_preview_box.remove(self._av_widget)
 
         self._ui.video_preview_placeholder.set_visible(False)
-        self._ui.video_preview_box.pack_end(widget, True, True, 0)
+        self._ui.video_preview_box.append(widget)
         self._av_widget = widget
 
         assert self._av_src is not None

@@ -33,10 +33,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('GroupchatJoin')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_title(_('Join Group Chat'))
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_default_size(500, 550)
         self.get_style_context().add_class('dialog-margin')
 
@@ -62,30 +59,31 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
         self._stack.connect('notify::visible-child-name',
                             self._on_page_changed)
-        self._main_box.add(self._stack)
+        self._main_box.append(self._stack)
 
         self._nick_chooser = NickChooser()
 
         self._join_button = Gtk.Button.new_with_mnemonic(_('_Join'))
         self._join_button.set_halign(Gtk.Align.END)
         self._join_button.set_sensitive(False)
-        self._join_button.set_can_default(True)
         self._join_button.get_style_context().add_class('suggested-action')
         self._join_button.connect('clicked', self._on_join)
 
         join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         join_box.get_style_context().add_class('linked')
         join_box.set_halign(Gtk.Align.END)
-        join_box.add(self._nick_chooser)
-        join_box.add(self._join_button)
+        join_box.append(self._nick_chooser)
+        join_box.append(self._join_button)
 
-        self._main_box.add(join_box)
+        self._main_box.append(join_box)
 
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
 
-        self.add(self._main_box)
-        self.show_all()
+        self.set_child(self._main_box)
 
         client = app.get_client(self.account)
         client.get_module('Discovery').disco_muc(
@@ -93,6 +91,8 @@ class GroupchatJoin(Gtk.ApplicationWindow):
             allow_redirect=True,
             request_vcard=True,
             callback=self._disco_info_received)
+
+        self.show()
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         name = stack.get_visible_child_name()
@@ -115,7 +115,7 @@ class GroupchatJoin(Gtk.ApplicationWindow):
             self._muc_info_box.set_from_disco_info(result.info)
             nickname = get_group_chat_nick(self.account, result.info.jid)
             self._nick_chooser.set_text(nickname)
-            self._join_button.grab_default()
+            self.set_default_widget(self._join_button)
             self._stack.set_visible_child_name('info')
 
         else:
@@ -148,9 +148,17 @@ class GroupchatJoin(Gtk.ApplicationWindow):
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._destroyed = True
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
 
 class ErrorPage(Gtk.Box):
@@ -160,21 +168,19 @@ class ErrorPage(Gtk.Box):
                          spacing=18)
         self.set_vexpand(True)
         self.set_homogeneous(True)
-        error_icon = Gtk.Image.new_from_icon_name(
-            'dialog-error', Gtk.IconSize.DIALOG)
+        error_icon = Gtk.Image.new_from_icon_name('dialog-error')
         error_icon.set_valign(Gtk.Align.END)
 
         self._error_label = Gtk.Label()
         self._error_label.set_justify(Gtk.Justification.CENTER)
         self._error_label.set_valign(Gtk.Align.START)
         self._error_label.get_style_context().add_class('bold16')
-        self._error_label.set_line_wrap(True)
-        self._error_label.set_line_wrap_mode(Pango.WrapMode.WORD)
+        self._error_label.set_wrap_mode(Pango.WrapMode.WORD)
+        self._error_label.set_wrap_mode(Pango.WrapMode.WORD)
         self._error_label.set_size_request(150, -1)
 
-        self.add(error_icon)
-        self.add(self._error_label)
-        self.show_all()
+        self.append(error_icon)
+        self.append(self._error_label)
 
     def set_text(self, text: str) -> None:
         self._error_label.set_text(text)
@@ -190,8 +196,7 @@ class ProgressPage(Gtk.Box):
         self._spinner = Gtk.Spinner()
         self._spinner.set_halign(Gtk.Align.CENTER)
 
-        self.add(self._spinner)
-        self.show_all()
+        self.append(self._spinner)
 
     def start(self) -> None:
         self._spinner.start()

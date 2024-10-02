@@ -20,6 +20,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
+from gajim.gtk.util import clear_listbox
+
 log = logging.getLogger('gajim.gtk.resource_selector')
 
 
@@ -36,14 +38,13 @@ class ResourceSelector(Gtk.ScrolledWindow):
                  contact: BareContact,
                  constraints: list[str] | None = None) -> None:
         Gtk.ScrolledWindow.__init__(self)
-        self.set_shadow_type(Gtk.ShadowType.IN)
         self.set_size_request(-1, 200)
         self.get_style_context().add_class('resource-selector')
 
         self._listbox = Gtk.ListBox()
         self._listbox.set_sort_func(self._sort_func)
         self._listbox.connect('row-selected', self._on_row_selected)
-        self.add(self._listbox)
+        self.set_child(self._listbox)
 
         self._contact = contact
         self._contact.connect('presence-update', self._on_update)
@@ -54,8 +55,6 @@ class ResourceSelector(Gtk.ScrolledWindow):
 
         self._set_placeholder()
         self._add_entries()
-
-        self.show_all()
 
     @staticmethod
     def _sort_func(row1: ResourceRow, row2: ResourceRow) -> int:
@@ -70,27 +69,24 @@ class ResourceSelector(Gtk.ScrolledWindow):
         self.emit('selection-changed', state)
 
     def _set_placeholder(self) -> None:
-        image = Gtk.Image.new_from_icon_name(
-            'dialog-warning-symbolic', Gtk.IconSize.DND)
+        image = Gtk.Image.new_from_icon_name('dialog-warning-symbolic')
         label = Gtk.Label(label=_('No devices online'))
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
         box.set_valign(Gtk.Align.CENTER)
         box.get_style_context().add_class('dim-label')
-        box.add(image)
-        box.add(label)
-        box.show_all()
+        box.append(image)
+        box.append(label)
         self._listbox.set_placeholder(box)
 
     def _add_entries(self) -> None:
         for resource in self._contact.iter_resources():
-            self._listbox.add(ResourceRow(resource, self._constraints))
+            self._listbox.append(ResourceRow(resource, self._constraints))
 
     def _on_update(self,
                    _contact: types.ResourceContact,
                    _signal_name: str
                    ) -> None:
-        for child in self._listbox.get_children():
-            self._listbox.remove(child)
+        clear_listbox(self._listbox)
         self._add_entries()
 
     def get_jid(self) -> JID:
@@ -123,23 +119,22 @@ class ResourceRow(Gtk.ListBoxRow):
                     tooltip_text = _('Phone')
 
         image = Gtk.Image()
-        image.set_from_icon_name(icon_name, Gtk.IconSize.DND)
+        image.set_from_icon_name(icon_name)
         image.set_tooltip_text(tooltip_text)
 
         name_label = Gtk.Label()
         name_label.set_text(self.device_text)
 
         box = Gtk.Box(spacing=12)
-        box.add(image)
-        box.add(name_label)
+        box.append(image)
+        box.append(name_label)
 
         for constraint in constraints:
             if not resource_contact.supports(constraint):
                 self.set_sensitive(False)
                 self.set_tooltip_text(_('This device is not compatible.'))
 
-        self.add(box)
-        self.show_all()
+        self.set_child(box)
 
     @staticmethod
     def _get_client_identity(disco_info: DiscoInfo

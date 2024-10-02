@@ -6,16 +6,13 @@
 
 from __future__ import annotations
 
-from typing import Any
-from typing import cast
+from typing import Any, cast
 
-import os
 import sys
 from collections.abc import Callable
 from pathlib import Path
 
-from gi.repository import GdkPixbuf
-from gi.repository import GLib
+from gi.repository import Gio
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -53,7 +50,12 @@ class BaseFileChooser:
                      cancel_cb: Callable[..., Any] | None
                      ) -> None:
         if response == Gtk.ResponseType.ACCEPT:
-            accept_cb(dialog.get_filenames())
+            paths: list[str] = []
+            for g_file in cast(list[Gio.File], dialog.get_files()):
+                path = g_file.get_path()
+                assert path is not None
+                paths.append(path)
+            accept_cb(paths)
 
         if response in (Gtk.ResponseType.CANCEL,
                         Gtk.ResponseType.DELETE_EVENT):
@@ -72,21 +74,6 @@ class BaseFileChooser:
             self.add_filter(filter_)
             if filterinfo.default:
                 self.set_filter(filter_)
-
-    def _update_preview(self, filechooser: Gtk.FileChooser) -> None:
-        path_to_file = filechooser.get_preview_filename()
-        preview = cast(Gtk.Image, filechooser.get_preview_widget())
-        if path_to_file is None or os.path.isdir(path_to_file):
-            # nothing to preview
-            preview.clear()
-            return
-        try:
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
-                path_to_file, *self._preview_size)
-        except GLib.Error:
-            preview.clear()
-            return
-        preview.set_from_pixbuf(pixbuf)
 
 
 class BaseFileOpenDialog:
@@ -132,11 +119,10 @@ class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
                                        action=self._action,
                                        transient_for=transient_for)
 
-        self.set_current_folder(path or str(Path.home()))
+        self.set_current_folder(Gio.File.new_for_path(path or str(Path.home())))
         if file_name is not None:
             self.set_current_name(file_name)
         self.set_select_multiple(select_multiple)
-        self.set_do_overwrite_confirmation(True)
         self.set_modal(modal)
         self._add_filters(self._filters)
 
@@ -181,7 +167,6 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
                  path: str | None = None,
                  file_name: str | None = None,
                  select_multiple: bool = False,
-                 preview: bool = True,
                  modal: bool = False
                  ) -> None:
 
@@ -198,18 +183,12 @@ class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
         open_button = self.add_button(_('_Open'), Gtk.ResponseType.ACCEPT)
         open_button.get_style_context().add_class('suggested-action')
 
-        self.set_current_folder(path or str(Path.home()))
+        self.set_current_folder(Gio.File.new_for_path(path or str(Path.home())))
         if file_name is not None:
             self.set_current_name(file_name)
         self.set_select_multiple(select_multiple)
-        self.set_do_overwrite_confirmation(True)
         self.set_modal(modal)
         self._add_filters(self._filters)
-
-        if preview:
-            self.set_use_preview_label(False)
-            self.set_preview_widget(Gtk.Image())
-            self.connect('selection-changed', self._update_preview)
 
         self.connect('response', self._on_response, accept_cb, cancel_cb)
         self.show()

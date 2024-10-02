@@ -25,6 +25,7 @@ paths = list(in_path.iterdir())
 paths.sort()
 
 IMPORTS = '''
+from typing import Any
 from typing import Literal
 from typing import overload
 
@@ -42,7 +43,7 @@ ATTR = '\n    %s: %s'
 
 GET_BUILDER_OVERLOAD = '''
 @overload
-def get_builder(file_name: Literal['%s'], widgets: list[str] = ...) -> %s: ...  # noqa'''  # noqa: E501
+def get_builder(file_name: Literal['%s'], instance: Any, widgets: list[str] = ...) -> %s: ...  # noqa'''  # noqa: E501
 
 GET_BUILDER = '''\n\n
 def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...'''

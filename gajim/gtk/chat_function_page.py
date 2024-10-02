@@ -25,6 +25,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.file_transfer_selector import FileTransferSelector
 from gajim.gtk.groupchat_inviter import GroupChatInviter
+from gajim.gtk.util import iterate_children
 
 
 class FunctionMode(Enum):
@@ -68,31 +69,31 @@ class ChatFunctionPage(Gtk.Box):
         self._heading.set_max_width_chars(30)
         self._heading.set_ellipsize(Pango.EllipsizeMode.END)
         self._heading.get_style_context().add_class('large-header')
-        self.add(self._heading)
+        self.append(self._heading)
 
         self._content_box = Gtk.Box()
         self._content_box.set_halign(Gtk.Align.CENTER)
-        self.add(self._content_box)
+        self.append(self._content_box)
 
         cancel_button = Gtk.Button(label=_('Cancel'))
         cancel_button.connect('clicked', self._on_cancel_clicked)
 
         self._forget_button = Gtk.Button(label=_('Forget Group Chat'))
-        self._forget_button.set_no_show_all(True)
+        self._forget_button.set_visible(False)
         self._forget_button.get_style_context().add_class(
             'destructive-action')
         self._forget_button.connect('clicked', self._on_forget_clicked)
 
         self._confirm_button = Gtk.Button()
-        self._confirm_button.set_can_default(True)
+        # self._confirm_button.set_can_default(True) GTK4 TODO
         self._confirm_button.connect('clicked', self._on_confirm_clicked)
 
-        button_box = Gtk.Box(spacing=18)
-        button_box.pack_start(cancel_button, False, True, 0)
-        button_box.pack_end(self._forget_button, False, True, 0)
-        button_box.pack_end(self._confirm_button, False, True, 0)
+        button_box = Gtk.Box(spacing=18, halign=Gtk.Align.CENTER)
+        button_box.append(cancel_button)
+        button_box.append(self._forget_button)
+        button_box.append(self._confirm_button)
 
-        self.add(button_box)
+        self.append(button_box)
 
     def process_escape(self) -> None:
         close_control = self._mode in (
@@ -105,18 +106,20 @@ class ChatFunctionPage(Gtk.Box):
         if self._client is not None:
             self._client.disconnect_all_from_obj(self)
 
-        for child in self._content_box.get_children():
-            child.destroy()
+        for child in iterate_children(self._content_box):
+            self._content_box.remove(child)
 
-        if self._widget is not None:
-            self._widget.destroy()
+        # TODO GTK4
+        # if self._widget is not None:
+        #     self._widget.destroy()
 
         self._confirm_button.get_style_context().remove_class(
             'destructive-action')
         self._confirm_button.get_style_context().remove_class(
             'suggested-action')
         self._confirm_button.set_sensitive(False)
-        self._confirm_button.grab_default()
+        # TODO GTK4
+        # self._confirm_button.grab_default()
 
         self._forget_button.set_sensitive(True)
         self._forget_button.hide()
@@ -201,7 +204,6 @@ class ChatFunctionPage(Gtk.Box):
                        'entry-activates-default': True}
             self._widget = DataFormWidget(form, options=options)
             self._widget.set_valign(Gtk.Align.START)
-            self._widget.show_all()
             self._widget.connect('is-valid', self._on_ready)
 
         elif mode == FunctionMode.CAPTCHA_ERROR:
@@ -229,7 +231,7 @@ class ChatFunctionPage(Gtk.Box):
             self._widget = ErrorWidget(mode=mode, error_text=error_text)
 
         assert self._widget is not None
-        self._content_box.add(self._widget)
+        self._content_box.append(self._widget)
         if isinstance(self._widget, InputWidget):
             self._widget.focus()
         elif isinstance(self._widget, DataFormWidget):
@@ -404,18 +406,18 @@ class InputWidget(Gtk.Box):
         heading_label = Gtk.Label()
         heading_label.set_xalign(0)
         heading_label.get_style_context().add_class('bold16')
-        self.add(heading_label)
+        self.append(heading_label)
 
         sub_label = Gtk.Label()
         sub_label.set_xalign(0)
         sub_label.get_style_context().add_class('dim-label')
-        self.add(sub_label)
+        self.append(sub_label)
 
         self._entry = Gtk.Entry()
         self._entry.set_activates_default(True)
         self._entry.set_size_request(300, -1)
         self._entry.connect('changed', self._on_entry_changed)
-        self.add(self._entry)
+        self.append(self._entry)
 
         if mode == FunctionMode.CHANGE_NICKNAME:
             heading_label.set_text(_('Change Nickname'))
@@ -438,7 +440,6 @@ class InputWidget(Gtk.Box):
             self._entry.set_visibility(False)
 
         self.connect('destroy', self._on_destroy)
-        self.show_all()
 
     def _on_destroy(self, _widget: InputWidget) -> None:
         app.check_finalize(self)
@@ -475,8 +476,7 @@ class ErrorWidget(Gtk.Box):
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.VERTICAL,
                          spacing=12)
-        image = Gtk.Image.new_from_icon_name(
-            'dialog-error-symbolic', Gtk.IconSize.DIALOG)
+        image = Gtk.Image.new_from_icon_name('dialog-error-symbolic')
         image.get_style_context().add_class('error-color')
 
         heading = Gtk.Label()
@@ -495,7 +495,6 @@ class ErrorWidget(Gtk.Box):
         if error_text is not None:
             label.set_text(error_text)
 
-        self.add(image)
-        self.add(heading)
-        self.add(label)
-        self.show_all()
+        self.append(image)
+        self.append(heading)
+        self.append(label)

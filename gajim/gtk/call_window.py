@@ -8,7 +8,6 @@ from typing import Any
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
@@ -36,9 +35,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_resizable(True)
         self.set_default_size(700, 600)
         self.set_name('CallWindow')
@@ -56,21 +53,22 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
         self._video_widget_other = None
         self._video_widget_self = None
 
-        self._ui = get_builder('call_window.ui')
-        self.add(self._ui.av_box)
+        self._ui = get_builder('call_window.ui', self)
+        self.set_child(self._ui.av_box)
 
-        self._ui.avatar_image.set_from_surface(
+        self._ui.avatar_image.set_pixel_size(AvatarSize.CALL_BIG)
+        self._ui.avatar_image.set_from_paintable(
             self._contact.get_avatar(AvatarSize.CALL_BIG,
                                      self.get_scale_factor(),
                                      add_show=False))
 
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-        self.show_all()
 
         self.register_events([
             ('call-updated', ged.GUI2, self._on_call_updated),
         ])
+
+        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         assert isinstance(self._resource_contact, ResourceContact)
@@ -104,7 +102,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_num_button_press(self,
                              button: Gtk.Button,
-                             _event: Gdk.EventButton
+                             _event: Any
                              ) -> None:
         button_id = Gtk.Buildable.get_name(button)
         key = button_id.split('_')[1]
@@ -113,7 +111,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_num_button_release(self,
                                _button: Gtk.Button,
-                               _event: Gdk.EventButton
+                               _event: Any
                                ) -> None:
         app.call_manager.stop_dtmf(
             self._account, self._resource_contact.jid)
@@ -148,7 +146,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
         if event.audio_state == JingleState.NULL:
             self._ui.audio_buttons_box.set_sensitive(False)
-            self._ui.jingle_audio_state.set_no_show_all(True)
+            self._ui.jingle_audio_state.set_visible(False)
             self._ui.jingle_audio_state.hide()
             self._ui.jingle_connection_state.set_text('')
             self._ui.jingle_connection_spinner.stop()
@@ -196,9 +194,9 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
     def _update_video(self, event: CallUpdated) -> None:
         if event.video_state == JingleState.NULL:
             self._ui.avatar_image.show()
-            self._ui.video_box.set_no_show_all(True)
+            self._ui.video_box.set_visible(False)
             self._ui.video_box.hide()
-            self._ui.outgoing_viewport.set_no_show_all(True)
+            self._ui.outgoing_viewport.set_visible(False)
             self._ui.outgoing_viewport.hide()
             if self._video_widget_other:
                 self._video_widget_other.destroy()
@@ -245,7 +243,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
                 self._ui.outgoing_viewport.set_no_show_all(False)
                 self._ui.outgoing_viewport.show()
             else:
-                self._ui.outgoing_viewport.set_no_show_all(True)
+                self._ui.outgoing_viewport.set_visible(False)
                 self._ui.outgoing_viewport.hide()
 
             other_gtk_widget = create_gtk_widget()
@@ -273,7 +271,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_('Turn Camera off'))
             self._ui.av_cam_image.set_from_icon_name(
-                'feather-camera-off-symbolic', Gtk.IconSize.BUTTON)
+                'feather-camera-off-symbolic')
 
         elif event.video_state == JingleState.ERROR:
             self._ui.jingle_connection_state.set_text(

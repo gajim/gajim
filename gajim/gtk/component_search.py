@@ -190,8 +190,7 @@ class SearchForm(Page):
         self._dataform_widget.set_propagate_natural_height(True)
         self._dataform_widget.connect('is-valid', self._on_is_valid)
         self._dataform_widget.validate()
-        self._dataform_widget.show_all()
-        self.add(self._dataform_widget)
+        self.append(self._dataform_widget)
 
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
         self.complete = is_valid
@@ -216,20 +215,18 @@ class Result(Page):
 
         self._label = Gtk.Label(label=_('No results found'))
         self._label.get_style_context().add_class('bold16')
-        self._label.set_no_show_all(True)
+        self._label.set_visible(False)
         self._label.set_halign(Gtk.Align.CENTER)
 
         self._scrolled = Gtk.ScrolledWindow()
         self._scrolled.set_propagate_natural_height(True)
         self._scrolled.get_style_context().add_class('gajim-scrolled')
-        self._scrolled.set_no_show_all(True)
+        self._scrolled.set_visible(False)
 
-        self.add(self._label)
-        self.add(self._scrolled)
+        self.append(self._label)
+        self.append(self._scrolled)
 
         self._treeview: Gtk.TreeView | None = None
-
-        self.show_all()
 
     def process_result(self, form: Node | None) -> None:
         if self._treeview is not None:
@@ -288,12 +285,11 @@ class Result(Page):
 
         self._treeview.set_model(liststore)
         self._treeview.show()
-        self._scrolled.add(self._treeview)
-        self._scrolled.show()
+        self._scrolled.set_child(self._treeview)
 
     def _on_button_press(self,
                          treeview: Gtk.TreeView,
-                         event: Gdk.EventButton
+                         event: Any
                          ) -> bool:
 
         if event.button != Gdk.BUTTON_SECONDARY:

@@ -10,7 +10,6 @@ from typing import cast
 import logging
 from pathlib import Path
 
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -30,11 +29,12 @@ from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.const import DND_TARGET_FLATPAK
-from gajim.gtk.const import DND_TARGET_URI_LIST
+# from gajim.gtk.const import DND_TARGET_FLATPAK
+# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.filechoosers import FileChooserDialog
 from gajim.gtk.resource_selector import ResourceSelector
+from gajim.gtk.util import iterate_listbox_children
 
 PREVIEW_SIZE = 72
 
@@ -60,11 +60,10 @@ class FileTransferSelector(Gtk.Box):
         client = app.get_client(contact.account)
         self._max_http_file_size = client.get_module('HTTPUpload').max_file_size
 
-        self._ui = get_builder('file_transfer_selector.ui')
-        self.add(self._ui.stack)
+        self._ui = get_builder('file_transfer_selector.ui', self, ['stack'])
+        self.append(self._ui.stack)
 
         self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
 
         self._resource_selector = None
         if isinstance(contact, BareContact):
@@ -74,32 +73,33 @@ class FileTransferSelector(Gtk.Box):
                 constraints=[Namespace.JINGLE_FILE_TRANSFER_5])
             self._resource_selector.connect(
                 'selection-changed', self._on_resource_selection)
-            self._ui.resource_box.pack_start(
-                self._resource_selector, True, False, 0)
+            self._ui.resource_box.prepend(
+                self._resource_selector)
 
             self._ui.resource_instructions.set_text(
                 _('%s is online with multiple devices.\n'
                   'Choose the device you would like to send the '
                   'files to.') % self._contact.name)
 
-        if app.is_flatpak():
-            target = DND_TARGET_FLATPAK
-        else:
-            target = DND_TARGET_URI_LIST
+        # GTK4 TODO
 
-        uri_entry = Gtk.TargetEntry.new(
-            target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
-        dst_targets = Gtk.TargetList.new([uri_entry])
+        # if app.is_flatpak():
+        #     target = DND_TARGET_FLATPAK
+        # else:
+        #     target = DND_TARGET_URI_LIST
 
-        self._ui.listbox.drag_dest_set(
-            Gtk.DestDefaults.ALL,
-            [uri_entry],
-            Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        self._ui.listbox.drag_dest_set_target_list(dst_targets)
-        self._ui.listbox.connect(
-            'drag-data-received', self._on_drag_data_received)
+        # uri_entry = Gtk.TargetEntry.new(
+        #     target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
+        # dst_targets = Gtk.TargetList.new([uri_entry])
 
-        self.show_all()
+        # self._ui.listbox.drag_dest_set(
+        #     Gtk.DestDefaults.ALL,
+        #     [uri_entry],
+        #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
+        # self._ui.listbox.drag_dest_set_target_list(dst_targets)
+        # self._ui.listbox.connect(
+        #     'drag-data-received', self._on_drag_data_received)
+
 
     def _is_over_max_http_file_size(self, path: Path) -> bool:
         if self._max_http_file_size is None:
@@ -173,10 +173,8 @@ class FileTransferSelector(Gtk.Box):
             jingle_warning = bool(self._method == 'jingle')
 
             row = FileRow(path, size_warning, jingle_warning)
-            self._ui.listbox.add(row)
+            self._ui.listbox.append(row)
             app.settings.set('last_send_dir', str(path.parent))
-
-        self._ui.listbox.show_all()
 
     def _add_warning_message(self, msg: str) -> None:
         log.warning(msg)  # TODO: replace with UI
@@ -186,17 +184,17 @@ class FileTransferSelector(Gtk.Box):
 
     def _get_file_paths(self) -> list[Path]:
         paths: list[Path] = []
-        for row in cast(list[FileRow], self._ui.listbox.get_children()):
+        for row in cast(list[FileRow], iterate_listbox_children(self._ui.listbox)):
             paths.append(row.file_path)
 
         return paths
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,
-                               _context: Gdk.DragContext,
+                               _context: Any,
                                _x_coord: int,
                                _y_coord: int,
-                               selection: Gtk.SelectionData,
+                               selection: Any,
                                target_type: int,
                                _timestamp: int
                                ) -> None:
@@ -247,8 +245,8 @@ class FileRow(Gtk.ListBoxRow):
         Gtk.ListBoxRow.__init__(self)
         self.file_path = path
 
-        self._ui = get_builder('file_transfer_selector.ui')
-        self.add(self._ui.file_box)
+        self._ui = get_builder('file_transfer_selector.ui', self, ['file_box'])
+        self.set_child(self._ui.file_box)
 
         self._ui.remove_file_button.connect('clicked', self._on_remove_clicked)
 
@@ -307,9 +305,9 @@ class FileRow(Gtk.ListBoxRow):
 
     def _set_icon_for_mime_type(self, mime_type: str) -> None:
         icon = get_icon_for_mime_type(mime_type)
-        self._ui.preview_image.set_from_gicon(icon, Gtk.IconSize.DIALOG)
+        self._ui.preview_image.set_from_gicon(icon)
 
     def _on_remove_clicked(self, _button: Gtk.Button) -> None:
         listbox = cast(Gtk.ListBox, self.get_parent())
         listbox.remove(self)
-        self.destroy()
+        app.check_finalize(self)

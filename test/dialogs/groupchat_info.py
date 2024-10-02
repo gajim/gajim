@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock
 
-from gi.repository import Gtk
+from gi.repository import GLib, Gtk
 from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import MucSubject
@@ -97,8 +97,6 @@ class GroupchatInfo(Gtk.ApplicationWindow):
     def __init__(self):
         Gtk.ApplicationWindow.__init__(self)
         self.set_name('GroupchatJoin')
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
         self.set_title('Test Group chat info')
 
         self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,
@@ -108,17 +106,17 @@ class GroupchatInfo(Gtk.ApplicationWindow):
         self._muc_info_box = GroupChatInfoScrolled()
         self._muc_info_box.set_vexpand(True)
 
-        self._main_box.add(self._muc_info_box)
+        self._main_box.append(self._muc_info_box)
 
-        self.add(self._main_box)
+        self.set_child(self._main_box)
         self._muc_info_box.set_from_disco_info(disco_info)
         self._muc_info_box.set_subject(MucSubject(text=subject,
                                                   author='someone',
                                                   timestamp=None))
-        self.show_all()
+        self.show()
 
 
 win = GroupchatInfo()
-win.connect('destroy', Gtk.main_quit)
-win.show_all()
-Gtk.main()
+
+while Gtk.Window.get_toplevels().get_n_items() > 0:
+    GLib.MainContext().default().iteration(True)

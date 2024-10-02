@@ -19,10 +19,9 @@ class VoiceRequestsButton(Gtk.Button):
     def __init__(self) -> None:
         Gtk.Button.__init__(self)
         self.set_tooltip_text(_('Pending Voice Requests'))
-        self.set_no_show_all(True)
-        image = Gtk.Image.new_from_icon_name(
-            'dialog-question-symbolic', Gtk.IconSize.BUTTON)
-        self.add(image)
+        self.set_visible(False)
+        image = Gtk.Image.new_from_icon_name('dialog-question-symbolic')
+        self.set_child(image)
         self.get_style_context().add_class('pulse-opacity')
         self.get_style_context().add_class('suggested-action')
         self.connect('clicked', self._on_button_clicked)
@@ -30,7 +29,7 @@ class VoiceRequestsButton(Gtk.Button):
     def switch_contact(self, contact: ChatContactT) -> None:
         if not isinstance(contact, GroupchatContact):
             self._contact = None
-            self.set_no_show_all(True)
+            self.set_visible(False)
             self.hide()
             return
 
@@ -38,7 +37,7 @@ class VoiceRequestsButton(Gtk.Button):
         self._update()
 
     def _update(self) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
 
         assert self._contact is not None
@@ -46,8 +45,7 @@ class VoiceRequestsButton(Gtk.Button):
         voice_requests = client.get_module('MUC').get_voice_requests(
             self._contact)
         if voice_requests:
-            self.set_no_show_all(False)
-            self.show_all()
+            self.show()
 
     def _on_button_clicked(self, _button: VoiceRequestsButton) -> None:
         assert self._contact is not None
@@ -64,9 +62,9 @@ class VoiceRequestsButton(Gtk.Button):
         desc_label = Gtk.Label(label=_('Participants asking for voice:'))
         desc_label.get_style_context().add_class('dim-label')
         desc_label.set_max_width_chars(35)
-        desc_label.set_line_wrap(True)
+        desc_label.set_wrap_mode(Pango.WrapMode.WORD)
         desc_label.set_margin_bottom(6)
-        menu_box.add(desc_label)
+        menu_box.append(desc_label)
 
         for request in voice_requests:
             request_box = Gtk.Box(spacing=12)
@@ -76,40 +74,37 @@ class VoiceRequestsButton(Gtk.Button):
             name_label.set_max_width_chars(20)
             name_label.set_ellipsize(Pango.EllipsizeMode.END)
             name_label.set_xalign(0)
-            request_box.add(name_label)
+            request_box.append(name_label)
 
             decline_button = Gtk.Button.new_from_icon_name(
-                'process-stop-symbolic', Gtk.IconSize.BUTTON)
+                'process-stop-symbolic')
             decline_button.set_tooltip_text(_('Decline'))
             decline_button.connect(
                 'clicked',
                 self._on_decline,
                 request,
                 self._contact)
-            request_box.pack_end(decline_button, False, False, 0)
+            request_box.append(decline_button)
 
             approve_button = Gtk.Button.new_from_icon_name(
-                'feather-check-symbolic', Gtk.IconSize.BUTTON)
+                'feather-check-symbolic')
             approve_button.set_tooltip_text(_('Approve'))
             approve_button.connect(
                 'clicked',
                 self._on_approve,
                 request,
                 self._contact)
-            request_box.pack_end(approve_button, False, False, 0)
+            request_box.append(approve_button)
 
             if voice_requests.index(request) > 0:
-                menu_box.add(Gtk.Separator())
+                menu_box.append(Gtk.Separator())
 
-            menu_box.add(request_box)
-
-        menu_box.show_all()
+            menu_box.append(request_box)
 
         popover = Gtk.PopoverMenu()
         popover.get_style_context().add_class('padding-6')
-        popover.set_relative_to(self)
         popover.set_position(Gtk.PositionType.BOTTOM)
-        popover.add(menu_box)
+        popover.set_child(menu_box)
         popover.connect('closed', self._on_closed)
         popover.popup()
 

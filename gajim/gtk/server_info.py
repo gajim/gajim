@@ -47,11 +47,8 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         EventHelper.__init__(self)
         self.set_name('ServerInfo')
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_default_size(500, 600)
-        self.set_show_menubar(False)
         self.set_title(_('Server Info'))
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self.account = account
         self._client = app.get_client(account)
@@ -62,12 +59,14 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT
 
-        self._ui = get_builder('server_info.ui')
-        self.add(self._ui.server_info_notebook)
+        self._ui = get_builder('server_info.ui', self)
+        self.set_child(self._ui.server_info_notebook)
 
         self.connect('destroy', self._on_destroy)
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
+
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
 
         self.register_events([
             ('server-disco-received', ged.GUI1, self._server_disco_received),
@@ -93,22 +92,29 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
             self._ui.no_certificate_label.show()
         else:
             cert_box = CertificateBox(account, self._client.certificate)
-            self._ui.cert_scrolled.add(cert_box)
+            self._ui.cert_scrolled.set_child(cert_box)
             self._ui.cert_scrolled.show()
-            cert_box.show_all()
 
         for feature in self._get_features():
             self._add_feature(feature)
-        self._clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
 
-        self.show_all()
+        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
+
 
     def _add_connection_info(self) -> None:
         # Connection type
@@ -262,7 +268,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _add_feature(self, feature: Feature) -> None:
         item = FeatureItem(feature)
-        self._ui.features_listbox.add(item)
+        self._ui.features_listbox.append(item)
 
     def _get_features(self) -> list[Feature]:
         http_upload_module = self._client.get_module('HTTPUpload')
@@ -326,8 +332,7 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
                 additional = f'({feature.additional})'
             server_features += f'{feature.name}: {available} {additional}\n'
 
-        clipboard_text = server_software + server_features
-        self._clipboard.set_text(clipboard_text, -1)
+        self.get_clipboard().set(server_software + server_features)
 
 
 class FeatureItem(Gtk.ListBoxRow):
@@ -342,7 +347,7 @@ class FeatureItem(Gtk.ListBoxRow):
         self._feature_label.set_halign(Gtk.Align.START)
         self._additional_label = Gtk.Label()
         self._additional_label.set_halign(Gtk.Align.START)
-        self._additional_label.set_no_show_all(True)
+        self._additional_label.set_visible(False)
         self._additional_label.get_style_context().add_class('dim-label')
 
         grid.attach(self._icon, 0, 0, 1, 1)
@@ -350,9 +355,7 @@ class FeatureItem(Gtk.ListBoxRow):
         grid.attach(self._additional_label, 1, 1, 1, 1)
 
         self._set_feature()
-
-        self.add(grid)
-        self.show_all()
+        self.set_child(grid)
 
     def _set_feature(self) -> None:
         self._feature_label.set_text(self._feature.name)
@@ -364,12 +367,10 @@ class FeatureItem(Gtk.ListBoxRow):
         self._icon.get_style_context().remove_class('success-color')
 
         if self._feature.available:
-            self._icon.set_from_icon_name(
-                'emblem-ok-symbolic', Gtk.IconSize.MENU)
+            self._icon.set_from_icon_name('emblem-ok-symbolic')
             self._icon.get_style_context().add_class('success-color')
         else:
-            self._icon.set_from_icon_name(
-                'window-close-symbolic', Gtk.IconSize.MENU)
+            self._icon.set_from_icon_name('window-close-symbolic')
             self._icon.get_style_context().add_class('error-color')
 
     def update(self, feature: Feature) -> None:

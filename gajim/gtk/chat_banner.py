@@ -6,8 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import cairo
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -50,17 +48,15 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._last_message_from_phone: set[BareContact] = set()
 
-        self._ui = get_builder('chat_banner.ui')
-        self.add(self._ui.banner_box)
-        self._ui.connect_signals(self)
+        self._ui = get_builder('chat_banner.ui', self)
+        self.append(self._ui.banner_box)
 
         self._account_badge = AccountBadge()
         self._voice_requests_button = VoiceRequestsButton()
 
-        self._ui.additional_items_box.pack_start(
-            self._voice_requests_button, False, True, 0)
-        self._ui.additional_items_box.pack_end(
-            self._account_badge, False, True, 0)
+        self._ui.additional_items_box.append(
+            self._voice_requests_button)
+        self._ui.additional_items_box.append(self._account_badge)
 
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
         self._set_toggle_roster_button_icon(hide_roster)
@@ -68,8 +64,6 @@ class ChatBanner(Gtk.Box, EventHelper):
         app.settings.connect_signal(
             'hide_groupchat_occupants_list',
             self._set_toggle_roster_button_icon)
-
-        self.show_all()
 
     def clear(self) -> None:
         self._disconnect_signals()
@@ -184,8 +178,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._update_robot_image()
 
     def _on_room_voice_request(self, *args: Any) -> None:
-        self._voice_requests_button.set_no_show_all(False)
-        self._voice_requests_button.show_all()
+        self._voice_requests_button.show()
 
     def _on_user_state_changed(self, *args: Any) -> None:
         self._update_avatar()
@@ -264,9 +257,9 @@ class ChatBanner(Gtk.Box, EventHelper):
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
         assert self._contact
-        surface = self._contact.get_avatar(AvatarSize.CHAT, scale)
-        assert isinstance(surface, cairo.ImageSurface)
-        self._ui.avatar_image.set_from_surface(surface)
+        texture = self._contact.get_avatar(AvatarSize.CHAT, scale)
+        self._ui.avatar_image.set_pixel_size(AvatarSize.CHAT)
+        self._ui.avatar_image.set_from_paintable(texture)
 
         self._avatar_image_tooltip = ContactTooltip()
 
@@ -363,9 +356,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.qr_code_image.show()
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
-        text = self._get_share_uri()
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(text, -1)
+        self.get_clipboard().set(self._get_share_uri())
         self._ui.share_popover.popdown()
 
     def _on_toggle_roster_clicked(self, _button: Gtk.Button) -> None:
@@ -377,8 +368,7 @@ class ChatBanner(Gtk.Box, EventHelper):
                                        *args: Any) -> None:
 
         icon = 'go-next-symbolic' if not hide_roster else 'go-previous-symbolic'
-        self._ui.toggle_roster_image.set_from_icon_name(
-            icon, Gtk.IconSize.BUTTON)
+        self._ui.toggle_roster_image.set_from_icon_name(icon)
 
     @staticmethod
     def _get_name_from_contact(contact: types.ChatContactT) -> str:

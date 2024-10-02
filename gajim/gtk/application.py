@@ -36,7 +36,6 @@ from datetime import timedelta
 from datetime import timezone
 from urllib.parse import unquote
 
-from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -82,6 +81,7 @@ from gajim.gtk.menus import get_main_menu
 from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_app_windows
+from gajim.gtk.util import get_icon_theme
 from gajim.gtk.util import load_user_iconsets
 from gajim.gtk.util import open_window
 
@@ -215,15 +215,20 @@ class GajimApplication(Gtk.Application, CoreApplication):
             # to render colored emoji glyphs
             os.environ['PANGOCAIRO_BACKEND'] = 'fontconfig'
 
+        if sys.platform == 'win32':
+            # TODO GTK4
+            # https://gitlab.gnome.org/GNOME/gtk/-/issues/7019
+            # Remove once GTK >4.16.2 is released
+            os.environ['GSK_RENDERER'] = 'cairo'
+
         app.ged.register_event_handler(
             'db-migration', 0, self._on_db_migration)
 
         if not self._init_core():
             return
 
-        Gtk.IconSize.register('100', 100, 100)
-        icon_theme = Gtk.IconTheme.get_default()
-        icon_theme.append_search_path(str(configpaths.get('ICONS')))
+        icon_theme = get_icon_theme()
+        icon_theme.add_search_path(str(configpaths.get('ICONS')))
         load_user_iconsets()
 
         self.set_menubar(get_main_menu())
@@ -798,7 +803,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
             jid = JID.from_string(params.jid)
             app.window.select_chat(params.account, jid)
 
-        app.window.present_with_time(Gtk.get_current_event_time())
+        app.window.present()
+        # app.window.present_with_time(Gtk.get_current_event_time())
+        # TODO GTK4
 
     @structs.actionmethod
     def _on_mark_as_read_action(self,
@@ -816,9 +823,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_copy_text_action(_action: Gio.SimpleAction,
                              param: GLib.Variant) -> None:
-        text = param.get_string()
-        clip = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clip.set_text(text, -1)
+        app.window.get_clipboard().set(param.get_string())
 
     @staticmethod
     def _on_open_chat_action(_action: Gio.SimpleAction,

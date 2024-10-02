@@ -28,5 +28,3 @@ class DateRow(BaseRow):
         self.label.set_hexpand(True)
         self.label.get_style_context().add_class('conversation-meta')
         self.grid.attach(self.label, 0, 0, 1, 1)
-
-        self.show_all()

@@ -10,7 +10,6 @@ import logging
 from enum import IntEnum
 
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
@@ -67,9 +66,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
         self.set_show_menubar(False)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
         self.set_resizable(True)
         self.set_default_size(700, 600)
         self.set_name('ContactInfo')
@@ -82,7 +79,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._client.connect_signal(
             'state-changed', self._on_client_state_changed)
 
-        self._ui = get_builder('contact_info.ui')
+        self._ui = get_builder('contact_info.ui', self)
 
         self._tasks: list[Task] = []
         self._devices: dict[str, DeviceGrid] = {}
@@ -100,7 +97,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
             edit_mode=True
         )
         self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
-        self._ui.contact_name_controls_box.add(self._contact_name_widget)
+        self._ui.contact_name_controls_box.append(self._contact_name_widget)
 
         self._ui.contact_name_header_label.set_text(self.contact.name)
 
@@ -116,8 +113,10 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if page is not None:
             self._switcher.set_row(page)
 
-        self._ui.connect_signals(self)
-        self.connect('key-press-event', self._on_key_press)
+        controller = Gtk.EventControllerKey()
+        controller.connect('key-pressed', self._on_key_pressed)
+        self.add_controller(controller)
+
         self.connect('destroy', self._on_destroy)
 
         connect_destroy(self._ui.tree_selection,
@@ -134,12 +133,21 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
              self._on_unsubscribed_presence_received),
         ])
 
-        self.add(self._ui.main_grid)
-        self.show_all()
+        self.set_child(self._ui.main_grid)
 
-    def _on_key_press(self, _widget: ContactInfo, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+        self.show()
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             self.destroy()
+            return True
+        return False
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
@@ -181,7 +189,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _fill_information_page(self, contact: ContactT) -> None:
         self._vcard_grid = VCardGrid(self.account)
-        self._ui.vcard_box.add(self._vcard_grid)
+        self._ui.vcard_box.append(self._vcard_grid)
         if self._client.state.is_available:
             self._client.get_module('VCard4').request_vcard(
                 jid=self.contact.jid,
@@ -202,7 +210,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         self._switcher.set_row_visible('information', True)
 
     def _fill_encryption_page(self, contact: ContactT) -> None:
-        self._ui.encryption_box.add(
+        self._ui.encryption_box.append(
             OMEMOTrustManager(self.contact.account, self.contact))
         self._switcher.set_row_visible('encryption-omemo', True)
 
@@ -244,7 +252,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
         self._switcher.set_row_visible('settings', True)
         contact_settings = ContactSettings(self.account, contact.jid)
-        self._ui.contact_settings_box.add(contact_settings)
+        self._ui.contact_settings_box.append(contact_settings)
 
         params = RemoveHistoryActionParams(
             account=self.account, jid=self.contact.jid)
@@ -274,7 +282,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         for resource_contact in contacts:
             device_grid = DeviceGrid(resource_contact)
             self._devices[resource_contact.resource] = device_grid
-            self._ui.devices_box.add(device_grid.widget)
+            self._ui.devices_box.append(device_grid.widget)
             self._query_device(resource_contact)
 
         self._ui.devices_stack.set_visible_child_name('devices')
@@ -308,16 +316,18 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _load_avatar(self) -> None:
         scale = self.get_scale_factor()
-        surface_1 = self.contact.get_avatar(AvatarSize.VCARD,
-                                            scale,
-                                            add_show=False)
-        surface_2 = self.contact.get_avatar(AvatarSize.VCARD_HEADER,
-                                            scale,
-                                            add_show=False)
-        assert not isinstance(surface_1, GdkPixbuf.Pixbuf)
-        assert not isinstance(surface_2, GdkPixbuf.Pixbuf)
-        self._ui.avatar_image.set_from_surface(surface_1)
-        self._ui.avatar_image_header.set_from_surface(surface_2)
+        texture1 = self.contact.get_avatar(AvatarSize.VCARD,
+                                           scale,
+                                           add_show=False)
+
+        self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
+        self._ui.avatar_image.set_from_paintable(texture1)
+
+        texture2 = self.contact.get_avatar(AvatarSize.VCARD_HEADER,
+                                           scale,
+                                           add_show=False)
+        self._ui.avatar_image_header.set_pixel_size(AvatarSize.VCARD_HEADER)
+        self._ui.avatar_image_header.set_from_paintable(texture2)
 
     def _set_os_info(self, task: Task) -> None:
         self._tasks.remove(task)
@@ -494,7 +504,7 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
 class DeviceGrid:
     def __init__(self, contact: ResourceContact) -> None:
         self._contact = contact
-        self._ui = get_builder('contact_info.ui', ['devices_grid'])
+        self._ui = get_builder('contact_info.ui', self, ['devices_grid'])
         self._spinner = Gtk.Spinner()
         self._spinner.start()
 
@@ -505,8 +515,7 @@ class DeviceGrid:
         self._ui.priority_value.show()
         self._ui.priority_label.show()
 
-        self._ui.resource_box.add(self._spinner)
-        self._ui.devices_grid.show_all()
+        self._ui.resource_box.append(self._spinner)
 
         self._waiting_for_info = 2
 

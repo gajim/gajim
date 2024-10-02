@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from typing import Any
 
 from pathlib import Path
 
@@ -19,8 +20,9 @@ class GajimPluginActivateException(Exception):
     '''
 
 
-def get_builder(file_name: str, widgets: list[str] | None = None) -> Builder:
+def get_builder(file_name: str, instance: Any, widgets: list[str] | None = None) -> Builder:
     return Builder(file_name,
+                   instance,
                    widgets,  # pyright: ignore
                    domain=DOMAIN,
                    gettext_=_)

@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from typing import Any
+
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -20,6 +22,7 @@ class ChatFilter(Gtk.Box):
         Gtk.Box.__init__(self)
         self.set_halign(Gtk.Align.CENTER)
 
+        return # GTK4 TODO
         toolbar = Gtk.Toolbar()
         toolbar.set_icon_size(Gtk.IconSize.MENU)
         if icons:
@@ -59,10 +62,11 @@ class ChatFilter(Gtk.Box):
         self.add(toolbar)
         self.show_all()
 
-    def _on_button_clicked(self, button: Gtk.RadioToolButton) -> None:
+    def _on_button_clicked(self, button: Any) -> None:
         if button.get_active():
             self.emit('filter-changed', button.get_name())
 
     def reset(self) -> None:
+        return # GTK4 TODO
         self._all_button.set_active(True)
         self.emit('filter-changed', 'all')
