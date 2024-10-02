@@ -215,9 +215,11 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                         groups=groups,
                         auto_auth=True)
                 iter_ = model.iter_next(iter_)
-            InformationDialog(i18n.ngettext('Added %s contact',
-                                            'Added %s contacts',
-                                            count))
+            InformationDialog(
+                i18n.ngettext('Added %(count)s contact',
+                              'Added %(count)s contacts',
+                              count) % {'count': count}
+                )
         elif self._action == 'modify':
             count = 0
             while iter_:
@@ -243,9 +245,11 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                     self._client.get_module('Presence').unsubscribe(jid)
                     self._client.get_module('Roster').delete_item(jid)
                 iter_ = model.iter_next(iter_)
-            InformationDialog(i18n.ngettext('Removed %s contact',
-                                            'Removed %s contacts',
-                                            count))
+            InformationDialog(
+                i18n.ngettext('Removed %(count)s contact',
+                              'Removed %(count)s contacts',
+                              count) % {'count': count}
+                )
         self.destroy()
 
     def _on_cancel_button_clicked(self, _button: Gtk.Button) -> None:
