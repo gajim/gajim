@@ -421,6 +421,8 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         occurrence_positon = self._search_context.get_occurrence_position(
             match_start, match_end)
+        if occurrence_positon == -1:
+            occurrence_positon = 1
         self._ui.search_results_label.set_text(
             _('%s of %s') % (occurrence_positon, occurrences_count)
         )
