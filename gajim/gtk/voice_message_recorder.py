@@ -186,6 +186,10 @@ class VoiceMessageRecorder:
             self._file_name = f'voice-message-{timestamp}.{self._filetype}'
             self._file_path = configpaths.get_temp_dir() / self._file_name
 
+        if not self._file_path.parent.exists():
+            self._handle_error_output_dir_inaccessible()
+            return
+
         self._output_file_counter += 1
         self._filesink.set_property(
             'location', f'{self._file_path}.part{self._output_file_counter}'
@@ -342,8 +346,19 @@ class VoiceMessageRecorder:
     def _handle_error_on_merging(self, message: Gst.Message | None) -> None:
         if message is not None and not self._is_error(message):
             return
-        # TODO
+
+        self._error_callback(
+            GST_ERROR_ON_MERGING,
+            _('Error while merging recordings, please try again.')
+        )
         log.debug('Error when merging the recordings!')
+
+    def _handle_error_output_dir_inaccessible(self) -> None:
+        log.error('Voice message lost. Temporary output folder %s '
+                  'not accessible', self._file_path.parent)
+        error_message = _('Voice message could not be saved. Please try again.')
+        self._error_callback(GST_ERROR_ON_MERGING, error_message)
+        self.stop_and_reset()
 
     def _custom_message(self, name: str) -> None:
         custom_structure = Gst.Structure.new_empty(name)
@@ -470,6 +485,10 @@ class VoiceMessageRecorder:
         return command
 
     def _merge_output_files(self) -> None:
+        if not self._file_path.parent.exists():
+            self._handle_error_output_dir_inaccessible()
+            return
+
         command = self._merge_opus_m4a_command()
         pipeline = Gst.parse_launch(command)
 

@@ -229,8 +229,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
                 self._stop_and_reset_recording()
             else:
                 self._stop_recording()
-
-        if occasion == GST_ERROR_ON_RECORDING:
+        elif occasion == GST_ERROR_ON_RECORDING:
             self._stop_recording()
 
             if not self._voice_message_recorder.audio_file_is_valid:
@@ -240,6 +239,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
                     Path(self._voice_message_recorder.audio_file_abspath)
                 )
                 self._show_playback_box()
+        else:
+            self._stop_and_reset_recording()
 
     def _update_time_label(self, recording_time: Callable[..., int]) -> bool:
         formatted = format_duration(recording_time(), recording_time())
@@ -298,6 +299,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton):
         self._ui.error_label.set_visible(False)
 
     def _on_record_toggle_clicked(self, _button: Gtk.Button) -> None:
+        self._hide_error_message()
+
         if self._voice_message_recorder.recording_in_progress:
             self._stop_recording()
 
