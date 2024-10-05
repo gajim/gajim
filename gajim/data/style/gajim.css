@@ -259,6 +259,11 @@ infobar.error > revealer > box {
     background: @theme_base_color;
 }
 
+.gajim-app-window > box {
+    padding: 18px;
+}
+
+
 /* Generic sidebar / chatlist elements */
 .account-identifier-bar {
 	border-radius: 6px;

@@ -31,6 +31,7 @@ from gajim.common.util.uri import open_uri
 from gajim.gtk.builder import get_builder
 from gajim.gtk.certificate_dialog import CertificateBox
 from gajim.gtk.util import EventHelper
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.server_info')
 
@@ -41,14 +42,17 @@ class Feature(NamedTuple):
     additional: str | None = None
 
 
-class ServerInfo(Gtk.ApplicationWindow, EventHelper):
+class ServerInfo(GajimAppWindow, EventHelper):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='ServerInfo',
+            application=app.app,
+            title=_('Server Info')
+        )
         EventHelper.__init__(self)
-        self.set_name('ServerInfo')
-        self.set_application(app.app)
+
         self.set_default_size(500, 600)
-        self.set_title(_('Server Info'))
 
         self.account = account
         self._client = app.get_client(account)
@@ -63,10 +67,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
         self.set_child(self._ui.server_info_notebook)
 
         self.connect('destroy', self._on_destroy)
-
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
 
         self.register_events([
             ('server-disco-received', ged.GUI1, self._server_disco_received),
@@ -102,19 +102,6 @@ class ServerInfo(Gtk.ApplicationWindow, EventHelper):
 
     def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
-
 
     def _add_connection_info(self) -> None:
         # Connection type
