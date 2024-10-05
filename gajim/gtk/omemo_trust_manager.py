@@ -291,7 +291,6 @@ class KeyRow(Gtk.ListBoxRow):
 
             listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
-            self.destroy()
 
         ConfirmationDialog(
             _('Delete'),
@@ -332,7 +331,7 @@ class TrustButton(Gtk.MenuButton):
         Gtk.MenuButton.__init__(self)
         self._row = row
         self._css_class = ''
-        self._trust_popover = TrustPopver(row)
+        self._trust_popover = TrustPopver(row, self)
         self.set_popover(self._trust_popover)
         self.set_valign(Gtk.Align.CENTER)
         self.update()
@@ -344,24 +343,24 @@ class TrustButton(Gtk.MenuButton):
 
     def update(self) -> None:
         icon_name, tooltip, css_class = TRUST_DATA[self._row.trust]
-        # TODO GTK4
-        # image = cast(Gtk.Image, self.get_child())
-        # image.set_from_icon_name(icon_name)
-        # image.get_style_context().remove_class(self._css_class)
+        image = Gtk.Image.new_from_icon_name(icon_name)
+        self.set_child(image)
 
         if not self._row.active:
             css_class = 'omemo-inactive-color'
             tooltip = f'{_("Inactive")} - {tooltip}'
 
-        # image.get_style_context().add_class(css_class)
+        image.add_css_class(css_class)
         self._css_class = css_class
         self.set_tooltip_text(tooltip)
 
 
 class TrustPopver(Gtk.Popover):
-    def __init__(self, row: KeyRow) -> None:
+    def __init__(self, row: KeyRow, trust_button: TrustButton) -> None:
         Gtk.Popover.__init__(self)
         self._row = row
+        self._trust_button = trust_button
+
         self._listbox = Gtk.ListBox()
         self._listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.update()
@@ -375,8 +374,7 @@ class TrustPopver(Gtk.Popover):
             self._row.delete_fingerprint()
         else:
             self._row.set_trust(row.type_)
-            trust_button = cast(TrustButton, self.get_relative_to())
-            trust_button.update()
+            self._trust_button.update()
             self.update()
 
     def update(self) -> None:
