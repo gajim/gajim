@@ -6,8 +6,6 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 import textwrap
 from collections.abc import Callable
 from collections.abc import Iterator
@@ -16,7 +14,6 @@ from urllib.parse import quote
 
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
@@ -266,33 +263,32 @@ def get_message_input_extra_context_menu() -> Gio.Menu:
     return extra_menu
 
 
-def get_conv_action_context_menu(account: str,
-                                 selected_text: str
-                                 ) -> Gtk.MenuItem:
+def get_conv_action_context_menu(
+    account: str,
+    selected_text: str
+) -> Gio.Menu:
+    menuitems: MenuItemListT = []
+
     selected_text_short = textwrap.shorten(selected_text,
                                            width=10,
                                            placeholder='…')
 
-    action_menu_item = Gtk.MenuItem.new_with_mnemonic(
-        _('_Actions for "%s"') % escape_mnemonic(selected_text_short))
-    submenu = Gtk.Menu()
-    action_menu_item.set_submenu(submenu)
-
     uri_text = quote(selected_text.encode('utf-8'))
 
+    # Wikipedia search
     if app.settings.get('always_english_wikipedia'):
         uri = (f'https://en.wikipedia.org/wiki/'
                f'Special:Search?search={uri_text}')
     else:
         uri = (f'https://{get_short_lang_code()}.wikipedia.org/'
                f'wiki/Special:Search?search={uri_text}')
-    item = Gtk.MenuItem.new_with_mnemonic(_('Read _Wikipedia Article'))
-    value = GLib.Variant.new_strv([account, uri])
-    item.set_action_target_value(value)
-    submenu.append(item)
+    variant = GLib.Variant.new_strv([account, uri])
+    menuitems.append(
+        (_('Read _Wikipedia Article'), 'app.open-link', variant)
+    )
 
-    item = Gtk.MenuItem.new_with_mnemonic(
-        _('Look it up in _Dictionary'))
+    # Dictionary search
+    dictionary_title = _('Look it up in _Dictionary')
     dict_link = app.settings.get('dictionary_url')
     if dict_link == 'WIKTIONARY':
         # Default is wikitionary.org
@@ -305,37 +301,42 @@ def get_conv_action_context_menu(account: str,
     else:
         if dict_link.find('%s') == -1:
             # There has to be a '%s' in the url if it’s not WIKTIONARY
-            item = Gtk.MenuItem.new_with_label(
-                _('Dictionary URL is missing a "%s"'))
-            item.set_sensitive(False)
+            dictionary_title = _('Dictionary URL is missing a "%s"')
         else:
             uri = dict_link % uri_text
-    value = GLib.Variant.new_strv([account, uri])
-    item.set_action_target_value(value)
-    submenu.append(item)
 
+    variant = GLib.Variant.new_strv([account, uri])
+    menuitems.append(
+        (dictionary_title, 'app.open-link', variant)
+    )
+
+    # Generic search
     search_link = app.settings.get('search_engine')
     if search_link.find('%s') == -1:
         # There has to be a '%s' in the url
-        item = Gtk.MenuItem.new_with_label(
-            _('Web Search URL is missing a "%s"'))
-        item.set_sensitive(False)
+        search_title = _('Web Search URL is missing a "%s"')
     else:
-        item = Gtk.MenuItem.new_with_mnemonic(_('Web _Search for it'))
+        search_title = _('Web _Search for it')
         uri = search_link % uri_text
-    value = GLib.Variant.new_strv([account, uri])
-    item.set_action_target_value(value)
-    submenu.append(item)
 
-    item = Gtk.MenuItem.new_with_mnemonic(_('Open as _Link'))
-    value = GLib.Variant.new_strv([account, f'https://{uri_text}'])
-    item.set_action_target_value(value)
-    submenu.append(item)
+    variant = GLib.Variant.new_strv([account, uri])
+    menuitems.append(
+        (search_title, 'app.open-link', variant)
+    )
 
-    for item in cast(list[Gtk.MenuItem], submenu):
-        item.set_action_name('app.open-link')
+    # Open as URI
+    variant = GLib.Variant.new_strv([account, f'https://{uri_text}'])
+    menuitems.append(
+        (_('Open as _Link'), 'app.open-link', variant)
+    )
 
-    return action_menu_item
+    menu = GajimMenu.from_list(menuitems)
+    extra_menu = Gio.Menu()
+    extra_menu.append_section(
+        _('Actions for "%s"') % escape_mnemonic(selected_text_short),
+        menu
+    )
+    return extra_menu
 
 
 def _xmpp_message_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
@@ -442,20 +443,25 @@ _uri_context_menus: dict[URIType, UriMenuBuilderT] = {
     URIType.OTHER: _other_uri_context_menu,
 }
 
-
-def populate_uri_context_menu(menu: Gtk.Menu, account: str, uri: URI) -> None:
+def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu:
     assert uri.type != URIType.INVALID  # it really begs to be a separate class
+
+    menuitems: MenuItemListT = []
+
     for action, args, label in _uri_context_menus[uri.type](uri, account):
-        menuitem = Gtk.MenuItem()
-        menuitem.set_label(label)
-        menuitem.set_action_name(f'app.{action}')
         if len(args) == 1:
             value = GLib.Variant.new_string(args[0])
         else:
             value = GLib.Variant.new_strv(args)
-        menuitem.set_action_target_value(value)
-        menuitem.show()
-        menu.append(menuitem)
+
+        menuitems.append(
+            (label, f'app.{action}', value),
+        )
+
+    menu = GajimMenu.from_list(menuitems)
+    extra_menu = Gio.Menu()
+    extra_menu.append_section(None, menu)
+    return extra_menu
 
 
 def get_roster_menu(

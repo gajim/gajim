@@ -22,7 +22,7 @@ from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
-from gajim.gtk.menus import populate_uri_context_menu
+from gajim.gtk.menus import get_uri_context_menu
 from gajim.gtk.util import make_pango_attributes
 
 log = logging.getLogger('gajim.gtk.conversaion.plain_widget')
@@ -71,25 +71,35 @@ class MessageLabel(Gtk.Label):
 
         self.connect('activate-link', self._on_activate_link)
 
-        # TODO GTK4
-        # self.connect('populate-popup', self._on_populate_popup)
-        # self.connect('focus-in-event', self._on_focus_in)
-        # self.connect('focus-out-event', self._on_focus_out)
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        gesture_secondary_click.connect('pressed', self._on_secondary_clicked)
+        self.add_controller(gesture_secondary_click)
 
-    def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
-        uri = label.get_current_uri()
-        selected, start, end = label.get_selection_bounds()
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect('enter', self._on_focus_enter)
+        focus_controller.connect('leave', self._on_focus_leave)
+        self.add_controller(focus_controller)
+
+    def _on_secondary_clicked(
+        self,
+        _gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> int:
+        uri = self.get_current_uri()
+        selected, start, end = self.get_selection_bounds()
         if uri:
             puri = parse_uri(uri)
             assert puri.type != URIType.INVALID  # would be a common.styling bug
-            menu.foreach(menu.remove)
-            populate_uri_context_menu(menu, self._account, puri)
+            self.set_extra_menu(get_uri_context_menu(self._account, puri))
         elif selected:
-            selected_text = label.get_text()[start:end]
-            action_menu_item = get_conv_action_context_menu(
-                self._account, selected_text)
-            menu.prepend(action_menu_item)
-        menu.show_all()
+            selected_text = self.get_text()[start:end]
+            self.set_extra_menu(
+                get_conv_action_context_menu(self._account, selected_text)
+            )
+
+        return Gdk.EVENT_PROPAGATE
 
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:
         markup_text = ''
@@ -133,14 +143,8 @@ class MessageLabel(Gtk.Label):
         open_uri(puri, self._account)
         return Gdk.EVENT_STOP
 
-    @staticmethod
-    def _on_focus_in(widget: MessageLabel,
-                     _event: Gdk.EventFocus
-                     ) -> None:
-        widget.get_style_context().remove_class('transparent-selection')
+    def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:
+        self.remove_css_class('transparent-selection')
 
-    @staticmethod
-    def _on_focus_out(widget: MessageLabel,
-                      _event: Gdk.EventFocus
-                      ) -> None:
-        widget.get_style_context().add_class('transparent-selection')
+    def _on_focus_leave(self, _focus_controller: Gtk.EventControllerFocus) -> None:
+        self.add_css_class('transparent-selection')
