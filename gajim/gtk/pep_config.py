@@ -8,7 +8,6 @@ from typing import Any
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from nbxmpp.errors import StanzaError
@@ -29,24 +28,27 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import get_source_view_style_scheme
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.pep_config')
 
 
-class PEPConfig(Gtk.ApplicationWindow, EventHelper):
+class PEPConfig(GajimAppWindow, EventHelper):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='PEPConfig',
+            title=_('PEP Service Configuration (%s)') % account,
+            default_width=700,
+            default_height=800,
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_name('PEPConfig')
-        self.set_default_size(700, 800)
-        self.set_resizable(True)
 
         self._ui = get_builder('pep_config.ui', self)
         self.set_child(self._ui.stack)
 
         self.account = account
-        self.set_title(_('PEP Service Configuration (%s)') % self.account)
         self._client = app.get_client(account)
 
         self._result_node: Node | None = None
@@ -70,13 +72,7 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
             ('style-changed', ged.GUI1, self._on_style_changed)
         ])
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self._on_destroy)
-
-        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         selection = self._ui.services_treeview.get_selection()
@@ -87,18 +83,6 @@ class PEPConfig(Gtk.ApplicationWindow, EventHelper):
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self._ui.items_view.get_buffer().set_style_scheme(style_scheme)
-
-    def _on_key_pressed(
-            self,
-            _event_controller_key: Gtk.EventControllerKey,
-            keyval: int,
-            _keycode: int,
-            _state: Gdk.ModifierType
-        ) -> bool:
-            if keyval == Gdk.KEY_Escape:
-                self.destroy()
-                return True
-            return False
 
     def _on_services_selection_changed(self,
                                        _selection: Gtk.TreeSelection

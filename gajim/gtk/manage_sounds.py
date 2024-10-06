@@ -9,7 +9,6 @@ from typing import cast
 import os
 from enum import IntEnum
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -19,6 +18,7 @@ from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 SOUNDS = {
     'attention_received': _('Attention Message Received'),
@@ -40,16 +40,17 @@ class Column(IntEnum):
     CONFIG = 3
 
 
-class ManageSounds(Gtk.ApplicationWindow):
+class ManageSounds(GajimAppWindow):
     def __init__(self, transient_for: Gtk.Window) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_name('ManageSounds')
-        self.set_default_size(400, 400)
-        self.set_resizable(True)
-        self.set_transient_for(transient_for)
+        GajimAppWindow.__init__(
+            self,
+            name='ManageSounds',
+            title=_('Manage Sounds'),
+            default_width=400,
+            default_height=400,
+            transient_for=transient_for
+        )
         self.set_modal(True)
-        self.set_title(_('Manage Sounds'))
 
         self._ui = get_builder('manage_sounds.ui', self)
         self.set_child(self._ui.manage_sounds)
@@ -66,12 +67,6 @@ class ManageSounds(Gtk.ApplicationWindow):
         self._ui.filechooser.set_filter(filter_)
 
         self._fill_sound_treeview()
-
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
-        self.show()
 
     @staticmethod
     def _on_row_changed(model: Gtk.TreeModel,
@@ -149,15 +144,3 @@ class ManageSounds(Gtk.ApplicationWindow):
 
         snd_event_config_name = model[iter_][Column.CONFIG]
         play_sound(snd_event_config_name, None, force=True)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False

@@ -4,7 +4,6 @@
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -13,17 +12,19 @@ from gajim.common.events import PasswordRequired
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.pass_dialog')
 
 
-class PasswordDialog(Gtk.ApplicationWindow):
+class PasswordDialog(GajimAppWindow):
     def __init__(self, event: PasswordRequired) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_default_size(400, -1)
-        self.set_name('PasswordDialog')
-        self.set_title(_('Password Required'))
+        GajimAppWindow.__init__(
+            self,
+            name='PasswordDialog',
+            title=_('Password Required'),
+            default_width=400,
+        )
 
         self._ui = get_builder('password_dialog.ui', self)
         self.set_child(self._ui.pass_box)
@@ -32,27 +33,9 @@ class PasswordDialog(Gtk.ApplicationWindow):
         self._client = app.get_client(event.client.account)
         self._event = event
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.set_default_widget(self._ui.ok_button)
 
         self._process_event()
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _process_event(self) -> None:
         own_jid = self._client.get_own_jid().bare

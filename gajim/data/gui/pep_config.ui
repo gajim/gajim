@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <requires lib="gtk" version="4.0"/>
   <requires lib="gtksourceview" version="5.0"/>
   <object class="GtkStack" id="stack">
     <property name="transition-type">slide-left-right</property>
+    <property name="hexpand">1</property>
     <child>
       <object class="GtkStackPage">
         <property name="name">overview</property>
@@ -31,6 +31,7 @@
             <child>
               <object class="GtkBox">
                 <property name="spacing">12</property>
+                <property name="halign">end</property>
                 <child>
                   <object class="GtkButton" id="show_content_button">
                     <property name="label" translatable="1">Show Content</property>
