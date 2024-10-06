@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common.i18n import _
@@ -19,6 +18,7 @@ from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
 from gajim.gtk.util import iterate_children
+from gajim.gtk.widgets import GajimAppWindow
 
 ContentT = ParsingResult | QuoteBlock
 
@@ -112,12 +112,15 @@ class MessageWidget(Gtk.Box):
             self.remove(child)
 
 
-class FullMessageWindow(Gtk.ApplicationWindow):
+class FullMessageWindow(GajimAppWindow):
     def __init__(self, text: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_size_request(800, 800)
-        self.set_title(_('Full Message View'))
-        self.get_style_context().add_class('dialog-margin')
+        GajimAppWindow.__init__(
+            self,
+            name='FullMessageWindow',
+            title=_('Full Message View'),
+            default_width=800,
+            default_height=800,
+        )
 
         textview = Gtk.TextView()
         textview.set_editable(False)
@@ -133,15 +136,3 @@ class FullMessageWindow(Gtk.ApplicationWindow):
         box.append(scrolled)
 
         self.set_child(box)
-
-        self.show()
-
-        # TODO GTK4
-        # self.connect('key-press-event', self._on_key_press_event)
-
-    def _on_key_press_event(self,
-                            _widget: Gtk.Widget,
-                            event: Any
-                            ) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
