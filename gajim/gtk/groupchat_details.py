@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -24,19 +23,22 @@ from gajim.gtk.groupchat_settings import GroupChatSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class GroupchatDetails(Gtk.ApplicationWindow):
-    def __init__(self,
-                 contact: GroupchatContact,
-                 page: str | None = None
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_default_size(-1, 600)
-        self.set_title(_('Group Chat Details'))
+class GroupchatDetails(GajimAppWindow):
+    def __init__(
+        self,
+        contact: GroupchatContact,
+        page: str | None = None
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name='StartChatDialog',
+            title=_('Group Chat Details'),
+            default_height=600,
+            add_window_padding=False,
+        )
 
         self.account = contact.account
         self._client = app.get_client(contact.account)
@@ -71,13 +73,7 @@ class GroupchatDetails(Gtk.ApplicationWindow):
         if page is not None:
             self._switcher.set_row(page)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self._on_destroy)
-
-        self.show()
 
     def _on_disco_info_update(self,
                               _contact: GroupchatContact,
@@ -182,18 +178,6 @@ class GroupchatDetails(Gtk.ApplicationWindow):
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._ui.contact_name_header_label.set_text(name)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_destroy(self, _widget: GroupchatDetails) -> None:
         app.check_finalize(self)

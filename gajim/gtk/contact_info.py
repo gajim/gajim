@@ -45,6 +45,7 @@ from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.util import connect_destroy
 from gajim.gtk.vcard_grid import VCardGrid
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.contact_info')
 
@@ -57,20 +58,22 @@ class Column(IntEnum):
     GROUP_NAME = 1
 
 
-class ContactInfo(Gtk.ApplicationWindow, EventHelper):
+class ContactInfo(GajimAppWindow, EventHelper):
     def __init__(self,
                  account: str,
                  contact: ContactT,
                  page: str | None = None) -> None:
 
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='ContactInfo',
+            title=_('Contact Information'),
+            default_width=700,
+            default_height=600,
+            add_window_padding=False,
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_default_size(700, 600)
-        self.set_name('ContactInfo')
-        self.set_title(_('Contact Information'))
 
         # Set account and jid for window management
         self.account = account
@@ -113,10 +116,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         if page is not None:
             self._switcher.set_row(page)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self._on_destroy)
 
         connect_destroy(self._ui.tree_selection,
@@ -134,20 +133,6 @@ class ContactInfo(Gtk.ApplicationWindow, EventHelper):
         ])
 
         self.set_child(self._ui.main_grid)
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_client_state_changed(self,
                                  _client: types.Client,

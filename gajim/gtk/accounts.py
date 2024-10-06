@@ -38,19 +38,22 @@ from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import open_window
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.accounts')
 
 
-class AccountsWindow(Gtk.ApplicationWindow):
+class AccountsWindow(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_name('AccountsWindow')
-        self.set_default_size(700, 550)
-        self.set_resizable(True)
-        self.set_title(_('Accounts'))
+        GajimAppWindow.__init__(
+            self,
+            name='AccountsWindow',
+            title=_('Accounts'),
+            default_width=700,
+            default_height=550,
+            add_window_padding=False,
+        )
+
         self._need_relogin: dict[str, list[AllSettingsT]] = {}
         self._accounts: dict[str, Account] = {}
 
@@ -68,12 +71,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
         self._menu.connect('menu-activated', self._on_menu_activated)
         self.connect('destroy', self._on_destroy)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
-        self.show()
-
     def _on_menu_activated(self,
                            _listbox: Gtk.ListBox,
                            account: str,
@@ -85,18 +82,6 @@ class AccountsWindow(Gtk.ApplicationWindow):
             self.on_remove_account(account)
         else:
             self._settings.set_page(name)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_destroy(self, _widget: AccountsWindow) -> None:
         self._check_relogin()
@@ -207,7 +192,6 @@ class Settings(Gtk.ScrolledWindow):
             del self._page_signal_ids[page]
             self._stack.disconnect(signal_id)
             self._stack.remove(page)
-            page.destroy()
         del self._pages[account]
 
     def update_proxy_list(self, account: str) -> None:

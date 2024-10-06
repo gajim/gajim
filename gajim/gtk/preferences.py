@@ -10,7 +10,6 @@ from typing import cast
 import logging
 import sys
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -40,19 +39,21 @@ from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
 from gajim.gtk.video_preview import VideoPreview
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.preferences')
 
 
-class Preferences(Gtk.ApplicationWindow):
+class Preferences(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_name('PreferencesWindow')
-        self.set_default_size(900, 650)
-        self.set_resizable(True)
-        self.set_title(_('Preferences'))
+        GajimAppWindow.__init__(
+            self,
+            name='PreferencesWindow',
+            title=_('Preferences'),
+            default_width=900,
+            default_height=650,
+            add_window_padding=False,
+        )
 
         self._ui = get_builder('preferences.ui', self)
 
@@ -94,13 +95,7 @@ class Preferences(Gtk.ApplicationWindow):
         #     self._ui.av_info_bar_label.set_text(
         #         _('Video calls are not available on Windows'))
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self._on_destroy)
-
-        self.show()
 
     def get_ui(self):
         return self._ui
@@ -115,18 +110,6 @@ class Preferences(Gtk.ApplicationWindow):
     def _add_video_preview(self) -> None:
         self._video_preview = VideoPreview()
         self._ui.video.attach(self._video_preview, 0, 0, 1, 1)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def get_video_preview(self) -> VideoPreview | None:
         return self._video_preview
