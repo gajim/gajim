@@ -712,8 +712,6 @@ class PopoverSetting(GenericSetting):
         box.set_halign(Gtk.Align.END)
         box.set_hexpand(True)
 
-        # TODO GTK4
-        # Use a Gtk.Dropdown for this
         self._default_text = cast(str, kwargs.get('default-text'))
 
         self._current_label = Gtk.Label()
@@ -740,9 +738,9 @@ class PopoverSetting(GenericSetting):
 
         self._popover = Gtk.Popover()
         self._popover.get_style_context().add_class('combo')
-        # self._popover.set_relative_to(image) # TODO GTK4
         self._popover.set_position(Gtk.PositionType.BOTTOM)
         self._popover.set_child(scrolled_window)
+        box.append(self._popover)
 
         self.setting_box.append(box)
 
