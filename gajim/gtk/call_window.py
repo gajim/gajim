@@ -26,19 +26,21 @@ from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.gstreamer import create_gtk_widget
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.call_window')
 
 
-class CallWindow(Gtk.ApplicationWindow, EventHelper):
+class CallWindow(GajimAppWindow, EventHelper):
     def __init__(self, account: str, resource_jid: JID) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='CallWindow',
+            default_width=700,
+            default_height=600,
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_default_size(700, 600)
-        self.set_name('CallWindow')
 
         self._account = account
         self._client = app.get_client(account)
@@ -68,8 +70,6 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             ('call-updated', ged.GUI2, self._on_call_updated),
         ])
 
-        self.show()
-
     def _on_destroy(self, *args: Any) -> None:
         assert isinstance(self._resource_contact, ResourceContact)
         app.call_manager.stop_call(
@@ -77,7 +77,6 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._resource_contact)
 
         self.unregister_events()
-        self._ui.dtmf_popover.destroy()
         app.check_finalize(self)
 
     def _close_with_timeout(self, timeout: int = 3) -> None:
@@ -104,7 +103,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
                              button: Gtk.Button,
                              _event: Any
                              ) -> None:
-        button_id = Gtk.Buildable.get_name(button)
+        button_id = button.get_name()
         key = button_id.split('_')[1]
         app.call_manager.start_dtmf(
             self._account, self._resource_contact.jid, key)
@@ -167,7 +166,6 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.jingle_connection_state.set_text(_('Incoming Call'))
 
         elif event.audio_state == JingleState.CONNECTED:
-            self._ui.jingle_audio_state.set_no_show_all(False)
             self._ui.jingle_audio_state.show()
             self._ui.jingle_connection_state.set_text('')
             self._ui.jingle_connection_spinner.stop()
@@ -198,10 +196,14 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.video_box.hide()
             self._ui.outgoing_viewport.set_visible(False)
             self._ui.outgoing_viewport.hide()
+
             if self._video_widget_other:
-                self._video_widget_other.destroy()
+                self._ui.incoming_viewport.set_child(None)
+                self._video_widget_other = None
+
             if self._video_widget_self:
-                self._video_widget_self.destroy()
+                self._ui.outgoing_viewport.set_child(None)
+                self._video_widget_self = None
 
             if event.audio_state != JingleState.CONNECTED:
                 self._ui.jingle_connection_state.set_text('')
@@ -209,8 +211,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.jingle_connection_spinner.hide()
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_('Turn Camera on'))
-            self._ui.av_cam_image.set_from_icon_name(
-                'feather-camera-symbolic', Gtk.IconSize.BUTTON)
+            self._ui.av_cam_image.set_from_icon_name('feather-camera-symbolic')
             if event.audio_state == JingleState.NULL:
                 self._ui.jingle_connection_state.set_text(_('Call ended'))
                 self._close_with_timeout()
@@ -222,8 +223,7 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.jingle_connection_state.set_text(_('Calling (Video)…'))
             self._ui.av_cam_button.set_sensitive(False)
             self._ui.av_cam_button.set_tooltip_text(_('Turn Camera off'))
-            self._ui.av_cam_image.set_from_icon_name(
-                'feather-camera-off-symbolic', Gtk.IconSize.BUTTON)
+            self._ui.av_cam_image.set_from_icon_name('feather-camera-off-symbolic')
 
         elif event.video_state == JingleState.CONNECTION_RECEIVED:
             self._ui.jingle_connection_state.set_text(
@@ -231,16 +231,12 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
             self._ui.answer_video_button.show()
             self._ui.av_cam_button.set_sensitive(False)
             self._ui.av_cam_button.set_tooltip_text(_('Turn Camera off'))
-            self._ui.av_cam_image.set_from_icon_name(
-                'feather-camera-off-symbolic', Gtk.IconSize.BUTTON)
+            self._ui.av_cam_image.set_from_icon_name('feather-camera-off-symbolic')
 
         elif event.video_state == JingleState.CONNECTED:
             self._ui.avatar_image.hide()
-            self._ui.video_box.set_no_show_all(False)
-            self._ui.video_box.show_all()
             self._ui.answer_video_button.hide()
             if app.settings.get('video_see_self'):
-                self._ui.outgoing_viewport.set_no_show_all(False)
                 self._ui.outgoing_viewport.show()
             else:
                 self._ui.outgoing_viewport.set_visible(False)
@@ -254,8 +250,8 @@ class CallWindow(Gtk.ApplicationWindow, EventHelper):
 
             sink_other, self._video_widget_other, _name = other_gtk_widget
             sink_self, self._video_widget_self, _name = self_gtk_widget
-            self._ui.incoming_viewport.add(self._video_widget_other)
-            self._ui.outgoing_viewport.add(self._video_widget_self)
+            self._ui.incoming_viewport.set_child(self._video_widget_other)
+            self._ui.outgoing_viewport.set_child(self._video_widget_self)
 
             session = self._client.get_module('Jingle').get_jingle_session(
                 str(self._resource_contact.jid), event.video_sid)
