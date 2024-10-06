@@ -4,12 +4,17 @@
 
 from __future__ import annotations
 
+import logging
+
 from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
 
 from gajim.gtk.util import iterate_children
+
+
+log = logging.getLogger('gajim.gtk')
 
 
 class GajimAppWindow(Gtk.ApplicationWindow):
@@ -33,6 +38,9 @@ class GajimAppWindow(Gtk.ApplicationWindow):
             default_height=default_height,
             transient_for=transient_for,
         )
+
+        log.debug('Load Window: %s', name)
+
         self.add_css_class('gajim-app-window')
 
         if add_window_padding:

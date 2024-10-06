@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -12,13 +14,19 @@ from gajim.common import app
 class MainMenuButton(Gtk.MenuButton):
     def __init__(self) -> None:
         Gtk.MenuButton.__init__(
-            self, halign=Gtk.Align.CENTER, visible=False, margin_top=12
+            self,
+            halign=Gtk.Align.CENTER,
+            margin_top=12,
+            icon_name='open-menu-symbolic',
         )
 
-        image = Gtk.Image.new_from_icon_name('open-menu-symbolic')
-        self.set_child(image)
+        menu_model = app.app.get_menubar()
+        assert menu_model is not None
 
-        self.set_menu_model(app.app.get_menubar())
+        menu = Gtk.PopoverMenu.new_from_model_full(
+            menu_model, Gtk.PopoverMenuFlags.NESTED)
+
+        self.set_popover(menu)
 
         menu_toggle_action = app.window.lookup_action('toggle-menu-bar')
         assert menu_toggle_action is not None
@@ -29,7 +37,4 @@ class MainMenuButton(Gtk.MenuButton):
     def _on_menu_toggle_action(
         self, _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        if app.window.get_show_menubar():
-            self.hide()
-        else:
-            self.show()
+        self.set_visible(not app.window.get_show_menubar())

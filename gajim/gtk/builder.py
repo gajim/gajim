@@ -5,6 +5,7 @@
 from typing import Any
 
 import functools
+import logging
 import sys
 import xml.etree.ElementTree as ET
 
@@ -14,6 +15,9 @@ from gi.repository import Gtk
 from gajim.common import configpaths
 from gajim.common import i18n
 from gajim.common.i18n import _
+
+
+log = logging.getLogger('gajim.gtk')
 
 
 class Builder:
@@ -40,6 +44,8 @@ class Builder:
             gettext_ = _
 
         xml_text = self._load_string_from_filename(filename, gettext_)
+
+        log.debug('Load ui file: %s', filename)
 
         if widgets is not None:
             self._builder.add_objects_from_string(xml_text, widgets)
