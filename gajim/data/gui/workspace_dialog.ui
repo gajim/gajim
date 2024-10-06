@@ -9,9 +9,7 @@
       <object class="GtkImage" id="preview"/>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="halign">center</property>
-        <child type="center">
+      <object class="GtkCenterBox">
           <object class="GtkEntry" id="entry">
             <property name="focusable">1</property>
             <property name="halign">center</property>
@@ -22,7 +20,7 @@
             <signal name="notify::text" handler="_on_text_changed" swapped="no"/>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="remove_workspace_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>

@@ -312,7 +312,7 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkCenterBox">
         <property name="spacing">6</property>
         <child type="center">
           <object class="GtkBox">
@@ -349,7 +349,7 @@
             </child>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkBox" id="audio_buttons_box">
             <property name="sensitive">0</property>
             <child>

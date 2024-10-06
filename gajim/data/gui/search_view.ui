@@ -82,10 +82,9 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox">
-        <property name="margin-bottom">6</property>
-        <property name="spacing">12</property>
-        <child>
+      <object class="GtkCenterBox">
+        <property name="shrink-center-last">true</property>
+        <child type="start">
           <object class="GtkButton">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
@@ -106,7 +105,7 @@
             </style>
           </object>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkMenuButton" id="calendar_button">
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>

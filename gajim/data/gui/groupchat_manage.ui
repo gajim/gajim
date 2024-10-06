@@ -111,19 +111,8 @@
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <child>
-                  <object class="GtkButton" id="manage_save_button">
-                    <property name="label" translatable="1">Save</property>
-                    <property name="sensitive">0</property>
-                    <property name="focusable">1</property>
-                    <signal name="clicked" handler="_on_manage_save_clicked" swapped="no"/>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
+              <object class="GtkCenterBox">
+                <child type="start">
                   <object class="GtkButton" id="destroy_muc_button">
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
@@ -134,6 +123,17 @@
                         <property name="icon-name">user-trash-symbolic</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkButton" id="manage_save_button">
+                    <property name="label" translatable="1">Save</property>
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    <signal name="clicked" handler="_on_manage_save_clicked" swapped="no"/>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
                   </object>
                 </child>
               </object>
@@ -202,10 +202,8 @@
                 <property name="row-spacing">6</property>
                 <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkBox">
-                    <property name="halign">center</property>
+                  <object class="GtkCenterBox">
                     <property name="margin-top">6</property>
-                    <property name="spacing">12</property>
                     <child type="center">
                       <object class="GtkButton" id="avatar_update_button">
                         <property name="label" translatable="1">Update</property>
