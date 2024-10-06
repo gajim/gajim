@@ -1003,10 +1003,10 @@ class AdvancedSettings(Page):
     def get_visible_buttons(self) -> list[str]:
         return [
             'back',
-            cast(AccountWizard, self.get_toplevel()).get_current_method()]
+            cast(AccountWizard, self.get_root()).get_current_method()]
 
     def get_default_button(self) -> str:
-        return cast(AccountWizard, self.get_toplevel()).get_current_method()
+        return cast(AccountWizard, self.get_root()).get_current_method()
 
 
 class SecurityWarning(Page):
@@ -1054,7 +1054,7 @@ class SecurityWarning(Page):
     def _on_view_cert(self, _button: Gtk.Button) -> None:
         open_window('CertificateDialog',
                     account=self._domain,
-                    transient_for=self.get_toplevel(),
+                    transient_for=self.get_root(),
                     cert=self._cert)
 
     @property
@@ -1064,7 +1064,7 @@ class SecurityWarning(Page):
     def get_visible_buttons(self) -> list[str]:
         return [
             'back',
-            cast(AccountWizard, self.get_toplevel()).get_current_method()]
+            cast(AccountWizard, self.get_root()).get_current_method()]
 
     def get_default_button(self) -> str:
         return 'back'
