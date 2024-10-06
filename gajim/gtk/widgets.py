@@ -18,8 +18,8 @@ class GajimAppWindow(Gtk.ApplicationWindow):
         *,
         name: str,
         title: str | None = None,
-        default_width: int = -1,
-        default_height: int = 1,
+        default_width: int = 0,
+        default_height: int = 0,
         transient_for: Gtk.Window | None = None,
         add_window_padding: bool = True,
     ) -> None:
