@@ -4,14 +4,13 @@
 
 from __future__ import annotations
 
-from typing import Any, Iterator
+from typing import Any
 from typing import cast
 
 import locale
 from enum import IntEnum
 
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -47,11 +46,13 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge, iterate_listbox_children
+from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import GroupBadge
 from gajim.gtk.util import IdleBadge
+from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.widgets import GajimAppWindow
 
 ContactT = BareContact | GroupchatContact
 
@@ -61,18 +62,19 @@ class Search(IntEnum):
     GLOBAL = 1
 
 
-class StartChatDialog(Gtk.ApplicationWindow):
+class StartChatDialog(GajimAppWindow):
     def __init__(self,
                  initial_jid: str | None = None,
                  initial_message: str | None = None
                  ) -> None:
 
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('StartChatDialog')
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_title(_('Start / Join Chat'))
-        self.set_default_size(-1, 600)
+        GajimAppWindow.__init__(
+            self,
+            name='StartChatDialog',
+            title=_('Start / Join Chat'),
+            default_height=600
+        )
+
         self.ready_to_destroy = False
         self._parameter_form: MuclumbusResult | None = None
         self._keywords: list[str] = []
@@ -128,7 +130,9 @@ class StartChatDialog(Gtk.ApplicationWindow):
             'filter-changed', self._on_chat_filter_changed)
         self._ui.filter_bar_revealer.set_child(self._chat_filter)
 
-        # self.connect('key-press-event', self._on_key_press)
+        controller = self.get_default_controller()
+        controller.connect('key-pressed', self._on_key_pressed)
+
         self.connect('destroy', self._on_destroy)
 
         if rows:
@@ -140,7 +144,6 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._ui.search_entry.set_text(initial_jid)
 
         self.select_first_row()
-        self.show()
 
     def remove_row(self, account: str, jid: str) -> None:
         for row in cast(list[ContactRow], list(iterate_listbox_children(self._ui.listbox))):
@@ -221,9 +224,15 @@ class StartChatDialog(Gtk.ApplicationWindow):
         else:
             self._on_select_clicked()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> int:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType
+    ) -> bool:
         is_search = self._ui.stack.get_visible_child_name() == 'search'
-        if event.keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
+        if keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
             if not is_search:
                 return Gdk.EVENT_PROPAGATE
 
@@ -233,8 +242,8 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._ui.search_entry.emit('next-match')
             return Gdk.EVENT_STOP
 
-        if (event.state == Gdk.ModifierType.SHIFT_MASK and
-                event.keyval == Gdk.KEY_ISO_Left_Tab):
+        if (state == Gdk.ModifierType.SHIFT_MASK and
+                keyval == Gdk.KEY_ISO_Left_Tab):
             if not is_search:
                 return Gdk.EVENT_PROPAGATE
 
@@ -244,7 +253,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._ui.search_entry.emit('previous-match')
             return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_Up:
+        if keyval == Gdk.KEY_Up:
             if not is_search:
                 return Gdk.EVENT_PROPAGATE
 
@@ -254,7 +263,7 @@ class StartChatDialog(Gtk.ApplicationWindow):
                 self._ui.search_entry.emit('previous-match')
             return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_Escape:
+        if keyval == Gdk.KEY_Escape:
             if self._ui.stack.get_visible_child_name() == 'progress':
                 self.destroy()
                 return Gdk.EVENT_STOP
@@ -273,11 +282,12 @@ class StartChatDialog(Gtk.ApplicationWindow):
             self._global_search_listbox.remove_all()
             if self._ui.search_entry.get_text() != '':
                 self._ui.search_entry.emit('stop-search')
-            else:
-                self.destroy()
+                return Gdk.EVENT_STOP
+
+            self.destroy()
             return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_Return:
+        if keyval == Gdk.KEY_Return:
             if self._ui.stack.get_visible_child_name() == 'progress':
                 return Gdk.EVENT_STOP
 
@@ -309,7 +319,10 @@ class StartChatDialog(Gtk.ApplicationWindow):
             return Gdk.EVENT_STOP
 
         if is_search:
-            self._ui.search_entry.grab_focus_without_selecting()
+            # TODO GTK4
+            # self._ui.search_entry.grab_focus_without_selecting()
+            pass
+
         return Gdk.EVENT_PROPAGATE
 
     def _on_infobar_response(self,
