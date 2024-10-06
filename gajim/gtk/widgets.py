@@ -4,7 +4,8 @@
 
 from __future__ import annotations
 
-from gi.repository import Gdk, Gtk
+from gi.repository import Gdk
+from gi.repository import Gtk
 
 from gajim.gtk.util import iterate_children
 
@@ -56,5 +57,5 @@ class GajimAppWindow(Gtk.ApplicationWindow):
     ) -> bool:
         if keyval == Gdk.KEY_Escape:
             self.destroy()
-            return True
-        return False
+            return Gdk.EVENT_STOP
+        return Gdk.EVENT_PROPAGATE

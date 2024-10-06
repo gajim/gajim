@@ -6,6 +6,9 @@
     <property name="hexpand">1</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
+    <style>
+      <class name="padding-18"/>
+    </style>
     <child>
       <object class="GtkBox">
         <property name="halign">center</property>

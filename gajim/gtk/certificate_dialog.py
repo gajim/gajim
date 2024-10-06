@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
 from typing import cast
 
 import logging
@@ -17,7 +16,6 @@ from cryptography.utils import int_to_bytes
 from cryptography.x509 import DNSName
 from cryptography.x509 import ExtensionNotFound
 from cryptography.x509.oid import ExtensionOID
-from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import Gtk
 
@@ -28,46 +26,30 @@ from gajim.common.util.text import format_bytes_as_hex
 from gajim.common.util.version import package_version
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.certificate_dialog')
 
 
-class CertificateDialog(Gtk.ApplicationWindow):
-    def __init__(self,
-                 transient_for: Gtk.Window,
-                 account: str,
-                 cert: Gio.TlsCertificate
-                 ) -> None:
+class CertificateDialog(GajimAppWindow):
+    def __init__(
+        self,
+        transient_for: Gtk.Window,
+        account: str,
+        cert: Gio.TlsCertificate
+    ) -> None:
 
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='CertificateDialog',
+            application=app.app,
+            title=_('Certificate')
+        )
+
         self.account = account
-        self.set_name('CertificateDialog')
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_title(_('Certificate'))
 
         self.set_child(CertificateBox(account, cert))
-
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.set_transient_for(transient_for)
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
 
 class CertificateBox(Gtk.Box):
@@ -186,7 +168,4 @@ class CertificateBox(Gtk.Box):
             self._sha256 + '\n\n' + \
             _('Public Key: ') + self._pk_algorithm + ' ' + self._pk_size
 
-        default_display = Gdk.Display.get_default()
-        if default_display is not None:
-            clipboard = default_display.get_clipboard()
-            clipboard.set(clipboard_text)
+        self.get_clipboard().set(clipboard_text)
