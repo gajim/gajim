@@ -31,6 +31,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.menus import get_subscription_menu
+from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import open_window
 
 NotificationActionListT = list[
@@ -123,7 +124,7 @@ class NotificationManager(Gtk.ListBox):
             app.window.remove_action(f'{action}-{self._account}')
 
     def update_unread_count(self):
-        count = len(self.get_children())
+        count = len(list(iterate_listbox_children(self)))
         app.window.update_account_unread_count(self._account, count)
 
     def _on_row_destroy(self, _widget: Gtk.Widget) -> None:
@@ -143,7 +144,7 @@ class NotificationManager(Gtk.ListBox):
             open_window('AddContact', account=self._account,
                         jid=jid, nick=nickname or contact.name)
         if row is not None:
-            row.destroy()
+            self.remove(row)
 
     def _on_subscription_block(self,
                                _action: Gio.SimpleAction,
@@ -154,7 +155,7 @@ class NotificationManager(Gtk.ListBox):
         self._client.get_module('Blocking').block([jid])
         row = self._get_notification_row(jid)
         if row is not None:
-            row.destroy()
+            self.remove(row)
 
     def _on_subscription_report(self,
                                 _action: Gio.SimpleAction,
@@ -165,7 +166,7 @@ class NotificationManager(Gtk.ListBox):
         self._client.get_module('Blocking').block([jid], report='spam')
         row = self._get_notification_row(jid)
         if row is not None:
-            row.destroy()
+            self.remove(row)
 
     def _on_subscription_deny(self,
                               _action: Gio.SimpleAction,
@@ -175,24 +176,24 @@ class NotificationManager(Gtk.ListBox):
         self._deny_request(jid)
         row = self._get_notification_row(jid)
         if row is not None:
-            row.destroy()
+            self.remove(row)
 
     def _on_subscription_deny_all(self,
                                   _action: Gio.SimpleAction,
                                   _param: GLib.Variant
                                   ) -> None:
 
-        for row in cast(list[NotificationRow], self.get_children()):
+        for row in cast(list[NotificationRow], iterate_listbox_children(self)):
             if row.type != 'subscribe':
                 continue
             self._deny_request(row.jid)
-            row.destroy()
+            self.remove(row)
 
     def _deny_request(self, jid: str) -> None:
         self._client.get_module('Presence').unsubscribed(jid)
 
     def _get_notification_row(self, jid: str) -> NotificationRow | None:
-        rows = cast(list[NotificationRow], self.get_children())
+        rows = cast(list[NotificationRow], iterate_listbox_children(self))
         for row in rows:
             if row.jid == jid:
                 return row
@@ -209,7 +210,7 @@ class NotificationManager(Gtk.ListBox):
                 event.status,
                 event.user_nick)
             new_row.connect('destroy', self._on_row_destroy)
-            self.add(new_row)
+            self.append(new_row)
 
             nick = event.user_nick
             if not nick:
@@ -227,7 +228,7 @@ class NotificationManager(Gtk.ListBox):
                              text=text))
             self.update_unread_count()
         elif row.type == 'unsubscribed':
-            row.destroy()
+            self.remove(row)
 
     def add_unsubscribed(self,
                          event: UnsubscribedPresenceReceived
@@ -236,7 +237,7 @@ class NotificationManager(Gtk.ListBox):
         if row is None:
             new_row = UnsubscribedRow(self._account, event.jid)
             new_row.connect('destroy', self._on_row_destroy)
-            self.add(new_row)
+            self.append(new_row)
             self.update_unread_count()
 
             contact = self._client.get_module('Contacts').get_contact(
@@ -251,7 +252,7 @@ class NotificationManager(Gtk.ListBox):
                              title=_('Contact Unsubscribed'),
                              text=text))
         elif row.type == 'subscribe':
-            row.destroy()
+            self.remove(row)
 
     def add_invitation_received(self, event: MucInvitation) -> None:
         row = self._get_notification_row(str(event.muc))
@@ -265,7 +266,7 @@ class NotificationManager(Gtk.ListBox):
 
         new_row = InvitationReceivedRow(self._account, event, muc_contact)
         new_row.connect('destroy', self._on_row_destroy)
-        self.add(new_row)
+        self.append(new_row)
         self.update_unread_count()
 
         if (muc_contact.muc_context == 'private' and
@@ -292,7 +293,7 @@ class NotificationManager(Gtk.ListBox):
 
         new_row = InvitationDeclinedRow(self._account, event)
         new_row.connect('destroy', self._on_row_destroy)
-        self.add(new_row)
+        self.append(new_row)
         self.update_unread_count()
 
 
@@ -305,7 +306,7 @@ class NotificationRow(Gtk.ListBoxRow):
         self.type = ''
 
         self.grid = Gtk.Grid(column_spacing=12)
-        self.add(self.grid)
+        self.set_child(self.grid)
 
     @staticmethod
     def _generate_label() -> Gtk.Label:
@@ -373,17 +374,14 @@ class SubscriptionRequestRow(NotificationRow):
         ]))
         self.grid.attach(accept_button, 3, 1, 1, 2)
 
-        more_image = Gtk.Image.new_from_icon_name(
-            'view-more-symbolic', Gtk.IconSize.MENU)
+        more_image = Gtk.Image.new_from_icon_name('view-more-symbolic')
         more_button = Gtk.MenuButton()
         more_button.set_valign(Gtk.Align.CENTER)
-        more_button.add(more_image)
+        more_button.set_child(more_image)
         subscription_menu = get_subscription_menu(
             self._account, JID.from_string(self.jid))
         more_button.set_menu_model(subscription_menu)
         self.grid.attach(more_button, 4, 1, 1, 2)
-
-        self.show_all()
 
 
 class UnsubscribedRow(NotificationRow):
@@ -417,17 +415,15 @@ class UnsubscribedRow(NotificationRow):
         remove_button.set_action_target_value(GLib.Variant('s', str(self.jid)))
         self.grid.attach(remove_button, 3, 1, 1, 2)
 
-        dismiss_button = Gtk.Button.new_from_icon_name(
-            'window-close-symbolic', Gtk.IconSize.BUTTON)
+        dismiss_button = Gtk.Button.new_from_icon_name('window-close-symbolic')
         dismiss_button.set_valign(Gtk.Align.CENTER)
         dismiss_button.set_tooltip_text(_('Remove Notification'))
         dismiss_button.connect('clicked', self._on_dismiss)
         self.grid.attach(dismiss_button, 4, 1, 1, 2)
 
-        self.show_all()
-
     def _on_dismiss(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
 
 
 class InvitationReceivedRow(NotificationRow):
@@ -479,23 +475,25 @@ class InvitationReceivedRow(NotificationRow):
         decline_button.connect('clicked', self._on_decline_invitation)
         self.grid.attach(decline_button, 4, 1, 1, 2)
 
-        self.show_all()
-
     def _on_show_invitation(self, _button: Gtk.Button) -> None:
         open_window('GroupChatInvitationDialog',
                     account=self._account,
                     event=self._event)
-        self.destroy()
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
 
     def _on_decline_invitation(self, _button: Gtk.Button) -> None:
         self._client.get_module('MUC').decline(
             self.jid, self._event.from_)
-        self.destroy()
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
 
     def _on_room_joined(self,
                         contact: GroupchatContact,
                         signal_name: str) -> None:
-        self.destroy()
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
+
 
 class InvitationDeclinedRow(NotificationRow):
     def __init__(self, account: str, event: MucDecline) -> None:
@@ -525,15 +523,13 @@ class InvitationDeclinedRow(NotificationRow):
         text_label.get_style_context().add_class('dim-label')
         self.grid.attach(text_label, 2, 2, 1, 1)
 
-        dismiss_button = Gtk.Button.new_from_icon_name(
-            'window-close-symbolic', Gtk.IconSize.BUTTON)
+        dismiss_button = Gtk.Button.new_from_icon_name('window-close-symbolic')
         dismiss_button.set_valign(Gtk.Align.CENTER)
         dismiss_button.set_halign(Gtk.Align.END)
         dismiss_button.set_tooltip_text(_('Remove Notification'))
         dismiss_button.connect('clicked', self._on_dismiss)
         self.grid.attach(dismiss_button, 3, 1, 1, 2)
 
-        self.show_all()
-
     def _on_dismiss(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        listbox = cast(Gtk.ListBox, self.get_parent())
+        listbox.remove(self)
