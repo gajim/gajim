@@ -34,27 +34,32 @@ from gajim.gtk.util import get_image_button
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import open_window
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.settings')
 
 
-class SettingsDialog(Gtk.ApplicationWindow):
-    def __init__(self,
-                 parent: Gtk.Root,
-                 title: str,
-                 flags: Gtk.DialogFlags,
-                 settings: list[Setting],
-                 account: str,
-                 extend: dict[SettingKind, GenericSetting] | None = None
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_title(title)
-        self.set_transient_for(parent)
-        self.set_resizable(False)
-        self.set_default_size(250, -1)
+class SettingsDialog(GajimAppWindow):
+    def __init__(
+        self,
+        parent: Gtk.Root,
+        title: str,
+        flags: Gtk.DialogFlags,
+        settings: list[Setting],
+        account: str,
+        extend: dict[SettingKind, GenericSetting] | None = None
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name='SettingsDialog',
+            title=title,
+            default_width=250,
+            transient_for=parent,
+            add_window_padding=False
+        )
+
         self.get_style_context().add_class('settings-dialog')
+
         self.account = account
         if flags == Gtk.DialogFlags.MODAL:
             self.set_modal(True)
@@ -71,26 +76,10 @@ class SettingsDialog(Gtk.ApplicationWindow):
 
         self.set_child(self.listbox)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect_after('destroy', self.__on_destroy)
 
     def __on_destroy(self, widget: SettingsDialog) -> None:
         app.check_finalize(self)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def get_setting(self, name: str):
         return self.listbox.get_setting(name)
