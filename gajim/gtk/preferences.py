@@ -55,7 +55,7 @@ class Preferences(GajimAppWindow):
             add_window_padding=False,
         )
 
-        self._ui = get_builder('preferences.ui', self)
+        self._ui = get_builder('preferences.ui')
 
         self._video_preview: VideoPreview | None = None
         self._prefs: dict[str, PreferenceBox] = {}
@@ -95,8 +95,6 @@ class Preferences(GajimAppWindow):
         #     self._ui.av_info_bar_label.set_text(
         #         _('Video calls are not available on Windows'))
 
-        self.connect('destroy', self._on_destroy)
-
     def get_ui(self):
         return self._ui
 
@@ -128,9 +126,9 @@ class Preferences(GajimAppWindow):
         miscellaneous = cast(Miscellaneous, self._prefs['miscellaneous'])
         miscellaneous.update_proxy_list()
 
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+    def _cleanup(self) -> None:
+        del self._video_preview
         self._prefs.clear()
-        app.check_finalize(self)
 
 
 class PreferenceBox(SettingsBox):

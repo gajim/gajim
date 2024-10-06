@@ -43,10 +43,10 @@ ATTR = '\n    %s: %s'
 
 GET_BUILDER_OVERLOAD = '''
 @overload
-def get_builder(file_name: Literal['%s'], instance: Any, widgets: list[str] = ...) -> %s: ...  # noqa'''  # noqa: E501
+def get_builder(file_name: Literal['%s'], instance: Any = None, widgets: list[str] = ...) -> %s: ...  # noqa'''  # noqa: E501
 
 GET_BUILDER = '''\n\n
-def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...'''
+def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ...'''
 
 
 def make_class_name(path: Path) -> str:

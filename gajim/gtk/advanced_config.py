@@ -24,6 +24,7 @@ from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 
 @unique
@@ -47,19 +48,27 @@ SETTING_TYPES = {
 }
 
 
-class AdvancedConfig(Gtk.ApplicationWindow):
+class AdvancedConfig(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_name('AdvancedConfig')
-        self.set_title(_('Advanced Configuration Editor (ACE)'))
+        GajimAppWindow.__init__(
+            self,
+            name='AdvancedConfig',
+            title=_('Advanced Configuration Editor (ACE)'),
+        )
 
-        self._ui = get_builder('advanced_configuration.ui', self)
+        self._ui = get_builder('advanced_configuration.ui')
+
         self.set_child(self._ui.box)
+
+        self._connect(self._ui.reset_button, 'clicked', self._on_reset_button_clicked)
+        self._connect(self._ui.search_entry, 'search-changed', self._on_search_entry_changed)
+        self._connect(self._ui.advanced_treeview, 'row-activated', self._on_treeview_row_activated)
+        self._connect(self._ui.treeview_selection, 'changed', self._on_treeview_selection_changed)
 
         treeview = self._ui.advanced_treeview
         self.treeview = treeview
         self.model = Gtk.TreeStore(str, str, str, bool)
+
         self._fill_model()
         self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
@@ -77,8 +86,9 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         col.set_resizable(True)
 
         self.renderer_text = Gtk.CellRendererText()
-        self.renderer_text.connect('edited', self._on_config_edited)
         self.renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
+        self.renderer_text.connect('edited', self._on_config_edited)
+
         col = Gtk.TreeViewColumn(
             p_('Configuration', 'Value'), self.renderer_text, text=1)
         treeview.insert_column(col, -1)
@@ -96,22 +106,34 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         treeview.set_model(self.modelfilter)
 
-        # self.connect_after('key-press-event', self._on_key_press)
-
+        self._connect(self.get_default_controller(), 'key-pressed', self._on_key_pressed)
         self.show()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
-        if event.keyval != Gdk.KEY_Escape:
-            return
+    def _cleanup(self) -> None:
+        del self.renderer_text
+        del self.modelfilter
+        del self.model
+        del self.treeview
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        keycode: int,
+        state: Gdk.ModifierType
+    ) -> bool:
+
+        if keyval != Gdk.KEY_Escape:
+            return Gdk.EVENT_PROPAGATE
 
         if self._ui.search_entry.get_text():
             self._ui.search_entry.set_text('')
-            return
+            return Gdk.EVENT_STOP
 
-        self.destroy()
+        return Gdk.EVENT_PROPAGATE
 
-    def _value_column_name_callback(self,
-                                    _col: Gtk.TreeViewColumn,
+    @staticmethod
+    def _value_column_name_callback(_col: Gtk.TreeViewColumn,
                                     cell: Gtk.CellRenderer,
                                     model: Gtk.TreeModel,
                                     iter_: Gtk.TreeIter,
@@ -121,8 +143,8 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         opt_is_default = model[iter_][Column.IS_DEFAULT]
         cell.set_property('weight', 400 if opt_is_default else 700)
 
-    def _value_column_data_callback(self,
-                                    _col: Gtk.TreeViewColumn,
+    @staticmethod
+    def _value_column_data_callback(_col: Gtk.TreeViewColumn,
                                     cell: Gtk.CellRenderer,
                                     model: Gtk.TreeModel,
                                     iter_: Gtk.TreeIter,
@@ -138,6 +160,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
     def _on_treeview_selection_changed(self,
                                        treeselection: Gtk.TreeSelection
                                        ) -> None:
+
         model, iter_ = treeselection.get_selected()
         if not iter_:
             self._ui.reset_button.set_sensitive(False)
@@ -248,6 +271,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
                       treeiter: Gtk.TreeIter,
                       _data: object | None
                       ) -> bool:
+
         search_string = self._ui.search_entry.get_text().lower()
         if not search_string:
             return True

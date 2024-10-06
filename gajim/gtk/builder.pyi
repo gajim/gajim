@@ -87,6 +87,7 @@ class AdvancedConfigurationBuilder(Builder):
     box: Gtk.Box
     search_entry: Gtk.SearchEntry
     advanced_treeview: Gtk.TreeView
+    treeview_selection: Gtk.TreeSelection
     description: Gtk.Label
     reset_button: Gtk.Button
 
@@ -215,9 +216,9 @@ class ChatListRowBuilder(Builder):
     mainbox: Gtk.Box
     account_identifier: Gtk.Box
     avatar_image: Gtk.Image
+    connection_icon: Gtk.Image
     group_chat_indicator: Gtk.Image
     name_label: Gtk.Label
-    connection_icon: Gtk.Image
     chatstate_image: Gtk.Image
     mute_image: Gtk.Image
     timestamp_label: Gtk.Label
@@ -514,8 +515,8 @@ class GroupchatManageBuilder(Builder):
     avatar_select_button: Gtk.Button
     muc_description_entry: Gtk.Entry
     muc_name_entry: Gtk.Entry
-    manage_save_button: Gtk.Button
     destroy_muc_button: Gtk.Button
+    manage_save_button: Gtk.Button
     subject_textview: Gtk.TextView
     subject_change_button: Gtk.Button
     avatar_selector_grid: Gtk.Grid
@@ -771,12 +772,12 @@ class PreviewBuilder(Builder):
     image_button: Gtk.Button
     link_button: Gtk.LinkButton
     button_box: Gtk.Box
-    download_button: Gtk.Button
-    save_as_button: Gtk.Button
-    open_folder_button: Gtk.Button
     file_name: Gtk.Label
     file_size: Gtk.Label
     info_message: Gtk.Label
+    open_folder_button: Gtk.Button
+    save_as_button: Gtk.Button
+    download_button: Gtk.Button
 
 
 class PreviewAudioBuilder(Builder):
@@ -1032,139 +1033,139 @@ class WorkspaceDialogBuilder(Builder):
 
 
 @overload
-def get_builder(file_name: Literal['account_page.ui'], instance: Any, widgets: list[str] = ...) -> AccountPageBuilder: ...  # noqa
+def get_builder(file_name: Literal['account_page.ui'], instance: Any = None, widgets: list[str] = ...) -> AccountPageBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['account_wizard.ui'], instance: Any, widgets: list[str] = ...) -> AccountWizardBuilder: ...  # noqa
+def get_builder(file_name: Literal['account_wizard.ui'], instance: Any = None, widgets: list[str] = ...) -> AccountWizardBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['add_contact.ui'], instance: Any, widgets: list[str] = ...) -> AddContactBuilder: ...  # noqa
+def get_builder(file_name: Literal['add_contact.ui'], instance: Any = None, widgets: list[str] = ...) -> AddContactBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['advanced_configuration.ui'], instance: Any, widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...  # noqa
+def get_builder(file_name: Literal['advanced_configuration.ui'], instance: Any = None, widgets: list[str] = ...) -> AdvancedConfigurationBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['app_page.ui'], instance: Any, widgets: list[str] = ...) -> AppPageBuilder: ...  # noqa
+def get_builder(file_name: Literal['app_page.ui'], instance: Any = None, widgets: list[str] = ...) -> AppPageBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['assistant.ui'], instance: Any, widgets: list[str] = ...) -> AssistantBuilder: ...  # noqa
+def get_builder(file_name: Literal['assistant.ui'], instance: Any = None, widgets: list[str] = ...) -> AssistantBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['blocking_list.ui'], instance: Any, widgets: list[str] = ...) -> BlockingListBuilder: ...  # noqa
+def get_builder(file_name: Literal['blocking_list.ui'], instance: Any = None, widgets: list[str] = ...) -> BlockingListBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['bookmarks.ui'], instance: Any, widgets: list[str] = ...) -> BookmarksBuilder: ...  # noqa
+def get_builder(file_name: Literal['bookmarks.ui'], instance: Any = None, widgets: list[str] = ...) -> BookmarksBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['call_window.ui'], instance: Any, widgets: list[str] = ...) -> CallWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['call_window.ui'], instance: Any = None, widgets: list[str] = ...) -> CallWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['certificate.ui'], instance: Any, widgets: list[str] = ...) -> CertificateBuilder: ...  # noqa
+def get_builder(file_name: Literal['certificate.ui'], instance: Any = None, widgets: list[str] = ...) -> CertificateBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['chat_banner.ui'], instance: Any, widgets: list[str] = ...) -> ChatBannerBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_banner.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatBannerBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['chat_control.ui'], instance: Any, widgets: list[str] = ...) -> ChatControlBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_control.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatControlBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['chat_list_row.ui'], instance: Any, widgets: list[str] = ...) -> ChatListRowBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_list_row.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatListRowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['chat_paned.ui'], instance: Any, widgets: list[str] = ...) -> ChatPanedBuilder: ...  # noqa
+def get_builder(file_name: Literal['chat_paned.ui'], instance: Any = None, widgets: list[str] = ...) -> ChatPanedBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['contact_info.ui'], instance: Any, widgets: list[str] = ...) -> ContactInfoBuilder: ...  # noqa
+def get_builder(file_name: Literal['contact_info.ui'], instance: Any = None, widgets: list[str] = ...) -> ContactInfoBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['contact_tooltip.ui'], instance: Any, widgets: list[str] = ...) -> ContactTooltipBuilder: ...  # noqa
+def get_builder(file_name: Literal['contact_tooltip.ui'], instance: Any = None, widgets: list[str] = ...) -> ContactTooltipBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['db_migration.ui'], instance: Any, widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
+def get_builder(file_name: Literal['db_migration.ui'], instance: Any = None, widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['debug_console.ui'], instance: Any, widgets: list[str] = ...) -> DebugConsoleBuilder: ...  # noqa
+def get_builder(file_name: Literal['debug_console.ui'], instance: Any = None, widgets: list[str] = ...) -> DebugConsoleBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['emoji_chooser.ui'], instance: Any, widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
+def get_builder(file_name: Literal['emoji_chooser.ui'], instance: Any = None, widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['exception_dialog.ui'], instance: Any, widgets: list[str] = ...) -> ExceptionDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['exception_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> ExceptionDialogBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['file_transfer.ui'], instance: Any, widgets: list[str] = ...) -> FileTransferBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['file_transfer_jingle.ui'], instance: Any, widgets: list[str] = ...) -> FileTransferJingleBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer_jingle.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferJingleBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['file_transfer_selector.ui'], instance: Any, widgets: list[str] = ...) -> FileTransferSelectorBuilder: ...  # noqa
+def get_builder(file_name: Literal['file_transfer_selector.ui'], instance: Any = None, widgets: list[str] = ...) -> FileTransferSelectorBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['filetransfers.ui'], instance: Any, widgets: list[str] = ...) -> FiletransfersBuilder: ...  # noqa
+def get_builder(file_name: Literal['filetransfers.ui'], instance: Any = None, widgets: list[str] = ...) -> FiletransfersBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_affiliation.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatAffiliationBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_affiliation.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatAffiliationBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_config.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatConfigBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_config.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatConfigBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_creation.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatCreationBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_creation.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatCreationBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_details.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatDetailsBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_details.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatDetailsBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_info_scrolled.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatInfoScrolledBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_inviter.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatInviterBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_inviter.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatInviterBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_manage.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatManageBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_manage.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatManageBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_nick_chooser.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatNickChooserBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_nick_chooser.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatNickChooserBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_outcast.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatOutcastBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_outcast.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatOutcastBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_roster.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatRosterBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_roster.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatRosterBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_roster_tooltip.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatRosterTooltipBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_roster_tooltip.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatRosterTooltipBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groupchat_state.ui'], instance: Any, widgets: list[str] = ...) -> GroupchatStateBuilder: ...  # noqa
+def get_builder(file_name: Literal['groupchat_state.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupchatStateBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['groups_post_window.ui'], instance: Any, widgets: list[str] = ...) -> GroupsPostWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['groups_post_window.ui'], instance: Any = None, widgets: list[str] = ...) -> GroupsPostWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['history_export.ui'], instance: Any, widgets: list[str] = ...) -> HistoryExportBuilder: ...  # noqa
+def get_builder(file_name: Literal['history_export.ui'], instance: Any = None, widgets: list[str] = ...) -> HistoryExportBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['main.ui'], instance: Any, widgets: list[str] = ...) -> MainBuilder: ...  # noqa
+def get_builder(file_name: Literal['main.ui'], instance: Any = None, widgets: list[str] = ...) -> MainBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['mam_preferences.ui'], instance: Any, widgets: list[str] = ...) -> MamPreferencesBuilder: ...  # noqa
+def get_builder(file_name: Literal['mam_preferences.ui'], instance: Any = None, widgets: list[str] = ...) -> MamPreferencesBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['manage_proxies.ui'], instance: Any, widgets: list[str] = ...) -> ManageProxiesBuilder: ...  # noqa
+def get_builder(file_name: Literal['manage_proxies.ui'], instance: Any = None, widgets: list[str] = ...) -> ManageProxiesBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['manage_sounds.ui'], instance: Any, widgets: list[str] = ...) -> ManageSoundsBuilder: ...  # noqa
+def get_builder(file_name: Literal['manage_sounds.ui'], instance: Any = None, widgets: list[str] = ...) -> ManageSoundsBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['message_actions_box.ui'], instance: Any, widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...  # noqa
+def get_builder(file_name: Literal['message_actions_box.ui'], instance: Any = None, widgets: list[str] = ...) -> MessageActionsBoxBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['omemo_trust_manager.ui'], instance: Any, widgets: list[str] = ...) -> OmemoTrustManagerBuilder: ...  # noqa
+def get_builder(file_name: Literal['omemo_trust_manager.ui'], instance: Any = None, widgets: list[str] = ...) -> OmemoTrustManagerBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['password_dialog.ui'], instance: Any, widgets: list[str] = ...) -> PasswordDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['password_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> PasswordDialogBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['pep_config.ui'], instance: Any, widgets: list[str] = ...) -> PepConfigBuilder: ...  # noqa
+def get_builder(file_name: Literal['pep_config.ui'], instance: Any = None, widgets: list[str] = ...) -> PepConfigBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['plugins.ui'], instance: Any, widgets: list[str] = ...) -> PluginsBuilder: ...  # noqa
+def get_builder(file_name: Literal['plugins.ui'], instance: Any = None, widgets: list[str] = ...) -> PluginsBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['popup_notification_window.ui'], instance: Any, widgets: list[str] = ...) -> PopupNotificationWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['popup_notification_window.ui'], instance: Any = None, widgets: list[str] = ...) -> PopupNotificationWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['preferences.ui'], instance: Any, widgets: list[str] = ...) -> PreferencesBuilder: ...  # noqa
+def get_builder(file_name: Literal['preferences.ui'], instance: Any = None, widgets: list[str] = ...) -> PreferencesBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['preview.ui'], instance: Any, widgets: list[str] = ...) -> PreviewBuilder: ...  # noqa
+def get_builder(file_name: Literal['preview.ui'], instance: Any = None, widgets: list[str] = ...) -> PreviewBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['preview_audio.ui'], instance: Any, widgets: list[str] = ...) -> PreviewAudioBuilder: ...  # noqa
+def get_builder(file_name: Literal['preview_audio.ui'], instance: Any = None, widgets: list[str] = ...) -> PreviewAudioBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['profile.ui'], instance: Any, widgets: list[str] = ...) -> ProfileBuilder: ...  # noqa
+def get_builder(file_name: Literal['profile.ui'], instance: Any = None, widgets: list[str] = ...) -> ProfileBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['quit_dialog.ui'], instance: Any, widgets: list[str] = ...) -> QuitDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['quit_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> QuitDialogBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['roster.ui'], instance: Any, widgets: list[str] = ...) -> RosterBuilder: ...  # noqa
+def get_builder(file_name: Literal['roster.ui'], instance: Any = None, widgets: list[str] = ...) -> RosterBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['roster_item_exchange.ui'], instance: Any, widgets: list[str] = ...) -> RosterItemExchangeBuilder: ...  # noqa
+def get_builder(file_name: Literal['roster_item_exchange.ui'], instance: Any = None, widgets: list[str] = ...) -> RosterItemExchangeBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['search_view.ui'], instance: Any, widgets: list[str] = ...) -> SearchViewBuilder: ...  # noqa
+def get_builder(file_name: Literal['search_view.ui'], instance: Any = None, widgets: list[str] = ...) -> SearchViewBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['server_info.ui'], instance: Any, widgets: list[str] = ...) -> ServerInfoBuilder: ...  # noqa
+def get_builder(file_name: Literal['server_info.ui'], instance: Any = None, widgets: list[str] = ...) -> ServerInfoBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['service_discovery_window.ui'], instance: Any, widgets: list[str] = ...) -> ServiceDiscoveryWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['service_discovery_window.ui'], instance: Any = None, widgets: list[str] = ...) -> ServiceDiscoveryWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['shortcuts_window.ui'], instance: Any, widgets: list[str] = ...) -> ShortcutsWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['shortcuts_window.ui'], instance: Any = None, widgets: list[str] = ...) -> ShortcutsWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['ssl_error_dialog.ui'], instance: Any, widgets: list[str] = ...) -> SslErrorDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['ssl_error_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> SslErrorDialogBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['start_chat_dialog.ui'], instance: Any, widgets: list[str] = ...) -> StartChatDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['start_chat_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> StartChatDialogBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['synchronize_accounts.ui'], instance: Any, widgets: list[str] = ...) -> SynchronizeAccountsBuilder: ...  # noqa
+def get_builder(file_name: Literal['synchronize_accounts.ui'], instance: Any = None, widgets: list[str] = ...) -> SynchronizeAccountsBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['systray_context_menu.ui'], instance: Any, widgets: list[str] = ...) -> SystrayContextMenuBuilder: ...  # noqa
+def get_builder(file_name: Literal['systray_context_menu.ui'], instance: Any = None, widgets: list[str] = ...) -> SystrayContextMenuBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['themes_window.ui'], instance: Any, widgets: list[str] = ...) -> ThemesWindowBuilder: ...  # noqa
+def get_builder(file_name: Literal['themes_window.ui'], instance: Any = None, widgets: list[str] = ...) -> ThemesWindowBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['video_preview.ui'], instance: Any, widgets: list[str] = ...) -> VideoPreviewBuilder: ...  # noqa
+def get_builder(file_name: Literal['video_preview.ui'], instance: Any = None, widgets: list[str] = ...) -> VideoPreviewBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['voice_message_recorder.ui'], instance: Any, widgets: list[str] = ...) -> VoiceMessageRecorderBuilder: ...  # noqa
+def get_builder(file_name: Literal['voice_message_recorder.ui'], instance: Any = None, widgets: list[str] = ...) -> VoiceMessageRecorderBuilder: ...  # noqa
 @overload
-def get_builder(file_name: Literal['workspace_dialog.ui'], instance: Any, widgets: list[str] = ...) -> WorkspaceDialogBuilder: ...  # noqa
+def get_builder(file_name: Literal['workspace_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> WorkspaceDialogBuilder: ...  # noqa
 
 
-def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ...
+def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ...

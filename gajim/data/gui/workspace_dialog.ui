@@ -10,6 +10,7 @@
     </child>
     <child>
       <object class="GtkCenterBox">
+        <child>
           <object class="GtkEntry" id="entry">
             <property name="focusable">1</property>
             <property name="halign">center</property>

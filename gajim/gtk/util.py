@@ -21,7 +21,7 @@ from importlib import import_module
 from re import Match
 
 import cairo
-from gi.repository import Gdk
+from gi.repository import GObject, Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
@@ -1008,3 +1008,35 @@ def convert_glib_to_py_datetime(dt: datetime.datetime | datetime.date) -> GLib.D
     g_dt = GLib.DateTime.new_from_iso8601(iso)
     assert g_dt is not None
     return g_dt
+
+
+class SignalManager:
+    def __init__(self) -> None:
+        self._signal_data: list[tuple[GObject.Object, int]] = []
+
+    def _connect(
+        self,
+        obj: GObject.Object,
+        signal_name: str,
+        callback: Any,
+        *args: Any
+    ) -> None:
+
+        signal_id = obj.connect(signal_name, callback, *args)
+        self._signal_data.append((obj, signal_id))
+
+    def _connect_after(
+        self,
+        obj: GObject.Object,
+        signal_name: str,
+        callback: Any,
+        *args: Any
+    ) -> None:
+
+        signal_id = obj.connect_after(signal_name, callback, *args)
+        self._signal_data.append((obj, signal_id))
+
+    def _disconnect_all(self):
+        for obj, signal_id in self._signal_data:
+            obj.disconnect(signal_id)
+        self._signal_data.clear()

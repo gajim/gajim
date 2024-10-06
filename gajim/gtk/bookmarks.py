@@ -27,7 +27,7 @@ class Bookmarks(GajimAppWindow):
 
         self.account = account
 
-        self._ui = get_builder('bookmarks.ui', self)
+        self._ui = get_builder('bookmarks.ui')
         self.set_child(self._ui.bookmarks_grid)
 
         client = app.get_client(account)
@@ -46,3 +46,6 @@ class Bookmarks(GajimAppWindow):
                      search_text: str,
                      iter_: Gtk.TreeIter):
         return search_text.lower() not in model[iter_][0].lower()
+
+    def _cleanup(self):
+        pass
