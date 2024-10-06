@@ -981,11 +981,14 @@ popover.combo scrollbar.vertical {
 #FinishedLabel { font-size: 1.2rem; font-weight: bold; }
 
 /* ServerInfo */
-#ServerInfo { border: 1px solid; border-color: @borders; }
-#ServerInfo > row:first-child { border-top: 1px solid; border-color: @borders; }
-#ServerInfo > row { padding: 10px 20px 10px 10px; }
-#ServerInfo > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
-#ServerInfo > row.activatable:active { box-shadow: none; }
+#ServerInfo notebook { border: none; }
+#ServerInfo notebook > stack { padding: 18px; }
+#ServerInfo > box { padding: 0px; }
+#ServerInfo #Features { border: 1px solid; border-color: @borders; }
+#ServerInfo #Features > row:first-child { border-top: 1px solid; border-color: @borders; }
+#ServerInfo #Features > row { padding: 10px 20px 10px 10px; }
+#ServerInfo #Features > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
+#ServerInfo #Features > row.activatable:active { box-shadow: none; }
 
 /* Features */
 #FeaturesInfoGrid { padding: 6px; }

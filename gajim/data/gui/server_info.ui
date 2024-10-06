@@ -435,7 +435,7 @@
                   <object class="GtkViewport">
                     <property name="child">
                       <object class="GtkListBox" id="features_listbox">
-                        <property name="name">ServerInfo</property>
+                        <property name="name">Features</property>
                         <property name="selection-mode">none</property>
                       </object>
                     </property>
