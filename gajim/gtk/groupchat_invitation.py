@@ -73,7 +73,7 @@ class GroupChatInvitation(Gtk.Box):
         main_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=12, valign=Gtk.Align.FILL
         )
-        main_box.get_style_context().add_class('padding-18')
+        main_box.get_style_context().add_class('p-18')
 
         muc_info_box = GroupChatInfoScrolled(account, minimal=True)
         muc_info_box.set_from_disco_info(event.info)

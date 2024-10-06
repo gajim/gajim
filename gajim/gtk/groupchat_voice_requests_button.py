@@ -56,7 +56,7 @@ class VoiceRequestsButton(Gtk.Button):
             return
 
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        menu_box.get_style_context().add_class('padding-12')
+        menu_box.get_style_context().add_class('p-12')
         menu_box.set_hexpand(True)
 
         desc_label = Gtk.Label(label=_('Participants asking for voice:'))
@@ -102,7 +102,7 @@ class VoiceRequestsButton(Gtk.Button):
             menu_box.append(request_box)
 
         popover = Gtk.PopoverMenu()
-        popover.get_style_context().add_class('padding-6')
+        popover.get_style_context().add_class('p-6')
         popover.set_position(Gtk.PositionType.BOTTOM)
         popover.set_child(menu_box)
         popover.connect('closed', self._on_closed)

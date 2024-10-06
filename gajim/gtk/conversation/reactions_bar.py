@@ -219,7 +219,7 @@ class MoreReactionsButton(Gtk.MenuButton):
             min_children_per_line=3,
             max_children_per_line=3,
         )
-        self._flow_box.get_style_context().add_class('padding-6')
+        self._flow_box.get_style_context().add_class('p-6')
 
         popover = Gtk.Popover()
         popover.set_child(self._flow_box)

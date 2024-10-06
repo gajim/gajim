@@ -125,7 +125,7 @@ class GroupchatDetails(GajimAppWindow):
 
     def _add_groupchat_settings(self) -> None:
         main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=24)
-        main_box.get_style_context().add_class('padding-18')
+        main_box.get_style_context().add_class('p-18')
 
         settings_box = GroupChatSettings(self.account, self._contact.jid)
         main_box.append(settings_box)

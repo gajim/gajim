@@ -152,7 +152,7 @@
               </object>
             </child>
             <style>
-              <class name="margin-18"/>
+              <class name="m-18"/>
             </style>
           </object>
         </property>
@@ -206,7 +206,7 @@
               </object>
             </child>
             <style>
-              <class name="margin-18"/>
+              <class name="m-18"/>
             </style>
           </object>
         </property>
@@ -226,7 +226,7 @@
                 <property name="wrap">1</property>
                 <style>
                   <class name="bold16"/>
-                  <class name="margin-12"/>
+                  <class name="m-12"/>
                 </style>
               </object>
             </child>
@@ -305,7 +305,7 @@
               </object>
             </child>
             <style>
-              <class name="margin-18"/>
+              <class name="m-18"/>
             </style>
           </object>
         </property>

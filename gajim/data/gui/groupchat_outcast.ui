@@ -12,7 +12,7 @@
 </property>
         <property name="use-markup">1</property>
         <style>
-          <class name="padding-6"/>
+          <class name="p-6"/>
         </style>
       </object>
     </property>
@@ -90,7 +90,7 @@
           </object>
         </property>
         <style>
-          <class name="margin-12"/>
+          <class name="m-12"/>
         </style>
       </object>
     </child>
@@ -152,7 +152,7 @@
           <placeholder/>
         </child>
         <style>
-          <class name="margin-12"/>
+          <class name="m-12"/>
         </style>
       </object>
     </child>

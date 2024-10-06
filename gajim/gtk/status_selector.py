@@ -77,7 +77,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
 
     def _create_popover(self) -> None:
         popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        popover_box.get_style_context().add_class('margin-3')
+        popover_box.get_style_context().add_class('m-3')
         popover_items = [
             'online',
             'away',

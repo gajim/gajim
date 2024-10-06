@@ -7,7 +7,7 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <style>
-      <class name="padding-18"/>
+      <class name="p-18"/>
     </style>
     <child>
       <object class="GtkBox">

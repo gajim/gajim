@@ -217,7 +217,7 @@ class DescriptionLabel(Gtk.Label):
         else:
             self.set_valign(Gtk.Align.CENTER)
         self.get_style_context().add_class('dim-label')
-        self.get_style_context().add_class('margin-right18')
+        self.get_style_context().add_class('me-18')
         self.set_visible(True)
         self.set_xalign(1)
         self.set_tooltip_text(FIELD_TOOLTIPS.get(value, ''))

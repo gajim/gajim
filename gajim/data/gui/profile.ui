@@ -88,7 +88,7 @@
           </object>
         </child>
         <style>
-          <class name="padding-6"/>
+          <class name="p-6"/>
         </style>
       </object>
     </property>
@@ -176,7 +176,7 @@
                           </object>
                         </child>
                         <style>
-                          <class name="padding-18"/>
+                          <class name="p-18"/>
                         </style>
                       </object>
                     </property>

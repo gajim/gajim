@@ -149,7 +149,7 @@
                     <property name="max-width-chars">38</property>
                     <style>
                       <class name="error-color"/>
-                      <class name="padding-12"/>
+                      <class name="p-12"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -164,7 +164,7 @@
                     <property name="wrap">1</property>
                     <property name="max-width-chars">38</property>
                     <style>
-                      <class name="padding-12"/>
+                      <class name="p-12"/>
                     </style>
                     <layout>
                       <property name="column">0</property>

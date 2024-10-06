@@ -229,7 +229,7 @@
                               <object class="GtkImage" id="avatar_image">
                                 <property name="icon-name">missing-image</property>
                                 <style>
-                                  <class name="margin-18"/>
+                                  <class name="m-18"/>
                                 </style>
                               </object>
                             </child>
@@ -313,7 +313,7 @@
                       </object>
                     </property>
                     <style>
-                      <class name="padding-18"/>
+                      <class name="p-18"/>
                     </style>
                   </object>
                 </property>
@@ -508,14 +508,14 @@
                               </object>
                             </child>
                             <style>
-                              <class name="padding-18"/>
+                              <class name="p-18"/>
                             </style>
                           </object>
                         </property>
                       </object>
                     </property>
                     <style>
-                      <class name="padding-18"/>
+                      <class name="p-18"/>
                     </style>
                   </object>
                 </property>

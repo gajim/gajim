@@ -56,7 +56,7 @@ class AppPage(Gtk.Box):
 
         update_label = Gtk.Label(label=_('Updates'))
         update_label.get_style_context().add_class('large-header')
-        update_label.get_style_context().add_class('margin-top12')
+        update_label.get_style_context().add_class('mt-12')
         self.append(update_label)
 
         self._app_message_listbox = AppMessageListBox()

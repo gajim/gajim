@@ -242,7 +242,7 @@ A moderator will process your request.</property>
           </object>
         </child>
         <style>
-          <class name="padding-12"/>
+          <class name="p-12"/>
         </style>
       </object>
     </property>

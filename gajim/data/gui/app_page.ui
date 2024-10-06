@@ -61,7 +61,7 @@
       </object>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="gajim_update_check">
@@ -125,7 +125,7 @@
       </object>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="plugin_updates">
@@ -208,7 +208,7 @@
       </object>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="plugin_updates_finished">
@@ -266,7 +266,7 @@
       </object>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
 </interface>

@@ -118,7 +118,7 @@
               </object>
             </child>
             <style>
-              <class name="margin-18"/>
+              <class name="m-18"/>
             </style>
           </object>
         </property>
@@ -370,7 +370,7 @@
               </object>
             </child>
             <style>
-              <class name="margin-18"/>
+              <class name="m-18"/>
             </style>
           </object>
         </property>

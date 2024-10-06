@@ -40,7 +40,7 @@ class GroupchatConfig(Gtk.Box):
 
         self._apply_button = ApplyButtonBox(_('Apply'), self._on_apply)
         self._apply_button.set_halign(Gtk.Align.END)
-        self._apply_button.get_style_context().add_class('margin-18')
+        self._apply_button.get_style_context().add_class('m-18')
 
         self._ui.config_box.append(self._apply_button)
 
@@ -59,7 +59,7 @@ class GroupchatConfig(Gtk.Box):
     def _set_form(self, form: Any) -> None:
         self._data_form_widget = DataFormWidget(form)
         self._data_form_widget.connect('is-valid', self._on_is_valid)
-        self._data_form_widget.get_style_context().add_class('padding-12')
+        self._data_form_widget.get_style_context().add_class('p-12')
         self._ui.config_box.prepend(self._data_form_widget)
         self._ui.stack.set_visible_child_name('config')
 

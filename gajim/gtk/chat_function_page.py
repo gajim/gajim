@@ -55,7 +55,7 @@ class ChatFunctionPage(Gtk.Box):
                          spacing=18)
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.CENTER)
-        self.get_style_context().add_class('padding-18')
+        self.get_style_context().add_class('p-18')
 
         self._client: types.Client | None = None
         self._contact: types.ChatContactT | None = None

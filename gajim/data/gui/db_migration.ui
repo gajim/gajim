@@ -181,7 +181,7 @@ This may take a while…</property>
       </object>
     </child>
     <style>
-      <class name="padding-18"/>
+      <class name="p-18"/>
     </style>
   </object>
 </interface>

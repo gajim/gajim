@@ -123,7 +123,7 @@
           </object>
         </child>
         <style>
-          <class name="padding-6"/>
+          <class name="p-6"/>
         </style>
       </object>
     </property>

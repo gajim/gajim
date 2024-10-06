@@ -56,7 +56,7 @@
           </object>
         </child>
         <style>
-          <class name="padding-12"/>
+          <class name="p-12"/>
         </style>
       </object>
     </property>
@@ -230,7 +230,7 @@
     </child>
     <style>
       <class name="gajim-banner"/>
-      <class name="padding-6"/>
+      <class name="p-6"/>
     </style>
   </object>
 </interface>
