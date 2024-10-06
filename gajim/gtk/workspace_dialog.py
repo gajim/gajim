@@ -4,7 +4,6 @@
 
 from typing import Any
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -17,16 +16,18 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util import make_rgba
 from gajim.gtk.util import rgba_to_float
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class WorkspaceDialog(Gtk.ApplicationWindow):
+class WorkspaceDialog(GajimAppWindow):
     def __init__(self, workspace_id: str | None = None) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('WorkspaceDialog')
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_title(_('Workspace Settings'))
-        self.set_size_request(500, 600)
+        GajimAppWindow.__init__(
+            self,
+            name='WorkspaceDialog',
+            title=_('Workspace Settings'),
+            default_width=500,
+            default_height=600,
+        )
 
         self._workspace_id = workspace_id
 
@@ -66,14 +67,8 @@ class WorkspaceDialog(Gtk.ApplicationWindow):
         self._ui.entry.set_text(name)
         self._ui.color_chooser.set_rgba(rgba)
         self._update_avatar()
-        # self._ui.save_button.grab_default() GTK4 TODO
 
-        # self.connect('key-press-event', self._on_key_press)
-        self.show()
-
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+        self.set_default_widget(self._ui.save_button)
 
     def _on_remove_workspace(self, _button: Gtk.Button) -> None:
         assert self._workspace_id is not None

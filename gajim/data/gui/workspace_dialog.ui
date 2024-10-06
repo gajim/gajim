@@ -3,6 +3,7 @@
   <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="box">
     <property name="orientation">vertical</property>
+    <property name="hexpand">1</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkImage" id="preview"/>
@@ -118,6 +119,9 @@
     </child>
     <child>
       <object class="GtkBox">
+        <property name="spacing">12</property>
+        <property name="homogeneous">1</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkButton">
             <property name="label" translatable="1">_Cancel</property>
@@ -140,8 +144,5 @@
         </child>
       </object>
     </child>
-    <style>
-      <class name="padding-18"/>
-    </style>
   </object>
 </interface>
