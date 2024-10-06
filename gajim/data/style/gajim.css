@@ -810,7 +810,6 @@ infobar.error > revealer > box {
 .data-form-widget textview { padding: 5px; }
 
 /* Assistant */
-.assistant-grid { padding: 18px; margin: 6px;}
 .assistant-grid > box stack  { padding: 18px; }
 
 /* Miscellaneous widgets ================================================== */

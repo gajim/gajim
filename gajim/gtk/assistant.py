@@ -11,18 +11,18 @@ from typing import overload
 
 from collections.abc import Callable
 
-from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.common import app
+from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import EventHelper
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class Assistant(Gtk.ApplicationWindow, EventHelper):
+class Assistant(GajimAppWindow, EventHelper):
 
     __gsignals__ = {
         'button-clicked': (
@@ -41,14 +41,16 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
                  width: int = 550,
                  height: int = 400,
                  transition_duration: int = 200) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='Assistant',
+            title=_('Assistant'),
+            transient_for=transient_for,
+            default_width=width,
+            default_height=height,
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_name('Assistant')
-        self.set_default_size(width, height)
-        self.set_resizable(True)
-        self.set_transient_for(transient_for)
 
         self._pages: dict[str, Page] = {}
         self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
@@ -59,28 +61,12 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.stack.set_transition_duration(transition_duration)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self.__on_destroy)
 
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit('page-changed', page_name)
         Gtk.ApplicationWindow.show(self)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -93,7 +79,7 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         self.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
-        for button, _ in self._buttons.values():
+        for button, _complete in self._buttons.values():
             button.hide()
 
     def _set_buttons_visible(self) -> None:
@@ -117,14 +103,14 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             return
 
         for button_name in buttons:
-            button, _ = self._buttons[button_name]
+            button, _complete = self._buttons[button_name]
             button.show()
 
     def set_button_visible_func(self, func: Callable[..., list[str]]) -> None:
         self._button_visible_func = func
 
     def set_default_button(self, button_name: str) -> None:
-        button, _ = self._buttons[button_name]
+        button, _complete = self._buttons[button_name]
         self.set_default_widget(button)
 
     def add_button(self,

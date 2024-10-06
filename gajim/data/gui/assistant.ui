@@ -27,6 +27,7 @@
     <child>
       <object class="GtkBox" id="action_area">
         <property name="spacing">12</property>
+        <property name="halign">end</property>
         <child>
           <placeholder/>
         </child>
