@@ -259,7 +259,7 @@ infobar.error > revealer > box {
     background: @theme_base_color;
 }
 
-.gajim-app-window > box {
+.gajim-app-window.window-padding > box {
     padding: 18px;
 }
 

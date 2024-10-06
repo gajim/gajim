@@ -20,7 +20,8 @@ class GajimAppWindow(Gtk.ApplicationWindow):
         title: str | None = None,
         default_width: int = -1,
         default_height: int = 1,
-        transient_for: Gtk.Window | None = None
+        transient_for: Gtk.Window | None = None,
+        add_window_padding: bool = True,
     ) -> None:
         Gtk.ApplicationWindow.__init__(
             self,
@@ -33,6 +34,9 @@ class GajimAppWindow(Gtk.ApplicationWindow):
             transient_for=transient_for,
         )
         self.add_css_class('gajim-app-window')
+
+        if add_window_padding:
+            self.add_css_class('window-padding')
 
         self.__main_box = Gtk.Box()
         super().set_child(self.__main_box)
