@@ -15,6 +15,7 @@ from datetime import timezone
 
 from gi.repository import GLib
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
@@ -31,6 +32,7 @@ from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import load_icon_surface
 
 log = logging.getLogger('gajim.gtk.history_sync')
@@ -218,13 +220,13 @@ class SelectTime(Page):
         listbox = Gtk.ListBox()
         listbox.set_hexpand(False)
         listbox.set_halign(Gtk.Align.CENTER)
-        listbox.add(TimeOption(_('One Month'), timedelta(days=30)))
-        listbox.add(TimeOption(_('Three Months'), timedelta(days=90)))
-        listbox.add(TimeOption(_('One Year'), timedelta(days=365)))
-        listbox.add(TimeOption(_('Everything')))
+        listbox.append(TimeOption(_('One Month'), timedelta(days=30)))
+        listbox.append(TimeOption(_('Three Months'), timedelta(days=90)))
+        listbox.append(TimeOption(_('One Year'), timedelta(days=365)))
+        listbox.append(TimeOption(_('Everything')))
         listbox.connect('row-selected', self._on_row_selected)
 
-        for row in cast(list[TimeOption], listbox.get_children()):
+        for row in cast(list[TimeOption], iterate_listbox_children(listbox)):
             delta = row.get_timedelta()
             if delta is None:
                 continue
@@ -232,11 +234,9 @@ class SelectTime(Page):
                 row.set_activatable(False)
                 row.set_selectable(False)
 
-        self.add(heading)
-        self.add(label)
-        self.add(listbox)
-
-        self.show_all()
+        self.append(heading)
+        self.append(label)
+        self.append(listbox)
 
     def _on_row_selected(self, _listbox: Gtk.ListBox, row: TimeOption) -> None:
         self._timedelta = row.get_timedelta()
@@ -268,9 +268,8 @@ class Progress(Page):
         self._progress_bar.set_vexpand(True)
         self._progress_bar.set_valign(Gtk.Align.CENTER)
 
-        self.add(image)
-        self.add(self._progress_bar)
-        self.show_all()
+        self.append(image)
+        self.append(self._progress_bar)
 
     def set_fraction(self) -> None:
         self._received += 1
@@ -299,7 +298,7 @@ class TimeOption(Gtk.ListBoxRow):
     def __init__(self, text: str, months: timedelta | None = None) -> None:
         Gtk.ListBoxRow.__init__(self)
         label = Gtk.Label(label=text)
-        self.add(label)
+        self.set_child(label)
 
         self._timedelta = months
 
