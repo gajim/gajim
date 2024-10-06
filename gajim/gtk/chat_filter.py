@@ -19,16 +19,13 @@ class ChatFilter(Gtk.Box):
     }
 
     def __init__(self, icons: bool = False) -> None:
-        Gtk.Box.__init__(self)
-        self.set_halign(Gtk.Align.CENTER)
+        Gtk.Box.__init__(self, halign=Gtk.Align.CENTER)
 
-        return # GTK4 TODO
-        toolbar = Gtk.Toolbar()
-        toolbar.set_icon_size(Gtk.IconSize.MENU)
+        toolbar = Gtk.Box(css_classes=['toolbar'])
         if icons:
-            toolbar.get_style_context().add_class('chat-filter-icons')
+            toolbar.add_css_class('chat-filter-icons')
 
-        self._all_button = Gtk.RadioToolButton.new_from_widget(None)
+        self._all_button = Gtk.ToggleButton()
         if icons:
             self._all_button.set_icon_name('feather-home-symbolic')
             self._all_button.set_tooltip_text(_('All'))
@@ -36,9 +33,9 @@ class ChatFilter(Gtk.Box):
             self._all_button.set_label(_('All'))
         self._all_button.set_name('all')
         self._all_button.connect('clicked', self._on_button_clicked)
-        toolbar.insert(self._all_button, 1)
+        toolbar.append(self._all_button)
 
-        chats_button = Gtk.RadioToolButton.new_from_widget(self._all_button)
+        chats_button = Gtk.ToggleButton(group=self._all_button)
         if icons:
             chats_button.set_icon_name('feather-user-symbolic')
             chats_button.set_tooltip_text(_('Chats'))
@@ -46,10 +43,9 @@ class ChatFilter(Gtk.Box):
             chats_button.set_label(_('Chats'))
         chats_button.set_name('chats')
         chats_button.connect('clicked', self._on_button_clicked)
-        toolbar.insert(chats_button, 2)
+        toolbar.append(chats_button)
 
-        group_chats_button = Gtk.RadioToolButton.new_from_widget(
-            self._all_button)
+        group_chats_button = Gtk.ToggleButton(group=self._all_button)
         if icons:
             group_chats_button.set_icon_name('feather-users-symbolic')
             group_chats_button.set_tooltip_text(_('Group Chats'))
@@ -57,16 +53,14 @@ class ChatFilter(Gtk.Box):
             group_chats_button.set_label(_('Group Chats'))
         group_chats_button.set_name('group_chats')
         group_chats_button.connect('clicked', self._on_button_clicked)
-        toolbar.insert(group_chats_button, 3)
+        toolbar.append(group_chats_button)
 
-        self.add(toolbar)
-        self.show_all()
+        self.append(toolbar)
 
     def _on_button_clicked(self, button: Any) -> None:
         if button.get_active():
             self.emit('filter-changed', button.get_name())
 
     def reset(self) -> None:
-        return # GTK4 TODO
         self._all_button.set_active(True)
         self.emit('filter-changed', 'all')

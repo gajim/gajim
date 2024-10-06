@@ -70,9 +70,8 @@ class ChatPage(Gtk.Box):
         section_hover_controller.connect('leave', self._on_section_label_leave)
         self._ui.section_label_eventbox.add_controller(section_hover_controller)
 
-        # TODO GTK4
         self._chat_filter = ChatFilter(icons=True)
-        self._ui.filter_bar.append(self._chat_filter)
+        self._ui.filter_bar.prepend(self._chat_filter)
         self._ui.filter_bar_toggle.connect(
             'toggled', self._on_filter_revealer_toggled)
 
