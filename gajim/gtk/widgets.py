@@ -40,7 +40,7 @@ class GajimAppWindow(Gtk.ApplicationWindow):
         self.__default_controller = Gtk.EventControllerKey(
             propagation_phase=Gtk.PropagationPhase.CAPTURE
         )
-        self.__default_controller.connect('key-pressed', self._on_key_pressed)
+        self.__default_controller.connect('key-pressed', self.__on_key_pressed)
         self.add_controller(self.__default_controller)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
@@ -56,7 +56,7 @@ class GajimAppWindow(Gtk.ApplicationWindow):
     def get_default_controller(self) -> Gtk.EventController:
         return self.__default_controller
 
-    def _on_key_pressed(
+    def __on_key_pressed(
         self,
         _event_controller_key: Gtk.EventControllerKey,
         keyval: int,
