@@ -14,13 +14,14 @@ from typing import NamedTuple
 import os
 import sys
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import passwords
 from gajim.common.i18n import _
+
+from gajim.gtk.widgets import GajimAppWindow
 
 
 class Feature(NamedTuple):
@@ -32,52 +33,35 @@ class Feature(NamedTuple):
     enabled: bool | None
 
 
-class Features(Gtk.ApplicationWindow):
+class Features(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_name('Features')
-        self.set_title(_('Features'))
-        self.set_resizable(False)
-        self.set_default_size(500, -1)
-        self.set_transient_for(app.window)
+        GajimAppWindow.__init__(
+            self,
+            name='Features',
+            application=app.app,
+            title=_('Features')
+        )
 
-        grid = Gtk.Grid()
-        grid.set_name('FeaturesInfoGrid')
-        grid.set_row_spacing(10)
-        grid.set_hexpand(True)
+        grid = Gtk.Grid(
+            name='FeaturesInfoGrid',
+            row_spacing=10,
+            width_request=400
+        )
 
-        self.feature_listbox = Gtk.ListBox()
-        self.feature_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.feature_listbox = Gtk.ListBox(
+            hexpand=True,
+            vexpand=True,
+            selection_mode=Gtk.SelectionMode.NONE
+        )
 
         grid.attach(self.feature_listbox, 0, 0, 1, 1)
 
-        box = Gtk.Box()
+        box = Gtk.Box(spacing=18)
         box.append(grid)
-        box.set_spacing(18)
         self.set_child(box)
-
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
 
         for feature in self._get_features():
             self._add_feature(feature)
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _add_feature(self, feature: Feature) -> None:
         item = FeatureItem(feature)
