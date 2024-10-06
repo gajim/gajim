@@ -15,22 +15,26 @@ from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class RosterItemExchange(Gtk.ApplicationWindow):
+class RosterItemExchange(GajimAppWindow):
     '''
     Used when someone sends a Roster Item Exchange suggestion (XEP-0144)
     '''
-    def __init__(self,
-                 account: str,
-                 action: str,
-                 exchange_list: dict[str, list[str]],
-                 jid_from: JID,
-                 message_body: str | None = None
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_title(_('Contact List Exchange'))
+    def __init__(
+        self,
+        account: str,
+        action: str,
+        exchange_list: dict[str, list[str]],
+        jid_from: JID,
+        message_body: str | None = None
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name='RosterItemExchange',
+            title=_('Contact List Exchange'),
+        )
 
         self.account = account
         self._client = app.get_client(account)
@@ -107,8 +111,6 @@ class RosterItemExchange(Gtk.ApplicationWindow):
             self._modify()
         elif action == 'delete':
             self._delete()
-
-        self.show()
 
     def _on_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
         model = self._ui.items_list_treeview.get_model()
