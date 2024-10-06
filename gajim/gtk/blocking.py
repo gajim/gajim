@@ -2,11 +2,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any, cast
+from typing import Any
+from typing import cast
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
@@ -18,15 +18,18 @@ from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.blocking_list')
 
 
-class BlockingList(Gtk.ApplicationWindow):
+class BlockingList(GajimAppWindow):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_title(_('Blocking List for %s') % account)
+        GajimAppWindow.__init__(
+            self,
+            name='BlockingList',
+            title=_('Blocking List for %s') % account,
+        )
 
         self.account = account
         self._client = app.get_client(account)
@@ -38,18 +41,12 @@ class BlockingList(Gtk.ApplicationWindow):
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self._set_grid_state(False)
 
         self._activate_spinner()
 
         self._client.get_module('Blocking').request_blocking_list(
             callback=self._on_blocking_list_received)
-
-        self.show()
 
     def _show_error(self, error: str) -> None:
         ErrorDialog(_('Error!'), error)
@@ -127,15 +124,3 @@ class BlockingList(Gtk.ApplicationWindow):
     def _disable_spinner(self) -> None:
         self._spinner.hide()
         self._spinner.stop()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False

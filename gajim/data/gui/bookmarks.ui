@@ -122,8 +122,5 @@
         </layout>
       </object>
     </child>
-    <style>
-      <class name="padding-18"/>
-    </style>
   </object>
 </interface>
