@@ -17,7 +17,7 @@ class GajimAppWindow(Gtk.ApplicationWindow):
         self,
         *,
         name: str,
-        title: str,
+        title: str | None = None,
         default_width: int = -1,
         default_height: int = 1,
         transient_for: Gtk.Window | None = None

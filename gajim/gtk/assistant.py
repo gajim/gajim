@@ -15,8 +15,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.common.i18n import _
-
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import EventHelper
 from gajim.gtk.widgets import GajimAppWindow
@@ -37,14 +35,14 @@ class Assistant(GajimAppWindow, EventHelper):
         )}
 
     def __init__(self,
-                 transient_for: Gtk.Window | None = None,
-                 width: int = 550,
-                 height: int = 400,
-                 transition_duration: int = 200) -> None:
+        transient_for: Gtk.Window | None = None,
+        width: int = 550,
+        height: int = 400,
+        transition_duration: int = 200
+    ) -> None:
         GajimAppWindow.__init__(
             self,
             name='Assistant',
-            title=_('Assistant'),
             transient_for=transient_for,
             default_width=width,
             default_height=height,
