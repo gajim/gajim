@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -18,32 +17,26 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import AccountBadge
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class GroupChatInvitationDialog(Gtk.ApplicationWindow):
+class GroupChatInvitationDialog(GajimAppWindow):
     def __init__(self, account: str, event: MucInvitation) -> None:
-        Gtk.ApplicationWindow.__init__(
+        GajimAppWindow.__init__(
             self,
-            application=app.app,
+            name='GroupChatInvitationDialog',
             title=_('Group Chat Invitation'),
         )
 
         self.account = account
 
-        # self.connect('key-press-event', self._on_key_press)
-
         invitation_widget = GroupChatInvitation(account, event)
         invitation_widget.connect('accepted', self._on_invitation_widget_action)
         invitation_widget.connect('declined', self._on_invitation_widget_action)
         self.set_child(invitation_widget)
-        self.show()
 
     def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
         self.destroy()
-
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
 
 
 class GroupChatInvitation(Gtk.Box):

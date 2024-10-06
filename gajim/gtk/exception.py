@@ -23,7 +23,6 @@ from types import TracebackType
 from urllib.parse import urlencode
 
 import nbxmpp
-from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.http import HTTPRequest
 
@@ -40,6 +39,7 @@ from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import get_gtk_version
+from gajim.gtk.widgets import GajimAppWindow
 
 try:
     import sentry_sdk
@@ -85,17 +85,19 @@ def _hook(type_: type[BaseException],
     _exception_in_progress.release()
 
 
-class ExceptionDialog(Gtk.ApplicationWindow):
-    def __init__(self,
-                 type_: type[BaseException],
-                 value: BaseException,
-                 tb: TracebackType
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_resizable(True)
-        self.set_default_size(700, -1)
-        self.set_title(_('Gajim - Error'))
+class ExceptionDialog(GajimAppWindow):
+    def __init__(
+        self,
+        type_: type[BaseException],
+        value: BaseException,
+        tb: TracebackType
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name='ExceptionDialog',
+            title=_('Gajim - Error'),
+            default_width=700,
+        )
 
         self._traceback_data = (type_, value, tb)
         self._sentry_available = app.is_installed('SENTRY_SDK')
@@ -117,26 +119,8 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         buffer_ = self._ui.exception_view.get_buffer()
         buffer_.set_text(self._issue_text)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
-        self.show()
-
         if self._sentry_available:
             self._ui.user_feedback_entry.grab_focus()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
         if self._sentry_available and determine_proxy() is None:

@@ -8,7 +8,6 @@ from typing import cast
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.errors import StanzaError
@@ -24,18 +23,21 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.groupchat_join')
 
 
-class GroupchatJoin(Gtk.ApplicationWindow):
+class GroupchatJoin(GajimAppWindow):
     def __init__(self, account: str, jid: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('GroupchatJoin')
-        self.set_application(app.app)
-        self.set_title(_('Join Group Chat'))
-        self.set_default_size(500, 550)
-        self.get_style_context().add_class('dialog-margin')
+
+        GajimAppWindow.__init__(
+            self,
+            name='GroupchatJoin',
+            title=_('Join Group Chat'),
+            default_width=500,
+            default_height=550,
+        )
 
         self._destroyed = False
         self.account = account
@@ -77,10 +79,6 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
         self._main_box.append(join_box)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self.connect('destroy', self._on_destroy)
 
         self.set_child(self._main_box)
@@ -91,8 +89,6 @@ class GroupchatJoin(Gtk.ApplicationWindow):
             allow_redirect=True,
             request_vcard=True,
             callback=self._disco_info_received)
-
-        self.show()
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         name = stack.get_visible_child_name()
@@ -147,18 +143,6 @@ class GroupchatJoin(Gtk.ApplicationWindow):
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._destroyed = True
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
 
 class ErrorPage(Gtk.Box):
