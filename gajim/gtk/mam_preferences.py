@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
@@ -20,20 +19,20 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InformationDialog
 from gajim.gtk.util import EventHelper
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.mam_preferences')
 
 
-class MamPreferences(Gtk.ApplicationWindow, EventHelper):
+class MamPreferences(GajimAppWindow, EventHelper):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_title(_('Archiving Preferences for %s') % account)
+        GajimAppWindow.__init__(
+            self,
+            name='MamPreferences',
+            title=_('Archiving Preferences for %s') % account,
+        )
 
-        controller = Gtk.EventControllerKey()
-        controller.connect_after('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
+        EventHelper.__init__(self)
 
         self.account = account
         self._client = app.get_client(account)
@@ -52,8 +51,6 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
 
         self._client.get_module('MAM').request_preferences(
             callback=self._mam_prefs_received)
-
-        self.show()
 
     def _on_destroy(self, widget: MamPreferences) -> None:
         self._destroyed = True
@@ -155,15 +152,3 @@ class MamPreferences(Gtk.ApplicationWindow, EventHelper):
     def _disable_spinner(self) -> None:
         self._spinner.hide()
         self._spinner.stop()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False

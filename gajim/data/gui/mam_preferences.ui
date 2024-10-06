@@ -149,16 +149,22 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="save_button">
-            <property name="label">_Save</property>
-            <property name="focusable">1</property>
-            <property name="receives_default">1</property>
-            <property name="valign">end</property>
-            <property name="use_underline">1</property>
-            <signal name="clicked" handler="_on_save" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
+          <object class="GtkBox">
+            <property name="hexpand">1</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="GtkButton" id="save_button">
+                <property name="label">_Save</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">end</property>
+                <property name="use_underline">1</property>
+                <signal name="clicked" handler="_on_save" swapped="no"/>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>
