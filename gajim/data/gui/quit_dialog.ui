@@ -137,8 +137,5 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         </child>
       </object>
     </child>
-    <style>
-      <class name="p-18"/>
-    </style>
   </object>
 </interface>

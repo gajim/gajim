@@ -8,7 +8,6 @@ from typing import Any
 from typing import cast
 from typing import NamedTuple
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import Pango
 
@@ -17,6 +16,7 @@ from gajim.common.const import ButtonAction
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 
 class DialogButton(NamedTuple):
@@ -274,28 +274,19 @@ class InputDialog(ConfirmationDialog):
         super()._on_response(_dialog, response)
 
 
-class QuitDialog(Gtk.ApplicationWindow):
+class QuitDialog(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(
+        GajimAppWindow.__init__(
             self,
-            application=app.app,
-            show_menubar=False,
-            modal=True,
+            name='GuitDialog',
+            title=_('Quit Gajim'),
             transient_for=app.window,
-            title=_('Quit Gajim')
         )
+        self.set_modal(True)
 
         self._ui = get_builder('quit_dialog.ui', self)
 
         self.set_child(self._ui.box)
-
-        # self.connect('key-press-event', self._on_key_press)
-
-        self.show()
-
-    def _on_key_press(self, _widget: QuitDialog, event: Any) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
 
     def _on_button_clicked(self, button: Gtk.Button) -> None:
         action = button.get_name()
