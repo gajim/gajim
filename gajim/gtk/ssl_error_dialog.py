@@ -12,21 +12,23 @@ from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import open_window
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class SSLErrorDialog(Gtk.ApplicationWindow):
-    def __init__(self,
-                 account: str,
-                 client: Client,
-                 cert: Gio.TlsCertificate,
-                 ignored_errors: set[Gio.TlsCertificateFlags],
-                 error: Gio.TlsCertificateFlags
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('SSLErrorDialog')
-        self.set_application(app.app)
-        self.set_resizable(False)
-        self.set_title(_('SSL Certificate Verification Error'))
+class SSLErrorDialog(GajimAppWindow):
+    def __init__(
+        self,
+        account: str,
+        client: Client,
+        cert: Gio.TlsCertificate,
+        ignored_errors: set[Gio.TlsCertificateFlags],
+        error: Gio.TlsCertificateFlags
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name='SSLErrorDialog',
+            title=_('SSL Certificate Verification Error'),
+        )
 
         self._ui = get_builder('ssl_error_dialog.ui', self)
         self.set_child(self._ui.ssl_error_box)
@@ -39,8 +41,6 @@ class SSLErrorDialog(Gtk.ApplicationWindow):
         self._server = app.get_hostname_from_account(self.account)
 
         self._process_error()
-
-        self.show()
 
     def _process_error(self) -> None:
         self._ui.intro_text.set_text(

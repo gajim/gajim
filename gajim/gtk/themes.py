@@ -29,6 +29,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.widgets import GajimAppWindow
 
 
 class StyleOption(NamedTuple):
@@ -124,15 +125,17 @@ class Column(IntEnum):
     THEME = 0
 
 
-class Themes(Gtk.ApplicationWindow):
+class Themes(GajimAppWindow):
     def __init__(self, transient: Gtk.Window) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_title(_('Gajim Themes'))
-        self.set_name('ThemesWindow')
-        self.set_transient_for(transient)
-        self.set_resizable(True)
-        self.set_default_size(600, 400)
+        GajimAppWindow.__init__(
+            self,
+            name='ThemesWindow',
+            title=_('Gajim Themes'),
+            default_width=600,
+            default_height=400,
+            transient_for=transient,
+        )
+
         self.set_modal(True)
 
         self._ui = get_builder('themes_window.ui', self)
@@ -141,25 +144,7 @@ class Themes(Gtk.ApplicationWindow):
         self._get_themes()
         self._ui.option_listbox.set_placeholder(self._ui.placeholder)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect_after('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self._fill_choose_listbox()
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _get_themes(self) -> None:
         current_theme = app.settings.get('roster_theme')

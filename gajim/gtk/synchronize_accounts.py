@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -16,17 +15,19 @@ from gajim.common.modules.contacts import BareContact
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import get_app_window
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class SynchronizeAccounts(Gtk.ApplicationWindow):
+class SynchronizeAccounts(GajimAppWindow):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_default_size(400, 550)
-        self.set_resizable(True)
-        self.set_title(_('Synchronize Accounts'))
-        self.set_transient_for(get_app_window('AccountsWindow'))
+        GajimAppWindow.__init__(
+            self,
+            name='SynchronizeAccounts',
+            title=_('Synchronize Accounts'),
+            default_width=400,
+            default_height=550,
+            transient_for=get_app_window('AccountsWindow')
+        )
 
         self.account = account
 
@@ -67,25 +68,7 @@ class SynchronizeAccounts(Gtk.ApplicationWindow):
         self._ui.contacts_treeview.insert_column_with_attributes(
             -1, _('Name'), renderer2, text=1)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
-
         self._init_accounts()
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_client_state_changed(self,
                                  _client: types.Client,

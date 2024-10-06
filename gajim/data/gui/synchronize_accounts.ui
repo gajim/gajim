@@ -7,8 +7,8 @@
         <property name="name">accounts</property>
         <property name="child">
           <object class="GtkBox" id="sync_accounts_box">
-            <property name="border-width">18</property>
             <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
@@ -21,7 +21,6 @@
                 <property name="vexpand">1</property>
                 <property name="width-request">150</property>
                 <property name="focusable">1</property>
-                <property name="shadow-type">in</property>
                 <property name="child">
                   <object class="GtkTreeView" id="accounts_treeview">
                     <property name="focusable">1</property>
@@ -35,6 +34,7 @@
             <child>
               <object class="GtkBox">
                 <property name="spacing">12</property>
+                <property name="halign">end</property>
                 <child>
                   <object class="GtkButton" id="select_contacts_button">
                     <property name="label" translatable="1">Select Contacts</property>
@@ -49,7 +49,6 @@
                 <child>
                   <object class="GtkLabel" id="connection_warning_label">
                     <property name="visible">0</property>
-                    <property name="no-show-all">True</property>
                     <property name="label" translatable="1">You are not connected to the server</property>
                     <property name="wrap">1</property>
                     <property name="max-width-chars">52</property>
@@ -68,11 +67,10 @@
     <child>
       <object class="GtkStackPage">
         <property name="name">contacts</property>
-        <property name="position">1</property>
         <property name="child">
           <object class="GtkBox" id="sync_contacts_box">
-            <property name="border-width">18</property>
             <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
@@ -85,7 +83,6 @@
                 <property name="vexpand">1</property>
                 <property name="width-request">150</property>
                 <property name="focusable">1</property>
-                <property name="shadow-type">in</property>
                 <property name="child">
                   <object class="GtkTreeView" id="contacts_treeview">
                     <property name="focusable">1</property>
