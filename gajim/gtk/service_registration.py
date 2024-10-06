@@ -162,7 +162,6 @@ class Form(Page):
         self.complete = False
 
         self._dataform_widget: DataFormWidget | None = None
-        self.show_all()
 
     def add_form(self, form: Any) -> None:
         self.remove_form()
@@ -175,8 +174,7 @@ class Form(Page):
         self._dataform_widget.set_propagate_natural_height(True)
         self._dataform_widget.connect('is-valid', self._on_is_valid)
         self._dataform_widget.validate()
-        self._dataform_widget.show_all()
-        self.add(self._dataform_widget)
+        self.append(self._dataform_widget)
 
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
         self.complete = is_valid
@@ -191,7 +189,6 @@ class Form(Page):
             return
 
         self.remove(self._dataform_widget)
-        self._dataform_widget.destroy()
         self._dataform_widget = None
 
     def get_default_button(self) -> str:
