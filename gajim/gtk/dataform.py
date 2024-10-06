@@ -7,19 +7,15 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
-from collections.abc import Callable
-
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.modules.dataforms import DataField
-from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.modules.dataforms import MultipleDataForm
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.dataforms import Uri
 from nbxmpp.protocol import InvalidJid
-from nbxmpp.simplexml import Node
 
 from gajim.common import app
 from gajim.common.i18n import _
@@ -960,46 +956,6 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
         for name, entry in self._entries.items():
             fields[name] = entry.get_text()
         return fields
-
-
-class DataFormDialog(Gtk.Dialog):
-    def __init__(self,
-                 title: str,
-                 transient_for: Gtk.Window,
-                 form: SimpleDataForm,
-                 node: Node,
-                 submit_callback: Callable[..., Any]
-                 ) -> None:
-
-        Gtk.Dialog.__init__(self,
-                            title=title,
-                            transient_for=transient_for,
-                            modal=False)
-        self.set_default_size(600, 500)
-
-        self._submit_callback = submit_callback
-        self._form = DataFormWidget(extend_form(node=form))
-        self._node = node
-
-        self.get_content_area().get_style_context().add_class('dialog-margin')
-        self.get_content_area().add(self._form)
-
-        self.add_button(_('Cancel'), Gtk.ResponseType.CANCEL)
-
-        submit_button = self.add_button(_('Submit'), Gtk.ResponseType.OK)
-        submit_button.get_style_context().add_class('suggested-action')
-        self.set_default_response(Gtk.ResponseType.OK)
-
-        self.connect('response', self._on_response)
-
-    def _on_response(self,
-                     _dialog: Gtk.Window,
-                     response: Gtk.ResponseType
-                     ) -> None:
-
-        if response == Gtk.ResponseType.OK:
-            self._submit_callback(self._form.get_submit_form(), self._node)
-        self.destroy()
 
 
 class DataFormReportedTable(Gtk.Grid):
