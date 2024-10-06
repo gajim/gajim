@@ -13,17 +13,22 @@ from gajim.common.i18n import _
 from gajim.gtk.account_wizard import AccountWizard
 from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class ManageProxies(Gtk.ApplicationWindow):
+class ManageProxies(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('ManageProxies')
-        self.set_application(app.app)
-        self.set_default_size(500, -1)
-        self.set_title(_('Manage Proxies'))
+        GajimAppWindow.__init__(
+            self,
+            name='ManageProxies',
+            title=_('Manage Proxies'),
+            default_width=500,
+        )
+
         self.set_modal(True)
 
         self._ui = get_builder('manage_proxies.ui', self)
@@ -33,24 +38,10 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._block_signal = False
 
         controller = Gtk.EventControllerKey()
-        controller.connect_after('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
+        controller.connect('key-pressed', self._on_proxies_treeview_key_pressed)
+        self._ui.proxies_treeview.add_controller(controller)
 
         self.connect('destroy', self._on_destroy)
-
-        self.show()
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     @staticmethod
     def _on_destroy(*args: Any) -> None:
@@ -104,21 +95,35 @@ class ManageProxies(Gtk.ApplicationWindow):
         self._ui.proxies_treeview.set_cursor(model.get_path(iter_))
 
     def _on_remove_proxy_button_clicked(self, _button: Gtk.Button) -> None:
-        sel = self._ui.proxies_treeview.get_selection()
-        if not sel:
-            return
-        (model, iter_) = sel.get_selected()
-        if not iter_:
-            return
+        self._remove_selected_proxy()
 
-        assert isinstance(model, Gtk.ListStore)
-        proxy = model[iter_][0]
-        model.remove(iter_)
-        app.settings.remove_proxy(proxy)
-        self._ui.remove_proxy_button.set_sensitive(False)
-        self._block_signal = True
-        self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
-        self._block_signal = False
+    def _remove_selected_proxy(self) -> None:
+        def _remove():
+            sel = self._ui.proxies_treeview.get_selection()
+            if not sel:
+                return
+            (model, iter_) = sel.get_selected()
+            if not iter_:
+                return
+
+            assert isinstance(model, Gtk.ListStore)
+            proxy = model[iter_][0]
+            model.remove(iter_)
+            app.settings.remove_proxy(proxy)
+            self._ui.remove_proxy_button.set_sensitive(False)
+            self._block_signal = True
+            self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
+            self._block_signal = False
+
+        ConfirmationDialog(
+            _('Remove Proxy'),
+            _('Remove Proxy?'),
+            _('Do you really want to remove this proxy?'),
+            [DialogButton.make('Cancel'),
+             DialogButton.make('Remove',
+                               callback=_remove)],
+            transient_for=self
+        ).show()
 
     def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:
         if self._block_signal:
@@ -175,13 +180,18 @@ class ManageProxies(Gtk.ApplicationWindow):
 
         self._block_signal = False
 
-    def _on_proxies_treeview_key_press_event(self,
-                                             button: Gtk.Button,
-                                             event: Any
-                                             ) -> None:
-        # TODO GTK4
-        if event.keyval == Gdk.KEY_Delete:
-            self._on_remove_proxy_button_clicked(button)
+    def _on_proxies_treeview_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        _state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Delete:
+            self._remove_selected_proxy()
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
 
     def _on_proxyname_entry_changed(self, entry: Gtk.Entry) -> None:
         if self._block_signal:
