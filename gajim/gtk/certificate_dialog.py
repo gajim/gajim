@@ -19,7 +19,6 @@ from cryptography.x509.oid import ExtensionOID
 from gi.repository import Gio
 from gi.repository import Gtk
 
-from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
@@ -42,14 +41,13 @@ class CertificateDialog(GajimAppWindow):
         GajimAppWindow.__init__(
             self,
             name='CertificateDialog',
-            application=app.app,
-            title=_('Certificate')
+            title=_('Certificate'),
+            transient_for=transient_for
         )
 
         self.account = account
 
         self.set_child(CertificateBox(account, cert))
-        self.set_transient_for(transient_for)
 
 
 class CertificateBox(Gtk.Box):

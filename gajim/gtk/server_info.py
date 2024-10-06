@@ -47,8 +47,9 @@ class ServerInfo(GajimAppWindow, EventHelper):
         GajimAppWindow.__init__(
             self,
             name='ServerInfo',
-            application=app.app,
-            title=_('Server Info')
+            title=_('Server Info'),
+            default_width=500,
+            default_height=600,
         )
         EventHelper.__init__(self)
 
@@ -97,8 +98,6 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
         for feature in self._get_features():
             self._add_feature(feature)
-
-        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         self._destroyed = True

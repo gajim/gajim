@@ -59,8 +59,9 @@ class ProfileWindow(GajimAppWindow):
         GajimAppWindow.__init__(
             self,
             name='ProfileWindow',
-            application=app.app,
-            title=_('Profile')
+            title=_('Profile'),
+            default_width=700,
+            default_height=600,
         )
 
         self.set_default_size(700, 600)

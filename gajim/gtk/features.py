@@ -38,7 +38,6 @@ class Features(GajimAppWindow):
         GajimAppWindow.__init__(
             self,
             name='Features',
-            application=app.app,
             title=_('Features')
         )
 
