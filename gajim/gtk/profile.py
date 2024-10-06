@@ -33,6 +33,7 @@ from gajim.gtk.filechoosers import AvatarChooserDialog
 from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.profile')
 
@@ -53,15 +54,16 @@ MENU_DICT = {
 }
 
 
-class ProfileWindow(Gtk.ApplicationWindow):
+class ProfileWindow(GajimAppWindow):
     def __init__(self, account: str) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
+        GajimAppWindow.__init__(
+            self,
+            name='ProfileWindow',
+            application=app.app,
+            title=_('Profile')
+        )
+
         self.set_default_size(700, 600)
-        self.set_name('ProfileWindow')
-        self.set_title(_('Profile'))
 
         self.account = account
         self._jid = app.get_jid_from_account(account)
@@ -127,18 +129,12 @@ class ProfileWindow(Gtk.ApplicationWindow):
             callback=self._on_access_model_received,
             user_data=Namespace.NICK)
 
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
 
         self.connect('destroy', self._on_destroy)
-
-        self.show()
 
     def _on_destroy(self, *args: Any) -> None:
         self._running_tasks.clear()
         self._avatar_selector = None
-        # self._ui.privacy_popover.destroy()
         app.check_finalize(self)
 
     def _on_client_state_changed(self,
@@ -197,18 +193,6 @@ class ProfileWindow(Gtk.ApplicationWindow):
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._ui.avatar_image.show()
 
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
-
     def _add_actions(self) -> None:
         for action in MENU_DICT:
             action_name = 'add-' + action.lower()
@@ -228,8 +212,8 @@ class ProfileWindow(Gtk.ApplicationWindow):
     def _on_edit_clicked(self, *args: Any) -> None:
         self._vcard_grid.set_editable(True)
         self._ui.edit_button.hide()
-        # self._ui.add_entry_button.set_no_show_all(False)
-        # self._ui.add_entry_button.show_all()
+
+        self._ui.add_entry_button.show()
         self._ui.cancel_button.show()
         self._ui.save_button.show()
         self._ui.remove_avatar_button.show()

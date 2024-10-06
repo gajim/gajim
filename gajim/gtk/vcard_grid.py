@@ -12,6 +12,7 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.modules.vcard4 import VCard
 
+from gajim.common import app
 from gajim.common.const import URIType
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
@@ -730,8 +731,7 @@ class KeyProperty(VCardProperty):
         self._third_column = [self._scrolled_window, self._copy_button]
 
     def _on_copy_clicked(self, _button: Gtk.Button) -> None:
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(self._value_text_view.get_text(), -1)
+        app.window.get_clipboard().set(self._value_text_view.get_text())
 
 
 class GenderProperty(VCardProperty):
