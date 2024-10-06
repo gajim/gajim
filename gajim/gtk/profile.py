@@ -64,8 +64,6 @@ class ProfileWindow(GajimAppWindow):
             default_height=600,
         )
 
-        self.set_default_size(700, 600)
-
         self.account = account
         self._jid = app.get_jid_from_account(account)
         self._running_tasks: list[Task] = []
