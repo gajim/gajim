@@ -35,6 +35,7 @@ from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import load_icon_pixbuf
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.plugins')
 
@@ -53,15 +54,16 @@ class Column(IntEnum):
     MANIFEST = 9
 
 
-class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
+class PluginsWindow(GajimAppWindow, EventHelper):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        EventHelper.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='PluginsWindow',
+            title=_('Plugins'),
+            default_height=500
+        )
 
-        self.set_application(app.app)
-        self.set_default_size(650, 500)
-        self.set_show_menubar(False)
-        self.set_title(_('Plugins'))
+        EventHelper.__init__(self)
 
         self._ui = get_builder('plugins.ui', self)
         self.set_child(self._ui.plugins_box)
@@ -86,7 +88,6 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
         self._load_repository_manifests()
 
         self.connect('destroy', self._on_destroy)
-        # self.connect('key-press-event', self._on_key_press) TODO GTK4
 
         self.register_events([
             ('plugin-removed', ged.GUI1, self._on_plugin_removed),
@@ -99,8 +100,6 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                                       self._on_download_finished)
         app.plugin_repository.connect('download-failed',
                                       self._on_download_failed)
-
-        self.show()
 
     def _on_render_enabled_cell(self,
                                 _tree_column: Gtk.TreeViewColumn,
@@ -128,8 +127,8 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                           tooltip: Gtk.Tooltip) -> bool:
 
         context = treeview.get_tooltip_context(x_coord, y_coord, keyboard_mode)
-        has_row, _x, _y, model, _path, iter_ = context
-        if not has_row or model is None:
+        has_row, model, _path, iter_ = context
+        if not has_row:
             return False
 
         row = model[iter_]
@@ -148,13 +147,9 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
                 tooltip.set_text(plugin.available_text)
             else:
                 tooltip.set_text(row[Column.ERROR_TEXT])
-            return True
+            return Gdk.EVENT_STOP
 
-        return False
-
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+        return Gdk.EVENT_PROPAGATE
 
     def _on_destroy(self, *args: Any) -> None:
         self._ui.enabled_renderer.run_dispose()
@@ -332,7 +327,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             assert plugin is not None
             plugin.config_dialog(self)  # pyright: ignore
 
-    def _on_uninstall_plugin(self, _button: Gtk.ToolButton) -> None:
+    def _on_uninstall_plugin(self, _button: Gtk.Button) -> None:
         selection = self._ui.plugins_treeview.get_selection()
         model, iter_ = selection.get_selected()
         if not iter_:
@@ -382,7 +377,7 @@ class PluginsWindow(Gtk.ApplicationWindow, EventHelper):
             manifest = row[Column.MANIFEST]
             app.plugin_repository.download_plugins([manifest])
 
-    def _on_install_plugin_from_zip(self, _button: Gtk.ToolButton) -> None:
+    def _on_install_plugin_from_zip(self, _button: Gtk.Button) -> None:
         def _show_warn_dialog() -> None:
             text = _('Archive is malformed')
             WarningDialog(text, transient_for=self)
