@@ -223,7 +223,6 @@ infobar.error > revealer > box {
 }
 
 /* General purpose classes ================================================= */
-.dialog-margin > box { margin: 18px;}
 .solid-background { background-color: @theme_base_color; }
 .border { border: 1px solid @borders; }
 .no-border { border: none; }
