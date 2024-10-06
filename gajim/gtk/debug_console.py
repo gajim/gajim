@@ -36,6 +36,7 @@ from gajim.gtk.util import EventHelper
 from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
+from gajim.gtk.widgets import GajimAppWindow
 
 STANZA_PRESETS = {
     'Presence': (
@@ -68,15 +69,17 @@ STANZA_PRESETS = {
 }
 
 
-class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
+class DebugConsoleWindow(GajimAppWindow, EventHelper):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='DebugConsoleWindow',
+            default_width=800,
+            default_height=600,
+            add_window_padding=False
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_default_size(800, 600)
-        self.set_resizable(True)
-        self.set_show_menubar(False)
-        self.set_name('DebugConsoleWindow')
 
         self._selected_account = 'AllAccounts'
         self._selected_send_account: str | None = None
@@ -93,7 +96,8 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui = get_builder('debug_console.ui', self)
         self.set_titlebar(self._ui.headerbar)
-        self._set_titlebar()
+        self._set_title()
+
         self.set_child(self._ui.stack)
 
         self._ui.paned.set_position(
@@ -149,9 +153,9 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         vadjustment.connect('notify::value',
                             self._on_adj_value_changed)
 
-        self.show()
+        controller = self.get_default_controller()
+        controller.connect('key-pressed', self._on_key_pressed)
 
-        # self.connect('key-press-event', self._on_key_press)
         self.connect('destroy', self._on_destroy)
 
         self.register_events([
@@ -163,7 +167,6 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _on_destroy(self, *args: Any) -> None:
         get_log_console_handler().set_callback(None)
-        # self._ui.popover.destroy()
         app.check_finalize(self)
 
     def _on_adj_upper_changed(self,
@@ -186,14 +189,14 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_value_change(self, combo: Gtk.ComboBox) -> None:
         self._selected_send_account = combo.get_active_id()
 
-    def _set_titlebar(self) -> None:
+    def _set_title(self) -> None:
         if self._selected_account == 'AllAccounts':
             title = _('All Accounts')
         elif self._selected_account == 'AccountWizard':
             title = _('Account Wizard')
         else:
             title = app.get_jid_from_account(self._selected_account)
-        # self._ui.headerbar.set_subtitle(title) TODO GTK4
+        self.set_title(title)
 
     def _on_account_changed(self,
                             event: AccountEnabled | AccountDisabled
@@ -246,38 +249,52 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
         end_iter = buf.get_end_iter()
         buf.insert(end_iter, message)
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Any) -> None:
-        if event.keyval == Gdk.KEY_Escape:
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType
+    ) -> bool:
+        if keyval == Gdk.KEY_Escape:
             if self._ui.search_toggle.get_active():
                 self._ui.search_toggle.set_active(False)
-                return
+                return Gdk.EVENT_STOP
 
             self.destroy()
 
-        if (event.state & Gdk.ModifierType.CONTROL_MASK and
-                event.keyval == Gdk.KEY_Return or
-                event.keyval == Gdk.KEY_KP_Enter):
+        if (state & Gdk.ModifierType.CONTROL_MASK and
+                keyval == Gdk.KEY_Return or
+                keyval == Gdk.KEY_KP_Enter):
             self._on_send()
+            return Gdk.EVENT_STOP
 
-        if (event.state & Gdk.ModifierType.CONTROL_MASK and
-                event.keyval == Gdk.KEY_Up):
+        if (state & Gdk.ModifierType.CONTROL_MASK and
+                keyval == Gdk.KEY_Up):
             self._on_paste_previous()
+            return Gdk.EVENT_STOP
 
-        if (event.state & Gdk.ModifierType.CONTROL_MASK and
-                event.keyval == Gdk.KEY_Down):
+        if (state & Gdk.ModifierType.CONTROL_MASK and
+                keyval == Gdk.KEY_Down):
             self._on_paste_next()
+            return Gdk.EVENT_STOP
 
-        if (event.state & Gdk.ModifierType.CONTROL_MASK and
-                event.keyval == Gdk.KEY_f):
+        if (state & Gdk.ModifierType.CONTROL_MASK and
+                keyval == Gdk.KEY_f):
             self._ui.search_toggle.set_active(True)
             self._ui.search_entry.grab_focus()
+            return Gdk.EVENT_STOP
 
-        if event.keyval == Gdk.KEY_F3:
+        if keyval == Gdk.KEY_F3:
             self._find(Direction.NEXT)
+            return Gdk.EVENT_STOP
 
-        if (event.state & Gdk.ModifierType.SHIFT_MASK and
-            event.keyval == Gdk.KEY_F3):
+        if (state & Gdk.ModifierType.SHIFT_MASK and
+            keyval == Gdk.KEY_F3):
             self._find(Direction.PREV)
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
 
     def _on_row_activated(self,
                           _listbox: Gtk.ListBox,
@@ -552,7 +569,7 @@ class DebugConsoleWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _set_account(self, value: str, _data: Any) -> None:
         self._selected_account = value
-        self._set_titlebar()
+        self._set_title()
         self._apply_filters()
 
     def _on_setting(self, value: bool, data: str) -> None:
