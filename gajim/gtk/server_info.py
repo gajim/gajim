@@ -53,8 +53,6 @@ class ServerInfo(GajimAppWindow, EventHelper):
         )
         EventHelper.__init__(self)
 
-        self.set_default_size(500, 600)
-
         self.account = account
         self._client = app.get_client(account)
         self._destroyed = False
