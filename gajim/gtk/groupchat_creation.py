@@ -7,7 +7,6 @@ from typing import Any
 import logging
 import random
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
@@ -28,20 +27,21 @@ from gajim.common.util.muc import get_random_muc_localpart
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.groupchat_creation')
 
 
-class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
+class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     def __init__(self, account: str | None) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name='CreateGroupchat',
+            title=_('Create Group Chat'),
+            default_width=500
+        )
+
         EventHelper.__init__(self)
-        self.set_name('CreateGroupchat')
-        self.set_application(app.app)
-        self.set_default_size(500, -1)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_title(_('Create Group Chat'))
 
         self._ui = get_builder('groupchat_creation.ui', self)
         self.set_child(self._ui.stack)
@@ -50,10 +50,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         self._destroyed: bool = False
 
         self._create_entry_completion()
-
-        controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_key_pressed)
-        self.add_controller(controller)
 
         self.connect('destroy', self._on_destroy)
 
@@ -69,8 +65,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._update_accounts(account)
         self._ui.create_button.grab_focus()
-
-        self.show()
 
     def _on_account_state(self,
                           _event: AccountConnected | AccountDisconnected
@@ -134,18 +128,6 @@ class CreateGroupchatWindow(Gtk.ApplicationWindow, EventHelper):
         if service_jid is None:
             return 'muc.example.org'
         return str(service_jid)
-
-    def _on_key_pressed(
-        self,
-        _event_controller_key: Gtk.EventControllerKey,
-        keyval: int,
-        _keycode: int,
-        _state: Gdk.ModifierType
-    ) -> bool:
-        if keyval == Gdk.KEY_Escape:
-            self.destroy()
-            return True
-        return False
 
     def _on_account_combo_changed(self, combo: Gtk.ComboBox) -> None:
         self._account = combo.get_active_id()
