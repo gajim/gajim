@@ -683,8 +683,8 @@ def open_window(name: str, **kwargs: Any) -> Any:
         module = import_module(WINDOW_MODULES[name])
         window_cls = getattr(module, name)
         window = window_cls(**kwargs)
-    else:
-        window.present()
+
+    window.present()
     return window
 
 
