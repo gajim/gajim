@@ -1,13 +1,14 @@
-from gi.repository import Gtk
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
-from gajim.common.const import CSSPriority
+from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 
 from . import util
-
-util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 
 class TestAssistant(Assistant):
@@ -56,11 +57,7 @@ class TestAssistant(Assistant):
             return ['back', 'close']
         raise ValueError('page %s unknown' % page_name)
 
-    def _on_button_clicked(self,
-                           _assistant: Assistant,
-                           button_name: str
-                           ) -> None:
-
+    def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:
         page = self.get_current_page()
         if button_name == 'forward':
             if page == 'start':
@@ -121,18 +118,17 @@ class Start(Page):
         self._server = Gtk.CheckButton.new_with_mnemonic('A fancy checkbox')
         self._server.set_halign(Gtk.Align.CENTER)
 
-        self.pack_start(heading, False, True, 0)
-        self.pack_start(label1, False, True, 0)
-        self.pack_start(entry, False, True, 0)
-        self.pack_start(self._server, False, True, 0)
-        self.show_all()
+        self.append(heading)
+        self.append(label1)
+        self.append(entry)
+        self.append(self._server)
 
     def _on_changed(self, entry: Gtk.Entry) -> None:
         self.complete = bool(entry.get_text())
         self.update_page_complete()
 
 
-win = TestAssistant()
-win.connect('destroy', Gtk.main_quit)
-win.show_all()
-Gtk.main()
+window = TestAssistant()
+window.show()
+
+util.run_app()

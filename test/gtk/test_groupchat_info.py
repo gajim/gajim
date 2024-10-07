@@ -1,20 +1,23 @@
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 from unittest.mock import MagicMock
 
-from gi.repository import GLib, Gtk
+from gi.repository import Gtk
 from nbxmpp.modules.discovery import parse_disco_info
 from nbxmpp.protocol import Iq
 from nbxmpp.structs import MucSubject
 
 from gajim.common import app
-from gajim.common.const import CSSPriority
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
+from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-util.load_style('gajim.css', CSSPriority.APPLICATION)
-
-stanza = Iq(node='''
+stanza = Iq(
+    node='''
 <iq xmlns="jabber:client" xml:lang="de-DE" to="user@user.us" from="asd@conference.temptatio.dev" type="result" id="67284933-e526-41f3-8309-9d9475cf9c74">
 <query xmlns="http://jabber.org/protocol/disco#info">
 <identity name="ipsum dolor sit amet, consetetur sadipscing elitr sed diam nonumy eirmod tempor invidunt" type="text" category="conference" />
@@ -81,26 +84,29 @@ stanza = Iq(node='''
 </field>
 </x>
 </query>
-</iq>''')  # noqa: E501
+</iq>'''
+)  # noqa: E501
 
 
-subject = ('Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
-           'diam nonumy eirmod tempor invidunt ut labore et dolore magna')
+subject = (
+    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
+    'diam nonumy eirmod tempor invidunt ut labore et dolore magna'
+)
 
 disco_info = parse_disco_info(stanza)
 
-app.css_config = MagicMock()
-app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
-
-class GroupchatInfo(Gtk.ApplicationWindow):
+class GroupchatInfo(GajimAppWindow):
     def __init__(self):
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_name('GroupchatJoin')
-        self.set_title('Test Group chat info')
+        GajimAppWindow.__init__(
+            self,
+            name='GroupchatJoin',
+            title='Test Group chat info',
+            default_width=700,
+            default_height=700,
+        )
 
-        self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL,
-                                 spacing=18)
+        self._main_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
         self._main_box.set_valign(Gtk.Align.FILL)
 
         self._muc_info_box = GroupChatInfoScrolled()
@@ -110,13 +116,15 @@ class GroupchatInfo(Gtk.ApplicationWindow):
 
         self.set_child(self._main_box)
         self._muc_info_box.set_from_disco_info(disco_info)
-        self._muc_info_box.set_subject(MucSubject(text=subject,
-                                                  author='someone',
-                                                  timestamp=None))
-        self.show()
+        self._muc_info_box.set_subject(
+            MucSubject(text=subject, author='someone', timestamp=None)
+        )
 
 
-win = GroupchatInfo()
+app.css_config = MagicMock()
+app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
-while Gtk.Window.get_toplevels().get_n_items() > 0:
-    GLib.MainContext().default().iteration(True)
+window = GroupchatInfo()
+window.show()
+
+util.run_app()

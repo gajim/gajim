@@ -1,3 +1,7 @@
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import unittest
 
 from gajim.common import app  # noqa: F401  (avoid circular imports)

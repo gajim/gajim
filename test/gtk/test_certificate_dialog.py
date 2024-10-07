@@ -1,18 +1,13 @@
-from typing import cast
-
-from unittest.mock import MagicMock
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 from gi.repository import Gio
 from gi.repository import Gtk
 
-from gajim.common import app
-from gajim.common.const import CSSPriority
-
-from gajim.gtk.ssl_error_dialog import SSLErrorDialog
+from gajim.gtk.certificate_dialog import CertificateDialog
 
 from . import util
-
-util.load_style('gajim.css', CSSPriority.APPLICATION)
 
 cert = '''
 -----BEGIN CERTIFICATE-----
@@ -48,17 +43,9 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 8xSTlUlCBTCozjzscZVeVDIojmejWclT
 -----END CERTIFICATE-----'''
 
-
-app.settings = MagicMock()
-app.settings.get_account_setting = MagicMock(
-    return_value='myhost@example.tld')
-
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
-# Listing of Gio.TlsCertificateFlags:
-# https://lazka.github.io/pgi-docs/#Gio-2.0/flags.html#Gio.TlsCertificateFlags
-ssl_error_num = cast(Gio.TlsCertificateFlags, 10)
 
-win = SSLErrorDialog('testacc', MagicMock(), gio_cert, set(), ssl_error_num)
-win.connect('destroy', Gtk.main_quit)
-win.show_all()
-Gtk.main()
+window = CertificateDialog(Gtk.Window(), 'testacc', gio_cert)
+window.show()
+
+util.run_app()

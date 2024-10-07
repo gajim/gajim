@@ -122,7 +122,7 @@ options:
 ## Tests
 
 - `python -m unittest discover -s test`
-- `python -m unittest ./test/dialogs/gui_file.py` (for testing GUI files)
+- `python -m unittest ./test/gtk/gui_file.py` (for testing GUI files)
 
 ## Packages and install instructions
 

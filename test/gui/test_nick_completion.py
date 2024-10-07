@@ -1,3 +1,7 @@
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import unittest
 from unittest.mock import MagicMock
 
@@ -7,7 +11,6 @@ from gajim.gtk.groupchat_nick_completion import GroupChatNickCompletion
 
 
 class Test(unittest.TestCase):
-
     def test_generate_suggestions(self):
         participant_names = [
             'Hugo',
@@ -24,12 +27,6 @@ class Test(unittest.TestCase):
             participant.name = name
             participants.append(participant)
 
-        app.get_client = MagicMock()
-
-        app.storage.archive = MagicMock()
-        app.storage.archive.get_recent_muc_nicks = MagicMock(
-            return_value=['Daisy', 'Robert'])
-
         gen = GroupChatNickCompletion()
         contact = MagicMock()
         contact.get_participants = MagicMock(return_value=participants)
@@ -45,6 +42,11 @@ class Test(unittest.TestCase):
         r = gen._generate_suggestions(prefix='m')  # type: ignore
         self.assertEqual(r, [])
 
+
+app.get_client = MagicMock()
+
+app.storage.archive = MagicMock()
+app.storage.archive.get_recent_muc_nicks = MagicMock(return_value=['Daisy', 'Robert'])
 
 if __name__ == '__main__':
     unittest.main()

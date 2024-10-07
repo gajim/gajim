@@ -1,10 +1,10 @@
-from typing import Any
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
 
 import tempfile
 from unittest.mock import MagicMock
 
-from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
@@ -25,17 +25,25 @@ from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.control import ChatControl
+from gajim.gtk.util import convert_surface_to_texture
+from gajim.gtk.widgets import GajimAppWindow
+
+from . import util
 
 ACCOUNT = 'testacc1'
 FROM_JID = 'contact@test.tld'
 BASE_TIMESTAMP = 1672531200
 
 
-class ConversationViewTest(Gtk.ApplicationWindow):
+class ConversationViewTest(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_size_request(800, 800)
-        self.set_title('Test ConversationView')
+        GajimAppWindow.__init__(
+            self,
+            name='',
+            title='Test ConversationView',
+            default_width=800,
+            default_height=800,
+        )
 
         self._chat_control = ChatControl()
         app.settings.set('hide_groupchat_occupants_list', True)
@@ -53,8 +61,6 @@ class ConversationViewTest(Gtk.ApplicationWindow):
         box.append(button_box)
         self.set_child(box)
 
-        # self.connect('key-press-event', self._on_key_press_event)
-
     def _get_contact(self) -> BareContact:
         contact = MagicMock(spec='BareContact')
         contact.connect = MagicMock()
@@ -62,15 +68,12 @@ class ConversationViewTest(Gtk.ApplicationWindow):
         contact.jid = JID.from_string(FROM_JID)
         contact.name = 'Test Contact'
         contact.is_groupchat = False
-        avatar = generate_default_avatar('T', (0.2, 0.1, 0.7), AvatarSize.ROSTER, 1)
+        avatar = convert_surface_to_texture(
+            generate_default_avatar('T', (0.2, 0.1, 0.7), AvatarSize.ROSTER, 1)
+        )
         contact.get_avatar = MagicMock(return_value=avatar)
         contact.settings = ContactSettings(ACCOUNT, JID.from_string(ACCOUNT))
         return contact
-
-    def _on_key_press_event(self, _widget: Gtk.Widget, event: Any) -> None:
-
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
 
     def _on_jump_to_clicked(self, _button: Gtk.Button) -> None:
         # BASE_TIMESTAMP + 500
@@ -105,7 +108,7 @@ app.window = MagicMock()
 app.settings = Settings(in_memory=True)
 app.settings.init()
 app.settings.add_account(ACCOUNT)
-app.settings.set_account_setting('testacc1', 'address', 'user@domain.org')
+app.settings.set_account_setting(ACCOUNT, 'address', 'user@domain.org')
 
 app.storage.events = EventStorage()
 app.storage.events.init()
@@ -120,8 +123,7 @@ add_archive_messages()
 
 app.preview_manager = PreviewManager()
 
-win = ConversationViewTest()
-win.show()
+window = ConversationViewTest()
+window.show()
 
-while Gtk.Window.get_toplevels().get_n_items() > 0:
-    GLib.MainContext().default().iteration(True)
+util.run_app()
