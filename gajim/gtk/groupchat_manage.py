@@ -195,7 +195,8 @@ class GroupchatManage(Gtk.Box):
             self._ui.avatar_update_button.set_sensitive(
                 self._avatar_selector.get_prepared())
             self._ui.stack.set_visible_child_name('avatar')
-            self._ui.avatar_update_button.grab_default()
+            # TODO GTK4
+            # self._ui.avatar_update_button.grab_default()
 
         AvatarChooserDialog(_on_accept,
                             transient_for=cast(Gtk.Window, self.get_root()),
@@ -254,7 +255,8 @@ class GroupchatManage(Gtk.Box):
     def _on_destroy_clicked(self, _button: Gtk.Button) -> None:
         self._ui.stack.set_visible_child_name('destroy')
         self._ui.destroy_reason_entry.grab_focus()
-        self._ui.destroy_button.grab_default()
+        # TODO GTK4
+        # self._ui.destroy_button.grab_default()
 
     def _on_destroy_alternate_changed(self, entry: Gtk.Entry) -> None:
         jid = entry.get_text()
@@ -279,6 +281,8 @@ class GroupchatManage(Gtk.Box):
         alternate_jid = self._ui.destroy_alternate_entry.get_text()
         self._client.get_module('MUC').destroy(
             self._contact.jid, reason, alternate_jid)
+        # TODO GTK4
+        return
         window = self.get_toplevel()
         window.destroy()
 
