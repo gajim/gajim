@@ -323,7 +323,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         return label
 
     def _get_contact_button(self, contact: JID) -> Gtk.Button:
-        button = Gtk.LinkButton(contact.to_iri(XmppUriQuery.MESSAGE.value),
+        button = Gtk.LinkButton(uri=contact.to_iri(XmppUriQuery.MESSAGE.value),
                                 label=str(contact))
         button.set_halign(Gtk.Align.START)
         button.get_style_context().add_class('link-button')
