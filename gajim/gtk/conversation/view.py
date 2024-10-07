@@ -385,7 +385,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def get_last_row(
         self
     ) -> MessageRow | CallRow | FileTransferJingleRow | None:
-        children = reversed(self._list_box.get_children())
+        children = reversed(list(iterate_listbox_children(self._list_box)))
         for row in children:
             if isinstance(row, MessageRow | CallRow | FileTransferJingleRow):
                 return row
@@ -401,7 +401,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def get_last_message_row(
         self
     ) -> MessageRow | None:
-        children = reversed(self._list_box.get_children())
+        children = reversed(list(iterate_listbox_children(self._list_box)))
         for row in children:
             if isinstance(row, MessageRow):
                 return row
@@ -414,8 +414,7 @@ class ConversationView(Gtk.ScrolledWindow):
         return None
 
     def get_last_event_row(self) -> InfoMessage | MUCJoinLeft | None:
-        children = self._list_box.get_children()
-        children.reverse()
+        children = reversed(list(iterate_listbox_children(self._list_box)))
         for row in children:
             if isinstance(row, InfoMessage | MUCJoinLeft):
                 return row
