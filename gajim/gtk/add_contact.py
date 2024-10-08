@@ -67,12 +67,8 @@ class AddContact(Assistant):
         progress.set_text(_('Trying to gather information on this address…'))
 
         self.connect('button-clicked', self._on_button_clicked)
-        self.connect('destroy', self._on_destroy)
 
         self.show_all()
-
-    def _on_destroy(self, *args: Any) -> None:
-        app.check_finalize(self)
 
     def _on_button_clicked(self,
                            _assistant: Assistant,

@@ -12,7 +12,6 @@
           <object class="GtkStack" id="stack">
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <signal name="notify::visible-child-name" handler="_on_visible_child_name" swapped="no"/>
             <child>
               <placeholder/>
             </child>

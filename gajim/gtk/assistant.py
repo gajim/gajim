@@ -16,11 +16,11 @@ from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.gtk.widgets import GajimAppWindow
 
 
-class Assistant(GajimAppWindow, EventHelper):
+class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     __gsignals__ = {
         'button-clicked': (
@@ -32,7 +32,8 @@ class Assistant(GajimAppWindow, EventHelper):
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
             (str, )
-        )}
+        )
+    }
 
     def __init__(self,
         transient_for: Gtk.Window | None = None,
@@ -40,6 +41,7 @@ class Assistant(GajimAppWindow, EventHelper):
         height: int = 400,
         transition_duration: int = 200
     ) -> None:
+        GObject.Object.__init__(self)
         GajimAppWindow.__init__(
             self,
             name='Assistant',
@@ -59,10 +61,12 @@ class Assistant(GajimAppWindow, EventHelper):
 
         self._ui.stack.set_transition_duration(transition_duration)
 
+        self._connect(self._ui.stack, 'notify::visible-child-name', self._on_visible_child_name)
+
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit('page-changed', page_name)
-        Gtk.ApplicationWindow.show(self)
+        self.window.show()
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -72,7 +76,7 @@ class Assistant(GajimAppWindow, EventHelper):
 
     def update_title(self) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
-        self.set_title(page_widget.title)
+        self.window.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
         for button, _complete in self._buttons.values():
@@ -107,7 +111,7 @@ class Assistant(GajimAppWindow, EventHelper):
 
     def set_default_button(self, button_name: str) -> None:
         button, _complete = self._buttons[button_name]
-        self.set_default_widget(button)
+        self.window.set_default_widget(button)
 
     def add_button(self,
                    name: str,
@@ -126,7 +130,7 @@ class Assistant(GajimAppWindow, EventHelper):
     def add_pages(self, pages: dict[str, Page]):
         for name, widget in pages.items():
             self._pages[name] = widget
-            widget.connect('update-page-complete', self._update_page_complete)
+            self._connect(widget, 'update-page-complete', self._update_page_complete)
             self._ui.stack.add_named(widget, name)
 
     @overload
@@ -186,10 +190,13 @@ class Assistant(GajimAppWindow, EventHelper):
                 return
 
     def _cleanup(self) -> None:
+        self.unregister_events()
         self._pages.clear()
         del self._pages
         self._buttons.clear()
         del self._buttons
+        del self._button_visible_func
+        self.run_dispose()
 
 
 class Page(Gtk.Box):

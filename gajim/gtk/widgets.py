@@ -75,9 +75,6 @@ class GajimAppWindow(SignalManager):
     def show(self) -> None:
         self.window.show()
 
-    def emit(self, signal_name: str, *args: Any) -> None:
-        self.window.emit(signal_name, *args)
-
     def set_child(self, child: Gtk.Widget | None = None) -> None:
         box = cast(Gtk.Box, self.window.get_child())
         current_child = box.get_first_child()
