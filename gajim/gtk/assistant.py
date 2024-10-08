@@ -59,8 +59,6 @@ class Assistant(GajimAppWindow, EventHelper):
 
         self._ui.stack.set_transition_duration(transition_duration)
 
-        self.connect('destroy', self.__on_destroy)
-
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit('page-changed', page_name)
@@ -187,9 +185,11 @@ class Assistant(GajimAppWindow, EventHelper):
                 self.emit('button-clicked', button_name)
                 return
 
-    def __on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
         self._pages.clear()
+        del self._pages
         self._buttons.clear()
+        del self._buttons
 
 
 class Page(Gtk.Box):

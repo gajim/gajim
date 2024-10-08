@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import cast
+from typing import Any
 from typing import Literal
 
 import logging
@@ -73,6 +74,9 @@ class GajimAppWindow(SignalManager):
 
     def show(self) -> None:
         self.window.show()
+
+    def emit(self, signal_name: str, *args: Any) -> None:
+        self.window.emit(signal_name, *args)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
         box = cast(Gtk.Box, self.window.get_child())

@@ -68,8 +68,11 @@ class AccountsWindow(GajimAppWindow):
         for account in app.get_accounts_sorted():
             self.add_account(account, initial=True)
 
-        self._menu.connect('menu-activated', self._on_menu_activated)
-        self.connect('destroy', self._on_destroy)
+        self._connect(self._menu, 'menu-activated', self._on_menu_activated)
+
+    def _cleanup(self) -> None:
+        self._check_relogin()
+        app.check_finalize(self)
 
     def _on_menu_activated(self,
                            _listbox: Gtk.ListBox,
@@ -82,10 +85,6 @@ class AccountsWindow(GajimAppWindow):
             self.on_remove_account(account)
         else:
             self._settings.set_page(name)
-
-    def _on_destroy(self, _widget: AccountsWindow) -> None:
-        self._check_relogin()
-        app.check_finalize(self)
 
     def update_account_label(self, account: str) -> None:
         self._accounts[account].update_account_label()
