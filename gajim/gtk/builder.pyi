@@ -683,11 +683,11 @@ class PasswordDialogBuilder(Builder):
     pass_box: Gtk.Box
     header: Gtk.Label
     message_label: Gtk.Label
-    pass_entry: Gtk.Entry
+    pass_entry: Gtk.PasswordEntry
     save_pass_checkbutton: Gtk.CheckButton
+    keyring_hint: Gtk.Label
     cancel_button: Gtk.Button
     ok_button: Gtk.Button
-    keyring_hint: Gtk.Label
 
 
 class PepConfigBuilder(Builder):
