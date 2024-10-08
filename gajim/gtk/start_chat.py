@@ -82,7 +82,7 @@ class StartChatDialog(GajimAppWindow):
         self._search_stopped = False
         self._redirected = False
 
-        self._ui = get_builder('start_chat_dialog.ui', self)
+        self._ui = get_builder('start_chat_dialog.ui',)
         self.set_child(self._ui.stack)
 
         self._nick_chooser = NickChooser()
@@ -101,22 +101,31 @@ class StartChatDialog(GajimAppWindow):
         self._add_groupchats(rows)
         self._add_new_contact_rows(rows)
 
-        self._ui.search_entry.connect(
+        self._connect(self._ui.search_entry, 
             'search-changed', self._on_search_changed)
-        self._ui.search_entry.connect(
+        self._connect(self._ui.search_entry, 
             'next-match', self._select_new_match, Direction.NEXT)
-        self._ui.search_entry.connect(
+        self._connect(self._ui.search_entry, 
             'previous-match', self._select_new_match, Direction.PREV)
-        self._ui.search_entry.connect(
+        self._connect(self._ui.search_entry, 
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
+
+        self._connect(self._ui.stack, "notify::visible-child-name", self._on_page_changed)
+        self._connect(self._ui.filter_bar_toggle ,"toggled", self._on_filter_bar_toggled)
+        self._connect(self._ui.global_search_toggle, "toggled", self._on_global_search_toggle)  
+        self._connect(self._ui.error_back_button ,"clicked", self._on_back_clicked)  
+        self._connect(self._ui.join_button, "clicked", self._on_join_clicked) 
+        self._connect(self._ui.info_back_button, "clicked", self._on_back_clicked) 
+        self._connect(self._ui.account_view, "row-activated", self._on_select_clicked) 
+        self._connect(self._ui.account_back_button, "clicked", self._on_back_clicked) 
+        self._connect(self._ui.account_select_button, "clicked", self._on_select_clicked)
 
         self._ui.listbox.set_placeholder(self._ui.placeholder)
         self._ui.listbox.set_filter_func(self._filter_func, None)
-        self._ui.listbox.connect('row-activated', self._on_row_activated)
+        self._connect(self._ui.listbox, 'row-activated', self._on_row_activated)
 
         self._global_search_listbox = GlobalSearch()
-        self._global_search_listbox.connect('row-activated',
-                                            self._on_row_activated)
+        self._connect(self._global_search_listbox, 'row-activated', self._on_row_activated)
         self._current_listbox = self._ui.listbox
 
         self._muc_info_box = GroupChatInfoScrolled()
@@ -126,14 +135,10 @@ class StartChatDialog(GajimAppWindow):
 
         self._current_filter = 'all'
         self._chat_filter = ChatFilter()
-        self._chat_filter.connect(
-            'filter-changed', self._on_chat_filter_changed)
+        self._connect(self._chat_filter, 'filter-changed', self._on_chat_filter_changed)
         self._ui.filter_bar_revealer.set_child(self._chat_filter)
 
-        controller = self.get_default_controller()
-        controller.connect('key-pressed', self._on_key_pressed)
-
-        self.connect('destroy', self._on_destroy)
+        self._connect(self.get_default_controller(), 'key-pressed', self._on_key_pressed)
 
         if rows:
             self._load_contacts(rows)
@@ -144,6 +149,15 @@ class StartChatDialog(GajimAppWindow):
             self._ui.search_entry.set_text(initial_jid)
 
         self.select_first_row()
+
+        self.show()
+
+    def _cleanup(self, *args: Any) -> None:
+        del self._nick_chooser
+        del self._global_search_listbox
+        self._ui.listbox.set_filter_func(None)
+        self._destroyed = True
+        app.cancel_tasks(self)
 
     def remove_row(self, account: str, jid: str) -> None:
         for row in cast(list[ContactRow], list(iterate_listbox_children(self._ui.listbox))):
@@ -265,8 +279,8 @@ class StartChatDialog(GajimAppWindow):
 
         if keyval == Gdk.KEY_Escape:
             if self._ui.stack.get_visible_child_name() == 'progress':
-                self.destroy()
-                return Gdk.EVENT_STOP
+                # Propagate to GajimAppWindow
+                return Gdk.EVENT_PROPAGATE
 
             if self._ui.stack.get_visible_child_name() == 'account':
                 self._on_back_clicked()
@@ -284,8 +298,8 @@ class StartChatDialog(GajimAppWindow):
                 self._ui.search_entry.emit('stop-search')
                 return Gdk.EVENT_STOP
 
-            self.destroy()
-            return Gdk.EVENT_STOP
+            # Propagate to GajimAppWindow
+            return Gdk.EVENT_PROPAGATE
 
         if keyval == Gdk.KEY_Return:
             if self._ui.stack.get_visible_child_name() == 'progress':
@@ -304,7 +318,7 @@ class StartChatDialog(GajimAppWindow):
                 return Gdk.EVENT_STOP
 
             if self._current_listbox_is(Search.GLOBAL):
-                if (self._ui.search_entry.is_focus() and
+                if (self._ui.search_entry.has_focus() and
                         self._ui.search_entry.get_text()):
                     self._global_search_listbox.remove_all()
                     self._start_search()
@@ -364,7 +378,7 @@ class StartChatDialog(GajimAppWindow):
             self.ready_to_destroy = True
             if app.window.chat_exists(row.account, row.jid):
                 app.window.select_chat(row.account, row.jid)
-                self.destroy()
+                self.close()
                 return
 
             self.ready_to_destroy = False
@@ -380,7 +394,7 @@ class StartChatDialog(GajimAppWindow):
                 select=True,
                 message=initial_message)
             self.ready_to_destroy = True
-            self.destroy()
+            self.close()
 
     def _disco_info(self, row: ContactRow) -> None:
         if not app.account_is_available(row.account):
@@ -492,7 +506,7 @@ class StartChatDialog(GajimAppWindow):
             account, str(jid), nickname=nickname)
 
         self.ready_to_destroy = True
-        self.destroy()
+        self.close()
 
     def _on_back_clicked(self, *args: Any) -> None:
         self._ui.stack.set_visible_child_name('search')
@@ -522,10 +536,12 @@ class StartChatDialog(GajimAppWindow):
     def _set_listbox(self, listbox: Gtk.ListBox):
         if self._current_listbox == listbox:
             return
+
         viewport = self._ui.scrolledwindow.get_child()
-        viewport.remove(viewport.get_child())
-        self._ui.scrolledwindow.remove(viewport)
-        self._ui.scrolledwindow.add(listbox)
+        viewport.set_child(None)
+
+        self._ui.scrolledwindow.set_child(None)
+        self._ui.scrolledwindow.set_child(listbox)
         self._current_listbox = listbox
 
     def _current_listbox_is(self, box: Search) -> bool:
@@ -535,11 +551,11 @@ class StartChatDialog(GajimAppWindow):
 
     def _on_global_search_toggle(self, button: Gtk.ToggleButton) -> None:
         self._ui.search_entry.grab_focus()
-        image_style_context = button.get_children()[0].get_style_context()
+        image = cast(Gtk.Image, button.get_child())
         if button.get_active():
             self._ui.filter_bar_toggle.set_active(False)
             self._ui.filter_bar_toggle.set_sensitive(False)
-            image_style_context.add_class('selected-color')
+            image.add_css_class('selected-color')
             self._set_listbox(self._global_search_listbox)
             if self._ui.search_entry.get_text():
                 self._start_search()
@@ -547,7 +563,7 @@ class StartChatDialog(GajimAppWindow):
         else:
             self._ui.filter_bar_toggle.set_sensitive(True)
             self._ui.search_entry.set_text('')
-            image_style_context.remove_class('selected-color')
+            image.remove_css_class('selected-color')
             self._set_listbox(self._ui.listbox)
             self._global_search_listbox.remove_all()
 
@@ -755,12 +771,6 @@ class StartChatDialog(GajimAppWindow):
 
         for item in result.items:
             self._global_search_listbox.add(ResultRow(item))
-
-    def _on_destroy(self, *args: Any) -> None:
-        self._ui.listbox.set_filter_func(None)
-        self._destroyed = True
-        app.cancel_tasks(self)
-        app.check_finalize(self)
 
 
 class ContactRow(Gtk.ListBoxRow):

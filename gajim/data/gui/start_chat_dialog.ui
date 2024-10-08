@@ -9,7 +9,6 @@
     </columns>
   </object>
   <object class="GtkStack" id="stack">
-    <signal name="notify::visible-child-name" handler="_on_page_changed" swapped="no"/>
     <child>
       <object class="GtkStackPage">
         <property name="name">search</property>
@@ -38,7 +37,6 @@
                         <property name="receives-default">1</property>
                         <property name="tooltip-text" translatable="1">Filter Chats</property>
                         <property name="halign">end</property>
-                        <signal name="toggled" handler="_on_filter_bar_toggled" swapped="no"/>
                         <child>
                           <object class="GtkImage">
                             <property name="icon-name">feather-filter-symbolic</property>
@@ -52,7 +50,6 @@
                         <property name="receives-default">1</property>
                         <property name="tooltip-text" translatable="1">Global Group Chat Search</property>
                         <property name="halign">end</property>
-                        <signal name="toggled" handler="_on_global_search_toggle" swapped="no"/>
                         <child>
                           <object class="GtkImage">
                             <property name="icon-name">feather-globe-symbolic</property>
@@ -142,13 +139,12 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="error_back_button">
                 <property name="label" translatable="1">_Back</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="halign">start</property>
                 <property name="use-underline">1</property>
-                <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
               </object>
             </child>
             <style>
@@ -182,7 +178,6 @@
                         <property name="receives-default">1</property>
                         <property name="halign">end</property>
                         <property name="use-underline">1</property>
-                        <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
                         <style>
                           <class name="suggested-action"/>
                         </style>
@@ -194,13 +189,12 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="info_back_button">
                     <property name="label" translatable="1">_Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">start</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -242,7 +236,6 @@
                     <property name="headers-visible">0</property>
                     <property name="enable-search">0</property>
                     <property name="show-expanders">0</property>
-                    <signal name="row-activated" handler="_on_select_clicked" swapped="no"/>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection"/>
                     </child>
@@ -280,23 +273,21 @@
               <object class="GtkBox">
                 <property name="homogeneous">1</property>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="account_back_button">
                     <property name="label" translatable="1">_Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">start</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="account_select_button">
                     <property name="label" translatable="1">_Select</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">end</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_select_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
                     </style>

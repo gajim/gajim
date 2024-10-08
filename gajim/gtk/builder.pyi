@@ -959,12 +959,16 @@ class StartChatDialogBuilder(Builder):
     listbox: Gtk.ListBox
     spinner: Gtk.Spinner
     error_label: Gtk.Label
+    error_back_button: Gtk.Button
     info_box: Gtk.Box
     join_box: Gtk.Box
     join_button: Gtk.Button
+    info_back_button: Gtk.Button
     account_view: Gtk.TreeView
     icon_pixbuf: Gtk.CellRendererPixbuf
     account_text: Gtk.CellRendererText
+    account_back_button: Gtk.Button
+    account_select_button: Gtk.Button
     placeholder: Gtk.Box
 
 
