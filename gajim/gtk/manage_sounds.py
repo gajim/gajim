@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import cast
 
-import os
 from enum import IntEnum
 
 from gi.repository import Gtk
@@ -18,6 +17,7 @@ from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import FileChooserButton
 from gajim.gtk.widgets import GajimAppWindow
 
 SOUNDS = {
@@ -55,16 +55,20 @@ class ManageSounds(GajimAppWindow):
         self._ui = get_builder('manage_sounds.ui', self)
         self.set_child(self._ui.manage_sounds)
 
+        self._file_chooser_button = FileChooserButton(default_label=_('Choose Sound'))
+        self._file_chooser_button.set_hexpand(True)
+        self._ui.sound_buttons_box.prepend(self._file_chooser_button)
+
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))
         filter_.add_pattern('*')
-        self._ui.filechooser.add_filter(filter_)
+        self._file_chooser_button.add_filter(filter_)
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('Wav Sounds'))
         filter_.add_pattern('*.wav')
-        self._ui.filechooser.add_filter(filter_)
-        self._ui.filechooser.set_filter(filter_)
+        self._file_chooser_button.add_filter(filter_)
+        self._file_chooser_button.set_default_filter(filter_)
 
         self._fill_sound_treeview()
 
@@ -87,7 +91,7 @@ class ManageSounds(GajimAppWindow):
                    path: Gtk.TreePath
                    ) -> None:
 
-        if self._ui.filechooser.get_filename() is None:
+        if self._file_chooser_button.get_path() is None:
             return
 
         model = self._ui.sounds_treeview.get_model()
@@ -112,26 +116,25 @@ class ManageSounds(GajimAppWindow):
 
         path_to_snd_file = check_soundfile_path(model[iter_][Column.PATH])
         if path_to_snd_file is None:
-            self._ui.filechooser.unselect_all()
+            self._file_chooser_button.reset()
         else:
-            self._ui.filechooser.set_filename(str(path_to_snd_file))
+            self._file_chooser_button.set_path(path_to_snd_file)
 
-    def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
+    def _on_file_set(self, button: FileChooserButton, file_path: str) -> None:
+        if not file_path:
+            return
+
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         assert iter_ is not None
 
-        filename = button.get_filename()
-        assert filename is not None
-
-        directory = os.path.dirname(filename)
-        app.settings.set('last_sounds_dir', directory)
-        path_to_snd_file = strip_soundfile_path(filename)
+        app.settings.set('last_sounds_dir', file_path)
+        path_to_snd_file = strip_soundfile_path(file_path)
 
         model[iter_][Column.PATH] = str(path_to_snd_file)
         model[iter_][Column.ENABLED] = True
 
     def _on_clear(self, _button: Gtk.Button) -> None:
-        self._ui.filechooser.unselect_all()
+        self._file_chooser_button.reset()
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         assert iter_ is not None
 

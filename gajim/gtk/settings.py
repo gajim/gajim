@@ -12,6 +12,7 @@ from typing import get_args
 
 import logging
 from collections.abc import Callable
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -34,6 +35,7 @@ from gajim.gtk.util import get_image_button
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import open_window
+from gajim.gtk.widgets import FileChooserButton
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.settings')
@@ -607,18 +609,8 @@ class SpinSetting(GenericSetting):
 class FileChooserSetting(GenericSetting):
     def __init__(self, *args: Any, filefilter: tuple[str, str]) -> None:
         GenericSetting.__init__(self, *args)
-        # TODO: GTK4 https://docs.gtk.org/gtk4/migrating-3to4.html#stop-using-gtkfilechooserbutton
-        return
-        button = Gtk.FileChooserButton(title=self.label,
-                                       action=Gtk.FileChooserAction.OPEN)
+        button = FileChooserButton(default_label=self.label)
         button.set_halign(Gtk.Align.END)
-
-        # GTK Bug: The FileChooserButton expands without limit
-        # get the label and use set_max_wide_chars()
-        inner_button = cast(Gtk.Button, button.get_children()[0])
-        inner_box = cast(Gtk.Box, inner_button.get_children()[0])
-        inner_label = cast(Gtk.Label, inner_box.get_children()[1])
-        inner_label.set_max_width_chars(20)
 
         if filefilter:
             name, pattern = filefilter
@@ -626,7 +618,6 @@ class FileChooserSetting(GenericSetting):
             filter_.set_name(name)
             filter_.add_pattern(pattern)
             button.add_filter(filter_)
-            button.set_filter(filter_)
 
         filter_ = Gtk.FileFilter()
         filter_.set_name(_('All files'))
@@ -635,17 +626,22 @@ class FileChooserSetting(GenericSetting):
 
         if self.setting_value:
             assert isinstance(self.setting_value, str)
-            button.set_filename(self.setting_value)
-        button.connect('selection-changed', self.on_select)
+            button.set_path(Path(self.setting_value))
+
+        button.connect('path-picked', self.on_select)
 
         clear_button = get_image_button(
             'edit-clear-all-symbolic', _('Clear File'))
-        clear_button.connect('clicked', lambda *args: button.unselect_all())
-        self.setting_box.append(button, True, True, 0)
-        self.setting_box.append(clear_button, False, False, 0)
+        clear_button.connect('clicked', lambda *args: button.reset())
+        self.setting_box.append(button)
+        self.setting_box.append(clear_button)
 
-    def on_select(self, filechooser: Gtk.FileChooser) -> None:
-        self.set_value(filechooser.get_filename() or '')
+    def on_select(
+        self,
+        _file_chooser_button: FileChooserButton,
+        file_path: str
+    ) -> None:
+        self.set_value(file_path)
 
     def on_row_activated(self) -> None:
         pass

@@ -33,7 +33,7 @@ Gajim will export all messages from the selected account to a directory of your 
       </object>
     </child>
     <child>
-      <object class="GtkGrid">
+      <object class="GtkGrid" id="settings_grid">
         <property name="halign">center</property>
         <property name="row-spacing">18</property>
         <property name="column-spacing">12</property>
@@ -78,21 +78,6 @@ Gajim will export all messages from the selected account to a directory of your 
             </style>
             <layout>
               <property name="column">0</property>
-              <property name="row">1</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkFileChooserButton" id="file_chooser_button">
-            <property name="width-request">250</property>
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="action">select-folder</property>
-            <property name="preview-widget-active">False</property>
-            <property name="title" translatable="1">Choose History Export Directory</property>
-            <signal name="file-set" handler="_on_file_set" swapped="no"/>
-            <layout>
-              <property name="column">1</property>
               <property name="row">1</property>
             </layout>
           </object>

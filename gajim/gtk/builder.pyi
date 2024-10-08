@@ -587,8 +587,8 @@ class GroupsPostWindowBuilder(Builder):
 class HistoryExportBuilder(Builder):
     account_liststore: Gtk.ListStore
     select_account_box: Gtk.Box
+    settings_grid: Gtk.Grid
     account_combo: Gtk.ComboBox
-    file_chooser_button: Gtk.FileChooserButton
 
 
 class MainBuilder(Builder):
@@ -634,7 +634,7 @@ class ManageSoundsBuilder(Builder):
     liststore1: Gtk.ListStore
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
-    filechooser: Gtk.FileChooserButton
+    sound_buttons_box: Gtk.Box
 
 
 class MessageActionsBoxBuilder(Builder):

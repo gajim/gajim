@@ -13,6 +13,7 @@
   <object class="GtkBox" id="manage_sounds">
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
+    <property name="hexpand">1</property>
     <child>
       <object class="GtkScrolledWindow">
         <property name="vexpand">1</property>
@@ -55,14 +56,8 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="sound_buttons_box">
         <property name="spacing">12</property>
-        <child>
-          <object class="GtkFileChooserButton" id="filechooser">
-            <property name="title" translatable="1">Choose Sound</property>
-            <signal name="file-set" handler="_on_file_set" swapped="no"/>
-          </object>
-        </child>
         <child>
           <object class="GtkButton">
             <property name="focusable">1</property>

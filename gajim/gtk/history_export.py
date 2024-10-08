@@ -20,13 +20,13 @@ from gajim.common.i18n import _
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
-from gajim.common.util.uri import filesystem_path_from_uri
 from gajim.common.util.uri import make_path_from_jid
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import FileChooserButton
 
 log = logging.getLogger('gajim.gtk.history_export')
 
@@ -184,7 +184,14 @@ class SelectAccountDir(Page):
         else:
             self._ui.account_combo.set_active(0)
 
-        self._ui.file_chooser_button.set_current_folder(self._export_directory)
+        file_chooser_button = FileChooserButton(
+            default_label=_('Choose History Export Directory'),
+            path=Path(self._export_directory),
+            mode='select',
+        )
+        file_chooser_button.set_size_request(250, -1)
+        file_chooser_button.connect('path-picked', self._on_path_picked)
+        self._ui.settings_grid.attach(file_chooser_button, 1, 1, 1, 1)
 
         self._set_complete()
 
@@ -197,12 +204,11 @@ class SelectAccountDir(Page):
         self.complete = bool(self._account is not None)
         self.update_page_complete()
 
-    def _on_file_set(self, button: Gtk.FileChooserButton) -> None:
-        uri = button.get_uri()
-        assert uri is not None
-        path = filesystem_path_from_uri(uri)
+    def _on_path_picked(
+        self, _file_chooser_button: FileChooserButton, path: str
+    ) -> None:
         assert path is not None
-        self._export_directory = str(path)
+        self._export_directory = path
 
     def get_account_and_directory(self) -> tuple[str, str]:
         assert self._account is not None
