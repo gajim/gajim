@@ -10,10 +10,9 @@
     </child>
     <child>
       <object class="GtkCenterBox">
-        <child>
+        <child type="center">
           <object class="GtkEntry" id="entry">
             <property name="focusable">1</property>
-            <property name="halign">center</property>
             <property name="activates-default">1</property>
             <property name="xalign">0.5</property>
             <property name="show-emoji-icon">1</property>
