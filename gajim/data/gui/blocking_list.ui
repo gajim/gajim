@@ -36,10 +36,9 @@
                     <property name="sort_indicator">1</property>
                     <property name="sort_column_id">0</property>
                     <child>
-                      <object class="GtkCellRendererText">
+                      <object class="GtkCellRendererText" id="jid_cell_renderer">
                         <property name="editable">1</property>
                         <property name="placeholder_text">user@example.org</property>
-                        <signal name="edited" handler="_jid_edited" swapped="no"/>
                       </object>
                       <attributes>
                         <attribute name="text">0</attribute>
@@ -66,14 +65,12 @@
           <object class="GtkButton" id="add_button">
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
-            <signal name="clicked" handler="_on_add" swapped="no"/>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="remove_button">
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
-            <signal name="clicked" handler="_on_remove" swapped="no"/>
           </object>
         </child>
         <style>
@@ -93,7 +90,6 @@
         <property name="halign">end</property>
         <property name="valign">end</property>
         <property name="use_underline">1</property>
-        <signal name="clicked" handler="_on_save" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>

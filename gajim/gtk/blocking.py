@@ -45,6 +45,11 @@ class BlockingList(GajimAppWindow):
 
         self._activate_spinner()
 
+        self._connect(self._ui.jid_cell_renderer, 'edited', self._jid_edited)
+        self._connect(self._ui.add_button, 'clicked', self._on_add)
+        self._connect(self._ui.remove_button, 'clicked', self._on_remove)
+        self._connect(self._ui.save_button, 'clicked', self._on_save)
+
         self._client.get_module('Blocking').request_blocking_list(
             callback=self._on_blocking_list_received)
 
@@ -77,7 +82,7 @@ class BlockingList(GajimAppWindow):
             self._set_grid_state(True)
             return
 
-        self.destroy()
+        self.close()
 
     def _set_grid_state(self, state: bool) -> None:
         self._ui.blocking_grid.set_sensitive(state)
@@ -124,3 +129,6 @@ class BlockingList(GajimAppWindow):
     def _disable_spinner(self) -> None:
         self._spinner.hide()
         self._spinner.stop()
+
+    def _cleanup(self) -> None:
+        pass

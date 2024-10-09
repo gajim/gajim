@@ -114,6 +114,7 @@ class BlockingListBuilder(Builder):
     blocking_grid: Gtk.Grid
     overlay: Gtk.Overlay
     block_view: Gtk.TreeView
+    jid_cell_renderer: Gtk.CellRendererText
     add_button: Gtk.Button
     remove_button: Gtk.Button
     save_button: Gtk.Button
