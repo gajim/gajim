@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import cast
-from typing import Any
 from typing import Literal
 
 import logging
@@ -36,6 +35,7 @@ class GajimAppWindow(SignalManager):
         default_width: int = 0,
         default_height: int = 0,
         transient_for: Gtk.Window | None = None,
+        modal: bool = False,
         add_window_padding: bool = True,
     ) -> None:
 
@@ -47,6 +47,7 @@ class GajimAppWindow(SignalManager):
             default_width=default_width,
             default_height=default_height,
             transient_for=transient_for,
+            modal=modal,
         )
         SignalManager.__init__(self)
 
@@ -66,7 +67,9 @@ class GajimAppWindow(SignalManager):
         )
         self.window.add_controller(self.__default_controller)
 
-        self._connect_after(self.__default_controller, 'key-pressed', self.__on_key_pressed)
+        self._connect_after(
+            self.__default_controller, 'key-pressed', self.__on_key_pressed
+        )
         self._connect_after(self.window, 'close-request', self.__on_close_request)
 
     def present(self) -> None:
@@ -74,6 +77,15 @@ class GajimAppWindow(SignalManager):
 
     def show(self) -> None:
         self.window.show()
+
+    def close(self) -> None:
+        self.window.close()
+
+    def get_scale_factor(self) -> int:
+        return self.window.get_scale_factor()
+
+    def set_default_widget(self, widget: Gtk.Widget | None) -> None:
+        self.window.set_default_widget(widget)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
         box = cast(Gtk.Box, self.window.get_child())
@@ -94,7 +106,7 @@ class GajimAppWindow(SignalManager):
         _event_controller_key: Gtk.EventControllerKey,
         keyval: int,
         keycode: int,
-        state: Gdk.ModifierType
+        state: Gdk.ModifierType,
     ) -> bool:
 
         if keyval == Gdk.KEY_Escape:
