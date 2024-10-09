@@ -847,14 +847,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         if 'text/uri-list' in mime_types:
             # Prevent TextView from pasting the URIs as text:
             textview.stop_emission_by_name('paste-clipboard')
-            # TODO GTK4
-            # gtypes = formats.get_gtypes()
-            # clipboard.read_value_async(
-            #     gtypes[0],
-            #     0,
-            #     None,
-            #     self._on_clipboard_read_value_finished
-            # )
+            clipboard.read_value_async(
+                Gdk.FileList,
+                0,
+                None,
+                self._on_clipboard_read_value_finished
+            )
             return
 
         if 'image/png' in mime_types:
@@ -867,11 +865,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
     ) -> None:
-        uris = clipboard.read_value_finish(result)
-        if uris is None:
+        file_list = clipboard.read_value_finish(result)
+        if file_list is None or not isinstance(file_list, Gdk.FileList):
             log.info('No URIs pasted')
             return
 
+        uris = [file.get_uri() for file in file_list.get_files()]
         app.window.activate_action('win.send-file', GLib.Variant('as', uris))
 
     def _on_clipboard_read_texture_finished(
