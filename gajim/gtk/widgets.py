@@ -131,7 +131,7 @@ class GajimAppWindow(SignalManager):
         raise NotImplementedError
 
 
-class FileChooserButton(Gtk.Button):
+class FileChooserButton(Gtk.Button, SignalManager):
 
     __gsignals__ = {
         'path-picked': (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -146,7 +146,9 @@ class FileChooserButton(Gtk.Button):
         default_label: str | None = None,
         transient_for: Gtk.Window | None = None,
     ) -> None:
+
         Gtk.Button.__init__(self)
+        SignalManager.__init__(self)
         self._path = path
         self._mode = mode
         self._filters = filters or Gio.ListStore()
@@ -179,7 +181,7 @@ class FileChooserButton(Gtk.Button):
             self._label.set_text(path.name if path.is_file() else path.as_posix())
             self._label.set_tooltip_text(str(self._path))
 
-        self.connect('clicked', self._on_clicked)
+        self._connect(self, 'clicked', self._on_clicked)
 
     def get_path(self) -> Path | None:
         return self._path
@@ -261,3 +263,8 @@ class FileChooserButton(Gtk.Button):
         self.set_path(Path(path))
 
         self.emit('path-picked', path)
+
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)

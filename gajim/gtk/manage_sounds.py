@@ -52,21 +52,17 @@ class ManageSounds(GajimAppWindow):
             modal=True,
         )
 
-        self._ui = get_builder('manage_sounds.ui', self)
+        self._ui = get_builder('manage_sounds.ui')
         self.set_child(self._ui.manage_sounds)
 
         self._file_chooser_button = FileChooserButton(default_label=_('Choose Sound'))
         self._file_chooser_button.set_hexpand(True)
         self._ui.sound_buttons_box.prepend(self._file_chooser_button)
 
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('All files'))
-        filter_.add_pattern('*')
+        filter_ = Gtk.FileFilter(name=_('All files'), patterns=['*'])
         self._file_chooser_button.add_filter(filter_)
 
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('Wav Sounds'))
-        filter_.add_pattern('*.wav')
+        filter_ = Gtk.FileFilter(name=_('WAV Sounds'), patterns=['*.wav'])
         self._file_chooser_button.add_filter(filter_)
         self._file_chooser_button.set_default_filter(filter_)
 
