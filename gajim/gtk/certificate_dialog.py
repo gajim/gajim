@@ -56,6 +56,7 @@ class CertificateBox(Gtk.Box):
 
         self._ui = get_builder('certificate.ui', self)
         self._headline = _('Certificate for \n%s') % account
+        self.set_size_request(500, -1)
 
         cert = get_x509_cert_from_gio_cert(certificate)
 

@@ -36,7 +36,7 @@ def _on_error_clicked(_button: Gtk.Button) -> None:
 
 
 window = DBMigration()
-box = window.get_child()
+box = window.window.get_child()
 assert isinstance(box, Gtk.Box)
 box.set_orientation(Gtk.Orientation.VERTICAL)
 

@@ -33,7 +33,7 @@ class PasswordDialog(GajimAppWindow):
         self._client = app.get_client(event.client.account)
         self._event = event
 
-        self.set_default_widget(self._ui.ok_button)
+        self.window.set_default_widget(self._ui.ok_button)
 
         self._process_event()
 
@@ -64,7 +64,7 @@ class PasswordDialog(GajimAppWindow):
         passwords.save_password(self.account, password)
 
         self._event.on_password()
-        self.destroy()
+        self.window.close()
 
     def _on_cancel(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.window.close()

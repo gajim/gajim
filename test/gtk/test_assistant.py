@@ -5,6 +5,9 @@
 from gi.repository import Gtk
 from gi.repository import Pango
 
+# Avoid circular imports from common.helpers
+from gajim.common import app  # type: ignore # noqa: F401
+
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 
@@ -78,7 +81,7 @@ class TestAssistant(Assistant):
             return
 
         if button_name == 'close':
-            self.destroy()
+            self.window.close()
 
     def _on_page_changed(self, _assistant: Assistant, page_name: str) -> None:
         if page_name == 'start':

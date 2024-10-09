@@ -34,13 +34,12 @@ class DBMigration(GajimAppWindow):
             default_height=300,
             transient_for=app.window
         )
-        self.set_modal(True)
-        self.set_deletable(False)
+
+        self.window.set_modal(True)
+        self.window.set_deletable(False)
 
         self._ui = get_builder('db_migration.ui', self)
         self.set_child(self._ui.box)
-
-        self.connect('destroy', self._on_destroy)
 
         app.ged.register_event_handler(
             'db-migration-progress',
@@ -81,10 +80,7 @@ class DBMigration(GajimAppWindow):
         text_buffer = self._ui.error_view.get_buffer()
         start, end = text_buffer.get_bounds()
         error_text = text_buffer.get_text(start, end, True)
-        self.get_clipboard().set(error_text)
+        self.window.get_clipboard().set(error_text)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
-
-    def _on_destroy(self, _widget: DBMigration) -> None:
-        app.check_finalize(self)
+        self.window.close()

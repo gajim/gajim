@@ -28,6 +28,11 @@ class FileChooserButtonTest(GajimAppWindow):
         box.append(file_chooser_button)
 
         filter_ = Gtk.FileFilter()
+        filter_.set_name('All files')
+        filter_.add_pattern('*')
+        file_chooser_button.add_filter(filter_)
+
+        filter_ = Gtk.FileFilter()
         filter_.set_name('Wav Sounds')
         filter_.add_pattern('*.wav')
         file_chooser_button.add_filter(filter_)

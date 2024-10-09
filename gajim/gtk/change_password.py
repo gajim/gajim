@@ -57,7 +57,6 @@ class ChangePassword(Assistant):
         progress.set_text(_('Trying to change password...'))
 
         self.connect('button-clicked', self._on_button_clicked)
-        self.connect('destroy', self._on_destroy)
 
     @overload
     def get_page(self, name: Literal['password']) -> EnterPassword: ...
@@ -87,7 +86,7 @@ class ChangePassword(Assistant):
             self.show_page('password', Gtk.StackTransitionType.SLIDE_RIGHT)
 
         elif button_name == 'close':
-            self.destroy()
+            self.window.close()
 
     def _on_apply(self, next_stage: bool = False) -> None:
         if next_stage:
