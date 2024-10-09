@@ -993,6 +993,8 @@ class ThemesWindowBuilder(Builder):
     theme_store: Gtk.ListStore
     theme_grid: Gtk.Grid
     theme_treeview: Gtk.TreeView
+    theme_treeview_selection: Gtk.TreeSelection
+    theme_name_cell_renderer: Gtk.CellRendererText
     option_listbox: Gtk.ListBox
     add_option_button: Gtk.MenuButton
     add_theme_button: Gtk.Button

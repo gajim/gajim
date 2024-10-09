@@ -13,7 +13,6 @@
             <property name="child">
               <object class="GtkListBox" id="choose_option_listbox">
                 <property name="selection_mode">none</property>
-                <signal name="row-activated" handler="_add_option" swapped="no"/>
                 <style>
                   <class name="theme_popover_listbox"/>
                 </style>
@@ -54,17 +53,15 @@
             <property name="focusable">1</property>
             <property name="model">theme_store</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection">
-                <signal name="changed" handler="_on_theme_selected" swapped="no"/>
+              <object class="GtkTreeSelection" id="theme_treeview_selection">
               </object>
             </child>
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="1">Themes</property>
                 <child>
-                  <object class="GtkCellRendererText">
+                  <object class="GtkCellRendererText" id="theme_name_cell_renderer">
                     <property name="editable">1</property>
-                    <signal name="edited" handler="_on_theme_name_edit" swapped="no"/>
                   </object>
                   <attributes>
                     <attribute name="text">0</attribute>
@@ -148,7 +145,6 @@
             <property name="tooltip_text" translatable="1">Add new Theme</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-add-symbolic</property>
-            <signal name="clicked" handler="_on_add_new_theme" swapped="no"/>
           </object>
         </child>
         <child>
@@ -158,7 +154,6 @@
             <property name="tooltip_text" translatable="1">Remove Theme</property>
             <property name="use_underline">1</property>
             <property name="icon_name">list-remove-symbolic</property>
-            <signal name="clicked" handler="_on_remove_theme" swapped="no"/>
           </object>
         </child>
         <style>

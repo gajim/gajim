@@ -134,9 +134,8 @@ class Themes(GajimAppWindow):
             default_width=600,
             default_height=400,
             transient_for=transient,
+            modal=True,
         )
-
-        self.set_modal(True)
 
         self._ui = get_builder('themes_window.ui', self)
         self.set_child(self._ui.theme_grid)
@@ -145,6 +144,16 @@ class Themes(GajimAppWindow):
         self._ui.option_listbox.set_placeholder(self._ui.placeholder)
 
         self._fill_choose_listbox()
+
+        self._connect(self._ui.choose_option_listbox, 'row-activated', self._add_option)
+        self._connect(
+            self._ui.theme_treeview_selection, 'changed', self._on_theme_selected
+        )
+        self._connect(
+            self._ui.theme_name_cell_renderer, 'edited', self._on_theme_name_edit
+        )
+        self._connect(self._ui.add_theme_button, 'clicked', self._on_add_new_theme)
+        self._connect(self._ui.remove_theme_button, 'clicked', self._on_remove_theme)
 
     def _get_themes(self) -> None:
         current_theme = app.settings.get('roster_theme')
@@ -317,6 +326,8 @@ class Themes(GajimAppWindow):
                                callback=_remove_theme)],
             transient_for=self).show()
 
+    def _cleanup(self) -> None:
+        pass
 
 class Option(Gtk.ListBoxRow):
     def __init__(self,
@@ -349,38 +360,42 @@ class Option(Gtk.ListBoxRow):
         self.set_child(self._box)
 
     def _init_color(self, color: str | None) -> None:
-        color_button = Gtk.ColorButton()
+        color_dialog = Gtk.ColorDialog()
+        color_button = Gtk.ColorDialogButton(dialog=color_dialog)
         if color is not None:
             rgba = Gdk.RGBA()
             rgba.parse(color)
             color_button.set_rgba(rgba)
         color_button.set_halign(Gtk.Align.END)
-        color_button.connect('color-set', self._on_color_set)
+        color_button.connect('notify::rgba', self._on_color_set)
         self._box.append(color_button)
 
     def _init_font(self, desc: Pango.FontDescription | None) -> None:
-        font_button = Gtk.FontButton()
+        font_dialog = Gtk.FontDialog()
+        font_button = Gtk.FontDialogButton(dialog=font_dialog)
         if desc is not None:
             font_button.set_font_desc(desc)
         font_button.set_halign(Gtk.Align.END)
-        font_button.connect('font-set', self._on_font_set)
+        font_button.connect('notify::font-desc', self._on_font_set)
         self._box.append(font_button)
 
-    def _on_color_set(self, color_button: Gtk.ColorButton) -> None:
+    def _on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any) -> None:
         color = color_button.get_rgba()
         color_string = color.to_string()
         app.css_config.set_value(
             self.option.selector, self.option.attr, color_string, pre=True)
         app.ged.raise_event(StyleChanged())
+        # TODO GTK4: this fails
         themes_win = cast(Themes, self.get_root())
         themes_win.reload_roster_theme()
 
-    def _on_font_set(self, font_button: Gtk.FontButton) -> None:
+    def _on_font_set(self, font_button: Gtk.FontDialogButton, *args: Any) -> None:
         desc = font_button.get_font_desc()
         if desc is None:
             return
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.ged.raise_event(StyleChanged())
+        # TODO GTK4: this fails
         themes_win = cast(Themes, self.get_root())
         themes_win.reload_roster_theme()
 
