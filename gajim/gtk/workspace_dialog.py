@@ -65,20 +65,36 @@ class WorkspaceDialog(GajimAppWindow):
             self._ui.style_stack.set_visible_child_name('image')
 
         self._ui.entry.set_text(name)
-        self._ui.color_chooser.set_rgba(rgba)
+
+        color_dialog = Gtk.ColorDialog()
+        self._ui.color_dialog_button.set_dialog(color_dialog)
+        self._ui.color_dialog_button.set_rgba(rgba)
+
         self._update_avatar()
+
+        self._connect(self._ui.entry, 'notify::text', self._on_text_changed)
+        self._connect(
+            self._ui.remove_workspace_button, 'clicked', self._on_remove_workspace
+        )
+        self._connect(
+            self._ui.image_switch, 'notify::active', self._on_image_switch_toggled
+        )
+        self._connect(self._ui.color_dialog_button, 'notify::rgba', self._on_color_set)
+        self._connect(self._ui.cancel_button, 'clicked', self._on_cancel)
+        self._connect(self._ui.save_button, 'clicked', self._on_save)
+        self._connect(self._ui.entry, 'notify::text', self._on_text_changed)
 
         self.set_default_widget(self._ui.save_button)
 
     def _on_remove_workspace(self, _button: Gtk.Button) -> None:
         assert self._workspace_id is not None
         app.window.remove_workspace(self._workspace_id)
-        self.destroy()
+        self.close()
 
     def _on_cancel(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.close()
 
-    def _on_color_set(self, _button: Gtk.ColorButton) -> None:
+    def _on_color_set(self, _button: Gtk.ColorDialogButton, *args: Any) -> None:
         self._update_avatar()
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
@@ -101,7 +117,7 @@ class WorkspaceDialog(GajimAppWindow):
 
     def _update_avatar(self) -> None:
         name = self._ui.entry.get_text()
-        rgba = self._ui.color_chooser.get_rgba()
+        rgba = self._ui.color_dialog_button.get_rgba()
         scale = self.get_scale_factor()
         if self._avatar_sha is not None:
             assert self._workspace_id is not None
@@ -131,7 +147,7 @@ class WorkspaceDialog(GajimAppWindow):
 
     def _on_save(self, _button: Gtk.Button) -> None:
         name = self._ui.entry.get_text()
-        rgba = self._ui.color_chooser.get_rgba()
+        rgba = self._ui.color_dialog_button.get_rgba()
         use_image = self._ui.image_switch.get_active()
         if use_image:
             data = self._get_avatar_data()
@@ -151,7 +167,7 @@ class WorkspaceDialog(GajimAppWindow):
                     self._workspace_id, 'avatar_sha', self._avatar_sha)
 
             app.window.update_workspace(self._workspace_id)
-            self.destroy()
+            self.close()
             return
 
         workspace_id = app.settings.add_workspace(name)
@@ -162,4 +178,7 @@ class WorkspaceDialog(GajimAppWindow):
                 workspace_id, 'avatar_sha', self._avatar_sha)
 
         app.window.add_workspace(workspace_id)
-        self.destroy()
+        self.close()
+
+    def _cleanup(self) -> None:
+        pass

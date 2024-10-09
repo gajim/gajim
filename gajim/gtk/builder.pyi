@@ -1027,8 +1027,9 @@ class WorkspaceDialogBuilder(Builder):
     remove_workspace_button: Gtk.Button
     image_switch: Gtk.Switch
     style_stack: Gtk.Stack
-    color_chooser: Gtk.ColorButton
+    color_dialog_button: Gtk.ColorDialogButton
     image_box: Gtk.Box
+    cancel_button: Gtk.Button
     save_button: Gtk.Button
 
 

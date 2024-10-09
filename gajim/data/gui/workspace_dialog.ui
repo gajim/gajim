@@ -17,7 +17,6 @@
             <property name="xalign">0.5</property>
             <property name="show-emoji-icon">1</property>
             <property name="enable-emoji-completion">1</property>
-            <signal name="notify::text" handler="_on_text_changed" swapped="no"/>
           </object>
         </child>
         <child type="end">
@@ -25,7 +24,6 @@
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="tooltip-text" translatable="1">Remove this workspace</property>
-            <signal name="clicked" handler="_on_remove_workspace" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">edit-delete-symbolic</property>
@@ -53,7 +51,6 @@
         <child>
           <object class="GtkSwitch" id="image_switch">
             <property name="focusable">1</property>
-            <signal name="notify::active" handler="_on_image_switch_toggled" swapped="no"/>
           </object>
         </child>
         <child>
@@ -87,10 +84,9 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkColorButton" id="color_chooser">
+                  <object class="GtkColorDialogButton" id="color_dialog_button">
                     <property name="focusable">1</property>
                     <property name="valign">center</property>
-                    <signal name="color-set" handler="_on_color_set" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -121,11 +117,10 @@
         <property name="homogeneous">1</property>
         <property name="halign">end</property>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="cancel_button">
             <property name="label" translatable="1">_Cancel</property>
             <property name="focusable">1</property>
             <property name="use-underline">1</property>
-            <signal name="clicked" handler="_on_cancel" swapped="no"/>
           </object>
         </child>
         <child>
@@ -134,7 +129,6 @@
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="use-underline">1</property>
-            <signal name="clicked" handler="_on_save" swapped="no"/>
             <style>
               <class name="suggested-action"/>
             </style>
