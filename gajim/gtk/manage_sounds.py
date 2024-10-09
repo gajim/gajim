@@ -48,9 +48,9 @@ class ManageSounds(GajimAppWindow):
             title=_('Manage Sounds'),
             default_width=400,
             default_height=400,
-            transient_for=transient_for
+            transient_for=transient_for,
+            modal=True,
         )
-        self.set_modal(True)
 
         self._ui = get_builder('manage_sounds.ui', self)
         self.set_child(self._ui.manage_sounds)
@@ -69,6 +69,14 @@ class ManageSounds(GajimAppWindow):
         filter_.add_pattern('*.wav')
         self._file_chooser_button.add_filter(filter_)
         self._file_chooser_button.set_default_filter(filter_)
+
+        self._connect(self._ui.liststore1, 'row-changed', self._on_row_changed)
+        self._connect(
+            self._ui.sounds_treeview, 'cursor-changed', self._on_cursor_changed
+        )
+        self._connect(self._ui.toggle_cell_renderer, 'toggled', self._on_toggle)
+        self._connect(self._ui.clear_sound_button, 'clicked', self._on_clear)
+        self._connect(self._ui.play_sound_button, 'clicked', self._on_play)
 
         self._fill_sound_treeview()
 
@@ -147,3 +155,6 @@ class ManageSounds(GajimAppWindow):
 
         snd_event_config_name = model[iter_][Column.CONFIG]
         play_sound(snd_event_config_name, None, force=True)
+
+    def _cleanup(self) -> None:
+        pass

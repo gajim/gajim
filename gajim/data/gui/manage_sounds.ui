@@ -8,7 +8,6 @@
       <column type="gchararray"/>
       <column type="gchararray"/>
     </columns>
-    <signal name="row-changed" handler="_on_row_changed" swapped="no"/>
   </object>
   <object class="GtkBox" id="manage_sounds">
     <property name="orientation">vertical</property>
@@ -22,7 +21,6 @@
           <object class="GtkTreeView" id="sounds_treeview">
             <property name="focusable">1</property>
             <property name="model">liststore1</property>
-            <signal name="cursor-changed" handler="_on_cursor_changed" swapped="no"/>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
@@ -31,8 +29,7 @@
                 <property name="title" translatable="1">Active</property>
                 <property name="clickable">1</property>
                 <child>
-                  <object class="GtkCellRendererToggle">
-                    <signal name="toggled" handler="_on_toggle" swapped="no"/>
+                  <object class="GtkCellRendererToggle" id="toggle_cell_renderer">
                   </object>
                   <attributes>
                     <attribute name="active">0</attribute>
@@ -59,11 +56,10 @@
       <object class="GtkBox" id="sound_buttons_box">
         <property name="spacing">12</property>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="clear_sound_button">
             <property name="focusable">1</property>
             <property name="receives_default">1</property>
             <property name="tooltip_text" translatable="1">Clear Sound</property>
-            <signal name="clicked" handler="_on_clear" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon_name">edit-clear-all-symbolic</property>
@@ -72,11 +68,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton">
+          <object class="GtkButton" id="play_sound_button">
             <property name="halign">center</property>
             <property name="focusable">1</property>
             <property name="tooltip_text" translatable="1">Play Sound</property>
-            <signal name="clicked" handler="_on_play" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon_name">media-playback-start-symbolic</property>

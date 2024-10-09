@@ -635,7 +635,10 @@ class ManageSoundsBuilder(Builder):
     liststore1: Gtk.ListStore
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
+    toggle_cell_renderer: Gtk.CellRendererToggle
     sound_buttons_box: Gtk.Box
+    clear_sound_button: Gtk.Button
+    play_sound_button: Gtk.Button
 
 
 class MessageActionsBoxBuilder(Builder):
