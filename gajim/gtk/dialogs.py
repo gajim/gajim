@@ -211,17 +211,20 @@ class ConfirmationCheckDialog(ConfirmationDialog):
                                     transient_for=transient_for,
                                     modal=modal)
 
-        self._checkbutton = Gtk.CheckButton.new_with_mnemonic(check_text)
+        label = Gtk.Label(
+            label=check_text,
+            wrap_mode=Pango.WrapMode.WORD,
+            max_width_chars=50,
+            halign=Gtk.Align.START,
+            margin_start=10,
+        )
+        label.set_text_with_mnemonic(check_text)
+
+        self._checkbutton = Gtk.CheckButton()
+        self._checkbutton.set_child(label)
         self._checkbutton.set_can_focus(False)
         self._checkbutton.set_margin_start(30)
         self._checkbutton.set_margin_end(30)
-        label = self._checkbutton.get_child()
-        assert isinstance(label, Gtk.Label)
-        label.set_wrap_mode(Pango.WrapMode.WORD)
-        label.set_max_width_chars(50)
-        label.set_halign(Gtk.Align.START)
-        label.set_wrap_mode(Pango.WrapMode.WORD)
-        label.set_margin_start(10)
 
         self.get_content_area().append(self._checkbutton)
 
