@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import Literal
 
 import logging
@@ -33,7 +32,7 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import WarningDialog
 from gajim.gtk.filechoosers import ArchiveChooserDialog
-from gajim.gtk.util import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.gtk.util import load_icon_pixbuf
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -65,7 +64,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
 
         EventHelper.__init__(self)
 
-        self._ui = get_builder('plugins.ui', self)
+        self._ui = get_builder('plugins.ui')
         self.set_child(self._ui.plugins_box)
 
         if app.is_flatpak():
@@ -87,7 +86,14 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         self._load_installed_manifests()
         self._load_repository_manifests()
 
-        self.connect('destroy', self._on_destroy)
+        self._connect(self._ui.configure_plugin_button, 'clicked', self._on_configure_plugin)
+        self._connect(self._ui.plugins_treeview, 'query-tooltip', self._on_query_tooltip)
+        self._connect(self._ui.treeview_selection, 'changed', self._selection_changed)
+        self._connect(self._ui.enabled_renderer, 'toggled', self._on_enabled_toggled)
+        self._connect(self._ui.help_button, 'clicked', self._on_help_clicked)
+        self._connect(self._ui.install_from_zip_button, 'clicked', self._on_install_plugin_from_zip)
+        self._connect(self._ui.uninstall_plugin_button, 'clicked', self._on_uninstall_plugin)
+        self._connect(self._ui.download_button, 'clicked', self._on_download_clicked)
 
         self.register_events([
             ('plugin-removed', ged.GUI1, self._on_plugin_removed),
@@ -100,6 +106,10 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                                       self._on_download_finished)
         app.plugin_repository.connect('download-failed',
                                       self._on_download_failed)
+
+    def _cleanup(self) -> None:
+        app.plugin_repository.disconnect(self)
+        self.unregister_events()
 
     def _on_render_enabled_cell(self,
                                 _tree_column: Gtk.TreeViewColumn,
@@ -150,13 +160,6 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
-
-    def _on_destroy(self, *args: Any) -> None:
-        self._ui.enabled_renderer.run_dispose()
-        self._ui.enabled_column.run_dispose()
-        self._ui.treeview_selection.run_dispose()
-        app.plugin_repository.disconnect(self)
-        app.check_finalize(self)
 
     def _selection_changed(self,
                            treeview_selection: Gtk.TreeSelection
@@ -380,7 +383,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
     def _on_install_plugin_from_zip(self, _button: Gtk.Button) -> None:
         def _show_warn_dialog() -> None:
             text = _('Archive is malformed')
-            WarningDialog(text, transient_for=self)
+            WarningDialog(text)
 
         def _on_plugin_exists(zip_filename: str) -> None:
             def _on_yes():
@@ -398,7 +401,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                  DialogButton.make('Remove',
                                    text=_('_Overwrite'),
                                    callback=_on_yes)],
-                transient_for=self).show()
+            ).show()
 
         def _try_install(paths: list[str]) -> None:
             zip_filename = paths[0]
@@ -416,7 +419,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                 _show_warn_dialog()
                 return
 
-        ArchiveChooserDialog(_try_install, transient_for=self)
+        ArchiveChooserDialog(_try_install)
 
     def _on_download_started(self,
                              _repository: PluginRepositoryT,

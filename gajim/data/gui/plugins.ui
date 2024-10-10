@@ -32,10 +32,8 @@
                 <property name="model">liststore</property>
                 <property name="search-column">1</property>
                 <property name="enable-grid-lines">horizontal</property>
-                <signal name="query-tooltip" handler="_on_query_tooltip" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview_selection">
-                    <signal name="changed" handler="_selection_changed" swapped="no"/>
                   </object>
                 </child>
                 <child>
@@ -89,7 +87,6 @@
                     <property name="title" translatable="1">Enabled</property>
                     <child>
                       <object class="GtkCellRendererToggle" id="enabled_renderer">
-                        <signal name="toggled" handler="_on_enabled_toggled" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -150,7 +147,6 @@
                 <property name="label" translatable="1">Install from File…</property>
                 <property name="use-underline">1</property>
                 <property name="icon-name">system-software-install-symbolic</property>
-                <signal name="clicked" handler="_on_install_plugin_from_zip" swapped="no"/>
               </object>
             </child>
             <child>
@@ -159,7 +155,6 @@
                 <property name="tooltip-text" translatable="1">Uninstall Plugin</property>
                 <property name="use-underline">1</property>
                 <property name="icon-name">edit-delete-symbolic</property>
-                <signal name="clicked" handler="_on_uninstall_plugin" swapped="no"/>
               </object>
             </child>
             <child>
@@ -168,7 +163,6 @@
                 <property name="halign">end</property>
                 <property name="use-underline">1</property>
                 <property name="icon-name">folder-download-symbolic</property>
-                <signal name="clicked" handler="_on_download_clicked" swapped="no"/>
               </object>
             </child>
             <child>
@@ -178,7 +172,6 @@
                 <property name="label" translatable="1">help</property>
                 <property name="use-underline">1</property>
                 <property name="icon-name">help-faq-symbolic</property>
-                <signal name="clicked" handler="_on_help_clicked" swapped="no"/>
               </object>
             </child>
             <style>
@@ -215,7 +208,6 @@
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Plugin Settings</property>
                 <property name="valign">center</property>
-                <signal name="clicked" handler="_on_configure_plugin" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">applications-system-symbolic</property>
