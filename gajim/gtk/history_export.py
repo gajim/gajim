@@ -26,7 +26,8 @@ from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import FileChooserButton
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
 
 log = logging.getLogger('gajim.gtk.history_export')
 
@@ -185,9 +186,9 @@ class SelectAccountDir(Page):
             self._ui.account_combo.set_active(0)
 
         file_chooser_button = FileChooserButton(
-            default_label=_('Choose History Export Directory'),
             path=Path(self._export_directory),
-            mode='select',
+            mode='folder',
+            label=_('Choose History Export Directory'),
         )
         file_chooser_button.set_size_request(250, -1)
         file_chooser_button.connect('path-picked', self._on_path_picked)
@@ -205,10 +206,11 @@ class SelectAccountDir(Page):
         self.update_page_complete()
 
     def _on_path_picked(
-        self, _file_chooser_button: FileChooserButton, path: str
+        self, _file_chooser_button: FileChooserButton, paths: list[str]
     ) -> None:
-        assert path is not None
-        self._export_directory = path
+        if not paths:
+            return
+        self._export_directory = paths[0]
 
     def get_account_and_directory(self) -> tuple[str, str]:
         assert self._account is not None

@@ -4,7 +4,8 @@
 
 from gi.repository import Gtk
 
-from gajim.gtk.widgets import FileChooserButton
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
@@ -23,24 +24,19 @@ class FileChooserButtonTest(GajimAppWindow):
         box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True)
         self.set_child(box)
 
-        file_chooser_button = FileChooserButton()
+        file_chooser_button = FileChooserButton(
+            filters=[
+                Filter(name='All files', patterns=['*']),
+                Filter(name='Wav Sounds', patterns=['*.wav']),
+            ]
+        )
         file_chooser_button.connect('path-picked', self._on_file_picked)
         box.append(file_chooser_button)
 
-        filter_ = Gtk.FileFilter()
-        filter_.set_name('All files')
-        filter_.add_pattern('*')
-        file_chooser_button.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name('Wav Sounds')
-        filter_.add_pattern('*.wav')
-        file_chooser_button.add_filter(filter_)
-
     def _on_file_picked(
-        self, _file_chooser_button: FileChooserButton, file_path: str
+        self, _file_chooser_button: FileChooserButton, file_paths: list[str]
     ) -> None:
-        print(file_path)
+        print(file_paths)
 
 
 window = FileChooserButtonTest()

@@ -17,7 +17,7 @@ from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.widgets import FileChooserButton
+from gajim.gtk.filechoosers import FileChooserButton, Filter
 from gajim.gtk.widgets import GajimAppWindow
 
 SOUNDS = {
@@ -55,16 +55,15 @@ class ManageSounds(GajimAppWindow):
         self._ui = get_builder('manage_sounds.ui')
         self.set_child(self._ui.manage_sounds)
 
-        self._file_chooser_button = FileChooserButton(default_label=_('Choose Sound'))
+        self._file_chooser_button = FileChooserButton(
+            filters=[
+                Filter(name=_('All files'), patterns=['*']),
+                Filter(name=_('WAV Sounds'), patterns=['*.wav'], default=True),
+            ],
+            label=_('Choose Sound')
+        )
         self._file_chooser_button.set_hexpand(True)
         self._ui.sound_buttons_box.prepend(self._file_chooser_button)
-
-        filter_ = Gtk.FileFilter(name=_('All files'), patterns=['*'])
-        self._file_chooser_button.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter(name=_('WAV Sounds'), patterns=['*.wav'])
-        self._file_chooser_button.add_filter(filter_)
-        self._file_chooser_button.set_default_filter(filter_)
 
         self._connect(self._ui.liststore1, 'row-changed', self._on_row_changed)
         self._connect(
@@ -124,15 +123,17 @@ class ManageSounds(GajimAppWindow):
         else:
             self._file_chooser_button.set_path(path_to_snd_file)
 
-    def _on_file_set(self, button: FileChooserButton, file_path: str) -> None:
-        if not file_path:
+    def _on_file_set(self, button: FileChooserButton, file_paths: list[str]) -> None:
+        if not file_paths:
             return
+
+        path = file_paths[0]
 
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         assert iter_ is not None
 
-        app.settings.set('last_sounds_dir', file_path)
-        path_to_snd_file = strip_soundfile_path(file_path)
+        app.settings.set('last_sounds_dir', path)
+        path_to_snd_file = strip_soundfile_path(path)
 
         model[iter_][Column.PATH] = str(path_to_snd_file)
         model[iter_][Column.ENABLED] = True

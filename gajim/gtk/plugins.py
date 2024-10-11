@@ -31,9 +31,10 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.filechoosers import ArchiveChooserDialog
 from gajim.common.ged import EventHelper
 from gajim.gtk.util import load_icon_pixbuf
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.plugins')
@@ -67,6 +68,17 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         self._ui = get_builder('plugins.ui')
         self.set_child(self._ui.plugins_box)
 
+        file_chooser_button = FileChooserButton(
+            filters=[
+                Filter(name=_('All files'), patterns=['*']),
+                Filter(name=_('ZIP files'), patterns=['*.zip'], default=True)
+            ],
+            tooltip=_('Install Plugin from ZIP-File'),
+            icon_name='system-software-install-symbolic',
+        )
+        self._connect(file_chooser_button, 'path-picked', self._on_install_plugin_from_zip)
+        self._ui.toolbar.prepend(file_chooser_button)
+
         if app.is_flatpak():
             self._ui.help_button.show()
             self._ui.download_button.set_visible(False)
@@ -91,7 +103,6 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         self._connect(self._ui.treeview_selection, 'changed', self._selection_changed)
         self._connect(self._ui.enabled_renderer, 'toggled', self._on_enabled_toggled)
         self._connect(self._ui.help_button, 'clicked', self._on_help_clicked)
-        self._connect(self._ui.install_from_zip_button, 'clicked', self._on_install_plugin_from_zip)
         self._connect(self._ui.uninstall_plugin_button, 'clicked', self._on_uninstall_plugin)
         self._connect(self._ui.download_button, 'clicked', self._on_download_clicked)
 
@@ -380,46 +391,40 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             manifest = row[Column.MANIFEST]
             app.plugin_repository.download_plugins([manifest])
 
-    def _on_install_plugin_from_zip(self, _button: Gtk.Button) -> None:
-        def _show_warn_dialog() -> None:
-            text = _('Archive is malformed')
-            WarningDialog(text)
+    def _on_install_plugin_from_zip(self, _button: FileChooserButton, paths: list[str]) -> None:
+        if not paths:
+            return
 
-        def _on_plugin_exists(zip_filename: str) -> None:
-            def _on_yes():
-                plugin = app.plugin_manager.install_from_zip(zip_filename,
-                                                             overwrite=True)
-                if not plugin:
-                    _show_warn_dialog()
-                    return
+        zip_filename = paths[0]
 
-            ConfirmationDialog(
-                _('Overwrite Plugin?'),
-                _('Plugin already exists'),
-                _('Do you want to overwrite the currently installed version?'),
-                [DialogButton.make('Cancel'),
-                 DialogButton.make('Remove',
-                                   text=_('_Overwrite'),
-                                   callback=_on_yes)],
-            ).show()
-
-        def _try_install(paths: list[str]) -> None:
-            zip_filename = paths[0]
-            try:
-                plugin = app.plugin_manager.install_from_zip(zip_filename)
-            except PluginsystemError as er_type:
-                error_text = str(er_type)
-                if error_text == _('Plugin already exists'):
-                    _on_plugin_exists(zip_filename)
-                    return
-
-                WarningDialog(error_text, f'"{zip_filename}"')
-                return
+        def _on_overwrite():
+            plugin = app.plugin_manager.install_from_zip(zip_filename,
+                                                         overwrite=True)
             if not plugin:
-                _show_warn_dialog()
+                WarningDialog(_('Archive is malformed'))
                 return
 
-        ArchiveChooserDialog(_try_install)
+        try:
+            plugin = app.plugin_manager.install_from_zip(zip_filename)
+        except PluginsystemError as er_type:
+            error_text = str(er_type)
+            if error_text == _('Plugin already exists'):
+                ConfirmationDialog(
+                    _('Overwrite Plugin?'),
+                    _('Plugin already exists'),
+                    _('Do you want to overwrite the currently installed version?'),
+                    [DialogButton.make('Cancel'),
+                     DialogButton.make('Remove',
+                                       text=_('_Overwrite'),
+                                       callback=_on_overwrite)],
+                ).show()
+                return
+
+            WarningDialog(error_text, f'"{zip_filename}"')
+            return
+
+        if not plugin:
+            WarningDialog(_('Archive is malformed'))
 
     def _on_download_started(self,
                              _repository: PluginRepositoryT,

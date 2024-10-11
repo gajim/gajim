@@ -30,6 +30,7 @@ from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.filechoosers import Filter
 from gajim.gtk.menus import build_accounts_menu
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import PopoverSetting
@@ -1129,7 +1130,12 @@ class CertificateDialog(SettingsDialog):
                     _('Client Certificate'),
                     SettingType.ACCOUNT_CONFIG,
                     'client_cert',
-                    props={'filefilter': (_('PKCS12 Files'), '*.p12')}),
+                    props={
+                        'filefilter': [
+                            Filter(name=_('All files'), patterns=['*']),
+                            Filter(name=_('PKCS12 Files'), patterns=['*.p12']),
+                        ]
+                    }),
 
             Setting(SettingKind.SWITCH,
                     _('Encrypted Certificate'),

@@ -6,21 +6,31 @@
 
 from __future__ import annotations
 
-from typing import Any, cast
+from typing import Any, Literal, NamedTuple, cast
 
+import logging
 import sys
 from collections.abc import Callable
 from pathlib import Path
 
-from gi.repository import Gio
+from gi.repository import GLib, GObject, Gio, Pango
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.const import Filter
+from gajim.gtk.util import SignalManager
 
 AcceptCallbackT = Callable[[list[str]], None]
+
+
+log = logging.getLogger('gajim.gtk.filechooser')
+
+
+class Filter(NamedTuple):
+    name: str
+    patterns: list[str]
+    default: bool = False
 
 
 def _require_native() -> bool:
@@ -130,13 +140,6 @@ class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
         self.show()
 
 
-class ArchiveChooserDialog(NativeFileChooserDialog):
-
-    _title = _('Choose Archive')
-    _filters = [Filter(_('All files'), '*', False),
-                Filter(_('ZIP files'), '*.zip', True)]
-
-
 class FileSaveDialog(NativeFileChooserDialog):
 
     _title = _('Save File as…')
@@ -217,3 +220,144 @@ if _require_native():
 else:
     FileChooserDialog = GtkFileOpenDialog
     AvatarChooserDialog = GtkAvatarChooserDialog
+
+
+class FileChooserButton(Gtk.Button, SignalManager):
+
+    __gsignals__ = {
+        'path-picked': (GObject.SignalFlags.RUN_LAST, None, (object,)),
+    }
+
+    def __init__(
+        self,
+        path: Path | None = None,
+        mode: Literal['file', 'folder'] = 'file',
+        filters: list[Filter] | None = None,
+        label: str = '',
+        tooltip: str = '',
+        icon_name: str | None = None,
+    ) -> None:
+
+        Gtk.Button.__init__(self)
+        SignalManager.__init__(self)
+        self._path = path
+        self._mode = mode
+        self._filters = filters or []
+        self._label_text = label
+        self._has_tooltip = bool(tooltip)
+
+        self.set_tooltip_text(tooltip)
+
+        icon = Gtk.Image.new_from_icon_name(
+            icon_name or 'system-file-manager-symbolic')
+
+        self._label = Gtk.Label(
+            label=label,
+            ellipsize=Pango.EllipsizeMode.MIDDLE,
+            max_width_chars=18,
+            visible=bool(label),
+        )
+
+        box = Gtk.Box(spacing=12)
+        box.append(icon)
+        box.append(self._label)
+
+        if path is not None:
+            self.set_path(path)
+
+        self.set_child(box)
+
+        self._connect(self, 'clicked', self._on_clicked)
+
+    def get_path(self) -> Path | None:
+        return self._path
+
+    def set_path(self, path: Path | None) -> None:
+        if path is None:
+            self.reset()
+            return
+
+        self._path = path
+        if not self._has_tooltip:
+            self._label.set_tooltip_text(str(path))
+
+        if self._mode == 'file':
+            self._label.set_text(_('File: %s') % path.name)
+        else:
+            self._label.set_text(_('Folder: %s') % path.as_posix())
+
+    def reset(self) -> None:
+        self._path = None
+        self._label.set_text(self._label_text or '')
+        self._label.set_tooltip_text(None)
+
+    def _on_clicked(self, _button: FileChooserButton) -> None:
+        dialog = Gtk.FileDialog()
+
+        file_filter_model = Gio.ListStore()
+        for f in self._filters:
+            file_filter = Gtk.FileFilter(name=f.name, patterns=f.patterns)
+            file_filter_model.append(file_filter)
+            if f.default:
+                dialog.set_default_filter(file_filter)
+
+        if self._path is not None:
+            file = Gio.File.new_for_path(str(self._path))
+            if self._mode == 'file':
+                dialog.set_initial_file(file)
+            else:
+                dialog.set_initial_folder(file)
+
+        if self._filters:
+            dialog.set_filters(file_filter_model)
+
+        parent = cast(Gtk.Window, self.get_root())
+
+        if self._mode == 'file':
+            dialog.open(parent, None, self._on_file_picked)
+        else:
+            dialog.select_folder(parent, None, self._on_file_picked)
+
+    def _set_error(self) -> None:
+        log.warning('Could not get picked file/folder')
+        self._label.set_text(_('Error'))
+        if not self._has_tooltip:
+            self._label.set_tooltip_text(_('Could not select file or folder'))
+        self.emit('path-picked', [])
+
+    def _on_file_picked(
+        self, file_dialog: Gtk.FileDialog, result: Gio.AsyncResult
+    ) -> None:
+        self._path = None
+
+        try:
+            if self._mode == 'file':
+                file = file_dialog.open_finish(result)
+            else:
+                file = file_dialog.select_folder_finish(result)
+        except GLib.Error as e:
+            if e.code == 2:
+                # User dismissed dialog, do nothing
+                return
+
+            log.exception(e)
+            self._set_error()
+            return
+
+        if file is None:
+            self._set_error()
+            return
+
+        path = file.get_path()
+        if path is None:
+            self._set_error()
+            return
+
+        self.set_path(Path(path))
+
+        self.emit('path-picked', [path])
+
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)

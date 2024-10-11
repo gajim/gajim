@@ -35,7 +35,8 @@ from gajim.gtk.util import get_image_button
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import open_window
-from gajim.gtk.widgets import FileChooserButton
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.settings')
@@ -607,22 +608,13 @@ class SpinSetting(GenericSetting):
 
 
 class FileChooserSetting(GenericSetting):
-    def __init__(self, *args: Any, filefilter: tuple[str, str]) -> None:
+    def __init__(self, *args: Any, filefilters: list[Filter]) -> None:
         GenericSetting.__init__(self, *args)
-        button = FileChooserButton(default_label=self.label)
+        button = FileChooserButton(
+            filters=filefilters,
+            label=self.label
+        )
         button.set_halign(Gtk.Align.END)
-
-        if filefilter:
-            name, pattern = filefilter
-            filter_ = Gtk.FileFilter()
-            filter_.set_name(name)
-            filter_.add_pattern(pattern)
-            button.add_filter(filter_)
-
-        filter_ = Gtk.FileFilter()
-        filter_.set_name(_('All files'))
-        filter_.add_pattern('*')
-        button.add_filter(filter_)
 
         if self.setting_value:
             assert isinstance(self.setting_value, str)
@@ -639,9 +631,12 @@ class FileChooserSetting(GenericSetting):
     def on_select(
         self,
         _file_chooser_button: FileChooserButton,
-        file_path: str
+        file_paths: list[str]
     ) -> None:
-        self.set_value(file_path)
+        if not file_paths:
+            return
+
+        self.set_value(file_paths[0])
 
     def on_row_activated(self) -> None:
         pass

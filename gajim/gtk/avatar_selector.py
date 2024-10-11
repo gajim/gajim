@@ -31,7 +31,8 @@ from gajim.gtk.const import DND_TARGET_FLATPAK
 from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.filechoosers import FileChooserButton, Filter
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.avatar_selector')
 
@@ -59,10 +60,14 @@ class Range(IntEnum):
     ABOVE = 4
 
 
-class AvatarSelector(Gtk.Box):
+class AvatarSelector(Gtk.Box, SignalManager):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL,
-                         spacing=12)
+        Gtk.Box.__init__(self,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=12
+        )
+        SignalManager.__init__(self)
+
         self.get_style_context().add_class('avatar-selector')
 
         if app.is_flatpak():
@@ -80,35 +85,43 @@ class AvatarSelector(Gtk.Box):
         #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
         # self.drag_dest_set_target_list(dst_targets)
         # self.connect('drag-data-received', self._on_drag_data_received)
-        self.connect('destroy', self._on_destroy)
 
         self._crop_area = CropArea()
         self._crop_area.set_vexpand(True)
         self.append(self._crop_area)
 
-        self._load_button = Gtk.Button()
-        self._load_button.set_label(_('Load Image'))
-        self._load_button.set_halign(Gtk.Align.CENTER)
-        self._load_button.set_visible(False)
-        self._load_button.connect('clicked', self._on_load_clicked)
-        self._load_button.show()
-        self.append(self._load_button)
+        self._file_chooser_button = FileChooserButton(
+            filters=[
+                Filter(name=_('PNG files'), patterns=['*.png'], default=True),
+                Filter(name=_('JPEG files'), patterns=['*.jp*g']),
+                Filter(name=_('SVG files'), patterns=['*.svg']),
+            ],
+            label=_('Load Image')
+        )
+
+        self._file_chooser_button.set_halign(Gtk.Align.CENTER)
+        self._connect(self._file_chooser_button, 'path-picked', self._on_path_picked)
+        self.append(self._file_chooser_button)
 
         self._helper_label = Gtk.Label(
             label=_('…or drop it here'))
         self._helper_label.get_style_context().add_class('bold')
         self._helper_label.get_style_context().add_class('dim-label')
         self._helper_label.set_vexpand(True)
-        self._helper_label.set_visible(False)
-        self._helper_label.show()
         self.append(self._helper_label)
 
-    def _on_destroy(self, *args: Any) -> None:
+    def do_unroot(self, *args: Any) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self._crop_area)
         app.check_finalize(self)
+        del self._file_chooser_button
+        del self._crop_area
 
     def reset(self) -> None:
         self._crop_area.reset()
-        self._load_button.show()
+        self._file_chooser_button.reset()
+        self._file_chooser_button.show()
         self._helper_label.show()
 
     def prepare_crop_area(self, path: str) -> None:
@@ -118,17 +131,15 @@ class AvatarSelector(Gtk.Box):
             return
 
         self._crop_area.set_pixbuf(pixbuf)
-        self._load_button.hide()
+        self._file_chooser_button.hide()
         self._helper_label.hide()
         self._crop_area.show()
 
-    def _on_load_clicked(self, _button: Gtk.Button) -> None:
-        def _on_file_selected(paths: list[str]) -> None:
-            self.prepare_crop_area(paths[0])
+    def _on_path_picked(self, _button: FileChooserButton, paths: list[str]) -> None:
+        if not paths:
+            return
 
-        AvatarChooserDialog(_on_file_selected,
-                            transient_for=cast(Gtk.Window, self.get_root()),
-                            modal=True)
+        self.prepare_crop_area(paths[0])
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,

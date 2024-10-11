@@ -27,12 +27,6 @@ else:
     GDK_MEMORY_DEFAULT = Gdk.MemoryFormat.A8R8G8B8_PREMULTIPLIED
 
 
-class Filter(NamedTuple):
-    name: str
-    pattern: str | list[str]
-    default: bool
-
-
 class Setting(NamedTuple):
     kind: SettingKind
     label: str

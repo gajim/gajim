@@ -102,6 +102,7 @@ class WorkspaceDialog(GajimAppWindow):
         self._update_avatar()
 
     def _on_image_switch_toggled(self, switch: Gtk.Switch, *args: Any) -> None:
+        self._avatar_selector.reset()
         if switch.get_active():
             self._ui.style_stack.set_visible_child_name('image')
             if self._workspace_id is not None:
@@ -112,7 +113,7 @@ class WorkspaceDialog(GajimAppWindow):
         else:
             self._ui.style_stack.set_visible_child_name('color')
             self._avatar_sha = None
-            self._avatar_selector.reset()
+
         self._update_avatar()
 
     def _update_avatar(self) -> None:
