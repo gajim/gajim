@@ -30,7 +30,7 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.certificate_dialog import CertificateBox
-from gajim.gtk.util import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.server_info')
@@ -55,7 +55,6 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
         self.account = account
         self._client = app.get_client(account)
-        self._destroyed = False
 
         if app.settings.get('use_kib_mib'):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
@@ -65,7 +64,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         self._ui = get_builder('server_info.ui', self)
         self.set_child(self._ui.server_info_notebook)
 
-        self.connect('destroy', self._on_destroy)
+        self._connect(self._ui.clipboard_button, 'clicked', self._on_clipboard_button_clicked)
 
         self.register_events([
             ('server-disco-received', ged.GUI1, self._server_disco_received),
@@ -97,8 +96,8 @@ class ServerInfo(GajimAppWindow, EventHelper):
         for feature in self._get_features():
             self._add_feature(feature)
 
-    def _on_destroy(self, *args: Any) -> None:
-        self._destroyed = True
+    def _cleanup(self, *args: Any) -> None:
+        self.unregister_events()
 
     def _add_connection_info(self) -> None:
         # Connection type
@@ -316,7 +315,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
                 additional = f'({feature.additional})'
             server_features += f'{feature.name}: {available} {additional}\n'
 
-        self.get_clipboard().set(server_software + server_features)
+        self.window.get_clipboard().set(server_software + server_features)
 
 
 class FeatureItem(Gtk.ListBoxRow):
