@@ -356,11 +356,10 @@
           </object>
         </child>
         <child>
-          <object class="GtkButton" id="copy_cert_info_button">
+          <object class="GtkButton" id="copy_button">
             <property name="focusable">1</property>
             <property name="tooltip-text" translatable="1">Copy Certificate Information</property>
             <property name="halign">end</property>
-            <signal name="clicked" handler="_on_copy_cert_info_button_clicked" swapped="no"/>
             <child>
               <object class="GtkImage" id="image1">
                 <property name="icon-name">edit-copy-symbolic</property>

@@ -45,7 +45,7 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 
-window = CertificateDialog(Gtk.Window(), 'testacc', gio_cert)
+window = CertificateDialog(None, 'testacc', gio_cert)
 window.show()
 
 util.run_app()

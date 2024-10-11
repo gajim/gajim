@@ -19,12 +19,14 @@ from cryptography.x509.oid import ExtensionOID
 from gi.repository import Gio
 from gi.repository import Gtk
 
+from gajim.common import app
 from gajim.common.helpers import get_x509_cert_from_gio_cert
 from gajim.common.i18n import _
 from gajim.common.util.text import format_bytes_as_hex
 from gajim.common.util.version import package_version
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.certificate_dialog')
@@ -33,7 +35,7 @@ log = logging.getLogger('gajim.gtk.certificate_dialog')
 class CertificateDialog(GajimAppWindow):
     def __init__(
         self,
-        transient_for: Gtk.Window,
+        transient_for: Gtk.Window | None,
         account: str,
         cert: Gio.TlsCertificate
     ) -> None:
@@ -49,14 +51,21 @@ class CertificateDialog(GajimAppWindow):
 
         self.set_child(CertificateBox(account, cert))
 
+    def _cleanup(self) -> None:
+        print('cleanup')
+        pass
 
-class CertificateBox(Gtk.Box):
+
+class CertificateBox(Gtk.Box, SignalManager):
     def __init__(self, account: str, certificate: Gio.TlsCertificate) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
 
-        self._ui = get_builder('certificate.ui', self)
+        self._ui = get_builder('certificate.ui')
         self._headline = _('Certificate for \n%s') % account
         self.set_size_request(500, -1)
+
+        self._connect(self._ui.copy_button, 'clicked', self._on_copy_button_clicked)
 
         cert = get_x509_cert_from_gio_cert(certificate)
 
@@ -147,7 +156,12 @@ class CertificateBox(Gtk.Box):
 
         self.append(self._ui.certificate_box)
 
-    def _on_copy_cert_info_button_clicked(self, _widget: Gtk.Button) -> None:
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
+
+    def _on_copy_button_clicked(self, _widget: Gtk.Button) -> None:
         clipboard_text = \
             self._headline + '\n\n' + \
             _('Issued to\n') + \
