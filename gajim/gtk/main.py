@@ -52,7 +52,6 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.filechoosers import FileSaveDialog
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
 from gajim.gtk.structs import AccountJidParam
@@ -632,19 +631,29 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             open_file(preview.orig_path)
 
         elif action_name == 'preview-save-as':
-            def _on_ok(paths: list[str]) -> None:
-                if not paths:
+            def _on_save_finished(
+                file_dialog: Gtk.FileDialog,
+                result: Gio.AsyncResult
+            ) -> None:
+                try:
+                    gfile = file_dialog.save_finish(result)
+                except GLib.Error as e:
+                    if e.code == 2:
+                        # User dismissed dialog, do nothing
+                        return
+
+                    log.exception(e)
                     ErrorDialog(
                         _('Could not save file'),
                         _('Could not save file to selected directory.'),
-                        transient_for=self)
+                        transient_for=app.app.get_current_window()
+                    )
                     return
 
-                target = paths[0]
                 assert preview is not None
                 assert preview.orig_path is not None
 
-                target_path = Path(target)
+                target_path = Path(gfile.get_path())
                 orig_ext = preview.orig_path.suffix
                 new_ext = target_path.suffix
                 if orig_ext != new_ext:
@@ -677,10 +686,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 app.preview_manager.download_content(preview, force=True)
                 return
 
-            FileSaveDialog(_on_ok,
-                           path=app.settings.get('last_save_dir'),
-                           file_name=preview.filename,
-                           transient_for=self)
+            dialog = Gtk.FileDialog(
+                initial_folder=app.settings.get('last_save_dir'),
+                initial_name=preview.filename,
+            )
+            dialog.save(
+                app.app.get_current_window(),
+                None,
+                _on_save_finished
+            )
 
         elif action_name == 'preview-open-folder':
             if not preview.orig_exists:

@@ -137,7 +137,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
     def __init__(
         self,
         path: Path | None = None,
-        mode: Literal['file', 'folder'] = 'file',
+        mode: Literal['file-open', 'folder-open', 'save'] = 'file-open',
         multiple: bool = False,
         filters: list[Filter] | None = None,
         label: str = '',
@@ -186,13 +186,16 @@ class FileChooserButton(Gtk.Button, SignalManager):
             return
 
         self._path = path
-        if not self._has_tooltip:
+        if not self._has_tooltip and self._mode != 'save':
             self._label.set_tooltip_text(str(path))
 
-        if self._mode == 'file':
-            self._label.set_text(_('File: %s') % path.name)
-        else:
-            self._label.set_text(_('Folder: %s') % path.as_posix())
+        match self._mode:
+            case 'file-open':
+                self._label.set_text(_('File: %s') % path.name)
+            case 'folder-open':
+                self._label.set_text(_('Folder: %s') % path.as_posix())
+            case _:
+                pass
 
     def reset(self) -> None:
         self._path = None
@@ -221,16 +224,19 @@ class FileChooserButton(Gtk.Button, SignalManager):
 
         parent = cast(Gtk.Window, self.get_root())
 
-        if self._mode == 'file':
-            if self._multiple:
+        match (self._mode, self._multiple):
+            case ('file-open', True):
                 dialog.open_multiple(parent, None, self._on_file_picked)
-            else:
+            case ('file-open', False):
                 dialog.open(parent, None, self._on_file_picked)
-        else:
-            if self._multiple:
+            case ('folder-open', True):
                 dialog.select_multiple_folders(parent, None, self._on_file_picked)
-            else:
+            case ('folder-open', False):
                 dialog.select_folder(parent, None, self._on_file_picked)
+            case ('save', False):
+                dialog.save(parent, None, self._on_file_picked)
+            case _:
+                raise ValueError('Unexpected file chooser configuration')
 
     def _set_error(self) -> None:
         log.warning('Could not get picked file/folder')
@@ -245,18 +251,20 @@ class FileChooserButton(Gtk.Button, SignalManager):
         self._path = None
 
         try:
-            if self._mode == 'file':
-                if self._multiple:
-                    files = file_dialog.open_multiple_finish(result)
-                    g_files = [f for f in files]
-                else:
+
+            match (self._mode, self._multiple):
+                case ('file-open', True):
+                    g_files = [f for f in file_dialog.open_multiple_finish(result)]
+                case ('file-open', False):
                     g_files = [file_dialog.open_finish(result)]
-            else:
-                if self._multiple:
-                    files = file_dialog.select_multiple_folders_finish(result)
-                    g_files = [f for f in files]
-                else:
+                case ('folder-open', True):
+                    g_files = [f for f in file_dialog.select_multiple_folders_finish(result)]
+                case ('folder-open', False):
                     g_files = [file_dialog.select_folder_finish(result)]
+                case ('save', False):
+                    g_files = [file_dialog.save_finish(result)]
+                case _:
+                    raise ValueError('Unexpected file chooser configuration')
 
         except GLib.Error as e:
             if e.code == 2:
