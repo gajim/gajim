@@ -26,13 +26,13 @@ from gajim.common.util.muc import get_random_muc_localpart
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util import SignalManager, ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.groupchat_creation')
 
 
-class CreateGroupchatWindow(GajimAppWindow, EventHelper):
+class CreateGroupchatWindow(GajimAppWindow, EventHelper, SignalManager):
     def __init__(self, account: str | None) -> None:
         GajimAppWindow.__init__(
             self,
@@ -42,16 +42,20 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         )
 
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
-        self._ui = get_builder('groupchat_creation.ui', self)
+        self._ui = get_builder('groupchat_creation.ui')
         self.set_child(self._ui.stack)
+
+        self._connect(self._ui.account_combo, 'changed', self._on_account_combo_changed)
+        self._connect(self._ui.advanced_switch, 'notify::active', self._on_toggle_advanced)
+        self._connect(self._ui.address_entry, 'changed', self._on_address_entry_changed)
+        self._connect(self._ui.create_button, 'clicked', self._on_create_clicked)
 
         self._account = account
         self._destroyed: bool = False
 
         self._create_entry_completion()
-
-        self.connect('destroy', self._on_destroy)
 
         self.register_events([
             ('account-connected', ged.GUI2, self._on_account_state),
@@ -65,6 +69,11 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
 
         self._update_accounts(account)
         self._ui.create_button.grab_focus()
+
+    def _cleanup(self) -> None:
+        self._disconnect_all()
+        self._destroyed = True
+        self.unregister_events()
 
     def _on_account_state(self,
                           _event: AccountConnected | AccountDisconnected
@@ -289,15 +298,10 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         if app.window.chat_exists(self._account, JID.from_string(room_jid)):
             log.error('Trying to create groupchat '
                       'which is already added as chat')
-            self.destroy()
+            self.close()
             return
 
         client = app.get_client(self._account)
         client.get_module('MUC').create(room_jid, config)
 
-        self.destroy()
-
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
-        self._destroyed = True
-        self.unregister_events()
-        app.check_finalize(self)
+        self.close()

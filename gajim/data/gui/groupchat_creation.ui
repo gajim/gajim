@@ -89,7 +89,6 @@
                     <property name="margin-bottom">12</property>
                     <property name="model">account_liststore</property>
                     <property name="id-column">0</property>
-                    <signal name="changed" handler="_on_account_combo_changed" swapped="no"/>
                     <child>
                       <object class="GtkCellRendererText"/>
                       <attributes>
@@ -124,7 +123,6 @@
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
                     <property name="margin-top">12</property>
-                    <signal name="notify::active" handler="_on_toggle_advanced" swapped="no"/>
                     <layout>
                       <property name="column">0</property>
                       <property name="row">3</property>
@@ -195,7 +193,6 @@
                     <property name="width-request">250</property>
                     <property name="focusable">1</property>
                     <property name="margin-top">12</property>
-                    <signal name="changed" handler="_on_address_entry_changed" swapped="no"/>
                     <layout>
                       <property name="column">1</property>
                       <property name="row">6</property>
@@ -304,7 +301,6 @@
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_create_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
                     </style>
