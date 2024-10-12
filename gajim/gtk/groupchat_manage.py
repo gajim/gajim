@@ -79,11 +79,11 @@ class GroupchatManage(Gtk.Box, SignalManager):
         self._prepare_manage()
 
     def do_unroot(self) -> None:
-        print('DO UNROOT')
         self._disconnect_all()
         Gtk.Box.do_unroot(self)
         del self._avatar_selector
         del self._avatar_chooser_button
+        del self._room_config_form
         app.check_finalize(self)
 
     @property

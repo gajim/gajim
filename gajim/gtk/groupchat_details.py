@@ -75,6 +75,7 @@ class GroupchatDetails(GajimAppWindow):
             self._switcher.set_row(page)
 
     def _cleanup(self) -> None:
+        print('_cleanup')
         del self._switcher
         del self._groupchat_manage
         del self._groupchat_info
