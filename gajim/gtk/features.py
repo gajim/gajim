@@ -62,6 +62,9 @@ class Features(GajimAppWindow):
         for feature in self._get_features():
             self._add_feature(feature)
 
+    def _cleanup(self) -> None:
+        pass
+
     def _add_feature(self, feature: Feature) -> None:
         item = FeatureItem(feature)
         self.feature_listbox.append(item)
