@@ -223,7 +223,7 @@ else:
 
 
 class FileChooserButton(Gtk.Button, SignalManager):
-
+    _cls_filters: list[Filter] = []
     __gsignals__ = {
         'path-picked': (GObject.SignalFlags.RUN_LAST, None, (object,)),
     }
@@ -242,7 +242,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
         SignalManager.__init__(self)
         self._path = path
         self._mode = mode
-        self._filters = filters or []
+        self._filters = filters or self._cls_filters
         self._label_text = label
         self._has_tooltip = bool(tooltip)
 
@@ -361,3 +361,11 @@ class FileChooserButton(Gtk.Button, SignalManager):
         Gtk.Button.do_unroot(self)
         self._disconnect_all()
         app.check_finalize(self)
+
+
+class AvatarFileChooserButton(FileChooserButton):
+    _cls_filters = [
+        Filter(name=_('PNG files'), patterns=['*.png'], default=True),
+        Filter(name=_('JPEG files'), patterns=['*.jp*g']),
+        Filter(name=_('SVG files'), patterns=['*.svg']),
+    ]

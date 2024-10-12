@@ -13,7 +13,7 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkOverlay">
+              <object class="GtkOverlay" id="avatar_overlay">
                 <property name="halign">center</property>
                 <property name="child">
                   <object class="GtkImage" id="avatar_button_image">
@@ -30,24 +30,9 @@
                     <property name="tooltip-text" translatable="1">Remove your group chat avatar</property>
                     <property name="halign">start</property>
                     <property name="valign">end</property>
-                    <signal name="clicked" handler="_on_remove_avatar" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">user-trash-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child type="overlay">
-                  <object class="GtkButton" id="avatar_select_button">
-                    <property name="visible">0</property>
-                    <property name="focusable">1</property>
-                    <property name="halign">end</property>
-                    <property name="valign">end</property>
-                    <signal name="clicked" handler="_on_change_avatar_clicked" swapped="no"/>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">document-edit-symbolic</property>
                       </object>
                     </child>
                   </object>
@@ -63,7 +48,7 @@
                   <object class="GtkEntry" id="muc_description_entry">
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
-                    <signal name="changed" handler="_on_name_desc_changed" swapped="no"/>
+                    
                     <layout>
                       <property name="column">1</property>
                       <property name="row">1</property>
@@ -75,7 +60,6 @@
                     <property name="width-request">300</property>
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
-                    <signal name="changed" handler="_on_name_desc_changed" swapped="no"/>
                     <layout>
                       <property name="column">1</property>
                       <property name="row">0</property>
@@ -117,7 +101,7 @@
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
                     <property name="tooltip-text" translatable="1">Destroy Group Chat…</property>
-                    <signal name="clicked" handler="_on_destroy_clicked" swapped="no"/>
+                    
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">user-trash-symbolic</property>
@@ -130,7 +114,7 @@
                     <property name="label" translatable="1">Save</property>
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
-                    <signal name="clicked" handler="_on_manage_save_clicked" swapped="no"/>
+                    
                     <style>
                       <class name="suggested-action"/>
                     </style>
@@ -176,7 +160,7 @@
                 <property name="focusable">1</property>
                 <property name="halign">end</property>
                 <property name="use-underline">1</property>
-                <signal name="clicked" handler="_on_subject_change_clicked" swapped="no"/>
+                
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -204,31 +188,23 @@
                 <child>
                   <object class="GtkCenterBox">
                     <property name="margin-top">6</property>
-                    <child type="center">
+                    <child type="start">
+                      <object class="GtkButton" id="avatar_cancel_button">
+                        <property name="label" translatable="1">_Close</property>
+                        <property name="focusable">1</property>
+                        <property name="use-underline">1</property>
+                      </object>
+                    </child>
+                    <child type="end">
                       <object class="GtkButton" id="avatar_update_button">
                         <property name="label" translatable="1">Update</property>
                         <property name="sensitive">0</property>
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
-                        <signal name="clicked" handler="_on_avatar_update_clicked" swapped="no"/>
+                        
                         <style>
                           <class name="suggested-action"/>
                         </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="1">_Close</property>
-                        <property name="focusable">1</property>
-                        <property name="use-underline">1</property>
-                        <signal name="clicked" handler="_on_avatar_cancel_clicked" swapped="no"/>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="1">Select File…</property>
-                        <property name="focusable">1</property>
-                        <signal name="clicked" handler="_on_avatar_select_file_clicked" swapped="no"/>
                       </object>
                     </child>
                     <layout>
@@ -323,21 +299,21 @@
                     <property name="margin-bottom">6</property>
                     <property name="activates-default">1</property>
                     <property name="placeholder-text" translatable="1">Alternate venue (optional)...</property>
-                    <signal name="changed" handler="_on_destroy_alternate_changed" swapped="no"/>
+                    
                   </object>
                 </child>
                 <child>
                   <object class="GtkBox">
                     <property name="margin-top">18</property>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="destroy_cancel_button">
                         <property name="label" translatable="1">_Cancel</property>
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
                         <property name="halign">start</property>
                         <property name="valign">start</property>
                         <property name="use-underline">1</property>
-                        <signal name="clicked" handler="_on_destroy_cancelled" swapped="no"/>
+                        
                       </object>
                     </child>
                     <child>
@@ -348,7 +324,7 @@
                         <property name="halign">end</property>
                         <property name="valign">start</property>
                         <property name="use-underline">1</property>
-                        <signal name="clicked" handler="_on_destroy_confirmed" swapped="no"/>
+                        
                         <style>
                           <class name="destructive-action"/>
                         </style>

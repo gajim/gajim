@@ -23,17 +23,20 @@ from gajim.common.util.jid import validate_jid
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.filechoosers import AvatarFileChooserButton
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.groupchat_manage')
 
 
-class GroupchatManage(Gtk.Box):
+class GroupchatManage(Gtk.Box, SignalManager):
     def __init__(self,
                  account: str,
                  contact: GroupchatContact,
                  ) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
+
         self._account = account
         self._client = app.get_client(account)
         self._contact = contact
@@ -41,8 +44,32 @@ class GroupchatManage(Gtk.Box):
 
         self._room_config_form = None
 
-        self._ui = get_builder('groupchat_manage.ui', self)
+        self._ui = get_builder('groupchat_manage.ui')
         self.append(self._ui.stack)
+
+        self._avatar_chooser_button = AvatarFileChooserButton(
+            tooltip=_('Change your profile picture'),
+            icon_name='document-edit-symbolic',
+        )
+        self._avatar_chooser_button.set_halign(Gtk.Align.END)
+        self._avatar_chooser_button.set_valign(Gtk.Align.END)
+        self._avatar_chooser_button.set_visible(False)
+
+        self._ui.avatar_overlay.add_overlay(self._avatar_chooser_button)
+
+        self._connect(self._ui.remove_avatar_button, 'clicked', self._on_remove_avatar)
+        self._connect(self._ui.muc_description_entry, 'changed', self._on_name_desc_changed)
+        self._connect(self._ui.muc_name_entry, 'changed', self._on_name_desc_changed)
+        self._connect(self._ui.destroy_muc_button, 'clicked', self._on_destroy_clicked)
+        self._connect(self._ui.manage_save_button, 'clicked', self._on_manage_save_clicked)
+        self._connect(self._ui.subject_change_button, 'clicked', self._on_subject_change_clicked)
+        self._connect(self._ui.avatar_update_button, 'clicked', self._on_avatar_update_clicked)
+        self._connect(self._ui.avatar_cancel_button, 'clicked', self._on_avatar_cancel_clicked)
+        self._connect(self._ui.destroy_alternate_entry, 'changed', self._on_destroy_alternate_changed)
+        self._connect(self._ui.destroy_cancel_button, 'clicked', self._on_destroy_cancelled)
+        self._connect(self._ui.destroy_button, 'clicked', self._on_destroy_confirmed)
+        self._connect(self._ui.subject_textview.get_buffer(), 'changed', self._on_subject_text_changed)
+        self._connect(self._avatar_chooser_button, 'path-picked', self._on_avatar_picked)
 
         self._avatar_selector = AvatarSelector()
         self._avatar_selector.set_size_request(500, 500)
@@ -51,12 +78,12 @@ class GroupchatManage(Gtk.Box):
         self._prepare_subject()
         self._prepare_manage()
 
-        self._ui.subject_textview.get_buffer().connect(
-            'changed', self._on_subject_text_changed)
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
+    def do_unroot(self) -> None:
+        print('DO UNROOT')
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
         del self._avatar_selector
+        del self._avatar_chooser_button
         app.check_finalize(self)
 
     @property
@@ -134,7 +161,7 @@ class GroupchatManage(Gtk.Box):
             return
 
         if vcard_support and self_contact.affiliation.is_owner:
-            self._ui.avatar_select_button.show()
+            self._avatar_chooser_button.show()
             self._ui.remove_avatar_button.show()
 
         if self_contact.affiliation.is_owner:
@@ -189,28 +216,11 @@ class GroupchatManage(Gtk.Box):
             jid=self._contact.jid,
             callback=self._on_upload_avatar_result)
 
-    def _on_change_avatar_clicked(self, _button: Gtk.Button) -> None:
-        def _on_accept(paths: list[str]) -> None:
-            self._avatar_selector.prepare_crop_area(paths[0])
-            self._ui.avatar_update_button.set_sensitive(
-                self._avatar_selector.get_prepared())
-            self._ui.stack.set_visible_child_name('avatar')
-            # TODO GTK4
-            # self._ui.avatar_update_button.grab_default()
-
-        AvatarChooserDialog(_on_accept,
-                            transient_for=cast(Gtk.Window, self.get_root()),
-                            modal=True)
-
-    def _on_avatar_select_file_clicked(self, _button: Gtk.Button) -> None:
-        def _on_accept(paths: list[str]) -> None:
-            self._avatar_selector.prepare_crop_area(paths[0])
-            self._ui.avatar_update_button.set_sensitive(
-                self._avatar_selector.get_prepared())
-
-        AvatarChooserDialog(_on_accept,
-                            transient_for=cast(Gtk.Window, self.get_root()),
-                            modal=True)
+    def _on_avatar_picked(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
+        self._avatar_selector.prepare_crop_area(paths[0])
+        self._ui.avatar_update_button.set_sensitive(
+            self._avatar_selector.get_prepared())
+        self._ui.stack.set_visible_child_name('avatar')
 
     def _on_upload_avatar_result(self, task: Task) -> None:
         try:

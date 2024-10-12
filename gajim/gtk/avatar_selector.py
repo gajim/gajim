@@ -31,7 +31,7 @@ from gajim.gtk.const import DND_TARGET_FLATPAK
 from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.filechoosers import FileChooserButton, Filter
+from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.avatar_selector')
@@ -90,14 +90,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self._crop_area.set_vexpand(True)
         self.append(self._crop_area)
 
-        self._file_chooser_button = FileChooserButton(
-            filters=[
-                Filter(name=_('PNG files'), patterns=['*.png'], default=True),
-                Filter(name=_('JPEG files'), patterns=['*.jp*g']),
-                Filter(name=_('SVG files'), patterns=['*.svg']),
-            ],
-            label=_('Load Image')
-        )
+        self._file_chooser_button = AvatarFileChooserButton(label=_('Load Image'))
 
         self._file_chooser_button.set_halign(Gtk.Align.CENTER)
         self._connect(self._file_chooser_button, 'path-picked', self._on_path_picked)
@@ -135,7 +128,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self._helper_label.hide()
         self._crop_area.show()
 
-    def _on_path_picked(self, _button: FileChooserButton, paths: list[str]) -> None:
+    def _on_path_picked(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
         if not paths:
             return
 

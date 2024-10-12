@@ -47,16 +47,17 @@ class GroupchatDetails(GajimAppWindow):
         self._contact.connect('avatar-update', self._on_avatar_update)
         self._contact.connect('disco-info-update', self._on_disco_info_update)
 
-        self._ui = get_builder('groupchat_details.ui', self)
+        self._ui = get_builder('groupchat_details.ui')
 
         self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
-        self._ui.main_stack.connect('notify::visible-child-name',
-                                    self._on_stack_child_changed)
         self.set_child(self._ui.main_grid)
 
         self._groupchat_manage: GroupchatManage | None = None
+
+        self._connect(self._ui.main_stack, 'notify::visible-child-name', self._on_stack_child_changed)
+        self._connect(self._ui.edit_name_button, 'clicked', self._on_edit_name_clicked)
 
         self._add_groupchat_info()
         self._add_groupchat_settings()
@@ -73,7 +74,10 @@ class GroupchatDetails(GajimAppWindow):
         if page is not None:
             self._switcher.set_row(page)
 
-        self.connect('destroy', self._on_destroy)
+    def _cleanup(self) -> None:
+        del self._switcher
+        del self._groupchat_manage
+        del self._groupchat_info
 
     def _on_disco_info_update(self,
                               _contact: GroupchatContact,
@@ -116,7 +120,7 @@ class GroupchatDetails(GajimAppWindow):
     def _add_groupchat_info(self) -> None:
         self._groupchat_info = GroupChatInfoScrolled(
             self._contact.account, width=600, edit_mode=True)
-        self._groupchat_info.connect('name-updated', self._on_contact_name_updated)
+        self._connect(self._groupchat_info, 'name-updated', self._on_contact_name_updated)
         self._groupchat_info.set_halign(Gtk.Align.FILL)
         self._groupchat_info.set_info_from_contact(self._contact)
         self._groupchat_info.set_subject(self._contact.subject)
@@ -178,6 +182,3 @@ class GroupchatDetails(GajimAppWindow):
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._ui.contact_name_header_label.set_text(name)
-
-    def _on_destroy(self, _widget: GroupchatDetails) -> None:
-        app.check_finalize(self)

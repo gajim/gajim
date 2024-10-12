@@ -29,7 +29,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
-from gajim.gtk.filechoosers import AvatarChooserDialog, FileChooserButton, Filter
+from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
@@ -94,12 +94,7 @@ class ProfileWindow(GajimAppWindow):
         self._connect(self._ui.remove_avatar_button, 'clicked', self._on_remove_avatar)
         self._connect(self._ui.vcard_access, 'notify::active', self._access_switch_toggled)
 
-        self._avatar_edit_button = FileChooserButton(
-            filters=[
-                Filter(name=_('PNG files'), patterns=['*.png'], default=True),
-                Filter(name=_('JPEG files'), patterns=['*.jp*g']),
-                Filter(name=_('SVG files'), patterns=['*.svg']),
-            ],
+        self._avatar_edit_button = AvatarFileChooserButton(
             tooltip=_('Change your profile picture'),
             icon_name='document-edit-symbolic',
         )
@@ -363,7 +358,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, _button: FileChooserButton, paths: list[str]) -> None:
+    def _on_edit_avatar(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
         if self._avatar_selector is None:
             self._avatar_selector = AvatarSelector()
             self._ui.avatar_selector_box.append(self._avatar_selector)
