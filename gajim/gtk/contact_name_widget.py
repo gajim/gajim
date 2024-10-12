@@ -4,6 +4,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -14,9 +16,10 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.gtk.util import SignalManager
 
 
-class ContactNameWidget(Gtk.Box):
+class ContactNameWidget(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         'name-updated': (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -28,6 +31,7 @@ class ContactNameWidget(Gtk.Box):
         edit_mode: bool = False,
     ) -> None:
         Gtk.Box.__init__(self, spacing=18)
+        SignalManager.__init__(self)
 
         self._contact = contact
 
@@ -40,7 +44,7 @@ class ContactNameWidget(Gtk.Box):
             text=name,
             xalign=1.0,
         )
-        self._entry.connect('activate', self._on_entry_activated)
+        self._connect(self._entry, 'activate', self._on_entry_activated)
         self.append(self._entry)
 
         self.update_displayed_name(name)
@@ -52,7 +56,7 @@ class ContactNameWidget(Gtk.Box):
             'document-edit-symbolic'
         )
         self._edit_button.set_tooltip_text(_('Edit display name…'))
-        self._edit_button.connect('clicked', self._on_edit_clicked)
+        self._connect(self._edit_button, 'clicked', self._on_edit_clicked)
 
         if isinstance(self._contact, GroupchatParticipant) or not edit_mode:
             self._edit_button.set_visible(False)
@@ -64,12 +68,20 @@ class ContactNameWidget(Gtk.Box):
         )
         self._clear_button.set_tooltip_text(_('Reset to original name'))
         self._clear_button.set_visible(False)
-        self._clear_button.connect('clicked', self._on_clear_button_clicked)
+        self._connect(self._clear_button, 'clicked', self._on_clear_button_clicked)
         button_box.append(self._clear_button)
 
         if self._contact is not None:
             client = app.get_client(self._contact.account)
             client.connect_signal('state-changed', self._on_client_state_changed)
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        del self._edit_button
+        del self._clear_button
+        del self._entry
+        app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState

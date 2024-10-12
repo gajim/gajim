@@ -15,6 +15,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.structs import AffiliationResult
 from nbxmpp.task import Task
 
+from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -22,6 +23,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.groupchat_outcasts')
 
@@ -36,9 +38,10 @@ class Column(IntEnum):
     REASON = 1
 
 
-class GroupchatOutcasts(Gtk.Box):
+class GroupchatOutcasts(Gtk.Box, SignalManager):
     def __init__(self, client: Client, contact: GroupchatContact) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        SignalManager.__init__(self)
 
         self._client = client
         self._contact = contact
@@ -48,7 +51,13 @@ class GroupchatOutcasts(Gtk.Box):
         assert self_contact is not None
         self._own_affiliation = self_contact.affiliation.value
 
-        self._ui = get_builder('groupchat_outcast.ui', self)
+        self._ui = get_builder('groupchat_outcast.ui')
+
+        self._connect(self._ui.outcast_selection, 'changed', self._on_selection_changed)
+        self._connect(self._ui.address_renderer, 'edited', self._on_jid_edited)
+        self._connect(self._ui.reason_renderer, 'edited', self._on_reason_edited)
+        self._connect(self._ui.add_button, 'clicked', self._on_add)
+        self._connect(self._ui.remove_button, 'clicked', self._on_remove)
 
         self._treeview = self._ui.outcast_treeview
         self._store = self._ui.outcast_store
@@ -66,6 +75,14 @@ class GroupchatOutcasts(Gtk.Box):
             self._contact.jid,
             'outcast',
             callback=self._on_outcasts_received)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        del self._treeview
+        del self._store
+        del self._apply_button
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_apply(self, _button: Gtk.Button) -> None:
         self._begin_progress()

@@ -47,9 +47,7 @@
             <property name="show-expanders">0</property>
             <property name="enable-grid-lines">horizontal</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection">
-                <signal name="changed" handler="_on_selection_changed" swapped="no"/>
-              </object>
+              <object class="GtkTreeSelection" id="affiliation_selection"/>
             </child>
             <child>
               <object class="GtkTreeViewColumn">
@@ -62,10 +60,9 @@
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">0</property>
                 <child>
-                  <object class="GtkCellRendererText">
+                  <object class="GtkCellRendererText" id="address_renderer">
                     <property name="ellipsize">end</property>
                     <property name="placeholder-text">user@example.org</property>
-                    <signal name="edited" handler="_on_jid_edited" swapped="no"/>
                   </object>
                   <attributes>
                     <attribute name="editable">5</attribute>
@@ -83,9 +80,7 @@
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">1</property>
                 <child>
-                  <object class="GtkCellRendererText">
-                    <signal name="edited" handler="_on_nick_edited" swapped="no"/>
-                  </object>
+                  <object class="GtkCellRendererText" id="reserved_name_renderer"/>
                   <attributes>
                     <attribute name="editable">4</attribute>
                     <attribute name="text">1</attribute>
@@ -103,11 +98,10 @@
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">3</property>
                 <child>
-                  <object class="GtkCellRendererCombo">
+                  <object class="GtkCellRendererCombo" id="affiliation_renderer">
                     <property name="has-entry">0</property>
                     <property name="model">combo_store</property>
                     <property name="text-column">0</property>
-                    <signal name="changed" handler="_on_affiliation_changed" swapped="no"/>
                   </object>
                   <attributes>
                     <attribute name="editable">4</attribute>
@@ -139,7 +133,6 @@
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
                 <property name="halign">center</property>
-                <signal name="clicked" handler="_on_add" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">list-add-symbolic</property>
@@ -154,7 +147,6 @@
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
-                <signal name="clicked" handler="_on_remove" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">list-remove-symbolic</property>

@@ -40,7 +40,8 @@ class MainStack(Gtk.Stack):
     def remove_account_page(self, account: str) -> None:
         account_page = self.get_child_by_name(account)
         assert account_page is not None
-        account_page.destroy()
+        app.check_finalize(account_page)
+        self.remove(account_page)
 
     def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)

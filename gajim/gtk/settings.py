@@ -30,7 +30,7 @@ from gajim.common.setting_values import FloatSettings
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.util import clear_listbox
+from gajim.gtk.util import SignalManager, clear_listbox
 from gajim.gtk.util import get_image_button
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import MaxWidthComboBoxText
@@ -61,13 +61,13 @@ class SettingsDialog(GajimAppWindow):
             add_window_padding=False
         )
 
-        self.get_style_context().add_class('settings-dialog')
+        self.window.get_style_context().add_class('settings-dialog')
 
         self.account = account
         if flags == Gtk.DialogFlags.MODAL:
-            self.set_modal(True)
+            self.window.set_modal(True)
         elif flags == Gtk.DialogFlags.DESTROY_WITH_PARENT:
-            self.set_destroy_with_parent(True)
+            self.window.set_destroy_with_parent(True)
 
         self.listbox = SettingsBox(account, extend=extend)
         self.listbox.set_hexpand(True)
@@ -79,22 +79,21 @@ class SettingsDialog(GajimAppWindow):
 
         self.set_child(self.listbox)
 
-        self.connect_after('destroy', self.__on_destroy)
-
-    def __on_destroy(self, widget: SettingsDialog) -> None:
-        app.check_finalize(self)
+    def _cleanup(self) -> None:
+        del self.listbox
 
     def get_setting(self, name: str):
         return self.listbox.get_setting(name)
 
 
-class SettingsBox(Gtk.ListBox):
+class SettingsBox(Gtk.ListBox, SignalManager):
     def __init__(self,
                  account: str | None = None,
                  jid: str | None = None,
                  extend: dict[SettingKind, GenericSetting] | None = None
                  ) -> None:
         Gtk.ListBox.__init__(self)
+        SignalManager.__init__(self)
         self.get_style_context().add_class('settings-box')
         self.account = account
         self.jid = jid
@@ -125,14 +124,16 @@ class SettingsBox(Gtk.ListBox):
             for setting, callback in extend:
                 self.map[setting] = callback
 
-        self.connect('row-activated', self.on_row_activated)
-        self.connect('destroy', self.__on_destroy)
+        self._connect(self, 'row-activated', self.on_row_activated)
 
-    @staticmethod
-    def __on_destroy(widget: SettingsBox) -> None:
-        app.check_finalize(widget)
-        for row in iterate_listbox_children(widget):
+    def do_unroot(self) -> None:
+        Gtk.ListBox.do_unroot(self)
+        self.named_settings.clear()
+        self._disconnect_all()
+        app.check_finalize(self)
+        while row := self.get_first_child():
             app.check_finalize(row)
+            self.remove(row)
 
     @staticmethod
     def on_row_activated(_listbox: SettingsBox, row: GenericSetting) -> None:
@@ -162,7 +163,7 @@ class SettingsBox(Gtk.ListBox):
             row.update_activatable()
 
 
-class GenericSetting(Gtk.ListBoxRow):
+class GenericSetting(Gtk.ListBoxRow, SignalManager):
     def __init__(self,
                  account: str,
                  jid: JID,
@@ -179,6 +180,8 @@ class GenericSetting(Gtk.ListBoxRow):
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
+
         self._grid = Gtk.Grid()
         self._grid.set_size_request(-1, 30)
         self._grid.set_column_spacing(12)
@@ -239,6 +242,13 @@ class GenericSetting(Gtk.ListBoxRow):
         self.set_child(self._grid)
 
         self._bind_sensitive_state()
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        self._disconnect_all()
+        app.settings.disconnect_signals(self)
+        del self.callback
+        del self.enabled_func
 
     def _bind_sensitive_state(self) -> None:
         if self.bind is None:
@@ -393,7 +403,7 @@ class GenericSetting(Gtk.ListBoxRow):
 
         callback = kwargs['button-callback']
         assert isinstance(callback, Callable)
-        button.connect('clicked', callback)
+        self._connect(button, 'clicked', callback)
         button.set_tooltip_text(tooltip_text)
         self.setting_box.append(button)
 
@@ -410,7 +420,7 @@ class SwitchSetting(GenericSetting):
             self.switch.set_active(state.get_boolean())
         else:
             self.switch.set_active(self.setting_value)
-        self.switch.connect('notify::active', self.on_switch)
+        self._connect(self.switch, 'notify::active', self.on_switch)
         self.switch.set_hexpand(True)
         self.switch.set_halign(Gtk.Align.END)
         self.switch.set_valign(Gtk.Align.CENTER)
@@ -448,8 +458,7 @@ class EntrySetting(GenericSetting):
 
         self.entry = Gtk.Entry()
         self.entry.set_text(str(self.setting_value))
-        self._text_handler_id = self.entry.connect(
-            'notify::text', self.on_text_change)
+        self._text_handler_id = self._connect(self.entry, 'notify::text', self.on_text_change)
         self.entry.set_valign(Gtk.Align.CENTER)
         self.entry.set_alignment(1)
 
@@ -465,15 +474,10 @@ class EntrySetting(GenericSetting):
                                     account=self.account,
                                     jid=self.jid)
 
-        self.connect('destroy', self._on_destroy)
-
     def _on_setting_changed(self, value: str, *args: Any) -> None:
         with self.entry.handler_block(self._text_handler_id):
             # If the handler is not blocked we enter a infinite loop
             self.entry.set_text(value)
-
-    def _on_destroy(self, *args: Any) -> None:
-        app.settings.disconnect_signals(self)
 
     def on_text_change(self, *args: Any) -> None:
         text = self.entry.get_text()
@@ -492,7 +496,7 @@ class ColorSetting(GenericSetting):
         rgba.parse(self.setting_value)
         self.color_button = Gtk.ColorButton()
         self.color_button.set_rgba(rgba)
-        self.color_button.connect('color-set', self.on_color_set)
+        self._connect(self.color_button, 'color-set', self.on_color_set)
         self.color_button.set_valign(Gtk.Align.CENTER)
         self.color_button.set_halign(Gtk.Align.END)
         self.color_button.set_hexpand(True)
@@ -505,15 +509,10 @@ class ColorSetting(GenericSetting):
                                     account=self.account,
                                     jid=self.jid)
 
-        self.connect('destroy', self._on_destroy)
-
     def _on_setting_changed(self, value: str, *args: Any) -> None:
         rgba = Gdk.RGBA()
         rgba.parse(value)
         self.color_button.set_rgba(rgba)
-
-    def _on_destroy(self, *args: Any) -> None:
-        app.settings.disconnect_signals(self)
 
     def on_color_set(self, button: Gtk.ColorButton) -> None:
         rgba = button.get_rgba()
@@ -536,6 +535,7 @@ class DialogSetting(GenericSetting):
         self.setting_box.append(self.setting_value)
 
     def show_dialog(self, parent: Gtk.Root) -> None:
+        # TODO broken and not used
         if self.dialog:
             dialog = self.dialog(self.account, parent)
             dialog.connect('destroy', self.on_destroy)
@@ -579,7 +579,7 @@ class SpinSetting(GenericSetting):
         self.spin.set_halign(Gtk.Align.END)
         self.spin.set_valign(Gtk.Align.CENTER)
         self.spin.set_hexpand(True)
-        self.spin.connect('notify::value', self.on_value_change)
+        self._connect(self.spin, 'notify::value', self.on_value_change)
 
         self.setting_box.append(self.spin)
 
@@ -588,13 +588,9 @@ class SpinSetting(GenericSetting):
                                     self._on_setting_changed,
                                     account=self.account,
                                     jid=self.jid)
-        self.connect('destroy', self._on_destroy)
 
     def _on_setting_changed(self, value: float, *args: Any) -> None:
         self.spin.set_value(value)
-
-    def _on_destroy(self, *args: Any) -> None:
-        app.settings.disconnect_signals(self)
 
     def on_row_activated(self) -> None:
         self.spin.grab_focus()
@@ -620,11 +616,11 @@ class FileChooserSetting(GenericSetting):
             assert isinstance(self.setting_value, str)
             button.set_path(Path(self.setting_value))
 
-        button.connect('path-picked', self.on_select)
+        self._connect(button, 'path-picked', self.on_select)
 
         clear_button = get_image_button(
             'edit-clear-all-symbolic', _('Clear File'))
-        clear_button.connect('clicked', lambda *args: button.reset())
+        self._connect(clear_button, 'clicked', lambda *args: button.reset())
         self.setting_box.append(button)
         self.setting_box.append(clear_button)
 
@@ -647,6 +643,11 @@ class CallbackSetting(GenericSetting):
         GenericSetting.__init__(self, *args)
         self.callback = callback
 
+    def do_unroot(self) -> None:
+        # TODO test, currently not in use
+        GenericSetting.do_unroot(self)
+        del self.callback
+
     def on_row_activated(self) -> None:
         self.callback()
 
@@ -662,13 +663,7 @@ class ActionSetting(GenericSetting):
         self.variant = GLib.Variant.new_string(account)
         self.on_enable()
 
-        self._handler_id = self.action.connect(
-            'notify::enabled', self.on_enable)
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
-        if self.action is not None:
-            self.action.disconnect(self._handler_id)
+        self._connect(self.action, 'notify::enabled', self.on_enable)
 
     def on_enable(self, *args: Any) -> None:
         if self.action is not None:
@@ -716,8 +711,7 @@ class PopoverSetting(GenericSetting):
         self._menu_listbox = Gtk.ListBox()
         self._menu_listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self._add_menu_entries()
-        self._menu_listbox.connect('row-activated',
-                                   self._on_menu_row_activated)
+        self._connect(self._menu_listbox, 'row-activated', self._on_menu_row_activated)
 
         scrolled_window = Gtk.ScrolledWindow()
         scrolled_window.set_propagate_natural_height(True)
@@ -746,7 +740,11 @@ class PopoverSetting(GenericSetting):
                                     account=self.account,
                                     jid=self.jid)
 
-        self.connect('destroy', self._on_destroy)
+    def do_unroot(self) -> None:
+        GenericSetting.do_unroot(self)
+        app.check_finalize(self._popover)
+        del self._popover
+        del self._menu_listbox
 
     @staticmethod
     def _convert_to_dict(entries: list[Any] | dict[Any, Any]
@@ -789,10 +787,6 @@ class PopoverSetting(GenericSetting):
         clear_listbox(self._menu_listbox)
         self._add_menu_entries()
 
-    def _on_destroy(self, *args: Any) -> None:
-        self._popover.destroy()
-        app.settings.disconnect_signals(self)
-
 
 class PopoverRow(Gtk.ListBoxRow):
     def __init__(self, label: str, value: str) -> None:
@@ -824,7 +818,7 @@ class ComboSetting(GenericSetting):
             if value == self.setting_value or index == 0:
                 self.combo.set_active(index)
 
-        self.combo.connect('changed', self.on_value_change)
+        self._connect(self.combo, 'changed', self.on_value_change)
 
         self.setting_box.append(self.combo)
 

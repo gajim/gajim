@@ -33,7 +33,7 @@ from gajim.common.modules.omemo import compose_trust_uri
 from .builder import get_builder
 from .dialogs import ConfirmationDialog
 from .dialogs import DialogButton
-from .util import clear_listbox
+from .util import SignalManager, clear_listbox
 from .util import open_window
 
 log = logging.getLogger('gajim.gui.omemo_trust_dialog')
@@ -55,7 +55,7 @@ TRUST_DATA = {
 }
 
 
-class OMEMOTrustManager(Gtk.Box, EventHelper):
+class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
     def __init__(self,
                  account: str,
                  contact: types.ChatContactT | None = None
@@ -63,17 +63,21 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
 
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._account = account
         self._contact = contact
 
-        self._ui = get_builder('omemo_trust_manager.ui', self)
+        self._ui = get_builder('omemo_trust_manager.ui')
         self.append(self._ui.stack)
+
+        self._connect(self._ui.search, 'search-changed', self._on_search_changed)
+        self._connect(self._ui.manage_trust_button, 'clicked', self._on_manage_trust_clicked)
+        self._connect(self._ui.show_inactive_switch, 'notify::active', self._on_show_inactive)
+        self._connect(self._ui.clear_devices_button, 'clicked', self._on_clear_devices_clicked)
 
         self._ui.list.set_filter_func(self._filter_func, None)
         self._ui.list.set_sort_func(self._sort_func, None)
-
-        self.connect('destroy', self._on_destroy)
 
         self.register_events([
             ('account-connected', ged.GUI2, self._on_account_state),
@@ -85,6 +89,14 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
             return
 
         self._update()
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self.unregister_events()
+        self._disconnect_all()
+        self._ui.list.set_filter_func(None)
+        self._ui.list.set_sort_func(None)
+        app.check_finalize(self)
 
     def _update(self) -> None:
         client = app.get_client(self._account)
@@ -138,13 +150,6 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
             self._contact,
             BareContact | GroupchatContact | GroupchatParticipant)
         self._load_fingerprints(self._contact)
-
-    def _on_destroy(self, *args: Any) -> None:
-        self.unregister_events()
-        self._ui.list.set_filter_func(None)
-        self._ui.search.disconnect_by_func(  # pyright: ignore
-            self._on_search_changed)
-        app.check_finalize(self)
 
     def _on_account_state(self,
                           event: AccountConnected | AccountDisconnected
@@ -210,7 +215,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper):
              DialogButton.make('Accept',
                                text=_('_Clear Devices'),
                                callback=_clear)],
-            transient_for=cast(Gtk.Window, self.get_toplevel())).show()
+            ).show()
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
@@ -276,9 +281,8 @@ class KeyRow(Gtk.ListBoxRow):
 
         self.set_child(grid)
 
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
@@ -300,7 +304,7 @@ class KeyRow(Gtk.ListBoxRow):
              DialogButton.make('Remove',
                                text=_('Delete'),
                                callback=_remove)],
-            transient_for=cast(Gtk.Window, self.get_toplevel())).show()
+            ).show()
 
     def set_trust(self, trust: OMEMOTrust) -> None:
         self._trust = trust
@@ -335,10 +339,10 @@ class TrustButton(Gtk.MenuButton):
         self.set_popover(self._trust_popover)
         self.set_valign(Gtk.Align.CENTER)
         self.update()
-        self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, *args: Any) -> None:
-        self._trust_popover.destroy()
+    def do_unroot(self) -> None:
+        Gtk.MenuButton.do_unroot(self)
+        del self._trust_popover
         app.check_finalize(self)
 
     def update(self) -> None:
@@ -355,9 +359,10 @@ class TrustButton(Gtk.MenuButton):
         self.set_tooltip_text(tooltip)
 
 
-class TrustPopver(Gtk.Popover):
+class TrustPopver(Gtk.Popover, SignalManager):
     def __init__(self, row: KeyRow, trust_button: TrustButton) -> None:
         Gtk.Popover.__init__(self)
+        SignalManager.__init__(self)
         self._row = row
         self._trust_button = trust_button
 
@@ -365,8 +370,14 @@ class TrustPopver(Gtk.Popover):
         self._listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.update()
         self.set_child(self._listbox)
-        self._listbox.connect('row-activated', self._activated)
+        self._connect(self._listbox, 'row-activated', self._activated)
         self.get_style_context().add_class('omemo-trust-popover')
+
+    def do_unroot(self) -> None:
+        Gtk.Popover.do_unroot(self)
+        del self._listbox
+        del self._row
+        app.check_finalize(self)
 
     def _activated(self, _listbox: Gtk.ListBox, row: MenuOption) -> None:
         self.popdown()

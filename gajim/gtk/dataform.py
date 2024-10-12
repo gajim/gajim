@@ -7,6 +7,8 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
+import logging
+
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -22,7 +24,7 @@ from gajim.common.i18n import _
 from gajim.common.util.image import scale_pixbuf_from_data
 from gajim.common.util.uri import open_uri
 
-from gajim.gtk.util import make_href_markup
+from gajim.gtk.util import SignalManager, make_href_markup
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import MultiLineLabel
 
@@ -37,7 +39,7 @@ from gajim.gtk.util import MultiLineLabel
 #  entry-activates-default      Form entry activates the default widget
 
 
-class DataFormWidget(Gtk.ScrolledWindow):
+class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
 
     __gsignals__ = {
         'is-valid': (GObject.SignalFlags.RUN_LAST, None, (bool,)),
@@ -49,6 +51,8 @@ class DataFormWidget(Gtk.ScrolledWindow):
                  ) -> None:
 
         Gtk.ScrolledWindow.__init__(self)
+        SignalManager.__init__(self)
+
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.get_style_context().add_class('data-form-widget')
@@ -65,12 +69,16 @@ class DataFormWidget(Gtk.ScrolledWindow):
             self._form_widget = DataFormReportedTable(form_node)
         else:
             self._form_widget = FormGrid(form_node, options)
-            self._form_widget.connect('form-completed', self._on_form_completed)
+            self._connect(self._form_widget, 'form-completed', self._on_form_completed)
         self._original_form_hash = self.get_form_hash()
 
         self.set_child(self._form_widget)
 
-        self.connect('destroy', self._on_destroy)
+    def do_unroot(self) -> None:
+        Gtk.ScrolledWindow.do_unroot(self)
+        self._disconnect_all()
+        del self._form_widget
+        app.check_finalize(self)
 
     @property
     def title(self) -> str | None:
@@ -111,14 +119,11 @@ class DataFormWidget(Gtk.ScrolledWindow):
                 widget.grab_focus_without_selecting()
                 break
 
-    def _on_destroy(self, widget: Gtk.ScrolledWindow) -> None:
-        self._form_widget.destroy()
-
     def _on_form_completed(self, *_args) -> None:
         self.get_toplevel().activate_default()
 
 
-class FormGrid(Gtk.Grid):
+class FormGrid(Gtk.Grid, SignalManager):
 
     __gsignals__ = {
         'form-completed': (GObject.SignalFlags.RUN_LAST, None, ())
@@ -130,6 +135,7 @@ class FormGrid(Gtk.Grid):
                  ) -> None:
 
         Gtk.Grid.__init__(self)
+        SignalManager.__init__(self)
         self.set_column_spacing(12)
         self.set_row_spacing(12)
         self.set_halign(Gtk.Align.CENTER)
@@ -173,7 +179,14 @@ class FormGrid(Gtk.Grid):
         self._analyse_fields(form_node, options)
         self._parse_form(form_node, options)
 
-        self.connect('destroy', self._on_destroy)
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        for row in self.rows:
+            if isinstance(row, Field):
+                row.destroy()
+        self.rows.clear()
+        Gtk.Grid.do_unroot(self)
+        app.check_finalize(self)
 
     def _add_row(
         self,
@@ -264,12 +277,6 @@ class FormGrid(Gtk.Grid):
     def _on_single_list_field_activated(self, widget: ListSingleField) -> None:
         self.emit('form-completed')
 
-    def _on_destroy(self, widget: Gtk.Grid) -> None:
-        for row in self.rows:
-            if isinstance(row, Field):
-                row.destroy()
-        self.rows.clear()
-
 
 class SizeAdjustment:
     def __init__(self, options: dict[str, Any]) -> None:
@@ -312,7 +319,7 @@ class Instructions:
         form_grid.attach(self._label, 0, row_number, 2, 1)
 
 
-class Field(GObject.GObject):
+class Field(GObject.GObject, SignalManager):
     def __init__(self,
                  field: DataField,
                  form_grid: FormGrid,
@@ -320,6 +327,7 @@ class Field(GObject.GObject):
                  ) -> None:
 
         GObject.GObject.__init__(self)
+        SignalManager.__init__(self)
 
         self._widget: Gtk.Widget | None = None
         self._field = field
@@ -412,6 +420,12 @@ class Field(GObject.GObject):
     def destroy(self) -> None:
         if self._validate_source_id is not None:
             GLib.source_remove(self._validate_source_id)
+        self._disconnect_all()
+        if self._widget is not None:
+            app.check_finalize(self._widget)
+        del self._widget
+        del self._field
+        del self._form_grid
 
 
 class BooleanField(Field):
@@ -430,7 +444,7 @@ class BooleanField(Field):
         else:
             self._widget = Gtk.CheckButton()
             self._widget.set_active(field.value)
-            self._widget.connect('toggled', self._toggled)
+            self._connect(self._widget, 'toggled', self._toggled)
         self._widget.set_valign(Gtk.Align.CENTER)
 
     def _toggled(self, _widget: Gtk.CheckButton) -> None:
@@ -480,6 +494,7 @@ class ListSingleField(Field):
         Field.__init__(self, field, form_grid, options)
 
         self._unique = treeview
+        self._treeview = None
 
         if self.read_only:
             self._widget = Gtk.Label(label=field.value, selectable=True)
@@ -491,6 +506,12 @@ class ListSingleField(Field):
         else:
             self._setup_dropdown(field)
 
+    def destroy(self) -> None:
+        Field.destroy(self)
+        if self._treeview is not None:
+            app.check_finalize(self._treeview)
+        del self._treeview
+
     def _setup_dropdown(self, field: DataField) -> None:
         self._widget = MaxWidthComboBoxText()
         self._widget.set_valign(Gtk.Align.CENTER)
@@ -500,7 +521,7 @@ class ListSingleField(Field):
             self._widget.append(value, label)
 
         self._widget.set_active_id(field.value)
-        self._widget.connect('changed', self._changed)
+        self._connect(self._widget, 'changed', self._changed)
 
     def _changed(self, widget: MaxWidthComboBoxText) -> None:
         self._field.value = widget.get_active_id()
@@ -508,8 +529,8 @@ class ListSingleField(Field):
 
     def _setup_treeview(self, field: DataField) -> None:
         self._treeview = ListSingleTreeView(field, self)
-        self._treeview.connect('row-activated', self._on_row_activated)
-        self._treeview.connect('cursor-changed', self._on_cursor_changed)
+        self._connect(self._treeview, 'row-activated', self._on_row_activated)
+        self._connect(self._treeview, 'cursor-changed', self._on_cursor_changed)
 
         self._widget = Gtk.ScrolledWindow()
         self._widget.set_propagate_natural_height(True)
@@ -519,7 +540,6 @@ class ListSingleField(Field):
         self._widget.set_max_content_height(300)
         self._widget.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self._widget.set_child(self._treeview)
-
 
     def _on_cursor_changed(self, *_args: Any) -> None:
         model, treeiter = self._treeview.get_selection().get_selected()
@@ -574,6 +594,13 @@ class ListSingleTreeView(Gtk.TreeView):
 
         self.set_model(self._store)
 
+    def do_unroot(self) -> None:
+        Gtk.TreeView.do_unroot(self)
+        del self._field
+        del self._multi_field
+        del self._store
+        app.check_finalize(self)
+
 
 class ListMultiField(Field):
     def __init__(self,
@@ -597,14 +624,20 @@ class ListMultiField(Field):
     def validate(self) -> None:
         self._validate()
 
+    def destroy(self) -> None:
+        Field.destroy(self)
+        app.check_finalize(self._treeview)
+        del self._treeview
 
-class ListMultiTreeView(Gtk.TreeView):
+
+class ListMultiTreeView(Gtk.TreeView, SignalManager):
     def __init__(self,
                  field: DataField,
                  multi_field: ListMultiField
                  ) -> None:
 
         Gtk.TreeView.__init__(self)
+        SignalManager.__init__(self)
 
         self._field = field
         self._multi_field = multi_field
@@ -625,7 +658,7 @@ class ListMultiTreeView(Gtk.TreeView):
         cell.set_activatable(True)
         cell.set_property('xalign', 1)
         cell.set_property('xpad', 10)
-        cell.connect('toggled', self._toggled)
+        self._connect(cell, 'toggled', self._toggled)
         col.pack_start(cell, True)
         col.set_attributes(cell, active=3)
 
@@ -645,6 +678,14 @@ class ListMultiTreeView(Gtk.TreeView):
             self.set_tooltip_column(2)
 
         self.set_model(self._store)
+
+    def do_unroot(self) -> None:
+        Gtk.TreeView.do_unroot(self)
+        self._disconnect_all()
+        del self._field
+        del self._multi_field
+        del self._store
+        app.check_finalize(self)
 
     def _toggled(self,
                  _renderer: Gtk.CellRendererToggle,
@@ -681,10 +722,10 @@ class JidMultiField(Field):
         self._treeview = JidMutliTreeView(field, self)
 
         self._add_button = Gtk.Button(icon_name='list-add-symbolic')
-        self._add_button.connect('clicked', self._add_clicked)
+        self._connect(self._add_button, 'clicked', self._add_clicked)
 
         self._remove_button = Gtk.Button(icon_name='list-remove-symbolic')
-        self._remove_button.connect('clicked', self._remove_clicked)
+        self._connect(self._remove_button, 'clicked', self._remove_clicked)
 
         self._toolbar = Gtk.Box()
         self._toolbar.add_css_class('toolbar')
@@ -703,6 +744,14 @@ class JidMultiField(Field):
 
         if not self._read_only:
             self._widget.append(self._toolbar)
+
+    def destroy(self) -> None:
+        Field.destroy(self)
+        app.check_finalize(self._treeview)
+        del self._treeview
+        del self._scrolled_window
+        del self._remove_button
+        del self._add_button
 
     def _add_clicked(self, _widget: Gtk.Button) -> None:
         model = self._treeview.get_model()
@@ -731,13 +780,14 @@ class JidMultiField(Field):
         self._validate()
 
 
-class JidMutliTreeView(Gtk.TreeView):
+class JidMutliTreeView(Gtk.TreeView, SignalManager):
     def __init__(self,
                  field: DataField,
                  multi_field: JidMultiField
                  ) -> None:
 
         Gtk.TreeView.__init__(self)
+        SignalManager.__init__(self)
 
         self._field = field
         self._multi_field = multi_field
@@ -748,7 +798,7 @@ class JidMutliTreeView(Gtk.TreeView):
         cell = Gtk.CellRendererText()
         cell.set_property('editable', True)
         cell.set_property('placeholder-text', 'user@example.org')
-        cell.connect('edited', self._jid_edited)
+        self._connect(cell, 'edited', self._jid_edited)
         col.pack_start(cell, True)
         col.set_attributes(cell, text=0)
         self.append_column(col)
@@ -759,6 +809,14 @@ class JidMutliTreeView(Gtk.TreeView):
             self._store.append([value])
 
         self.set_model(self._store)
+
+    def do_unroot(self) -> None:
+        Gtk.TreeView.do_unroot(self)
+        self._disconnect_all()
+        del self._field
+        del self._multi_field
+        del self._store
+        app.check_finalize(self)
 
     def _jid_edited(self,
                     _renderer: Gtk.CellRendererText,
@@ -796,7 +854,7 @@ class TextSingleField(Field):
         else:
             self._widget = Gtk.Entry()
             self._widget.set_text(field.value)
-            self._widget.connect('changed', self._changed)
+            self._connect(self._widget, 'changed', self._changed)
             if options.get('entry-activates-default', False):
                 self._widget.set_activates_default(True)
         self._widget.set_valign(Gtk.Align.CENTER)
@@ -849,7 +907,7 @@ class TextMultiField(Field):
             self._textview = Gtk.TextView()
             self._textview.set_wrap_mode(Gtk.WrapMode.WORD_CHAR)
             self._textview.get_buffer().set_text(field.value)
-            self._textview.get_buffer().connect('changed', self._changed)
+            self._connect(self._textview.get_buffer(), 'changed', self._changed)
 
         if self.read_only and length < 500:
             self._widget = self._textview
@@ -865,6 +923,11 @@ class TextMultiField(Field):
     def _changed(self, widget: Gtk.TextBuffer) -> None:
         self._field.value = widget.get_text(*widget.get_bounds(), False)
         self._validate()
+
+    def destroy(self) -> None:
+        Field.destroy(self)
+        app.check_finalize(self._textview)
+        del self._textview
 
 
 class ImageMediaField:
@@ -892,9 +955,11 @@ class ImageMediaField:
         form_grid.attach(self._image, 1, row_number, 1, 1)
 
 
-class FakeDataFormWidget(Gtk.ScrolledWindow):
+class FakeDataFormWidget(Gtk.ScrolledWindow, SignalManager):
     def __init__(self, fields: dict[str, str]) -> None:
         Gtk.ScrolledWindow.__init__(self)
+        SignalManager.__init__(self)
+
         self.set_hexpand(True)
         self.set_vexpand(True)
         self.set_overlay_scrolling(False)
@@ -925,11 +990,18 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
             button = Gtk.Button(label='Register')
             button.set_halign(Gtk.Align.CENTER)
             button.get_style_context().add_class('suggested-action')
-            button.connect('clicked', lambda *args: open_uri(redirect_url))
+            self._connect(button, 'clicked', lambda *args: open_uri(redirect_url))
             self._grid.attach(button, 0, self._row_count, 2, 1)
         else:
             self._add_fields()
         self.set_child(self._grid)
+
+    def do_unroot(self) -> None:
+        Gtk.ScrolledWindow.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self._grid)
+        del self._grid
+        app.check_finalize(self)
 
     def _add_fields(self) -> None:
         for name, value in self._fields.items():
@@ -958,14 +1030,15 @@ class FakeDataFormWidget(Gtk.ScrolledWindow):
         return fields
 
 
-class DataFormReportedTable(Gtk.Grid):
+class DataFormReportedTable(Gtk.Grid, SignalManager):
     '''
     A widget representing the results of a command as a table, when the data
     form contains a <reported> element.
     '''
 
     def __init__(self, form_node: MultipleDataForm) -> None:
-        super().__init__(row_spacing=10)
+        Gtk.Grid.__init__(self, row_spacing=10)
+        SignalManager.__init__(self)
         self._form_node = form_node
 
         self.title = form_node.title
@@ -975,6 +1048,13 @@ class DataFormReportedTable(Gtk.Grid):
         self._build_list_store()
         self._build_treeview()
         self._build_scrolled_window()
+
+    def do_unroot(self) -> None:
+        Gtk.Grid.do_unroot(self)
+        self._disconnect_all()
+        del self._list_store
+        del self._treeview
+        app.check_finalize(self)
 
     def _process_form(self) -> None:
         self._column_names: list[str] = []
@@ -995,7 +1075,7 @@ class DataFormReportedTable(Gtk.Grid):
 
     def _build_treeview(self) -> None:
         self._treeview = Gtk.TreeView(model=self._list_store.filter_new())
-        self._treeview.connect('row-activated', self._on_row_activate)
+        self._connect(self._treeview, 'row-activated', self._on_row_activate)
 
         for i, column_title in enumerate(self._column_names):
             renderer = Gtk.CellRendererText()

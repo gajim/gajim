@@ -4,25 +4,36 @@
 
 from __future__ import annotations
 
+import logging
+
 from typing import cast
 
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.gtk.util import SignalManager
 
 
-class SideBarSwitcher(Gtk.ListBox):
+class SideBarSwitcher(Gtk.ListBox, SignalManager):
     def __init__(self, width: int | None = None) -> None:
         Gtk.ListBox.__init__(self)
+        SignalManager.__init__(self)
+
         self.set_vexpand(True)
         self.get_style_context().add_class('settings-menu')
         if width is not None:
             self.set_size_request(width, -1)
-        self.connect('row-activated', self._on_row_activated)
+
+        self._connect(self, 'row-activated', self._on_row_activated)
         self._stack = cast(Gtk.Stack, None)
         self._rows: dict[str, Row] = {}
 
-        self.connect('destroy', self._destroy)
+    def do_unroot(self) -> None:
+        Gtk.ListBox.do_unroot(self)
+        self._disconnect_all()
+        del self._stack
+        self._rows.clear()
+        app.check_finalize(self)
 
     def set_stack(self, stack: Gtk.Stack, rows_visible: bool = True) -> None:
         self._stack = stack
@@ -61,13 +72,6 @@ class SideBarSwitcher(Gtk.ListBox):
 
     def _select_first_row(self):
         self.select_row(self.get_row_at_index(0))
-
-    def _destroy(self, _widget: SideBarSwitcher) -> None:
-        for row in self._rows.values():
-            self.remove(row)
-        self._rows.clear()
-        del self._stack
-        app.check_finalize(self)
 
 
 class Row(Gtk.ListBoxRow):

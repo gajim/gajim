@@ -159,7 +159,6 @@
         <property name="receives-default">1</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
-        <signal name="activate-link" handler="_on_activate_log_link" swapped="no"/>
         <style>
           <class name="link-button"/>
         </style>
@@ -228,7 +227,6 @@
         <property name="selectable">1</property>
         <property name="max-width-chars">40</property>
         <property name="xalign">0</property>
-        <signal name="activate-link" handler="_on_activate_subject_link" swapped="no"/>
         <layout>
           <property name="column">1</property>
           <property name="row">4</property>
@@ -266,7 +264,6 @@
             <property name="tooltip-text" translatable="1">Copy Address</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
-            <signal name="clicked" handler="_on_copy_address" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">edit-copy-symbolic</property>

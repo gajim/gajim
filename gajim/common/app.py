@@ -605,8 +605,8 @@ def check_finalize(obj: Any) -> None:
             return False
 
     def check_finalized():
-        # gc.collect()
-        # gc.collect()
+        gc.collect()
+        gc.collect()
 
         if g_objects:
             logger.warning('GObject not finalized: %s', name)

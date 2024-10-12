@@ -27,7 +27,7 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util import SignalManager, iterate_children
 from gajim.gtk.util import make_href_markup
 
 log = logging.getLogger('gajim.gtk.groupchat_info')
@@ -96,7 +96,7 @@ MUC_FEATURES = {
 }
 
 
-class GroupChatInfoScrolled(Gtk.ScrolledWindow):
+class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
 
     __gsignals__ = {
         'name-updated': (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -108,6 +108,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                  minimal: bool = False,
                  edit_mode: bool = False
                  ) -> None:
+        SignalManager.__init__(self)
         Gtk.ScrolledWindow.__init__(self)
         self.set_size_request(width, -1)
         self.set_halign(Gtk.Align.CENTER)
@@ -128,13 +129,23 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
         self._contact: GroupchatContact | None = None
         self._info: DiscoInfo | None = None
 
-        self._ui = get_builder('groupchat_info_scrolled.ui', self)
+        self._ui = get_builder('groupchat_info_scrolled.ui')
         self.set_child(self._ui.info_grid)
 
+        self._connect(self._ui.logs, 'activate-link', self._on_activate_log_link)
+        self._connect(self._ui.subject, 'activate-link', self._on_activate_subject_link)
+        self._connect(self._ui.address_copy_button, 'clicked', self._on_copy_address)
+
         self._contact_name_widget = ContactNameWidget(edit_mode=edit_mode)
-        self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
+        self._connect(self._contact_name_widget, 'name-updated', self._on_contact_name_updated)
 
         self._ui.name_box.append(self._contact_name_widget)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ScrolledWindow.do_unroot(self)
+        del self._contact_name_widget
+        app.check_finalize(self) 
 
     def get_account(self) -> str | None:
         return self._account
@@ -327,6 +338,6 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow):
                                 label=str(contact))
         button.set_halign(Gtk.Align.START)
         button.get_style_context().add_class('link-button')
-        button.connect('activate-link', self._on_activate_contact_link)
+        self._connect(button, 'activate-link', self._on_activate_contact_link)
         button.show()
         return button

@@ -15,6 +15,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.structs import AffiliationResult
 from nbxmpp.task import Task
 
+from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -22,6 +23,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.groupchat_affiliation')
 
@@ -39,9 +41,10 @@ class Column(IntEnum):
     AFFILIATION_TEXT = 3
 
 
-class GroupchatAffiliation(Gtk.Box):
+class GroupchatAffiliation(Gtk.Box, SignalManager):
     def __init__(self, client: Client, contact: GroupchatContact) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        SignalManager.__init__(self)
 
         self._client = client
         self._contact = contact
@@ -51,7 +54,14 @@ class GroupchatAffiliation(Gtk.Box):
         assert self_contact is not None
         self._own_affiliation = self_contact.affiliation.value
 
-        self._ui = get_builder('groupchat_affiliation.ui', self)
+        self._ui = get_builder('groupchat_affiliation.ui')
+
+        self._connect(self._ui.affiliation_selection, 'changed', self._on_selection_changed)
+        self._connect(self._ui.address_renderer, 'edited', self._on_jid_edited)
+        self._connect(self._ui.reserved_name_renderer, 'edited', self._on_nick_edited)
+        self._connect(self._ui.affiliation_renderer, 'changed', self._on_affiliation_changed)
+        self._connect(self._ui.add_button, 'clicked', self._on_add)
+        self._connect(self._ui.remove_button, 'clicked', self._on_remove)
 
         self._treeview = self._ui.affiliation_treeview
         self._store = self._ui.affiliation_store
@@ -71,6 +81,14 @@ class GroupchatAffiliation(Gtk.Box):
                 affiliation,
                 callback=self._on_affiliations_received,
                 user_data=affiliation)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        del self._treeview
+        del self._store
+        del self._apply_button
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_apply(self, _button: Gtk.Button) -> None:
         self._begin_progress()

@@ -1020,10 +1020,11 @@ class SignalManager:
         signal_name: str,
         callback: Any,
         *args: Any
-    ) -> None:
+    ) -> int:
 
         signal_id = obj.connect(signal_name, callback, *args)
         self._signal_data.append((obj, signal_id))
+        return signal_id
 
     def _connect_after(
         self,
@@ -1031,10 +1032,11 @@ class SignalManager:
         signal_name: str,
         callback: Any,
         *args: Any
-    ) -> None:
+    ) -> int:
 
         signal_id = obj.connect_after(signal_name, callback, *args)
         self._signal_data.append((obj, signal_id))
+        return signal_id
 
     def _disconnect_all(self):
         for obj, signal_id in self._signal_data:

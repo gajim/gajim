@@ -1,9 +1,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
-from typing import cast
-
 import logging
 
 from gi.repository import Gtk

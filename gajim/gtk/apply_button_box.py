@@ -4,14 +4,19 @@
 
 from __future__ import annotations
 
+import logging
+
 from typing import Any
 
 from collections.abc import Callable
 
 from gi.repository import Gtk
 
+from gajim.common import app
+from gajim.gtk.util import SignalManager
 
-class ApplyButtonBox(Gtk.Box):
+
+class ApplyButtonBox(Gtk.Box, SignalManager):
     def __init__(self,
                  button_text: str,
                  on_clicked: Callable[[Gtk.Button], Any]) -> None:
@@ -19,17 +24,23 @@ class ApplyButtonBox(Gtk.Box):
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
+        SignalManager.__init__(self)
 
         self._status_image = Gtk.Image(visible=False)
         self._spinner = Gtk.Spinner(visible=False)
         self._button = Gtk.Button(label=button_text, sensitive=False)
         self._button.get_style_context().add_class('suggested-action')
-        self._button.connect('clicked', self._on_clicked)
-        self._button.connect('clicked', on_clicked)
+        self._connect(self._button, 'clicked', self._on_clicked)
+        self._connect(self._button, 'clicked', on_clicked)
 
         self.append(self._status_image)
         self.append(self._spinner)
         self.append(self._button)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)

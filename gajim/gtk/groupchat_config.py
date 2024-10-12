@@ -13,6 +13,7 @@ from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
+from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -20,13 +21,15 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.groupchat_config')
 
 
-class GroupchatConfig(Gtk.Box):
+class GroupchatConfig(Gtk.Box, SignalManager):
     def __init__(self, client: Client, contact: GroupchatContact) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
 
         self._contact = contact
         self._client = client
@@ -36,7 +39,7 @@ class GroupchatConfig(Gtk.Box):
 
         self._own_affiliation = self_contact.affiliation
 
-        self._ui = get_builder('groupchat_config.ui', self)
+        self._ui = get_builder('groupchat_config.ui')
 
         self._apply_button = ApplyButtonBox(_('Apply'), self._on_apply)
         self._apply_button.set_halign(Gtk.Align.END)
@@ -56,9 +59,18 @@ class GroupchatConfig(Gtk.Box):
             self._ui.error_image.set_from_icon_name('dialog-error')
             self._ui.stack.set_visible_child_name('error')
 
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        del self._apply_button
+        if self._data_form_widget is not None:
+            app.check_finalize(self._data_form_widget)
+        del self._data_form_widget
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
+
     def _set_form(self, form: Any) -> None:
         self._data_form_widget = DataFormWidget(form)
-        self._data_form_widget.connect('is-valid', self._on_is_valid)
+        self._connect(self._data_form_widget, 'is-valid', self._on_is_valid)
         self._data_form_widget.get_style_context().add_class('p-12')
         self._ui.config_box.prepend(self._data_form_widget)
         self._ui.stack.set_visible_child_name('config')
