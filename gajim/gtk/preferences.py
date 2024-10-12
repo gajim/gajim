@@ -399,6 +399,7 @@ class FilePreview(PreferenceBox):
                     SettingType.CONFIG,
                     'enable_file_preview',
                     desc=_('Show previews for files')),
+
             Setting(SettingKind.SPIN,
                     _('Preview Size'),
                     SettingType.CONFIG,
@@ -513,8 +514,9 @@ class Sounds(PreferenceBox):
 
         PreferenceBox.__init__(self, settings)
 
-    def _on_manage_sounds(self, _button: Gtk.Button) -> None:
-        open_window('ManageSounds', transient_for=self.get_root())
+    @staticmethod
+    def _on_manage_sounds(_button: Gtk.Button) -> None:
+        open_window('ManageSounds')
 
 
 class StatusMessage(PreferenceBox):
