@@ -38,19 +38,23 @@ button.flat.link { padding: 0; border: 0; }
 messagedialog.confirmation-dialog > box { margin-top: 18px; }
 
 /* InfoBar */
-infobar.info > revealer > box {
+.infobar > box {
+    padding: 12px 18px;
+    border-bottom: 1px solid @borders;
+}
+.infobar.info > box {
     color: #3A87AD;
     background-color: #D9EDF7;
 }
-infobar.question > revealer > box {
+.infobar.question > box {
     color: #295A72;
     background-color: #AFDAF0;
 }
-infobar.warning > revealer > box {
+.infobar.warning > box {
     color: #D06821;
     background-color: #FFEBC0;
 }
-infobar.error > revealer > box {
+.infobar.error > box {
     color: #B94A48;
     background-color: #F2DEDE;
 }

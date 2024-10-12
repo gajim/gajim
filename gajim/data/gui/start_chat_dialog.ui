@@ -1,26 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkListStore" id="account_store">
-    <columns>
-      <column type="GdkPixbuf"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkStack" id="stack">
     <child>
       <object class="GtkStackPage">
         <property name="name">search</property>
         <property name="child">
           <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <child/>
+            <property name="orientation">1</property>
+            <child>
+              <object class="GtkRevealer" id="infobar">
+                <property name="reveal-child">true</property>
+                <style>
+                  <class name="infobar"/>
+                  <class name="info"/>
+                </style>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">dialog-information-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Start a new chat, join a group chat or search for new group chats globally. You can also enter an XMPP address.</property>
+                        <property name="hexpand">1</property>
+                        <property name="wrap">true</property>
+                        <property name="max-width-chars">46</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="infobar_close_button">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">window-close-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
             <child>
               <object class="GtkBox" id="box">
                 <property name="vexpand">1</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
+                <style>
+                  <class name="p-18"/>
+                </style>
                 <child>
                   <object class="GtkBox">
                     <property name="spacing">6</property>
@@ -55,6 +88,25 @@
                             <property name="icon-name">feather-globe-symbolic</property>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="search_error_box">
+                    <property name="spacing">12</property>
+                    <property name="visible">0</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">dialog-warning-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="search_error_label">
+                        <property name="label" translatable="true">Invalid Address</property>
+                        <property name="wrap">true</property>
+                        <property name="max-width-chars">46</property>
+                        <property name="xalign">0</property>
                       </object>
                     </child>
                   </object>
@@ -232,7 +284,6 @@
                 <property name="child">
                   <object class="GtkTreeView" id="account_view">
                     <property name="focusable">1</property>
-                    <property name="model">account_store</property>
                     <property name="headers-visible">0</property>
                     <property name="enable-search">0</property>
                     <property name="show-expanders">0</property>

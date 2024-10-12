@@ -947,12 +947,15 @@ class SslErrorDialogBuilder(Builder):
 
 
 class StartChatDialogBuilder(Builder):
-    account_store: Gtk.ListStore
     stack: Gtk.Stack
+    infobar: Gtk.Revealer
+    infobar_close_button: Gtk.Button
     box: Gtk.Box
     search_entry: Gtk.SearchEntry
     filter_bar_toggle: Gtk.ToggleButton
     global_search_toggle: Gtk.ToggleButton
+    search_error_box: Gtk.Box
+    search_error_label: Gtk.Label
     filter_bar_revealer: Gtk.Revealer
     scrolledwindow: Gtk.ScrolledWindow
     listbox: Gtk.ListBox

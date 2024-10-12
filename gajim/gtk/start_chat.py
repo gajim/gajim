@@ -11,6 +11,7 @@ import locale
 from enum import IntEnum
 
 from gi.repository import Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -72,7 +73,8 @@ class StartChatDialog(GajimAppWindow):
             self,
             name='StartChatDialog',
             title=_('Start / Join Chat'),
-            default_height=600
+            default_height=600,
+            add_window_padding=False,
         )
 
         self.ready_to_destroy = False
@@ -95,12 +97,16 @@ class StartChatDialog(GajimAppWindow):
         self.new_contact_rows: dict[str, ContactRow | None] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
+        self._accounts_store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
+        self._ui.account_view.set_model(self._accounts_store)
+
         rows: list[ContactRow] = []
         self._add_accounts()
         self._add_contacts(rows)
         self._add_groupchats(rows)
         self._add_new_contact_rows(rows)
 
+        self._connect(self._ui.infobar_close_button, 'clicked', self._on_infobar_close_clicked)
         self._connect(self._ui.search_entry, 
             'search-changed', self._on_search_changed)
         self._connect(self._ui.search_entry, 
@@ -109,16 +115,15 @@ class StartChatDialog(GajimAppWindow):
             'previous-match', self._select_new_match, Direction.PREV)
         self._connect(self._ui.search_entry, 
             'stop-search', lambda *args: self._ui.search_entry.set_text(''))
-
-        self._connect(self._ui.stack, "notify::visible-child-name", self._on_page_changed)
-        self._connect(self._ui.filter_bar_toggle ,"toggled", self._on_filter_bar_toggled)
-        self._connect(self._ui.global_search_toggle, "toggled", self._on_global_search_toggle)  
-        self._connect(self._ui.error_back_button ,"clicked", self._on_back_clicked)  
-        self._connect(self._ui.join_button, "clicked", self._on_join_clicked) 
-        self._connect(self._ui.info_back_button, "clicked", self._on_back_clicked) 
-        self._connect(self._ui.account_view, "row-activated", self._on_select_clicked) 
-        self._connect(self._ui.account_back_button, "clicked", self._on_back_clicked) 
-        self._connect(self._ui.account_select_button, "clicked", self._on_select_clicked)
+        self._connect(self._ui.stack, 'notify::visible-child-name', self._on_page_changed)
+        self._connect(self._ui.filter_bar_toggle ,'toggled', self._on_filter_bar_toggled)
+        self._connect(self._ui.global_search_toggle, 'toggled', self._on_global_search_toggle)
+        self._connect(self._ui.error_back_button ,'clicked', self._on_back_clicked)
+        self._connect(self._ui.join_button, 'clicked', self._on_join_clicked)
+        self._connect(self._ui.info_back_button, 'clicked', self._on_back_clicked)
+        self._connect(self._ui.account_view, 'row-activated', self._on_select_clicked)
+        self._connect(self._ui.account_back_button, 'clicked', self._on_back_clicked)
+        self._connect(self._ui.account_select_button, 'clicked', self._on_select_clicked)
 
         self._ui.listbox.set_placeholder(self._ui.placeholder)
         self._ui.listbox.set_filter_func(self._filter_func, None)
@@ -131,7 +136,7 @@ class StartChatDialog(GajimAppWindow):
         self._muc_info_box = GroupChatInfoScrolled()
         self._ui.info_box.append(self._muc_info_box)
 
-        # self._ui.infobar.set_revealed(app.settings.get('show_help_start_chat')) TODO GTK4
+        self._ui.infobar.set_reveal_child(app.settings.get('show_help_start_chat'))
 
         self._current_filter = 'all'
         self._chat_filter = ChatFilter()
@@ -170,7 +175,7 @@ class StartChatDialog(GajimAppWindow):
 
     def _add_accounts(self) -> None:
         for account in self._accounts:
-            self._ui.account_store.append([None, *account])
+            self._accounts_store.append([None, *account])
 
     def _add_contacts(self, rows: list[ContactRow]):
         show_account = len(self._accounts) > 1
@@ -301,6 +306,9 @@ class StartChatDialog(GajimAppWindow):
             # Propagate to GajimAppWindow
             return Gdk.EVENT_PROPAGATE
 
+        text_widget = self._ui.search_entry.get_delegate()
+        assert isinstance(text_widget, Gtk.Text)
+
         if keyval == Gdk.KEY_Return:
             if self._ui.stack.get_visible_child_name() == 'progress':
                 return Gdk.EVENT_STOP
@@ -318,8 +326,7 @@ class StartChatDialog(GajimAppWindow):
                 return Gdk.EVENT_STOP
 
             if self._current_listbox_is(Search.GLOBAL):
-                if (self._ui.search_entry.has_focus() and
-                        self._ui.search_entry.get_text()):
+                if (text_widget.has_focus() and self._ui.search_entry.get_text()):
                     self._global_search_listbox.remove_all()
                     self._start_search()
 
@@ -333,19 +340,16 @@ class StartChatDialog(GajimAppWindow):
             return Gdk.EVENT_STOP
 
         if is_search:
-            # TODO GTK4
-            # self._ui.search_entry.grab_focus_without_selecting()
-            pass
+            text_widget.grab_focus_without_selecting()
 
         return Gdk.EVENT_PROPAGATE
 
-    def _on_infobar_response(self,
-                             _widget: Gtk.InfoBar,
-                             response: Gtk.ResponseType
-                             ) -> None:
-        if response == Gtk.ResponseType.CLOSE:
-            self._ui.infobar.set_revealed(False)
-            app.settings.set('show_help_start_chat', False)
+    def _on_infobar_close_clicked(
+        self,
+        _button: Gtk.Button,
+    ) -> None:
+        self._ui.infobar.set_reveal_child(False)
+        app.settings.set('show_help_start_chat', False)
 
     def _on_filter_bar_toggled(self, toggle_button: Gtk.ToggleButton) -> None:
         active = toggle_button.get_active()
@@ -592,13 +596,7 @@ class StartChatDialog(GajimAppWindow):
         self._ui.listbox.invalidate_filter()
 
     def _show_search_entry_error(self, state: bool):
-        icon_name = 'dialog-warning-symbolic' if state else None
-        # self._ui.search_entry.set_icon_from_icon_name( TODO GTK4
-        #     Gtk.EntryIconPosition.SECONDARY,
-        #     icon_name)
-        # self._ui.search_entry.set_icon_tooltip_text(
-        #     Gtk.EntryIconPosition.SECONDARY,
-        #     _('Invalid Address'))
+        self._ui.search_error_box.set_visible(state)
 
     def _update_new_contact_rows(self, search_text: str) -> None:
         for row in self.new_contact_rows.values():
