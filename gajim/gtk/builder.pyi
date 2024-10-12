@@ -182,7 +182,7 @@ class CertificateBuilder(Builder):
     data_expires_on: Gtk.Label
     data_sha1: Gtk.Label
     data_sha256: Gtk.Label
-    copy_cert_info_button: Gtk.Button
+    copy_button: Gtk.Button
     image1: Gtk.Image
     public_key_algorithm: Gtk.Label
     public_key_size: Gtk.Label
@@ -511,9 +511,9 @@ class GroupchatInviterBuilder(Builder):
 
 class GroupchatManageBuilder(Builder):
     stack: Gtk.Stack
+    avatar_overlay: Gtk.Overlay
     avatar_button_image: Gtk.Image
     remove_avatar_button: Gtk.Button
-    avatar_select_button: Gtk.Button
     muc_description_entry: Gtk.Entry
     muc_name_entry: Gtk.Entry
     destroy_muc_button: Gtk.Button
@@ -521,9 +521,11 @@ class GroupchatManageBuilder(Builder):
     subject_textview: Gtk.TextView
     subject_change_button: Gtk.Button
     avatar_selector_grid: Gtk.Grid
+    avatar_cancel_button: Gtk.Button
     avatar_update_button: Gtk.Button
     destroy_reason_entry: Gtk.Entry
     destroy_alternate_entry: Gtk.Entry
+    destroy_cancel_button: Gtk.Button
     destroy_button: Gtk.Button
 
 
@@ -717,7 +719,6 @@ class PluginsBuilder(Builder):
     enabled_column: Gtk.TreeViewColumn
     enabled_renderer: Gtk.CellRendererToggle
     toolbar: Gtk.Box
-    install_from_zip_button: Gtk.Button
     uninstall_plugin_button: Gtk.Button
     download_button: Gtk.Button
     help_button: Gtk.Button
@@ -817,7 +818,6 @@ class ProfileBuilder(Builder):
     avatar_overlay: Gtk.Overlay
     avatar_image: Gtk.Image
     remove_avatar_button: Gtk.Button
-    edit_avatar_button: Gtk.Button
     nickname_entry: Gtk.Entry
     cancel_button: Gtk.Button
     add_entry_button: Gtk.MenuButton
@@ -825,6 +825,7 @@ class ProfileBuilder(Builder):
     save_button: Gtk.Button
     edit_button: Gtk.Button
     avatar_selector_box: Gtk.Box
+    avatar_cancel: Gtk.Button
     avatar_update_button: Gtk.Button
     error_label: Gtk.Label
     error_title_label: Gtk.Label
@@ -860,7 +861,12 @@ class RosterItemExchangeBuilder(Builder):
 class SearchViewBuilder(Builder):
     calendar_popover: Gtk.Popover
     calendar: Gtk.Calendar
+    first_day_button: Gtk.Button
+    previous_day_button: Gtk.Button
+    next_day_button: Gtk.Button
+    last_day_button: Gtk.Button
     search_box: Gtk.Box
+    close_button: Gtk.Button
     calendar_button: Gtk.MenuButton
     search_entry: Gtk.SearchEntry
     search_checkbutton: Gtk.CheckButton

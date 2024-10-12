@@ -12,17 +12,15 @@
             <property name="year">2022</property>
             <property name="month">4</property>
             <property name="day">21</property>
-            <signal name="day-selected" handler="_on_date_selected" swapped="no"/>
           </object>
         </child>
         <child>
           <object class="GtkBox">
             <property name="homogeneous">1</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="first_day_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_first_date_selected" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">go-first-symbolic</property>
@@ -31,10 +29,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="previous_day_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_previous_date_selected" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">go-previous-symbolic</property>
@@ -43,10 +40,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="next_day_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_next_date_selected" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">go-next-symbolic</property>
@@ -55,10 +51,9 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="last_day_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_last_date_selected" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">go-last-symbolic</property>
@@ -85,11 +80,10 @@
       <object class="GtkCenterBox">
         <property name="shrink-center-last">true</property>
         <child type="start">
-          <object class="GtkButton">
+          <object class="GtkButton" id="close_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="tooltip-text" translatable="1">Close Search</property>
-            <signal name="clicked" handler="_on_hide_clicked" swapped="no"/>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">window-close-symbolic</property>
@@ -127,7 +121,6 @@
         <property name="focusable">1</property>
         <property name="halign">center</property>
         <property name="placeholder-text" translatable="1">Search…</property>
-        <signal name="activate" handler="_on_search" swapped="no"/>
       </object>
     </child>
     <child>
@@ -135,7 +128,6 @@
         <property name="label" translatable="1">Search all Chats</property>
         <property name="focusable">1</property>
         <property name="halign">center</property>
-        <signal name="toggled" handler="_on_search_all_toggled" swapped="no"/>
       </object>
     </child>
     <child>
@@ -155,13 +147,11 @@
       <object class="GtkScrolledWindow" id="results_scrolled">
         <property name="vexpand">1</property>
         <property name="focusable">1</property>
-        <signal name="edge-reached" handler="_on_edge_reached" swapped="no"/>
         <property name="child">
           <object class="GtkViewport">
             <property name="child">
               <object class="GtkListBox" id="results_listbox">
                 <property name="selection-mode">none</property>
-                <signal name="row-activated" handler="_on_row_activated" swapped="no"/>
                 <child type="placeholder">
                   <object class="GtkBox" id="placeholder">
                     <property name="valign">center</property>

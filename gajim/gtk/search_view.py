@@ -24,6 +24,7 @@ from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -35,9 +36,10 @@ from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
-from gajim.gtk.util import clear_listbox, convert_glib_to_py_datetime
-from gajim.gtk.util import gtk_month
+from gajim.gtk.util import clear_listbox
+from gajim.gtk.util import convert_glib_to_py_datetime
 from gajim.gtk.util import python_month
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.search_view')
 
@@ -48,7 +50,7 @@ class PlaceholderMode(Enum):
     NO_RESULTS = 'no_results'
 
 
-class SearchView(Gtk.Box):
+class SearchView(Gtk.Box, SignalManager, EventHelper):
     __gsignals__ = {
         'hide-search': (
             GObject.SignalFlags.RUN_FIRST,
@@ -57,8 +59,9 @@ class SearchView(Gtk.Box):
     }
 
     def __init__(self) -> None:
-        Gtk.Box.__init__(self)
-        self.set_size_request(300, -1)
+        Gtk.Box.__init__(self, width_request=300)
+        SignalManager.__init__(self)
+        EventHelper.__init__(self)
 
         self._account: str | None = None
         self._jid: JID | None = None
@@ -69,7 +72,7 @@ class SearchView(Gtk.Box):
 
         self._last_search_string = ''
 
-        self._ui = get_builder('search_view.ui', self, ['calendar_popover', 'search_box'])
+        self._ui = get_builder('search_view.ui', ['calendar_popover', 'search_box'])
         self._ui.results_listbox.set_header_func(self._header_func)
         self.append(self._ui.search_box)
 
@@ -79,12 +82,27 @@ class SearchView(Gtk.Box):
             'filter-activated', self._on_search_filters_activated)
         self._ui.search_filters_box.append(self._search_filters)
 
-        app.ged.register_event_handler('account-enabled',
-                                       ged.GUI1,
-                                       self._on_account_state)
-        app.ged.register_event_handler('account-disabled',
-                                       ged.GUI1,
-                                       self._on_account_state)
+        self.register_events([
+            ('account-enabled', ged.GUI1, self._on_account_state),
+            ('account-disabled', ged.GUI1, self._on_account_state),
+        ])
+
+        self._connect(self._ui.calendar, 'day-selected', self._on_date_selected)
+        self._connect(self._ui.calendar_button, 'notify::active', self._on_calender_button_clicked)
+        self._connect(self._ui.first_day_button, 'clicked', self._on_first_date_selected)
+        self._connect(self._ui.previous_day_button, 'clicked', self._on_previous_date_selected)
+        self._connect(self._ui.next_day_button, 'clicked', self._on_next_date_selected)
+        self._connect(self._ui.last_day_button, 'clicked', self._on_last_date_selected)
+        self._connect(self._ui.close_button, 'clicked', self._on_hide_clicked)
+        self._connect(self._ui.search_entry, 'activate', self._on_search)
+        self._connect(self._ui.search_checkbutton, 'toggled', self._on_search_all_toggled)
+        self._connect(self._ui.results_scrolled, 'edge-reached', self._on_edge_reached)
+        self._connect(self._ui.results_listbox, 'row-activated', self._on_row_activated)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        self.unregister_events()
+        app.check_finalize(self)
 
     def _on_account_state(self, _event: Any) -> None:
         self._clear()
