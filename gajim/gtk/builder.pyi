@@ -347,13 +347,6 @@ class DebugConsoleBuilder(Builder):
     search_toggle: Gtk.ToggleButton
 
 
-class EmojiChooserBuilder(Builder):
-    box: Gtk.Box
-    search: Gtk.SearchEntry
-    stack: Gtk.Stack
-    section_box: Gtk.Box
-
-
 class ExceptionDialogBuilder(Builder):
     exception_box: Gtk.Box
     exception_view: Gtk.TextView
@@ -1085,8 +1078,6 @@ def get_builder(file_name: Literal['contact_tooltip.ui'], instance: Any = None, 
 def get_builder(file_name: Literal['db_migration.ui'], instance: Any = None, widgets: list[str] = ...) -> DbMigrationBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['debug_console.ui'], instance: Any = None, widgets: list[str] = ...) -> DebugConsoleBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['emoji_chooser.ui'], instance: Any = None, widgets: list[str] = ...) -> EmojiChooserBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['exception_dialog.ui'], instance: Any = None, widgets: list[str] = ...) -> ExceptionDialogBuilder: ...  # noqa
 @overload
