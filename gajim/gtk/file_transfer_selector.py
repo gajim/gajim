@@ -32,16 +32,16 @@ from gajim.gtk.builder import get_builder
 # from gajim.gtk.const import DND_TARGET_FLATPAK
 # from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.const import TARGET_TYPE_URI_LIST
-from gajim.gtk.filechoosers import FileChooserDialog
+from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.resource_selector import ResourceSelector
-from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util import SignalManager, iterate_listbox_children
 
 PREVIEW_SIZE = 72
 
 log = logging.getLogger('gajim.gtk.file_transfer_selector')
 
 
-class FileTransferSelector(Gtk.Box):
+class FileTransferSelector(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         'changed': (GObject.SignalFlags.RUN_LAST, None, (bool,)),
@@ -53,6 +53,7 @@ class FileTransferSelector(Gtk.Box):
                  ) -> None:
 
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
 
         self._contact = contact
         self._method = method or app.window.get_preferred_ft_method(contact)
@@ -60,10 +61,22 @@ class FileTransferSelector(Gtk.Box):
         client = app.get_client(contact.account)
         self._max_http_file_size = client.get_module('HTTPUpload').max_file_size
 
-        self._ui = get_builder('file_transfer_selector.ui', self, ['stack'])
+        self._ui = get_builder('file_transfer_selector.ui', widgets=['stack'])
         self.append(self._ui.stack)
 
-        self.connect('destroy', self._on_destroy)
+        last_dir = app.settings.get('last_send_dir') or None
+        if last_dir is not None:
+            last_dir = Path(last_dir)
+
+        self._file_chooser_button = FileChooserButton(
+            path=last_dir,
+            multiple=True,
+            label=_('Add Files…')
+        )
+        self._file_chooser_button.set_halign(Gtk.Align.CENTER)
+        self._ui.box.append(self._file_chooser_button)
+
+        self._connect(self._file_chooser_button, 'path-picked', self._on_choose_files_clicked)
 
         self._resource_selector = None
         if isinstance(contact, BareContact):
@@ -71,8 +84,7 @@ class FileTransferSelector(Gtk.Box):
             self._resource_selector = ResourceSelector(
                 contact,
                 constraints=[Namespace.JINGLE_FILE_TRANSFER_5])
-            self._resource_selector.connect(
-                'selection-changed', self._on_resource_selection)
+            self._connect(self._resource_selector, 'selection-changed', self._on_resource_selection)
             self._ui.resource_box.prepend(
                 self._resource_selector)
 
@@ -100,6 +112,11 @@ class FileTransferSelector(Gtk.Box):
         # self._ui.listbox.connect(
         #     'drag-data-received', self._on_drag_data_received)
 
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        del self._file_chooser_button
+        app.check_finalize(self)
 
     def _is_over_max_http_file_size(self, path: Path) -> bool:
         if self._max_http_file_size is None:
@@ -179,9 +196,6 @@ class FileTransferSelector(Gtk.Box):
     def _add_warning_message(self, msg: str) -> None:
         log.warning(msg)  # TODO: replace with UI
 
-    def _on_destroy(self, _widget: FileTransferSelector) -> None:
-        app.check_finalize(self)
-
     def _get_file_paths(self) -> list[Path]:
         paths: list[Path] = []
         for row in cast(list[FileRow], iterate_listbox_children(self._ui.listbox)):
@@ -226,16 +240,11 @@ class FileTransferSelector(Gtk.Box):
 
         self.emit('changed', state)
 
-    def _on_choose_files_clicked(self, _button: Gtk.Button) -> None:
-        def _on_chosen(paths: list[str]) -> None:
-            self.add_files([Path(p).as_uri() for p in paths])
-        FileChooserDialog(_on_chosen,
-                          select_multiple=True,
-                          transient_for=app.window,
-                          path=app.settings.get('last_send_dir') or None)
+    def _on_choose_files_clicked(self, _button: FileChooserButton, paths: list[Path]) -> None:
+        self.add_files([p.as_uri() for p in paths])
 
 
-class FileRow(Gtk.ListBoxRow):
+class FileRow(Gtk.ListBoxRow, SignalManager):
     def __init__(self,
                  path: Path,
                  size_warning: bool,
@@ -243,12 +252,14 @@ class FileRow(Gtk.ListBoxRow):
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
+
         self.file_path = path
 
-        self._ui = get_builder('file_transfer_selector.ui', self, ['file_box'])
+        self._ui = get_builder('file_transfer_selector.ui', widgets=['file_box'])
         self.set_child(self._ui.file_box)
 
-        self._ui.remove_file_button.connect('clicked', self._on_remove_clicked)
+        self._connect(self._ui.remove_file_button, 'clicked', self._on_remove_clicked)
 
         self._ui.file_name_label.set_text(path.name)
 
@@ -272,6 +283,11 @@ class FileRow(Gtk.ListBoxRow):
 
         self._ui.preview_image_box.set_size_request(PREVIEW_SIZE, -1)
         self._set_preview(path)
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def _set_preview(self, path: Path) -> None:
         mime_type = guess_mime_type(path)
@@ -310,4 +326,3 @@ class FileRow(Gtk.ListBoxRow):
     def _on_remove_clicked(self, _button: Gtk.Button) -> None:
         listbox = cast(Gtk.ListBox, self.get_parent())
         listbox.remove(self)
-        app.check_finalize(self)

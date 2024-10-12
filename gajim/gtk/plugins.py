@@ -391,11 +391,11 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             manifest = row[Column.MANIFEST]
             app.plugin_repository.download_plugins([manifest])
 
-    def _on_install_plugin_from_zip(self, _button: FileChooserButton, paths: list[str]) -> None:
+    def _on_install_plugin_from_zip(self, _button: FileChooserButton, paths: list[Path]) -> None:
         if not paths:
             return
 
-        zip_filename = paths[0]
+        zip_filename = str(paths[0])
 
         def _on_overwrite():
             plugin = app.plugin_manager.install_from_zip(zip_filename,

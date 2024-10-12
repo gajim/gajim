@@ -108,7 +108,7 @@ class HistoryExport(Assistant):
 
         current_time = datetime.now()
         time_str = current_time.strftime('%Y-%m-%d-%H-%M-%S')
-        export_dir = Path(directory) / f'export_{time_str}'
+        export_dir = directory / f'export_{time_str}'
 
         jids = app.storage.archive.get_conversation_jids(account)
 
@@ -168,7 +168,7 @@ class SelectAccountDir(Page):
     def __init__(self, account: str | None) -> None:
         Page.__init__(self)
         self._account = account
-        self._export_directory = str(configpaths.get('MY_DATA'))
+        self._export_directory = configpaths.get('MY_DATA')
 
         self.title = _('Export Chat History')
 
@@ -186,7 +186,7 @@ class SelectAccountDir(Page):
             self._ui.account_combo.set_active(0)
 
         file_chooser_button = FileChooserButton(
-            path=Path(self._export_directory),
+            path=self._export_directory,
             mode='folder',
             label=_('Choose History Export Directory'),
         )
@@ -206,13 +206,13 @@ class SelectAccountDir(Page):
         self.update_page_complete()
 
     def _on_path_picked(
-        self, _file_chooser_button: FileChooserButton, paths: list[str]
+        self, _file_chooser_button: FileChooserButton, paths: list[Path]
     ) -> None:
         if not paths:
             return
         self._export_directory = paths[0]
 
-    def get_account_and_directory(self) -> tuple[str, str]:
+    def get_account_and_directory(self) -> tuple[str, Path]:
         assert self._account is not None
         assert self._export_directory is not None
         return self._account, self._export_directory

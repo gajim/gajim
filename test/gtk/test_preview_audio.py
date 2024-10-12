@@ -44,11 +44,11 @@ class AudioWidgetTest(GajimAppWindow):
 
         self._audio_widget = None
 
-    def _on_path_picked(self, _button: FileChooserButton, paths: list[str]) -> None:
+    def _on_path_picked(self, _button: FileChooserButton, paths: list[Path]) -> None:
         if self._audio_widget is not None:
             self._box.remove(self._audio_widget)
 
-        self._audio_widget = AudioWidget(Path(paths[0]))
+        self._audio_widget = AudioWidget(paths[0])
         self._box.append(self._audio_widget)
 
 

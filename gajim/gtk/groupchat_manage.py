@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 import logging
+from pathlib import Path
 
 from gi.repository import Gtk
 from nbxmpp.const import Affiliation
@@ -213,8 +214,8 @@ class GroupchatManage(Gtk.Box, SignalManager):
             jid=self._contact.jid,
             callback=self._on_upload_avatar_result)
 
-    def _on_avatar_picked(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
-        self._avatar_selector.prepare_crop_area(paths[0])
+    def _on_avatar_picked(self, _button: AvatarFileChooserButton, paths: list[Path]) -> None:
+        self._avatar_selector.prepare_crop_area(str(paths[0]))
         self._ui.avatar_update_button.set_sensitive(
             self._avatar_selector.get_prepared())
         self._ui.stack.set_visible_child_name('avatar')

@@ -627,12 +627,12 @@ class FileChooserSetting(GenericSetting):
     def on_select(
         self,
         _file_chooser_button: FileChooserButton,
-        file_paths: list[str]
+        file_paths: list[Path]
     ) -> None:
         if not file_paths:
             return
 
-        self.set_value(file_paths[0])
+        self.set_value(str(file_paths[0]))
 
     def on_row_activated(self) -> None:
         pass

@@ -86,25 +86,6 @@ class BaseFileChooser:
                 self.set_filter(filter_)
 
 
-class BaseFileOpenDialog:
-
-    _title = _('Choose File to Send…')
-    _filters = [Filter(_('All files'), '*', True)]
-
-
-class BaseAvatarChooserDialog:
-
-    _title = _('Choose Avatar…')
-    _preview_size = (100, 100)
-
-    if _require_native():
-        _filters = [Filter(_('PNG files'), '*.png', True),
-                    Filter(_('JPEG files'), '*.jp*g', False),
-                    Filter(_('SVG files'), '*.svg', False)]
-    else:
-        _filters = [Filter(_('Images'), ['image/*'], True)]
-
-
 class NativeFileChooserDialog(Gtk.FileChooserNative, BaseFileChooser):
 
     _title = ''
@@ -147,81 +128,6 @@ class FileSaveDialog(NativeFileChooserDialog):
     _action = Gtk.FileChooserAction.SAVE
 
 
-class NativeFileOpenDialog(BaseFileOpenDialog, NativeFileChooserDialog):
-    pass
-
-
-class NativeAvatarChooserDialog(BaseAvatarChooserDialog,
-                                NativeFileChooserDialog):
-    pass
-
-
-class GtkFileChooserDialog(Gtk.FileChooserDialog, BaseFileChooser):
-
-    _title = ''
-    _filters: list[Filter] = []
-    _action = Gtk.FileChooserAction.OPEN
-    _preview_size = (200, 200)
-
-    def __init__(self,
-                 accept_cb: AcceptCallbackT,
-                 cancel_cb: Callable[..., Any] | None = None,
-                 transient_for: Gtk.Window | None = None,
-                 path: str | None = None,
-                 file_name: str | None = None,
-                 select_multiple: bool = False,
-                 modal: bool = False
-                 ) -> None:
-
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-
-        Gtk.FileChooserDialog.__init__(
-            self,
-            title=self._title,
-            action=self._action,
-            transient_for=transient_for)
-
-        self.add_button(_('_Cancel'), Gtk.ResponseType.CANCEL)
-        open_button = self.add_button(_('_Open'), Gtk.ResponseType.ACCEPT)
-        open_button.get_style_context().add_class('suggested-action')
-
-        self.set_current_folder(Gio.File.new_for_path(path or str(Path.home())))
-        if file_name is not None:
-            self.set_current_name(file_name)
-        self.set_select_multiple(select_multiple)
-        self.set_modal(modal)
-        self._add_filters(self._filters)
-
-        self.connect('response', self._on_response, accept_cb, cancel_cb)
-        self.show()
-
-    def _on_response(self,
-                     dialog: Gtk.FileChooser | Gtk.FileChooserNative,
-                     response: Gtk.ResponseType,
-                     accept_cb: AcceptCallbackT,
-                     cancel_cb: Callable[..., Any] | None
-                     ) -> None:
-        super()._on_response(dialog, response, accept_cb, cancel_cb)
-        self.destroy()
-
-
-class GtkFileOpenDialog(BaseFileOpenDialog, GtkFileChooserDialog):
-    pass
-
-
-class GtkAvatarChooserDialog(BaseAvatarChooserDialog, GtkFileChooserDialog):
-    pass
-
-
-if _require_native():
-    FileChooserDialog = NativeFileOpenDialog
-    AvatarChooserDialog = NativeAvatarChooserDialog
-else:
-    FileChooserDialog = GtkFileOpenDialog
-    AvatarChooserDialog = GtkAvatarChooserDialog
-
-
 class FileChooserButton(Gtk.Button, SignalManager):
     _cls_filters: list[Filter] = []
     __gsignals__ = {
@@ -232,6 +138,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
         self,
         path: Path | None = None,
         mode: Literal['file', 'folder'] = 'file',
+        multiple: bool = False,
         filters: list[Filter] | None = None,
         label: str = '',
         tooltip: str = '',
@@ -242,6 +149,7 @@ class FileChooserButton(Gtk.Button, SignalManager):
         SignalManager.__init__(self)
         self._path = path
         self._mode = mode
+        self._multiple = multiple
         self._filters = filters or self._cls_filters
         self._label_text = label
         self._has_tooltip = bool(tooltip)
@@ -314,9 +222,15 @@ class FileChooserButton(Gtk.Button, SignalManager):
         parent = cast(Gtk.Window, self.get_root())
 
         if self._mode == 'file':
-            dialog.open(parent, None, self._on_file_picked)
+            if self._multiple:
+                dialog.open_multiple(parent, None, self._on_file_picked)
+            else:
+                dialog.open(parent, None, self._on_file_picked)
         else:
-            dialog.select_folder(parent, None, self._on_file_picked)
+            if self._multiple:
+                dialog.select_multiple_folders(parent, None, self._on_file_picked)
+            else:
+                dialog.select_folder(parent, None, self._on_file_picked)
 
     def _set_error(self) -> None:
         log.warning('Could not get picked file/folder')
@@ -332,9 +246,18 @@ class FileChooserButton(Gtk.Button, SignalManager):
 
         try:
             if self._mode == 'file':
-                file = file_dialog.open_finish(result)
+                if self._multiple:
+                    files = file_dialog.open_multiple_finish(result)
+                    g_files = [f for f in files]
+                else:
+                    g_files = [file_dialog.open_finish(result)]
             else:
-                file = file_dialog.select_folder_finish(result)
+                if self._multiple:
+                    files = file_dialog.select_multiple_folders_finish(result)
+                    g_files = [f for f in files]
+                else:
+                    g_files = [file_dialog.select_folder_finish(result)]
+
         except GLib.Error as e:
             if e.code == 2:
                 # User dismissed dialog, do nothing
@@ -344,18 +267,12 @@ class FileChooserButton(Gtk.Button, SignalManager):
             self._set_error()
             return
 
-        if file is None:
-            self._set_error()
-            return
+        paths = [Path(f.get_path()) for f in g_files]
 
-        path = file.get_path()
-        if path is None:
-            self._set_error()
-            return
+        if len(paths) == 1:
+            self.set_path(paths[0])
 
-        self.set_path(Path(path))
-
-        self.emit('path-picked', [path])
+        self.emit('path-picked', paths)
 
     def do_unroot(self) -> None:
         Gtk.Button.do_unroot(self)

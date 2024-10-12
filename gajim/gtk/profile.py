@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from pathlib import Path
 from typing import Any
 from typing import cast
 
@@ -358,12 +359,12 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
+    def _on_edit_avatar(self, _button: AvatarFileChooserButton, paths: list[Path]) -> None:
         if self._avatar_selector is None:
             self._avatar_selector = AvatarSelector()
             self._ui.avatar_selector_box.append(self._avatar_selector)
 
-        self._avatar_selector.prepare_crop_area(paths[0])
+        self._avatar_selector.prepare_crop_area(str(paths[0]))
         self._ui.avatar_update_button.set_sensitive(
             self._avatar_selector.get_prepared())
         self._ui.profile_stack.set_visible_child_name('avatar_selector')

@@ -7,6 +7,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Any
 from typing import cast
 
@@ -128,11 +129,11 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self._helper_label.hide()
         self._crop_area.show()
 
-    def _on_path_picked(self, _button: AvatarFileChooserButton, paths: list[str]) -> None:
+    def _on_path_picked(self, _button: AvatarFileChooserButton, paths: list[Path]) -> None:
         if not paths:
             return
 
-        self.prepare_crop_area(paths[0])
+        self.prepare_crop_area(str(paths[0]))
 
     def _on_drag_data_received(self,
                                _widget: Gtk.Widget,

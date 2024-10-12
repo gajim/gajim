@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from pathlib import Path
 from gi.repository import Gtk
 
 from gajim.gtk.filechoosers import FileChooserButton
@@ -34,7 +35,7 @@ class FileChooserButtonTest(GajimAppWindow):
         box.append(file_chooser_button)
 
     def _on_file_picked(
-        self, _file_chooser_button: FileChooserButton, file_paths: list[str]
+        self, _file_chooser_button: FileChooserButton, file_paths: list[Path]
     ) -> None:
         print(file_paths)
 
