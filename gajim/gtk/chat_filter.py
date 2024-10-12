@@ -14,16 +14,15 @@ from gajim.gtk.util import SignalManager
 class ChatFilter(Gtk.Box, SignalManager):
 
     __gsignals__ = {
-        'filter-changed': (GObject.SignalFlags.RUN_LAST,
-                           None,
-                           (str, )),
+        'filter-changed': (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(self, icons: bool = False) -> None:
         Gtk.Box.__init__(self, halign=Gtk.Align.CENTER)
         SignalManager.__init__(self)
 
-        toolbar = Gtk.Box(css_classes=['toolbar'])
+        toolbar = Gtk.Box()
+        toolbar.add_css_class('toolbar')
         if icons:
             toolbar.add_css_class('chat-filter-icons')
 
