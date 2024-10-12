@@ -53,6 +53,7 @@ from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import GroupBadge
 from gajim.gtk.util import IdleBadge
 from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 ContactT = BareContact | GroupchatContact
@@ -771,7 +772,7 @@ class StartChatDialog(GajimAppWindow):
             self._global_search_listbox.add(ResultRow(item))
 
 
-class ContactRow(Gtk.ListBoxRow):
+class ContactRow(Gtk.ListBoxRow, SignalManager):
     def __init__(self,
                  account: str,
                  contact: ContactT | None,
@@ -781,7 +782,10 @@ class ContactRow(Gtk.ListBoxRow):
                  groupchat: bool = False
                  ) -> None:
         Gtk.ListBoxRow.__init__(self)
-        self.get_style_context().add_class('start-chat-row')
+        SignalManager.__init__(self)
+
+        self.add_css_class('start-chat-row')
+
         self.account = account
         self.account_label = app.get_account_label(account)
         self.show_account = show_account
@@ -801,7 +805,7 @@ class ContactRow(Gtk.ListBoxRow):
 
         self._tooltip = ContactTooltip()
         image.set_has_tooltip(True)
-        image.connect('query-tooltip', self._on_query_tooltip)
+        self._connect(image, 'query-tooltip', self._on_query_tooltip)
 
         if self.name is None:
             self.name = _('Start New Chat')
@@ -852,12 +856,20 @@ class ContactRow(Gtk.ListBoxRow):
 
         grid.attach(badge_box, 2, 0, 1, 3)
 
-        self._grid = grid
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        self._connect(gesture_secondary_click, 'pressed', self._popup_menu)
+        self.add_controller(gesture_secondary_click)
 
-        eventbox = Gtk.Box()
-        # eventbox.connect('button-press-event', self._popup_menu)
-        eventbox.append(grid)
-        self.set_child(eventbox)
+        self._menu_popover = GajimPopover(None)
+        grid.attach(self._menu_popover, 0, 1, 1, 1)
+
+        self._grid = grid
+        self.set_child(grid)
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def _on_query_tooltip(self,
                           _img: Gtk.Image,
@@ -871,20 +883,22 @@ class ContactRow(Gtk.ListBoxRow):
         tooltip.set_custom(widget)
         return v
 
-    def _popup_menu(self,
-                    _widget: Gtk.Box,
-                    event: Any
-                    ) -> None:
+    def _popup_menu(
+        self,
+        _gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
         if not self.groupchat:
-            return
-
-        if event.button != Gdk.BUTTON_SECONDARY:
-            return
+            return Gdk.EVENT_PROPAGATE
 
         menu = get_start_chat_row_menu(self.account, self.jid)
+        self._menu_popover.set_menu_model(menu)
+        self._menu_popover.set_pointing_to_coord(x, y)
+        self._menu_popover.popup()
 
-        popover = GajimPopover(menu, relative_to=self, event=event)
-        popover.popup()
+        return Gdk.EVENT_PROPAGATE
 
     def _get_avatar_image(self, contact: ContactT) -> Gtk.Image:
         if self.is_new:
@@ -919,6 +933,10 @@ class GlobalSearch(Gtk.ListBox):
         self.set_activate_on_single_click(False)
         self._progress: ProgressRow | None = None
         self._add_placeholder()
+
+    def do_unroot(self) -> None:
+        Gtk.ListBox.do_unroot(self)
+        app.check_finalize(self)
 
     def _add_placeholder(self) -> None:
         placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -1054,6 +1072,9 @@ class ResultRow(Gtk.ListBoxRow):
 
         main_box.append(users_box)
 
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
 class ProgressRow(Gtk.ListBoxRow):
     def __init__(self) -> None:
@@ -1078,6 +1099,10 @@ class ProgressRow(Gtk.ListBoxRow):
         box.append(self._spinner)
         box.append(self._count_label)
         self.set_child(box)
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
     def update(self) -> None:
         self._count += 1
