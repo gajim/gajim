@@ -46,8 +46,6 @@
                 <property name="fill-level">0</property>
                 <property name="digits">2</property>
                 <property name="value-pos">bottom</property>
-                <signal name="change-value" handler="_on_seek" swapped="no"/>
-                <signal name="value-changed" handler="_on_seek_bar_moved" swapped="no"/>
               </object>
             </child>
             <layout>
@@ -98,7 +96,6 @@
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Rewind 10 seconds</property>
-                <signal name="clicked" handler="_on_rewind_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">media-seek-backward-symbolic</property>
@@ -110,7 +107,6 @@
               <object class="GtkButton" id="play_pause_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_play_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="play_icon">
                     <property name="tooltip-text" translatable="1">Start/stop playback</property>
@@ -123,7 +119,6 @@
               <object class="GtkButton" id="forward_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <signal name="clicked" handler="_on_forward_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="tooltip-text" translatable="1">Forward 10 seconds</property>
@@ -144,7 +139,6 @@
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Decrease playback speed</property>
-                <signal name="clicked" handler="_on_speed_dec_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="halign">center</property>
@@ -195,7 +189,6 @@
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Increase playback speed</property>
-                <signal name="clicked" handler="_on_speed_inc_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="halign">center</property>
@@ -233,7 +226,6 @@
                 <property name="digits">2</property>
                 <property name="has-origin">0</property>
                 <property name="value-pos">right</property>
-                <signal name="change-value" handler="_on_speed_change" swapped="no"/>
               </object>
             </child>
           </object>

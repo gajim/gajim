@@ -29,6 +29,7 @@ from gajim.common.util.text import format_duration
 from gajim.gtk.builder import get_builder
 from gajim.gtk.preview_audio_analyzer import AudioAnalyzer
 from gajim.gtk.preview_audio_visualizer import AudioVisualizerWidget
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.preview_audio')
 
@@ -36,12 +37,12 @@ log = logging.getLogger('gajim.gtk.preview_audio')
 SEEK_BAR_PADDING = 11
 
 
-class AudioWidget(Gtk.Box):
+class AudioWidget(Gtk.Box, SignalManager):
     def __init__(self, file_path: Path) -> None:
-
         Gtk.Box.__init__(self,
                          orientation=Gtk.Orientation.HORIZONTAL,
                          spacing=6)
+        SignalManager.__init__(self)
 
         self._playbin = Gst.ElementFactory.make('playbin', 'bin')
         self._bus_watch_id: int = 0
@@ -126,9 +127,53 @@ class AudioWidget(Gtk.Box):
 
         self._ui.progress_label.set_xalign(1.0)
 
-        self.connect('destroy', self._on_destroy)
+        self._connect(self._ui.seek_bar, 'change-value', self._on_seek)
+        self._connect(self._ui.seek_bar, 'value-changed', self._on_seek_bar_moved)
+        self._connect(self._ui.rewind_button, 'clicked', self._on_rewind_clicked)
+        self._connect(self._ui.play_pause_button, 'clicked', self._on_play_clicked)
+        self._connect(self._ui.forward_button, 'clicked', self._on_forward_clicked)
+        self._connect(self._ui.speed_dec_button, 'clicked', self._on_speed_dec_clicked)
+        self._connect(self._ui.speed_inc_button, 'clicked', self._on_speed_inc_clicked)
+        self._connect(self._ui.speed_bar, 'change-value', self._on_speed_change)
 
-        # TODO GTK4 button handling from preview_audio.ui
+        gesture_seek_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
+        gesture_seek_click.connect('pressed', self._on_seek_bar_button_pressed)
+        gesture_seek_click.connect('released', self._on_seek_bar_button_released)
+        self._ui.seek_bar.add_controller(gesture_seek_click)
+
+        controller_motion = Gtk.EventControllerMotion()
+        controller_motion.connect('motion', self._on_seek_bar_cursor_move)
+        self._ui.seek_bar.add_controller(controller_motion)
+
+        controller_scroll = Gtk.EventControllerScroll(flags=Gtk.EventControllerScrollFlags.VERTICAL)
+        controller_scroll.connect('scroll', self._on_seek_bar_scrolled)
+        self._ui.seek_bar.add_controller(controller_scroll)
+
+        gesture_timestamp_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
+        gesture_timestamp_click.connect('pressed', self._on_timestamp_label_clicked)
+        self._ui.progress_label.add_controller(gesture_timestamp_click)
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+
+        # TODO GTK4: release eventcontrollers
+
+        if self._playbin is not None:
+            self._playbin.set_state(Gst.State.NULL)
+            bus = self._playbin.get_bus()
+
+            if bus is not None:
+                bus.remove_signal_watch()
+                bus.disconnect(self._bus_watch_id)
+
+        if self._audio_analyzer is not None:
+            self._audio_analyzer.destroy()
+
+        self._remove_seek_bar_update_idle()
+
+        app.preview_manager.unregister_audio_stop_func(self._id)
+        app.check_finalize(self)
 
     def load_audio_file(self, file_path: Path) -> None:
         assert self._playbin is not None
@@ -547,19 +592,26 @@ class AudioWidget(Gtk.Box):
     def _on_seek_bar_moved(self, _scake: Gtk.Scale) -> None:
         self._update_timestamp_label()
 
-    def _on_timestamp_label_clicked(self,
-                                    _label: Gtk.Label,
-                                    *args: Any
-                                    ) -> None:
+    def _on_timestamp_label_clicked(
+        self,
+        _gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> int:
 
         self._state.is_timestamp_positive = \
             not self._state.is_timestamp_positive
         self._update_timestamp_label()
+        return Gdk.EVENT_STOP
 
-    def _on_seek_bar_button_pressed(self,
-                                    _scale: Gtk.Scale,
-                                    _event: Any,
-                                    ) -> None:
+    def _on_seek_bar_button_pressed(
+        self,
+        _gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> int:
         assert self._cursor_pos is not None
         # There are two cases when the user clicks on the seek bar:
         # 1) Press and immediately release: Jump to the new position and
@@ -571,35 +623,41 @@ class AudioWidget(Gtk.Box):
         width = self._ui.seek_bar.get_allocation().width - 2 * SEEK_BAR_PADDING
         new_pos = self._state.duration * self._cursor_pos / width
         self._seek_unconditionally(new_pos)
+        return Gdk.EVENT_STOP
 
-    def _on_seek_bar_button_released(self,
-                                     _scale: Gtk.Scale,
-                                     event: Any,
-                                     ) -> None:
+    def _on_seek_bar_button_released(
+        self,
+        _gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> int:
         self._pause_seek = False
         self._seek(self._state.position)
 
         # Set the seek position to -1 to indicate that the user isn't about
         # to change the position
         self._seek_pos = -1
+        return Gdk.EVENT_STOP
 
     def _on_seek_bar_cursor_move(self,
-                                 _scale: Gtk.Scale,
-                                 event: Any
+                                 _event_controller: Gtk.EventControllerMotion,
+                                 x: float,
+                                 _y: float,
                                  ) -> None:
         # Used to determine the click position on the seekbar
         if self._is_LTR:
-            self._cursor_pos = event.x - SEEK_BAR_PADDING
+            self._cursor_pos = x - SEEK_BAR_PADDING
         else:
             width = self._ui.seek_bar.get_allocation().width
-            self._cursor_pos = width - (event.x + SEEK_BAR_PADDING)
+            self._cursor_pos = width - (x + SEEK_BAR_PADDING)
 
     def _on_seek_bar_scrolled(self,
-                              _scale: Gtk.Scale,
-                              event: Any
+                              _event_controller: Gtk.EventControllerScroll,
+                              _dx: float,
+                              dy: float,
                               ) -> None:
-        _is_smooth, _delta_x, delta_y = event.get_scroll_deltas()
-        if delta_y > 0:
+        if dy > 0:
             new_pos = self._state.position + self._offset_backward
         else:
             new_pos = self._state.position + self._offset_forward
@@ -650,20 +708,3 @@ class AudioWidget(Gtk.Box):
         new_pos = self._get_constrained_position(
             self._state.position + self._offset_forward)
         self._seek_unconditionally(new_pos)
-
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
-        if self._playbin is not None:
-            self._playbin.set_state(Gst.State.NULL)
-            bus = self._playbin.get_bus()
-
-            if bus is not None:
-                bus.remove_signal_watch()
-                bus.disconnect(self._bus_watch_id)
-
-        if self._audio_analyzer is not None:
-            self._audio_analyzer.destroy()
-
-        self._remove_seek_bar_update_idle()
-
-        app.preview_manager.unregister_audio_stop_func(self._id)
-        app.check_finalize(self)
