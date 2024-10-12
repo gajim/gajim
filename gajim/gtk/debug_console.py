@@ -32,7 +32,7 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
-from gajim.gtk.util import EventHelper
+from gajim.common.ged import EventHelper
 from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
@@ -95,7 +95,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._outgoing = True
 
         self._ui = get_builder('debug_console.ui', self)
-        self.set_titlebar(self._ui.headerbar)
+        self.window.set_titlebar(self._ui.headerbar)
         self._set_title()
 
         self.set_child(self._ui.stack)
@@ -109,7 +109,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._combo.set_halign(Gtk.Align.END)
         self._combo.set_visible(False)
         self._combo.set_visible(False)
-        self._combo.connect('changed', self._on_value_change)
+        self._connect(self._combo, 'changed', self._on_value_change)
         available_accounts = self._get_accounts()
         for account, label in available_accounts:
             self._combo.append(account, label)
@@ -144,19 +144,14 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         log_handler = get_log_console_handler()
         log_handler.set_callback(self._add_log_record)
 
-        self._ui.stack.connect('notify::visible-child-name',
-                               self._on_stack_child_changed)
+        self._connect(self._ui.stack, 'notify::visible-child-name', self._on_stack_child_changed)
 
         vadjustment = self._ui.scrolled.get_vadjustment()
-        vadjustment.connect('notify::upper',
-                            self._on_adj_upper_changed)
-        vadjustment.connect('notify::value',
-                            self._on_adj_value_changed)
+        self._connect(vadjustment, 'notify::upper', self._on_adj_upper_changed)
+        self._connect(vadjustment, 'notify::value', self._on_adj_value_changed)
 
         controller = self.get_default_controller()
         controller.connect('key-pressed', self._on_key_pressed)
-
-        self.connect('destroy', self._on_destroy)
 
         self.register_events([
             ('stanza-received', ged.GUI1, self._on_stanza_received),
@@ -165,9 +160,9 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             ('account-disabled', ged.GUI1, self._on_account_changed)
         ])
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
+        self.unregister_events()
         get_log_console_handler().set_callback(None)
-        app.check_finalize(self)
 
     def _on_adj_upper_changed(self,
                               adj: Gtk.Adjustment,
@@ -196,7 +191,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             title = _('Account Wizard')
         else:
             title = app.get_jid_from_account(self._selected_account)
-        self.set_title(title)
+        self.window.set_title(title)
 
     def _on_account_changed(self,
                             event: AccountEnabled | AccountDisabled
@@ -522,7 +517,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             settings,
             self._selected_account or 'AllAccounts')
-        self._filter_dialog.connect('destroy', self._on_filter_destroyed)
+        self._connect(self._filter_dialog.window, 'close-request', self._on_filter_destroyed)
 
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
         self._filter_dialog = None
