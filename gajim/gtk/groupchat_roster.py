@@ -33,6 +33,7 @@ from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.util import EventHelper
 from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.groupchat_roster')
 
@@ -65,16 +66,17 @@ CONTACT_SIGNALS = {
 }
 
 
-class GroupchatRoster(Gtk.Revealer, EventHelper):
+class GroupchatRoster(Gtk.Revealer, EventHelper, SignalManager):
     def __init__(self) -> None:
         Gtk.Revealer.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._contact = None
 
         self._tooltip = GCTooltip()
 
-        self._ui = get_builder('groupchat_roster.ui', self)
+        self._ui = get_builder('groupchat_roster.ui')
         self.set_child(self._ui.box)
 
         self._contact_refs: dict[str, Gtk.TreeRowReference] = {}
@@ -84,6 +86,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
 
         self._roster = self._ui.roster_treeview
+
+        self._menu_popover = GajimPopover(None)
+        self._ui.box.append(self._menu_popover)
 
         self._filter_string = ''
         self._modelfilter = self._store.filter_new()
@@ -102,7 +107,24 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         self.set_reveal_child(
             not app.settings.get('hide_groupchat_occupants_list'))
 
-        self.connect('notify::reveal-child', self._on_reveal)
+        self._connect(self, 'notify::reveal-child', self._on_reveal)
+        self._connect(self._ui.search_entry, 'changed', self._on_search_changed)
+        self._connect(self._ui.roster_treeview, 'query-tooltip', self._query_tooltip)
+        self._connect(self._ui.roster_treeview, 'row-activated', self._on_roster_row_activated)
+
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        gesture_secondary_click.connect('pressed', self._on_roster_button_press_event)
+        self._ui.roster_treeview.add_controller(gesture_secondary_click)
+
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect('leave', self._on_focus_out)
+        self._ui.roster_treeview.add_controller(focus_controller)
+
+    def do_unroot(self) -> None:
+        Gtk.Revealer.do_unroot(self)
+        self._disconnect_all()
+        self.unregister_events()
+        app.check_finalize(self)
 
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
@@ -153,9 +175,8 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if self._contact.is_joined:
             self._load_roster()
 
-    @staticmethod
-    def _on_focus_out(treeview: Gtk.TreeView, _param: Gdk.EventFocus) -> None:
-        treeview.get_selection().unselect_all()
+    def _on_focus_out(self, _event_controller_focus: Gtk.EventControllerFocus) -> None:
+        self._ui.roster_treeview.get_selection().unselect_all()
 
     def _query_tooltip(self,
                        widget: Gtk.Widget,
@@ -408,15 +429,14 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                         contact.jid,
                                         select=True)
 
-    def _on_roster_button_press_event(self,
-                                      treeview: Gtk.TreeView,
-                                      event: Any
-                                      ) -> None:
-
-        if event.button == Gdk.BUTTON_PRIMARY:
-            return
-
-        pos = treeview.get_path_at_pos(int(event.x), int(event.y))
+    def _on_roster_button_press_event(
+        self,
+        gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> None:
+        pos = self._ui.roster_treeview.get_path_at_pos(int(x), int(y))
         if pos is None:
             return
 
@@ -439,13 +459,13 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if self._contact.nickname == nick:
             return
 
-        if event.button == Gdk.BUTTON_SECONDARY:
-            self._show_contact_menu(nick, event)
+        if gesture_click.get_button() == Gdk.BUTTON_SECONDARY:
+            self._show_contact_menu(nick, x, y)
 
-        # if event.button == Gdk.BUTTON_MIDDLE:
+        # if gesture_click.get_button() == Gdk.BUTTON_MIDDLE:
             # self.roster.emit('row-activated', nick)
 
-    def _show_contact_menu(self, nick: str, event: Any) -> None:
+    def _show_contact_menu(self, nick: str, x: float, y: float) -> None:
         assert self._contact is not None
         self_contact = self._contact.get_self()
         assert self_contact is not None
@@ -454,8 +474,9 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
                                               self_contact,
                                               contact)
 
-        popover = GajimPopover(menu, relative_to=self._roster, event=event)
-        popover.popup()
+        self._menu_popover.set_menu_model(menu)
+        self._menu_popover.set_pointing_to_coord(x, y)
+        self._menu_popover.popup()
 
     def _on_muc_state_changed(self,
                               contact: GroupchatContact,

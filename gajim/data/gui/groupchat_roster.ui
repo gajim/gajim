@@ -40,7 +40,6 @@
           <object class="GtkSearchEntry" id="search_entry">
             <property name="focusable">1</property>
             <property name="placeholder-text" translatable="1">Search Participants…</property>
-            <signal name="changed" handler="_on_search_changed" swapped="no"/>
           </object>
         </child>
       </object>
@@ -61,8 +60,6 @@
             <property name="headers-visible">0</property>
             <property name="expander-column">expander</property>
             <property name="enable-search">0</property>
-            <signal name="query-tooltip" handler="_query_tooltip" swapped="no"/>
-            <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
             <child internal-child="selection">
               <object class="GtkTreeSelection"/>
             </child>
