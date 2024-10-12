@@ -283,6 +283,7 @@ class KeyRow(Gtk.ListBoxRow):
 
     def do_unroot(self) -> None:
         Gtk.ListBoxRow.do_unroot(self)
+        del self._trust_button
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
@@ -343,6 +344,7 @@ class TrustButton(Gtk.MenuButton):
     def do_unroot(self) -> None:
         Gtk.MenuButton.do_unroot(self)
         del self._trust_popover
+        del self._row
         app.check_finalize(self)
 
     def update(self) -> None:
@@ -375,8 +377,10 @@ class TrustPopver(Gtk.Popover, SignalManager):
 
     def do_unroot(self) -> None:
         Gtk.Popover.do_unroot(self)
+        self._disconnect_all()
         del self._listbox
         del self._row
+        del self._trust_button
         app.check_finalize(self)
 
     def _activated(self, _listbox: Gtk.ListBox, row: MenuOption) -> None:
