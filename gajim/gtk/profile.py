@@ -29,7 +29,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
-from gajim.gtk.filechoosers import AvatarChooserDialog
+from gajim.gtk.filechoosers import AvatarChooserDialog, FileChooserButton, Filter
 from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
@@ -75,7 +75,7 @@ class ProfileWindow(GajimAppWindow):
         self._contact = self._client.get_module('Contacts').get_contact(
             self._jid)
 
-        self._ui = get_builder('profile.ui', self)
+        self._ui = get_builder('profile.ui')
 
         menu = Gio.Menu()
         for action, label in MENU_DICT.items():
@@ -83,6 +83,32 @@ class ProfileWindow(GajimAppWindow):
 
         self._ui.add_entry_button.set_menu_model(menu)
         self._add_actions()
+
+        self._connect(self._ui.back_button, 'clicked', self._on_back_clicked)
+        self._connect(self._ui.avatar_update_button, 'clicked', self._on_update_avatar)
+        self._connect(self._ui.edit_button, 'clicked', self._on_edit_clicked)
+        self._connect(self._ui.avatar_cancel, 'clicked', self._on_cancel_update_avatar)
+        self._connect(self._ui.save_button, 'clicked', self._on_save_clicked)
+        self._connect(self._ui.cancel_button, 'clicked', self._on_cancel_clicked)
+        self._connect(self._ui.avatar_nick_access, 'notify::active', self._access_switch_toggled)
+        self._connect(self._ui.remove_avatar_button, 'clicked', self._on_remove_avatar)
+        self._connect(self._ui.vcard_access, 'notify::active', self._access_switch_toggled)
+
+        self._avatar_edit_button = FileChooserButton(
+            filters=[
+                Filter(name=_('PNG files'), patterns=['*.png'], default=True),
+                Filter(name=_('JPEG files'), patterns=['*.jp*g']),
+                Filter(name=_('SVG files'), patterns=['*.svg']),
+            ],
+            tooltip=_('Change your profile picture'),
+            icon_name='document-edit-symbolic',
+        )
+        self._connect(self._avatar_edit_button, 'path-picked', self._on_edit_avatar)
+
+        self._avatar_edit_button.set_halign(Gtk.Align.END)
+        self._avatar_edit_button.set_valign(Gtk.Align.END)
+        self._avatar_edit_button.set_visible(False)
+        self._ui.avatar_overlay.add_overlay(self._avatar_edit_button)
 
         self._avatar_selector: AvatarSelector | None = None
         self._current_avatar: Gdk.Texture | None = None
@@ -128,13 +154,10 @@ class ProfileWindow(GajimAppWindow):
             callback=self._on_access_model_received,
             user_data=Namespace.NICK)
 
-
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
+        del self._avatar_edit_button
         self._running_tasks.clear()
         self._avatar_selector = None
-        app.check_finalize(self)
 
     def _on_client_state_changed(self,
                                  _client: Client,
@@ -197,7 +220,7 @@ class ProfileWindow(GajimAppWindow):
             action_name = 'add-' + action.lower()
             act = Gio.SimpleAction.new(action_name, None)
             act.connect('activate', self._on_action)
-            self.add_action(act)
+            self.window.add_action(act)
 
     def _on_action(self,
                    action: Gio.SimpleAction,
@@ -216,7 +239,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.cancel_button.show()
         self._ui.save_button.show()
         self._ui.remove_avatar_button.show()
-        self._ui.edit_avatar_button.show()
+        self._avatar_edit_button.show()
         self._ui.nickname_entry.set_sensitive(True)
         self._ui.privacy_button.show()
 
@@ -340,18 +363,15 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, _button: Gtk.Button) -> None:
-        def _on_file_selected(paths: list[str]) -> None:
-            if self._avatar_selector is None:
-                self._avatar_selector = AvatarSelector()
-                self._ui.avatar_selector_box.append(self._avatar_selector)
+    def _on_edit_avatar(self, _button: FileChooserButton, paths: list[str]) -> None:
+        if self._avatar_selector is None:
+            self._avatar_selector = AvatarSelector()
+            self._ui.avatar_selector_box.append(self._avatar_selector)
 
-            self._avatar_selector.prepare_crop_area(paths[0])
-            self._ui.avatar_update_button.set_sensitive(
-                self._avatar_selector.get_prepared())
-            self._ui.profile_stack.set_visible_child_name('avatar_selector')
-
-        AvatarChooserDialog(_on_file_selected, transient_for=self)
+        self._avatar_selector.prepare_crop_area(paths[0])
+        self._ui.avatar_update_button.set_sensitive(
+            self._avatar_selector.get_prepared())
+        self._ui.profile_stack.set_visible_child_name('avatar_selector')
 
     def _on_cancel_update_avatar(self, _button: Gtk.Button) -> None:
         self._show_profile_page()
