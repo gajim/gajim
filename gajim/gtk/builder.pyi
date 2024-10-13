@@ -607,12 +607,12 @@ class MainBuilder(Builder):
 
 
 class MamPreferencesBuilder(Builder):
-    default_store: Gtk.ListStore
-    preferences_store: Gtk.ListStore
     mam_box: Gtk.Box
     default_combo: Gtk.ComboBox
     overlay: Gtk.Overlay
     pref_view: Gtk.TreeView
+    jid_cell_renderer: Gtk.CellRendererText
+    pref_toggle_cell_renderer: Gtk.CellRendererToggle
     add: Gtk.Button
     remove: Gtk.Button
     save_button: Gtk.Button

@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkListStore" id="default_store">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Always</col>
-        <col id="1">always</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Contact List</col>
-        <col id="1">roster</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Never</col>
-        <col id="1">never</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="preferences_store">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gboolean"/>
-    </columns>
-  </object>
   <object class="GtkBox" id="mam_box">
     <property name="width_request">400</property>
     <property name="height_request">300</property>
@@ -50,7 +24,6 @@
           <object class="GtkComboBox" id="default_combo">
             <property name="width_request">200</property>
             <property name="halign">start</property>
-            <property name="model">default_store</property>
             <property name="active">0</property>
             <property name="id_column">1</property>
             <child>
@@ -74,7 +47,6 @@
             <property name="child">
               <object class="GtkTreeView" id="pref_view">
                 <property name="focusable">1</property>
-                <property name="model">preferences_store</property>
                 <property name="search_column">0</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
@@ -87,10 +59,9 @@
                     <property name="sort_indicator">1</property>
                     <property name="sort_column_id">0</property>
                     <child>
-                      <object class="GtkCellRendererText">
+                      <object class="GtkCellRendererText" id="jid_cell_renderer">
                         <property name="editable">1</property>
                         <property name="placeholder_text">user@example.org</property>
-                        <signal name="edited" handler="_jid_edited" swapped="no"/>
                       </object>
                       <attributes>
                         <attribute name="text">0</attribute>
@@ -105,8 +76,7 @@
                     <property name="sort_indicator">1</property>
                     <property name="sort_column_id">1</property>
                     <child>
-                      <object class="GtkCellRendererToggle">
-                        <signal name="toggled" handler="_pref_toggled" swapped="no"/>
+                      <object class="GtkCellRendererToggle" id="pref_toggle_cell_renderer">
                       </object>
                       <attributes>
                         <attribute name="active">1</attribute>
@@ -132,7 +102,6 @@
                 <property name="can_focus">0</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">list-add-symbolic</property>
-                <signal name="clicked" handler="_on_add" swapped="no"/>
               </object>
             </child>
             <child>
@@ -140,7 +109,6 @@
                 <property name="can_focus">0</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">list-remove-symbolic</property>
-                <signal name="clicked" handler="_on_remove" swapped="no"/>
               </object>
             </child>
             <style>
@@ -159,7 +127,6 @@
                 <property name="receives_default">1</property>
                 <property name="valign">end</property>
                 <property name="use_underline">1</property>
-                <signal name="clicked" handler="_on_save" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
