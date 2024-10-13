@@ -9,7 +9,6 @@ import math
 from statistics import mean
 
 import cairo
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common.preview import AudioSampleT
@@ -42,7 +41,7 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         # Add EventMask to receive button press events (for skipping)
         # self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK) GTK4 TODO
 
-        # self.connect('draw', self._on_drawingarea_draw)
+        self.set_draw_func(self._on_drawingarea_draw)
         # self.connect('configure-event', self._on_drawingarea_changed)
         # self.connect('style-updated', self._on_style_updated)
 
@@ -57,6 +56,9 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._ctx: cairo.Context[cairo.ImageSurface] = cairo.Context(
             self._surface)
         self._cairo_path = self._ctx.copy_path()
+
+    def do_unroot(self) -> None:
+        Gtk.DrawingArea.do_unroot(self)
 
     def set_parameters(self,
                        position: float,
@@ -91,23 +93,25 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
     def _on_drawingarea_draw(self,
                              _drawing_area: Gtk.DrawingArea,
-                             ctx: cairo.Context[cairo.ImageSurface]
+                             ctx: cairo.Context[cairo.ImageSurface],
+                             _width: int,
+                             _height: int,
                              ) -> None:
 
         if len(self._samples) == 0:
             return
         self._draw_surface(ctx)
 
-    def _on_drawingarea_changed(self,
-                                _drawing_area: Gtk.DrawingArea,
-                                _event: Gdk.EventConfigure
-                                ) -> None:
+    # def _on_drawingarea_changed(self,
+    #                             _drawing_area: Gtk.DrawingArea,
+    #                             _event: Gdk.EventConfigure
+    #                             ) -> None:
 
-        self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
-        self._render_waveform()
+    #     self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
+    #     self._render_waveform()
 
-    def _on_style_updated(self, _event: Gdk.EventConfigure) -> None:
-        self.queue_draw()
+    # def _on_style_updated(self, _event: Gdk.EventConfigure) -> None:
+    #     self.queue_draw()
 
     def _is_static(self):
         return self._animation_period == 1

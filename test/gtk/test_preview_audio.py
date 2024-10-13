@@ -18,6 +18,8 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
+DEFAULT_AUDIO_FILE_PATH = util.get_gajim_dir() / 'data/sounds/attention.wav'
+
 
 class AudioWidgetTest(GajimAppWindow):
     def __init__(self):
@@ -29,24 +31,33 @@ class AudioWidgetTest(GajimAppWindow):
             default_height=600,
         )
 
-        self._box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True, orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        self._box = Gtk.Box(
+            halign=Gtk.Align.CENTER,
+            valign=Gtk.Align.CENTER,
+            hexpand=True,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=12,
+        )
         self.set_child(self._box)
 
         file_chooser_button = FileChooserButton(
             label='Select Audio File',
             filters=[
                 Filter(name='All files', patterns=['*']),
+                Filter(name='WAV Sounds', patterns=['*.wav']),
                 Filter(name='MP3 Sounds', patterns=['*.mp3'], default=True),
             ],
+            path=DEFAULT_AUDIO_FILE_PATH,
         )
         file_chooser_button.connect('path-picked', self._on_path_picked)
         self._box.append(file_chooser_button)
 
-        self._audio_widget = None
+        self._audio_widget = AudioWidget(DEFAULT_AUDIO_FILE_PATH)
+        self._box.append(self._audio_widget)
 
     def _on_path_picked(self, _button: FileChooserButton, paths: list[Path]) -> None:
-        if self._audio_widget is not None:
-            self._box.remove(self._audio_widget)
+        self._box.remove(self._audio_widget)
+        del self._audio_widget
 
         self._audio_widget = AudioWidget(paths[0])
         self._box.append(self._audio_widget)
