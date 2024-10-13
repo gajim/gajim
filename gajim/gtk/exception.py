@@ -39,6 +39,7 @@ from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import get_gtk_version
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 try:
@@ -81,11 +82,13 @@ def _hook(type_: type[BaseException],
         sys.__excepthook__(type_, value, tb)
         return
 
-    ExceptionDialog(type_, value, tb)
+    window = ExceptionDialog(type_, value, tb)
+    window.show()
+
     _exception_in_progress.release()
 
 
-class ExceptionDialog(GajimAppWindow):
+class ExceptionDialog(GajimAppWindow, SignalManager):
     def __init__(
         self,
         type_: type[BaseException],
@@ -97,7 +100,9 @@ class ExceptionDialog(GajimAppWindow):
             name='ExceptionDialog',
             title=_('Gajim - Error'),
             default_width=700,
+            add_window_padding=False,
         )
+        SignalManager.__init__(self)
 
         self._traceback_data = (type_, value, tb)
         self._sentry_available = app.is_installed('SENTRY_SDK')
@@ -107,10 +112,13 @@ class ExceptionDialog(GajimAppWindow):
 
         if not self._sentry_available:
             self._ui.user_feedback_box.set_visible(False)
-            self._ui.infobar.set_revealed(True)
+            self._ui.infobar.set_reveal_child(True)
 
         self._ui.report_button.grab_focus()
         self.set_default_widget(self._ui.report_button)
+
+        self._connect(self._ui.close_button, 'clicked', self._on_close_clicked)
+        self._connect(self._ui.report_button, 'clicked', self._on_report_clicked)
 
         trace = StringIO()
         traceback.print_exception(type_, value, tb, None, trace)
@@ -136,10 +144,10 @@ class ExceptionDialog(GajimAppWindow):
         params = {'issue[description]': self._issue_text}
         url = f'{ISSUE_URL}?{urlencode(params)}'
         webbrowser.open(url, new=2)
-        self.destroy()
+        self.close()
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.close()
 
     @staticmethod
     def _get_issue_text(traceback_text: str) -> str:
@@ -161,12 +169,12 @@ class ExceptionDialog(GajimAppWindow):
             return
 
         self._capture_exception()
-        self.destroy()
+        self.close()
 
     def _request_sentry_endpoint(self) -> None:
         self._ui.report_button.set_sensitive(False)
         self._ui.close_button.set_sensitive(False)
-        self._ui.report_spinner.show()
+        self._ui.report_spinner.set_visible(True)
         self._ui.report_spinner.start()
 
         request = create_http_request()
@@ -199,7 +207,7 @@ class ExceptionDialog(GajimAppWindow):
         else:
             self._init_sentry(endpoint)
             self._capture_exception()
-            self.destroy()
+            self.close()
 
     def _init_sentry(self, endpoint: str) -> None:
         sentry_sdk.init(
@@ -243,6 +251,9 @@ class ExceptionDialog(GajimAppWindow):
         event['server_name'] = 'redacted'
         pprint.pprint(event)
         return event
+
+    def _cleanup(self) -> None:
+        self._disconnect_all()
 
 
 def init() -> None:

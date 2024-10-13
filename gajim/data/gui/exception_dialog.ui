@@ -3,26 +3,15 @@
   <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="exception_box">
     <property name="orientation">vertical</property>
-    <!-- <child>
-      <object class="GtkInfoBar" id="infobar">
-        <property name="visible">0</property>
-        <property name="revealed">0</property>
-        <child internal-child="action_area">
+    <child>
+      <object class="GtkRevealer" id="infobar">
+        <property name="reveal-child">0</property>
+        <style>
+          <class name="infobar"/>
+          <class name="info"/>
+        </style>
+        <child>
           <object class="GtkBox">
-            <property name="can-focus">False</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child internal-child="content_area">
-          <object class="GtkBox">
-            <property name="visible">0</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
@@ -33,21 +22,23 @@
               <object class="GtkLabel">
                 <property name="label" translatable="1">Install &lt;tt&gt;sentry-sdk&lt;/tt&gt; to make reporting issues easier.</property>
                 <property name="use-markup">1</property>
+                <property name="hexpand">1</property>
+                <property name="wrap">true</property>
+                <property name="max-width-chars">46</property>
+                <property name="xalign">0</property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
-    </child> -->
+    </child>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">24</property>
+        <style>
+          <class name="p-18"/>
+        </style>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -135,12 +126,18 @@ Please help us fixing this issue by sending this report.</property>
         <child>
           <object class="GtkBox">
             <property name="spacing">12</property>
+            <property name="hexpand">1</property>
+            <property name="halign">end</property>
             <child>
               <object class="GtkButton" id="close_button">
                 <property name="label" translatable="1">_Close</property>
                 <property name="focusable">1</property>
                 <property name="use-underline">1</property>
-                <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinner" id="report_spinner">
+                <property name="visible">0</property>
               </object>
             </child>
             <child>
@@ -149,14 +146,10 @@ Please help us fixing this issue by sending this report.</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="use-underline">1</property>
-                <signal name="clicked" handler="_on_report_clicked" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
               </object>
-            </child>
-            <child>
-              <object class="GtkSpinner" id="report_spinner"/>
             </child>
           </object>
         </child>

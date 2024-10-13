@@ -349,12 +349,13 @@ class DebugConsoleBuilder(Builder):
 
 class ExceptionDialogBuilder(Builder):
     exception_box: Gtk.Box
+    infobar: Gtk.Revealer
     exception_view: Gtk.TextView
     user_feedback_box: Gtk.Box
     user_feedback_entry: Gtk.Entry
     close_button: Gtk.Button
-    report_button: Gtk.Button
     report_spinner: Gtk.Spinner
+    report_button: Gtk.Button
 
 
 class FileTransferBuilder(Builder):
