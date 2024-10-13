@@ -30,13 +30,14 @@ from gajim.common.setting_values import FloatSettings
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.util import SignalManager, clear_listbox
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
+from gajim.gtk.util import clear_listbox
 from gajim.gtk.util import get_image_button
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import open_window
-from gajim.gtk.filechoosers import FileChooserButton
-from gajim.gtk.filechoosers import Filter
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.settings')
@@ -494,9 +495,10 @@ class ColorSetting(GenericSetting):
         rgba = Gdk.RGBA()
         assert isinstance(self.setting_value, str)
         rgba.parse(self.setting_value)
-        self.color_button = Gtk.ColorButton()
+        color_dialog = Gtk.ColorDialog()
+        self.color_button = Gtk.ColorDialogButton(dialog=color_dialog)
         self.color_button.set_rgba(rgba)
-        self._connect(self.color_button, 'color-set', self.on_color_set)
+        self._connect(self.color_button, 'notify::rgba', self.on_color_set)
         self.color_button.set_valign(Gtk.Align.CENTER)
         self.color_button.set_halign(Gtk.Align.END)
         self.color_button.set_hexpand(True)
@@ -514,8 +516,8 @@ class ColorSetting(GenericSetting):
         rgba.parse(value)
         self.color_button.set_rgba(rgba)
 
-    def on_color_set(self, button: Gtk.ColorButton) -> None:
-        rgba = button.get_rgba()
+    def on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any) -> None:
+        rgba = color_button.get_rgba()
         self.set_value(rgba.to_string())
         app.css_config.refresh()
 

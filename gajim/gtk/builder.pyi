@@ -28,7 +28,7 @@ class AccountPageBuilder(Builder):
 class AccountWizardBuilder(Builder):
     account_label_box: Gtk.Box
     account_name_entry: Gtk.Entry
-    account_color_button: Gtk.ColorButton
+    account_color_button: Gtk.ColorDialogButton
     badge_preview: Gtk.Label
     advanced_grid: Gtk.Grid
     custom_port_entry: Gtk.Entry
@@ -387,6 +387,7 @@ class FileTransferSelectorBuilder(Builder):
     warning_label: Gtk.Label
     remove_file_button: Gtk.Button
     stack: Gtk.Stack
+    box: Gtk.Box
     listbox: Gtk.ListBox
     resource_box: Gtk.Box
     resource_instructions: Gtk.Label
@@ -416,7 +417,11 @@ class GroupchatAffiliationBuilder(Builder):
     main_box: Gtk.Box
     affiliation_scrolled: Gtk.ScrolledWindow
     affiliation_treeview: Gtk.TreeView
+    affiliation_selection: Gtk.TreeSelection
+    address_renderer: Gtk.CellRendererText
     reserved_name_column: Gtk.TreeViewColumn
+    reserved_name_renderer: Gtk.CellRendererText
+    affiliation_renderer: Gtk.CellRendererCombo
     button_box: Gtk.Box
     add_remove_button_box: Gtk.Box
     add_button: Gtk.Button
@@ -536,6 +541,9 @@ class GroupchatOutcastBuilder(Builder):
     main_box: Gtk.Box
     outcast_scrolled: Gtk.ScrolledWindow
     outcast_treeview: Gtk.TreeView
+    outcast_selection: Gtk.TreeSelection
+    address_renderer: Gtk.CellRendererText
+    reason_renderer: Gtk.CellRendererText
     button_box: Gtk.Box
     add_remove_button_box: Gtk.Box
     add_button: Gtk.Button

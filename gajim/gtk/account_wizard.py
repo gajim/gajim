@@ -96,7 +96,6 @@ class AccountWizard(Assistant):
         self.get_page('login').connect('clicked', self._on_button_clicked)
         self.connect('button-clicked', self._on_assistant_button_clicked)
         self.connect('page-changed', self._on_page_changed)
-        self.connect('destroy', self._on_destroy)
 
         self.update_proxy_list()
 
@@ -224,7 +223,7 @@ class AccountWizard(Assistant):
                 account = self.get_page('success').account
                 assert account is not None
                 app.app.enable_account(account)
-                self.destroy()
+                self.close()
 
         elif button_name == 'back':
             if page == 'signup':
@@ -584,7 +583,7 @@ class AccountWizard(Assistant):
                            'without an error message')
         self._show_error_page(_('Error'), _('Error'), error_text)
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self, *args: Any) -> None:
         self._disconnect()
         self._destroyed = True
 
@@ -1185,7 +1184,10 @@ class Success(SuccessPage):
         self._provider = self._add_css_provider()
 
         self._ui.account_name_entry.connect('changed', self._on_name_changed)
-        self._ui.account_color_button.connect('color-set', self._on_color_set)
+
+        color_dialog = Gtk.ColorDialog()
+        self._ui.account_color_button.set_dialog(color_dialog)
+        self._ui.account_color_button.connect('notify::rgba', self._on_color_set)
 
     def set_account(self, account: str) -> None:
         self._account = account
@@ -1214,8 +1216,8 @@ class Success(SuccessPage):
         self._ui.badge_preview.set_text(self._label or self._our_jid)
         self._save_config()
 
-    def _on_color_set(self, button: Gtk.ColorButton):
-        rgba = button.get_rgba()
+    def _on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any):
+        rgba = color_button.get_rgba()
         self._color = rgba.to_string()
         self._set_badge_color(self._color)
         self._save_config()
