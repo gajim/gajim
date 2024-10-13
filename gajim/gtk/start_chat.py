@@ -79,12 +79,10 @@ class StartChatDialog(GajimAppWindow):
             add_window_padding=False,
         )
 
-        self.ready_to_destroy = False
         self._parameter_form: MuclumbusResult | None = None
         self._keywords: list[str] = []
         self._destroyed = False
         self._search_stopped = False
-        self._redirected = False
 
         self._ui = get_builder('start_chat_dialog.ui',)
         self.set_child(self._ui.stack)
@@ -236,17 +234,7 @@ class StartChatDialog(GajimAppWindow):
                           _listbox: Gtk.ListBox,
                           row: ContactRow
                           ) -> None:
-        if self._current_view_is(Search.GLOBAL):
-            self._select_muc()
-        else:
-            self._start_new_chat(row)
-
-    def _on_global_row_activated(
-        self,
-        _listview: Gtk.ListView,
-        position: int
-    ) -> None:
-        print(position)
+        self._start_new_chat(row)
 
     def _select_muc(self) -> None:
         if len(self._accounts) > 1:
@@ -390,14 +378,11 @@ class StartChatDialog(GajimAppWindow):
                                         'unless you are connected.'))
                 return
 
-            self.ready_to_destroy = True
             if app.window.chat_exists(row.account, row.jid):
                 app.window.select_chat(row.account, row.jid)
                 self.close()
                 return
 
-            self.ready_to_destroy = False
-            self._redirected = False
             self._disco_muc(row.account, row.jid, request_vcard=row.is_new)
 
         else:
@@ -408,8 +393,14 @@ class StartChatDialog(GajimAppWindow):
                 'contact',
                 select=True,
                 message=initial_message)
-            self.ready_to_destroy = True
             self.close()
+
+    def _on_global_row_activated(
+        self,
+        _listview: Gtk.ListView,
+        position: int,
+    ) -> None:
+        self._select_muc()
 
     def _disco_info(self, row: ContactRow) -> None:
         if not app.account_is_available(row.account):
@@ -515,7 +506,6 @@ class StartChatDialog(GajimAppWindow):
         app.window.show_add_join_groupchat(
             account, str(jid), nickname=nickname)
 
-        self.ready_to_destroy = True
         self.close()
 
     def _on_back_clicked(self, *args: Any) -> None:
@@ -530,9 +520,8 @@ class StartChatDialog(GajimAppWindow):
         else:
             return
 
-        selected_row = cast(
-            MuclumbusViewItem, self._global_search_view.get_selected_row())
-        if selected_row is None:
+        item = self._global_search_view.get_selected_item()
+        if item is None:
             return
 
         if not app.account_is_available(account):
@@ -540,8 +529,8 @@ class StartChatDialog(GajimAppWindow):
                                     'unless you are connected.'))
             return
 
-        self._redirected = False
-        self._disco_muc(account, selected_row.jid, request_vcard=True)
+        jid = JID.from_string(item.jid)
+        self._disco_muc(account, jid, request_vcard=True)
 
     def _current_view_is(self, view: Search) -> bool:
         page_name =  self._ui.list_stack.get_visible_child_name()
@@ -928,28 +917,34 @@ class GlobalSearch(Gtk.ListView, SignalManager):
         Gtk.ListView.__init__(
             self,
             has_tooltip=True,
-            single_click_activate=True,
         )
         SignalManager.__init__(self)
 
-        self.model = Gio.ListStore(item_type=MuclumbusListItem)
+        self._model = Gio.ListStore(item_type=MuclumbusListItem)
+        self._selection_model = Gtk.SingleSelection(model=self._model)
 
         factory = Gtk.SignalListItemFactory()
         self._connect(factory, 'setup', self._on_factory_setup)
         self._connect(factory, 'bind', self._on_factory_bind)
         self._connect(factory, 'unbind', self._on_factory_unbind)
 
-        self.set_model(Gtk.NoSelection(model=self.model))
+        self.set_model(self._selection_model)
         self.set_factory(factory)
 
     def do_unroot(self) -> None:
         Gtk.ListView.do_unroot(self)
         self._disconnect_all()
-        del self.model
+        del self._model
         app.check_finalize(self)
 
     def remove_all(self) -> None:
-        self.model.remove_all()
+        self._model.remove_all()
+
+    def get_listitem(self, position: int) -> MuclumbusListItem:
+        return self._model.get_item(position)
+
+    def get_selected_item(self) -> MuclumbusListItem | None:
+        return self._selection_model.get_selected_item()
 
     def _on_factory_setup(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
         list_item.set_child(MuclumbusViewItem())
@@ -995,25 +990,22 @@ class GlobalSearch(Gtk.ListView, SignalManager):
         pass
 
     def add(self, item: MuclumbusItem) -> None:
-        self.model.append(MuclumbusListItem(item=item))
+        self._model.append(MuclumbusListItem(item=item))
 
     def _select(self, direction: Direction) -> None:
-        selected_row = self.get_selected_row()
-        if selected_row is None:
+        selected_pos = self._selection_model.get_selected()
+        if selected_pos == Gtk.INVALID_LIST_POSITION:
             return
 
-        index = selected_row.get_index()
         if direction == Direction.NEXT:
-            index += 1
+            selected_pos += 1
         else:
-            index -= 1
+            selected_pos -= 1
 
-        new_selected_row = self.get_row_at_index(index)
-        if new_selected_row is None:
+        if selected_pos < 0:
             return
 
-        self.select_row(new_selected_row)
-        new_selected_row.grab_focus()
+        self._selection_model.set_selected(selected_pos)
 
     def select_next(self) -> None:
         self._select(Direction.NEXT)
@@ -1087,8 +1079,8 @@ class MuclumbusViewItem(Gtk.Box):
         Gtk.Box.__init__(
             self,
             spacing=12,
-            css_classes=['start-chat-row']
         )
+        self.add_css_class('start-chat-row')
 
         self.__bindings: list[GObject.Binding] = []
 
@@ -1096,15 +1088,15 @@ class MuclumbusViewItem(Gtk.Box):
             halign=Gtk.Align.START,
             ellipsize=Pango.EllipsizeMode.END,
             max_width_chars=40,
-            css_classes=['bold16']
         )
+        self._name_label.add_css_class('bold16')
 
         self._description_label = Gtk.Label(
             halign=Gtk.Align.START,
             ellipsize=Pango.EllipsizeMode.END,
             max_width_chars=40,
-            css_classes=['dim-label']
         )
+        self._description_label.add_css_class('dim-label')
 
         self._name_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL,
@@ -1121,8 +1113,8 @@ class MuclumbusViewItem(Gtk.Box):
         users_box = Gtk.Box(
             spacing=6,
             tooltip_text=_('Participants Count'),
-            css_classes=['dim-label'],
         )
+        users_box.add_css_class('dim-label')
 
         users_icon = Gtk.Image.new_from_icon_name('system-users-symbolic')
         users_box.append(users_icon)
