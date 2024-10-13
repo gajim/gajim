@@ -10,12 +10,13 @@ from typing import cast
 import locale
 from enum import IntEnum
 
-from gi.repository import Gdk
+from gi.repository import GObject, Gdk, Gio
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp import JID
+from nbxmpp.const import AnonymityMode
 from nbxmpp.errors import CancelledError
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
@@ -128,9 +129,9 @@ class StartChatDialog(GajimAppWindow):
         self._ui.listbox.set_filter_func(self._filter_func, None)
         self._connect(self._ui.listbox, 'row-activated', self._on_row_activated)
 
-        self._global_search_listbox = GlobalSearch()
-        self._connect(self._global_search_listbox, 'row-activated', self._on_row_activated)
-        self._current_listbox = self._ui.listbox
+        self._global_search_view = GlobalSearch()
+        self._connect(self._global_search_view, 'activate', self._on_global_row_activated)
+        self._ui.global_scrolled.set_child(self._global_search_view)
 
         self._muc_info_box = GroupChatInfoScrolled()
         self._ui.info_box.append(self._muc_info_box)
@@ -158,7 +159,7 @@ class StartChatDialog(GajimAppWindow):
 
     def _cleanup(self, *args: Any) -> None:
         del self._nick_chooser
-        del self._global_search_listbox
+        del self._global_search_view
         del self._muc_info_box
         del self._chat_filter
         del self._accounts_store
@@ -235,10 +236,17 @@ class StartChatDialog(GajimAppWindow):
                           _listbox: Gtk.ListBox,
                           row: ContactRow
                           ) -> None:
-        if self._current_listbox_is(Search.GLOBAL):
+        if self._current_view_is(Search.GLOBAL):
             self._select_muc()
         else:
             self._start_new_chat(row)
+
+    def _on_global_row_activated(
+        self,
+        _listview: Gtk.ListView,
+        position: int
+    ) -> None:
+        print(position)
 
     def _select_muc(self) -> None:
         if len(self._accounts) > 1:
@@ -259,7 +267,7 @@ class StartChatDialog(GajimAppWindow):
                 return Gdk.EVENT_PROPAGATE
 
             if self._global_search_active():
-                self._global_search_listbox.select_next()
+                self._global_search_view.select_next()
             else:
                 self._ui.search_entry.emit('next-match')
             return Gdk.EVENT_STOP
@@ -270,7 +278,7 @@ class StartChatDialog(GajimAppWindow):
                 return Gdk.EVENT_PROPAGATE
 
             if self._global_search_active():
-                self._global_search_listbox.select_prev()
+                self._global_search_view.select_prev()
             else:
                 self._ui.search_entry.emit('previous-match')
             return Gdk.EVENT_STOP
@@ -280,7 +288,7 @@ class StartChatDialog(GajimAppWindow):
                 return Gdk.EVENT_PROPAGATE
 
             if self._global_search_active():
-                self._global_search_listbox.select_prev()
+                self._global_search_view.select_prev()
             else:
                 self._ui.search_entry.emit('previous-match')
             return Gdk.EVENT_STOP
@@ -301,7 +309,7 @@ class StartChatDialog(GajimAppWindow):
             self._search_stopped = True
             self._ui.search_entry.grab_focus()
             self._scroll_to_first_row()
-            self._global_search_listbox.remove_all()
+            self._global_search_view.remove_all()
             if self._ui.search_entry.get_text() != '':
                 self._ui.search_entry.emit('stop-search')
                 return Gdk.EVENT_STOP
@@ -328,12 +336,12 @@ class StartChatDialog(GajimAppWindow):
                 self._on_join_clicked()
                 return Gdk.EVENT_STOP
 
-            if self._current_listbox_is(Search.GLOBAL):
+            if self._current_view_is(Search.GLOBAL):
                 if (text_widget.has_focus() and self._ui.search_entry.get_text()):
-                    self._global_search_listbox.remove_all()
+                    self._global_search_view.remove_all()
                     self._start_search()
 
-                elif self._global_search_listbox.get_selected_row() is not None:
+                elif self._global_search_view.get_selected_row() is not None:
                     self._select_muc()
                 return Gdk.EVENT_STOP
 
@@ -523,7 +531,7 @@ class StartChatDialog(GajimAppWindow):
             return
 
         selected_row = cast(
-            ResultRow, self._global_search_listbox.get_selected_row())
+            MuclumbusViewItem, self._global_search_view.get_selected_row())
         if selected_row is None:
             return
 
@@ -535,21 +543,11 @@ class StartChatDialog(GajimAppWindow):
         self._redirected = False
         self._disco_muc(account, selected_row.jid, request_vcard=True)
 
-    def _set_listbox(self, listbox: Gtk.ListBox):
-        if self._current_listbox == listbox:
-            return
-
-        viewport = self._ui.scrolledwindow.get_child()
-        viewport.set_child(None)
-
-        self._ui.scrolledwindow.set_child(None)
-        self._ui.scrolledwindow.set_child(listbox)
-        self._current_listbox = listbox
-
-    def _current_listbox_is(self, box: Search) -> bool:
-        if self._current_listbox == self._ui.listbox:
-            return box == Search.CONTACT
-        return box == Search.GLOBAL
+    def _current_view_is(self, view: Search) -> bool:
+        page_name =  self._ui.list_stack.get_visible_child_name()
+        if view == Search.CONTACT:
+            return page_name == 'contacts'
+        return page_name == 'global'
 
     def _on_global_search_toggle(self, button: Gtk.ToggleButton) -> None:
         self._ui.search_entry.grab_focus()
@@ -558,7 +556,7 @@ class StartChatDialog(GajimAppWindow):
             self._ui.filter_bar_toggle.set_active(False)
             self._ui.filter_bar_toggle.set_sensitive(False)
             image.add_css_class('selected-color')
-            self._set_listbox(self._global_search_listbox)
+            self._ui.list_stack.set_visible_child_name('global')
             if self._ui.search_entry.get_text():
                 self._start_search()
             self._ui.listbox.invalidate_filter()
@@ -566,8 +564,8 @@ class StartChatDialog(GajimAppWindow):
             self._ui.filter_bar_toggle.set_sensitive(True)
             self._ui.search_entry.set_text('')
             image.remove_css_class('selected-color')
-            self._set_listbox(self._ui.listbox)
-            self._global_search_listbox.remove_all()
+            self._ui.list_stack.set_visible_child_name('contacts')
+            self._global_search_view.remove_all()
 
     def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
         self._show_search_entry_error(False)
@@ -689,7 +687,7 @@ class StartChatDialog(GajimAppWindow):
         client = app.get_client(accounts[0]).connection
 
         text = self._ui.search_entry.get_text().strip()
-        self._global_search_listbox.start_search()
+        self._global_search_view.start_search()
 
         if app.settings.get('muclumbus_api_pref') == 'http':
             self._start_http_search(client, text)
@@ -726,7 +724,7 @@ class StartChatDialog(GajimAppWindow):
 
             self._process_search_result(result)
 
-        self._global_search_listbox.end_search()
+        self._global_search_view.end_search()
 
     @as_task
     def _start_http_search(self, client, text):
@@ -747,7 +745,7 @@ class StartChatDialog(GajimAppWindow):
 
             self._process_search_result(result)
 
-        self._global_search_listbox.end_search()
+        self._global_search_view.end_search()
 
     def _process_search_result(self,
                                result: MuclumbusResult,
@@ -758,7 +756,7 @@ class StartChatDialog(GajimAppWindow):
 
         if is_error(result):
             assert isinstance(result, StanzaError)
-            self._global_search_listbox.remove_progress()
+            self._global_search_view.remove_progress()
             self._show_error_page(to_user_string(result))
             raise result
 
@@ -766,7 +764,7 @@ class StartChatDialog(GajimAppWindow):
             return
 
         for item in result.items:
-            self._global_search_listbox.add(ResultRow(item))
+            self._global_search_view.add(item)
 
 
 class ContactRow(Gtk.ListBoxRow, SignalManager):
@@ -925,54 +923,79 @@ class ContactRow(Gtk.ListBoxRow, SignalManager):
         return f'{self.name} {self.jid}'
 
 
-class GlobalSearch(Gtk.ListBox):
+class GlobalSearch(Gtk.ListView, SignalManager):
     def __init__(self) -> None:
-        Gtk.ListBox.__init__(self)
-        self.set_has_tooltip(True)
-        self.set_activate_on_single_click(False)
-        self._progress: ProgressRow | None = None
-        self._add_placeholder()
+        Gtk.ListView.__init__(
+            self,
+            has_tooltip=True,
+            single_click_activate=True,
+        )
+        SignalManager.__init__(self)
+
+        self.model = Gio.ListStore(item_type=MuclumbusListItem)
+
+        factory = Gtk.SignalListItemFactory()
+        self._connect(factory, 'setup', self._on_factory_setup)
+        self._connect(factory, 'bind', self._on_factory_bind)
+        self._connect(factory, 'unbind', self._on_factory_unbind)
+
+        self.set_model(Gtk.NoSelection(model=self.model))
+        self.set_factory(factory)
 
     def do_unroot(self) -> None:
-        Gtk.ListBox.do_unroot(self)
+        Gtk.ListView.do_unroot(self)
+        self._disconnect_all()
+        del self.model
         app.check_finalize(self)
 
-    def _add_placeholder(self) -> None:
-        placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
-        placeholder.set_halign(Gtk.Align.CENTER)
-        placeholder.set_valign(Gtk.Align.CENTER)
-        icon = Gtk.Image.new_from_icon_name('system-search-symbolic')
-        icon.get_style_context().add_class('dim-label')
-        label = Gtk.Label(label=_('Search for group chats globally\n'
-                                  '(press Return to start search)'))
-        label.get_style_context().add_class('dim-label')
-        label.set_justify(Gtk.Justification.CENTER)
-        label.set_max_width_chars(35)
-        placeholder.append(icon)
-        placeholder.append(label)
-        self.set_placeholder(placeholder)
+    def remove_all(self) -> None:
+        self.model.remove_all()
+
+    def _on_factory_setup(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
+        list_item.set_child(MuclumbusViewItem())
+
+    def _on_factory_bind(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
+        row = list_item.get_child()
+        obj = list_item.get_item()
+        row.bind_gobject(obj)
+
+    def _on_factory_unbind(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
+        row = list_item.get_child()
+        row.unbind_gobject()
+
+    # def _add_placeholder(self) -> None:
+    # TODO GTK4
+    #     placeholder = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+    #     placeholder.set_halign(Gtk.Align.CENTER)
+    #     placeholder.set_valign(Gtk.Align.CENTER)
+    #     icon = Gtk.Image.new_from_icon_name('system-search-symbolic')
+    #     icon.get_style_context().add_class('dim-label')
+    #     label = Gtk.Label(label=_('Search for group chats globally\n'
+    #                               '(press Return to start search)'))
+    #     label.get_style_context().add_class('dim-label')
+    #     label.set_justify(Gtk.Justification.CENTER)
+    #     label.set_max_width_chars(35)
+    #     placeholder.append(icon)
+    #     placeholder.append(label)
+    #     self.set_placeholder(placeholder)
 
     def remove_progress(self) -> None:
-        assert self._progress
-        self.remove(self._progress)
+        # assert self._progress
+        # self.remove(self._progress)
+        pass
 
     def start_search(self) -> None:
-        self._progress = ProgressRow()
-        self.append(self._progress)
+        # self._progress = ProgressRow()
+        # self.append(self._progress)
+        pass
 
     def end_search(self) -> None:
-        assert self._progress
-        self._progress.stop()
+        # assert self._progress
+        # self._progress.stop()
+        pass
 
-    def add(self, row: ResultRow) -> None:
-        self.append(row)
-        if self.get_selected_row() is None:
-            row_ = self.get_row_at_index(1)
-            if row_ is not None:
-                self.select_row(row_)
-                row_.grab_focus()
-        assert self._progress
-        self._progress.update()
+    def add(self, item: MuclumbusItem) -> None:
+        self.model.append(MuclumbusListItem(item=item))
 
     def _select(self, direction: Direction) -> None:
         selected_row = self.get_selected_row()
@@ -999,43 +1022,15 @@ class GlobalSearch(Gtk.ListBox):
         self._select(Direction.PREV)
 
 
-class ResultRow(Gtk.ListBoxRow):
+class MuclumbusListItem(GObject.Object):
+    __gtype_name__ = "MuclumbusListItem"
+
     def __init__(self, item: MuclumbusItem) -> None:
-        Gtk.ListBoxRow.__init__(self, activatable=True)
-        self.get_style_context().add_class('start-chat-row')
+        super().__init__()
 
-        self.is_new = False
-        self.jid = JID.from_string(item.jid)
-        self.groupchat = True
-
-        name_label = Gtk.Label(
-            label=item.name or self.jid.localpart or item.jid,
-            halign=Gtk.Align.START,
-            ellipsize=Pango.EllipsizeMode.END,
-            max_width_chars=40
-        )
-        name_label.get_style_context().add_class('bold16')
-
-        description_label = Gtk.Label(
-            label=item.description,
-            halign=Gtk.Align.START,
-            ellipsize=Pango.EllipsizeMode.END,
-            max_width_chars=40
-        )
-        description_label.get_style_context().add_class('dim-label')
-
-        main_box = Gtk.Box(spacing=12)
-        self.set_child(main_box)
-
-        name_box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL,
-            hexpand=True,
-            tooltip_text=item.jid
-        )
-        name_box.append(name_label)
-        name_box.append(description_label)
-
-        main_box.append(name_box)
+        self._item = item
+        jid = JID.from_string(self._item.jid)
+        self._name = self._item.name or jid.localpart or str(jid)
 
         language_code = item.language.upper()
         if len(language_code) < 2:
@@ -1049,31 +1044,117 @@ class ResultRow(Gtk.ListBoxRow):
             # Fix for most used languages/countries
             language_code = 'GB'
 
-        language_label = Gtk.Label(
-            label=get_country_flag_from_code(language_code),
-            tooltip_text=_('Language: %s') % item.language
+        self._language_code = get_country_flag_from_code(language_code)
+
+    @GObject.Property(type=str)
+    def jid(self) -> str:
+        return self._item.jid
+
+    @GObject.Property(type=str)
+    def name(self) -> str:
+        return self._name
+
+    @GObject.Property(type=str)
+    def nusers(self) -> str:
+        return self._item.nusers
+
+    @GObject.Property(type=str)
+    def description(self) -> str:
+        return self._item.description
+
+    @GObject.Property(type=str)
+    def language(self) -> str:
+        return self._item.language
+
+    @GObject.Property(type=str)
+    def language_code(self) -> str:
+        return self._language_code
+
+    @GObject.Property(type=str)
+    def is_open(self) -> bool:
+        return self._item.is_open
+
+    @GObject.Property(type=str)
+    def anonymity_mode(self) -> AnonymityMode:
+        return self._item.anonymity_mode
+
+    def __repr__(self) -> str:
+        return f"MuclumbusListItem: {self._item}"
+
+
+class MuclumbusViewItem(Gtk.Box):
+    def __init__(self) -> None:
+        Gtk.Box.__init__(
+            self,
+            spacing=12,
+            css_classes=['start-chat-row']
         )
-        main_box.append(language_label)
+
+        self.__bindings: list[GObject.Binding] = []
+
+        self._name_label = Gtk.Label(
+            halign=Gtk.Align.START,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=40,
+            css_classes=['bold16']
+        )
+
+        self._description_label = Gtk.Label(
+            halign=Gtk.Align.START,
+            ellipsize=Pango.EllipsizeMode.END,
+            max_width_chars=40,
+            css_classes=['dim-label']
+        )
+
+        self._name_box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL,
+            hexpand=True,
+        )
+        self._name_box.append(self._name_label)
+        self._name_box.append(self._description_label)
+
+        self.append(self._name_box)
+
+        self._language_label = Gtk.Label()
+        self.append(self._language_label)
 
         users_box = Gtk.Box(
             spacing=6,
-            tooltip_text=_('Participants Count')
+            tooltip_text=_('Participants Count'),
+            css_classes=['dim-label'],
         )
-        users_box.get_style_context().add_class('dim-label')
 
-        users_icon = Gtk.Image.new_from_icon_name(
-            'system-users-symbolic'
-        )
+        users_icon = Gtk.Image.new_from_icon_name('system-users-symbolic')
         users_box.append(users_icon)
 
-        users_count_label = Gtk.Label(label=item.nusers)
-        users_box.append(users_count_label)
+        self._users_count_label = Gtk.Label()
+        users_box.append(self._users_count_label)
 
-        main_box.append(users_box)
+        self.append(users_box)
+
+    def bind_gobject(self, obj: MuclumbusListItem) -> None:
+        bind = obj.bind_property('name', self._name_label, "label", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+        bind = obj.bind_property('description', self._description_label, "label", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+        bind = obj.bind_property('jid', self._name_box, "tooltip_text", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+        bind = obj.bind_property('language_code', self._language_label, "label", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+        bind = obj.bind_property('language', self._language_label, "tooltip_text", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+        bind = obj.bind_property('nusers', self._users_count_label, "label", GObject.BindingFlags.SYNC_CREATE)
+        self.__bindings.append(bind)
+
+    def unbind_gobject(self) -> None:
+        for bind in self.__bindings:
+            bind.unbind()
+        self.__bindings.clear()
 
     def do_unroot(self) -> None:
-        Gtk.ListBoxRow.do_unroot(self)
+        Gtk.Box.do_unroot(self)
         app.check_finalize(self)
+
 
 class ProgressRow(Gtk.ListBoxRow):
     def __init__(self) -> None:

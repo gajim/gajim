@@ -968,8 +968,10 @@ class StartChatDialogBuilder(Builder):
     search_error_box: Gtk.Box
     search_error_label: Gtk.Label
     filter_bar_revealer: Gtk.Revealer
-    scrolledwindow: Gtk.ScrolledWindow
+    list_stack: Gtk.Stack
+    contact_scrolled: Gtk.ScrolledWindow
     listbox: Gtk.ListBox
+    global_scrolled: Gtk.ScrolledWindow
     spinner: Gtk.Spinner
     error_label: Gtk.Label
     error_back_button: Gtk.Button
