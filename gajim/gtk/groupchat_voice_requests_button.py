@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.structs import VoiceRequest
@@ -14,17 +13,31 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.util import SignalManager
 
-class VoiceRequestsButton(Gtk.Button):
+
+class VoiceRequestsButton(Gtk.Button, SignalManager):
     def __init__(self) -> None:
-        Gtk.Button.__init__(self)
-        self.set_tooltip_text(_('Pending Voice Requests'))
-        self.set_visible(False)
+        Gtk.Button.__init__(
+            self,
+            tooltip_text=_('Pending Voice Requests'),
+            visible=False,
+        )
+        SignalManager.__init__(self)
+
+        inner_box = Gtk.Box()
+        self.set_child(inner_box)
+
         image = Gtk.Image.new_from_icon_name('dialog-question-symbolic')
-        self.set_child(image)
-        self.get_style_context().add_class('pulse-opacity')
-        self.get_style_context().add_class('suggested-action')
-        self.connect('clicked', self._on_button_clicked)
+        inner_box.append(image)
+
+        self.add_css_class('pulse-opacity')
+        self.add_css_class('suggested-action')
+
+        self._popover = Gtk.Popover()
+        inner_box.append(self._popover)
+
+        self._connect(self, 'clicked', self._on_button_clicked)
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if not isinstance(contact, GroupchatContact):
@@ -35,6 +48,12 @@ class VoiceRequestsButton(Gtk.Button):
 
         self._contact = contact
         self._update()
+
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        self._disconnect_all()
+        del self._popover
+        app.check_finalize(self)
 
     def _update(self) -> None:
         self.set_visible(False)
@@ -101,16 +120,9 @@ class VoiceRequestsButton(Gtk.Button):
 
             menu_box.append(request_box)
 
-        popover = Gtk.PopoverMenu()
-        popover.get_style_context().add_class('p-6')
-        popover.set_position(Gtk.PositionType.BOTTOM)
-        popover.set_child(menu_box)
-        popover.connect('closed', self._on_closed)
-        popover.popup()
-
-    @staticmethod
-    def _on_closed(popover: Gtk.Popover) -> None:
-        GLib.idle_add(popover.destroy)
+        self._popover.get_style_context().add_class('p-6')
+        self._popover.set_child(menu_box)
+        self._popover.popup()
 
     def _on_approve(self,
                     _button: Gtk.Button,
