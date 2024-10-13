@@ -52,7 +52,6 @@ class CertificateDialog(GajimAppWindow):
         self.set_child(CertificateBox(account, cert))
 
     def _cleanup(self) -> None:
-        print('cleanup')
         pass
 
 
