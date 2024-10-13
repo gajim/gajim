@@ -88,12 +88,11 @@ class Preferences(GajimAppWindow):
         self._add_prefs(prefs)
         self._add_video_preview()
 
-        # TODO GTK4
-        # self._ui.av_info_bar.set_revealed(
-        #     not app.is_installed('AV') or sys.platform == 'win32')
-        # if sys.platform == 'win32':
-        #     self._ui.av_info_bar_label.set_text(
-        #         _('Video calls are not available on Windows'))
+        self._ui.av_info_bar.set_reveal_child(
+            not app.is_installed('AV') or sys.platform == 'win32')
+        if sys.platform == 'win32':
+            self._ui.av_info_bar_label.set_text(
+                _('Video calls are not available on Windows'))
 
     def get_ui(self):
         return self._ui
@@ -111,12 +110,6 @@ class Preferences(GajimAppWindow):
 
     def get_video_preview(self) -> VideoPreview | None:
         return self._video_preview
-
-    @staticmethod
-    def _on_features_clicked(_widget: Gtk.InfoBar,
-                             _response: Gtk.ResponseType
-                             ) -> None:
-        open_window('Features')
 
     def update_theme_list(self) -> None:
         themes = cast(Themes, self._prefs['themes'])

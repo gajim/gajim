@@ -755,6 +755,8 @@ class PreferencesBuilder(Builder):
     status_message: Gtk.Grid
     automatic_status: Gtk.Grid
     themes: Gtk.Grid
+    av_info_bar: Gtk.Revealer
+    av_info_bar_label: Gtk.Label
     server: Gtk.Grid
     audio: Gtk.Grid
     video: Gtk.Grid

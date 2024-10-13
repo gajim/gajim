@@ -580,54 +580,43 @@
                         <child>
                           <object class="GtkBox">
                             <property name="orientation">vertical</property>
-                            <!-- <child>
-                              <object class="GtkInfoBar" id="av_info_bar">
-                                <property name="message-type">warning</property>
-                                <signal name="response" handler="_on_features_clicked" swapped="no"/>
-                                <child internal-child="action_area">
+                            <child>
+                              <object class="GtkRevealer" id="av_info_bar">
+                                <property name="reveal-child">false</property>
+                                <property name="margin-bottom">18</property>
+                                <style>
+                                  <class name="infobar"/>
+                                  <class name="warning"/>
+                                </style>
+                                <child>
                                   <object class="GtkBox">
-                                    <property name="can-focus">False</property>
-                                    <property name="spacing">6</property>
+                                    <property name="spacing">12</property>
                                     <child>
-                                      <object class="GtkButton" id="button1">
-                                        <property name="label" translatable="1">Show _Features</property>
-                                        <property name="focusable">1</property>
-                                        <property name="receives-default">1</property>
-                                        <property name="use-underline">1</property>
+                                      <object class="GtkImage">
+                                        <property name="icon-name">dialog-information-symbolic</property>
                                       </object>
-                                    </child>
-                                  </object>
-                                </child>
-                                <child internal-child="content_area">
-                                  <object class="GtkBox">
-                                    <property name="visible">0</property>
-                                    <property name="spacing">16</property>
-                                    <child>
-                                      <placeholder/>
                                     </child>
                                     <child>
                                       <object class="GtkLabel" id="av_info_bar_label">
-                                        <property name="label" translatable="1">Missing dependencies for Audio/Video</property>
+                                        <property name="label" translatable="true">Missing dependencies for Audio/Video</property>
+                                        <property name="hexpand">1</property>
+                                        <property name="wrap">true</property>
+                                        <property name="max-width-chars">46</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <placeholder/>
+                                      <object class="GtkButton">
+                                        <property name="valign">center</property>
+                                        <property name="label" translatable="true">Show _Features</property>
+                                        <property name="use-underline">1</property>
+                                        <property name="action-name">app.features</property>
+                                      </object>
                                     </child>
                                   </object>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="position">0</property>
-                                  </packing>
-                                </child>
-                                <action-widgets>
-                                  <action-widget response="-11">button1</action-widget>
-                                </action-widgets>
-                                <child>
-                                  <placeholder/>
                                 </child>
                               </object>
-                            </child> -->
+                            </child>
                           </object>
                         </child>
                         <child>
