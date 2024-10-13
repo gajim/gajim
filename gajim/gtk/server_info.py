@@ -207,7 +207,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         label.set_xalign(0)
         label.set_halign(Gtk.Align.START)
         label.get_style_context().add_class('link-button')
-        label.connect('activate-link', self._on_activate_link)
+        self._connect(label, 'activate-link', self._on_activate_link)
         if last:
             label.set_margin_bottom(6)
         return label
