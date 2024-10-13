@@ -11,7 +11,6 @@
 
 from typing import NamedTuple
 
-import os
 import sys
 
 from gi.repository import Gtk
@@ -160,7 +159,7 @@ class FeatureItem(Gtk.Grid):
         feature_dependency = Gtk.Label(label=feature.dependency_u)
         feature_dependency.get_style_context().add_class('dim-label')
 
-        if os.name == 'nt':
+        if sys.platform == 'win32':
             feature_dependency.set_label(feature.dependency_w)
         else:
             feature_dependency.set_label(feature.dependency_u)
@@ -182,6 +181,10 @@ class FeatureItem(Gtk.Grid):
 
         self.attach(self._icon, 0, 0, 1, 1)
         self.attach(self._box, 1, 0, 1, 1)
+
+    def do_unroot(self) -> None:
+        Gtk.Grid.do_unroot(self)
+        app.check_finalize(self)
 
     def _set_feature(self, available: bool, enabled: bool | None) -> None:
         self._icon.get_style_context().remove_class('error-color')
