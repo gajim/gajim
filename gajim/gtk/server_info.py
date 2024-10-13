@@ -25,12 +25,12 @@ from gajim.common import app
 from gajim.common import ged
 from gajim.common.const import TLS_VERSION_STRINGS
 from gajim.common.events import ServerDiscoReceived
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.certificate_dialog import CertificateBox
-from gajim.common.ged import EventHelper
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger('gajim.gtk.server_info')
