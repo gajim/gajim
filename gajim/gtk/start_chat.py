@@ -91,11 +91,9 @@ class StartChatDialog(GajimAppWindow):
         self._nick_chooser = NickChooser()
         self._ui.join_box.append(self._nick_chooser)
 
-        # Helper for the case where we don't receive a disco info
-        self._new_chat_row: ContactRow | None = None
         self._search_is_valid_jid = False
 
-        self.new_contact_rows: dict[str, ContactRow | None] = {}
+        self._new_contact_rows: dict[str, ContactRow | None] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
         self._accounts_store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
@@ -161,6 +159,10 @@ class StartChatDialog(GajimAppWindow):
     def _cleanup(self, *args: Any) -> None:
         del self._nick_chooser
         del self._global_search_listbox
+        del self._muc_info_box
+        del self._chat_filter
+        del self._accounts_store
+        self._new_contact_rows.clear()
         self._ui.listbox.set_filter_func(None)
         self._destroyed = True
         app.cancel_tasks(self)
@@ -216,7 +218,7 @@ class StartChatDialog(GajimAppWindow):
         for account, _label in self._accounts:
             show_account = len(self._accounts) > 1
             row = ContactRow(account, None, None, None, show_account)
-            self.new_contact_rows[account] = row
+            self._new_contact_rows[account] = row
             rows.append(row)
 
     def _load_contacts(self, rows: list[ContactRow]) -> None:
@@ -449,11 +451,6 @@ class StartChatDialog(GajimAppWindow):
             row.update_chat_type()
         self._start_new_chat(row)
 
-    def _on_no_disco_continue(self, _button: Gtk.Button) -> None:
-        assert self._new_chat_row
-        self._new_chat_row.update_chat_type()
-        self._start_new_chat(self._new_chat_row)
-
     def _disco_muc(self, account: str, jid: JID, request_vcard: bool) -> None:
         self._ui.stack.set_visible_child_name('progress')
         client = app.get_client(account)
@@ -600,7 +597,7 @@ class StartChatDialog(GajimAppWindow):
         self._ui.search_error_box.set_visible(state)
 
     def _update_new_contact_rows(self, search_text: str) -> None:
-        for row in self.new_contact_rows.values():
+        for row in self._new_contact_rows.values():
             if row is not None:
                 row.update_jid(JID.from_string(search_text))
 
@@ -869,6 +866,8 @@ class ContactRow(Gtk.ListBoxRow, SignalManager):
     def do_unroot(self) -> None:
         Gtk.ListBoxRow.do_unroot(self)
         self._disconnect_all()
+        del self._menu_popover
+        del self._grid
         app.check_finalize(self)
 
     def _on_query_tooltip(self,
