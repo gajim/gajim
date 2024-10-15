@@ -1131,7 +1131,6 @@ popover.combo scrollbar.vertical {
 .start-chat-row:last-child { border-bottom: 0px; }
 .start-chat-row.activatable:active { box-shadow: none; }
 .start-chat-row { padding: 10px 20px 10px 10px; }
-.start-chat-row:not(.activatable) label { color: @insensitive_fg_color; }
 .start-chat-row:focus { outline: none; }
 
 /* GroupchatConfig */

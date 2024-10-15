@@ -661,7 +661,7 @@ def get_app_window(name: str,
                    jid: str | JID | None = None
                    ) -> Gtk.Window | None:
     for win in app.app.get_windows():
-        if type(win).__name__ != name:
+        if win.get_name() != name:
             continue
 
         if account is not None:
@@ -671,7 +671,7 @@ def get_app_window(name: str,
         if jid is not None:
             if jid != win.jid:  # pyright: ignore
                 continue
-        return win
+        return win.wrapper
     return None
 
 
@@ -753,19 +753,47 @@ class GroupBadge(Gtk.Label):
         Gtk.Label.__init__(
             self,
             ellipsize=Pango.EllipsizeMode.END,
-            visible=False,
             halign=Gtk.Align.END,
-            valign=Gtk.Align.CENTER,
             hexpand=True,
-            tooltip_text=group,
+            label=group,
+            valign=Gtk.Align.CENTER,
+            max_width_chars=20
         )
-        self.set_size_request(50, -1)
-        self.get_style_context().add_class('group')
-        self.set_text(group)
-        self.show()
+
+        self.add_css_class('group')
+
+
+class GroupBadgeBox(Gtk.Box):
+    __gtype_name__ = 'GroupBadgeBox'
+
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self)
+
+        self._groups: list[str] = []
+
+    @GObject.Property(type=object)
+    def groups(self) -> list[str]:
+        return self._groups
+
+    @groups.setter
+    def groups(self, groups: list[str] | None) -> None:
+        if groups is None:
+            groups = []
+
+        self._groups = groups[:3]
+        container_remove_all(self)
+        visible = bool(groups)
+        self.set_visible(visible)
+        if not visible:
+            return
+
+        for group in self._groups:
+            self.append(GroupBadge(group))
 
 
 class IdleBadge(Gtk.Label):
+    __gtype_name__ = 'IdleBadge'
+
     def __init__(self, idle: datetime.datetime | None = None) -> None:
         Gtk.Label.__init__(
             self,
@@ -775,21 +803,34 @@ class IdleBadge(Gtk.Label):
             visible=False,
         )
         self.set_size_request(50, -1)
-        self.get_style_context().add_class('dim-label')
-        self.get_style_context().add_class('small-label')
-        if idle is not None:
-            self.set_idle(idle)
+        self.add_css_class('dim-label')
+        self.add_css_class('small-label')
 
-        self.show()
+    @GObject.Property(type=object)
+    def idle(self) -> str:
+        return self.get_text()
 
-    def set_idle(self, idle: datetime.datetime) -> None:
-        self.set_text(_('Last seen: %s') % format_idle_time(idle))
+    @idle.setter
+    def idle(self, value: datetime.datetime | None) -> None:
+        return self._set_idle(value)
+
+    def _set_idle(self, value: datetime.datetime | None) -> None:
+        self.set_visible(bool(value))
+        if value is None:
+            return
+
+        self.set_text(_('Last seen: %s') % format_idle_time(value))
         format_string = app.settings.get('date_time_format')
-        self.set_tooltip_text(idle.strftime(format_string))
+        self.set_tooltip_text(value.strftime(format_string))
 
 
 class AccountBadge(Gtk.Label):
-    def __init__(self, account: str | None = None) -> None:
+    __gtype_name__ = 'AccountBadge'
+
+    def __init__(
+        self, account: str | None = None,
+        bind_setting: bool = False
+    ) -> None:
         Gtk.Label.__init__(self)
         self.set_ellipsize(Pango.EllipsizeMode.END)
         self.set_max_width_chars(12)
@@ -797,27 +838,38 @@ class AccountBadge(Gtk.Label):
         self.get_style_context().add_class('badge')
         self.set_visible(False)
 
+        self._bind_setting = bind_setting
+
         if account is not None:
             self.set_account(account)
             self.show()
+
+    @GObject.Property(type=str)
+    def account_label(self) -> str:
+        return self.get_text()
+
+    @account_label.setter
+    def account_label(self, value: str | None) -> None:
+        self.set_account(value)
 
     def set_account(self, account: str) -> None:
         label = app.get_account_label(account)
         self.set_text(label)
 
         for style_class in self.get_css_classes():
-            if style_class != 'badge':
+            if style_class.startswith('gajim_class'):
                 self.remove_css_class(style_class)
 
         account_class = app.css_config.get_dynamic_class(account)
         self.add_css_class(account_class)
 
         self.set_tooltip_text(_('Account: %s') % label)
-        app.settings.disconnect_signals(self)
-        app.settings.connect_signal(
-            'account_label',
-            self._on_account_label_changed,
-            account)
+        if self._bind_setting:
+            app.settings.disconnect_signals(self)
+            app.settings.connect_signal(
+                'account_label',
+                self._on_account_label_changed,
+                account)
 
     def _on_account_label_changed(self,
                                   _value: str,
@@ -942,6 +994,8 @@ class GdkRectangle(Gdk.Rectangle):
 
 
 class GajimPopover(Gtk.PopoverMenu):
+    __gtype_name__ = 'GajimPopover'
+
     def __init__(self,
                  menu: Gio.MenuModel | None = None,
                  position: Gtk.PositionType = Gtk.PositionType.RIGHT,
@@ -969,6 +1023,11 @@ def iterate_listbox_children(listbox: Gtk.ListBox) -> Iterator[Gtk.Widget]:
     while child := listbox.get_row_at_index(index):
         yield child
         index += 1
+
+
+def container_remove_all(container: Any) -> None:
+    while child := container.get_first_child():
+        container.remove(child)
 
 
 def clear_listbox(listbox: Gtk.ListBox) -> None:

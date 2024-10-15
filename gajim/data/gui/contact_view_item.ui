@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ContactViewItem" parent="GtkGrid">
+    <property name="column-spacing">12</property>
+    <style>
+      <class name="start-chat-row"/>
+    </style>
+    <child>
+      <object class="GtkImage" id="_avatar">
+        <property name="pixel-size">48</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="valign">3</property>
+        <property name="orientation">1</property>
+        <child>
+          <object class="GtkLabel" id="_name_label">
+            <property name="halign">1</property>
+            <property name="xalign">0</property>
+            <property name="width-chars">20</property>
+            <property name="ellipsize">3</property>
+            <style>
+              <class name="bold14"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="IdleBadge" id="_idle_badge">
+            <property name="halign">1</property>
+            <property name="hexpand">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_status_label">
+            <property name="halign">1</property>
+            <property name="xalign">0</property>
+            <property name="width-chars">22</property>
+            <property name="ellipsize">3</property>
+            <style>
+              <class name="dim-label"/>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <property name="orientation">1</property>
+        <child>
+          <object class="AccountBadge" id="_account_badge">
+            <property name="halign">2</property>
+            <property name="valign">1</property>
+            <property name="hexpand">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GroupBadgeBox" id="_group_badge_box">
+            <property name="spacing">6</property>
+            <property name="halign">2</property>
+          </object>
+        </child>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GajimPopover" id="_menu">
+        <layout>
+          <property name="column">3</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+  </template>
+</interface>

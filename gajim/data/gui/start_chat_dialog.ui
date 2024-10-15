@@ -129,17 +129,6 @@
                             <property name="vexpand">1</property>
                             <property name="focusable">1</property>
                             <property name="hscrollbar-policy">never</property>
-                            <property name="child">
-                              <object class="GtkViewport">
-                                <property name="child">
-                                  <object class="GtkListBox" id="listbox">
-                                    <property name="name">StartChatListBox</property>
-                                    <property name="selection-mode">browse</property>
-                                    <property name="activate-on-single-click">0</property>
-                                  </object>
-                                </property>
-                              </object>
-                            </property>
                           </object>
                         </property>
                       </object>
@@ -175,6 +164,7 @@
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="vexpand">1</property>
+                <property name="spinning">1</property>
               </object>
             </child>
           </object>
@@ -197,6 +187,7 @@
                   <object class="GtkImage">
                     <property name="valign">end</property>
                     <property name="icon-name">dialog-error</property>
+                    <property name="pixel-size">48</property>
                   </object>
                 </child>
                 <child>

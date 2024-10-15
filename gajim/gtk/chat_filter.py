@@ -32,8 +32,8 @@ class ChatFilter(Gtk.Box, SignalManager):
             self._all_button.set_tooltip_text(_('All'))
         else:
             self._all_button.set_label(_('All'))
-        self._all_button.set_name('all')
-        self._connect(self._all_button, 'clicked', self._on_button_clicked)
+
+        self._connect(self._all_button, 'clicked', self._on_button_clicked, 'all')
         toolbar.append(self._all_button)
 
         chats_button = Gtk.ToggleButton(group=self._all_button)
@@ -42,8 +42,8 @@ class ChatFilter(Gtk.Box, SignalManager):
             chats_button.set_tooltip_text(_('Chats'))
         else:
             chats_button.set_label(_('Chats'))
-        chats_button.set_name('chats')
-        self._connect(chats_button, 'clicked', self._on_button_clicked)
+
+        self._connect(chats_button, 'clicked', self._on_button_clicked, 'chats')
         toolbar.append(chats_button)
 
         group_chats_button = Gtk.ToggleButton(group=self._all_button)
@@ -52,8 +52,8 @@ class ChatFilter(Gtk.Box, SignalManager):
             group_chats_button.set_tooltip_text(_('Group Chats'))
         else:
             group_chats_button.set_label(_('Group Chats'))
-        group_chats_button.set_name('group_chats')
-        self._connect(group_chats_button, 'clicked', self._on_button_clicked)
+
+        self._connect(group_chats_button, 'clicked', self._on_button_clicked, 'group_chats')
         toolbar.append(group_chats_button)
 
         self.append(toolbar)
@@ -63,9 +63,9 @@ class ChatFilter(Gtk.Box, SignalManager):
         self._disconnect_all()
         app.check_finalize(self)
 
-    def _on_button_clicked(self, button: Gtk.ToggleButton) -> None:
+    def _on_button_clicked(self, button: Gtk.ToggleButton, filter_name: str) -> None:
         if button.get_active():
-            self.emit('filter-changed', button.get_name())
+            self.emit('filter-changed', filter_name)
 
     def reset(self) -> None:
         self._all_button.set_active(True)

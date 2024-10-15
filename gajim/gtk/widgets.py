@@ -33,6 +33,8 @@ class GajimAppWindow(SignalManager):
         add_window_padding: bool = True,
     ) -> None:
 
+        SignalManager.__init__(self)
+
         self.window = Gtk.ApplicationWindow(
             application=app.app,
             resizable=True,
@@ -43,7 +45,8 @@ class GajimAppWindow(SignalManager):
             transient_for=transient_for,
             modal=modal,
         )
-        SignalManager.__init__(self)
+        # Hack to get the instance in get_app_window
+        self.window.wrapper = self
 
         log.debug('Load Window: %s', name)
 
@@ -115,6 +118,7 @@ class GajimAppWindow(SignalManager):
         app.check_finalize(self.window)
         app.check_finalize(self)
 
+        del self.window.wrapper
         del self._ui
         del self.__default_controller
         del self.window

@@ -4,17 +4,17 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Generic, Type, TypeVar
 from typing import cast
 
 import locale
-from enum import IntEnum
+from enum import Enum
+import datetime
 
 from gi.repository import GObject, Gdk, Gio
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp import JID
 from nbxmpp.const import AnonymityMode
 from nbxmpp.errors import CancelledError
@@ -48,7 +48,7 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import AccountBadge, GajimMenu, GroupBadgeBox, get_icon_theme
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_status_icon_name
 from gajim.gtk.util import GroupBadge
@@ -58,11 +58,13 @@ from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 ContactT = BareContact | GroupchatContact
+L = TypeVar('L', bound=Type[GObject.Object])
+V = TypeVar('V', bound=Type[Gtk.Widget])
 
-
-class Search(IntEnum):
-    CONTACT = 0
-    GLOBAL = 1
+class ChatTypeFilter(Enum):
+    ALL = 'all'
+    CHAT = 'chats'
+    GROUPCHAT = 'group_chats'
 
 
 class StartChatDialog(GajimAppWindow):
@@ -83,6 +85,7 @@ class StartChatDialog(GajimAppWindow):
         self._keywords: list[str] = []
         self._destroyed = False
         self._search_stopped = False
+        self._search_is_changed = False
 
         self._ui = get_builder('start_chat_dialog.ui',)
         self.set_child(self._ui.stack)
@@ -92,19 +95,31 @@ class StartChatDialog(GajimAppWindow):
 
         self._search_is_valid_jid = False
 
-        self._new_contact_rows: dict[str, ContactRow | None] = {}
+        self._new_contact_items: dict[str, ContactListItem] = {}
         self._accounts = app.get_enabled_accounts_with_labels()
 
         self._accounts_store = Gtk.ListStore(GdkPixbuf.Pixbuf, str, str)
         self._ui.account_view.set_model(self._accounts_store)
 
-        rows: list[ContactRow] = []
+        self._contact_view = ContactListView()
+        self._connect(self._contact_view, 'activate', self._on_contact_item_activated)
+        self._ui.contact_scrolled.set_child(self._contact_view)
+
+        scale = self.get_scale_factor()
         self._add_accounts()
-        self._add_contacts(rows)
-        self._add_groupchats(rows)
-        self._add_new_contact_rows(rows)
+        self._add_contacts(scale)
+        self._add_groupchats(scale)
+        self._add_new_contact_items(scale)
+
+        controller = Gtk.EventControllerKey(
+            propagation_phase=Gtk.PropagationPhase.BUBBLE
+        )
+        self._ui.search_entry.get_delegate().add_controller(controller)
+        self._connect(controller, 'key-pressed', self._on_search_key_pressed)
 
         self._connect(self._ui.infobar_close_button, 'clicked', self._on_infobar_close_clicked)
+        self._connect(self._ui.search_entry, 
+            'activate', self._on_search_activate)
         self._connect(self._ui.search_entry, 
             'search-changed', self._on_search_changed)
         self._connect(self._ui.search_entry, 
@@ -123,12 +138,8 @@ class StartChatDialog(GajimAppWindow):
         self._connect(self._ui.account_back_button, 'clicked', self._on_back_clicked)
         self._connect(self._ui.account_select_button, 'clicked', self._on_select_clicked)
 
-        self._ui.listbox.set_placeholder(self._ui.placeholder)
-        self._ui.listbox.set_filter_func(self._filter_func, None)
-        self._connect(self._ui.listbox, 'row-activated', self._on_row_activated)
-
         self._global_search_view = GlobalSearch()
-        self._connect(self._global_search_view, 'activate', self._on_global_row_activated)
+        self._connect(self._global_search_view, 'activate', self._on_global_item_activated)
         self._ui.global_scrolled.set_child(self._global_search_view)
 
         self._muc_info_box = GroupChatInfoScrolled()
@@ -143,15 +154,10 @@ class StartChatDialog(GajimAppWindow):
 
         self._connect(self.get_default_controller(), 'key-pressed', self._on_key_pressed)
 
-        if rows:
-            self._load_contacts(rows)
-
         self._initial_message: dict[str, str | None] = {}
         if initial_jid is not None:
             self._initial_message[initial_jid] = initial_message
             self._ui.search_entry.set_text(initial_jid)
-
-        self.select_first_row()
 
         self.show()
 
@@ -161,44 +167,57 @@ class StartChatDialog(GajimAppWindow):
         del self._muc_info_box
         del self._chat_filter
         del self._accounts_store
-        self._new_contact_rows.clear()
-        self._ui.listbox.set_filter_func(None)
+        self._new_contact_items.clear()
         self._destroyed = True
         app.cancel_tasks(self)
 
     def remove_row(self, account: str, jid: str) -> None:
-        for row in cast(list[ContactRow], list(iterate_listbox_children(self._ui.listbox))):
-            if row.account == account and row.jid == jid:
-                self._ui.listbox.remove(row)
-                return
+        # Used by forget-groupchat action
+        self._contact_view.remove(account, jid)
 
-    def _global_search_active(self) -> bool:
-        return self._ui.global_search_toggle.get_active()
+    def _is_global_search_active(self) -> bool:
+        return self._ui.list_stack.get_visible_child_name() == 'global'
+
+    def _get_active_view(self) -> ContactListView | GlobalSearch:
+        if self._ui.list_stack.get_visible_child_name() == 'global':
+            return self._global_search_view
+        return self._contact_view
 
     def _add_accounts(self) -> None:
         for account in self._accounts:
             self._accounts_store.append([None, *account])
 
-    def _add_contacts(self, rows: list[ContactRow]):
+    def _add_contacts(self, scale: int) -> None:
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             client = app.get_client(account)
             for jid, _data in client.get_module('Roster').iter():
                 contact = client.get_module('Contacts').get_contact(jid)
-                rows.append(ContactRow(account,
-                                       contact,
-                                       jid,
-                                       contact.name,
-                                       show_account))
+
+                item = ContactListItem(
+                    account,
+                    contact,
+                    jid,
+                    contact.name,
+                    scale,
+                    show_account,
+                )
+
+                self._contact_view.add(item)
+
             self_contact = client.get_module('Contacts').get_contact(
                 client.get_own_jid().bare)
-            rows.append(ContactRow(account,
-                                   self_contact,
-                                   self_contact.jid,
-                                   _('Note to myself'),
-                                   show_account))
+            item = ContactListItem(
+                account,
+                self_contact,
+                self_contact.jid,
+                _('Note to myself'),
+                scale,
+                show_account,
+            )
+            self._contact_view.add(item)
 
-    def _add_groupchats(self, rows: list[ContactRow]) -> None:
+    def _add_groupchats(self, scale: int) -> None:
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             client = app.get_client(account)
@@ -206,41 +225,105 @@ class StartChatDialog(GajimAppWindow):
             for bookmark in bookmarks:
                 contact = client.get_module('Contacts').get_contact(
                     bookmark.jid, groupchat=True)
-                rows.append(ContactRow(account,
-                                       contact,
-                                       bookmark.jid,
-                                       contact.name,
-                                       show_account,
-                                       groupchat=True))
 
-    def _add_new_contact_rows(self, rows: list[ContactRow]) -> None:
+                item = ContactListItem(
+                    account,
+                    contact,
+                    bookmark.jid,
+                    contact.name,
+                    scale,
+                    show_account,
+                    groupchat=True,
+                )
+                self._contact_view.add(item)
+
+    def _add_new_contact_items(self, scale: int) -> None:
         for account, _label in self._accounts:
             show_account = len(self._accounts) > 1
-            row = ContactRow(account, None, None, None, show_account)
-            self._new_contact_rows[account] = row
-            rows.append(row)
-
-    def _load_contacts(self, rows: list[ContactRow]) -> None:
-        for row in rows:
-            self._ui.listbox.append(row)
-
-        self._ui.listbox.set_sort_func(self._sort_func, None)
+            item = ContactListItem(account, None, None, None, scale, show_account)
+            self._new_contact_items[account] = item
+            self._contact_view.add(item)
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         if stack.get_visible_child_name() == 'account':
             self._ui.account_view.grab_focus()
 
-    def _on_row_activated(self,
-                          _listbox: Gtk.ListBox,
-                          row: ContactRow
-                          ) -> None:
-        self._start_new_chat(row)
+    def _on_contact_item_activated(
+        self,
+        _listbox: Gtk.ListView,
+        position: int,    
+    ) -> None:
+        item = self._contact_view.get_listitem(position)
+        self._prepare_new_chat(item)
+
+    def _on_global_item_activated(
+        self,
+        _listview: Gtk.ListView,
+        position: int,
+    ) -> None:
+        self._select_muc()
 
     def _select_muc(self) -> None:
         if len(self._accounts) > 1:
             self._ui.stack.set_visible_child_name('account')
         else:
             self._on_select_clicked()
+
+    def _on_search_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        _keycode: int,
+        state: Gdk.ModifierType
+    ) -> bool:
+
+        if keyval == Gdk.KEY_Down:
+            self._ui.search_entry.emit('next-match')
+            return Gdk.EVENT_STOP
+
+        if keyval == Gdk.KEY_Up:
+            self._ui.search_entry.emit('previous-match')
+            return Gdk.EVENT_STOP
+
+        return Gdk.EVENT_PROPAGATE
+
+    def _on_search_activate(self, search_entry: Gtk.SearchEntry) -> None:
+        if self._is_global_search_active() and self._search_is_changed:
+            self._search_is_changed = False
+            self._global_search_view.remove_all()
+            self._start_search()
+            return
+
+        view = self._get_active_view()
+        pos = view.get_selected()
+        if pos == Gtk.INVALID_LIST_POSITION:
+            return
+        view.emit('activate', pos)
+
+    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
+        self._search_is_changed = True
+        self._show_search_entry_error(False)
+        self._search_is_valid_jid = False
+
+        if self._is_global_search_active():
+            return
+
+        search_text = search_entry.get_text()
+        uri = parse_uri(search_text)
+        if uri.type == URIType.XMPP:
+            search_entry.set_text(uri.data['jid'])
+            return
+
+        if search_text:
+            try:
+                validate_jid(search_text)
+            except ValueError:
+                self._show_search_entry_error(True)
+            else:
+                self._update_new_contact_items(search_text)
+                self._search_is_valid_jid = True
+
+        self._contact_view.set_search(search_text)
 
     def _on_key_pressed(
         self,
@@ -249,37 +332,6 @@ class StartChatDialog(GajimAppWindow):
         _keycode: int,
         state: Gdk.ModifierType
     ) -> bool:
-        is_search = self._ui.stack.get_visible_child_name() == 'search'
-        if keyval in (Gdk.KEY_Down, Gdk.KEY_Tab):
-            if not is_search:
-                return Gdk.EVENT_PROPAGATE
-
-            if self._global_search_active():
-                self._global_search_view.select_next()
-            else:
-                self._ui.search_entry.emit('next-match')
-            return Gdk.EVENT_STOP
-
-        if (state == Gdk.ModifierType.SHIFT_MASK and
-                keyval == Gdk.KEY_ISO_Left_Tab):
-            if not is_search:
-                return Gdk.EVENT_PROPAGATE
-
-            if self._global_search_active():
-                self._global_search_view.select_prev()
-            else:
-                self._ui.search_entry.emit('previous-match')
-            return Gdk.EVENT_STOP
-
-        if keyval == Gdk.KEY_Up:
-            if not is_search:
-                return Gdk.EVENT_PROPAGATE
-
-            if self._global_search_active():
-                self._global_search_view.select_prev()
-            else:
-                self._ui.search_entry.emit('previous-match')
-            return Gdk.EVENT_STOP
 
         if keyval == Gdk.KEY_Escape:
             if self._ui.stack.get_visible_child_name() == 'progress':
@@ -296,7 +348,6 @@ class StartChatDialog(GajimAppWindow):
 
             self._search_stopped = True
             self._ui.search_entry.grab_focus()
-            self._scroll_to_first_row()
             self._global_search_view.remove_all()
             if self._ui.search_entry.get_text() != '':
                 self._ui.search_entry.emit('stop-search')
@@ -304,9 +355,6 @@ class StartChatDialog(GajimAppWindow):
 
             # Propagate to GajimAppWindow
             return Gdk.EVENT_PROPAGATE
-
-        text_widget = self._ui.search_entry.get_delegate()
-        assert isinstance(text_widget, Gtk.Text)
 
         if keyval == Gdk.KEY_Return:
             if self._ui.stack.get_visible_child_name() == 'progress':
@@ -324,23 +372,6 @@ class StartChatDialog(GajimAppWindow):
                 self._on_join_clicked()
                 return Gdk.EVENT_STOP
 
-            if self._current_view_is(Search.GLOBAL):
-                if (text_widget.has_focus() and self._ui.search_entry.get_text()):
-                    self._global_search_view.remove_all()
-                    self._start_search()
-
-                elif self._global_search_view.get_selected_row() is not None:
-                    self._select_muc()
-                return Gdk.EVENT_STOP
-
-            row = self._ui.listbox.get_selected_row()
-            if row is not None:
-                row.emit('activate')
-            return Gdk.EVENT_STOP
-
-        if is_search:
-            text_widget.grab_focus_without_selecting()
-
         return Gdk.EVENT_PROPAGATE
 
     def _on_infobar_close_clicked(
@@ -355,68 +386,64 @@ class StartChatDialog(GajimAppWindow):
         self._ui.filter_bar_revealer.set_reveal_child(active)
 
     def _on_chat_filter_changed(self, _filter: ChatFilter, name: str) -> None:
-        self._current_filter = name
-        self._ui.listbox.invalidate_filter()
+        self._contact_view.set_chat_filter(ChatTypeFilter(name))
 
-    def _start_new_chat(self, row: ContactRow) -> None:
-        if row.jid is None:
+    def _prepare_new_chat(self, item: ContactListItem) -> None:
+        if item.jid is None:
             return
 
-        if row.is_new:
+        if item.is_new:
             try:
-                validate_jid(row.jid)
+                validate_jid(item.jid)
             except ValueError as error:
                 self._show_error_page(str(error))
                 return
 
-            self._disco_info(row)
+            self._disco_info(item)
             return
 
-        if row.groupchat:
-            if not app.account_is_available(row.account):
+        self._start_new_chat(item, groupchat=item.is_groupchat)
+
+    def _start_new_chat(self, item: ContactListItem, *, groupchat: bool) -> None:
+        if groupchat:
+            if not app.account_is_available(item.account):
                 self._show_error_page(_('You can not join a group chat '
                                         'unless you are connected.'))
                 return
 
-            if app.window.chat_exists(row.account, row.jid):
-                app.window.select_chat(row.account, row.jid)
+            if app.window.chat_exists(item.account, item.jid):
+                app.window.select_chat(item.account, item.jid)
                 self.close()
                 return
 
-            self._disco_muc(row.account, row.jid, request_vcard=row.is_new)
+            self._disco_muc(item.account, item.jid, request_vcard=item.is_new)
 
         else:
-            initial_message = self._initial_message.get(str(row.jid))
+            initial_message = self._initial_message.get(str(item.jid))
             app.window.add_chat(
-                row.account,
-                row.jid,
+                item.account,
+                item.jid,
                 'contact',
                 select=True,
                 message=initial_message)
             self.close()
 
-    def _on_global_row_activated(
-        self,
-        _listview: Gtk.ListView,
-        position: int,
-    ) -> None:
-        self._select_muc()
-
-    def _disco_info(self, row: ContactRow) -> None:
-        if not app.account_is_available(row.account):
+    def _disco_info(self, item: ContactListItem) -> None:
+        if not app.account_is_available(item.account):
             self._show_error_page(_('You are offline.'))
             return
 
         self._ui.stack.set_visible_child_name('progress')
-        client = app.get_client(row.account)
+        self._ui.spinner.start()
+        client = app.get_client(item.account)
         client.get_module('Discovery').disco_info(
-            row.jid,
+            item.jid,
             callback=self._disco_info_received,
-            user_data=row,
+            user_data=item,
             timeout=10)
 
     def _disco_info_received(self, task: Task) -> None:
-        row = cast(ContactRow, task.get_user_data())
+        item = cast(ContactListItem, task.get_user_data())
         try:
             result = cast(DiscoInfo, task.finish())
         except StanzaError as error:
@@ -428,8 +455,7 @@ class StartChatDialog(GajimAppWindow):
             if error.condition in contact_conditions:
                 # These error conditions are the result of
                 # querying contacts without subscription
-                row.update_chat_type()
-                self._start_new_chat(row)
+                self._start_new_chat(item, groupchat=False)
                 return
 
             # Handle other possible errors
@@ -441,17 +467,18 @@ class StartChatDialog(GajimAppWindow):
             self._show_error_page(_('This address is not reachable.'))
             return
 
+        groupchat = False
         if result.is_muc and not result.jid.is_domain:
             # This is mostly a fix for the MUC protocol, there is no
             # way to differentiate between a MUC service and room.
             # Except the MUC XEP defines rooms should have a localpart.
-            row.update_chat_type(groupchat=True)
-        else:
-            row.update_chat_type()
-        self._start_new_chat(row)
+            groupchat = True
+
+        self._start_new_chat(item, groupchat=groupchat)
 
     def _disco_muc(self, account: str, jid: JID, request_vcard: bool) -> None:
         self._ui.stack.set_visible_child_name('progress')
+        self._ui.spinner.start()
         client = app.get_client(account)
         client.get_module('Discovery').disco_muc(
             jid,
@@ -532,12 +559,6 @@ class StartChatDialog(GajimAppWindow):
         jid = JID.from_string(item.jid)
         self._disco_muc(account, jid, request_vcard=True)
 
-    def _current_view_is(self, view: Search) -> bool:
-        page_name =  self._ui.list_stack.get_visible_child_name()
-        if view == Search.CONTACT:
-            return page_name == 'contacts'
-        return page_name == 'global'
-
     def _on_global_search_toggle(self, button: Gtk.ToggleButton) -> None:
         self._ui.search_entry.grab_focus()
         image = cast(Gtk.Image, button.get_child())
@@ -548,7 +569,7 @@ class StartChatDialog(GajimAppWindow):
             self._ui.list_stack.set_visible_child_name('global')
             if self._ui.search_entry.get_text():
                 self._start_search()
-            self._ui.listbox.invalidate_filter()
+                self._global_search_view.grab_focus()
         else:
             self._ui.filter_bar_toggle.set_sensitive(True)
             self._ui.search_entry.set_text('')
@@ -556,117 +577,22 @@ class StartChatDialog(GajimAppWindow):
             self._ui.list_stack.set_visible_child_name('contacts')
             self._global_search_view.remove_all()
 
-    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
-        self._show_search_entry_error(False)
-        self._search_is_valid_jid = False
-
-        if self._global_search_active():
-            return
-
-        search_text = search_entry.get_text()
-        uri = parse_uri(search_text)
-        if uri.type == URIType.XMPP:
-            search_entry.set_text(uri.data['jid'])
-            return
-
-        if search_text:
-            try:
-                validate_jid(search_text)
-            except ValueError:
-                self._show_search_entry_error(True)
-            else:
-                self._update_new_contact_rows(search_text)
-                self._search_is_valid_jid = True
-
-        self._ui.listbox.invalidate_filter()
-
     def _show_search_entry_error(self, state: bool):
         self._ui.search_error_box.set_visible(state)
 
-    def _update_new_contact_rows(self, search_text: str) -> None:
-        for row in self._new_contact_rows.values():
-            if row is not None:
-                row.update_jid(JID.from_string(search_text))
+    def _update_new_contact_items(self, search_text: str) -> None:
+        for item in self._new_contact_items.values():
+            item.props.jid = JID.from_string(search_text)
 
     def _select_new_match(self,
                           _entry: Gtk.Entry,
                           direction: Direction
                           ) -> None:
-        selected_row = self._ui.listbox.get_selected_row()
-        if selected_row is None:
-            return
 
-        index = selected_row.get_index()
-
-        if direction == Direction.NEXT:
-            index += 1
+        if self._is_global_search_active():
+            self._global_search_view.select(direction)
         else:
-            index -= 1
-
-        while True:
-            new_selected_row = self._ui.listbox.get_row_at_index(index)
-            if new_selected_row is None:
-                return
-            if new_selected_row.get_child_visible():
-                self._ui.listbox.select_row(new_selected_row)
-                new_selected_row.grab_focus()
-                return
-            if direction == Direction.NEXT:
-                index += 1
-            else:
-                index -= 1
-
-    def select_first_row(self) -> None:
-        first_row = self._ui.listbox.get_row_at_y(0)
-        self._ui.listbox.select_row(first_row)
-
-    def _scroll_to_first_row(self) -> None:
-        self._ui.scrolledwindow.get_vadjustment().set_value(0)
-
-    def _filter_func(self, row: ContactRow, _user_data: Any) -> bool:
-        if row.contact is None:
-            # new contact row
-            return self._search_is_valid_jid
-
-        search_text = self._ui.search_entry.get_text().lower()
-        search_text_list = search_text.split()
-        row_text = row.get_search_text().lower()
-
-        if self._current_filter == 'chats' and row.groupchat:
-            return False
-
-        if self._current_filter == 'group_chats' and not row.groupchat:
-            return False
-
-        for text in search_text_list:
-            if text not in row_text:
-                GLib.timeout_add(50, self.select_first_row)
-                return False
-        GLib.timeout_add(50, self.select_first_row)
-        return True
-
-    @staticmethod
-    def _sort_func(row1: ContactRow, row2: ContactRow, _user_data: Any) -> int:
-        name1 = row1.get_search_text()
-        name2 = row2.get_search_text()
-        account1 = row1.account
-        account2 = row2.account
-        is_groupchat1 = row1.groupchat
-        is_groupchat2 = row2.groupchat
-        new1 = row1.is_new
-        new2 = row2.is_new
-
-        result = locale.strcoll(account1.lower(), account2.lower())
-        if result != 0:
-            return result
-
-        if new1 != new2:
-            return 1 if new1 else -1
-
-        if is_groupchat1 != is_groupchat2:
-            return 1 if is_groupchat1 else -1
-
-        return locale.strcoll(name1.lower(), name2.lower())
+            self._contact_view.select(direction)
 
     def _start_search(self) -> None:
         self._search_stopped = False
@@ -676,6 +602,9 @@ class StartChatDialog(GajimAppWindow):
         client = app.get_client(accounts[0]).connection
 
         text = self._ui.search_entry.get_text().strip()
+        if not text:
+            return
+
         self._global_search_view.start_search()
 
         if app.settings.get('muclumbus_api_pref') == 'http':
@@ -756,118 +685,338 @@ class StartChatDialog(GajimAppWindow):
             self._global_search_view.add(item)
 
 
-class ContactRow(Gtk.ListBoxRow, SignalManager):
-    def __init__(self,
-                 account: str,
-                 contact: ContactT | None,
-                 jid: JID | None,
-                 name: str | None,
-                 show_account: bool,
-                 groupchat: bool = False
-                 ) -> None:
-        Gtk.ListBoxRow.__init__(self)
+class BaseListView(Generic[L, V], Gtk.ListView, SignalManager):
+
+    _selection_model: Gtk.SingleSelection
+    _filter_model: Gtk.FilterListModel
+
+    def __init__(self, list_type: L, view_type: V) -> None:
+        Gtk.ListView.__init__(self)
         SignalManager.__init__(self)
 
-        self.add_css_class('start-chat-row')
+        self._model = Gio.ListStore(item_type=list_type)
 
-        self.account = account
-        self.account_label = app.get_account_label(account)
-        self.show_account = show_account
-        self.jid = jid
-        self.contact = contact
-        self.name = name
-        self.groupchat = groupchat
-        self.is_new = bool(jid is None)
+        factory = Gtk.SignalListItemFactory()
+        self._connect(factory, 'setup', self._on_factory_setup, view_type)
+        self._connect(factory, 'bind', self._on_factory_bind)
+        self._connect(factory, 'unbind', self._on_factory_unbind)
+        self.set_factory(factory)
 
-        grid = Gtk.Grid()
-        grid.set_column_spacing(12)
-        grid.set_size_request(260, -1)
+    @staticmethod
+    def _on_factory_setup(
+        _factory: Gtk.SignalListItemFactory,
+        list_item: Gtk.ListItem,
+        view_type: V
+    ) -> None:
+        list_item.set_child(view_type())
 
-        image = self._get_avatar_image(contact)
-        image.set_size_request(AvatarSize.CHAT, AvatarSize.CHAT)
-        grid.attach(image, 0, 0, 1, 1)
+    @staticmethod
+    def _on_factory_bind(
+        _factory: Gtk.SignalListItemFactory,
+        list_item: Gtk.ListItem
+    ) -> None:
+        view_item = list_item.get_child()
+        obj = list_item.get_item()
+        view_item.bind(obj)
 
-        self._tooltip = ContactTooltip()
-        image.set_has_tooltip(True)
-        self._connect(image, 'query-tooltip', self._on_query_tooltip)
+    @staticmethod
+    def _on_factory_unbind(
+        _factory: Gtk.SignalListItemFactory,
+        list_item: Gtk.ListItem
+    ) -> None:
+        view_item = list_item.get_child()
+        view_item.unbind()
 
-        if self.name is None:
-            self.name = _('Start New Chat')
+    def add(self, *args, **kwargs) -> None:
+        raise NotImplementedError
 
-        meta_box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL, valign=Gtk.Align.CENTER)
+    def remove_all(self) -> None:
+        self._model.remove_all()
 
-        self.name_label = Gtk.Label(label=self.name)
-        self.name_label.set_ellipsize(Pango.EllipsizeMode.END)
-        self.name_label.set_xalign(0)
-        self.name_label.set_width_chars(20)
-        self.name_label.set_halign(Gtk.Align.START)
-        self.name_label.get_style_context().add_class('bold14')
-        meta_box.append(self.name_label)
+    def get_listitem(self, position: int) -> L:
+        return self._filter_model.get_item(position)
 
-        if contact and not contact.is_groupchat:
-            if idle := contact.idle_datetime:
-                idle_badge = IdleBadge(idle)
-                meta_box.append(idle_badge)
+    def get_selected_item(self) -> L | None:
+        return self._selection_model.get_selected_item()
 
-        if contact and not contact.is_groupchat and (status := contact.status):
-            self.status_label = Gtk.Label(
-                label=status,
-                ellipsize=Pango.EllipsizeMode.END,
-                xalign=0,
-                width_chars=22,
-                halign=Gtk.Align.START,
-            )
-            self.status_label.get_style_context().add_class('dim-label')
-            self.status_label.get_style_context().add_class('small-label')
-            meta_box.append(self.status_label)
+    def get_selected(self) -> int:
+        return self._selection_model.get_selected()
 
-        grid.attach(meta_box, 1, 0, 1, 3)
+    def select(self, direction: Direction) -> None:
+        selected_pos = self._selection_model.get_selected()
+        if selected_pos == Gtk.INVALID_LIST_POSITION:
+            return
 
-        badge_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        if show_account:
-            account_badge = AccountBadge(account)
-            account_badge.set_halign(Gtk.Align.END)
-            account_badge.set_valign(Gtk.Align.START)
-            account_badge.set_hexpand(True)
-            badge_box.append(account_badge)
+        if direction == Direction.NEXT:
+            selected_pos += 1
+        else:
+            selected_pos -= 1
 
-        if contact and not contact.is_groupchat and not contact.is_pm_contact:
-            groups = contact.groups
-            for group in groups:
-                group_badge = GroupBadge(group)
-                badge_box.append(group_badge)
+        if not 0 <= selected_pos < self._selection_model.get_n_items():
+            return
 
-        grid.attach(badge_box, 2, 0, 1, 3)
+        self.scroll_to(selected_pos, Gtk.ListScrollFlags.SELECT)
 
-        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+
+class ContactListView(BaseListView[Type['ContactListItem'], Type['ContactViewItem']]):
+    def __init__(self) -> None:
+        BaseListView.__init__(self, ContactListItem, ContactViewItem)
+
+        self._chat_type_filter = ChatTypeFilter.ALL
+        self._scroll_id = None
+        self._search_string_list: list[str] = []
+
+        expression =  Gtk.PropertyExpression.new(
+            this_type=ContactListItem,
+            expression=None,
+            property_name='name',
+        )
+        sorter = Gtk.StringSorter(expression=expression)
+        self._sort_model = Gtk.SortListModel(model=self._model, sorter=sorter)
+
+        self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
+
+        self._filter_model = Gtk.FilterListModel(
+            model=self._sort_model,
+            filter=self._custom_filter
+        )
+        self._connect(self._filter_model, 'items-changed', self._on_filter_items_changed)
+
+        self._selection_model = Gtk.SingleSelection(model=self._filter_model)
+
+        self.set_model(self._selection_model)
+
+    def do_unroot(self) -> None:
+        Gtk.ListView.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self._model)
+        app.check_finalize(self._filter_model)
+        app.check_finalize(self._sort_model)
+        app.check_finalize(self._selection_model)
+        app.check_finalize(self._custom_filter)
+        del self._model
+        del self._filter_model
+        del self._sort_model
+        del self._selection_model
+        self._custom_filter.set_filter_func(None)
+        del self._custom_filter
+        app.check_finalize(self)
+
+    def _on_filter_items_changed(
+        self,
+        filter_model: Gtk.FilterListModel,
+        _pos: int,
+        _removed: int,
+        _added: int
+    ) -> None:
+
+        # Cancel any active source at first so we dont have
+        # multiple timeouts running
+
+        if self._scroll_id is not None:
+            GLib.source_remove(self._scroll_id)
+            self._scroll_id = None
+
+        # If the first item is already selected or
+        # no items are in the model we dont need to trigger a scroll
+
+        if (self._selection_model.get_selected() == 0 or
+                filter_model.get_n_items() == 0):
+            return
+
+        def _scroll_to() -> None:
+            self._scroll_id = None
+            self.scroll_to(0, Gtk.ListScrollFlags.SELECT)
+
+        self._scroll_id = GLib.timeout_add(50, _scroll_to)
+
+    def _filter_func(self, item: ContactListItem) -> bool:
+        if item.is_new:
+            return True
+
+        for search_string in self._search_string_list:
+            if search_string not in item.search_string:
+                return False
+
+        type_ = self._chat_type_filter
+        if type_ == ChatTypeFilter.ALL:
+            return True
+
+        is_groupchat = item.is_groupchat
+        if type_ == ChatTypeFilter.CHAT and not is_groupchat:
+            return True
+
+        if type_ == ChatTypeFilter.GROUPCHAT and is_groupchat:
+            return True
+
+        return False
+
+    def add(self, item: ContactViewItem) -> None:
+        self._model.append(item)
+
+    def remove(self, account: str, jid: JID) -> None:
+        for item in self._model:
+            if item.account != account or item.jid != jid:
+                continue
+            success, pos = self._model.find(item)
+            if success:
+                self._model.remove(pos)
+            break
+
+    def set_search(self, text: str) -> None:
+        self._search_string_list = text.lower().split()
+        self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
+
+    def set_chat_filter(self, value: ChatTypeFilter) -> None:
+        if self._chat_type_filter == value:
+            return
+        self._chat_type_filter = value
+        self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
+
+
+class ContactListItem(GObject.Object):
+    __gtype_name__ = "ContactListItem"
+
+    account = GObject.Property(type=str)
+    account_label = GObject.Property(type=str)
+    account_visible = GObject.Property(type=bool, default=False)
+    jid = GObject.Property(type=str)
+    name = GObject.Property(type=str)
+    groups = GObject.Property(type=object)
+    is_groupchat = GObject.Property(type=bool, default=False)
+    is_new = GObject.Property(type=bool, default=False)
+    avatar_paintable = GObject.Property(type=Gdk.Paintable)
+    idle = GObject.Property(type=object)
+    status = GObject.Property(type=str)
+    status_visible = GObject.Property(type=bool, default=False)
+    search_string = GObject.Property(type=str)
+    menu = GObject.Property(type=Gio.Menu)
+
+    def __init__(
+        self,
+        account: str,
+        contact: ContactT | None,
+        jid: JID | None,
+        name: str | None,
+        scale: int,
+        account_visible: bool,
+        groupchat: bool = False
+    ) -> None:
+
+        account_label = app.get_account_label(account)
+        name = name or _('Start New Chat')
+
+        idle = None
+        status = ''
+        groups = []
+        if contact is not None and not groupchat:
+            groups = sorted(contact.groups)
+            status = contact.status
+            idle = contact.idle_datetime
+
+        menu = None
+        if groupchat:
+            menu = get_start_chat_row_menu(account, jid)
+
+        is_new = jid is None
+
+        avatar_paintable = None
+        if is_new:
+            theme = get_icon_theme()
+            avatar_paintable = theme.lookup_icon(
+                'avatar-default', None, AvatarSize.CHAT, scale, Gtk.TextDirection.NONE, 0)
+
+        else:
+            avatar_paintable = contact.get_avatar(AvatarSize.CHAT, scale)
+
+        search_string = '|'.join((name, str(jid), account_label)).lower()
+
+        super().__init__(
+            account=account,
+            account_label=account_label,
+            account_visible=account_visible,
+            jid=jid,
+            name=name,
+            idle=idle,
+            is_groupchat=groupchat,
+            is_new=jid is None,
+            status=status,
+            status_visible=bool(status),
+            groups=groups,
+            menu=menu,
+            avatar_paintable=avatar_paintable,
+            search_string=search_string
+        )
+
+    def __repr__(self) -> str:
+        return f"ContactListItem: {self.props.account} - {self.props.jid}"
+
+
+@Gtk.Template(filename='gajim/data/gui/contact_view_item.ui')
+class ContactViewItem(Gtk.Grid, SignalManager):
+    __gtype_name__ = "ContactViewItem"
+
+    _avatar: Gtk.Label = Gtk.Template.Child()
+    _name_label: Gtk.Label = Gtk.Template.Child()
+    _idle_badge: IdleBadge = Gtk.Template.Child()
+    _status_label: Gtk.Label = Gtk.Template.Child()
+    _account_badge: AccountBadge = Gtk.Template.Child()
+    _group_badge_box: GroupBadgeBox = Gtk.Template.Child()
+    _menu: GajimPopover = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Grid.__init__(self)
+        SignalManager.__init__(self)
+
+        self.__bindings: list[GObject.Binding] = []
+
+        # self._tooltip = ContactTooltip()
+        # image.set_has_tooltip(True)
+        # self._connect(image, 'query-tooltip', self._on_query_tooltip)
+
+        gesture_secondary_click = Gtk.GestureClick(
+            button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE)
         self._connect(gesture_secondary_click, 'pressed', self._popup_menu)
         self.add_controller(gesture_secondary_click)
 
-        self._menu_popover = GajimPopover(None)
-        grid.attach(self._menu_popover, 0, 1, 1, 1)
+    def bind(self, obj: GlobalListItem) -> None:
+        bind_spec = [
+            ('name', self._name_label, 'label'),
+            ('status', self._status_label, 'label'),
+            ('status_visible', self._status_label, 'visible'),
+            ('avatar_paintable', self._avatar, 'paintable'),
+            ('idle', self._idle_badge, 'idle'),
+            ('account', self._account_badge, 'account_label'),
+            ('account_visible', self._account_badge, 'visible'),
+            ('groups', self._group_badge_box, 'groups'),
+            ('menu', self._menu, 'menu-model'),
+        ]
 
-        self._grid = grid
-        self.set_child(grid)
+        for source_prop, widget, target_prop in bind_spec:
+            bind = obj.bind_property(
+                source_prop, widget, target_prop, GObject.BindingFlags.SYNC_CREATE)
+            self.__bindings.append(bind)
+
+    def unbind(self) -> None:
+        for bind in self.__bindings:
+            bind.unbind()
+        self.__bindings.clear()
 
     def do_unroot(self) -> None:
-        Gtk.ListBoxRow.do_unroot(self)
-        self._disconnect_all()
-        del self._menu_popover
-        del self._grid
+        Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
 
-    def _on_query_tooltip(self,
-                          _img: Gtk.Image,
-                          _x_coord: int,
-                          _y_coord: int,
-                          _keyboard_mode: bool,
-                          tooltip: Gtk.Tooltip) -> bool:
-        if not isinstance(self.contact, BareContact):
-            return False
-        v, widget = self._tooltip.get_tooltip(self.contact)
-        tooltip.set_custom(widget)
-        return v
+    # def _on_query_tooltip(self,
+    #                       _img: Gtk.Image,
+    #                       _x_coord: int,
+    #                       _y_coord: int,
+    #                       _keyboard_mode: bool,
+    #                       tooltip: Gtk.Tooltip) -> bool:
+    #     if not isinstance(self.contact, BareContact):
+    #         return False
+    #     v, widget = self._tooltip.get_tooltip(self.contact)
+    #     tooltip.set_custom(widget)
+    #     return v
 
     def _popup_menu(
         self,
@@ -876,87 +1025,29 @@ class ContactRow(Gtk.ListBoxRow, SignalManager):
         x: float,
         y: float,
     ) -> int:
-        if not self.groupchat:
+
+        if self._menu.get_menu_model() is None:
             return Gdk.EVENT_PROPAGATE
 
-        menu = get_start_chat_row_menu(self.account, self.jid)
-        self._menu_popover.set_menu_model(menu)
-        self._menu_popover.set_pointing_to_coord(x, y)
-        self._menu_popover.popup()
+        self._menu.set_pointing_to_coord(x, y)
+        self._menu.popup()
 
-        return Gdk.EVENT_PROPAGATE
-
-    def _get_avatar_image(self, contact: ContactT) -> Gtk.Image:
-        if self.is_new:
-            icon_name = 'avatar-default'
-            if self.groupchat:
-                icon_name = get_status_icon_name('muc-inactive')
-            return Gtk.Image.new_from_icon_name(icon_name)
-
-        scale = self.get_scale_factor()
-        texture = contact.get_avatar(AvatarSize.CHAT, scale)
-        return Gtk.Image.new_from_paintable(texture)
-
-    def update_jid(self, jid: JID) -> None:
-        self.jid = jid
-        self._grid.set_tooltip_text(str(jid))
-
-    def update_chat_type(self, groupchat: bool = False) -> None:
-        self.is_new = False
-        self.groupchat = groupchat
-
-    def get_search_text(self) -> str:
-        if self.contact is None and not self.groupchat:
-            return str(self.jid)
-
-        return f'{self.name} {self.jid}'
+        return Gdk.EVENT_STOP
 
 
-class GlobalSearch(Gtk.ListView, SignalManager):
+class GlobalSearch(BaseListView[Type['GlobalListItem'], Type['GlobalViewItem']], Gtk.ListView, SignalManager):
     def __init__(self) -> None:
-        Gtk.ListView.__init__(
-            self,
-            has_tooltip=True,
-        )
+        BaseListView.__init__(self, GlobalListItem, GlobalViewItem)
         SignalManager.__init__(self)
 
-        self._model = Gio.ListStore(item_type=MuclumbusListItem)
         self._selection_model = Gtk.SingleSelection(model=self._model)
-
-        factory = Gtk.SignalListItemFactory()
-        self._connect(factory, 'setup', self._on_factory_setup)
-        self._connect(factory, 'bind', self._on_factory_bind)
-        self._connect(factory, 'unbind', self._on_factory_unbind)
-
         self.set_model(self._selection_model)
-        self.set_factory(factory)
 
     def do_unroot(self) -> None:
         Gtk.ListView.do_unroot(self)
         self._disconnect_all()
         del self._model
         app.check_finalize(self)
-
-    def remove_all(self) -> None:
-        self._model.remove_all()
-
-    def get_listitem(self, position: int) -> MuclumbusListItem:
-        return self._model.get_item(position)
-
-    def get_selected_item(self) -> MuclumbusListItem | None:
-        return self._selection_model.get_selected_item()
-
-    def _on_factory_setup(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
-        list_item.set_child(MuclumbusViewItem())
-
-    def _on_factory_bind(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
-        row = list_item.get_child()
-        obj = list_item.get_item()
-        row.bind_gobject(obj)
-
-    def _on_factory_unbind(self, _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem) -> None:
-        row = list_item.get_child()
-        row.unbind_gobject()
 
     # def _add_placeholder(self) -> None:
     # TODO GTK4
@@ -990,155 +1081,73 @@ class GlobalSearch(Gtk.ListView, SignalManager):
         pass
 
     def add(self, item: MuclumbusItem) -> None:
-        self._model.append(MuclumbusListItem(item=item))
-
-    def _select(self, direction: Direction) -> None:
-        selected_pos = self._selection_model.get_selected()
-        if selected_pos == Gtk.INVALID_LIST_POSITION:
-            return
-
-        if direction == Direction.NEXT:
-            selected_pos += 1
-        else:
-            selected_pos -= 1
-
-        if selected_pos < 0:
-            return
-
-        self._selection_model.set_selected(selected_pos)
-
-    def select_next(self) -> None:
-        self._select(Direction.NEXT)
-
-    def select_prev(self) -> None:
-        self._select(Direction.PREV)
+        self._model.append(GlobalListItem(item=item))
 
 
-class MuclumbusListItem(GObject.Object):
-    __gtype_name__ = "MuclumbusListItem"
+class GlobalListItem(GObject.Object):
+    __gtype_name__ = "GlobalListItem"
+
+    jid = GObject.Property(type=str)
+    name = GObject.Property(type=str)
+    nusers = GObject.Property(type=str)
+    description = GObject.Property(type=str)
+    language = GObject.Property(type=str)
+    language_code = GObject.Property(type=str)
 
     def __init__(self, item: MuclumbusItem) -> None:
-        super().__init__()
+        jid = JID.from_string(item.jid)
+        name = item.name or jid.localpart or str(jid)
 
-        self._item = item
-        jid = JID.from_string(self._item.jid)
-        self._name = self._item.name or jid.localpart or str(jid)
-
-        language_code = item.language.upper()
-        if len(language_code) < 2:
-            language_code = ''
-
-        if len(language_code) > 2:
-            # Fix if no ISO code has been provided
-            language_code = language_code[:2]
-
+        language_code = item.language.upper()[:2]
         if language_code == 'EN':
             # Fix for most used languages/countries
             language_code = 'GB'
 
-        self._language_code = get_country_flag_from_code(language_code)
+        language_code = get_country_flag_from_code(language_code)
 
-    @GObject.Property(type=str)
-    def jid(self) -> str:
-        return self._item.jid
-
-    @GObject.Property(type=str)
-    def name(self) -> str:
-        return self._name
-
-    @GObject.Property(type=str)
-    def nusers(self) -> str:
-        return self._item.nusers
-
-    @GObject.Property(type=str)
-    def description(self) -> str:
-        return self._item.description
-
-    @GObject.Property(type=str)
-    def language(self) -> str:
-        return self._item.language
-
-    @GObject.Property(type=str)
-    def language_code(self) -> str:
-        return self._language_code
-
-    @GObject.Property(type=str)
-    def is_open(self) -> bool:
-        return self._item.is_open
-
-    @GObject.Property(type=str)
-    def anonymity_mode(self) -> AnonymityMode:
-        return self._item.anonymity_mode
+        super().__init__(
+            jid=item.jid,
+            name=name,
+            nusers=item.nusers,
+            description=item.description,
+            language=_('Language: %s') % item.language,
+            language_code=language_code,
+        )
 
     def __repr__(self) -> str:
-        return f"MuclumbusListItem: {self._item}"
+        return f"GlobalListItem: {self.props.jid} {self.props.name}"
 
 
-class MuclumbusViewItem(Gtk.Box):
+@Gtk.Template(filename='gajim/data/gui/global_view_item.ui')
+class GlobalViewItem(Gtk.Box):
+    __gtype_name__ = 'GlobalViewItem'
+
+    _name_box: Gtk.Box = Gtk.Template.Child()
+    _name_label: Gtk.Label = Gtk.Template.Child()
+    _description_label: Gtk.Label = Gtk.Template.Child()
+    _language_label: Gtk.Label = Gtk.Template.Child()
+    _users_count_label: Gtk.Label = Gtk.Template.Child()
+
     def __init__(self) -> None:
-        Gtk.Box.__init__(
-            self,
-            spacing=12,
-        )
-        self.add_css_class('start-chat-row')
-
+        Gtk.Box.__init__(self)
         self.__bindings: list[GObject.Binding] = []
 
-        self._name_label = Gtk.Label(
-            halign=Gtk.Align.START,
-            ellipsize=Pango.EllipsizeMode.END,
-            max_width_chars=40,
-        )
-        self._name_label.add_css_class('bold16')
+    def bind(self, obj: GlobalListItem) -> None:
+        bind_spec: list[tuple[str, Gtk.Widget, str]] = [
+            ('name', self._name_label, 'label'),
+            ('description', self._description_label, 'label'),
+            ('jid', self._name_box, 'tooltip_text'),
+            ('language_code', self._language_label, 'label'),
+            ('language', self._language_label, 'tooltip_text'),
+            ('nusers', self._users_count_label, 'label'),
+        ]
 
-        self._description_label = Gtk.Label(
-            halign=Gtk.Align.START,
-            ellipsize=Pango.EllipsizeMode.END,
-            max_width_chars=40,
-        )
-        self._description_label.add_css_class('dim-label')
+        for source_prop, child_widget, target_prop in bind_spec:
+            bind = obj.bind_property(
+                source_prop, child_widget, target_prop, GObject.BindingFlags.SYNC_CREATE)
+            self.__bindings.append(bind)
 
-        self._name_box = Gtk.Box(
-            orientation=Gtk.Orientation.VERTICAL,
-            hexpand=True,
-        )
-        self._name_box.append(self._name_label)
-        self._name_box.append(self._description_label)
-
-        self.append(self._name_box)
-
-        self._language_label = Gtk.Label()
-        self.append(self._language_label)
-
-        users_box = Gtk.Box(
-            spacing=6,
-            tooltip_text=_('Participants Count'),
-        )
-        users_box.add_css_class('dim-label')
-
-        users_icon = Gtk.Image.new_from_icon_name('system-users-symbolic')
-        users_box.append(users_icon)
-
-        self._users_count_label = Gtk.Label()
-        users_box.append(self._users_count_label)
-
-        self.append(users_box)
-
-    def bind_gobject(self, obj: MuclumbusListItem) -> None:
-        bind = obj.bind_property('name', self._name_label, "label", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-        bind = obj.bind_property('description', self._description_label, "label", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-        bind = obj.bind_property('jid', self._name_box, "tooltip_text", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-        bind = obj.bind_property('language_code', self._language_label, "label", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-        bind = obj.bind_property('language', self._language_label, "tooltip_text", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-        bind = obj.bind_property('nusers', self._users_count_label, "label", GObject.BindingFlags.SYNC_CREATE)
-        self.__bindings.append(bind)
-
-    def unbind_gobject(self) -> None:
+    def unbind(self) -> None:
         for bind in self.__bindings:
             bind.unbind()
         self.__bindings.clear()
