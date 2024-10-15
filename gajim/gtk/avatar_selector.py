@@ -7,13 +7,13 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Any
 from typing import cast
 
 import logging
 from enum import IntEnum
 from enum import unique
+from pathlib import Path
 
 import cairo
 from gi.repository import Gdk
