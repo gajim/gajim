@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -82,6 +82,13 @@ msgstr "%(name)s a anulat transferul (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%s min în urmă"
+msgstr[1] "%s minute în urmă"
+msgstr[2] "%s de minute în urmă"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -163,13 +170,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s tastează…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s min în urmă"
-msgstr[1] "%s minute în urmă"
-msgstr[2] "%s de minute în urmă"
 
 #, python-format
 msgid "%s of %s"
@@ -553,9 +553,9 @@ msgstr "Adăugați acest certificat la lista de certificate de _încredere"
 msgid "Add to Contact List…"
 msgstr "Adăugați la lista de contacte…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Adăugat %s contact"
 msgstr[1] "Adăugate %s contacte"
 msgstr[2] "Adăugate %s de contacte"
@@ -1950,6 +1950,9 @@ msgstr "Eroare primită: {}"
 
 msgid "Error while Exporting"
 msgstr "Eroare în timpul exportului"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Eroare în timpul procesării imaginii"
@@ -3886,9 +3889,9 @@ msgstr "Îndepărtați-vă avatarul de chat de grup"
 msgid "Remove your profile picture"
 msgstr "Îndepărtați imaginea de profil"
 
-#, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+#, fuzzy, python-format
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "A eliminat %s contact"
 msgstr[1] "A eliminat %s contacte"
 msgstr[2] "A eliminat %s de contacte"
@@ -5461,6 +5464,9 @@ msgstr "Mesaj vocal"
 
 msgid "Voice Messages are not available"
 msgstr "Mesajele vocale nu sunt disponibile"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 msgid "Waiting…"
 msgstr "Așteptând…"

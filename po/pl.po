@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-08-12 04:17+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-05 22:11+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -80,6 +80,13 @@ msgstr "%(name)s anulował transfer (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%(number)s minutę temu"
+msgstr[1] "%(number)s minuty temu"
+msgstr[2] "%(number)s minut temu"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -163,15 +170,8 @@ msgid "%s is typing…"
 msgstr "%s pisze…"
 
 #, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s minutę temu"
-msgstr[1] "%s minuty temu"
-msgstr[2] "%s minut temu"
-
-#, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s z %s"
 
 #, python-format
 msgid "%s participants are typing…"
@@ -223,7 +223,7 @@ msgstr "(%(filesize_unit)s/ów)"
 
 #, python-format
 msgid "** %s lost all their hats!"
-msgstr ""
+msgstr "** %s stracił wszystkie swoje kapelusze!"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
@@ -237,10 +237,10 @@ msgstr "** Rola użytkownika {nick} została zmieniona na {role}{actor}{reason}"
 
 #, python-format
 msgid "** The hats of %s are now %s"
-msgstr ""
+msgstr "** Kapelusze od %s są teraz %s"
 
 msgid "** You lost all your hats!"
-msgstr ""
+msgstr "** Straciłeś wszystkie swoje kapelusze!"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -252,7 +252,7 @@ msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Twoja rola została zmieniona na {role}{actor}{reason}"
 
 msgid "** Your hats are now "
-msgstr ""
+msgstr "** Twoje kapelusze są teraz "
 
 msgid "1 Day"
 msgstr "1 dzień"
@@ -357,7 +357,7 @@ msgid "<error>"
 msgstr "<błąd>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Rozmowa grupowa wymaga przynajmniej jednego właściciela"
@@ -553,11 +553,11 @@ msgid "Add to Contact List…"
 msgstr "Dodaj do listy kontaktów…"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "Dodano %s kontakt"
-msgstr[1] "Dodano %s kontakty"
-msgstr[2] "Dodano %s kontaktów"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "Dodano %(count)s kontakt"
+msgstr[1] "Dodano %(count)s kontakty"
+msgstr[2] "Dodano %(count)s kontaktów"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "Dodatkowo, utracisz swoją przynależność administratora."
@@ -1793,9 +1793,8 @@ msgstr "Jem"
 msgid "Edit Name…"
 msgstr "Edytuj nazwę…"
 
-#, fuzzy
 msgid "Edit display name…"
-msgstr "Edytuj nazwę…"
+msgstr "Edytuj wyświetlaną nazwę…"
 
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Edytuj wiadomość (Esc anuluje)…"
@@ -1933,6 +1932,9 @@ msgstr "Odebrany błąd: {}"
 
 msgid "Error while Exporting"
 msgstr "Błąd podczas eksportowania"
+
+msgid "Error while merging recordings, please try again."
+msgstr "Błąd podczas łączenia nagrań, proszę spróbować ponownie."
 
 msgid "Error while processing image"
 msgstr "Błąd podczas przetwarzania obrazu"
@@ -2260,7 +2262,6 @@ msgstr ""
 "Gajim integruje się dobrze z Twoimi pozostałymi urządzeniami: po prostu "
 "kontynuuj rozmowę na telefonie."
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim jest w pełni zsynchronizowany z archiwum."
 
@@ -2422,9 +2423,8 @@ msgstr "Strona domowa"
 msgid "Hostname"
 msgstr "Nazwa hosta"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
-msgstr "Jak daleko wstecz historia powinna zostać zsynchronizowana?"
+msgstr "Jak daleko wstecz historia rozmów powinna być synchronizowana?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Jak długo Gajim powinien przechowywać Twoją historię rozmów"
@@ -2589,9 +2589,8 @@ msgstr "Nieprawidłowy węzeł"
 msgid "Invalid Server Name"
 msgstr "Niepoprawna nazwa serwera"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "Nieprawidłowa nazwa"
+msgstr "Nieprawidłowa stanza"
 
 msgid "Invalid XMPP Address"
 msgstr "Niepoprawny adres XMPP"
@@ -2725,7 +2724,7 @@ msgstr "Etykieta"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "Język: %s"
 
 msgid "Last but not least"
 msgstr "I wreszcie,"
@@ -3374,9 +3373,8 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Uczestnicy"
 
-#, fuzzy
 msgid "Participants Count"
-msgstr "Uczestnicy"
+msgstr "Liczba uczestników"
 
 msgid "Participants asking for voice:"
 msgstr "Uczestnicy proszący o prawo głosu:"
@@ -3603,7 +3601,7 @@ msgid "Previous"
 msgstr "Poprzednie"
 
 msgid "Print XML stanzas and other debug information"
-msgstr "Drukuj XML i inne informacje debugowania"
+msgstr "Drukuj stanze XML i inne informacje debugowania"
 
 msgid "Priority"
 msgstr "Priorytet"
@@ -3858,11 +3856,11 @@ msgid "Remove your profile picture"
 msgstr "Usuń swój obrazek profilowy"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "Usunięto %s kontakt"
-msgstr[1] "Usunięto %s kontakty"
-msgstr[2] "Usunięto %s kontaktów"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "Usunięto %(count)s kontakt"
+msgstr[1] "Usunięto %(count)s kontakty"
+msgstr[2] "Usunięto %(count)s kontaktów"
 
 msgid "Remove…"
 msgstr "Usuń…"
@@ -3957,7 +3955,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "Zresetuj wszystkie rozmowy grupowe do obecnej domyślnej wartości"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "Przywróć pierwotną nazwę"
 
 msgid "Resets value to default"
 msgstr "Zresetuj wartość do domyślnej"
@@ -4046,7 +4044,7 @@ msgid "Save as…"
 msgstr "Zapisz jako…"
 
 msgid "Save display name"
-msgstr ""
+msgstr "Zapisz wyświetlaną nazwę"
 
 msgid "Saving Avatar Failed"
 msgstr "Zapisywanie awataru nie powiodło się"
@@ -4164,11 +4162,9 @@ msgstr "Wybierz emoji"
 msgid "Select playback speed"
 msgstr "Wybierz prędkość odtwarzania"
 
-#, fuzzy
 msgid "Select the account with which you want to synchronize"
-msgstr "Wskaż konto, z którym chcesz zsynchronizować kontakty"
+msgstr "Wskaż konto, z którym chcesz się zsynchronizować"
 
-#, fuzzy
 msgid "Select the contacts you want to synchronize"
 msgstr "Wybierz kontakty, które chcesz zsynchronizować"
 
@@ -4738,18 +4734,15 @@ msgstr "Synchronizuj konta"
 msgid "Synchronize Chat History"
 msgstr "Synchronizuj historię rozmowy"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "Synchronizuj historię…"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "Każdy może dołączyć do tej rozmowy grupowej"
+msgstr "Synchronizuj dołączone rozmowy grupowe"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "Synchronizuj dołączone rozmowy grupowe z innymi urządzeniami."
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "Synchronizuj status wszystkich kont"
 
@@ -4832,9 +4825,8 @@ msgstr ""
 msgid "The last message was written on a mobile client"
 msgstr "Ostatnia wiadomość została napisana na kliencie mobilnym"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "Wiadomości głosowe nie są dostępne"
+msgstr "Odwoływana wiadomość nie jest dostępna."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -5427,6 +5419,9 @@ msgstr "Wiadomość głosowa"
 
 msgid "Voice Messages are not available"
 msgstr "Wiadomości głosowe nie są dostępne"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr "Wiadomość głosowa nie mogła zostać zapisana. Proszę spróbować ponownie."
 
 msgid "Waiting…"
 msgstr "Oczekiwanie…"

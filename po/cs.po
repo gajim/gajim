@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -84,6 +84,13 @@ msgstr "%(name)s zrušil/a přenos kvůli (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "před %s minutou"
+msgstr[1] "před %s minutami"
+msgstr[2] "před %s minutami"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -166,13 +173,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "%s volá"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "před %s minutou"
-msgstr[1] "před %s minutami"
-msgstr[2] "před %s minutami"
 
 #, python-format
 msgid "%s of %s"
@@ -558,9 +558,9 @@ msgstr ""
 msgid "Add to Contact List…"
 msgstr "Přidat kontakt do seznamu…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Přidán %s kontakt"
 msgstr[1] "Přidáno %s kontaktů"
 msgstr[2] "Přidáno %s kontaktů"
@@ -1935,6 +1935,9 @@ msgstr "Chyba: {}"
 
 msgid "Error while Exporting"
 msgstr "Chyba při exportu"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Chyba při zpracovávání obrázku"
@@ -3875,9 +3878,9 @@ msgstr "Odstranit profilový obrázek"
 msgid "Remove your profile picture"
 msgstr "Odstranit profilový obrázek"
 
-#, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+#, fuzzy, python-format
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Odstraněn %s kontakt"
 msgstr[1] "Odstraněno %s kontaktů"
 msgstr[2] "Odstraněno %s kontaktů"
@@ -5441,6 +5444,9 @@ msgstr "Poslat zprávu"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Video hovory nejsou na Windows dostupné"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 msgid "Waiting…"
 msgstr "Čekám…"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-08-12 01:17+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-02 13:11+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -85,6 +85,11 @@ msgstr "%(name)s 取消了传输 (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s："
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%(number)s 分钟前"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -168,13 +173,8 @@ msgid "%s is typing…"
 msgstr "%s 正在输入…"
 
 #, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s 分钟前"
-
-#, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s / %s"
 
 #, python-format
 msgid "%s participants are typing…"
@@ -226,7 +226,7 @@ msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
-msgstr ""
+msgstr "** %s 失去了全部头衔！"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
@@ -238,10 +238,10 @@ msgstr "**{actor} 已将 {nick} 的角色设为{role}{reason}"
 
 #, python-format
 msgid "** The hats of %s are now %s"
-msgstr ""
+msgstr "** %s 的头衔现在是 %s"
 
 msgid "** You lost all your hats!"
-msgstr ""
+msgstr "** 您失去了全部头衔！"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -252,7 +252,7 @@ msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "**{actor} 已将您的角色设为{role}{reason}"
 
 msgid "** Your hats are now "
-msgstr ""
+msgstr "** 您的头衔现在是 "
 
 msgid "1 Day"
 msgstr "1 天"
@@ -356,7 +356,7 @@ msgid "<error>"
 msgstr "<错误>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "群聊至少需要一位所有者"
@@ -548,9 +548,9 @@ msgid "Add to Contact List…"
 msgstr "添加到联系人列表…"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "已添加 %s 位联系人"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "已添加 %(count)s 位联系人"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "此外，您将失去管理员从属关系。"
@@ -1771,9 +1771,8 @@ msgstr "用餐中"
 msgid "Edit Name…"
 msgstr "编辑名称…"
 
-#, fuzzy
 msgid "Edit display name…"
-msgstr "编辑名称…"
+msgstr "编辑显示名称…"
 
 msgid "Edit your message (Esc to cancel)…"
 msgstr "编辑您的消息（Esc 取消）…"
@@ -1901,6 +1900,9 @@ msgstr "收到错误：{}"
 
 msgid "Error while Exporting"
 msgstr "导出时错误"
+
+msgid "Error while merging recordings, please try again."
+msgstr "合并录音时出错，请重试。"
 
 msgid "Error while processing image"
 msgstr "处理图片时错误"
@@ -2224,9 +2226,8 @@ msgid ""
 "on your mobile device."
 msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
-msgstr "Gajim 与存档已完全同步。"
+msgstr "Gajim 已与存档完全同步。"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2384,7 +2385,6 @@ msgstr "主页面"
 msgid "Hostname"
 msgstr "主机名"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "应该同步多久前的聊天记录？"
 
@@ -2543,9 +2543,8 @@ msgstr "无效节点"
 msgid "Invalid Server Name"
 msgstr "无效服务器名"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "无效名称"
+msgstr "无效的节"
 
 msgid "Invalid XMPP Address"
 msgstr "无效 XMPP 地址"
@@ -2678,7 +2677,7 @@ msgstr "标签"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "语言：%s"
 
 msgid "Last but not least"
 msgstr "最后但同样重要的"
@@ -3317,9 +3316,8 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "参与者"
 
-#, fuzzy
 msgid "Participants Count"
-msgstr "参与者"
+msgstr "参与者总数"
 
 msgid "Participants asking for voice:"
 msgstr "参与者请求发言权："
@@ -3793,9 +3791,9 @@ msgid "Remove your profile picture"
 msgstr "移除您的个人资料图片"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "已移除 %s 位联系人"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "已移除 %(count)s 位联系人"
 
 msgid "Remove…"
 msgstr "移除…"
@@ -3890,7 +3888,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "重置所有群聊为当前默认值"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "重置为原始名称"
 
 msgid "Resets value to default"
 msgstr "重置所有值为默认"
@@ -3979,7 +3977,7 @@ msgid "Save as…"
 msgstr "另存为…"
 
 msgid "Save display name"
-msgstr ""
+msgstr "保存显示名称"
 
 msgid "Saving Avatar Failed"
 msgstr "保存头像失败"
@@ -4097,11 +4095,9 @@ msgstr "选择表情符号"
 msgid "Select playback speed"
 msgstr "选择播放速度"
 
-#, fuzzy
 msgid "Select the account with which you want to synchronize"
 msgstr "选择您想要与之同步的账号"
 
-#, fuzzy
 msgid "Select the contacts you want to synchronize"
 msgstr "选择您想要同步的联系人"
 
@@ -4653,20 +4649,17 @@ msgstr "同步账号"
 msgid "Synchronize Chat History"
 msgstr "同步聊天记录"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "同步聊天记录…"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "任何用户都可以加入此群聊"
+msgstr "同步已加入的群聊"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "与其他设备同步已加入的群聊。"
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
-msgstr "同步所有账号状态"
+msgstr "同步所有账号的状态"
 
 msgid "Synchronizing Chat History…"
 msgstr "同步聊天记录中…"
@@ -4742,9 +4735,8 @@ msgstr "尝试验证提供者的证书时出现以下警告"
 msgid "The last message was written on a mobile client"
 msgstr "最近的消息是在移动客户端上编写的"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "语音消息不可用"
+msgstr "引用的消息不存在。"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "服务器指定或修改了您的群聊昵称"
@@ -5314,6 +5306,9 @@ msgstr "语音消息"
 
 msgid "Voice Messages are not available"
 msgstr "语音消息不可用"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr "无法保存语音消息。请重试。"
 
 msgid "Waiting…"
 msgstr "等待中…"

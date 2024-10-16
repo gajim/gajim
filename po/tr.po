@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2022-01-13 21:17+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -78,6 +78,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "Takma Ad:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -157,11 +162,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "%s yazılıyor..."
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
 
 #, python-format
 msgid "%s of %s"
@@ -582,8 +582,8 @@ msgid "Add to Contact List…"
 msgstr "Kişi _ekle"
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Kişileri eşzamana getir"
 
 msgid "Additionally, you will lose your administrator affiliation."
@@ -2159,6 +2159,9 @@ msgstr "Komuta satrında hata: %s\n"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4333,8 +4336,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Kişileri eşzamana getir"
 
 #, fuzzy
@@ -6082,6 +6085,9 @@ msgstr "Mesajı gönder"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Hiç bir hesap bulunmiyor"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

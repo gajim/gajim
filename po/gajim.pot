@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -74,6 +74,12 @@ msgstr ""
 #, python-format
 msgid "%(nickname)s:"
 msgstr ""
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -153,12 +159,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr ""
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
 
 #, python-format
 msgid "%s of %s"
@@ -528,8 +528,8 @@ msgid "Add to Contact List…"
 msgstr ""
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1863,6 +1863,9 @@ msgid "Error received: {}"
 msgstr ""
 
 msgid "Error while Exporting"
+msgstr ""
+
+msgid "Error while merging recordings, please try again."
 msgstr ""
 
 msgid "Error while processing image"
@@ -3719,8 +3722,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -5210,6 +5213,9 @@ msgid "Voice Message"
 msgstr ""
 
 msgid "Voice Messages are not available"
+msgstr ""
+
+msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
 msgid "Waiting…"

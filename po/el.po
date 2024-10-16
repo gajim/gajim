@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -83,6 +83,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "Ψευδώνυμο:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -162,12 +168,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "Δουλειά"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
 
 #, python-format
 msgid "%s of %s"
@@ -596,8 +596,8 @@ msgid "Add to Contact List…"
 msgstr "_Προσθήκη επαφής..."
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Προσθήκη _επαφής"
 msgstr[1] "Προσθήκη _επαφής"
 
@@ -2172,6 +2172,9 @@ msgstr "Προσθήκη νέας εγγραφής στο μενού"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας. %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4358,8 +4361,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Αφαιρεί μια επαφή από τη λίστα επαφών"
 msgstr[1] "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
@@ -6108,6 +6111,9 @@ msgstr "Αποστολή μηνύματος"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "To Session bus δεν είναι διαθέσιμο"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

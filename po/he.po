@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -93,6 +93,12 @@ msgid "%(nickname)s:"
 msgstr "שם כינוי:"
 
 #, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
+msgstr[1] ""
+
+#, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
 msgstr "‏%(owner_or_admin_or_member)s בשיחת קבוצה זו"
 
@@ -173,12 +179,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "כותב"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
 
 #, python-format
 msgid "%s of %s"
@@ -619,8 +619,8 @@ msgstr "הוסף _איש קשר..."
 
 # נוספו
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "הוסף איש קשר %d"
 msgstr[1] "הוספו %d אנשי קשר"
 
@@ -2234,6 +2234,9 @@ msgstr "שגיאה בקבלת dataform"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "שגיאה בעת הוספת שירות. %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4469,8 +4472,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "הוסר איש קשר %d"
 msgstr[1] "הוסרו %d אנשי קשר"
 
@@ -6259,6 +6262,9 @@ msgstr "מסירת הודעה"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "סשנים חזותיים אינם זמינים"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

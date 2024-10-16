@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2009-11-20 20:49+1100\n"
 "Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
 "Language-Team: English <en_gb@li.org>\n"
@@ -74,6 +74,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "Nickname:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
+msgstr[1] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -153,12 +159,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "Writing"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
 
 #, python-format
 msgid "%s of %s"
@@ -593,8 +593,8 @@ msgid "Add to Contact List…"
 msgstr "_Add Contact..."
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "_Add contact"
 msgstr[1] "_Add contact"
 
@@ -2176,6 +2176,9 @@ msgstr "Error in received dataform"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Error while adding service. %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4358,8 +4361,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Removes contact from roster"
 msgstr[1] "Removes contact from roster"
 
@@ -6116,6 +6119,9 @@ msgstr "Send message"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Connection not available"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

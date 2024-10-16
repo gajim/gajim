@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -81,6 +81,12 @@ msgstr "%(name)s файлдармен алмасуы тоқтатты (%(reason)
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%s мин бұрын"
+msgstr[1] "%s мин бұрын"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -162,12 +168,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s теруде…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s мин бұрын"
-msgstr[1] "%s мин бұрын"
 
 #, python-format
 msgid "%s of %s"
@@ -548,9 +548,9 @@ msgstr "Бұл сертификатты сені_мділер тізіміне �
 msgid "Add to Contact List…"
 msgstr "Контакттар тізіміне қосу…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "%s контакт қосылды"
 msgstr[1] "%s контакт қосылды"
 
@@ -1926,6 +1926,9 @@ msgstr "Қате алынды: {}"
 
 msgid "Error while Exporting"
 msgstr "Экспорттау кезіндегі қате"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Суретті өңдеу кезінде қате"
@@ -3858,9 +3861,9 @@ msgstr "Профиль суретіңізді өшіру"
 msgid "Remove your profile picture"
 msgstr "Профиль суретіңізді өшіру"
 
-#, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+#, fuzzy, python-format
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "%s контакт өшірілді"
 msgstr[1] "%s контакт өшірілді"
 
@@ -5424,6 +5427,9 @@ msgstr "Хабарламаны жіберу"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Видео қоңыраулар Windows жүйесінде қол жетімді емес"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 msgid "Waiting…"
 msgstr "Күтуде…"

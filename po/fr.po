@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-08-12 21:17+0000\n"
-"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-02 13:11+0000\n"
+"Last-Translator: Codimp <contact@lithio.fr>\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -88,6 +88,12 @@ msgstr "%(name)s a annulé le transfert (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s :"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "il y a %(number)s minute"
+msgstr[1] "il y a %(number)s minutes"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -171,14 +177,8 @@ msgid "%s is typing…"
 msgstr "%s est en train d'écrire…"
 
 #, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "il y a %s minute"
-msgstr[1] "il y a %s minutes"
-
-#, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s de %s"
 
 #, python-format
 msgid "%s participants are typing…"
@@ -230,7 +230,7 @@ msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
-msgstr ""
+msgstr "** %s a perdu tous ses chapeaux !"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
@@ -243,10 +243,10 @@ msgstr "** Le rôle de {nick} a été défini à {role}{actor}{reason}"
 
 #, python-format
 msgid "** The hats of %s are now %s"
-msgstr ""
+msgstr "** Les chapeaux de %s sont à présent %s"
 
 msgid "** You lost all your hats!"
-msgstr ""
+msgstr "** Vous avez perdu tous vos chapeaux !"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -257,7 +257,7 @@ msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** Votre rôle de a été défini à {role}{actor}{reason}"
 
 msgid "** Your hats are now "
-msgstr ""
+msgstr "** Vos chapeaux sont à présent "
 
 msgid "1 Day"
 msgstr "1 jour"
@@ -362,7 +362,7 @@ msgid "<error>"
 msgstr "<error>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Un salon de discussion a besoin d'au moins un propriétaire"
@@ -560,10 +560,10 @@ msgid "Add to Contact List…"
 msgstr "Ajouter à la liste de contacts …"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "%s contact ajouté"
-msgstr[1] "%s contacts ajoutés"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "%(count)s contact ajouté"
+msgstr[1] "%(count)s contacts ajoutés"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "De plus, vous perdrez votre affiliation d'administrateur·ice."
@@ -1823,7 +1823,6 @@ msgstr "Mange"
 msgid "Edit Name…"
 msgstr "Éditer le nom…"
 
-#, fuzzy
 msgid "Edit display name…"
 msgstr "Éditer le nom…"
 
@@ -1966,6 +1965,9 @@ msgstr "Erreur reçue : {}"
 
 msgid "Error while Exporting"
 msgstr "Erreur lors de l'export"
+
+msgid "Error while merging recordings, please try again."
+msgstr "Erreur lors de la fusion des enregistrements, merci de réessayer."
 
 msgid "Error while processing image"
 msgstr "Erreur lors du traitement de l'image"
@@ -2292,9 +2294,8 @@ msgstr ""
 "Gajim s'intègre bien avec vos autres appareils : continuez vos discussions "
 "sur votre appareil mobile en toute simplicité."
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
-msgstr "Gajim est entièrement synchronisé avec l'archive."
+msgstr "Gajim est totalement synchronisé avec l'archive."
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2454,7 +2455,6 @@ msgstr "Site perso"
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr ""
 "Jusqu'où voulez-vous remonter dans le temps pour la synchronisation "
@@ -2628,9 +2628,8 @@ msgstr "Nœud invalide"
 msgid "Invalid Server Name"
 msgstr "Nom de serveur invalide"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "Nom invalide"
+msgstr "Stanza invalide"
 
 msgid "Invalid XMPP Address"
 msgstr "Adresse XMPP invalide"
@@ -2764,7 +2763,7 @@ msgstr "Étiquette"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "Langue : %s"
 
 msgid "Last but not least"
 msgstr "Enfin et surtout"
@@ -3417,9 +3416,8 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Participants/tes"
 
-#, fuzzy
 msgid "Participants Count"
-msgstr "Participants/tes"
+msgstr "Nombre de participant·es"
 
 msgid "Participants asking for voice:"
 msgstr "Participant·es demandant la parole :"
@@ -3904,10 +3902,10 @@ msgid "Remove your profile picture"
 msgstr "Retirer l'image de votre profil"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "%s contact supprimé"
-msgstr[1] "%s contacts supprimés"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "%(count)s contact supprimé"
+msgstr[1] "%(count)s contacts supprimés"
 
 msgid "Remove…"
 msgstr "Supprimer…"
@@ -4003,7 +4001,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "Rétablir tous les salons à la valeur par défaut actuelle"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "Réinitialiser au nom original"
 
 msgid "Resets value to default"
 msgstr "Rétablit la valeur par défaut"
@@ -4092,7 +4090,7 @@ msgid "Save as…"
 msgstr "Enregistrer sous…"
 
 msgid "Save display name"
-msgstr ""
+msgstr "Enregistrer le nom affiché"
 
 msgid "Saving Avatar Failed"
 msgstr "L'enregistrement d'image de profil a échoué"
@@ -4211,11 +4209,9 @@ msgstr "Sélectionnez un émoji"
 msgid "Select playback speed"
 msgstr "Sélection de la vitesse de lecture"
 
-#, fuzzy
 msgid "Select the account with which you want to synchronize"
 msgstr "Sélectionnez le compte avec lequel vous voulez vous synchroniser"
 
-#, fuzzy
 msgid "Select the contacts you want to synchronize"
 msgstr "Sélectionnez les contacts que vous voulez synchroniser"
 
@@ -4792,18 +4788,16 @@ msgstr "Synchroniser les comptes"
 msgid "Synchronize Chat History"
 msgstr "Synchroniser l’historique de discussion"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "Synchroniser l’historique…"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "N’importe qui pourra rejoindre ce salon de discussion"
+msgstr "Synchroniser les groupes de discussion rejoins"
 
 msgid "Synchronize joined group chats with other devices."
 msgstr ""
+"Synchroniser les groupes de discussion rejoins avec les autres appareils."
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "Synchroniser le statut de tous les comptes"
 
@@ -4886,9 +4880,8 @@ msgstr ""
 msgid "The last message was written on a mobile client"
 msgstr "Le dernier message a été écrit sur un client mobile"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "Message Vocal non disponible"
+msgstr "Le message référencé n'est pas disponible."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr "Le serveur à défini ou modifié votre pseudonyme dans ce salon"
@@ -5479,6 +5472,9 @@ msgstr "Message Vocal"
 
 msgid "Voice Messages are not available"
 msgstr "Message Vocal non disponible"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr "Le message audio ne peut pas être enregistré. Merci de réessayer."
 
 msgid "Waiting…"
 msgstr "En attente…"

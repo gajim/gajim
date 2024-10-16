@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-08-28 10:18+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -77,6 +77,16 @@ msgstr "ألغى %(name)s النقل (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "منذ أقل من دقيقة"
+msgstr[1] "منذ دقيقة"
+msgstr[2] "منذ دقيقتين"
+msgstr[3] "منذ %s دقائق"
+msgstr[4] "منذ %s دقيقة"
+msgstr[5] "منذ %s دقيقة"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -158,16 +168,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s يكتب…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "منذ أقل من دقيقة"
-msgstr[1] "منذ دقيقة"
-msgstr[2] "منذ دقيقتين"
-msgstr[3] "منذ %s دقائق"
-msgstr[4] "منذ %s دقيقة"
-msgstr[5] "منذ %s دقيقة"
 
 #, python-format
 msgid "%s of %s"
@@ -545,9 +545,9 @@ msgstr "أضِف هذه الشهادة لقائمة الشهادات المو_ث
 msgid "Add to Contact List…"
 msgstr "أضِف لقائمة المُتراسلين…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "لم تُضِف مُتراسلين"
 msgstr[1] "أضفت مُتراسلًا"
 msgstr[2] "أضفت مُتراسلَين"
@@ -1895,6 +1895,9 @@ msgid "Error received: {}"
 msgstr ""
 
 msgid "Error while Exporting"
+msgstr ""
+
+msgid "Error while merging recordings, please try again."
 msgstr ""
 
 msgid "Error while processing image"
@@ -3750,11 +3753,15 @@ msgstr ""
 msgid "Remove your profile picture"
 msgstr ""
 
-#, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] ""
-msgstr[1] ""
+#, fuzzy, python-format
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "لم تُضِف مُتراسلين"
+msgstr[1] "أضفت مُتراسلًا"
+msgstr[2] "أضفت مُتراسلَين"
+msgstr[3] "أضفت %s مُتراسلين"
+msgstr[4] "أضفت %s مُتراسِلًا"
+msgstr[5] "أضفت %s مُتراسِل"
 
 msgid "Remove…"
 msgstr ""
@@ -5244,6 +5251,9 @@ msgid "Voice Message"
 msgstr ""
 
 msgid "Voice Messages are not available"
+msgstr ""
+
+msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
 msgid "Waiting…"

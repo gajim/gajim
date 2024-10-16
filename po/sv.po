@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -78,6 +78,12 @@ msgstr "%(name)s avbröt överföringen (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%s min sedan"
+msgstr[1] "%s min sedan"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -159,12 +165,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s skriver…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s min sedan"
-msgstr[1] "%s min sedan"
 
 #, python-format
 msgid "%s of %s"
@@ -547,9 +547,9 @@ msgstr "Lägg till det här certifikatet i listan över _betrodda certifikat"
 msgid "Add to Contact List…"
 msgstr "Lägg till i kontaktlistan…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Lade till %s kontakt"
 msgstr[1] "Lade till %s kontakter"
 
@@ -2023,6 +2023,9 @@ msgstr "Fel mottaget: {}"
 
 msgid "Error while Exporting"
 msgstr "Fel vid export"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Fel vid bearbetning av bilden"
@@ -4061,8 +4064,8 @@ msgid "Remove your profile picture"
 msgstr "Ta bort din profilbild"
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Ta bort en kontakt från kontaktlista"
 msgstr[1] "Ta bort en kontakt från kontaktlista"
 
@@ -5797,6 +5800,9 @@ msgstr "Skicka meddelande"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Sessionsbus inte tillgänglig"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

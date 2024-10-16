@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-09-30 20:11+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-02 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -92,6 +92,12 @@ msgstr "%(name)s hat die Dateiübertragung abgelehnt (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "vor %(number)s min"
+msgstr[1] "vor %(number)s min"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -173,12 +179,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s schreibt…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "vor %s min"
-msgstr[1] "vor %s min"
 
 #, python-format
 msgid "%s of %s"
@@ -568,10 +568,10 @@ msgid "Add to Contact List…"
 msgstr "Kontakt hinzufügen…"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "%s Kontakt hinzugefügt"
-msgstr[1] "%s Kontakte hinzugefügt"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "%(count)s Kontakt hinzugefügt"
+msgstr[1] "%(count)s Kontakte hinzugefügt"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "Außerdem wirst du deine Administratorenrechte verlieren."
@@ -1959,6 +1959,9 @@ msgstr "Fehler festgestellt: {}"
 msgid "Error while Exporting"
 msgstr "Fehler beim Export"
 
+msgid "Error while merging recordings, please try again."
+msgstr "Fehler beim Zusammenführen der Aufnahme, bitte versuche es noch einmal."
+
 msgid "Error while processing image"
 msgstr "Fehler beim Verarbeiten des Bildes"
 
@@ -2447,7 +2450,8 @@ msgid "Hostname"
 msgstr "Hostname"
 
 msgid "How far back should the chat history be synchronized?"
-msgstr "Für welchen Zeitraum soll der Nachrichtenverlauf synchronisiert werden?"
+msgstr ""
+"Für welchen Zeitraum soll der Nachrichtenverlauf synchronisiert werden?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Wie lange Gajim deinen Nachrichtenverlauf behalten soll"
@@ -3886,10 +3890,10 @@ msgid "Remove your profile picture"
 msgstr "Entferne dein Profilbild"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "%s Kontakt entfernt"
-msgstr[1] "%s Kontakte entfernt"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "%(count)s Kontakt entfernt"
+msgstr[1] "%(count)s Kontakte entfernt"
 
 msgid "Remove…"
 msgstr "Entfernen…"
@@ -5462,6 +5466,10 @@ msgstr "Sprachnachricht"
 
 msgid "Voice Messages are not available"
 msgstr "Sprachnachrichten sind nicht verfügbar"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
+"Sprachnachricht konnte nicht gespeichert werden. Bitte versuche es erneut."
 
 msgid "Waiting…"
 msgstr "Warte…"

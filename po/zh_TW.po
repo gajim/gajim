@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2011-09-07 23:11+0800\n"
 "Last-Translator: Wei-Lun Chao <chaoweilun@gmail.com>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@linux.org.tw>\n"
@@ -78,6 +78,11 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "暱稱:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -159,11 +164,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "寫作"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
 
 #, python-format
 msgid "%s of %s"
@@ -594,8 +594,8 @@ msgid "Add to Contact List…"
 msgstr "加入聯絡人(_A)…"
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "加入了 %s 聯絡人"
 
 msgid "Additionally, you will lose your administrator affiliation."
@@ -2172,6 +2172,9 @@ msgstr "在收到的資料表中有錯誤"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "加入服務錯誤。 %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4356,8 +4359,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "移除了 %s 聯絡人"
 
 #, fuzzy
@@ -6107,6 +6110,9 @@ msgstr "傳送訊息"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "連線無法使用"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

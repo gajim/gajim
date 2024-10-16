@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-09-29 16:10+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-02 17:24+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -75,6 +75,12 @@ msgstr "%(name)s leállította a fájlátvitelt (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%(number)s perce"
+msgstr[1] "%(number)s perce"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -158,14 +164,8 @@ msgid "%s is typing…"
 msgstr "%s éppen ír…"
 
 #, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s perce"
-msgstr[1] "%s perce"
-
-#, python-format
 msgid "%s of %s"
-msgstr ""
+msgstr "%s/%s"
 
 #, python-format
 msgid "%s participants are typing…"
@@ -217,7 +217,7 @@ msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
-msgstr ""
+msgstr "** %s minden hatáskörét elvesztette!"
 
 #, python-brace-format
 msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
@@ -229,10 +229,10 @@ msgstr "** {nick} szerepköre mostantól {role}{actor}{reason}"
 
 #, python-format
 msgid "** The hats of %s are now %s"
-msgstr ""
+msgstr "** %s hatásköre mostantól: %s"
 
 msgid "** You lost all your hats!"
-msgstr ""
+msgstr "** Minden hatásköröm elveszett!"
 
 #, python-brace-format
 msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
@@ -243,7 +243,7 @@ msgid "** Your Role has been set to {role}{actor}{reason}"
 msgstr "** A szerepköröm mostantól {role}{actor}{reason}"
 
 msgid "** Your hats are now "
-msgstr ""
+msgstr "** A hatásköröm mostantól: "
 
 msgid "1 Day"
 msgstr "1 nap"
@@ -348,7 +348,7 @@ msgid "<error>"
 msgstr "<hiba>"
 
 msgid "@APP_NAME@"
-msgstr ""
+msgstr "@APP_NAME@"
 
 msgid "A Group Chat needs at least one Owner"
 msgstr "Legalább egy tulajdonosa kell legyen egy társalgónak"
@@ -540,10 +540,10 @@ msgid "Add to Contact List…"
 msgstr "Hozzáadás a névjegyekhez…"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "%s névjegy lett hozzáadva"
-msgstr[1] "%s névjegy lett hozzáadva"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "%(count)s névjegy lett hozzáadva"
+msgstr[1] "%(count)s névjegy lett hozzáadva"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "Ezenfelül a meglévő adminisztrátori jogosultság is megszűnik."
@@ -1786,9 +1786,8 @@ msgstr "Étkezés"
 msgid "Edit Name…"
 msgstr "Név módosítása…"
 
-#, fuzzy
 msgid "Edit display name…"
-msgstr "Név módosítása…"
+msgstr "A megjelenítendő név módosítása…"
 
 msgid "Edit your message (Esc to cancel)…"
 msgstr "Üzenetszerkesztés (ESC: mégsem)…"
@@ -1921,6 +1920,9 @@ msgstr "A hibaüzenet: {}"
 
 msgid "Error while Exporting"
 msgstr "Exportálási hiba"
+
+msgid "Error while merging recordings, please try again."
+msgstr "A felvételek egyesítése nem sikerült, újra lehet próbálkozni."
 
 msgid "Error while processing image"
 msgstr "Képfeldolgozási hiba"
@@ -2249,7 +2251,6 @@ msgstr ""
 "A Gajim kiválóan együttműködik más eszközökkel: egy beszélgetés egyszerűen "
 "folytatható mobil eszközről is."
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr "A Gajim teljes szinkronban van az archívummal."
 
@@ -2410,7 +2411,6 @@ msgstr "Weboldal"
 msgid "Hostname"
 msgstr "Kiszolgálónév"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
 msgstr "Milyen régi üzenetek legyenek szinkronizálva?"
 
@@ -2574,9 +2574,8 @@ msgstr "Érvénytelen csomópont"
 msgid "Invalid Server Name"
 msgstr "Érvénytelen kiszolgálónév"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "Érvénytelen név"
+msgstr "Érvénytelen üzenetblokk"
 
 msgid "Invalid XMPP Address"
 msgstr "Érvénytelen XMPP-cím"
@@ -2711,7 +2710,7 @@ msgstr "Címke"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "Nyelv: %s"
 
 msgid "Last but not least"
 msgstr "Végül, de nem utolsó sorban"
@@ -3355,9 +3354,8 @@ msgctxt "Group chat contact role"
 msgid "Participants"
 msgstr "Résztvevők"
 
-#, fuzzy
 msgid "Participants Count"
-msgstr "Résztvevők"
+msgstr "A résztvevők száma"
 
 msgid "Participants asking for voice:"
 msgstr "Résztvevők, akik szót kértek:"
@@ -3834,10 +3832,10 @@ msgid "Remove your profile picture"
 msgstr "Profilkép törlése"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "%s névjegy lett törölve"
-msgstr[1] "%s névjegy lett törölve"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "%(count)s névjegy lett törölve"
+msgstr[1] "%(count)s névjegy lett törölve"
 
 msgid "Remove…"
 msgstr "Eltávolítás…"
@@ -3932,7 +3930,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "A jelenlegi alapértelmezések beállítása minden társalgóban"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "Az eredeti név visszaállítása"
 
 msgid "Resets value to default"
 msgstr "Visszaállítás az alapértelmezett értékre"
@@ -4023,7 +4021,7 @@ msgid "Save as…"
 msgstr "Mentés másként…"
 
 msgid "Save display name"
-msgstr ""
+msgstr "A megjelenítendő név mentése"
 
 msgid "Saving Avatar Failed"
 msgstr "A profilkép mentése nem sikerült"
@@ -4141,11 +4139,9 @@ msgstr "Hangulatjel beszúrása"
 msgid "Select playback speed"
 msgstr "A lejátszási sebesség beállítása"
 
-#, fuzzy
 msgid "Select the account with which you want to synchronize"
 msgstr "A szinkronizálandó fiók kiválasztása"
 
-#, fuzzy
 msgid "Select the contacts you want to synchronize"
 msgstr "A szinkronizálandó névjegyek kijelölése"
 
@@ -4709,18 +4705,15 @@ msgstr "Fiókok szinkronizálása"
 msgid "Synchronize Chat History"
 msgstr "Beszélgetési előzmények szinkronizálása"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "Előzmények szinkronizálása…"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "Bárki beléphet ebbe a társalgóba"
+msgstr "Aktív társalgók szinkronizálása"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "Az aktív társalgók szinkronizálása a többi eszközzel."
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "A fiókok jelenléti állapotának összhangban tartása"
 
@@ -4802,9 +4795,8 @@ msgstr ""
 msgid "The last message was written on a mobile client"
 msgstr "A legutóbbi üzenet mobil eszközről érkezett"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "Nem lehet hangüzenetet küldeni"
+msgstr "A hivatkozott üzenet nem elérhető."
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -5386,6 +5378,9 @@ msgstr "Hangüzenet"
 
 msgid "Voice Messages are not available"
 msgstr "Nem lehet hangüzenetet küldeni"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr "A hangüzenet mentése nem sikerült. Újra lehet próbálkozni."
 
 msgid "Waiting…"
 msgstr "Várakozás…"

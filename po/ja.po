@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
-"PO-Revision-Date: 2024-09-22 06:13+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"PO-Revision-Date: 2024-10-16 04:11+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -84,6 +84,11 @@ msgstr "%(name)s は転送を断りました: %(reason)s"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%(number)s分前"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -165,11 +170,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s はタイプ中…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s分前"
 
 #, python-format
 msgid "%s of %s"
@@ -549,9 +549,9 @@ msgid "Add to Contact List…"
 msgstr "相手先一覧に追加…"
 
 #, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
-msgstr[0] "%s 件の相手先を追加しました"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
+msgstr[0] "%(count)s 件の相手先を追加しました"
 
 msgid "Additionally, you will lose your administrator affiliation."
 msgstr "加えて、管理者ではなくなります。"
@@ -1784,9 +1784,8 @@ msgstr "食事"
 msgid "Edit Name…"
 msgstr "名前を編集…"
 
-#, fuzzy
 msgid "Edit display name…"
-msgstr "名前を編集…"
+msgstr "表示名を編集…"
 
 msgid "Edit your message (Esc to cancel)…"
 msgstr "メッセージを編集 (Esc で中止)…"
@@ -1915,6 +1914,9 @@ msgstr "エラーを受け取りました: {}"
 
 msgid "Error while Exporting"
 msgstr "書き出し時のエラー"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "画像処理中のエラー"
@@ -2247,9 +2249,8 @@ msgid ""
 msgstr ""
 "Gajimは他のデバイスとよく連携します。モバイル端末でも会話を続けられます。"
 
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
-msgstr "Gajim は保存記録と完全に同期しました。"
+msgstr "Gajim は保存記録と完全に同期しています。"
 
 msgid ""
 "Gajim was not able to reach the server. Make sure your XMPP address is "
@@ -2408,9 +2409,8 @@ msgstr "ホームページ"
 msgid "Hostname"
 msgstr "ホスト名"
 
-#, fuzzy
 msgid "How far back should the chat history be synchronized?"
-msgstr "どのくらい遡りたいですか ?"
+msgstr "会話履歴をどのくらい遡って同期する必要がありますか ?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim が会話の履歴を保持する期間"
@@ -2575,9 +2575,8 @@ msgstr "ノードが正しくありません"
 msgid "Invalid Server Name"
 msgstr "サーバー名が正しくありません"
 
-#, fuzzy
 msgid "Invalid Stanza"
-msgstr "名前が正しくありません"
+msgstr "スタンザが正しくありません"
 
 msgid "Invalid XMPP Address"
 msgstr "XMPP アドレスが正しくありません"
@@ -2711,7 +2710,7 @@ msgstr "ラベル"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
+msgstr "言語: %s"
 
 msgid "Last but not least"
 msgstr "最後に大切なことを付け加えますと、"
@@ -3848,9 +3847,9 @@ msgid "Remove your profile picture"
 msgstr "プロフィール画像を除去します"
 
 #, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
-msgstr[0] "%s 件の相手先を除去しました"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
+msgstr[0] "%(count)s 件の相手先を除去しました"
 
 msgid "Remove…"
 msgstr "除去…"
@@ -3947,7 +3946,7 @@ msgid "Reset all group chats to the current default value"
 msgstr "すべての談話室を現在のデフォルト値にリセットします"
 
 msgid "Reset to original name"
-msgstr ""
+msgstr "元の名前にリセット"
 
 msgid "Resets value to default"
 msgstr "値をデフォルトに戻します"
@@ -4039,7 +4038,7 @@ msgid "Save as…"
 msgstr "名前を付けて保存…"
 
 msgid "Save display name"
-msgstr ""
+msgstr "表示名を保存"
 
 msgid "Saving Avatar Failed"
 msgstr "アバターの保存に失敗しました"
@@ -4157,13 +4156,11 @@ msgstr "絵文字を選択"
 msgid "Select playback speed"
 msgstr "再生速度を選択"
 
-#, fuzzy
 msgid "Select the account with which you want to synchronize"
-msgstr "合わせたいアカウントを選択してください"
+msgstr "同期したいアカウントを選択してください"
 
-#, fuzzy
 msgid "Select the contacts you want to synchronize"
-msgstr "合わせたい相手先を選択してください"
+msgstr "同期したい相手先を選択してください"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "音声入力を選択してください (例: マイクロフォン)"
@@ -4726,18 +4723,15 @@ msgstr "アカウントを同期"
 msgid "Synchronize Chat History"
 msgstr "会話履歴を同期"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "履歴を同期…"
 
-#, fuzzy
 msgid "Synchronize joined group chats"
-msgstr "誰でもこの談話室に参加できます"
+msgstr "参加中の談話室を同期"
 
 msgid "Synchronize joined group chats with other devices."
-msgstr ""
+msgstr "参加している談話室を他のデバイスと同期します。"
 
-#, fuzzy
 msgid "Synchronize the status of all accounts"
 msgstr "すべてのアカウントの在席状況を同期します"
 
@@ -4817,9 +4811,8 @@ msgstr "プロバイダーの証明書の検証中に次の警告が発生しま
 msgid "The last message was written on a mobile client"
 msgstr "最新のメッセージはモバイルクライアントで書かれました"
 
-#, fuzzy
 msgid "The referenced message is not available."
-msgstr "音声メッセージは利用できません"
+msgstr "参照されたメッセージは利用できません。"
 
 msgid "The server has assigned or modified your nickname in this group chat"
 msgstr ""
@@ -5404,6 +5397,9 @@ msgstr "音声メッセージ"
 
 msgid "Voice Messages are not available"
 msgstr "音声メッセージは利用できません"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr "音声メッセージは保存できませんでした。もう一度試してください。"
 
 msgid "Waiting…"
 msgstr "待機中…"

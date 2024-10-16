@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-08-13 11:17+0000\n"
 "Last-Translator: Robert oResoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -92,6 +92,12 @@ msgstr "%(name)s ha annullato il trasferimento per (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%s min fa"
+msgstr[1] "%s min fa"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -173,12 +179,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s sta scrivendo…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s min fa"
-msgstr[1] "%s min fa"
 
 #, python-format
 msgid "%s of %s"
@@ -563,9 +563,9 @@ msgstr "Aggiungi questo certificato alla lista di quelli _affidabili"
 msgid "Add to Contact List…"
 msgstr "Aggiungi alla Lista Contatti…"
 
-#, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+#, fuzzy, python-format
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "%s contatto aggiunto"
 msgstr[1] "%s contatti aggiunti"
 
@@ -1949,6 +1949,9 @@ msgstr "Errore ricevuto: {}"
 
 msgid "Error while Exporting"
 msgstr "Errore esportazione"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Errore elaborazione immagine"
@@ -3978,9 +3981,9 @@ msgstr "Rimuovi immagine di profilo"
 msgid "Remove your profile picture"
 msgstr "Rimuovi immagine di profilo"
 
-#, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+#, fuzzy, python-format
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "%s contatto eliminato"
 msgstr[1] "%s contatti eliminati"
 
@@ -5681,6 +5684,9 @@ msgstr "Invia Messaggio"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Conversazioni video non disponibili"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 msgid "Waiting…"
 msgstr "In attesa…"

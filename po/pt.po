@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2022-07-18 19:51+0000\n"
 "Last-Translator: Rogério A. Matos <rogerio.matos@me.com>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -80,6 +80,12 @@ msgstr "%(name)s cancelou a transferência (%(reason)s)"
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%i min atrás"
+msgstr[1] "%i mins atrás"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -161,12 +167,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "%s está chamando"
-
-#, fuzzy, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%i min atrás"
-msgstr[1] "%i mins atrás"
 
 #, python-format
 msgid "%s of %s"
@@ -562,8 +562,8 @@ msgid "Add to Contact List…"
 msgstr "Adicionar à Lista de Contatos…"
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Adicionado %d contato"
 msgstr[1] "Adicionado %d contatos"
 
@@ -1987,6 +1987,9 @@ msgstr "Erro recebido: {}"
 
 msgid "Error while Exporting"
 msgstr "Erro ao Exportar"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 msgid "Error while processing image"
 msgstr "Erro ao processar a imagem"
@@ -3990,8 +3993,8 @@ msgid "Remove your profile picture"
 msgstr "Remover sua imagem de perfil"
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Removido o contato %d"
 msgstr[1] "Removido os contatos %d"
 
@@ -5621,6 +5624,9 @@ msgstr "Enviar Mensagem"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "As chamadas de vídeo não estão disponíveis no Windows"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 msgid "Waiting…"
 msgstr "Aguardando…"

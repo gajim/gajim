@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -75,6 +75,13 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "Мянушка:"
+
+#, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -154,13 +161,6 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "Працую"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
 
 #, python-format
 msgid "%s of %s"
@@ -587,8 +587,8 @@ msgid "Add to Contact List…"
 msgstr "_Дадаць чалавека..."
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "Дадаць _чалавека"
 msgstr[1] "Дадаць _чалавека"
 msgstr[2] "Дадаць _чалавека"
@@ -2161,6 +2161,9 @@ msgstr "Вы атрымалі новае паведамленне:"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Памылка дадання сервіса. %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4350,8 +4353,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "Выдаліць чалавека з спіса"
 msgstr[1] "Выдаліць чалавека з спіса"
 msgstr[2] "Выдаліць чалавека з спіса"
@@ -6098,6 +6101,9 @@ msgstr "Адправіць паведамленне"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Няма злучэння"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"

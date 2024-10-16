@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-29 21:04+0000\n"
+"POT-Creation-Date: 2024-10-02 10:56+0000\n"
 "PO-Revision-Date: 2024-08-27 21:18+0000\n"
 "Last-Translator: Gerard Kusters <gk1mst+gajim-translate@hotmail.com>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -78,6 +78,12 @@ msgstr "%(jid)s heeft de uitnodiging geweigerd: %(reason)s"
 #, fuzzy, python-format
 msgid "%(nickname)s:"
 msgstr "Bijnaam:"
+
+#, fuzzy, python-format
+msgid "%(number)s min ago"
+msgid_plural "%(number)s mins ago"
+msgstr[0] "%s minuut geleden"
+msgstr[1] "%s minuten geleden"
 
 #, python-format
 msgid "%(owner_or_admin_or_member)s of this group chat"
@@ -159,12 +165,6 @@ msgstr ""
 #, python-format
 msgid "%s is typing…"
 msgstr "%s is aan het typen…"
-
-#, python-format
-msgid "%s min ago"
-msgid_plural "%s mins ago"
-msgstr[0] "%s minuut geleden"
-msgstr[1] "%s minuten geleden"
 
 #, python-format
 msgid "%s of %s"
@@ -583,8 +583,8 @@ msgid "Add to Contact List…"
 msgstr "Contact toevoegen…"
 
 #, fuzzy, python-format
-msgid "Added %s contact"
-msgid_plural "Added %s contacts"
+msgid "Added %(count)s contact"
+msgid_plural "Added %(count)s contacts"
 msgstr[0] "%d contact toegevoegd"
 msgstr[1] "%d contacten toegevoegd"
 
@@ -2142,6 +2142,9 @@ msgstr "Fout ontvangen: {}"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Fout bij toevoegen van dienst. %s"
+
+msgid "Error while merging recordings, please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -4315,8 +4318,8 @@ msgid "Remove your profile picture"
 msgstr ""
 
 #, fuzzy, python-format
-msgid "Removed %s contact"
-msgid_plural "Removed %s contacts"
+msgid "Removed %(count)s contact"
+msgid_plural "Removed %(count)s contacts"
 msgstr[0] "%d contact verwijderd"
 msgstr[1] "%d contacten verwijderd"
 
@@ -6074,6 +6077,9 @@ msgstr "Bericht verzenden"
 #, fuzzy
 msgid "Voice Messages are not available"
 msgstr "Videosessies zijn niet beschikbaar"
+
+msgid "Voice message could not be saved. Please try again."
+msgstr ""
 
 #, fuzzy
 msgid "Waiting…"
