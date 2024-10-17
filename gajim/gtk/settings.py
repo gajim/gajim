@@ -228,7 +228,7 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
             description.set_halign(Gtk.Align.START)
             description.set_valign(Gtk.Align.CENTER)
             description.set_xalign(0)
-            description.set_wrap_mode(Pango.WrapMode.WORD)
+            description.set_wrap(True)
             description.set_wrap_mode(Pango.WrapMode.WORD)
             description.set_max_width_chars(50)
             description_box.append(description)
