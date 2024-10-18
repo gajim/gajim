@@ -250,7 +250,8 @@ class ChatStack(Gtk.Stack, EventHelper):
         #                   old_primary_clipboard,
         #                   -1)
 
-        GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
+        # TODO GTK4: This creates a loop raising CPU load
+        # GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
 
     def _on_room_password_required(self,
                                    _contact: GroupchatContact,
