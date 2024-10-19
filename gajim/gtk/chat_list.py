@@ -11,6 +11,7 @@ import logging
 from collections.abc import Iterator
 from datetime import datetime
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -71,17 +72,13 @@ class ChatList(Gtk.ListBox, EventHelper):
         hover_controller.connect('leave', self._on_cursor_leave)
         self.add_controller(hover_controller)
 
-        # Drag and Drop
-        # entries = [Gtk.TargetEntry.new(
-        #     'CHAT_LIST_ITEM',
-        #     Gtk.TargetFlags.SAME_APP,
-        #     0)]
-        # self.drag_dest_set(
-        #     Gtk.DestDefaults.MOTION | Gtk.DestDefaults.DROP,
-        #     entries,
-        #     Gdk.DragAction.MOVE)
+        drop_target = Gtk.DropTarget(
+            formats=Gdk.ContentFormats.new_for_gtype(ChatListRow),
+            actions=Gdk.DragAction.MOVE
+        )
+        drop_target.connect('drop', self._on_drop)
+        self.add_controller(drop_target)
 
-        self._drag_row: ChatListRow | None = None
         self._chat_order: list[ChatListRow] = []
 
         self.register_events([
@@ -90,7 +87,6 @@ class ChatList(Gtk.ListBox, EventHelper):
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
-        # self.connect('drag-data-received', self._on_drag_data_received)
         self.connect('destroy', self._on_destroy)
 
         self._timer_id = GLib.timeout_add_seconds(60, self._update_row_state)
@@ -204,7 +200,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         if pinned:
             self._chat_order.insert(position, row)
 
-        # row.connect('drag-begin', self._on_row_drag_begin) TODO GTK4
         row.connect('unread-changed', self._on_row_unread_changed)
         row.connect('context-menu-state-changed',
                     self._on_context_menu_state_changed)
@@ -369,13 +364,6 @@ class ChatList(Gtk.ListBox, EventHelper):
         assert last_row is not None
         return cast(ChatListRow, last_row)
 
-    def _on_row_drag_begin(self,
-                           row: ChatListRow,
-                           _drag_context: Any
-                           ) -> None:
-
-        self._drag_row = row
-
     def _on_row_unread_changed(self, row: ChatListRow) -> None:
         self._emit_unread_changed()
 
@@ -387,66 +375,37 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._context_menu_visible = menu_is_visible
         self._schedule_check_sort_inhibit()
 
-    def _on_drag_data_received(self,
-                               _widget: Gtk.Widget,
-                               _drag_context: Any,
-                               _x_coord: int,
-                               y_coord: int,
-                               selection_data: Any,
-                               _info: int,
-                               _time: int
-                               ) -> None:
+    def _on_drop(self,
+        _drop_target: Gtk.DropTarget,
+        value: GObject.Value,
+        _x: float,
+        y: float
+    ) -> bool:
+        target_row = self.get_row_at_y(int(y))
 
-        item_type = selection_data.get_data_type().name()
-        if item_type != 'CHAT_LIST_ITEM':
-            log.debug('Unknown item type dropped')
-            return
+        if not value or not isinstance(target_row, ChatListRow):
+            # Reject drop
+            return False
 
-        assert self._drag_row is not None
+        if isinstance(value, ChatListRow):
+            if not value.is_pinned or not target_row.is_pinned:
+                log.debug('Only pinned rows can be reordered')
+                return False
 
-        if not self._drag_row.is_pinned:
-            log.debug('Dropped row is not pinned')
-            return
+            self._change_pinned_order(value, target_row)
+            return True
 
-        row = cast(ChatListRow | None, self.get_row_at_y(y_coord))
-        if row is not None:
-            alloc = row.get_allocation()
-            hover_row_y = alloc.y
-            hover_row_height = alloc.height
+        # Reject drop
+        log.debug('Unknown item type dropped')
+        return False
 
-            if y_coord < hover_row_y + hover_row_height / 2:
-                row_before = self._get_row_before(row)
-                row_after = row
-            else:
-                row_before = row
-                row_after = self._get_row_after(row)
-        else:
-            row_before = self._get_last_row()
-            row_after = None
-
-        if self._drag_row in (row_before, row_after):
-            log.debug('Dropped row on self')
-            return
-
-        if row_before is not None and not row_before.is_pinned:
-            log.debug('Dropped under not pinned row')
-            return
-
-        self._change_pinned_order(row_before)
-
-    def _change_pinned_order(self, row_before: ChatListRow | None) -> None:
-        assert self._drag_row is not None
-
-        self._chat_order.remove(self._drag_row)
-
-        if row_before is None:
-            self._chat_order.insert(0, self._drag_row)
-        else:
-            offset = 0
-            if row_before.position < self._drag_row.position:
-                offset = 1
-            self._chat_order.insert(
-                row_before.position + offset, self._drag_row)
+    def _change_pinned_order(
+        self,
+        drag_row: ChatListRow,
+        target_row: ChatListRow
+    ) -> None:
+        self._chat_order.remove(drag_row)
+        self._chat_order.insert(target_row.position, drag_row)
 
         for row in self._chat_order:
             row.position = self._chat_order.index(row)

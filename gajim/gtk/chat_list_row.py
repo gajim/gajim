@@ -6,11 +6,9 @@ from __future__ import annotations
 
 from typing import Any
 
-import pickle
 from datetime import datetime
 from urllib.parse import urlparse
 
-import cairo
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -122,18 +120,14 @@ class ChatListRow(Gtk.ListBoxRow):
             self.contact.jid)
         self._on_mute_setting_changed()
 
-        # Drag and Drop GTK4 TODO
-        # entries = [Gtk.TargetEntry.new(
-        #     'CHAT_LIST_ITEM',
-        #     Gtk.TargetFlags.SAME_APP,
-        #     0)]
-        # self.drag_source_set(
-        #     Gdk.ModifierType.BUTTON1_MASK,
-        #     entries,
-        #     Gdk.DragAction.MOVE)
-        # self.connect('drag-begin', self._on_drag_begin)
-        # self.connect('drag-end', self._on_drag_end)
-        # self.connect('drag-data-get', self._on_drag_data_get)
+        self._drag_hotspot_x: float = 0
+        self._drag_hotspot_y: float = 0
+
+        drag_source = Gtk.DragSource(actions=Gdk.DragAction.MOVE)
+        drag_source.connect('prepare', self._on_prepare)
+        drag_source.connect('drag-begin', self._on_drag_begin)
+        drag_source.connect('drag-end', self._on_drag_end)
+        self.add_controller(drag_source)
 
         if self.type == 'groupchat':
             self._ui.group_chat_indicator.show()
@@ -491,40 +485,39 @@ class ChatListRow(Gtk.ListBoxRow):
     def _on_context_popover_closed(self, _popover: Gtk.Popover) -> None:
         self.emit('context-menu-state-changed', False)
 
-    def _on_drag_begin(self,
-                       row: ChatListRow,
-                       drag_context: Any
-                       ) -> None:
+    def _on_prepare(self,
+        _drag_source: Gtk.DragSource,
+        x: float,
+        y: float
+    ) -> Gdk.ContentProvider:
+        self._drag_hotspot_x = x
+        self._drag_hotspot_y = y
 
-        # Use rendered ChatListRow as drag icon
-        alloc = self.get_allocation()
-        surface = cairo.ImageSurface(
-            cairo.Format.ARGB32, alloc.width, alloc.height)
-        context = cairo.Context(surface)
-        self.draw(context)
-        Gtk.drag_set_icon_surface(drag_context, surface)
+        value = GObject.Value()
+        value.init(ChatListRow)
+        value.set_object(self)
 
-        app.window.highlight_dnd_targets(row, True)
+        return Gdk.ContentProvider.new_for_value(value)
+
+    def _on_drag_begin(self, _drag_source: Gtk.DragSource, drag: Gdk.Drag) -> None:
+        # TODO: Use widget's snapshot
+        texture = self.contact.get_avatar(AvatarSize.CHAT, 1)
+        if texture is not None:
+            Gtk.DragIcon.set_from_paintable(
+                drag,
+                texture,
+                int(self._drag_hotspot_x),
+                int(self._drag_hotspot_y)
+            )
+
+        app.window.highlight_dnd_targets(self, True)
 
     def _on_drag_end(self,
-                     row: ChatListRow,
-                     _drag_context: Any
-                     ) -> None:
-
-        app.window.highlight_dnd_targets(row, False)
-
-    def _on_drag_data_get(self,
-                          row: ChatListRow,
-                          _drag_context: Any,
-                          selection_data: Any,
-                          _info: int,
-                          _time: int
-                          ) -> None:
-
-        app.window.highlight_dnd_targets(row, False)
-        # drop_type = Gdk.Atom.intern_static_string('CHAT_LIST_ITEM') TODO GTK4
-        byte_data = pickle.dumps((self.account, self.jid, self.workspace_id))
-        # selection_data.set(drop_type, 8, byte_data)
+        _drag_source: Gtk.DragSource,
+        _drag: Gdk.Drag,
+        _delete_data: bool
+    ) -> None:
+        app.window.highlight_dnd_targets(self, False)
 
     def _connect_contact_signals(self) -> None:
         self.contact.connect('chatstate-update', self._on_chatstate_update)
