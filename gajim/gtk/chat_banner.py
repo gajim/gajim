@@ -51,7 +51,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui = get_builder('chat_banner.ui', self)
         self.append(self._ui.banner_box)
 
-        self._account_badge = AccountBadge()
+        self._account_badge = AccountBadge(bind_setting=True)
         self._voice_requests_button = VoiceRequestsButton()
 
         self._ui.additional_items_box.append(
