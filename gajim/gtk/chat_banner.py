@@ -36,19 +36,21 @@ from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import make_href_markup
+from gajim.gtk.util import SignalManager
 
 
-class ChatBanner(Gtk.Box, EventHelper):
+class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._client: types.Client | None = None
         self._contact: types.ChatContactT | None = None
 
         self._last_message_from_phone: set[BareContact] = set()
 
-        self._ui = get_builder('chat_banner.ui', self)
+        self._ui = get_builder('chat_banner.ui')
         self.append(self._ui.banner_box)
 
         self._account_badge = AccountBadge(bind_setting=True)
@@ -61,9 +63,24 @@ class ChatBanner(Gtk.Box, EventHelper):
         hide_roster = app.settings.get('hide_groupchat_occupants_list')
         self._set_toggle_roster_button_icon(hide_roster)
 
+        self._connect(self._ui.copy_jid_button, 'clicked', self._on_copy_jid_clicked)
+        self._connect(self._ui.avatar_image, 'query-tooltip', self._on_query_tooltip)
+        self._connect(
+            self._ui.toggle_roster_button, 'clicked', self._on_toggle_roster_clicked
+        )
+        self._connect(
+            self._ui.share_menu_button, 'notify::active', self._on_share_activated
+        )
+
         app.settings.connect_signal(
             'hide_groupchat_occupants_list',
             self._set_toggle_roster_button_icon)
+
+    def do_unroot(self) -> None:
+        self.clear()
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        app.settings.disconnect_signals(self)
 
     def clear(self) -> None:
         self._disconnect_signals()
@@ -334,7 +351,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         else:
             return self._client.get_module('OMEMO').compose_trust_uri(jid)
 
-    def _on_share_clicked(self, _button: Gtk.Button) -> None:
+    def _on_share_activated(self, _button: Gtk.MenuButton, *args: Any) -> None:
         assert self._contact is not None
         if isinstance(self._contact, GroupchatContact):
             share_text = _('Scan this QR code to join %s.')
@@ -351,8 +368,9 @@ class ChatBanner(Gtk.Box, EventHelper):
             return
 
         # Generate QR code on demand (i.e. not when switching chats)
-        self._ui.qr_code_image.set_from_pixbuf(
-            generate_qr_code(self._get_share_uri()))
+        self._ui.qr_code_image.set_from_paintable(
+            generate_qr_code(self._get_share_uri())
+        )
         self._ui.qr_code_image.show()
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:

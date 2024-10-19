@@ -198,7 +198,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
             app.get_client(self._account).get_own_jid(),
             [self._omemo.backend.get_our_identity()])
         log.debug('Trust URI: %s', uri)
-        self._ui.qr_code_image.set_from_pixbuf(generate_qr_code(uri))
+        self._ui.qr_code_image.set_from_paintable(generate_qr_code(uri))
 
     def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
         self._ui.list.invalidate_filter()

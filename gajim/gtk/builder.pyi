@@ -193,6 +193,7 @@ class ChatBannerBuilder(Builder):
     share_instructions: Gtk.Label
     qr_code_image: Gtk.Image
     jid_label: Gtk.Label
+    copy_jid_button: Gtk.Button
     banner_box: Gtk.Box
     avatar_image: Gtk.Image
     name_label: Gtk.Label
