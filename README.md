@@ -32,7 +32,7 @@
 
 - D-Bus running to have gajim-remote working
 - [sentry-sdk](https://pypi.org/project/sentry-sdk/) for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
-- [gspell](https://gitlab.gnome.org/GNOME/gspell) and hunspell-LANG where lang is your locale eg. en, fr etc
+- [libspelling](https://gitlab.gnome.org/GNOME/libspelling) and hunspell-LANG where lang is your locale eg. en, fr etc
 - [libsecret](https://gitlab.gnome.org/GNOME/libsecret/) for GNOME Keyring or KDE support as password storage
 - [GUPnP-IGD](https://gitlab.gnome.org/GNOME/gupnp) for better NAT traversing
 - [NetworkManager](https://gitlab.freedesktop.org/NetworkManager/NetworkManager) for network lose detection

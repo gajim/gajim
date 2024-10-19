@@ -46,7 +46,7 @@ Recommends:
     ca-certificates,
     fonts-noto-color-emoji,
     gir1.2-gsound-1.0,
-    gir1.2-gspell-1,
+    gir1.2-spelling-1,
     gir1.2-gupnpigd-1.0,
     gir1.2-secret-1,
     gir1.2-farstream-0.2,

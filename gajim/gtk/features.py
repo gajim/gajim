@@ -124,10 +124,10 @@ class Features(GajimAppWindow):
                     _('No additional requirements'),
                     app.settings.get('use_keyring')),
             Feature(_('Spell Checker'),
-                    app.is_installed('GSPELL'),
+                    app.is_installed('SPELLING'),
                     _('Enables Gajim to spell check your messages while '
                       'composing'),
-                    _('Requires: Gspell'),
+                    _('Requires: libspelling'),
                     _('No additional requirements'),
                     spell_check_enabled),
             Feature(_('UPnP-IGD Port Forwarding'),

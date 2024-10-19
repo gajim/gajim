@@ -35,8 +35,8 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_message_input_extra_context_menu
 from gajim.gtk.util import scroll_to_end
 
-if app.is_installed('GSPELL') or typing.TYPE_CHECKING:
-    from gi.repository import Gspell
+if app.is_installed('SPELLING') or typing.TYPE_CHECKING:
+    from gi.repository import Spelling
 
 FORMAT_CHARS: dict[str, str] = {
     'bold': '*',
@@ -89,7 +89,8 @@ class MessageInputTextView(GtkSource.View):
         self.connect_after('paste-clipboard', self._after_paste_clipboard)
         self.connect('destroy', self._on_destroy)
 
-        self.set_extra_menu(get_message_input_extra_context_menu())
+        self._speller_menu: Gio.MenuModel | None = None
+        self._update_extra_menu()
 
         app.plugin_manager.gui_extension_point('message_input', self)
 
@@ -113,6 +114,16 @@ class MessageInputTextView(GtkSource.View):
         self.clear()
         self._contact = contact
         self._chat_action_processor.switch_contact(contact)
+
+    def set_speller_menu(self, menu: Gio.MenuModel) -> None:
+        self._speller_menu = menu
+        self._update_extra_menu()
+
+    def _update_extra_menu(self) -> None:
+        menu = get_message_input_extra_context_menu()
+        if self._speller_menu is not None:
+            menu.append_section(_('Spell Checking'), self._speller_menu)
+        self.set_extra_menu(menu)
 
     def _on_destroy(self, _widget: Gtk.Widget) -> None:
         self._chat_action_processor.destroy()
@@ -341,7 +352,9 @@ class TextBufferManager(GObject.Object):
 
         self._text_buffers: dict[ChatContactT, GtkSource.Buffer] = {}
         self._text_buffer_handlers: dict[ChatContactT, int] = {}
-        self._language_handler_ids: dict[ChatContactT, int] = {}
+
+        self._spelling_adapters: dict[ChatContactT, Spelling.TextBufferAdapter] = {}
+        self._spelling_language_handlers: dict[ChatContactT, int] = {}
 
         app.settings.connect_signal('use_speller', self._on_toggle_spell_check)
 
@@ -354,18 +367,14 @@ class TextBufferManager(GObject.Object):
             buf.create_tag('strike', strikethrough=True)
             buf.create_tag('pre', family='monospace')
             self._text_buffers[contact] = buf
+
+            self._init_spell_checker(contact)
         else:
             buffer_handler = self._text_buffer_handlers[contact]
             buf.disconnect(buffer_handler)
-            if app.is_installed('GSPELL'):
-                gspell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(buf)
-                checker = gspell_buffer.get_spell_checker()
-                assert checker is not None
-                checker_handler_id = self._language_handler_ids[contact]
-                checker.disconnect(checker_handler_id)
 
-        self._init_spell_checker(contact)
-        self._set_spell_checker_language(contact)
+            self._disconnect_spell_checker(contact)
+
         # Since the buffer changes when switching contacts, MessageActionsBox
         # cannot connect to a buffer's 'changed' signal.
         # Instead, we (re)connect each buffer and relay its 'changed' signal
@@ -374,41 +383,66 @@ class TextBufferManager(GObject.Object):
             'changed', self._on_buffer_changed)
         self._message_input.set_buffer(buf)
 
+        self._connect_spell_checker(contact)
+
         self._contact = contact
 
     def _on_buffer_changed(self, _text_buffer: GtkSource.Buffer) -> None:
         self.emit('buffer-changed')
 
     def _init_spell_checker(self, contact: ChatContactT) -> None:
-        if not app.is_installed('GSPELL'):
+        if not app.is_installed('SPELLING'):
             return
 
-        checker = Gspell.Checker.new(Gspell.language_get_default())
+        provider = Spelling.Provider.get_default()
+        checker = Spelling.Checker.new(
+            provider, self._get_spell_checker_language(contact)
+        )
+        lang = self._get_spell_checker_language(contact)
+        checker.set_language(lang)
 
-        buf = self._text_buffers[contact]
-        gspell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(buf)
-        gspell_buffer.set_spell_checker(checker)
+        text_buffer = self._text_buffers[contact]
+        self._spelling_adapters[contact] = Spelling.TextBufferAdapter.new(
+            text_buffer, checker,
+        )
 
-        view = Gspell.TextView.get_from_gtk_text_view(self._message_input)
-        view.set_enable_language_menu(True)
+    def _connect_spell_checker(self, contact: ChatContactT) -> None:
+        adapter = self._spelling_adapters[contact]
+        speller_menu = adapter.get_menu_model()
 
-        self._on_toggle_spell_check()
+        self._message_input.set_speller_menu(speller_menu)
+        self._message_input.insert_action_group('spelling', adapter)
 
-        self._language_handler_ids[contact] = checker.connect(
+        adapter.set_enabled(app.settings.get('use_speller'))
+
+        checker = adapter.get_checker()
+        assert checker is not None
+        self._spelling_language_handlers[contact] = checker.connect(
             'notify::language', self._on_language_changed)
 
+    def _disconnect_spell_checker(self, contact: ChatContactT) -> None:
+        if not app.is_installed('SPELLING'):
+            return
+
+        adapter = self._spelling_adapters[contact]
+        checker = adapter.get_checker()
+        assert checker is not None
+        checker_handler_id = self._spelling_language_handlers[contact]
+        checker.disconnect(checker_handler_id)
+
+        self._message_input.insert_action_group('spelling', None)
+
     def _on_toggle_spell_check(self, *args: Any) -> None:
-        if not app.is_installed('GSPELL'):
+        if not app.is_installed('SPELLING'):
             return
 
         use_spell_check = app.settings.get('use_speller')
-        spell_view = Gspell.TextView.get_from_gtk_text_view(self._message_input)
-        spell_view.set_inline_spell_checking(use_spell_check)
+        for adapter in self._spelling_adapters.values():
+            adapter.set_enabled(use_spell_check)
 
     def _get_spell_checker_language(self,
                                     contact: ChatContactT
-                                    ) -> Gspell.Language | None:
-
+                                    ) -> str:
         lang = contact.settings.get('speller_language')
         if not lang:
             # use the default one
@@ -416,32 +450,14 @@ class TextBufferManager(GObject.Object):
             if not lang:
                 lang = get_default_lang()
 
-        assert isinstance(lang, str)
-        lang = Gspell.language_lookup(lang)
-        if lang is None:
-            return Gspell.language_get_default()
-        return lang
-
-    def _set_spell_checker_language(self, contact: ChatContactT) -> None:
-        if not app.is_installed('GSPELL'):
-            return
-
-        buf = self._text_buffers[contact]
-        gspell_buffer = Gspell.TextBuffer.get_from_gtk_text_buffer(buf)
-        checker = gspell_buffer.get_spell_checker()
-        assert checker is not None
-        lang = self._get_spell_checker_language(contact)
-
-        handler_id = self._language_handler_ids[contact]
-        with checker.handler_block(handler_id):
-            checker.set_language(lang)
+        return lang or 'en'
 
     def _on_language_changed(self,
-                             checker: Gspell.Checker,
+                             checker: Spelling.Checker,
                              _param: Any) -> None:
-
-        gspell_lang = checker.get_language()
-        if gspell_lang is not None:
+        language_code = checker.get_language()
+        if language_code is not None:
             assert self._contact is not None
-            self._contact.settings.set('speller_language',
-                                       gspell_lang.get_code())
+            handler_id = self._spelling_language_handlers[self._contact]
+            with checker.handler_block(handler_id):
+                self._contact.settings.set('speller_language', language_code)

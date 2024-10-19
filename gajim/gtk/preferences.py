@@ -221,8 +221,8 @@ class General(PreferenceBox):
     def __init__(self, *args: Any) -> None:
 
         speller_desc = None
-        if not app.is_installed('GSPELL'):
-            speller_desc = _('Needs gspell to be installed')
+        if not app.is_installed('SPELLING'):
+            speller_desc = _('Needs libspelling to be installed')
 
         settings = [
             Setting(SettingKind.SWITCH,
@@ -264,7 +264,7 @@ class General(PreferenceBox):
 
     @staticmethod
     def _speller_available() -> bool:
-        return app.is_installed('GSPELL')
+        return app.is_installed('SPELLING')
 
 
 class Chats(PreferenceBox):

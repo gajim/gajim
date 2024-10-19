@@ -121,7 +121,7 @@ _dependencies = {
     'GEOCLUE': False,
     'UPNP': False,
     'GSOUND': False,
-    'GSPELL': False,
+    'SPELLING': False,
     'IDLE': False,
     'APPINDICATOR': False,
     'AYATANA_APPINDICATOR': False,
@@ -261,16 +261,17 @@ def detect_dependencies() -> None:
     except (ImportError, ValueError):
         pass
 
-    # GSPELL
+    # LIBSPELLING
     try:
-        gi.require_version('Gspell', '1')
-        from gi.repository import Gspell
-        langs = Gspell.language_get_available()
+        gi.require_version('Spelling', '1')
+        from gi.repository import Spelling
+        provider = Spelling.Provider.get_default()
+        langs = provider.list_languages()
         for lang in langs:
             log('gajim').info('%s (%s) dict available',
                               lang.get_name(), lang.get_code())
         if langs:
-            _dependencies['GSPELL'] = True
+            _dependencies['SPELLING'] = True
     except (ImportError, ValueError):
         pass
 
