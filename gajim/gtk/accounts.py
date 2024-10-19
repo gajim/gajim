@@ -569,7 +569,7 @@ class AccountRow(Gtk.ListBoxRow):
                  DialogButton.make('Remove',
                                    text=_('_Disable Account'),
                                    callback=_disable)],
-                transient_for=window).show()
+                transient_for=window.window).show()
             return Gdk.EVENT_STOP
 
         if state:

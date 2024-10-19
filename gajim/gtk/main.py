@@ -1413,7 +1413,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         # Make sure there is only one window
         win = get_app_window('CallWindow')
         if win is not None:
-            win.destroy()
+            win.close()
         CallWindow(event.account, event.resource_jid)
 
     def _on_jingle_request(self, event: events.JingleRequestReceived) -> None:

@@ -571,7 +571,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             # dialog. It shows if the removal was successful.
             if type(win).__name__ == 'RemoveAccount':
                 continue
-            win.destroy()
+            win.close()
 
         CoreApplication.disable_account(self, account)
 

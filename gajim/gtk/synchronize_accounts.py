@@ -14,7 +14,6 @@ from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import get_app_window
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -25,8 +24,7 @@ class SynchronizeAccounts(GajimAppWindow):
             name='SynchronizeAccounts',
             title=_('Synchronize Accounts'),
             default_width=400,
-            default_height=550,
-            transient_for=get_app_window('AccountsWindow')
+            default_height=550
         )
 
         self.account = account
