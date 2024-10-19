@@ -13,7 +13,7 @@ from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
 
-from gi.repository import Gio
+from gi.repository import Gio, Graphene
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -640,11 +640,11 @@ class ConversationView(Gtk.ScrolledWindow):
         if previous_flags & Gtk.StateFlags.PRELIGHT:
             self._message_row_actions.hide_actions()
         else:
-            coords = row.translate_coordinates(self, 0, 0)
-            if coords is None:
+            success, point = row.compute_point(self, Graphene.Point.zero())
+            if not success:
                 return
-            _x_coord, y_coord = coords
-            self._message_row_actions.update(y_coord, row)
+
+            self._message_row_actions.update(point.y, row)
 
     def remove_message(self, pk: int) -> None:
         row = self.get_row_by_pk(pk)

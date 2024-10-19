@@ -23,9 +23,8 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
-from gajim.gtk.conversation.reactions_bar import AddReactionButton
 from gajim.gtk.menus import get_groupchat_participant_menu
-from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import GajimPopover, SignalManager
 
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow
@@ -53,23 +52,30 @@ class MessageRowActions(Gtk.Box):
         self._contact: ChatContactT | None = None
 
         self._has_cursor = False
-        self._menu_button_clicked = False
+        self._is_menu_open = False
 
         self._timeout_id: int | None = None
 
-        self._reaction_buttons: list[Gtk.Button] = []
+        self._reaction_buttons: list[Gtk.Button | Gtk.MenuButton] = []
 
         for emoji in ['👍', '❤', '🤣']:
             button = QuickReactionButton(emoji)
             button.connect('clicked', self._on_quick_reaction_button_clicked)
             self._reaction_buttons.append(button)
 
-        choose_reaction_button = AddReactionButton()
-        choose_reaction_button.set_visible(False)
-        choose_reaction_button.connect(
-            'clicked', self._on_choose_reaction_button_clicked
+        emoji_popover = Gtk.EmojiChooser()
+        emoji_popover.connect('emoji-picked', self._on_reaction_added)
+        emoji_popover.connect('closed', self._on_popover_closed)
+
+        choose_reaction_button = Gtk.MenuButton(
+            icon_name='lucide-smile-plus-symbolic',
+            tooltip_text=_('Add Reaction…'),
+            visible=False,
+            popover=emoji_popover,
         )
-        choose_reaction_button.connect('emoji-added', self._on_reaction_added)
+        choose_reaction_button.set_create_popup_func(
+            self._on_emoji_chooser_popup
+        )
         self._reaction_buttons.append(choose_reaction_button)
 
         self._reply_button = Gtk.Button.new_from_icon_name(
@@ -79,10 +85,13 @@ class MessageRowActions(Gtk.Box):
         self._reply_button.set_tooltip_text(_('Reply…'))
         self._reply_button.connect('clicked', self._on_reply_clicked)
 
-        more_button = Gtk.Button.new_from_icon_name(
-            'feather-more-horizontal-symbolic'
-        )
-        more_button.connect('clicked', self._on_more_clicked)
+        self._more_popover = Gtk.PopoverMenu()
+        self._more_popover.connect('closed', self._on_popover_closed)
+
+        self._more_button = Gtk.MenuButton(
+            icon_name='feather-more-horizontal-symbolic',
+            popover=self._more_popover)
+        self._more_button.set_create_popup_func(self._on_create_more_popover)
 
         box = Gtk.Box()
         box.get_style_context().add_class('linked')
@@ -91,7 +100,7 @@ class MessageRowActions(Gtk.Box):
             box.append(button)
 
         box.append(self._reply_button)
-        box.append(more_button)
+        box.append(self._more_button)
 
         self.append(box)
 
@@ -107,13 +116,18 @@ class MessageRowActions(Gtk.Box):
         self.add_controller(scroll_controller)
 
     def hide_actions(self) -> None:
+        if self._is_menu_open:
+            return
+
         # Set a 10ms timeout, which gives us enough time to inhibit hiding
         # if the cursor enters (cursor changes from row to MessageRowActions)
-        self._timeout_id = GLib.timeout_add(10, self._hide)
+        self._hide_with_timeout()
 
     def update(self, y_coord: float, message_row: MessageRow) -> None:
+        if self._is_menu_open:
+            return
+
         self._message_row = message_row
-        self._menu_button_clicked = False
 
         if self._timeout_id is not None:
             GLib.source_remove(self._timeout_id)
@@ -146,7 +160,7 @@ class MessageRowActions(Gtk.Box):
             button.set_visible(reactions_visible)
 
         self._reply_button.set_visible(self._get_reply_visible())
-        self.show()
+        self.set_visible(True)
 
     def switch_contact(self, contact: ChatContactT) -> None:
         self._message_row = None
@@ -194,14 +208,19 @@ class MessageRowActions(Gtk.Box):
 
         return self._message_row.message_id is not None
 
+    def _hide_with_timeout(self) -> None:
+        if self._timeout_id is not None:
+            GLib.source_remove(self._timeout_id)
+
+        self._timeout_id = GLib.timeout_add(10, self._hide)
+
     def _hide(self) -> None:
+        self._timeout_id = None
+
         if self._has_cursor or self._message_row is None:
             return
 
         self._message_row.get_style_context().remove_class('conversation-row-hover')
-
-        self._timeout_id = None
-        self._menu_button_clicked = False
 
         self.hide()
 
@@ -211,8 +230,12 @@ class MessageRowActions(Gtk.Box):
         _x: int,
         _y: int,
     ) -> None:
+
         self._has_cursor = True
-        self._menu_button_clicked = False
+
+        if self._is_menu_open:
+            return
+
         if self._message_row is not None:
             # message_row may be None if MessageRowActions are entered without
             # hovering a MessageRow before (e.g. by switching chats via shortcut)
@@ -220,17 +243,14 @@ class MessageRowActions(Gtk.Box):
 
     def _on_cursor_leave(self, controller: Gtk.EventControllerMotion) -> None:
         self._has_cursor = False
-        self._timeout_id = None
 
-        if self._menu_button_clicked:
+        if self._is_menu_open:
             # A popover triggers a leave event,
             # but we don't want to hide MessageRowActions
             return
 
         if self._message_row is not None:
             self._message_row.get_style_context().remove_class('conversation-row-hover')
-
-        self.hide()
 
     def _on_scroll(
         self,
@@ -253,11 +273,12 @@ class MessageRowActions(Gtk.Box):
     def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
         self._send_reaction(button.emoji)
 
-    def _on_choose_reaction_button_clicked(self, _button: AddReactionButton) -> None:
-        self._menu_button_clicked = True
+    def _on_emoji_chooser_popup(self, _button: Gtk.MenuButton) -> None:
+        self._is_menu_open = True
 
-    def _on_reaction_added(self, _widget: AddReactionButton, emoji: str) -> None:
-        self._menu_button_clicked = False
+    def _on_reaction_added(self, _widget: Gtk.EmojiChooser, emoji: str) -> None:
+        # Remove emoji variant selectors
+        emoji = emoji.strip('\uFE0E\uFE0F')
         self._send_reaction(emoji, toggle=False)
 
     def _send_reaction(self, emoji: str, toggle: bool = True) -> None:
@@ -266,12 +287,21 @@ class MessageRowActions(Gtk.Box):
 
         self._message_row.send_reaction(emoji, toggle)
 
-    def _on_more_clicked(self, button: Gtk.Button) -> None:
+    def _on_create_more_popover(self, button: Gtk.MenuButton) -> None:
         if self._message_row is None:
             return
 
-        self._menu_button_clicked = True
-        self._message_row.show_chat_row_menu(self, button)
+        self._is_menu_open = True
+
+        menu = self._message_row.get_chat_row_menu()
+        self._more_popover.set_menu_model(menu)
+
+    def _on_popover_closed(self, popover: Gtk.PopoverMenu) -> None:
+        if self._message_row is not None:
+            self._message_row.get_style_context().remove_class('conversation-row-hover')
+
+        self._is_menu_open = False
+        self._hide_with_timeout()
 
 
 class QuickReactionButton(Gtk.Button):

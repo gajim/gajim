@@ -55,10 +55,17 @@ class ReactionsBar(Gtk.Box):
 
         self._reactions: list[mod.Reaction] = []
 
-        add_reaction_button = AddReactionButton()
-        add_reaction_button.get_style_context().add_class('reaction')
-        add_reaction_button.get_style_context().add_class('flat')
-        add_reaction_button.connect('emoji-added', self._on_emoji_added)
+        emoji_popover = Gtk.EmojiChooser()
+        emoji_popover.connect('emoji-picked', self._on_emoji_added)
+
+        add_reaction_button = Gtk.MenuButton(
+            icon_name='lucide-smile-plus-symbolic',
+            tooltip_text=_('Add Reaction…'),
+            popover=emoji_popover,
+        )
+        add_reaction_button.add_css_class('flat')
+        add_reaction_button.add_css_class('reaction')
+
         self.append(add_reaction_button)
 
     def _on_client_state_changed(self, *args: Any) -> None:
@@ -126,12 +133,14 @@ class ReactionsBar(Gtk.Box):
     def _on_reaction_clicked(self, reaction_button: ReactionButton) -> None:
         self._message_row.send_reaction(reaction_button.emoji)
 
-    def _on_emoji_added(self, _widget: AddReactionButton, emoji: str) -> None:
+    def _on_emoji_added(self, _widget: Gtk.EmojiChooser, emoji: str) -> None:
+        # Remove emoji variant selectors
+        emoji = emoji.strip('\uFE0E\uFE0F')
         self._message_row.send_reaction(emoji, toggle=False)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
         for widget in iterate_children(self):
-            if isinstance(widget, AddReactionButton):
+            if isinstance(widget, Gtk.MenuButton):
                 continue
 
             if isinstance(widget, MoreReactionsButton):
@@ -232,47 +241,3 @@ class MoreReactionsButton(Gtk.MenuButton):
 
     def add_reaction(self, reaction_button: ReactionButton) -> None:
         self._flow_box.append(reaction_button)
-
-
-class AddReactionButton(Gtk.Button):
-
-    __gsignals__ = {
-        'emoji-added': (GObject.SignalFlags.RUN_LAST, None, (str,)),
-    }
-
-    def __init__(self) -> None:
-        Gtk.Button.__init__(self, tooltip_text=_('Add reaction'))
-        icon = Gtk.Image.new_from_icon_name('lucide-smile-plus-symbolic')
-        self._dummy_entry = Gtk.Text(
-            width_chars=0,
-            editable=True,
-            visible=False,
-            propagate_text_width=True,
-            css_classes=['flat', 'dummy-emoji-entry']
-        )
-        self._dummy_entry.connect('insert-text', self._on_insert_text)
-
-        box = Gtk.Box()
-        box.append(icon)
-        box.append(self._dummy_entry)
-        self.set_child(box)
-        self.set_tooltip_text(_('Add Reaction…'))
-
-        # Use connect_after to allow other widgets to connect beforehand
-        self.connect_after('clicked', self._on_clicked)
-
-    def _on_clicked(self, _button: Gtk.Button) -> None:
-        self._dummy_entry.show()
-        self._dummy_entry.emit('insert-emoji')
-
-    def _on_insert_text(
-        self, entry: Gtk.Entry, text: str, _length: int, _position: int
-    ) -> int:
-        entry.stop_emission_by_name('insert-text')
-        entry.hide()
-
-        # Remove emoji variant selectors
-        text = text.strip('\uFE0E\uFE0F')
-        if text:
-            self.emit('emoji-added', text)
-        return 0

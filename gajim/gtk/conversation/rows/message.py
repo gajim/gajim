@@ -40,7 +40,7 @@ from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
-from gajim.gtk.util import format_fingerprint
+from gajim.gtk.util import GajimMenu, format_fingerprint
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
@@ -267,11 +267,11 @@ class MessageRow(BaseRow):
             return self._contact.muc_context
         return None
 
-    def show_chat_row_menu(
+    def get_chat_row_menu(
         self,
-        message_row_actions: MessageRowActions,
-        button: Gtk.Button
-    ) -> None:
+        # message_row_actions: MessageRowActions,
+        # button: Gtk.Button
+    ) -> GajimMenu:
         menu = get_chat_row_menu(
             contact=self._contact,
             name=self.name,
@@ -284,6 +284,7 @@ class MessageRow(BaseRow):
             state=self.state,
             is_moderated=self._is_moderated,
         )
+        return menu
 
         self._message_row_menu_popover.set_menu_model(menu)
         # TODO GTK4: self._message_row_menu_popover.set_pointing_to(x, y)
