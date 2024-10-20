@@ -205,26 +205,31 @@
                   </object>
                 </child>
                 <child type="end">
-                  <object class="GtkMenuButton" id="privacy_button">
-                    <property name="visible">0</property>
-                    <property name="tooltip-text" translatable="1">Privacy</property>
-                    <property name="direction">up</property>
-                    <property name="popover">privacy_popover</property>
+                  <object class="GtkBox">
+                    <property name="spacing">12</property>
                     <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">feather-eye-symbolic</property>
+                      <object class="GtkMenuButton" id="privacy_button">
+                        <property name="visible">0</property>
+                        <property name="tooltip-text" translatable="1">Privacy</property>
+                        <property name="direction">up</property>
+                        <property name="popover">privacy_popover</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">feather-eye-symbolic</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child type="end">
-                  <object class="GtkButton" id="save_button">
-                    <property name="visible">0</property>
-                    <property name="label" translatable="1">_Save</property>
-                    <property name="use-underline">1</property>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
+                    <child>
+                      <object class="GtkButton" id="save_button">
+                        <property name="visible">0</property>
+                        <property name="label" translatable="1">_Save</property>
+                        <property name="use-underline">1</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child type="end">
