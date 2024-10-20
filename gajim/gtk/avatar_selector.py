@@ -237,6 +237,7 @@ class CropArea(Gtk.DrawingArea, SignalManager):
 
     def do_unroot(self, *args: Any) -> None:
         self._disconnect_all()
+        self.set_draw_func(None)
         Gtk.DrawingArea.do_unroot(self)
         app.check_finalize(self)
 
