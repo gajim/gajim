@@ -21,10 +21,11 @@ from importlib import import_module
 from re import Match
 
 import cairo
-from gi.repository import GObject, Gdk
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import GtkSource
 from gi.repository import Pango
@@ -996,12 +997,14 @@ class GdkRectangle(Gdk.Rectangle):
 class GajimPopover(Gtk.PopoverMenu):
     __gtype_name__ = 'GajimPopover'
 
-    def __init__(self,
-                 menu: Gio.MenuModel | None = None,
-                 position: Gtk.PositionType = Gtk.PositionType.RIGHT,
-                 event: Any | None = None) -> None:
+    def __init__(
+        self,
+        menu: Gio.MenuModel | None = None,
+        position: Gtk.PositionType = Gtk.PositionType.RIGHT,
+        event: Any | None = None
+    ) -> None:
 
-        Gtk.Popover.__init__(self, autohide=True)
+        Gtk.PopoverMenu.__init__(self, autohide=True)
 
         if menu is not None:
             self.set_menu_model(menu)
