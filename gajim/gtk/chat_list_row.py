@@ -42,9 +42,10 @@ from gajim.common.util.user_strings import get_uf_relative_time
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_chat_list_row_menu
 from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import SignalManager
 
 
-class ChatListRow(Gtk.ListBoxRow):
+class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     __gsignals__ = {
         'unread-changed': (
@@ -67,6 +68,7 @@ class ChatListRow(Gtk.ListBoxRow):
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
 
         self.account = account
         self.jid = jid
@@ -96,21 +98,22 @@ class ChatListRow(Gtk.ListBoxRow):
 
         self.get_style_context().add_class('chatlist-row')
 
-        self._ui = get_builder('chat_list_row.ui', self)
+        self._ui = get_builder('chat_list_row.ui')
         self.set_child(self._ui.mainbox)
+
+        self._connect(self._ui.close_button, 'clicked', self._on_close_button_clicked)
 
         self._menu_popover = GajimPopover(None)
         self._ui.mainbox.append(self._menu_popover)
 
-        self.connect('state-flags-changed', self._on_state_flags_changed)
-        self.connect('destroy', self._on_destroy)
+        self._connect(self, 'state-flags-changed', self._on_state_flags_changed)
 
         gesture_middle_click = Gtk.GestureClick(button=Gdk.BUTTON_MIDDLE)
-        gesture_middle_click.connect('pressed', self._on_row_clicked)
+        self._connect(gesture_middle_click, 'pressed', self._on_row_clicked)
         self.add_controller(gesture_middle_click)
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_secondary_click.connect('pressed', self._on_row_clicked)
+        self._connect(gesture_secondary_click, 'pressed', self._on_row_clicked)
         self.add_controller(gesture_secondary_click)
 
         app.settings.connect_signal(
@@ -124,9 +127,9 @@ class ChatListRow(Gtk.ListBoxRow):
         self._drag_hotspot_y: float = 0
 
         drag_source = Gtk.DragSource(actions=Gdk.DragAction.MOVE)
-        drag_source.connect('prepare', self._on_prepare)
-        drag_source.connect('drag-begin', self._on_drag_begin)
-        drag_source.connect('drag-end', self._on_drag_end)
+        self._connect(drag_source, 'prepare', self._on_prepare)
+        self._connect(drag_source, 'drag-begin', self._on_drag_begin)
+        self._connect(drag_source, 'drag-end', self._on_drag_end)
         self.add_controller(drag_source)
 
         if self.type == 'groupchat':
@@ -443,7 +446,9 @@ class ChatListRow(Gtk.ListBoxRow):
             self._ui.revealer.set_reveal_child(False)
             self._ui.close_button.hide()
 
-    def _on_destroy(self, _row: ChatListRow) -> None:
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        self._disconnect_all()
         app.settings.disconnect_signals(self)
         self.contact.disconnect_all_from_obj(self)
         if isinstance(self.contact, GroupchatParticipant):
@@ -463,6 +468,7 @@ class ChatListRow(Gtk.ListBoxRow):
         x: float,
         y: float,
     ) -> int:
+
         if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
             app.window.activate_action(
                 'win.remove-chat',

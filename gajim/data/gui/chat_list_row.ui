@@ -147,7 +147,6 @@
                 <property name="receives-default">1</property>
                 <property name="valign">center</property>
                 <property name="margin-end">6</property>
-                <signal name="clicked" handler="_on_close_button_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">window-close-symbolic</property>
