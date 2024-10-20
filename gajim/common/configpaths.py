@@ -49,7 +49,6 @@ def get_plugin_dirs() -> list[Path]:
 
 def get_ui_path(filename: str) -> str:
     path = _paths['GUI'] / filename
-    breakpoint()
     return str(path)
 
 
