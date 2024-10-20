@@ -167,7 +167,6 @@ class ReactionsBar(Gtk.Box):
                 if more_reactions_button is None:
                     more_reactions_button = MoreReactionsButton()
                     self.append(more_reactions_button)
-                    self.reorder_child_after(more_reactions_button, reaction_button)
                 more_reactions_button.add_reaction(reaction_button)
             else:
                 log.debug('Too many reactions: %s', len(aggregated_reactions))
