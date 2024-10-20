@@ -212,7 +212,7 @@
                     <property name="popover">privacy_popover</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="icon-name">preferences-system-privacy-symbolic</property>
+                        <property name="icon-name">feather-eye-symbolic</property>
                       </object>
                     </child>
                   </object>

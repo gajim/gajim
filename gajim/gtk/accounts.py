@@ -409,11 +409,11 @@ class PageMenuItem(MenuItem):
         if name == 'general':
             icon = 'avatar-default-symbolic'
         elif name == 'privacy':
-            icon = 'preferences-system-privacy-symbolic'
+            icon = 'feather-eye-symbolic'
         elif name == 'encryption-omemo':
             icon = 'channel-secure-symbolic'
         elif name == 'connection':
-            icon = 'preferences-system-network-symbolic'
+            icon = 'feather-globe-symbolic'
         elif name == 'advanced':
             icon = 'preferences-system-symbolic'
         else:
