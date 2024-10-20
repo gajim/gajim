@@ -57,8 +57,7 @@ class RemoveAccount(Assistant):
         progress.set_title(_('Removing Account...'))
         progress.set_text(_('Trying to remove account...'))
 
-        self.connect('button-clicked', self._on_button_clicked)
-        self.connect('destroy', self._on_destroy)
+        self._connect(self, 'button-clicked', self._on_button_clicked)
 
         self.register_events([
             ('account-connected', ged.POSTGUI, self._on_account_connected),
@@ -115,7 +114,7 @@ class RemoveAccount(Assistant):
             return
 
         if button_name == 'close':
-            self.destroy()
+            self.close()
 
     def _on_remove(self, *args: Any) -> None:
         remove_choice_page = self.get_page('remove_choice')
@@ -148,7 +147,8 @@ class RemoveAccount(Assistant):
 
         self._account_removed = True
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
+        self.unregister_events()
         self._destroyed = True
 
 
