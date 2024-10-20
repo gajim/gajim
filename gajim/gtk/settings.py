@@ -46,7 +46,7 @@ log = logging.getLogger('gajim.gtk.settings')
 class SettingsDialog(GajimAppWindow):
     def __init__(
         self,
-        parent: Gtk.Root,
+        parent: Gtk.Window,
         title: str,
         flags: Gtk.DialogFlags,
         settings: list[Setting],
@@ -79,6 +79,7 @@ class SettingsDialog(GajimAppWindow):
         self.listbox.update_states()
 
         self.set_child(self.listbox)
+        self.show()
 
     def _cleanup(self) -> None:
         del self.listbox

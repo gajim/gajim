@@ -22,6 +22,7 @@ from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
 from gajim.common.events import StanzaReceived
 from gajim.common.events import StanzaSent
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.logging_helpers import get_log_console_handler
 
@@ -32,7 +33,6 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
-from gajim.common.ged import EventHelper
 from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
@@ -116,10 +116,22 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         if available_accounts:
             self._combo.set_active(0)
         self._ui.actionbox.append(self._combo)
-        self._ui.actionbox.reorder_child_after(self._combo)
+        self._ui.actionbox.reorder_child_after(self._combo, self._ui.account_label)
 
         self._create_tags()
         self._add_stanza_presets()
+
+        self._connect(self._ui.filter_options_button, 'clicked', self._on_filter_options)
+        self._connect(self._ui.clear_button, 'clicked', self._on_clear)
+        self._connect(self._ui.paste, 'clicked', self._on_paste_previous)
+        self._connect(self._ui.stanza_presets_listbox, 'row-activated', self._on_row_activated)
+        self._connect(self._ui.search_entry, 'activate', self._on_search_activate)
+        self._connect(self._ui.search_forward, 'clicked', self._on_search_clicked)
+        self._connect(self._ui.search_backward, 'clicked', self._on_search_clicked)
+        self._connect(self._ui.jump_to_end_button, 'clicked', self._on_jump_to_end_clicked)
+        self._connect(self._ui.send, 'clicked', self._on_send)
+        self._connect(self._ui.edit_toggle, 'toggled', self._on_input)
+        self._connect(self._ui.search_toggle, 'toggled', self._on_search_toggled)
 
         source_manager = GtkSource.LanguageManager.get_default()
         lang = source_manager.get_language('xml')
@@ -256,7 +268,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
                 self._ui.search_toggle.set_active(False)
                 return Gdk.EVENT_STOP
 
-            self.destroy()
+            self.close()
 
         if (state & Gdk.ModifierType.CONTROL_MASK and
                 keyval == Gdk.KEY_Return or
@@ -512,7 +524,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         ]
 
         self._filter_dialog = SettingsDialog(
-            self,
+            self.window,
             _('Filter'),
             Gtk.DialogFlags.DESTROY_WITH_PARENT,
             settings,

@@ -340,10 +340,13 @@ class DebugConsoleBuilder(Builder):
     scrolled_input: Gtk.ScrolledWindow
     input_entry: GtkSource.View
     actionbox: Gtk.Box
-    send: Gtk.Button
-    account_label: Gtk.Label
+    filter_options_button: Gtk.Button
+    clear_button: Gtk.Button
+    edit_toggle: Gtk.ToggleButton
     paste: Gtk.Button
     menubutton: Gtk.MenuButton
+    account_label: Gtk.Label
+    send: Gtk.Button
     headerbar: Gtk.HeaderBar
     search_toggle: Gtk.ToggleButton
 
