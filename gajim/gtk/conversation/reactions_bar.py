@@ -117,7 +117,10 @@ class ReactionsBar(Gtk.Box):
                     )
                 )
 
-        return dict(sorted(aggregated_reactions.items()))
+        # Multisort dict, first for emojis, afterwards for count
+        emoji_sorted = sorted(aggregated_reactions.items())
+        count_sorted = sorted(emoji_sorted, reverse=True, key=lambda tup: len(tup[1]))
+        return dict(count_sorted)
 
     def get_our_reactions(self) -> set[str]:
         our_reactions: set[str] = set()
