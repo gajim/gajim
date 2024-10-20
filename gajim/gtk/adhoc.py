@@ -210,7 +210,7 @@ class Commands(Page):
         column.set_expand(True)
         self._treeview.append_column(column)
 
-        self._treeview.connect('row-activated', self._on_row_activate)
+        self._connect(self._treeview, 'row-activated', self._on_row_activate)
         self._treeview.set_search_equal_func(self._search_func)
 
         self._scrolled.set_child(self._treeview)
