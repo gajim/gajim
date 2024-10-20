@@ -29,6 +29,7 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -137,7 +138,7 @@ class Themes(GajimAppWindow):
             modal=True,
         )
 
-        self._ui = get_builder('themes_window.ui', self)
+        self._ui = get_builder('themes_window.ui')
         self.set_child(self._ui.theme_grid)
 
         self._get_themes()
@@ -329,12 +330,14 @@ class Themes(GajimAppWindow):
     def _cleanup(self) -> None:
         pass
 
-class Option(Gtk.ListBoxRow):
+class Option(Gtk.ListBoxRow, SignalManager):
     def __init__(self,
                  option: StyleOption,
                  value: str | Pango.FontDescription | None
                  ) -> None:
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
+
         self.option = option
         self._box = Gtk.Box(spacing=12)
 
@@ -354,10 +357,15 @@ class Option(Gtk.ListBoxRow):
         remove_button = Gtk.Button.new_from_icon_name('list-remove-symbolic')
         remove_button.set_tooltip_text(_('Remove Setting'))
         remove_button.get_style_context().add_class('theme_remove_button')
-        remove_button.connect('clicked', self._on_remove)
+        self._connect(remove_button, 'clicked', self._on_remove)
         self._box.append(remove_button)
 
         self.set_child(self._box)
+
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def _init_color(self, color: str | None) -> None:
         color_dialog = Gtk.ColorDialog()
@@ -367,7 +375,7 @@ class Option(Gtk.ListBoxRow):
             rgba.parse(color)
             color_button.set_rgba(rgba)
         color_button.set_halign(Gtk.Align.END)
-        color_button.connect('notify::rgba', self._on_color_set)
+        self._connect(color_button, 'notify::rgba', self._on_color_set)
         self._box.append(color_button)
 
     def _init_font(self, desc: Pango.FontDescription | None) -> None:
@@ -376,7 +384,7 @@ class Option(Gtk.ListBoxRow):
         if desc is not None:
             font_button.set_font_desc(desc)
         font_button.set_halign(Gtk.Align.END)
-        font_button.connect('notify::font-desc', self._on_font_set)
+        self._connect(font_button, 'notify::font-desc', self._on_font_set)
         self._box.append(font_button)
 
     def _on_color_set(self, color_button: Gtk.ColorDialogButton, *args: Any) -> None:
