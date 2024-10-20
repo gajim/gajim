@@ -40,11 +40,10 @@ from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
-from gajim.gtk.util import GajimMenu, format_fingerprint
+from gajim.gtk.util import GajimMenu, container_remove_all, format_fingerprint
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
-from gajim.gtk.util import iterate_children
 
 log = logging.getLogger('gajim.gtk.conversation.rows.message')
 
@@ -141,11 +140,8 @@ class MessageRow(BaseRow):
         self.get_style_context().remove_class('moderated-message')
         self.get_style_context().remove_class('gajim-mention-highlight')
 
-        for widget in iterate_children(self._meta_box):
-            self._meta_box.remove(widget)
-
-        for widget in iterate_children(self._bottom_box):
-            self._bottom_box.remove(widget)
+        container_remove_all(self._meta_box)
+        container_remove_all(self._bottom_box)
 
         self._corr_message = None
 

@@ -17,7 +17,7 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util import container_remove_all, iterate_children
 from gajim.gtk.widgets import GajimAppWindow
 
 ContentT = ParsingResult | QuoteBlock
@@ -108,8 +108,7 @@ class MessageWidget(Gtk.Box):
         return True
 
     def clear(self) -> None:
-        for child in iterate_children(self):
-            self.remove(child)
+        container_remove_all(self)
 
 
 class FullMessageWindow(GajimAppWindow):

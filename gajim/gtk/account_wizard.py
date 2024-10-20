@@ -55,10 +55,9 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import clear_listbox
+from gajim.gtk.util import clear_listbox, container_remove_all
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_color_for_account
-from gajim.gtk.util import iterate_children
 from gajim.gtk.util import open_window
 
 CustomHostT = tuple[str, ConnectionProtocol, ConnectionType]
@@ -836,8 +835,7 @@ class Signup(Page):
         self._ui.sign_up_info_grid.attach(Gtk.Separator(), 0, 3, 2, 1)
 
     def _clear_server_info_box(self) -> None:
-        for child in iterate_children(self._ui.sign_up_info_grid):
-            self._ui.sign_up_info_grid.remove(child)
+        container_remove_all(self._ui.sign_up_info_grid)
 
     def _on_visit_server(self, _button: Gtk.Button) -> int:
         server = self._ui.server_comboboxtext_sign_up_entry.get_text().strip()

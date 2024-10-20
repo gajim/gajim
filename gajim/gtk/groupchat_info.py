@@ -27,7 +27,7 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
-from gajim.gtk.util import SignalManager, iterate_children
+from gajim.gtk.util import SignalManager, container_remove_all
 from gajim.gtk.util import make_href_markup
 
 log = logging.getLogger('gajim.gtk.groupchat_info')
@@ -231,8 +231,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self._ui.users_image.set_visible(has_users)
 
         # Set contacts
-        for widget in iterate_children(self._ui.contact_box):
-            self._ui.contact_box.remove(widget)
+        container_remove_all(self._ui.contact_box)
 
         has_contacts = bool(info.muc_contacts)
         if has_contacts:

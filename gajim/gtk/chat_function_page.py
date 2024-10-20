@@ -25,7 +25,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.file_transfer_selector import FileTransferSelector
 from gajim.gtk.groupchat_inviter import GroupChatInviter
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util import container_remove_all
 
 
 class FunctionMode(Enum):
@@ -106,8 +106,7 @@ class ChatFunctionPage(Gtk.Box):
         if self._client is not None:
             self._client.disconnect_all_from_obj(self)
 
-        for child in iterate_children(self._content_box):
-            self._content_box.remove(child)
+        container_remove_all(self._content_box)
 
         # TODO GTK4
         # if self._widget is not None:

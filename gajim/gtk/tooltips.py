@@ -38,7 +38,7 @@ from gajim.common.util.user_strings import get_uf_sub
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import convert_surface_to_texture
+from gajim.gtk.util import container_remove_all, convert_surface_to_texture
 from gajim.gtk.util import format_location
 from gajim.gtk.util import format_tune
 from gajim.gtk.util import iterate_children
@@ -105,8 +105,7 @@ class GCTooltip:
 
         if contact.hats is not None:
 
-            for child in iterate_children(self._ui.hats_box):
-                self._ui.hats_box.remove(child)
+            container_remove_all(self._ui.hats_box)
 
             for hat in contact.hats.get_hats()[:5]:
                 # Limit to 5 hats
@@ -143,8 +142,7 @@ class ContactTooltip:
 
     def clear_tooltip(self) -> None:
         self._contact = None
-        for widget in iterate_children(self._ui.resources_box):
-            self._ui.resources_box.remove(widget)
+        container_remove_all(self._ui.resources_box)
         for widget in iterate_children(self._ui.tooltip_grid):
             widget.hide()
 

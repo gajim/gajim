@@ -33,8 +33,7 @@ from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util import container_remove_all, ensure_not_destroyed
 from gajim.gtk.util import MultiLineLabel
 
 log = logging.getLogger('gajim.gtk.adhoc')
@@ -400,8 +399,7 @@ class Completed(Page):
         self.append(self._dataform_widget)
 
     def _show_notes(self, notes: list[AdHocCommandNote]):
-        for note in iterate_children(self._notes):
-            self._notes.remove(note)
+        container_remove_all(self._notes)
 
         for i, note in enumerate(notes):
             if len(notes) > 1:
