@@ -47,6 +47,12 @@ def get_plugin_dirs() -> list[Path]:
             Path(_paths['PLUGINS_USER'])]
 
 
+def get_ui_path(filename: str) -> str:
+    path = _paths['GUI'] / filename
+    breakpoint()
+    return str(path)
+
+
 def get_paths(type_: PathType) -> Generator[Path, None, None]:
     # pylint: disable=unnecessary-dict-index-lookup
     for key, value in _paths.items():

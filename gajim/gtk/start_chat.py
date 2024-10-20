@@ -27,6 +27,7 @@ from nbxmpp.structs import MuclumbusResult
 from nbxmpp.task import Task
 
 from gajim.common import app
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import MUC_DISCO_ERRORS
@@ -952,7 +953,7 @@ class ContactListItem(GObject.Object):
         return f"ContactListItem: {self.props.account} - {self.props.jid}"
 
 
-@Gtk.Template(filename='gajim/data/gui/contact_view_item.ui')
+@Gtk.Template(filename=get_ui_path('contact_view_item.ui'))
 class ContactViewItem(Gtk.Grid, SignalManager):
     __gtype_name__ = "ContactViewItem"
 
@@ -1118,7 +1119,7 @@ class GlobalListItem(GObject.Object):
         return f"GlobalListItem: {self.props.jid} {self.props.name}"
 
 
-@Gtk.Template(filename='gajim/data/gui/global_view_item.ui')
+@Gtk.Template(filename=get_ui_path('global_view_item.ui'))
 class GlobalViewItem(Gtk.Box):
     __gtype_name__ = 'GlobalViewItem'
 
