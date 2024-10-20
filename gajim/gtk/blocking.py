@@ -35,8 +35,11 @@ class BlockingList(GajimAppWindow):
         self._client = app.get_client(account)
         self._prev_blocked_jids: set[JID] = set()
 
-        self._ui = get_builder('blocking_list.ui', self)
+        self._ui = get_builder('blocking_list.ui')
         self.set_child(self._ui.blocking_grid)
+
+        self._blocking_store = Gtk.ListStore(str)
+        self._ui.block_view.set_model(self._blocking_store)
 
         self._spinner = Gtk.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
@@ -65,10 +68,10 @@ class BlockingList(GajimAppWindow):
             return
 
         self._prev_blocked_jids = blocking_list
-        self._ui.blocking_store.clear()
+        self._blocking_store.clear()
 
         for jid in blocking_list:
-            self._ui.blocking_store.append([str(jid)])
+            self._blocking_store.append([str(jid)])
 
         self._set_grid_state(True)
         self._disable_spinner()
@@ -92,25 +95,25 @@ class BlockingList(GajimAppWindow):
                     path: str,
                     new_text: str
                     ) -> None:
-        iter_ = self._ui.blocking_store.get_iter(path)
-        self._ui.blocking_store.set_value(iter_, 0, new_text)
+        iter_ = self._blocking_store.get_iter(path)
+        self._blocking_store.set_value(iter_, 0, new_text)
 
     def _on_add(self, _button: Any) -> None:
-        self._ui.blocking_store.append([''])
+        self._blocking_store.append([''])
 
     def _on_remove(self, _button: Any) -> None:
         selected_rows = self._ui.block_view.get_selection().get_selected_rows()
         mod, paths = selected_rows
         for path in paths:
             iter_ = mod.get_iter(path)
-            self._ui.blocking_store.remove(iter_)
+            self._blocking_store.remove(iter_)
 
     def _on_save(self, _button: Gtk.Button) -> None:
         self._activate_spinner()
         self._set_grid_state(False)
 
         blocked_jids: set[JID] = set()
-        for item in self._ui.blocking_store:
+        for item in self._blocking_store:
             if not item[0]:
                 # No address/placeholder
                 continue
