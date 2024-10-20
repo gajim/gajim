@@ -37,6 +37,7 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
+from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -93,6 +94,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._ui = get_builder('main.ui', self)
 
         self.set_child(self._ui.main_grid)
+
+        self._emoji_chooser: EmojiChooser | None = None
 
         self._main_stack = MainStack()
         self._ui.main_grid.attach(self._main_stack, 1, 0, 1, 1)
@@ -172,6 +175,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def get_chat_stack(self) -> ChatStack:
         return self._chat_page.get_chat_stack()
+
+    def get_emoji_chooser(self) -> EmojiChooser:
+        if self._emoji_chooser is None:
+            self._emoji_chooser = EmojiChooser()
+        return self._emoji_chooser
 
     def is_minimized(self) -> bool:
         if app.is_display(Display.WAYLAND):

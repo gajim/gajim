@@ -22,6 +22,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
+from gajim.gtk.util import SignalManager
 from gajim.gtk.util import iterate_children
 
 if TYPE_CHECKING:
@@ -40,9 +41,11 @@ class ReactionData(NamedTuple):
     from_us: bool
 
 
-class ReactionsBar(Gtk.Box):
+class ReactionsBar(Gtk.Box, SignalManager):
     def __init__(self, message_row: MessageRow, contact: types.ChatContactT) -> None:
         Gtk.Box.__init__(self, spacing=3, visible=False, halign=Gtk.Align.START)
+        SignalManager.__init__(self)
+
         self._message_row = message_row
         self._contact = contact
         if isinstance(self._contact, GroupchatContact):
@@ -54,18 +57,29 @@ class ReactionsBar(Gtk.Box):
 
         self._reactions: list[mod.Reaction] = []
 
-        emoji_popover = Gtk.EmojiChooser()
-        emoji_popover.connect('emoji-picked', self._on_emoji_added)
-
-        add_reaction_button = Gtk.MenuButton(
+        self._add_reaction_button = Gtk.MenuButton(
             icon_name='lucide-smile-plus-symbolic',
             tooltip_text=_('Add Reaction…'),
-            popover=emoji_popover,
         )
-        add_reaction_button.add_css_class('flat')
-        add_reaction_button.add_css_class('reaction-add')
 
-        self.append(add_reaction_button)
+        self._add_reaction_button.set_create_popup_func(
+            self._on_emoji_create_popover
+        )
+        self._add_reaction_button.add_css_class('flat')
+        self._add_reaction_button.add_css_class('reaction-add')
+
+        self.append(self._add_reaction_button)
+
+    def do_unroot(self) -> None:
+        self._reactions.clear()
+        self._contact.disconnect_all_from_obj(self)
+        self._client.disconnect_all_from_obj(self)
+        self._add_reaction_button.set_create_popup_func(None)
+        del self._add_reaction_button
+        del self._message_row
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_client_state_changed(self, *args: Any) -> None:
         self.set_sensitive(self._get_reactions_enabled())
@@ -162,7 +176,7 @@ class ReactionsBar(Gtk.Box):
         more_reactions_button = None
         for index, (emoji, data) in enumerate(aggregated_reactions.items()):
             reaction_button = ReactionButton(emoji, data)
-            reaction_button.connect('clicked', self._on_reaction_clicked)
+            self._connect(reaction_button, 'clicked', self._on_reaction_clicked)
             if index + 1 <= MAX_VISIBLE_REACTIONS:
                 self.prepend(reaction_button)
             elif index + 1 > MAX_VISIBLE_REACTIONS and index + 1 <= MAX_TOTAL_REACTIONS:
@@ -175,6 +189,11 @@ class ReactionsBar(Gtk.Box):
                 break
 
         self.show()
+
+    def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
+        emoji_chooser = app.window.get_emoji_chooser()
+        button.set_popover(emoji_chooser)
+        emoji_chooser.set_emoji_picked_func(self._on_emoji_added)
 
 
 class ReactionButton(Gtk.Button):
