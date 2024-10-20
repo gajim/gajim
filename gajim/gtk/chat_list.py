@@ -22,6 +22,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common.const import Direction
 from gajim.common.const import RowHeaderType
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
@@ -32,14 +33,14 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.user_strings import get_moderation_text
 
 from gajim.gtk.chat_list_row import ChatListRow
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import get_listbox_row_count
 from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.chatlist')
 
 
-class ChatList(Gtk.ListBox, EventHelper):
+class ChatList(Gtk.ListBox, EventHelper, SignalManager):
 
     __gsignals__ = {
         'chat-order-changed': (GObject.SignalFlags.RUN_LAST,
@@ -50,6 +51,8 @@ class ChatList(Gtk.ListBox, EventHelper):
     def __init__(self, workspace_id: str) -> None:
         Gtk.ListBox.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
+
         self._workspace_id = workspace_id
 
         self._chats: dict[tuple[str, JID], ChatListRow] = {}
@@ -68,15 +71,15 @@ class ChatList(Gtk.ListBox, EventHelper):
         self._pinned_order_change = False
 
         hover_controller = Gtk.EventControllerMotion()
-        hover_controller.connect('enter', self._on_cursor_enter)
-        hover_controller.connect('leave', self._on_cursor_leave)
+        self._connect(hover_controller, 'enter', self._on_cursor_enter)
+        self._connect(hover_controller, 'leave', self._on_cursor_leave)
         self.add_controller(hover_controller)
 
         drop_target = Gtk.DropTarget(
             formats=Gdk.ContentFormats.new_for_gtype(ChatListRow),
             actions=Gdk.DragAction.MOVE
         )
-        drop_target.connect('drop', self._on_drop)
+        self._connect(drop_target, 'drop', self._on_drop)
         self.add_controller(drop_target)
 
         self._chat_order: list[ChatListRow] = []
@@ -87,9 +90,17 @@ class ChatList(Gtk.ListBox, EventHelper):
             ('bookmarks-received', ged.GUI1, self._on_bookmarks_received),
         ])
 
-        self.connect('destroy', self._on_destroy)
-
         self._timer_id = GLib.timeout_add_seconds(60, self._update_row_state)
+
+    def do_unroot(self) -> None:
+        Gtk.ListBox.do_unroot(self)
+        self._disconnect_all()
+        self.unregister_events()
+        self.set_filter_func(None)
+        self.set_header_func(None)
+        self.set_sort_func(None)
+        GLib.source_remove(self._timer_id)
+        app.check_finalize(self)
 
     @property
     def workspace_id(self) -> str:
@@ -286,11 +297,11 @@ class ChatList(Gtk.ListBox, EventHelper):
                     ) -> None:
 
         row = self._chats.pop((account, jid))
+
         if row.is_pinned:
             self._chat_order.remove(row)
         self.remove(row)
-        # TODO GTK4
-        # row.destroy()
+
         if emit_unread:
             self._emit_unread_changed()
 
@@ -662,6 +673,3 @@ class ChatList(Gtk.ListBox, EventHelper):
     def _on_bookmarks_received(self, _event: events.BookmarksReceived) -> None:
         for row in self._iterate_rows():
             row.update_name()
-
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
-        GLib.source_remove(self._timer_id)
