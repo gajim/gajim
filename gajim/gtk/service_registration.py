@@ -55,7 +55,7 @@ class ServiceRegistration(Assistant):
         self.get_page('error').set_title(_('Registration failed'))
         self.get_page('error').set_heading(_('Registration failed'))
 
-        self.connect('button-clicked', self._on_button_clicked)
+        self._connect(self, 'button-clicked', self._on_button_clicked)
 
         self.show_all()
 
@@ -103,7 +103,7 @@ class ServiceRegistration(Assistant):
             self.show_page('form', Gtk.StackTransitionType.SLIDE_RIGHT)
 
         if button_name == 'close':
-            self.destroy()
+            self.close()
 
     def _request_form(self) -> None:
         self.get_page('progress').set_title(_('Requesting Register Form'))
@@ -172,7 +172,7 @@ class Form(Page):
         }
         self._dataform_widget = DataFormWidget(form, options)
         self._dataform_widget.set_propagate_natural_height(True)
-        self._dataform_widget.connect('is-valid', self._on_is_valid)
+        self._connect(self._dataform_widget, 'is-valid', self._on_is_valid)
         self._dataform_widget.validate()
         self.append(self._dataform_widget)
 
