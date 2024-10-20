@@ -123,7 +123,7 @@ class AccountsWindow(GajimAppWindow):
              DialogButton.make('Accept',
                                text=_('_Re-Login'),
                                callback=relog)],
-            transient_for=self).show()
+            transient_for=self.window).show()
 
     @staticmethod
     def _get_relogin_settings(account: str) -> list[AllSettingsT]:
@@ -252,8 +252,6 @@ class AccountMenu(Gtk.Box):
         sub_menu = self._stack.get_child_by_name(f'{row.account}-menu')
         assert sub_menu is not None
         self._stack.remove(sub_menu)
-        # row.destroy() GTK4 TODO
-        # sub_menu.destroy()
 
     def _on_account_row_activated(self,
                                   _listbox: Gtk.ListBox,
@@ -1074,9 +1072,7 @@ class PriorityDialog(SettingsDialog):
         SettingsDialog.__init__(self, parent, _('Priority'),
                                 Gtk.DialogFlags.MODAL, settings, account)
 
-        self.connect('destroy', self.on_destroy)
-
-    def on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
         # Update priority
         if self.account not in app.settings.get_active_accounts():
             return
@@ -1179,8 +1175,6 @@ class LoginDialog(SettingsDialog):
         SettingsDialog.__init__(self, parent, _('Login Settings'),
                                 Gtk.DialogFlags.MODAL, settings, account)
 
-        self.connect('destroy', self.on_destroy)
-
     def on_password_change(self, new_password: str, _data: Any) -> None:
         try:
             new_password = saslprep(new_password)
@@ -1190,7 +1184,7 @@ class LoginDialog(SettingsDialog):
 
         passwords.save_password(self.account, new_password)
 
-    def on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
         savepass = app.settings.get_account_setting(self.account, 'savepass')
         if not savepass:
             passwords.delete_password(self.account)

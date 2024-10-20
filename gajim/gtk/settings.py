@@ -538,10 +538,10 @@ class DialogSetting(GenericSetting):
         self.setting_box.append(self.setting_value)
 
     def show_dialog(self, parent: Gtk.Root) -> None:
-        # TODO broken and not used
         if self.dialog:
             dialog = self.dialog(self.account, parent)
-            dialog.connect('destroy', self.on_destroy)
+            # TODO GTK4 broken (used by classes inheriting from dialogsetting)
+            # dialog.connect('destroy', self.on_destroy)
             dialog.show()
 
     def on_destroy(self, *args: Any) -> None:
