@@ -24,7 +24,7 @@ from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
 from gajim.gtk.menus import get_groupchat_participant_menu
-from gajim.gtk.util import GajimPopover, SignalManager
+from gajim.gtk.util import GajimPopover
 
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow
@@ -133,7 +133,7 @@ class MessageRowActions(Gtk.Box):
             GLib.source_remove(self._timeout_id)
             self._timeout_id = None
 
-        self_height = self.get_allocated_height()
+        self_height = self.get_height()
         y_coord = max(y_coord, self_height)
 
         # Subtract some space to let MessageRowActions 'flow' above the row,
@@ -147,7 +147,7 @@ class MessageRowActions(Gtk.Box):
 
         self.set_margin_top(int(adjusted_y_coord))
 
-        message_row_width = self._message_row.get_allocated_width()
+        message_row_width = self._message_row.get_width()
         reactions_visible = self._get_reactions_visible()
 
         for button in self._reaction_buttons:

@@ -844,6 +844,11 @@ messagedialog.confirmation-dialog > box { margin-top: 18px; }
 .reaction label {
     font-size: 90%;
 }
+.reaction > button {
+    border: none;
+    padding: 0;
+    background: transparent;
+}
 .dummy-emoji-entry {
     padding: 0;
     border: 0;
