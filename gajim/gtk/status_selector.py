@@ -26,12 +26,13 @@ from gajim.gtk.util import EventHelper
 
 class StatusSelector(Gtk.MenuButton, EventHelper):
     def __init__(self, account: str | None = None, compact: bool = False):
-        Gtk.MenuButton.__init__(self)
+        Gtk.MenuButton.__init__(self, direction=Gtk.ArrowType.UP)
         EventHelper.__init__(self)
-        self.set_direction(Gtk.ArrowType.UP)
+
         self._account = account
         self._compact = compact
-        self._create_popover()
+        self._status_popover = self._create_popover()
+        self.set_popover(self._status_popover)
 
         self._current_show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
         surface = get_show_circle(
@@ -51,8 +52,6 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
 
         self.set_child(box)
 
-        self.connect('destroy', self._on_destroy)
-
         self.register_event('our-show', ged.GUI1, self._on_our_show)
         self.register_event('account-enabled',
                             ged.GUI1,
@@ -61,6 +60,12 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
+
+    def do_unroot(self) -> None:
+        Gtk.MenuButton.do_unroot(self)
+        self.unregister_events()
+        del self._status_popover
+        app.check_finalize(self)
 
     def _on_our_show(self, event: events.ShowChanged) -> None:
         self.update()
@@ -75,7 +80,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
                                  state: SimpleClientState) -> None:
         self.update()
 
-    def _create_popover(self) -> None:
+    def _create_popover(self) -> Gtk.Popover:
         popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         popover_box.get_style_context().add_class('m-3')
         popover_items = [
@@ -112,9 +117,9 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
             button.connect('clicked', self._on_change_status)
             popover_box.append(button)
 
-        self._status_popover = Gtk.Popover()
-        self._status_popover.set_child(popover_box)
-        self.set_popover(self._status_popover)
+        status_popover = Gtk.Popover()
+        status_popover.set_child(popover_box)
+        return status_popover
 
     def _on_change_status(self, button: Gtk.Button) -> None:
         self._status_popover.popdown()
@@ -142,7 +147,3 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
                 _('Status: %s') % show_label)
             if not self._compact:
                 self._current_show_label.set_text(show_label)
-
-    def _on_destroy(self, widget: StatusSelector) -> None:
-        # self._status_popover.destroy() GTK4 TODO
-        app.check_finalize(self)
