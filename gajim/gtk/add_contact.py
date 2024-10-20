@@ -105,13 +105,13 @@ class AddContact(Assistant):
                     name=self._result.gateway_name,
                     auto_auth=True)
             app.window.show_account_page(account)
-            self.destroy()
+            self.close()
             return
 
         if button_name == 'join':
             _, jid = address_page.get_account_and_jid()
             open_window('GroupchatJoin', account=account, jid=jid)
-            self.destroy()
+            self.close()
 
     def _start_disco(self) -> None:
         self._result = None
