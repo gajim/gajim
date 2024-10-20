@@ -18,12 +18,15 @@ from gajim.common.util.status import get_global_status_message
 from gajim.common.util.text import to_one_line
 
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import SignalManager
 
 
-class StatusMessageSelector(Gtk.Box, EventHelper):
+class StatusMessageSelector(Gtk.Box, EventHelper, SignalManager):
     def __init__(self, account: str | None = None) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
+
         self.get_style_context().add_class('linked')
         self._account = account
 
@@ -32,17 +35,15 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
         self._entry.set_property('show-emoji-icon', True)
         self._entry.set_property('enable-emoji-completion', True)
         self._entry.set_placeholder_text(_('Status message…'))
-        self._entry.connect('activate', self._set_status_message)
-        self._entry.connect('changed', self._on_changed)
+        self._connect(self._entry, 'activate', self._set_status_message)
+        self._connect(self._entry, 'changed', self._on_changed)
 
         self._button = Gtk.Button.new_from_icon_name(
             'object-select-symbolic')
         self._button.set_tooltip_text(_('Set status message'))
-        self._button.connect('clicked', self._set_status_message)
+        self._connect(self._button, 'clicked', self._set_status_message)
         self.append(self._entry)
         self.append(self._button)
-
-        self.connect('destroy', self._on_destroy)
 
         self.register_event('our-show', ged.GUI1, self._on_our_show)
         self.register_event('account-enabled',
@@ -52,6 +53,12 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
         for client in app.get_clients():
             client.connect_signal('state-changed',
                                   self._on_client_state_changed)
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self.unregister_events()
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def _on_our_show(self, event: events.ShowChanged) -> None:
         self.update()
@@ -94,6 +101,3 @@ class StatusMessageSelector(Gtk.Box, EventHelper):
             message = client.status_message
 
         self._entry.set_text(message)
-
-    def _on_destroy(self, widget: StatusMessageSelector) -> None:
-        app.check_finalize(self)
