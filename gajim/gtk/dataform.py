@@ -7,8 +7,6 @@ from __future__ import annotations
 from typing import Any
 from typing import cast
 
-import logging
-
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -24,9 +22,10 @@ from gajim.common.i18n import _
 from gajim.common.util.image import scale_pixbuf_from_data
 from gajim.common.util.uri import open_uri
 
-from gajim.gtk.util import SignalManager, make_href_markup
+from gajim.gtk.util import make_href_markup
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import MultiLineLabel
+from gajim.gtk.util import SignalManager
 
 # Options
 
@@ -50,13 +49,12 @@ class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
                  options: dict[str, Any] | None = None
                  ) -> None:
 
-        Gtk.ScrolledWindow.__init__(self)
+        Gtk.ScrolledWindow.__init__(
+            self, hexpand=True, vexpand=True, overlay_scrolling=False
+        )
         SignalManager.__init__(self)
 
-        self.set_hexpand(True)
-        self.set_vexpand(True)
-        self.get_style_context().add_class('data-form-widget')
-        self.set_overlay_scrolling(False)
+        self.add_css_class('data-form-widget')
 
         if options is None:
             options = {}
@@ -120,6 +118,7 @@ class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
                 break
 
     def _on_form_completed(self, *_args) -> None:
+        # TODO GTK4
         self.get_toplevel().activate_default()
 
 

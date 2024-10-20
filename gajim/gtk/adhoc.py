@@ -33,7 +33,8 @@ from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import container_remove_all, ensure_not_destroyed
+from gajim.gtk.util import container_remove_all
+from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import MultiLineLabel
 
 log = logging.getLogger('gajim.gtk.adhoc')
@@ -70,10 +71,10 @@ class AdHocCommands(Assistant):
             'executing': Executing(),
         })
 
-        self.get_page('commands').connect('execute', self._on_execute)
+        commands_page = self.get_page('commands')
+        self._connect(commands_page, 'execute', self._on_execute)
 
-        self.connect('button-clicked', self._on_button_clicked)
-        self.connect('destroy', self._on_destroy)
+        self._connect(self, 'button-clicked', self._on_button_clicked)
 
         self._client.get_module('AdHocCommands').request_command_list(
             self.jid, callback=self._received_command_list)
@@ -117,7 +118,7 @@ class AdHocCommands(Assistant):
         error_page.set_text(text)
         self.show_page('error')
 
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+    def _cleanup(self) -> None:
         self._destroyed = True
 
     def _on_button_clicked(self,
