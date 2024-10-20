@@ -116,14 +116,36 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if page is not None:
             self._switcher.set_row(page)
 
-        self.connect('destroy', self._on_destroy)
-
         connect_destroy(self._ui.tree_selection,
                         'changed', self._on_group_selection_changed)
         connect_destroy(self._ui.toggle_renderer,
                         'toggled', self._on_group_toggled)
         connect_destroy(self._ui.text_renderer,
                         'edited', self._on_group_name_edited)
+
+        self._connect(
+            self._ui.edit_contact_name_header_button,
+            'clicked',
+            self._on_edit_contact_name_header_clicked,
+        )
+        self._connect(
+            self._ui.from_subscription_switch,
+            'state-set',
+            self._on_from_subscription_switch_toggled,
+        )
+        self._connect(
+            self._ui.to_subscription_button,
+            'clicked',
+            self._on_to_subscription_button_clicked,
+        )
+        self._connect(
+            self._ui.group_add_button, 'clicked', self._on_group_add_button_clicked
+        )
+        self._connect(
+            self._ui.group_remove_button,
+            'clicked',
+            self._on_group_remove_button_clicked,
+        )
 
         self.register_events([
             ('subscribed-presence-received', ged.GUI1,
@@ -155,7 +177,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         name = self._ui.main_stack.get_visible_child_name()
         self._ui.header_revealer.set_reveal_child(name != 'information')
 
-    def _on_destroy(self, _widget: ContactInfo) -> None:
+    def _cleanup(self) -> None:
         for task in self._tasks:
             task.cancel()
 
@@ -181,7 +203,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
                 callback=self._on_vcard_received)
 
         jid = str(contact.get_address())
-
 
         self._ui.contact_jid_label.set_text(jid)
         self._ui.contact_jid_label.set_tooltip_text(jid)

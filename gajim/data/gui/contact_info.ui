@@ -192,7 +192,6 @@
                     <property name="receives-default">1</property>
                     <property name="tooltip-text" translatable="1">Edit Name…</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="_on_edit_contact_name_header_clicked" swapped="no"/>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">document-edit-symbolic</property>
@@ -371,7 +370,6 @@
                                                 <property name="focusable">1</property>
                                                 <property name="halign">end</property>
                                                 <property name="valign">center</property>
-                                                <signal name="state-set" handler="_on_from_subscription_switch_toggled" swapped="no"/>
                                               </object>
                                             </child>
                                           </object>
@@ -445,7 +443,6 @@
                                                                 <property name="tooltip-text" translatable="1">Request to see this contact&apos;s online status</property>
                                                                 <property name="valign">center</property>
                                                                 <property name="use-underline">1</property>
-                                                                <signal name="clicked" handler="_on_to_subscription_button_clicked" swapped="no"/>
                                                               </object>
                                                             </child>
                                                           </object>
@@ -641,17 +638,15 @@
                                         <property name="tooltip-text" translatable="1">Add Group…</property>
                                         <property name="use-underline">1</property>
                                         <property name="icon-name">list-add-symbolic</property>
-                                        <signal name="clicked" handler="_on_group_add_button_clicked" swapped="no"/>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkButton" id="group_remove_button">
                                         <property name="sensitive">0</property>
                                         <property name="can-focus">0</property>
-                                        <property name="tooltip-text" translatable="1">Remove Group...</property>
+                                        <property name="tooltip-text" translatable="1">Remove Group…</property>
                                         <property name="use-underline">1</property>
                                         <property name="icon-name">list-remove-symbolic</property>
-                                        <signal name="clicked" handler="_on_group_remove_button_clicked" swapped="no"/>
                                       </object>
                                     </child>
                                     <style>
