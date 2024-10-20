@@ -17,7 +17,8 @@ from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.filechoosers import FileChooserButton, Filter
+from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
 
 SOUNDS = {
@@ -41,7 +42,7 @@ class Column(IntEnum):
 
 
 class ManageSounds(GajimAppWindow):
-    def __init__(self, transient_for: Gtk.Window) -> None:
+    def __init__(self, transient_for: Gtk.Window | None = None) -> None:
         GajimAppWindow.__init__(
             self,
             name='ManageSounds',
@@ -55,6 +56,9 @@ class ManageSounds(GajimAppWindow):
         self._ui = get_builder('manage_sounds.ui')
         self.set_child(self._ui.manage_sounds)
 
+        liststore = Gtk.ListStore(bool, str, str, str)
+        self._ui.sounds_treeview.set_model(liststore)
+
         self._file_chooser_button = FileChooserButton(
             filters=[
                 Filter(name=_('All files'), patterns=['*']),
@@ -65,7 +69,7 @@ class ManageSounds(GajimAppWindow):
         self._file_chooser_button.set_hexpand(True)
         self._ui.sound_buttons_box.prepend(self._file_chooser_button)
 
-        self._connect(self._ui.liststore1, 'row-changed', self._on_row_changed)
+        self._connect(liststore, 'row-changed', self._on_row_changed)
         self._connect(
             self._ui.sounds_treeview, 'cursor-changed', self._on_cursor_changed
         )
