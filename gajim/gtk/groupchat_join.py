@@ -1,4 +1,3 @@
-
 # This file is part of Gajim.
 #
 # SPDX-License-Identifier: GPL-3.0-only
@@ -59,8 +58,7 @@ class GroupchatJoin(GajimAppWindow):
         progress_page = cast(ProgressPage, self._stack.get_visible_child())
         progress_page.start()
 
-        self._stack.connect('notify::visible-child-name',
-                            self._on_page_changed)
+        self._connect(self._stack, 'notify::visible-child-name', self._on_page_changed)
         self._main_box.append(self._stack)
 
         self._nick_chooser = NickChooser()
@@ -69,7 +67,7 @@ class GroupchatJoin(GajimAppWindow):
         self._join_button.set_halign(Gtk.Align.END)
         self._join_button.set_sensitive(False)
         self._join_button.get_style_context().add_class('suggested-action')
-        self._join_button.connect('clicked', self._on_join)
+        self._connect(self._join_button, 'clicked', self._on_join)
 
         join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         join_box.get_style_context().add_class('linked')
@@ -78,8 +76,6 @@ class GroupchatJoin(GajimAppWindow):
         join_box.append(self._join_button)
 
         self._main_box.append(join_box)
-
-        self.connect('destroy', self._on_destroy)
 
         self.set_child(self._main_box)
 
@@ -139,9 +135,9 @@ class GroupchatJoin(GajimAppWindow):
 
         app.window.show_add_join_groupchat(
             self.account, self.jid, nickname=nickname)
-        self.destroy()
+        self.close()
 
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+    def _cleanup(self) -> None:
         self._destroyed = True
 
 
