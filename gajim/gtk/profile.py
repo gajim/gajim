@@ -3,11 +3,11 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from pathlib import Path
 from typing import Any
 from typing import cast
 
 import logging
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -80,7 +80,7 @@ class ProfileWindow(GajimAppWindow):
 
         menu = Gio.Menu()
         for action, label in MENU_DICT.items():
-            menu.append(label, 'win.add-' + action.lower())
+            menu.append(label, f'win.add-{action.lower()}')
 
         self._ui.add_entry_button.set_menu_model(menu)
         self._add_actions()
@@ -91,9 +91,13 @@ class ProfileWindow(GajimAppWindow):
         self._connect(self._ui.avatar_cancel, 'clicked', self._on_cancel_update_avatar)
         self._connect(self._ui.save_button, 'clicked', self._on_save_clicked)
         self._connect(self._ui.cancel_button, 'clicked', self._on_cancel_clicked)
-        self._connect(self._ui.avatar_nick_access, 'notify::active', self._access_switch_toggled)
+        self._connect(
+            self._ui.avatar_nick_access, 'notify::active', self._access_switch_toggled
+        )
         self._connect(self._ui.remove_avatar_button, 'clicked', self._on_remove_avatar)
-        self._connect(self._ui.vcard_access, 'notify::active', self._access_switch_toggled)
+        self._connect(
+            self._ui.vcard_access, 'notify::active', self._access_switch_toggled
+        )
 
         self._avatar_edit_button = AvatarFileChooserButton(
             tooltip=_('Change your profile picture'),
@@ -213,9 +217,9 @@ class ProfileWindow(GajimAppWindow):
 
     def _add_actions(self) -> None:
         for action in MENU_DICT:
-            action_name = 'add-' + action.lower()
+            action_name = f'add-{action.lower()}'
             act = Gio.SimpleAction.new(action_name, None)
-            act.connect('activate', self._on_action)
+            self._connect(act, 'activate', self._on_action)
             self.window.add_action(act)
 
     def _on_action(self,
@@ -246,7 +250,6 @@ class ProfileWindow(GajimAppWindow):
         self._ui.cancel_button.hide()
         self._ui.save_button.hide()
         self._ui.remove_avatar_button.hide()
-        self._ui.edit_avatar_button.hide()
         self._ui.privacy_button.hide()
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
@@ -265,7 +268,6 @@ class ProfileWindow(GajimAppWindow):
         self._ui.save_button.hide()
         self._ui.edit_button.show()
         self._ui.remove_avatar_button.hide()
-        self._ui.edit_avatar_button.hide()
         self._ui.privacy_button.hide()
         self._ui.nickname_entry.set_sensitive(False)
 
@@ -359,7 +361,9 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.hide()
         self._new_avatar = None
 
-    def _on_edit_avatar(self, _button: AvatarFileChooserButton, paths: list[Path]) -> None:
+    def _on_edit_avatar(
+        self, _button: AvatarFileChooserButton, paths: list[Path]
+    ) -> None:
         if self._avatar_selector is None:
             self._avatar_selector = AvatarSelector()
             self._ui.avatar_selector_box.append(self._avatar_selector)
