@@ -31,13 +31,12 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.menus import get_component_search_menu
 from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import GajimPopover
 
 log = logging.getLogger('gajim.gtk.search')
 
 
-class ComponentSearch(Assistant, EventHelper):
+class ComponentSearch(Assistant):
     def __init__(self,
                  account: str,
                  jid: str,
@@ -47,7 +46,6 @@ class ComponentSearch(Assistant, EventHelper):
                            transient_for=transient_for,
                            width=700,
                            height=500)
-        EventHelper.__init__(self)
 
         self._client = app.get_client(account)
         self.account = account
@@ -69,8 +67,7 @@ class ComponentSearch(Assistant, EventHelper):
         progress.set_title(_('Searching'))
         progress.set_text(_('Searching…'))
 
-        self.connect('button-clicked', self._on_button_clicked)
-        self.connect('destroy', self._on_destroy)
+        self._connect(self, 'button-clicked', self._on_button_clicked)
 
         self.register_events([
             ('search-form-received', ged.GUI1, self._search_form_received),
@@ -112,7 +109,7 @@ class ComponentSearch(Assistant, EventHelper):
             return
 
         if button_name == 'close':
-            self.destroy()
+            self.close()
 
     @ensure_not_destroyed
     def _search_form_received(self, event: SearchFormReceivedEvent) -> None:
@@ -138,7 +135,8 @@ class ComponentSearch(Assistant, EventHelper):
         self.get_page('result').process_result(event.data)
         self.show_page('result')
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
+        self.unregister_events()
         self._destroyed = True
 
 
@@ -160,8 +158,6 @@ class SearchForm(Page):
         self.complete = False
 
         self._dataform_widget = None
-
-        self.show_all()
 
     @property
     def search_form(self) -> dataforms.SimpleDataForm:
@@ -188,7 +184,7 @@ class SearchForm(Page):
         form = dataforms.extend_form(node=form)
         self._dataform_widget = DataFormWidget(form, options=options)
         self._dataform_widget.set_propagate_natural_height(True)
-        self._dataform_widget.connect('is-valid', self._on_is_valid)
+        self._connect(self._dataform_widget, 'is-valid', self._on_is_valid)
         self._dataform_widget.validate()
         self.append(self._dataform_widget)
 
@@ -230,8 +226,7 @@ class Result(Page):
 
     def process_result(self, form: Node | None) -> None:
         if self._treeview is not None:
-            self._scrolled.remove(self._treeview)
-            self._treeview.destroy()
+            self._scrolled.set_child(None)
             self._treeview = None
             self._label.hide()
             self._scrolled.hide()
@@ -273,7 +268,10 @@ class Result(Page):
         self._treeview.set_hexpand(True)
         self._treeview.set_vexpand(True)
         self._treeview.get_style_context().add_class('gajim-treeview')
-        self._treeview.connect('button-press-event', self._on_button_press)
+
+        gesture_secondary = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        self._connect(gesture_secondary, 'pressed', self._on_button_press)
+        self._treeview.add_controller(gesture_secondary)
 
         for field, counter in zip(form.reported.iter_fields(),
                                   itertools.count(),
@@ -285,22 +283,27 @@ class Result(Page):
 
         self._treeview.set_model(liststore)
         self._treeview.show()
-        self._scrolled.set_child(self._treeview)
 
-    def _on_button_press(self,
-                         treeview: Gtk.TreeView,
-                         event: Any
-                         ) -> bool:
+        box = Gtk.Box()
+        box.append(self._treeview)
 
-        if event.button != Gdk.BUTTON_SECONDARY:
-            return False
+        self._popover_menu = GajimPopover(None)
+        box.append(self._popover_menu)
+        self._scrolled.set_child(box)
 
-        path = treeview.get_path_at_pos(int(event.x), int(event.y))
+    def _on_button_press(
+        self,
+        gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+        path = self._treeview.get_path_at_pos(int(x), int(y))
         if path is None:
             return False
 
         path, _column, _x, _y = path
-        store = treeview.get_model()
+        store = self._treeview.get_model()
         assert store is not None
         assert path is not None
         iter_ = store.get_iter(path)
@@ -311,10 +314,10 @@ class Result(Page):
         if self._jid_col is not None:
             jid = column_values[self._jid_col]
         menu = get_component_search_menu(jid, text)
-
-        popover = GajimPopover(menu, relative_to=self, event=event)
-        popover.popup()
-        return True
+        self._popover_menu.set_menu_model(menu)
+        self._popover_menu.set_pointing_to_coord(x, y)
+        self._popover_menu.popup()
+        return Gdk.EVENT_STOP
 
     def get_visible_buttons(self) -> list[str]:
         return ['close', 'new-search']
