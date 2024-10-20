@@ -86,6 +86,7 @@
                         <child type="center">
                           <object class="GtkBox">
                             <property name="margin-bottom">12</property>
+                            <property name="margin-end">12</property>
                             <property name="orientation">1</property>
                             <property name="spacing">6</property>
                             <child>
