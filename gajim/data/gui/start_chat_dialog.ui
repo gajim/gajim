@@ -231,7 +231,18 @@
             <child>
               <object class="GtkBox">
                 <child>
+                  <object class="GtkButton" id="info_back_button">
+                    <property name="label" translatable="1">_Back</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkBox" id="join_box">
+                    <property name="halign">end</property>
+                    <property name="hexpand">true</property>
                     <child>
                       <placeholder/>
                     </child>
@@ -250,15 +261,6 @@
                     <style>
                       <class name="linked"/>
                     </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="info_back_button">
-                    <property name="label" translatable="1">_Back</property>
-                    <property name="focusable">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="halign">start</property>
-                    <property name="use-underline">1</property>
                   </object>
                 </child>
               </object>

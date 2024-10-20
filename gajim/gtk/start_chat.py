@@ -92,7 +92,7 @@ class StartChatDialog(GajimAppWindow):
         self.set_child(self._ui.stack)
 
         self._nick_chooser = NickChooser()
-        self._ui.join_box.append(self._nick_chooser)
+        self._ui.join_box.prepend(self._nick_chooser)
 
         self._search_is_valid_jid = False
 
@@ -144,7 +144,7 @@ class StartChatDialog(GajimAppWindow):
         self._ui.global_scrolled.set_child(self._global_search_view)
 
         self._muc_info_box = GroupChatInfoScrolled()
-        self._ui.info_box.append(self._muc_info_box)
+        self._ui.info_box.prepend(self._muc_info_box)
 
         self._ui.infobar.set_reveal_child(app.settings.get('show_help_start_chat'))
 
