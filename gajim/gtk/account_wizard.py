@@ -55,7 +55,8 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import clear_listbox, container_remove_all
+from gajim.gtk.util import clear_listbox
+from gajim.gtk.util import container_remove_all
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_color_for_account
 from gajim.gtk.util import open_window
@@ -92,9 +93,10 @@ class AccountWizard(Assistant):
 
         self.add_default_page('progress')
 
-        self.get_page('login').connect('clicked', self._on_button_clicked)
-        self.connect('button-clicked', self._on_assistant_button_clicked)
-        self.connect('page-changed', self._on_page_changed)
+        login_page = self.get_page('login')
+        self._connect(login_page, 'clicked', self._on_button_clicked)
+        self._connect(self, 'button-clicked', self._on_assistant_button_clicked)
+        self._connect(self, 'page-changed', self._on_page_changed)
 
         self.update_proxy_list()
 
@@ -597,18 +599,19 @@ class Login(Page):
         Page.__init__(self)
         self.title = _('Add Account')
 
-        self._ui = get_builder('account_wizard.ui', self)
-        self._ui.log_in_address_entry.connect(
-            'activate', self._on_address_entry_activate)
-        self._ui.log_in_address_entry.connect(
-            'changed', self._on_address_changed)
-        self._ui.log_in_password_entry.connect(
-            'changed', self._set_complete)
-        self._ui.log_in_password_entry.connect(
-            'activate', self._on_password_entry_activate)
-
-        self._ui.log_in_button.connect('clicked', self._on_login)
-        self._ui.sign_up_button.connect('clicked', self._on_signup)
+        self._ui = get_builder('account_wizard.ui')
+        self._connect(
+            self._ui.log_in_address_entry, 'activate', self._on_address_entry_activate
+        )
+        self._connect(
+            self._ui.log_in_address_entry, 'changed', self._on_address_changed
+        )
+        self._connect(self._ui.log_in_password_entry, 'changed', self._set_complete)
+        self._connect(
+            self._ui.log_in_password_entry, 'activate', self._on_password_entry_activate
+        )
+        self._connect(self._ui.log_in_button, 'clicked', self._on_login)
+        self._connect(self._ui.sign_up_button, 'clicked', self._on_signup)
 
         self.append(self._ui.login_box)
 
@@ -706,23 +709,22 @@ class Signup(Page):
         self._servers: list[dict[str, Any]] = []
         self._provider_list_request: HTTPRequest | None = None
 
-        self._ui = get_builder('account_wizard.ui', self)
+        self._ui = get_builder('account_wizard.ui')
         self._ui.server_comboboxtext_sign_up_entry.set_activates_default(True)
 
         self._ui.recommendation_link1.connect(
             'activate-link', self._on_activate_link)
         self._ui.recommendation_link2.connect(
             'activate-link', self._on_activate_link)
-        self._ui.visit_server_button.connect('clicked',
-                                             self._on_visit_server)
-        self._ui.server_comboboxtext_sign_up_entry.connect(
-            'changed', self._set_complete)
+        self._connect(self._ui.visit_server_button, 'clicked', self._on_visit_server)
+        self._connect(
+            self._ui.server_comboboxtext_sign_up_entry, 'changed', self._set_complete
+        )
 
         self.append(self._ui.signup_grid)
 
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, widget: Signup) -> None:
+    def do_unroot(self) -> None:
+        Page.do_unroot(self)
         if self._provider_list_request is None:
             return
 
@@ -885,12 +887,11 @@ class AdvancedSettings(Page):
         self.title: str = _('Advanced settings')
         self.complete: bool = False
 
-        self._ui = get_builder('account_wizard.ui', self)
-        self._ui.manage_proxies_button.connect('clicked',
-                                               self._on_proxy_manager)
-        self._ui.proxies_combobox.connect('changed', self._set_complete)
-        self._ui.custom_host_entry.connect('changed', self._set_complete)
-        self._ui.custom_port_entry.connect('changed', self._set_complete)
+        self._ui = get_builder('account_wizard.ui')
+        self._connect(self._ui.manage_proxies_button, 'clicked', self._on_proxy_manager)
+        self._connect(self._ui.proxies_combobox, 'changed', self._set_complete)
+        self._connect(self._ui.custom_host_entry, 'changed', self._set_complete)
+        self._connect(self._ui.custom_port_entry, 'changed', self._set_complete)
         self.append(self._ui.advanced_grid)
 
     @staticmethod
@@ -1013,9 +1014,9 @@ class SecurityWarning(Page):
         self._cert: Gio.TlsCertificate | None = None
         self._domain: str | None = None
 
-        self._ui = get_builder('account_wizard.ui', self)
+        self._ui = get_builder('account_wizard.ui')
         self.append(self._ui.security_warning_box)
-        self._ui.view_cert_button.connect('clicked', self._on_view_cert)
+        self._connect(self._ui.view_cert_button, 'clicked', self._on_view_cert)
 
     @property
     def cert(self) -> Gio.TlsCertificate | None:
@@ -1147,9 +1148,9 @@ class Redirect(Page):
         self.title: str = _('Redirect')
         self._link: str | None = None
 
-        self._ui = get_builder('account_wizard.ui', self)
+        self._ui = get_builder('account_wizard.ui')
         self.append(self._ui.redirect_box)
-        self._ui.link_button.connect('clicked', self._on_link_button)
+        self._connect(self._ui.link_button, 'clicked', self._on_link_button)
 
     def set_redirect(self, link: str, instructions: str) -> None:
         if instructions is None:
@@ -1176,16 +1177,16 @@ class Success(SuccessPage):
         self._label: str | None = None
         self._color: str | None = None
 
-        self._ui = get_builder('account_wizard.ui', self)
+        self._ui = get_builder('account_wizard.ui')
         self.append(self._ui.account_label_box)
 
         self._provider = self._add_css_provider()
 
-        self._ui.account_name_entry.connect('changed', self._on_name_changed)
+        self._connect(self._ui.account_name_entry, 'changed', self._on_name_changed)
 
         color_dialog = Gtk.ColorDialog()
         self._ui.account_color_button.set_dialog(color_dialog)
-        self._ui.account_color_button.connect('notify::rgba', self._on_color_set)
+        self._connect(self._ui.account_color_button, 'notify::rgba', self._on_color_set)
 
     def set_account(self, account: str) -> None:
         self._account = account
