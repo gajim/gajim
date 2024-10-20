@@ -65,7 +65,6 @@ class MamPreferences(GajimAppWindow):
 
     def _cleanup(self) -> None:
         self._destroyed = True
-        self._disconnect_all()
 
     @ensure_not_destroyed
     def _mam_prefs_received(self, task: Task) -> None:
