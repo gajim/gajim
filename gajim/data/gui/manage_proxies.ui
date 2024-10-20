@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkListStore" id="liststore1">
-    <columns>
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes" context="proxy configuration">HTTP</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes" context="proxy configuration">SOCKS5</col>
-      </row>
-    </data>
-  </object>
   <object class="GtkBox" id="box">
     <property name="spacing">12</property>
     <child>
@@ -28,7 +15,6 @@
               <object class="GtkTreeView" id="proxies_treeview">
                 <property name="focusable">1</property>
                 <property name="headers_visible">0</property>
-                <signal name="cursor-changed" handler="_on_proxies_treeview_cursor_changed" swapped="no"/>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview-selection1"/>
                 </child>
@@ -44,7 +30,6 @@
                 <property name="tooltip_text" translatable="1">Add Proxy</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">list-add-symbolic</property>
-                <signal name="clicked" handler="_on_add_proxy_button_clicked" swapped="no"/>
               </object>
             </child>
             <child>
@@ -52,7 +37,6 @@
                 <property name="tooltip_text" translatable="1">Remove Proxy</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">list-remove-symbolic</property>
-                <signal name="clicked" handler="_on_remove_proxy_button_clicked" swapped="no"/>
               </object>
             </child>
             <style>
@@ -73,7 +57,6 @@
             <property name="focusable">1</property>
             <property name="visibility">0</property>
             <property name="input_purpose">password</property>
-            <signal name="changed" handler="_on_proxypass_entry_changed" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">8</property>
@@ -98,7 +81,6 @@
         <child>
           <object class="GtkEntry" id="proxyuser_entry">
             <property name="focusable">1</property>
-            <signal name="changed" handler="_on_proxyuser_entry_changed" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">7</property>
@@ -112,7 +94,6 @@
             <property name="halign">start</property>
             <property name="margin_top">12</property>
             <property name="use_underline">1</property>
-            <signal name="toggled" handler="_on_useauth_toggled" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">6</property>
@@ -139,7 +120,6 @@
             <property name="focusable">1</property>
             <property name="placeholder_text">9050</property>
             <property name="input_purpose">number</property>
-            <signal name="changed" handler="_on_proxyport_entry_changed" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">5</property>
@@ -167,7 +147,6 @@
             <property name="hexpand">1</property>
             <property name="placeholder_text" translatable="1">example.org</property>
             <property name="input_purpose">url</property>
-            <signal name="changed" handler="_on_proxyhost_entry_changed" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">4</property>
@@ -207,8 +186,6 @@
         </child>
         <child>
           <object class="GtkComboBox" id="proxytype_combobox">
-            <property name="model">liststore1</property>
-            <signal name="changed" handler="_on_proxytype_combobox_changed" swapped="no"/>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>
@@ -256,7 +233,6 @@
             <property name="width_request">200</property>
             <property name="focusable">1</property>
             <property name="hexpand">1</property>
-            <signal name="changed" handler="_on_proxyname_entry_changed" swapped="no"/>
             <layout>
               <property name="column">1</property>
               <property name="row">1</property>

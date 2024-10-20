@@ -2,8 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
-
 from gi.repository import Gdk
 from gi.repository import Gtk
 
@@ -27,24 +25,57 @@ class ManageProxies(GajimAppWindow):
             name='ManageProxies',
             title=_('Manage Proxies'),
             default_width=500,
+            modal=True,
         )
 
-        self.set_modal(True)
-
-        self._ui = get_builder('manage_proxies.ui', self)
+        self._ui = get_builder('manage_proxies.ui')
         self.set_child(self._ui.box)
+
+        liststore = Gtk.ListStore(str)
+        liststore.append(['HTTP'])
+        liststore.append(['SOCKS5'])
+        self._ui.proxytype_combobox.set_model(liststore)
+
+        self._connect(
+            self._ui.proxies_treeview,
+            'cursor-changed',
+            self._on_proxies_treeview_cursor_changed,
+        )
+        self._connect(
+            self._ui.add_proxy_button, 'clicked', self._on_add_proxy_button_clicked
+        )
+        self._connect(
+            self._ui.remove_proxy_button,
+            'clicked',
+            self._on_remove_proxy_button_clicked,
+        )
+        self._connect(
+            self._ui.proxypass_entry, 'changed', self._on_proxypass_entry_changed
+        )
+        self._connect(self._ui.useauth_checkbutton, 'toggled', self._on_useauth_toggled)
+        self._connect(
+            self._ui.proxyport_entry, 'changed', self._on_proxyport_entry_changed
+        )
+        self._connect(
+            self._ui.proxyhost_entry, 'changed', self._on_proxyhost_entry_changed
+        )
+        self._connect(
+            self._ui.proxytype_combobox, 'changed', self._on_proxytype_combobox_changed
+        )
+        self._connect(
+            self._ui.proxyname_entry, 'changed', self._on_proxyname_entry_changed
+        )
 
         self._init_list()
         self._block_signal = False
 
         controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_proxies_treeview_key_pressed)
+        self.get_default_controller().connect(
+            'key-pressed', self._on_proxies_treeview_key_pressed
+        )
         self._ui.proxies_treeview.add_controller(controller)
 
-        self.connect('destroy', self._on_destroy)
-
-    @staticmethod
-    def _on_destroy(*args: Any) -> None:
+    def _cleanup(self) -> None:
         # Window callbacks for updating proxy comboboxes
         window_pref = get_app_window('Preferences')
         window_accounts = get_app_window('AccountsWindow')
@@ -72,7 +103,7 @@ class ManageProxies(GajimAppWindow):
         self._ui.settings_grid.set_sensitive(False)
         model = Gtk.ListStore(str)
         self._ui.proxies_treeview.set_model(model)
-        col = Gtk.TreeViewColumn(title='Proxies')
+        col = Gtk.TreeViewColumn(title=_('Proxies'))
         self._ui.proxies_treeview.append_column(col)
         renderer = Gtk.CellRendererText()
         col.pack_start(renderer, True)
