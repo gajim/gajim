@@ -212,11 +212,11 @@ class Address(Page):
         self._account = account
         self._jid = jid
 
-        self._ui = get_builder('add_contact.ui', self)
+        self._ui = get_builder('add_contact.ui')
         self.append(self._ui.address_box)
 
-        self._ui.account_combo.connect('changed', self._on_account_changed)
-        self._ui.address_entry.connect('changed', self._set_complete)
+        self._connect(self._ui.account_combo, 'changed', self._on_account_changed)
+        self._connect(self._ui.address_entry, 'changed', self._set_complete)
 
         accounts = app.get_enabled_accounts_with_labels(connected_only=True)
         liststore = self._ui.account_combo.get_model()
@@ -335,10 +335,10 @@ class Contact(Page):
         self._account: str | None = None
         self._contact: types.BareContact | None = None
 
-        self._ui = get_builder('add_contact.ui', self)
+        self._ui = get_builder('add_contact.ui')
         self.append(self._ui.contact_grid)
 
-        self._ui.contact_info_button.connect('clicked', self._on_info_clicked)
+        self._connect(self._ui.contact_info_button, 'clicked', self._on_info_clicked)
 
     def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
@@ -387,11 +387,11 @@ class Gateway(Page):
         self._account: str | None = None
         self._result: DiscoInfo | None = None
 
-        self._ui = get_builder('add_contact.ui', self)
+        self._ui = get_builder('add_contact.ui')
         self.append(self._ui.gateway_box)
 
-        self._ui.register_button.connect('clicked', self._on_register_clicked)
-        self._ui.commands_button.connect('clicked', self._on_command_clicked)
+        self._connect(self._ui.register_button, 'clicked', self._on_register_clicked)
+        self._connect(self._ui.commands_button, 'clicked', self._on_command_clicked)
 
     def get_visible_buttons(self) -> list[str]:
         return ['back', 'add']
