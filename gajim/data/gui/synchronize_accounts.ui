@@ -40,7 +40,6 @@
                     <property name="label" translatable="1">Select Contacts</property>
                     <property name="halign">end</property>
                     <property name="valign">end</property>
-                    <signal name="clicked" handler="_on_next_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
                     </style>
@@ -96,22 +95,20 @@
             <child>
               <object class="GtkBox">
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="synchronize_button">
                     <property name="label" translatable="1">Synchronize</property>
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
-                    <signal name="clicked" handler="_on_sync_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
                     </style>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="back_button">
                     <property name="label" translatable="1">Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
                   </object>
                 </child>
               </object>

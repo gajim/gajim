@@ -979,15 +979,14 @@ class StartChatDialogBuilder(Builder):
     error_label: Gtk.Label
     error_back_button: Gtk.Button
     info_box: Gtk.Box
+    info_back_button: Gtk.Button
     join_box: Gtk.Box
     join_button: Gtk.Button
-    info_back_button: Gtk.Button
     account_view: Gtk.TreeView
     icon_pixbuf: Gtk.CellRendererPixbuf
     account_text: Gtk.CellRendererText
     account_back_button: Gtk.Button
     account_select_button: Gtk.Button
-    placeholder: Gtk.Box
 
 
 class SynchronizeAccountsBuilder(Builder):
@@ -998,6 +997,8 @@ class SynchronizeAccountsBuilder(Builder):
     connection_warning_label: Gtk.Label
     sync_contacts_box: Gtk.Box
     contacts_treeview: Gtk.TreeView
+    synchronize_button: Gtk.Button
+    back_button: Gtk.Button
 
 
 class SystrayContextMenuBuilder(Builder):
