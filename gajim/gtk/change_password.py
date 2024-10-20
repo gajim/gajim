@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import Any
 from typing import cast
 from typing import Literal
 from typing import overload
@@ -56,7 +55,7 @@ class ChangePassword(Assistant):
         progress.set_title(_('Changing Password...'))
         progress.set_text(_('Trying to change password...'))
 
-        self.connect('button-clicked', self._on_button_clicked)
+        self._connect(self, 'button-clicked', self._on_button_clicked)
 
     @overload
     def get_page(self, name: Literal['password']) -> EnterPassword: ...
@@ -118,7 +117,7 @@ class ChangePassword(Assistant):
             passwords.save_password(self.account, password)
             self.show_page('success')
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
         self._destroyed = True
 
 
@@ -149,7 +148,7 @@ class EnterPassword(Page):
         self._password1_entry.set_valign(Gtk.Align.END)
         self._password1_entry.set_placeholder_text(
             _('Enter new password...'))
-        self._password1_entry.connect('changed', self._on_changed)
+        self._connect(self._password1_entry, 'changed', self._on_changed)
         self._password2_entry = Gtk.Entry()
         self._password2_entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)
         self._password2_entry.set_visibility(False)
@@ -158,7 +157,7 @@ class EnterPassword(Page):
         self._password2_entry.set_valign(Gtk.Align.START)
         self._password2_entry.set_placeholder_text(
             _('Confirm new password...'))
-        self._password2_entry.connect('changed', self._on_changed)
+        self._connect(self._password2_entry, 'changed', self._on_changed)
 
         self.append(heading)
         self.append(label)
@@ -226,7 +225,7 @@ class NextStage(Page):
         if self._current_form is not None:
             self.remove(self._current_form)
         self._current_form = DataFormWidget(form)
-        self._current_form.connect('is-valid', self._on_is_valid)
+        self._connect(self._current_form, 'is-valid', self._on_is_valid)
         self._current_form.validate()
         self.append(self._current_form)
 
