@@ -580,7 +580,12 @@ class GroupchatRosterTooltipBuilder(Builder):
 
 class GroupchatStateBuilder(Builder):
     groupchat_state: Gtk.Stack
+    join_button: Gtk.Button
+    joining_spinner: Gtk.Spinner
+    abort_join_button: Gtk.Button
+    mam_sync_spinner: Gtk.Spinner
     mam_error_label: Gtk.Label
+    close_button: Gtk.Button
 
 
 class GroupsPostWindowBuilder(Builder):
@@ -712,9 +717,9 @@ class PepConfigBuilder(Builder):
     items_back_button: Gtk.Button
     config_box: Gtk.Box
     form_label: Gtk.Label
+    form_box: Gtk.Box
     config_back_button: Gtk.Button
     save_button: Gtk.Button
-    form_box: Gtk.Box
 
 
 class PluginsBuilder(Builder):

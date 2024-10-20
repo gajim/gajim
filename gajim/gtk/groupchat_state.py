@@ -13,22 +13,32 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.util import SignalManager
 
 
-class GroupchatState(Gtk.Box):
+class GroupchatState(Gtk.Box, SignalManager):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self)
-        self.set_halign(Gtk.Align.CENTER)
-        self.set_valign(Gtk.Align.END)
-        self.set_visible(False)
+        Gtk.Box.__init__(
+            self, halign=Gtk.Align.CENTER, valign=Gtk.Align.END, visible=False
+        )
+        SignalManager.__init__(self)
 
         self._contact = None
         self._client = None
 
-        self._ui = get_builder('groupchat_state.ui', self)
+        self._ui = get_builder('groupchat_state.ui')
+        self._connect(self._ui.join_button, 'clicked', self._on_join_clicked)
+        self._connect(self._ui.abort_join_button, 'clicked', self._on_abort_clicked)
+        self._connect(self._ui.close_button, 'clicked', self._on_close_clicked)
 
         self.append(self._ui.groupchat_state)
-        self.hide()
+
+    def do_unroot(self) -> None:
+        self.clear()
+
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def clear(self) -> None:
         if self._contact is not None:
@@ -75,8 +85,12 @@ class GroupchatState(Gtk.Box):
         self._update_state(contact)
 
     def _update_state(self, contact: GroupchatContact) -> None:
+        self._ui.joining_spinner.stop()
+        self._ui.mam_sync_spinner.stop()
+
         if contact.is_joining:
             self._ui.groupchat_state.set_visible_child_name('joining')
+            self._ui.joining_spinner.start()
 
         elif contact.is_not_joined:
             self._ui.groupchat_state.set_visible_child_name('not-joined')
@@ -93,6 +107,7 @@ class GroupchatState(Gtk.Box):
         if signal_name == 'mam-sync-started':
             self.set_visible(True)
             self._ui.groupchat_state.set_visible_child_name(signal_name)
+            self._ui.mam_sync_spinner.start()
             return
 
         self.hide()
@@ -108,6 +123,8 @@ class GroupchatState(Gtk.Box):
         self._ui.mam_error_label.set_text(
             _('There has been an error while trying to '
               'fetch messages: %s') % error_text)
+        self._ui.mam_sync_spinner.stop()
+
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
         self.hide()

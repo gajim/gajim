@@ -17,12 +17,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="join_button">
                 <property name="label" translatable="1">Join</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="valign">center</property>
-                <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -42,20 +41,21 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
-              <object class="GtkSpinner"/>
+              <object class="GtkSpinner" id="joining_spinner"/>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">Joining…</property>
+                <property name="hexpand">1</property>
+                <property name="halign">start</property>
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="abort_join_button">
                 <property name="label" translatable="1">Abort</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="valign">center</property>
-                <signal name="clicked" handler="_on_abort_clicked" swapped="no"/>
               </object>
             </child>
             <style>
@@ -72,11 +72,13 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
-              <object class="GtkSpinner"/>
+              <object class="GtkSpinner" id="mam_sync_spinner"/>
             </child>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">Fetching messages…</property>
+                <property name="hexpand">1</property>
+                <property name="halign">start</property>
               </object>
             </child>
             <style>
@@ -108,12 +110,11 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="close_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Close</property>
                 <property name="valign">center</property>
-                <signal name="clicked" handler="_on_close_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">window-close-symbolic</property>
