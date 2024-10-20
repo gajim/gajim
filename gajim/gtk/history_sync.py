@@ -25,15 +25,14 @@ from gajim.common import ged
 from gajim.common.const import ArchiveState
 from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import RawMamMessageReceived
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import load_icon_surface
 
 log = logging.getLogger('gajim.gtk.history_sync')
 
@@ -42,7 +41,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
     def __init__(self, account: str) -> None:
         Assistant.__init__(self, width=600, transient_for=app.window)
         EventHelper.__init__(self)
-        self.set_name('HistorySyncAssistant')
+        self.window.set_name('HistorySyncAssistant')
 
         self.account = account
         self._client = app.get_client(account)
@@ -132,7 +131,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
             return
 
         if button_name == 'close':
-            self.destroy()
+            self.close()
 
     def _prepare_query(self) -> None:
         select_time_page = self.get_page('select')
@@ -224,7 +223,7 @@ class SelectTime(Page):
         listbox.append(TimeOption(_('Three Months'), timedelta(days=90)))
         listbox.append(TimeOption(_('One Year'), timedelta(days=365)))
         listbox.append(TimeOption(_('Everything')))
-        listbox.connect('row-selected', self._on_row_selected)
+        self._connect(listbox, 'row-selected', self._on_row_selected)
 
         for row in cast(list[TimeOption], iterate_listbox_children(listbox)):
             delta = row.get_timedelta()
@@ -258,8 +257,8 @@ class Progress(Page):
         self._count = 0
         self._received = 0
 
-        surface = load_icon_surface('folder-download-symbolic', size=64)
-        image = Gtk.Image.new_from_paintable(surface)
+        image = Gtk.Image.new_from_icon_name('folder-download-symbolic')
+        image.set_pixel_size(64)
 
         self._progress_bar = Gtk.ProgressBar()
         self._progress_bar.set_show_text(True)
