@@ -369,7 +369,7 @@
       <placeholder/>
     </child>
   </object>
-  <object class="GtkBox" id="placeholder">
+<!--   <object class="GtkBox" id="placeholder">
     <property name="halign">center</property>
     <property name="valign">center</property>
     <property name="orientation">vertical</property>
@@ -394,5 +394,5 @@ You can also type an XMPP address</property>
         </style>
       </object>
     </child>
-  </object>
+  </object> -->
 </interface>
