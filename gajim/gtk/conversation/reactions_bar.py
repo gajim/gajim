@@ -117,7 +117,7 @@ class ReactionsBar(Gtk.Box):
                     )
                 )
 
-        return aggregated_reactions
+        return dict(sorted(aggregated_reactions.items()))
 
     def get_our_reactions(self) -> set[str]:
         our_reactions: set[str] = set()
@@ -139,12 +139,13 @@ class ReactionsBar(Gtk.Box):
         self._message_row.send_reaction(emoji, toggle=False)
 
     def update_from_reactions(self, reactions: list[mod.Reaction]) -> None:
-        for widget in iterate_children(self):
-            if isinstance(widget, Gtk.MenuButton):
-                continue
-
+        for widget in list(iterate_children(self)):
             if isinstance(widget, MoreReactionsButton):
                 widget.hide_popover()
+                self.remove(widget)
+                continue
+
+            if isinstance(widget, Gtk.MenuButton):
                 continue
 
             self.remove(widget)
@@ -154,7 +155,6 @@ class ReactionsBar(Gtk.Box):
         aggregated_reactions = self._aggregate_reactions(reactions)
         if not aggregated_reactions:
             self.set_visible(False)
-            self.hide()
             return
 
         more_reactions_button = None
