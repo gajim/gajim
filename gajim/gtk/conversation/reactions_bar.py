@@ -12,7 +12,6 @@ import datetime as dt
 import logging
 from collections import defaultdict
 
-from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -64,7 +63,7 @@ class ReactionsBar(Gtk.Box):
             popover=emoji_popover,
         )
         add_reaction_button.add_css_class('flat')
-        add_reaction_button.add_css_class('reaction')
+        add_reaction_button.add_css_class('reaction-add')
 
         self.append(add_reaction_button)
 

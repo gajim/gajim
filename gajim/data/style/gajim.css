@@ -844,10 +844,10 @@ messagedialog.confirmation-dialog > box { margin-top: 18px; }
 .reaction label {
     font-size: 90%;
 }
-.reaction > button {
-    border: none;
-    padding: 0;
-    background: transparent;
+.reaction-add > button {
+    border: 1px solid @borders;
+    border-radius: 18px;
+    padding: 2px;
 }
 .dummy-emoji-entry {
     padding: 0;
