@@ -22,12 +22,14 @@ from gajim.common.util.status import statuses_unified
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.util import convert_surface_to_texture
 from gajim.gtk.util import EventHelper
+from gajim.gtk.util import SignalManager
 
 
-class StatusSelector(Gtk.MenuButton, EventHelper):
+class StatusSelector(Gtk.MenuButton, EventHelper, SignalManager):
     def __init__(self, account: str | None = None, compact: bool = False):
         Gtk.MenuButton.__init__(self, direction=Gtk.ArrowType.UP)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._account = account
         self._compact = compact
@@ -64,10 +66,11 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
     def do_unroot(self) -> None:
         Gtk.MenuButton.do_unroot(self)
         self.unregister_events()
+        self._disconnect_all()
         del self._status_popover
         app.check_finalize(self)
 
-    def _on_our_show(self, event: events.ShowChanged) -> None:
+    def _on_our_show(self, _event: events.ShowChanged) -> None:
         self.update()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
@@ -75,9 +78,9 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         client.connect_signal('state-changed', self._on_client_state_changed)
 
     def _on_client_state_changed(self,
-                                 client: Client,
+                                 _client: Client,
                                  _signal_name: str,
-                                 state: SimpleClientState) -> None:
+                                 _state: SimpleClientState) -> None:
         self.update()
 
     def _create_popover(self) -> Gtk.Popover:
@@ -112,9 +115,10 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
             show_box.append(show_label)
 
             button = Gtk.Button()
+            button.add_css_class('flat')
             button.set_name(item)
             button.set_child(show_box)
-            button.connect('clicked', self._on_change_status)
+            self._connect(button, 'clicked', self._on_change_status)
             popover_box.append(button)
 
         status_popover = Gtk.Popover()
