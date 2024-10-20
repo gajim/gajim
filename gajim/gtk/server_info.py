@@ -48,8 +48,8 @@ class ServerInfo(GajimAppWindow, EventHelper):
             self,
             name='ServerInfo',
             title=_('Server Info'),
-            default_width=500,
-            default_height=600,
+            default_width=600,
+            default_height=700,
         )
         EventHelper.__init__(self)
 
@@ -61,10 +61,12 @@ class ServerInfo(GajimAppWindow, EventHelper):
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT
 
-        self._ui = get_builder('server_info.ui', self)
+        self._ui = get_builder('server_info.ui')
         self.set_child(self._ui.server_info_notebook)
 
-        self._connect(self._ui.clipboard_button, 'clicked', self._on_clipboard_button_clicked)
+        self._connect(
+            self._ui.clipboard_button, 'clicked', self._on_clipboard_button_clicked
+        )
 
         self.register_events([
             ('server-disco-received', ged.GUI1, self._server_disco_received),
