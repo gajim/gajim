@@ -397,7 +397,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                  DialogButton.make('Remove',
                                    text=_('_Stop Sharing'),
                                    callback=_stop_sharing)],
-                transient_for=self).show()
+                transient_for=self.window).show()
         return Gdk.EVENT_STOP
 
     def _on_to_subscription_button_clicked(self, _widget: Gtk.Button) -> None:
@@ -466,7 +466,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
                                callback=_remove_group)],
-            transient_for=self).show()
+            transient_for=self.window).show()
         return Gdk.EVENT_STOP
 
     def _on_group_toggled(self,

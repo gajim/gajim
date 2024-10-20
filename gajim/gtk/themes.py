@@ -324,7 +324,7 @@ class Themes(GajimAppWindow):
             [DialogButton.make('Cancel'),
              DialogButton.make('Delete',
                                callback=_remove_theme)],
-            transient_for=self).show()
+            transient_for=self.window).show()
 
     def _cleanup(self) -> None:
         pass

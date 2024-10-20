@@ -122,7 +122,7 @@ class ManageProxies(GajimAppWindow):
             [DialogButton.make('Cancel'),
              DialogButton.make('Remove',
                                callback=_remove)],
-            transient_for=self
+            transient_for=self.window
         ).show()
 
     def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:
