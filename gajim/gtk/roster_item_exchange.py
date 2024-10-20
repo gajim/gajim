@@ -43,8 +43,11 @@ class RosterItemExchange(GajimAppWindow):
         self._exchange_list = exchange_list
         self._jid_from = jid_from
 
-        self._ui = get_builder('roster_item_exchange.ui', self)
+        self._ui = get_builder('roster_item_exchange.ui')
         self.set_child(self._ui.roster_item_exchange)
+
+        self._connect(self._ui.cancel_button, 'clicked', self._on_cancel_button_clicked)
+        self._connect(self._ui.accept_button, 'clicked', self._on_accept_button_clicked)
 
         # Set label depending on action
         contact = self._client.get_module('Contacts').get_contact(jid_from)
@@ -80,7 +83,7 @@ class RosterItemExchange(GajimAppWindow):
         # Columns
         renderer1 = Gtk.CellRendererToggle()
         renderer1.set_property('activatable', True)
-        renderer1.connect('toggled', self._on_toggled)
+        self._connect(renderer1, 'toggled', self._on_toggled)
         title = ''
         if self._action == 'add':
             title = _('Add')
@@ -112,6 +115,9 @@ class RosterItemExchange(GajimAppWindow):
         elif action == 'delete':
             self._delete()
 
+    def _cleanup(self) -> None:
+        pass
+
     def _on_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
         model = self._ui.items_list_treeview.get_model()
         assert isinstance(model, Gtk.ListStore)
@@ -125,7 +131,6 @@ class RosterItemExchange(GajimAppWindow):
             name = self._exchange_list[jid][0]
             groups = ', '.join(self._exchange_list[jid][1])
             if not contact.is_in_roster:
-                self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
                 self._model.set(iter_,
@@ -150,7 +155,6 @@ class RosterItemExchange(GajimAppWindow):
                 if group not in contact.groups:
                     is_right = False
             if not is_right and contact.is_in_roster:
-                self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
                 self._model.set(iter_,
@@ -168,7 +172,6 @@ class RosterItemExchange(GajimAppWindow):
             name = self._exchange_list[jid][0]
             groups = ', '.join(self._exchange_list[jid][1])
             if contact.is_in_roster:
-                self.show_all()
                 assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
                 self._model.set(iter_,
@@ -250,7 +253,7 @@ class RosterItemExchange(GajimAppWindow):
                               'Removed %(count)s contacts',
                               count) % {'count': count}
                 )
-        self.destroy()
+        self.close()
 
     def _on_cancel_button_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.close()
