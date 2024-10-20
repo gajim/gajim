@@ -398,8 +398,6 @@ class TextBufferManager(GObject.Object):
         checker = Spelling.Checker.new(
             provider, self._get_spell_checker_language(contact)
         )
-        lang = self._get_spell_checker_language(contact)
-        checker.set_language(lang)
 
         text_buffer = self._text_buffers[contact]
         self._spelling_adapters[contact] = Spelling.TextBufferAdapter.new(
@@ -407,6 +405,9 @@ class TextBufferManager(GObject.Object):
         )
 
     def _connect_spell_checker(self, contact: ChatContactT) -> None:
+        if not app.is_installed('SPELLING'):
+            return
+
         adapter = self._spelling_adapters[contact]
         speller_menu = adapter.get_menu_model()
 
