@@ -17,6 +17,7 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.util import AccountBadge
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -31,15 +32,15 @@ class GroupChatInvitationDialog(GajimAppWindow):
         self.account = account
 
         invitation_widget = GroupChatInvitation(account, event)
-        invitation_widget.connect('accepted', self._on_invitation_widget_action)
-        invitation_widget.connect('declined', self._on_invitation_widget_action)
+        self._connect(invitation_widget, 'accepted', self._on_invitation_widget_action)
+        self._connect(invitation_widget, 'declined', self._on_invitation_widget_action)
         self.set_child(invitation_widget)
 
     def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
-        self.destroy()
+        self.close()
 
 
-class GroupChatInvitation(Gtk.Box):
+class GroupChatInvitation(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         'accepted': (
@@ -56,6 +57,7 @@ class GroupChatInvitation(Gtk.Box):
 
     def __init__(self, account: str, event: MucInvitation) -> None:
         Gtk.Box.__init__(self, halign=Gtk.Align.CENTER)
+        SignalManager.__init__(self)
 
         self._account = account
         self._client = app.get_client(account)
@@ -101,7 +103,7 @@ class GroupChatInvitation(Gtk.Box):
 
         decline_button = Gtk.Button.new_with_mnemonic(_('_Decline'))
         decline_button.set_halign(Gtk.Align.START)
-        decline_button.connect('clicked', self._on_decline)
+        self._connect(decline_button, 'clicked', self._on_decline)
 
         self._nick_chooser = NickChooser()
         self._nick_chooser.set_text(get_group_chat_nick(self._account, event.info.jid))
@@ -109,7 +111,7 @@ class GroupChatInvitation(Gtk.Box):
         join_button = Gtk.Button.new_with_mnemonic(_('_Join'))
         join_button.set_halign(Gtk.Align.END)
         join_button.get_style_context().add_class('suggested-action')
-        join_button.connect('clicked', self._on_join)
+        self._connect(join_button, 'clicked', self._on_join)
 
         join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.END)
         join_box.get_style_context().add_class('linked')
@@ -124,6 +126,10 @@ class GroupChatInvitation(Gtk.Box):
         self.append(main_box)
 
         join_button.grab_focus()
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
 
     def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()
