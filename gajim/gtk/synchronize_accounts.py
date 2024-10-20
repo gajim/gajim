@@ -73,7 +73,7 @@ class SynchronizeAccounts(GajimAppWindow):
         self._init_accounts()
 
     def _cleanup(self) -> None:
-        self._disconnect_all()
+        pass
 
     def _on_client_state_changed(self,
                                  _client: types.Client,
