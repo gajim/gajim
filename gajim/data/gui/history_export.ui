@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkListStore" id="account_liststore">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkBox" id="select_account_box">
     <property name="orientation">vertical</property>
     <property name="spacing">18</property>
@@ -53,10 +47,8 @@ Gajim will export all messages from the selected account to a directory of your 
         <child>
           <object class="GtkComboBox" id="account_combo">
             <property name="width-request">250</property>
-            <property name="model">account_liststore</property>
             <property name="id-column">0</property>
             <property name="active-id">-1</property>
-            <signal name="changed" handler="_on_account_changed" swapped="no"/>
             <child>
               <object class="GtkCellRendererText"/>
               <attributes>

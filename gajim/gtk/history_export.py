@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -27,7 +26,6 @@ from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
-from gajim.gtk.filechoosers import Filter
 
 log = logging.getLogger('gajim.gtk.history_export')
 
@@ -100,7 +98,7 @@ class HistoryExport(Assistant):
             self.show_page('start', Gtk.StackTransitionType.SLIDE_RIGHT)
 
         elif button_name == 'close':
-            self.destroy()
+            self.close()
 
     def _on_export(self) -> None:
         start_page = self.get_page('start')
@@ -172,13 +170,15 @@ class SelectAccountDir(Page):
 
         self.title = _('Export Chat History')
 
-        self._ui = get_builder('history_export.ui', self)
+        self._ui = get_builder('history_export.ui')
         self.append(self._ui.select_account_box)
 
         accounts = app.get_enabled_accounts_with_labels()
-        liststore = cast(Gtk.ListStore, self._ui.account_combo.get_model())
+        liststore = Gtk.ListStore(str, str)
         for acc in accounts:
             liststore.append(acc)
+
+        self._ui.account_combo.set_model(liststore)
 
         if self._account is not None:
             self._ui.account_combo.set_active_id(self._account)
@@ -187,12 +187,14 @@ class SelectAccountDir(Page):
 
         file_chooser_button = FileChooserButton(
             path=self._export_directory,
-            mode='folder',
+            mode='folder-open',
             label=_('Choose History Export Directory'),
         )
         file_chooser_button.set_size_request(250, -1)
-        file_chooser_button.connect('path-picked', self._on_path_picked)
+        self._connect(file_chooser_button, 'path-picked', self._on_path_picked)
         self._ui.settings_grid.attach(file_chooser_button, 1, 1, 1, 1)
+
+        self._connect(self._ui.account_combo, 'changed', self._on_account_changed)
 
         self._set_complete()
 
