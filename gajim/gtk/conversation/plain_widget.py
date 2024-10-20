@@ -53,11 +53,14 @@ class PlainWidget(Gtk.Box):
 
 class MessageLabel(Gtk.Label):
     def __init__(self, account: str, selectable: bool) -> None:
-        Gtk.Label.__init__(self)
-        self.set_hexpand(True)
-        self.set_selectable(selectable)
-        self.set_wrap_mode(Pango.WrapMode.WORD)
-        self.set_xalign(0)
+        Gtk.Label.__init__(
+            self,
+            hexpand=True,
+            selectable=selectable,
+            xalign=0,
+            wrap=True,
+        )
+
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
         if os.environ.get('GAJIM_FORCE_WORD_WRAP'):
@@ -67,7 +70,7 @@ class MessageLabel(Gtk.Label):
 
         self._account = account
 
-        self.get_style_context().add_class('gajim-conversation-text')
+        self.add_css_class('gajim-conversation-text')
 
         self.connect('activate-link', self._on_activate_link)
 
