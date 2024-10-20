@@ -110,7 +110,6 @@ class AssistantBuilder(Builder):
 
 
 class BlockingListBuilder(Builder):
-    blocking_store: Gtk.ListStore
     blocking_grid: Gtk.Grid
     overlay: Gtk.Overlay
     block_view: Gtk.TreeView
@@ -623,7 +622,6 @@ class MamPreferencesBuilder(Builder):
 
 
 class ManageProxiesBuilder(Builder):
-    liststore1: Gtk.ListStore
     box: Gtk.Box
     proxies_treeview: Gtk.TreeView
     treeview_selection1: Gtk.TreeSelection
@@ -640,7 +638,6 @@ class ManageProxiesBuilder(Builder):
 
 
 class ManageSoundsBuilder(Builder):
-    liststore1: Gtk.ListStore
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
     toggle_cell_renderer: Gtk.CellRendererToggle
@@ -712,8 +709,11 @@ class PepConfigBuilder(Builder):
     items_box: Gtk.Box
     items_label: Gtk.Label
     items_view: GtkSource.View
+    items_back_button: Gtk.Button
     config_box: Gtk.Box
     form_label: Gtk.Label
+    config_back_button: Gtk.Button
+    save_button: Gtk.Button
     form_box: Gtk.Box
 
 

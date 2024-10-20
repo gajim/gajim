@@ -17,6 +17,7 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.ged import EventHelper
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
@@ -26,7 +27,6 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import WarningDialog
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -65,18 +65,25 @@ class PEPConfig(GajimAppWindow, EventHelper):
         self._init_services()
 
         selection = self._ui.services_treeview.get_selection()
-        self._changed_handler = selection.connect(
-            'changed', self._on_services_selection_changed)
+        self._connect(selection, 'changed', self._on_services_selection_changed)
+
+        self._connect(
+            self._ui.show_content_button, 'clicked', self._on_show_content_clicked
+        )
+        self._connect(self._ui.delete_button, 'clicked', self._on_delete_button_clicked)
+        self._connect(
+            self._ui.configure_button, 'clicked', self._on_configure_button_clicked
+        )
+        self._connect(self._ui.items_back_button, 'clicked', self._on_back_clicked)
+        self._connect(self._ui.config_back_button, 'clicked', self._on_back_clicked)
+        self._connect(self._ui.save_button, 'clicked', self._on_save_config_clicked)
 
         self.register_events([
             ('style-changed', ged.GUI1, self._on_style_changed)
         ])
 
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
-        selection = self._ui.services_treeview.get_selection()
-        selection.disconnect(self._changed_handler)
+    def _cleanup(self) -> None:
+        self.unregister_events()
         app.check_finalize(self)
 
     def _on_style_changed(self, *args: Any) -> None:
