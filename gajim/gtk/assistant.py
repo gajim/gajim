@@ -15,8 +15,11 @@ from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.gtk.builder import get_builder
+from gajim.common import app
 from gajim.common.ged import EventHelper
+
+from gajim.gtk.builder import get_builder
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -61,7 +64,9 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
         self._ui.stack.set_transition_duration(transition_duration)
 
-        self._connect(self._ui.stack, 'notify::visible-child-name', self._on_visible_child_name)
+        self._connect(
+            self._ui.stack, 'notify::visible-child-name', self._on_visible_child_name
+        )
 
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
@@ -199,19 +204,28 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         self.run_dispose()
 
 
-class Page(Gtk.Box):
+class Page(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         'update-page-complete': (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        self.set_valign(Gtk.Align.CENTER)
+        Gtk.Box.__init__(
+            self,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=18,
+            valign=Gtk.Align.CENTER,
+        )
+        SignalManager.__init__(self)
 
         self.title: str = ''
         self.complete: bool = True
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def get_visible_buttons(self) -> list[str] | None:
         return None
