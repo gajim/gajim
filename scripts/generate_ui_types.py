@@ -49,6 +49,10 @@ GET_BUILDER = '''\n\n
 def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ...'''
 
 
+class InvalidFile(Exception):
+    pass
+
+
 def make_class_name(path: Path) -> str:
     name = path.name.removesuffix('.ui')
     names = name.split('_')
@@ -60,6 +64,9 @@ def parse(path: Path, file: TextIOWrapper) -> str:
     log.info('Read %s', path)
     lines: list[str] = []
     tree = ElementTree.parse(path)
+    if tree.find('template'):
+        raise InvalidFile
+
     for node in tree.iter(tag='object'):
         id_ = node.attrib.get('id')
         if id_ is None:
@@ -96,7 +103,12 @@ with out_path.open(mode='w', encoding='utf8') as file:
 
         if path.name.startswith('#'):
             continue
-        name = parse(path, file)
+
+        try:
+            name = parse(path, file)
+        except InvalidFile:
+            continue
+
         builder_names.append((name, path.name))
 
     for name, file_name in builder_names:

@@ -971,7 +971,6 @@ class StartChatDialogBuilder(Builder):
     filter_bar_revealer: Gtk.Revealer
     list_stack: Gtk.Stack
     contact_scrolled: Gtk.ScrolledWindow
-    listbox: Gtk.ListBox
     global_scrolled: Gtk.ScrolledWindow
     spinner: Gtk.Spinner
     error_label: Gtk.Label
