@@ -30,8 +30,16 @@ class SSLErrorDialog(GajimAppWindow):
             title=_('SSL Certificate Verification Error'),
         )
 
-        self._ui = get_builder('ssl_error_dialog.ui', self)
+        self._ui = get_builder('ssl_error_dialog.ui')
         self.set_child(self._ui.ssl_error_box)
+
+        self._connect(
+            self._ui.add_certificate_checkbutton,
+            'toggled',
+            self._on_add_certificate_toggled,
+        )
+        self._connect(self._ui.view_cert_button, 'clicked', self._on_view_cert_clicked)
+        self._connect(self._ui.connect_button, 'clicked', self._on_connect_clicked)
 
         self.account = account
         self._error = error
@@ -41,6 +49,9 @@ class SSLErrorDialog(GajimAppWindow):
         self._server = app.get_hostname_from_account(self.account)
 
         self._process_error()
+
+    def _cleanup(self) -> None:
+        pass
 
     def _process_error(self) -> None:
         self._ui.intro_text.set_text(
@@ -64,7 +75,7 @@ class SSLErrorDialog(GajimAppWindow):
     def _on_view_cert_clicked(self, _button: Gtk.Button) -> None:
         open_window('CertificateDialog',
                     account=self.account,
-                    transient_for=self,
+                    transient_for=self.window,
                     cert=self._cert)
 
     def _on_add_certificate_toggled(self,
@@ -79,5 +90,5 @@ class SSLErrorDialog(GajimAppWindow):
         if self._error == Gio.TlsCertificateFlags.EXPIRED:
             self._ignored_errors.add(Gio.TlsCertificateFlags.EXPIRED)
 
-        self.destroy()
         self._client.connect(ignored_tls_errors=self._ignored_errors)
+        self.close()
