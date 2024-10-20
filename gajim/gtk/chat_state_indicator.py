@@ -8,6 +8,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.const import Chatstate
 
+from gajim.common import app
 from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -37,6 +38,12 @@ class ChatStateIndicator(Gtk.Box):
         self._label.get_style_context().add_class('dim-label')
         self._label.get_style_context().add_class('small-label')
         self.append(self._label)
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+        app.check_finalize(self)
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         if self._contact is not None:
