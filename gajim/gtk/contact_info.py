@@ -99,9 +99,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
             contact=self.contact,
             edit_mode=True
         )
-        self._contact_name_widget.connect('name-updated', self._on_contact_name_updated)
-        self._ui.contact_name_controls_box.append(self._contact_name_widget)
 
+        self._connect(self._contact_name_widget, 'name-updated', self._on_contact_name_updated)
+        self._ui.contact_name_controls_box.append(self._contact_name_widget)
         self._ui.contact_name_header_label.set_text(self.contact.name)
 
         self._fill_information_page(self.contact)
@@ -116,12 +116,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if page is not None:
             self._switcher.set_row(page)
 
-        connect_destroy(self._ui.tree_selection,
-                        'changed', self._on_group_selection_changed)
-        connect_destroy(self._ui.toggle_renderer,
-                        'toggled', self._on_group_toggled)
-        connect_destroy(self._ui.text_renderer,
-                        'edited', self._on_group_name_edited)
+        self._connect(self._ui.tree_selection, 'changed', self._on_group_selection_changed)
+        self._connect(self._ui.toggle_renderer, 'toggled', self._on_group_toggled)
+        self._connect(self._ui.text_renderer, 'edited', self._on_group_name_edited)
 
         self._connect(
             self._ui.edit_contact_name_header_button,
@@ -156,6 +153,23 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self.set_child(self._ui.main_grid)
 
+    def _cleanup(self) -> None:
+        for task in self._tasks:
+            task.cancel()
+
+        if self.contact.is_in_roster and self._client.state.is_available:
+            self._save_annotation()
+
+        for device_grid in self._devices.values():
+            device_grid.destroy()
+        self._devices.clear()
+
+        del self._switcher
+        del self._contact_name_widget
+        self._disconnect_all()
+        self.unregister_events()
+        app.check_finalize(self)
+
     def _on_client_state_changed(self,
                                  _client: types.Client,
                                  _signal_name: str,
@@ -176,20 +190,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         name = self._ui.main_stack.get_visible_child_name()
         self._ui.header_revealer.set_reveal_child(name != 'information')
-
-    def _cleanup(self) -> None:
-        for task in self._tasks:
-            task.cancel()
-
-        if self.contact.is_in_roster and self._client.state.is_available:
-            self._save_annotation()
-
-        for device_grid in self._devices.values():
-            device_grid.destroy()
-        self._devices.clear()
-
-        self.unregister_events()
-        app.check_finalize(self)
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
         self._ui.contact_name_header_label.set_text(name)
