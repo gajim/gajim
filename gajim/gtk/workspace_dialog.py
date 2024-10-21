@@ -35,7 +35,7 @@ class WorkspaceDialog(GajimAppWindow):
         self.set_child(self._ui.box)
 
         self._avatar_selector = AvatarSelector()
-        self._avatar_selector.set_size_request(200, 200)
+        self._avatar_selector.set_size_request(400, 300)
         self._ui.image_box.append(self._avatar_selector)
 
         name: str = _('My Workspace')
