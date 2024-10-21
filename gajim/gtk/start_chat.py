@@ -1004,6 +1004,7 @@ class ContactViewItem(Gtk.Grid, SignalManager):
         self.__bindings.clear()
 
     def do_unroot(self) -> None:
+        self._disconnect_all()
         Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
 
@@ -1045,8 +1046,8 @@ class GlobalSearch(BaseListView[Type['GlobalListItem'], Type['GlobalViewItem']],
         self.set_model(self._selection_model)
 
     def do_unroot(self) -> None:
-        Gtk.ListView.do_unroot(self)
         self._disconnect_all()
+        Gtk.ListView.do_unroot(self)
         del self._model
         app.check_finalize(self)
 
