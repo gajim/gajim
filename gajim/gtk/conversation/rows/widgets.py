@@ -23,6 +23,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.util import GajimPopover
 
@@ -63,19 +64,15 @@ class MessageRowActions(Gtk.Box):
             button.connect('clicked', self._on_quick_reaction_button_clicked)
             self._reaction_buttons.append(button)
 
-        emoji_popover = Gtk.EmojiChooser()
-        emoji_popover.connect('emoji-picked', self._on_reaction_added)
-        emoji_popover.connect('closed', self._on_popover_closed)
-
         choose_reaction_button = Gtk.MenuButton(
             icon_name='lucide-smile-plus-symbolic',
             tooltip_text=_('Add Reaction…'),
             visible=False,
-            popover=emoji_popover,
         )
         choose_reaction_button.set_create_popup_func(
-            self._on_emoji_chooser_popup
+            self._on_emoji_create_popover
         )
+
         self._reaction_buttons.append(choose_reaction_button)
 
         self._reply_button = Gtk.Button.new_from_icon_name(
@@ -273,10 +270,14 @@ class MessageRowActions(Gtk.Box):
     def _on_quick_reaction_button_clicked(self, button: QuickReactionButton) -> None:
         self._send_reaction(button.emoji)
 
-    def _on_emoji_chooser_popup(self, _button: Gtk.MenuButton) -> None:
+    def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
         self._is_menu_open = True
+        emoji_chooser = app.window.get_emoji_chooser()
+        button.set_popover(emoji_chooser)
+        emoji_chooser.set_emoji_picked_func(self._on_reaction_added)
+        emoji_chooser.connect_after('closed', self._on_popover_closed)
 
-    def _on_reaction_added(self, _widget: Gtk.EmojiChooser, emoji: str) -> None:
+    def _on_reaction_added(self, _widget: EmojiChooser, emoji: str) -> None:
         # Remove emoji variant selectors
         emoji = emoji.strip('\uFE0E\uFE0F')
         self._send_reaction(emoji, toggle=False)
@@ -297,6 +298,9 @@ class MessageRowActions(Gtk.Box):
         self._more_popover.set_menu_model(menu)
 
     def _on_popover_closed(self, popover: Gtk.PopoverMenu) -> None:
+        if isinstance(popover, EmojiChooser):
+            popover.disconnect_by_func(self._on_popover_closed)
+
         if self._message_row is not None:
             self._message_row.get_style_context().remove_class('conversation-row-hover')
 

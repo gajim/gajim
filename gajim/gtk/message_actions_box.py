@@ -40,6 +40,7 @@ from gajim.common.types import ChatContactT
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_state_indicator import ChatStateIndicator
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
@@ -108,9 +109,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._ui.formattings_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
 
-        emoji_chooser = Gtk.EmojiChooser()
-        emoji_chooser.connect('emoji-picked', self._on_emoji_picked)
-        self._ui.emoticons_button.set_popover(emoji_chooser)
+        self._ui.emoticons_button.set_create_popup_func(
+            self._on_emoji_create_popover
+        )
 
         self._connect_actions()
 
@@ -128,7 +129,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
-    def _on_emoji_picked(self, _emoji_chooser: Gtk.EmojiChooser, text: str) -> None:
+    def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
+        emoji_chooser = app.window.get_emoji_chooser()
+        button.set_popover(emoji_chooser)
+        emoji_chooser.set_emoji_picked_func(self._on_emoji_picked)
+
+    def _on_emoji_picked(self, _emoji_chooser: EmojiChooser, text: str) -> None:
         self.msg_textview.insert_text(text)
 
     def _connect_actions(self) -> None:

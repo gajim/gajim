@@ -22,6 +22,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
+from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.util import SignalManager
 from gajim.gtk.util import iterate_children
 
@@ -149,7 +150,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
     def _on_reaction_clicked(self, reaction_button: ReactionButton) -> None:
         self._message_row.send_reaction(reaction_button.emoji)
 
-    def _on_emoji_added(self, _widget: Gtk.EmojiChooser, emoji: str) -> None:
+    def _on_emoji_added(self, _widget: EmojiChooser, emoji: str) -> None:
         # Remove emoji variant selectors
         emoji = emoji.strip('\uFE0E\uFE0F')
         self._message_row.send_reaction(emoji, toggle=False)
