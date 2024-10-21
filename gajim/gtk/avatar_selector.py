@@ -120,7 +120,11 @@ class AvatarSelector(Gtk.Box, SignalManager):
         self._helper_label.hide()
         self._crop_area.show()
 
-    def _on_path_picked(self, _button: AvatarFileChooserButton, paths: list[Path]) -> None:
+    def _on_path_picked(
+        self,
+        _button: AvatarFileChooserButton,
+        paths: list[Path]
+    ) -> None:
         if not paths:
             return
 
@@ -193,8 +197,6 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         Gtk.DrawingArea.__init__(self, visible=False)
         SignalManager.__init__(self)
 
-        # TODO GTK4: Resizing does not work
-
         self._image = Gdk.Rectangle()
         self._crop = Gdk.Rectangle()
         self._pixbuf: GdkPixbuf.Pixbuf | None = None
@@ -210,8 +212,8 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         self._active_region = Loc.OUTSIDE
         self._last_press_x = -1
         self._last_press_y = -1
-        self._base_width = 300
-        self._base_height = 300
+        self._base_width = 10
+        self._base_height = 10
         self._aspect = 1.0
 
         self.set_size_request(self._base_width, self._base_height)
@@ -397,8 +399,6 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         self._last_press_y = (y - self._image.y) / self._scale
         self._active_region = self._find_location(crop, x, y)
         self.queue_draw()
-        # self.queue_draw_area(
-        #     crop.x - 1, crop.y - 1, crop.width + 2, crop.height + 2)
 
     def _on_button_release(
         self,
@@ -410,14 +410,12 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         if self._browse_pixbuf is None:
             return
 
-        crop = self._crop_to_widget()
+        self._crop_to_widget()
         self._last_press_x = -1
         self._last_press_y = -1
         self._active_region = Loc.OUTSIDE
 
         self.queue_draw()
-        # self.queue_draw_area(
-        #     crop.x - 1, crop.y - 1, crop.width + 2, crop.height + 2)
 
     def _on_motion(
         self,
@@ -433,10 +431,8 @@ class CropArea(Gtk.DrawingArea, SignalManager):
 
         self._update_cursor(x, y)
 
-        damage = self._crop_to_widget()
+        self._crop_to_widget()
         self.queue_draw()
-        # self.queue_draw_area(
-        #     damage.x - 1, damage.y - 1, damage.width + 2, damage.height + 2)
 
         pb_width = self._browse_pixbuf.get_width()
         pb_height = self._browse_pixbuf.get_height()
@@ -612,11 +608,9 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         self._crop.y = int(top)
         self._crop.width = int(right - left + 1)
         self._crop.height = int(bottom - top + 1)
-        damage = self._crop_to_widget()
+        self._crop_to_widget()
 
         self.queue_draw()
-        # self.queue_draw_area(
-        #     damage.x - 1, damage.y - 1, damage.width + 2, damage.height + 2)
 
     def _update_pixbufs(self) -> None:
         allocated_width = self.get_width()
