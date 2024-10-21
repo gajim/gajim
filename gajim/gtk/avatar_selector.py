@@ -27,10 +27,8 @@ from gajim.common.i18n import _
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 
-from gajim.gtk import types
-from gajim.gtk.const import DND_TARGET_FLATPAK
-from gajim.gtk.const import DND_TARGET_URI_LIST
-from gajim.gtk.const import TARGET_TYPE_URI_LIST
+# from gajim.gtk.const import DND_TARGET_FLATPAK
+# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import SignalManager
@@ -71,21 +69,16 @@ class AvatarSelector(Gtk.Box, SignalManager):
 
         self.get_style_context().add_class('avatar-selector')
 
-        if app.is_flatpak():
-            target = DND_TARGET_FLATPAK
-        else:
-            target = DND_TARGET_URI_LIST
+        # TODO GTK4 test how Flatpak behaves
+        # if app.is_flatpak():
+        #     target = DND_TARGET_FLATPAK
+        # else:
+        #     target = DND_TARGET_URI_LIST
 
-        # uri_entry = Gtk.TargetEntry.new(
-        #     target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
-        # dst_targets = Gtk.TargetList.new([uri_entry])
-
-        # self.drag_dest_set(
-        #     Gtk.DestDefaults.ALL,
-        #     [uri_entry],
-        #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        # self.drag_dest_set_target_list(dst_targets)
-        # self.connect('drag-data-received', self._on_drag_data_received)
+        drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
+        self._connect(drop_target, 'accept', self._on_drop_accept)
+        self._connect(drop_target, 'drop', self._on_file_drop)
+        self.add_controller(drop_target)
 
         self._crop_area = CropArea()
         self._crop_area.set_vexpand(True)
@@ -133,24 +126,23 @@ class AvatarSelector(Gtk.Box, SignalManager):
 
         self.prepare_crop_area(str(paths[0]))
 
-    # def _on_drag_data_received(self,
-    #                            _widget: Gtk.Widget,
-    #                            _context: Any,
-    #                            _x_coord: int,
-    #                            _y_coord: int,
-    #                            selection: Any,
-    #                            target_type: int,
-    #                            _timestamp: int
-    #                            ) -> None:
-    #     if not selection.get_data():
-    #         return
+    def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        formats = drop.get_formats()
+        return bool(formats.contain_gtype(Gdk.FileList))
 
-    #     if target_type == TARGET_TYPE_URI_LIST:
-    #         uri_split = selection.get_uris()  # Might be more than one
-    #         path = get_file_path_from_dnd_dropped_uri(uri_split[0])
-    #         if not path or not path.is_file():
-    #             return
-    #         self.prepare_crop_area(str(path))
+    def _on_file_drop(
+        self, _target: Gtk.DropTarget, value: Gdk.FileList, _x: float, _y: float
+    ) -> bool:
+        files = value.get_files()
+        if not files:
+            return False
+
+        path = get_file_path_from_dnd_dropped_uri(files[0].get_uri())
+        if not path or not path.is_file():
+            return False
+
+        self.prepare_crop_area(str(path))
+        return True
 
     @staticmethod
     def _get_pixbuf_from_path(path: str) -> GdkPixbuf.Pixbuf | None:
