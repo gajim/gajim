@@ -10,6 +10,7 @@ from typing import cast
 import logging
 from pathlib import Path
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -31,10 +32,10 @@ from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 from gajim.gtk.builder import get_builder
 # from gajim.gtk.const import DND_TARGET_FLATPAK
 # from gajim.gtk.const import DND_TARGET_URI_LIST
-from gajim.gtk.const import TARGET_TYPE_URI_LIST
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.resource_selector import ResourceSelector
-from gajim.gtk.util import SignalManager, iterate_listbox_children
+from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util import SignalManager
 
 PREVIEW_SIZE = 72
 
@@ -76,7 +77,11 @@ class FileTransferSelector(Gtk.Box, SignalManager):
         self._file_chooser_button.set_halign(Gtk.Align.CENTER)
         self._ui.box.append(self._file_chooser_button)
 
-        self._connect(self._file_chooser_button, 'path-picked', self._on_choose_files_clicked)
+        self._connect(
+            self._file_chooser_button,
+            'path-picked',
+            self._on_choose_files_clicked
+        )
 
         self._resource_selector = None
         if isinstance(contact, BareContact):
@@ -84,7 +89,11 @@ class FileTransferSelector(Gtk.Box, SignalManager):
             self._resource_selector = ResourceSelector(
                 contact,
                 constraints=[Namespace.JINGLE_FILE_TRANSFER_5])
-            self._connect(self._resource_selector, 'selection-changed', self._on_resource_selection)
+            self._connect(
+                self._resource_selector,
+                'selection-changed',
+                self._on_resource_selection
+            )
             self._ui.resource_box.prepend(
                 self._resource_selector)
 
@@ -93,24 +102,16 @@ class FileTransferSelector(Gtk.Box, SignalManager):
                   'Choose the device you would like to send the '
                   'files to.') % self._contact.name)
 
-        # GTK4 TODO
-
+        # TODO GTK4 test how Flatpak behaves
         # if app.is_flatpak():
         #     target = DND_TARGET_FLATPAK
         # else:
         #     target = DND_TARGET_URI_LIST
 
-        # uri_entry = Gtk.TargetEntry.new(
-        #     target, Gtk.TargetFlags.OTHER_APP, TARGET_TYPE_URI_LIST)
-        # dst_targets = Gtk.TargetList.new([uri_entry])
-
-        # self._ui.listbox.drag_dest_set(
-        #     Gtk.DestDefaults.ALL,
-        #     [uri_entry],
-        #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        # self._ui.listbox.drag_dest_set_target_list(dst_targets)
-        # self._ui.listbox.connect(
-        #     'drag-data-received', self._on_drag_data_received)
+        drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
+        self._connect(drop_target, 'accept', self._on_drop_accept)
+        self._connect(drop_target, 'drop', self._on_file_drop)
+        self.add_controller(drop_target)
 
     def do_unroot(self) -> None:
         Gtk.Box.do_unroot(self)
@@ -190,8 +191,15 @@ class FileTransferSelector(Gtk.Box, SignalManager):
             jingle_warning = bool(self._method == 'jingle')
 
             row = FileRow(path, size_warning, jingle_warning)
+            self._connect(row, 'removed', self._on_row_removed)
             self._ui.listbox.append(row)
             app.settings.set('last_send_dir', str(path.parent))
+
+        self._on_files_changed()
+
+    def _on_row_removed(self, row: FileRow) -> None:
+        self._ui.listbox.remove(row)
+        self._on_files_changed()
 
     def _add_warning_message(self, msg: str) -> None:
         log.warning(msg)  # TODO: replace with UI
@@ -203,22 +211,25 @@ class FileTransferSelector(Gtk.Box, SignalManager):
 
         return paths
 
-    def _on_drag_data_received(self,
-                               _widget: Gtk.Widget,
-                               _context: Any,
-                               _x_coord: int,
-                               _y_coord: int,
-                               selection: Any,
-                               target_type: int,
-                               _timestamp: int
-                               ) -> None:
-        if not selection.get_data():
-            return
+    def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        formats = drop.get_formats()
+        return bool(formats.contain_gtype(Gdk.FileList))
 
-        if target_type == TARGET_TYPE_URI_LIST:
-            self.add_files(selection.get_uris())
+    def _on_file_drop(
+        self, _target: Gtk.DropTarget, value: Gdk.FileList, _x: float, _y: float
+    ) -> bool:
+        files = value.get_files()
+        if not files:
+            return False
 
-    def _on_files_changed(self, _listbox: Gtk.ListBox, _row: FileRow) -> None:
+        path = get_file_path_from_dnd_dropped_uri(files[0].get_uri())
+        if not path or not path.is_file():
+            return False
+
+        self.add_files([file.get_uri() for file in files])
+        return True
+
+    def _on_files_changed(self) -> None:
         file_paths = self._get_file_paths()
         if not file_paths:
             self.emit('changed', False)
@@ -240,11 +251,20 @@ class FileTransferSelector(Gtk.Box, SignalManager):
 
         self.emit('changed', state)
 
-    def _on_choose_files_clicked(self, _button: FileChooserButton, paths: list[Path]) -> None:
+    def _on_choose_files_clicked(
+        self,
+        _button: FileChooserButton,
+        paths: list[Path]
+    ) -> None:
         self.add_files([p.as_uri() for p in paths])
 
 
 class FileRow(Gtk.ListBoxRow, SignalManager):
+
+    __gsignals__ = {
+        'removed': (GObject.SignalFlags.RUN_LAST, None, ()),
+    }
+
     def __init__(self,
                  path: Path,
                  size_warning: bool,
@@ -324,5 +344,4 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
         self._ui.preview_image.set_from_gicon(icon)
 
     def _on_remove_clicked(self, _button: Gtk.Button) -> None:
-        listbox = cast(Gtk.ListBox, self.get_parent())
-        listbox.remove(self)
+        self.emit('removed')

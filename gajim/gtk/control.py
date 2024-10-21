@@ -154,9 +154,9 @@ class ChatControl(EventHelper):
 
         self._scrolled_view.add_info_message(text, timestamp)
 
-    def drag_data_file_transfer(self, selection: Gtk.SelectionData) -> None:
+    def drag_data_file_transfer(self, paths: list[str]) -> None:
         app.window.activate_action('win.send-file',
-                                   GLib.Variant('as', selection.get_uris()))
+                                   GLib.Variant('as', paths))
 
     def clear(self) -> None:
         log.info('Clear')

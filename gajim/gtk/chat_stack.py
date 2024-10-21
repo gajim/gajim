@@ -21,6 +21,7 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -40,27 +41,24 @@ from gajim.common.util.text import remove_invalid_xml_chars
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
-from gajim.gtk.const import DND_TARGET_FLATPAK
-from gajim.gtk.const import DND_TARGET_URI_LIST
-from gajim.gtk.const import TARGET_TYPE_URI_LIST
+# from gajim.gtk.const import DND_TARGET_FLATPAK
+# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.control import ChatControl
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import open_window
 from gajim.gtk.util import set_urgency_hint
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.chatstack')
 
 
-class ChatStack(Gtk.Stack, EventHelper):
+class ChatStack(Gtk.Stack, EventHelper, SignalManager):
     def __init__(self):
-        Gtk.Stack.__init__(self)
+        Gtk.Stack.__init__(self, hexpand=True, vexpand=True)
         EventHelper.__init__(self)
-
-        self.set_vexpand(True)
-        self.set_hexpand(True)
+        SignalManager.__init__(self)
 
         self._current_contact: ChatContactT | None = None
         self._last_quoted_id: int | None = None
@@ -107,32 +105,20 @@ class ChatStack(Gtk.Stack, EventHelper):
         overlay = Gtk.Overlay()
         overlay.add_overlay(self._drop_area)
         overlay.set_child(box)
-        # overlay.connect('drag-data-received', self._on_drag_data_received)
-        # overlay.connect('drag-motion', self._on_drag_motion)
-        # overlay.connect('drag-leave', self._on_drag_leave) TODO GTK4
 
-        if app.is_flatpak():
-            target = DND_TARGET_FLATPAK
-        else:
-            target = DND_TARGET_URI_LIST
+        # TODO: support dnd for contacts (MUC invitations)
+        drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
+        self._connect(drop_target, 'accept', self._on_drop_accept)
+        self._connect(drop_target, 'drop', self._on_file_drop)
+        self._connect(drop_target, 'enter', self._on_drag_enter)
+        self._connect(drop_target, 'leave', self._on_drag_leave)
+        overlay.add_controller(drop_target)
 
-        # uri_entry = Gtk.TargetEntry.new(
-        #     target,
-        #     Gtk.TargetFlags.OTHER_APP,
-        #     TARGET_TYPE_URI_LIST)
-        # dnd_list = [uri_entry,
-        #             Gtk.TargetEntry.new(
-        #                 'OBJECT_DROP',
-        #                 Gtk.TargetFlags.SAME_APP,
-        #                 0)]
-        # dst_targets = Gtk.TargetList.new([uri_entry])
-        # dst_targets.add_text_targets(0)
-
-        # overlay.drag_dest_set(
-        #     Gtk.DestDefaults.ALL,
-        #     dnd_list,
-        #     Gdk.DragAction.COPY | Gdk.DragAction.MOVE)
-        # overlay.drag_dest_set_target_list(dst_targets)
+        # TODO GTK4 test how Flatpak behaves
+        # if app.is_flatpak():
+        #     target = DND_TARGET_FLATPAK
+        # else:
+        #     target = DND_TARGET_URI_LIST
 
         self.add_named(overlay, 'controls')
 
@@ -144,6 +130,12 @@ class ChatStack(Gtk.Stack, EventHelper):
             ('account-connected', 85, self._on_account_state),
             ('account-disconnected', 85, self._on_account_state),
         ])
+
+    def do_unroot(self) -> None:
+        Gtk.Stack.do_unroot(self)
+        self._disconnect_all()
+        self.unregister_events()
+        app.check_finalize(self)
 
     def _get_current_contact(self) -> ChatContactT:
         assert self._current_contact is not None
@@ -730,50 +722,35 @@ class ChatStack(Gtk.Stack, EventHelper):
         else:
             log.debug('Affiliation/role change success: %s', result)
 
-    def _on_drag_data_received(self,
-                               _widget: Gtk.Widget,
-                               _context: Gdk.DragContext,
-                               _x_coord: int,
-                               _y_coord: int,
-                               selection: Gtk.SelectionData,
-                               target_type: int,
-                               _timestamp: int
-                               ) -> None:
-        if not selection.get_data():
-            return
+    def _on_drag_enter(
+        self,
+        _drop_target: Gtk.DropTarget,
+        _x: float,
+        _y: float,
+    ) -> Gdk.DragAction:
+        self._drop_area.set_visible(True)
+        return Gdk.DragAction.COPY
 
-        log.debug('Drop received: %s, %s', selection.get_data(), target_type)
-
-        # TODO: Contact drag and drop for invitations (AdHoc MUC/MUC)
-        if target_type == TARGET_TYPE_URI_LIST:
-            if self._chat_control.has_active_chat():
-                self._chat_control.drag_data_file_transfer(selection)
-
-    def _on_drag_leave(self,
-                       _widget: Gtk.Widget,
-                       _context: Gdk.DragContext,
-                       _time: int
-                       ) -> None:
+    def _on_drag_leave(self, _drop_target: Gtk.DropTarget) -> None:
         self._drop_area.set_visible(False)
-        self._drop_area.hide()
 
-    def _on_drag_motion(self,
-                        _widget: Gtk.Widget,
-                        context: Gdk.DragContext,
-                        _x_coord: int,
-                        _y_coord: int,
-                        time: int
-                        ) -> bool:
+    def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:
+        formats = drop.get_formats()
+        return bool(formats.contain_gtype(Gdk.FileList))
 
-        if time == 0:
-            # Workaround for https://gitlab.gnome.org/GNOME/gtk/-/issues/5518
+    def _on_file_drop(
+        self, _target: Gtk.DropTarget, value: Gdk.FileList, _x: float, _y: float
+    ) -> bool:
+        log.debug('Drop received: %s', value)
+        files = value.get_files()
+        if not files:
             return False
 
-        for targ in context.list_targets():
-            if targ.name() in {DND_TARGET_URI_LIST, DND_TARGET_FLATPAK}:
-                self._drop_area.set_no_show_all(False)
-                self._drop_area.show_all()
-                return True
+        if self._chat_control.has_active_chat():
+            self._chat_control.drag_data_file_transfer(
+                [file.get_uri() for file in files]
+            )
+            return True
 
         return False
 
