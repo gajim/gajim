@@ -66,7 +66,6 @@ BoolSettings = Literal[
     'print_status_in_chats',
     'remote_control',
     'show_main_menu',
-    'save_main_window_position',
     'send_on_ctrl_enter',
     'show_help_start_chat',
     'show_in_taskbar',
@@ -244,7 +243,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'print_status_in_chats': False,
     'remote_control': False,
     'roster_theme': 'default',
-    'save_main_window_position': True,
     'search_engine': 'https://duckduckgo.com/?q=%s',
     'send_on_ctrl_enter': False,
     'show_help_start_chat': True,
@@ -700,9 +698,6 @@ ADVANCED_SETTINGS = {
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
         'providers_list_url': _(
             'Endpoint for retrieving a list of providers for sign up'),
-        'save_main_window_position': _(
-            'If enabled, Gajim will save the main window position when hiding '
-            'it, and restore it when showing the window again.'),
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),

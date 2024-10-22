@@ -220,30 +220,6 @@ def move_window(window: Gtk.Window, pos_x: int, pos_y: int) -> None:
     window.move(pos_x, pos_y)
 
 
-def save_main_window_position() -> None:
-    if not app.settings.get('save_main_window_position'):
-        return
-    if app.is_display(Display.WAYLAND):
-        return
-
-    # TODO GTK4
-    return
-    x_pos, y_pos = app.window.get_position()
-    log.debug('Saving main window position: %s %s', x_pos, y_pos)
-    app.settings.set('mainwin_x_position', x_pos)
-    app.settings.set('mainwin_y_position', y_pos)
-
-
-def restore_main_window_position() -> None:
-    if not app.settings.get('save_main_window_position'):
-        return
-    if app.is_display(Display.WAYLAND):
-        return
-    move_window(app.window,
-                app.settings.get('mainwin_x_position'),
-                app.settings.get('mainwin_y_position'))
-
-
 def get_source_view_style_scheme() -> GtkSource.StyleScheme | None:
     style_scheme_manager = GtkSource.StyleSchemeManager.get_default()
     if app.css_config.prefer_dark:

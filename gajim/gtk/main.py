@@ -64,8 +64,6 @@ from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
 from gajim.gtk.util import resize_window
-from gajim.gtk.util import restore_main_window_position
-from gajim.gtk.util import save_main_window_position
 from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:
@@ -194,14 +192,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         assert toplevel is not None
         return bool(Gdk.WindowState.WITHDRAWN & toplevel.get_state())
 
-    def hide(self) -> None:
-        save_main_window_position()
-        Gtk.ApplicationWindow.hide(self)
-
     def show(self) -> None:
-        restore_main_window_position()
-        # self.present_with_time(Gtk.get_current_event_time())
-        # GTK4 TODO
         self.present()
 
     def set_skip_taskbar_hint(self, value: bool) -> None:
@@ -240,7 +231,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_width = app.settings.get('mainwin_width')
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
-        restore_main_window_position()
 
         if app.is_display(Display.X11):
             self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
@@ -1439,7 +1429,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.add_chat(event.account, event.jid, 'contact')
 
     def quit(self) -> None:
-        save_main_window_position()
         window_width, window_height = self.get_width(), self.get_height()
         app.settings.set('mainwin_width', window_width)
         app.settings.set('mainwin_height', window_height)
