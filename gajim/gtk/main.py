@@ -37,7 +37,6 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
-from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
@@ -53,6 +52,7 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
 from gajim.gtk.structs import AccountJidParam
@@ -237,10 +237,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_height = app.settings.get('mainwin_height')
         resize_window(self, window_width, window_height)
 
+        self.show()
+
         if app.is_display(Display.X11):
             self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
-
-        self.show()
 
         show_main_window = app.settings.get('show_main_window_on_startup')
         if show_main_window == 'never':
