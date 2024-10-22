@@ -28,6 +28,7 @@ from gajim.common.const import StyleAttr
 from gajim.common.events import ApplicationEvent
 from gajim.common.events import RosterPush
 from gajim.common.events import RosterReceived
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.util.decorators import event_filter
@@ -37,9 +38,9 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.menus import get_roster_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import open_window
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.roster')
 
@@ -55,13 +56,13 @@ class Column(IntEnum):
     VISIBLE = 4
 
 
-class Roster(Gtk.ScrolledWindow, EventHelper):
+class Roster(Gtk.ScrolledWindow, EventHelper, SignalManager):
     def __init__(self, account: str) -> None:
-        Gtk.ScrolledWindow.__init__(self)
+        Gtk.ScrolledWindow.__init__(self, width_request=200, vexpand=True)
         EventHelper.__init__(self)
-        self.set_size_request(200, -1)
-        self.set_vexpand(True)
-        self.get_style_context().add_class('roster')
+        SignalManager.__init__(self)
+
+        self.add_css_class('roster')
 
         self._account = account
         self._client = app.get_client(account)
@@ -69,22 +70,44 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._roster_tooltip = ContactTooltip()
 
-        self._ui = get_builder('roster.ui', self)
+        self._ui = get_builder('roster.ui')
         self._ui.roster_treeview.set_model(None)
-        self.set_child(self._ui.roster_treeview)
+
+        box = Gtk.Box()
+        box.append(self._ui.roster_treeview)
+        self.set_child(box)
+
+        self._popover_menu = GajimPopover(None)
+        box.append(self._popover_menu)
+
+        gesture_middle_click = Gtk.GestureClick(button=Gdk.BUTTON_MIDDLE)
+        self._connect(gesture_middle_click, 'pressed', self._on_row_clicked)
+        self._ui.roster_treeview.add_controller(gesture_middle_click)
+
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        self._connect(gesture_secondary_click, 'pressed', self._on_row_clicked)
+        self._ui.roster_treeview.add_controller(gesture_secondary_click)
+
+        focus_controller = Gtk.EventControllerFocus()
+        self._connect(focus_controller, 'leave', self._on_focus_out)
+        self._ui.roster_treeview.add_controller(focus_controller)
+
+        self._connect(
+            self._ui.roster_treeview, 'row-activated', self._on_roster_row_activated
+        )
 
         self._contact_refs: dict[
             JID, list[Gtk.TreeRowReference]] = defaultdict(list)
         self._group_refs: dict[str, Gtk.TreeRowReference] = {}
 
-        self._store = self._ui.contact_store
+        self._store = Gtk.TreeStore(Gdk.Texture, str, bool, str, bool)
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
 
         self._roster = self._ui.roster_treeview
         self._roster.set_has_tooltip(True)
         self._roster.connect('query-tooltip', self._on_query_tooltip)
 
-        # Drag and Drop GTK4 TODO
+        # TODO port roster to Gtk.ListView and add back drag and drop
         # entries = [Gtk.TargetEntry.new(
         #     'ROSTER_ITEM',
         #     Gtk.TargetFlags.SAME_APP,
@@ -99,7 +122,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
 
         self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
                                                    self._text_cell_data_func)
-        self.connect('destroy', self._on_destroy)
 
         self.register_events([
             ('roster-received', ged.CORE, self._on_roster_received),
@@ -122,10 +144,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         app.settings.connect_signal('sort_by_show_in_roster',
                                     self._on_setting_changed)
 
-        self._action_signal_ids = self._connect_actions()
+        self._connect_actions()
         self._initial_draw()
 
-    def _connect_actions(self) -> dict[Gio.Action, int]:
+    def _connect_actions(self) -> None:
         app_actions = [
             (f'{self._account}-contact-info', self._on_contact_info),
             (f'{self._account}-modify-gateway', self._on_modify_gateway),
@@ -134,15 +156,11 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             (f'{self._account}-remove-contact', self._on_remove_contact),
         ]
 
-        signal_ids: dict[Gio.Action, int] = {}
         for action in app_actions:
             action_name, func = action
             action = app.app.lookup_action(action_name)
             assert action is not None
-            signal_id = action.connect('activate', func)
-            signal_ids[action] = signal_id
-
-        return signal_ids
+            self._connect(action, 'activate', func)
 
     def _get_contact(self, jid: str) -> BareContact:
         contact = self._client.get_module('Contacts').get_contact(jid)
@@ -152,73 +170,73 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     def _on_theme_update(self, _event: ApplicationEvent) -> None:
         self.redraw()
 
-    @staticmethod
-    def _on_drag_drop(treeview: Gtk.TreeView,
-                      drag_context: Any,
-                      _x_coord: int,
-                      _y_coord: int,
-                      timestamp: int) -> bool:
+    # @staticmethod
+    # def _on_drag_drop(treeview: Gtk.TreeView,
+    #                   drag_context: Any,
+    #                   _x_coord: int,
+    #                   _y_coord: int,
+    #                   timestamp: int) -> bool:
 
-        treeview.stop_emission_by_name('drag-drop')
-        target_list = treeview.drag_dest_get_target_list()
-        target = treeview.drag_dest_find_target(drag_context, target_list)
-        treeview.drag_get_data(drag_context, target, timestamp)
-        return True
+    #     treeview.stop_emission_by_name('drag-drop')
+    #     target_list = treeview.drag_dest_get_target_list()
+    #     target = treeview.drag_dest_find_target(drag_context, target_list)
+    #     treeview.drag_get_data(drag_context, target, timestamp)
+    #     return True
 
-    def _on_drag_data_received(self,
-                               treeview: Gtk.TreeView,
-                               _drag_context: Any,
-                               x_coord: int,
-                               y_coord: int,
-                               _selection_data: Any,
-                               _info: int,
-                               _timestamp: int) -> None:
+    # def _on_drag_data_received(self,
+    #                            treeview: Gtk.TreeView,
+    #                            _drag_context: Any,
+    #                            x_coord: int,
+    #                            y_coord: int,
+    #                            _selection_data: Any,
+    #                            _info: int,
+    #                            _timestamp: int) -> None:
 
-        treeview.stop_emission_by_name('drag-data-received')
-        if treeview.get_selection().count_selected_rows() == 0:
-            # No selections, nothing dragged from treeview
-            return
+    #     treeview.stop_emission_by_name('drag-data-received')
+    #     if treeview.get_selection().count_selected_rows() == 0:
+    #         # No selections, nothing dragged from treeview
+    #         return
 
-        drop_info = treeview.get_dest_row_at_pos(x_coord, y_coord)
-        if not drop_info:
-            return
+    #     drop_info = treeview.get_dest_row_at_pos(x_coord, y_coord)
+    #     if not drop_info:
+    #         return
 
-        path_dest, _ = drop_info
+    #     path_dest, _ = drop_info
 
-        # Source: the row being dragged
-        rows = treeview.get_selection().get_selected_rows()
-        assert rows is not None
-        model, paths = rows
-        path_source = paths[0]
-        iter_source = model.get_iter(path_source)
-        iter_source_parent = model.iter_parent(iter_source)
-        if iter_source_parent is None:
-            # Dragged a group
-            return
+    #     # Source: the row being dragged
+    #     rows = treeview.get_selection().get_selected_rows()
+    #     assert rows is not None
+    #     model, paths = rows
+    #     path_source = paths[0]
+    #     iter_source = model.get_iter(path_source)
+    #     iter_source_parent = model.iter_parent(iter_source)
+    #     if iter_source_parent is None:
+    #         # Dragged a group
+    #         return
 
-        source_group = model[iter_source_parent][Column.JID_OR_GROUP]
+    #     source_group = model[iter_source_parent][Column.JID_OR_GROUP]
 
-        jid = model[iter_source][Column.JID_OR_GROUP]
+    #     jid = model[iter_source][Column.JID_OR_GROUP]
 
-        # Destination: the row receiving the drop
-        iter_dest = model.get_iter(path_dest)
-        iter_dest_parent = model.iter_parent(iter_dest)
-        if iter_dest_parent is None:
-            # Dropped on a group
-            dest_group = model[iter_dest][Column.JID_OR_GROUP]
-        else:
-            dest_group = model[iter_dest_parent][Column.JID_OR_GROUP]
+    #     # Destination: the row receiving the drop
+    #     iter_dest = model.get_iter(path_dest)
+    #     iter_dest_parent = model.iter_parent(iter_dest)
+    #     if iter_dest_parent is None:
+    #         # Dropped on a group
+    #         dest_group = model[iter_dest][Column.JID_OR_GROUP]
+    #     else:
+    #         dest_group = model[iter_dest_parent][Column.JID_OR_GROUP]
 
-        if source_group == dest_group:
-            return
+    #     if source_group == dest_group:
+    #         return
 
-        if DEFAULT_GROUP == dest_group:
-            self._client.get_module('Roster').set_groups(jid, None)
-            return
+    #     if DEFAULT_GROUP == dest_group:
+    #         self._client.get_module('Roster').set_groups(jid, None)
+    #         return
 
-        self._client.get_module('Roster').change_group(jid,
-                                                       source_group,
-                                                       dest_group)
+    #     self._client.get_module('Roster').change_group(jid,
+    #                                                    source_group,
+    #                                                    dest_group)
 
     def _on_query_tooltip(self,
                           treeview: Gtk.TreeView,
@@ -336,55 +354,50 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         jid = JID.from_string(self._store[iter_][Column.JID_OR_GROUP])
         app.window.add_chat(self._account, jid, 'contact', select=True)
 
-    def _on_roster_button_press_event(self,
-                                      treeview: Gtk.TreeView,
-                                      event: Any) -> None:
-
-        if event.button == Gdk.BUTTON_PRIMARY:
-            return
-
-        pos = treeview.get_path_at_pos(int(event.x), int(event.y))
+    def _on_row_clicked(
+        self,
+        gesture_click : Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+        pos = self._roster.get_path_at_pos(int(x), int(y))
         if pos is None:
-            return
+            return Gdk.EVENT_PROPAGATE
 
         path, _, _, _ = pos
-        if path is None:
-            return
-
         path = self._modelfilter.convert_path_to_child_path(path)
         assert path is not None
         iter_ = self._store.get_iter(path)
         if self._store.iter_parent(iter_) is None:
             # Group row
-            return
+            return Gdk.EVENT_PROPAGATE
 
         jid = self._store[iter_][Column.JID_OR_GROUP]
 
-        if event.button == Gdk.BUTTON_SECONDARY:
-            self._show_contact_menu(jid, treeview, event)
+        if gesture_click.get_current_button() == Gdk.BUTTON_SECONDARY:
+            self._show_contact_menu(jid, x, y)
+            return Gdk.EVENT_STOP
 
         jid = JID.from_string(jid)
-        if event.button == Gdk.BUTTON_MIDDLE:
+        if gesture_click.get_current_button() == Gdk.BUTTON_MIDDLE:
             app.window.add_chat(self._account, jid, 'contact', select=True)
+            return Gdk.EVENT_STOP
 
-    @staticmethod
-    def _on_focus_out(treeview: Gtk.TreeView, _event: Gdk.EventFocus) -> None:
-        treeview.get_selection().unselect_all()
+        return Gdk.EVENT_PROPAGATE
 
-    def _show_contact_menu(self,
-                           jid: str,
-                           treeview: Gtk.TreeView,
-                           event: Any) -> None:
-
+    def _show_contact_menu(self, jid: str, x: float, y: float) -> None:
         contact = self._contacts.get_bare_contact(jid)
         assert isinstance(contact, BareContact)
-        gateway_register = contact.is_gateway and contact.supports(
-            Namespace.REGISTER)
+        gateway_register = contact.is_gateway and contact.supports(Namespace.REGISTER)
 
-        menu = get_roster_menu(
-            self._account, contact, gateway=gateway_register)
-        popover = GajimPopover(menu, relative_to=treeview, event=event)
-        popover.popup()
+        menu = get_roster_menu(self._account, contact, gateway=gateway_register)
+        self._popover_menu.set_menu_model(menu)
+        self._popover_menu.set_pointing_to_coord(x, y)
+        self._popover_menu.popup()
+
+    def _on_focus_out(self, _event_controller_focus: Gtk.EventControllerFocus) -> None:
+        self._roster.get_selection().unselect_all()
 
     def set_search_string(self, text: str) -> None:
         self._filter_string = text.lower()
@@ -618,8 +631,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
             name = f'<span strikethrough="true">{name}</span>'
         self._store[iter_][Column.TEXT] = name
 
-        texture = contact.get_avatar(
-            AvatarSize.ROSTER, self.get_scale_factor())
+        texture = contact.get_avatar(AvatarSize.ROSTER, 1)
         self._store[iter_][Column.AVATAR] = texture
         self._store[iter_][Column.VISIBLE] = self._get_contact_visible(contact)
 
@@ -713,11 +725,6 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._group_refs.clear()
         self._store.clear()
 
-    def _disconnect_actions(self) -> None:
-        for action, signal_id in self._action_signal_ids.items():
-            action.disconnect(signal_id)
-        self._action_signal_ids.clear()
-
     @staticmethod
     def _dummy_tree_compare(
         _model: Gtk.TreeModel,
@@ -727,9 +734,10 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
     ) -> int:
         return 0
 
-    def _on_destroy(self, _roster: Roster) -> None:
+    def do_unroot(self) -> None:
         app.settings.disconnect_signals(self)
-        self._disconnect_actions()
+        self._disconnect_all()
+        self.unregister_events()
         self._contact_refs.clear()
         self._group_refs.clear()
         self._unset_model()
@@ -738,6 +746,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper):
         self._store.set_sort_func(Column.TEXT, self._dummy_tree_compare)
         self._store.clear()
         self._roster_tooltip.destroy()
+        Gtk.ScrolledWindow.do_unroot(self)
         del self._roster
         del self._store
         del self._roster_tooltip
