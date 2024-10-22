@@ -111,10 +111,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._account_side_bar = AccountSideBar()
         self._ui.account_box.append(self._account_side_bar)
 
-        # self.connect('motion-notify-event', self._on_window_motion_notify)
         self.connect('notify::is-active', self._on_window_active)
         self.connect('close-request', self._on_close_request)
         # self.connect('window-state-event', self._on_window_state_changed) GTK4 TODO
+
+        controller = Gtk.EventControllerMotion(
+            propagation_phase=Gtk.PropagationPhase.BUBBLE
+        )
+        controller.connect('motion', self._on_window_motion_notify)
+        self.add_controller(controller)
 
         controller = Gtk.EventControllerKey(
             propagation_phase=Gtk.PropagationPhase.CAPTURE
@@ -807,15 +812,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                callback=_on_delete)],
             transient_for=app.window).show()
 
-    def _on_window_motion_notify(self,
-                                 _widget: Gtk.ApplicationWindow,
-                                 _event: Any
-                                 ) -> None:
+    def _on_window_motion_notify(
+        self,
+        _widget: Gtk.EventControllerMotion,
+        _x: float,
+        _y: float,
+    ) -> None:
         control = self.get_control()
         if not control.has_active_chat():
             return
 
-        if self.get_property('has-toplevel-focus'):
+        if self.is_active():
             client = app.get_client(control.contact.account)
             chat_stack = self._chat_page.get_chat_stack()
             msg_action_box = chat_stack.get_message_action_box()
