@@ -82,7 +82,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper, SignalManager):
         self._contact_refs: dict[str, Gtk.TreeRowReference] = {}
         self._group_refs: dict[str, Gtk.TreeRowReference] = {}
 
-        self._store = self._ui.participant_store
+        self._store = Gtk.TreeStore(Gdk.Texture, str, bool, str)
         self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
 
         self._roster = self._ui.roster_treeview
@@ -110,14 +110,18 @@ class GroupchatRoster(Gtk.Revealer, EventHelper, SignalManager):
         self._connect(self, 'notify::reveal-child', self._on_reveal)
         self._connect(self._ui.search_entry, 'changed', self._on_search_changed)
         self._connect(self._ui.roster_treeview, 'query-tooltip', self._query_tooltip)
-        self._connect(self._ui.roster_treeview, 'row-activated', self._on_roster_row_activated)
+        self._connect(
+            self._ui.roster_treeview, 'row-activated', self._on_roster_row_activated
+        )
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_secondary_click.connect('pressed', self._on_roster_button_press_event)
+        self._connect(
+            gesture_secondary_click, 'pressed', self._on_roster_button_press_event
+        )
         self._ui.roster_treeview.add_controller(gesture_secondary_click)
 
         focus_controller = Gtk.EventControllerFocus()
-        focus_controller.connect('leave', self._on_focus_out)
+        self._connect(focus_controller, 'leave', self._on_focus_out)
         self._ui.roster_treeview.add_controller(focus_controller)
 
     def do_unroot(self) -> None:
@@ -651,8 +655,7 @@ class GroupchatRoster(Gtk.Revealer, EventHelper, SignalManager):
         if iter_ is None:
             return
 
-        texture = contact.get_avatar(AvatarSize.ROSTER,
-                                     self.get_scale_factor())
+        texture = contact.get_avatar(AvatarSize.ROSTER, 1)
 
         self._store[iter_][Column.AVATAR] = texture
 

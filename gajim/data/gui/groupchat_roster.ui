@@ -105,12 +105,4 @@
       <class name="groupchat-roster"/>
     </style>
   </object>
-  <object class="GtkTreeStore" id="participant_store">
-    <columns>
-      <column type="GdkTexture"/>
-      <column type="gchararray"/>
-      <column type="gboolean"/>
-      <column type="gchararray"/>
-    </columns>
-  </object>
 </interface>
