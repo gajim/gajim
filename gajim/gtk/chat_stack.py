@@ -48,7 +48,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util import open_window
-from gajim.gtk.util import set_urgency_hint
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.chatstack')
@@ -421,7 +420,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             msg_type = 'chat-message'
             title += f' {contact.name}'
             sound = 'first_message_received'
-            set_urgency_hint(app.window, True)
+            app.window.set_urgency_hint(True)
 
         if isinstance(contact, GroupchatContact):
             msg_type = 'group-chat-message'
@@ -437,7 +436,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             if not contact.can_notify() and not needs_highlight:
                 return
 
-            set_urgency_hint(app.window, True)
+            app.window.set_urgency_hint(True)
 
         if isinstance(contact, GroupchatParticipant):
             msg_type = 'private-chat-message'

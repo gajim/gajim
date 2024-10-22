@@ -285,7 +285,7 @@ class QuitDialog(GajimAppWindow):
             title=_('Quit Gajim'),
             transient_for=app.window,
         )
-        self.set_modal(True)
+        self.window.set_modal(True)
 
         self._ui = get_builder('quit_dialog.ui', self)
 
@@ -305,7 +305,10 @@ class QuitDialog(GajimAppWindow):
         elif action == 'quit':
             app.window.quit()
 
-        self.destroy()
+        self.close()
+
+    def _cleanup(self):
+        pass
 
 
 class ShortcutsWindow:

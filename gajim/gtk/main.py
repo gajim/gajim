@@ -66,7 +66,6 @@ from gajim.gtk.util import open_window
 from gajim.gtk.util import resize_window
 from gajim.gtk.util import restore_main_window_position
 from gajim.gtk.util import save_main_window_position
-from gajim.gtk.util import set_urgency_hint
 from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:
@@ -116,7 +115,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         # self.connect('motion-notify-event', self._on_window_motion_notify)
         self.connect('notify::is-active', self._on_window_active)
-        # self.connect('delete-event', self._on_window_delete)
+        self.connect('close-request', self._on_close_request)
         # self.connect('window-state-event', self._on_window_state_changed) GTK4 TODO
 
         controller = Gtk.EventControllerKey(
@@ -186,14 +185,14 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             # There is no way to discover if a window is minimized on wayland
             return False
 
-        window = self.get_window()
-        assert window is not None
-        return bool(Gdk.WindowState.ICONIFIED & window.get_state())
+        toplevel = self.get_surface()
+        assert toplevel is not None
+        return bool(Gdk.ToplevelState.MINIMIZED & toplevel.get_state())
 
     def is_withdrawn(self) -> bool:
-        window = self.get_window()
-        assert window is not None
-        return bool(Gdk.WindowState.WITHDRAWN & window.get_state())
+        toplevel = self.get_window()
+        assert toplevel is not None
+        return bool(Gdk.WindowState.WITHDRAWN & toplevel.get_state())
 
     def hide(self) -> None:
         save_main_window_position()
@@ -205,14 +204,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         # GTK4 TODO
         self.present()
 
-    def minimize(self) -> None:
-        self.iconify()
+    def set_skip_taskbar_hint(self, value: bool) -> None:
+        if not app.is_display(Display.X11):
+            return
+        toplevel = self.get_surface()
+        toplevel.set_skip_taskbar_hint(value)
 
-    def unminimize(self) -> None:
-        self.deiconify()
-        # self.present_with_time(Gtk.get_current_event_time())
-        # GTK4 TODO
-        self.present()
+    def set_urgency_hint(self, value: bool) -> None:
+        if not app.is_display(Display.X11):
+            return
+
+        if not app.settings.get('use_urgency_hint'):
+            return
+
+        toplevel = self.get_surface()
+        toplevel.set_urgency_hint(value)
 
     def mark_workspace_as_read(self, workspace: str) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -236,9 +242,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         resize_window(self, window_width, window_height)
         restore_main_window_position()
 
-        # GdkX11.X11Surface
-        # self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
-        # TODO GTK4
+        if app.is_display(Display.X11):
+            self.set_skip_taskbar_hint(not app.settings.get('show_in_taskbar'))
+
         self.show()
 
         show_main_window = app.settings.get('show_main_window_on_startup')
@@ -826,11 +832,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client.get_module('Chatstate').set_mouse_activity(
                 control.contact, msg_action_box.msg_textview.has_text)
 
-    def _on_window_delete(self,
-                          _widget: Gtk.ApplicationWindow,
-                          _event: Gdk.Event
-                          ) -> int:
-
+    def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> int:
         if app.settings.get('confirm_on_window_delete'):
             open_window('QuitDialog')
             return Gdk.EVENT_STOP
@@ -1208,7 +1210,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                                                   jid,
                                                   include_silent=True)
 
-        set_urgency_hint(self, False)
+        self.set_urgency_hint(False)
         control = self.get_control()
         if control.has_active_chat():
             # Reset jump to bottom button unread counter
@@ -1245,7 +1247,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not window.is_active():
             return
 
-        set_urgency_hint(self, False)
+        self.set_urgency_hint(False)
         control = self.get_control()
         if not control.has_active_chat():
             return

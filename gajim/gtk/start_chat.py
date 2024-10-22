@@ -7,16 +7,13 @@ from __future__ import annotations
 from typing import Any, Generic, Type, TypeVar
 from typing import cast
 
-import locale
 from enum import Enum
-import datetime
 
 from gi.repository import GObject, Gdk, Gio
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
-from nbxmpp.const import AnonymityMode
 from nbxmpp.errors import CancelledError
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
@@ -49,12 +46,9 @@ from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge, GajimMenu, GroupBadgeBox, get_icon_theme
+from gajim.gtk.util import AccountBadge, GroupBadgeBox, get_icon_theme
 from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import get_status_icon_name
-from gajim.gtk.util import GroupBadge
 from gajim.gtk.util import IdleBadge
-from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 

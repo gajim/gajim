@@ -63,12 +63,6 @@ MenuValueT = None | str | GLib.Variant | VariantMixin
 MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
-def set_urgency_hint(window: Gtk.Window, setting: bool) -> None:
-    return # TODO: GTK4
-    if app.settings.get('use_urgency_hint'):
-        window.set_urgency_hint(setting)
-
-
 def icon_exists(name: str) -> bool:
     return Gtk.IconTheme.get_default().has_icon(name)
 

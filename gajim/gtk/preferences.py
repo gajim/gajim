@@ -181,8 +181,6 @@ class WindowBehaviour(PreferenceBox):
 
     @staticmethod
     def _on_show_in_taskbar(value: bool, *args: Any) -> None:
-        # TODO: GTK4
-        return
         app.window.set_skip_taskbar_hint(not value)
 
 
