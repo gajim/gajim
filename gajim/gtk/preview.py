@@ -28,6 +28,7 @@ from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import load_icon_pixbuf
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.preview')
 
@@ -41,9 +42,11 @@ PREVIEW_ACTIONS: dict[str, tuple[str, str]] = {
 }
 
 
-class PreviewWidget(Gtk.Box):
+class PreviewWidget(Gtk.Box, SignalManager):
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
+
         self.account = account
         self._preview: Preview | None = None
 
@@ -54,8 +57,17 @@ class PreviewWidget(Gtk.Box):
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT
 
-        self._ui = get_builder('preview.ui', self)
+        self._ui = get_builder('preview.ui')
         self.append(self._ui.preview_stack)
+
+        self._connect(self._ui.icon_button, 'clicked', self._on_content_button_clicked)
+        self._connect(
+            self._ui.cancel_download_button, 'clicked', self._on_cancel_download_clicked
+        )
+        self._connect(self._ui.image_button, 'clicked', self._on_content_button_clicked)
+        self._connect(self._ui.open_folder_button, 'clicked', self._on_open_folder)
+        self._connect(self._ui.save_as_button, 'clicked', self._on_save_as)
+        self._connect(self._ui.download_button, 'clicked', self._on_download)
 
         pointer_cursor = Gdk.Cursor.new_from_name('pointer')
         self._ui.icon_button.set_cursor(pointer_cursor)
@@ -73,16 +85,18 @@ class PreviewWidget(Gtk.Box):
             PREVIEW_ACTIONS[leftclick_action][0])
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_secondary_click.connect('pressed', self._on_preview_clicked)
+        self._connect(gesture_secondary_click, 'pressed', self._on_preview_clicked)
         self.add_controller(gesture_secondary_click)
 
         app.settings.connect_signal(
             'preview_leftclick_action', self._update_icon_button_tooltip)
 
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+    def do_unroot(self) -> None:
         self._destroyed = True
+        self._disconnect_all()
+        app.settings.disconnect_signals(self)
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _update_icon_button_tooltip(self, setting: str, *args: Any) -> None:
         self._ui.icon_button.set_tooltip_text(

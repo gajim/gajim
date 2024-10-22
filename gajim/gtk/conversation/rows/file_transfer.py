@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
+from typing import cast
 
 import time
 
@@ -12,6 +12,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.const import FTState
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.util.datetime import utc_now
@@ -20,7 +21,6 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import format_eta
 
 
@@ -45,8 +45,8 @@ class FileTransferRow(BaseRow, EventHelper):
         self._pulse = GLib.timeout_add(100, self._pulse_progressbar)
 
         self._transfer = transfer
-        self._transfer.connect('state-changed', self._on_transfer_state_change)
-        self._transfer.connect('progress', self._on_transfer_progress)
+        self._connect(self._transfer, 'state-changed', self._on_transfer_state_change)
+        self._connect(self._transfer, 'progress', self._on_transfer_progress)
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
@@ -57,26 +57,30 @@ class FileTransferRow(BaseRow, EventHelper):
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)
 
-        self._ui = get_builder('file_transfer.ui', self)
+        self._ui = get_builder('file_transfer.ui')
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
+
+        self._connect(self._ui.cancel_button, 'clicked', self._on_cancel_clicked)
+
         self._ui.file_name.set_text(transfer.filename)
         self._ui.transfer_description.set_text(
             transfer.get_state_description())
 
-        self.connect('destroy', self._on_destroy)
-
-    def _on_destroy(self, *args: Any) -> None:
+    def do_unroot(self) -> None:
         self._destroyed = True
 
         del self._transfer
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
 
+        self.unregister_events()
+        BaseRow.do_unroot(self)
+
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         if self._transfer.state.is_active:
             self._transfer.cancel()
 
-        self.destroy()
+        cast(Gtk.ListBox, self.get_parent()).remove(self)
 
     def _on_transfer_state_change(self,
                                   transfer: HTTPFileTransfer,
@@ -89,10 +93,10 @@ class FileTransferRow(BaseRow, EventHelper):
             ErrorDialog(_('Error'),
                         transfer.error_text,
                         transient_for=app.window)
-            self.destroy()
+            cast(Gtk.ListBox, self.get_parent()).remove(self)
 
         if state.is_finished or state.is_cancelled:
-            self.destroy()
+            cast(Gtk.ListBox, self.get_parent()).remove(self)
             return
 
         description = transfer.get_state_description()

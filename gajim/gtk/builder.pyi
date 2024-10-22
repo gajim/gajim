@@ -368,6 +368,7 @@ class FileTransferBuilder(Builder):
     file_size: Gtk.Label
     progress_bar: Gtk.ProgressBar
     transfer_progress: Gtk.Label
+    cancel_button: Gtk.Button
 
 
 class FileTransferJingleBuilder(Builder):
@@ -564,7 +565,6 @@ class GroupchatRosterBuilder(Builder):
     avatar_renderer: Gtk.CellRendererPixbuf
     text_renderer: Gtk.CellRendererText
     expander: Gtk.TreeViewColumn
-    participant_store: Gtk.TreeStore
 
 
 class GroupchatRosterTooltipBuilder(Builder):
@@ -598,7 +598,6 @@ class GroupsPostWindowBuilder(Builder):
 
 
 class HistoryExportBuilder(Builder):
-    account_liststore: Gtk.ListStore
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
     account_combo: Gtk.ComboBox
@@ -851,7 +850,6 @@ class QuitDialogBuilder(Builder):
 
 
 class RosterBuilder(Builder):
-    contact_store: Gtk.TreeStore
     roster_treeview: Gtk.TreeView
     contact_column: Gtk.TreeViewColumn
     avatar_renderer: Gtk.CellRendererPixbuf
