@@ -4,12 +4,11 @@
   <object class="GtkBox" id="gajim_update">
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="dismiss_gajim_update">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="icon-name">window-close-symbolic</property>
@@ -18,12 +17,11 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="download_update">
         <property name="label" translatable="1">Download</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_download_update_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
@@ -67,12 +65,11 @@
   <object class="GtkBox" id="gajim_update_check">
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="dismiss_update_check">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_check_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="icon-name">window-close-symbolic</property>
@@ -81,12 +78,11 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="activate_update_check">
         <property name="label" translatable="1">Activate</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_activate_check_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
@@ -131,12 +127,11 @@
   <object class="GtkBox" id="plugin_updates">
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="dismiss_plugin_updates">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="icon-name">window-close-symbolic</property>
@@ -183,11 +178,10 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="open_plugins">
         <property name="focusable">1</property>
         <property name="tooltip-text" translatable="1">Open Plugins…</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_open_plugins" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="icon-name">system-software-install-symbolic</property>
@@ -196,12 +190,11 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="update_plugins">
         <property name="label" translatable="1">Update</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_update_plugins_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
@@ -252,12 +245,11 @@
       </object>
     </child>
     <child>
-      <object class="GtkButton">
+      <object class="GtkButton" id="dismiss_update_notification">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_update_notification" swapped="no"/>
         <child>
           <object class="GtkImage">
             <property name="icon-name">window-close-symbolic</property>

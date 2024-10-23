@@ -95,12 +95,20 @@ class AdvancedConfigurationBuilder(Builder):
 
 class AppPageBuilder(Builder):
     gajim_update: Gtk.Box
+    dismiss_gajim_update: Gtk.Button
+    download_update: Gtk.Button
     update_message: Gtk.Label
     gajim_update_check: Gtk.Box
+    dismiss_update_check: Gtk.Button
+    activate_update_check: Gtk.Button
     plugin_updates: Gtk.Box
+    dismiss_plugin_updates: Gtk.Button
     auto_update_plugins: Gtk.CheckButton
+    open_plugins: Gtk.Button
+    update_plugins: Gtk.Button
     plugin_updates_finished: Gtk.Box
     notify_after_plugin_updates: Gtk.CheckButton
+    dismiss_update_notification: Gtk.Button
 
 
 class AssistantBuilder(Builder):

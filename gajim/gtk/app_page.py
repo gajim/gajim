@@ -21,6 +21,7 @@ from gajim.plugins.manifest import PluginManifest
 from gajim.gtk.builder import get_builder
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
+from gajim.gtk.util import SignalManager
 
 
 class AppPage(Gtk.Box):
@@ -148,7 +149,7 @@ class AppMessageListBox(Gtk.ListBox):
         return f'{gajim}\n{plugins}'
 
 
-class AppMessageRow(Gtk.ListBoxRow):
+class AppMessageRow(Gtk.ListBoxRow, SignalManager):
     def __init__(self,
                  category: str,
                  new_version: str | None = None,
@@ -157,10 +158,36 @@ class AppMessageRow(Gtk.ListBoxRow):
                  ) -> None:
 
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
+
         self._plugin_manifests = plugin_manifests
         self._new_setup_url = new_setup_url
 
-        self._ui = get_builder('app_page.ui', self)
+        self._ui = get_builder('app_page.ui')
+        self._connect(
+            self._ui.dismiss_gajim_update, 'clicked', self._on_dismiss_clicked
+        )
+        self._connect(
+            self._ui.download_update, 'clicked', self._on_download_update_clicked
+        )
+        self._connect(
+            self._ui.dismiss_update_check, 'clicked', self._on_dismiss_check_clicked
+        )
+        self._connect(
+            self._ui.activate_update_check, 'clicked', self._on_activate_check_clicked
+        )
+        self._connect(
+            self._ui.dismiss_plugin_updates, 'clicked', self._on_dismiss_clicked
+        )
+        self._connect(self._ui.open_plugins, 'clicked', self._on_open_plugins)
+        self._connect(
+            self._ui.update_plugins, 'clicked', self._on_update_plugins_clicked
+        )
+        self._connect(
+            self._ui.dismiss_update_notification,
+            'clicked',
+            self._on_dismiss_update_notification,
+        )
 
         if category == 'allow-gajim-update-check':
             self.set_child(self._ui.gajim_update_check)
@@ -175,6 +202,11 @@ class AppMessageRow(Gtk.ListBoxRow):
 
         if category == 'plugin-updates-finished':
             self.set_child(self._ui.plugin_updates_finished)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
     def _remove_app_message(self) -> None:
         list_box = cast(AppMessageListBox, self.get_parent())
