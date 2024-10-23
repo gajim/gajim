@@ -274,7 +274,7 @@ class PopupNotification(Gtk.Window):
                                            jid=jid)
             # present_with_time needs to be called at this instant in order to
             # work on Windows
-            app.window.present_with_time(event.time)
+            app.window.present_with_time(Gdk.CURRENT_TIME)
             app.app.activate_action(f'{self._event.account}-open-event',
                                     params.to_variant())
 
@@ -360,7 +360,7 @@ class WindowsToastNotification(NotificationBackend):
         # Calls need to be executed with GLib.idle_add to avoid threading issues,
         # because Toasts run in a different thread.
         if event.arguments is None:
-            GLib.idle_add(app.window.present_with_time, Gtk.get_current_event_time())
+            GLib.idle_add(app.window.present_with_time, Gdk.CURRENT_TIME)
             return
 
         if event.arguments.startswith('open-event-'):
@@ -387,7 +387,7 @@ class WindowsToastNotification(NotificationBackend):
                 )
                 return
 
-        GLib.idle_add(app.window.present_with_time, Gtk.get_current_event_time())
+        GLib.idle_add(app.window.present_with_time, Gdk.CURRENT_TIME)
 
     def _get_toast_image(self, event: events.Notification) -> ToastImage:
         if event.type == 'incoming-message':

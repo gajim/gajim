@@ -36,7 +36,7 @@ from datetime import timedelta
 from datetime import timezone
 from urllib.parse import unquote
 
-from gi.repository import Gio
+from gi.repository import Gdk, Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
@@ -803,9 +803,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             jid = JID.from_string(params.jid)
             app.window.select_chat(params.account, jid)
 
-        app.window.present()
-        # app.window.present_with_time(Gtk.get_current_event_time())
-        # TODO GTK4
+        app.window.present_with_time(Gdk.CURRENT_TIME)
 
     @structs.actionmethod
     def _on_mark_as_read_action(self,
