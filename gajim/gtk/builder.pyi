@@ -321,6 +321,9 @@ class DbMigrationBuilder(Builder):
     status_label: Gtk.Label
     error_label: Gtk.Label
     error_view: Gtk.TextView
+    error_copy_button: Gtk.Button
+    error_close_button: Gtk.Button
+    success_close_button: Gtk.Button
 
 
 class DebugConsoleBuilder(Builder):

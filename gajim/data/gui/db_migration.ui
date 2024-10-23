@@ -100,11 +100,10 @@ This may take a while…</property>
                             <property name="css-classes">toolbar</property>
                             <property name="can-focus">0</property>
                             <child>
-                              <object class="GtkButton">
+                              <object class="GtkButton" id="error_copy_button">
                                 <property name="can-focus">0</property>
                                 <property name="label" translatable="1">C_opy</property>
                                 <property name="use-underline">1</property>
-                                <signal name="clicked" handler="_on_error_copy_clicked" swapped="no"/>
                               </object>
                             </child>
                             <style>
@@ -122,14 +121,13 @@ This may take a while…</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="error_close_button">
                     <property name="label" translatable="1">_Close</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_close_button_clicked" swapped="no"/>
                   </object>
                 </child>
               </object>
@@ -161,14 +159,13 @@ This may take a while…</property>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="success_close_button">
                     <property name="label" translatable="1">_Close</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="use-underline">1</property>
-                    <signal name="clicked" handler="_on_close_button_clicked" swapped="no"/>
                     <style>
                       <class name="suggested-action"/>
                     </style>

@@ -14,6 +14,7 @@ from gajim.common import app
 from gajim.common.events import DBMigrationError
 from gajim.common.events import DBMigrationFinished
 from gajim.common.events import DBMigrationProgress
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
@@ -22,7 +23,7 @@ from gajim.gtk.widgets import GajimAppWindow
 log = logging.getLogger('gajim.gtk.db_migration')
 
 
-class DBMigration(GajimAppWindow):
+class DBMigration(GajimAppWindow, EventHelper):
     def __init__(
         self,
     ) -> None:
@@ -32,26 +33,34 @@ class DBMigration(GajimAppWindow):
             title=_('Database Migration'),
             default_width=600,
             default_height=300,
-            transient_for=app.window
+            transient_for=app.window,
+            modal=True
         )
+        EventHelper.__init__(self)
 
-        self.window.set_modal(True)
         self.window.set_deletable(False)
 
-        self._ui = get_builder('db_migration.ui', self)
+        self._ui = get_builder('db_migration.ui')
         self.set_child(self._ui.box)
 
-        app.ged.register_event_handler(
-            'db-migration-progress',
-            0,
-            self._on_progress
+        self._connect(
+            self._ui.error_copy_button, 'clicked', self._on_error_copy_clicked
         )
-        app.ged.register_event_handler('db-migration-error', 0, self._on_error)
-        app.ged.register_event_handler(
-            'db-migration-finished',
-            0,
-            self._on_finished
+        self._connect(
+            self._ui.error_close_button, 'clicked', self._on_close_button_clicked
         )
+        self._connect(
+            self._ui.success_close_button, 'clicked', self._on_close_button_clicked
+        )
+
+        self.register_events([
+            ('db-migration-progress', 0, self._on_progress),
+            ('db-migration-error', 0, self._on_error),
+            ('db-migration-finished', 0, self._on_finished),
+        ])
+
+    def _cleanup(self) -> None:
+        self.unregister_events()
 
     def _on_progress(self, event: DBMigrationProgress) -> None:
         self._ui.stack.set_visible_child_name('progress-page')
@@ -83,4 +92,4 @@ class DBMigration(GajimAppWindow):
         self.window.get_clipboard().set(error_text)
 
     def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
-        self.window.close()
+        self.close()
