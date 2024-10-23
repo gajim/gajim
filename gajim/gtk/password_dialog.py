@@ -14,7 +14,7 @@ from gajim.common.i18n import _
 from gajim.gtk.builder import get_builder
 from gajim.gtk.widgets import GajimAppWindow
 
-log = logging.getLogger('gajim.gtk.pass_dialog')
+log = logging.getLogger('gajim.gtk.password_dialog')
 
 
 class PasswordDialog(GajimAppWindow):
@@ -26,16 +26,22 @@ class PasswordDialog(GajimAppWindow):
             default_width=400,
         )
 
-        self._ui = get_builder('password_dialog.ui', self)
+        self._ui = get_builder('password_dialog.ui')
         self.set_child(self._ui.pass_box)
+
+        self._connect(self._ui.cancel_button, 'clicked', self._on_cancel)
+        self._connect(self._ui.ok_button, 'clicked', self._on_ok)
 
         self.account = event.client.account
         self._client = app.get_client(event.client.account)
         self._event = event
 
-        self.window.set_default_widget(self._ui.ok_button)
+        self.set_default_widget(self._ui.ok_button)
 
         self._process_event()
+
+    def _cleanup(self) -> None:
+        pass
 
     def _process_event(self) -> None:
         own_jid = self._client.get_own_jid().bare
@@ -64,7 +70,7 @@ class PasswordDialog(GajimAppWindow):
         passwords.save_password(self.account, password)
 
         self._event.on_password()
-        self.window.close()
+        self.close()
 
     def _on_cancel(self, _button: Gtk.Button) -> None:
-        self.window.close()
+        self.close()
