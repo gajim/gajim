@@ -95,12 +95,6 @@ class MessageRow(BaseRow):
         self._reactions_bar = ReactionsBar(self, self._contact)
         self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
-        self._message_row_menu_popover = GajimPopover(
-            menu=None,
-            position=Gtk.PositionType.TOP
-        )
-        self.grid.attach(self._message_row_menu_popover, 2, 0, 1, 1)
-
         self._set_content(message)
 
     @classmethod
@@ -286,15 +280,6 @@ class MessageRow(BaseRow):
             is_moderated=self._is_moderated,
         )
         return menu
-
-        self._message_row_menu_popover.set_menu_model(menu)
-        # TODO GTK4: self._message_row_menu_popover.set_pointing_to(x, y)
-        self._message_row_menu_popover.connect(
-            'closed',
-            self._on_more_menu_popover_closed,
-            message_row_actions
-        )
-        self._message_row_menu_popover.popup()
 
     def _on_more_menu_popover_closed(
         self,
