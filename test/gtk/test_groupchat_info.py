@@ -96,12 +96,12 @@ subject = (
 disco_info = parse_disco_info(stanza)
 
 
-class GroupchatInfo(GajimAppWindow):
+class TestGroupchatInfo(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='GroupchatJoin',
-            title='Test Group chat info',
+            name='',
+            title=__class__.__name__,
             default_width=700,
             default_height=700,
         )
@@ -124,7 +124,7 @@ class GroupchatInfo(GajimAppWindow):
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
-window = GroupchatInfo()
+window = TestGroupchatInfo()
 window.show()
 
 util.run_app()

@@ -34,17 +34,21 @@ fake_form2 = {
 }
 
 
-class DataFormWindow(GajimAppWindow):
+class TestDataFormWindow(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
-            self, name='', title='Data Form Test', default_width=600, default_height=600
+            self,
+            name='',
+            title=__class__.__name__,
+            default_width=600,
+            default_height=600,
         )
 
         self._widget = FakeDataFormWidget(fake_form2)
         self.set_child(self._widget)
 
 
-window = DataFormWindow()
+window = TestDataFormWindow()
 window.show()
 
 util.run_app()

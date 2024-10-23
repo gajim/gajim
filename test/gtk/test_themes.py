@@ -35,7 +35,7 @@ app.css_config = MagicMock()
 app.css_config.get_value = _get_value
 
 window = Themes(Gtk.Window())
-window._update_preferences_window = MagicMock() # type: ignore
+window._update_preferences_window = MagicMock()  # type: ignore
 window.show()
 
 util.run_app()

@@ -35,12 +35,12 @@ FROM_JID = 'contact@test.tld'
 BASE_TIMESTAMP = 1672531200
 
 
-class ConversationViewTest(GajimAppWindow):
+class TestConversationView(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
             name='',
-            title='Test ConversationView',
+            title=__class__.__name__,
             default_width=800,
             default_height=800,
         )
@@ -123,7 +123,7 @@ add_archive_messages()
 
 app.preview_manager = PreviewManager()
 
-window = ConversationViewTest()
+window = TestConversationView()
 window.show()
 
 util.run_app()

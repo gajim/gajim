@@ -10,12 +10,12 @@ from gajim.gtk.widgets import GajimAppWindow
 from . import util
 
 
-class DNDFileTest(GajimAppWindow):
+class TestDNDFile(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='DNDFileTest',
+            title=__class__.__name__,
             default_width=600,
             default_height=600,
         )
@@ -50,7 +50,7 @@ class DNDFileTest(GajimAppWindow):
         return True
 
 
-window = DNDFileTest()
+window = TestDNDFile()
 window.show()
 
 util.run_app()

@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from gi.repository import Gio
-from gi.repository import Gtk
 
 from gajim.gtk.certificate_dialog import CertificateDialog
 

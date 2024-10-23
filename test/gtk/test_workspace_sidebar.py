@@ -20,12 +20,12 @@ from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 from . import util
 
 
-class WorkspaceSideBarTest(GajimAppWindow):
+class TestWorkspaceSideBar(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='WorkspaceSideBarTest',
+            title=__class__.__name__,
             default_width=600,
             default_height=800,
         )
@@ -51,16 +51,13 @@ class WorkspaceSideBarTest(GajimAppWindow):
         for workspace_id in app.settings.get_workspaces():
             sidebar.add_workspace(workspace_id)
 
-    def _get_workspace_texture(self, workspace_id: str,
-                              size: int,
-                              scale: int) -> Gdk.Texture | None:
+    def _get_workspace_texture(
+        self, workspace_id: str, size: int, scale: int
+    ) -> Gdk.Texture | None:
         name = app.settings.get_workspace_setting(workspace_id, 'name')
         rgba = make_rgba(DEFAULT_WORKSPACE_COLOR)
-        return make_workspace_avatar(
-                name,
-                rgba_to_float(rgba),
-                size,
-                scale)
+        return make_workspace_avatar(name, rgba_to_float(rgba), size, scale)
+
 
 app.window = MagicMock()
 app.settings = Settings(in_memory=True)
@@ -70,7 +67,7 @@ for i in range(10):
     app.settings.add_workspace(str(i))
 
 
-window = WorkspaceSideBarTest()
+window = TestWorkspaceSideBar()
 window.show()
 
 util.run_app()

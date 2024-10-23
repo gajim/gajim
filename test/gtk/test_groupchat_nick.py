@@ -15,7 +15,7 @@ class TestNickChooser(GajimAppWindow):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='Test NickChooser',
+            title=__class__.__name__,
             default_width=700,
             default_height=700,
         )

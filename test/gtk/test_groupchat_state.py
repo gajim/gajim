@@ -55,6 +55,7 @@ class TestGroupchatState(GajimAppWindow):
         contact.is_joined = False
         return contact
 
+
 app.get_client = MagicMock()
 
 window = TestGroupchatState()

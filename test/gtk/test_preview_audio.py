@@ -21,12 +21,12 @@ from . import util
 DEFAULT_AUDIO_FILE_PATH = util.get_gajim_dir() / 'data/sounds/attention.wav'
 
 
-class AudioWidgetTest(GajimAppWindow):
+class TestAudioWidget(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='AudioWidget Test',
+            title=__class__.__name__,
             default_width=600,
             default_height=600,
         )
@@ -68,7 +68,7 @@ _success, _argv = Gst.init_check(None)
 app.preview_manager = MagicMock()
 app.preview_manager.get_audio_state = MagicMock(return_value=AudioPreviewState())
 
-window = AudioWidgetTest()
+window = TestAudioWidget()
 window.show()
 
 util.run_app()

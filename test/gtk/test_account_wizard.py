@@ -20,28 +20,28 @@ from . import util
 ACCOUNT = 'testacc1'
 
 
-def _on_login_successful(self: AccountWizard, client: Client, _signal_name: str) -> None:
-        account = self._generate_account_name(client.domain)
-        proxy_name = None
-        if client.proxy is not None:
-            proxy_name = self.get_page('advanced').get_proxy()
+def _on_login_successful(
+    self: AccountWizard, client: Client, _signal_name: str
+) -> None:
+    account = self._generate_account_name(client.domain)
+    proxy_name = None
+    if client.proxy is not None:
+        proxy_name = self.get_page('advanced').get_proxy()
 
-        address = JID(localpart=client.username, domain=client.domain)
+    address = JID(localpart=client.username, domain=client.domain)
 
-        app.settings.add_account(account)
+    app.settings.add_account(account)
 
-        self.get_page('success').set_account(account)
-        self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
-        self._disconnect()
+    self.get_page('success').set_account(account)
+    self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+    self._disconnect()
 
 
 def _save_config(self: Success) -> None:
     assert self._account is not None
-    app.settings.set_account_setting(
-        self._account, 'account_color', self._color)
+    app.settings.set_account_setting(self._account, 'account_color', self._color)
     if self._label:
-        app.settings.set_account_setting(
-            self._account, 'account_label', self._label)
+        app.settings.set_account_setting(self._account, 'account_label', self._label)
     app.css_config.refresh()
 
 

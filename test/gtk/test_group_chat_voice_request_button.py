@@ -18,17 +18,24 @@ from . import util
 ACCOUNT = 'testacc1'
 FROM_JID = 'groupchat@conference.example.org'
 
-class GroupChatVoiceRequestButtonTest(GajimAppWindow):
+
+class TestGroupChatVoiceRequestButton(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='GroupChatVoiceRequestButtonTest',
+            title=__class__.__name__,
             default_width=600,
             default_height=600,
         )
 
-        self._box = Gtk.Box(halign=Gtk.Align.CENTER, valign=Gtk.Align.CENTER, hexpand=True, orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        self._box = Gtk.Box(
+            halign=Gtk.Align.CENTER,
+            valign=Gtk.Align.CENTER,
+            hexpand=True,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=12,
+        )
         self.set_child(self._box)
 
         button = VoiceRequestsButton()
@@ -48,7 +55,7 @@ class GroupChatVoiceRequestButtonTest(GajimAppWindow):
 
 app.get_client = MagicMock()
 
-window = GroupChatVoiceRequestButtonTest()
+window = TestGroupChatVoiceRequestButton()
 window.show()
 
 util.run_app()

@@ -9,15 +9,17 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-DEFAULT_IMAGE_FILE_PATH = util.get_gajim_dir() / 'data/icons/hicolor/96x96/apps/gajim.png'
+DEFAULT_IMAGE_FILE_PATH = (
+    util.get_gajim_dir() / 'data/icons/hicolor/96x96/apps/gajim.png'
+)
 
 
-class AvatarSelectorTest(GajimAppWindow):
+class TestAvatarSelector(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
             name='',
-            title='AvatarSelectorTest',
+            title=__class__.__name__,
             default_width=800,
             default_height=800,
         )
@@ -30,7 +32,7 @@ class AvatarSelectorTest(GajimAppWindow):
         box.append(avatar_selector)
 
 
-window = AvatarSelectorTest()
+window = TestAvatarSelector()
 window.show()
 
 util.run_app()

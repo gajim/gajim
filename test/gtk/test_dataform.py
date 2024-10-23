@@ -116,12 +116,12 @@ FORM = '''
 '''  # noqa: E501
 
 
-class DataFormWindow(GajimAppWindow):
+class TestDataFormWindow(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
             name='',
-            title='Data Form Test',
+            title=__class__.__name__,
             default_width=1000,
             default_height=600,
         )
@@ -139,7 +139,7 @@ app.bob_cache['sha1+8f35fef110ffc5df08d579a50083ff9308fb6242'] = b64decode(
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
 
-window = DataFormWindow()
+window = TestDataFormWindow()
 window.show()
 
 util.run_app()

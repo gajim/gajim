@@ -31,6 +31,7 @@ def load_style(filename: str, priority: CSSPriority) -> None:
     assert display is not None
     Gtk.StyleContext.add_provider_for_display(display, provider, priority)
 
+
 def run_app(load_default_styles: bool = True) -> None:
     if load_default_styles:
         load_style('gajim.css', CSSPriority.APPLICATION)
