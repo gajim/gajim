@@ -18,10 +18,9 @@
       <object class="GtkGrid" id="grid1">
         <child>
           <object class="GtkButton" id="button_1">
+            <property name="name">1</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="halign">center</property>
@@ -38,10 +37,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_2">
+            <property name="name">2</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;2&lt;/b&gt; abc</property>
@@ -56,10 +54,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_3">
+            <property name="name">3</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;3&lt;/b&gt; def</property>
@@ -74,10 +71,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_4">
+            <property name="name">4</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;4&lt;/b&gt; ghi</property>
@@ -92,10 +88,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_5">
+            <property name="name">5</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;5&lt;/b&gt; jkl</property>
@@ -110,10 +105,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_6">
+            <property name="name">6</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;6&lt;/b&gt; mno</property>
@@ -128,10 +122,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_7">
+            <property name="name">7</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;7&lt;/b&gt; pqrs</property>
@@ -146,10 +139,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_8">
+            <property name="name">8</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;8&lt;/b&gt; tuv</property>
@@ -164,10 +156,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_9">
+            <property name="name">9</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;9&lt;/b&gt; wxyz</property>
@@ -182,10 +173,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_star">
+            <property name="name">star</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;*&lt;/b&gt;</property>
@@ -200,10 +190,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_0">
+            <property name="name">0</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;0&lt;/b&gt;</property>
@@ -218,10 +207,9 @@
         </child>
         <child>
           <object class="GtkButton" id="button_pound">
+            <property name="name">pound</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <signal name="button-press-event" handler="_on_num_button_press" swapped="no"/>
-            <signal name="button-release-event" handler="_on_num_button_release" swapped="no"/>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="1">&lt;b&gt;#&lt;/b&gt;</property>
@@ -306,17 +294,16 @@
             <property name="label" translatable="1">Share Video</property>
             <property name="focusable">1</property>
             <property name="halign">center</property>
-            <signal name="clicked" handler="_on_upgrade_to_video_clicked" swapped="no"/>
           </object>
         </child>
       </object>
     </child>
     <child>
       <object class="GtkCenterBox">
-        <property name="spacing">6</property>
         <child type="center">
           <object class="GtkBox">
             <property name="spacing">12</property>
+            <property name="margin-end">12</property>
             <child>
               <object class="GtkButton" id="av_cam_button">
                 <property name="width-request">70</property>
@@ -324,7 +311,6 @@
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Turn Camera on</property>
-                <signal name="clicked" handler="_on_enable_video_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage" id="av_cam_image">
                     <property name="icon-name">feather-camera-symbolic</property>
@@ -333,13 +319,12 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="end_call_button">
                 <property name="width-request">70</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">End call</property>
                 <property name="halign">center</property>
-                <signal name="clicked" handler="_on_end_call_clicked" swapped="no"/>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">call-stop</property>
@@ -364,7 +349,6 @@ microphone-sensitivity-low-symbolic
 microphone-sensitivity-medium-symbolic
 microphone-sensitivity-high-symbolic</property>
                 <property name="use-symbolic">0</property>
-                <signal name="value-changed" handler="_on_mic_volume_changed" swapped="no"/>
                 <child internal-child="plus_button">
                   <object class="GtkButton" id="volumebutton-plus_button2">
                     <property name="visible">0</property>
@@ -389,7 +373,6 @@ audio-volume-low-symbolic
 audio-volume-medium-symbolic
 audio-volume-high-symbolic</property>
                 <property name="use-symbolic">0</property>
-                <signal name="value-changed" handler="_on_output_volume_changed" swapped="no"/>
                 <child internal-child="plus_button">
                   <object class="GtkButton" id="volumebutton-plus_button1">
                     <property name="visible">0</property>

@@ -4,10 +4,9 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import logging
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
@@ -50,13 +49,44 @@ class CallWindow(GajimAppWindow, EventHelper):
         assert isinstance(self._contact, BareContact)
         self._resource_contact = contacts_module.get_contact(resource_jid)
         assert isinstance(self._resource_contact, ResourceContact)
-        self.set_title(_('Call with %s') % self._contact.name)
+        self.window.set_title(_('Call with %s') % self._contact.name)
 
         self._video_widget_other = None
         self._video_widget_self = None
 
-        self._ui = get_builder('call_window.ui', self)
+        self._ui = get_builder('call_window.ui')
         self.set_child(self._ui.av_box)
+
+        buttons = [
+            self._ui.button_0,
+            self._ui.button_1,
+            self._ui.button_2,
+            self._ui.button_3,
+            self._ui.button_3,
+            self._ui.button_4,
+            self._ui.button_5,
+            self._ui.button_6,
+            self._ui.button_7,
+            self._ui.button_8,
+            self._ui.button_9,
+            self._ui.button_star,
+            self._ui.button_pound,
+        ]
+        for button in buttons:
+            gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
+            self._connect(gesture_primary_click, 'pressed', self._on_button_press)
+            self._connect(gesture_primary_click, 'released', self._on_button_release)
+            button.add_controller(gesture_primary_click)
+
+        self._connect(
+            self._ui.answer_video_button, 'clicked', self._on_upgrade_to_video_clicked
+        )
+        self._connect(self._ui.av_cam_button, 'clicked', self._on_enable_video_clicked)
+        self._connect(self._ui.end_call_button, 'clicked', self._on_end_call_clicked)
+        self._connect(self._ui.mic_hscale, 'value-changed', self._on_mic_volume_changed)
+        self._connect(
+            self._ui.sound_hscale, 'value-changed', self._on_output_volume_changed
+        )
 
         self._ui.avatar_image.set_pixel_size(AvatarSize.CALL_BIG)
         self._ui.avatar_image.set_from_paintable(
@@ -64,13 +94,11 @@ class CallWindow(GajimAppWindow, EventHelper):
                                      self.get_scale_factor(),
                                      add_show=False))
 
-        self.connect('destroy', self._on_destroy)
-
         self.register_events([
             ('call-updated', ged.GUI2, self._on_call_updated),
         ])
 
-    def _on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
         assert isinstance(self._resource_contact, ResourceContact)
         app.call_manager.stop_call(
             self._account,
@@ -81,7 +109,7 @@ class CallWindow(GajimAppWindow, EventHelper):
 
     def _close_with_timeout(self, timeout: int = 3) -> None:
         self._ui.av_box.set_sensitive(False)
-        GLib.timeout_add_seconds(timeout, self.destroy)
+        GLib.timeout_add_seconds(timeout, self.close)
 
     def _on_upgrade_to_video_clicked(self, button: Gtk.Button) -> None:
         app.call_manager.upgrade_to_video_call()
@@ -99,21 +127,26 @@ class CallWindow(GajimAppWindow, EventHelper):
         app.call_manager.start_call(
             self._account, self._contact.jid, CallType.VIDEO)
 
-    def _on_num_button_press(self,
-                             button: Gtk.Button,
-                             _event: Any
-                             ) -> None:
-        button_id = button.get_name()
-        key = button_id.split('_')[1]
+    def _on_button_press(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> None:
+        button = gesture_click.get_widget()
+        key = button.get_name()
         app.call_manager.start_dtmf(
             self._account, self._resource_contact.jid, key)
 
-    def _on_num_button_release(self,
-                               _button: Gtk.Button,
-                               _event: Any
-                               ) -> None:
-        app.call_manager.stop_dtmf(
-            self._account, self._resource_contact.jid)
+    def _on_button_release(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> None:
+        app.call_manager.stop_dtmf(self._account, self._resource_contact.jid)
 
     def _on_mic_volume_changed(self,
                                _button: Gtk.VolumeButton,

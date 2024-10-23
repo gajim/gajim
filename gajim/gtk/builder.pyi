@@ -167,6 +167,7 @@ class CallWindowBuilder(Builder):
     answer_video_button: Gtk.Button
     av_cam_button: Gtk.Button
     av_cam_image: Gtk.Image
+    end_call_button: Gtk.Button
     audio_buttons_box: Gtk.Box
     mic_hscale: Gtk.VolumeButton
     volumebutton_plus_button2: Gtk.Button
