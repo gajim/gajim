@@ -25,6 +25,7 @@ from gajim.gtk.chat_list_stack import ChatListStack
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.menus import get_start_chat_button_menu
 from gajim.gtk.search_view import SearchView
+from gajim.gtk.util import SignalManager
 
 if TYPE_CHECKING:
     from gajim.gtk.control import ChatControl
@@ -32,7 +33,7 @@ if TYPE_CHECKING:
 log = logging.getLogger('gajim.gtk.chat_page')
 
 
-class ChatPage(Gtk.Box):
+class ChatPage(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         'chat-selected': (GObject.SignalFlags.RUN_LAST,
@@ -42,8 +43,9 @@ class ChatPage(Gtk.Box):
 
     def __init__(self):
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
 
-        self._ui = get_builder('chat_paned.ui', self)
+        self._ui = get_builder('chat_paned.ui')
         self.append(self._ui.paned)
 
         self._chat_stack = ChatStack()
@@ -66,36 +68,48 @@ class ChatPage(Gtk.Box):
         self._restore_occupants_list = False
 
         section_hover_controller = Gtk.EventControllerMotion()
-        section_hover_controller.connect('enter', self._on_section_label_enter)
-        section_hover_controller.connect('leave', self._on_section_label_leave)
+        self._connect(section_hover_controller, 'enter', self._on_section_label_enter)
+        self._connect(section_hover_controller, 'leave', self._on_section_label_leave)
         self._ui.section_label_eventbox.add_controller(section_hover_controller)
 
         self._chat_filter = ChatFilter(icons=True)
         self._ui.filter_bar.prepend(self._chat_filter)
-        self._ui.filter_bar_toggle.connect(
-            'toggled', self._on_filter_revealer_toggled)
+        self._connect(
+            self._ui.filter_bar_toggle, 'toggled', self._on_filter_revealer_toggled
+        )
 
         self._chat_list_stack = ChatListStack(
             self._chat_filter, self._ui.search_entry)
-        self._chat_list_stack.connect('chat-selected', self._on_chat_selected)
-        self._chat_list_stack.connect('chat-unselected',
+        self._connect(self._chat_list_stack, 'chat-selected', self._on_chat_selected)
+        self._connect(self._chat_list_stack, 'chat-unselected',
                                       self._on_chat_unselected)
-        self._chat_list_stack.connect('chat-removed', self._on_chat_removed)
-        self._chat_list_stack.connect('notify::visible-child-name',
+        self._connect(self._chat_list_stack, 'chat-removed', self._on_chat_removed)
+        self._connect(self._chat_list_stack, 'notify::visible-child-name',
                                       self._on_chat_list_changed)
         self._ui.chat_list_scrolled.set_child(self._chat_list_stack)
 
         self._ui.start_chat_menu_button.set_menu_model(
             get_start_chat_button_menu())
 
+        self._connect(
+            self._ui.workspace_settings_button,
+            'clicked',
+            self._on_edit_workspace_clicked
+        )
+
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        # self._ui.paned.connect('button-release-event', self._on_button_release) GTK4 TODO
+        # TODO GTK4
+        # self._ui.paned.connect('button-release-event', self._on_button_release)
         self.toggle_chat_list()
 
         self._startup_finished: bool = False
         self._closed_chat_memory: list[tuple[str, JID, str]] = []
 
         self._add_actions()
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
 
     def _add_actions(self):
         actions = [
@@ -108,7 +122,7 @@ class ChatPage(Gtk.Box):
             if variant is not None:
                 variant = GLib.VariantType.new(variant)
             act = Gio.SimpleAction.new(action_name, variant)
-            act.connect('activate', func)
+            self._connect(act, 'activate', func)
             app.window.add_action(act)
 
     def set_startup_finished(self) -> None:
@@ -122,6 +136,7 @@ class ChatPage(Gtk.Box):
 
     @staticmethod
     def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
+        # TODO GTK4
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()
@@ -144,8 +159,7 @@ class ChatPage(Gtk.Box):
     def _on_section_label_leave(self, controller: Gtk.EventControllerMotion) -> None:
         self._ui.workspace_settings_button.set_visible(False)
 
-    @staticmethod
-    def _on_edit_workspace_clicked(_button: Gtk.Button) -> None:
+    def _on_edit_workspace_clicked(self, _button: Gtk.Button) -> None:
         app.window.activate_action('win.edit-workspace', GLib.Variant('s', ''))
 
     def _on_chat_selected(self,

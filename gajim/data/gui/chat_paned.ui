@@ -120,7 +120,6 @@
                         <property name="receives-default">1</property>
                         <property name="tooltip-text" translatable="1">Workspace settings…</property>
                         <property name="valign">center</property>
-                        <signal name="clicked" handler="_on_edit_workspace_clicked" swapped="no"/>
                         <child>
                           <object class="GtkImage">
                             <property name="icon-name">preferences-system-symbolic</property>
