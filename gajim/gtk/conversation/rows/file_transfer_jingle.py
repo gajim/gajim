@@ -27,6 +27,7 @@ from gajim.common.events import JingleErrorReceived
 from gajim.common.events import JingleFtCancelledReceived
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import models as mod
@@ -46,7 +47,7 @@ TransferEventT = FileRequestReceivedEvent | FileRequestSent
 log = logging.getLogger('gajim.gtk.conversation.rows.file_transfer_jingle')
 
 
-class FileTransferJingleRow(BaseRow):
+class FileTransferJingleRow(BaseRow, EventHelper):
     def __init__(self,
                  account: str,
                  contact: BareContact,
@@ -54,6 +55,7 @@ class FileTransferJingleRow(BaseRow):
                  message: mod.Message | None = None
                  ) -> None:
         BaseRow.__init__(self, account)
+        EventHelper.__init__(self)
 
         self.type = 'file-transfer'
 
@@ -132,9 +134,24 @@ class FileTransferJingleRow(BaseRow):
         meta_box.append(timestamp_widget)
         self.grid.attach(meta_box, 1, 0, 1, 1)
 
-        self._ui = get_builder('file_transfer_jingle.ui', self)
+        self._ui = get_builder('file_transfer_jingle.ui')
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
         self._ui.transfer_box.set_halign(Gtk.Align.START)
+
+        self._connect(
+            self._ui.accept_file_request, 'clicked', self._on_accept_file_request
+        )
+        self._connect(
+            self._ui.reject_file_request, 'clicked', self._on_reject_file_request
+        )
+        self._connect(self._ui.open_folder, 'clicked', self._on_open_folder)
+        self._connect(self._ui.open_file, 'clicked', self._on_open_file)
+        self._connect(self._ui.error_show_transfers, 'clicked', self._on_show_transfers)
+        self._connect(self._ui.retry_bad_hash, 'clicked', self._on_bad_hash_retry)
+        self._connect(
+            self._ui.rejected_show_transfers, 'clicked', self._on_show_transfers
+        )
+        self._connect(self._ui.cancel_transfer, 'clicked', self._on_cancel_transfer)
 
         if message is not None:
             self._reconstruct_transfer()
@@ -145,24 +162,19 @@ class FileTransferJingleRow(BaseRow):
         if self._file_props is None:
             return
 
-        app.ged.register_event_handler(
-            'file-completed', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'file-hash-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'file-send-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'file-request-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'file-progress', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'file-error', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'jingle-error-received', ged.GUI1, self.process_event)
-        app.ged.register_event_handler(
-            'jingle-ft-cancelled-received', ged.GUI1, self.process_event)
+        self.register_events([
+            ('file-completed', ged.GUI1, self.process_event),
+            ('file-hash-error', ged.GUI1, self.process_event),
+            ('file-send-error', ged.GUI1, self.process_event),
+            ('file-request-error', ged.GUI1, self.process_event),
+            ('file-progress', ged.GUI1, self.process_event),
+            ('file-error', ged.GUI1, self.process_event),
+            ('jingle-error-received', ged.GUI1, self.process_event),
+            ('jingle-ft-cancelled-received', ged.GUI1, self.process_event),
+        ])
 
     def do_unroot(self) -> None:
+        self.unregister_events()
         BaseRow.do_unroot(self)
 
     def _reconstruct_transfer(self) -> None:

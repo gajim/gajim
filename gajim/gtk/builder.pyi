@@ -390,9 +390,17 @@ class FileTransferJingleBuilder(Builder):
     file_description: Gtk.Label
     file_size: Gtk.Label
     action_stack: Gtk.Stack
+    accept_file_request: Gtk.Button
+    reject_file_request: Gtk.Button
+    open_folder: Gtk.Button
+    open_file: Gtk.Button
+    error_show_transfers: Gtk.Button
     error_label: Gtk.Label
+    retry_bad_hash: Gtk.Button
+    rejected_show_transfers: Gtk.Button
     progress_label: Gtk.Label
     progress_bar: Gtk.ProgressBar
+    cancel_transfer: Gtk.Button
 
 
 class FileTransferSelectorBuilder(Builder):

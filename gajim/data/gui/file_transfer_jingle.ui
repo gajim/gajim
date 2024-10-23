@@ -83,23 +83,21 @@
                       <object class="GtkBox">
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="accept_file_request">
                             <property name="label" translatable="1">Download</property>
                             <property name="focusable">1</property>
                             <property name="valign">start</property>
-                            <signal name="clicked" handler="_on_accept_file_request" swapped="no"/>
                             <style>
                               <class name="suggested-action"/>
                             </style>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="reject_file_request">
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="tooltip-text" translatable="1">Reject file transfer</property>
                             <property name="valign">start</property>
-                            <signal name="clicked" handler="_on_reject_file_request" swapped="no"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="icon-name">process-stop-symbolic</property>
@@ -118,12 +116,11 @@
                       <object class="GtkBox">
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="open_folder">
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="tooltip-text" translatable="1">Open Folder</property>
                             <property name="valign">start</property>
-                            <signal name="clicked" handler="_on_open_folder" swapped="no"/>
                             <child>
                               <object class="GtkImage">
                                 <property name="icon-name">folder-symbolic</property>
@@ -132,12 +129,11 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="open_file">
                             <property name="label" translatable="1">Open</property>
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="valign">start</property>
-                            <signal name="clicked" handler="_on_open_file" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -152,11 +148,10 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="error_show_transfers">
                             <property name="label" translatable="1">Show Transfers</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
-                            <signal name="clicked" handler="_on_show_transfers" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -179,11 +174,10 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="retry_bad_hash">
                             <property name="label" translatable="1">Try Again</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
-                            <signal name="clicked" handler="_on_bad_hash_retry" swapped="no"/>
                           </object>
                         </child>
                         <child>
@@ -213,11 +207,10 @@
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="rejected_show_transfers">
                             <property name="label" translatable="1">Show Transfers</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
-                            <signal name="clicked" handler="_on_show_transfers" swapped="no"/>
                           </object>
                         </child>
                       </object>
@@ -242,12 +235,11 @@
                           <object class="GtkProgressBar" id="progress_bar"/>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkButton" id="cancel_transfer">
                             <property name="label" translatable="1">Cancel</property>
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="halign">end</property>
-                            <signal name="clicked" handler="_on_cancel_transfer" swapped="no"/>
                           </object>
                         </child>
                       </object>
