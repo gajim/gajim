@@ -98,8 +98,7 @@ class ChatPage(Gtk.Box, SignalManager):
         )
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        # TODO GTK4
-        # self._ui.paned.connect('button-release-event', self._on_button_release)
+        self._ui.paned.connect('notify::position', self._on_handle_position_notify)
         self.toggle_chat_list()
 
         self._startup_finished: bool = False
@@ -135,10 +134,7 @@ class ChatPage(Gtk.Box, SignalManager):
         return self._chat_stack
 
     @staticmethod
-    def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
-        # TODO GTK4
-        if event.window != paned.get_handle_window():
-            return
+    def _on_handle_position_notify(paned: Gtk.Paned, *args: Any) -> None:
         position = paned.get_position()
         app.settings.set('chat_handle_position', position)
 

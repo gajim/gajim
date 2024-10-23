@@ -72,8 +72,7 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         self._ui.roster_box.append(self._roster)
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        # TODO GTK4
-        # self._ui.paned.connect('button-release-event', self._on_button_release)
+        self._ui.paned.connect('notify::position', self._on_handle_position_notify)
 
         self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
         self._ui.account_page_menu_button.set_menu_model(
@@ -130,10 +129,7 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         self._roster.set_search_string(text)
 
     @staticmethod
-    def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
-        # TODO GTK4
-        if event.window != paned.get_handle_window():
-            return
+    def _on_handle_position_notify(paned: Gtk.Paned, *args: Any) -> None:
         position = paned.get_position()
         app.settings.set('chat_handle_position', position)
 
