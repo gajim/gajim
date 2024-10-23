@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -18,6 +17,7 @@ from gajim.common.events import MucDecline
 from gajim.common.events import MucInvitation
 from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
+from gajim.common.ged import EventHelper
 from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.builder import get_builder
@@ -28,23 +28,29 @@ from gajim.gtk.notification_manager import NotificationManager
 from gajim.gtk.roster import Roster
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import open_window
+from gajim.gtk.util import SignalManager
 
 
-class AccountPage(Gtk.Box, EventHelper):
+class AccountPage(Gtk.Box, EventHelper, SignalManager):
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._account = account
         client = app.get_client(account)
         jid = client.get_own_jid().bare
         self._contact = client.get_module('Contacts').get_contact(jid)
-        self._contact.connect('avatar-update', self._on_avatar_update)
+        self._connect(self._contact, 'avatar-update', self._on_avatar_update)
 
-        self._ui = get_builder('account_page.ui', self)
+        self._ui = get_builder('account_page.ui')
         self.append(self._ui.paned)
+
+        self._connect(self._ui.roster_search_entry, 'changed', self._on_search_changed)
+        self._connect(
+            self._ui.account_settings_button, 'clicked', self._on_account_settings
+        )
 
         self._ui.our_jid_label.set_text(jid)
 
@@ -66,7 +72,8 @@ class AccountPage(Gtk.Box, EventHelper):
         self._ui.roster_box.append(self._roster)
 
         self._ui.paned.set_position(app.settings.get('chat_handle_position'))
-        # self._ui.paned.connect('button-release-event', self._on_button_release) GTK4 TODO
+        # TODO GTK4
+        # self._ui.paned.connect('button-release-event', self._on_button_release)
 
         self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
         self._ui.account_page_menu_button.set_menu_model(
@@ -90,11 +97,13 @@ class AccountPage(Gtk.Box, EventHelper):
         # pylint: enable=line-too-long
 
         self.update()
-        self.connect('destroy', self._on_destroy)
 
-    def _on_destroy(self, _widget: AccountPage) -> None:
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        self.unregister_events()
         self._contact.disconnect_all_from_obj(self)
         app.settings.disconnect_signals(self)
+        Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 
     def _on_account_label_changed(self, value: str, *args: Any) -> None:
@@ -122,6 +131,7 @@ class AccountPage(Gtk.Box, EventHelper):
 
     @staticmethod
     def _on_button_release(paned: Gtk.Paned, event: Any) -> None:
+        # TODO GTK4
         if event.window != paned.get_handle_window():
             return
         position = paned.get_position()

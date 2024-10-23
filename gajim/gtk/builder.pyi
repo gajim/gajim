@@ -20,6 +20,7 @@ class AccountPageBuilder(Builder):
     avatar_image: Gtk.Image
     account_label: Gtk.Label
     our_jid_label: Gtk.Label
+    account_settings_button: Gtk.Button
     account_page_menu_button: Gtk.MenuButton
     status_box: Gtk.Box
     notifications_menu_button: Gtk.MenuButton

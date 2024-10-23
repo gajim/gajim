@@ -45,7 +45,6 @@
               <object class="GtkSearchEntry" id="roster_search_entry">
                 <property name="focusable">true</property>
                 <property name="placeholder-text" translatable="true">Search…</property>
-                <signal name="changed" handler="_on_search_changed"/>
               </object>
             </child>
             <child>
@@ -120,12 +119,11 @@
                             <property name="hexpand">true</property>
                             <property name="spacing">12</property>
                             <child>
-                              <object class="GtkButton">
+                              <object class="GtkButton" id="account_settings_button">
                                 <property name="focusable">true</property>
                                 <property name="receives-default">true</property>
                                 <property name="tooltip-text" translatable="true">Account Settings…</property>
                                 <property name="valign">3</property>
-                                <signal name="clicked" handler="_on_account_settings"/>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="icon-name">preferences-system-symbolic</property>
