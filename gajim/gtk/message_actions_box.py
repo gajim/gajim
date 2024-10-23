@@ -47,15 +47,17 @@ from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
 from gajim.gtk.util import open_window
+from gajim.gtk.util import SignalManager
 from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
 
 log = logging.getLogger('gajim.gtk.messageactionsbox')
 
 
-class MessageActionsBox(Gtk.Grid, EventHelper):
+class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def __init__(self) -> None:
         Gtk.Grid.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._client: Client | None = None
         self._contact: ChatContactT | None = None
@@ -63,8 +65,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self._correcting: dict[ChatContactT, str | None] = defaultdict(lambda: None)
         self._last_message_id: dict[ChatContactT, str | None] = {}
 
-        self._ui = get_builder('message_actions_box.ui', self)
-        self.get_style_context().add_class('message-actions-box')
+        self._ui = get_builder('message_actions_box.ui')
+        self.add_css_class('message-actions-box')
 
         self.attach(self._ui.box, 0, 0, 1, 1)
 
@@ -95,11 +97,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._security_label_selector)
 
         self.msg_textview = MessageInputTextView()
-        self.msg_textview.connect('buffer-changed', self._on_buffer_changed)
-        self.msg_textview.connect('paste-clipboard', self._on_paste_clipboard)
+        self._connect(self.msg_textview, 'buffer-changed', self._on_buffer_changed)
+        self._connect(self.msg_textview, 'paste-clipboard', self._on_paste_clipboard)
 
         controller = Gtk.EventControllerKey()
-        controller.connect('key-pressed', self._on_msg_textview_key_pressed)
+        self._connect(controller, 'key-pressed', self._on_msg_textview_key_pressed)
         self.msg_textview.add_controller(controller)
 
         self._ui.input_scrolled.set_child(self.msg_textview)
@@ -113,6 +115,20 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             self._on_emoji_create_popover
         )
 
+        self._connect(
+            self._ui.cancel_correction_button,
+            'clicked',
+            self._on_cancel_correction_clicked
+        )
+        self._connect(
+            self._ui.encryption_details_button,
+            'clicked',
+            self._on_encryption_details_clicked
+        )
+        self._connect(
+            self._ui.request_voice_button, 'clicked', self._on_request_voice_clicked
+        )
+
         self._connect_actions()
 
         app.plugin_manager.gui_extension_point(
@@ -121,6 +137,18 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
         self.register_events([
             ('message-sent', ged.GUI2, self._on_message_sent)
         ])
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        self.unregister_events()
+
+        if self._client is not None:
+            self._client.disconnect_all_from_obj(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+
+        Gtk.Grid.do_unroot(self)
+        app.check_finalize(self)
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -154,16 +182,16 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
 
         for action in actions:
             action = app.window.get_action(action)
-            action.connect('activate', self._on_action)
+            self._connect(action, 'activate', self._on_action)
 
         action = app.window.get_action('set-encryption')
-        action.connect('change-state', self._change_encryption)
+        self._connect(action, 'change-state', self._change_encryption)
 
         action = app.window.get_action('send-file-jingle')
-        action.connect('notify::enabled', self._on_send_file_enabled_changed)
+        self._connect(action, 'notify::enabled', self._on_send_file_enabled_changed)
 
         action = app.window.get_action('send-file-httpupload')
-        action.connect('notify::enabled', self._on_send_file_enabled_changed)
+        self._connect(action, 'notify::enabled', self._on_send_file_enabled_changed)
 
     def _on_action(self,
                    action: Gio.SimpleAction,
@@ -749,78 +777,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper):
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_PROPAGATE
-
-    def _on_msg_textview_key_press_event(self,
-                                         textview: MessageInputTextView,
-                                         event: Any
-                                         ) -> bool:
-        # pylint: disable=too-many-nested-blocks
-        event_state = event.get_state()
-        if event_state & Gdk.ModifierType.SHIFT_MASK:
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if event.keyval == Gdk.KEY_ISO_Left_Tab:
-                    app.window.select_next_chat(
-                        Direction.PREV, unread_first=True)
-                    return True
-
-        if event_state & Gdk.ModifierType.CONTROL_MASK:
-            if event.keyval == Gdk.KEY_Tab:
-                app.window.select_next_chat(Direction.NEXT, unread_first=True)
-                return True
-
-            if event.keyval == Gdk.KEY_z:
-                self.msg_textview.undo()
-                return True
-
-            if event.keyval == Gdk.KEY_y:
-                self.msg_textview.redo()
-                return True
-
-            if event.keyval == Gdk.KEY_Up:
-                self.toggle_message_correction()
-                return True
-
-        if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            if event_state & Gdk.ModifierType.SHIFT_MASK:
-                textview.insert_newline()
-                return True
-
-            if event_state & Gdk.ModifierType.CONTROL_MASK:
-                if not app.settings.get('send_on_ctrl_enter'):
-                    textview.insert_newline()
-                    return True
-            else:
-                if app.settings.get('send_on_ctrl_enter'):
-                    textview.insert_newline()
-                    return True
-
-            assert self._contact is not None
-
-            # Reset IMContext to clear preedit state
-            self.msg_textview.reset_im_context()
-
-            message = self.msg_textview.get_text()
-
-            try:
-                handled = app.commands.parse(self._contact.type_string, message)
-            except CommandFailed:
-                return True
-
-            if handled:
-                self.msg_textview.clear()
-                return True
-
-            if not app.account_is_available(self._contact.account):
-                # we are not connected
-                ErrorDialog(
-                    _('No Connection Available'),
-                    _('Your message can not be sent until you are connected.'))
-                return True
-
-            app.window.activate_action('win.send-message', None)
-            return True
-
-        return False
 
     def _on_request_voice_clicked(self, _button: Gtk.Button) -> None:
         self._ui.visitor_popover.popdown()

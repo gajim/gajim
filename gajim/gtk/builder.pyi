@@ -664,6 +664,7 @@ class MessageActionsBoxBuilder(Builder):
     visitor_menu_button: Gtk.MenuButton
     edit_box: Gtk.Box
     edit_box_image: Gtk.Image
+    cancel_correction_button: Gtk.Button
     action_box: Gtk.Box
     emoticons_button: Gtk.MenuButton
     formattings_button: Gtk.MenuButton
@@ -675,6 +676,7 @@ class MessageActionsBoxBuilder(Builder):
     encryption_details_button: Gtk.Button
     encryption_details_image: Gtk.Image
     visitor_popover: Gtk.Popover
+    request_voice_button: Gtk.Button
 
 
 class OmemoTrustManagerBuilder(Builder):
