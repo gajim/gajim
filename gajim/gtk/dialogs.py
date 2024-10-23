@@ -321,9 +321,9 @@ class ShortcutsWindow:
         assert transient
         builder = get_builder('shortcuts_window.ui', self)
         self.window = cast(Gtk.Window, builder.get_object('shortcuts_window'))
-        self.window.connect('destroy', self._on_window_destroy)
+        self.window.connect('close-request', self._on_close)
         self.window.set_transient_for(transient)
         self.window.present()
 
-    def _on_window_destroy(self, _widget: Gtk.Widget) -> None:
+    def _on_close(self, _window: Gtk.Window) -> None:
         self.window = None
