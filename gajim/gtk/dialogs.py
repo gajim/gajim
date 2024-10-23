@@ -284,10 +284,14 @@ class QuitDialog(GajimAppWindow):
             name='GuitDialog',
             title=_('Quit Gajim'),
             transient_for=app.window,
+            modal=True
         )
-        self.window.set_modal(True)
 
-        self._ui = get_builder('quit_dialog.ui', self)
+        self._ui = get_builder('quit_dialog.ui')
+
+        self._connect(self._ui.hide_button, 'clicked', self._on_button_clicked)
+        self._connect(self._ui.minimize_button, 'clicked', self._on_button_clicked)
+        self._connect(self._ui.quit_button, 'clicked', self._on_button_clicked)
 
         self.set_child(self._ui.box)
 

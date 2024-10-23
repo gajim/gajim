@@ -847,6 +847,9 @@ class ProfileBuilder(Builder):
 class QuitDialogBuilder(Builder):
     box: Gtk.Box
     remember_checkbutton: Gtk.CheckButton
+    hide_button: Gtk.Button
+    minimize_button: Gtk.Button
+    quit_button: Gtk.Button
 
 
 class RosterBuilder(Builder):
