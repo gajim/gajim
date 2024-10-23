@@ -162,6 +162,9 @@ class FileTransferJingleRow(BaseRow):
         app.ged.register_event_handler(
             'jingle-ft-cancelled-received', ged.GUI1, self.process_event)
 
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
+
     def _reconstruct_transfer(self) -> None:
         self._show_file_infos()
         if self._file_props is None:

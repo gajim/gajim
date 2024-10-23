@@ -66,11 +66,14 @@ class CallRow(BaseRow):
         else:
             self._add_incoming_call_widget()
 
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
+
     def update(self) -> None:
         if self._event is None and self._session is None:
             return
 
-        self._call_box.destroy()
+        self.grid.remove(self._call_box)
         self._add_history_call_widget()
 
         self._event = None
@@ -185,6 +188,7 @@ class CallRow(BaseRow):
         label = Gtk.Label(label=text)
         label.get_style_context().add_class('bold')
         label.set_max_width_chars(40)
+        label.set_wrap(True)
         label.set_wrap_mode(Pango.WrapMode.WORD)
         self._call_box.append(label)
 
@@ -193,9 +197,9 @@ class CallRow(BaseRow):
             self._decline_button.set_sensitive(not self._session.accepted)
         self._decline_button.get_style_context().add_class(
             'destructive-action')
-        self._decline_button.connect('clicked', self._on_decline)
+        self._connect(self._decline_button, 'clicked', self._on_decline)
         decline_icon = Gtk.Image.new_from_icon_name('call-stop-symbolic')
-        self._decline_button.append(decline_icon)
+        self._decline_button.set_child(decline_icon)
         decline_label = Gtk.Label(label=_('Decline'))
         decline_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
         decline_box.append(self._decline_button)
@@ -206,10 +210,9 @@ class CallRow(BaseRow):
             self._accept_button.set_sensitive(not self._session.accepted)
         self._accept_button.get_style_context().add_class(
             'suggested-action')
-        self._accept_button.connect('clicked', self._on_accept)
-        accept_icon = Gtk.Image.new_from_icon_name(
-            'call-start-symbolic', Gtk.IconSize.DND)
-        self._accept_button.append(accept_icon)
+        self._connect(self._accept_button, 'clicked', self._on_accept)
+        accept_icon = Gtk.Image.new_from_icon_name('call-start-symbolic')
+        self._accept_button.set_child(accept_icon)
         accept_label = Gtk.Label(label=_('Accept'))
         accept_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
         accept_box.append(self._accept_button)

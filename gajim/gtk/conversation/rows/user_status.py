@@ -63,3 +63,6 @@ class UserStatus(BaseRow):
         timestamp_widget.set_halign(Gtk.Align.START)
         timestamp_widget.set_valign(Gtk.Align.END)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)

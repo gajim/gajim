@@ -47,8 +47,11 @@ class EncryptionInfoRow(BaseRow):
                              EncryptionInfoMsg.UNDECIDED_FINGERPRINTS):
             button = Gtk.Button(label=_('Manage Trust'))
             button.set_halign(Gtk.Align.START)
-            button.connect('clicked', self._on_manage_trust_clicked)
+            self._connect(button, 'clicked', self._on_manage_trust_clicked)
             self.grid.attach(button, 1, 2, 1, 1)
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         contact = self._client.get_module('Contacts').get_contact(

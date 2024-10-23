@@ -40,7 +40,9 @@ from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
-from gajim.gtk.util import GajimMenu, container_remove_all, format_fingerprint
+from gajim.gtk.util import container_remove_all
+from gajim.gtk.util import format_fingerprint
+from gajim.gtk.util import GajimMenu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
@@ -126,6 +128,9 @@ class MessageRow(BaseRow):
     @property
     def is_merged(self) -> bool:
         return self._merged
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
 
     def refresh(self, *, complete: bool = True) -> None:
         original_message = app.storage.archive.get_message_with_pk(

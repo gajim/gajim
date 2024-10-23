@@ -34,3 +34,6 @@ class ScrollHintRow(BaseRow):
             self.label.set_text(_('There is no more history'))
         else:
             self.label.set_text(_('Scroll up to load more chat history…'))
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)

@@ -60,6 +60,9 @@ class MUCJoinLeft(BaseRow):
         timestamp_widget.set_valign(Gtk.Align.FILL)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
 
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
+
     @staticmethod
     def _make_left_message(nick: str, reason: str | None,
                            error: bool) -> str:

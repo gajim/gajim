@@ -78,3 +78,6 @@ class MUCSubject(BaseRow):
         timestamp_widget = DateTimeLabel(self.timestamp)
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 2, 0, 1, 1)
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)

@@ -95,6 +95,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._destroyed = True
         self._disconnect_all()
         app.settings.disconnect_signals(self)
+        self._preview = None
+        del self._preview
         Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 

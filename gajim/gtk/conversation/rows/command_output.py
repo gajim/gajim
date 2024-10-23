@@ -45,3 +45,6 @@ class CommandOutputRow(BaseRow):
             self._label.get_style_context().add_class('gajim-command-output')
         self._label.set_markup(markup)
         self.grid.attach(self._label, 1, 1, 1, 1)
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
