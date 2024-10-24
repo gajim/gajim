@@ -35,7 +35,6 @@ import types
 import weakref
 
 import nbxmpp
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
@@ -294,9 +293,8 @@ class ServicesCache:
 
         # Or load it
         icon_name = f'gajim-agent-{service_name}'
-        # TODO GTK4
-        # if icon_exists(icon_name):
-        #     return icon_name
+        if icon_exists(icon_name):
+            return icon_name
         return 'gajim-agent-jabber'
 
     def get_browser(self, identities=None, features=None):

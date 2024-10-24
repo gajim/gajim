@@ -63,7 +63,7 @@ MenuItemListT = list[tuple[str, str, MenuValueT]]
 
 
 def icon_exists(name: str) -> bool:
-    return Gtk.IconTheme.get_default().has_icon(name)
+    return get_icon_theme().has_icon(name)
 
 
 def get_icon_theme() -> Gtk.IconTheme:
