@@ -73,7 +73,10 @@ class CallWindow(GajimAppWindow, EventHelper):
             self._ui.button_pound,
         ]
         for button in buttons:
-            gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
+            gesture_primary_click = Gtk.GestureClick(
+                button=Gdk.BUTTON_PRIMARY,
+                propagation_phase=Gtk.PropagationPhase.CAPTURE,
+            )
             self._connect(gesture_primary_click, 'pressed', self._on_button_press)
             self._connect(gesture_primary_click, 'released', self._on_button_release)
             button.add_controller(gesture_primary_click)
