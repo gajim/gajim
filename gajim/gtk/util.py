@@ -38,7 +38,6 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import types
 from gajim.common.const import AvatarSize
-from gajim.common.const import Display
 from gajim.common.const import LOCATION_DATA
 from gajim.common.ged import EventHelper as CommonEventHelper
 from gajim.common.i18n import _
@@ -458,7 +457,7 @@ def find_widget(name: str, container: Gtk.Container) -> Gtk.Widget | None:
 class MultiLineLabel(Gtk.Label):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         Gtk.Label.__init__(self, *args, **kwargs)
-        self.set_wrap_mode(Pango.WrapMode.WORD)
+        self.set_wrap(True)
         self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
         self.set_single_line_mode(False)
         self.set_selectable(True)
