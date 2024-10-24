@@ -36,7 +36,8 @@ from datetime import timedelta
 from datetime import timezone
 from urllib.parse import unquote
 
-from gi.repository import Gdk, Gio
+from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
@@ -218,7 +219,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         if sys.platform == 'win32':
             # TODO GTK4
             # https://gitlab.gnome.org/GNOME/gtk/-/issues/7019
-            # Remove once GTK >4.16.2 is released
+            # Remove once GTK >=4.17 is released
             os.environ['GSK_RENDERER'] = 'cairo'
 
         app.ged.register_event_handler(
