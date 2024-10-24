@@ -763,15 +763,6 @@ class PluginsBuilder(Builder):
     plugin_homepage_linkbutton: Gtk.Label
 
 
-class PopupNotificationWindowBuilder(Builder):
-    eventbox: Gtk.Box
-    color_bar: Gtk.Box
-    image: Gtk.Image
-    event_type_label: Gtk.Label
-    close_button: Gtk.Button
-    event_description_label: Gtk.Label
-
-
 class PreferencesBuilder(Builder):
     grid: Gtk.Grid
     stack: Gtk.Stack
@@ -960,8 +951,6 @@ class ServerInfoBuilder(Builder):
 
 
 class ServiceDiscoveryWindowBuilder(Builder):
-    liststore1: Gtk.ListStore
-    service_discovery_window: Gtk.Window
     service_discovery: Gtk.Box
     banner_agent_icon: Gtk.Image
     banner_agent_header: Gtk.Label
@@ -1183,8 +1172,6 @@ def get_builder(file_name: Literal['password_dialog.ui'], instance: Any = None, 
 def get_builder(file_name: Literal['pep_config.ui'], instance: Any = None, widgets: list[str] = ...) -> PepConfigBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['plugins.ui'], instance: Any = None, widgets: list[str] = ...) -> PluginsBuilder: ...  # noqa
-@overload
-def get_builder(file_name: Literal['popup_notification_window.ui'], instance: Any = None, widgets: list[str] = ...) -> PopupNotificationWindowBuilder: ...  # noqa
 @overload
 def get_builder(file_name: Literal['preferences.ui'], instance: Any = None, widgets: list[str] = ...) -> PreferencesBuilder: ...  # noqa
 @overload

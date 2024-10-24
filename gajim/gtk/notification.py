@@ -23,7 +23,6 @@ import hashlib
 import logging
 import platform
 import sys
-import textwrap
 from pathlib import Path
 
 import cairo
@@ -31,7 +30,6 @@ from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
-from gi.repository import Gtk
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -41,7 +39,6 @@ from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
-from gajim.common.const import StyleAttr
 from gajim.common.ged import EventHelper
 from gajim.common.helpers import allow_showing_notification
 from gajim.common.helpers import play_sound
@@ -50,11 +47,8 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.avatar import merge_avatars
-from gajim.gtk.builder import get_builder
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
-from gajim.gtk.util import add_css_to_widget
-from gajim.gtk.util import get_total_screen_geometry
 from gajim.gtk.util import load_icon_surface
 
 MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
@@ -62,7 +56,7 @@ MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
 if ((sys.platform == 'win32' and
         int(platform.version().split('.')[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION) or
         TYPE_CHECKING):
-    # Importing windows_toasts on an unsupported Windows version will throw an Exception
+    # Importing windows_toasts on an unsupported OS will throw an Exception
     from windows_toasts import InteractableWindowsToaster
     from windows_toasts import Toast
     from windows_toasts import ToastActivatedEventArgs
@@ -149,140 +143,6 @@ class DummyBackend(NotificationBackend):
 
     def _withdraw(self, details: list[Any]) -> None:
         pass
-
-
-class WindowsLegacy(NotificationBackend):
-    def __init__(self):
-        NotificationBackend.__init__(self)
-        self._active_notification = None
-
-    def _send(self, event: events.Notification) -> None:
-        timeout = app.settings.get('notification_timeout')
-        self._withdraw([])
-        self._active_notification = PopupNotification(event, timeout)
-
-        def _on_popup_destroy(_widget: Gtk.Window) -> None:
-            self._active_notification = None
-
-        self._active_notification.connect('destroy', _on_popup_destroy)
-
-    def _withdraw(self, details: list[Any]) -> None:
-        if self._active_notification is not None:
-            self._active_notification.destroy()
-
-
-class PopupNotification(Gtk.Window):
-
-    _background_class = {
-        'incoming-message': '.gajim-notify-message',
-        'file-error': '.gajim-notify-error',
-        'file-send-error': '.gajim-notify-error',
-        'file-request-error': '.gajim-notify-error',
-        'file-completed': '.gajim-notify-success',
-        'file-stopped': '.gajim-notify-success',
-        'group-chat-invitation': '.gajim-notify-invite',
-    }
-
-    def __init__(self, event: events.Notification, timeout: int) -> None:
-        Gtk.Window.__init__(self)
-        self.set_type_hint(Gdk.WindowTypeHint.UTILITY)
-        self.set_focus_on_map(False)
-        self.set_accept_focus(False)
-        self.set_skip_taskbar_hint(True)
-        self.set_skip_pager_hint(True)
-        self.set_decorated(False)
-        self.set_keep_above(True)
-
-        self._timeout_id: int | None = None
-        self._event = event
-
-        self._ui = get_builder('popup_notification_window.ui', self)
-        self.add(self._ui.eventbox)
-
-        self._add_background_color(event)
-
-        if event.type == 'incoming-message':
-            assert event.jid is not None
-            pixbuf = _get_pixbuf_icon(event.account, event.jid, event.resource)
-            self._ui.image.set_from_pixbuf(pixbuf)
-        else:
-            icon_name = self._get_icon_name(event)
-            self._ui.image.set_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
-        self._ui.event_type_label.set_text(event.title)
-        body = textwrap.fill(event.text,
-                             width=40,
-                             max_lines=3,
-                             placeholder='…')
-        self._ui.event_description_label.set_text(body)
-
-        if timeout > 0:
-            self._timeout_id = GLib.timeout_add_seconds(timeout, self.destroy)
-
-        self.move(*self._get_window_pos())
-
-        self._ui.connect_signals(self)
-        self.connect('button-press-event', self._on_button_press)
-        self.connect('destroy', self._on_destroy)
-        self.show_all()
-
-    @staticmethod
-    def _get_icon_name(event: events.Notification) -> str:
-        if event.icon_name is not None:
-            return event.icon_name
-        icon_name = event.sub_type or event.type
-        return NOTIFICATION_ICONS.get(icon_name, 'gajim-chat-msg-recv')
-
-    def _add_background_color(self, event: events.Notification) -> None:
-        event_type = event.sub_type or event.type
-        css_class = self._background_class.get(event_type,
-                                               '.gajim-notify-other')
-        bg_color = app.css_config.get_value(css_class, StyleAttr.COLOR)
-        bar_class = '''
-            .popup-bar {
-                background-color: %s;
-            }''' % bg_color
-        add_css_to_widget(self._ui.color_bar, bar_class)
-        self._ui.color_bar.get_style_context().add_class('popup-bar')
-
-    @staticmethod
-    def _get_window_pos() -> tuple[int, int]:
-        pos_x = app.settings.get('notification_position_x')
-        screen_w, screen_h = get_total_screen_geometry()
-        if pos_x < 0:
-            pos_x = screen_w - 312 + pos_x + 1
-        pos_y = app.settings.get('notification_position_y')
-        if pos_y < 0:
-            pos_y = screen_h - 95 - 80 + pos_y + 1
-        return pos_x, pos_y
-
-    def _on_close_button_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
-
-    def _on_button_press(self,
-                         _widget: Gtk.Widget,
-                         event: Any
-                         ) -> None:
-        if event.button == Gdk.BUTTON_PRIMARY:
-
-            jid = ''
-            if self._event.jid is not None:
-                jid = str(self._event.jid)
-
-            params = OpenEventActionParams(type=self._event.type,
-                                           sub_type=self._event.sub_type or '',
-                                           account=self._event.account,
-                                           jid=jid)
-            # present_with_time needs to be called at this instant in order to
-            # work on Windows
-            app.window.present_with_time(Gdk.CURRENT_TIME)
-            app.app.activate_action(f'{self._event.account}-open-event',
-                                    params.to_variant())
-
-        self.destroy()
-
-    def _on_destroy(self, _widget: Gtk.Window) -> None:
-        if self._timeout_id is not None:
-            GLib.source_remove(self._timeout_id)
 
 
 class WindowsToastNotification(NotificationBackend):
@@ -651,7 +511,7 @@ def get_notification_backend() -> NotificationBackend:
     if sys.platform == 'win32':
         if int(platform.version().split('.')[2]) >= MIN_WINDOWS_TOASTS_WIN_VERSION:
             return WindowsToastNotification()
-        return WindowsLegacy()
+        return DummyBackend()
 
     if sys.platform == 'darwin':
         return DummyBackend()
