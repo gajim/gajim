@@ -6,7 +6,7 @@
     <property name="visible">1</property>
     <property name="title" translatable="1">Create new post</property>
     <property name="type_hint">dialog</property>
-    <signal name="key-press-event" handler="_on_key_press_event" swapped="no"/>
+    <!-- <signal name="key-press-event" handler="_on_key_press_event" swapped="no"/> -->
     <child>
       <placeholder/>
     </child>

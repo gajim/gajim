@@ -293,8 +293,9 @@ class ServicesCache:
 
         # Or load it
         icon_name = f'gajim-agent-{service_name}'
-        if icon_exists(icon_name):
-            return icon_name
+        # TODO GTK4
+        # if icon_exists(icon_name):
+        #     return icon_name
         return 'gajim-agent-jabber'
 
     def get_browser(self, identities=None, features=None):
@@ -561,16 +562,16 @@ class ServiceDiscoveryWindow:
             self._ui.address_box.set_visible(False)
             self._ui.address_box.hide()
 
-        accel_group = Gtk.AccelGroup()
-        keyval, mod = Gtk.accelerator_parse('<Control>r')
-        accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
-                            self.accel_group_func)
-        self.window.add_accel_group(accel_group)
+        # accel_group = Gtk.AccelGroup()
+        # keyval, mod = Gtk.accelerator_parse('<Control>r')
+        # accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
+        #                     self.accel_group_func)
+        # self.window.add_accel_group(accel_group)
 
         self._initial_state()
-        self._ui.connect_signals(self)
+        # self._ui.connect_signals(self)
         self.travel(jid, node)
-        self.window.show_all()
+        self.window.show()
 
     @property
     def account(self):
@@ -841,9 +842,9 @@ class AgentBrowser:
         '''
         self.browse_button = Gtk.Button()
         self.browse_button.connect('clicked', self.on_browse_button_clicked)
-        self.window.action_buttonbox.add(self.browse_button)
+        self.window.action_buttonbox.append(self.browse_button)
         self.browse_button.set_label(_('Browse'))
-        self.browse_button.show_all()
+        self.browse_button.show()
 
     def _clean_actions(self):
         '''
@@ -874,8 +875,7 @@ class AgentBrowser:
         # Add an icon to the banner.
         icon_name = self.cache.get_icon(identities,
                                         addr=self._get_agent_address())
-        self.window.banner_icon.set_from_icon_name(icon_name,
-                                                   Gtk.IconSize.DIALOG)
+        self.window.banner_icon.set_from_icon_name(icon_name)
         self.window.banner_icon.show()
 
     def _clean_title(self):
@@ -1042,7 +1042,8 @@ class AgentBrowser:
         # We got a list of items
         def fill_partial_rows(items):
             '''Generator to fill the listmodel of a treeview progressively.'''
-            self.window.services_treeview.freeze_child_notify()
+            # TODO GTK4
+            # self.window.services_treeview.freeze_child_notify()
             for item in items:
                 if self.window.dying:
                     yield False
@@ -1054,10 +1055,10 @@ class AgentBrowser:
                 self._total_items += 1
                 self._add_item(jid_, node_, node, item, force)
                 if (self._total_items % 10) == 0:
-                    self.window.services_treeview.thaw_child_notify()
+                    # self.window.services_treeview.thaw_child_notify()
                     yield True
-                    self.window.services_treeview.freeze_child_notify()
-            self.window.services_treeview.thaw_child_notify()
+                    # self.window.services_treeview.freeze_child_notify()
+            # self.window.services_treeview.thaw_child_notify()
             # Stop idle_add()
             yield False
         loader = fill_partial_rows(items)
@@ -1216,7 +1217,6 @@ class ToplevelAgentBrowser(AgentBrowser):
         # Icon Renderer
         renderer = Gtk.CellRendererPixbuf()
         renderer.set_property('xpad', 6)
-        renderer.set_property('stock-size', Gtk.IconSize.DND)
         col.pack_start(renderer, False)
         col.set_cell_data_func(renderer, self._pixbuf_renderer_data_func)
         # Text Renderer
@@ -1250,32 +1250,31 @@ class ToplevelAgentBrowser(AgentBrowser):
                                          use_underline=True)
         self.execute_button.connect('clicked', self._on_execute_button_clicked)
         image = Gtk.Image.new_from_icon_name(
-            'utilities-terminal-symbolic', Gtk.IconSize.BUTTON)
-        self.execute_button.set_image(image)
-        self.window.action_buttonbox.add(self.execute_button)
-        self.execute_button.show_all()
+            'utilities-terminal-symbolic')
+        self.execute_button.set_child(image)
+        self.window.action_buttonbox.append(self.execute_button)
+        self.execute_button.show()
 
         self.register_button = Gtk.Button(label=_('Re_gister'),
                                           use_underline=True)
         self.register_button.connect(
             'clicked', self._on_register_button_clicked)
-        self.window.action_buttonbox.add(self.register_button)
-        self.register_button.show_all()
+        self.window.action_buttonbox.append(self.register_button)
+        self.register_button.show()
 
         self.join_button = Gtk.Button(label=_('Join'),
                                       use_underline=True)
         self.join_button.connect('clicked', self._on_join_button_clicked)
-        self.window.action_buttonbox.add(self.join_button)
-        self.join_button.show_all()
+        self.window.action_buttonbox.append(self.join_button)
+        self.join_button.show()
 
         self.search_button = Gtk.Button(label=_('_Search'),
                                         use_underline=True)
         self.search_button.connect('clicked', self.on_search_button_clicked)
-        image = Gtk.Image.new_from_icon_name('edit-find-symbolic',
-                                             Gtk.IconSize.BUTTON)
-        self.search_button.set_image(image)
-        self.window.action_buttonbox.add(self.search_button)
-        self.search_button.show_all()
+        image = Gtk.Image.new_from_icon_name('edit-find-symbolic')
+        self.search_button.set_child(image)
+        self.window.action_buttonbox.append(self.search_button)
+        self.search_button.show()
 
     def _clean_actions(self):
         if self.execute_button:
@@ -1692,8 +1691,8 @@ class MucBrowser(AgentBrowser):
     def _add_actions(self):
         self.join_button = Gtk.Button(label=_('_Join'), use_underline=True)
         self.join_button.connect('clicked', self._on_join_button_clicked)
-        self.window.action_buttonbox.add(self.join_button)
-        self.join_button.show_all()
+        self.window.action_buttonbox.append(self.join_button)
+        self.join_button.show()
 
     def _clean_actions(self):
         if self.join_button:
@@ -1970,27 +1969,26 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.post_button = Gtk.Button(label=_('_New post'), use_underline=True)
         self.post_button.set_sensitive(False)
         self.post_button.connect('clicked', self._on_post_button_clicked)
-        image = Gtk.Image.new_from_icon_name(
-            'mail-message-new-symbolic', Gtk.IconSize.BUTTON)
-        self.post_button.set_image(image)
-        self.window.action_buttonbox.add(self.post_button)
-        self.post_button.show_all()
+        image = Gtk.Image.new_from_icon_name('mail-message-new-symbolic')
+        self.post_button.set_child(image)
+        self.window.action_buttonbox.append(self.post_button)
+        self.post_button.show()
 
         self.subscribe_button = Gtk.Button(label=_('_Subscribe'),
                                            use_underline=True)
         self.subscribe_button.set_sensitive(False)
         self.subscribe_button.connect(
             'clicked', self._on_subscribe_button_clicked)
-        self.window.action_buttonbox.add(self.subscribe_button)
-        self.subscribe_button.show_all()
+        self.window.action_buttonbox.append(self.subscribe_button)
+        self.subscribe_button.show()
 
         self.unsubscribe_button = Gtk.Button(label=_('_Unsubscribe'),
                                              use_underline=True)
         self.unsubscribe_button.set_sensitive(False)
         self.unsubscribe_button.connect(
             'clicked', self._on_unsubscribe_button_clicked)
-        self.window.action_buttonbox.add(self.unsubscribe_button)
-        self.unsubscribe_button.show_all()
+        self.window.action_buttonbox.append(self.unsubscribe_button)
+        self.unsubscribe_button.show()
 
     def _clean_actions(self):
         if self.post_button is not None:
@@ -2150,7 +2148,7 @@ class GroupsPostWindow:
         self.window = self._ui.groups_post_window
 
         self._ui.connect_signals(self)
-        self.window.show_all()
+        self.window.show()
 
     def _on_key_press_event(self, widget, event):
         if event.keyval == Gdk.KEY_Escape:
