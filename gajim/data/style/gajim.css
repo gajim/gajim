@@ -642,7 +642,8 @@ messagedialog.confirmation-dialog > box { margin-top: 18px; }
 .message-actions-box { margin: 2px 13px 8px 8px; }
 
 /* MessageInputTextView */
-.message-input-textview {
+.message-input-textview,
+.message-input-textview text {
     background-color: transparent;
 }
 .message-input-border {
