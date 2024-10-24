@@ -153,6 +153,7 @@ WINDOW_MODULES = {
     'GroupchatDetails': 'gajim.gtk.groupchat_details',
     'GroupChatInvitationDialog': 'gajim.gtk.groupchat_invitation',
     'GroupchatJoin': 'gajim.gtk.groupchat_join',
+    'GroupsPostWindow': 'gajim.gtk.discovery',
     'HistoryExport': 'gajim.gtk.history_export',
     'HistorySyncAssistant': 'gajim.gtk.history_sync',
     'MamPreferences': 'gajim.gtk.mam_preferences',

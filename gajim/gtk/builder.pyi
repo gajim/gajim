@@ -611,7 +611,7 @@ class GroupchatStateBuilder(Builder):
 
 class GroupsPostWindowBuilder(Builder):
     textbuffer1: Gtk.TextBuffer
-    groups_post_window: Gtk.Window
+    box: Gtk.Box
     from_entry: Gtk.Entry
     subject_entry: Gtk.Entry
     contents_textview: Gtk.TextView

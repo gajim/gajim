@@ -54,6 +54,7 @@ from gajim.gtk.component_search import ComponentSearch
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import icon_exists
 from gajim.gtk.util import open_window
+from gajim.gtk.widgets import GajimAppWindow
 
 LABELS = {
     1: _('This service has not yet responded with detailed information'),
@@ -562,14 +563,7 @@ class ServiceDiscoveryWindow:
             self._ui.address_box.set_visible(False)
             self._ui.address_box.hide()
 
-        # accel_group = Gtk.AccelGroup()
-        # keyval, mod = Gtk.accelerator_parse('<Control>r')
-        # accel_group.connect(keyval, mod, Gtk.AccelFlags.VISIBLE,
-        #                     self.accel_group_func)
-        # self.window.add_accel_group(accel_group)
-
         self._initial_state()
-        # self._ui.connect_signals(self)
         self.travel(jid, node)
         self.window.show()
 
@@ -2036,8 +2030,9 @@ class DiscussionGroupsBrowser(AgentBrowser):
             return
 
         groupnode = model.get_value(iter_, 1)   # 1 = groupnode
-
-        GroupsPostWindow(self.account, self.jid, groupnode)
+        open_window(
+            'GroupsPostWindow', account=self.account, jid=self.jid, groupnode=groupnode
+        )
 
     def _on_subscribe_button_clicked(self, widget):
         '''
@@ -2131,12 +2126,16 @@ class DiscussionGroupsBrowser(AgentBrowser):
 _agent_type_info = _gen_agent_type_info()
 
 
-class GroupsPostWindow:
+class GroupsPostWindow(GajimAppWindow):
     def __init__(self, account, servicejid, groupid):
         '''
         Open new 'create post' window to create message for groupid on
         servicejid service
         '''
+        GajimAppWindow.__init__(
+            self, name='GroupsPostWindow', title=_('Create new post')
+        )
+
         assert isinstance(servicejid, str)
         assert isinstance(groupid, str)
 
@@ -2144,15 +2143,13 @@ class GroupsPostWindow:
         self.servicejid = servicejid
         self.groupid = groupid
 
-        self._ui = get_builder('groups_post_window.ui', self)
-        self.window = self._ui.groups_post_window
+        self._ui = get_builder('groups_post_window.ui')
+        self.set_child(self._ui.box)
 
-        self._ui.connect_signals(self)
-        self.window.show()
+        self._connect(self._ui.send_button, 'clicked', self._on_send_button_clicked)
 
-    def _on_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
+    def _cleanup(self) -> None:
+        pass
 
     def _on_send_button_clicked(self, w):
         '''
@@ -2179,4 +2176,4 @@ class GroupsPostWindow:
                                             jid=self.servicejid)
 
         # Close the window
-        self.window.destroy()
+        self.close()
