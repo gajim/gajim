@@ -7,7 +7,7 @@ from typing import cast
 
 import logging
 
-from gi.repository import Gdk
+from gi.repository import Gdk, Gio
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -27,7 +27,6 @@ from gajim.gtk.menus import get_preview_menu
 from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import load_icon_pixbuf
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger('gajim.gtk.preview')
@@ -123,7 +122,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.info_message.set_tooltip_text('')
 
     @ensure_not_destroyed
-    def update(self, preview: Preview, data: GdkPixbufType | None) -> None:
+    def update(self, preview: Preview, data: GdkPixbufType | Gio.Icon | None) -> None:
         self._preview = preview
 
         self._ui.preview_stack.set_visible_child_name('preview')
@@ -131,15 +130,17 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.info_message.hide()
 
         if preview.is_geo_uri:
-            data = load_icon_pixbuf('map', size=preview.size)
+            image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name='map'))
+            image.set_pixel_size(preview.size)
+            self._ui.image_button.set_child(image)
 
-        if isinstance(data, GdkPixbuf.PixbufAnimation):
+        elif isinstance(data, GdkPixbuf.PixbufAnimation):
             # TODO GTK4
             pass
             # image = Gtk.Image.new_from_animation(data)
             # self._ui.image_button.set_child(image)
         elif isinstance(data, GdkPixbuf.Pixbuf):
-            image = Gtk.Image.new_from_paintable(Gdk.Texture.new_for_pixbuf(data))
+            image = Gtk.Image.new_from_gicon(data)
             image_width = data.get_width()
             preview_size = app.settings.get('preview_size')
             image.set_pixel_size(min(image_width, preview_size))

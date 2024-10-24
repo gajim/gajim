@@ -126,31 +126,6 @@ def load_icon_surface(
     return surface
 
 
-def load_icon_pixbuf(icon_name: str,
-                     size: int = 16,
-                     scale: int | None = None,
-                     flags: Gtk.IconLookupFlags = None
-                     ) -> GdkPixbuf.Pixbuf | None:
-
-    icon_info = load_icon_info(icon_name, size, scale, flags)
-    if icon_info is None:
-        return None
-
-    try:
-        icon = icon_info.load_icon()
-    except GLib.Error as e:
-        log.error(
-            'Error loading icon surface for %s, %s, %s: %s',
-            icon_name,
-            size,
-            scale,
-            e
-        )
-        return None
-
-    return icon
-
-
 def get_status_icon_name(name: str) -> str:
     prefix = 'gajim'
     if app.is_flatpak():

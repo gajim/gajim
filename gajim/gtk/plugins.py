@@ -11,7 +11,7 @@ from enum import IntEnum
 from enum import unique
 from pathlib import Path
 
-from gi.repository import Gdk
+from gi.repository import Gdk, Gio
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
 
@@ -32,7 +32,6 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import WarningDialog
 from gajim.common.ged import EventHelper
-from gajim.gtk.util import load_icon_pixbuf
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
@@ -264,7 +263,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
     def _add_manifest(self,
                       manifest: PluginManifest,
                       installed: bool,
-                      icon: GdkPixbuf.Pixbuf | None = None) -> None:
+                      icon: Gio.Icon | None = None) -> None:
 
         restart = self._get_restart(manifest)
         has_error, error = self._get_error(manifest, installed)
@@ -294,7 +293,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
 
     def _get_plugin_icon(self,
                          manifest: PluginManifest
-                         ) -> GdkPixbuf.Pixbuf | None:
+                         ) -> Gio.Icon | None:
 
         image_name = f'{manifest.short_name}.png'
         path = configpaths.get('PLUGINS_IMAGES') / image_name
@@ -309,7 +308,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         if path.exists():
             return GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
 
-        return load_icon_pixbuf('applications-utilities')
+        return Gio.ThemedIcon(name='applications-utilities')
 
     def _on_enabled_toggled(self,
                             _cell: Gtk.CellRendererToggle,

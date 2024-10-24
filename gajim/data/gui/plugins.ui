@@ -3,7 +3,7 @@
   <requires lib="gtk" version="4.0"/>
   <object class="GtkListStore" id="liststore">
     <columns>
-      <column type="GdkPixbuf"/>
+      <column type="GIcon"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gboolean"/>
@@ -41,7 +41,7 @@
                     <child>
                       <object class="GtkCellRendererPixbuf"/>
                       <attributes>
-                        <attribute name="pixbuf">0</attribute>
+                        <attribute name="gicon">0</attribute>
                       </attributes>
                     </child>
                   </object>
