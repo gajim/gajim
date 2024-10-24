@@ -490,12 +490,23 @@ class ServicesCache:
                 del self._cbs[cbkey]
 
 
-class ServiceDiscoveryWindow:
+class ServiceDiscoveryWindow(GajimAppWindow):
     '''
     Class that represents the Services Discovery window
     '''
-    def __init__(self, account, jid='', node=None, address_entry=False,
-                 parent=None, initial_identities=None):
+    def __init__(
+        self,
+        account,
+        jid='',
+        node=None,
+        address_entry=False,
+        parent=None,
+        initial_identities=None,
+    ) -> None:
+        GajimAppWindow.__init__(
+            self, name='ServiceDiscoveryWindow', default_width=550, default_height=550
+        )
+
         self._account = account
         self.parent = parent
         if not jid:
@@ -525,16 +536,32 @@ class ServiceDiscoveryWindow:
 
         if initial_identities:
             self.cache._on_agent_info(jid, node, initial_identities, [], None)
-        self._ui = get_builder('service_discovery_window.ui', self)
-        self.window = self._ui.service_discovery_window
+
+        self._ui = get_builder('service_discovery_window.ui')
+        self.set_child(self._ui.service_discovery)
+
+        # self.window = self._ui.service_discovery_window
         self.services_treeview = self._ui.services_treeview
         self.model = None
         # This is more reliable than the cursor-changed signal.
         selection = self.services_treeview.get_selection()
-        selection.connect_after(
-            'changed', self._on_services_treeview_selection_changed)
-        self.services_treeview.connect(
-            'row-activated', self._on_services_treeview_row_activated)
+        self._connect_after(
+            selection, 'changed', self._on_services_treeview_selection_changed
+        )
+        self._connect(
+            self.services_treeview,
+            'row-activated',
+            self._on_services_treeview_row_activated,
+        )
+        self._connect(
+            self._ui.address_comboboxtext,
+            'changed',
+            self._on_address_comboboxtext_changed,
+        )
+        self._connect(self._ui.browse_button, 'clicked', self._on_go_button_clicked)
+
+        self._connect(self.window, 'close-request', self._on_close_request)
+
         self.services_scrollwin = self._ui.services_scrollwin
         self.progressbar = self._ui.services_progressbar
         self.banner_header = self._ui.banner_agent_header
@@ -565,7 +592,8 @@ class ServiceDiscoveryWindow:
 
         self._initial_state()
         self.travel(jid, node)
-        self.window.show()
+
+        self.show()
 
     @property
     def account(self):
@@ -577,14 +605,6 @@ class ServiceDiscoveryWindow:
         self.cache.account = value
         if self.browser:
             self.browser.account = value
-
-    def _on_key_press_event(self, widget, event):
-        if event.keyval == Gdk.KEY_Escape:
-            self.window.destroy()
-
-    def accel_group_func(self, accel_group, acceleratable, keyval, modifier):
-        if (modifier & Gdk.ModifierType.CONTROL_MASK) and (keyval == Gdk.KEY_r):
-            self.reload()
 
     def _initial_state(self):
         '''
@@ -606,6 +626,9 @@ class ServiceDiscoveryWindow:
         else:
             self.banner_subheader.hide()
 
+    def _cleanup(self) -> None:
+        self._destroy()
+
     def _destroy(self, chain=False):
         '''
         Close the browser. This can optionally close its children and propagate
@@ -625,7 +648,7 @@ class ServiceDiscoveryWindow:
             self.window.hide()
             self.browser.cleanup()
             self.browser = None
-        self.window.destroy()
+        self.window.close()
 
         for child in self.children[:]:
             child.parent = None
@@ -714,7 +737,7 @@ class ServiceDiscoveryWindow:
             return
         self.children.append(win)
 
-    def _on_service_discovery_window_destroy(self, widget):
+    def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> int:
         self._destroy()
 
     def _on_address_comboboxtext_changed(self, widget):
@@ -758,10 +781,6 @@ class ServiceDiscoveryWindow:
     def _on_services_treeview_selection_changed(self, widget):
         if self.browser:
             self.browser.update_actions()
-
-    def _on_entry_key_press_event(self, widget, event):
-        if event.keyval in (Gdk.KEY_Return, Gdk.KEY_KP_Enter):
-            self._on_go_button_clicked(widget)
 
 
 class AgentBrowser:
@@ -845,7 +864,7 @@ class AgentBrowser:
         Remove the action buttons specific to this browser
         '''
         if self.browse_button:
-            self.browse_button.destroy()
+            self.window.action_buttonbox.remove(self.browse_button)
             self.browse_button = None
 
     def _set_title(self, jid, node, identities, features, data):
@@ -1026,7 +1045,7 @@ class AgentBrowser:
         if not items:
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
-                self.window.window.destroy()
+                self.window.window.close()
             ErrorDialog(_('The service is not browsable'),
                         _('This service does not contain any items '
                           'to browse.'),
@@ -1272,16 +1291,16 @@ class ToplevelAgentBrowser(AgentBrowser):
 
     def _clean_actions(self):
         if self.execute_button:
-            self.execute_button.destroy()
+            self.window.action_buttonbox.remove(self.execute_button)
             self.execute_button = None
         if self.register_button:
-            self.register_button.destroy()
+            self.window.action_buttonbox.remove(self.register_button)
             self.register_button = None
         if self.join_button:
-            self.join_button.destroy()
+            self.window.action_buttonbox.remove(self.join_button)
             self.join_button = None
         if self.search_button:
-            self.search_button.destroy()
+            self.window.action_buttonbox.remove(self.search_button)
             self.search_button = None
         AgentBrowser._clean_actions(self)
 
@@ -1669,14 +1688,8 @@ class MucBrowser(AgentBrowser):
         # Connect to scrollwindow scrolling
         self.vadj = self.window.services_scrollwin.get_property('vadjustment')
         self.vadj_cbid = self.vadj.connect('value-changed', self.on_scroll)
-        # And to size changes
-        self.size_cbid = self.window.services_scrollwin.connect(
-            'size-allocate', self.on_scroll)
 
     def _clean_treemodel(self):
-        if self.size_cbid:
-            self.window.services_scrollwin.disconnect(self.size_cbid)
-            self.size_cbid = None
         if self.vadj_cbid:
             self.vadj.disconnect(self.vadj_cbid)
             self.vadj_cbid = None
@@ -1690,7 +1703,7 @@ class MucBrowser(AgentBrowser):
 
     def _clean_actions(self):
         if self.join_button:
-            self.join_button.destroy()
+            self.window.action_buttonbox.remove(self.join_button)
             self.join_button = None
 
     def _on_join_button_clicked(self, *args):
@@ -1769,9 +1782,6 @@ class MucBrowser(AgentBrowser):
             self._broken += 1
             if self._broken >= 3:
                 # Disable queries completely after 3 failures
-                if self.size_cbid:
-                    self.window.services_scrollwin.disconnect(self.size_cbid)
-                    self.size_cbid = None
                 if self.vadj_cbid:
                     self.vadj.disconnect(self.vadj_cbid)
                     self.vadj_cbid = None
@@ -1986,15 +1996,15 @@ class DiscussionGroupsBrowser(AgentBrowser):
 
     def _clean_actions(self):
         if self.post_button is not None:
-            self.post_button.destroy()
+            self.window.action_buttonbox.remove(self.post_button)
             self.post_button = None
 
         if self.subscribe_button is not None:
-            self.subscribe_button.destroy()
+            self.window.action_buttonbox.remove(self.subscribe_button)
             self.subscribe_button = None
 
         if self.unsubscribe_button is not None:
-            self.unsubscribe_button.destroy()
+            self.window.action_buttonbox.remove(self.unsubscribe_button)
             self.unsubscribe_button = None
 
     def update_actions(self):
