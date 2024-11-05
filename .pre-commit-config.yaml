@@ -30,3 +30,10 @@ repos:
     rev: 5.13.2
     hooks:
       - id: isort
+
+  - repo: https://github.com/psf/black
+    # The `refs/tags/<tag>:refs/tags/<tag>` is needed for black's required-version to work:
+    # https://github.com/psf/black/issues/2493#issuecomment-1081987650
+    rev: 'refs/tags/24.10.0:refs/tags/24.10.0'
+    hooks:
+      - id: black

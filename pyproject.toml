@@ -59,6 +59,7 @@ dev = [
   "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",
   "python-gitlab",
   "sentry-sdk",
+  "black==24.10.0",
 ]
 
 [project.scripts]
@@ -79,8 +80,9 @@ version = {attr = "gajim.__version__"}
 
 [tool.black]
 line-length = 88
-skip-string-normalization = true
 target-version = ["py310", "py311", "py312"]
+force-exclude = "gajim|typings|test"
+required-version = "24.10.0"
 
 [tool.codespell]
 skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
@@ -235,7 +237,7 @@ select = [
     # "PT",    # flake8-pytest-style
     # "PTH",   # flake8-use-pathlib
     # "PYI",   # flake8-pyi
-    "Q",     # flake8-quotes
+    # "Q",     # flake8-quotes
     # "RET",   # flake8-return
     "RSE",   # flake8-raise
     "RUF",   # Ruff-specific rules
@@ -339,11 +341,6 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 [tool.ruff.lint.mccabe]
 max-complexity = 15
-
-[tool.ruff.lint.flake8-quotes]
-inline-quotes = "single"
-docstring-quotes = "single"
-multiline-quotes = "single"
 
 [tool.isort]
 force_alphabetical_sort_within_sections = true
