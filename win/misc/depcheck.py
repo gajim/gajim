@@ -11,66 +11,88 @@ import sys
 
 import gi
 
-gi.require_version('GIRepository', '2.0')
+gi.require_version("GIRepository", "2.0")
 from gi.repository import GIRepository  # noqa: E402
 
-logging.basicConfig(level='INFO', format='%(levelname)s: %(message)s')
+logging.basicConfig(level="INFO", format="%(levelname)s: %(message)s")
 log = logging.getLogger()
 
-IGNORED_LIBS = [
-    ('Soup', '2.4'),
-    ('Gtk', '4.0')
-]
+IGNORED_LIBS = [("Soup", "2.4"), ("Gtk", "4.0")]
+
 
 def get_required_by_typelibs() -> set[str]:
     deps: set[str] = set()
     repo = GIRepository.Repository()
     for tl in os.listdir(repo.get_search_path()[0]):
-        namespace, version = os.path.splitext(tl)[0].split('-', 1)
+        namespace, version = os.path.splitext(tl)[0].split("-", 1)
         if (namespace, version) in IGNORED_LIBS:
             continue
         try:
             repo.require(namespace, version, 0)
         except Exception as error:
-            log.warning('Unable to load %s %s: %s',
-                        namespace, version, error)
+            log.warning("Unable to load %s %s: %s", namespace, version, error)
             continue
         lib = repo.get_shared_library(namespace)
         if lib:
-            deps.update(lib.split(','))
+            deps.update(lib.split(","))
     return deps
 
 
-EXTENSIONS = ['.exe', '.pyd', '.dll']
+EXTENSIONS = [".exe", ".pyd", ".dll"]
 SYSTEM_LIBS = [
-    'advapi32.dll',
-    'cabinet.dll', 'comctl32.dll', 'comdlg32.dll', 'crypt32.dll', 'd3d9.dll',
-    'dnsapi.dll', 'dsound.dll', 'dwmapi.dll', 'gdi32.dll', 'imm32.dll',
-    'iphlpapi.dll', 'kernel32.dll', 'ksuser.dll', 'msi.dll', 'msimg32.dll',
-    'msvcr71.dll', 'msvcr80.dll', 'msvcrt.dll', 'ole32.dll', 'oleaut32.dll',
-    'opengl32.dll', 'rpcrt4.dll', 'setupapi.dll', 'shell32.dll', 'user32.dll',
-    'usp10.dll', 'winmm.dll', 'winspool.drv', 'wldap32.dll', 'ws2_32.dll',
-    'wsock32.dll', 'shlwapi.dll'
+    "advapi32.dll",
+    "cabinet.dll",
+    "comctl32.dll",
+    "comdlg32.dll",
+    "crypt32.dll",
+    "d3d9.dll",
+    "dnsapi.dll",
+    "dsound.dll",
+    "dwmapi.dll",
+    "gdi32.dll",
+    "imm32.dll",
+    "iphlpapi.dll",
+    "kernel32.dll",
+    "ksuser.dll",
+    "msi.dll",
+    "msimg32.dll",
+    "msvcr71.dll",
+    "msvcr80.dll",
+    "msvcrt.dll",
+    "ole32.dll",
+    "oleaut32.dll",
+    "opengl32.dll",
+    "rpcrt4.dll",
+    "setupapi.dll",
+    "shell32.dll",
+    "user32.dll",
+    "usp10.dll",
+    "winmm.dll",
+    "winspool.drv",
+    "wldap32.dll",
+    "ws2_32.dll",
+    "wsock32.dll",
+    "shlwapi.dll",
 ]
 
 
 def get_dependencies(filename: str) -> list[str]:
     deps: list[str] = []
     try:
-        data = subprocess.getoutput('objdump -p %s' % filename)
+        data = subprocess.getoutput("objdump -p %s" % filename)
     except Exception as error:
         log.error(error)
         return deps
 
     for line in data.splitlines():
         line = line.strip()
-        if line.startswith('DLL Name:'):
-            deps.append(line.split(':', 1)[-1].strip().lower())
+        if line.startswith("DLL Name:"):
+            deps.append(line.split(":", 1)[-1].strip().lower())
     return deps
 
 
 def find_lib(root: str, name: str) -> str | None:
-    search_path = os.path.join(root, 'bin')
+    search_path = os.path.join(root, "bin")
     if os.path.exists(os.path.join(search_path, name)):
         return os.path.join(search_path, name)
     elif name in SYSTEM_LIBS:
@@ -89,18 +111,18 @@ def get_things_to_delete(root: str) -> list[str]:
                     all_libs.add(lib)
                     needed.add(lib)
                     if find_lib(root, lib) is None:
-                        log.info('MISSING: %s %s', path, lib)
+                        log.info("MISSING: %s %s", path, lib)
 
     for lib in get_required_by_typelibs():
         needed.add(lib)
         if find_lib(root, lib) is None:
-            log.info('MISSING: %s', lib)
+            log.info("MISSING: %s", lib)
 
     result: list[str] = []
     libs = all_libs - needed
     for lib in libs:
         _, ext = os.path.splitext(lib)
-        if ext == '.exe':
+        if ext == ".exe":
             continue
 
         name = find_lib(root, lib)
@@ -116,10 +138,10 @@ def main() -> None:
     libs = get_things_to_delete(sys.prefix)
     while libs:
         for lib in libs:
-            log.info('DELETE: %s', lib)
+            log.info("DELETE: %s", lib)
             os.unlink(lib)
         libs = get_things_to_delete(sys.prefix)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
