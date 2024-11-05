@@ -190,13 +190,6 @@ def guess_mime_type(file_path: Path | str,
                     ) -> str:
     file_path = str(file_path)
 
-    if not mimetypes.inited:
-        # On Windows both mime types are only available
-        # with python 3.11, so this can be removed once
-        # the Windows build uses python 3.11
-        mimetypes.add_type('image/webp', '.webp')
-        mimetypes.add_type('image/avif', '.avif')
-
     # The mimetypes module maps extensions to mime types
     # it does no guessing based on file content
     mime_type, _ = mimetypes.guess_type(file_path)
