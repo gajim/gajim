@@ -79,7 +79,7 @@ class RosterItemExchange(BaseModule):
                 for group in contact.groups:
                     if group not in groups:
                         same_groups = False
-                if contact.sub in ('both', 'to') and same_groups:
+                if contact.subscription in ('both', 'to') and same_groups:
                     continue
             exchange_items_list[jid] = [name, groups]
 
