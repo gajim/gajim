@@ -6,8 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import cairo
-from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -38,38 +36,50 @@ from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util import AccountBadge
 from gajim.gtk.util import make_href_markup
+from gajim.gtk.util import SignalManager
 
 
-class ChatBanner(Gtk.Box, EventHelper):
+class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._client: types.Client | None = None
         self._contact: types.ChatContactT | None = None
 
         self._last_message_from_phone: set[BareContact] = set()
 
-        self._ui = get_builder('chat_banner.ui')
-        self.add(self._ui.banner_box)
-        self._ui.connect_signals(self)
+        self._ui = get_builder("chat_banner.ui")
+        self.append(self._ui.banner_box)
 
-        self._account_badge = AccountBadge()
+        self._account_badge = AccountBadge(bind_setting=True)
         self._voice_requests_button = VoiceRequestsButton()
 
-        self._ui.additional_items_box.pack_start(
-            self._voice_requests_button, False, True, 0)
-        self._ui.additional_items_box.pack_end(
-            self._account_badge, False, True, 0)
+        self._ui.additional_items_box.append(self._voice_requests_button)
+        self._ui.additional_items_box.append(self._account_badge)
 
-        hide_roster = app.settings.get('hide_groupchat_occupants_list')
+        hide_roster = app.settings.get("hide_groupchat_occupants_list")
         self._set_toggle_roster_button_icon(hide_roster)
 
-        app.settings.connect_signal(
-            'hide_groupchat_occupants_list',
-            self._set_toggle_roster_button_icon)
+        self._connect(self._ui.copy_jid_button, "clicked", self._on_copy_jid_clicked)
+        self._connect(self._ui.avatar_image, "query-tooltip", self._on_query_tooltip)
+        self._connect(
+            self._ui.toggle_roster_button, "clicked", self._on_toggle_roster_clicked
+        )
+        self._connect(
+            self._ui.share_menu_button, "notify::active", self._on_share_activated
+        )
 
-        self.show_all()
+        app.settings.connect_signal(
+            "hide_groupchat_occupants_list", self._set_toggle_roster_button_icon
+        )
+
+    def do_unroot(self) -> None:
+        self.clear()
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        app.settings.disconnect_signals(self)
 
     def clear(self) -> None:
         self._disconnect_signals()
@@ -82,12 +92,14 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._connect_signals()
 
         if not self.has_events_registered():
-            self.register_events([
-                ('message-received', ged.GUI2, self._on_message_received),
-                ('bookmarks-received', ged.GUI2, self._on_bookmarks_received),
-                ('account-enabled', ged.GUI2, self._on_account_changed),
-                ('account-disabled', ged.GUI2, self._on_account_changed)
-            ])
+            self.register_events(
+                [
+                    ("message-received", ged.GUI2, self._on_message_received),
+                    ("bookmarks-received", ged.GUI2, self._on_bookmarks_received),
+                    ("account-enabled", ged.GUI2, self._on_account_changed),
+                    ("account-disabled", ged.GUI2, self._on_account_changed),
+                ]
+            )
 
         self._voice_requests_button.switch_contact(self._contact)
 
@@ -105,29 +117,34 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert self._contact is not None
         assert self._client is not None
 
-        self._contact.multi_connect({
-            'chatstate-update': self._on_chatstate_update,
-            'nickname-update': self._on_nickname_update,
-            'avatar-update': self._on_avatar_update,
-            'presence-update': self._on_presence_update,
-            'caps-update': self._on_caps_update
-        })
+        self._contact.multi_connect(
+            {
+                "chatstate-update": self._on_chatstate_update,
+                "nickname-update": self._on_nickname_update,
+                "avatar-update": self._on_avatar_update,
+                "presence-update": self._on_presence_update,
+                "caps-update": self._on_caps_update,
+            }
+        )
 
         if isinstance(self._contact, GroupchatContact):
-            self._contact.multi_connect({
-                'room-voice-request': self._on_room_voice_request,
-                'disco-info-update': self._on_disco_info_update,
-            })
+            self._contact.multi_connect(
+                {
+                    "room-voice-request": self._on_room_voice_request,
+                    "disco-info-update": self._on_disco_info_update,
+                }
+            )
 
         elif isinstance(self._contact, GroupchatParticipant):
-            self._contact.multi_connect({
-                'user-joined': self._on_user_state_changed,
-                'user-left': self._on_user_state_changed,
-                'user-avatar-update': self._on_user_avatar_update,
-            })
+            self._contact.multi_connect(
+                {
+                    "user-joined": self._on_user_state_changed,
+                    "user-left": self._on_user_state_changed,
+                    "user-avatar-update": self._on_user_avatar_update,
+                }
+            )
 
-        self._client.connect_signal('state-changed',
-                                    self._on_client_state_changed)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
 
     def _disconnect_signals(self) -> None:
         if self._contact is not None:
@@ -138,54 +155,43 @@ class ChatBanner(Gtk.Box, EventHelper):
             self._client.disconnect_all_from_obj(self)
             self._client = None
 
-    def _on_client_state_changed(self,
-                                 _client: types.Client,
-                                 _signal_name: str,
-                                 state: SimpleClientState):
+    def _on_client_state_changed(
+        self, _client: types.Client, _signal_name: str, state: SimpleClientState
+    ):
 
         self._update_avatar()
 
-    def _on_presence_update(self,
-                            _contact: types.BareContact,
-                            _signal_name: str
-                            ) -> None:
+    def _on_presence_update(
+        self, _contact: types.BareContact, _signal_name: str
+    ) -> None:
 
         self._update_avatar()
         self._update_description_label()
 
-    def _on_chatstate_update(self,
-                             contact: types.BareContact,
-                             _signal_name: str
-                             ) -> None:
+    def _on_chatstate_update(
+        self, contact: types.BareContact, _signal_name: str
+    ) -> None:
         if contact.is_groupchat:
             self._update_description_label()
         else:
             self._update_name_label()
 
-    def _on_nickname_update(self,
-                            _contact: types.BareContact,
-                            _signal_name: str
-                            ) -> None:
+    def _on_nickname_update(
+        self, _contact: types.BareContact, _signal_name: str
+    ) -> None:
 
         self._update_name_label()
 
-    def _on_avatar_update(self,
-                          _contact: types.BareContact,
-                          _signal_name: str
-                          ) -> None:
+    def _on_avatar_update(self, _contact: types.BareContact, _signal_name: str) -> None:
 
         self._update_avatar()
 
-    def _on_caps_update(self,
-                        _contact: types.BareContact,
-                        _signal_name: str
-                        ) -> None:
+    def _on_caps_update(self, _contact: types.BareContact, _signal_name: str) -> None:
         self._update_avatar()
         self._update_robot_image()
 
     def _on_room_voice_request(self, *args: Any) -> None:
-        self._voice_requests_button.set_no_show_all(False)
-        self._voice_requests_button.show_all()
+        self._voice_requests_button.show()
 
     def _on_user_state_changed(self, *args: Any) -> None:
         self._update_avatar()
@@ -199,10 +205,9 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         self._update_name_label()
 
-    def _on_disco_info_update(self,
-                              _contact: GroupchatContact,
-                              _signal_name: str
-                              ) -> None:
+    def _on_disco_info_update(
+        self, _contact: GroupchatContact, _signal_name: str
+    ) -> None:
 
         self._update_name_label()
         self._update_description_label()
@@ -247,35 +252,38 @@ class ChatBanner(Gtk.Box, EventHelper):
         self._ui.chat_menu_button.set_menu_model(menu)
 
     def _update_phone_image(self) -> None:
-        self._ui.phone_image.set_visible(
-            self._contact in self._last_message_from_phone)
+        self._ui.phone_image.set_visible(self._contact in self._last_message_from_phone)
 
     def _update_robot_image(self) -> None:
         if isinstance(self._contact, BareContact):
-            self._ui.robot_image.set_visible(self._contact.is_gateway
-                                             or self._contact.is_bot)
+            self._ui.robot_image.set_visible(
+                self._contact.is_gateway or self._contact.is_bot
+            )
         else:
             self._ui.robot_image.set_visible(False)
 
     def _update_roster_button(self) -> None:
         self._ui.toggle_roster_button.set_visible(
-            isinstance(self._contact, GroupchatContact))
+            isinstance(self._contact, GroupchatContact)
+        )
 
     def _update_avatar(self) -> None:
         scale = app.window.get_scale_factor()
         assert self._contact
-        surface = self._contact.get_avatar(AvatarSize.CHAT, scale)
-        assert isinstance(surface, cairo.ImageSurface)
-        self._ui.avatar_image.set_from_surface(surface)
+        texture = self._contact.get_avatar(AvatarSize.CHAT, scale)
+        self._ui.avatar_image.set_pixel_size(AvatarSize.CHAT)
+        self._ui.avatar_image.set_from_paintable(texture)
 
         self._avatar_image_tooltip = ContactTooltip()
 
-    def _on_query_tooltip(self,
-                          _img: Gtk.Image,
-                          _x_coord: int,
-                          _y_coord: int,
-                          _keyboard_mode: bool,
-                          tooltip: Gtk.Tooltip) -> bool:
+    def _on_query_tooltip(
+        self,
+        _img: Gtk.Image,
+        _x_coord: int,
+        _y_coord: int,
+        _keyboard_mode: bool,
+        tooltip: Gtk.Tooltip,
+    ) -> bool:
         if not isinstance(self._contact, BareContact):
             return False
         res, widget = self._avatar_image_tooltip.get_tooltip(self._contact)
@@ -286,7 +294,7 @@ class ChatBanner(Gtk.Box, EventHelper):
         assert self._contact is not None
 
         name = self._get_name_from_contact(self._contact)
-        self._ui.name_label.set_markup(f'<span>{GLib.markup_escape_text(name)}</span>')
+        self._ui.name_label.set_markup(f"<span>{GLib.markup_escape_text(name)}</span>")
         self._ui.name_label.set_tooltip_text(name)
 
     def _get_muc_description_text(self) -> str | None:
@@ -307,7 +315,7 @@ class ChatBanner(Gtk.Box, EventHelper):
             text = self._get_muc_description_text()
         else:
             assert not isinstance(contact, GroupchatContact)
-            text = contact.status or ''
+            text = contact.status or ""
         self._ui.description_label.set_markup(make_href_markup(text))
         self._ui.description_label.set_visible(bool(text))
 
@@ -325,11 +333,10 @@ class ChatBanner(Gtk.Box, EventHelper):
     def _update_share_box(self) -> None:
         assert self._contact is not None
         if self._contact.is_groupchat:
-            self._ui.share_menu_button.set_tooltip_text(_('Share Group Chat…'))
+            self._ui.share_menu_button.set_tooltip_text(_("Share Group Chat…"))
         else:
-            self._ui.share_menu_button.set_tooltip_text(_('Share Contact…'))
-        self._ui.share_menu_button.set_sensitive(
-            not self._contact.is_pm_contact)
+            self._ui.share_menu_button.set_tooltip_text(_("Share Contact…"))
+        self._ui.share_menu_button.set_sensitive(not self._contact.is_pm_contact)
         self._ui.jid_label.set_text(str(self._contact.jid))
 
     def _get_share_uri(self) -> str:
@@ -339,46 +346,44 @@ class ChatBanner(Gtk.Box, EventHelper):
         if self._contact.is_groupchat:
             return jid.to_iri(XmppUriQuery.JOIN.value)
         else:
-            return self._client.get_module('OMEMO').compose_trust_uri(jid)
+            return self._client.get_module("OMEMO").compose_trust_uri(jid)
 
-    def _on_share_clicked(self, _button: Gtk.Button) -> None:
+    def _on_share_activated(self, _button: Gtk.MenuButton, *args: Any) -> None:
         assert self._contact is not None
         if isinstance(self._contact, GroupchatContact):
-            share_text = _('Scan this QR code to join %s.')
-            if self._contact.muc_context == 'private':
-                share_text = _('%s can be joined by invite only.')
+            share_text = _("Scan this QR code to join %s.")
+            if self._contact.muc_context == "private":
+                share_text = _("%s can be joined by invite only.")
         else:
-            share_text = _('Scan this QR code to start a chat with %s.')
+            share_text = _("Scan this QR code to start a chat with %s.")
         self._ui.share_instructions.set_text(share_text % self._contact.name)
 
-        if (isinstance(self._contact, GroupchatContact) and
-                self._contact.muc_context == 'private'):
+        if (
+            isinstance(self._contact, GroupchatContact)
+            and self._contact.muc_context == "private"
+        ):
             # Don't display QR code for private MUCs (they require an invite)
             self._ui.qr_code_image.hide()
             return
 
         # Generate QR code on demand (i.e. not when switching chats)
-        self._ui.qr_code_image.set_from_pixbuf(
-            generate_qr_code(self._get_share_uri()))
+        self._ui.qr_code_image.set_from_paintable(
+            generate_qr_code(self._get_share_uri())
+        )
         self._ui.qr_code_image.show()
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
-        text = self._get_share_uri()
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(text, -1)
+        self.get_clipboard().set(self._get_share_uri())
         self._ui.share_popover.popdown()
 
     def _on_toggle_roster_clicked(self, _button: Gtk.Button) -> None:
-        state = app.settings.get('hide_groupchat_occupants_list')
-        app.settings.set('hide_groupchat_occupants_list', not state)
+        state = app.settings.get("hide_groupchat_occupants_list")
+        app.settings.set("hide_groupchat_occupants_list", not state)
 
-    def _set_toggle_roster_button_icon(self,
-                                       hide_roster: bool,
-                                       *args: Any) -> None:
+    def _set_toggle_roster_button_icon(self, hide_roster: bool, *args: Any) -> None:
 
-        icon = 'go-next-symbolic' if not hide_roster else 'go-previous-symbolic'
-        self._ui.toggle_roster_image.set_from_icon_name(
-            icon, Gtk.IconSize.BUTTON)
+        icon = "go-next-symbolic" if not hide_roster else "go-previous-symbolic"
+        self._ui.toggle_roster_image.set_from_icon_name(icon)
 
     @staticmethod
     def _get_name_from_contact(contact: types.ChatContactT) -> str:
@@ -386,10 +391,10 @@ class ChatBanner(Gtk.Box, EventHelper):
 
         if isinstance(contact, BareContact):
             if contact.is_self:
-                return _('Note to myself')
+                return _("Note to myself")
             return name
 
         if isinstance(contact, GroupchatParticipant):
-            return f'{name} ({contact.room.name})'
+            return f"{name} ({contact.room.name})"
 
         return name
