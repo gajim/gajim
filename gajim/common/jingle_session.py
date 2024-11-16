@@ -768,9 +768,11 @@ class JingleSession:
                               media=None,
                               reason=text)
         if reason == 'cancel' and self.session_type_ft:
-            self._raise_event('jingle-ft-cancelled-received',
-                              media=None,
-                              reason=text)
+            pass
+            # TODO: Jingle FT
+            # self._raise_event('jingle-ft-cancelled-received',
+            #                   media=None,
+            #                   reason=text)
 
     def __broadcast_all(self,
                         stanza: nbxmpp.Node,

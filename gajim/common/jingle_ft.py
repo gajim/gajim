@@ -23,7 +23,8 @@ from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common import helpers
-from gajim.common.events import FileRequestReceivedEvent
+
+# from gajim.common.events import FileRequestReceivedEvent
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.jingle_content import contents
@@ -248,14 +249,15 @@ class JingleFileTransfer(JingleContent):
             file_props.desc = file_desc_tag.getData()
         file_props.transferred_size = []
 
-        app.ged.raise_event(FileRequestReceivedEvent(
-            conn=con,
-            stanza=stanza,
-            id_=id_,
-            fjid=fjid,
-            account=account,
-            jid=jid,
-            file_props=file_props))
+        # TODO Jingle FT
+        # app.ged.raise_event(FileRequestReceivedEvent(
+        #     conn=con,
+        #     stanza=stanza,
+        #     id_=id_,
+        #     fjid=fjid,
+        #     account=account,
+        #     jid=jid,
+        #     file_props=file_props))
 
     def __on_session_initiate_sent(self,
                                    stanza: nbxmpp.Node,
