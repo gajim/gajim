@@ -39,6 +39,7 @@ import precis_i18n.codec  # noqa: F401
 import qrcode
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
 from gi.repository import GLib
@@ -122,7 +123,7 @@ def get_contact_dict_for_account(account: str) -> dict[str, types.BareContact]:
     return contacts_dict
 
 
-def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
+def generate_qr_code(content: str) -> Gdk.Texture:
     qr = qrcode.QRCode(version=None,
                        error_correction=qrcode.constants.ERROR_CORRECT_L,
                        box_size=6,
@@ -131,10 +132,11 @@ def generate_qr_code(content: str) -> GdkPixbuf.Pixbuf | None:
     qr.make(fit=True)
 
     img = qr.make_image(image_factory=QrcPilImage).convert('RGB')
-    return GdkPixbuf.Pixbuf.new_from_bytes(
+    pixbuf = GdkPixbuf.Pixbuf.new_from_bytes(
         GLib.Bytes.new(img.tobytes()),
         GdkPixbuf.Colorspace.RGB, False, 8,
         img.width, img.height, img.width*3)
+    return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 
 def play_sound(sound_event: str,

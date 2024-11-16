@@ -13,7 +13,7 @@ from collections.abc import Iterator
 from datetime import datetime
 from datetime import timezone
 
-import cairo
+from gi.repository import Gdk
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import Chatstate
@@ -549,13 +549,14 @@ class BareContact(CommonContact):
                    scale: int,
                    add_show: bool = True,
                    default: bool = False,
-                   style: str = 'circle'):
+                   style: str = 'circle'
+                   ) -> Gdk.Texture:
 
         show = self.show.value if add_show else None
 
         transport_icon = self._get_transport_icon_name()
 
-        return app.app.avatar_storage.get_surface(
+        return app.app.avatar_storage.get_texture(
             self,
             size,
             scale,
@@ -839,10 +840,10 @@ class GroupchatContact(CommonContact):
     def set_avatar_sha(self, sha: str) -> None:
         app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
-    def get_avatar(self, size: int, scale: int) -> cairo.ImageSurface:
+    def get_avatar(self, size: int, scale: int) -> Gdk.Texture:
         transport_icon = self._get_transport_icon_name()
 
-        return app.app.avatar_storage.get_muc_surface(
+        return app.app.avatar_storage.get_muc_texture(
             self._account,
             self._jid,
             size,
@@ -1047,10 +1048,10 @@ class GroupchatParticipant(CommonContact):
                    scale: int,
                    add_show: bool = True,
                    style: str = 'circle'
-                   ) -> cairo.ImageSurface:
+                   ) -> Gdk.Texture:
 
         show = self.show.value if add_show else None
-        return app.app.avatar_storage.get_surface(
+        return app.app.avatar_storage.get_texture(
             self, size, scale, show, style=style)
 
     def update_presence(self, presence: MUCPresenceData) -> None:

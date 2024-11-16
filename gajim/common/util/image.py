@@ -11,6 +11,7 @@ import math
 from io import BytesIO
 from pathlib import Path
 
+from gi.repository import Gdk
 from gi.repository import GdkPixbuf
 from gi.repository import GLib
 from PIL import Image
@@ -20,6 +21,16 @@ from PIL import UnidentifiedImageError
 log = logging.getLogger('gajim.c.util.image')
 
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+def get_texture_from_file(
+    path: str | Path,
+    size: int | None = None
+) -> Gdk.Texture | None:
+    pixbuf = get_pixbuf_from_file(path, size)
+    if pixbuf is None:
+        return None
+    return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 
 def get_pixbuf_from_file(
@@ -58,7 +69,7 @@ def get_pixbuf_from_file(
         return None
 
 
-def get_pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf | None:
+def get_texture_from_data(data: bytes, size: int | None = None) -> Gdk.Texture | None:
     '''
     Load data into PixbufLoader and return GdkPixbuf.Pixbuf if possible.
     Pillow is used as fallback mechanism.
@@ -95,7 +106,14 @@ def get_pixbuf_from_data(data: bytes) -> GdkPixbuf.Pixbuf | None:
         return None
 
     pixbuf = pixbuf.apply_embedded_orientation()
-    return pixbuf
+    assert pixbuf is not None
+
+    if size is not None:
+        width, height = scale_with_ratio(size, pixbuf.get_width(), pixbuf.get_height())
+        pixbuf = pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
+        assert pixbuf is not None
+
+    return Gdk.Texture.new_for_pixbuf(pixbuf)
 
 
 def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
@@ -109,32 +127,24 @@ def scale_with_ratio(size: int, width: int, height: int) -> tuple[int, int]:
     return size, int(size / ratio)
 
 
-def scale_pixbuf(pixbuf: GdkPixbuf.Pixbuf, size: int) -> GdkPixbuf.Pixbuf | None:
-    width, height = scale_with_ratio(size, pixbuf.get_width(), pixbuf.get_height())
-    return pixbuf.scale_simple(width, height, GdkPixbuf.InterpType.BILINEAR)
-
-
-def scale_pixbuf_from_data(data: bytes, size: int) -> GdkPixbuf.Pixbuf | None:
-    pixbuf = get_pixbuf_from_data(data)
-    assert pixbuf is not None
-    return scale_pixbuf(pixbuf, size)
-
-
 def create_thumbnail(data: bytes, size: int, mime_type: str) -> bytes | None:
+    # Create thumbnail from bytes and return bytes in PNG format
+
     try:
-        thumbnail = create_thumbnail_with_pil(data, size)
+        thumbnail = _create_thumbnail_with_pil(data, size)
     except (Image.DecompressionBombError, Image.DecompressionBombWarning):
         # Don't try to process image further
         return None
 
     if thumbnail is not None:
         return thumbnail
-    return create_thumbnail_with_pixbuf(data, size, mime_type)
+    return _create_thumbnail_with_pixbuf(data, size, mime_type)
 
 
-def create_thumbnail_with_pixbuf(
+def _create_thumbnail_with_pixbuf(
     data: bytes, size: int, mime_type: str
 ) -> bytes | None:
+    # Reads data and returns thumbnail bytes in PNG format
 
     try:
         # Try to create GdKPixbuf loader with fixed mime-type to
@@ -175,7 +185,9 @@ def create_thumbnail_with_pixbuf(
     return bytes_
 
 
-def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
+def _create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
+    # Reads data and returns thumbnail bytes in PNG format
+
     input_file = BytesIO(data)
     output_file = BytesIO()
     try:
@@ -185,7 +197,6 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
         raise
     except Exception as error:
         log.warning('making pil thumbnail failed: %s', error)
-        log.warning('fallback to pixbuf')
         input_file.close()
         output_file.close()
         return None
@@ -198,17 +209,17 @@ def create_thumbnail_with_pil(data: bytes, size: int) -> bytes | None:
         return data
 
     try:
-        if image.format == 'GIF' and image.n_frames > 1:  # type: ignore
-            assert isinstance(image, ImageFile.ImageFile)
-            resize_gif(image, output_file, (size, size))
-        else:
-            image.thumbnail((size, size))
-            image.save(
-                output_file,
-                format=image.format,
-                exif=image.info.get('exif', b''),  # type: ignore
-                optimize=True,
-            )
+        # Disabled after port to Gtk4
+        # if image.format == 'GIF' and image.n_frames > 1:
+        #     assert isinstance(image, ImageFile.ImageFile)
+        #     resize_gif(image, output_file, (size, size))
+        # else:
+        image.thumbnail((size, size))
+        image.save(
+            output_file,
+            format='png',
+            optimize=True,
+        )
     except Exception as error:
         log.warning('saving pil thumbnail failed: %s', error)
         return None
