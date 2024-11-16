@@ -3,9 +3,9 @@ from pathlib import Path
 
 from .config import *  # noqa: F403
 
-__version__ = '1.9.5'
+__version__ = "1.9.5"
 
-portable_path = Path(sys.executable).parent / 'is_portable'
+portable_path = Path(sys.executable).parent / "is_portable"
 IS_PORTABLE = portable_path.exists()
 
 # Check for Microsoft app identity by trying to query AppInfo.
@@ -13,6 +13,7 @@ IS_PORTABLE = portable_path.exists()
 has_ms_appinfo = False
 try:
     from winrt.windows.applicationmodel import AppInfo
+
     has_ms_appinfo = AppInfo.current is not None
 except Exception:
     pass
