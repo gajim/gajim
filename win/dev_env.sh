@@ -25,8 +25,8 @@ function main {
         ${MINGW_PACKAGE_PREFIX}-python-setuptools-scm \
         ${MINGW_PACKAGE_PREFIX}-python-six \
         ${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
-        ${MINGW_PACKAGE_PREFIX}-gtk3 \
-        ${MINGW_PACKAGE_PREFIX}-gtksourceview4 \
+        ${MINGW_PACKAGE_PREFIX}-gtk4 \
+        ${MINGW_PACKAGE_PREFIX}-gtksourceview5 \
         ${MINGW_PACKAGE_PREFIX}-gstreamer \
         ${MINGW_PACKAGE_PREFIX}-gst-plugins-base \
         ${MINGW_PACKAGE_PREFIX}-gst-plugins-good \
@@ -34,7 +34,7 @@ function main {
         ${MINGW_PACKAGE_PREFIX}-gst-python \
         ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
         ${MINGW_PACKAGE_PREFIX}-farstream \
-        ${MINGW_PACKAGE_PREFIX}-gspell \
+        ${MINGW_PACKAGE_PREFIX}-libspelling \
         ${MINGW_PACKAGE_PREFIX}-hunspell \
         ${MINGW_PACKAGE_PREFIX}-libheif \
         ${MINGW_PACKAGE_PREFIX}-libnice \
@@ -45,7 +45,7 @@ function main {
     PIP_REQUIREMENTS="\
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 git+https://dev.gajim.org/gajim/omemo-dr.git
-pygobject-stubs --no-cache-dir --config-settings=config=Gtk3,Gdk3,GtkSource4
+pygobject-stubs --no-cache-dir --config-settings=config=Gtk4,Gdk4,GtkSource5
 python-gnupg
 qrcode
 css_parser
@@ -58,10 +58,8 @@ winrt-Windows.UI
 winrt-Windows.UI.ViewManagement
 windows-toasts
 "
-# Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
-# Env variable described in https://www.msys2.org/docs/python/
-SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install --upgrade precis-i18n
-SETUPTOOLS_USE_DISTUTILS=stdlib pip3 install --upgrade $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
+pip3 install --upgrade precis-i18n
+pip3 install --upgrade $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
 }
 

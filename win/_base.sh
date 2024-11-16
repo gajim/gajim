@@ -81,8 +81,8 @@ function install_mingw_deps {
         "${MINGW_PACKAGE_PREFIX}"-python-setuptools-scm \
         "${MINGW_PACKAGE_PREFIX}"-python-six \
         "${MINGW_PACKAGE_PREFIX}"-python-sqlalchemy \
-        "${MINGW_PACKAGE_PREFIX}"-gtk3 \
-        "${MINGW_PACKAGE_PREFIX}"-gtksourceview4 \
+        "${MINGW_PACKAGE_PREFIX}"-gtk4 \
+        "${MINGW_PACKAGE_PREFIX}"-gtksourceview5 \
         "${MINGW_PACKAGE_PREFIX}"-gstreamer \
         "${MINGW_PACKAGE_PREFIX}"-gst-plugins-base \
         "${MINGW_PACKAGE_PREFIX}"-gst-plugins-good \
@@ -91,7 +91,7 @@ function install_mingw_deps {
         "${MINGW_PACKAGE_PREFIX}"-gst-python \
         "${MINGW_PACKAGE_PREFIX}"-adwaita-icon-theme \
         "${MINGW_PACKAGE_PREFIX}"-farstream \
-        "${MINGW_PACKAGE_PREFIX}"-gspell \
+        "${MINGW_PACKAGE_PREFIX}"-libspelling \
         "${MINGW_PACKAGE_PREFIX}"-hunspell \
         "${MINGW_PACKAGE_PREFIX}"-libavif \
         "${MINGW_PACKAGE_PREFIX}"-libheif \
@@ -119,10 +119,8 @@ winrt-Windows.UI
 winrt-Windows.UI.ViewManagement
 windows-toasts
 "
-    # Workaround for https://dev.gajim.org/gajim/gajim/-/issues/11490
-    # Env variable described in https://www.msys2.org/docs/python/
-    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install precis-i18n
-    SETUPTOOLS_USE_DISTUTILS=stdlib build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
+    build_pip install precis-i18n
+    build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
 
 }
 
@@ -133,7 +131,7 @@ function post_install_deps {
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/96x96"
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/64x64"
     rm -Rf "${MINGW_ROOT}/share/icons/Adwaita/48x48"
-    "${MINGW_ROOT}"/bin/gtk-update-icon-cache-3.0.exe --force \
+    "${MINGW_ROOT}"/bin/gtk4-update-icon-cache.exe --force \
         "${MINGW_ROOT}/share/icons/Adwaita"
 
     # Compile GLib schemas
@@ -174,7 +172,7 @@ function install_gajim {
     cp -r gajim/data/icons/hicolor "${MINGW_ROOT}"/share/icons
 
     # Update icon cache
-    "${MINGW_ROOT}"/bin/gtk-update-icon-cache-3.0.exe --force \
+    "${MINGW_ROOT}"/bin/gtk4-update-icon-cache.exe --force \
         "${MINGW_ROOT}/share/icons/hicolor"
 
 }
@@ -195,7 +193,7 @@ function cleanup_install {
         fi
     done
 
-    KEEP="gajim|gajim-debug|python3|gdbus|gspawn-win32-helper|gspawn-win64-helper"
+    KEEP="gajim|gajim-debug|python3|gdbus|gspawn-win64-helper"
 
     echo "deleting .exe files"
     find "${MINGW_ROOT}" -regextype "posix-extended" -name "*.exe" -and ! \
@@ -229,7 +227,6 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/share/gdb
     rm -Rf "${MINGW_ROOT}"/share/libcaca
     rm -Rf "${MINGW_ROOT}"/share/gettext
-    rm -Rf "${MINGW_ROOT}"/share/gtk-3.0
     rm -Rf "${MINGW_ROOT}"/share/nghttp2
     rm -Rf "${MINGW_ROOT}"/share/fontconfig
     rm -Rf "${MINGW_ROOT}"/share/gettext-*
@@ -247,7 +244,6 @@ function cleanup_install {
     rm -Rf "${MINGW_ROOT}"/lib/"${PYTHON_ID}".*/dist-packages/Ogre
     rm -Rf "${MINGW_ROOT}"/lib/cmake
     rm -Rf "${MINGW_ROOT}"/lib/gettext
-    rm -Rf "${MINGW_ROOT}"/lib/gtk-3.0
     rm -Rf "${MINGW_ROOT}"/lib/mpg123
     rm -Rf "${MINGW_ROOT}"/lib/p11-kit
     rm -Rf "${MINGW_ROOT}"/lib/ruby
@@ -306,7 +302,6 @@ function cleanup_install {
     find "${MINGW_ROOT}" -regex ".*/bin/[^.]+" -exec rm -f {} \;
     find "${MINGW_ROOT}" -regex ".*/bin/[^.]+\\.[0-9]+" -exec rm -f {} \;
 
-    find "${MINGW_ROOT}" -name "gtk30-properties.mo" -exec rm -rf {} \;
     find "${MINGW_ROOT}" -name "gettext-tools.mo" -exec rm -rf {} \;
 
     find "${MINGW_ROOT}" -name "old_root.pem" -exec rm -rf {} \;

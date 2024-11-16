@@ -28,7 +28,7 @@ def get_required_by_typelibs() -> set[str]:
         if (namespace, version) in IGNORED_LIBS:
             continue
         try:
-            repo.require(namespace, version, 0)
+            repo.require(namespace, version, 0)  # pyright: ignore
         except Exception as error:
             log.warning("Unable to load %s %s: %s", namespace, version, error)
             continue
