@@ -269,7 +269,9 @@ class VariantMixin:
                 continue
 
             if not isinstance(value, field_t):
-                raise ValueError(f'invalid type: {value} is not a {field_t}')
+                raise ValueError(
+                    f'invalid type: {value} type {type(value)} is not a {field_t}'
+                )
 
             conversion_func = self._type_to_variant_funcs.get(field_t)
             if conversion_func is not None:
