@@ -147,10 +147,13 @@ class Settings:
         for handlers in self._callbacks.values():
             for handler in list(handlers):
                 if isinstance(handler, tuple):
-                    continue
-                func = handler()
-                if func is None or func.__self__ is object_:
-                    handlers.remove(handler)
+                    widget = handler[1]
+                    if widget is object_:
+                        handlers.remove(handler)
+                else:
+                    func = handler()
+                    if func is None or func.__self__ is object_:
+                        handlers.remove(handler)
 
     def bind_signal(self,
                     setting: str,
@@ -164,12 +167,7 @@ class Settings:
 
         callbacks = self._callbacks[(setting, account, jid)]
         func = getattr(widget, func_name)
-        callbacks.append((func, inverted, default_text))
-
-        def _on_destroy(*args: Any) -> None:
-            callbacks.remove((func, inverted, default_text))
-
-        widget.connect('destroy', _on_destroy)
+        callbacks.append((func, widget, inverted, default_text))
 
     def _notify(self,
                 value: Any,
@@ -182,7 +180,7 @@ class Settings:
         callbacks = self._callbacks[(setting, account, jid)]
         for func in list(callbacks):
             if isinstance(func, tuple):
-                func, inverted, default_text = func
+                func, widget, inverted, default_text = func
                 if isinstance(value, bool) and inverted:
                     value = not value
 
