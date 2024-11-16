@@ -296,7 +296,6 @@ class CoreApplication(ged.EventHelper):
     def _show_warnings() -> None:
         import traceback
         import warnings
-        os.environ['GAJIM_LEAK'] = 'true'
 
         def warn_with_traceback(message: Warning | str,
                                 category: type[Warning],
