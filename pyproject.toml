@@ -81,7 +81,7 @@ version = {attr = "gajim.__version__"}
 [tool.black]
 line-length = 88
 target-version = ["py310", "py311", "py312"]
-force-exclude = "gajim|typings|test"
+force-exclude = "common|plugins|typings|test"
 required-version = "24.10.0"
 
 [tool.codespell]
@@ -183,11 +183,9 @@ exclude = [
   "gajim/plugins/pluginmanager.py",
   "scripts/update_flatpak_manifest.py",
   "test/common/test_uri_util.py",
-  "test/dialogs/change_password.py",
-  "test/dialogs/dataform.py",
-  "test/dialogs/groupchat_info.py",
   "test/gui/test_menus.py",
   "test/gui/test_nick_completion.py",
+  "test/gtk/ui_test_change_password.py",
   "typings/windows_toasts/*",
 ]
 
@@ -329,6 +327,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "gajim/common/storage/omemo.py" = ["N803"]
 "gajim/common/storage/*" = ["E501"]
 "gajim/common/modules/chatstates.py" = ["E501"]
+"gajim/gtk/types.py" = ["F401"]
 "test/*" = ["E402"]
 "test/common/test_styling.py" = ["RUF001", "E501"]
 "test/common/test_regex.py" = ["RUF001"]
@@ -343,6 +342,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 max-complexity = 15
 
 [tool.isort]
+profile = "black"
 force_alphabetical_sort_within_sections = true
 force_single_line = true
 group_by_package = true
