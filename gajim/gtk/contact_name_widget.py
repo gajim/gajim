@@ -15,11 +15,13 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
+from gajim.gtk.util import SignalManager
 
-class ContactNameWidget(Gtk.Box):
+
+class ContactNameWidget(Gtk.Box, SignalManager):
 
     __gsignals__ = {
-        'name-updated': (GObject.SignalFlags.RUN_LAST, None, (str,)),
+        "name-updated": (GObject.SignalFlags.RUN_LAST, None, (str,)),
     }
 
     def __init__(
@@ -28,50 +30,53 @@ class ContactNameWidget(Gtk.Box):
         edit_mode: bool = False,
     ) -> None:
         Gtk.Box.__init__(self, spacing=18)
+        SignalManager.__init__(self)
 
         self._contact = contact
 
-        name = '' if self._contact is None else self._contact.name
+        name = "" if self._contact is None else self._contact.name
 
         self._entry = Gtk.Entry(
             activates_default=True,
-            name='ContactNameEntry',
+            name="ContactNameEntry",
             sensitive=False,
             text=name,
             xalign=1.0,
         )
-        self._entry.connect('activate', self._on_entry_activated)
-        self.add(self._entry)
+        self._connect(self._entry, "activate", self._on_entry_activated)
+        self.append(self._entry)
 
         self.update_displayed_name(name)
 
         button_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
-        self.add(button_box)
+        self.append(button_box)
 
-        self._edit_button = Gtk.Button.new_from_icon_name(
-            'document-edit-symbolic', Gtk.IconSize.BUTTON
-        )
-        self._edit_button.set_tooltip_text(_('Edit display name…'))
-        self._edit_button.connect('clicked', self._on_edit_clicked)
+        self._edit_button = Gtk.Button.new_from_icon_name("document-edit-symbolic")
+        self._edit_button.set_tooltip_text(_("Edit display name…"))
+        self._connect(self._edit_button, "clicked", self._on_edit_clicked)
 
         if isinstance(self._contact, GroupchatParticipant) or not edit_mode:
-            self._edit_button.set_no_show_all(True)
+            self._edit_button.set_visible(False)
 
-        button_box.add(self._edit_button)
+        button_box.append(self._edit_button)
 
-        self._clear_button = Gtk.Button.new_from_icon_name(
-            'edit-clear-symbolic', Gtk.IconSize.BUTTON
-        )
-        self._clear_button.set_tooltip_text(_('Reset to original name'))
-        self._clear_button.set_no_show_all(True)
-        self._clear_button.connect('clicked', self._on_clear_button_clicked)
-        button_box.add(self._clear_button)
+        self._clear_button = Gtk.Button.new_from_icon_name("edit-clear-symbolic")
+        self._clear_button.set_tooltip_text(_("Reset to original name"))
+        self._clear_button.set_visible(False)
+        self._connect(self._clear_button, "clicked", self._on_clear_button_clicked)
+        button_box.append(self._clear_button)
 
         if self._contact is not None:
             client = app.get_client(self._contact.account)
-            client.connect_signal('state-changed', self._on_client_state_changed)
+            client.connect_signal("state-changed", self._on_client_state_changed)
 
-        self.show_all()
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        del self._edit_button
+        del self._clear_button
+        del self._entry
+        app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, state: SimpleClientState
@@ -93,7 +98,7 @@ class ContactNameWidget(Gtk.Box):
             self.enable_edit_mode()
 
     def _on_clear_button_clicked(self, _button: Gtk.Button) -> None:
-        self._entry.set_text('')
+        self._entry.set_text("")
         self._save_name()
         self._disable_edit_mode()
 
@@ -104,21 +109,19 @@ class ContactNameWidget(Gtk.Box):
         client = app.get_client(self._contact.account)
 
         if isinstance(self._contact, BareContact):
-            client.get_module('Roster').set_item(
+            client.get_module("Roster").set_item(
                 self._contact.jid, name, self._contact.groups
             )
         else:
-            client.get_module('Bookmarks').modify(self._contact.jid, name=name)
+            client.get_module("Bookmarks").modify(self._contact.jid, name=name)
 
         self.update_displayed_name(name)
 
     def _disable_edit_mode(self) -> None:
         self._entry.set_sensitive(False)
 
-        self._edit_button.set_tooltip_text(_('Edit display name…'))
-        self._edit_button.set_image(
-            Gtk.Image.new_from_icon_name('document-edit-symbolic', Gtk.IconSize.BUTTON)
-        )
+        self._edit_button.set_tooltip_text(_("Edit display name…"))
+        self._edit_button.set_icon_name("document-edit-symbolic")
         self._clear_button.hide()
 
     def set_contact(
@@ -139,21 +142,19 @@ class ContactNameWidget(Gtk.Box):
         self._entry.set_text(self._contact.name)
         self._entry.grab_focus()
 
-        self._edit_button.set_tooltip_text(_('Save display name'))
-        self._edit_button.set_image(
-            Gtk.Image.new_from_icon_name('document-save-symbolic', Gtk.IconSize.BUTTON)
-        )
+        self._edit_button.set_tooltip_text(_("Save display name"))
+        self._edit_button.set_icon_name("document-save-symbolic")
         self._clear_button.show()
 
     def update_displayed_name(self, name: str) -> None:
         if self._contact is not None:
             if isinstance(self._contact, BareContact | GroupchatContact):
                 # Name editing is not possible for GroupchatParticipant
-                if name == '':
+                if name == "":
                     name = self._contact.original_name
 
                 if name != self._contact.original_name:
-                    name = f'{name} ({self._contact.original_name})'
+                    name = f"{name} ({self._contact.original_name})"
             else:
                 name = self._contact.name
 
@@ -162,4 +163,4 @@ class ContactNameWidget(Gtk.Box):
         width_chars = len(name) if len(name) <= 20 else 20
         self._entry.set_width_chars(width_chars)
 
-        self.emit('name-updated', name)
+        self.emit("name-updated", name)
