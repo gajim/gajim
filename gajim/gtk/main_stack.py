@@ -21,14 +21,14 @@ class MainStack(Gtk.Stack):
     def __init__(self) -> None:
         Gtk.Stack.__init__(self)
 
-        self.add_named(Gtk.Box(), 'empty')
+        self.add_named(Gtk.Box(), "empty")
 
         self._app_page = AppPage()
-        self.add_named(self._app_page, 'app')
+        self.add_named(self._app_page, "app")
 
         self._chat_page = ChatPage()
-        self._chat_page.connect('chat-selected', self._on_chat_selected)
-        self.add_named(self._chat_page, 'chats')
+        self._chat_page.connect("chat-selected", self._on_chat_selected)
+        self.add_named(self._chat_page, "chats")
 
         for account in app.settings.get_active_accounts():
             self.add_account_page(account)
@@ -40,7 +40,8 @@ class MainStack(Gtk.Stack):
     def remove_account_page(self, account: str) -> None:
         account_page = self.get_child_by_name(account)
         assert account_page is not None
-        account_page.destroy()
+        app.check_finalize(account_page)
+        self.remove(account_page)
 
     def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)
@@ -49,19 +50,19 @@ class MainStack(Gtk.Stack):
         return self.get_visible_child_name()
 
     def show_app_page(self) -> None:
-        self.set_visible_child_name('app')
+        self.set_visible_child_name("app")
 
     def get_app_page(self) -> AppPage:
-        app_page = self.get_child_by_name('app')
+        app_page = self.get_child_by_name("app")
         assert isinstance(app_page, AppPage)
         return app_page
 
     def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
-        self.set_visible_child_name('chats')
+        self.set_visible_child_name("chats")
 
     def show_chat_page(self) -> None:
-        self.set_visible_child_name('chats')
+        self.set_visible_child_name("chats")
 
     def show_account(self, account: str) -> None:
         self.set_visible_child_name(account)
@@ -72,13 +73,11 @@ class MainStack(Gtk.Stack):
         return account_page
 
     def get_chat_page(self) -> ChatPage:
-        chat_page = self.get_child_by_name('chats')
+        chat_page = self.get_child_by_name("chats")
         assert isinstance(chat_page, ChatPage)
         return chat_page
 
-    def _on_chat_selected(self,
-                          _chat_list: ChatList,
-                          _workspace_id: str,
-                          _account: str,
-                          _jid: JID) -> None:
-        self.set_visible_child_name('chats')
+    def _on_chat_selected(
+        self, _chat_list: ChatList, _workspace_id: str, _account: str, _jid: JID
+    ) -> None:
+        self.set_visible_child_name("chats")
