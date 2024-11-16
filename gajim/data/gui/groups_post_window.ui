@@ -1,132 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkTextBuffer" id="textbuffer1"/>
-  <object class="GtkWindow" id="groups_post_window">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Create new post</property>
-    <property name="type_hint">dialog</property>
-    <signal name="key-press-event" handler="_on_key_press_event" swapped="no"/>
+  <object class="GtkBox" id="box">
+    <property name="border_width">18</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
     <child>
-      <placeholder/>
+      <object class="GtkGrid">
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">12</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label" translatable="1">From</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label" translatable="1">Subject</property>
+            <property name="xalign">0</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="from_entry">
+            <property name="focusable">1</property>
+            <property name="hexpand">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="subject_entry">
+            <property name="focusable">1</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+      </object>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="row_spacing">6</property>
-            <property name="column_spacing">12</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">From</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Subject</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="from_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="subject_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">1</property>
-              </packing>
-            </child>
+      <object class="GtkScrolledWindow">
+        <property name="vexpand">1</property>
+        <property name="focusable">1</property>
+        <property name="shadow_type">in</property>
+        <property name="child">
+          <object class="GtkTextView" id="contents_textview">
+            <property name="focusable">1</property>
+            <property name="left_margin">6</property>
+            <property name="right_margin">6</property>
+            <property name="top_margin">6</property>
+            <property name="bottom_margin">6</property>
+            <property name="buffer">textbuffer1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <child>
-              <object class="GtkTextView" id="contents_textview">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="left_margin">6</property>
-                <property name="right_margin">6</property>
-                <property name="top_margin">6</property>
-                <property name="bottom_margin">6</property>
-                <property name="buffer">textbuffer1</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="send_button">
-            <property name="label">_Forward</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">end</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_send_button_clicked" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="send_button">
+        <property name="label">_Forward</property>
+        <property name="focusable">1</property>
+        <property name="halign">end</property>
+        <property name="use_underline">1</property>
+        <style>
+          <class name="suggested-action"/>
+        </style>
       </object>
     </child>
   </object>
