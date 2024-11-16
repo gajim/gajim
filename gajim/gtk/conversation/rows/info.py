@@ -17,15 +17,11 @@ from gajim.gtk.conversation.rows.widgets import SimpleLabel
 
 
 class InfoMessage(BaseRow):
-    def __init__(self,
-                 account: str,
-                 text: str,
-                 timestamp: datetime | None
-                 ) -> None:
+    def __init__(self, account: str, text: str, timestamp: datetime | None) -> None:
 
         BaseRow.__init__(self, account)
 
-        self.type = 'info'
+        self.type = "info"
 
         if timestamp is None:
             timestamp = utc_now()
@@ -36,13 +32,12 @@ class InfoMessage(BaseRow):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 
-        icon = Gtk.Image.new_from_icon_name('feather-info-symbolic',
-                                            Gtk.IconSize.MENU)
-        icon.get_style_context().add_class('gajim-status-message')
+        icon = Gtk.Image.new_from_icon_name("feather-info-symbolic")
+        icon.add_css_class("gajim-status-message")
         self.grid.attach(icon, 1, 0, 1, 1)
 
         self._label = SimpleLabel()
-        self._label.get_style_context().add_class('gajim-status-message')
+        self._label.add_css_class("gajim-status-message")
         self._label.set_text(text)
         self.grid.attach(self._label, 2, 0, 1, 1)
 
@@ -51,4 +46,5 @@ class InfoMessage(BaseRow):
         timestamp_widget.set_valign(Gtk.Align.END)
         self.grid.attach(timestamp_widget, 3, 0, 1, 1)
 
-        self.show_all()
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)

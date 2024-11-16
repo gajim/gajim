@@ -11,38 +11,36 @@ from gajim.common import app
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
+from gajim.gtk.util import SignalManager
 
-class BaseRow(Gtk.ListBoxRow):
+
+class BaseRow(Gtk.ListBoxRow, SignalManager):
     def __init__(self, account: str, widget: str | None = None) -> None:
-        Gtk.ListBoxRow.__init__(self)
+        Gtk.ListBoxRow.__init__(self, selectable=False)
+        SignalManager.__init__(self)
+
         self._account = account
         self._client = app.get_client(account)
 
-        self.type: str = ''
+        self.type: str = ""
         self.timestamp = FIRST_LOCAL_DATETIME
-        self.kind: str = ''
+        self.kind: str = ""
         self.direction = ChatDirection.INCOMING
-        self.name: str = ''
+        self.name: str = ""
         self.pk: int | None = None
         self.stanza_id: str | None = None
-        self.text: str = ''
+        self.text: str = ""
         self._merged: bool = False
 
-        self.set_selectable(False)
-        self.set_can_focus(False)
-        self.get_style_context().add_class('conversation-row')
+        self.add_css_class("conversation-row")
 
         self.grid = Gtk.Grid(row_spacing=3, column_spacing=12)
-        self.add(self.grid)
+        self.set_child(self.grid)
 
-        if widget == 'label':
-            self.label = Gtk.Label()
-            self.label.set_selectable(True)
-            self.label.set_line_wrap(True)
-            self.label.set_xalign(0)
-            self.label.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-
-        self.connect('destroy', self.__destroy)
+        if widget == "label":
+            self.label = Gtk.Label(
+                selectable=True, wrap=True, xalign=0, wrap_mode=Pango.WrapMode.WORD_CHAR
+            )
 
     def enable_selection_mode(self) -> None:
         return
@@ -54,6 +52,7 @@ class BaseRow(Gtk.ListBoxRow):
     def is_merged(self) -> bool:
         return self._merged
 
-    @staticmethod
-    def __destroy(widget: Gtk.Widget) -> None:
-        app.check_finalize(widget)
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
+from typing import cast
 
 import time
 
@@ -20,23 +20,21 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import format_eta
 
 
-class FileTransferRow(BaseRow, EventHelper):
+class FileTransferRow(BaseRow):
     def __init__(self, account: str, transfer: HTTPFileTransfer) -> None:
         BaseRow.__init__(self, account)
-        EventHelper.__init__(self)
 
-        self.type = 'file-transfer'
+        self.type = "file-transfer"
         timestamp = utc_now()
         self.timestamp = timestamp.astimezone()
         self.db_timestamp = timestamp.timestamp()
 
         self._destroyed: bool = False
 
-        if app.settings.get('use_kib_mib'):
+        if app.settings.get("use_kib_mib"):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT
@@ -45,8 +43,8 @@ class FileTransferRow(BaseRow, EventHelper):
         self._pulse = GLib.timeout_add(100, self._pulse_progressbar)
 
         self._transfer = transfer
-        self._transfer.connect('state-changed', self._on_transfer_state_change)
-        self._transfer.connect('progress', self._on_transfer_progress)
+        self._transfer.connect("state-changed", self._on_transfer_state_change)
+        self._transfer.connect("progress", self._on_transfer_progress)
 
         avatar_placeholder = Gtk.Box()
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
@@ -57,45 +55,42 @@ class FileTransferRow(BaseRow, EventHelper):
         timestamp_widget.set_valign(Gtk.Align.START)
         self.grid.attach(timestamp_widget, 1, 0, 1, 1)
 
-        self._ui = get_builder('file_transfer.ui')
+        self._ui = get_builder("file_transfer.ui")
         self.grid.attach(self._ui.transfer_box, 1, 1, 1, 1)
+
+        self._connect(self._ui.cancel_button, "clicked", self._on_cancel_clicked)
+
         self._ui.file_name.set_text(transfer.filename)
-        self._ui.transfer_description.set_text(
-            transfer.get_state_description())
+        self._ui.transfer_description.set_text(transfer.get_state_description())
 
-        self.connect('destroy', self._on_destroy)
-        self._ui.connect_signals(self)
-
-        self.show_all()
-
-    def _on_destroy(self, *args: Any) -> None:
+    def do_unroot(self) -> None:
         self._destroyed = True
 
+        self._transfer.disconnect_all_from_obj(self)
         del self._transfer
         if self._pulse is not None:
             GLib.source_remove(self._pulse)
+
+        BaseRow.do_unroot(self)
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         if self._transfer.state.is_active:
             self._transfer.cancel()
 
-        self.destroy()
+        cast(Gtk.ListBox, self.get_parent()).remove(self)
 
-    def _on_transfer_state_change(self,
-                                  transfer: HTTPFileTransfer,
-                                  _signal_name: str,
-                                  state: FTState) -> None:
+    def _on_transfer_state_change(
+        self, transfer: HTTPFileTransfer, _signal_name: str, state: FTState
+    ) -> None:
         if self._destroyed:
             return
 
         if state.is_error:
-            ErrorDialog(_('Error'),
-                        transfer.error_text,
-                        transient_for=app.window)
-            self.destroy()
+            ErrorDialog(_("Error"), transfer.error_text, transient_for=app.window)
+            cast(Gtk.ListBox, self.get_parent()).remove(self)
 
         if state.is_finished or state.is_cancelled:
-            self.destroy()
+            cast(Gtk.ListBox, self.get_parent()).remove(self)
             return
 
         description = transfer.get_state_description()
@@ -106,10 +101,9 @@ class FileTransferRow(BaseRow, EventHelper):
         self._ui.progress_bar.pulse()
         return True
 
-    def _on_transfer_progress(self,
-                              transfer: HTTPFileTransfer,
-                              _signal_name: str
-                              ) -> None:
+    def _on_transfer_progress(
+        self, transfer: HTTPFileTransfer, _signal_name: str
+    ) -> None:
         if self._destroyed:
             return
         if self._pulse is not None:
@@ -125,18 +119,17 @@ class FileTransferRow(BaseRow, EventHelper):
         seen = transfer.size * progress
 
         bytes_sec = int(round(seen / (time_now - self._start_time), 1))
-        speed = f'{GLib.format_size_full(bytes_sec, self._units)}/s'
-        self._ui.transfer_progress.set_tooltip_text(_('Speed: %s') % speed)
+        speed = f"{GLib.format_size_full(bytes_sec, self._units)}/s"
+        self._ui.transfer_progress.set_tooltip_text(_("Speed: %s") % speed)
 
         if bytes_sec == 0:
-            eta = '∞'
+            eta = "∞"
         else:
-            eta = format_eta(round(
-                (transfer.size - seen) / bytes_sec))
+            eta = format_eta(round((transfer.size - seen) / bytes_sec))
 
         self._ui.transfer_progress.set_text(
-            _('%(progress)s %% (%(time)s remaining)') % {
-                'progress': round(progress * 100),
-                'time': eta})
+            _("%(progress)s %% (%(time)s remaining)")
+            % {"progress": round(progress * 100), "time": eta}
+        )
 
         self._ui.progress_bar.set_fraction(progress)

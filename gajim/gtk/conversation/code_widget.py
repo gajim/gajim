@@ -6,7 +6,6 @@ from typing import Any
 
 import logging
 
-from gi.repository import Gdk
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -17,67 +16,63 @@ from gajim.common.styling import PreBlock
 
 from gajim.gtk.util import get_source_view_style_scheme
 
-log = logging.getLogger('gajim.gtk.conversation.code_widget')
+log = logging.getLogger("gajim.gtk.conversation.code_widget")
 
 
 class CodeWidget(Gtk.Box):
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_vexpand(True)
-        self.get_style_context().add_class('code-widget')
+        self.add_css_class("code-widget")
 
         self._account = account
 
         header = Gtk.Box()
         header.set_spacing(6)
-        header.get_style_context().add_class('code-widget-header')
+        header.add_css_class("code-widget-header")
         self._lang_label = Gtk.Label()
-        header.add(self._lang_label)
+        header.append(self._lang_label)
 
-        copy_button = Gtk.Button.new_from_icon_name(
-            'edit-copy-symbolic', Gtk.IconSize.MENU)
-        copy_button.set_tooltip_text(_('Copy code snippet'))
-        copy_button.connect('clicked', self._on_copy)
-        header.add(copy_button)
-        self.add(header)
+        copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
+        copy_button.set_tooltip_text(_("Copy code snippet"))
+        copy_button.connect("clicked", self._on_copy)
+        header.append(copy_button)
+        self.append(header)
 
         self._textview = CodeTextview()
         self._scrolled = Gtk.ScrolledWindow()
-        self._scrolled.set_policy(Gtk.PolicyType.AUTOMATIC,
-                                  Gtk.PolicyType.NEVER)
+        self._scrolled.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.NEVER)
         self._scrolled.set_hexpand(True)
         self._scrolled.set_vexpand(True)
         self._scrolled.set_propagate_natural_width(True)
         self._scrolled.set_propagate_natural_height(True)
         self._scrolled.set_max_content_height(400)
-        self._scrolled.add(self._textview)
+        self._scrolled.set_child(self._textview)
 
-        self.add(self._scrolled)
+        self.append(self._scrolled)
 
     def _on_copy(self, _button: Gtk.Button) -> None:
-        text = self._textview.get_code()
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(text, -1)
+        self.get_clipboard().set(self._textview.get_code())
 
     def add_content(self, block: PreBlock):
         code, lang = self._prepare_code(block.text)
         if lang is None:
-            self._lang_label.set_text(_('Code snippet'))
+            self._lang_label.set_text(_("Code snippet"))
         else:
             lang_name = self._textview.set_language(lang)
-            self._lang_label.set_text(_('Code snippet (%s)') % lang_name)
+            self._lang_label.set_text(_("Code snippet (%s)") % lang_name)
 
         self._textview.print_code(code)
 
     @staticmethod
     def _prepare_code(text: str) -> tuple[str, str | None]:
         text = text.strip()
-        code_start = text.partition('\n')[0]
+        code_start = text.partition("\n")[0]
         lang = None
         if len(code_start) > 3:
             lang = code_start[3:]
 
-        code = text.partition('\n')[2][:-4]
+        code = text.partition("\n")[2][:-4]
         return code, lang
 
 
@@ -93,9 +88,9 @@ class CodeTextview(GtkSource.View):
 
         self._source_manager = GtkSource.LanguageManager.get_default()
 
-        app.ged.register_event_handler('style-changed',
-                                       ged.GUI1,
-                                       self._on_style_changed)
+        app.ged.register_event_handler(
+            "style-changed", ged.GUI1, self._on_style_changed
+        )
 
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
@@ -109,9 +104,9 @@ class CodeTextview(GtkSource.View):
     def set_language(self, language_string: str) -> str:
         lang = self._source_manager.get_language(language_string)
         if lang is None:
-            return _('Unknown language')
+            return _("Unknown language")
 
-        log.debug('Code snippet lang: %s', lang.get_name())
+        log.debug("Code snippet lang: %s", lang.get_name())
         self.get_buffer().set_language(lang)
         return lang.get_name()
 

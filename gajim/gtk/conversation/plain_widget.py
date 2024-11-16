@@ -22,13 +22,13 @@ from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
-from gajim.gtk.menus import populate_uri_context_menu
+from gajim.gtk.menus import get_uri_context_menu
 from gajim.gtk.util import make_pango_attributes
 
-log = logging.getLogger('gajim.gtk.conversaion.plain_widget')
+log = logging.getLogger("gajim.gtk.conversaion.plain_widget")
 
-URI_TAGS = ['uri', 'address', 'xmppadr', 'mailadr']
-STYLE_TAGS = ['strong', 'emphasis', 'strike', 'pre']
+URI_TAGS = ["uri", "address", "xmppadr", "mailadr"]
+STYLE_TAGS = ["strong", "emphasis", "strike", "pre"]
 
 
 class PlainWidget(Gtk.Box):
@@ -39,7 +39,7 @@ class PlainWidget(Gtk.Box):
         self._account = account
 
         self._text_widget = MessageLabel(self._account, selectable)
-        self.add(self._text_widget)
+        self.append(self._text_widget)
 
     def set_selectable(self, selectable: bool) -> None:
         self._text_widget.set_selectable(selectable)
@@ -53,45 +53,59 @@ class PlainWidget(Gtk.Box):
 
 class MessageLabel(Gtk.Label):
     def __init__(self, account: str, selectable: bool) -> None:
-        Gtk.Label.__init__(self)
-        self.set_hexpand(True)
-        self.set_selectable(selectable)
-        self.set_line_wrap(True)
-        self.set_xalign(0)
+        Gtk.Label.__init__(
+            self,
+            hexpand=True,
+            selectable=selectable,
+            xalign=0,
+            wrap=True,
+        )
+
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
-        if os.environ.get('GAJIM_FORCE_WORD_WRAP'):
-            self.set_line_wrap_mode(Pango.WrapMode.WORD)
+        if os.environ.get("GAJIM_FORCE_WORD_WRAP"):
+            self.set_wrap_mode(Pango.WrapMode.WORD)
         else:
-            self.set_line_wrap_mode(Pango.WrapMode.WORD_CHAR)
-        self.set_track_visited_links(False)
+            self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
         self._account = account
 
-        self.get_style_context().add_class('gajim-conversation-text')
+        self.add_css_class("gajim-conversation-text")
 
-        self.connect('populate-popup', self._on_populate_popup)
-        self.connect('activate-link', self._on_activate_link)
-        self.connect('focus-in-event', self._on_focus_in)
-        self.connect('focus-out-event', self._on_focus_out)
+        self.connect("activate-link", self._on_activate_link)
 
-    def _on_populate_popup(self, label: Gtk.Label, menu: Gtk.Menu) -> None:
-        uri = label.get_current_uri()
-        selected, start, end = label.get_selection_bounds()
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        gesture_secondary_click.connect("pressed", self._on_secondary_clicked)
+        self.add_controller(gesture_secondary_click)
+
+        focus_controller = Gtk.EventControllerFocus()
+        focus_controller.connect("enter", self._on_focus_enter)
+        focus_controller.connect("leave", self._on_focus_leave)
+        self.add_controller(focus_controller)
+
+    def _on_secondary_clicked(
+        self,
+        _gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        _x: float,
+        _y: float,
+    ) -> int:
+        uri = self.get_current_uri()
+        selected, start, end = self.get_selection_bounds()
         if uri:
             puri = parse_uri(uri)
             assert puri.type != URIType.INVALID  # would be a common.styling bug
-            menu.foreach(menu.remove)
-            populate_uri_context_menu(menu, self._account, puri)
+            self.set_extra_menu(get_uri_context_menu(self._account, puri))
         elif selected:
-            selected_text = label.get_text()[start:end]
-            action_menu_item = get_conv_action_context_menu(
-                self._account, selected_text)
-            menu.prepend(action_menu_item)
-        menu.show_all()
+            selected_text = self.get_text()[start:end]
+            self.set_extra_menu(
+                get_conv_action_context_menu(self._account, selected_text)
+            )
+
+        return Gdk.EVENT_PROPAGATE
 
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:
-        markup_text = ''
+        markup_text = ""
         after = GLib.markup_escape_text(text.strip())
         for uri in uris:
             uri_escaped = GLib.markup_escape_text(uri.text)
@@ -116,30 +130,24 @@ class MessageLabel(Gtk.Label):
         if stripped and emoji.purely_emoji(stripped):
             emoji_count = emoji.emoji_count(stripped)
             if emoji_count == 1:
-                classname = 'gajim-single-emoji-msg'
+                classname = "gajim-single-emoji-msg"
             else:
-                classname = 'gajim-emoji-msg'
-            self.get_style_context().add_class(classname)
+                classname = "gajim-emoji-msg"
+            self.add_css_class(classname)
 
     def add_action_phrase(self, text: str, nickname: str) -> None:
-        text = text.replace('/me', f'* {nickname}', 1)
+        text = text.replace("/me", f"* {nickname}", 1)
         uris = process_uris(text)
         text = self._build_link_markup(text, uris)
-        self.set_markup(f'<i>{text}</i>')
+        self.set_markup(f"<i>{text}</i>")
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
         puri = parse_uri(uri)
         open_uri(puri, self._account)
         return Gdk.EVENT_STOP
 
-    @staticmethod
-    def _on_focus_in(widget: MessageLabel,
-                     _event: Gdk.EventFocus
-                     ) -> None:
-        widget.get_style_context().remove_class('transparent-selection')
+    def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:
+        self.remove_css_class("transparent-selection")
 
-    @staticmethod
-    def _on_focus_out(widget: MessageLabel,
-                      _event: Gdk.EventFocus
-                      ) -> None:
-        widget.get_style_context().add_class('transparent-selection')
+    def _on_focus_leave(self, _focus_controller: Gtk.EventControllerFocus) -> None:
+        self.add_css_class("transparent-selection")

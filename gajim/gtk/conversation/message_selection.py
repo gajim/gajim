@@ -13,37 +13,40 @@ from gajim.common.i18n import _
 class MessageSelection(Gtk.Grid):
 
     __gsignals__ = {
-        'copy': (GObject.SignalFlags.RUN_LAST, None, ()),
-        'cancel': (GObject.SignalFlags.RUN_LAST, None, ()),
+        "copy": (GObject.SignalFlags.RUN_LAST, None, ()),
+        "cancel": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self) -> None:
         Gtk.Grid.__init__(self, row_spacing=18, column_spacing=6)
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
 
-        self.get_style_context().add_class('floating-overlay-box')
+        self.add_css_class("floating-overlay-box")
 
-        label = Gtk.Label(label=_('Click messages to select them\n'
-                                  '(Ctrl + Double Click to deselect)'))
+        label = Gtk.Label(
+            label=_(
+                "Click messages to select them\n" "(Ctrl + Double Click to deselect)"
+            )
+        )
         self.attach(label, 0, 0, 2, 1)
 
-        copy_button = Gtk.Button(label=_('Copy Text'))
-        copy_button.get_style_context().add_class('suggested-action')
-        copy_button.connect('clicked', self._on_copy_clicked)
+        copy_button = Gtk.Button(label=_("Copy Text"))
+        copy_button.add_css_class("suggested-action")
+        copy_button.connect("clicked", self._on_copy_clicked)
         self.attach(copy_button, 0, 1, 1, 1)
 
-        cancel_button = Gtk.Button(label=_('Cancel'))
-        cancel_button.connect('clicked', self._on_cancel_clicked)
+        cancel_button = Gtk.Button(label=_("Cancel"))
+        cancel_button.connect("clicked", self._on_cancel_clicked)
         self.attach(cancel_button, 1, 1, 1, 1)
 
     def _on_copy_clicked(self, _button: Gtk.Button) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
-        self.emit('copy')
+        self.emit("copy")
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
-        self.emit('cancel')
+        self.emit("cancel")
