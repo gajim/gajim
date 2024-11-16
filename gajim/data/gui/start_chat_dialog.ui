@@ -1,596 +1,512 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <object class="GtkListStore" id="account_store">
-    <columns>
-      <!-- column-name icon -->
-      <column type="GdkPixbuf"/>
-      <!-- column-name account -->
-      <column type="gchararray"/>
-      <!-- column-name account_label -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkStack" id="stack">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <signal name="notify::visible-child-name" handler="_on_page_changed" swapped="no"/>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkInfoBar" id="infobar">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="homogeneous">True</property>
-            <property name="show-close-button">True</property>
-            <signal name="response" handler="_on_infobar_response" swapped="no"/>
-            <child internal-child="action_area">
-              <object class="GtkButtonBox">
-                <property name="can-focus">False</property>
-                <property name="layout-style">end</property>
+      <object class="GtkStackPage">
+        <property name="name">search</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">1</property>
+            <child>
+              <object class="GtkRevealer" id="infobar">
+                <property name="reveal-child">true</property>
+                <style>
+                  <class name="infobar"/>
+                  <class name="info"/>
+                </style>
                 <child>
-                  <placeholder/>
+                  <object class="GtkBox">
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">dialog-information-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="true">Start a new chat, join a group chat or search for new group chats globally. You can also enter an XMPP address.</property>
+                        <property name="hexpand">1</property>
+                        <property name="wrap">true</property>
+                        <property name="max-width-chars">46</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="infobar_close_button">
+                        <property name="valign">center</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">window-close-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
-            <child internal-child="content_area">
-              <object class="GtkBox">
-                <property name="can-focus">False</property>
+            <child>
+              <object class="GtkBox" id="box">
+                <property name="vexpand">1</property>
+                <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
+                <style>
+                  <class name="p-18"/>
+                </style>
                 <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">dialog-information-symbolic</property>
-                    <property name="icon_size">3</property>
+                  <object class="GtkBox">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkSearchEntry" id="search_entry">
+                        <property name="focusable">1</property>
+                        <property name="hexpand">1</property>
+                        <property name="placeholder-text" translatable="1">Search…</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="filter_bar_toggle">
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="tooltip-text" translatable="1">Filter Chats</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">feather-filter-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="global_search_toggle">
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="tooltip-text" translatable="1">Global Group Chat Search</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">feather-globe-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">Start a new chat, join a group chat or search for new group chats globally. You can also enter an XMPP address.</property>
-                    <property name="wrap">True</property>
-                    <property name="max-width-chars">46</property>
-                    <property name="xalign">0</property>
+                  <object class="GtkBox" id="search_error_box">
+                    <property name="spacing">12</property>
+                    <property name="visible">0</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">dialog-warning-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="search_error_label">
+                        <property name="label" translatable="true">Invalid Address</property>
+                        <property name="wrap">true</property>
+                        <property name="max-width-chars">46</property>
+                        <property name="xalign">0</property>
+                      </object>
+                    </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
+                </child>
+                <child>
+                  <object class="GtkRevealer" id="filter_bar_revealer">
+                    <property name="transition-duration">100</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="list_stack">
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">contacts</property>
+                        <property name="child">
+                          <object class="GtkOverlay">
+                            <property name="vexpand">1</property>
+                            <property name="child">
+                              <object class="GtkScrolledWindow" id="contact_scrolled">
+                                <property name="vexpand">1</property>
+                                <property name="focusable">1</property>
+                                <property name="hscrollbar-policy">never</property>
+                              </object>
+                            </property>
+                            <child type="overlay">
+                              <object class="GtkBox" id="no_contacts_placeholder">
+                                <property name="visible">0</property>
+                                <property name="halign">center</property>
+                                <property name="valign">center</property>
+                                <property name="orientation">vertical</property>
+                                <property name="spacing">12</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon-name">avatar-default-symbolic</property>
+                                    <property name="pixel-size">44</property>
+                                    <style>
+                                      <class name="dim-label"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="label" translatable="1">No contacts found
+You can also type an XMPP address</property>
+                                    <property name="justify">center</property>
+                                    <property name="wrap">1</property>
+                                    <property name="max-width-chars">35</property>
+                                    <style>
+                                      <class name="dim-label"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">global</property>
+                        <property name="child">
+                          <object class="GtkOverlay">
+                            <property name="vexpand">1</property>
+                            <property name="child">
+                              <object class="GtkScrolledWindow" id="global_scrolled">
+                                <property name="vexpand">1</property>
+                                <property name="focusable">1</property>
+                                <property name="hscrollbar-policy">never</property>
+                              </object>
+                            </property>
+                            <child type="overlay">
+                              <object class="GtkStack" id="global_search_placeholder_stack">
+                                <property name="visible">0</property>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">global-search-hint</property>
+                                    <property name="child">
+                                      <object class="GtkBox" id="global_search_placeholder_hints">
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">12</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">system-search-symbolic</property>
+                                            <property name="pixel-size">44</property>
+                                            <style>
+                                              <class name="dim-label"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="1">Search for group chats globally
+(press Return to start search)</property>
+                                            <property name="justify">center</property>
+                                            <property name="wrap">1</property>
+                                            <property name="max-width-chars">35</property>
+                                            <style>
+                                              <class name="dim-label"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+<child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">global-search-no-results</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">12</property>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="icon-name">system-search-symbolic</property>
+                                            <property name="pixel-size">44</property>
+                                            <style>
+                                              <class name="dim-label"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel">
+                                            <property name="label" translatable="1">No results</property>
+                                            <style>
+                                              <class name="dim-label"/>
+                                            </style>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkStackPage">
+                                    <property name="name">global-search-progress</property>
+                                    <property name="child">
+                                      <object class="GtkBox">
+                                        <property name="halign">center</property>
+                                        <property name="valign">center</property>
+                                        <property name="orientation">vertical</property>
+                                        <property name="spacing">12</property>
+                                        <child>
+                                          <object class="GtkSpinner">
+                                            <property name="spinning">1</property>
+                                            <property name="width-request">200</property>
+                                            <property name="height-request">32</property>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkLabel" id="global_search_results_label">
+                                            <property name="label"/>
+                                          </object>
+                                        </child>
+                                        <style>
+                                          <class name="p-18"/>
+                                          <class name="floating-overlay-box"/>
+                                        </style>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">0</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="border-width">18</property>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">progress</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkSpinner" id="spinner">
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <property name="vexpand">1</property>
+                <property name="spinning">1</property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">error</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox">
+                <property name="vexpand">1</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="homogeneous">1</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="valign">end</property>
+                    <property name="icon-name">dialog-error</property>
+                    <property name="pixel-size">48</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="error_label">
+                    <property name="valign">start</property>
+                    <property name="justify">center</property>
+                    <property name="wrap">1</property>
+                    <style>
+                      <class name="bold16"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="error_back_button">
+                <property name="label" translatable="1">_Back</property>
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="halign">start</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <style>
+              <class name="m-18"/>
+            </style>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">info</property>
+        <property name="child">
+          <object class="GtkBox" id="info_box">
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
+              <placeholder/>
+            </child>
+            <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="spacing">6</property>
                 <child>
-                  <object class="GtkSearchEntry" id="search_entry">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="has-focus">True</property>
-                    <property name="is-focus">True</property>
-                    <property name="hexpand">True</property>
-                    <property name="primary-icon-name">edit-find-symbolic</property>
-                    <property name="primary-icon-activatable">False</property>
-                    <property name="primary-icon-sensitive">False</property>
-                    <property name="placeholder-text" translatable="yes">Search…</property>
+                  <object class="GtkButton" id="info_back_button">
+                    <property name="label" translatable="1">_Back</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">1</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkToggleButton" id="filter_bar_toggle">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Filter Chats</property>
+                  <object class="GtkBox" id="join_box">
                     <property name="halign">end</property>
-                    <signal name="toggled" handler="_on_filter_bar_toggled" swapped="no"/>
+                    <property name="hexpand">true</property>
                     <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="icon-name">feather-filter-symbolic</property>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="join_button">
+                        <property name="label" translatable="1">_Join</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="halign">end</property>
+                        <property name="use-underline">1</property>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
                       </object>
                     </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleButton" id="global_search_toggle">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="tooltip-text" translatable="yes">Global Group Chat Search</property>
-                    <property name="halign">end</property>
-                    <property name="relief">half</property>
-                    <signal name="toggled" handler="_on_global_search_toggle" swapped="no"/>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="icon-name">feather-globe-symbolic</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkRevealer" id="filter_bar_revealer">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="transition-duration">100</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="scrolledwindow">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkListBox" id="listbox">
-                        <property name="name">StartChatListBox</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="selection-mode">browse</property>
-                        <property name="activate-on-single-click">False</property>
-                      </object>
-                    </child>
+                    <style>
+                      <class name="linked"/>
+                    </style>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
             </child>
+            <style>
+              <class name="m-18"/>
+            </style>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="name">search</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <object class="GtkSpinner" id="spinner">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="vexpand">True</property>
-            <property name="active">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="name">progress</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="GtkStackPage">
+        <property name="name">account</property>
+        <property name="child">
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <property name="homogeneous">True</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">end</property>
-                <property name="icon-name">dialog-error</property>
-                <property name="icon_size">6</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="error_label">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">start</property>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Select Account</property>
                 <property name="justify">center</property>
-                <property name="wrap">True</property>
+                <property name="wrap">1</property>
                 <style>
                   <class name="bold16"/>
+                  <class name="m-12"/>
                 </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">_Back</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="halign">start</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-18"/>
-        </style>
-      </object>
-      <packing>
-        <property name="name">error</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="info_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <child>
-              <object class="GtkBox" id="join_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
+              <object class="GtkScrolledWindow">
+                <property name="focusable">1</property>
+                <property name="vexpand">1</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="account_view">
+                    <property name="focusable">1</property>
+                    <property name="headers-visible">0</property>
+                    <property name="enable-search">0</property>
+                    <property name="show-expanders">0</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="icon_pixbuf"/>
+                          <attributes>
+                            <attribute name="pixbuf">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <child>
+                          <object class="GtkCellRendererText" id="account_text"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="start-chat-treeview"/>
+                    </style>
+                  </object>
+                </property>
+                <style>
+                  <class name="start-chat-scrolled"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="homogeneous">1</property>
                 <child>
-                  <placeholder/>
+                  <object class="GtkButton" id="account_back_button">
+                    <property name="label" translatable="1">_Back</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">1</property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkButton" id="join_button">
-                    <property name="label" translatable="yes">_Join</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
+                  <object class="GtkButton" id="account_select_button">
+                    <property name="label" translatable="1">_Select</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
                     <property name="halign">end</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="_on_join_clicked" swapped="no"/>
+                    <property name="use-underline">1</property>
                     <style>
                       <class name="suggested-action"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
-                <style>
-                  <class name="linked"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Back</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">start</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-18"/>
-        </style>
-      </object>
-      <packing>
-        <property name="name">info</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select Account</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-            <style>
-              <class name="bold16"/>
-              <class name="margin-12"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="vexpand">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTreeView" id="account_view">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="model">account_store</property>
-                <property name="headers-visible">False</property>
-                <property name="enable-search">False</property>
-                <property name="show-expanders">False</property>
-                <signal name="row-activated" handler="_on_select_clicked" swapped="no"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <child>
-                      <object class="GtkCellRendererPixbuf" id="icon_pixbuf"/>
-                      <attributes>
-                        <attribute name="pixbuf">0</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn">
-                    <child>
-                      <object class="GtkCellRendererText" id="account_text"/>
-                      <attributes>
-                        <attribute name="text">2</attribute>
-                      </attributes>
-                    </child>
-                  </object>
-                </child>
-                <style>
-                  <class name="start-chat-treeview"/>
-                </style>
               </object>
             </child>
             <style>
-              <class name="start-chat-scrolled"/>
+              <class name="m-18"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Back</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">start</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Select</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <property name="halign">end</property>
-                <property name="use-underline">True</property>
-                <signal name="clicked" handler="_on_select_clicked" swapped="no"/>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-18"/>
-        </style>
+        </property>
       </object>
-      <packing>
-        <property name="name">account</property>
-        <property name="position">4</property>
-      </packing>
     </child>
     <child>
       <placeholder/>
-    </child>
-  </object>
-  <object class="GtkBox" id="placeholder">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="halign">center</property>
-    <property name="valign">center</property>
-    <property name="orientation">vertical</property>
-    <property name="spacing">12</property>
-    <child>
-      <object class="GtkImage">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="icon-name">avatar-default-symbolic</property>
-        <property name="icon_size">6</property>
-        <style>
-          <class name="dim-label"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">No contacts found
-You can also type an XMPP address</property>
-        <property name="justify">center</property>
-        <property name="wrap">True</property>
-        <property name="max-width-chars">35</property>
-        <style>
-          <class name="dim-label"/>
-        </style>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
   </object>
 </interface>
