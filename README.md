@@ -9,8 +9,8 @@
 - [css-parser](https://pypi.org/project/css-parser/)
 - [emoji](https://pypi.org/project/emoji/) (>=2.6.0)
 - [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.66.0)
-- [Gtk3](https://gitlab.gnome.org/GNOME/gtk) (>=3.24.30)
-- [GtkSourceView](https://gitlab.gnome.org/GNOME/gtksourceview)
+- [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.14.0)
+- [GtkSourceView5](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [keyring](https://pypi.org/project/keyring/)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=5.0.4)
 - [omemo-dr](https://dev.gajim.org/gajim/omemo-dr) (>=1.0.0)
@@ -32,13 +32,12 @@
 
 - D-Bus running to have gajim-remote working
 - [sentry-sdk](https://pypi.org/project/sentry-sdk/) for Sentry error reporting to dev.gajim.org (users decide whether to send reports or not)
-- [gspell](https://gitlab.gnome.org/GNOME/gspell) and hunspell-LANG where lang is your locale eg. en, fr etc
+- [libspelling](https://gitlab.gnome.org/GNOME/libspelling) and hunspell-LANG where lang is your locale eg. en, fr etc
 - [libsecret](https://gitlab.gnome.org/GNOME/libsecret/) for GNOME Keyring or KDE support as password storage
 - [GUPnP-IGD](https://gitlab.gnome.org/GNOME/gupnp) for better NAT traversing
 - [NetworkManager](https://gitlab.freedesktop.org/NetworkManager/NetworkManager) for network lose detection
 - [GeoClue](https://gitlab.freedesktop.org/geoclue/geoclue) for sharing your location
 - [GSound](https://gitlab.gnome.org/GNOME/gsound) for sound on Linux
-- [AppIndicator](https://github.com/AyatanaIndicators/libayatana-appindicator) for App Indicator on Wayland
 
 #### For Video and Audio Calls
 
@@ -122,7 +121,7 @@ options:
 ## Tests
 
 - `python -m unittest discover -s test`
-- `python -m unittest ./test/dialogs/gui_file.py` (for testing GUI files)
+- `python -m unittest ./test/gtk/gui_file.py` (for testing GUI files)
 
 ## Packages and install instructions
 
