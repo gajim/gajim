@@ -1,0 +1,28 @@
+version = 1
+
+[[annotations]]
+path = [
+  ".chglog/**/*",
+  ".ci/*",
+  ".githooks/*",
+  ".gitlab/**/*",
+  "data/*",
+  "debian/**/*",
+  "flatpak/*",
+  "typings/**/*"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = [ "po/**/*" ]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = [ "gajim/data/gui/*.ui" ]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "Gajim Team <https://gajim.org/>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
