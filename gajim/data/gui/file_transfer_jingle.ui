@@ -1,67 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="transfer_box">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkImage">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="icon-name">document-send-symbolic</property>
-        <property name="icon_size">6</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="hexpand">1</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel" id="transfer_action">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;transfer action&gt;</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="max-width-chars">50</property>
             <style>
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="valign">start</property>
                 <property name="orientation">vertical</property>
                 <child>
                   <object class="GtkLabel" id="file_name">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="selectable">True</property>
+                    <property name="focusable">1</property>
+                    <property name="selectable">1</property>
                     <property name="halign">start</property>
                     <property name="label">&lt;file name&gt;</property>
                     <property name="ellipsize">middle</property>
@@ -70,17 +46,11 @@
                       <class name="dim-label"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="file_description">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="selectable">True</property>
+                    <property name="focusable">1</property>
+                    <property name="selectable">1</property>
                     <property name="halign">start</property>
                     <property name="label">&lt;file description&gt;</property>
                     <property name="ellipsize">end</property>
@@ -89,347 +59,198 @@
                       <class name="dim-label"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="file_size">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label">&lt;file size&gt;</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkStack" id="action_stack">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="valign">start</property>
-                <property name="hhomogeneous">False</property>
-                <property name="vhomogeneous">False</property>
+                <property name="hhomogeneous">0</property>
+                <property name="vhomogeneous">0</property>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Download</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="valign">start</property>
-                        <signal name="clicked" handler="_on_accept_file_request" swapped="no"/>
-                        <style>
-                          <class name="suggested-action"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Reject file transfer</property>
-                        <property name="valign">start</property>
-                        <signal name="clicked" handler="_on_reject_file_request" swapped="no"/>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">process-stop-symbolic</property>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">request</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="tooltip-text" translatable="yes">Open Folder</property>
-                        <property name="valign">start</property>
-                        <signal name="clicked" handler="_on_open_folder" swapped="no"/>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="spacing">12</property>
                         <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="can-focus">False</property>
-                            <property name="icon-name">folder-symbolic</property>
+                          <object class="GtkButton" id="accept_file_request">
+                            <property name="label" translatable="1">Download</property>
+                            <property name="focusable">1</property>
+                            <property name="valign">start</property>
+                            <style>
+                              <class name="suggested-action"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="reject_file_request">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="1">Reject file transfer</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">process-stop-symbolic</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Open</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="valign">start</property>
-                        <signal name="clicked" handler="_on_open_file" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
+                    </property>
                   </object>
-                  <packing>
+                </child>
+                <child>
+                  <object class="GtkStackPage">
                     <property name="name">complete</property>
-                    <property name="position">1</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkButton" id="open_folder">
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="tooltip-text" translatable="1">Open Folder</property>
+                            <property name="valign">start</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">folder-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="open_file">
+                            <property name="label" translatable="1">Open</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="valign">start</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Show Transfers</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">end</property>
-                        <signal name="clicked" handler="_on_show_transfers" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="error_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label">&lt;error label&gt;</property>
-                        <property name="wrap">True</property>
-                        <property name="max-width-chars">20</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">error</property>
-                    <property name="position">2</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkButton" id="error_show_transfers">
+                            <property name="label" translatable="1">Show Transfers</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="error_label">
+                            <property name="halign">end</property>
+                            <property name="label">&lt;error label&gt;</property>
+                            <property name="wrap">1</property>
+                            <property name="max-width-chars">20</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Try Again</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">end</property>
-                        <signal name="clicked" handler="_on_bad_hash_retry" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">File corrupted during transfer</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">hash-error</property>
-                    <property name="position">3</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkButton" id="retry_bad_hash">
+                            <property name="label" translatable="1">Try Again</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">end</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">end</property>
+                            <property name="label" translatable="1">File corrupted during transfer</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="valign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="halign">end</property>
-                        <property name="label" translatable="yes">You cancelled the transfer</property>
-                        <property name="wrap">True</property>
-                        <property name="max-width-chars">20</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Show Transfers</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">False</property>
-                        <property name="halign">end</property>
-                        <signal name="clicked" handler="_on_show_transfers" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="pack-type">end</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">rejected</property>
-                    <property name="position">4</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="halign">end</property>
+                            <property name="label" translatable="1">You cancelled the transfer</property>
+                            <property name="wrap">1</property>
+                            <property name="max-width-chars">20</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="rejected_show_transfers">
+                            <property name="label" translatable="1">Show Transfers</property>
+                            <property name="focusable">1</property>
+                            <property name="halign">end</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkLabel" id="progress_label">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkProgressBar" id="progress_bar">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="label" translatable="yes">Cancel</property>
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="receives-default">True</property>
-                        <property name="halign">end</property>
-                        <signal name="clicked" handler="_on_cancel_transfer" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">2</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
+                  <object class="GtkStackPage">
                     <property name="name">progress</property>
-                    <property name="position">5</property>
-                  </packing>
+                    <property name="child">
+                      <object class="GtkBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="progress_label">
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkProgressBar" id="progress_bar"/>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="cancel_transfer">
+                            <property name="label" translatable="1">Cancel</property>
+                            <property name="focusable">1</property>
+                            <property name="receives-default">1</property>
+                            <property name="halign">end</property>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                  </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">1</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <style>
       <class name="file-transfer"/>
