@@ -1,559 +1,471 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkNotebook" id="server_info_notebook">
-    <property name="visible">True</property>
-    <property name="can-focus">True</property>
+    <property name="focusable">1</property>
     <child>
-      <!-- n-columns=2 n-rows=5 -->
-      <object class="GtkGrid" id="server">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">center</property>
-        <property name="row-spacing">6</property>
-        <property name="column-spacing">12</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Hostname</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="server_hostname">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="ellipsize">end</property>
-            <property name="single-line-mode">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Server Software</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="server_software">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="ellipsize">end</property>
-            <property name="single-line-mode">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Server Uptime</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="server_uptime">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="ellipsize">end</property>
-            <property name="single-line-mode">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">12</property>
-            <property name="label" translatable="yes">Contact Addresses</property>
-            <style>
-              <class name="bold16"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="no_addresses_label">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="label" translatable="yes">No contact addresses published for this server.</property>
-            <property name="wrap">True</property>
-            <property name="max-width-chars">50</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-            <property name="width">2</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-18"/>
-        </style>
-      </object>
-    </child>
-    <child type="tab">
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Server</property>
-      </object>
-      <packing>
-        <property name="tab-fill">False</property>
-      </packing>
-    </child>
-    <child>
-      <!-- n-columns=2 n-rows=9 -->
-      <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="row-spacing">6</property>
-        <property name="column-spacing">12</property>
-        <property name="column-homogeneous">True</property>
-        <child>
-          <object class="GtkLabel" id="connection_type">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="single-line-mode">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Proxy Type</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="proxy_type">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="label" translatable="yes">No proxy used</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Proxy Host</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="proxy_host">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="label">-</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Type</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="domain_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label">Domain</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="dns_label">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">end</property>
-            <property name="label">DNS</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="ip_port_label">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">end</property>
-            <property name="label">IP / Port</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="websocket_label">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">end</property>
-            <property name="label">WebSocket URL</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="domain">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="dns">
-            <property name="can-focus">True</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="ip_port">
-            <property name="can-focus">True</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="websocket">
-            <property name="can-focus">True</property>
-            <property name="no-show-all">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-            <property name="xalign">0</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">TLS Version</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Cipher Suite</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="tls_version">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="cipher_suite">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="selectable">True</property>
-          </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">6</property>
-          </packing>
-        </child>
-        <style>
-          <class name="margin-18"/>
-        </style>
-      </object>
-      <packing>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child type="tab">
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Connection</property>
-      </object>
-      <packing>
-        <property name="position">1</property>
-        <property name="tab-fill">False</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkScrolledWindow" id="cert_scrolled">
-            <property name="can-focus">True</property>
-            <property name="no-show-all">True</property>
+      <object class="GtkNotebookPage">
+        <property name="child">
+          <object class="GtkGrid" id="server">
+            <property name="halign">center</property>
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
             <child>
-              <placeholder/>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Hostname</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="server_hostname">
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="ellipsize">end</property>
+                <property name="single-line-mode">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Server Software</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="server_software">
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="ellipsize">end</property>
+                <property name="single-line-mode">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Server Uptime</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="server_uptime">
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="ellipsize">end</property>
+                <property name="single-line-mode">1</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="margin-top">12</property>
+                <property name="label" translatable="1">Contact Addresses</property>
+                <style>
+                  <class name="bold16"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                  <property name="column-span">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="no_addresses_label">
+                <property name="visible">0</property>
+                <property name="label" translatable="1">No contact addresses published for this server.</property>
+                <property name="wrap">1</property>
+                <property name="max-width-chars">50</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">4</property>
+                  <property name="column-span">2</property>
+                </layout>
+              </object>
+            </child>
+            <style>
+              <class name="m-18"/>
+            </style>
+          </object>
+        </property>
+        <property name="tab">
+          <object class="GtkLabel">
+            <property name="label" translatable="1">Server</property>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkNotebookPage">
+        <property name="position">1</property>
+        <property name="child">
+          <object class="GtkGrid">
+            <property name="row-spacing">6</property>
+            <property name="column-spacing">12</property>
+            <property name="column-homogeneous">1</property>
+            <child>
+              <object class="GtkLabel" id="connection_type">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="single-line-mode">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Proxy Type</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">7</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="proxy_type">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="1">No proxy used</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">7</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Proxy Host</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="proxy_host">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="label">-</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Type</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="domain_label">
+                <property name="halign">end</property>
+                <property name="label">Domain</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="dns_label">
+                <property name="visible">0</property>
+                <property name="halign">end</property>
+                <property name="label">DNS</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="ip_port_label">
+                <property name="visible">0</property>
+                <property name="halign">end</property>
+                <property name="label">IP / Port</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="websocket_label">
+                <property name="visible">0</property>
+                <property name="halign">end</property>
+                <property name="label">WebSocket URL</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="domain">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="dns">
+                <property name="visible">0</property>
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="ip_port">
+                <property name="visible">0</property>
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="websocket">
+                <property name="visible">0</property>
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <property name="xalign">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">TLS Version</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">end</property>
+                <property name="label" translatable="1">Cipher Suite</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="tls_version">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="cipher_suite">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="selectable">1</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <style>
+              <class name="m-18"/>
+            </style>
+          </object>
+        </property>
+        <property name="tab">
+          <object class="GtkLabel">
+            <property name="label" translatable="1">Connection</property>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkNotebookPage">
+        <property name="position">2</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkScrolledWindow" id="cert_scrolled">
+                <property name="vexpand">1</property>
+                <property name="visible">0</property>
+                <property name="focusable">1</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="no_certificate_label">
+                <property name="vexpand">1</property>
+                <property name="visible">0</property>
+                <property name="valign">center</property>
+                <property name="label" translatable="1">No certificate</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="no_certificate_label">
-            <property name="can-focus">False</property>
-            <property name="no-show-all">True</property>
-            <property name="valign">center</property>
-            <property name="label" translatable="yes">No certificate</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
+        </property>
+        <property name="tab">
+          <object class="GtkLabel">
+            <property name="label" translatable="1">Certificate</property>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child type="tab">
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Certificate</property>
-      </object>
-      <packing>
-        <property name="position">2</property>
-        <property name="tab-fill">False</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkBox" id="features">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="max-content-height">500</property>
+      <object class="GtkNotebookPage">
+        <property name="position">3</property>
+        <property name="child">
+          <object class="GtkBox" id="features">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkViewport">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">1</property>
+                <property name="focusable">1</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="max-content-height">500</property>
+                <property name="child">
+                  <object class="GtkViewport">
+                    <property name="child">
+                      <object class="GtkListBox" id="features_listbox">
+                        <property name="name">Features</property>
+                        <property name="selection-mode">none</property>
+                      </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="clipboard_button">
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="tooltip-text" translatable="1">Copy info to clipboard</property>
+                <property name="halign">end</property>
+                <property name="margin-end">12</property>
+                <property name="margin-bottom">12</property>
                 <child>
-                  <object class="GtkListBox" id="features_listbox">
-                    <property name="name">ServerInfo</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="selection-mode">none</property>
+                  <object class="GtkImage">
+                    <property name="icon-name">edit-copy-symbolic</property>
                   </object>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="clipboard_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Copy info to clipboard</property>
-            <property name="halign">end</property>
-            <signal name="clicked" handler="_on_clipboard_button_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">edit-copy-symbolic</property>
-              </object>
-            </child>
+        </property>
+        <property name="tab">
+          <object class="GtkLabel">
+            <property name="label" translatable="1">Features</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="position">3</property>
-      </packing>
-    </child>
-    <child type="tab">
-      <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Features</property>
-      </object>
-      <packing>
-        <property name="position">3</property>
-        <property name="tab-fill">False</property>
-      </packing>
     </child>
   </object>
 </interface>
