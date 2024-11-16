@@ -863,9 +863,10 @@ COMMON_FEATURES = [
     Namespace.HASHES_BLAKE2B_256,
     Namespace.HASHES_BLAKE2B_512,
     Namespace.JINGLE,
-    Namespace.JINGLE_FILE_TRANSFER_5,
-    Namespace.JINGLE_BYTESTREAM,
-    Namespace.JINGLE_IBB,
+    # TODO Jingle FT
+    # Namespace.JINGLE_FILE_TRANSFER_5,
+    # Namespace.JINGLE_BYTESTREAM,
+    # Namespace.JINGLE_IBB,
     Namespace.AVATAR_METADATA + '+notify',
     Namespace.MESSAGE_MODERATE,
     Namespace.REPLY,
