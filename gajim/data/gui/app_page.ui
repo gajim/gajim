@@ -1,66 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="gajim_update">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Dismiss</property>
+      <object class="GtkButton" id="dismiss_gajim_update">
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
+        <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">window-close-symbolic</property>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkButton">
-        <property name="label" translatable="yes">Download</property>
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
+      <object class="GtkButton" id="download_update">
+        <property name="label" translatable="1">Download</property>
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_download_update_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="hexpand">1</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Gajim Update</property>
+            <property name="label" translatable="1">Gajim Update</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -68,16 +44,9 @@
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="update_message">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
@@ -86,82 +55,49 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="gajim_update_check">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Dismiss</property>
+      <object class="GtkButton" id="dismiss_update_check">
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
+        <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_check_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">window-close-symbolic</property>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkButton">
-        <property name="label" translatable="yes">Activate</property>
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
+      <object class="GtkButton" id="activate_update_check">
+        <property name="label" translatable="1">Activate</property>
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_activate_check_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="hexpand">1</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Update Check</property>
+            <property name="label" translatable="1">Update Check</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -169,18 +105,11 @@
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Search for Gajim updates periodically?</property>
+            <property name="label" translatable="1">Search for Gajim updates periodically?</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -188,63 +117,38 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="plugin_updates">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Dismiss</property>
+      <object class="GtkButton" id="dismiss_plugin_updates">
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
+        <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_clicked" swapped="no"/>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">window-close-symbolic</property>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="hexpand">1</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Plugin Updates</property>
+            <property name="label" translatable="1">Plugin Updates</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -252,18 +156,11 @@
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">There are updates for Gajim’s plugins</property>
+            <property name="label" translatable="1">There are updates for Gajim’s plugins</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -271,96 +168,54 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="auto_update_plugins">
-            <property name="label" translatable="yes">Update plugins automatically</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="draw-indicator">True</property>
+            <property name="label" translatable="1">Update plugins automatically</property>
+            <property name="focusable">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">False</property>
-        <property name="tooltip-text" translatable="yes">Open Plugins…</property>
+      <object class="GtkButton" id="open_plugins">
+        <property name="focusable">1</property>
+        <property name="tooltip-text" translatable="1">Open Plugins…</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_open_plugins" swapped="no"/>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">system-software-install-symbolic</property>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkButton">
-        <property name="label" translatable="yes">Update</property>
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
+      <object class="GtkButton" id="update_plugins">
+        <property name="label" translatable="1">Update</property>
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_update_plugins_clicked" swapped="no"/>
         <style>
           <class name="suggested-action"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">3</property>
-      </packing>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
   <object class="GtkBox" id="plugin_updates_finished">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="hexpand">1</property>
         <property name="valign">center</property>
         <property name="orientation">vertical</property>
         <property name="spacing">3</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Plugins Updated Successfully</property>
+            <property name="label" translatable="1">Plugins Updated Successfully</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -368,18 +223,11 @@
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
-            <property name="label" translatable="yes">Updates will be installed next time Gajim is started</property>
+            <property name="label" translatable="1">Updates will be installed next time Gajim is started</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -387,58 +235,30 @@
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkCheckButton" id="notify_after_plugin_updates">
-            <property name="label" translatable="yes">Don’t show this again</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="draw-indicator">True</property>
+            <property name="label" translatable="1">Don’t show this again</property>
+            <property name="focusable">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkButton">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="receives-default">True</property>
-        <property name="tooltip-text" translatable="yes">Dismiss</property>
+      <object class="GtkButton" id="dismiss_update_notification">
+        <property name="focusable">1</property>
+        <property name="receives-default">1</property>
+        <property name="tooltip-text" translatable="1">Dismiss</property>
         <property name="valign">center</property>
-        <signal name="clicked" handler="_on_dismiss_update_notification" swapped="no"/>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">window-close-symbolic</property>
           </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <style>
-      <class name="padding-12"/>
+      <class name="p-12"/>
     </style>
   </object>
 </interface>
