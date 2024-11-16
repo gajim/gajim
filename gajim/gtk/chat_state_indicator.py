@@ -8,6 +8,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.const import Chatstate
 
+from gajim.common import app
 from gajim.common import types
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -23,28 +24,31 @@ class ChatStateIndicator(Gtk.Box):
 
         self._contact: types.ChatContactT | None = None
 
-        self._composing_icon = Gtk.Image.new_from_icon_name(
-            'content-loading-symbolic', Gtk.IconSize.BUTTON
-        )
-        self._composing_icon.set_no_show_all(True)
-        self._composing_icon.get_style_context().add_class('chat-state-icon')
-        self.add(self._composing_icon)
+        self._composing_icon = Gtk.Image.new_from_icon_name("content-loading-symbolic")
+        self._composing_icon.set_visible(False)
+        self._composing_icon.add_css_class("chat-state-icon")
+        self.append(self._composing_icon)
 
         self._label = Gtk.Label(
             max_width_chars=52,
             ellipsize=Pango.EllipsizeMode.END,
         )
-        self._label.get_style_context().add_class('dim-label')
-        self._label.get_style_context().add_class('small-label')
-        self.add(self._label)
-        self._label.show()
+        self._label.add_css_class("dim-label")
+        self._label.add_css_class("small-label")
+        self.append(self._label)
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        if self._contact is not None:
+            self._contact.disconnect_all_from_obj(self)
+        app.check_finalize(self)
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         if self._contact is not None:
             self._contact.disconnect_all_from_obj(self)
 
         self._contact = contact
-        self._contact.connect('chatstate-update', self._on_chatstate_update)
+        self._contact.connect("chatstate-update", self._on_chatstate_update)
 
         self._update_state()
 
@@ -60,26 +64,26 @@ class ChatStateIndicator(Gtk.Box):
             visible = bool(self._contact.get_composers())
             text = self._get_muc_composing_text()
 
-            self._composing_icon.get_style_context().add_class('chat-state-icon')
+            self._composing_icon.add_css_class("chat-state-icon")
         else:
             visible = self._contact.chatstate in (Chatstate.COMPOSING, Chatstate.PAUSED)
-            text = f'{self._contact.name} {self._contact.chatstate_string}'
+            text = f"{self._contact.name} {self._contact.chatstate_string}"
 
             if self._contact.chatstate == Chatstate.COMPOSING:
-                self._composing_icon.get_style_context().add_class('chat-state-icon')
+                self._composing_icon.add_css_class("chat-state-icon")
             else:
-                self._composing_icon.get_style_context().remove_class('chat-state-icon')
+                self._composing_icon.remove_css_class("chat-state-icon")
 
         self._composing_icon.set_visible(visible)
-        self._label.set_text(text if visible else '')
+        self._label.set_text(text if visible else "")
 
     def _get_muc_composing_text(self) -> str:
         assert isinstance(self._contact, GroupchatContact)
         composers = tuple(c.name for c in self._contact.get_composers())
         count = len(composers)
         if count == 1:
-            return _('%s is typing…') % composers[0]
+            return _("%s is typing…") % composers[0]
         if count == 2:
-            return _('%s and %s are typing…') % composers
+            return _("%s and %s are typing…") % composers
 
-        return _('%s participants are typing…') % count
+        return _("%s participants are typing…") % count
