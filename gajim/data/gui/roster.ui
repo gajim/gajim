@@ -1,31 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
-  <object class="GtkTreeStore" id="contact_store">
-    <columns>
-      <!-- column-name Avatar -->
-      <column type="CairoGObjectSurface"/>
-      <!-- column-name Text -->
-      <column type="gchararray"/>
-      <!-- column-name IsContact -->
-      <column type="gboolean"/>
-      <!-- column-name JidOrGroup -->
-      <column type="gchararray"/>
-      <!-- column-name Visible -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkTreeView" id="roster_treeview">
-    <property name="visible">True</property>
-    <property name="can-focus">True</property>
-    <property name="model">contact_store</property>
-    <property name="headers-visible">False</property>
+    <property name="focusable">1</property>
+    <property name="hexpand">1</property>
+    <property name="headers-visible">0</property>
     <property name="expander-column">expander</property>
     <property name="search-column">1</property>
-    <signal name="button-press-event" handler="_on_roster_button_press_event" swapped="no"/>
-    <signal name="focus-out-event" handler="_on_focus_out" swapped="no"/>
-    <signal name="row-activated" handler="_on_roster_row_activated" swapped="no"/>
     <child internal-child="selection">
       <object class="GtkTreeSelection"/>
     </child>
@@ -33,7 +14,7 @@
       <object class="GtkTreeViewColumn" id="contact_column">
         <property name="sizing">fixed</property>
         <property name="title">avatar</property>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
         <child>
           <object class="GtkCellRendererPixbuf" id="avatar_renderer">
             <property name="width">40</property>
@@ -42,7 +23,7 @@
           </object>
           <attributes>
             <attribute name="visible">2</attribute>
-            <attribute name="surface">0</attribute>
+            <attribute name="texture">0</attribute>
           </attributes>
         </child>
         <child>
@@ -57,7 +38,7 @@
     </child>
     <child>
       <object class="GtkTreeViewColumn" id="expander">
-        <property name="visible">False</property>
+        <property name="visible">0</property>
         <property name="sizing">fixed</property>
         <property name="title">expander</property>
       </object>
