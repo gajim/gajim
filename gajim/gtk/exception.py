@@ -23,7 +23,6 @@ from types import TracebackType
 from urllib.parse import urlencode
 
 import nbxmpp
-from gi.repository import Gdk
 from gi.repository import Gtk
 from nbxmpp.http import HTTPRequest
 
@@ -40,6 +39,8 @@ from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import get_gtk_version
+from gajim.gtk.util import SignalManager
+from gajim.gtk.widgets import GajimAppWindow
 
 try:
     import sentry_sdk
@@ -52,9 +53,9 @@ except Exception:
 
 _exception_in_progress = threading.Lock()
 
-ISSUE_URL = 'https://dev.gajim.org/gajim/gajim/issues/new'
+ISSUE_URL = "https://dev.gajim.org/gajim/gajim/issues/new"
 
-ISSUE_TEXT = '''## Versions:
+ISSUE_TEXT = """## Versions:
 - OS: {}
 - GTK Version: {}
 - PyGObject Version: {}
@@ -68,51 +69,50 @@ ISSUE_TEXT = '''## Versions:
 {}
 ```
 ## Steps to reproduce the problem
-...'''
+..."""
 
 
-def _hook(type_: type[BaseException],
-          value: BaseException,
-          tb: TracebackType
-          ) -> None:
+def _hook(type_: type[BaseException], value: BaseException, tb: TracebackType) -> None:
     if not _exception_in_progress.acquire(False):
         # Exceptions have piled up, so we use the default exception
         # handler for such exceptions
         sys.__excepthook__(type_, value, tb)
         return
 
-    ExceptionDialog(type_, value, tb)
+    window = ExceptionDialog(type_, value, tb)
+    window.show()
+
     _exception_in_progress.release()
 
 
-class ExceptionDialog(Gtk.ApplicationWindow):
-    def __init__(self,
-                 type_: type[BaseException],
-                 value: BaseException,
-                 tb: TracebackType
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
-        self.set_resizable(True)
-        self.set_default_size(700, -1)
-        self.set_title(_('Gajim - Error'))
+class ExceptionDialog(GajimAppWindow, SignalManager):
+    def __init__(
+        self, type_: type[BaseException], value: BaseException, tb: TracebackType
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name="ExceptionDialog",
+            title=_("Gajim - Error"),
+            default_width=700,
+            add_window_padding=False,
+        )
+        SignalManager.__init__(self)
 
         self._traceback_data = (type_, value, tb)
-        self._sentry_available = app.is_installed('SENTRY_SDK')
+        self._sentry_available = app.is_installed("SENTRY_SDK")
 
-        self._ui = get_builder('exception_dialog.ui')
-        self.add(self._ui.exception_box)
+        self._ui = get_builder("exception_dialog.ui")
+        self.set_child(self._ui.exception_box)
 
         if not self._sentry_available:
-            self._ui.user_feedback_box.set_no_show_all(True)
-            self._ui.infobar.set_no_show_all(False)
-            self._ui.infobar.set_revealed(True)
+            self._ui.user_feedback_box.set_visible(False)
+            self._ui.infobar.set_reveal_child(True)
 
         self._ui.report_button.grab_focus()
-        self._ui.report_button.grab_default()
+        self.set_default_widget(self._ui.report_button)
+
+        self._connect(self._ui.close_button, "clicked", self._on_close_clicked)
+        self._connect(self._ui.report_button, "clicked", self._on_report_clicked)
 
         trace = StringIO()
         traceback.print_exception(type_, value, tb, None, trace)
@@ -121,16 +121,8 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         buffer_ = self._ui.exception_view.get_buffer()
         buffer_.set_text(self._issue_text)
 
-        self.connect('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
-        self.show_all()
-
         if self._sentry_available:
             self._ui.user_feedback_entry.grab_focus()
-
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
         if self._sentry_available and determine_proxy() is None:
@@ -143,25 +135,26 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             self._report_with_browser()
 
     def _report_with_browser(self):
-        params = {'issue[description]': self._issue_text}
-        url = f'{ISSUE_URL}?{urlencode(params)}'
+        params = {"issue[description]": self._issue_text}
+        url = f"{ISSUE_URL}?{urlencode(params)}"
         webbrowser.open(url, new=2)
-        self.destroy()
+        self.close()
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.close()
 
     @staticmethod
     def _get_issue_text(traceback_text: str) -> str:
         return ISSUE_TEXT.format(
-            f'{get_os_name()} {get_os_version()}',
+            f"{get_os_name()} {get_os_version()}",
             get_gtk_version(),
             get_gobject_version(),
             get_glib_version(),
             get_soup_version(),
             nbxmpp.__version__,
             gajim.__version__,
-            traceback_text)
+            traceback_text,
+        )
 
     def _report_with_sentry(self) -> None:
         if sentry_sdk.last_event_id() is None:
@@ -171,31 +164,34 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             return
 
         self._capture_exception()
-        self.destroy()
+        self.close()
 
     def _request_sentry_endpoint(self) -> None:
         self._ui.report_button.set_sensitive(False)
         self._ui.close_button.set_sensitive(False)
-        self._ui.report_spinner.show()
+        self._ui.report_spinner.set_visible(True)
         self._ui.report_spinner.start()
 
         request = create_http_request()
-        request.send('GET', 'https://gajim.org/updates.json',
-                     callback=self._on_endpoint_received)
+        request.send(
+            "GET", "https://gajim.org/updates.json", callback=self._on_endpoint_received
+        )
 
     def _parse_endpoint(self, request: HTTPRequest) -> str:
         if not request.is_complete():
-            raise ValueError('Failed to retrieve sentry endpoint: '
-                             f'{request.get_status()} {request.get_error()}')
+            raise ValueError(
+                "Failed to retrieve sentry endpoint: "
+                f"{request.get_status()} {request.get_error()}"
+            )
 
         try:
             data = json.loads(request.get_data())
         except Exception as error:
-            raise ValueError(f'Json parsing error: {error}')
+            raise ValueError(f"Json parsing error: {error}")
 
-        endpoint = data.get('sentry_endpoint')
+        endpoint = data.get("sentry_endpoint")
         if endpoint is None:
-            raise ValueError('Sentry endpoint missing in response')
+            raise ValueError("Sentry endpoint missing in response")
 
         return endpoint
 
@@ -209,7 +205,7 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         else:
             self._init_sentry(endpoint)
             self._capture_exception()
-            self.destroy()
+            self.close()
 
     def _init_sentry(self, endpoint: str) -> None:
         sentry_sdk.init(
@@ -221,21 +217,27 @@ class ExceptionDialog(Gtk.ApplicationWindow):
             shutdown_timeout=0,
             auto_session_tracking=False,
             before_send=self._before_send,  # pyright: ignore
-            debug=False)
+            debug=False,
+        )
 
-        sentry_sdk.set_context('os', {
-            'name': get_os_name(),
-            'version': get_os_version()})
+        sentry_sdk.set_context(
+            "os", {"name": get_os_name(), "version": get_os_version()}
+        )
 
-        sentry_sdk.set_context('software', {
-            'python-nbxmpp': nbxmpp.__version__,
-            'GTK': get_gtk_version(),
-            'GObject': get_gobject_version(),
-            'GLib': get_glib_version()})
+        sentry_sdk.set_context(
+            "software",
+            {
+                "python-nbxmpp": nbxmpp.__version__,
+                "GTK": get_gtk_version(),
+                "GObject": get_gobject_version(),
+                "GLib": get_glib_version(),
+            },
+        )
 
     def _capture_exception(self) -> None:
-        sentry_sdk.set_context('user_feedback', {
-            'Feedback': self._ui.user_feedback_entry.get_text()})
+        sentry_sdk.set_context(
+            "user_feedback", {"Feedback": self._ui.user_feedback_entry.get_text()}
+        )
         sentry_sdk.capture_exception(self._traceback_data)
 
     def _before_send(self, event: dict[str, Any], hint: Any) -> dict[str, Any]:
@@ -243,18 +245,25 @@ class ExceptionDialog(Gtk.ApplicationWindow):
         # The value is the arg which is passed to the Exception.
         # e.g. raise Exception('Error')
         try:
-            value = event['exception']['values'][0].get('value')
+            value = event["exception"]["values"][0].get("value")
             if not value:
-                event['exception']['values'][0]['value'] = 'Unknown'
+                event["exception"]["values"][0]["value"] = "Unknown"
         except Exception:
             pass
 
         # Remove the hostname of the machine
-        event['server_name'] = 'redacted'
+        event["server_name"] = "redacted"
         pprint.pprint(event)
         return event
 
+    def _cleanup(self) -> None:
+        self._disconnect_all()
+
 
 def init() -> None:
-    if sys.platform == 'win32' or not sys.stderr.isatty():
+    # TODO GTK4
+    # Change back once port is done
+    # if sys.platform == 'win32' or not sys.stderr.isatty():
+    #     sys.excepthook = _hook
+    if not sys.stderr.isatty():
         sys.excepthook = _hook
