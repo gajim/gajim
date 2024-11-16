@@ -1,14 +1,28 @@
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import unittest
 from unittest.mock import MagicMock
 
 from gajim.common import app
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
-from gajim.gtk.groupchat_nick_completion import GroupChatNickCompletion
+from gajim.gtk.completion.nickname import NicknameCompletionProvider
 
 
 class Test(unittest.TestCase):
-
     def test_generate_suggestions(self):
+
+        def _get_mock_participant(nick: str) -> GroupchatParticipant:
+            participant = MagicMock(spec_set=GroupchatParticipant)
+            participant.name = nick
+            return participant
+
+        def _get_resource(nick: str) -> GroupchatParticipant:
+            return _get_mock_participant(nick)
+
         participant_names = [
             'Hugo',
             'Herbert',
@@ -18,33 +32,26 @@ class Test(unittest.TestCase):
             '7user',
         ]
 
-        participants: list[MagicMock] = []
+        participants: list[GroupchatParticipant] = []
         for name in participant_names:
-            participant = MagicMock()
-            participant.name = name
-            participants.append(participant)
+            participants.append(_get_mock_participant(name))
 
-        app.get_client = MagicMock()
+        gen = NicknameCompletionProvider()
+        groupchat_contact = MagicMock(spec_set=GroupchatContact)
+        groupchat_contact.get_participants = MagicMock(return_value=participants)
+        groupchat_contact.get_resource = MagicMock(side_effect=_get_resource)
 
-        app.storage.archive = MagicMock()
-        app.storage.archive.get_recent_muc_nicks = MagicMock(
-            return_value=['Daisy', 'Robert'])
+        results = gen._generate_suggestions(groupchat_contact)  # type: ignore
+        self.assertEqual(
+            [result.name for result in results],
+            ['Harry', 'Joe', '7user', 'Daisy', 'Herbert', 'Hugo', 'Robert', 'xavier'],
+        )
 
-        gen = GroupChatNickCompletion()
-        contact = MagicMock()
-        contact.get_participants = MagicMock(return_value=participants)
 
-        gen.switch_contact(contact)
+app.get_client = MagicMock()
 
-        r = gen._generate_suggestions(prefix='h')  # type: ignore
-        self.assertEqual(r, ['Herbert', 'Hugo'])
-
-        r = gen._generate_suggestions(prefix='')  # type: ignore
-        self.assertEqual(r, ['Daisy', 'Robert', '7user', 'Herbert', 'Hugo', 'xavier'])
-
-        r = gen._generate_suggestions(prefix='m')  # type: ignore
-        self.assertEqual(r, [])
-
+app.storage.archive = MagicMock()
+app.storage.archive.get_recent_muc_nicks = MagicMock(return_value=['Harry', 'Joe'])
 
 if __name__ == '__main__':
     unittest.main()
