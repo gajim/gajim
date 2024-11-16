@@ -54,13 +54,6 @@ cleanup:
 
 modules:
 
-  - name: gtksourceview4
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://download.gnome.org/sources/gtksourceview/4.8/gtksourceview-4.8.4.tar.xz
-        sha256: 7ec9d18fb283d1f84a3a3eff3b7a72b09a10c9c006597b3fbabbb5958420a87d
-
   - name: python3-pycparser
     buildsystem: simple
     build-commands:
@@ -93,22 +86,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-43.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-43.0.3-cp39-abi3-manylinux_2_28_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
-        sha256: d03a475165f3134f773d1388aeb19c2d25ba88b6a9733c5c590b9ff7bbfa2e0c
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.3-cp39-abi3-manylinux_2_28_aarch64.whl
+        sha256: f7b178f11ed3664fd0e995a47ed2b5ff0a12d893e41dd0494f406d1cf555cab7
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-43.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-43.0.3-cp39-abi3-manylinux_2_28_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: 511f4273808ab590912a93ddb4e3914dfd8a388fed883361b02dea3791f292e1
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-43.0.3-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: c2e6fc39c4ab499049df3bdf567f768a723a5e8464816e8f009f121a5a9f4405
 
   - name: python3-jeepney
     buildsystem: simple
@@ -171,13 +164,13 @@ modules:
   - name: python3-keyring
     buildsystem: simple
     build-commands:
-      - pip3 install keyring-25.4.1-py3-none-any.whl
+      - pip3 install keyring-25.5.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.4.1-py3-none-any.whl
-        sha256: 5426f817cf7f6f007ba5ec722b1bcad95a75b27d780343772ad76b17cb47b0bf
+        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.5.0-py3-none-any.whl
+        sha256: e67f8ac32b04be4714b42fe84ce7dad9c40985b9ca827c592cc303e7c26d9741
 
   - name: python3-css-parser
     buildsystem: simple
@@ -191,11 +184,11 @@ modules:
   - name: python3-precis_i18n
     buildsystem: simple
     build-commands:
-      - pip3 install precis_i18n-1.1.0-py3-none-any.whl
+      - pip3 install precis_i18n-1.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.1.0-py3-none-any.whl
-        sha256: 15358c96f070a1fc1ae5738d62d7ed00037975844715db88c3b041060a436a50
+        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.1.1-py3-none-any.whl
+        sha256: eabb3a3a8c01dededbc36cb0173f143c7bdfaa3f4fcd9b4ca215c9fd6aed865f
 
   # GSound dependency
   - shared-modules/libcanberra/libcanberra.json
@@ -207,14 +200,14 @@ modules:
         url: https://download.gnome.org/sources/gsound/1.0/gsound-1.0.3.tar.xz
         sha256: ca2d039e1ebd148647017a7f548862350bc9af01986d39f10cfdc8e95f07881a
 
-  - name: gspell
+  - name: libspelling
     buildsystem: meson
     cleanup:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/gspell/1.14/gspell-1.14.0.tar.xz
-        sha256: 64ea1d8e9edc1c25b45a920e80daf67559d1866ffcd7f8432fecfea6d0fe8897
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.4.tar.xz
+        sha256: ac9132c634bb9df911e35b52345aa12126f7ec95e5f07179a980861819787150
 
   - name: farstream
     rm-configure: true
@@ -231,8 +224,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-10.4.0.tar.gz
-        sha256: 166c1cd4d24309b30d61f79f4a9114b7b2313d7450912277855ff5dfd7cd4a06
+        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-11.0.0.tar.gz
+        sha256: 72bacbaf24ac003fea9bff9837d1eedb6088758d41e100c1552930151f677739
 
   # sentry-sdk dependency
   - name: python3-urllib3
@@ -256,11 +249,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.14.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.18.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.14.0-py2.py3-none-any.whl
-        sha256: b8bc3dc51d06590df1291b7519b85c75e2ced4f28d9ea655b6d54033503b5bf4
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.18.0-py2.py3-none-any.whl
+        sha256: ee70e27d1bbe4cd52a38e1bd28a5fadb9b17bc29d91b5f2b97ae29c0a7610442
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -283,20 +276,20 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.35-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.36-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.35-py3-none-any.whl
-        sha256: 2ab3f0336c0387662ce6221ad30ab3a5e6499aab01b9790879b6578fd9b8faa1
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.36-py3-none-any.whl
+        sha256: fddbe92b4760c6f5d48162aef14824add991aeda8ddadb3c31d56eb15ca69f8e
 
   - name: python3-emoji
     buildsystem: simple
     build-commands:
-      - pip3 install emoji-2.13.2-py3-none-any.whl
+      - pip3 install emoji-2.14.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.13.2-py3-none-any.whl
-        sha256: ef6f2ee63b245e934c763b1a9a0637713955aa3d9e322432e036bb60559de4d6
+        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.14.0-py3-none-any.whl
+        sha256: fcc936bf374b1aec67dda5303ae99710ba88cc9cdce2d1a71c5f2204e6d78799
 
   # gssapi dependency
   - name: python3-decorator
@@ -322,20 +315,20 @@ modules:
   - name: python3-qrcode
     buildsystem: simple
     build-commands:
-      - pip3 install --no-build-isolation .
+      - pip3 install qrcode-8.0-py3-none-any.whl
     sources:
-      - type: archive
-        url: https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-7.4.2.tar.gz
-        sha256: 9dd969454827e127dbd93696b20747239e6d540e082937c90f14ac95b30f5845
+      - type: file
+        url: https://files.pythonhosted.org/packages/py3/q/qrcode/qrcode-8.0-py3-none-any.whl
+        sha256: 9fc05f03305ad27a709eb742cf3097fa19e6f6f93bb9e2f039c0979190f6f1b1
 
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.28.2-py3-none-any.whl
+      - pip3 install --no-deps protobuf-5.28.3-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.28.2-py3-none-any.whl
-        sha256: 52235802093bd8a2811abbe8bf0ab9c5f54cca0a751fdd3f6ac2a21438bffece
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.28.3-py3-none-any.whl
+        sha256: cee1757663fa32a1ee673434fcf3bf24dd54763c79690201208bafec62f19eed
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -353,8 +346,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.8.3.tar.gz
-        sha256: aa3c8d0b1526f52559552bb2c9d2d6be013d76a8e5db00b39a1db5727e93b0b0
+        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.9.0.tar.gz
+        sha256: f468fac8f3f5fca8f4d1ca19e3cd4d2e10bd91074e7285464b22715d13548afe
 
   - name: python3-nbxmpp
     buildsystem: simple
