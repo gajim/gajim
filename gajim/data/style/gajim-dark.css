@@ -1,31 +1,19 @@
 /* Gajim Dark Application CSS File */
 
 /* InfoBar */
-infobar.info > revealer > box {
+.infobar.info > box {
     color: #D9EDF7;
     background-color: #3A87AD;
 }
-infobar.info > revealer > box > box * {
-    color: #D9EDF7;
-}
-infobar.question > revealer > box {
+.infobar.question > box {
     color: #D9EDF7;
     background-color: #295A72;
 }
-infobar.question > revealer > box > box * {
-    color: #D9EDF7;
-}
-infobar.warning > revealer > box {
+.infobar.warning > box{
     color: #FCF8E3;
     background-color: #D2822B;
 }
-infobar.warning > revealer > box > box * {
-    color: #FCF8E3;
-}
-infobar.error > revealer > box {
+.infobar.error > box {
     color: #FCE5D5;
     background-color: #D64937;
-}
-infobar.error > revealer > box > box * {
-    color: #FCE5D5;
 }

@@ -5,7 +5,7 @@
 .gajim-outgoing-nickname {
     color: rgb(50, 90, 140);
 }
-.gajim-conversation-text text {
+.gajim-conversation-text {
     color: inherit;
 }
 .gajim-status-message {
@@ -25,7 +25,7 @@
 }
 .gajim-command-output {
     background-color: rgb(10, 50, 70);
-    color: rgb(170, 180, 200)
+    color: rgb(170, 180, 200);
 }
 .gajim-mention-highlight {
     background: rgb(255, 215, 194);
@@ -67,8 +67,8 @@
     color: rgb(77, 166, 255);
 }
 .gajim-single-emoji-msg {
-    font-size: 36pt
+    font-size: 36pt;
 }
 .gajim-emoji-msg {
-    font-size: 24pt
+    font-size: 24pt;
 }
