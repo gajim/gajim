@@ -1,527 +1,438 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="certificate_box">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="halign">center</property>
-    <property name="hexpand">True</property>
-    <property name="border-width">18</property>
+    <property name="hexpand">1</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
+    <style>
+      <class name="p-18"/>
+    </style>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="halign">center</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">application-certificate-symbolic</property>
-            <property name="icon_size">6</property>
+            <property name="pixel-size">64</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_cert_for_account">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="justify">center</property>
             <style>
               <class name="large-header"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
-      <!-- n-columns=3 n-rows=18 -->
       <object class="GtkGrid">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="margin-top">20</property>
         <property name="row-spacing">6</property>
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Common Name (CN)</property>
+            <property name="label" translatable="1">Common Name (CN)</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_it_common_name">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Organization (O)</property>
+            <property name="label" translatable="1">Organization (O)</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_it_organization">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Subject Alt Names</property>
+            <property name="label" translatable="1">Subject Alt Names</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_it_subject_alt_names">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Serial Number</property>
+            <property name="label" translatable="1">Serial Number</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_it_serial_number">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="wrap-mode">word-char</property>
-            <property name="selectable">True</property>
+            <property name="selectable">1</property>
             <property name="xalign">0</property>
             <attributes>
-              <attribute name="font-desc" value="Monospace 8"/>
+              <attribute name="font-desc" value="Monospace 8"></attribute>
             </attributes>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">4</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">4</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Common Name (CN)</property>
+            <property name="label" translatable="1">Common Name (CN)</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">6</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">6</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_ib_common_name">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">6</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">6</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Organization (O)</property>
+            <property name="label" translatable="1">Organization (O)</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">7</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">7</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_ib_organization">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">7</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">7</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-top">6</property>
-            <property name="label" translatable="yes">Issued to</property>
+            <property name="label" translatable="1">Issued to</property>
             <style>
               <class name="bold"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-top">12</property>
-            <property name="label" translatable="yes">Issued by</property>
+            <property name="label" translatable="1">Issued by</property>
             <style>
               <class name="bold"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">5</property>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">5</property>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-top">12</property>
-            <property name="label" translatable="yes">Validity</property>
+            <property name="label" translatable="1">Validity</property>
             <style>
               <class name="bold"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">8</property>
+              <property name="column-span">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">8</property>
-            <property name="width">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Issued on</property>
+            <property name="label" translatable="1">Issued on</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">9</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">9</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_issued_on">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">9</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">9</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_expires_on">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">10</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">10</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Expires on</property>
+            <property name="label" translatable="1">Expires on</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">10</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">10</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-top">12</property>
-            <property name="label" translatable="yes">Fingerprints</property>
+            <property name="label" translatable="1">Fingerprints</property>
             <style>
               <class name="bold"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">11</property>
+              <property name="column-span">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">11</property>
-            <property name="width">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_sha1">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="wrap-mode">char</property>
-            <property name="selectable">True</property>
+            <property name="selectable">1</property>
             <attributes>
-              <attribute name="font-desc" value="Monospace 8"/>
+              <attribute name="font-desc" value="Monospace 8"></attribute>
             </attributes>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">12</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">12</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">SHA-1</property>
+            <property name="label" translatable="1">SHA-1</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">12</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">12</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="data_sha256">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label">&lt;&gt;</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="wrap-mode">char</property>
-            <property name="selectable">True</property>
+            <property name="selectable">1</property>
             <attributes>
-              <attribute name="font-desc" value="Monospace 8"/>
+              <attribute name="font-desc" value="Monospace 8"></attribute>
             </attributes>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">13</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">13</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">SHA-256</property>
+            <property name="label" translatable="1">SHA-256</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">13</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">13</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton" id="copy_cert_info_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="has-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="tooltip-text" translatable="yes">Copy Certificate Information</property>
+          <object class="GtkButton" id="copy_button">
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="1">Copy Certificate Information</property>
             <property name="halign">end</property>
-            <signal name="clicked" handler="_on_copy_cert_info_button_clicked" swapped="no"/>
             <child>
               <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="icon-name">edit-copy-symbolic</property>
               </object>
             </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">17</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">17</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="margin-top">12</property>
-            <property name="label" translatable="yes">Public Key Information</property>
+            <property name="label" translatable="1">Public Key Information</property>
             <style>
               <class name="bold"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">14</property>
+              <property name="column-span">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">14</property>
-            <property name="width">3</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Algorithm</property>
+            <property name="label" translatable="1">Algorithm</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">15</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">15</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="halign">end</property>
             <property name="valign">start</property>
-            <property name="label" translatable="yes">Key Size</property>
+            <property name="label" translatable="1">Key Size</property>
             <style>
               <class name="dim-label"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">16</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">16</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="public_key_algorithm">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">15</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">15</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="public_key_size">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="label">&lt;&gt;</property>
             <property name="xalign">0</property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">16</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left-attach">1</property>
-            <property name="top-attach">16</property>
-          </packing>
         </child>
         <child>
           <placeholder/>
@@ -572,11 +483,6 @@
           <placeholder/>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
   </object>
 </interface>
