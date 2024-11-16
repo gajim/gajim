@@ -27,44 +27,43 @@ class AboutDialog(Gtk.AboutDialog):
     def __init__(self):
         Gtk.AboutDialog.__init__(self)
         self.set_transient_for(app.window)
-        self.set_name('Gajim')
+        self.set_name("Gajim")
         self.set_version(get_extended_app_version())
-        self.set_copyright('Copyright © 2003-2024 Gajim Team')
+        self.set_copyright("Copyright © 2003-2024 Gajim Team")
         self.set_license_type(Gtk.License.GPL_3_0_ONLY)
-        self.set_website('https://gajim.org/')
+        self.set_website("https://gajim.org/")
 
         cairo_ver = cairo.cairo_version_string()
         python_cairo_ver = cairo.version
 
         comments: list[str] = []
-        comments.append(_('A fully-featured XMPP chat client'))
-        comments.append('')
-        comments.append(_('GTK Version: %s') % get_gtk_version())
-        comments.append(_('GLib Version: %s') % get_glib_version())
-        comments.append(_('Pango Version: %s') % Pango.version_string())
-        comments.append(_('PyGObject Version: %s') % get_gobject_version())
-        comments.append(_('cairo Version: %s') % cairo_ver)
-        comments.append(_('pycairo Version: %s') % python_cairo_ver)
-        comments.append(_('python-nbxmpp Version: %s') % nbxmpp.__version__)
-        comments.append(_('libsoup Version: %s') % get_soup_version())
+        comments.append(_("A fully-featured XMPP chat client"))
+        comments.append("")
+        comments.append(_("GTK Version: %s") % get_gtk_version())
+        comments.append(_("GLib Version: %s") % get_glib_version())
+        comments.append(_("Pango Version: %s") % Pango.version_string())
+        comments.append(_("PyGObject Version: %s") % get_gobject_version())
+        comments.append(_("cairo Version: %s") % cairo_ver)
+        comments.append(_("pycairo Version: %s") % python_cairo_ver)
+        comments.append(_("python-nbxmpp Version: %s") % nbxmpp.__version__)
+        comments.append(_("libsoup Version: %s") % get_soup_version())
 
-        self.set_comments('\n'.join(comments))
+        self.set_comments("\n".join(comments))
 
-        self.add_credit_section(_('Current Developers'), DEVS_CURRENT)
-        self.add_credit_section(_('Past Developers'), DEVS_PAST)
-        self.add_credit_section(_('Artists'), ARTISTS)
+        self.add_credit_section(_("Current Developers"), DEVS_CURRENT)
+        self.add_credit_section(_("Past Developers"), DEVS_PAST)
+        self.add_credit_section(_("Artists"), ARTISTS)
 
         thanks = list(THANKS)
-        thanks.append('')
-        thanks.append(_('Last but not least'))
-        thanks.append(_('we would like to thank all the package maintainers.'))
-        self.add_credit_section(_('Thanks'), thanks)
+        thanks.append("")
+        thanks.append(_("Last but not least"))
+        thanks.append(_("we would like to thank all the package maintainers."))
+        self.add_credit_section(_("Thanks"), thanks)
 
-        self.set_translator_credits(_('translator-credits'))
-        self.set_logo_icon_name('gajim')
+        self.set_translator_credits(_("translator-credits"))
+        self.set_logo_icon_name("gajim")
 
-        self.connect('activate-link', self._on_activate_link)
-        self.connect('response', self._on_response)
+        self.connect("activate-link", self._on_activate_link)
         self.show()
 
     @staticmethod
@@ -73,10 +72,3 @@ class AboutDialog(Gtk.AboutDialog):
         # is not cross-platform compatible
         open_uri(uri)
         return Gdk.EVENT_STOP
-
-    def _on_response(self,
-                     _dialog: Gtk.AboutDialog,
-                     response: Gtk.ResponseType
-                     ) -> None:
-        if response == Gtk.ResponseType.DELETE_EVENT:
-            self.destroy()
