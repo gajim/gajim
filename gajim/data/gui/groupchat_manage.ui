@@ -1,560 +1,345 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkStack" id="stack">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="transition-type">crossfade</property>
     <child>
-      <object class="GtkBox">
-        <property name="width-request">400</property>
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">center</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkOverlay">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">center</property>
-            <child>
-              <object class="GtkImage" id="avatar_button_image">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-end">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="pixel-size">100</property>
-                <property name="icon-name">missing-image</property>
-                <property name="icon_size">6</property>
-              </object>
-              <packing>
-                <property name="index">-1</property>
-              </packing>
-            </child>
-            <child type="overlay">
-              <object class="GtkButton" id="remove_avatar_button">
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="tooltip-text" translatable="yes">Remove your group chat avatar</property>
-                <property name="halign">start</property>
-                <property name="valign">end</property>
-                <property name="always-show-image">True</property>
-                <signal name="clicked" handler="_on_remove_avatar" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">user-trash-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child type="overlay">
-              <object class="GtkButton" id="avatar_select_button">
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="no-show-all">True</property>
-                <property name="halign">end</property>
-                <property name="valign">end</property>
-                <signal name="clicked" handler="_on_change_avatar_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">document-edit-symbolic</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <!-- n-columns=2 n-rows=2 -->
-          <object class="GtkGrid">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">center</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
-            <child>
-              <object class="GtkEntry" id="muc_description_entry">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <signal name="changed" handler="_on_name_desc_changed" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="muc_name_entry">
-                <property name="width-request">300</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <signal name="changed" handler="_on_name_desc_changed" swapped="no"/>
-              </object>
-              <packing>
-                <property name="left-attach">1</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Name</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Description</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkButton" id="manage_save_button">
-                <property name="label" translatable="yes">Save</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="can-default">True</property>
-                <property name="receives-default">False</property>
-                <signal name="clicked" handler="_on_manage_save_clicked" swapped="no"/>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="destroy_muc_button">
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="tooltip-text" translatable="yes">Destroy Group Chat…</property>
-                <signal name="clicked" handler="_on_destroy_clicked" swapped="no"/>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <property name="icon-name">user-trash-symbolic</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="margin-top">12</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Subject</property>
-            <style>
-              <class name="bold16"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="height-request">100</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="shadow-type">in</property>
-            <child>
-              <object class="GtkTextView" id="subject_textview">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="wrap-mode">word-char</property>
-                <property name="left-margin">6</property>
-                <property name="right-margin">6</property>
-                <property name="top-margin">6</property>
-                <property name="bottom-margin">6</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="subject_change_button">
-            <property name="label" translatable="yes">Ch_ange Subject</property>
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="halign">end</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_subject_change_clicked" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
+      <object class="GtkStackPage">
         <property name="name">manage</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <!-- n-columns=1 n-rows=3 -->
-          <object class="GtkGrid" id="avatar_selector_grid">
-            <property name="name">settings_grid</property>
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="width-request">400</property>
             <property name="halign">center</property>
-            <property name="valign">start</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="border-width">18</property>
-            <property name="row-spacing">6</property>
-            <property name="column-spacing">12</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
+              <object class="GtkOverlay" id="avatar_overlay">
                 <property name="halign">center</property>
-                <property name="margin-top">6</property>
-                <property name="spacing">12</property>
-                <child type="center">
-                  <object class="GtkButton" id="avatar_update_button">
-                    <property name="label" translatable="yes">Update</property>
-                    <property name="visible">True</property>
-                    <property name="sensitive">False</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <signal name="clicked" handler="_on_avatar_update_clicked" swapped="no"/>
+                <property name="child">
+                  <object class="GtkImage" id="avatar_button_image">
+                    <property name="margin-end">6</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="pixel-size">100</property>
+                    <property name="icon-name">missing-image</property>
+                  </object>
+                </property>
+                <child type="overlay">
+                  <object class="GtkButton" id="remove_avatar_button">
+                    <property name="visible">0</property>
+                    <property name="focusable">1</property>
+                    <property name="tooltip-text" translatable="1">Remove your group chat avatar</property>
+                    <property name="halign">start</property>
+                    <property name="valign">end</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">user-trash-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkGrid">
+                <property name="halign">center</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
+                <child>
+                  <object class="GtkEntry" id="muc_description_entry">
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="muc_name_entry">
+                    <property name="width-request">300</property>
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">end</property>
+                    <property name="label" translatable="1">Name</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">end</property>
+                    <property name="label" translatable="1">Description</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">1</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCenterBox">
+                <child type="start">
+                  <object class="GtkButton" id="destroy_muc_button">
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    <property name="tooltip-text" translatable="1">Destroy Group Chat…</property>
+                    
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">user-trash-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkButton" id="manage_save_button">
+                    <property name="label" translatable="1">Save</property>
+                    <property name="sensitive">0</property>
+                    <property name="focusable">1</property>
+                    
                     <style>
                       <class name="suggested-action"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">_Close</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="_on_avatar_cancel_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">Select File…</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">False</property>
-                    <signal name="clicked" handler="_on_avatar_select_file_clicked" swapped="no"/>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">2</property>
-              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-top">12</property>
+              </object>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Update Avatar</property>
-                <property name="justify">center</property>
-                <property name="wrap">True</property>
+                <property name="label" translatable="1">Subject</property>
                 <style>
                   <class name="bold16"/>
                 </style>
               </object>
-              <packing>
-                <property name="left-attach">0</property>
-                <property name="top-attach">0</property>
-              </packing>
             </child>
             <child>
-              <placeholder/>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">1</property>
+                <property name="height-request">100</property>
+                <property name="focusable">1</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="child">
+                  <object class="GtkTextView" id="subject_textview">
+                    <property name="focusable">1</property>
+                    <property name="wrap-mode">word-char</property>
+                    <property name="left-margin">6</property>
+                    <property name="right-margin">6</property>
+                    <property name="top-margin">6</property>
+                    <property name="bottom-margin">6</property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="subject_change_button">
+                <property name="label" translatable="1">Ch_ange Subject</property>
+                <property name="sensitive">0</property>
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="use-underline">1</property>
+                
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="name">avatar</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">center</property>
-        <property name="valign">start</property>
-        <property name="orientation">vertical</property>
-        <child>
+      <object class="GtkStackPage">
+        <property name="name">avatar</property>
+        <property name="child">
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="orientation">vertical</property>
-            <property name="spacing">6</property>
             <child>
-              <object class="GtkLabel">
-                <property name="width-request">300</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-bottom">6</property>
-                <property name="label" translatable="yes">Destroy This Chat</property>
-                <property name="justify">center</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">22</property>
-                <style>
-                  <class name="bold16"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Reason for destruction</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="destroy_reason_entry">
-                <property name="width-request">200</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-bottom">6</property>
-                <property name="activates-default">True</property>
-                <property name="caps-lock-warning">False</property>
-                <property name="secondary-icon-name">face-smile-symbolic</property>
-                <property name="secondary-icon-tooltip-text" translatable="yes">Insert Emoji</property>
-                <property name="secondary-icon-tooltip-markup" translatable="yes">Insert Emoji</property>
-                <property name="placeholder-text" translatable="yes">Reason (optional)...</property>
-                <property name="show-emoji-icon">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">start</property>
-                <property name="label" translatable="yes">Where participants should go</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="destroy_alternate_entry">
-                <property name="width-request">200</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="margin-bottom">6</property>
-                <property name="activates-default">True</property>
-                <property name="caps-lock-warning">False</property>
-                <property name="placeholder-text" translatable="yes">Alternate venue (optional)...</property>
-                <signal name="changed" handler="_on_destroy_alternate_changed" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="margin-top">18</property>
+              <object class="GtkGrid" id="avatar_selector_grid">
+                <property name="name">settings_grid</property>
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkButton">
-                    <property name="label" translatable="yes">_Cancel</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">start</property>
-                    <property name="valign">start</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="_on_destroy_cancelled" swapped="no"/>
+                  <object class="GtkCenterBox">
+                    <property name="margin-top">6</property>
+                    <child type="start">
+                      <object class="GtkButton" id="avatar_cancel_button">
+                        <property name="label" translatable="1">_Close</property>
+                        <property name="focusable">1</property>
+                        <property name="use-underline">1</property>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkButton" id="avatar_update_button">
+                        <property name="label" translatable="1">Update</property>
+                        <property name="sensitive">0</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">2</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="destroy_button">
-                    <property name="label" translatable="yes">_Destroy</property>
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="can-default">True</property>
-                    <property name="receives-default">True</property>
-                    <property name="halign">end</property>
-                    <property name="valign">start</property>
-                    <property name="use-underline">True</property>
-                    <signal name="clicked" handler="_on_destroy_confirmed" swapped="no"/>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="1">Update Avatar</property>
+                    <property name="justify">center</property>
+                    <property name="wrap">1</property>
                     <style>
-                      <class name="destructive-action"/>
+                      <class name="bold16"/>
                     </style>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="pack-type">end</property>
-                    <property name="position">1</property>
-                  </packing>
+                </child>
+                <child>
+                  <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">5</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
+    </child>
+    <child>
+      <object class="GtkStackPage">
         <property name="name">destroy</property>
-        <property name="position">2</property>
-      </packing>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="width-request">300</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="label" translatable="1">Destroy This Chat</property>
+                    <property name="justify">center</property>
+                    <property name="wrap">1</property>
+                    <property name="max-width-chars">22</property>
+                    <style>
+                      <class name="bold16"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="1">Reason for destruction</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="destroy_reason_entry">
+                    <property name="width-request">200</property>
+                    <property name="focusable">1</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="activates-default">1</property>
+                    <property name="secondary-icon-name">face-smile-symbolic</property>
+                    <property name="secondary-icon-tooltip-text" translatable="1">Insert Emoji</property>
+                    <property name="secondary-icon-tooltip-markup" translatable="1">Insert Emoji</property>
+                    <property name="placeholder-text" translatable="1">Reason (optional)...</property>
+                    <property name="show-emoji-icon">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="1">Where participants should go</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="destroy_alternate_entry">
+                    <property name="width-request">200</property>
+                    <property name="focusable">1</property>
+                    <property name="margin-bottom">6</property>
+                    <property name="activates-default">1</property>
+                    <property name="placeholder-text" translatable="1">Alternate venue (optional)...</property>
+                    
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="margin-top">18</property>
+                    <child>
+                      <object class="GtkButton" id="destroy_cancel_button">
+                        <property name="label" translatable="1">_Cancel</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="halign">start</property>
+                        <property name="valign">start</property>
+                        <property name="use-underline">1</property>
+                        
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="destroy_button">
+                        <property name="label" translatable="1">_Destroy</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="halign">end</property>
+                        <property name="valign">start</property>
+                        <property name="use-underline">1</property>
+                        
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
     </child>
     <style>
-      <class name="padding-18"/>
+      <class name="p-18"/>
     </style>
   </object>
 </interface>

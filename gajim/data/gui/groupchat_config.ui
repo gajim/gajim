@@ -1,110 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkStack" id="stack">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="hexpand">1</property>
+    <property name="vexpand">1</property>
     <child>
-      <object class="GtkBox" id="loading_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="valign">center</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Loading…</property>
-            <style>
-              <class name="bold24"/>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSpinner">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="active">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
+      <object class="GtkStackPage">
         <property name="name">loading</property>
-      </packing>
+        <property name="child">
+          <object class="GtkBox" id="loading_box">
+            <property name="valign">center</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="1">Loading…</property>
+                <style>
+                  <class name="bold24"/>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinner">
+                <property name="spinning">1</property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
     </child>
     <child>
-      <object class="GtkBox" id="config_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-      </object>
-      <packing>
+      <object class="GtkStackPage">
         <property name="name">config</property>
-        <property name="position">1</property>
-      </packing>
+        <property name="child">
+          <object class="GtkBox" id="config_box">
+            <property name="orientation">vertical</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+        </property>
+      </object>
     </child>
     <child>
-      <object class="GtkBox" id="error_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="halign">center</property>
-        <property name="valign">center</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkImage" id="error_image">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="stock">gtk-missing-image</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="error_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="justify">center</property>
-            <property name="wrap">True</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
+      <object class="GtkStackPage">
         <property name="name">error</property>
-        <property name="position">2</property>
-      </packing>
+        <property name="child">
+          <object class="GtkBox" id="error_box">
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkImage" id="error_image"/>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error_label">
+                <property name="justify">center</property>
+                <property name="wrap">1</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
     </child>
   </object>
 </interface>

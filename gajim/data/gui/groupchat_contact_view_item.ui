@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="GroupchatContactViewItem" parent="GtkGrid">
+    <property name="column-spacing">12</property>
+    <property name="has-tooltip">1</property>
+    <child>
+      <object class="GtkImage" id="_avatar">
+        <property name="pixel-size">32</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="valign">3</property>
+        <property name="orientation">1</property>
+        <child>
+          <object class="GtkLabel" id="_nick_label">
+            <property name="halign">1</property>
+            <property name="xalign">0</property>
+            <property name="max-width-chars">20</property>
+            <property name="ellipsize">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_status_message_label">
+            <property name="halign">1</property>
+            <property name="xalign">0</property>
+            <property name="max-width-chars">20</property>
+            <property name="single-line-mode">1</property>
+            <property name="ellipsize">3</property>
+            <style>
+              <class name="dim-label"/>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImage" id="_hat_image">
+        <property name="halign">1</property>
+        <property name="pixel-size">16</property>
+        <property name="icon-name">feather-tag-symbolic</property>
+        <layout>
+          <property name="column">2</property>
+          <property name="row">0</property>
+        </layout>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+  </template>
+</interface>

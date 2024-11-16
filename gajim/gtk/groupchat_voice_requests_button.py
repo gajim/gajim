@@ -4,7 +4,6 @@
 
 from __future__ import annotations
 
-from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.structs import VoiceRequest
@@ -14,59 +13,76 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.util import SignalManager
 
-class VoiceRequestsButton(Gtk.Button):
+
+class VoiceRequestsButton(Gtk.Button, SignalManager):
     def __init__(self) -> None:
-        Gtk.Button.__init__(self)
-        self.set_tooltip_text(_('Pending Voice Requests'))
-        self.set_no_show_all(True)
-        image = Gtk.Image.new_from_icon_name(
-            'dialog-question-symbolic', Gtk.IconSize.BUTTON)
-        self.add(image)
-        self.get_style_context().add_class('pulse-opacity')
-        self.get_style_context().add_class('suggested-action')
-        self.connect('clicked', self._on_button_clicked)
+        Gtk.Button.__init__(
+            self,
+            tooltip_text=_("Pending Voice Requests"),
+            visible=False,
+        )
+        SignalManager.__init__(self)
+
+        inner_box = Gtk.Box()
+        self.set_child(inner_box)
+
+        image = Gtk.Image.new_from_icon_name("dialog-question-symbolic")
+        inner_box.append(image)
+
+        self.add_css_class("pulse-opacity")
+        self.add_css_class("suggested-action")
+
+        self._popover = Gtk.Popover()
+        inner_box.append(self._popover)
+
+        self._connect(self, "clicked", self._on_button_clicked)
 
     def switch_contact(self, contact: ChatContactT) -> None:
         if not isinstance(contact, GroupchatContact):
             self._contact = None
-            self.set_no_show_all(True)
+            self.set_visible(False)
             self.hide()
             return
 
         self._contact = contact
         self._update()
 
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        self._disconnect_all()
+        del self._popover
+        app.check_finalize(self)
+
     def _update(self) -> None:
-        self.set_no_show_all(True)
+        self.set_visible(False)
         self.hide()
 
         assert self._contact is not None
         client = app.get_client(self._contact.account)
-        voice_requests = client.get_module('MUC').get_voice_requests(
-            self._contact)
+        voice_requests = client.get_module("MUC").get_voice_requests(self._contact)
         if voice_requests:
-            self.set_no_show_all(False)
-            self.show_all()
+            self.show()
 
     def _on_button_clicked(self, _button: VoiceRequestsButton) -> None:
         assert self._contact is not None
         client = app.get_client(self._contact.account)
-        voice_requests = client.get_module('MUC').get_voice_requests(
-            self._contact)
+        voice_requests = client.get_module("MUC").get_voice_requests(self._contact)
         if not voice_requests:
             return
 
         menu_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        menu_box.get_style_context().add_class('padding-12')
+        menu_box.add_css_class("p-12")
         menu_box.set_hexpand(True)
 
-        desc_label = Gtk.Label(label=_('Participants asking for voice:'))
-        desc_label.get_style_context().add_class('dim-label')
+        desc_label = Gtk.Label(label=_("Participants asking for voice:"))
+        desc_label.add_css_class("dim-label")
         desc_label.set_max_width_chars(35)
-        desc_label.set_line_wrap(True)
+        desc_label.set_wrap(True)
+        desc_label.set_wrap_mode(Pango.WrapMode.WORD)
         desc_label.set_margin_bottom(6)
-        menu_box.add(desc_label)
+        menu_box.append(desc_label)
 
         for request in voice_requests:
             request_box = Gtk.Box(spacing=12)
@@ -76,65 +92,45 @@ class VoiceRequestsButton(Gtk.Button):
             name_label.set_max_width_chars(20)
             name_label.set_ellipsize(Pango.EllipsizeMode.END)
             name_label.set_xalign(0)
-            request_box.add(name_label)
+            request_box.append(name_label)
 
-            decline_button = Gtk.Button.new_from_icon_name(
-                'process-stop-symbolic', Gtk.IconSize.BUTTON)
-            decline_button.set_tooltip_text(_('Decline'))
-            decline_button.connect(
-                'clicked',
-                self._on_decline,
-                request,
-                self._contact)
-            request_box.pack_end(decline_button, False, False, 0)
+            decline_button = Gtk.Button.new_from_icon_name("process-stop-symbolic")
+            decline_button.set_tooltip_text(_("Decline"))
+            decline_button.connect("clicked", self._on_decline, request, self._contact)
+            request_box.append(decline_button)
 
-            approve_button = Gtk.Button.new_from_icon_name(
-                'feather-check-symbolic', Gtk.IconSize.BUTTON)
-            approve_button.set_tooltip_text(_('Approve'))
-            approve_button.connect(
-                'clicked',
-                self._on_approve,
-                request,
-                self._contact)
-            request_box.pack_end(approve_button, False, False, 0)
+            approve_button = Gtk.Button.new_from_icon_name("feather-check-symbolic")
+            approve_button.set_tooltip_text(_("Approve"))
+            approve_button.connect("clicked", self._on_approve, request, self._contact)
+            request_box.append(approve_button)
 
             if voice_requests.index(request) > 0:
-                menu_box.add(Gtk.Separator())
+                menu_box.append(Gtk.Separator())
 
-            menu_box.add(request_box)
+            menu_box.append(request_box)
 
-        menu_box.show_all()
+        self._popover.add_css_class("p-6")
+        self._popover.set_child(menu_box)
+        self._popover.popup()
 
-        popover = Gtk.PopoverMenu()
-        popover.get_style_context().add_class('padding-6')
-        popover.set_relative_to(self)
-        popover.set_position(Gtk.PositionType.BOTTOM)
-        popover.add(menu_box)
-        popover.connect('closed', self._on_closed)
-        popover.popup()
-
-    @staticmethod
-    def _on_closed(popover: Gtk.Popover) -> None:
-        GLib.idle_add(popover.destroy)
-
-    def _on_approve(self,
-                    _button: Gtk.Button,
-                    voice_request: VoiceRequest,
-                    contact: GroupchatContact
-                    ) -> None:
+    def _on_approve(
+        self,
+        _button: Gtk.Button,
+        voice_request: VoiceRequest,
+        contact: GroupchatContact,
+    ) -> None:
 
         client = app.get_client(contact.account)
-        client.get_module('MUC').approve_voice_request(
-            contact, voice_request)
+        client.get_module("MUC").approve_voice_request(contact, voice_request)
         self._update()
 
-    def _on_decline(self,
-                    _button: Gtk.Button,
-                    voice_request: VoiceRequest,
-                    contact: GroupchatContact
-                    ) -> None:
+    def _on_decline(
+        self,
+        _button: Gtk.Button,
+        voice_request: VoiceRequest,
+        contact: GroupchatContact,
+    ) -> None:
 
         client = app.get_client(contact.account)
-        client.get_module('MUC').decline_voice_request(
-            contact, voice_request)
+        client.get_module("MUC").decline_voice_request(contact, voice_request)
         self._update()

@@ -15,6 +15,7 @@ from nbxmpp.errors import StanzaError
 from nbxmpp.structs import AffiliationResult
 from nbxmpp.task import Task
 
+from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
@@ -22,8 +23,9 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.util import SignalManager
 
-log = logging.getLogger('gajim.gtk.groupchat_outcasts')
+log = logging.getLogger("gajim.gtk.groupchat_outcasts")
 
 
 class OutcastRow(NamedTuple):
@@ -36,9 +38,10 @@ class Column(IntEnum):
     REASON = 1
 
 
-class GroupchatOutcasts(Gtk.Box):
+class GroupchatOutcasts(Gtk.Box, SignalManager):
     def __init__(self, client: Client, contact: GroupchatContact) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        SignalManager.__init__(self)
 
         self._client = client
         self._contact = contact
@@ -48,26 +51,40 @@ class GroupchatOutcasts(Gtk.Box):
         assert self_contact is not None
         self._own_affiliation = self_contact.affiliation.value
 
-        self._ui = get_builder('groupchat_outcast.ui')
+        self._ui = get_builder("groupchat_outcast.ui")
+
+        self._connect(self._ui.outcast_selection, "changed", self._on_selection_changed)
+        self._connect(self._ui.address_renderer, "edited", self._on_jid_edited)
+        self._connect(self._ui.reason_renderer, "edited", self._on_reason_edited)
+        self._connect(self._ui.add_button, "clicked", self._on_add)
+        self._connect(self._ui.remove_button, "clicked", self._on_remove)
 
         self._treeview = self._ui.outcast_treeview
         self._store = self._ui.outcast_store
 
-        self.add(self._ui.main_box)
-        self._apply_button = ApplyButtonBox(_('Apply'),
-                                            on_clicked=self._on_apply)
-        self._ui.button_box.pack_end(self._apply_button, False, False, 0)
+        self.append(self._ui.main_box)
 
-        if self._own_affiliation in ('admin', 'owner'):
+        self._apply_button = ApplyButtonBox(_("Apply"), on_clicked=self._on_apply)
+        self._apply_button.set_hexpand(True)
+        self._apply_button.set_halign(Gtk.Align.END)
+
+        self._ui.button_box.append(self._apply_button)
+
+        if self._own_affiliation in ("admin", "owner"):
             self._ui.add_button.set_sensitive(True)
-            self._ui.add_button.set_tooltip_text('')
+            self._ui.add_button.set_tooltip_text("")
 
-        self._ui.connect_signals(self)
+        self._client.get_module("MUC").get_affiliation(
+            self._contact.jid, "outcast", callback=self._on_outcasts_received
+        )
 
-        self._client.get_module('MUC').get_affiliation(
-            self._contact.jid,
-            'outcast',
-            callback=self._on_outcasts_received)
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        del self._treeview
+        del self._store
+        del self._apply_button
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_apply(self, _button: Gtk.Button) -> None:
         self._begin_progress()
@@ -92,11 +109,17 @@ class GroupchatOutcasts(Gtk.Box):
         self._update_apply_button_state()
 
     def _on_remove(self, _button: Gtk.Button) -> None:
-        _model, paths = self._treeview.get_selection().get_selected_rows()
+        selection = self._treeview.get_selection()
+        assert selection is not None
+        rows = selection.get_selected_rows()
+        if rows is None:
+            return
+
+        _model, paths = rows
 
         references: list[Gtk.TreeRowReference] = []
         for path in paths:
-            references.append(Gtk.TreeRowReference.new(self._store, path))
+            references.append(Gtk.TreeRowReference(self._store, path))
 
         for ref in references:
             path = ref.get_path()
@@ -106,10 +129,9 @@ class GroupchatOutcasts(Gtk.Box):
 
         self._update_apply_button_state()
 
-    def _on_jid_edited(self,
-                       _renderer: Gtk.CellRendererText,
-                       path: str,
-                       new_text: str) -> None:
+    def _on_jid_edited(
+        self, _renderer: Gtk.CellRendererText, path: str, new_text: str
+    ) -> None:
 
         old_text = self._store[path][Column.JID]
         if new_text == old_text:
@@ -122,10 +144,9 @@ class GroupchatOutcasts(Gtk.Box):
         self._store[path][Column.JID] = new_text
         self._update_apply_button_state()
 
-    def _on_reason_edited(self,
-                          _renderer: Gtk.CellRendererText,
-                          path: str,
-                          new_text: str) -> None:
+    def _on_reason_edited(
+        self, _renderer: Gtk.CellRendererText, path: str, new_text: str
+    ) -> None:
         self._store[path][Column.REASON] = new_text or None
         self._update_apply_button_state()
 
@@ -137,17 +158,17 @@ class GroupchatOutcasts(Gtk.Box):
         return any(row[Column.JID] == jid for row in self._store)
 
     def _set_remove_button_state(self, sensitive: bool) -> None:
-        value = self._own_affiliation in ('admin', 'owner')
+        value = self._own_affiliation in ("admin", "owner")
         self._ui.remove_button.set_sensitive(sensitive and value)
 
     def _update_apply_button_state(self):
-        if self._own_affiliation not in ('admin', 'owner'):
+        if self._own_affiliation not in ("admin", "owner"):
             return
         new_rows = self._get_new_rows()
         self._apply_button.set_button_state(new_rows != self._current_rows)
 
     def _allowed_to_edit(self) -> bool:
-        return self._own_affiliation in ('owner', 'admin')
+        return self._own_affiliation in ("owner", "admin")
 
     def _get_new_rows(self) -> set[OutcastRow]:
         rows: set[OutcastRow] = set()
@@ -156,8 +177,7 @@ class GroupchatOutcasts(Gtk.Box):
             if not row[Column.JID]:
                 continue
 
-            rows.add(OutcastRow(jid=row[Column.JID],
-                                reason=row[Column.REASON]))
+            rows.add(OutcastRow(jid=row[Column.JID], reason=row[Column.REASON]))
         return rows
 
     def _get_diff(self) -> tuple[list[OutcastRow], list[OutcastRow]]:
@@ -184,23 +204,22 @@ class GroupchatOutcasts(Gtk.Box):
 
         outcasts = {}
         for row in other_rows:
-            outcasts[row.jid] = {'affiliation': 'outcast'}
+            outcasts[row.jid] = {"affiliation": "outcast"}
             if row.reason:
-                outcasts[row.jid]['reason'] = row.reason
+                outcasts[row.jid]["reason"] = row.reason
 
         for row in removed_rows:
-            outcasts[row.jid] = {'affiliation': 'none'}
+            outcasts[row.jid] = {"affiliation": "none"}
 
-        self._client.get_module('MUC').set_affiliation(
-            self._contact.jid,
-            outcasts,
-            callback=self._on_affiliation_finished)
+        self._client.get_module("MUC").set_affiliation(
+            self._contact.jid, outcasts, callback=self._on_affiliation_finished
+        )
 
     def _on_affiliation_finished(self, task: Task) -> None:
         try:
             task.finish()
         except StanzaError as error:
-            log.info('Error while setting outcasts: %s', error)
+            log.info("Error while setting outcasts: %s", error)
             self._end_progress()
             self._apply_button.set_error(str(error))
             return
@@ -213,12 +232,12 @@ class GroupchatOutcasts(Gtk.Box):
         try:
             result = cast(AffiliationResult, task.finish())
         except StanzaError as error:
-            log.info('Error while requesting outcasts: %s', error.condition)
+            log.info("Error while requesting outcasts: %s", error.condition)
             return
 
         editable = self._allowed_to_edit()
         for jid, attrs in result.users.items():
-            reason = attrs.get('reason')
+            reason = attrs.get("reason")
 
             jid = str(jid)
             self._store.append([jid, reason, editable])
@@ -227,5 +246,4 @@ class GroupchatOutcasts(Gtk.Box):
 
     @staticmethod
     def _raise_error() -> None:
-        ErrorDialog(_('Error'),
-                    _('An entry with this XMPP Address already exists'))
+        ErrorDialog(_("Error"), _("An entry with this XMPP Address already exists"))

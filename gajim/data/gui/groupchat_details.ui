@@ -1,80 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
-  <!-- n-columns=2 n-rows=1 -->
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkGrid" id="main_grid">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <child>
       <object class="GtkBox">
         <property name="width-request">570</property>
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkRevealer" id="header_revealer">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="transition-duration">200</property>
-            <child>
+            <property name="child">
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkImage" id="header_image">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="icon-name">missing-image</property>
-                    <property name="icon_size">6</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="contact_name_header_label">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="ellipsize">end</property>
-                    <property name="single-line-mode">True</property>
+                    <property name="single-line-mode">1</property>
                     <property name="max-width-chars">20</property>
                     <style>
                       <class name="large-header"/>
                     </style>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="edit_name_button">
-                    <property name="visible">True</property>
-                    <property name="can-focus">True</property>
-                    <property name="receives-default">True</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
                     <property name="valign">center</property>
-                    <signal name="clicked" handler="_on_edit_name_clicked" swapped="no"/>
+                    
                     <child>
                       <object class="GtkImage">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
                         <property name="icon-name">document-edit-symbolic</property>
                       </object>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
                 </child>
                 <child>
                   <placeholder/>
@@ -83,184 +50,164 @@
                   <class name="stack-header"/>
                 </style>
               </object>
-            </child>
+            </property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkStack" id="main_stack">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
+            <property name="vexpand">1</property>
             <property name="transition-type">crossfade</property>
             <child>
-              <object class="GtkBox" id="info_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="padding-18"/>
-                </style>
-              </object>
-              <packing>
+              <object class="GtkStackPage">
                 <property name="name">information</property>
-                <property name="title" translatable="yes">Information</property>
-                <property name="icon-name">user-info-symbolic</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="settings_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="halign">center</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="padding-18"/>
-                </style>
-              </object>
-              <packing>
-                <property name="name">settings</property>
-                <property name="title" translatable="yes">Settings</property>
-                <property name="icon-name">document-properties-symbolic</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow" id="encryption_scrolled">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
+                <property name="title" translatable="1">Information</property>
+                <property name="icon-name">feather-user-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="info_box">
+                    <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkBox" id="encryption_box">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <property name="margin-start">36</property>
-                        <property name="margin-end">36</property>
-                        <property name="margin-top">36</property>
-                        <property name="margin-bottom">36</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <placeholder/>
-                        </child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="p-18"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">settings</property>
+                <property name="title" translatable="1">Settings</property>
+                <property name="icon-name">document-properties-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="settings_box">
+                    <property name="halign">center</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="p-18"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">encryption-omemo</property>
+                <property name="title" translatable="1">Encryption (OMEMO)</property>
+                <property name="icon-name">channel-secure-symbolic</property>
+                <property name="child">
+                  <object class="GtkScrolledWindow" id="encryption_scrolled">
+                    <property name="focusable">1</property>
+                    <property name="hscrollbar-policy">never</property>
+                    <property name="child">
+                      <object class="GtkViewport">
+                        <property name="child">
+                          <object class="GtkBox" id="encryption_box">
+                            <property name="margin-start">36</property>
+                            <property name="margin-end">36</property>
+                            <property name="margin-top">36</property>
+                            <property name="margin-bottom">36</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <placeholder/>
+                            </child>
+                          </object>
+                        </property>
                       </object>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">manage</property>
+                <property name="title" translatable="1">Manage</property>
+                <property name="icon-name">document-edit-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="manage_box">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="p-18"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">affiliations</property>
+                <property name="title" translatable="1">Affiliations</property>
+                <property name="icon-name">system-users-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="affiliation_box">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="p-18"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">outcasts</property>
+                <property name="title" translatable="1">Outcasts</property>
+                <property name="icon-name">system-users-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="outcasts_box">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                    <style>
+                      <class name="p-18"/>
+                    </style>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">config</property>
+                <property name="title" translatable="1">Configuration</property>
+                <property name="icon-name">document-properties-symbolic</property>
+                <property name="child">
+                  <object class="GtkBox" id="configuration_box">
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <placeholder/>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
-              <packing>
-                <property name="name">encryption-omemo</property>
-                <property name="title" translatable="yes">Encryption (OMEMO)</property>
-                <property name="icon-name">channel-secure-symbolic</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="manage_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="padding-18"/>
-                </style>
-              </object>
-              <packing>
-                <property name="name">manage</property>
-                <property name="title" translatable="yes">Manage</property>
-                <property name="icon-name">document-edit-symbolic</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="affiliation_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="padding-18"/>
-                </style>
-              </object>
-              <packing>
-                <property name="name">affiliations</property>
-                <property name="title" translatable="yes">Affiliations</property>
-                <property name="icon-name">system-users-symbolic</property>
-                <property name="position">4</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="outcasts_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="padding-18"/>
-                </style>
-              </object>
-              <packing>
-                <property name="name">outcasts</property>
-                <property name="title" translatable="yes">Outcasts</property>
-                <property name="icon-name">system-users-symbolic</property>
-                <property name="position">5</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkBox" id="configuration_box">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </object>
-              <packing>
-                <property name="name">config</property>
-                <property name="title" translatable="yes">Configuration</property>
-                <property name="icon-name">document-properties-symbolic</property>
-                <property name="position">6</property>
-              </packing>
             </child>
             <style>
               <class name="stack-border"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left-attach">1</property>
-        <property name="top-attach">0</property>
-      </packing>
     </child>
     <child>
       <placeholder/>

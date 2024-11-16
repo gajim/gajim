@@ -5,64 +5,64 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 
 import locale
 import logging
-from enum import IntEnum
 
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.const import Affiliation
 
 from gajim.common import app
-from gajim.common import ged
 from gajim.common import types
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
-from gajim.common.const import StyleAttr
-from gajim.common.events import ApplicationEvent
 from gajim.common.events import MUCNicknameChanged
-from gajim.common.helpers import jid_is_blocked
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.tooltips import GCTooltip
-from gajim.gtk.util import EventHelper
 from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import SignalManager
 
-log = logging.getLogger('gajim.gtk.groupchat_roster')
+log = logging.getLogger("gajim.gtk.groupchat_roster")
 
-
+binds = 0
 AffiliationRoleSortOrder = {
-    'owner': 0,
-    'admin': 1,
-    'moderator': 2,
-    'participant': 3,
-    'visitor': 4
+    "owner": 0,
+    "admin": 1,
+    "moderator": 2,
+    "participant": 3,
+    "visitor": 4,
 }
-
-
-class Column(IntEnum):
-    AVATAR = 0
-    TEXT = 1
-    IS_CONTACT = 2
-    NICK_OR_GROUP = 3
 
 
 CONTACT_SIGNALS = {
-    'user-affiliation-changed',
-    'user-hats-changed',
-    'user-avatar-update',
-    'user-joined',
-    'user-left',
-    'user-nickname-changed',
-    'user-role-changed',
-    'user-status-show-changed',
+    "user-affiliation-changed",
+    "user-joined",
+    "user-left",
+    "user-nickname-changed",
+    "user-role-changed",
+    "user-status-show-changed",
 }
+
+
+def get_group_from_contact(contact: types.GroupchatParticipant) -> tuple[str, str]:
+    if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
+        return contact.affiliation.value, get_uf_affiliation(
+            contact.affiliation, plural=True
+        )
+    return contact.role.value, get_uf_role(contact.role, plural=True)
 
 
 class GroupchatRoster(Gtk.Revealer, EventHelper):
@@ -71,45 +71,30 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         EventHelper.__init__(self)
 
         self._contact = None
+        self._scroll_id = None
 
-        self._tooltip = GCTooltip()
+        self._ui = get_builder("groupchat_roster.ui")
+        self.set_child(self._ui.box)
 
-        self._ui = get_builder('groupchat_roster.ui')
-        self.add(self._ui.box)
+        self._contact_view = GroupchatContactListView()
+        self._contact_view.connect("activate", self._on_contact_item_activated)
+        self._contact_view.set_size_request(
+            app.settings.get("groupchat_roster_width"), -1
+        )
+        self._ui.scrolled.set_child(self._contact_view)
 
-        self._contact_refs: dict[str, Gtk.TreeRowReference] = {}
-        self._group_refs: dict[str, Gtk.TreeRowReference] = {}
+        self.set_reveal_child(not app.settings.get("hide_groupchat_occupants_list"))
+        self.connect("notify::reveal-child", self._on_reveal)
 
-        self._store = self._ui.participant_store
-        self._store.set_sort_func(Column.TEXT, self._tree_compare_iters)
-
-        self._roster = self._ui.roster_treeview
-
-        self._filter_string = ''
-        self._modelfilter = self._store.filter_new()
-        self._modelfilter.set_visible_func(self._visible_func)
-        self._roster.set_has_tooltip(True)
-
-        self._ui.contact_column.set_fixed_width(
-            app.settings.get('groupchat_roster_width'))
-        self._ui.contact_column.set_cell_data_func(self._ui.text_renderer,
-                                                   self._text_cell_data_func)
-
-        self._ui.connect_signals(self)
-
-        self.register_events([
-            ('theme-update', ged.GUI2, self._on_theme_update),
-        ])
-
-        self.set_reveal_child(
-            not app.settings.get('hide_groupchat_occupants_list'))
-
-        self.connect('notify::reveal-child', self._on_reveal)
+        self._ui.search_entry.connect("search-changed", self._on_search_changed)
+        self._ui.search_entry.connect(
+            "stop-search",
+            lambda *args: self._ui.search_entry.set_text(""),
+        )
 
     def _hide_roster(self, hide_roster: bool, *args: Any) -> None:
         transition = Gtk.RevealerTransitionType.SLIDE_RIGHT
         if not hide_roster:
-            self.show_all()
             transition = Gtk.RevealerTransitionType.SLIDE_LEFT
 
         self.set_transition_type(transition)
@@ -129,340 +114,154 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         if self._contact is None:
             return
 
-        log.info('Clear')
+        log.info("Clear")
         self._unload_roster()
         app.settings.disconnect_signals(self)
-        self._contact.disconnect_signal(self, 'state-changed')
+        self._contact.disconnect_signal(self, "state-changed")
         self._contact = None
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         self.clear()
 
         is_groupchat = isinstance(contact, GroupchatContact)
-        hide_roster = app.settings.get('hide_groupchat_occupants_list')
+        hide_roster = app.settings.get("hide_groupchat_occupants_list")
         self.set_visible(is_groupchat and not hide_roster)
         if not is_groupchat:
             return
 
-        log.info('Switch to %s (%s)', contact.jid, contact.account)
+        log.info("Switch to %s (%s)", contact.jid, contact.account)
 
-        contact.connect('state-changed', self._on_muc_state_changed)
-        app.settings.connect_signal(
-            'hide_groupchat_occupants_list', self._hide_roster)
+        contact.connect("state-changed", self._on_muc_state_changed)
+        app.settings.connect_signal("hide_groupchat_occupants_list", self._hide_roster)
 
         self._contact = contact
 
         if self._contact.is_joined:
             self._load_roster()
 
-    @staticmethod
-    def _on_focus_out(treeview: Gtk.TreeView, _param: Gdk.EventFocus) -> None:
-        treeview.get_selection().unselect_all()
+    def _load_roster(self) -> None:
+        if not self.get_reveal_child():
+            return
 
-    def _query_tooltip(self,
-                       widget: Gtk.Widget,
-                       x_pos: int,
-                       y_pos: int,
-                       _keyboard_mode: bool,
-                       tooltip: Gtk.Tooltip
-                       ) -> bool:
+        log.info("Load Roster")
+        assert self._contact is not None
+        self._contact.multi_connect(
+            {
+                "user-joined": self._on_contact_changed,
+                "user-left": self._on_contact_changed,
+                "user-nickname-changed": self._on_user_nickname_changed,
+                "user-affiliation-changed": self._on_contact_changed,
+                "user-role-changed": self._on_contact_changed,
+                "user-status-show-changed": self._on_contact_changed,
+            }
+        )
 
-        row = self._roster.get_path_at_pos(x_pos, y_pos)
-        if row is None:
-            self._tooltip.clear_tooltip()
-            return False
+        self._contact_view.unbind_model()
+        self._ui.search_entry.set_text("")
 
-        path, _, _, _ = row
-        if path is None:
-            self._tooltip.clear_tooltip()
-            return False
+        # Convert (copy) participants iterator to list,
+        # since it may change during iteration, see #11970
+        for participant in list(self._contact.get_participants()):
+            self._add_contact(participant)
 
-        path = self._modelfilter.convert_path_to_child_path(path)
-        if path is None:
-            self._tooltip.clear_tooltip()
-            return False
+        self._contact_view.bind_model()
 
-        iter_ = None
-        try:
-            iter_ = self._store.get_iter(path)
-        except Exception:
-            self._tooltip.clear_tooltip()
-            return False
-
-        if not self._store[iter_][Column.IS_CONTACT]:
-            self._tooltip.clear_tooltip()
-            return False
-
-        nickname = self._store[iter_][Column.NICK_OR_GROUP]
+    def _unload_roster(self) -> None:
+        log.info("Unload Roster")
+        self._contact_view.unbind_model()
+        self._contact_view.remove_all()
 
         assert self._contact is not None
-        contact = self._contact.get_resource(nickname)
+        self._contact.multi_disconnect(self, CONTACT_SIGNALS)
 
-        value, widget = self._tooltip.get_tooltip(contact)
-        tooltip.set_custom(widget)
-        return value
+    def _on_contact_item_activated(
+        self,
+        _list_view: Gtk.ListView,
+        position: int,
+    ) -> None:
+
+        item = self._contact_view.get_listitem(position)
+        assert item is not None
+
+        participant_contact = item.contact
+        if participant_contact.is_self:
+            return
+
+        assert self._contact is not None
+        disco = self._contact.get_disco()
+        assert disco is not None
+
+        muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
+        if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
+            assert participant_contact.real_jid is not None
+            app.window.add_chat(
+                self._contact.account,
+                participant_contact.real_jid,
+                "contact",
+                select=True,
+            )
+        else:
+            app.window.add_private_chat(
+                self._contact.account, participant_contact.jid, select=True
+            )
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
-        self._filter_string = widget.get_text().lower()
-        self._modelfilter.refilter()
-        self._roster.expand_all()
+        self._contact_view.set_search(widget.get_text())
+        self._scroll_to_top()
 
-    def _visible_func(self,
-                      model: Gtk.TreeModelFilter,
-                      iter_: Gtk.TreeIter,
-                      *_data: Any
-                      ) -> bool:
+    def _scroll_to_top(self) -> None:
+        # Cancel any active source at first so we dont have
+        # multiple timeouts running
+        if self._scroll_id is not None:
+            GLib.source_remove(self._scroll_id)
+            self._scroll_id = None
 
-        if not self._filter_string:
-            return True
+        def _scroll_to() -> None:
+            self._scroll_id = None
+            self._ui.scrolled.get_vadjustment().set_value(0)
 
-        if not model[iter_][Column.IS_CONTACT]:
-            return True
-
-        nickname = model[iter_][Column.TEXT].split('\n')[0]
-        return self._filter_string in nickname.lower()
-
-    def _get_group_iter(self, group_name: str) -> Gtk.TreeIter | None:
-        try:
-            ref = self._group_refs[group_name]
-        except KeyError:
-            return None
-
-        path = ref.get_path()
-        if path is None:
-            return None
-        return self._store.get_iter(path)
-
-    def _get_contact_iter(self, nick: str) -> Gtk.TreeIter | None:
-        try:
-            ref = self._contact_refs[nick]
-        except KeyError:
-            return None
-
-        path = ref.get_path()
-        if path is None:
-            return None
-        return self._store.get_iter(path)
-
-    def _on_user_joined(self,
-                        _contact: types.GroupchatContact,
-                        _signal_name: str,
-                        user_contact: types.GroupchatParticipant,
-                        *args: Any
-                        ) -> None:
-        self._add_contact(user_contact)
+        self._scroll_id = GLib.timeout_add(100, _scroll_to)
 
     def _add_contact(self, contact: types.GroupchatParticipant) -> None:
-        group_name, group_text = self._get_group_from_contact(contact)
-        nick = contact.name
+        item = GroupchatContactListItem(contact=contact)
+        self._contact_view.add(item)
 
-        # Create Group
-        group_iter = self._get_group_iter(group_name)
-        role_path = None
-        if not group_iter:
-            group_iter = self._store.append(
-                None, [None, group_text, False, group_name])
-            role_path = self._store.get_path(group_iter)
-            group_ref = Gtk.TreeRowReference(self._store, role_path)
-            self._group_refs[group_name] = group_ref
+    def _remove_contact(self, contact: types.GroupchatParticipant) -> None:
+        self._contact_view.remove(contact)
 
-        # Avatar
-        surface = contact.get_avatar(AvatarSize.ROSTER,
-                                     self.get_scale_factor())
+    def _on_contact_changed(
+        self,
+        _contact: types.GroupchatContact,
+        signal_name: str,
+        user_contact: types.GroupchatParticipant,
+        *args: Any,
+    ) -> None:
 
-        iter_ = self._store.append(group_iter,
-                                   [surface, nick, True, nick])
-        self._contact_refs[nick] = Gtk.TreeRowReference(
-            self._store, self._store.get_path(iter_))
+        if signal_name == "user-joined":
+            self._add_contact(user_contact)
 
-        self._draw_groups()
-        self._draw_contact(nick)
+        elif signal_name == "user-left":
+            self._remove_contact(user_contact)
 
-        if (role_path is not None and
-                self._roster.get_model() is not None):
-            self._roster.expand_row(role_path, False)
+        else:
+            self._remove_contact(user_contact)
+            self._add_contact(user_contact)
 
-    def _on_user_left(self,
-                      _contact: types.GroupchatContact,
-                      _signal_name: str,
-                      user_contact: types.GroupchatParticipant,
-                      *args: Any
-                      ) -> None:
-
-        self._remove_contact(user_contact)
-        self._draw_groups()
-
-    def _update_contact(self,
-                        _contact: types.GroupchatContact,
-                        _signal_name: str,
-                        user_contact: types.GroupchatParticipant,
-                        *args: Any
-                        ) -> None:
-
-        self._remove_contact(user_contact)
-        self._add_contact(user_contact)
-
-    def _on_user_nickname_changed(self,
-                                  _contact: types.GroupchatContact,
-                                  _signal_name: str,
-                                  _event: MUCNicknameChanged,
-                                  old_contact: types.GroupchatParticipant,
-                                  new_contact: types.GroupchatParticipant
-                                  ) -> None:
+    def _on_user_nickname_changed(
+        self,
+        _contact: types.GroupchatContact,
+        _signal_name: str,
+        _event: MUCNicknameChanged,
+        old_contact: types.GroupchatParticipant,
+        new_contact: types.GroupchatParticipant,
+    ) -> None:
 
         self._remove_contact(old_contact)
         self._add_contact(new_contact)
 
-    def _on_user_status_show_changed(self,
-                                     _contact: types.GroupchatContact,
-                                     _signal_name: str,
-                                     user_contact: types.GroupchatParticipant,
-                                     *args: Any
-                                     ) -> None:
-
-        self._draw_contact(user_contact.name)
-
-    def _remove_contact(self, contact: types.GroupchatParticipant) -> None:
-        nick = contact.name
-        iter_ = self._get_contact_iter(nick)
-        if not iter_:
-            return
-
-        group_iter = self._store.iter_parent(iter_)
-        if group_iter is None:
-            raise ValueError('Trying to remove non-child')
-
-        self._store.remove(iter_)
-        del self._contact_refs[nick]
-        if not self._store.iter_has_child(group_iter):
-            group = self._store[group_iter][Column.NICK_OR_GROUP]
-            del self._group_refs[group]
-            self._store.remove(group_iter)
-
-    @staticmethod
-    def _get_group_from_contact(contact: types.GroupchatParticipant
-                                ) -> tuple[str, str]:
-        if contact.affiliation in (Affiliation.OWNER, Affiliation.ADMIN):
-            return contact.affiliation.value, get_uf_affiliation(
-                contact.affiliation, plural=True)
-        return contact.role.value, get_uf_role(contact.role, plural=True)
-
-    @staticmethod
-    def _text_cell_data_func(_column: Gtk.TreeViewColumn,
-                             renderer: Gtk.CellRenderer,
-                             model: Gtk.TreeModel,
-                             iter_: Gtk.TreeIter,
-                             _user_data: object | None
-                             ) -> None:
-
-        has_parent = bool(model.iter_parent(iter_))
-        style = 'contact' if has_parent else 'group'
-
-        bgcolor = app.css_config.get_value(f'.gajim-{style}-row',
-                                           StyleAttr.BACKGROUND)
-        renderer.set_property('cell-background', bgcolor)
-
-        color = app.css_config.get_value(f'.gajim-{style}-row',
-                                         StyleAttr.COLOR)
-        renderer.set_property('foreground', color)
-
-        desc = app.css_config.get_font(f'.gajim-{style}-row')
-        renderer.set_property('font-desc', desc)
-
-        if not has_parent:
-            renderer.set_property('weight', 600)
-            renderer.set_property('ypad', 6)
-
-    def _on_roster_row_activated(self,
-                                 _treeview: Gtk.TreeView,
-                                 path: Gtk.TreePath,
-                                 _column: Gtk.TreeViewColumn
-                                 ) -> None:
-
-        child_path = self._modelfilter.convert_path_to_child_path(path)
-        assert child_path is not None
-
-        iter_ = self._store.get_iter(child_path)
-        if self._store.iter_parent(iter_) is None:
-            # This is a group row
-            return
-
-        assert self._contact is not None
-
-        nick = self._store[iter_][Column.NICK_OR_GROUP]
-        if self._contact.nickname == nick:
-            return
-
-        disco = self._contact.get_disco()
-        assert disco is not None
-
-        muc_prefer_direct_msg = app.settings.get('muc_prefer_direct_msg')
-        if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
-            participant = self._contact.get_resource(nick)
-            assert participant.real_jid is not None
-            app.window.add_chat(self._contact.account,
-                                participant.real_jid,
-                                'contact',
-                                select=True)
-        else:
-            contact = self._contact.get_resource(nick)
-            app.window.add_private_chat(self._contact.account,
-                                        contact.jid,
-                                        select=True)
-
-    def _on_roster_button_press_event(self,
-                                      treeview: Gtk.TreeView,
-                                      event: Gdk.EventButton
-                                      ) -> None:
-
-        if event.button == Gdk.BUTTON_PRIMARY:
-            return
-
-        pos = treeview.get_path_at_pos(int(event.x), int(event.y))
-        if pos is None:
-            return
-
-        path, _, _, _ = pos
-        if path is None:
-            return
-
-        path = self._modelfilter.convert_path_to_child_path(path)
-        if path is None:
-            return
-
-        iter_ = self._store.get_iter(path)
-        if self._store.iter_parent(iter_) is None:
-            # Group row
-            return
-
-        assert self._contact is not None
-
-        nick = self._store[iter_][Column.NICK_OR_GROUP]
-        if self._contact.nickname == nick:
-            return
-
-        if event.button == Gdk.BUTTON_SECONDARY:
-            self._show_contact_menu(nick, event)
-
-        # if event.button == Gdk.BUTTON_MIDDLE:
-            # self.roster.emit('row-activated', nick)
-
-    def _show_contact_menu(self, nick: str, event: Gdk.EventButton) -> None:
-        assert self._contact is not None
-        self_contact = self._contact.get_self()
-        assert self_contact is not None
-        contact = self._contact.get_resource(nick)
-        menu = get_groupchat_participant_menu(self._contact.account,
-                                              self_contact,
-                                              contact)
-
-        popover = GajimPopover(menu, relative_to=self._roster, event=event)
-        popover.popup()
-
-    def _on_muc_state_changed(self,
-                              contact: GroupchatContact,
-                              _signal_name: str
-                              ) -> None:
+    def _on_muc_state_changed(
+        self, contact: GroupchatContact, _signal_name: str
+    ) -> None:
 
         if contact.is_joined:
             self._load_roster()
@@ -470,188 +269,317 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         elif contact.is_not_joined:
             self._unload_roster()
 
-    def _tree_compare_iters(self,
-                            model: Gtk.TreeModel,
-                            iter1: Gtk.TreeIter,
-                            iter2: Gtk.TreeIter,
-                            _user_data: object | None
-                            ) -> int:
-        '''
-        Compare two iterators to sort them
-        '''
-        is_contact = model.iter_parent(iter1)
-        if is_contact:
+    def invalidate_sort(self) -> None:
+        self._contact_view.invalidate_sort()
 
-            nick1 = model[iter1][Column.NICK_OR_GROUP]
-            nick2 = model[iter2][Column.NICK_OR_GROUP]
 
-            assert self._contact is not None
-            our_nick = self._contact.nickname
-            if our_nick in (nick1, nick2):
-                # Always show our nickname at the top
-                return -1 if our_nick == nick1 else 1
+class GroupchatContactListView(Gtk.ListView):
+    def __init__(self) -> None:
+        Gtk.ListView.__init__(self)
+        self.add_css_class("p-12")
 
-            if not app.settings.get('sort_by_show_in_muc'):
-                return locale.strcoll(nick1.lower(), nick2.lower())
+        self._model = Gio.ListStore(item_type=GroupchatContactListItem)
 
-            contact1 = self._contact.get_resource(nick1)
-            contact2 = self._contact.get_resource(nick2)
+        factory = Gtk.SignalListItemFactory()
+        factory.connect("setup", self._on_factory_setup, GroupchatContactViewItem)
+        factory.connect("bind", self._on_factory_bind)
+        factory.connect("unbind", self._on_factory_unbind)
+        self.set_factory(factory)
 
-            if contact1.show != contact2.show:
-                return -1 if contact1.show > contact2.show else 1
+        factory = Gtk.SignalListItemFactory()
+        factory.connect("setup", self._on_factory_setup, GroupchatContactHeaderViewItem)
+        factory.connect("bind", self._on_factory_bind)
+        self.set_header_factory(factory)
 
-            return locale.strcoll(nick1.lower(), nick2.lower())
+        expression = Gtk.PropertyExpression.new(
+            this_type=GroupchatContactListItem,
+            expression=None,
+            property_name="nick",
+        )
+        self._string_filter = Gtk.StringFilter(expression=expression)
 
-        # Group
-        group1 = model[iter1][Column.NICK_OR_GROUP]
-        group2 = model[iter2][Column.NICK_OR_GROUP]
-        group1_index = AffiliationRoleSortOrder[group1]
-        group2_index = AffiliationRoleSortOrder[group2]
-        return -1 if group1_index < group2_index else 1
+        section_sorter = Gtk.CustomSorter.new(sort_func=self._section_sort_func)
+        self._sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
 
-    def _enable_sort(self, enable: bool) -> None:
-        column = Gtk.TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID
-        if enable:
-            column = Column.TEXT
+        self._sort_model = Gtk.SortListModel(
+            model=self._model, sorter=self._sorter, section_sorter=section_sorter
+        )
+        self._filter_model = Gtk.FilterListModel(
+            model=self._sort_model, filter=self._string_filter
+        )
 
-        self._store.set_sort_column_id(column, Gtk.SortType.ASCENDING)
-
-    def _load_roster(self) -> None:
-        if not self.get_reveal_child():
-            return
-
-        log.info('Load Roster')
-        assert self._contact is not None
-        self._contact.multi_connect({
-            'user-affiliation-changed': self._update_contact,
-            'user-hats-changed': self._update_contact,
-            'user-avatar-update': self._on_user_avatar_update,
-            'user-joined': self._on_user_joined,
-            'user-left': self._on_user_left,
-            'user-nickname-changed': self._on_user_nickname_changed,
-            'user-role-changed': self._update_contact,
-            'user-status-show-changed': self._on_user_status_show_changed,
-        })
-
-        # Convert (copy) participants iterator to list,
-        # since it may change during iteration, see #11970
-        for participant in list(self._contact.get_participants()):
-            self._add_contact(participant)
-
-        self._enable_sort(True)
-        self._roster.set_model(self._modelfilter)
-
-        self._ui.search_entry.set_text('')
-        self._roster.expand_all()
-
-    def _unload_roster(self) -> None:
-        if self._roster.get_model() is None:
-            return
-
-        log.info('Unload Roster')
-        assert self._contact is not None
-        self._contact.multi_disconnect(self, CONTACT_SIGNALS)
-
-        self._roster.set_model(None)
-        self._store.clear()
-        self._enable_sort(False)
-
-        self._contact_refs = {}
-        self._group_refs = {}
+        self._selection_model = Gtk.NoSelection(
+            model=self._filter_model,
+        )
+        self.set_model(self._selection_model)
 
     def invalidate_sort(self) -> None:
-        self._enable_sort(False)
-        self._enable_sort(True)
+        self.unbind_model()
+        self.bind_model()
 
-    def _redraw(self) -> None:
-        self._roster.set_model(None)
-        self._roster.set_model(self._store)
-        self._roster.expand_all()
-
-    def _draw_contact(self, nick: str) -> None:
-        iter_ = self._get_contact_iter(nick)
-        if not iter_:
+    def bind_model(self) -> None:
+        if self._sort_model.get_model() is not None:
             return
+        self._sort_model.set_model(self._model)
+
+    def unbind_model(self) -> None:
+        self._sort_model.set_model(None)
+
+    @staticmethod
+    def _on_factory_setup(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem, view_item: Any
+    ) -> None:
+        list_item.set_child(view_item())
+
+    @staticmethod
+    def _on_factory_bind(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
+    ) -> None:
+        view_item = list_item.get_child()
+        obj = list_item.get_item()
+        if isinstance(view_item, GroupchatContactHeaderViewItem):
+            assert isinstance(obj, GroupchatContactListItem)
+            view_item.set_data(obj.group, obj.group_label)
+        else:
+            view_item.bind(obj)  # pyright: ignore
+
+    @staticmethod
+    def _on_factory_unbind(
+        _factory: Gtk.SignalListItemFactory, list_item: Gtk.ListItem
+    ) -> None:
+        view_item = list_item.get_child()
+        view_item.unbind()  # pyright: ignore
+
+    @staticmethod
+    def _section_sort_func(
+        obj1: Any,
+        obj2: Any,
+        _user_data: object | None,
+    ) -> int:
+
+        group1_index = AffiliationRoleSortOrder[obj1.group]
+        group2_index = AffiliationRoleSortOrder[obj2.group]
+        if group1_index == group2_index:
+            return 0
+        return -1 if group1_index < group2_index else 1
+
+    @staticmethod
+    def _sort_func(
+        obj1: Any,
+        obj2: Any,
+        _user_data: object | None,
+    ) -> int:
+
+        nick1 = obj1.nick.lower()
+        nick2 = obj2.nick.lower()
+
+        if obj1.contact.is_self or obj2.contact.is_self:
+            return -1
+
+        if not app.settings.get("sort_by_show_in_muc"):
+            return locale.strcoll(nick1, nick2)
+
+        show1 = obj1.contact.show
+        show2 = obj2.contact.show
+
+        if show1 != show2:
+            return -1 if show1 > show2 else 1
+
+        return locale.strcoll(nick1, nick2)
+
+    def add(self, item: GroupchatContactListItem) -> None:
+        self._model.append(item)
+
+    def remove(self, contact: GroupchatParticipant) -> None:
+        for item in self._model:
+            assert isinstance(item, GroupchatContactListItem)
+            if item.contact != contact:
+                continue
+            success, pos = self._model.find(item)
+            if success:
+                self._model.remove(pos)
+            break
+
+    def remove_all(self) -> None:
+        self._model.remove_all()
+
+    def get_listitem(self, position: int) -> GroupchatContactListItem:
+        return cast(GroupchatContactListItem, self._filter_model.get_item(position))
+
+    def set_search(self, text: str) -> None:
+        self._string_filter.set_search(text)
+
+
+class GroupchatContactListItem(GObject.Object):
+    __gtype_name__ = "GroupchatContactListItem"
+
+    contact = GObject.Property(type=object)
+    nick = GObject.Property(type=str)
+    group = GObject.Property(type=str)
+    group_label = GObject.Property(type=str)
+    status = GObject.Property(type=str)
+
+    def __init__(self, contact: GroupchatParticipant) -> None:
+        nick = contact.name
+        if contact.is_self:
+            nick = p_("own nickname in group chat", "%s (You)" % nick)
+
+        status = ""
+        if app.settings.get("show_status_msgs_in_roster"):
+            status = contact.status
+
+        group, group_label = get_group_from_contact(contact)
+        super().__init__(
+            contact=contact,
+            nick=nick,
+            group=group,
+            group_label=group_label,
+            status=status,
+        )
+
+    def __repr__(self) -> str:
+        return f"GroupchatContactListItem: {self.props.nick}"
+
+
+@Gtk.Template(filename=get_ui_path("groupchat_contact_view_item.ui"))
+class GroupchatContactViewItem(Gtk.Grid, SignalManager):
+    __gtype_name__ = "GroupchatContactViewItem"
+
+    _avatar: Gtk.Image = Gtk.Template.Child()
+    _nick_label: Gtk.Label = Gtk.Template.Child()
+    _status_message_label: Gtk.Label = Gtk.Template.Child()
+    _hat_image: Gtk.Label = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Grid.__init__(self)
+        SignalManager.__init__(self)
+
+        self.__bindings: list[GObject.Binding] = []
+        self._contact: GroupchatParticipant | None = None
+
+        self._tooltip = GCTooltip()
+        self._connect(self, "query-tooltip", self._query_tooltip)
+
+        self._popover_menu = GajimPopover(None)
+        self.attach(self._popover_menu, 4, 0, 1, 1)
+
+        self._connect(
+            self._status_message_label, "notify::label", self._on_status_change
+        )
+
+        gesture_secondary_click = Gtk.GestureClick(
+            button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE
+        )
+        self._connect(gesture_secondary_click, "pressed", self._popup_menu)
+        self.add_controller(gesture_secondary_click)
+
+    def bind(self, obj: GroupchatContactListItem) -> None:
+        self._contact = obj.contact
+        assert self._contact is not None
+
+        bind_spec = [
+            ("nick", self._nick_label, "label"),
+            ("status", self._status_message_label, "label"),
+        ]
+
+        for source_prop, widget, target_prop in bind_spec:
+            bind = obj.bind_property(
+                source_prop, widget, target_prop, GObject.BindingFlags.SYNC_CREATE
+            )
+            self.__bindings.append(bind)
+
+        self._update_avatar(self._contact)
+        self._update_hats(self._contact)
+
+        self._contact.multi_connect(
+            {
+                "user-avatar-update": self._update_avatar,
+                "user-hats-changed": self._update_hats,
+            }
+        )
+
+    def unbind(self) -> None:
+        assert self._contact is not None
+        self._contact.disconnect_all_from_obj(self)
+        self._contact = None
+        for bind in self.__bindings:
+            bind.unbind()
+        self.__bindings.clear()
+
+    def do_unroot(self) -> None:
+        Gtk.Grid.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self._popover_menu)
+        app.check_finalize(self._tooltip)
+        del self._popover_menu
+        del self._tooltip
+        app.check_finalize(self)
+
+    def _on_status_change(self, label: Gtk.Label, *args: Any) -> None:
+        label.set_visible(bool(label.get_label()))
+
+    def _update_avatar(self, contact: GroupchatParticipant, *args: Any) -> None:
+        paintable = contact.get_avatar(AvatarSize.ROSTER, app.window.get_scale_factor())
+        self._avatar.set_from_paintable(paintable)
+
+    def _update_hats(self, contact: GroupchatParticipant, *args: Any) -> None:
+        self._hat_image.set_visible(bool(contact.hats))
+
+    def _popup_menu(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> bool:
 
         assert self._contact is not None
-        contact = self._contact.get_resource(nick)
-
-        self._draw_avatar(contact)
-
-        name = GLib.markup_escape_text(contact.name)
-        self_contact = self._contact.get_self()
-        if self_contact is not None and self_contact.name == nick:
-            name = p_('own nickname in group chat', '%s (You)' % nick)
-
-        # Strike name if blocked
-        fjid = f'{self._contact.jid}/{nick}'
-        if jid_is_blocked(self._contact.account, fjid):
-            name = f'<span strikethrough="true">{name}</span>'
-
-        # add status msg, if not empty, under contact name
-        status = contact.status.strip()
-        if status and app.settings.get('show_status_msgs_in_roster'):
-            # Display only first line
-            status = status.split('\n', 1)[0]
-            # escape markup entities and make them small italic and fg color
-            name += (f'\n<span size="small" style="italic" alpha="70%">'
-                     f'{GLib.markup_escape_text(status)}</span>')
-
-        if contact.hats is not None:
-            name += ' <span size="x-large">🎓</span>'
-
-        self._store[iter_][Column.TEXT] = name
-
-    def draw_contacts(self) -> None:
-        for nick in self._contact_refs:
-            self._draw_contact(nick)
-
-    def _draw_groups(self) -> None:
-        for group in self._group_refs:
-            self._draw_group(group)
-
-    def _draw_group(self, group: str) -> None:
-        group_iter = self._get_group_iter(group)
-        if not group_iter:
-            return
-
-        if group in ('owner', 'admin'):
-            group_text = get_uf_affiliation(group, plural=True)
+        participant = self._contact
+        if participant.is_self:
+            self_contact = participant
         else:
-            group_text = get_uf_role(group, plural=True)
+            self_contact = participant.room.get_self()
+            assert self_contact is not None
 
-        total_users = self._get_total_user_count()
-        group_users = self._store.iter_n_children(group_iter)
+        menu = get_groupchat_participant_menu(
+            participant.account, self_contact, participant
+        )
 
-        group_text += f' ({group_users}/{total_users})'
+        self._popover_menu.set_menu_model(menu)
+        self._popover_menu.set_pointing_to_coord(x, y)
+        self._popover_menu.popup()
 
-        self._store[group_iter][Column.TEXT] = group_text
+        return Gdk.EVENT_STOP
 
-    def _draw_avatar(self, contact: types.GroupchatParticipant) -> None:
-        iter_ = self._get_contact_iter(contact.name)
-        if iter_ is None:
-            return
+    def _query_tooltip(
+        self,
+        list_view: GroupchatContactListView,
+        x: int,
+        y: int,
+        _keyboard_mode: bool,
+        tooltip: Gtk.Tooltip,
+    ) -> bool:
 
-        surface = contact.get_avatar(AvatarSize.ROSTER,
-                                     self.get_scale_factor())
+        assert self._contact is not None
+        value, widget = self._tooltip.get_tooltip(self._contact)
+        tooltip.set_custom(widget)
+        return value
 
-        self._store[iter_][Column.AVATAR] = surface
 
-    def _on_user_avatar_update(self,
-                               _contact: types.GroupchatContact,
-                               _signal_name: str,
-                               user_contact: types.GroupchatParticipant
-                               ) -> None:
+@Gtk.Template(filename=get_ui_path("groupchat_contact_header_view_item.ui"))
+class GroupchatContactHeaderViewItem(Gtk.Box):
+    __gtype_name__ = "GroupchatContactHeaderViewItem"
 
-        self._draw_avatar(user_contact)
+    _group_label: Gtk.Label = Gtk.Template.Child()
 
-    def _get_total_user_count(self) -> int:
-        count = 0
-        for group_row in self._store:
-            count += self._store.iter_n_children(group_row.iter)
-        return count
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        Gtk.Box.__init__(self)
+        self.group = None
 
-    def _on_theme_update(self, _event: ApplicationEvent) -> None:
-        if self._contact is None:
-            return
-        self._redraw()
+    def set_data(self, group: str, group_label: str) -> None:
+        self._group_label.set_label(group_label)
+        self.group = group
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
