@@ -11,70 +11,68 @@ from typing import overload
 
 from collections.abc import Callable
 
-from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 
 from gajim.common import app
+from gajim.common.ged import EventHelper
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import EventHelper
+from gajim.gtk.util import SignalManager
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class Assistant(Gtk.ApplicationWindow, EventHelper):
+class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     __gsignals__ = {
-        'button-clicked': (
+        "button-clicked": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            (str, )
+            (str,),
         ),
-        'page-changed': (
+        "page-changed": (
             GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
             None,
-            (str, )
-        )}
+            (str,),
+        ),
+    }
 
-    def __init__(self,
-                 transient_for: Gtk.Window | None = None,
-                 width: int = 550,
-                 height: int = 400,
-                 transition_duration: int = 200) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+    def __init__(
+        self,
+        transient_for: Gtk.Window | None = None,
+        width: int = 550,
+        height: int = 400,
+        transition_duration: int = 200,
+    ) -> None:
+        GObject.Object.__init__(self)
+        GajimAppWindow.__init__(
+            self,
+            name="Assistant",
+            transient_for=transient_for,
+            default_width=width,
+            default_height=height,
+        )
+
         EventHelper.__init__(self)
-        self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
-        self.set_name('Assistant')
-        self.set_default_size(width, height)
-        self.set_resizable(True)
-        self.set_transient_for(transient_for)
-        self.set_type_hint(Gdk.WindowTypeHint.DIALOG)
 
         self._pages: dict[str, Page] = {}
         self._buttons: dict[str, tuple[Gtk.Button, bool]] = {}
         self._button_visible_func = None
 
-        self._ui = get_builder('assistant.ui')
-        self.add(self._ui.main_grid)
+        self._ui = get_builder("assistant.ui")
+        self.set_child(self._ui.main_grid)
 
         self._ui.stack.set_transition_duration(transition_duration)
 
-        self.connect('key-press-event', self._on_key_press_event)
-        self.connect('destroy', self.__on_destroy)
-        self._ui.connect_signals(self)
+        self._connect(
+            self._ui.stack, "notify::visible-child-name", self._on_visible_child_name
+        )
 
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
-        self.emit('page-changed', page_name)
-        Gtk.ApplicationWindow.show_all(self)
-
-    def _on_key_press_event(self,
-                            _widget: Gtk.Widget,
-                            event: Gdk.EventKey
-                            ) -> None:
-        if event.keyval == Gdk.KEY_Escape:
-            self.destroy()
+        self.emit("page-changed", page_name)
+        self.window.show()
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -84,10 +82,10 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
 
     def update_title(self) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
-        self.set_title(page_widget.title)
+        self.window.set_title(page_widget.title)
 
     def _hide_buttons(self) -> None:
-        for button, _ in self._buttons.values():
+        for button, _complete in self._buttons.values():
             button.hide()
 
     def _set_buttons_visible(self) -> None:
@@ -111,55 +109,54 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             return
 
         for button_name in buttons:
-            button, _ = self._buttons[button_name]
+            button, _complete = self._buttons[button_name]
             button.show()
 
     def set_button_visible_func(self, func: Callable[..., list[str]]) -> None:
         self._button_visible_func = func
 
     def set_default_button(self, button_name: str) -> None:
-        button, _ = self._buttons[button_name]
-        button.grab_default()
+        button, _complete = self._buttons[button_name]
+        self.window.set_default_widget(button)
 
-    def add_button(self,
-                   name: str,
-                   label: str,
-                   css_class: str | None = None,
-                   complete: bool = False
-                   ) -> None:
-        button = Gtk.Button(label=label,
-                            can_default=True,
-                            no_show_all=True)
-        button.connect('clicked', self.__on_button_clicked)
+    def add_button(
+        self,
+        name: str,
+        label: str,
+        css_class: str | None = None,
+        complete: bool = False,
+    ) -> None:
+        button = Gtk.Button(label=label, visible=False)
+        button.connect("clicked", self.__on_button_clicked)
         if css_class is not None:
-            button.get_style_context().add_class(css_class)
+            button.add_css_class(css_class)
         self._buttons[name] = (button, complete)
-        self._ui.action_area.pack_end(button, False, False, 0)
+        self._ui.action_area.append(button)
 
     def add_pages(self, pages: dict[str, Page]):
         for name, widget in pages.items():
             self._pages[name] = widget
-            widget.connect('update-page-complete', self._update_page_complete)
+            self._connect(widget, "update-page-complete", self._update_page_complete)
             self._ui.stack.add_named(widget, name)
 
     @overload
-    def add_default_page(self, name: Literal['success']) -> SuccessPage: ...
+    def add_default_page(self, name: Literal["success"]) -> SuccessPage: ...
 
     @overload
-    def add_default_page(self, name: Literal['error']) -> ErrorPage: ...
+    def add_default_page(self, name: Literal["error"]) -> ErrorPage: ...
 
     @overload
-    def add_default_page(self, name: Literal['progress']) -> ProgressPage: ...
+    def add_default_page(self, name: Literal["progress"]) -> ProgressPage: ...
 
     def add_default_page(self, name: str) -> Page:
-        if name == 'success':
+        if name == "success":
             page = SuccessPage()
-        elif name == 'error':
+        elif name == "error":
             page = ErrorPage()
-        elif name == 'progress':
+        elif name == "progress":
             page = ProgressPage()
         else:
-            raise ValueError('Unknown page: %s' % name)
+            raise ValueError("Unknown page: %s" % name)
 
         self._pages[name] = page
         self._ui.stack.add_named(page, name)
@@ -170,10 +167,11 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
         assert name is not None
         return name
 
-    def show_page(self,
-                  name: str,
-                  transition: Gtk.StackTransitionType =
-                  Gtk.StackTransitionType.NONE) -> None:
+    def show_page(
+        self,
+        name: str,
+        transition: Gtk.StackTransitionType = Gtk.StackTransitionType.NONE,
+    ) -> None:
 
         if self._ui.stack.get_visible_child_name() == name:
             return
@@ -189,33 +187,47 @@ class Assistant(Gtk.ApplicationWindow, EventHelper):
             return
         self.update_title()
         self._set_buttons_visible()
-        self.emit('page-changed', stack.get_visible_child_name())
+        self.emit("page-changed", stack.get_visible_child_name())
 
     def __on_button_clicked(self, button: Gtk.Button) -> None:
         for button_name, button_data in self._buttons.items():
             button_ = button_data[0]
             if button_ == button:
-                self.emit('button-clicked', button_name)
+                self.emit("button-clicked", button_name)
                 return
 
-    def __on_destroy(self, *args: Any) -> None:
+    def _cleanup(self) -> None:
+        self.unregister_events()
         self._pages.clear()
+        del self._pages
         self._buttons.clear()
+        del self._buttons
+        del self._button_visible_func
+        self.run_dispose()
 
 
-class Page(Gtk.Box):
+class Page(Gtk.Box, SignalManager):
 
     __gsignals__ = {
-        'update-page-complete': (GObject.SignalFlags.RUN_LAST, None, ()),
+        "update-page-complete": (GObject.SignalFlags.RUN_LAST, None, ()),
     }
 
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.set_spacing(18)
-        self.set_valign(Gtk.Align.CENTER)
+        Gtk.Box.__init__(
+            self,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=18,
+            valign=Gtk.Align.CENTER,
+        )
+        SignalManager.__init__(self)
 
-        self.title: str = ''
+        self.title: str = ""
         self.complete: bool = True
+
+    def do_unroot(self) -> None:
+        Gtk.Box.do_unroot(self)
+        self._disconnect_all()
+        app.check_finalize(self)
 
     def get_visible_buttons(self) -> list[str] | None:
         return None
@@ -224,7 +236,7 @@ class Page(Gtk.Box):
         return None
 
     def update_page_complete(self) -> None:
-        self.emit('update-page-complete')
+        self.emit("update-page-complete")
 
 
 class DefaultPage(Page):
@@ -232,25 +244,27 @@ class DefaultPage(Page):
         Page.__init__(self)
 
         self._heading = Gtk.Label()
-        self._heading.get_style_context().add_class('large-header')
+        self._heading.add_css_class("large-header")
         self._heading.set_max_width_chars(30)
-        self._heading.set_line_wrap(True)
+        self._heading.set_wrap(True)
+        self._heading.set_wrap_mode(Pango.WrapMode.WORD)
         self._heading.set_halign(Gtk.Align.CENTER)
         self._heading.set_justify(Gtk.Justification.CENTER)
 
-        icon = Gtk.Image.new_from_icon_name(icon_name, Gtk.IconSize.DIALOG)
-        icon.get_style_context().add_class(icon_css_class)
+        icon = Gtk.Image.new_from_icon_name(icon_name)
+        icon.set_pixel_size(64)
+        icon.add_css_class(icon_css_class)
 
         self._label = Gtk.Label()
         self._label.set_max_width_chars(50)
-        self._label.set_line_wrap(True)
+        self._label.set_wrap(True)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_halign(Gtk.Align.CENTER)
         self._label.set_justify(Gtk.Justification.CENTER)
 
-        self.pack_start(self._heading, False, True, 0)
-        self.pack_start(icon, False, True, 0)
-        self.pack_start(self._label, False, True, 0)
-        self.show_all()
+        self.append(self._heading)
+        self.append(icon)
+        self.append(self._label)
 
     def set_heading(self, heading: str) -> None:
         self._heading.set_text(heading)
@@ -264,16 +278,16 @@ class DefaultPage(Page):
 
 class ErrorPage(DefaultPage):
     def __init__(self) -> None:
-        DefaultPage.__init__(self,
-                             icon_name='dialog-error-symbolic',
-                             icon_css_class='error-color')
+        DefaultPage.__init__(
+            self, icon_name="dialog-error-symbolic", icon_css_class="error-color"
+        )
 
 
 class SuccessPage(DefaultPage):
     def __init__(self) -> None:
-        DefaultPage.__init__(self,
-                             icon_name='object-select-symbolic',
-                             icon_css_class='success-color')
+        DefaultPage.__init__(
+            self, icon_name="object-select-symbolic", icon_css_class="success-color"
+        )
 
 
 class ProgressPage(Page):
@@ -282,17 +296,16 @@ class ProgressPage(Page):
 
         self._label = Gtk.Label()
         self._label.set_max_width_chars(50)
-        self._label.set_line_wrap(True)
+        self._label.set_wrap(True)
+        self._label.set_wrap_mode(Pango.WrapMode.WORD)
         self._label.set_halign(Gtk.Align.CENTER)
         self._label.set_justify(Gtk.Justification.CENTER)
 
         spinner = Gtk.Spinner()
         spinner.start()
 
-        self.pack_start(spinner, True, True, 0)
-        self.pack_start(self._label, False, True, 0)
-
-        self.show_all()
+        self.append(spinner)
+        self.append(self._label)
 
     def set_text(self, text: str) -> None:
         self._label.set_text(text)
