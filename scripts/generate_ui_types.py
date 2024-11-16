@@ -15,7 +15,7 @@ log = logging.getLogger()
 cwd = Path.cwd()
 
 if cwd.name != "gajim":
-    sys.exit("Script needs to be executed from gajim repository " "root directory")
+    sys.exit("Script needs to be executed from gajim repository root directory")
 
 in_path = cwd / "gajim" / "data" / "gui"
 out_path = cwd / "gajim" / "gtk" / "builder.pyi"
@@ -24,12 +24,25 @@ paths = list(in_path.iterdir())
 paths.sort()
 
 IMPORTS = """
+from typing import Any
 from typing import Literal
 from typing import overload
 
-from gi.repository import Atk
 from gi.repository import Gtk
 from gi.repository import GtkSource
+
+
+class GajimBuilder:
+
+    def __init__(
+        self,
+        filename: str | None = None,
+        instance: Any = None,
+        widgets: list[str] | None = None,
+        domain: str | None = None,
+        gettext_: Any | None = None
+    ) -> None: ...
+
 
 class Builder(Gtk.Builder):
     ...
@@ -41,10 +54,14 @@ ATTR = "\n    %s: %s"
 
 GET_BUILDER_OVERLOAD = """
 @overload
-def get_builder(file_name: Literal['%s'], widgets: list[str] = ...) -> %s: ...  # noqa"""  # noqa: E501
+def get_builder(file_name: Literal['%s'], instance: Any = None, widgets: list[str] = ...) -> %s: ...  # noqa"""  # noqa: E501
 
 GET_BUILDER = """\n\n
-def get_builder(file_name: str, widgets: list[str] = ...) -> Builder: ..."""
+def get_builder(file_name: str, instance: Any = None, widgets: list[str] = ...) -> Builder: ..."""  # noqa: E501
+
+
+class InvalidFile(Exception):
+    pass
 
 
 def make_class_name(path: Path) -> str:
@@ -58,8 +75,13 @@ def parse(path: Path, file: TextIOWrapper) -> str:
     log.info("Read %s", path)
     lines: list[str] = []
     tree = ElementTree.parse(path)
+
+    if tree.find("template") is not None:
+        raise InvalidFile
+
     for node in tree.iter(tag="object"):
         id_ = node.attrib.get("id")
+
         if id_ is None:
             continue
         klass = node.attrib["class"]
@@ -94,7 +116,12 @@ with out_path.open(mode="w", encoding="utf8") as file:
 
         if path.name.startswith("#"):
             continue
-        name = parse(path, file)
+
+        try:
+            name = parse(path, file)
+        except InvalidFile:
+            continue
+
         builder_names.append((name, path.name))
 
     for name, file_name in builder_names:
