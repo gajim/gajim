@@ -66,7 +66,6 @@ BoolSettings = Literal[
     'print_status_in_chats',
     'remote_control',
     'show_main_menu',
-    'save_main_window_position',
     'send_on_ctrl_enter',
     'show_help_start_chat',
     'show_in_taskbar',
@@ -88,7 +87,6 @@ BoolSettings = Literal[
     'trayicon_notification_on_events',
     'use_keyring',
     'use_kib_mib',
-    'use_libappindicator',
     'use_speller',
     'use_stun_server',
     'use_urgency_hint',
@@ -244,7 +242,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'print_status_in_chats': False,
     'remote_control': False,
     'roster_theme': 'default',
-    'save_main_window_position': True,
     'search_engine': 'https://duckduckgo.com/?q=%s',
     'send_on_ctrl_enter': False,
     'show_help_start_chat': True,
@@ -272,7 +269,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'trayicon_notification_on_events': True,
     'use_keyring': True,
     'use_kib_mib': False,
-    'use_libappindicator': True,
     'use_speller': True,
     'use_stun_server': False,
     'use_urgency_hint': True,
@@ -700,9 +696,6 @@ ADVANCED_SETTINGS = {
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
         'providers_list_url': _(
             'Endpoint for retrieving a list of providers for sign up'),
-        'save_main_window_position': _(
-            'If enabled, Gajim will save the main window position when hiding '
-            'it, and restore it when showing the window again.'),
         'search_engine': '',
         'send_on_ctrl_enter': _(
             'Send message on Ctrl+Enter and make a new line with Enter.'),
@@ -712,8 +705,6 @@ ADVANCED_SETTINGS = {
             'Notify of events in the notification area.'),
         'use_kib_mib': _(
             'IEC standard says KiB = 1024 bytes, KB = 1000 bytes.'),
-        'use_libappindicator': _(
-            'Enables libappindicator, an alternative tray icon provider'),
         'use_stun_server': _(
             'If enabled, Gajim will try to use a STUN server when using Jingle.'
             ' The one in "stun_server" option, or the one given by '
