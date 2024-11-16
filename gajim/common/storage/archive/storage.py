@@ -932,6 +932,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.fk_account_pk == fk_account_pk,
                 Message.timestamp > recent,
+                Message.direction == ChatDirection.INCOMING,
                 Message.resource.isnot(None),
                 Message.correction_id.is_(None),
             )
