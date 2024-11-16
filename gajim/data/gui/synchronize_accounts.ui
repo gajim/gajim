@@ -1,196 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkStack" id="stack">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <child>
-      <object class="GtkBox" id="sync_accounts_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select the account with which you want to synchronize</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="width-request">150</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
+      <object class="GtkStackPage">
+        <property name="name">accounts</property>
+        <property name="child">
+          <object class="GtkBox" id="sync_accounts_box">
+            <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkTreeView" id="accounts_treeview">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+              <object class="GtkLabel">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">Select the account with which you want to synchronize</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">1</property>
+                <property name="width-request">150</property>
+                <property name="focusable">1</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="accounts_treeview">
+                    <property name="focusable">1</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">12</property>
+                <property name="halign">end</property>
+                <child>
+                  <object class="GtkButton" id="select_contacts_button">
+                    <property name="label" translatable="1">Select Contacts</property>
+                    <property name="halign">end</property>
+                    <property name="valign">end</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="connection_warning_label">
+                    <property name="visible">0</property>
+                    <property name="label" translatable="1">You are not connected to the server</property>
+                    <property name="wrap">1</property>
+                    <property name="max-width-chars">52</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="warning-color"/>
+                    </style>
+                  </object>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkButton" id="select_contacts_button">
-                <property name="label" translatable="yes">Select Contacts</property>
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="receives-default">False</property>
-                <property name="halign">end</property>
-                <property name="valign">end</property>
-                <signal name="clicked" handler="_on_next_clicked" swapped="no"/>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="connection_warning_label">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes">You are not connected to the server</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">52</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="warning-color"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="name">accounts</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkBox" id="sync_contacts_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="border-width">18</property>
-        <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Select the contacts you want to synchronize</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="width-request">150</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="shadow-type">in</property>
+      <object class="GtkStackPage">
+        <property name="name">contacts</property>
+        <property name="child">
+          <object class="GtkBox" id="sync_contacts_box">
+            <property name="orientation">vertical</property>
+            <property name="hexpand">1</property>
+            <property name="spacing">6</property>
             <child>
-              <object class="GtkTreeView" id="contacts_treeview">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection"/>
+              <object class="GtkLabel">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">Select the contacts you want to synchronize</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">1</property>
+                <property name="width-request">150</property>
+                <property name="focusable">1</property>
+                <property name="child">
+                  <object class="GtkTreeView" id="contacts_treeview">
+                    <property name="focusable">1</property>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection"/>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkButton" id="synchronize_button">
+                    <property name="label" translatable="1">Synchronize</property>
+                    <property name="focusable">1</property>
+                    <property name="halign">end</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="back_button">
+                    <property name="label" translatable="1">Back</property>
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                  </object>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Synchronize</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="halign">end</property>
-                <signal name="clicked" handler="_on_sync_clicked" swapped="no"/>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack-type">end</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">Back</property>
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">True</property>
-                <signal name="clicked" handler="_on_back_clicked" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="name">contacts</property>
-        <property name="position">1</property>
-      </packing>
     </child>
   </object>
 </interface>
