@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="EmojiCompletionViewItem" parent="GtkStack">
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">emoji</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="_emoji_label">
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_short_name_label">
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="_keywords_label">
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkStackPage">
+        <property name="name">variations</property>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkButton" id="_var1_button">
+                <property name="label"></property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_var2_button">
+                <property name="label"></property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_var3_button">
+                <property name="label"></property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_var4_button">
+                <property name="label"></property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_var5_button">
+                <property name="label"></property>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>
