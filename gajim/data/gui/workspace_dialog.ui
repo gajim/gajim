@@ -1,251 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="box">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
+    <property name="hexpand">1</property>
     <property name="spacing">12</property>
     <child>
-      <object class="GtkImage" id="preview">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
+      <object class="GtkImage" id="preview"/>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+      <object class="GtkCenterBox">
         <child type="center">
           <object class="GtkEntry" id="entry">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">center</property>
-            <property name="activates-default">True</property>
+            <property name="focusable">1</property>
+            <property name="activates-default">1</property>
             <property name="xalign">0.5</property>
-            <property name="show-emoji-icon">True</property>
-            <property name="enable-emoji-completion">True</property>
-            <signal name="notify::text" handler="_on_text_changed" swapped="no"/>
+            <property name="show-emoji-icon">1</property>
+            <property name="enable-emoji-completion">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
-        <child>
+        <child type="end">
           <object class="GtkButton" id="remove_workspace_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Remove this workspace</property>
-            <signal name="clicked" handler="_on_remove_workspace" swapped="no"/>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">Remove this workspace</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="icon-name">edit-delete-symbolic</property>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">0</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="label" translatable="yes">Choose a color or select an image</property>
-        <property name="wrap">True</property>
+        <property name="label" translatable="1">Choose a color or select an image</property>
+        <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="halign">center</property>
         <property name="margin-top">24</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkSwitch" id="image_switch">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <signal name="notify::active" handler="_on_image_switch_toggled" swapped="no"/>
+            <property name="focusable">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Use Image</property>
+            <property name="label" translatable="1">Use Image</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
     </child>
     <child>
       <object class="GtkStack" id="style_stack">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="transition-duration">100</property>
-        <property name="transition-type">slide-left-right</property>
         <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">center</property>
-            <property name="valign">start</property>
-            <property name="margin-top">6</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="valign">center</property>
-                <property name="label" translatable="yes">Color</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkColorButton" id="color_chooser">
-                <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="receives-default">False</property>
-                <property name="valign">center</property>
-                <signal name="color-set" handler="_on_color_set" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">color</property>
-            <property name="title" translatable="yes">Color</property>
-          </packing>
+            <property name="title" translatable="1">Color</property>
+            <property name="child">
+              <object class="GtkBox">
+                <property name="halign">center</property>
+                <property name="valign">start</property>
+                <property name="margin-top">6</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">Color</property>
+                    <style>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkColorDialogButton" id="color_dialog_button">
+                    <property name="focusable">1</property>
+                    <property name="valign">center</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
         <child>
-          <object class="GtkBox" id="image_box">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
+          <object class="GtkStackPage">
             <property name="name">image</property>
-            <property name="title" translatable="yes">Image</property>
-            <property name="position">1</property>
-          </packing>
+            <property name="title" translatable="1">Image</property>
+            <property name="child">
+              <object class="GtkBox" id="image_box">
+                <property name="halign">center</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+            </property>
+          </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
+        <property name="spacing">12</property>
+        <property name="homogeneous">1</property>
+        <property name="halign">end</property>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">_Cancel</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_cancel" swapped="no"/>
+          <object class="GtkButton" id="cancel_button">
+            <property name="label" translatable="1">_Cancel</property>
+            <property name="focusable">1</property>
+            <property name="use-underline">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="save_button">
-            <property name="label" translatable="yes">_Save</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="can-default">True</property>
-            <property name="receives-default">True</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_save" swapped="no"/>
+            <property name="label" translatable="1">_Save</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="use-underline">1</property>
             <style>
               <class name="suggested-action"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">7</property>
-      </packing>
     </child>
-    <style>
-      <class name="padding-18"/>
-    </style>
   </object>
 </interface>
