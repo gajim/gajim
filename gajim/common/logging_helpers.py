@@ -196,6 +196,9 @@ def init() -> None:
     root_log.addHandler(stream_handler)
     root_log.propagate = False
 
+    if os.environ.get('GAJIM_LEAK'):
+        logging.getLogger('gajim.leak').setLevel(logging.DEBUG)
+
     # GAJIM_DEBUG is set only on Windows when using Gajim-Debug.exe
     # Gajim-Debug.exe shows a command line prompt and we want to redirect
     # log output to it
