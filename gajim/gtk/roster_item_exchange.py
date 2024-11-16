@@ -15,24 +15,27 @@ from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.widgets import GajimAppWindow
 
 
-class RosterItemExchange(Gtk.ApplicationWindow):
-    '''
+class RosterItemExchange(GajimAppWindow):
+    """
     Used when someone sends a Roster Item Exchange suggestion (XEP-0144)
-    '''
-    def __init__(self,
-                 account: str,
-                 action: str,
-                 exchange_list: dict[str, list[str]],
-                 jid_from: JID,
-                 message_body: str | None = None
-                 ) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
-        self.set_title(_('Contact List Exchange'))
+    """
+
+    def __init__(
+        self,
+        account: str,
+        action: str,
+        exchange_list: dict[str, list[str]],
+        jid_from: JID,
+        message_body: str | None = None,
+    ) -> None:
+        GajimAppWindow.__init__(
+            self,
+            name="RosterItemExchange",
+            title=_("Contact List Exchange"),
+        )
 
         self.account = account
         self._client = app.get_client(account)
@@ -41,29 +44,33 @@ class RosterItemExchange(Gtk.ApplicationWindow):
         self._exchange_list = exchange_list
         self._jid_from = jid_from
 
-        self._ui = get_builder('roster_item_exchange.ui')
-        self.add(self._ui.roster_item_exchange)
+        self._ui = get_builder("roster_item_exchange.ui")
+        self.set_child(self._ui.roster_item_exchange)
+
+        self._connect(self._ui.cancel_button, "clicked", self._on_cancel_button_clicked)
+        self._connect(self._ui.accept_button, "clicked", self._on_accept_button_clicked)
 
         # Set label depending on action
-        contact = self._client.get_module('Contacts').get_contact(jid_from)
+        contact = self._client.get_module("Contacts").get_contact(jid_from)
         assert isinstance(
-            contact, BareContact | GroupchatContact | GroupchatParticipant)
-        type_label = ''
-        if action == 'add':
-            type_label = _('%(name)s (%(jid)s) would like to add some '
-                           'contacts to your contact list.') % {
-                               'name': contact.name,
-                               'jid': self._jid_from}
-        elif action == 'modify':
-            type_label = _('%(name)s (%(jid)s) would like to modify some '
-                           'contacts in your contact list.') % {
-                               'name': contact.name,
-                               'jid': self._jid_from}
-        elif action == 'delete':
-            type_label = _('%(name)s (%(jid)s) would like to delete some '
-                           'contacts from your contact list.') % {
-                               'name': contact.name,
-                               'jid': self._jid_from}
+            contact, BareContact | GroupchatContact | GroupchatParticipant
+        )
+        type_label = ""
+        if action == "add":
+            type_label = _(
+                "%(name)s (%(jid)s) would like to add some "
+                "contacts to your contact list."
+            ) % {"name": contact.name, "jid": self._jid_from}
+        elif action == "modify":
+            type_label = _(
+                "%(name)s (%(jid)s) would like to modify some "
+                "contacts in your contact list."
+            ) % {"name": contact.name, "jid": self._jid_from}
+        elif action == "delete":
+            type_label = _(
+                "%(name)s (%(jid)s) would like to delete some "
+                "contacts from your contact list."
+            ) % {"name": contact.name, "jid": self._jid_from}
         self._ui.type_label.set_text(type_label)
 
         if message_body:
@@ -73,76 +80,68 @@ class RosterItemExchange(Gtk.ApplicationWindow):
             self._ui.body_scrolledwindow.hide()
 
         # Treeview
-        model = Gtk.ListStore(bool, str, str, str, str)
-        self._ui.items_list_treeview.set_model(model)
+        self._model = Gtk.ListStore(bool, str, str, str, str)
+        self._ui.items_list_treeview.set_model(self._model)
         # Columns
         renderer1 = Gtk.CellRendererToggle()
-        renderer1.set_property('activatable', True)
-        renderer1.connect('toggled', self._on_toggled)
-        title = ''
-        if self._action == 'add':
-            title = _('Add')
-        elif self._action == 'modify':
-            title = _('Modify')
-        elif self._action == 'delete':
-            title = _('Delete')
+        renderer1.set_property("activatable", True)
+        self._connect(renderer1, "toggled", self._on_toggled)
+        title = ""
+        if self._action == "add":
+            title = _("Add")
+        elif self._action == "modify":
+            title = _("Modify")
+        elif self._action == "delete":
+            title = _("Delete")
         self._ui.items_list_treeview.insert_column_with_attributes(
-            -1, title, renderer1, active=0)
+            -1, title, renderer1, active=0
+        )
         renderer2 = Gtk.CellRendererText()
         self._ui.items_list_treeview.insert_column_with_attributes(
-            -1, _('JID'), renderer2, text=1)
+            -1, _("JID"), renderer2, text=1
+        )
         renderer3 = Gtk.CellRendererText()
         self._ui.items_list_treeview.insert_column_with_attributes(
-            -1, _('Name'), renderer3, text=2)
+            -1, _("Name"), renderer3, text=2
+        )
         renderer4 = Gtk.CellRendererText()
         self._ui.items_list_treeview.insert_column_with_attributes(
-            -1, _('Groups'), renderer4, text=3)
+            -1, _("Groups"), renderer4, text=3
+        )
 
-        # Init contacts
-        self._model = self._ui.items_list_treeview.get_model()
-        assert isinstance(self._model, Gtk.ListStore)
-        self._model.clear()
-
-        if action == 'add':
+        if action == "add":
             self._add()
-        elif action == 'modify':
+        elif action == "modify":
             self._modify()
-        elif action == 'delete':
+        elif action == "delete":
             self._delete()
 
-        self._ui.connect_signals(self)
+    def _cleanup(self) -> None:
+        pass
 
     def _on_toggled(self, cell: Gtk.CellRendererToggle, path: str) -> None:
-        model = self._ui.items_list_treeview.get_model()
-        assert isinstance(model, Gtk.ListStore)
-        iter_ = model.get_iter(path)
-        model[iter_][0] = not cell.get_active()
+        iter_ = self._model.get_iter(path)
+        self._model[iter_][0] = not cell.get_active()
 
     def _add(self) -> None:
         for jid in self._exchange_list:
-            contact = self._client.get_module('Contacts').get_contact(jid)
+            contact = self._client.get_module("Contacts").get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ', '.join(self._exchange_list[jid][1])
+            groups = ", ".join(self._exchange_list[jid][1])
             if not contact.is_in_roster:
-                self.show_all()
-                assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_,
-                                {0: True,
-                                 1: jid,
-                                 2: name,
-                                 3: groups})
+                self._model.set(iter_, {0: True, 1: jid, 2: name, 3: groups})
 
-        self._ui.accept_button.set_label(_('Add'))
+        self._ui.accept_button.set_label(_("Add"))
 
     def _modify(self) -> None:
         for jid in self._exchange_list:
             is_right = True
-            contact = self._client.get_module('Contacts').get_contact(jid)
+            contact = self._client.get_module("Contacts").get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ', '.join(self._exchange_list[jid][1])
+            groups = ", ".join(self._exchange_list[jid][1])
 
             if name != contact.name:
                 is_right = False
@@ -150,107 +149,99 @@ class RosterItemExchange(Gtk.ApplicationWindow):
                 if group not in contact.groups:
                     is_right = False
             if not is_right and contact.is_in_roster:
-                self.show_all()
-                assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_,
-                                {0: True,
-                                 1: jid,
-                                 2: name,
-                                 3: groups})
+                self._model.set(iter_, {0: True, 1: jid, 2: name, 3: groups})
 
-        self._ui.accept_button.set_label(_('Modify'))
+        self._ui.accept_button.set_label(_("Modify"))
 
     def _delete(self) -> None:
         for jid in self._exchange_list:
-            contact = self._client.get_module('Contacts').get_contact(jid)
+            contact = self._client.get_module("Contacts").get_contact(jid)
             assert isinstance(contact, BareContact)
             name = self._exchange_list[jid][0]
-            groups = ', '.join(self._exchange_list[jid][1])
+            groups = ", ".join(self._exchange_list[jid][1])
             if contact.is_in_roster:
-                self.show_all()
-                assert isinstance(self._model, Gtk.ListStore)
                 iter_ = self._model.append()
-                self._model.set(iter_,
-                                {0: True,
-                                 1: jid,
-                                 2: name,
-                                 3: groups})
+                self._model.set(iter_, {0: True, 1: jid, 2: name, 3: groups})
 
-        self._ui.accept_button.set_label(_('Delete'))
+        self._ui.accept_button.set_label(_("Delete"))
 
     def _on_accept_button_clicked(self, _button: Gtk.Button) -> None:
-        model = self._ui.items_list_treeview.get_model()
-        assert isinstance(model, Gtk.ListStore)
-        iter_ = model.get_iter_first()
-        if self._action == 'add':
+        iter_ = self._model.get_iter_first()
+        if self._action == "add":
             count = 0
             while iter_:
-                if model[iter_][0]:
+                if self._model[iter_][0]:
                     count += 1
                     # It is selected
-                    contact = self._client.get_module('Contacts').get_contact(
-                        self._jid_from)
+                    contact = self._client.get_module("Contacts").get_contact(
+                        self._jid_from
+                    )
                     assert isinstance(
-                        contact,
-                        BareContact | GroupchatContact | GroupchatParticipant)
-                    message = _('%(name)s %(jid)s suggested me to add you to '
-                                'my contact list.') % {
-                                    'name': contact.name,
-                                    'jid': self._jid_from}
+                        contact, BareContact | GroupchatContact | GroupchatParticipant
+                    )
+                    message = _(
+                        "%(name)s %(jid)s suggested me to add you to "
+                        "my contact list."
+                    ) % {"name": contact.name, "jid": self._jid_from}
                     # Keep same groups and same nickname
                     groups: list[str] = []
-                    groups = model[iter_][3].split(', ')
-                    if groups == ['']:
+                    groups = self._model[iter_][3].split(", ")
+                    if groups == [""]:
                         groups = []
-                    jid = model[iter_][1]
+                    jid = self._model[iter_][1]
                     if app.jid_is_transport(str(self._jid_from)):
-                        self._client.get_module('Presence')\
-                            .automatically_added.append(jid)
+                        self._client.get_module("Presence").automatically_added.append(
+                            jid
+                        )
 
-                    self._client.get_module('Presence').subscribe(
+                    self._client.get_module("Presence").subscribe(
                         jid,
                         msg=message,
-                        name=model[iter_][2],
+                        name=self._model[iter_][2],
                         groups=groups,
-                        auto_auth=True)
-                iter_ = model.iter_next(iter_)
+                        auto_auth=True,
+                    )
+                iter_ = self._model.iter_next(iter_)
             InformationDialog(
-                i18n.ngettext('Added %(count)s contact',
-                              'Added %(count)s contacts',
-                              count) % {'count': count}
+                i18n.ngettext(
+                    "Added %(count)s contact", "Added %(count)s contacts", count
                 )
-        elif self._action == 'modify':
+                % {"count": count}
+            )
+        elif self._action == "modify":
             count = 0
             while iter_:
-                if model[iter_][0]:
+                if self._model[iter_][0]:
                     count += 1
                     # It is selected
-                    jid = model[iter_][1]
+                    jid = self._model[iter_][1]
                     # Keep same groups and same nickname
-                    groups = model[iter_][3].split(', ')
-                    if groups == ['']:
+                    groups = self._model[iter_][3].split(", ")
+                    if groups == [""]:
                         groups = []
-                    self._client.get_module('Roster').set_item(
-                        jid, model[iter_][2], groups)
+                    self._client.get_module("Roster").set_item(
+                        jid, self._model[iter_][2], groups
+                    )
 
-                iter_ = model.iter_next(iter_)
-        elif self._action == 'delete':
+                iter_ = self._model.iter_next(iter_)
+        elif self._action == "delete":
             count = 0
             while iter_:
-                if model[iter_][0]:
+                if self._model[iter_][0]:
                     count += 1
                     # It is selected
-                    jid = model[iter_][1]
-                    self._client.get_module('Presence').unsubscribe(jid)
-                    self._client.get_module('Roster').delete_item(jid)
-                iter_ = model.iter_next(iter_)
+                    jid = self._model[iter_][1]
+                    self._client.get_module("Presence").unsubscribe(jid)
+                    self._client.get_module("Roster").delete_item(jid)
+                iter_ = self._model.iter_next(iter_)
             InformationDialog(
-                i18n.ngettext('Removed %(count)s contact',
-                              'Removed %(count)s contacts',
-                              count) % {'count': count}
+                i18n.ngettext(
+                    "Removed %(count)s contact", "Removed %(count)s contacts", count
                 )
-        self.destroy()
+                % {"count": count}
+            )
+        self.close()
 
     def _on_cancel_button_clicked(self, _button: Gtk.Button) -> None:
-        self.destroy()
+        self.close()
