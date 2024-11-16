@@ -15,22 +15,23 @@ except Exception:
         from gi.repository import Gst
 
 
+# TODO GTK4
 def create_gtk_widget() -> tuple[Gst.Element, Gtk.Widget, str] | None:
-    gtkglsink = Gst.ElementFactory.make('gtkglsink', None)
+    gtkglsink = Gst.ElementFactory.make("gtkglsink", None)
     if gtkglsink is not None:
-        glsinkbin = Gst.ElementFactory.make('glsinkbin', None)
+        glsinkbin = Gst.ElementFactory.make("glsinkbin", None)
         if glsinkbin is None:
             return None
-        glsinkbin.set_property('sink', gtkglsink)
+        glsinkbin.set_property("sink", gtkglsink)
         sink = glsinkbin
-        widget = gtkglsink.get_property('widget')
-        name = 'gtkglsink'
+        widget = gtkglsink.get_property("widget")
+        name = "gtkglsink"
     else:
-        sink = Gst.ElementFactory.make('gtksink', None)
+        sink = Gst.ElementFactory.make("gtksink", None)
         if sink is None:
             return None
-        widget = sink.get_property('widget')
-        name = 'gtksink'
+        widget = sink.get_property("widget")
+        name = "gtksink"
     widget.set_visible(True)
-    widget.set_property('expand', True)
+    widget.set_property("expand", True)
     return sink, widget, name
