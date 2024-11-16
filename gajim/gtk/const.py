@@ -9,20 +9,23 @@ from __future__ import annotations
 from typing import Any
 from typing import NamedTuple
 
+import sys
 from collections.abc import Callable
 from collections.abc import Iterator
 from enum import Enum
 from enum import IntEnum
 from enum import unique
 
+from gi.repository import Gdk
+
 from gajim.common.i18n import _
 from gajim.common.setting_values import AllSettingsT
 
-
-class Filter(NamedTuple):
-    name: str
-    pattern: str | list[str]
-    default: bool
+if sys.byteorder == "little":
+    gdk_memory_default = Gdk.MemoryFormat.B8G8R8A8_PREMULTIPLIED
+else:
+    gdk_memory_default = Gdk.MemoryFormat.A8R8G8B8_PREMULTIPLIED
+GDK_MEMORY_DEFAULT = gdk_memory_default
 
 
 class Setting(NamedTuple):
@@ -40,13 +43,13 @@ class Setting(NamedTuple):
     props: dict[str, Any] | None = None
 
 
-DEFAULT_WORKSPACE_COLOR = 'rgb(191,15,167)'
+DEFAULT_WORKSPACE_COLOR = "rgb(191,15,167)"
 
 # Drag and drop target type URI list (for dropped files)
 TARGET_TYPE_URI_LIST = 80
 
-DND_TARGET_URI_LIST = 'text/uri-list'
-DND_TARGET_FLATPAK = 'application/vnd.portal.filetransfer'
+DND_TARGET_URI_LIST = "text/uri-list"
+DND_TARGET_FLATPAK = "application/vnd.portal.filetransfer"
 
 MAX_MESSAGE_LENGTH = 5000
 
@@ -64,13 +67,14 @@ class MuteState(IntEnum):
     def iter(cls) -> Iterator[tuple[int, str]]:
         yield from cls._labels.items()  # pyright: ignore
 
+
 MuteState._labels = {  # pyright: ignore
-        MuteState.MIN_30: _('30 minutes'),
-        MuteState.MIN_60: _('1 hour'),
-        MuteState.MIN_120: _('2 hours'),
-        MuteState.MIN_480: _('8 hours'),
-        MuteState.PERM: _('Permanently'),
-    }
+    MuteState.MIN_30: _("30 minutes"),
+    MuteState.MIN_60: _("1 hour"),
+    MuteState.MIN_120: _("2 hours"),
+    MuteState.MIN_480: _("8 hours"),
+    MuteState.PERM: _("Permanently"),
+}
 
 
 @unique
@@ -95,11 +99,11 @@ class SettingKind(IntEnum):
     CHANGEPASSWORD = 11
     COMBO = 12
     COLOR = 13
-    POPOVER = 14
     AUTO_AWAY = 15
     AUTO_EXTENDED_AWAY = 16
     USE_STUN_SERVER = 17
     NOTIFICATIONS = 18
+    DROPDOWN = 19
 
 
 @unique
@@ -114,9 +118,9 @@ class SettingType(IntEnum):
 
 
 class ControlType(Enum):
-    CHAT = 'chat'
-    GROUPCHAT = 'gc'
-    PRIVATECHAT = 'pm'
+    CHAT = "chat"
+    GROUPCHAT = "gc"
+    PRIVATECHAT = "pm"
 
     @property
     def is_chat(self):
@@ -135,210 +139,213 @@ class ControlType(Enum):
 
 
 WINDOW_MODULES = {
-    'AccountsWindow': 'gajim.gtk.accounts',
-    'AccountWizard': 'gajim.gtk.account_wizard',
-    'AddContact': 'gajim.gtk.add_contact',
-    'AdHocCommands': 'gajim.gtk.adhoc',
-    'AdvancedConfig': 'gajim.gtk.advanced_config',
-    'DBMigration': 'gajim.gtk.db_migration',
-    'BlockingList': 'gajim.gtk.blocking',
-    'Bookmarks': 'gajim.gtk.bookmarks',
-    'CertificateDialog': 'gajim.gtk.certificate_dialog',
-    'ChangePassword': 'gajim.gtk.change_password',
-    'ContactInfo': 'gajim.gtk.contact_info',
-    'CreateGroupchatWindow': 'gajim.gtk.groupchat_creation',
-    'Features': 'gajim.gtk.features',
-    'GroupchatDetails': 'gajim.gtk.groupchat_details',
-    'GroupChatInvitationDialog': 'gajim.gtk.groupchat_invitation',
-    'GroupchatJoin': 'gajim.gtk.groupchat_join',
-    'HistoryExport': 'gajim.gtk.history_export',
-    'HistorySyncAssistant': 'gajim.gtk.history_sync',
-    'MamPreferences': 'gajim.gtk.mam_preferences',
-    'ManageProxies': 'gajim.gtk.proxies',
-    'ManageSounds': 'gajim.gtk.manage_sounds',
-    'PasswordDialog': 'gajim.gtk.password_dialog',
-    'PEPConfig': 'gajim.gtk.pep_config',
-    'PluginsWindow': 'gajim.gtk.plugins',
-    'Preferences': 'gajim.gtk.preferences',
-    'ProfileWindow': 'gajim.gtk.profile',
-    'QuitDialog': 'gajim.gtk.dialogs',
-    'RemoveAccount': 'gajim.gtk.remove_account',
-    'RosterItemExchange': 'gajim.gtk.roster_item_exchange',
-    'ServerInfo': 'gajim.gtk.server_info',
-    'ServiceDiscoveryWindow': 'gajim.gtk.discovery',
-    'ServiceRegistration': 'gajim.gtk.service_registration',
-    'SSLErrorDialog': 'gajim.gtk.ssl_error_dialog',
-    'StartChatDialog': 'gajim.gtk.start_chat',
-    'SynchronizeAccounts': 'gajim.gtk.synchronize_accounts',
-    'Themes': 'gajim.gtk.themes',
-    'WorkspaceDialog': 'gajim.gtk.workspace_dialog',
-    'DebugConsoleWindow': 'gajim.gtk.debug_console',
+    "AccountsWindow": "gajim.gtk.accounts",
+    "AccountWizard": "gajim.gtk.account_wizard",
+    "AddContact": "gajim.gtk.add_contact",
+    "AdHocCommands": "gajim.gtk.adhoc",
+    "AdvancedConfig": "gajim.gtk.advanced_config",
+    "DBMigration": "gajim.gtk.db_migration",
+    "BlockingList": "gajim.gtk.blocking",
+    "Bookmarks": "gajim.gtk.bookmarks",
+    "CertificateDialog": "gajim.gtk.certificate_dialog",
+    "ChangePassword": "gajim.gtk.change_password",
+    "ContactInfo": "gajim.gtk.contact_info",
+    "CreateGroupchatWindow": "gajim.gtk.groupchat_creation",
+    "Features": "gajim.gtk.features",
+    "GroupchatDetails": "gajim.gtk.groupchat_details",
+    "GroupChatInvitationDialog": "gajim.gtk.groupchat_invitation",
+    "GroupchatJoin": "gajim.gtk.groupchat_join",
+    "GroupsPostWindow": "gajim.gtk.discovery",
+    "HistoryExport": "gajim.gtk.history_export",
+    "HistorySyncAssistant": "gajim.gtk.history_sync",
+    "MamPreferences": "gajim.gtk.mam_preferences",
+    "ManageProxies": "gajim.gtk.proxies",
+    "ManageSounds": "gajim.gtk.manage_sounds",
+    "PasswordDialog": "gajim.gtk.password_dialog",
+    "PEPConfig": "gajim.gtk.pep_config",
+    "PluginsWindow": "gajim.gtk.plugins",
+    "Preferences": "gajim.gtk.preferences",
+    "ProfileWindow": "gajim.gtk.profile",
+    "QuitDialog": "gajim.gtk.dialogs",
+    "RemoveAccount": "gajim.gtk.remove_account",
+    "RosterItemExchange": "gajim.gtk.roster_item_exchange",
+    "ServerInfo": "gajim.gtk.server_info",
+    "ServiceDiscoveryWindow": "gajim.gtk.discovery",
+    "ServiceRegistration": "gajim.gtk.service_registration",
+    "SSLErrorDialog": "gajim.gtk.ssl_error_dialog",
+    "StartChatDialog": "gajim.gtk.start_chat",
+    "SynchronizeAccounts": "gajim.gtk.synchronize_accounts",
+    "Themes": "gajim.gtk.themes",
+    "WorkspaceDialog": "gajim.gtk.workspace_dialog",
+    "DebugConsoleWindow": "gajim.gtk.debug_console",
 }
 
 
 APP_ACTIONS = [
-    ('about', None),
-    ('accounts', 's'),
-    ('add-account', None),
-    ('add-contact', 's'),
-    ('content', None),
-    ('copy-text', 's'),
-    ('create-groupchat', 's'),
-    ('faq', None),
-    ('privacy-policy', None),
-    ('features', None),
-    ('file-transfer', None),
-    ('forget-groupchat', 'a{sv}'),
-    ('join-support-chat', None),
-    ('manage-proxies', None),
-    ('open-link', 'as'),
-    ('plugins', None),
-    ('preferences', None),
-    ('quit', None),
-    ('remove-history', 'a{sv}'),
-    ('shortcuts', None),
-    ('show', None),
-    ('start-chat', 'as'),
-    ('open-chat', 'as'),
-    ('mute-chat', 'a{sv}'),
-    ('xml-console', None),
+    ("about", None),
+    ("accounts", "s"),
+    ("add-account", None),
+    ("add-contact", "s"),
+    ("content", None),
+    ("copy-text", "s"),
+    ("create-groupchat", "s"),
+    ("faq", None),
+    ("privacy-policy", None),
+    ("features", None),
+    ("forget-groupchat", "a{sv}"),
+    ("join-support-chat", None),
+    ("manage-proxies", None),
+    ("open-link", "as"),
+    ("plugins", None),
+    ("preferences", None),
+    ("quit", None),
+    ("remove-history", "a{sv}"),
+    ("shortcuts", None),
+    ("show", None),
+    ("start-chat", "as"),
+    ("open-chat", "as"),
+    ("mute-chat", "a{sv}"),
+    ("xml-console", None),
 ]
 
 
 MAIN_WIN_ACTIONS = [
     # action name, variant type, enabled
-    ('input-bold', None, True),
-    ('input-italic', None, True),
-    ('input-strike', None, True),
-    ('input-clear', None, True),
-    ('show-emoji-chooser', None, True),
-    ('activate-message-selection', 'u', True),
-    ('delete-message-locally', 'a{sv}', True),
-    ('correct-message', None, False),
-    ('copy-message', 's', True),
-    ('moderate-message', 'a{sv}', False),
-    ('quote', 's', False),
-    ('quote-next', None, True),
-    ('quote-prev', None, True),
-    ('reply', 'u', False),
-    ('jump-to-message', 'au', True),
-    ('mention', 's', False),
-    ('send-file-httpupload', 'as', False),
-    ('send-file-jingle', 'as', False),
-    ('send-file', 'as', False),
-    ('add-to-roster', None, True),
-    ('start-voice-call', None, False),
-    ('start-video-call', None, False),
-    ('show-contact-info', None, True),
-    ('send-message', None, False),
-    ('muc-change-nickname', None, False),
-    ('muc-invite', None, False),
-    ('muc-contact-info', 's', False),
-    ('muc-execute-command', 's', False),
-    ('muc-ban', 's', False),
-    ('muc-kick', 's', False),
-    ('muc-change-role', 'as', False),
-    ('muc-change-affiliation', 'as', False),
-    ('muc-request-voice', None, False),
-    ('scroll-view-up', None, True),
-    ('scroll-view-down', None, True),
-    ('change-nickname', None, True),
-    ('change-subject', None, True),
-    ('escape', None, True),
-    ('close-chat', None, True),
-    ('restore-chat', None, True),
-    ('switch-next-chat', None, True),
-    ('switch-prev-chat', None, True),
-    ('switch-next-unread-chat', None, True),
-    ('switch-prev-unread-chat', None, True),
-    ('switch-chat-1', None, True),
-    ('switch-chat-2', None, True),
-    ('switch-chat-3', None, True),
-    ('switch-chat-4', None, True),
-    ('switch-chat-5', None, True),
-    ('switch-chat-6', None, True),
-    ('switch-chat-7', None, True),
-    ('switch-chat-8', None, True),
-    ('switch-chat-9', None, True),
-    ('switch-workspace-1', None, True),
-    ('switch-workspace-2', None, True),
-    ('switch-workspace-3', None, True),
-    ('switch-workspace-4', None, True),
-    ('switch-workspace-5', None, True),
-    ('switch-workspace-6', None, True),
-    ('switch-workspace-7', None, True),
-    ('switch-workspace-8', None, True),
-    ('switch-workspace-9', None, True),
-    ('increase-app-font-size', None, True),
-    ('decrease-app-font-size', None, True),
-    ('reset-app-font-size', None, True),
-    ('toggle-chat-list', None, True),
-    ('toggle-menu-bar', None, True),
-    ('add-workspace', 's', True),
-    ('edit-workspace', 's', True),
-    ('remove-workspace', 's', True),
-    ('activate-workspace', 's', True),
-    ('mark-workspace-as-read', 's', True),
-    ('add-chat', 'a{sv}', True),
-    ('add-group-chat', 'as', True),
-    ('add-to-roster', 'a{sv}', True),
-    ('preview-open', 's', True),
-    ('preview-save-as', 's', True),
-    ('preview-open-folder', 's', True),
-    ('preview-copy-link', 's', True),
-    ('preview-open-link', 's', True),
-    ('preview-download', 's', True),
+    ("input-bold", None, True),
+    ("input-italic", None, True),
+    ("input-strike", None, True),
+    ("input-clear", None, True),
+    ("insert-emoji", "s", True),
+    ("show-emoji-chooser", None, True),
+    ("activate-message-selection", "u", True),
+    ("delete-message-locally", "a{sv}", True),
+    ("correct-message", None, False),
+    ("copy-message", "s", True),
+    ("moderate-message", "a{sv}", False),
+    ("paste-as-quote", None, False),
+    ("paste-as-code-block", None, False),
+    ("quote", "s", False),
+    ("quote-next", None, True),
+    ("quote-prev", None, True),
+    ("reply", "u", False),
+    ("jump-to-message", "au", True),
+    ("mention", "s", False),
+    ("send-file-httpupload", "as", False),
+    # ('send-file-jingle', 'as', False),
+    ("send-file", "as", False),
+    ("add-to-roster", None, True),
+    ("start-voice-call", None, False),
+    ("start-video-call", None, False),
+    ("show-contact-info", None, True),
+    ("send-message", None, False),
+    ("muc-change-nickname", None, False),
+    ("muc-invite", None, False),
+    ("muc-contact-info", "s", False),
+    ("muc-execute-command", "s", False),
+    ("muc-ban", "s", False),
+    ("muc-kick", "s", False),
+    ("muc-change-role", "as", False),
+    ("muc-change-affiliation", "as", False),
+    ("muc-request-voice", None, False),
+    ("scroll-view-up", None, True),
+    ("scroll-view-down", None, True),
+    ("change-nickname", None, True),
+    ("change-subject", None, True),
+    ("escape", None, True),
+    ("close-chat", None, True),
+    ("restore-chat", None, True),
+    ("switch-next-chat", None, True),
+    ("switch-prev-chat", None, True),
+    ("switch-next-unread-chat", None, True),
+    ("switch-prev-unread-chat", None, True),
+    ("switch-chat-1", None, True),
+    ("switch-chat-2", None, True),
+    ("switch-chat-3", None, True),
+    ("switch-chat-4", None, True),
+    ("switch-chat-5", None, True),
+    ("switch-chat-6", None, True),
+    ("switch-chat-7", None, True),
+    ("switch-chat-8", None, True),
+    ("switch-chat-9", None, True),
+    ("switch-workspace-1", None, True),
+    ("switch-workspace-2", None, True),
+    ("switch-workspace-3", None, True),
+    ("switch-workspace-4", None, True),
+    ("switch-workspace-5", None, True),
+    ("switch-workspace-6", None, True),
+    ("switch-workspace-7", None, True),
+    ("switch-workspace-8", None, True),
+    ("switch-workspace-9", None, True),
+    ("increase-app-font-size", None, True),
+    ("decrease-app-font-size", None, True),
+    ("reset-app-font-size", None, True),
+    ("toggle-chat-list", None, True),
+    ("toggle-menu-bar", None, True),
+    ("add-workspace", "s", True),
+    ("edit-workspace", "s", True),
+    ("remove-workspace", "s", True),
+    ("activate-workspace", "s", True),
+    ("mark-workspace-as-read", "s", True),
+    ("add-chat", "a{sv}", True),
+    ("add-group-chat", "as", True),
+    ("add-to-roster", "a{sv}", True),
+    ("preview-open", "s", True),
+    ("preview-save-as", "s", True),
+    ("preview-open-folder", "s", True),
+    ("preview-copy-link", "s", True),
+    ("preview-open-link", "s", True),
+    ("preview-download", "s", True),
 ]
 
 
 ACCOUNT_ACTIONS = [
-    ('add-contact', 'as'),
-    ('contact-info', 's'),
-    ('block-contact', 's'),
-    ('remove-contact', 's'),
-    ('execute-command', 'as'),
-    ('modify-gateway', 's'),
-    ('archive', 's'),
-    ('blocking', 's'),
-    ('bookmarks', 's'),
-    ('export-history', 's'),
-    ('import-contacts', 's'),
-    ('mark-as-read', 'a{sv}'),
-    ('open-event', 'a{sv}'),
-    ('pep-config', 's'),
-    ('profile', 's'),
-    ('server-info', 's'),
-    ('services', 's'),
-    ('sync-history', 's'),
+    ("add-contact", "as"),
+    ("contact-info", "s"),
+    ("block-contact", "s"),
+    ("remove-contact", "s"),
+    ("execute-command", "as"),
+    ("modify-gateway", "s"),
+    ("archive", "s"),
+    ("blocking", "s"),
+    ("bookmarks", "s"),
+    ("export-history", "s"),
+    ("import-contacts", "s"),
+    ("mark-as-read", "a{sv}"),
+    ("open-event", "a{sv}"),
+    ("pep-config", "s"),
+    ("profile", "s"),
+    ("server-info", "s"),
+    ("services", "s"),
+    ("sync-history", "s"),
 ]
 
 
 ALWAYS_ACCOUNT_ACTIONS = {
-    'export-history',
-    'import-contacts',
-    'open-event',
+    "export-history",
+    "import-contacts",
+    "open-event",
 }
 
 
 ONLINE_ACCOUNT_ACTIONS = {
-    'add-contact',
-    'remove-contact',
-    'contact-info',
-    'execute-command',
-    'modify-gateway',
-    'bookmarks',
-    'import-contacts',
-    'pep-config',
-    'profile',
-    'server-info',
-    'services',
-    'sync-history',
-    'mark-as-read',
+    "add-contact",
+    "remove-contact",
+    "contact-info",
+    "execute-command",
+    "modify-gateway",
+    "bookmarks",
+    "import-contacts",
+    "pep-config",
+    "profile",
+    "server-info",
+    "services",
+    "sync-history",
+    "mark-as-read",
 }
 
 
 FEATURE_ACCOUNT_ACTIONS = {
-    'archive',
-    'blocking',
-    'block-contact',
+    "archive",
+    "blocking",
+    "block-contact",
 }

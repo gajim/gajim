@@ -82,29 +82,30 @@ class DeleteMessageParam(VariantMixin):
 def get_params_class(func: Callable[..., Any]) -> Any:
     module = sys.modules[__name__]
     params = inspect.signature(func).parameters
-    cls_string = params['params'].annotation
-    cls_string = cls_string.rsplit('.', maxsplit=1)[-1]
+    cls_string = params["params"].annotation
+    cls_string = cls_string.rsplit(".", maxsplit=1)[-1]
     return getattr(module, cls_string)
 
 
-def actionmethod(func: Callable[[Any, Gio.SimpleAction, Any], None]
-                 ) -> Callable[[Any, Gio.SimpleAction, GLib.Variant], None]:
+def actionmethod(
+    func: Callable[[Any, Gio.SimpleAction, Any], None]
+) -> Callable[[Any, Gio.SimpleAction, GLib.Variant], None]:
     @functools.wraps(func)
-    def method_wrapper(obj: Any,
-                       action: Gio.SimpleAction,
-                       param: GLib.Variant) -> None:
+    def method_wrapper(obj: Any, action: Gio.SimpleAction, param: GLib.Variant) -> None:
         params_cls = get_params_class(func)
         params = params_cls.from_variant(param)
         return func(obj, action, params)
+
     return method_wrapper
 
 
-def actionfunction(func: Callable[[Gio.SimpleAction, Any], None]
-                   ) -> Callable[[Gio.SimpleAction, GLib.Variant], None]:
+def actionfunction(
+    func: Callable[[Gio.SimpleAction, Any], None]
+) -> Callable[[Gio.SimpleAction, GLib.Variant], None]:
     @functools.wraps(func)
-    def func_wrapper(action: Gio.SimpleAction,
-                     param: GLib.Variant) -> None:
+    def func_wrapper(action: Gio.SimpleAction, param: GLib.Variant) -> None:
         params_cls = get_params_class(func)
         params = params_cls.from_variant(param)
         return func(action, params)
+
     return func_wrapper
