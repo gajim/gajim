@@ -1,36 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="control_box">
-    <property name="can-focus">True</property>
+    <property name="visible">1</property>
+    <property name="focusable">1</property>
     <child>
       <object class="GtkPaned" id="conv_view_paned">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <child>
+        <property name="hexpand">1</property>
+        <property name="focusable">1</property>
+        <property name="resize-end-child">0</property>
+        <property name="shrink-end-child">0</property>
+        <property name="start-child">
           <object class="GtkOverlay" id="conv_view_overlay">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="hexpand">True</property>
-            <child>
-              <placeholder/>
-            </child>
+            <property name="hexpand">1</property>
           </object>
-          <packing>
-            <property name="resize">True</property>
-            <property name="shrink">True</property>
-          </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
   </object>
 </interface>
