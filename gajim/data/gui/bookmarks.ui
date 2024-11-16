@@ -1,37 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.38.2 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkListStore" id="bookmarks_store">
     <columns>
-      <!-- column-name jid -->
       <column type="gchararray"/>
-      <!-- column-name name -->
       <column type="gchararray"/>
-      <!-- column-name nick -->
       <column type="gchararray"/>
-      <!-- column-name password -->
       <column type="gchararray"/>
-      <!-- column-name autojoin -->
       <column type="gboolean"/>
     </columns>
   </object>
-  <!-- n-columns=2 n-rows=1 -->
   <object class="GtkGrid" id="bookmarks_grid">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="can-focus">True</property>
-        <property name="hexpand">True</property>
-        <property name="vexpand">True</property>
+        <property name="focusable">1</property>
+        <property name="hexpand">1</property>
+        <property name="vexpand">1</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="shadow-type">in</property>
-        <child>
+        <property name="child">
           <object class="GtkTreeView" id="bookmarks_view">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="focusable">1</property>
             <property name="model">bookmarks_store</property>
             <property name="search-column">0</property>
             <property name="enable-grid-lines">horizontal</property>
@@ -40,10 +28,10 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="resizable">True</property>
-                <property name="title" translatable="yes">XMPP Address</property>
-                <property name="expand">True</property>
-                <property name="sort-indicator">True</property>
+                <property name="resizable">1</property>
+                <property name="title" translatable="1">XMPP Address</property>
+                <property name="expand">1</property>
+                <property name="sort-indicator">1</property>
                 <property name="sort-column-id">0</property>
                 <child>
                   <object class="GtkCellRendererText" id="jid">
@@ -58,10 +46,10 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="resizable">True</property>
+                <property name="resizable">1</property>
                 <property name="min-width">100</property>
-                <property name="title" translatable="yes">Name</property>
-                <property name="sort-indicator">True</property>
+                <property name="title" translatable="1">Name</property>
+                <property name="sort-indicator">1</property>
                 <property name="sort-column-id">1</property>
                 <child>
                   <object class="GtkCellRendererText" id="name">
@@ -75,9 +63,9 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="resizable">True</property>
-                <property name="title" translatable="yes">Nickname</property>
-                <property name="sort-indicator">True</property>
+                <property name="resizable">1</property>
+                <property name="title" translatable="1">Nickname</property>
+                <property name="sort-indicator">1</property>
                 <property name="sort-column-id">2</property>
                 <child>
                   <object class="GtkCellRendererText" id="nick">
@@ -91,9 +79,9 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="resizable">True</property>
-                <property name="title" translatable="yes">Password</property>
-                <property name="sort-indicator">True</property>
+                <property name="resizable">1</property>
+                <property name="title" translatable="1">Password</property>
+                <property name="sort-indicator">1</property>
                 <property name="sort-column-id">3</property>
                 <child>
                   <object class="GtkCellRendererText" id="password">
@@ -108,8 +96,8 @@
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="sizing">fixed</property>
-                <property name="title" translatable="yes">Autojoin</property>
-                <property name="sort-indicator">True</property>
+                <property name="title" translatable="1">Autojoin</property>
+                <property name="sort-indicator">1</property>
                 <property name="sort-column-id">4</property>
                 <child>
                   <object class="GtkCellRendererToggle" id="autojoin"/>
@@ -123,19 +111,16 @@
               <class name="gajim-treeview"/>
             </style>
           </object>
-        </child>
+        </property>
         <style>
           <class name="gajim-scrolled"/>
         </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+          <property name="column-span">2</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left-attach">0</property>
-        <property name="top-attach">0</property>
-        <property name="width">2</property>
-      </packing>
     </child>
-    <style>
-      <class name="padding-18"/>
-    </style>
   </object>
 </interface>
