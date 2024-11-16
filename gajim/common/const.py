@@ -493,15 +493,16 @@ ARTISTS = [
 ]
 
 
-DEVS_CURRENT = [
-    'Yann Leboulanger (asterix AT lagaule.org)',
+MAINTAINERS = [
     'Philipp Hörist (philipp AT hoerist.com)',
     'Daniel Brötzmann (wurstsalat AT posteo.de)',
-    'André Apitzsch',
 ]
 
 
-DEVS_PAST = [
+DEVELOPERS = [
+    'Marc Henning',
+    'André Apitzsch',
+    'Yann Leboulanger (asterix AT lagaule.org)',
     'Stefan Bethge (stefan AT lanpartei.de)',
     'Alexander Cherniuk (ts33kr AT gmail.com)',
     'Stephan Erb (steve-e AT h3c.de)',

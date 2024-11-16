@@ -10,8 +10,8 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import ARTISTS
-from gajim.common.const import DEVS_CURRENT
-from gajim.common.const import DEVS_PAST
+from gajim.common.const import DEVELOPERS
+from gajim.common.const import MAINTAINERS
 from gajim.common.const import THANKS
 from gajim.common.i18n import _
 from gajim.common.util.app import get_extended_app_version
@@ -50,8 +50,8 @@ class AboutDialog(Gtk.AboutDialog):
 
         self.set_comments("\n".join(comments))
 
-        self.add_credit_section(_("Current Developers"), DEVS_CURRENT)
-        self.add_credit_section(_("Past Developers"), DEVS_PAST)
+        self.add_credit_section(_("Maintainers"), MAINTAINERS)
+        self.add_credit_section(_("Developers"), DEVELOPERS)
         self.add_credit_section(_("Artists"), ARTISTS)
 
         thanks = list(THANKS)
