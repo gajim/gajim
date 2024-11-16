@@ -1,5 +1,13 @@
 [[_TOC_]]
 
+## Gajim
+
+A fully-featured XMPP chat client.
+
+Gajim aims to be an easy to use and fully-featured XMPP client.
+Just chat with your friends or family, easily share pictures and 
+thoughts or discuss the news with your groups.
+
 ## Requirements
 
 ### Runtime Requirements
