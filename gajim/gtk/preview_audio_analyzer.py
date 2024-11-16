@@ -21,20 +21,21 @@ except Exception:
 from gajim.common import app
 from gajim.common.preview import AudioSampleT
 
-log = logging.getLogger('gajim.gtk.preview_audio_analyzer')
+log = logging.getLogger("gajim.gtk.preview_audio_analyzer")
 
 
 class AudioAnalyzer:
-    def __init__(self,
-                 filepath: Path,
-                 duration_callback: Callable[[float], None],
-                 samples_callback: Callable[[AudioSampleT], None]
-                 ) -> None:
+    def __init__(
+        self,
+        filepath: Path,
+        duration_callback: Callable[[float], None],
+        samples_callback: Callable[[AudioSampleT], None],
+    ) -> None:
 
-        self._playbin = Gst.ElementFactory.make('playbin')
+        self._playbin = Gst.ElementFactory.make("playbin")
 
         if self._playbin is None:
-            log.debug('Could not create GST playbin for AudioAnalyzer')
+            log.error("Could not create GST playbin for AudioAnalyzer")
             return
 
         self._duration_callback = duration_callback
@@ -53,10 +54,10 @@ class AudioAnalyzer:
     def _setup_audio_analyzer(self, file_path: Path) -> None:
         assert isinstance(self._playbin, Gst.Bin)
 
-        audio_sink = Gst.Bin.new('audiosink')
-        audioconvert = Gst.ElementFactory.make('audioconvert', 'audioconvert')
-        self._level = Gst.ElementFactory.make('level', 'level')
-        fakesink = Gst.ElementFactory.make('fakesink', 'fakesink')
+        audio_sink = Gst.Bin.new("audiosink")
+        audioconvert = Gst.ElementFactory.make("audioconvert", "audioconvert")
+        self._level = Gst.ElementFactory.make("level", "level")
+        fakesink = Gst.ElementFactory.make("fakesink", "fakesink")
 
         pipeline_elements = [
             audio_sink,
@@ -66,7 +67,7 @@ class AudioAnalyzer:
         ]
 
         if any(element is None for element in pipeline_elements):
-            log.error('Could not set up pipeline for AudioAnalyzer')
+            log.error("Could not set up pipeline for AudioAnalyzer")
             return
 
         assert audioconvert is not None
@@ -80,34 +81,35 @@ class AudioAnalyzer:
         audioconvert.link(self._level)
         self._level.link(fakesink)
 
-        sink_pad = audioconvert.get_static_pad('sink')
+        sink_pad = audioconvert.get_static_pad("sink")
         assert sink_pad is not None
-        ghost_pad = Gst.GhostPad.new('sink', sink_pad)
+        ghost_pad = Gst.GhostPad.new("sink", sink_pad)
         assert ghost_pad is not None
         audio_sink.add_pad(ghost_pad)
 
-        self._playbin.set_property('audio-sink', audio_sink)
+        self._playbin.set_property("audio-sink", audio_sink)
         if file_path.is_file():
             file_uri = file_path.as_uri()
-            self._playbin.set_property('uri', file_uri)
+            self._playbin.set_property("uri", file_uri)
         self._playbin.no_more_pads()
 
-        self._level.set_property('message', True)
-        fakesink.set_property('sync', False)
+        # TODO: Message is no longer a property: Check if required
+        # self._level.set_property('message', True)
+        fakesink.set_property("sync", False)
 
         state_return = self._playbin.set_state(Gst.State.PLAYING)
         if state_return == Gst.StateChangeReturn.FAILURE:
-            log.warning('Could not set up GST playbin')
+            log.warning("Could not set up GST playbin")
             return
 
-        self._level_element = self._playbin.get_by_name('level')
+        self._level_element = self._playbin.get_by_name("level")
         bus = self._playbin.get_bus()
         if bus is None:
-            log.debug('Could not get GST Bus')
+            log.error("Could not get GST Bus")
             return
 
         bus.add_signal_watch()
-        self._bus_watch_id = bus.connect('message', self._on_bus_message)
+        self._bus_watch_id = bus.connect("message", self._on_bus_message)
 
     def _on_bus_message(self, _bus: Gst.Bus, message: Gst.Message) -> None:
         assert self._playbin is not None
@@ -117,10 +119,11 @@ class AudioAnalyzer:
             self._playbin.set_state(Gst.State.NULL)
             return
 
-        if (message.type in (Gst.MessageType.STATE_CHANGED,
-                             Gst.MessageType.DURATION_CHANGED)):
-            _success, self._duration = self._playbin.query_duration(
-                Gst.Format.TIME)
+        if message.type in (
+            Gst.MessageType.STATE_CHANGED,
+            Gst.MessageType.DURATION_CHANGED,
+        ):
+            _success, self._duration = self._playbin.query_duration(Gst.Format.TIME)
             if not self._duration_updated:
                 if _success:
                     assert self._duration is not None
@@ -130,13 +133,15 @@ class AudioAnalyzer:
 
         if message.src is self._level:
             structure = message.get_structure()
-            if (structure is None
-                    or structure.get_name() != 'level'
-                    or not structure.has_field('rms')):
+            if (
+                structure is None
+                or structure.get_name() != "level"
+                or not structure.has_field("rms")
+            ):
                 return
 
             # RMS: Root Mean Square = Average Power
-            rms_values = cast(list[float], structure.get_value('rms'))
+            rms_values = cast(list[float], structure.get_value("rms"))
             assert rms_values is not None
             self._num_channels = min(2, len(rms_values))
 

@@ -8,25 +8,29 @@ import logging
 import math
 from statistics import mean
 
-import cairo
-from gi.repository import Gdk
+from gi.repository import Graphene
+from gi.repository import Gsk
 from gi.repository import Gtk
 
+from gajim.common import app
 from gajim.common.preview import AudioSampleT
 
-log = logging.getLogger('gajim.gtk.preview_audio_visualizer')
+from gajim.gtk.util import make_rgba
+
+log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 
 
-class AudioVisualizerWidget(Gtk.DrawingArea):
-    def __init__(self,
-                 width: int,
-                 height: int,
-                 x_offset: int,
-                 ) -> None:
+class AudioVisualizerWidget(Gtk.Widget):
+    def __init__(
+        self,
+        width: int = 340,
+        height: int = 50,
+        x_offset: int = 0,
+    ) -> None:
+        Gtk.Widget.__init__(
+            self, margin_start=x_offset, width_request=width, height_request=height
+        )
 
-        Gtk.DrawingArea.__init__(self)
-
-        self._x_offset = x_offset
         self._peak_width = 2  # in px
         self._gap_height = 0.25
         self._width = width
@@ -39,29 +43,18 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         self._animation_index = 0
         self._animation_period = 1
 
-        # Add EventMask to receive button press events (for skipping)
-        self.add_events(Gdk.EventMask.BUTTON_PRESS_MASK)
+        self._waveform_path = None
 
-        self.connect('draw', self._on_drawingarea_draw)
-        self.connect('configure-event', self._on_drawingarea_changed)
-        self.connect('style-updated', self._on_style_updated)
+        # TODO: Hard code colors for now
+        self._color_default = make_rgba("rgb(170,180,200)")
+        self._color_progress = make_rgba("rgb(30,144,255)")
+        self._color_seek = make_rgba("rgb(77,166,255)")
 
-        self._style_context = self.get_style_context()
-        self._style_context.add_class('audiovisualizer')
+    def do_unroot(self) -> None:
+        Gtk.Widget.do_unroot(self)
+        app.check_finalize(self)
 
-        self.set_size_request(self._width, self._height)
-        self._surface = cairo.ImageSurface(
-            cairo.FORMAT_ARGB32,
-            self._width,
-            self._height)
-        self._ctx: cairo.Context[cairo.ImageSurface] = cairo.Context(
-            self._surface)
-        self._cairo_path = self._ctx.copy_path()
-
-    def set_parameters(self,
-                       position: float,
-                       animation_period: int = 1
-                       ) -> None:
+    def set_parameters(self, position: float, animation_period: int = 1) -> None:
 
         self._position = position
         self._animation_period = animation_period
@@ -73,41 +66,69 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         if self._is_static():
             samples = self._average_samples(samples)
             samples = self._normalize_samples(samples)
-        samples = self._rescale_samples(samples)
-        self._samples = samples
+        self._samples = self._rescale_samples(samples)
+        self._waveform_path = self._create_waveform_path()
 
     def render_animated_graph(self, animation_index: int = 0) -> None:
-        self._animation_index = animation_index
-        self._render_waveform()
+        if not self._samples:
+            log.debug("Render animated graph: No samples")
+            return
 
-    def render_static_graph(self,
-                            position: float,
-                            seek_position: float = -1.0
-                            ) -> None:
+        self._animation_index = animation_index
+        self._waveform_path = self._create_waveform_path()
+        self.queue_draw()
+
+    def render_static_graph(self, position: float, seek_position: float = -1.0) -> None:
+        if not self._samples:
+            return
 
         self._position = position
         self._seek_position = seek_position
-        self._render_waveform()
-
-    def _on_drawingarea_draw(self,
-                             _drawing_area: Gtk.DrawingArea,
-                             ctx: cairo.Context[cairo.ImageSurface]
-                             ) -> None:
-
-        if len(self._samples) == 0:
-            return
-        self._draw_surface(ctx)
-
-    def _on_drawingarea_changed(self,
-                                _drawing_area: Gtk.DrawingArea,
-                                _event: Gdk.EventConfigure
-                                ) -> None:
-
-        self._is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
-        self._render_waveform()
-
-    def _on_style_updated(self, _event: Gdk.EventConfigure) -> None:
         self.queue_draw()
+
+    def do_snapshot(self, snapshot: Gtk.Snapshot) -> None:
+        if self._waveform_path is None:
+            log.debug("Waveform Path is None")
+            return
+
+        if not self._is_LTR:
+            # rotate 180° around the center
+            snapshot.translate(Graphene.Point().init(self._width / 2, self._height / 2))
+            snapshot.rotate(180)
+            snapshot.translate(
+                Graphene.Point().init(-self._width / 2, -self._height / 2)
+            )
+
+        play_pos = self._pixel_pos(self._position)
+
+        # Default
+        snapshot.push_clip(Graphene.Rect().init(0, 0, self._width, self._height))
+        snapshot.append_fill(
+            self._waveform_path, Gsk.FillRule.WINDING, self._color_default
+        )
+        snapshot.pop()
+
+        # Progress
+        snapshot.push_clip(Graphene.Rect().init(0, 0, play_pos, self._height))
+        snapshot.append_fill(
+            self._waveform_path, Gsk.FillRule.WINDING, self._color_progress
+        )
+        snapshot.pop()
+
+        # Seek
+        if self._seek_position >= 0:
+            seek_pos = self._pixel_pos(self._seek_position)
+            start_seek = min(play_pos, seek_pos)
+            end_seek = max(play_pos, seek_pos)
+            width_seek = end_seek - start_seek
+
+            snapshot.push_clip(
+                Graphene.Rect().init(start_seek, 0, width_seek, self._height)
+            )
+            snapshot.append_fill(
+                self._waveform_path, Gsk.FillRule.WINDING, self._color_seek
+            )
+            snapshot.pop()
 
     def _is_static(self):
         return self._animation_period == 1
@@ -116,6 +137,11 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         # Create a subset by taking the average of three samples
         # around every nth sample
         num_divisions = int(self._width / (self._peak_width * 2))
+
+        if num_divisions == 0:
+            log.error("Number of divisions is zero")
+            return []
+
         n = math.floor(len(samples) / num_divisions) + 1
 
         if n < 2:
@@ -125,22 +151,23 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
         samples1, samples2 = zip(*samples, strict=True)
         for i in range(2, int(len(samples) - n / 2), n):
             index = int(i + n / 2)
-            avg1 = mean(samples1[index - 1:index + 1])
-            avg2 = mean(samples2[index - 1:index + 1])
+            avg1 = mean(samples1[index - 1 : index + 1])
+            avg2 = mean(samples2[index - 1 : index + 1])
             samples_averaged.append((avg1, avg2))
         return samples_averaged
 
     def _normalize_samples(self, samples: AudioSampleT) -> AudioSampleT:
+        if not samples:
+            log.error("No samples")
+            return []
+
         # Normalize both channels using the same scale
         max_elem = max(max(samples))  # noqa: PLW3301
         min_elem = min(min(samples))  # noqa: PLW3301
         delta = max_elem - min_elem
         if delta > 0:
             samples_normalized = [
-                (
-                    (val1 - min_elem) / delta,
-                    (val2 - min_elem) / delta
-                )
+                ((val1 - min_elem) / delta, (val2 - min_elem) / delta)
                 for val1, val2 in samples
             ]
             return samples_normalized
@@ -148,110 +175,65 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
             return samples
 
     def _rescale_samples(self, samples: AudioSampleT):
-        '''
+        """
         Recorded volume is perceived louder than the visual pretends.
         Therefore, rescale lower peaks bit. The sin(sqrt) function is
         a bit steeper than a shifted and normalized log function.
-        '''
+        """
         samples_rescaled = [
             (
                 math.sin(math.sqrt(math.fabs(val1))) / math.sin(1),
-                math.sin(math.sqrt(math.fabs(val2))) / math.sin(1)
+                math.sin(math.sqrt(math.fabs(val2))) / math.sin(1),
             )
             for val1, val2 in samples
         ]
         return samples_rescaled
 
     def _pixel_pos(self, pos: float) -> float:
-        return pos * self._width + self._x_offset
+        return pos * self._width
 
-    def _render_waveform(self) -> None:
-        if len(self._samples) == 0:
-            return
-
-        self._draw_rms_amplitudes(self._ctx)
-        self.queue_draw()
-
-    def _draw_surface(self, ctx: cairo.Context[cairo.ImageSurface]) -> None:
-        if not self._is_LTR:
-            # rotate 180° around the center
-            ctx.translate(
-                (self._width + self._x_offset * 2) / 2, self._height / 2)
-            ctx.rotate(math.pi)
-            ctx.translate(
-                -(self._width + self._x_offset * 2) / 2, -self._height / 2)
-
-        ctx.append_path(self._cairo_path)
-        ctx.clip()
-
-        play_pos = self._pixel_pos(self._position)
-        start_pos = self._pixel_pos(0.0)
-        width_pos = play_pos - start_pos
-
-        # Default
-        self._style_context.set_state(Gtk.StateFlags.NORMAL)
-        Gtk.render_background(
-            self._style_context, ctx,
-            start_pos, 0, self._width, self._height)
-
-        # Progress
-        self._style_context.set_state(Gtk.StateFlags.CHECKED)
-        Gtk.render_background(self._style_context, ctx,
-                              start_pos, 0, width_pos, self._height)
-
-        # Seek
-        if self._seek_position >= 0:
-            seek_pos = self._pixel_pos(self._seek_position)
-            start_seek = min(play_pos, seek_pos)
-            end_seek = max(play_pos, seek_pos)
-            width_seek = end_seek - start_seek
-
-            self._style_context.set_state(Gtk.StateFlags.SELECTED)
-            Gtk.render_background(self._style_context, ctx,
-                                  start_seek, 0, width_seek, self._height)
-
-    def _draw_rms_amplitudes(self,
-                             ctx: cairo.Context[cairo.ImageSurface]
-                             ) -> None:
-        ctx.new_path()
+    def _create_waveform_path(self) -> Gsk.Path | None:
+        if not self._samples:
+            return None
 
         peak_width = self._peak_width
 
         # determines the spacing between the amplitudes
         x_shift = (self._width - 2 * peak_width) / len(self._samples)
         x_shift_anime = x_shift * self._animation_index / self._animation_period
-        x = self._x_offset - x_shift - x_shift_anime
+        x = x_shift - x_shift_anime
 
+        path_builder = Gsk.PathBuilder.new()
         for i in range(len(self._samples)):
             sample1 = self._samples[i][0]
             sample2 = self._samples[i][1]
 
-            self._draw_rounded_rec(
-                ctx,
+            rounded_rec = self._rounded_rec(
                 x,
                 self._height / 2,
                 peak_width,
                 sample1,
                 sample2,
             )
+            path_builder.add_path(rounded_rec)
             x += x_shift
 
-        self._cairo_path = ctx.copy_path()
+        return path_builder.to_path()
 
-    def _draw_rounded_rec(self,
-                          ctx: cairo.Context[cairo.ImageSurface],
-                          x: float,
-                          y: float,
-                          width: float,
-                          height1: float,
-                          height2: float,
-                          ) -> None:
+    def _rounded_rec(
+        self,
+        x: float,
+        y: float,
+        width: float,
+        height1: float,
+        height2: float,
+    ) -> Gsk.Path:
 
         # Don't insert a gap if bars are too small
         if height1 + height2 < 3 or not self._is_static():
             gap = 0.0
         else:
-            gap = self._gap_height # between upper and lower peak in pixels
+            gap = self._gap_height  # between upper and lower peak in pixels
 
         radius = 1  # radius of the arcs on top and bottom of the amplitudes
         scaling = self._height / 2 - radius - gap / 2  # peak scaling factor
@@ -262,35 +244,34 @@ class AudioVisualizerWidget(Gtk.DrawingArea):
 
         # Draws a rectangle of width w and total height of h1+h2
         # The top and bottom edges are curved to the outside
-        m = width / 2
         # A --- B --- C
         # |           |
         # F --- E --- D
 
         # Up
         # A -- B -- C
-        ctx.move_to(x, y + height1)
-        ctx.curve_to(x, y + height1,
-                     x + m, y + height1 + radius,
-                     x + width, y + height1)
+        pb = Gsk.PathBuilder.new()
+
+        pb.move_to(x, y + height1)
+        pb.conic_to(x + width / 2, y + height1 + width / 2, x + width, y + height1, 30)
         # C -- D
-        ctx.line_to(x + width, y + gap)
+        pb.line_to(x + width, y + gap)
         # D -- F
-        ctx.line_to(x, y + gap)
+        pb.line_to(x, y + gap)
         # F -- A
-        ctx.line_to(x, y + height1)
-        ctx.close_path()
+        pb.line_to(x, y + height1)
+        pb.close()
 
         # Down
         # C -- D
-        ctx.move_to(x + width, y - gap)
-        ctx.line_to(x + width, y - height2)
+        pb.move_to(x + width, y - gap)
+        pb.line_to(x + width, y - height2)
         # D -- E -- F
-        ctx.curve_to(x + width, y - height2,
-                     x + m, y - height2 - radius,
-                     x, y - height2)
+        pb.conic_to(x + width / 2, y - height2 - width / 2, x, y - height2, 30)
         # F -- A
-        ctx.line_to(x, y - gap)
+        pb.line_to(x, y - gap)
         # A -- C
-        ctx.line_to(x + width, y - gap)
-        ctx.close_path()
+        pb.line_to(x + width, y - gap)
+        pb.close()
+
+        return pb.to_path()

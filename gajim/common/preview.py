@@ -35,7 +35,6 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
 from gajim.common.util.image import create_thumbnail
-from gajim.common.util.image import get_pixbuf_from_data
 from gajim.common.util.preview import aes_decrypt
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths
@@ -194,14 +193,8 @@ class Preview:
 
 class PreviewManager:
     def __init__(self) -> None:
-        self._orig_dir = Path(configpaths.get('MY_DATA')) / 'downloads'
-        self._thumb_dir = Path(configpaths.get('MY_CACHE')) / 'downloads.thumb'
-
-        if GLib.mkdir_with_parents(str(self._orig_dir), 0o700) != 0:
-            log.error('Failed to create: %s', self._orig_dir)
-
-        if GLib.mkdir_with_parents(str(self._thumb_dir), 0o700) != 0:
-            log.error('Failed to create: %s', self._thumb_dir)
+        self._orig_dir = configpaths.get('DOWNLOADS')
+        self._thumb_dir = configpaths.get('DOWNLOADS_THUMB')
 
         self._previews: dict[str, Preview] = {}
 
@@ -421,22 +414,12 @@ class PreviewManager:
             return
 
         preview.thumbnail = data
-        preview.mime_type = guess_mime_type(preview.orig_path, data)
+        # Thumbnails are stored always as PNG, we don’t know the
+        # mime-type of the original picture
+        preview.mime_type = guess_mime_type(preview.orig_path)
         preview.file_size = os.path.getsize(preview.orig_path)
 
-        try:
-            pixbuf = get_pixbuf_from_data(preview.thumbnail)
-        except Exception as err:
-            log.error('Unable to load: %s, %s',
-                      preview.thumb_path.name,
-                      err)
-            return
-
-        if pixbuf is None:
-            log.error('Unable to load pixbuf')
-            return
-
-        preview.update_widget(data=pixbuf)
+        preview.update_widget(data=data)
 
     def download_content(self,
                          preview: Preview,
@@ -612,19 +595,7 @@ class PreviewManager:
         if preview.thumbnail is None:
             return
 
-        try:
-            pixbuf = get_pixbuf_from_data(preview.thumbnail)
-        except Exception as err:
-            log.error('Unable to load: %s, %s',
-                      preview.thumb_path.name,
-                      err)
-            return
-
-        if pixbuf is None:
-            log.error('Unable to load pixbuf')
-            return
-
-        preview.update_widget(data=pixbuf)
+        preview.update_widget(data=preview.thumbnail)
 
     def cancel_download(self, preview: Preview) -> None:
         preview.request.cancel()

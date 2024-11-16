@@ -1,72 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="video_preview_box">
     <property name="height-request">250</property>
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
-    <property name="hexpand">True</property>
-    <property name="vexpand">True</property>
+    <property name="hexpand">1</property>
+    <property name="vexpand">1</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkLabel" id="video_source_label">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
+      <object class="GtkLabel" id="video_source_label"/>
     </child>
     <child>
       <placeholder/>
     </child>
     <child>
       <object class="GtkBox" id="video_preview_placeholder">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="vexpand">True</property>
+        <property name="vexpand">1</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkImage">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
             <property name="icon-name">camera-web-symbolic</property>
-            <property name="icon_size">6</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Live Preview</property>
+            <property name="label" translatable="1">Live Preview</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
   </object>
 </interface>

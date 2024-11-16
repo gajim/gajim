@@ -8,7 +8,6 @@ import binascii
 import hashlib
 import logging
 import mimetypes
-import sys
 from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import unquote
@@ -76,7 +75,7 @@ def get_image_paths(uri: str,
 
     orig_filename = f'{web_stem}_{name_hash}{extension}'
 
-    thumb_filename = f'{web_stem}_{name_hash}_thumb_{size}{extension}'
+    thumb_filename = f'{web_stem}_{name_hash}_thumb_{size}.png'
 
     orig_path = orig_dir / orig_filename
     thumb_path = thumb_dir / thumb_filename
@@ -193,9 +192,7 @@ def guess_mime_type(file_path: Path | str,
     # The mimetypes module maps extensions to mime types
     # it does no guessing based on file content
     mime_type, _ = mimetypes.guess_type(file_path)
-    if mime_type is None and not sys.platform == 'win32':
-        # Does not work on Windows see
-        # https://gitlab.gnome.org/GNOME/glib/-/issues/3399
+    if mime_type is None:
         # Gio does also guess based on file content
         extension, _ = Gio.content_type_guess(file_path, data)
         mime_type = Gio.content_type_get_mime_type(extension)

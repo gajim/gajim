@@ -8,7 +8,7 @@ from typing import cast
 import logging
 
 from gi.repository import Gdk
-from gi.repository import GdkPixbuf
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -16,7 +16,6 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.preview import Preview
-from gajim.common.types import GdkPixbufType
 from gajim.common.util.preview import contains_audio_streams
 from gajim.common.util.preview import format_geo_coords
 from gajim.common.util.preview import get_icon_for_mime_type
@@ -27,100 +26,131 @@ from gajim.gtk.menus import get_preview_menu
 from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import get_cursor
-from gajim.gtk.util import load_icon_pixbuf
+from gajim.gtk.util import SignalManager
 
-log = logging.getLogger('gajim.gtk.preview')
+log = logging.getLogger("gajim.gtk.preview")
 
 PREVIEW_ACTIONS: dict[str, tuple[str, str]] = {
-    'open': (_('Open'), 'preview-open'),
-    'save_as': (_('Save as…'), 'preview-save-as'),
-    'open_folder': (_('Open Folder'), 'preview-open-folder'),
-    'copy_link_location': (_('Copy Link'), 'preview-copy-link'),
-    'open_link_in_browser': (_('Open Link in Browser'), 'preview-open-link'),
-    'download': (_('Download File'), 'preview-download'),
+    "open": (_("Open"), "win.preview-open"),
+    "save_as": (_("Save as…"), "win.preview-save-as"),
+    "open_folder": (_("Open Folder"), "win.preview-open-folder"),
+    "copy_link_location": (_("Copy Link"), "win.preview-copy-link"),
+    "open_link_in_browser": (_("Open Link in Browser"), "win.preview-open-link"),
+    "download": (_("Download File"), "win.preview-download"),
 }
 
 
-class PreviewWidget(Gtk.Box):
+class PreviewWidget(Gtk.Box, SignalManager):
     def __init__(self, account: str) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
+
         self.account = account
         self._preview: Preview | None = None
 
         self._destroyed = False
 
-        if app.settings.get('use_kib_mib'):
+        if app.settings.get("use_kib_mib"):
             self._units = GLib.FormatSizeFlags.IEC_UNITS
         else:
             self._units = GLib.FormatSizeFlags.DEFAULT
 
-        self._ui = get_builder('preview.ui')
-        self._ui.connect_signals(self)
-        self.add(self._ui.preview_stack)
+        self._ui = get_builder("preview.ui")
+        self.append(self._ui.preview_stack)
 
-        leftclick_action = app.settings.get('preview_leftclick_action')
-        self._ui.icon_button.set_tooltip_text(
-            PREVIEW_ACTIONS[leftclick_action][0])
+        self._connect(self._ui.icon_button, "clicked", self._on_content_button_clicked)
+        self._connect(
+            self._ui.cancel_download_button, "clicked", self._on_cancel_download_clicked
+        )
+        self._connect(self._ui.image_button, "clicked", self._on_content_button_clicked)
+        self._connect(self._ui.open_folder_button, "clicked", self._on_open_folder)
+        self._connect(self._ui.save_as_button, "clicked", self._on_save_as)
+        self._connect(self._ui.download_button, "clicked", self._on_download)
+
+        pointer_cursor = Gdk.Cursor.new_from_name("pointer")
+        self._ui.icon_button.set_cursor(pointer_cursor)
+        self._ui.cancel_download_button.set_cursor(pointer_cursor)
+        self._ui.image_button.set_cursor(pointer_cursor)
+        self._ui.download_button.set_cursor(pointer_cursor)
+        self._ui.save_as_button.set_cursor(pointer_cursor)
+        self._ui.open_folder_button.set_cursor(pointer_cursor)
+
+        self._menu_popover = GajimPopover(None)
+        self.append(self._menu_popover)
+
+        leftclick_action = app.settings.get("preview_leftclick_action")
+        self._ui.icon_button.set_tooltip_text(PREVIEW_ACTIONS[leftclick_action][0])
+
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        self._connect(gesture_secondary_click, "pressed", self._on_preview_clicked)
+        self.add_controller(gesture_secondary_click)
+
         app.settings.connect_signal(
-            'preview_leftclick_action', self._update_icon_button_tooltip)
+            "preview_leftclick_action", self._update_icon_button_tooltip
+        )
 
-        self.connect('destroy', self._on_destroy)
-
-        self.show_all()
-
-    def _on_destroy(self, _widget: Gtk.Widget) -> None:
+    def do_unroot(self) -> None:
         self._destroyed = True
+        self._disconnect_all()
+        app.settings.disconnect_signals(self)
+        self._preview = None
+        del self._preview
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _update_icon_button_tooltip(self, setting: str, *args: Any) -> None:
-        self._ui.icon_button.set_tooltip_text(
-            PREVIEW_ACTIONS[setting][0])
+        self._ui.icon_button.set_tooltip_text(PREVIEW_ACTIONS[setting][0])
 
     def get_text(self) -> str:
         if self._preview is None:
-            return ''
+            return ""
         return self._preview.uri
 
     @ensure_not_destroyed
     def update_progress(self, preview: Preview, progress: float) -> None:
         self._preview = preview
 
-        self._ui.preview_stack.set_visible_child_name('preview')
+        self._ui.preview_stack.set_visible_child_name("preview")
         self._ui.download_button.hide()
 
         self._ui.progress_box.show()
-        self._ui.progress_text.set_label(f'{int(progress * 100)} %')
+        self._ui.progress_text.set_label(f"{int(progress * 100)} %")
         self._ui.progressbar.set_fraction(progress)
-        self._ui.info_message.set_text(_('Downloading…'))
-        self._ui.info_message.set_tooltip_text('')
+        self._ui.info_message.set_text(_("Downloading…"))
+        self._ui.info_message.set_tooltip_text("")
 
     @ensure_not_destroyed
-    def update(self, preview: Preview, data: GdkPixbufType | None) -> None:
+    def update(self, preview: Preview, data: bytes | None) -> None:
         self._preview = preview
 
-        self._ui.preview_stack.set_visible_child_name('preview')
+        self._ui.preview_stack.set_visible_child_name("preview")
         self._ui.progress_box.hide()
         self._ui.info_message.hide()
 
         if preview.is_geo_uri:
-            data = load_icon_pixbuf('map', size=preview.size)
+            image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
+            image.set_pixel_size(preview.size)
+            self._ui.image_button.set_child(image)
 
-        if isinstance(data, GdkPixbuf.PixbufAnimation):
-            image = Gtk.Image.new_from_animation(data)
-            self._ui.image_button.set_image(image)
-        elif isinstance(data, GdkPixbuf.Pixbuf):
-            image = Gtk.Image.new_from_pixbuf(data)
-            self._ui.image_button.set_image(image)
+        elif data is not None:
+            texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+            image = Gtk.Image.new_from_paintable(texture)
+            image_width = texture.get_width()
+            preview_size = app.settings.get("preview_size")
+            image.set_pixel_size(min(image_width, preview_size))
+            self._ui.image_button.set_child(image)
+
         else:
             icon = get_icon_for_mime_type(preview.mime_type)
-            image = Gtk.Image.new_from_gicon(icon, Gtk.IconSize.DIALOG)
-            self._ui.icon_button.set_image(image)
+            image = Gtk.Image.new_from_gicon(icon)
+            image.set_pixel_size(64)
+            self._ui.icon_button.set_child(image)
 
         self._ui.image_button.set_tooltip_text(preview.filename)
 
         if preview.is_geo_uri:
             self._ui.icon_event_box.hide()
-            self._ui.file_name.set_text(_('Click to view location'))
+            self._ui.file_name.set_text(_("Click to view location"))
             self._ui.file_name.set_selectable(False)
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
@@ -129,12 +159,11 @@ class PreviewWidget(Gtk.Box):
             location = split_geo_uri(preview.uri)
             text = format_geo_coords(float(location.lat), float(location.lon))
             self._ui.file_size.set_text(text)
-            self._ui.image_button.set_tooltip_text(
-                _('Location at %s') % text)
+            self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
             self._ui.preview_box.set_size_request(160, -1)
             return
 
-        preview_enabled = app.settings.get('enable_file_preview')
+        preview_enabled = app.settings.get("enable_file_preview")
 
         if preview_enabled and preview.is_previewable and preview.orig_exists:
             self._ui.icon_event_box.hide()
@@ -144,17 +173,15 @@ class PreviewWidget(Gtk.Box):
         else:
             self._ui.image_button.hide()
             self._ui.icon_event_box.show()
-            image.set_property('pixel-size', 64)
 
-        file_size_string = _('File size unknown')
+        file_size_string = _("File size unknown")
         if preview.file_size != 0:
-            file_size_string = GLib.format_size_full(
-                preview.file_size, self._units)
+            file_size_string = GLib.format_size_full(preview.file_size, self._units)
 
         self._ui.link_button.set_uri(preview.uri)
         self._ui.link_button.set_tooltip_text(preview.uri)
         self._ui.link_button.set_label(preview.uri)
-        label = cast(Gtk.Label, self._ui.link_button.get_children()[0])
+        label = cast(Gtk.Label, self._ui.link_button.get_child())
         label.set_ellipsize(Pango.EllipsizeMode.END)
         label.set_max_width_chars(32)
 
@@ -171,15 +198,19 @@ class PreviewWidget(Gtk.Box):
             self._ui.open_folder_button.show()
             self._ui.save_as_button.show()
 
-            if (preview_enabled and
-                    preview.orig_path is not None and
-                    preview.is_audio and
-                    app.is_installed('GST') and
-                    contains_audio_streams(preview.orig_path)):
+            if (
+                preview_enabled
+                and preview.orig_path is not None
+                and preview.is_audio
+                and app.is_installed("GST")
+                and contains_audio_streams(preview.orig_path)
+            ):
                 self._ui.image_button.hide()
                 audio_widget = AudioWidget(preview.orig_path)
-                self._ui.right_box.pack_end(audio_widget, False, True, 0)
-                self._ui.right_box.reorder_child(audio_widget, 1)
+                self._ui.right_box.append(audio_widget)
+                self._ui.right_box.reorder_child_after(
+                    audio_widget, self._ui.content_box
+                )
         else:
             if preview.file_size == 0:
                 if preview_enabled:
@@ -191,14 +222,16 @@ class PreviewWidget(Gtk.Box):
                 self._ui.download_button.show()
             self._ui.save_as_button.hide()
             self._ui.open_folder_button.hide()
-            allow_in_public = app.settings.get('preview_anonymous_muc')
-            if (preview.context == 'public' and not
-                    allow_in_public and not preview.from_us):
-                image = Gtk.Image.new_from_icon_name(
-                    'dialog-question', Gtk.IconSize.DIALOG)
-                self._ui.icon_button.set_image(image)
+            allow_in_public = app.settings.get("preview_anonymous_muc")
+            if (
+                preview.context == "public"
+                and not allow_in_public
+                and not preview.from_us
+            ):
+                image = Gtk.Image.new_from_icon_name("dialog-question")
+                self._ui.icon_button.set_child(image)
                 self._ui.download_button.show()
-                file_size_string = _('Automatic preview disabled')
+                file_size_string = _("Automatic preview disabled")
 
         self._ui.file_size.set_text(file_size_string)
         self._ui.file_name.set_text(preview.filename)
@@ -208,48 +241,43 @@ class PreviewWidget(Gtk.Box):
         if self._preview is None:
             return
 
-        variant = GLib.Variant('s', self._preview.id)
-        app.window.activate_action('preview-download', variant)
+        variant = GLib.Variant("s", self._preview.id)
+        app.window.activate_action("win.preview-download", variant)
 
     def _on_save_as(self, _button: Gtk.Button) -> None:
         assert self._preview is not None
-        variant = GLib.Variant('s', self._preview.id)
-        app.window.activate_action('preview-save-as', variant)
+        variant = GLib.Variant("s", self._preview.id)
+        app.window.activate_action("win.preview-save-as", variant)
 
     def _on_open_folder(self, _button: Gtk.Button) -> None:
         assert self._preview is not None
-        variant = GLib.Variant('s', self._preview.id)
-        app.window.activate_action('preview-open-folder', variant)
+        variant = GLib.Variant("s", self._preview.id)
+        app.window.activate_action("win.preview-open-folder", variant)
 
     def _on_content_button_clicked(self, _button: Gtk.Button) -> None:
         if self._preview is None:
             return
 
-        leftclick_action = app.settings.get('preview_leftclick_action')
-        variant = GLib.Variant('s', self._preview.id)
+        leftclick_action = app.settings.get("preview_leftclick_action")
+        variant = GLib.Variant("s", self._preview.id)
         action = PREVIEW_ACTIONS[leftclick_action][1]
         app.window.activate_action(action, variant)
 
-    def _on_button_press_event(self,
-                               _button: Gtk.Button,
-                               event: Gdk.EventButton
-                               ) -> None:
-
+    def _on_preview_clicked(
+        self,
+        _gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> None:
         if self._preview is None:
             return
 
-        if (event.type == Gdk.EventType.BUTTON_PRESS and
-                event.button == Gdk.BUTTON_SECONDARY):
-            menu = get_preview_menu(self._preview)
-            popover = GajimPopover(menu, relative_to=self, event=event)
-            popover.popup()
+        menu = get_preview_menu(self._preview)
+        self._menu_popover.set_menu_model(menu)
+        self._menu_popover.set_pointing_to_coord(x, y)
+        self._menu_popover.popup()
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
         assert self._preview is not None
         app.preview_manager.cancel_download(self._preview)
-
-    @staticmethod
-    def _on_realize(event_box: Gtk.EventBox) -> None:
-        window = event_box.get_window()
-        assert window
-        window.set_cursor(get_cursor('pointer'))
