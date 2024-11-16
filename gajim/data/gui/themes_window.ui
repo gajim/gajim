@@ -1,93 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.20"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkPopover" id="option_popover">
-    <property name="can_focus">False</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="focusable">1</property>
         <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
         <property name="min_content_height">260</property>
-        <property name="overlay_scrolling">False</property>
-        <child>
+        <property name="overlay_scrolling">0</property>
+        <property name="child">
           <object class="GtkViewport">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
+            <property name="child">
               <object class="GtkListBox" id="choose_option_listbox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="selection_mode">none</property>
-                <signal name="row-activated" handler="_add_option" swapped="no"/>
                 <style>
                   <class name="theme_popover_listbox"/>
                 </style>
               </object>
-            </child>
+            </property>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkBox" id="placeholder">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="wrap">True</property>
-        <property name="wrap_mode">word</property>
-        <property name="label" translatable="yes">Add a setting you would like to change</property>
+        <property name="vexpand">1</property>
+        <property name="wrap">1</property>
+        <property name="label" translatable="1">Add a setting you would like to change</property>
         <style>
           <class name="dim-label"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
   </object>
   <object class="GtkListStore" id="theme_store">
     <columns>
-      <!-- column-name name -->
       <column type="gchararray"/>
     </columns>
   </object>
   <object class="GtkGrid" id="theme_grid">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="column_spacing">6</property>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="focusable">1</property>
         <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
-        <child>
+        <property name="child">
           <object class="GtkTreeView" id="theme_treeview">
             <property name="width_request">150</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="focusable">1</property>
             <property name="model">theme_store</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection">
-                <signal name="changed" handler="_on_theme_selected" swapped="no"/>
+              <object class="GtkTreeSelection" id="theme_treeview_selection">
               </object>
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Themes</property>
+                <property name="title" translatable="1">Themes</property>
                 <child>
-                  <object class="GtkCellRendererText">
-                    <property name="editable">True</property>
-                    <signal name="edited" handler="_on_theme_name_edit" swapped="no"/>
+                  <object class="GtkCellRendererText" id="theme_name_cell_renderer">
+                    <property name="editable">1</property>
                   </object>
                   <attributes>
                     <attribute name="text">0</attribute>
@@ -96,145 +70,100 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="vexpand">True</property>
+        <property name="focusable">1</property>
+        <property name="vexpand">1</property>
         <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
-        <child>
+        <property name="child">
           <object class="GtkViewport">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
+            <property name="child">
               <object class="GtkListBox" id="option_listbox">
                 <property name="width_request">200</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="hexpand">True</property>
+                <property name="hexpand">1</property>
                 <property name="selection_mode">none</property>
-                <property name="activate_on_single_click">False</property>
+                <property name="activate_on_single_click">0</property>
                 <style>
                   <class name="theme_listbox"/>
                 </style>
               </object>
-            </child>
+            </property>
           </object>
-        </child>
+        </property>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">0</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkMenuButton" id="add_option_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="focusable">1</property>
+            <property name="receives_default">1</property>
             <property name="popover">option_popover</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="spacing">6</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="icon_name">list-add-symbolic</property>
-                    <property name="icon_size">1</property>
+                    <property name="icon_name">feather-plus-symbolic</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Add Setting</property>
+                    <property name="label" translatable="1">Add Setting</property>
                   </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">0</property>
-          </packing>
         </child>
+        <layout>
+          <property name="column">1</property>
+          <property name="row">1</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left_attach">1</property>
-        <property name="top_attach">1</property>
-      </packing>
     </child>
     <child>
-      <object class="GtkToolbar">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="icon_size">2</property>
+      <object class="GtkBox">
+        <property name="css-classes">toolbar</property>
+        <property name="can_focus">0</property>
         <child>
-          <object class="GtkToolButton" id="add_theme_button">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Add new Theme</property>
-            <property name="use_underline">True</property>
-            <property name="icon_name">list-add-symbolic</property>
-            <signal name="clicked" handler="_on_add_new_theme" swapped="no"/>
+          <object class="GtkButton" id="add_theme_button">
+            <property name="can_focus">0</property>
+            <property name="tooltip_text" translatable="1">Add new Theme</property>
+            <property name="use_underline">1</property>
+            <property name="icon_name">feather-plus-symbolic</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkToolButton" id="remove_theme_button">
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can_focus">False</property>
-            <property name="tooltip_text" translatable="yes">Remove Theme</property>
-            <property name="use_underline">True</property>
-            <property name="icon_name">list-remove-symbolic</property>
-            <signal name="clicked" handler="_on_remove_theme" swapped="no"/>
+          <object class="GtkButton" id="remove_theme_button">
+            <property name="sensitive">0</property>
+            <property name="can_focus">0</property>
+            <property name="tooltip_text" translatable="1">Remove Theme</property>
+            <property name="use_underline">1</property>
+            <property name="icon_name">feather-trash-symbolic</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
         </child>
         <style>
           <class name="inline-toolbar"/>
         </style>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
       </object>
-      <packing>
-        <property name="left_attach">0</property>
-        <property name="top_attach">1</property>
-      </packing>
     </child>
   </object>
 </interface>
