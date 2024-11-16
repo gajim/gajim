@@ -1,190 +1,138 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.40.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="box">
-    <property name="visible">True</property>
-    <property name="can-focus">False</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox" id="action_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-        <property name="hexpand">True</property>
-        <property name="spacing">2</property>
+      <object class="GtkBox" id="chat_state_box">
+        <property name="orientation">vertical</property>
         <child>
           <placeholder/>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="reply_box">
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkButton" id="encryption_details_button">
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="no-show-all">True</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="_on_encryption_details_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage" id="encryption_details_image">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon_size">1</property>
-              </object>
-            </child>
-            <style>
-              <class name="message-actions-box-button"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">1</property>
-          </packing>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="state_box">
+        <property name="visible">0</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="state_box_image"/>
         </child>
         <child>
-          <object class="GtkMenuButton" id="encryption_menu_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="relief">none</property>
-            <child>
-              <object class="GtkImage" id="encryption_image">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">channel-insecure-symbolic</property>
-              </object>
-            </child>
+          <object class="GtkLabel" id="state_box_label">
+            <property name="ellipsize">end</property>
+            <property name="xalign">0</property>
             <style>
-              <class name="message-actions-box-button"/>
+              <class name="small-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton" id="sendfile_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="action-name">win.send-file</property>
-            <property name="action-target">['']</property>
-            <property name="relief">none</property>
+          <object class="GtkMenuButton" id="visitor_menu_button">
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">What does this mean?</property>
+            <property name="valign">center</property>
+            <property name="margin-end">6</property>
+            <property name="popover">visitor_popover</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">mail-attachment-symbolic</property>
+                <property name="icon-name">dialog-information-symbolic</property>
               </object>
             </child>
             <style>
-              <class name="message-actions-box-button"/>
+              <class name="suggested-action"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">3</property>
-          </packing>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="edit_box">
+        <property name="visible">0</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="edit_box_image">
+            <property name="icon-name">document-edit-symbolic</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="label" translatable="1">Edit your message (Esc to cancel)…</property>
+            <style>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="cancel_correction_button">
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">Cancel</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">window-close-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="action_box">
+        <property name="hexpand">1</property>
+        <property name="spacing">2</property>
         <child>
           <object class="GtkMenuButton" id="emoticons_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
-            <property name="action-name">win.show-emoji-chooser</property>
-            <property name="relief">none</property>
+            <property name="valign">center</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">Show a list of emojis</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="icon-name">face-smile-symbolic</property>
               </object>
             </child>
-            <style>
-              <class name="message-actions-box-button"/>
-            </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">5</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkButton" id="send_message_button">
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="no-show-all">True</property>
-            <property name="tooltip-text" translatable="yes">Send Message</property>
-            <property name="action-name">win.send-message</property>
-            <property name="relief">none</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">gajim-send-message-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="message-actions-box-button"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="pack-type">end</property>
-            <property name="position">6</property>
-          </packing>
         </child>
         <child>
           <object class="GtkMenuButton" id="formattings_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Format your message</property>
-            <property name="relief">none</property>
+            <property name="valign">center</property>
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">Format your message</property>
             <property name="direction">up</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
                 <property name="icon-name">format-text-bold-symbolic</property>
-                <property name="icon_size">1</property>
               </object>
             </child>
-            <style>
-              <class name="message-actions-box-button"/>
-            </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
-          </packing>
         </child>
         <child>
           <object class="GtkScrolledWindow" id="input_scrolled">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
+            <property name="hexpand">1</property>
+            <property name="focusable">1</property>
             <property name="margin-start">3</property>
             <property name="margin-end">3</property>
             <property name="hscrollbar-policy">external</property>
-            <property name="shadow-type">in</property>
-            <property name="overlay-scrolling">False</property>
+            <property name="overlay-scrolling">0</property>
             <property name="max-content-height">100</property>
-            <property name="propagate-natural-height">True</property>
+            <property name="propagate-natural-height">1</property>
             <child>
               <placeholder/>
             </child>
@@ -196,255 +144,104 @@
               <class name="one-line-scrollbar"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">9</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="edit_box">
-        <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkImage" id="edit_box_image">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon-name">document-edit-symbolic</property>
-            <property name="icon_size">3</property>
-            <style>
-              <class name="dim-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">Cancel</property>
-            <property name="relief">none</property>
-            <signal name="clicked" handler="_on_cancel_correction_clicked" swapped="no"/>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">window-close-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="message-actions-box-button"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">Edit your message (Esc to cancel)…</property>
-            <style>
-              <class name="small-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="state_box">
-        <property name="can-focus">False</property>
-        <property name="no-show-all">True</property>
-        <property name="spacing">12</property>
-        <child>
-          <object class="GtkImage" id="state_box_image">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="icon_size">3</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="state_box_label">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="ellipsize">end</property>
-            <property name="xalign">0</property>
-            <style>
-              <class name="small-label"/>
-            </style>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="visitor_menu_button">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="focus-on-click">False</property>
-            <property name="receives-default">True</property>
-            <property name="tooltip-text" translatable="yes">What does this mean?</property>
+          <object class="GtkButton" id="send_message_button">
             <property name="valign">center</property>
-            <property name="margin-end">6</property>
-            <property name="popover">visitor_popover</property>
+            <property name="halign">center</property>
+            <property name="visible">0</property>
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="tooltip-text" translatable="1">Send Message</property>
+            <property name="action-name">win.send-message</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can-focus">False</property>
-                <property name="icon-name">dialog-information-symbolic</property>
+                <property name="icon-name">gajim-send-message-symbolic</property>
               </object>
             </child>
-            <style>
-              <class name="suggested-action"/>
-            </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">2</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="reply_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
         <child>
-          <placeholder/>
+          <object class="GtkButton" id="sendfile_button">
+            <property name="valign">center</property>
+            <property name="halign">center</property>
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <property name="action-name">win.send-file</property>
+            <property name="action-target">[&apos;&apos;]</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">mail-attachment-symbolic</property>
+              </object>
+            </child>
+          </object>
         </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="chat_state_box">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
-        <property name="orientation">vertical</property>
         <child>
-          <placeholder/>
+          <object class="GtkMenuButton" id="encryption_menu_button">
+            <property name="valign">center</property>
+            <property name="focusable">1</property>
+            <property name="receives-default">1</property>
+            <child>
+              <object class="GtkImage" id="encryption_image">
+                <property name="icon-name">channel-insecure-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="encryption_details_button">
+            <property name="valign">center</property>
+            <property name="halign">center</property>
+            <property name="visible">0</property>
+            <property name="focusable">1</property>
+            <property name="focus-on-click">0</property>
+            <property name="receives-default">1</property>
+            <child>
+              <object class="GtkImage" id="encryption_details_image"/>
+            </child>
+          </object>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="pack-type">end</property>
-        <property name="position">4</property>
-      </packing>
     </child>
   </object>
   <object class="GtkPopover" id="visitor_popover">
-    <property name="can-focus">False</property>
-    <property name="relative-to">visitor_menu_button</property>
-    <property name="position">bottom</property>
-    <child>
+    <property name="child">
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can-focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">You are a visitor</property>
+            <property name="label" translatable="1">You are a visitor</property>
             <style>
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="label" translatable="yes">In order to write messages in this chat, you need to request voice first.
+            <property name="label" translatable="1">In order to write messages in this chat, you need to request voice first.
 A moderator will process your request.</property>
-            <property name="wrap">True</property>
+            <property name="wrap">1</property>
             <property name="max-width-chars">30</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="label" translatable="yes">_Request</property>
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="receives-default">False</property>
+          <object class="GtkButton" id="request_voice_button">
+            <property name="label" translatable="1">_Request</property>
+            <property name="focusable">1</property>
             <property name="halign">center</property>
-            <property name="use-underline">True</property>
-            <signal name="clicked" handler="_on_request_voice_clicked" swapped="no"/>
+            <property name="use-underline">1</property>
             <style>
               <class name="suggested-action"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack-type">end</property>
-            <property name="position">2</property>
-          </packing>
         </child>
         <style>
-          <class name="padding-12"/>
+          <class name="p-12"/>
         </style>
       </object>
-    </child>
+    </property>
   </object>
 </interface>
