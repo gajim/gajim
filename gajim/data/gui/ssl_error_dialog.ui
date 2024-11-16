@@ -1,146 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="ssl_error_box">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">18</property>
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
       <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_bottom">6</property>
-        <property name="label" translatable="yes">SSL Certificate Verification Error</property>
+        <property name="label" translatable="1">SSL Certificate Verification Error</property>
         <style>
           <class name="large-header"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel" id="intro_text">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_end">30</property>
         <property name="margin_bottom">6</property>
-        <property name="wrap">True</property>
+        <property name="wrap">1</property>
         <property name="max_width_chars">50</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">Identified Error</property>
+        <property name="label" translatable="1">Identified Error</property>
         <style>
           <class name="bold"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <child>
       <object class="GtkLabel" id="ssl_error">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_bottom">12</property>
-        <property name="label" translatable="yes">&lt;error&gt;</property>
-        <property name="wrap">True</property>
+        <property name="label" translatable="1">&lt;error&gt;</property>
+        <property name="wrap">1</property>
         <property name="max_width_chars">42</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
     </child>
     <child>
       <object class="GtkCheckButton" id="add_certificate_checkbutton">
-        <property name="label" translatable="yes">Add this certificate to the list of _trusted certificates</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="no_show_all">True</property>
+        <property name="visible">0</property>
+        <property name="label" translatable="1">Add this certificate to the list of _trusted certificates</property>
+        <property name="focusable">1</property>
         <property name="halign">start</property>
         <property name="margin_start">15</property>
         <property name="margin_end">15</property>
-        <property name="use_underline">True</property>
-        <property name="draw_indicator">True</property>
-        <signal name="toggled" handler="_on_add_certificate_toggled" swapped="no"/>
+        <property name="use_underline">1</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
-      </packing>
     </child>
     <child>
       <placeholder/>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_top">12</property>
-        <property name="hexpand">True</property>
+        <property name="hexpand">1</property>
         <property name="spacing">12</property>
-        <property name="homogeneous">True</property>
+        <property name="homogeneous">1</property>
         <child>
           <object class="GtkButton" id="view_cert_button">
-            <property name="label" translatable="yes">_View Certificate</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="label" translatable="1">_View Certificate</property>
+            <property name="focusable">1</property>
+            <property name="receives_default">1</property>
             <property name="halign">start</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_view_cert_clicked" swapped="no"/>
+            <property name="use_underline">1</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkButton" id="connect_button">
-            <property name="label" translatable="yes">_Connect</property>
-            <property name="visible">True</property>
-            <property name="sensitive">False</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="label" translatable="1">_Connect</property>
+            <property name="sensitive">0</property>
+            <property name="focusable">1</property>
+            <property name="receives_default">1</property>
             <property name="halign">end</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_connect_clicked" swapped="no"/>
+            <property name="use_underline">1</property>
             <style>
               <class name="destructive-action"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">6</property>
-      </packing>
     </child>
   </object>
 </interface>
