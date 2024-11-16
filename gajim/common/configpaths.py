@@ -174,7 +174,7 @@ class ConfigPaths:
 
         path = Path(path)
 
-        if location is not None:
+        if location != PathLocation.NONE:
             path = self._prepare(path, unique)
         self._paths[name] = (location, path, path_type)
 
@@ -193,13 +193,16 @@ class ConfigPaths:
             self.add(*path)
 
         # These paths are unique per profile
-        unique_profile_paths = [
+        unique_profile_paths: list[tuple[str, str | Path, PathLocation, PathType]] = [
             # Data paths
             ('SECRETS_FILE', 'secrets', PathLocation.DATA, PathType.FILE),
             ('CERT_STORE', 'cert_store', PathLocation.DATA, PathType.FOLDER),
             ('DEBUG', 'debug', PathLocation.DATA, PathType.FOLDER),
             ('PLUGINS_DATA', 'plugins_data',
              PathLocation.DATA, PathType.FOLDER),
+
+            # Cache paths
+            ('DOWNLOADS_THUMB', 'downloads.thumb', PathLocation.CACHE, PathType.FOLDER),
 
             # Config paths
             ('SETTINGS', 'settings.sqlite', PathLocation.CONFIG, PathType.FILE),
@@ -209,6 +212,17 @@ class ConfigPaths:
             ('MY_SHORTCUTS', 'shortcuts.json',
              PathLocation.CONFIG, PathType.FILE),
         ]
+
+        # Determine downloads dir
+        path = ('DOWNLOADS', 'downloads', PathLocation.DATA, PathType.FOLDER)
+        if sys.platform == 'win32' and not gajim.IS_PORTABLE:
+            download_dir = GLib.get_user_special_dir(
+                GLib.UserDirectory.DIRECTORY_DOWNLOAD)
+            assert download_dir is not None
+            path = ('DOWNLOADS', Path(download_dir) / 'Gajim',
+                    PathLocation.NONE, PathType.FOLDER)
+
+        unique_profile_paths.append(path)
 
         for path in unique_profile_paths:
             self.add(*path, unique=True)
