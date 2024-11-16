@@ -55,6 +55,7 @@ class RowHeaderType(IntEnum):
 class AvatarSize(IntEnum):
     TAB = 16
     SHOW_CIRCLE = 24
+    SMALL = 24
     ROSTER = 32
     VCARD_HEADER = 40
     ACCOUNT_SIDE_BAR = 40
@@ -82,6 +83,7 @@ class PathLocation(IntEnum):
     CONFIG = 0
     CACHE = 1
     DATA = 2
+    NONE = 3
 
 
 @unique
