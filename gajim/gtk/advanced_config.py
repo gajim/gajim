@@ -24,6 +24,7 @@ from gajim.common.setting_values import ADVANCED_SETTINGS
 from gajim.common.setting_values import APP_SETTINGS
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.widgets import GajimAppWindow
 
 
 @unique
@@ -34,129 +35,150 @@ class Column(IntEnum):
     IS_DEFAULT = 3
 
 
-BOOL_DICT = {
-    True: _('Activated'),
-    False: _('Deactivated')
-}
+BOOL_DICT = {True: _("Activated"), False: _("Deactivated")}
 
 
 SETTING_TYPES = {
-    bool: p_('Configuration type', 'Boolean'),
-    int: p_('Configuration type', 'Integer'),
-    str: p_('Configuration type', 'Text'),
+    bool: p_("Configuration type", "Boolean"),
+    int: p_("Configuration type", "Integer"),
+    str: p_("Configuration type", "Text"),
 }
 
 
-class AdvancedConfig(Gtk.ApplicationWindow):
+class AdvancedConfig(GajimAppWindow):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
-        self.set_application(app.app)
-        self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_show_menubar(False)
-        self.set_name('AdvancedConfig')
-        self.set_title(_('Advanced Configuration Editor (ACE)'))
+        GajimAppWindow.__init__(
+            self,
+            name="AdvancedConfig",
+            title=_("Advanced Configuration Editor (ACE)"),
+        )
 
-        self._ui = get_builder('advanced_configuration.ui')
-        self.add(self._ui.box)
+        self._ui = get_builder("advanced_configuration.ui")
+
+        self.set_child(self._ui.box)
+
+        self._connect(self._ui.reset_button, "clicked", self._on_reset_button_clicked)
+        self._connect(
+            self._ui.search_entry, "search-changed", self._on_search_entry_changed
+        )
+        self._connect(
+            self._ui.advanced_treeview, "row-activated", self._on_treeview_row_activated
+        )
+        self._connect(
+            self._ui.treeview_selection, "changed", self._on_treeview_selection_changed
+        )
 
         treeview = self._ui.advanced_treeview
         self.treeview = treeview
         self.model = Gtk.TreeStore(str, str, str, bool)
+
         self._fill_model()
         self.model.set_sort_column_id(0, Gtk.SortType.ASCENDING)
         self.modelfilter = self.model.filter_new()
         self.modelfilter.set_visible_func(self._visible_func)
 
         renderer_text = Gtk.CellRendererText()
-        renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
-        col = Gtk.TreeViewColumn(p_('Configuration', 'Preference Name'),
-                                 renderer_text, text=0)
+        renderer_text.set_property("ellipsize", Pango.EllipsizeMode.END)
+        col = Gtk.TreeViewColumn(
+            p_("Configuration", "Preference Name"), renderer_text, text=0
+        )
         treeview.insert_column(col, -1)
-        col.set_cell_data_func(renderer_text,
-                               self._value_column_name_callback)
+        col.set_cell_data_func(renderer_text, self._value_column_name_callback)
         col.set_expand(True)
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_resizable(True)
 
         self.renderer_text = Gtk.CellRendererText()
-        self.renderer_text.connect('edited', self._on_config_edited)
-        self.renderer_text.set_property('ellipsize', Pango.EllipsizeMode.END)
+        self.renderer_text.set_property("ellipsize", Pango.EllipsizeMode.END)
+        self.renderer_text.connect("edited", self._on_config_edited)
+
         col = Gtk.TreeViewColumn(
-            p_('Configuration', 'Value'), self.renderer_text, text=1)
+            p_("Configuration", "Value"), self.renderer_text, text=1
+        )
         treeview.insert_column(col, -1)
-        col.set_cell_data_func(self.renderer_text,
-                               self._value_column_data_callback)
+        col.set_cell_data_func(self.renderer_text, self._value_column_data_callback)
         col.set_expand(True)
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
         col.set_resizable(True)
 
         renderer_text = Gtk.CellRendererText()
-        col = Gtk.TreeViewColumn(
-            p_('Configuration', 'Type'), renderer_text, text=2)
+        col = Gtk.TreeViewColumn(p_("Configuration", "Type"), renderer_text, text=2)
         treeview.insert_column(col, -1)
         col.set_sizing(Gtk.TreeViewColumnSizing.FIXED)
 
         treeview.set_model(self.modelfilter)
 
-        self.connect_after('key-press-event', self._on_key_press)
-        self._ui.connect_signals(self)
-        self.show_all()
+        self._connect(
+            self.get_default_controller(), "key-pressed", self._on_key_pressed
+        )
+        self.show()
 
-    def _on_key_press(self, _widget: Gtk.Widget, event: Gdk.EventKey) -> None:
-        if event.keyval != Gdk.KEY_Escape:
-            return
+    def _cleanup(self) -> None:
+        del self.renderer_text
+        del self.modelfilter
+        del self.model
+        del self.treeview
+
+    def _on_key_pressed(
+        self,
+        _event_controller_key: Gtk.EventControllerKey,
+        keyval: int,
+        keycode: int,
+        state: Gdk.ModifierType,
+    ) -> bool:
+
+        if keyval != Gdk.KEY_Escape:
+            return Gdk.EVENT_PROPAGATE
 
         if self._ui.search_entry.get_text():
-            self._ui.search_entry.set_text('')
-            return
+            self._ui.search_entry.set_text("")
+            return Gdk.EVENT_STOP
 
-        self.destroy()
+        return Gdk.EVENT_PROPAGATE
 
-    def _value_column_name_callback(self,
-                                    _col: Gtk.TreeViewColumn,
-                                    cell: Gtk.CellRenderer,
-                                    model: Gtk.TreeModel,
-                                    iter_: Gtk.TreeIter,
-                                    _data: object | None
-                                    ) -> None:
+    @staticmethod
+    def _value_column_name_callback(
+        _col: Gtk.TreeViewColumn,
+        cell: Gtk.CellRenderer,
+        model: Gtk.TreeModel,
+        iter_: Gtk.TreeIter,
+        _data: object | None,
+    ) -> None:
 
         opt_is_default = model[iter_][Column.IS_DEFAULT]
-        cell.set_property('weight', 400 if opt_is_default else 700)
+        cell.set_property("weight", 400 if opt_is_default else 700)
 
-    def _value_column_data_callback(self,
-                                    _col: Gtk.TreeViewColumn,
-                                    cell: Gtk.CellRenderer,
-                                    model: Gtk.TreeModel,
-                                    iter_: Gtk.TreeIter,
-                                    _data: object | None
-                                    ) -> None:
+    @staticmethod
+    def _value_column_data_callback(
+        _col: Gtk.TreeViewColumn,
+        cell: Gtk.CellRenderer,
+        model: Gtk.TreeModel,
+        iter_: Gtk.TreeIter,
+        _data: object | None,
+    ) -> None:
 
         opt_type = model[iter_][Column.TYPE]
-        cell.set_property('editable', opt_type != SETTING_TYPES[bool])
+        cell.set_property("editable", opt_type != SETTING_TYPES[bool])
 
         opt_is_default = model[iter_][Column.IS_DEFAULT]
-        cell.set_property('weight', 400 if opt_is_default else 700)
+        cell.set_property("weight", 400 if opt_is_default else 700)
 
-    def _on_treeview_selection_changed(self,
-                                       treeselection: Gtk.TreeSelection
-                                       ) -> None:
+    def _on_treeview_selection_changed(self, treeselection: Gtk.TreeSelection) -> None:
+
         model, iter_ = treeselection.get_selected()
         if not iter_:
             self._ui.reset_button.set_sensitive(False)
             return
 
         setting = model[iter_][Column.NAME]
-        desc = ADVANCED_SETTINGS['app'][setting]
+        desc = ADVANCED_SETTINGS["app"][setting]
 
-        self._ui.description.set_text(
-            desc or p_('Configuration description', 'None'))
+        self._ui.description.set_text(desc or p_("Configuration description", "None"))
         self._ui.reset_button.set_sensitive(not model[iter_][Column.IS_DEFAULT])
 
-    def _on_treeview_row_activated(self,
-                                   _treeview: Gtk.TreeView,
-                                   path: Gtk.TreePath,
-                                   _column: Gtk.TreeViewColumn
-                                   ) -> None:
+    def _on_treeview_row_activated(
+        self, _treeview: Gtk.TreeView, path: Gtk.TreePath, _column: Gtk.TreeViewColumn
+    ) -> None:
         modelpath = self.modelfilter.convert_path_to_child_path(path)
         assert modelpath
         modelrow = self.model[modelpath]
@@ -165,7 +187,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
         if modelrow[Column.TYPE] != SETTING_TYPES[bool]:
             return
 
-        setting_value = modelrow[Column.VALUE] != _('Activated')
+        setting_value = modelrow[Column.VALUE] != _("Activated")
         column_value = BOOL_DICT[setting_value]
         default = APP_SETTINGS[setting]
 
@@ -175,13 +197,12 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
         self._ui.reset_button.set_sensitive(setting_value != default)
 
-    def _on_config_edited(self,
-                          _cell: Gtk.CellRendererText,
-                          path: str,
-                          text: str
-                          ) -> None:
+    def _on_config_edited(
+        self, _cell: Gtk.CellRendererText, path: str, text: str
+    ) -> None:
 
         treepath = Gtk.TreePath.new_from_string(path)
+        assert treepath is not None
         modelpath = self.modelfilter.convert_path_to_child_path(treepath)
         assert modelpath
         modelrow = self.model[modelpath]
@@ -221,7 +242,7 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
     def _fill_model(self) -> None:
         for category, settings in ADVANCED_SETTINGS.items():
-            if category != 'app':
+            if category != "app":
                 continue
 
             for setting in settings:
@@ -245,17 +266,16 @@ class AdvancedConfig(Gtk.ApplicationWindow):
 
                 self.model.append(None, [setting, value, type_, is_default])
 
-    def _visible_func(self,
-                      model: Gtk.TreeModel,
-                      treeiter: Gtk.TreeIter,
-                      _data: object | None
-                      ) -> bool:
+    def _visible_func(
+        self, model: Gtk.TreeModel, treeiter: Gtk.TreeIter, _data: object | None
+    ) -> bool:
+
         search_string = self._ui.search_entry.get_text().lower()
         if not search_string:
             return True
 
         setting = model[treeiter][Column.NAME]
-        desc = ADVANCED_SETTINGS['app'][setting]
+        desc = ADVANCED_SETTINGS["app"][setting]
 
         return search_string in setting or search_string in desc.lower()
 

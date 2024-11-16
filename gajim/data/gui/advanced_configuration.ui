@@ -1,140 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.1 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="box">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">18</property>
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
     <child>
       <object class="GtkLabel">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="label" translatable="yes">A restart may be required for some settings to take effect</property>
+        <property name="label" translatable="1">A restart may be required for some settings to take effect</property>
         <property name="xalign">0</property>
         <attributes>
-          <attribute name="foreground" value="#efef29292929"/>
+          <attribute name="foreground" value="#efef29292929"></attribute>
         </attributes>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="padding">5</property>
-        <property name="position">0</property>
-      </packing>
     </child>
     <child>
       <object class="GtkSearchEntry" id="search_entry">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="primary_icon_name">edit-find-symbolic</property>
-        <property name="primary_icon_activatable">False</property>
-        <property name="primary_icon_sensitive">False</property>
-        <property name="placeholder_text" translatable="yes">Type to search for values...</property>
-        <signal name="search-changed" handler="_on_search_entry_changed" swapped="no"/>
+        <property name="focusable">1</property>
+        <property name="placeholder_text" translatable="1">Type to search for values...</property>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkScrolledWindow">
+        <property name="vexpand">1</property>
         <property name="width_request">600</property>
         <property name="height_request">300</property>
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
+        <property name="focusable">1</property>
         <property name="hscrollbar_policy">never</property>
-        <property name="shadow_type">in</property>
-        <child>
+        <property name="child">
           <object class="GtkTreeView" id="advanced_treeview">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <signal name="row-activated" handler="_on_treeview_row_activated" swapped="no"/>
+            <property name="focusable">1</property>
             <child internal-child="selection">
-              <object class="GtkTreeSelection">
-                <signal name="changed" handler="_on_treeview_selection_changed" swapped="no"/>
+              <object class="GtkTreeSelection" id="treeview_selection">
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="padding">1</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Description</property>
-            <property name="use_markup">True</property>
+            <property name="label" translatable="1">Description</property>
+            <property name="use_markup">1</property>
             <property name="xalign">0</property>
             <style>
               <class name="bold"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="description">
             <property name="height_request">40</property>
-            <property name="visible">True</property>
-            <property name="selectable">True</property>
-            <property name="wrap">True</property>
+            <property name="selectable">1</property>
+            <property name="wrap">1</property>
             <property name="max_width_chars">60</property>
             <property name="xalign">0</property>
             <property name="yalign">0</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
-      </packing>
     </child>
     <child>
       <object class="GtkButton" id="reset_button">
-        <property name="label" translatable="yes">_Reset Value</property>
-        <property name="visible">True</property>
-        <property name="sensitive">False</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">False</property>
-        <property name="tooltip_text" translatable="yes">Resets value to default</property>
+        <property name="label" translatable="1">_Reset Value</property>
+        <property name="sensitive">0</property>
+        <property name="focusable">1</property>
+        <property name="tooltip_text" translatable="1">Resets value to default</property>
         <property name="halign">end</property>
-        <property name="use_underline">True</property>
-        <signal name="clicked" handler="_on_reset_button_clicked" swapped="no"/>
+        <property name="use_underline">1</property>
         <style>
           <class name="destructive-action"/>
         </style>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">4</property>
-      </packing>
     </child>
   </object>
 </interface>
