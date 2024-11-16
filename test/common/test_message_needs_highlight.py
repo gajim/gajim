@@ -1,3 +1,7 @@
+# This file is part of Gajim.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import unittest
 
 from gajim.common import app
@@ -57,3 +61,6 @@ class HighlightTest(unittest.TestCase):
         self.assertFalse(message_needs_highlight(f_text_url_1, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text_url_2, NICK, JID))
         self.assertFalse(message_needs_highlight(f_text_url_3, NICK, JID))
+
+if __name__ == '__main__':
+    unittest.main()
