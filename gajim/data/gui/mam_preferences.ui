@@ -1,75 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.36.0 -->
 <interface>
-  <requires lib="gtk+" version="3.22"/>
-  <object class="GtkListStore" id="default_store">
-    <columns>
-      <!-- column-name text -->
-      <column type="gchararray"/>
-      <!-- column-name value -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Always</col>
-        <col id="1">always</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Contact List</col>
-        <col id="1">roster</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Never</col>
-        <col id="1">never</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="preferences_store">
-    <columns>
-      <!-- column-name jid -->
-      <column type="gchararray"/>
-      <!-- column-name gboolean1 -->
-      <column type="gboolean"/>
-    </columns>
-  </object>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkBox" id="mam_box">
     <property name="width_request">400</property>
     <property name="height_request">300</property>
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="border_width">18</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">end</property>
-            <property name="label" translatable="yes">_Default</property>
-            <property name="use_underline">True</property>
+            <property name="label" translatable="1">_Default</property>
+            <property name="use_underline">1</property>
             <property name="xalign">0</property>
             <style>
               <class name="dim-label"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="default_combo">
             <property name="width_request">200</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="halign">start</property>
-            <property name="model">default_store</property>
             <property name="active">0</property>
             <property name="id_column">1</property>
             <child>
@@ -79,51 +33,35 @@
               </attributes>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
     </child>
     <child>
       <object class="GtkOverlay" id="overlay">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="vexpand">1</property>
         <property name="margin_top">6</property>
-        <child>
+        <property name="child">
           <object class="GtkScrolledWindow">
             <property name="height_request">150</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="shadow_type">in</property>
-            <child>
+            <property name="focusable">1</property>
+            <property name="child">
               <object class="GtkTreeView" id="pref_view">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="model">preferences_store</property>
+                <property name="focusable">1</property>
                 <property name="search_column">0</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection"/>
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">XMPP Address</property>
-                    <property name="expand">True</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_indicator">True</property>
+                    <property name="title" translatable="1">XMPP Address</property>
+                    <property name="expand">1</property>
+                    <property name="clickable">1</property>
+                    <property name="sort_indicator">1</property>
                     <property name="sort_column_id">0</property>
                     <child>
-                      <object class="GtkCellRendererText">
-                        <property name="editable">True</property>
+                      <object class="GtkCellRendererText" id="jid_cell_renderer">
+                        <property name="editable">1</property>
                         <property name="placeholder_text">user@example.org</property>
-                        <signal name="edited" handler="_jid_edited" swapped="no"/>
                       </object>
                       <attributes>
                         <attribute name="text">0</attribute>
@@ -133,13 +71,12 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">Archive</property>
-                    <property name="clickable">True</property>
-                    <property name="sort_indicator">True</property>
+                    <property name="title" translatable="1">Archive</property>
+                    <property name="clickable">1</property>
+                    <property name="sort_indicator">1</property>
                     <property name="sort_column_id">1</property>
                     <child>
-                      <object class="GtkCellRendererToggle">
-                        <signal name="toggled" handler="_pref_toggled" swapped="no"/>
+                      <object class="GtkCellRendererToggle" id="pref_toggle_cell_renderer">
                       </object>
                       <attributes>
                         <attribute name="active">1</attribute>
@@ -148,92 +85,56 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
-          <packing>
-            <property name="index">-1</property>
-          </packing>
-        </child>
+        </property>
       </object>
-      <packing>
-        <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">2</property>
-      </packing>
     </child>
     <child>
       <object class="GtkBox">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkToolbar">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="toolbar_style">icons</property>
-            <property name="icon_size">4</property>
+          <object class="GtkBox">
+            <property name="css-classes">toolbar</property>
+            <property name="can_focus">0</property>
             <child>
-              <object class="GtkToolButton" id="add">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">list-add-symbolic</property>
-                <signal name="clicked" handler="_on_add" swapped="no"/>
+              <object class="GtkButton" id="add">
+                <property name="can_focus">0</property>
+                <property name="use_underline">1</property>
+                <property name="icon_name">feather-plus-symbolic</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="remove">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="use_underline">True</property>
-                <property name="icon_name">list-remove-symbolic</property>
-                <signal name="clicked" handler="_on_remove" swapped="no"/>
+              <object class="GtkButton" id="remove">
+                <property name="can_focus">0</property>
+                <property name="use_underline">1</property>
+                <property name="icon_name">feather-trash-symbolic</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="homogeneous">True</property>
-              </packing>
             </child>
             <style>
               <class name="inline-toolbar"/>
             </style>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkButton" id="save_button">
-            <property name="label">_Save</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
-            <property name="valign">end</property>
-            <property name="use_underline">True</property>
-            <signal name="clicked" handler="_on_save" swapped="no"/>
-            <style>
-              <class name="suggested-action"/>
-            </style>
+          <object class="GtkBox">
+            <property name="hexpand">1</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="GtkButton" id="save_button">
+                <property name="label">_Save</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+                <property name="valign">end</property>
+                <property name="use_underline">1</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="pack_type">end</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">3</property>
-      </packing>
     </child>
   </object>
 </interface>
