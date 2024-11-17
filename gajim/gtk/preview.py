@@ -63,6 +63,12 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._ui.cancel_download_button, "clicked", self._on_cancel_download_clicked
         )
         self._connect(self._ui.image_button, "clicked", self._on_content_button_clicked)
+
+        content_hover_controller = Gtk.EventControllerMotion()
+        self._connect(content_hover_controller, "enter", self._on_content_cursor_enter)
+        self._connect(content_hover_controller, "leave", self._on_content_cursor_leave)
+        self._ui.preview_box.add_controller(content_hover_controller)
+
         self._connect(self._ui.open_folder_button, "clicked", self._on_open_folder)
         self._connect(self._ui.save_as_button, "clicked", self._on_save_as)
         self._connect(self._ui.download_button, "clicked", self._on_download)
@@ -127,6 +133,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.progress_box.hide()
         self._ui.info_message.hide()
 
+        self._ui.image_button.set_tooltip_text(preview.filename)
+
         if preview.is_geo_uri:
             image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
             image.set_pixel_size(preview.size)
@@ -138,15 +146,29 @@ class PreviewWidget(Gtk.Box, SignalManager):
             image_width = texture.get_width()
             preview_size = app.settings.get("preview_size")
             image.set_pixel_size(min(image_width, preview_size))
+
+            self._ui.image_button.set_tooltip_text(None)
+
             self._ui.image_button.set_child(image)
+            self._ui.button_box.unparent()
+            self._ui.content_overlay.add_overlay(self._ui.button_box)
+            self._ui.button_box.set_visible(False)
+
+            self._ui.button_box.set_valign(Gtk.Align.END)
+            self._ui.button_box.set_halign(Gtk.Align.FILL)
+            self._ui.button_box.set_can_target(True)
+
+            self._ui.preview_stack.remove_css_class("preview-stack")
+            self._ui.preview_stack.add_css_class("preview-stack-image")
+            self._ui.button_box.add_css_class("preview-image-overlay")
+            self._ui.open_folder_button.add_css_class("preview-image-overlay-button")
+            self._ui.save_as_button.add_css_class("preview-image-overlay-button")
 
         else:
             icon = get_icon_for_mime_type(preview.mime_type)
             image = Gtk.Image.new_from_gicon(icon)
             image.set_pixel_size(64)
             self._ui.icon_button.set_child(image)
-
-        self._ui.image_button.set_tooltip_text(preview.filename)
 
         if preview.is_geo_uri:
             self._ui.icon_event_box.hide()
@@ -277,6 +299,24 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._menu_popover.set_menu_model(menu)
         self._menu_popover.set_pointing_to_coord(x, y)
         self._menu_popover.popup()
+
+    def _on_content_cursor_enter(
+        self,
+        _controller: Gtk.EventControllerMotion,
+        _x: int,
+        _y: int,
+    ) -> None:
+        assert self._preview is not None
+        if self._preview.mime_type.startswith("image/"):
+            self._ui.button_box.set_visible(True)
+
+    def _on_content_cursor_leave(
+        self,
+        _controller: Gtk.EventControllerMotion,
+    ) -> None:
+        assert self._preview is not None
+        if self._preview.mime_type.startswith("image/"):
+            self._ui.button_box.set_visible(False)
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
         assert self._preview is not None

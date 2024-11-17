@@ -734,6 +734,7 @@ class PreviewBuilder(Builder):
     progress_text: Gtk.Label
     cancel_download_button: Gtk.Button
     content_box: Gtk.Box
+    content_overlay: Gtk.Overlay
     image_button: Gtk.Button
     link_button: Gtk.LinkButton
     button_box: Gtk.Box
