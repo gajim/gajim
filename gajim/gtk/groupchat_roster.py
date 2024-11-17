@@ -536,10 +536,10 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         assert self._contact is not None
         participant = self._contact
         if participant.is_self:
-            self_contact = participant
-        else:
-            self_contact = participant.room.get_self()
-            assert self_contact is not None
+            return Gdk.EVENT_STOP
+
+        self_contact = participant.room.get_self()
+        assert self_contact is not None
 
         menu = get_groupchat_participant_menu(
             participant.account, self_contact, participant
