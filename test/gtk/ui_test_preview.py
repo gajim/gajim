@@ -34,7 +34,7 @@ ACCOUNT = 'me@example.org'
 
 PREVIEW_TYPES = {
     'geo: URI': 'geo:50.3333,24.5555',
-    'Image URL': 'https://gajim.org/img/screenshots/single-window-mode.png',
+    'Image URL': 'https://gajim.org/img/screenshots/server-info.png',
     'Audio URL': 'https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg',
     'PDF URL': 'https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf',
     'Regular URL': 'https://gajim.org',
@@ -55,6 +55,7 @@ class TestPreview(GajimAppWindow):
             halign=Gtk.Align.CENTER,
             valign=Gtk.Align.CENTER,
             orientation=Gtk.Orientation.VERTICAL,
+            hexpand=True,
             spacing=12,
         )
         self.set_child(self._box)
@@ -98,6 +99,7 @@ logging_helpers.set_loglevels('gajim=DEBUG')
 app.settings = Settings(in_memory=True)
 app.settings.init()
 app.settings.add_account(ACCOUNT)
+app.settings.set("preview_size", 400)
 
 configpaths.set_separation(True)
 configpaths.set_config_root(str(configpaths.get_temp_dir()))
