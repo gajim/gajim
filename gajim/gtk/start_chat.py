@@ -9,6 +9,7 @@ from typing import cast
 from typing import Generic
 from typing import TypeVar
 
+import logging
 from enum import Enum
 
 from gi.repository import Gdk
@@ -62,6 +63,9 @@ from gajim.gtk.widgets import GajimAppWindow
 ContactT = BareContact | GroupchatContact
 L = TypeVar("L", bound=type[GObject.Object])
 V = TypeVar("V", bound=type[Gtk.Widget])
+
+
+log = logging.getLogger("gajim.gtk.start_chat")
 
 
 class ChatTypeFilter(Enum):
@@ -188,6 +192,9 @@ class StartChatDialog(GajimAppWindow):
             self._initial_message[initial_jid] = initial_message
             self._ui.search_entry.set_text(initial_jid)
 
+        self._contact_view.set_loading_finished()
+
+        log.debug("Loading dialog finished")
         self.show()
 
     def _cleanup(self, *args: Any) -> None:
@@ -217,6 +224,7 @@ class StartChatDialog(GajimAppWindow):
             self._accounts_store.append([None, *account])
 
     def _add_contacts(self, scale: int) -> None:
+        log.debug("Loading contacts")
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             client = app.get_client(account)
@@ -247,7 +255,12 @@ class StartChatDialog(GajimAppWindow):
             )
             self._contact_view.add(item)
 
+        log.debug(
+            "Loading contacts finished, model count %s", self._contact_view.get_count()
+        )
+
     def _add_groupchats(self, scale: int) -> None:
+        log.debug("Loading groupchats")
         show_account = len(self._accounts) > 1
         for account, _label in self._accounts:
             client = app.get_client(account)
@@ -267,6 +280,11 @@ class StartChatDialog(GajimAppWindow):
                     groupchat=True,
                 )
                 self._contact_view.add(item)
+
+        log.debug(
+            "Loading groupchats finished, model count %s",
+            self._contact_view.get_count(),
+        )
 
     def _add_new_contact_items(self, scale: int) -> None:
         for account, _label in self._accounts:
@@ -822,7 +840,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
             property_name="name",
         )
         sorter = Gtk.StringSorter(expression=expression)
-        self._sort_model = Gtk.SortListModel(model=self._model, sorter=sorter)
+        self._sort_model = Gtk.SortListModel(sorter=sorter)
 
         self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
 
@@ -852,6 +870,12 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._custom_filter.set_filter_func(None)
         del self._custom_filter
         app.check_finalize(self)
+
+    def set_loading_finished(self) -> None:
+        self._sort_model.set_model(self._model)
+
+    def get_count(self) -> int:
+        return self._model.get_n_items()
 
     def _on_filter_items_changed(
         self, filter_model: Gtk.FilterListModel, _pos: int, _removed: int, _added: int
