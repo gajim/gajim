@@ -133,14 +133,28 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.progress_box.hide()
         self._ui.info_message.hide()
 
-        self._ui.image_button.set_tooltip_text(preview.filename)
-
         if preview.is_geo_uri:
             image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
             image.set_pixel_size(preview.size)
             self._ui.image_button.set_child(image)
 
-        elif data is not None:
+            self._ui.icon_event_box.hide()
+            self._ui.file_name.set_text(_("Click to view location"))
+            self._ui.file_name.set_selectable(False)
+            self._ui.save_as_button.hide()
+            self._ui.open_folder_button.hide()
+            self._ui.download_button.hide()
+
+            location = split_geo_uri(preview.uri)
+            text = format_geo_coords(float(location.lat), float(location.lon))
+            self._ui.file_size.set_text(text)
+            self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
+            self._ui.preview_box.set_size_request(160, -1)
+            return
+
+        self._ui.image_button.set_tooltip_text(preview.filename)
+
+        if data is not None:
             texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
 
             max_preview_size = app.settings.get("preview_size")
@@ -186,21 +200,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
             image = Gtk.Image.new_from_gicon(icon)
             image.set_pixel_size(64)
             self._ui.icon_button.set_child(image)
-
-        if preview.is_geo_uri:
-            self._ui.icon_event_box.hide()
-            self._ui.file_name.set_text(_("Click to view location"))
-            self._ui.file_name.set_selectable(False)
-            self._ui.save_as_button.hide()
-            self._ui.open_folder_button.hide()
-            self._ui.download_button.hide()
-
-            location = split_geo_uri(preview.uri)
-            text = format_geo_coords(float(location.lat), float(location.lon))
-            self._ui.file_size.set_text(text)
-            self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
-            self._ui.preview_box.set_size_request(160, -1)
-            return
 
         preview_enabled = app.settings.get("enable_file_preview")
 
