@@ -11,6 +11,8 @@ from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
 
+from gajim.gtk.util import get_icon_theme
+
 
 def get_gajim_dir() -> Path:
     gajim_path = Path(__file__) / '..' / '..' / '..' / 'gajim'
@@ -32,9 +34,13 @@ def load_style(filename: str, priority: CSSPriority) -> None:
     Gtk.StyleContext.add_provider_for_display(display, provider, priority)
 
 
-def run_app(load_default_styles: bool = True) -> None:
+def run_app(load_default_styles: bool = True, load_custom_icons: bool = True) -> None:
     if load_default_styles:
         load_style('gajim.css', CSSPriority.APPLICATION)
+
+    if load_custom_icons:
+        icon_theme = get_icon_theme()
+        icon_theme.add_search_path(str(get_gajim_dir() / 'data/icons'))
 
     while Gtk.Window.get_toplevels().get_n_items() > 0:
         GLib.MainContext().default().iteration(True)

@@ -5,6 +5,10 @@
 from pathlib import Path
 from unittest.mock import MagicMock
 
+import gi
+
+gi.require_version('Gst', '1.0')
+
 from gi.repository import Gst
 from gi.repository import Gtk
 
@@ -63,7 +67,7 @@ class TestAudioWidget(GajimAppWindow):
         self._box.append(self._audio_widget)
 
 
-_success, _argv = Gst.init_check(None)
+Gst.init()
 
 app.preview_manager = MagicMock()
 app.preview_manager.get_audio_state = MagicMock(return_value=AudioPreviewState())

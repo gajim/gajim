@@ -7,7 +7,6 @@ from pathlib import Path
 
 from gi.repository import Gtk
 
-from gajim.gtk.util import get_icon_theme
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
@@ -52,9 +51,6 @@ class TestCustomIcons(GajimAppWindow):
                 image.set_pixel_size(48)
                 flow_box.append(image)
 
-
-icon_theme = get_icon_theme()
-icon_theme.add_search_path(str(CUSTOM_ICONS_PATH))
 
 window = TestCustomIcons()
 window.show()
