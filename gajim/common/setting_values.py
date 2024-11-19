@@ -236,7 +236,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'preview_anonymous_muc': False,
     'preview_leftclick_action': 'open',
     'preview_max_file_size': 10485760,
-    'preview_size': 300,
+    'preview_size': 400,
     'preview_verify_https': True,
     'providers_list_url': 'https://data.xmpp.net/providers/v2/providers-B.json',
     'print_status_in_chats': False,
