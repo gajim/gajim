@@ -326,6 +326,14 @@ class Address(Page):
             )
             return False
 
+        if jid.localpart is None:
+            self._show_icon(True)
+            self._ui.address_entry.set_icon_tooltip_text(
+                Gtk.EntryIconPosition.SECONDARY,
+                _("'@' is missing in address. Are you sure this is correct?"),
+            )
+            return True
+
         self._show_icon(False)
         return True
 
