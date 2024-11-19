@@ -267,6 +267,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 and not preview.from_us
             ):
                 image = Gtk.Image.new_from_icon_name("dialog-question")
+                image.set_pixel_size(64)
                 self._ui.icon_button.set_child(image)
                 self._ui.download_button.show()
                 file_size_string = _("Automatic preview disabled")
