@@ -612,6 +612,11 @@ class ConversationView(Gtk.ScrolledWindow):
     def _on_message_row_state_flags_changed(
         self, row: MessageRow, previous_flags: Gtk.StateFlags
     ) -> None:
+        if self._list_box.get_selection_mode() == Gtk.SelectionMode.MULTIPLE:
+            # Message row selection active, hide MessageRowActions
+            self._message_row_actions.hide_actions()
+            return
+
         current_flags = self.get_state_flags()
 
         if (
