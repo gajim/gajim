@@ -261,9 +261,5 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
 
 
 def init() -> None:
-    # TODO GTK4
-    # Change back once port is done
-    # if sys.platform == 'win32' or not sys.stderr.isatty():
-    #     sys.excepthook = _hook
-    if not sys.stderr.isatty():
+    if sys.platform == "win32" or not sys.stderr.isatty():
         sys.excepthook = _hook
