@@ -10,10 +10,8 @@ import json
 import logging
 import os
 import pstats
-import shutil
 import sys
 from datetime import datetime
-from pathlib import Path
 from pstats import SortKey
 
 from gi.repository import Gio
@@ -66,13 +64,6 @@ class CoreApplication(ged.EventHelper):
         app.app = self
         app.print_version()
         app.detect_dependencies()
-
-        if app.is_ms_store():
-            try:
-                self._migrate_virtualized_storage()
-            except Exception as e:
-                log.exception(e)
-
         configpaths.create_paths()
 
         app.settings = Settings()
@@ -148,34 +139,6 @@ class CoreApplication(ged.EventHelper):
     @property
     def _log(self) -> logging.Logger:
         return app.log('gajim.application')
-
-    def _migrate_virtualized_storage(self) -> None:
-        '''Initially, Gajim's files were stored in a virtualized directory,
-        when installed via Microsoft Store. Currently, Gajim's storage is _not_
-        virtualized anymore. This means we need to migrate files from virtualized
-        storage to %appdata%/Gajim.
-
-        - Check if %appdata%/Gajim exists; if yes, do nothing
-        - If %appdata%/Gajim does not exist, check for virtualized files
-        - If there are virtualized files, move them to %appdata%/Gajim
-        '''
-
-        roaming_path = Path(os.environ['APPDATA']) / 'Gajim'
-        if roaming_path.exists():
-            return
-
-        from winrt.windows.storage import ApplicationData
-        if (ApplicationData.current is None or
-                ApplicationData.current.local_cache_folder is None):
-            return
-
-        virtualized_path = Path(
-            ApplicationData.current.local_cache_folder.path) / 'Roaming' / 'Gajim'
-        if not virtualized_path.exists():
-            return
-
-        # Move files from virtualized folder to %appdata%/Gajim
-        shutil.move(virtualized_path, Path(os.environ['APPDATA']))
 
     def _core_command_line(self, options: GLib.VariantDict) -> None:
         if options.contains('cprofile'):

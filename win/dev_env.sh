@@ -53,7 +53,6 @@ sentry-sdk
 emoji
 winrt-Windows.ApplicationModel
 winrt-Windows.Foundation
-winrt-Windows.Storage
 winrt-Windows.UI
 winrt-Windows.UI.ViewManagement
 windows-toasts
