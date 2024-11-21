@@ -115,12 +115,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._connect(drop_target, "leave", self._on_drag_leave)
         overlay.add_controller(drop_target)
 
-        # TODO GTK4 test how Flatpak behaves
-        # if app.is_flatpak():
-        #     target = DND_TARGET_FLATPAK
-        # else:
-        #     target = DND_TARGET_URI_LIST
-
         self.add_named(overlay, "controls")
 
         self._connect_actions()

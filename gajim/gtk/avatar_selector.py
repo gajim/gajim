@@ -66,12 +66,6 @@ class AvatarSelector(Gtk.Box, SignalManager):
 
         self.add_css_class("avatar-selector")
 
-        # TODO GTK4 test how Flatpak behaves
-        # if app.is_flatpak():
-        #     target = DND_TARGET_FLATPAK
-        # else:
-        #     target = DND_TARGET_URI_LIST
-
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
         self._connect(drop_target, "accept", self._on_drop_accept)
         self._connect(drop_target, "drop", self._on_file_drop)
