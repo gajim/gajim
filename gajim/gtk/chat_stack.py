@@ -740,8 +740,12 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         return bool(formats.contain_gtype(Gdk.FileList))
 
     def _on_file_drop(
-        self, _target: Gtk.DropTarget, value: Gdk.FileList, _x: float, _y: float
+        self, _target: Gtk.DropTarget, value: Gdk.FileList | None, _x: float, _y: float
     ) -> bool:
+        if value is None:
+            log.debug("Drop received, but value is None")
+            return False
+
         log.debug("Drop received: %s", value)
         files = value.get_files()
         if not files:
