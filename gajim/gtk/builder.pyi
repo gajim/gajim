@@ -94,17 +94,17 @@ class AdvancedConfigurationBuilder(Builder):
 
 class AppPageBuilder(Builder):
     gajim_update: Gtk.Box
-    dismiss_gajim_update: Gtk.Button
-    download_update: Gtk.Button
     update_message: Gtk.Label
+    download_update: Gtk.Button
+    dismiss_gajim_update: Gtk.Button
     gajim_update_check: Gtk.Box
-    dismiss_update_check: Gtk.Button
     activate_update_check: Gtk.Button
+    dismiss_update_check: Gtk.Button
     plugin_updates: Gtk.Box
-    dismiss_plugin_updates: Gtk.Button
     auto_update_plugins: Gtk.CheckButton
-    open_plugins: Gtk.Button
     update_plugins: Gtk.Button
+    open_plugins: Gtk.Button
+    dismiss_plugin_updates: Gtk.Button
     plugin_updates_finished: Gtk.Box
     notify_after_plugin_updates: Gtk.CheckButton
     dismiss_update_notification: Gtk.Button
@@ -554,14 +554,6 @@ class GroupchatStateBuilder(Builder):
     mam_sync_spinner: Gtk.Spinner
     mam_error_label: Gtk.Label
     close_button: Gtk.Button
-
-class GroupsPostWindowBuilder(Builder):
-    textbuffer1: Gtk.TextBuffer
-    box: Gtk.Box
-    from_entry: Gtk.Entry
-    subject_entry: Gtk.Entry
-    contents_textview: Gtk.TextView
-    send_button: Gtk.Button
 
 class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
@@ -1180,12 +1172,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> GroupchatStateBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["groups_post_window.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> GroupsPostWindowBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["history_export.ui"],
