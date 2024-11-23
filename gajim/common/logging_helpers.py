@@ -117,6 +117,8 @@ class LogConsoleHandler(logging.StreamHandler):  # pyright: ignore
         self._callback = func
 
 
+logging.Formatter.default_msec_format = None
+
 class FancyFormatter(logging.Formatter):
     '''
     An eye-candy formatter with Colors
@@ -131,9 +133,8 @@ class FancyFormatter(logging.Formatter):
 
     def __init__(self,
                  fmt: str | None = None,
-                 datefmt: str | None = None,
                  use_color: bool = False) -> None:
-        logging.Formatter.__init__(self, fmt, datefmt)
+        logging.Formatter.__init__(self, fmt)
         self.use_color = use_color
 
     def format(self, record: logging.LogRecord) -> str:
@@ -167,7 +168,6 @@ def init() -> None:
     stream_handler.setFormatter(
         FancyFormatter(
             '%(asctime)s %(levelname)s %(name)-35s %(message)s',
-            '%Y-%m-%dT%H:%M:%S',
             use_color
         )
     )
@@ -248,7 +248,6 @@ _log_console_handler = LogConsoleHandler()
 _log_console_handler.setFormatter(
     logging.Formatter(
         '%(asctime)s (%(levelname).1s) %(name)-35s | %(message)s\n',
-        '%x %H:%M:%S'
     )
 )
 
