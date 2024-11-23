@@ -155,6 +155,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.image_button.set_tooltip_text(preview.filename)
 
         if data is not None:
+            self._ui.image_button.set_tooltip_text(None)
+
             texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
 
             max_preview_size = app.settings.get("preview_size")
@@ -174,12 +176,12 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 width = texture_width
                 height = texture_height
 
+            self._ui.content_overlay.set_size_request(width, height)
+
             image = Gtk.Picture.new_for_paintable(texture)
             image.add_css_class("preview-image")
-            image.set_size_request(width, height)
-
-            self._ui.image_button.set_child(image)
-            self._ui.image_button.set_tooltip_text(None)
+            image.set_can_target(False)
+            self._ui.content_overlay.add_overlay(image)
 
             self._ui.button_box.unparent()
             self._ui.content_overlay.add_overlay(self._ui.button_box)

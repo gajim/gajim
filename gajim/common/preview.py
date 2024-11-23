@@ -90,7 +90,7 @@ class Preview:
         self.account = widget.account
         self.orig_path = orig_path
         self.thumb_path = thumb_path
-        self.size = size
+        self.size = size * app.window.get_scale_factor()
 
         self.thumbnail: bytes | None = None
         self.mime_type: str = ''
