@@ -9,6 +9,7 @@ from typing import cast
 from typing import Generic
 from typing import TypeVar
 
+import locale
 import logging
 from enum import Enum
 
@@ -834,12 +835,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._scroll_id = None
         self._search_string_list: list[str] = []
 
-        expression = Gtk.PropertyExpression.new(
-            this_type=ContactListItem,
-            expression=None,
-            property_name="name",
-        )
-        sorter = Gtk.StringSorter(expression=expression)
+        sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
         self._sort_model = Gtk.SortListModel(sorter=sorter)
 
         self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
@@ -917,6 +913,17 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
             return True
 
         return type_ == ChatTypeFilter.GROUPCHAT and is_groupchat
+
+    @staticmethod
+    def _sort_func(
+        obj1: Any,
+        obj2: Any,
+        _user_data: object | None,
+    ) -> int:
+        if obj1.is_new:
+            return 1
+
+        return locale.strcoll(obj1.name, obj2.name)
 
     def add(self, item: ContactViewItem) -> None:
         self._model.append(item)
