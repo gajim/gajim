@@ -528,9 +528,6 @@ class ConversationView(Gtk.ScrolledWindow):
     def _insert_message(self, message: BaseRow) -> None:
         self._list_box.append(message)
 
-        # TODO: This is a workaround to make the scrolledwindow aware of the new row
-        GLib.idle_add(message.queue_resize)
-
         self._add_date_row(message.timestamp)
         self._check_for_merge(message)
         assert self._read_marker_row is not None
@@ -538,6 +535,10 @@ class ConversationView(Gtk.ScrolledWindow):
         if message.direction == ChatDirection.INCOMING:
             if message.timestamp > self._read_marker_row.timestamp:
                 self._read_marker_row.hide()
+
+        # TODO GTK4:
+        # This is a workaround to make the scrolledwindow aware of new content
+        GLib.idle_add(message.queue_resize)
 
     def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp.astimezone())
