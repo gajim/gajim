@@ -31,6 +31,7 @@ from gajim.common.util.user_strings import get_uf_role
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_groupchat_participant_menu
+from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import SignalManager
@@ -194,16 +195,21 @@ class GroupchatRoster(Gtk.Revealer, EventHelper):
         muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
         if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
             assert participant_contact.real_jid is not None
-            app.window.add_chat(
-                self._contact.account,
-                participant_contact.real_jid,
-                "contact",
+            dm_params = AddChatActionParams(
+                account=self._contact.account,
+                jid=participant_contact.real_jid,
+                type="chat",
                 select=True,
             )
         else:
-            app.window.add_private_chat(
-                self._contact.account, participant_contact.jid, select=True
+            dm_params = AddChatActionParams(
+                account=self._contact.account,
+                jid=participant_contact.jid,
+                type="pm",
+                select=True,
             )
+
+        app.window.activate_action("win.add-chat", dm_params.to_variant())
 
     def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
         self._contact_view.set_search(widget.get_text())

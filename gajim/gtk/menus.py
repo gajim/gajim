@@ -688,9 +688,24 @@ def get_groupchat_participant_menu(
     contact: types.GroupchatParticipant,
 ) -> GajimMenu:
 
+    group_chat = self_contact.room
+    disco = group_chat.get_disco()
+    assert disco is not None
+    muc_prefer_direct_msg = app.settings.get("muc_prefer_direct_msg")
+    if disco.muc_is_nonanonymous and muc_prefer_direct_msg:
+        assert contact.real_jid is not None
+        dm_params = AddChatActionParams(
+            account=account, jid=contact.real_jid, type="chat", select=True
+        )
+    else:
+        dm_params = AddChatActionParams(
+            account=account, jid=contact.jid, type="pm", select=True
+        )
+
     value = str(contact.name)
 
     general_items: MenuItemListT = [
+        (_("Direct Message"), "win.add-chat", dm_params),
         (_("Details"), "win.muc-contact-info", value),
         (_("Execute Command…"), "win.muc-execute-command", value),
     ]
