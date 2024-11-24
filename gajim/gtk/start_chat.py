@@ -1008,7 +1008,7 @@ class ContactListItem(GObject.Object):
         else:
             avatar_paintable = contact.get_avatar(AvatarSize.CHAT, scale)
 
-        search_string = "|".join((name, str(jid), account_label)).lower()
+        search_string = "|".join((name, str(jid), account_label, *groups)).lower()
 
         super().__init__(
             account=account,
