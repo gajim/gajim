@@ -9,6 +9,7 @@ from typing import Any
 import logging
 import uuid
 from collections import defaultdict
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -29,6 +30,7 @@ from gajim.common.const import Draft
 from gajim.common.const import SimpleClientState
 from gajim.common.events import MessageSent
 from gajim.common.ged import EventHelper
+from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -811,16 +813,18 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             log.warning("Could not determine clipboard mime types")
             return
 
+        if "image/png" in mime_types:
+            self._ui.input_overlay.set_visible(True)
+            self._ui.input_overlay_label.set_text(_("Processing image…"))
+            clipboard.read_texture_async(None, self._on_clipboard_read_texture_finished)
+            return
+
         if "text/uri-list" in mime_types:
             # Prevent TextView from pasting the URIs as text:
             textview.stop_emission_by_name("paste-clipboard")
             clipboard.read_value_async(
                 Gdk.FileList, 0, None, self._on_clipboard_read_value_finished
             )
-            return
-
-        if "image/png" in mime_types:
-            clipboard.read_texture_async(None, self._on_clipboard_read_texture_finished)
 
     def _on_clipboard_read_value_finished(
         self,
@@ -843,18 +847,36 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         texture = clipboard.read_texture_finish(result)
         if texture is None:
             log.info("No image pasted")
+            self._ui.input_overlay.set_visible(False)
             return
 
         temp_dir = configpaths.get_temp_dir()
         image_path = temp_dir / f"{uuid.uuid4()}.png"
 
         try:
-            success = texture.save_to_png(str(image_path))
-            if not success:
+            image = texture.save_to_png_bytes()
+            image_bytes = image.get_data()
+            if image_bytes is None:
                 log.error("Could not process pasted image")
+                self._ui.input_overlay.set_visible(False)
                 return
+
         except GLib.Error as e:
             log.error("Error while trying to store pasted image: %s", e)
+            self._ui.input_overlay.set_visible(False)
+            return
+
+        write_file_async(
+            image_path, image_bytes, self._on_paste_image_saved, image_path
+        )
+
+    def _on_paste_image_saved(
+        self, _successful: bool, error: GLib.Error | None, image_path: Path
+    ) -> None:
+        self._ui.input_overlay.set_visible(False)
+
+        if error is not None:
+            log.error("Error while trying to store pasted image: %s", error.message)
             return
 
         app.window.activate_action(

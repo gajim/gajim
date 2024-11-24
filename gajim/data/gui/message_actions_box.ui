@@ -124,25 +124,49 @@
           </object>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="input_scrolled">
-            <property name="hexpand">1</property>
-            <property name="focusable">1</property>
-            <property name="margin-start">3</property>
-            <property name="margin-end">3</property>
-            <property name="hscrollbar-policy">external</property>
-            <property name="overlay-scrolling">0</property>
-            <property name="max-content-height">100</property>
-            <property name="propagate-natural-height">1</property>
-            <child>
-              <placeholder/>
+          <object class="GtkOverlay">
+            <property name="child">
+              <object class="GtkScrolledWindow" id="input_scrolled">
+                <property name="hexpand">1</property>
+                <property name="focusable">1</property>
+                <property name="margin-start">3</property>
+                <property name="margin-end">3</property>
+                <property name="hscrollbar-policy">external</property>
+                <property name="overlay-scrolling">0</property>
+                <property name="max-content-height">100</property>
+                <property name="propagate-natural-height">1</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <style>
+                  <class name="message-input-border"/>
+                  <class name="scrolled-no-border"/>
+                  <class name="no-scroll-indicator"/>
+                  <class name="scrollbar-style"/>
+                  <class name="one-line-scrollbar"/>
+                </style>
+              </object>
+            </property>
+            <child type="overlay">
+              <object class="GtkBox" id="input_overlay">
+                <property name="visible">0</property>
+                <property name="margin-start">12</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkSpinner">
+                    <property name="spinning">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="input_overlay_label">
+                    <property name="halign">start</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+              </object>
             </child>
-            <style>
-              <class name="message-input-border"/>
-              <class name="scrolled-no-border"/>
-              <class name="no-scroll-indicator"/>
-              <class name="scrollbar-style"/>
-              <class name="one-line-scrollbar"/>
-            </style>
           </object>
         </child>
         <child>

@@ -618,6 +618,8 @@ class MessageActionsBoxBuilder(Builder):
     emoticons_button: Gtk.MenuButton
     formattings_button: Gtk.MenuButton
     input_scrolled: Gtk.ScrolledWindow
+    input_overlay: Gtk.Box
+    input_overlay_label: Gtk.Label
     send_message_button: Gtk.Button
     sendfile_button: Gtk.Button
     encryption_menu_button: Gtk.MenuButton
