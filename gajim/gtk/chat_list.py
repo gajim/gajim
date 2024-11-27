@@ -24,6 +24,7 @@ from gajim.common.const import Direction
 from gajim.common.const import RowHeaderType
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message_util import get_nickname_from_message
 from gajim.common.setting_values import OpenChatsSettingT
 from gajim.common.storage.archive.const import ChatDirection
@@ -32,7 +33,9 @@ from gajim.common.storage.archive.models import Message
 from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.user_strings import get_moderation_text
 
+from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_list_row import ChatListRow
+from gajim.gtk.start_chat import ChatTypeFilter
 from gajim.gtk.util import get_listbox_row_count
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import SignalManager
@@ -54,7 +57,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._workspace_id = workspace_id
 
         self._chats: dict[tuple[str, JID], ChatListRow] = {}
-        self._current_filter: str = "all"
+        self._current_filter: ChatFilters = ChatFilters()
         self._current_filter_text: str = ""
 
         self.add_css_class("chatlist")
@@ -131,8 +134,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         if chat is not None:
             chat.unread_count = count
 
-    def set_filter(self, name: str) -> None:
-        self._current_filter = name
+    def set_filter(self, chat_filter: ChatFilters) -> None:
+        self._current_filter = chat_filter
         self.invalidate_filter()
 
     def set_filter_text(self, text: str) -> None:
@@ -411,11 +414,19 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         return True
 
     def _filter_func(self, row: ChatListRow) -> bool:
-        is_groupchat = row.type == "groupchat"
-        if self._current_filter == "chats" and is_groupchat:
+        group = self._current_filter.group
+        if (
+            group is not None
+            and isinstance(row.contact, BareContact)
+            and group not in row.contact.groups
+        ):
             return False
 
-        if self._current_filter == "group_chats" and not is_groupchat:
+        is_groupchat = row.type == "groupchat"
+        if self._current_filter.type == ChatTypeFilter.CHAT and is_groupchat:
+            return False
+
+        if self._current_filter.type == ChatTypeFilter.GROUPCHAT and not is_groupchat:
             return False
 
         if not self._current_filter_text:

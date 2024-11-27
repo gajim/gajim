@@ -121,9 +121,11 @@ class ChatListStack(Gtk.Stack, EventHelper):
             return False
         return chat.account == account and chat.jid == jid
 
-    def _on_filter_changed(self, _filter: ChatFilter, name: str) -> None:
+    def _on_filter_changed(self, chat_filter: ChatFilter) -> None:
+        filters = chat_filter.get_filters()
+
         chat_list = cast(ChatList, self.get_visible_child())
-        chat_list.set_filter(name)
+        chat_list.set_filter(filters)
 
     def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
         chat_list = cast(ChatList, self.get_visible_child())

@@ -69,11 +69,8 @@ class ChatPage(Gtk.Box, SignalManager):
         self._connect(section_hover_controller, "leave", self._on_section_label_leave)
         self._ui.section_label_eventbox.add_controller(section_hover_controller)
 
-        self._chat_filter = ChatFilter(icons=True)
-        self._ui.filter_bar.prepend(self._chat_filter)
-        self._connect(
-            self._ui.filter_bar_toggle, "toggled", self._on_filter_revealer_toggled
-        )
+        self._chat_filter = ChatFilter()
+        self._chat_filter.insert_after(self._ui.controls_box, self._ui.search_entry)
 
         self._chat_list_stack = ChatListStack(self._chat_filter, self._ui.search_entry)
         self._connect(self._chat_list_stack, "chat-selected", self._on_chat_selected)
@@ -136,11 +133,6 @@ class ChatPage(Gtk.Box, SignalManager):
     def _on_handle_position_notify(paned: Gtk.Paned, *args: Any) -> None:
         position = paned.get_position()
         app.settings.set("chat_handle_position", position)
-
-    def _on_filter_revealer_toggled(self, toggle_button: Gtk.ToggleButton) -> None:
-        active = toggle_button.get_active()
-        self._ui.filter_bar_revealer.set_reveal_child(active)
-        self._chat_filter.reset()
 
     def _on_section_label_enter(
         self,
@@ -217,7 +209,6 @@ class ChatPage(Gtk.Box, SignalManager):
 
     def show_workspace_chats(self, workspace_id: str) -> None:
         self._chat_list_stack.show_chat_list(workspace_id)
-        self._ui.filter_bar_toggle.set_active(False)
         self._chat_filter.reset()
 
     def update_workspace(self, workspace_id: str) -> None:

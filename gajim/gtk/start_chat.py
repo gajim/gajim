@@ -11,7 +11,6 @@ from typing import TypeVar
 
 import locale
 import logging
-from enum import Enum
 
 from gi.repository import Gdk
 from gi.repository import GdkPixbuf
@@ -48,6 +47,8 @@ from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_filter import ChatFilter
+from gajim.gtk.chat_filter import ChatFilters
+from gajim.gtk.chat_filter import ChatTypeFilter
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
@@ -67,12 +68,6 @@ V = TypeVar("V", bound=type[Gtk.Widget])
 
 
 log = logging.getLogger("gajim.gtk.start_chat")
-
-
-class ChatTypeFilter(Enum):
-    ALL = "all"
-    CHAT = "chats"
-    GROUPCHAT = "group_chats"
 
 
 class StartChatDialog(GajimAppWindow):
@@ -149,9 +144,6 @@ class StartChatDialog(GajimAppWindow):
             self._ui.stack, "notify::visible-child-name", self._on_page_changed
         )
         self._connect(
-            self._ui.filter_bar_toggle, "toggled", self._on_filter_bar_toggled
-        )
-        self._connect(
             self._ui.global_search_toggle, "toggled", self._on_global_search_toggle
         )
         self._connect(self._ui.error_back_button, "clicked", self._on_back_clicked)
@@ -179,10 +171,9 @@ class StartChatDialog(GajimAppWindow):
 
         self._ui.infobar.set_reveal_child(app.settings.get("show_help_start_chat"))
 
-        self._current_filter = "all"
         self._chat_filter = ChatFilter()
         self._connect(self._chat_filter, "filter-changed", self._on_chat_filter_changed)
-        self._ui.filter_bar_revealer.set_child(self._chat_filter)
+        self._chat_filter.insert_after(self._ui.controls_box, self._ui.search_entry)
 
         self._connect(
             self.get_default_controller(), "key-pressed", self._on_key_pressed
@@ -452,12 +443,8 @@ class StartChatDialog(GajimAppWindow):
         self._ui.infobar.set_reveal_child(False)
         app.settings.set("show_help_start_chat", False)
 
-    def _on_filter_bar_toggled(self, toggle_button: Gtk.ToggleButton) -> None:
-        active = toggle_button.get_active()
-        self._ui.filter_bar_revealer.set_reveal_child(active)
-
-    def _on_chat_filter_changed(self, _filter: ChatFilter, name: str) -> None:
-        self._contact_view.set_chat_filter(ChatTypeFilter(name))
+    def _on_chat_filter_changed(self, chat_filter: ChatFilter) -> None:
+        self._contact_view.set_chat_filter(chat_filter.get_filters())
 
     def _prepare_new_chat(self, item: ContactListItem) -> None:
         if item.jid is None:
@@ -631,8 +618,8 @@ class StartChatDialog(GajimAppWindow):
         self._ui.search_entry.grab_focus()
         image = cast(Gtk.Image, button.get_child())
         if button.get_active():
-            self._ui.filter_bar_toggle.set_active(False)
-            self._ui.filter_bar_toggle.set_sensitive(False)
+            self._chat_filter.reset()
+            self._chat_filter.set_sensitive(False)
             image.add_css_class("selected-color")
             self._ui.list_stack.set_visible_child_name("global")
 
@@ -645,7 +632,7 @@ class StartChatDialog(GajimAppWindow):
                 self._start_search()
                 self._global_search_view.grab_focus()
         else:
-            self._ui.filter_bar_toggle.set_sensitive(True)
+            self._chat_filter.set_sensitive(True)
             self._ui.search_entry.set_text("")
             image.remove_css_class("selected-color")
             self._ui.list_stack.set_visible_child_name("contacts")
@@ -831,7 +818,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
     def __init__(self) -> None:
         BaseListView.__init__(self, ContactListItem, ContactViewItem)
 
-        self._chat_type_filter = ChatTypeFilter.ALL
+        self._chat_filters = ChatFilters()
         self._scroll_id = None
         self._search_string_list: list[str] = []
 
@@ -904,7 +891,11 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
             if search_string not in item.search_string:
                 return False
 
-        type_ = self._chat_type_filter
+        group = self._chat_filters.group
+        if group is not None and group not in item.groups:
+            return False
+
+        type_ = self._chat_filters.type
         if type_ == ChatTypeFilter.ALL:
             return True
 
@@ -941,10 +932,10 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._search_string_list = text.lower().split()
         self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
 
-    def set_chat_filter(self, value: ChatTypeFilter) -> None:
-        if self._chat_type_filter == value:
+    def set_chat_filter(self, value: ChatFilters) -> None:
+        if self._chat_filters == value:
             return
-        self._chat_type_filter = value
+        self._chat_filters = value
         self._custom_filter.changed(Gtk.FilterChange.DIFFERENT)
 
 

@@ -235,11 +235,9 @@ class ChatPanedBuilder(Builder):
     paned: Gtk.Paned
     middle_grid: Gtk.Grid
     header_bar: Gtk.Grid
+    controls_box: Gtk.Box
     search_entry: Gtk.SearchEntry
-    filter_bar_toggle: Gtk.ToggleButton
     start_chat_menu_button: Gtk.MenuButton
-    filter_bar_revealer: Gtk.Revealer
-    filter_bar: Gtk.Box
     section_label_eventbox: Gtk.Box
     section_label: Gtk.Label
     workspace_settings_button: Gtk.Button
@@ -904,12 +902,11 @@ class StartChatDialogBuilder(Builder):
     infobar: Gtk.Revealer
     infobar_close_button: Gtk.Button
     box: Gtk.Box
+    controls_box: Gtk.Box
     search_entry: Gtk.SearchEntry
-    filter_bar_toggle: Gtk.ToggleButton
     global_search_toggle: Gtk.ToggleButton
     search_error_box: Gtk.Box
     search_error_label: Gtk.Label
-    filter_bar_revealer: Gtk.Revealer
     list_stack: Gtk.Stack
     contact_scrolled: Gtk.ScrolledWindow
     no_contacts_placeholder: Gtk.Box

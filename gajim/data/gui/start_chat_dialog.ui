@@ -55,26 +55,13 @@
                   <class name="p-18"/>
                 </style>
                 <child>
-                  <object class="GtkBox">
+                  <object class="GtkBox" id="controls_box">
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkSearchEntry" id="search_entry">
                         <property name="focusable">1</property>
                         <property name="hexpand">1</property>
                         <property name="placeholder-text" translatable="1">Search…</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkToggleButton" id="filter_bar_toggle">
-                        <property name="focusable">1</property>
-                        <property name="receives-default">1</property>
-                        <property name="tooltip-text" translatable="1">Filter Chats</property>
-                        <property name="halign">end</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">feather-filter-symbolic</property>
-                          </object>
-                        </child>
                       </object>
                     </child>
                     <child>
@@ -108,14 +95,6 @@
                         <property name="max-width-chars">46</property>
                         <property name="xalign">0</property>
                       </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkRevealer" id="filter_bar_revealer">
-                    <property name="transition-duration">100</property>
-                    <child>
-                      <placeholder/>
                     </child>
                   </object>
                 </child>
