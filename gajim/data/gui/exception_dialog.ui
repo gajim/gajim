@@ -46,6 +46,7 @@
             <child>
               <object class="GtkImage">
                 <property name="valign">start</property>
+                <property name="pixel-size">48</property>
                 <property name="icon-name">face-embarrassed</property>
               </object>
             </child>
