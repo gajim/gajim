@@ -40,6 +40,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     def __init__(
         self,
+        name: str = "Assistant",
         transient_for: Gtk.Window | None = None,
         width: int = 550,
         height: int = 400,
@@ -48,7 +49,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
         GObject.Object.__init__(self)
         GajimAppWindow.__init__(
             self,
-            name="Assistant",
+            name=name,
             transient_for=transient_for,
             default_width=width,
             default_height=height,

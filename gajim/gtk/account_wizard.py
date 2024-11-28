@@ -68,7 +68,7 @@ log = logging.getLogger("gajim.gtk.account_wizard")
 
 class AccountWizard(Assistant):
     def __init__(self) -> None:
-        Assistant.__init__(self, height=500)
+        Assistant.__init__(self, name="AccountWizard", height=500)
         self._client: Client | None = None
         self._method: str = "login"
         self._destroyed: bool = False
@@ -987,10 +987,13 @@ class AdvancedSettings(Page):
         self.update_page_complete()
 
     def get_visible_buttons(self) -> list[str]:
-        return ["back", cast(AccountWizard, self.get_root()).get_current_method()]
+        return [
+            "back",
+            cast(AccountWizard, get_app_window("AccountWizard")).get_current_method(),
+        ]
 
     def get_default_button(self) -> str:
-        return cast(AccountWizard, self.get_root()).get_current_method()
+        return cast(AccountWizard, get_app_window("AccountWizard")).get_current_method()
 
 
 class SecurityWarning(Page):
@@ -1050,7 +1053,10 @@ class SecurityWarning(Page):
         return self._ui.trust_cert_checkbutton.get_active()
 
     def get_visible_buttons(self) -> list[str]:
-        return ["back", cast(AccountWizard, self.get_root()).get_current_method()]
+        return [
+            "back",
+            cast(AccountWizard, get_app_window("AccountWizard")).get_current_method(),
+        ]
 
     def get_default_button(self) -> str:
         return "back"
@@ -1223,7 +1229,7 @@ class Success(SuccessPage):
                 self._account, "account_label", self._label
             )
         app.css_config.refresh()
-        window = cast(AccountsWindow, get_app_window("AccountsWindow"))
+        window = cast(AccountsWindow | None, get_app_window("AccountsWindow"))
         if window is not None:
             window.update_account_label(self._account)
 
