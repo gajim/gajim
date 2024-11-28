@@ -56,7 +56,9 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkImage" id="error_image"/>
+              <object class="GtkImage" id="error_image">
+                <property name="pixel-size">48</property>
+              </object>
             </child>
             <child>
               <object class="GtkLabel" id="error_label">
