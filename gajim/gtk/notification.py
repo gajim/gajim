@@ -214,7 +214,7 @@ class WindowsToastNotification(NotificationBackend):
         # Calls need to be executed with GLib.idle_add to avoid threading issues,
         # because Toasts run in a different thread.
         if event.arguments is None:
-            GLib.idle_add(app.window.present_with_time, Gdk.CURRENT_TIME)
+            GLib.idle_add(app.window.present)
             return
 
         if event.arguments.startswith("open-event-"):
@@ -243,7 +243,7 @@ class WindowsToastNotification(NotificationBackend):
                 )
                 return
 
-        GLib.idle_add(app.window.present_with_time, Gdk.CURRENT_TIME)
+        GLib.idle_add(app.window.present)
 
     def _get_toast_image(self, event: events.Notification) -> ToastImage:
         if event.type == "incoming-message":
