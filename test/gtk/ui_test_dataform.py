@@ -130,8 +130,8 @@ class TestDataFormWindow(GajimAppWindow):
             "form-width": 435,
         }
         self._widget = DataFormWidget(
-            extend_form(node=Node(node=FORM)), options
-        )  # pyright: ignore
+            extend_form(node=Node(node=FORM)), options  # pyright: ignore
+        )
         self.set_child(self._widget)
 
 
