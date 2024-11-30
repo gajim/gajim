@@ -15,7 +15,7 @@ from gajim.gtk.themes import Themes
 
 from . import util
 
-ACCOUNT = 'test'
+ACCOUNT = "test"
 
 app.settings = Settings(in_memory=True)
 app.settings.init()
@@ -26,9 +26,9 @@ def _get_value(
     selector: str, attr: str | StyleAttr, pre: bool = False
 ) -> str | Pango.FontDescription | None:
     if attr == StyleAttr.FONT:
-        return Pango.FontDescription.from_string('Cantarell Italic Light 15')
+        return Pango.FontDescription.from_string("Cantarell Italic Light 15")
     else:
-        return 'rgb(100, 10, 50)'
+        return "rgb(100, 10, 50)"
 
 
 app.css_config = MagicMock()

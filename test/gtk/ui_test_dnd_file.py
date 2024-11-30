@@ -14,7 +14,7 @@ class TestDNDFile(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -27,15 +27,15 @@ class TestDNDFile(GajimAppWindow):
             width_request=300,
             height_request=300,
         )
-        box.add_css_class('dnd-area')
+        box.add_css_class("dnd-area")
         self.set_child(box)
 
         drop_target = Gtk.DropTarget.new(Gdk.FileList, Gdk.DragAction.COPY)
-        drop_target.connect('accept', self._on_drop_accept)
-        drop_target.connect('drop', self._on_file_drop)
+        drop_target.connect("accept", self._on_drop_accept)
+        drop_target.connect("drop", self._on_file_drop)
         box.add_controller(drop_target)
 
-        label = Gtk.Label(label='Drop files here', hexpand=True)
+        label = Gtk.Label(label="Drop files here", hexpand=True)
         box.append(label)
 
     def _on_drop_accept(self, _target: Gtk.DropTarget, drop: Gdk.Drop) -> bool:

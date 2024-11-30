@@ -11,6 +11,7 @@ class AudioSource(Enum):
     """
     Different audios built into Windows
     """
+
     Default = ...
     IM = ...
     Mail = ...
@@ -37,7 +38,6 @@ class AudioSource(Enum):
     Call9 = ...
     Call10 = ...
 
-
 @dataclass
 class ToastAudio:
     """
@@ -50,6 +50,7 @@ class ToastAudio:
     :param silent: Silence any audio
     :type silent: bool
     """
+
     sound: Union[AudioSource, str] = ...
     looping: bool = ...
     silent: bool = ...
@@ -59,6 +60,3 @@ class ToastAudio:
         Returns the string value of the selected sound
         """
         ...
-    
-
-

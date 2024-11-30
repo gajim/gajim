@@ -28,29 +28,28 @@ class ErrorTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_insert_error(self) -> None:
         error_data1 = MessageError(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            message_id='1',
-            by=JID.from_string('some@domain.com'),
-            type='modify',
-            text='Text 1',
-            condition='not-acceptable',
-            condition_text='Condition Data 1',
+            message_id="1",
+            by=JID.from_string("some@domain.com"),
+            type="modify",
+            text="Text 1",
+            condition="not-acceptable",
+            condition_text="Condition Data 1",
             timestamp=utc_now(),
         )
 
@@ -60,22 +59,22 @@ class ErrorTest(unittest.TestCase):
             error = s.scalar(select(MessageError).where(MessageError.pk == pk))
         assert error is not None
 
-        self.assertEqual(error.by, 'some@domain.com')
+        self.assertEqual(error.by, "some@domain.com")
         self.assertIsInstance(error.by, JID)
-        self.assertEqual(error.text, 'Text 1')
-        self.assertEqual(error.condition, 'not-acceptable')
-        self.assertEqual(error.condition_text, 'Condition Data 1')
-        self.assertEqual(error.type, 'modify')
+        self.assertEqual(error.text, "Text 1")
+        self.assertEqual(error.condition, "not-acceptable")
+        self.assertEqual(error.condition_text, "Condition Data 1")
+        self.assertEqual(error.type, "modify")
 
         error_data2 = MessageError(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            message_id='1',
-            by=JID.from_string('some@domain.com'),
-            type='cancel',
-            text='Text 2',
-            condition='not-acceptable',
-            condition_text='Condition Data 2',
+            message_id="1",
+            by=JID.from_string("some@domain.com"),
+            type="cancel",
+            text="Text 2",
+            condition="not-acceptable",
+            condition_text="Condition Data 2",
             timestamp=utc_now(),
         )
 
@@ -86,14 +85,14 @@ class ErrorTest(unittest.TestCase):
         message_data = Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            resource='someres1',
+            resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            id='1',
+            id="1",
             stanza_id=get_uuid(),
-            text='message',
+            text="message",
         )
 
         pk = self._archive.insert_object(message_data)
@@ -101,12 +100,12 @@ class ErrorTest(unittest.TestCase):
         error_data1 = MessageError(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            message_id='1',
-            by=JID.from_string('some@domain.com'),
-            type='modify',
-            text='Text 1',
-            condition='not-acceptable',
-            condition_text='Condition Data 1',
+            message_id="1",
+            by=JID.from_string("some@domain.com"),
+            type="modify",
+            text="Text 1",
+            condition="not-acceptable",
+            condition_text="Condition Data 1",
             timestamp=utc_now(),
         )
         self._archive.insert_row(error_data1)
@@ -115,13 +114,13 @@ class ErrorTest(unittest.TestCase):
 
         assert message is not None
         assert message.error is not None
-        self.assertEqual(message.error.by, 'some@domain.com')
+        self.assertEqual(message.error.by, "some@domain.com")
         self.assertIsInstance(message.error.by, JID)
-        self.assertEqual(message.error.text, 'Text 1')
-        self.assertEqual(message.error.condition, 'not-acceptable')
-        self.assertEqual(message.error.condition_text, 'Condition Data 1')
-        self.assertEqual(message.error.type, 'modify')
+        self.assertEqual(message.error.text, "Text 1")
+        self.assertEqual(message.error.condition, "not-acceptable")
+        self.assertEqual(message.error.condition_text, "Condition Data 1")
+        self.assertEqual(message.error.type, "modify")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

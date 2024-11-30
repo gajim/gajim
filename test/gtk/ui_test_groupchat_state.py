@@ -15,15 +15,15 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-ACCOUNT = 'testacc1'
-FROM_JID = 'contact@test.tld'
+ACCOUNT = "testacc1"
+FROM_JID = "contact@test.tld"
 
 
 class TestGroupchatState(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -49,7 +49,7 @@ class TestGroupchatState(GajimAppWindow):
         contact.connect = MagicMock()
         contact.account = ACCOUNT
         contact.jid = JID.from_string(FROM_JID)
-        contact.name = 'Test Contact'
+        contact.name = "Test Contact"
         contact.is_groupchat = True
         contact.is_joining = True
         contact.is_joined = False

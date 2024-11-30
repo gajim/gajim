@@ -17,7 +17,7 @@ from gajim.gtk.widgets import GajimAppWindow
 from . import util
 
 stanza = Iq(
-    node='''
+    node="""
 <iq xmlns="jabber:client" xml:lang="de-DE" to="user@user.us" from="asd@conference.temptatio.dev" type="result" id="67284933-e526-41f3-8309-9d9475cf9c74">
     <query
         xmlns="http://jabber.org/protocol/disco#info">
@@ -86,13 +86,13 @@ stanza = Iq(
             </field>
         </x>
     </query>
-</iq>'''  # type: ignore  # noqa: E501
+</iq>"""  # type: ignore  # noqa: E501
 )
 
 
 subject = (
-    'Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed '
-    'diam nonumy eirmod tempor invidunt ut labore et dolore magna'
+    "Lorem ipsum dolor sit amet, consetetur sadipscing elitr sed "
+    "diam nonumy eirmod tempor invidunt ut labore et dolore magna"
 )
 
 disco_info = parse_disco_info(stanza)
@@ -102,7 +102,7 @@ class TestGroupchatInfo(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=700,
             default_height=700,
@@ -119,12 +119,12 @@ class TestGroupchatInfo(GajimAppWindow):
         self.set_child(self._main_box)
         self._muc_info_box.set_from_disco_info(disco_info)
         self._muc_info_box.set_subject(
-            MucSubject(text=subject, author='someone', timestamp=None)
+            MucSubject(text=subject, author="someone", timestamp=None)
         )
 
 
 app.css_config = MagicMock()
-app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
+app.css_config.get_value = MagicMock(return_value="rgb(100, 100, 255)")
 
 window = TestGroupchatInfo()
 window.show()

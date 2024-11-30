@@ -43,16 +43,16 @@ box.set_orientation(Gtk.Orientation.VERTICAL)
 button_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)
 box.append(button_box)
 
-progress_button = Gtk.Button(label='Progress')
-progress_button.connect('clicked', _on_progress_clicked)
+progress_button = Gtk.Button(label="Progress")
+progress_button.connect("clicked", _on_progress_clicked)
 button_box.append(progress_button)
 
-finish_button = Gtk.Button(label='Finish')
-finish_button.connect('clicked', _on_finish_clicked)
+finish_button = Gtk.Button(label="Finish")
+finish_button.connect("clicked", _on_finish_clicked)
 button_box.append(finish_button)
 
-error_button = Gtk.Button(label='Error')
-error_button.connect('clicked', _on_error_clicked)
+error_button = Gtk.Button(label="Error")
+error_button.connect("clicked", _on_error_clicked)
 button_box.append(error_button)
 
 window.show()

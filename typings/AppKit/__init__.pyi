@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 from typing import Any
@@ -6,7 +5,6 @@ from typing import Any
 class NSLocale:
     @classmethod
     def currentLocale(cls) -> Any: ...
-
 
 class NSSound:
     @classmethod

@@ -17,7 +17,7 @@ class TestFileChooserButton(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -28,11 +28,11 @@ class TestFileChooserButton(GajimAppWindow):
 
         file_chooser_button = FileChooserButton(
             filters=[
-                Filter(name='All files', patterns=['*']),
-                Filter(name='Wav Sounds', patterns=['*.wav']),
+                Filter(name="All files", patterns=["*"]),
+                Filter(name="Wav Sounds", patterns=["*.wav"]),
             ]
         )
-        file_chooser_button.connect('path-picked', self._on_file_picked)
+        file_chooser_button.connect("path-picked", self._on_file_picked)
         box.append(file_chooser_button)
 
     def _on_file_picked(

@@ -80,7 +80,7 @@ version = {attr = "gajim.__version__"}
 [tool.black]
 line-length = 88
 target-version = ["py310", "py311", "py312"]
-force-exclude = "common|plugins|typings|test"
+force-exclude = "common|plugins"
 required-version = "24.10.0"
 
 [tool.codespell]

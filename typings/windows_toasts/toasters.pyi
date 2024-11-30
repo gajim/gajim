@@ -13,19 +13,21 @@ from winrt.windows.ui.notifications import ToastNotifier
 
 from .toast import Toast
 
-ToastNotificationT = TypeVar("ToastNotificationT", ToastNotification, ScheduledToastNotification)
+ToastNotificationT = TypeVar(
+    "ToastNotificationT", ToastNotification, ScheduledToastNotification
+)
+
 class BaseWindowsToaster:
     """
     Wrapper to simplify WinRT's ToastNotificationManager
 
     :param applicationText: Text to display the application as
     """
+
     applicationText: str
     notifierAUMID: Optional[str]
     toastNotifier: ToastNotifier
-    def __init__(self, applicationText: str) -> None:
-        ...
-    
+    def __init__(self, applicationText: str) -> None: ...
     def show_toast(self, toast: Toast) -> None:
         """
         Displays the specified toast notification.
@@ -34,7 +36,7 @@ class BaseWindowsToaster:
         :param toast: Toast to display
         """
         ...
-    
+
     def update_toast(self, toast: Toast) -> bool:
         """
         Update the passed notification data with the new data in the clas
@@ -44,7 +46,7 @@ class BaseWindowsToaster:
         :return: Whether the update succeeded
         """
         ...
-    
+
     def schedule_toast(self, toast: Toast, displayTime: datetime) -> None:
         """
         Schedule the passed notification toast. Warning: scheduled toasts cannot be updated or activated (i.e. on_X)
@@ -55,7 +57,7 @@ class BaseWindowsToaster:
         :type displayTime: datetime
         """
         ...
-    
+
     def unschedule_toast(self, toast: Toast) -> None:
         """
         Unschedule the passed notification toast
@@ -63,20 +65,18 @@ class BaseWindowsToaster:
         :raises: ToastNotFoundError: If the toast could not be found
         """
         ...
-    
+
     def clear_toasts(self) -> None:
         """
         Clear toasts popped by this toaster
         """
         ...
-    
+
     def clear_scheduled_toasts(self) -> None:
         """
         Clear all scheduled toasts set for the toaster
         """
         ...
-    
-
 
 class WindowsToaster(BaseWindowsToaster):
     """
@@ -85,14 +85,10 @@ class WindowsToaster(BaseWindowsToaster):
 
     :param applicationText: Text to display the application as
     """
-    __InteractableWarningMessage = ...
-    def __init__(self, applicationText: str) -> None:
-        ...
-    
-    def show_toast(self, toast: Toast) -> None:
-        ...
-    
 
+    __InteractableWarningMessage = ...
+    def __init__(self, applicationText: str) -> None: ...
+    def show_toast(self, toast: Toast) -> None: ...
 
 class InteractableWindowsToaster(BaseWindowsToaster):
     """
@@ -102,8 +98,7 @@ class InteractableWindowsToaster(BaseWindowsToaster):
     :param applicationText: Text to display the application as
     :param notifierAUMID: AUMID to use. Defaults to Command Prompt. To use a custom AUMID, see one of the scripts
     """
-    def __init__(self, applicationText: str, notifierAUMID: Optional[str] = ...) -> None:
-        ...
-    
 
-
+    def __init__(
+        self, applicationText: str, notifierAUMID: Optional[str] = ...
+    ) -> None: ...

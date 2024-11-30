@@ -15,7 +15,7 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-image = '''iVBORw0KGgoAAAANSUhEUgAAAIwAAAA8CAAAAACRYQ2XAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfiCwQXMiypK
+image = """iVBORw0KGgoAAAANSUhEUgAAAIwAAAA8CAAAAACRYQ2XAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAHdElNRQfiCwQXMiypK
 zsIAAAM4ElEQVRo3u1ZeVxUR7b+moZmE1AWFVDQNoIiEBFFxUHEXaJGQX0TnWhi0DhjYlQwbviEbOKOE9eIOjFGR8e44C4qcYkIssmiIMiO7Es3vXffe94ftxsaaUh0Zt689/ul/ulb59a5/VXVWb5TxSP832lG+B3M/wMwxr9plFpjWlFtZm9n+p8Gwxrll2vuXXDyf
 F5erZw5yde1G+/fBYb3K97UoErf3U/8y/xRrNREaFqVnFDuPmKm/38AjIaflVF32mKWzYCxSp4ZwJIRT1GRefflkNnuFv+LYIiHUsWLWNPelWs8BD3a20/Dkx+q5v/J9N8OhshI09SgMOled6nW5orZ+y5CD9aQv52Py4hY3ckkdJhN/jkwz1NLNeVHrUcNKsnkBziqZ
 gyFdWdqqow9Rit921kym/pUxhbJl/pwvVtPhMNd3xyMbCtrIjwU5lNcZTTaVt7Lqks9pvBk9WJv8zZ0zx9W8potnMXx7vssATQ6fWotsQ8Y9XpoqLUF7X1B9NFhIiK2TfqSOmtHBeFMa+d2+NIrxURUVf6+cTMRZbqJM09ti1yXQK/R2sA02xIRhR1u91pxLyLmfme6z
@@ -40,10 +40,10 @@ uulhdcJGwA53+9ttkLFo0KR4wwPQ8q+tkl30we/A0AjPb9nT3egrnwEAJS7WrzJCTn/neAbN2orrAAMN
 itner+hRS7W65wJLCJi6kp+XU1MORru7EvVkztO6ln3z4Nh123WLUNDjFUxvXaTcc6nMFcbfP1a9028z9gj2WIWqpqHu9QF/V7/CNxkeFYjA/llf+M3ulV5pdUduNZjoEtZtdLtL65vctPzc0SjmDE3uzL4XwEGaE59Wir0GODyhncVCiWBZ2GCfw2Y3y9MfwfzO5hO2
 v8AIg7mWYx8/rwAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtMTEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggolQTkcNChoKAAAADUlIRFIAAAAoAAAAPAEAAAAAP
 MLFTQAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAAHdihOkAAAAB3RJTUUH4gsEFzIsqSs7CAAAABBJREFUGNNj+A8CDKMkjUkAKsYq5D2hXoMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTgtM
-TEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggg=='''  # noqa: E501
+TEtMDRUMjM6NTA6NDQrMDE6MDBAxMf7AAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE4LTExLTA0VDIzOjUwOjQ0KzAxOjAwMZl/RwAAAABJRU5ErkJggg=="""  # noqa: E501
 
 
-FORM = '''
+FORM = """
 <x xmlns='jabber:x:data' type='form'>
   <title>Bot Configuration</title>
   <instructions>Fill out this form to configure your new bot!</instructions>
@@ -113,31 +113,33 @@ FORM = '''
     <required/>
   </field>
 </x>
-'''  # noqa: E501
+"""  # noqa: E501
 
 
 class TestDataFormWindow(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=1000,
             default_height=600,
         )
         options = {
-            'left-width': 100,
-            'form-width': 435,
+            "left-width": 100,
+            "form-width": 435,
         }
-        self._widget = DataFormWidget(extend_form(node=Node(node=FORM)), options)  # pyright: ignore
+        self._widget = DataFormWidget(
+            extend_form(node=Node(node=FORM)), options
+        )  # pyright: ignore
         self.set_child(self._widget)
 
 
-app.bob_cache['sha1+8f35fef110ffc5df08d579a50083ff9308fb6242'] = b64decode(
+app.bob_cache["sha1+8f35fef110ffc5df08d579a50083ff9308fb6242"] = b64decode(
     image
 )  # noqa: E501
 app.css_config = MagicMock()
-app.css_config.get_value = MagicMock(return_value='rgb(100, 100, 255)')
+app.css_config.get_value = MagicMock(return_value="rgb(100, 100, 255)")
 
 window = TestDataFormWindow()
 window.show()

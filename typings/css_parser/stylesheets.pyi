@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-class MediaList:
-    ...
-
+class MediaList: ...
 
 class StyleSheet:
 

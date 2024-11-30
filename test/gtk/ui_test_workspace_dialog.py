@@ -11,7 +11,7 @@ from gajim.gtk.workspace_dialog import WorkspaceDialog
 
 from . import util
 
-ACCOUNT = 'test'
+ACCOUNT = "test"
 
 app.settings = Settings(in_memory=True)
 app.settings.init()

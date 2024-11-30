@@ -15,15 +15,15 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-ACCOUNT = 'testacc1'
-FROM_JID = 'groupchat@conference.example.org'
+ACCOUNT = "testacc1"
+FROM_JID = "groupchat@conference.example.org"
 
 
 class TestGroupChatVoiceRequestButton(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -48,7 +48,7 @@ class TestGroupChatVoiceRequestButton(GajimAppWindow):
         contact = MagicMock(spec_set=GroupchatContact)
         contact.account = ACCOUNT
         contact.jid = JID.from_string(FROM_JID)
-        contact.name = 'Test Contact'
+        contact.name = "Test Contact"
         contact.is_groupchat = True
         return contact
 

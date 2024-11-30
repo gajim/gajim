@@ -12,7 +12,7 @@ from gajim.gtk.widgets import GajimAppWindow
 from . import util
 
 DEFAULT_IMAGE_FILE_PATH = (
-    util.get_gajim_dir() / 'data/icons/hicolor/96x96/apps/gajim.png'
+    util.get_gajim_dir() / "data/icons/hicolor/96x96/apps/gajim.png"
 )
 
 
@@ -20,7 +20,7 @@ class TestSnapshot(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -51,7 +51,7 @@ class TestSnapshot(GajimAppWindow):
         cutout_rect = Graphene.Rect().init(50, 50, 50, 50)
 
         color = Gdk.RGBA()
-        color.parse('rgb(70, 0, 190)')
+        color.parse("rgb(70, 0, 190)")
 
         rounded_rect = Gsk.RoundedRect()
         rounded_rect.init_from_rect(cutout_rect, radius=25)

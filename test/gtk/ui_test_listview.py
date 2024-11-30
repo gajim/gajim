@@ -12,7 +12,7 @@ from . import util
 
 
 class Country(GObject.Object):
-    __gtype_name__ = 'Country'
+    __gtype_name__ = "Country"
 
     country_id = GObject.Property(type=str)
     country_name = GObject.Property(type=str)
@@ -23,33 +23,29 @@ class TestListView(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=800,
             default_height=800,
         )
 
         nodes = {
-            'at': ('Austria', 'Van der Bellen'),
-            'uk': ('United Kingdom', 'Charles III'),
-            'us': ('United States', 'Biden'),
+            "at": ("Austria", "Van der Bellen"),
+            "uk": ("United Kingdom", "Charles III"),
+            "us": ("United States", "Biden"),
         }
 
         self.model = Gio.ListStore(item_type=Country)
         for n in nodes:
             self.model.append(
-                Country(
-                    country_id=n,
-                    country_name=nodes[n][0],
-                    country_pm=nodes[n][1]
-                )
+                Country(country_id=n, country_name=nodes[n][0], country_pm=nodes[n][1])
             )
 
         factory = Gtk.SignalListItemFactory()
-        factory.connect('setup', self._on_factory_setup)
-        factory.connect('bind', self._on_factory_bind, 'country_name')
-        factory.connect('unbind', self._on_factory_unbind, 'country_name')
-        factory.connect('teardown', self._on_factory_teardown)
+        factory.connect("setup", self._on_factory_setup)
+        factory.connect("bind", self._on_factory_bind, "country_name")
+        factory.connect("unbind", self._on_factory_unbind, "country_name")
+        factory.connect("teardown", self._on_factory_teardown)
 
         self.lv = Gtk.ListView(
             model=Gtk.NoSelection(model=self.model),
@@ -64,7 +60,7 @@ class TestListView(GajimAppWindow):
         box.props.margin_end = 12
         box.props.margin_top = 6
         box.props.margin_bottom = 6
-        box.append(Gtk.Label(label='Some Table:'))
+        box.append(Gtk.Label(label="Some Table:"))
         box.append(self.lv)
 
         self.set_child(box)
@@ -86,7 +82,7 @@ class TestListView(GajimAppWindow):
         cell = list_item.get_child()
         assert cell is not None
         cell._binding = country.bind_property(  # pyright: ignore
-            what, cell, 'text', GObject.BindingFlags.SYNC_CREATE
+            what, cell, "text", GObject.BindingFlags.SYNC_CREATE
         )
 
     def _on_factory_unbind(

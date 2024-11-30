@@ -27,27 +27,26 @@ class SecurityLabelsTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account_jid = JID.from_string('user@domain.org')
-        self._account = 'testacc1'
-        self._remote_jid = JID.from_string('remote@jid.org')
+        self._account_jid = JID.from_string("user@domain.org")
+        self._account = "testacc1"
+        self._remote_jid = JID.from_string("remote@jid.org")
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_security_labels_join(self):
         sec_data = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
             updated_at=datetime.fromtimestamp(0, timezone.utc),
-            label_hash='label1hash',
-            displaymarking='SECRET',
-            fgcolor='black',
-            bgcolor='red',
+            label_hash="label1hash",
+            displaymarking="SECRET",
+            fgcolor="black",
+            bgcolor="red",
         )
 
         message_data = Message(
@@ -57,9 +56,9 @@ class SecurityLabelsTest(unittest.TestCase):
             direction=ChatDirection.INCOMING,
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            resource='res',
-            text='Some Message',
-            id='messageid1',
+            resource="res",
+            text="Some Message",
+            id="messageid1",
             stanza_id=get_uuid(),
             security_label_=sec_data,
         )
@@ -71,29 +70,29 @@ class SecurityLabelsTest(unittest.TestCase):
         assert message is not None
         assert message.security_label is not None
 
-        self.assertEqual(message.security_label.displaymarking, 'SECRET')
-        self.assertEqual(message.security_label.fgcolor, 'black')
-        self.assertEqual(message.security_label.bgcolor, 'red')
+        self.assertEqual(message.security_label.displaymarking, "SECRET")
+        self.assertEqual(message.security_label.fgcolor, "black")
+        self.assertEqual(message.security_label.bgcolor, "red")
 
     def test_security_labels_update(self):
         sec_data1 = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
             updated_at=datetime.fromtimestamp(0, timezone.utc),
-            label_hash='label1hash',
-            displaymarking='SECRET',
-            fgcolor='black',
-            bgcolor='red',
+            label_hash="label1hash",
+            displaymarking="SECRET",
+            fgcolor="black",
+            bgcolor="red",
         )
 
         sec_data2 = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
             updated_at=datetime.fromtimestamp(1, timezone.utc),
-            label_hash='label1hash',
-            displaymarking='NOT SECRET',
-            fgcolor='white',
-            bgcolor='blue',
+            label_hash="label1hash",
+            displaymarking="NOT SECRET",
+            fgcolor="white",
+            bgcolor="blue",
         )
 
         pk1 = self._archive.upsert_row(sec_data1)
@@ -107,11 +106,11 @@ class SecurityLabelsTest(unittest.TestCase):
             res = s.scalar(select(SecurityLabel).where(SecurityLabel.pk == pk3))
         assert res is not None
 
-        self.assertEqual(res.displaymarking, 'NOT SECRET')
-        self.assertEqual(res.fgcolor, 'white')
-        self.assertEqual(res.bgcolor, 'blue')
+        self.assertEqual(res.displaymarking, "NOT SECRET")
+        self.assertEqual(res.fgcolor, "white")
+        self.assertEqual(res.bgcolor, "blue")
         self.assertEqual(res.updated_at, datetime.fromtimestamp(1, timezone.utc))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

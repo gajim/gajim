@@ -30,42 +30,41 @@ class ForeignKeyTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_filetransfer_join(self) -> None:
         now = datetime.now(timezone.utc)
 
         source1 = UrlData(
-            type='urldata',
-            target='http://target',
-            scheme_data={'header': 'someheader'},
+            type="urldata",
+            target="http://target",
+            scheme_data={"header": "someheader"},
         )
 
         source2 = JinglePub(
-            type='jinglepub',
-            id='123',
+            type="jinglepub",
+            id="123",
         )
 
         ft_data1 = FileTransfer(
             date=now,
-            desc='desc',
-            hash='abc',
-            hash_algo='sha-1',
+            desc="desc",
+            hash="abc",
+            hash_algo="sha-1",
             height=123,
             length=778272,
-            media_type='image/png',
-            name='filename1',
+            media_type="image/png",
+            name="filename1",
             size=6555,
             width=789,
             state=0,
@@ -75,14 +74,14 @@ class ForeignKeyTest(unittest.TestCase):
         message_data = Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            resource='someres1',
+            resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=now,
             state=MessageState.ACKNOWLEDGED,
-            id='1',
+            id="1",
             stanza_id=get_uuid(),
-            text='message',
+            text="message",
             filetransfers=[ft_data1],
         )
 
@@ -94,13 +93,13 @@ class ForeignKeyTest(unittest.TestCase):
         assert message.filetransfers
         ft1 = message.filetransfers[0]
         self.assertEqual(ft1.date, now)
-        self.assertEqual(ft1.desc, 'desc')
-        self.assertEqual(ft1.hash, 'abc')
-        self.assertEqual(ft1.hash_algo, 'sha-1')
+        self.assertEqual(ft1.desc, "desc")
+        self.assertEqual(ft1.hash, "abc")
+        self.assertEqual(ft1.hash_algo, "sha-1")
         self.assertEqual(ft1.height, 123)
         self.assertEqual(ft1.length, 778272)
-        self.assertEqual(ft1.media_type, 'image/png')
-        self.assertEqual(ft1.name, 'filename1')
+        self.assertEqual(ft1.media_type, "image/png")
+        self.assertEqual(ft1.name, "filename1")
         self.assertEqual(ft1.size, 6555)
         self.assertEqual(ft1.width, 789)
         self.assertEqual(ft1.state, 0)
@@ -112,12 +111,12 @@ class ForeignKeyTest(unittest.TestCase):
         assert isinstance(source1, UrlData)
         assert isinstance(source2, JinglePub)
 
-        self.assertEqual(source1.type, 'urldata')
-        self.assertEqual(source1.target, 'http://target')
-        self.assertEqual(source1.scheme_data, {'header': 'someheader'})
+        self.assertEqual(source1.type, "urldata")
+        self.assertEqual(source1.target, "http://target")
+        self.assertEqual(source1.scheme_data, {"header": "someheader"})
 
-        self.assertEqual(source2.type, 'jinglepub')
-        self.assertEqual(source2.id, '123')
+        self.assertEqual(source2.type, "jinglepub")
+        self.assertEqual(source2.id, "123")
 
         self._archive.delete_message(message.pk)
 
@@ -133,5 +132,5 @@ class ForeignKeyTest(unittest.TestCase):
             assert res is None
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

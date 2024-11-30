@@ -20,9 +20,9 @@ from gajim.gtk.call_window import CallWindow
 
 from . import util
 
-ACCOUNT = 'testacc1'
-BARE_JID = JID.from_string('contact@test.tld')
-RESOURCE_JID = JID.from_string('contact@test.tld/test')
+ACCOUNT = "testacc1"
+BARE_JID = JID.from_string("contact@test.tld")
+RESOURCE_JID = JID.from_string("contact@test.tld/test")
 
 
 class TestContactsModule:
@@ -37,9 +37,9 @@ class TestContactsModule:
         else:
             contact = MagicMock(spec_set=BareContact)
             contact.jid = BARE_JID
-            contact.name = 'Test Contact'
+            contact.name = "Test Contact"
             avatar = convert_surface_to_texture(
-                generate_default_avatar('T', (0.2, 0.1, 0.7), AvatarSize.CALL_BIG, 1)
+                generate_default_avatar("T", (0.2, 0.1, 0.7), AvatarSize.CALL_BIG, 1)
             )
             contact.get_avatar = MagicMock(return_value=avatar)
 
@@ -54,7 +54,7 @@ class TestClient:
         self.account = account
 
     def get_module(self, module: str) -> Any:
-        if module == 'Contacts':
+        if module == "Contacts":
             return TestContactsModule()
         return MagicMock()
 

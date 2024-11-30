@@ -25,7 +25,7 @@ def _create_traceback(message: str) -> TracebackType | None:
     return tb
 
 
-tb = _create_traceback('Test')
+tb = _create_traceback("Test")
 assert isinstance(tb, TracebackType)
 
 window = ExceptionDialog(BaseException, Exception(), tb)

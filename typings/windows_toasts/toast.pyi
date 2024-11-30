@@ -26,6 +26,7 @@ from .wrappers import ToastScenario
 from .wrappers import ToastSystemButton
 
 ToastInput = TypeVar("ToastInput", ToastInputTextBox, ToastInputSelectionBox)
+
 class Toast:
     audio: Optional[ToastAudio]
     duration: Literal[ToastDuration.Default, ToastDuration.Long, ToastDuration.Short]
@@ -46,7 +47,28 @@ class Toast:
     tag: str
     updates: int
     _launch_action: Optional[str]
-    def __init__(self, text_fields: Union[list[Optional[str]], tuple[Optional[str]], set[Optional[str]]] = ..., audio: Optional[ToastAudio] = ..., duration: ToastDuration = ..., expiration_time: Optional[datetime.datetime] = ..., group: Optional[str] = ..., launch_action: Optional[str] = ..., progress_bar: Optional[ToastProgressBar] = ..., attribution_text: Optional[str] = ..., scenario: ToastScenario = ..., suppress_popup: bool = ..., timestamp: Optional[datetime.datetime] = ..., on_activated: Optional[Callable[[ToastActivatedEventArgs], None]] = ..., on_dismissed: Optional[Callable[[ToastDismissedEventArgs], None]] = ..., on_failed: Optional[Callable[[ToastFailedEventArgs], None]] = ..., actions: Iterable[Union[ToastButton, ToastSystemButton]] = ..., images: Iterable[ToastDisplayImage] = ..., inputs: Iterable[ToastInput] = ...) -> None:
+    def __init__(
+        self,
+        text_fields: Union[
+            list[Optional[str]], tuple[Optional[str]], set[Optional[str]]
+        ] = ...,
+        audio: Optional[ToastAudio] = ...,
+        duration: ToastDuration = ...,
+        expiration_time: Optional[datetime.datetime] = ...,
+        group: Optional[str] = ...,
+        launch_action: Optional[str] = ...,
+        progress_bar: Optional[ToastProgressBar] = ...,
+        attribution_text: Optional[str] = ...,
+        scenario: ToastScenario = ...,
+        suppress_popup: bool = ...,
+        timestamp: Optional[datetime.datetime] = ...,
+        on_activated: Optional[Callable[[ToastActivatedEventArgs], None]] = ...,
+        on_dismissed: Optional[Callable[[ToastDismissedEventArgs], None]] = ...,
+        on_failed: Optional[Callable[[ToastFailedEventArgs], None]] = ...,
+        actions: Iterable[Union[ToastButton, ToastSystemButton]] = ...,
+        images: Iterable[ToastDisplayImage] = ...,
+        inputs: Iterable[ToastInput] = ...,
+    ) -> None:
         """
         Initialise a toast
 
@@ -58,13 +80,11 @@ class Toast:
         :type inputs: Iterable[ToastInput]
         """
         ...
-    
-    def __eq__(self, other) -> bool:
+
+    def __eq__(self, other) -> bool: ...
+    def __repr__(self):  # -> str:
         ...
-    
-    def __repr__(self): # -> str:
-        ...
-    
+
     def AddAction(self, action: Union[ToastButton, ToastSystemButton]) -> None:
         """
         Add an action to the action list. For example, if you're setting up a reminder,
@@ -73,7 +93,7 @@ class Toast:
         :type action: Union[ToastButton, ToastSystemButton]
         """
         ...
-    
+
     def AddImage(self, image: ToastDisplayImage) -> None:
         """
         Adds an the image that will be displayed on the toast.
@@ -82,7 +102,7 @@ class Toast:
         :param image: :class:`ToastDisplayImage` to display in the toast
         """
         ...
-    
+
     def AddInput(self, toast_input: ToastInput) -> None:
         """
         Adds an input field to the notification. It will be supplied as user_input of type ValueSet in on_activated
@@ -90,16 +110,16 @@ class Toast:
         :param toast_input: :class:`ToastInput` to display in the toast
         """
         ...
-    
+
     @property
     def launch_action(self) -> Optional[str]:
         """Protocol to launch when the toast is clicked"""
         ...
-    
+
     @launch_action.setter
-    def launch_action(self, value: Optional[str]): # -> None:
+    def launch_action(self, value: Optional[str]):  # -> None:
         ...
-    
+
     def clone(self) -> Toast:
         """
         Clone the current toast and return the new one
@@ -108,6 +128,3 @@ class Toast:
         :rtype: Toast
         """
         ...
-    
-
-

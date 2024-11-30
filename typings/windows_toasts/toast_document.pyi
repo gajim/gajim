@@ -24,17 +24,17 @@ from .wrappers import ToastScenario
 from .wrappers import ToastSystemButton
 
 IXmlType = TypeVar("IXmlType", IXmlNode, XmlElement)
+
 class ToastDocument:
     """
     The XmlDocument wrapper for toasts, which applies all the
     attributes configured in :class:`~windows_toasts.toast.Toast`
     """
+
     xmlDocument: XmlDocument
     bindingNode: IXmlType
     _inputFields: int
-    def __init__(self, toast: Toast) -> None:
-        ...
-    
+    def __init__(self, toast: Toast) -> None: ...
     @staticmethod
     def GetAttributeValue(nodeAttribute: IXmlType, attributeName: str) -> str:
         """
@@ -48,7 +48,7 @@ class ToastDocument:
         :rtype: str
         """
         ...
-    
+
     def GetElementByTagName(self, tagName: str) -> Optional[IXmlType]:
         """
         Helper function to get the first element by its tag name
@@ -58,8 +58,10 @@ class ToastDocument:
         :rtype: IXmlType
         """
         ...
-    
-    def SetAttribute(self, nodeAttribute: IXmlType, attributeName: str, attributeValue: str) -> None:
+
+    def SetAttribute(
+        self, nodeAttribute: IXmlType, attributeName: str, attributeValue: str
+    ) -> None:
         """
         Helper function to set an attribute to a node. <nodeAttribute attributeName="attributeValue" />
 
@@ -71,7 +73,7 @@ class ToastDocument:
         :type attributeValue: str
         """
         ...
-    
+
     def SetNodeStringValue(self, targetNode: IXmlType, newValue: str) -> None:
         """
         Helper function to set the inner value of a node. <text>newValue</text>
@@ -82,7 +84,7 @@ class ToastDocument:
         :type newValue: str
         """
         ...
-    
+
     def SetAttributionText(self, attributionText: str) -> None:
         """
         Set attribution text for the toast. This is used if we're using
@@ -93,7 +95,7 @@ class ToastDocument:
         :param attributionText: Attribution text to set
         """
         ...
-    
+
     def SetAudioAttributes(self, audioConfiguration: ToastAudio) -> None:
         """
         Apply audio attributes for the toast. If a loop is requested, the toast duration has to be set to long. `Audio
@@ -101,7 +103,7 @@ class ToastDocument:
         -interactive-toasts#audio>`_
         """
         ...
-    
+
     def SetTextField(self, nodePosition: int) -> None:
         """
         Set a simple text field. `Text elements on Microsoft.com
@@ -110,7 +112,7 @@ class ToastDocument:
         :param nodePosition: Index of the text fields of the toast type for the text to be written in
         """
         ...
-    
+
     def SetTextFieldStatic(self, nodePosition: int, newValue: str) -> None:
         """
         :meth:`SetTextField` but static, generally used for scheduled toasts
@@ -119,7 +121,7 @@ class ToastDocument:
         :param newValue: Content value of the text field
         """
         ...
-    
+
     def SetCustomTimestamp(self, customTimestamp: datetime.datetime) -> None:
         """
         Apply a custom timestamp to display on the toast and in the notification center. `Custom timestamp on
@@ -130,7 +132,7 @@ class ToastDocument:
         :type customTimestamp: datetime.datetime
         """
         ...
-    
+
     def AddImage(self, displayImage: ToastDisplayImage) -> None:
         """
         Add an image to display. `Inline image on Microsoft.com <https://learn.microsoft.com/windows/
@@ -139,7 +141,7 @@ class ToastDocument:
         :type displayImage: ToastDisplayImage
         """
         ...
-    
+
     def SetScenario(self, scenario: ToastScenario) -> None:
         """
         Set whether the notification should be marked as important. `Important Notifications on Microsoft.com
@@ -150,8 +152,10 @@ class ToastDocument:
         :type scenario: ToastScenario
         """
         ...
-    
-    def AddInput(self, toastInput: Union[ToastInputTextBox, ToastInputSelectionBox]) -> None:
+
+    def AddInput(
+        self, toastInput: Union[ToastInputTextBox, ToastInputSelectionBox]
+    ) -> None:
         """
         Add a field for the user to input. `Inputs with button bar on Microsoft.com
         <https://learn.microsoft.com/windows/apps/design/shell/tiles-and-notifications/adaptive-interactive
@@ -160,7 +164,7 @@ class ToastDocument:
         :type toastInput: Union[ToastInputTextBox, ToastInputSelectionBox]
         """
         ...
-    
+
     def SetDuration(self, duration: ToastDuration) -> None:
         """
         Set the duration of the toast. If looping audio is enabled, it will automatically be set to long
@@ -168,7 +172,7 @@ class ToastDocument:
         :type duration: ToastDuration
         """
         ...
-    
+
     def AddAction(self, action: Union[ToastButton, ToastSystemButton]) -> None:
         """
         Adds a button to the toast. Only works on :obj:`~windows_toasts.toasters.InteractableWindowsToaster`
@@ -176,7 +180,7 @@ class ToastDocument:
         :type action: Union[ToastButton, ToastSystemButton]
         """
         ...
-    
+
     def AddProgressBar(self) -> None:
         """
         Add a progress bar on your app notification to keep the user informed of the progress of operations.
@@ -184,12 +188,9 @@ class ToastDocument:
         /adaptive-interactive-toasts#progress-bar>`_
         """
         ...
-    
+
     def AddStaticProgressBar(self, progressBar: ToastProgressBar) -> None:
         """
         :meth:`AddProgressBar` but static, generally used for scheduled toasts
         """
         ...
-    
-
-

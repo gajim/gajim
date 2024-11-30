@@ -27,18 +27,17 @@ class ModerationTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_insert_moderation(self) -> None:
         uuid = get_uuid()
@@ -47,8 +46,8 @@ class ModerationTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=None,
             stanza_id=uuid,
-            by=JID.from_string('some@domain.com'),
-            reason='some reason',
+            by=JID.from_string("some@domain.com"),
+            reason="some reason",
             timestamp=datetime.fromtimestamp(0, timezone.utc),
         )
 
@@ -59,9 +58,9 @@ class ModerationTest(unittest.TestCase):
             moderation = s.scalar(select(Moderation).where(Moderation.pk == pk))
         assert moderation is not None
 
-        self.assertEqual(moderation.by, 'some@domain.com')
+        self.assertEqual(moderation.by, "some@domain.com")
         self.assertIsInstance(moderation.by, JID)
-        self.assertEqual(moderation.reason, 'some reason')
+        self.assertEqual(moderation.reason, "some reason")
         self.assertEqual(moderation.timestamp, datetime.fromtimestamp(0, timezone.utc))
         self.assertEqual(moderation.stanza_id, uuid)
         self.assertEqual(moderation.occupant, None)
@@ -71,8 +70,8 @@ class ModerationTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=None,
             stanza_id=uuid,
-            by=JID.from_string('someother@domain.com'),
-            reason='some other reason',
+            by=JID.from_string("someother@domain.com"),
+            reason="some other reason",
             timestamp=datetime.fromtimestamp(1, timezone.utc),
         )
 
@@ -84,14 +83,14 @@ class ModerationTest(unittest.TestCase):
         message_data = Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            resource='someres1',
+            resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            id='1',
+            id="1",
             stanza_id=uuid,
-            text='message',
+            text="message",
         )
 
         pk = self._archive.insert_object(message_data)
@@ -101,8 +100,8 @@ class ModerationTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=None,
             stanza_id=uuid,
-            by=JID.from_string('some@domain.com'),
-            reason='some reason',
+            by=JID.from_string("some@domain.com"),
+            reason="some reason",
             timestamp=datetime.fromtimestamp(0, timezone.utc),
         )
 
@@ -112,9 +111,9 @@ class ModerationTest(unittest.TestCase):
 
         assert message is not None
         assert message.moderation is not None
-        self.assertEqual(message.moderation.by, 'some@domain.com')
+        self.assertEqual(message.moderation.by, "some@domain.com")
         self.assertIsInstance(message.moderation.by, JID)
-        self.assertEqual(message.moderation.reason, 'some reason')
+        self.assertEqual(message.moderation.reason, "some reason")
         self.assertEqual(
             message.moderation.timestamp, datetime.fromtimestamp(0, timezone.utc)
         )
@@ -122,5 +121,5 @@ class ModerationTest(unittest.TestCase):
         self.assertEqual(message.moderation.occupant, None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -10,5 +10,10 @@ from .stylesheets import MediaList
 
 ser: CSSSerializer
 
-
-def parseFile(filename: str | Path, href: str | None = ..., media: MediaList | list[str] | str | None = ..., title: str | None = ..., validate: bool | None = ...) -> None: ...
+def parseFile(
+    filename: str | Path,
+    href: str | None = ...,
+    media: MediaList | list[str] | str | None = ...,
+    title: str | None = ...,
+    validate: bool | None = ...,
+) -> None: ...

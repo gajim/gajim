@@ -18,15 +18,15 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-ACCOUNT = 'testacc1'
-FROM_JID = 'test@example.org'
+ACCOUNT = "testacc1"
+FROM_JID = "test@example.org"
 
 
 class TestResourceSelector(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -37,7 +37,7 @@ class TestResourceSelector(GajimAppWindow):
             valign=Gtk.Align.CENTER,
             hexpand=True,
             width_request=500,
-            height_request=700
+            height_request=700,
         )
         self.set_child(box)
 
@@ -47,21 +47,19 @@ class TestResourceSelector(GajimAppWindow):
 
         self._resource_selector = ResourceSelector(contact)
         self._resource_selector.set_hexpand(True)
-        self._resource_selector.connect('selection-changed', self._on_selection_changed)
+        self._resource_selector.connect("selection-changed", self._on_selection_changed)
         box.append(self._resource_selector)
 
     def _on_selection_changed(
-        self,
-        _resource_selector: ResourceSelector,
-        state: bool
+        self, _resource_selector: ResourceSelector, state: bool
     ) -> None:
-        print('Selection available:', state)
+        print("Selection available:", state)
 
     def _get_contact(self) -> BareContact:
         contact = MagicMock(spec_set=BareContact)
         contact.account = ACCOUNT
         contact.jid = JID.from_string(FROM_JID)
-        contact.name = 'Test Contact'
+        contact.name = "Test Contact"
         contact.is_groupchat = False
         contact.iter_resources = MagicMock(side_effect=self._iter_resources)
         return contact
@@ -70,7 +68,7 @@ class TestResourceSelector(GajimAppWindow):
         resources: list[ResourceContact] = []
         for index in range(5):
             resource_contact = MagicMock(spec_set=ResourceContact)
-            resource_contact.jid = JID.from_string(f'{FROM_JID}/Resource.{index}')
+            resource_contact.jid = JID.from_string(f"{FROM_JID}/Resource.{index}")
             resources.append(resource_contact)
 
         return resources

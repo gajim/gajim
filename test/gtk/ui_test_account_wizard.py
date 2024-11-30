@@ -16,7 +16,7 @@ from gajim.gtk.account_wizard import Success
 
 from . import util
 
-ACCOUNT = 'testacc1'
+ACCOUNT = "testacc1"
 
 
 def _on_login_successful(
@@ -24,16 +24,16 @@ def _on_login_successful(
 ) -> None:
     account = self._generate_account_name(client.domain)  # type: ignore
     app.settings.add_account(account)
-    self.get_page('success').set_account(account)
-    self.show_page('success', Gtk.StackTransitionType.SLIDE_LEFT)
+    self.get_page("success").set_account(account)
+    self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
     self._disconnect()  # type: ignore
 
 
 def _save_config(self: Success) -> None:
     assert self._account is not None  # type: ignore
-    app.settings.set_account_setting(self._account, 'account_color', self._color)  # type: ignore
+    app.settings.set_account_setting(self._account, "account_color", self._color)  # type: ignore
     if self._label:  # type: ignore
-        app.settings.set_account_setting(self._account, 'account_label', self._label)  # type: ignore
+        app.settings.set_account_setting(self._account, "account_label", self._label)  # type: ignore
     app.css_config.refresh()
 
 
@@ -42,7 +42,7 @@ app.get_client = MagicMock()
 
 app.settings = Settings(in_memory=True)
 app.settings.init()
-app.get_jid_from_account = MagicMock(return_value='testjid')
+app.get_jid_from_account = MagicMock(return_value="testjid")
 
 app.cert_store = MagicMock()
 
@@ -52,7 +52,7 @@ app.css_config.prefer_dark = MagicMock(return_value=False)
 window = AccountWizard()
 window._on_login_successful = partial(_on_login_successful, window)  # type: ignore
 
-success_page = window.get_page('success')
+success_page = window.get_page("success")
 success_page._save_config = partial(_save_config, success_page)  # type: ignore
 window.show()
 

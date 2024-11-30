@@ -28,24 +28,23 @@ class DisplayedMarkersTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_markers_join(self):
         marker_data1 = DisplayedMarker(
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=None,
-            id='messageid1',
+            id="messageid1",
             timestamp=datetime.fromtimestamp(1, timezone.utc),
         )
 
@@ -53,7 +52,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             account_=self._account,
             remote_jid_=self._remote_jid,
             occupant_=None,
-            id='messageid1',
+            id="messageid1",
             timestamp=datetime.fromtimestamp(3, timezone.utc),
         )
 
@@ -69,9 +68,9 @@ class DisplayedMarkersTest(unittest.TestCase):
             direction=ChatDirection.OUTGOING,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            resource='res',
-            text='Some Message',
-            id='messageid1',
+            resource="res",
+            text="Some Message",
+            id="messageid1",
             stanza_id=get_uuid(),
             occupant_=None,
         )
@@ -95,16 +94,16 @@ class DisplayedMarkersTest(unittest.TestCase):
         occupant_data1 = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='occupantid1',
-            nickname='nickname1',
+            id="occupantid1",
+            nickname="nickname1",
             updated_at=datetime.fromtimestamp(0, timezone.utc),
         )
 
         occupant_data2 = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='occupantid2',
-            nickname='nickname1',
+            id="occupantid2",
+            nickname="nickname1",
             updated_at=datetime.fromtimestamp(0, timezone.utc),
         )
 
@@ -149,9 +148,9 @@ class DisplayedMarkersTest(unittest.TestCase):
             direction=ChatDirection.INCOMING,
             timestamp=datetime.fromtimestamp(0, timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            resource='res',
-            text='Some Message',
-            id='messageid99',
+            resource="res",
+            text="Some Message",
+            id="messageid99",
             stanza_id=uuid,
             occupant_=None,
         )
@@ -169,11 +168,11 @@ class DisplayedMarkersTest(unittest.TestCase):
         assert marker1.occupant is not None
         assert marker2.occupant is not None
 
-        self.assertEqual(marker1.occupant.id, 'occupantid1')
+        self.assertEqual(marker1.occupant.id, "occupantid1")
         self.assertEqual(marker1.timestamp, datetime.fromtimestamp(1, timezone.utc))
-        self.assertEqual(marker2.occupant.id, 'occupantid2')
+        self.assertEqual(marker2.occupant.id, "occupantid2")
         self.assertEqual(marker2.timestamp, datetime.fromtimestamp(2, timezone.utc))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

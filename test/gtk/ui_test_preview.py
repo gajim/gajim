@@ -8,8 +8,8 @@ from unittest.mock import MagicMock
 
 import gi
 
-gi.require_version('Gst', '1.0')
-gi.require_version('GstPbutils', '1.0')
+gi.require_version("Gst", "1.0")
+gi.require_version("GstPbutils", "1.0")
 
 from gi.repository import Gst
 from gi.repository import Gtk
@@ -28,16 +28,16 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-util.load_style('gajim.css', CSSPriority.APPLICATION)
+util.load_style("gajim.css", CSSPriority.APPLICATION)
 
-ACCOUNT = 'me@example.org'
+ACCOUNT = "me@example.org"
 
 PREVIEW_TYPES = {
-    'geo: URI': 'geo:50.3333,24.5555',
-    'Image URL': 'https://gajim.org/img/screenshots/server-info.png',
-    'Audio URL': 'https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg',
-    'PDF URL': 'https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf',
-    'Regular URL': 'https://gajim.org',
+    "geo: URI": "geo:50.3333,24.5555",
+    "Image URL": "https://gajim.org/img/screenshots/server-info.png",
+    "Audio URL": "https://dev.gajim.org/gajim/gajim/-/wikis/uploads/dec966d89848453df07e0bd9b2ebc3d3/Gajim.ogg",
+    "PDF URL": "https://www.rfc-editor.org/rfc/pdfrfc/rfc6120.txt.pdf",
+    "Regular URL": "https://gajim.org",
 }
 
 
@@ -45,7 +45,7 @@ class TestPreview(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=600,
@@ -64,7 +64,7 @@ class TestPreview(GajimAppWindow):
         self._box.append(self._preview_widget)
 
         drop_down = GajimDropDown(list(PREVIEW_TYPES.keys()))
-        drop_down.connect('notify::selected', self._on_preview_type_selected)
+        drop_down.connect("notify::selected", self._on_preview_type_selected)
         self._box.append(drop_down)
 
     def _on_preview_type_selected(self, drop_down: GajimDropDown, *args: Any) -> None:
@@ -94,7 +94,7 @@ app.get_client = MagicMock()
 app.window = MagicMock()
 app.is_installed = MagicMock(return_value=True)
 
-logging_helpers.set_loglevels('gajim=DEBUG')
+logging_helpers.set_loglevels("gajim=DEBUG")
 
 app.settings = Settings(in_memory=True)
 app.settings.init()

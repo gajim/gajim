@@ -24,7 +24,7 @@ class TestWorkspaceSideBar(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=600,
             default_height=800,
@@ -54,7 +54,7 @@ class TestWorkspaceSideBar(GajimAppWindow):
     def _get_workspace_texture(
         self, workspace_id: str, size: int, scale: int
     ) -> Gdk.Texture | None:
-        name = app.settings.get_workspace_setting(workspace_id, 'name')
+        name = app.settings.get_workspace_setting(workspace_id, "name")
         rgba = make_rgba(DEFAULT_WORKSPACE_COLOR)
         return make_workspace_avatar(name, rgba_to_float(rgba), size, scale)
 

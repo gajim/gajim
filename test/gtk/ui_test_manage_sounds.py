@@ -14,7 +14,7 @@ from gajim.gtk.manage_sounds import ManageSounds
 
 from . import util
 
-ACCOUNT = 'test'
+ACCOUNT = "test"
 
 app.settings = Settings(in_memory=True)
 app.settings.init()

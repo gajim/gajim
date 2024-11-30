@@ -34,26 +34,24 @@ class MethodsTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
-        app.settings.add_account('testacc2')
-        app.settings.set_account_setting(
-            'testacc2', 'address', 'user2@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
+        app.settings.add_account("testacc2")
+        app.settings.set_account_setting("testacc2", "address", "user2@domain.org")
 
     def _insert_messages(
         self,
-        account: str = 'testacc1',
+        account: str = "testacc1",
         remote_jid: JID | None = None,
         resource: str | None = None,
-        message: str = 'test',
+        message: str = "test",
         message_id: str | None = None,
         type: int = MessageType.CHAT,  # noqa: A002
         timestamp: datetime | None = None,
@@ -62,7 +60,7 @@ class MethodsTest(unittest.TestCase):
         for i in range(count):
             remote_jid_ = remote_jid
             if remote_jid_ is None:
-                remote_jid_ = JID.from_string(f'remote{i}@jid.org')
+                remote_jid_ = JID.from_string(f"remote{i}@jid.org")
 
             timestamp_ = timestamp
             if timestamp_ is None:
@@ -70,11 +68,11 @@ class MethodsTest(unittest.TestCase):
 
             message_id_ = message_id
             if message_id_ is None:
-                message_id_ = f'messageid{i}'
+                message_id_ = f"messageid{i}"
 
             resource_ = resource
             if resource_ is None:
-                resource_ = f'res{i}'
+                resource_ = f"res{i}"
 
             m = Message(
                 account_=account,
@@ -93,29 +91,29 @@ class MethodsTest(unittest.TestCase):
         now = utc_now()
         uuid = get_uuid()
         m1 = Message(
-            account_='testacc1',
-            remote_jid_=JID.from_string('remote1@jid.org'),
+            account_="testacc1",
+            remote_jid_=JID.from_string("remote1@jid.org"),
             resource=None,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=now,
             state=MessageState.ACKNOWLEDGED,
-            id='1',
+            id="1",
             stanza_id=uuid,
         )
         pk = self._archive.insert_object(m1)
 
         m2 = Message(
-            account_='testacc1',
-            remote_jid_=JID.from_string('remote1@jid.org'),
+            account_="testacc1",
+            remote_jid_=JID.from_string("remote1@jid.org"),
             resource=None,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=now,
             state=MessageState.ACKNOWLEDGED,
-            id='1',
+            id="1",
             stanza_id=uuid,
-            encryption_=Encryption(protocol=1, key='123', trust=1),
+            encryption_=Encryption(protocol=1, key="123", trust=1),
         )
         m2.pk = pk
 
@@ -127,45 +125,45 @@ class MethodsTest(unittest.TestCase):
             self.assertIsNone(result)
 
     def test_get_conversation_jids(self) -> None:
-        self._insert_messages('testacc1', count=10)
-        self._insert_messages('testacc2', count=12)
+        self._insert_messages("testacc1", count=10)
+        self._insert_messages("testacc2", count=12)
 
-        jids = self._archive.get_conversation_jids('testacc1')
+        jids = self._archive.get_conversation_jids("testacc1")
         self.assertEqual(len(jids), 10)
-        jids = self._archive.get_conversation_jids('testacc2')
+        jids = self._archive.get_conversation_jids("testacc2")
         self.assertEqual(len(jids), 12)
 
     def test_get_conversation_before_after(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
-        self._insert_messages('testacc1', remote_jid=remote_jid, count=10)
+        remote_jid = JID.from_string("remote1@jid.org")
+        self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
         messages = self._archive.get_conversation_before_after(
-            'testacc1', remote_jid, True, datetime.now(timezone.utc), 10
+            "testacc1", remote_jid, True, datetime.now(timezone.utc), 10
         )
 
-        self.assertEqual(messages[0].id, 'messageid9')
-        self.assertEqual(messages[1].id, 'messageid8')
+        self.assertEqual(messages[0].id, "messageid9")
+        self.assertEqual(messages[1].id, "messageid8")
 
         messages = self._archive.get_conversation_before_after(
-            'testacc1', remote_jid, False, datetime.fromtimestamp(0, timezone.utc), 10
+            "testacc1", remote_jid, False, datetime.fromtimestamp(0, timezone.utc), 10
         )
 
-        self.assertEqual(messages[0].id, 'messageid0')
-        self.assertEqual(messages[1].id, 'messageid1')
+        self.assertEqual(messages[0].id, "messageid0")
+        self.assertEqual(messages[1].id, "messageid1")
 
     def test_get_last_conversation_row(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
         self._insert_messages(
-            'testacc1',
+            "testacc1",
             remote_jid=remote_jid,
             timestamp=datetime.now(timezone.utc),
             count=10,
         )
 
-        message = self._archive.get_last_conversation_row('testacc1', remote_jid)
+        message = self._archive.get_last_conversation_row("testacc1", remote_jid)
         assert message is not None
 
-        self.assertEqual(message.id, 'messageid9')
+        self.assertEqual(message.id, "messageid9")
 
     def test_get_last_correctable_message(self) -> None:
         # TODO
@@ -187,62 +185,62 @@ class MethodsTest(unittest.TestCase):
         assert offset is not None
         offset_s = offset.total_seconds()
 
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
 
         timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=timezone.utc)
         for day in range(1, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
-                'testacc1',
+                "testacc1",
                 remote_jid=remote_jid,
                 timestamp=timestamp,
-                message_id=f'messageid{day}',
+                message_id=f"messageid{day}",
                 count=1,
             )
 
         days = self._archive.get_days_containing_messages(
-            'testacc1', remote_jid, 2024, 1
+            "testacc1", remote_jid, 2024, 1
         )
 
         self.assertEqual(
             days,
             [1, 2, 3] if offset_s <= 0 else [1, 2, 3, 4],
-            msg=f'Localtime: {localtime}, offset: {offset_s}',
+            msg=f"Localtime: {localtime}, offset: {offset_s}",
         )
 
     def test_get_last_message_ts(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
 
         timestamp = datetime(2024, 1, 1, tzinfo=timezone.utc)
         for day in range(2, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
-                'testacc1',
+                "testacc1",
                 remote_jid=remote_jid,
                 timestamp=timestamp,
-                message_id=f'messageid{day}',
+                message_id=f"messageid{day}",
                 count=1,
             )
 
-        timestamp = self._archive.get_last_message_ts('testacc1', remote_jid)
+        timestamp = self._archive.get_last_message_ts("testacc1", remote_jid)
 
         self.assertEqual(timestamp, datetime(2024, 1, 4, tzinfo=timezone.utc))
 
     def test_get_first_message_ts(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
 
         timestamp = datetime(2024, 1, 1, tzinfo=timezone.utc)
         for day in range(2, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
-                'testacc1',
+                "testacc1",
                 remote_jid=remote_jid,
                 timestamp=timestamp,
-                message_id=f'messageid{day}',
+                message_id=f"messageid{day}",
                 count=1,
             )
 
-        timestamp = self._archive.get_first_message_ts('testacc1', remote_jid)
+        timestamp = self._archive.get_first_message_ts("testacc1", remote_jid)
 
         self.assertEqual(timestamp, datetime(2024, 1, 2, tzinfo=timezone.utc))
 
@@ -252,21 +250,21 @@ class MethodsTest(unittest.TestCase):
         assert offset is not None
         offset_s = offset.total_seconds()
 
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
 
         timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=timezone.utc)
         for day in range(1, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
-                'testacc1',
+                "testacc1",
                 remote_jid=remote_jid,
                 timestamp=timestamp,
-                message_id=f'messageid{day}',
+                message_id=f"messageid{day}",
                 count=1,
             )
 
         metadata = self._archive.get_first_message_meta_for_date(
-            'testacc1', remote_jid, dt.date(2024, 1, 1)
+            "testacc1", remote_jid, dt.date(2024, 1, 1)
         )
         assert metadata is not None
         pk, timestamp = metadata
@@ -283,70 +281,70 @@ class MethodsTest(unittest.TestCase):
             )
 
         metadata = self._archive.get_first_message_meta_for_date(
-            'testacc1', remote_jid, dt.date(2024, 2, 1)
+            "testacc1", remote_jid, dt.date(2024, 2, 1)
         )
         self.assertIsNone(metadata)
 
     def test_get_recent_muc_nicks(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
 
         timestamp = datetime.now(timezone.utc) - timedelta(days=91)
 
         self._insert_messages(
-            'testacc1',
+            "testacc1",
             remote_jid=remote_jid,
             timestamp=timestamp,
-            resource='res101',
-            message_id='messageid101',
+            resource="res101",
+            message_id="messageid101",
             count=1,
         )
         self._insert_messages(
-            'testacc1', remote_jid=remote_jid, type=MessageType.GROUPCHAT, count=10
+            "testacc1", remote_jid=remote_jid, type=MessageType.GROUPCHAT, count=10
         )
-        nicknames = self._archive.get_recent_muc_nicks('testacc1', remote_jid)
+        nicknames = self._archive.get_recent_muc_nicks("testacc1", remote_jid)
         self.assertEqual(len(nicknames), 10)
-        self.assertNotIn('res101', nicknames)
+        self.assertNotIn("res101", nicknames)
 
     def test_get_mam_archive_state(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
         state = MAMArchiveState(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
-            from_stanza_id='stanzaid1',
+            from_stanza_id="stanzaid1",
             from_stanza_ts=datetime.now(timezone.utc),
-            to_stanza_id='stanzaid2',
+            to_stanza_id="stanzaid2",
             to_stanza_ts=datetime.now(timezone.utc),
         )
         self._archive.upsert_row(state)
 
-        state = self._archive.get_mam_archive_state('testacc1', remote_jid)
+        state = self._archive.get_mam_archive_state("testacc1", remote_jid)
         assert state is not None
-        self.assertEqual(state.from_stanza_id, 'stanzaid1')
-        self.assertEqual(state.to_stanza_id, 'stanzaid2')
+        self.assertEqual(state.from_stanza_id, "stanzaid1")
+        self.assertEqual(state.to_stanza_id, "stanzaid2")
 
     def test_reset_mam_archive_state(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
         state = MAMArchiveState(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
         )
         self._archive.upsert_row(state)
 
-        state = self._archive.get_mam_archive_state('testacc1', remote_jid)
+        state = self._archive.get_mam_archive_state("testacc1", remote_jid)
         assert state is not None
-        self._archive.reset_mam_archive_state('testacc1', remote_jid)
-        state = self._archive.get_mam_archive_state('testacc1', remote_jid)
+        self._archive.reset_mam_archive_state("testacc1", remote_jid)
+        state = self._archive.get_mam_archive_state("testacc1", remote_jid)
         self.assertIsNone(state)
 
     def test_remove_history(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
-        self._insert_messages('testacc1', remote_jid=remote_jid, count=10)
+        remote_jid = JID.from_string("remote1@jid.org")
+        self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
         mod = Moderation(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
             occupant_=None,
-            stanza_id='stanzaid1',
+            stanza_id="stanzaid1",
             by=None,
             reason=None,
             timestamp=utc_now(),
@@ -354,14 +352,14 @@ class MethodsTest(unittest.TestCase):
         self._archive.insert_object(mod)
 
         error = MessageError(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
-            message_id='messageid1',
+            message_id="messageid1",
             by=None,
-            type='modify',
-            text='text',
-            condition='somecond',
-            condition_text='somecondtext',
+            type="modify",
+            text="text",
+            condition="somecond",
+            condition_text="somecondtext",
             timestamp=utc_now(),
         )
 
@@ -377,7 +375,7 @@ class MethodsTest(unittest.TestCase):
             result = s.scalar(select(Message))
             self.assertIsNotNone(result)
 
-        self._archive.remove_history_for_jid('testacc1', remote_jid)
+        self._archive.remove_history_for_jid("testacc1", remote_jid)
 
         with self._archive.get_session() as s:
             result = s.scalar(select(MessageError))
@@ -390,53 +388,51 @@ class MethodsTest(unittest.TestCase):
             self.assertIsNone(result)
 
     def test_check_if_stanza_id_exists(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
         m = Message(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
-            resource='test',
+            resource="test",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
-            id='123',
-            stanza_id='stanzaid123',
-            text='testmessage',
+            id="123",
+            stanza_id="stanzaid123",
+            text="testmessage",
         )
         self._archive.insert_object(m)
 
         result = self._archive.check_if_stanza_id_exists(
-            'testacc1', remote_jid, 'stanzaid123')
+            "testacc1", remote_jid, "stanzaid123"
+        )
         self.assertTrue(result)
 
-        result = self._archive.check_if_stanza_id_exists(
-            'testacc1', remote_jid, 'xxx')
+        result = self._archive.check_if_stanza_id_exists("testacc1", remote_jid, "xxx")
         self.assertFalse(result)
 
     def test_check_if_message_id_exists(self) -> None:
-        remote_jid = JID.from_string('remote1@jid.org')
+        remote_jid = JID.from_string("remote1@jid.org")
         m = Message(
-            account_='testacc1',
+            account_="testacc1",
             remote_jid_=remote_jid,
-            resource='test',
+            resource="test",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=utc_now(),
             state=MessageState.ACKNOWLEDGED,
-            id='123',
-            stanza_id='stanzaid123',
-            text='testmessage',
+            id="123",
+            stanza_id="stanzaid123",
+            text="testmessage",
         )
         self._archive.insert_object(m)
 
-        result = self._archive.check_if_message_id_exists(
-            'testacc1', remote_jid, '123')
+        result = self._archive.check_if_message_id_exists("testacc1", remote_jid, "123")
         self.assertTrue(result)
 
-        result = self._archive.check_if_message_id_exists(
-            'testacc1', remote_jid, 'xxx')
+        result = self._archive.check_if_message_id_exists("testacc1", remote_jid, "xxx")
         self.assertFalse(result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

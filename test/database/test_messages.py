@@ -24,18 +24,17 @@ class MessagesTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def _create_base_message(
         self,
@@ -46,15 +45,16 @@ class MessagesTest(unittest.TestCase):
         return Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            resource='someres1',
+            resource="someres1",
             type=MessageType.CHAT,
             direction=direction,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
             id=message_id,
             stanza_id=stanza_id,
-            text='message',
+            text="message",
         )
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

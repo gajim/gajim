@@ -27,30 +27,29 @@ class ReceiptTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_receipt_join(self):
         receipt_data1 = Receipt(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='messageid1',
+            id="messageid1",
             timestamp=datetime.fromtimestamp(1, timezone.utc),
         )
 
         receipt_data2 = Receipt(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='messageid1',
+            id="messageid1",
             timestamp=datetime.fromtimestamp(3, timezone.utc),
         )
 
@@ -66,9 +65,9 @@ class ReceiptTest(unittest.TestCase):
             direction=ChatDirection.OUTGOING,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            resource='res',
-            text='Some Message',
-            id='messageid1',
+            resource="res",
+            text="Some Message",
+            id="messageid1",
             stanza_id=get_uuid(),
             occupant_=None,
         )
@@ -87,5 +86,5 @@ class ReceiptTest(unittest.TestCase):
         )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

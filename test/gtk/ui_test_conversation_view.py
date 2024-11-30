@@ -30,8 +30,8 @@ from gajim.gtk.widgets import GajimAppWindow
 
 from . import util
 
-ACCOUNT = 'testacc1'
-FROM_JID = 'contact@test.tld'
+ACCOUNT = "testacc1"
+FROM_JID = "contact@test.tld"
 BASE_TIMESTAMP = 1672531200
 
 
@@ -39,20 +39,20 @@ class TestConversationView(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=800,
             default_height=800,
         )
 
         self._chat_control = ChatControl()
-        app.settings.set('hide_groupchat_occupants_list', True)
+        app.settings.set("hide_groupchat_occupants_list", True)
 
         contact = self._get_contact()
         self._chat_control.switch_contact(contact)
 
-        jump_to_button = Gtk.Button(label='Jump to 500')
-        jump_to_button.connect('clicked', self._on_jump_to_clicked)
+        jump_to_button = Gtk.Button(label="Jump to 500")
+        jump_to_button.connect("clicked", self._on_jump_to_clicked)
         button_box = Gtk.Box(spacing=6, halign=Gtk.Align.CENTER, margin_bottom=6)
         button_box.append(jump_to_button)
 
@@ -62,14 +62,14 @@ class TestConversationView(GajimAppWindow):
         self.set_child(box)
 
     def _get_contact(self) -> BareContact:
-        contact = MagicMock(spec='BareContact')
+        contact = MagicMock(spec="BareContact")
         contact.connect = MagicMock()
         contact.account = ACCOUNT
         contact.jid = JID.from_string(FROM_JID)
-        contact.name = 'Test Contact'
+        contact.name = "Test Contact"
         contact.is_groupchat = False
         avatar = convert_surface_to_texture(
-            generate_default_avatar('T', (0.2, 0.1, 0.7), AvatarSize.ROSTER, 1)
+            generate_default_avatar("T", (0.2, 0.1, 0.7), AvatarSize.ROSTER, 1)
         )
         contact.get_avatar = MagicMock(return_value=avatar)
         contact.settings = ContactSettings(ACCOUNT, JID.from_string(ACCOUNT))
@@ -108,7 +108,7 @@ app.window = MagicMock()
 app.settings = Settings(in_memory=True)
 app.settings.init()
 app.settings.add_account(ACCOUNT)
-app.settings.set_account_setting(ACCOUNT, 'address', 'user@domain.org')
+app.settings.set_account_setting(ACCOUNT, "address", "user@domain.org")
 
 app.storage.events = EventStorage()
 app.storage.events.init()

@@ -14,7 +14,7 @@ from gajim.gtk.ssl_error_dialog import SSLErrorDialog
 
 from . import util
 
-cert = '''
+cert = """
 -----BEGIN CERTIFICATE-----
 MIIFhDCCBGygAwIBAgISA4oUEifTr7Y+mcdiwu6KWpcVMA0GCSqGSIb3DQEBCwUA
 MEoxCzAJBgNVBAYTAlVTMRYwFAYDVQQKEw1MZXQncyBFbmNyeXB0MSMwIQYDVQQD
@@ -46,18 +46,18 @@ cJr9PQ+3FsSnxy7LDjZMpbmBuXhawOyPBPw2M0f0Tv6Eo6miwvP/X1kLE3VjTzCo
 JxbGMqRuw/sGiTLKlXc1xVil8WZjL3hokzrgI7K6np2skUjWuMZvhJgwi5QiE7/C
 ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 8xSTlUlCBTCozjzscZVeVDIojmejWclT
------END CERTIFICATE-----'''
+-----END CERTIFICATE-----"""
 
 
 app.settings = MagicMock()
-app.settings.get_account_setting = MagicMock(return_value='myhost@example.tld')
+app.settings.get_account_setting = MagicMock(return_value="myhost@example.tld")
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 # Listing of Gio.TlsCertificateFlags:
 # https://lazka.github.io/pgi-docs/#Gio-2.0/flags.html#Gio.TlsCertificateFlags
 ssl_error_num = cast(Gio.TlsCertificateFlags, 10)
 
-window = SSLErrorDialog('testacc', MagicMock(), gio_cert, set(), ssl_error_num)
+window = SSLErrorDialog("testacc", MagicMock(), gio_cert, set(), ssl_error_num)
 window.show()
 
 util.run_app()

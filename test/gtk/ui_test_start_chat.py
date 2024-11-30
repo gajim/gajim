@@ -41,10 +41,10 @@ class TestRosterModule:
         self._account = account
         self._roster: dict[JID, RosterItem] = {}
         for i in range(CONTACTS_COUNT):
-            jid = JID.from_string(f'test{i}@{self._account}.org')
+            jid = JID.from_string(f"test{i}@{self._account}.org")
             self._roster[jid] = RosterItem(
                 jid=jid,
-                name=f'name{i}',
+                name=f"name{i}",
                 ask=None,
                 subscription=None,
                 approved=None,
@@ -61,10 +61,10 @@ class TestBookmarksModule:
         self._bookmarks: dict[JID, BookmarkData] = {}
 
         for i in range(GROUPCHATS_COUNT):
-            jid = JID.from_string(f'test{i}@conference.{self._account}.org')
+            jid = JID.from_string(f"test{i}@conference.{self._account}.org")
             self._bookmarks[jid] = BookmarkData(
                 jid=jid,
-                name=f'name{i}',
+                name=f"name{i}",
             )
 
     @property
@@ -90,11 +90,11 @@ class TestContactsModule:
             self._avatars.append(convert_surface_to_texture(avatar))
 
     def get_contact(self, jid: str | JID, groupchat: bool = False) -> BareContact:
-        contact_name = f'Test Contact {random.randrange(CONTACTS_PER_ACCOUNT_COUNT)}'
+        contact_name = f"Test Contact {random.randrange(CONTACTS_PER_ACCOUNT_COUNT)}"
 
         if groupchat:
             spec_set = GroupchatContact
-            contact_name = f'{contact_name} (MUC)'
+            contact_name = f"{contact_name} (MUC)"
         else:
             spec_set = BareContact
 
@@ -107,7 +107,7 @@ class TestContactsModule:
         contact.is_groupchat = groupchat
 
         if not groupchat:
-            contact.status = 'Test Status Message'
+            contact.status = "Test Status Message"
             contact.idle_datetime = dt.datetime.now()
 
         return contact
@@ -125,21 +125,21 @@ class TestClient:
         return JID.from_string(self._account)
 
     def get_module(self, module: str) -> Any:
-        if module == 'Contacts':
+        if module == "Contacts":
             return self._contacts_module
-        if module == 'Bookmarks':
+        if module == "Bookmarks":
             return self._bookmarks_module
-        if module == 'Roster':
+        if module == "Roster":
             return self._roster_module
         return MagicMock()
 
 
 def _get_dynamic_class(account: str) -> str:
-    color = app.settings.get_account_setting(account, 'account_color')
-    css_class = f'gajim_class_{account}'
-    css = f'.{css_class} {{ background-color: {color}; }}\n'
+    color = app.settings.get_account_setting(account, "account_color")
+    css_class = f"gajim_class_{account}"
+    css = f".{css_class} {{ background-color: {color}; }}\n"
     dynamic_provider = Gtk.CssProvider()
-    dynamic_provider.load_from_bytes(GLib.Bytes.new(css.encode('utf-8')))
+    dynamic_provider.load_from_bytes(GLib.Bytes.new(css.encode("utf-8")))
     display = Gdk.Display.get_default()
     assert display is not None
     Gtk.StyleContext.add_provider_for_display(
@@ -151,7 +151,7 @@ def _get_dynamic_class(account: str) -> str:
 accounts: list[list[str]] = []
 for i in range(ACCOUNTS_COUNT):
     accounts.append(
-        [f'account{i}', f'Account {i}'],
+        [f"account{i}", f"Account {i}"],
     )
 
 app.settings = Settings(in_memory=True)
@@ -161,8 +161,8 @@ for account in accounts:
     app.settings.add_account(account[0])
     app.settings.set_account_setting(
         account[0],
-        'account_color',
-        f'rgb({random.randrange(255)}, {random.randrange(255)}, {random.randrange(255)})',  # noqa: E501
+        "account_color",
+        f"rgb({random.randrange(255)}, {random.randrange(255)}, {random.randrange(255)})",  # noqa: E501
     )
 
 app.css_config = MagicMock()

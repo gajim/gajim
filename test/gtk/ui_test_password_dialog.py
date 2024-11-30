@@ -16,13 +16,13 @@ from gajim.gtk.password_dialog import PasswordDialog
 
 from . import util
 
-ACCOUNT = 'test'
-FROM_JID = 'contact@example.org'
+ACCOUNT = "test"
+FROM_JID = "contact@example.org"
 
 app.settings = Settings(in_memory=True)
 app.settings.init()
 app.settings.add_account(ACCOUNT)
-app.settings.set_account_setting(ACCOUNT, 'account_label', 'Test')
+app.settings.set_account_setting(ACCOUNT, "account_label", "Test")
 
 
 def on_password(*args: Any) -> None:
@@ -36,8 +36,9 @@ class TestClient:
     def get_own_jid(self) -> JID:
         return JID.from_string(FROM_JID)
 
+
 app.get_client = MagicMock(side_effect=TestClient)
-app.get_account_label = MagicMock(return_value='Test Account')
+app.get_account_label = MagicMock(return_value="Test Account")
 
 client = app.get_client(ACCOUNT)
 

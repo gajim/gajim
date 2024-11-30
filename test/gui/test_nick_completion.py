@@ -24,12 +24,12 @@ class Test(unittest.TestCase):
             return _get_mock_participant(nick)
 
         participant_names = [
-            'Hugo',
-            'Herbert',
-            'Robert',
-            'Daisy',
-            'xavier',
-            '7user',
+            "Hugo",
+            "Herbert",
+            "Robert",
+            "Daisy",
+            "xavier",
+            "7user",
         ]
 
         participants: list[GroupchatParticipant] = []
@@ -44,14 +44,14 @@ class Test(unittest.TestCase):
         results = gen._generate_suggestions(groupchat_contact)  # type: ignore
         self.assertEqual(
             [result.name for result in results],
-            ['Harry', 'Joe', '7user', 'Daisy', 'Herbert', 'Hugo', 'Robert', 'xavier'],
+            ["Harry", "Joe", "7user", "Daisy", "Herbert", "Hugo", "Robert", "xavier"],
         )
 
 
 app.get_client = MagicMock()
 
 app.storage.archive = MagicMock()
-app.storage.archive.get_recent_muc_nicks = MagicMock(return_value=['Harry', 'Joe'])
+app.storage.archive.get_recent_muc_nicks = MagicMock(return_value=["Harry", "Joe"])
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

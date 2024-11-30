@@ -1,4 +1,3 @@
-
 from keyring.backend import KeyringBackend
 
 def get_password(service_name: str, username: str) -> str | None: ...

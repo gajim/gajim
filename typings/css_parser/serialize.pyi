@@ -4,7 +4,6 @@ class CSSSerializer:
 
     prefs: Preferences
 
-
 class Preferences:
 
     keepEmptyRules: bool

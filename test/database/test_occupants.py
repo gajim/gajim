@@ -26,25 +26,24 @@ class OccupantTest(unittest.TestCase):
         self._archive = MessageArchiveStorage(in_memory=True)
         self._archive.init()
 
-        self._account = 'testacc1'
-        self._account_jid = JID.from_string('user@domain.org')
-        self._remote_jid = JID.from_string('remote@jid.org')
-        self._occupant_id = 'occupantid1'
+        self._account = "testacc1"
+        self._account_jid = JID.from_string("user@domain.org")
+        self._remote_jid = JID.from_string("remote@jid.org")
+        self._occupant_id = "occupantid1"
         self._init_settings()
 
     def _init_settings(self) -> None:
         app.settings = Settings(in_memory=True)
         app.settings.init()
-        app.settings.add_account('testacc1')
-        app.settings.set_account_setting(
-            'testacc1', 'address', 'user@domain.org')
+        app.settings.add_account("testacc1")
+        app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_insert_occupant(self) -> None:
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
-            nickname='peter',
+            id="someid",
+            nickname="peter",
             updated_at=datetime.fromtimestamp(50, timezone.utc),
         )
 
@@ -54,19 +53,19 @@ class OccupantTest(unittest.TestCase):
             occupant = s.scalar(select(Occupant).where(Occupant.pk == pk))
         assert occupant is not None
 
-        self.assertEqual(occupant.id, 'someid')
+        self.assertEqual(occupant.id, "someid")
         self.assertEqual(occupant.real_remote, None)
-        self.assertEqual(occupant.nickname, 'peter')
+        self.assertEqual(occupant.nickname, "peter")
         self.assertEqual(occupant.avatar_sha, None)
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(50, timezone.utc))
 
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
-            real_remote_jid_=JID.from_string('real@remote.jid'),
-            nickname='peter',
-            avatar_sha='sha1',
+            id="someid",
+            real_remote_jid_=JID.from_string("real@remote.jid"),
+            nickname="peter",
+            avatar_sha="sha1",
             updated_at=datetime.fromtimestamp(100, timezone.utc),
         )
 
@@ -77,11 +76,11 @@ class OccupantTest(unittest.TestCase):
         assert occupant is not None
         assert occupant.real_remote is not None
 
-        self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
+        self.assertEqual(occupant.id, "someid")
+        self.assertEqual(occupant.real_remote.jid, "real@remote.jid")
         self.assertIsInstance(occupant.real_remote.jid, JID)
-        self.assertEqual(occupant.nickname, 'peter')
-        self.assertEqual(occupant.avatar_sha, 'sha1')
+        self.assertEqual(occupant.nickname, "peter")
+        self.assertEqual(occupant.avatar_sha, "sha1")
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, timezone.utc))
 
         # Update with old data should be ignored
@@ -89,10 +88,10 @@ class OccupantTest(unittest.TestCase):
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
-            real_remote_jid_=JID.from_string('real2@remote.jid'),
-            nickname='peter2',
-            avatar_sha='sha2',
+            id="someid",
+            real_remote_jid_=JID.from_string("real2@remote.jid"),
+            nickname="peter2",
+            avatar_sha="sha2",
             updated_at=datetime.fromtimestamp(50, timezone.utc),
         )
 
@@ -104,11 +103,11 @@ class OccupantTest(unittest.TestCase):
         assert occupant is not None
         assert occupant.real_remote is not None
 
-        self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
+        self.assertEqual(occupant.id, "someid")
+        self.assertEqual(occupant.real_remote.jid, "real@remote.jid")
         self.assertIsInstance(occupant.real_remote.jid, JID)
-        self.assertEqual(occupant.nickname, 'peter')
-        self.assertEqual(occupant.avatar_sha, 'sha1')
+        self.assertEqual(occupant.nickname, "peter")
+        self.assertEqual(occupant.avatar_sha, "sha1")
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, timezone.utc))
 
         # Update with new data
@@ -117,10 +116,10 @@ class OccupantTest(unittest.TestCase):
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
-            real_remote_jid_=JID.from_string('real2@remote.jid'),
-            nickname='peter2',
-            avatar_sha='sha2',
+            id="someid",
+            real_remote_jid_=JID.from_string("real2@remote.jid"),
+            nickname="peter2",
+            avatar_sha="sha2",
             updated_at=datetime.fromtimestamp(200, timezone.utc),
         )
 
@@ -132,11 +131,11 @@ class OccupantTest(unittest.TestCase):
         assert occupant is not None
         assert occupant.real_remote is not None
 
-        self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
+        self.assertEqual(occupant.id, "someid")
+        self.assertEqual(occupant.real_remote.jid, "real@remote.jid")
         self.assertIsInstance(occupant.real_remote.jid, JID)
-        self.assertEqual(occupant.nickname, 'peter2')
-        self.assertEqual(occupant.avatar_sha, 'sha2')
+        self.assertEqual(occupant.nickname, "peter2")
+        self.assertEqual(occupant.avatar_sha, "sha2")
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(200, timezone.utc))
 
         # Set avatar_sha None
@@ -145,7 +144,7 @@ class OccupantTest(unittest.TestCase):
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
+            id="someid",
             nickname=None,
             avatar_sha=None,
             updated_at=datetime.fromtimestamp(300, timezone.utc),
@@ -159,10 +158,10 @@ class OccupantTest(unittest.TestCase):
         assert occupant is not None
         assert occupant.real_remote is not None
 
-        self.assertEqual(occupant.id, 'someid')
-        self.assertEqual(occupant.real_remote.jid, 'real@remote.jid')
+        self.assertEqual(occupant.id, "someid")
+        self.assertEqual(occupant.real_remote.jid, "real@remote.jid")
         self.assertIsInstance(occupant.real_remote.jid, JID)
-        self.assertEqual(occupant.nickname, 'peter2')
+        self.assertEqual(occupant.nickname, "peter2")
         self.assertEqual(occupant.avatar_sha, None)
         self.assertEqual(occupant.updated_at, datetime.fromtimestamp(300, timezone.utc))
 
@@ -170,23 +169,23 @@ class OccupantTest(unittest.TestCase):
         occupant_data = Occupant(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            id='someid',
-            real_remote_jid_=JID.from_string('real@remote.jid'),
-            nickname='peter3',
-            avatar_sha='sha1',
+            id="someid",
+            real_remote_jid_=JID.from_string("real@remote.jid"),
+            nickname="peter3",
+            avatar_sha="sha1",
             updated_at=datetime.fromtimestamp(300, timezone.utc),
         )
 
         message_data = Message(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            resource='someres1',
+            resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
             timestamp=datetime.now(timezone.utc),
             state=MessageState.ACKNOWLEDGED,
-            id='1',
-            text='message',
+            id="1",
+            text="message",
             occupant_=occupant_data,
         )
 
@@ -198,11 +197,11 @@ class OccupantTest(unittest.TestCase):
         assert message.occupant is not None
         assert message.occupant.real_remote is not None
 
-        self.assertEqual(message.occupant.nickname, 'peter3')
-        self.assertEqual(message.occupant.avatar_sha, 'sha1')
-        self.assertEqual(message.occupant.real_remote.jid, 'real@remote.jid')
+        self.assertEqual(message.occupant.nickname, "peter3")
+        self.assertEqual(message.occupant.avatar_sha, "sha1")
+        self.assertEqual(message.occupant.real_remote.jid, "real@remote.jid")
         self.assertIsInstance(message.occupant.real_remote.jid, JID)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

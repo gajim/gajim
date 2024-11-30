@@ -14,7 +14,7 @@ class TestNickChooser(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
-            name='',
+            name="",
             title=__class__.__name__,
             default_width=700,
             default_height=700,
@@ -25,7 +25,7 @@ class TestNickChooser(GajimAppWindow):
         )
 
         self._nick_chooser = NickChooser()
-        self._nick_chooser.set_text('Fancy Nickname')
+        self._nick_chooser.set_text("Fancy Nickname")
 
         self._main_box.append(self._nick_chooser)
 

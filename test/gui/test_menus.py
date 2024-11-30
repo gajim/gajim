@@ -23,5 +23,5 @@ class Test(unittest.TestCase):
             self.assertIn(t, _xmpp_uri_context_menus)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

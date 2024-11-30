@@ -40,4 +40,36 @@ MIN_VERSION = ...
 osVersion = int(platform.version().split(".")[2])
 if platform.system() == "Windows" and osVersion < MIN_VERSION:
     ...
-__all__ = ["__author__", "__description__", "__license__", "__title__", "__url__", "__version__", "ToastActivatedEventArgs", "ToastDismissalReason", "ToastDismissedEventArgs", "ToastFailedEventArgs", "InvalidImageException", "ToastNotFoundError", "UnsupportedOSVersionException", "AudioSource", "ToastAudio", "Toast", "InteractableWindowsToaster", "WindowsToaster", "ToastButton", "ToastButtonColour", "ToastDisplayImage", "ToastDuration", "ToastImage", "ToastImagePosition", "ToastInputSelectionBox", "ToastInputTextBox", "ToastProgressBar", "ToastScenario", "ToastSelection", "ToastSystemButton", "ToastSystemButtonAction"]
+__all__ = [
+    "__author__",
+    "__description__",
+    "__license__",
+    "__title__",
+    "__url__",
+    "__version__",
+    "ToastActivatedEventArgs",
+    "ToastDismissalReason",
+    "ToastDismissedEventArgs",
+    "ToastFailedEventArgs",
+    "InvalidImageException",
+    "ToastNotFoundError",
+    "UnsupportedOSVersionException",
+    "AudioSource",
+    "ToastAudio",
+    "Toast",
+    "InteractableWindowsToaster",
+    "WindowsToaster",
+    "ToastButton",
+    "ToastButtonColour",
+    "ToastDisplayImage",
+    "ToastDuration",
+    "ToastImage",
+    "ToastImagePosition",
+    "ToastInputSelectionBox",
+    "ToastInputTextBox",
+    "ToastProgressBar",
+    "ToastScenario",
+    "ToastSelection",
+    "ToastSystemButton",
+    "ToastSystemButtonAction",
+]
