@@ -414,6 +414,10 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         return True
 
     def _filter_func(self, row: ChatListRow) -> bool:
+        account = self._current_filter.account
+        if account is not None and account != row.account:
+            return False
+
         group = self._current_filter.group
         if (
             group is not None

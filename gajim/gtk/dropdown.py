@@ -14,7 +14,7 @@ from gi.repository import Pango
 
 from gajim.common import app
 
-GajimDropDownDataT = dict[str, str] | list[str]
+GajimDropDownDataT = dict[Any, str] | list[str]
 
 
 class GajimDropDown(Gtk.DropDown):
@@ -89,6 +89,12 @@ class GajimDropDown(Gtk.DropDown):
                 items.append(KeyValueItem(key=entry, value=entry))
 
         self._model.splice(0, 0, items)
+
+    def get_selected_key(self) -> Any | None:
+        selected_item = self.get_selected_item()
+        if selected_item is None:
+            return None
+        return selected_item.get_property("key")
 
     def select_key(self, key: Any) -> None:
         for pos in range(self._model.get_n_items()):

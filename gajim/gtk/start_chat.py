@@ -891,6 +891,10 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
             if search_string not in item.search_string:
                 return False
 
+        account = self._chat_filters.account
+        if account is not None and account != item.account:
+            return False
+
         group = self._chat_filters.group
         if group is not None and group not in item.groups:
             return False

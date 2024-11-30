@@ -29,6 +29,7 @@ class ChatTypeFilter(Enum):
 class ChatFilters:
     type: ChatTypeFilter = ChatTypeFilter.ALL
     group: str | None = None
+    account: str | None = None
 
 
 class ChatFilter(Gtk.Overlay, SignalManager):
@@ -75,9 +76,9 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         popover_content.attach(chat_type_label, 0, 1, 1, 1)
 
         chat_type_data = {
-            "all": _("All"),
-            "chats": _("Chats"),
-            "group_chats": _("Group Chats"),
+            ChatTypeFilter.ALL: _("All"),
+            ChatTypeFilter.CHAT: _("Chats"),
+            ChatTypeFilter.GROUPCHAT: _("Group Chats"),
         }
         self._chat_type_drop_down = GajimDropDown(fixed_width=12, data=chat_type_data)
         self._connect(
@@ -97,11 +98,23 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         )
         popover_content.attach(self._roster_groups_drop_down, 1, 2, 1, 1)
 
+        self._account_label = Gtk.Label(label=_("Account"), halign=Gtk.Align.END)
+        self._account_label.add_css_class("dim-label")
+        popover_content.attach(self._account_label, 0, 3, 1, 1)
+
+        self._account_drop_down = GajimDropDown(fixed_width=12)
+        self._connect(
+            self._account_drop_down,
+            "notify::selected",
+            self._on_account_selected,
+        )
+        popover_content.attach(self._account_drop_down, 1, 3, 1, 1)
+
         reset_button = Gtk.Button(
             label=_("Reset Filters"), halign=Gtk.Align.CENTER, margin_top=6
         )
         self._connect(reset_button, "clicked", self._on_reset_button_clicked)
-        popover_content.attach(reset_button, 0, 3, 2, 1)
+        popover_content.attach(reset_button, 0, 4, 2, 1)
 
     def do_unroot(self) -> None:
         Gtk.Overlay.do_unroot(self)
@@ -109,26 +122,21 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         app.check_finalize(self)
 
     def get_filters(self) -> ChatFilters:
-        chat_type = "all"
-        chat_type_item = self._chat_type_drop_down.get_selected_item()
-        if chat_type_item is not None:
-            chat_type = chat_type_item.get_property("key")
-
-        roster_group = None
-        roster_group_item = self._roster_groups_drop_down.get_selected_item()
-        if roster_group_item is not None:
-            roster_group = roster_group_item.get_property("key")
-            if roster_group == _("All Groups"):
-                roster_group = None
+        chat_type_item = self._chat_type_drop_down.get_selected_key()
+        assert chat_type_item is not None
+        roster_group = self._roster_groups_drop_down.get_selected_key()
+        account = self._account_drop_down.get_selected_key()
 
         return ChatFilters(
-            type=ChatTypeFilter(chat_type),
+            type=chat_type_item,
             group=roster_group,
+            account=account,
         )
 
     def reset(self) -> None:
         self._chat_type_drop_down.set_selected(0)
         self._roster_groups_drop_down.set_selected(0)
+        self._account_drop_down.set_selected(0)
 
     def _on_menu_button_activated(
         self, menu_button: Gtk.MenuButton, *args: Any
@@ -136,21 +144,31 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         if not menu_button.get_active():
             return
 
-        selected_roster_groups_key = None
-        selected_item = self._roster_groups_drop_down.get_selected_item()
-        if selected_item is not None:
-            selected_roster_groups_key = selected_item.get_property("key")
+        roster_group_key = self._roster_groups_drop_down.get_selected_key()
+        account_key = self._account_drop_down.get_selected_key()
 
         roster_groups = self._get_roster_groups()
+        accounts = self._get_accounts()
+
+        show_account_filter = len(accounts) > 2
+        self._account_drop_down.set_visible(show_account_filter)
+        self._account_label.set_visible(show_account_filter)
 
         self._block_signal = True
         self._roster_groups_drop_down.set_data(roster_groups)
-        self._roster_groups_drop_down.select_key(selected_roster_groups_key)
+        self._roster_groups_drop_down.select_key(roster_group_key)
+
+        self._account_drop_down.set_data(accounts)
+        self._account_drop_down.select_key(account_key)
         self._block_signal = False
 
     def _update(self) -> None:
         filters = self.get_filters()
-        active = filters.type != ChatTypeFilter.ALL or filters.group is not None
+        active = (
+            filters.type != ChatTypeFilter.ALL
+            or filters.group is not None
+            or filters.account is not None
+        )
         if active:
             self.set_tooltip_text(_("Filters (active)"))
         else:
@@ -159,12 +177,17 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         self._filter_active_dot.set_visible(active)
         self._popover.grab_focus()
 
-    def _on_chat_type_selected(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_chat_type_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
         self._update()
         if not self._block_signal:
             self.emit("filter-changed")
 
-    def _on_roster_group_selected(self, dropdown: GajimDropDown, *args: Any) -> None:
+    def _on_roster_group_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
+        self._update()
+        if not self._block_signal:
+            self.emit("filter-changed")
+
+    def _on_account_selected(self, _dropdown: GajimDropDown, *args: Any) -> None:
         self._update()
         if not self._block_signal:
             self.emit("filter-changed")
@@ -172,13 +195,21 @@ class ChatFilter(Gtk.Overlay, SignalManager):
     def _on_reset_button_clicked(self, _button: Gtk.Button) -> None:
         self.reset()
 
-    def _get_roster_groups(self) -> list[str]:
-        roster_groups_set: set[str] = set()
-        for account in app.get_connected_accounts():
-            client = app.get_client(account)
-            groups = client.get_module("Roster").get_groups()
-            roster_groups_set.update(groups)
+    def _get_roster_groups(self) -> dict[str | None, str]:
+        roster_groups: dict[str | None, str] = {None: _("All")}
 
-        roster_groups = sorted(roster_groups_set)
-        roster_groups.insert(0, _("All Groups"))
+        groups: set[str] = set()
+        for account, _label in app.get_enabled_accounts_with_labels():
+            client = app.get_client(account)
+            groups.update(client.get_module("Roster").get_groups())
+
+        for group in sorted(groups):
+            roster_groups[group] = group
+
         return roster_groups
+
+    def _get_accounts(self) -> dict[str | None, str]:
+        accounts: dict[str | None, str] = {None: _("All")}
+        for acc, label in app.get_enabled_accounts_with_labels():
+            accounts[acc] = label
+        return accounts
