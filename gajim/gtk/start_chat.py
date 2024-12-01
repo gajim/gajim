@@ -971,7 +971,6 @@ class ContactListItem(GObject.Object):
         groupchat: bool = False,
     ) -> None:
 
-        account_label = app.get_account_label(account)
         name = name or _("Start New Chat")
 
         idle = None
@@ -1003,7 +1002,7 @@ class ContactListItem(GObject.Object):
         else:
             avatar_paintable = contact.get_avatar(AvatarSize.CHAT, scale)
 
-        search_string = "|".join((name, str(jid), account_label, *groups)).lower()
+        search_string = "|".join((name, str(jid))).lower()
 
         super().__init__(
             account=account,
