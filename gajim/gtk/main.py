@@ -514,9 +514,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return None
 
         if action_name == "escape" and app.settings.get("escape_key_closes"):
-            self.emit("delete-event", Gdk.Event())
+            self.close()
 
-        if action_name == "restore-chat":
+        elif action_name == "restore-chat":
             self._chat_page.restore_chat()
 
         elif action_name == "switch-next-chat":
