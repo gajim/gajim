@@ -894,6 +894,7 @@ class ImageMediaField:
         texture = get_texture_from_data(data, 170)
         self._image = Gtk.Image.new_from_paintable(texture)
         self._image.set_halign(Gtk.Align.CENTER)
+        self._image.set_pixel_size(170)
         self._image.add_css_class("preview-image")
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
