@@ -35,8 +35,10 @@ GST_ERROR_ON_MERGING = 3
 
 
 class VoiceMessageRecorder:
-
     def __init__(self, error_callback: Callable[[int, str], None]) -> None:
+        if not app.is_installed("GST"):
+            return
+
         # React to settings change
         app.settings.connect_signal(
             "audio_input_device", self._on_audio_input_device_changed

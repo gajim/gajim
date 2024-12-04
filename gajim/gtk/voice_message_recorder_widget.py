@@ -42,6 +42,16 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
         app.settings.bind_signal("show_voice_message_button", self, "set_visible")
 
+        self._ui = get_builder("voice_message_recorder.ui")
+
+        if not app.is_installed("GST"):
+            self.set_sensitive(False)
+            self.set_tooltip_text(_("Voice Messages are not available"))
+            self.set_child(
+                Gtk.Image.new_from_icon_name("audio-input-microphone-symbolic")
+            )
+            return
+
         app.settings.connect_signal(
             "audio_input_device", self._on_audio_input_device_changed
         )
@@ -77,8 +87,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
 
         self._voice_message_recorder = VoiceMessageRecorder(self._on_error_occurred)
         self._audio_player_widget = AudioWidget(Path(""))
-
-        self._ui = get_builder("voice_message_recorder.ui")
 
         self._connect(self._ui.cancel_button, "clicked", self._on_cancel_clicked)
         self._connect(
