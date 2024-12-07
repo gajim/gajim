@@ -705,7 +705,7 @@ def get_groupchat_participant_menu(
     value = str(contact.name)
 
     general_items: MenuItemListT = [
-        (_("Direct Message"), "win.add-chat", dm_params),
+        (_("Direct Message…"), "win.add-chat", dm_params),
         (_("Details"), "win.muc-contact-info", value),
         (_("Execute Command…"), "win.muc-execute-command", value),
     ]
