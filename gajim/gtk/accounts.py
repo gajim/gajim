@@ -961,7 +961,6 @@ class ConnectionPage(GenericSettingPage):
                 name="proxy",
                 props={
                     "data": self._get_proxies(),
-                    "default-text": _("System"),
                     "button-icon-name": "preferences-system-symbolic",
                     "button-callback": self._on_proxy_edit,
                 },
@@ -1001,7 +1000,8 @@ class ConnectionPage(GenericSettingPage):
 
     @staticmethod
     def _get_proxies() -> dict[str, str]:
-        proxies = {proxy: proxy for proxy in app.settings.get_proxies()}
+        proxies = {"": _("System")}
+        proxies.update({proxy: proxy for proxy in app.settings.get_proxies()})
         proxies["no-proxy"] = _("No Proxy")
         return proxies
 
