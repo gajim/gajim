@@ -87,11 +87,13 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
         for request in voice_requests:
             request_box = Gtk.Box(spacing=12)
 
-            name_label = Gtk.Label(label=request.nick)
-            name_label.set_width_chars(10)
-            name_label.set_max_width_chars(20)
-            name_label.set_ellipsize(Pango.EllipsizeMode.END)
-            name_label.set_xalign(0)
+            name_label = Gtk.Label(
+                label=f"{request.nick} ({request.jid})",
+                hexpand=True,
+                max_width_chars=30,
+                ellipsize=Pango.EllipsizeMode.MIDDLE,
+                xalign=0,
+            )
             request_box.append(name_label)
 
             decline_button = Gtk.Button.new_from_icon_name("process-stop-symbolic")
