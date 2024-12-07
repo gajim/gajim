@@ -95,6 +95,7 @@ class WorkspaceSideBar(Gtk.ListBox):
             app.window.activate_action(
                 "win.move-chat-to-workspace", params.to_variant()
             )
+            app.window.highlight_dnd_targets(value, False)
             return True
 
         # Reject drop
