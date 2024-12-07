@@ -27,8 +27,6 @@ from gajim.common.i18n import _
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 
-# from gajim.gtk.const import DND_TARGET_FLATPAK
-# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import SignalManager

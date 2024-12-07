@@ -41,9 +41,6 @@ from gajim.common.util.text import remove_invalid_xml_chars
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
-
-# from gajim.gtk.const import DND_TARGET_FLATPAK
-# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.control import ChatControl
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.message_actions_box import MessageActionsBox

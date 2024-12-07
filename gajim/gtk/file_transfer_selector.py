@@ -28,9 +28,6 @@ from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 
 from gajim.gtk.builder import get_builder
-
-# from gajim.gtk.const import DND_TARGET_FLATPAK
-# from gajim.gtk.const import DND_TARGET_URI_LIST
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.resource_selector import ResourceSelector
 from gajim.gtk.util import iterate_listbox_children
