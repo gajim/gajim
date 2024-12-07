@@ -706,6 +706,43 @@ class MessageArchiveStorage(AlchemyStorage):
         return app.storage.archive.get_message_with_id(
             account, jid, reply_id)
 
+
+    @with_session
+    @timeit
+    def get_message_stanza_ids_from_occupant(
+        self,
+        session: Session,
+        account: str,
+        jid: JID,
+        occupant_id: str,
+    ) -> Sequence[str] | None:
+        """Get stanza IDs for all messages which were sent by a participant
+         with occupant_id.
+         """
+        fk_account_pk = self._get_account_pk(session, account)
+        fk_remote_pk = self._get_jid_pk(session, jid)
+        stmt = select(Occupant.pk).where(
+            Occupant.id == occupant_id,
+            Occupant.fk_remote_pk == fk_remote_pk,
+            Occupant.fk_account_pk == fk_account_pk,
+        )
+        fk_occupant_pk = session.scalar(stmt)
+        if fk_occupant_pk is None:
+            self._log.warning(
+                'Unable to get messages, unknown occupant-id: %s', occupant_id
+            )
+            return None
+
+        stmt = select(Message.stanza_id).where(
+            Message.fk_remote_pk == fk_remote_pk,
+            Message.fk_account_pk == fk_account_pk,
+            Message.fk_occupant_pk == fk_occupant_pk,
+            Message.stanza_id.isnot(None)
+        )
+        result = cast(Sequence[str] | None, session.scalars(stmt).all())
+        return result
+
+
     @with_session
     @timeit
     def search_archive(

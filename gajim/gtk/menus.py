@@ -42,6 +42,7 @@ from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
+from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
 from gajim.gtk.structs import RemoveHistoryActionParams
@@ -747,6 +748,7 @@ def get_chat_row_menu(
     corrected_pk: int | None,
     state: MessageState,
     is_moderated: bool,
+    occupant_id: str | None,
 ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -824,6 +826,22 @@ def get_chat_row_menu(
             menu_items.append(
                 (p_("Message row action", "Moderate…"), "win.moderate-message", param)
             )
+
+            if occupant_id is not None:
+                param = ModerateAllMessagesParam(
+                    account=contact.account,
+                    jid=contact.jid,
+                    occupant_id=occupant_id,
+                    nickname=resource_contact.name,
+                    namespace=ns,
+                )
+                menu_items.append(
+                    (
+                        p_("Message row action", "Moderate all messages…"),
+                        "win.moderate-all-messages",
+                        param,
+                    )
+                )
 
     menu_items.append(
         (

@@ -60,6 +60,7 @@ from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
+from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import open_window
@@ -461,6 +462,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ("preview-open-link", self._on_preview_action),
             ("copy-message", self._on_copy_message),
             ("moderate-message", self._on_moderate_message),
+            ("moderate-all-messages", self._on_moderate_all_messages),
             ("delete-message-locally", self._on_delete_message_locally),
             ("add-workspace", self._add_workspace),
             ("edit-workspace", self._edit_workspace),
@@ -739,6 +741,44 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             _("Moderate Message"),
             _("Moderate message?"),
             _("Why do you want to moderate this message?"),
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),
+            ],
+            input_str=_("Spam"),
+            transient_for=app.window,
+        ).show()
+
+    @actionmethod
+    def _on_moderate_all_messages(
+        self, _action: Gio.SimpleAction, params: ModerateAllMessagesParam
+    ) -> None:
+        messages = app.storage.archive.get_message_stanza_ids_from_occupant(
+            params.account, params.jid, params.occupant_id
+        )
+        if messages is None:
+            ErrorDialog(_("Could not find any messages for this participant."))
+            return
+
+        def _on_moderate(reason: str) -> None:
+            client = app.get_client(params.account)
+            groupchat_contact = client.get_module("Contacts").get_contact(params.jid)
+            assert isinstance(groupchat_contact, GroupchatContact)
+            if not groupchat_contact.is_joined:
+                ErrorDialog(_("You are currently not joined this group chat"))
+                return
+
+            muc_module = client.get_module("MUC")
+            for stanza_id in messages:
+                muc_module.moderate_message(
+                    params.namespace, params.jid, stanza_id, reason or None
+                )
+
+        InputDialog(
+            _("Moderate Messages"),
+            _("Moderate %(count)s messages from %(participant)s?")
+            % {"count": len(messages), "participant": params.nickname},
+            _("Why do you want to moderate these messages?"),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),

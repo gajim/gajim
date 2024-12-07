@@ -73,6 +73,15 @@ class ModerateMessageParam(VariantMixin):
 
 
 @dataclass
+class ModerateAllMessagesParam(VariantMixin):
+    account: str
+    jid: JID
+    occupant_id: str
+    nickname: str
+    namespace: str
+
+
+@dataclass
 class DeleteMessageParam(VariantMixin):
     account: str
     jid: JID

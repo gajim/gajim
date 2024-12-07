@@ -216,6 +216,7 @@ MAIN_WIN_ACTIONS = [
     ("correct-message", None, False),
     ("copy-message", "s", True),
     ("moderate-message", "a{sv}", False),
+    ("moderate-all-messages", "a{sv}", False),
     ("paste-as-quote", None, False),
     ("paste-as-code-block", None, False),
     ("quote", "s", False),

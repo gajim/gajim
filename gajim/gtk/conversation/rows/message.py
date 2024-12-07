@@ -247,10 +247,12 @@ class MessageRow(BaseRow):
 
     def get_chat_row_menu(
         self,
-        # message_row_actions: MessageRowActions,
-        # button: Gtk.Button
     ) -> GajimMenu:
-        menu = get_chat_row_menu(
+        occupant_id = None
+        if self._message.occupant is not None:
+            occupant_id = self._message.occupant.id
+
+        return get_chat_row_menu(
             contact=self._contact,
             name=self.name,
             text=self.get_text(),
@@ -261,8 +263,8 @@ class MessageRow(BaseRow):
             corrected_pk=self.pk,
             state=self.state,
             is_moderated=self._is_moderated,
+            occupant_id=occupant_id,
         )
-        return menu
 
     def _on_more_menu_popover_closed(
         self, _popover: GajimPopover, message_row_actions: MessageRowActions
