@@ -88,11 +88,12 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             request_box = Gtk.Box(spacing=12)
 
             name_label = Gtk.Label(
-                label=f"{request.nick} ({request.jid})",
+                label=f"{request.nick} ({request.jid.bare})",
                 hexpand=True,
                 max_width_chars=30,
                 ellipsize=Pango.EllipsizeMode.MIDDLE,
                 xalign=0,
+                tooltip_text=str(request.jid.bare),
             )
             request_box.append(name_label)
 
