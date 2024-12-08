@@ -73,6 +73,7 @@ class TestConversationView(GajimAppWindow):
         )
         contact.get_avatar = MagicMock(return_value=avatar)
         contact.settings = ContactSettings(ACCOUNT, JID.from_string(ACCOUNT))
+        contact.disconnect_all_from_obj = MagicMock()
         return contact
 
     def _on_jump_to_clicked(self, _button: Gtk.Button) -> None:
