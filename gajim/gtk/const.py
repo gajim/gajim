@@ -45,7 +45,7 @@ class Setting(NamedTuple):
 
 DEFAULT_WORKSPACE_COLOR = "rgb(191,15,167)"
 
-MAX_MESSAGE_LENGTH = 5000
+MAX_MESSAGE_LENGTH = 1000
 
 
 @unique
