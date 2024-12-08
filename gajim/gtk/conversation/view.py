@@ -159,7 +159,6 @@ class ConversationView(Gtk.ScrolledWindow):
             row.disable_selection_mode()
 
     def _on_scroll_view(self, action: Gio.SimpleAction, _param: Literal[None]) -> None:
-
         action_name = action.get_name()
         if action_name == "scroll-view-down":
             self.emit("scroll-child", Gtk.ScrollType.PAGE_DOWN, False)
@@ -236,7 +235,7 @@ class ConversationView(Gtk.ScrolledWindow):
     def _emit(self, signal_name: str, *args: Any) -> None:
         if not self._block_signals:
             log.debug("emit %s, %s", signal_name, args)
-            self.emit(signal_name, *args)
+            GLib.idle_add(self.emit, signal_name, *args)
 
     def _reset_list_box(self) -> None:
         # TODO GTK4
@@ -285,23 +284,29 @@ class ConversationView(Gtk.ScrolledWindow):
     def get_lower_complete(self) -> bool:
         return self._lower_complete
 
+    def _scroll_to_pos_idle(self, adj: Gtk.Adjustment, value: float) -> None:
+        if value == -1:
+            # scroll to end
+            value = adj.get_upper() - adj.get_page_size()
+
+        GLib.idle_add(adj.set_value, value)
+
     def _on_adj_upper_changed(
         self, adj: Gtk.Adjustment, _pspec: GObject.ParamSpec
     ) -> None:
-
         upper = adj.get_upper()
         diff = upper - self._current_upper
 
         if diff != 0:
             self._current_upper = upper
             if self._autoscroll:
-                adj.set_value(adj.get_upper() - adj.get_page_size())
+                self._scroll_to_pos_idle(adj, -1)
             else:
                 # Workaround
                 # https://gitlab.gnome.org/GNOME/gtk/merge_requests/395
                 self.set_kinetic_scrolling(True)
                 if self._requesting == "before":
-                    adj.set_value(adj.get_value() + diff)
+                    self._scroll_to_pos_idle(adj, adj.get_value() + diff)
 
         if upper == adj.get_page_size():
             # There is no scrollbar
@@ -338,7 +343,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self._request_history_at_upper = None
 
-        distance = adj.get_page_size() * 2
+        distance = adj.get_page_size()
         if adj.get_value() < distance:
             # Load messages when we are near the top
             if self._upper_complete:
@@ -536,10 +541,6 @@ class ConversationView(Gtk.ScrolledWindow):
             if message.timestamp > self._read_marker_row.timestamp:
                 self._read_marker_row.hide()
 
-        # TODO GTK4:
-        # This is a workaround to make the scrolledwindow aware of new content
-        GLib.idle_add(message.queue_resize)
-
     def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp.astimezone())
         if start_of_day in self._active_date_rows:
@@ -702,8 +703,7 @@ class ConversationView(Gtk.ScrolledWindow):
         highlight_row.remove_css_class("conversation-row-highlight")
 
     def scroll_to_end(self) -> None:
-        adj = self.get_vadjustment()
-        adj.set_value(adj.get_upper() - adj.get_page_size())
+        self._scroll_to_pos_idle(self.get_vadjustment(), -1)
 
     def _get_row_by_message_id(self, message_id: str) -> MessageRow | None:
         return self._message_id_row_map.get(message_id)
