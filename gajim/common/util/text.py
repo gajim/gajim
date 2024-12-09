@@ -147,8 +147,7 @@ def get_country_flag_from_code(country_code: str) -> str:
 
 
 def to_one_line(msg: str) -> str:
-    msg = msg.replace('\\', '\\\\')
-    return msg.replace('\n', '\\n')
+    return " ".join(msg.splitlines())
 
 
 def from_one_line(msg: str) -> str:

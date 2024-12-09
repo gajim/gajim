@@ -57,6 +57,7 @@ class AvatarSize(IntEnum):
     SHOW_CIRCLE = 24
     SMALL = 24
     ROSTER = 32
+    START_CHAT = 40
     VCARD_HEADER = 40
     ACCOUNT_SIDE_BAR = 40
     WORKSPACE = 40

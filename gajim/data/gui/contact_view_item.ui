@@ -8,7 +8,7 @@
     </style>
     <child>
       <object class="GtkImage" id="_avatar">
-        <property name="pixel-size">48</property>
+        <property name="pixel-size">40</property>
         <layout>
           <property name="column">0</property>
           <property name="row">0</property>
@@ -28,12 +28,6 @@
             <style>
               <class name="bold14"/>
             </style>
-          </object>
-        </child>
-        <child>
-          <object class="IdleBadge" id="_idle_badge">
-            <property name="halign">1</property>
-            <property name="hexpand">1</property>
           </object>
         </child>
         <child>
@@ -59,10 +53,23 @@
         <property name="spacing">6</property>
         <property name="orientation">1</property>
         <child>
-          <object class="AccountBadge" id="_account_badge">
-            <property name="halign">2</property>
-            <property name="valign">1</property>
-            <property name="hexpand">1</property>
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <property name="orientation">0</property>
+            <property name="halign">end</property>
+            <child>
+              <object class="IdleBadge" id="_idle_badge">
+                <property name="halign">1</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="AccountBadge" id="_account_badge">
+                <property name="halign">2</property>
+                <property name="valign">1</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>

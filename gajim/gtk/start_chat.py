@@ -43,6 +43,7 @@ from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.text import get_country_flag_from_code
+from gajim.common.util.text import to_one_line
 from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.builder import get_builder
@@ -80,6 +81,7 @@ class StartChatDialog(GajimAppWindow):
             name="StartChatDialog",
             title=_("Start / Join Chat"),
             default_height=600,
+            default_width=550,
             add_window_padding=False,
         )
 
@@ -978,7 +980,7 @@ class ContactListItem(GObject.Object):
         groups = []
         if contact is not None and not groupchat:
             groups = sorted(contact.groups)
-            status = contact.status
+            status = to_one_line(contact.status)
             idle = contact.idle_datetime
 
         menu = None
@@ -993,14 +995,14 @@ class ContactListItem(GObject.Object):
             avatar_paintable = theme.lookup_icon(
                 "feather-user-plus-symbolic",
                 None,
-                AvatarSize.CHAT,
+                AvatarSize.START_CHAT,
                 scale,
                 Gtk.TextDirection.NONE,
                 0,
             )
 
         else:
-            avatar_paintable = contact.get_avatar(AvatarSize.CHAT, scale)
+            avatar_paintable = contact.get_avatar(AvatarSize.START_CHAT, scale)
 
         search_string = "|".join((name, str(jid))).lower()
 
@@ -1030,8 +1032,8 @@ class ContactViewItem(Gtk.Grid, SignalManager):
 
     _avatar: Gtk.Label = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
-    _idle_badge: IdleBadge = Gtk.Template.Child()
     _status_label: Gtk.Label = Gtk.Template.Child()
+    _idle_badge: IdleBadge = Gtk.Template.Child()
     _account_badge: AccountBadge = Gtk.Template.Child()
     _group_badge_box: GroupBadgeBox = Gtk.Template.Child()
     _menu: GajimPopover = Gtk.Template.Child()
