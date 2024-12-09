@@ -107,8 +107,11 @@ class TestContactsModule:
         contact.is_groupchat = groupchat
 
         if not groupchat:
-            contact.status = "Test Status Message"
+            contact.status = (
+                "Test Status Message very very very very very long\nwith newline"
+            )
             contact.idle_datetime = dt.datetime.now()
+            contact.groups = {"testg1", "testg2", "testg3"}
 
         return contact
 
