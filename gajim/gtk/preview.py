@@ -180,7 +180,8 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 width = texture_width
                 height = texture_height
 
-            self._ui.content_overlay.set_size_request(width, height)
+            # Set minimum height of 100 to avoid button overlay covering entire image
+            self._ui.content_overlay.set_size_request(width, max(height, 100))
 
             image = Gtk.Picture.new_for_paintable(texture)
             image.add_css_class("preview-image")
