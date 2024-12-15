@@ -559,19 +559,22 @@ class SpinSetting(GenericSetting):
             page_size=0,
         )
 
-        self.spin = Gtk.SpinButton()
-        self.spin.set_adjustment(adjustment)
-        self.spin.set_numeric(True)
-        self.spin.set_update_policy(Gtk.SpinButtonUpdatePolicy.IF_VALID)
+        self.spin = Gtk.SpinButton(
+            adjustment=adjustment,
+            halign=Gtk.Align.END,
+            hexpand=True,
+            numeric=True,
+            update_policy=Gtk.SpinButtonUpdatePolicy.IF_VALID,
+            valign=Gtk.Align.CENTER,
+            width_chars=5,
+        )
 
         assert self.setting_value is not None
         if isinstance(self.setting_value, float):
             self.spin.set_digits(3)
 
         self.spin.set_value(float(self.setting_value))
-        self.spin.set_halign(Gtk.Align.END)
-        self.spin.set_valign(Gtk.Align.CENTER)
-        self.spin.set_hexpand(True)
+
         self._connect(self.spin, "notify::value", self.on_value_change)
 
         self.setting_box.append(self.spin)
