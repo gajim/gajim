@@ -120,15 +120,13 @@ class FullMessageWindow(GajimAppWindow):
             default_height=800,
         )
 
-        textview = Gtk.TextView()
-        textview.set_editable(False)
-        textview.set_left_margin(3)
-        textview.set_top_margin(3)
+        textview = Gtk.TextView(
+            editable=False,
+            wrap_mode=Gtk.WrapMode.WORD_CHAR,
+        )
         textview.get_buffer().set_text(text)
 
-        scrolled = Gtk.ScrolledWindow()
-        scrolled.set_hexpand(True)
-        scrolled.set_child(textview)
+        scrolled = Gtk.ScrolledWindow(child=textview, hexpand=True)
 
         box = Gtk.Box()
         box.append(scrolled)

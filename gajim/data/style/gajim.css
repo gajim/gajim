@@ -1087,6 +1087,9 @@ popover.combo scrollbar.vertical {
     color: @theme_fg_color;
 }
 
+/* FullMessageWindow */
+#FullMessageWindow textview { padding: 10px }
+
 /* HistorySyncAssistant */
 #HistorySyncAssistant notebook { padding: 18px; }
 #HistorySyncAssistant progressbar text { color: #000; font-size: 1.6rem; padding: 10px;}
