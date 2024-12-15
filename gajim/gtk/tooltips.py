@@ -104,7 +104,7 @@ class GCTooltip:
 
             for hat in contact.hats.get_hats()[:5]:
                 # Limit to 5 hats
-                hat_badge = Gtk.Box(spacing=6)
+                hat_badge = Gtk.Box(spacing=6, halign=Gtk.Align.START)
                 hat_badge.add_css_class("badge")
                 hat_badge.add_css_class("hat-badge")
 
@@ -115,8 +115,8 @@ class GCTooltip:
                     label=GLib.markup_escape_text(hat.title),
                     ellipsize=Pango.EllipsizeMode.END,
                     max_width_chars=20,
+                    halign=Gtk.Align.START,
                 )
-                hat_badge_label.set_halign(Gtk.Align.START)
                 hat_badge.append(hat_badge_label)
 
                 self._ui.hats_box.append(hat_badge)
