@@ -44,7 +44,7 @@ client = app.get_client(ACCOUNT)
 
 event = PasswordRequired(client, on_password)
 
-window = PasswordDialog(event)
+window = PasswordDialog(ACCOUNT, event)
 window.show()
 
 util.run_app()
