@@ -500,11 +500,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._ui.state_box.set_visible(not state)
 
-        self._ui.emoticons_button.set_sensitive(state)
-        self._ui.formattings_button.set_sensitive(state)
-        self.msg_textview.set_sensitive(state)
-        self.msg_textview.set_editable(state)
-
     def _set_chatstate(self, state: bool) -> None:
         assert self._client is not None
         if state:
@@ -690,9 +685,13 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._ui.sendfile_button.set_tooltip_text(tooltip_text)
 
     def _on_buffer_changed(self, _message_input: MessageInputTextView) -> None:
+        assert self._contact
+
+        online = app.account_is_connected(self._contact.account)
+
         has_text = self.msg_textview.has_text
         send_message_action = app.window.get_action("send-message")
-        send_message_action.set_enabled(has_text)
+        send_message_action.set_enabled(online and has_text)
 
         assert self._contact is not None
         encryption_name = self._contact.settings.get("encryption")
@@ -700,7 +699,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if has_text and encryption_name:
             app.plugin_manager.extension_point("typing" + encryption_name, self)
 
-        assert self._contact
         client = app.get_client(self._contact.account)
         client.get_module("Chatstate").set_keyboard_activity(self._contact)
         if not has_text:
