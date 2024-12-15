@@ -691,6 +691,7 @@ class DropDownSetting(GenericSetting):
         self._add_action_button(kwargs)
 
     def do_unroot(self) -> None:
+        self._dropdown.disconnect_by_func(self._on_selected)
         GenericSetting.do_unroot(self)
         app.check_finalize(self._dropdown)
         del self._dropdown
