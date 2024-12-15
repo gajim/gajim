@@ -105,7 +105,7 @@ class Roster(Gtk.ScrolledWindow, EventHelper, SignalManager):
 
         self._roster = self._ui.roster_treeview
         self._roster.set_has_tooltip(True)
-        self._roster.connect("query-tooltip", self._on_query_tooltip)
+        self._connect(self._roster, "query-tooltip", self._on_query_tooltip)
 
         # TODO port roster to Gtk.ListView and add back drag and drop
         # entries = [Gtk.TargetEntry.new(
