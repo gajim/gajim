@@ -160,6 +160,7 @@
                     <child>
                       <object class="GtkImage" id="placeholder_image">
                         <property name="icon-name">system-search-symbolic</property>
+                        <property name="pixel-size">64</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
