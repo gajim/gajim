@@ -333,7 +333,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _on_password_required(event: events.PasswordRequired) -> None:
-        open_window("PasswordDialog", event=event)
+        open_window("PasswordDialog", account=event.client.account, event=event)
 
     @staticmethod
     def _on_http_auth(event: events.HttpAuth) -> None:

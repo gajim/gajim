@@ -18,7 +18,7 @@ log = logging.getLogger("gajim.gtk.password_dialog")
 
 
 class PasswordDialog(GajimAppWindow):
-    def __init__(self, event: PasswordRequired) -> None:
+    def __init__(self, account: str, event: PasswordRequired) -> None:
         GajimAppWindow.__init__(
             self,
             name="PasswordDialog",
@@ -32,7 +32,7 @@ class PasswordDialog(GajimAppWindow):
         self._connect(self._ui.cancel_button, "clicked", self._on_cancel)
         self._connect(self._ui.ok_button, "clicked", self._on_ok)
 
-        self.account = event.client.account
+        self.account = account
         self._client = app.get_client(event.client.account)
         self._event = event
 

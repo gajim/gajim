@@ -444,11 +444,11 @@ def get_app_window(
             continue
 
         if account is not None:
-            if account != win.account:  # pyright: ignore
+            if account != win.wrapper.account:  # pyright: ignore
                 continue
 
         if jid is not None:
-            if jid != win.jid:  # pyright: ignore
+            if jid != win.wrapper.jid:  # pyright: ignore
                 continue
         return win.wrapper  # pyright: ignore
     return None
