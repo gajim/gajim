@@ -716,6 +716,35 @@ def make_menu_item(
     return item
 
 
+def allow_send_message(has_text: bool, contact: types.ChatContactT) -> bool:
+    if isinstance(contact, GroupchatContact):
+        joined = contact.is_joined
+
+        is_visitor = False
+        if joined:
+            self_contact = contact.get_self()
+            assert self_contact
+            is_visitor = self_contact.role.is_visitor
+
+        return bool(has_text and joined and not is_visitor)
+
+    if isinstance(contact, GroupchatParticipant):
+        groupchat_contact = contact.room
+        joined = groupchat_contact.is_joined
+
+        is_visitor = False
+        if joined:
+            self_contact = groupchat_contact.get_self()
+            assert self_contact
+            is_visitor = self_contact.role.is_visitor
+
+        return bool(has_text and joined and not is_visitor)
+
+    # BareContact
+    online = app.account_is_connected(contact.account)
+    return bool(online and has_text)
+
+
 class GajimMenu(Gio.Menu):
     def __init__(self):
         Gio.Menu.__init__(self)

@@ -45,6 +45,7 @@ from gajim.gtk.control import ChatControl
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
+from gajim.gtk.util import allow_send_message
 from gajim.gtk.util import open_window
 from gajim.gtk.util import SignalManager
 
@@ -498,8 +499,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         client = app.get_client(contact.account)
         online = app.account_is_connected(contact.account)
 
-        has_text = self._message_action_box.msg_textview.has_text
-        app.window.get_action("send-message").set_enabled(online and has_text)
+        app.window.get_action("send-message").set_enabled(
+            allow_send_message(self._message_action_box.msg_textview.has_text, contact)
+        )
 
         httpupload = app.window.get_action("send-file-httpupload")
         httpupload.set_enabled(online and client.get_module("HTTPUpload").available)
@@ -515,8 +517,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         app.window.get_action("correct-message").set_enabled(online)
 
     def _update_chat_actions(self, contact: BareContact) -> None:
-        account = contact.account
-        online = app.account_is_connected(account)
+        online = app.account_is_connected(contact.account)
 
         app.window.get_action("start-voice-call").set_enabled(
             online and contact.supports_audio and sys.platform != "win32"
@@ -524,13 +525,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         app.window.get_action("start-video-call").set_enabled(
             online and contact.supports_video and sys.platform != "win32"
         )
-
-        app.window.get_action("paste-as-quote").set_enabled(online)
-        app.window.get_action("paste-as-code-block").set_enabled(online)
-
-        app.window.get_action("quote").set_enabled(online)
-        app.window.get_action("mention").set_enabled(online)
-        app.window.get_action("reply").set_enabled(online)
 
     def _update_group_chat_actions(self, contact: GroupchatContact) -> None:
         joined = contact.is_joined
@@ -551,9 +545,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.window.get_action("muc-request-voice").set_enabled(is_visitor)
 
-        app.window.get_action("quote").set_enabled(joined)
-        app.window.get_action("mention").set_enabled(joined)
-        app.window.get_action("reply").set_enabled(joined)
         app.window.get_action("moderate-message").set_enabled(joined)
         app.window.get_action("moderate-all-messages").set_enabled(joined)
 

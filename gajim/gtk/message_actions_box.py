@@ -48,6 +48,7 @@ from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
+from gajim.gtk.util import allow_send_message
 from gajim.gtk.util import open_window
 from gajim.gtk.util import SignalManager
 from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
@@ -205,10 +206,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         action_name = action.get_name()
         log.info("Activate action: %s", action_name)
-
-        if not self.msg_textview.is_sensitive():
-            log.info("Action dismissed, input is not enabled")
-            return
 
         if action_name == "input-clear":
             self._on_clear()
@@ -373,9 +370,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def insert_as_quote(self, text: str, *, clear: bool = False) -> None:
         if self._contact is None:
-            return
-
-        if not self.msg_textview.is_sensitive():
             return
 
         if clear:
@@ -687,11 +681,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def _on_buffer_changed(self, _message_input: MessageInputTextView) -> None:
         assert self._contact
 
-        online = app.account_is_connected(self._contact.account)
-
         has_text = self.msg_textview.has_text
-        send_message_action = app.window.get_action("send-message")
-        send_message_action.set_enabled(online and has_text)
+        app.window.get_action("send-message").set_enabled(
+            allow_send_message(has_text, self._contact)
+        )
 
         assert self._contact is not None
         encryption_name = self._contact.settings.get("encryption")
