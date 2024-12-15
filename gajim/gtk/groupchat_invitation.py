@@ -113,7 +113,9 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         join_button.add_css_class("suggested-action")
         self._connect(join_button, "clicked", self._on_join)
 
-        join_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.END)
+        join_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL, halign=Gtk.Align.END, hexpand=True
+        )
         join_box.add_css_class("linked")
         join_box.append(self._nick_chooser)
         join_box.append(join_button)
