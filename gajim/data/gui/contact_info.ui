@@ -681,7 +681,7 @@
               <object class="GtkStackPage">
                 <property name="name">notes</property>
                 <property name="title" translatable="1">Notes</property>
-                <property name="icon-name">x-office-address-book-symbolic</property>
+                <property name="icon-name">lucide-notebook-tabs-symbolic</property>
                 <property name="child">
                   <object class="GtkStack" id="notes_page_stack">
                     <property name="transition-type">crossfade</property>

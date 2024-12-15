@@ -108,7 +108,7 @@
             <property name="popover">calendar_popover</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">x-office-calendar-symbolic</property>
+                <property name="icon-name">lucide-calendar-search-symbolic</property>
               </object>
             </child>
           </object>
@@ -300,7 +300,7 @@
         <property name="popover">filter_date_before_popover</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">x-office-calendar-symbolic</property>
+            <property name="icon-name">lucide-calendar-symbolic</property>
           </object>
         </child>
         <layout>
@@ -319,7 +319,7 @@
         <property name="popover">filter_date_after_popover</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">x-office-calendar-symbolic</property>
+            <property name="icon-name">lucide-calendar-symbolic</property>
           </object>
         </child>
         <layout>

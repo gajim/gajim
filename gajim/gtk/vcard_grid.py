@@ -681,7 +681,7 @@ class DateProperty(VCardProperty):
         self._value_entry.connect("notify::text", self._on_text_changed)
 
         self._calendar_button = Gtk.MenuButton()
-        image = Gtk.Image.new_from_icon_name("x-office-calendar-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-calendar-symbolic")
         self._calendar_button.set_child(image)
         self._calendar_button.connect(
             "notify::active", self._on_calendar_button_clicked
