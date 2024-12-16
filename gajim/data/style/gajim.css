@@ -1092,7 +1092,7 @@ popover.combo scrollbar.vertical {
 
 /* HistorySyncAssistant */
 #HistorySyncAssistant notebook { padding: 18px; }
-#HistorySyncAssistant progressbar text { color: #000; font-size: 1.6rem; padding: 10px;}
+#HistorySyncAssistant progressbar text { font-size: 1.6rem; padding: 10px;}
 #HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
 #HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
 #HistorySyncAssistant list > row > label { color: @insensitive_fg_color; }
