@@ -32,6 +32,7 @@ from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import convert_surface_to_texture
+from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
 from gajim.gtk.widgets import GajimAppWindow
@@ -68,6 +69,7 @@ class ProfileWindow(GajimAppWindow):
         self.account = account
         self._jid = app.get_jid_from_account(account)
         self._running_tasks: list[Task] = []
+        self._destroyed = False
 
         self._client = app.get_client(self.account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
@@ -156,6 +158,7 @@ class ProfileWindow(GajimAppWindow):
         )
 
     def _cleanup(self) -> None:
+        self._destroyed = True
         del self._avatar_edit_button
         self._running_tasks.clear()
         self._avatar_selector = None
@@ -169,6 +172,7 @@ class ProfileWindow(GajimAppWindow):
             _("Not connected") if not state.is_connected else ""
         )
 
+    @ensure_not_destroyed
     def _on_access_model_received(self, task: Task) -> None:
         namespace = task.get_user_data()
 
@@ -190,6 +194,7 @@ class ProfileWindow(GajimAppWindow):
             assert self._avatar_nick_public is not None
             self._set_avatar_nick_access_switch(self._avatar_nick_public)
 
+    @ensure_not_destroyed
     def _on_vcard_received(self, task: Task):
         try:
             self._current_vcard = cast(VCard | None, task.finish())
@@ -302,6 +307,7 @@ class ProfileWindow(GajimAppWindow):
             nick = app.get_default_nick(self.account)
         app.nicks[self.account] = nick
 
+    @ensure_not_destroyed
     def _on_set_avatar_result(self, task: Task) -> None:
         self._running_tasks.remove(task)
         try:
@@ -331,6 +337,7 @@ class ProfileWindow(GajimAppWindow):
         if not self._running_tasks:
             self._show_profile_page()
 
+    @ensure_not_destroyed
     def _on_set_vcard_result(self, task: Task) -> None:
         self._running_tasks.remove(task)
         try:
