@@ -114,6 +114,11 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._ui.input_scrolled.set_child(self.msg_textview)
 
+        vadjustment = self._ui.input_scrolled.get_vadjustment()
+        self._connect(
+            vadjustment, "value-changed", self._on_input_scrolled_value_changed
+        )
+
         self._ui.sendfile_button.set_tooltip_text(_("No File Transfer available"))
         self._ui.formattings_button.set_menu_model(get_format_menu())
         self._ui.encryption_menu_button.set_menu_model(get_encryption_menu())
@@ -160,6 +165,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
+
+    def _on_input_scrolled_value_changed(self, vadjustment: Gtk.Adjustment) -> None:
+        if vadjustment.get_value() == 0:
+            self._ui.input_scrolled.add_css_class("one-line-scrollbar")
+        else:
+            self._ui.input_scrolled.remove_css_class("one-line-scrollbar")
 
     def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
         emoji_chooser = app.window.get_emoji_chooser()
