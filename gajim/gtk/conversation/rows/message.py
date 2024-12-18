@@ -9,6 +9,7 @@ import textwrap
 from datetime import datetime
 from datetime import timedelta
 
+from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp.namespaces import Namespace
@@ -47,6 +48,7 @@ from gajim.gtk.referenced_message import ReferencedMessageWidget
 from gajim.gtk.util.misc import container_remove_all
 from gajim.gtk.util.misc import get_avatar_for_message
 from gajim.gtk.util.misc import get_contact_name_for_message
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.conversation.rows.message")
 
@@ -86,6 +88,13 @@ class MessageRow(BaseRow):
         self._is_retracted = bool(message.moderation or message.retraction)
         self._is_blocked = False
         self._has_receipt = False
+
+        self._row_menu_popover = GajimPopover(None)
+        self.grid.attach(self._row_menu_popover, 0, 0, 1, 1)
+
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        self._connect(gesture_secondary_click, "pressed", self._on_row_clicked)
+        self.add_controller(gesture_secondary_click)
 
         self._avatar_box = AvatarBox(contact)
 
@@ -250,6 +259,18 @@ class MessageRow(BaseRow):
         if isinstance(self._contact, GroupchatContact | GroupchatParticipant):
             return self._contact.muc_context
         return None
+
+    def _on_row_clicked(
+        self,
+        _gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+        self._row_menu_popover.set_menu_model(self.get_chat_row_menu())
+        self._row_menu_popover.set_pointing_to_coord(x=x, y=y)
+        self._row_menu_popover.popup()
+        return Gdk.EVENT_PROPAGATE
 
     def get_chat_row_menu(
         self,
