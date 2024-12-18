@@ -4,6 +4,7 @@
   <object class="GtkBox" id="box">
     <property name="orientation">vertical</property>
     <property name="spacing">12</property>
+    <property name="hexpand">true</property>
     <child>
       <object class="GtkStack" id="stack">
         <property name="vexpand">1</property>
@@ -52,6 +53,7 @@ This may take a while…</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">dialog-error-symbolic</property>
+                    <property name="pixel-size">32</property>
                     <style>
                       <class name="error-color"/>
                     </style>
@@ -145,6 +147,7 @@ This may take a while…</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">feather-check-symbolic</property>
+                    <property name="pixel-size">32</property>
                     <style>
                       <class name="success-color"/>
                     </style>

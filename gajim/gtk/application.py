@@ -587,6 +587,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
     def _on_db_migration(self, _event: events.DBMigration) -> None:
         open_window("DBMigration")
 
+        context = GLib.MainContext.default()
+        while context.pending():
+            context.iteration(may_block=False)
+
     # Action Callbacks
 
     @staticmethod

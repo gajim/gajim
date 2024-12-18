@@ -75,6 +75,7 @@ class DBMigration(GajimAppWindow, EventHelper):
 
     def _on_finished(self, event: DBMigrationFinished) -> None:
         self._ui.stack.set_visible_child_name("success-page")
+        GLib.timeout_add_seconds(2, self.present)
 
     def _on_error(self, event: DBMigrationError) -> None:
         trace = StringIO()
