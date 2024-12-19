@@ -60,13 +60,12 @@ class WorkspaceDialog(GajimAppWindow):
 
         rgba = make_rgba(color or DEFAULT_WORKSPACE_COLOR)
         if self._avatar_sha is not None:
-            self._ui.image_switch.set_state(True)
+            self._ui.image_switch.set_active(True)
             self._ui.style_stack.set_visible_child_name("image")
 
         self._ui.entry.set_text(name)
 
-        color_dialog = Gtk.ColorDialog()
-        self._ui.color_dialog_button.set_dialog(color_dialog)
+        self._ui.color_dialog_button.set_dialog(Gtk.ColorDialog())
         self._ui.color_dialog_button.set_rgba(rgba)
 
         self._update_avatar()
