@@ -26,6 +26,7 @@ from gajim.gtk.util import GajimPopover
 from gajim.gtk.util import get_listbox_row_count
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import open_window
+from gajim.gtk.util import SignalManager
 
 if TYPE_CHECKING:
     # Simplifies testing
@@ -35,11 +36,11 @@ if TYPE_CHECKING:
 log = logging.getLogger("gajim.gtk.workspace_sidebar")
 
 
-class WorkspaceSideBar(Gtk.ListBox):
+class WorkspaceSideBar(Gtk.ListBox, SignalManager):
     def __init__(self, chat_page: ChatPage) -> None:
-        Gtk.ListBox.__init__(self)
-        self.set_vexpand(True)
-        self.set_valign(Gtk.Align.START)
+        Gtk.ListBox.__init__(self, vexpand=True, valign=Gtk.Align.START)
+        SignalManager.__init__(self)
+
         self.add_css_class("workspace-sidebar")
 
         formats_workspace = Gdk.ContentFormats.new_for_gtype(Workspace)
@@ -47,17 +48,24 @@ class WorkspaceSideBar(Gtk.ListBox):
         formats = formats_workspace.union(formats_chat_list_row)
 
         drop_target = Gtk.DropTarget(formats=formats, actions=Gdk.DragAction.MOVE)
-        drop_target.connect("drop", self._on_drop)
+        self._connect(drop_target, "drop", self._on_drop)
         self.add_controller(drop_target)
 
-        self.connect("row-activated", self._on_row_activated)
+        self._connect(self, "row-activated", self._on_row_activated)
 
         self.append(AddWorkspace("add"))
 
         chat_list_stack = chat_page.get_chat_list_stack()
-        chat_list_stack.connect("unread-count-changed", self._on_unread_count_changed)
-        chat_list_stack.connect("chat-selected", self._on_chat_selected)
+        self._connect(
+            chat_list_stack, "unread-count-changed", self._on_unread_count_changed
+        )
+        self._connect(chat_list_stack, "chat-selected", self._on_chat_selected)
         self._workspaces: dict[str, Workspace] = {}
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBox.do_unroot(self)
+        app.check_finalize(self)
 
     def get_row_count(self) -> int:
         return get_listbox_row_count(self)
@@ -70,10 +78,13 @@ class WorkspaceSideBar(Gtk.ListBox):
         self, _drop_target: Gtk.DropTarget, value: GObject.Value, _x: float, y: float
     ) -> bool:
         target_workspace = self.get_row_at_y(int(y))
+        app.window.highlight_dnd_targets(self, False)
 
         if not value or not isinstance(target_workspace, Workspace):
             # Reject drop
             return False
+
+        app.window.highlight_dnd_targets(value, False)
 
         if isinstance(value, Workspace):
             target_index = target_workspace.get_index()
@@ -95,7 +106,6 @@ class WorkspaceSideBar(Gtk.ListBox):
             app.window.activate_action(
                 "win.move-chat-to-workspace", params.to_variant()
             )
-            app.window.highlight_dnd_targets(value, False)
             return True
 
         # Reject drop
@@ -138,7 +148,6 @@ class WorkspaceSideBar(Gtk.ListBox):
         self.remove(row)
 
     def get_other_workspace(self, exclude_workspace_id: str) -> str | None:
-
         for workspace in self._workspaces.values():
             if workspace.workspace_id != exclude_workspace_id:
                 return workspace.workspace_id
@@ -179,10 +188,16 @@ class WorkspaceSideBar(Gtk.ListBox):
         row.update_avatar()
 
 
-class CommonWorkspace(Gtk.ListBoxRow):
+class CommonWorkspace(Gtk.ListBoxRow, SignalManager):
     def __init__(self, workspace_id: str) -> None:
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
         self.workspace_id = workspace_id
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
 
 class Workspace(CommonWorkspace):
@@ -218,13 +233,13 @@ class Workspace(CommonWorkspace):
         self._drag_hotspot_y: float = 0
 
         drag_source = Gtk.DragSource(actions=Gdk.DragAction.MOVE)
-        drag_source.connect("prepare", self._on_prepare)
-        drag_source.connect("drag-begin", self._on_drag_begin)
-        drag_source.connect("drag-end", self._on_drag_end)
+        self._connect(drag_source, "prepare", self._on_prepare)
+        self._connect(drag_source, "drag-begin", self._on_drag_begin)
+        self._connect(drag_source, "drag-end", self._on_drag_end)
         self.add_controller(drag_source)
 
         controller = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        controller.connect("pressed", self._on_pressed)
+        self._connect(controller, "pressed", self._on_pressed)
         self.add_controller(controller)
 
         self.set_child(overlay)
@@ -287,8 +302,9 @@ class AddWorkspace(CommonWorkspace):
         self.set_selectable(False)
         self.set_tooltip_text(_("Add Workspace"))
         self.add_css_class("workspace-add")
+
         button = Gtk.Button(icon_name="feather-plus-symbolic")
-        button.connect("clicked", self._on_add_clicked)
+        self._connect(button, "clicked", self._on_add_clicked)
         self.set_child(button)
 
     @staticmethod
