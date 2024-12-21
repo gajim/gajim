@@ -729,6 +729,10 @@ class Themes(PreferenceBox):
             "style-changed", ged.GUI1, self._on_style_changed
         )
 
+    def do_unroot(self) -> None:
+        app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
+        PreferenceBox.do_unroot(self)
+
     @staticmethod
     def _on_app_font_size_changed(_value: float, *args: Any) -> None:
         app.css_config.apply_app_font_size()
