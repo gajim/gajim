@@ -709,6 +709,11 @@ class DropDownSetting(GenericSetting):
         self._dropdown.set_data(data)
         self._dropdown.connect("notify::selected", self._on_selected)
 
+    def select_key(self, key: Any) -> None:
+        self._dropdown.disconnect_by_func(self._on_selected)
+        self._dropdown.select_key(key)
+        self._dropdown.connect("notify::selected", self._on_selected)
+
     def on_row_activated(self) -> None:
         pass
 
