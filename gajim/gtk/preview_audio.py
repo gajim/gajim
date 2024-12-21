@@ -41,6 +41,11 @@ class AudioWidget(Gtk.Box, SignalManager):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         SignalManager.__init__(self)
 
+        if not app.is_installed("GST"):
+            log.info("Could not create AudioWidget because GStreamer is not installed.")
+            self._show_init_error()
+            return
+
         self._playbin = Gst.ElementFactory.make("playbin", "bin")
         self._bus_watch_id: int = 0
         self._timeout_id: int = -1
@@ -48,8 +53,7 @@ class AudioWidget(Gtk.Box, SignalManager):
 
         if self._playbin is None:
             log.error("Could not create GST playbin.")
-            label = Gtk.Label(label=_("Audio preview is not available"))
-            self.append(label)
+            self._show_init_error()
             return
 
         self._file_path = file_path
@@ -216,6 +220,9 @@ class AudioWidget(Gtk.Box, SignalManager):
             self._playbin.set_state(Gst.State.PLAYING)
             self._add_seek_bar_update_idle()
             self._ui.play_icon.set_from_icon_name("media-playback-pause-symbolic")
+
+    def _show_init_error(self) -> None:
+        self.append(Gtk.Label(label=_("Audio preview is not available")))
 
     def _enable_controls(self, status: bool) -> None:
         self._ui.seek_bar.set_sensitive(status)
