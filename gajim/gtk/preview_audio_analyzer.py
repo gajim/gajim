@@ -32,6 +32,12 @@ class AudioAnalyzer:
         samples_callback: Callable[[AudioSampleT], None],
     ) -> None:
 
+        if not app.is_installed("GST"):
+            log.info(
+                "Could not create AudioAnalyzer because GStreamer is not installed."
+            )
+            return
+
         self._playbin = Gst.ElementFactory.make("playbin")
 
         if self._playbin is None:
