@@ -2,10 +2,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from typing import Any
+
 from unittest.mock import MagicMock
 
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
+from nbxmpp.structs import VoiceRequest
 
 from gajim.common import app
 from gajim.common.modules.contacts import GroupchatContact
@@ -17,6 +20,55 @@ from . import util
 
 ACCOUNT = "testacc1"
 FROM_JID = "groupchat@conference.example.org"
+
+
+class TestMUCModule:
+    def __init__(self, account: str) -> None:
+        self._account = account
+
+        self._requests: list[VoiceRequest] = []
+        for item in range(15):
+            self._requests.append(
+                VoiceRequest(
+                    JID.from_string(f"user{item}@conference.example.org/user"),
+                    f"Nick #{item}",
+                    None,
+                )
+            )
+        self._requests.append(
+            VoiceRequest(
+                JID.from_string(
+                    "extralongjid_with_many_characters@conference.example.org/with_resource"
+                ),
+                "Nickname with many characters very very looooooooong",
+                None,
+            )
+        )
+
+    def get_voice_requests(self, _contact: GroupchatContact) -> list[VoiceRequest]:
+        return self._requests
+
+    def approve_voice_request(
+        self, _contact: GroupchatContact, request: VoiceRequest
+    ) -> None:
+        self._requests.remove(request)
+
+    def decline_voice_request(
+        self, _contact: GroupchatContact, request: VoiceRequest
+    ) -> None:
+        self._requests.remove(request)
+
+
+class TestClient:
+    def __init__(self, account: str) -> None:
+        self._account = account
+
+        self._muc_module = TestMUCModule(self._account)
+
+    def get_module(self, module: str) -> Any:
+        if module == "MUC":
+            return self._muc_module
+        return MagicMock()
 
 
 class TestGroupChatVoiceRequestButton(GajimAppWindow):
@@ -53,7 +105,8 @@ class TestGroupChatVoiceRequestButton(GajimAppWindow):
         return contact
 
 
-app.get_client = MagicMock()
+test_client = TestClient(ACCOUNT)
+app.get_client = MagicMock(return_value=test_client)
 
 window = TestGroupChatVoiceRequestButton()
 window.show()
