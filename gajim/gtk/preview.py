@@ -150,10 +150,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
             self._ui.file_size.set_text(text)
             self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
             self._ui.preview_box.set_size_request(160, -1)
-
-            # TODO GTK4:
-            # This is a workaround to make the scrolledwindow aware of new content
-            self._ui.preview_box.queue_resize()
             return
 
         self._ui.image_button.set_tooltip_text(preview.filename)
@@ -282,10 +278,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.file_size.set_text(file_size_string)
         self._ui.file_name.set_text(preview.filename)
         self._ui.file_name.set_tooltip_text(preview.filename)
-
-        # TODO GTK4:
-        # This is a workaround to make the scrolledwindow aware of new content
-        GLib.idle_add(self.queue_resize)
 
     def _on_download(self, _button: Gtk.Button) -> None:
         if self._preview is None:
