@@ -14,6 +14,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import ged
 from gajim.common.const import THRESHOLD_OPTIONS
 from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
@@ -109,10 +110,6 @@ class Preferences(GajimAppWindow):
 
     def get_video_preview(self) -> VideoPreview | None:
         return self._video_preview
-
-    def update_theme_list(self) -> None:
-        themes = cast(Themes, self._prefs["themes"])
-        themes.update_theme_list()
 
     def update_proxy_list(self) -> None:
         miscellaneous = cast(Miscellaneous, self._prefs["miscellaneous"])
@@ -727,28 +724,36 @@ class Themes(PreferenceBox):
 
         PreferenceBox.__init__(self, settings)
 
+        app.ged.register_event_handler(
+            "style-changed", ged.GUI1, self._on_style_changed
+        )
+
     @staticmethod
     def _on_app_font_size_changed(_value: float, *args: Any) -> None:
         app.css_config.apply_app_font_size()
 
     @staticmethod
     def _get_theme_items() -> list[str]:
-        theme_items = ["default"]
-        theme_items += app.css_config.themes
-        return theme_items
+        return ["default", *app.css_config.themes]
 
-    def update_theme_list(self) -> None:
+    def _on_style_changed(self, *args: Any) -> None:
         dropdown_row = cast(DropDownSetting, self.get_setting("roster_theme"))
         dropdown_row.update_entries(self._get_theme_items())
+        dropdown_row.select_key(app.settings.get("roster_theme"))
 
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
         open_window("Themes", transient=self.get_root())
 
-    @staticmethod
-    def _on_theme_changed(value: str, *args: Any) -> None:
+    def _on_theme_changed(self, value: str, *args: Any) -> None:
+        app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
+
         app.css_config.change_theme(value)
         app.ged.raise_event(ThemeUpdate())
         app.ged.raise_event(StyleChanged())
+
+        app.ged.register_event_handler(
+            "style-changed", ged.GUI1, self._on_style_changed
+        )
 
     @staticmethod
     def _on_dark_theme(value: str, *args: Any) -> None:

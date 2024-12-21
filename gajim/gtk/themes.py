@@ -26,7 +26,6 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ErrorDialog
-from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import SignalManager
@@ -229,8 +228,6 @@ class Themes(GajimAppWindow):
         if not app.css_config.add_new_theme(name):
             return
 
-        self._update_preferences_window()
-
         self._ui.remove_theme_button.set_sensitive(True)
         iter_ = self._ui.theme_store.append([name])
         self._select_theme_row(iter_)
@@ -249,12 +246,6 @@ class Themes(GajimAppWindow):
         app.settings.set("roster_theme", theme)
         app.css_config.change_theme(theme)
         app.ged.raise_event(ThemeUpdate())
-
-    @staticmethod
-    def _update_preferences_window() -> None:
-        window = cast(Preferences | None, get_app_window("Preferences"))
-        if window is not None:
-            window.update_theme_list()
 
     @staticmethod
     def _create_theme_name() -> str:
@@ -276,7 +267,6 @@ class Themes(GajimAppWindow):
                 app.ged.raise_event(StyleChanged())
 
             app.css_config.remove_theme(theme)
-            self._update_preferences_window()
             assert isinstance(store, Gtk.ListStore)
             assert iter_ is not None
             store.remove(iter_)
