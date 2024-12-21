@@ -554,7 +554,8 @@ class Sounds(PreferenceBox):
 
     @staticmethod
     def _on_manage_sounds(_button: Gtk.Button) -> None:
-        open_window("ManageSounds")
+        preferences = cast(Preferences, get_app_window("Preferences"))
+        open_window("ManageSounds", transient_for=preferences.window)
 
 
 class StatusMessage(PreferenceBox):
