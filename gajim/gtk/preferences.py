@@ -48,7 +48,7 @@ class Preferences(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
             self,
-            name="PreferencesWindow",
+            name="Preferences",
             title=_("Preferences"),
             default_width=900,
             default_height=650,
