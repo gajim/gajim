@@ -124,7 +124,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkOverlay">
+          <object class="GtkOverlay" id="input_wrapper">
             <property name="child">
               <object class="GtkScrolledWindow" id="input_scrolled">
                 <property name="hexpand">1</property>

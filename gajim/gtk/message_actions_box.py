@@ -99,7 +99,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._security_label_selector = SecurityLabelSelector()
         self._ui.action_box.append(self._security_label_selector)
         self._ui.action_box.reorder_child_after(
-            self._security_label_selector, self._ui.input_scrolled
+            self._security_label_selector, self._ui.input_wrapper
         )
 
         self.msg_textview = MessageInputTextView(self)

@@ -615,6 +615,7 @@ class MessageActionsBoxBuilder(Builder):
     action_box: Gtk.Box
     emoticons_button: Gtk.MenuButton
     formattings_button: Gtk.MenuButton
+    input_wrapper: Gtk.Overlay
     input_scrolled: Gtk.ScrolledWindow
     input_overlay: Gtk.Box
     input_overlay_label: Gtk.Label
