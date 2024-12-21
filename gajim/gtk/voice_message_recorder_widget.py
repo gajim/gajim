@@ -159,8 +159,8 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         if not self._voice_message_recorder.audio_input_device_exists(audio_device):
             log.error('Audio device "%s" not found', audio_device)
             return False
-        else:
-            return True
+
+        return True
 
     def _is_audio_input_device_blacklisted(self) -> bool:
         audio_device = app.settings.get("audio_input_device")
