@@ -31,11 +31,12 @@ from gajim.common.util.text import quote_text
 
 from gajim.gtk.util import get_avatar_for_message
 from gajim.gtk.util import get_contact_name_for_message
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.referenced_message_widget")
 
 
-class ReferencedMessageWidget(Gtk.Box):
+class ReferencedMessageWidget(Gtk.Box, SignalManager):
     def __init__(
         self,
         contact: ChatContactT,
@@ -43,6 +44,7 @@ class ReferencedMessageWidget(Gtk.Box):
         show_reply_icon: bool = True,
     ) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
 
         self._contact = contact
         self._original_message = original_message
@@ -55,10 +57,15 @@ class ReferencedMessageWidget(Gtk.Box):
         self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
 
         gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
-        gesture_primary_click.connect("pressed", self._on_clicked)
+        self._connect(gesture_primary_click, "pressed", self._on_clicked)
         self.add_controller(gesture_primary_click)
 
         self._add_content(self._message)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _add_content(self, message: mod.Message) -> None:
         main_box = Gtk.Box(
@@ -149,8 +156,8 @@ class ReferencedMessageWidget(Gtk.Box):
         self,
         _gesture_click: Gtk.GestureClick,
         _n_press: int,
-        x: float,
-        y: float,
+        _x: float,
+        _y: float,
     ) -> int:
         app.window.activate_action(
             "win.jump-to-message",
@@ -220,22 +227,30 @@ class ReferencedMessageNotFoundWidget(Gtk.Box):
         content_box.append(message_box)
 
 
-class ReplyBox(Gtk.Box):
+class ReplyBox(Gtk.Box, SignalManager):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, spacing=12, visible=False)
+        Gtk.Box.__init__(self, spacing=6, visible=False)
+        SignalManager.__init__(self)
 
         reply_image = Gtk.Image.new_from_icon_name("lucide-reply-symbolic")
         reply_image.set_size_request(AvatarSize.CHAT, -1)
+        reply_image.set_pixel_size(24)
         reply_image.add_css_class("dim-label")
         self.append(reply_image)
 
         self._close_button = Gtk.Button.new_from_icon_name("window-close-symbolic")
         self._close_button.set_valign(Gtk.Align.CENTER)
         self._close_button.set_tooltip_text(_("Cancel"))
-        self._close_button.connect("clicked", self.disable_reply_mode)
+        self._connect(self._close_button, "clicked", self.disable_reply_mode)
         self.append(self._close_button)
 
         self._ref_widget = None
+
+    def do_unroot(self) -> None:
+        self.disable_reply_mode()
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def enable_reply_mode(
         self, contact: ChatContactT, original_message: mod.Message
