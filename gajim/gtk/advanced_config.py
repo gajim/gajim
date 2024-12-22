@@ -92,7 +92,7 @@ class AdvancedConfig(GajimAppWindow):
 
         self.renderer_text = Gtk.CellRendererText()
         self.renderer_text.set_property("ellipsize", Pango.EllipsizeMode.END)
-        self.renderer_text.connect("edited", self._on_config_edited)
+        self._connect(self.renderer_text, "edited", self._on_config_edited)
 
         col = Gtk.TreeViewColumn(
             p_("Configuration", "Value"), self.renderer_text, text=1
@@ -125,8 +125,8 @@ class AdvancedConfig(GajimAppWindow):
         self,
         _event_controller_key: Gtk.EventControllerKey,
         keyval: int,
-        keycode: int,
-        state: Gdk.ModifierType,
+        _keycode: int,
+        _state: Gdk.ModifierType,
     ) -> bool:
 
         if keyval != Gdk.KEY_Escape:
