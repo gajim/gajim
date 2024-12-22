@@ -76,9 +76,7 @@ BoolSettings = Literal[
     'show_voice_message_button',
     'show_status_msgs_in_roster',
     'show_subject_on_join',
-    'show_transports_group',
     'show_trayicon',
-    'show_xhtml',
     'showoffline',
     'sort_by_show_in_muc',
     'sort_by_show_in_roster',
@@ -106,9 +104,6 @@ IntSettings = Literal[
     'groupchat_roster_width',
     'mainwin_height',
     'mainwin_width',
-    'notification_position_x',
-    'notification_position_y',
-    'notification_timeout',
     'preview_max_file_size',
     'preview_size',
 ]
@@ -160,6 +155,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'allow_open_file_uris': False,
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
+    'app_font_size': 1.0,
     'ascii_formatting': True,
     'ask_online_status': False,
     'audio_input_device': 'autoaudiosrc ! volume name=gajim_vol',
@@ -182,7 +178,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'date_format': '%x',
     'date_time_format': '%c',
     'dev_force_bookmark_2': False,
-    'dev_use_message_label': True,
     'developer_modus': False,
     'dictionary_url': 'WIKTIONARY',
     'enable_emoji_shortcodes': True,
@@ -217,10 +212,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'muclumbus_api_http_uri': 'https://search.jabber.network/api/1.0/search',
     'muclumbus_api_jid': 'api@search.jabber.network',
     'muclumbus_api_pref': 'http',
-    'notification_position_x': -1,
-    'notification_position_y': -1,
     'notification_preview_message': True,
-    'notification_timeout': 5,
     'notify_on_all_muc_messages': False,
     'notify_on_file_complete': True,
     'plugins_auto_update': False,
@@ -251,9 +243,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'show_voice_message_button': True,
     'show_status_msgs_in_roster': True,
     'show_subject_on_join': True,
-    'show_transports_group': True,
     'show_trayicon': True,
-    'show_xhtml': True,
     'showoffline': True,
     'sort_by_show_in_muc': False,
     'sort_by_show_in_roster': True,
@@ -268,7 +258,6 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'use_speller': True,
     'use_stun_server': False,
     'use_urgency_hint': True,
-    'app_font_size': 1.0,
     'video_framerate': '',
     'video_input_device': 'autovideosrc',
     'video_see_self': True,
@@ -292,7 +281,6 @@ BoolAccountSettings = Literal[
     'gc_send_marker_private_default',
     'gc_send_marker_public_default',
     'ignore_unknown_contacts',
-    'is_zeroconf',
     'publish_location',
     'publish_tune',
     'request_user_data',
@@ -335,10 +323,6 @@ StringAccountSettings = Literal[
     'roster_version',
     'send_chatstate_default',
     'subscription_request_msg',
-    'zeroconf_email',
-    'zeroconf_first_name',
-    'zeroconf_jabber_id',
-    'zeroconf_last_name',
 ]
 
 IntAccountSettings = Literal[
@@ -439,7 +423,6 @@ ACCOUNT_SETTINGS = {
         'gc_send_marker_public_default': False,
         'http_auth': 'ask',
         'ignore_unknown_contacts': False,
-        'is_zeroconf': False,
         'keyid': '',
         'keyname': '',
         'last_status': 'online',
@@ -465,10 +448,6 @@ ACCOUNT_SETTINGS = {
         'use_custom_host': False,
         'use_ft_proxies': False,
         'use_plain_connection': False,
-        'zeroconf_email': '',
-        'zeroconf_first_name': '',
-        'zeroconf_jabber_id': '',
-        'zeroconf_last_name': '',
         'omemo_blind_trust': True,
     },
 
@@ -653,7 +632,6 @@ ADVANCED_SETTINGS = {
         'date_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'date_time_format': 'https://docs.python.org/3/library/time.html#time.strftime',  # noqa: E501
         'dev_force_bookmark_2': _('Force Bookmark 2 usage'),
-        'dev_use_message_label': '',
         'developer_modus': '',
         'dictionary_url': _(
             'Either a custom URL with %%s in it (where %%s is the word/phrase)'
@@ -686,7 +664,6 @@ ADVANCED_SETTINGS = {
             'API Preferences. Possible values: "http", "iq"'),
         'notification_preview_message': _(
             'Preview new messages in notification popup?'),
-        'notification_timeout': '',
         'notify_on_all_muc_messages': '',
         'plugins_repository_enabled': _(
             'If enabled, Gajim offers to download plugins hosted on gajim.org'),
