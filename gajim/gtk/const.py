@@ -139,6 +139,7 @@ WINDOW_MODULES = {
     "AdHocCommands": "gajim.gtk.adhoc",
     "AdvancedConfig": "gajim.gtk.advanced_config",
     "DBMigration": "gajim.gtk.db_migration",
+    "DebugConsoleWindow": "gajim.gtk.debug_console",
     "BlockingList": "gajim.gtk.blocking",
     "Bookmarks": "gajim.gtk.bookmarks",
     "CertificateDialog": "gajim.gtk.certificate_dialog",
@@ -149,7 +150,6 @@ WINDOW_MODULES = {
     "GroupchatDetails": "gajim.gtk.groupchat_details",
     "GroupChatInvitationDialog": "gajim.gtk.groupchat_invitation",
     "GroupchatJoin": "gajim.gtk.groupchat_join",
-    "GroupsPostWindow": "gajim.gtk.discovery",
     "HistoryExport": "gajim.gtk.history_export",
     "HistorySyncAssistant": "gajim.gtk.history_sync",
     "MamPreferences": "gajim.gtk.mam_preferences",
@@ -171,7 +171,6 @@ WINDOW_MODULES = {
     "SynchronizeAccounts": "gajim.gtk.synchronize_accounts",
     "Themes": "gajim.gtk.themes",
     "WorkspaceDialog": "gajim.gtk.workspace_dialog",
-    "DebugConsoleWindow": "gajim.gtk.debug_console",
 }
 
 
