@@ -46,11 +46,13 @@ SETTING_TYPES = {
 
 
 class AdvancedConfig(GajimAppWindow):
-    def __init__(self) -> None:
+    def __init__(self, transient_for: Gtk.Window | None) -> None:
         GajimAppWindow.__init__(
             self,
             name="AdvancedConfig",
             title=_("Advanced Configuration Editor (ACE)"),
+            modal=True,
+            transient_for=transient_for,
         )
 
         self._ui = get_builder("advanced_configuration.ui")

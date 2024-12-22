@@ -1117,4 +1117,5 @@ class Advanced(PreferenceBox):
 
     @staticmethod
     def _on_advanced_config_editor(*args: Any) -> None:
-        open_window("AdvancedConfig")
+        preferences = cast(Preferences, get_app_window("Preferences"))
+        open_window("AdvancedConfig", transient_for=preferences.window)
