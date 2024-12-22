@@ -220,9 +220,11 @@ class DescriptionLabel(Gtk.Label):
         self.set_tooltip_text(FIELD_TOOLTIPS.get(value, ""))
 
 
-class ValueLabel(Gtk.Label):
+class ValueLabel(Gtk.Label, SignalManager):
     def __init__(self, prop, account):
         Gtk.Label.__init__(self)
+        SignalManager.__init__(self)
+
         self._prop = prop
         self._uri: URI | None = None
         self._account = account
@@ -232,11 +234,16 @@ class ValueLabel(Gtk.Label):
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
 
-        self.connect("activate-link", self._on_activate_link)
+        self._connect(self, "activate-link", self._on_activate_link)
         if prop.name == "org":
             self.set_value(prop.values[0] if prop.values else "")
         else:
             self.set_value(prop.value)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Label.do_unroot(self)
+        app.check_finalize(self)
 
     def set_value(self, value: str) -> None:
         # EMAIL https://rfc-editor.org/rfc/rfc6350#section-6.4.2
