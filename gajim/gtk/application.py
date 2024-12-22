@@ -611,9 +611,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_accounts_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        window = open_window("AccountsWindow")
+
         account = param.get_string()
         if account:
-            window = open_window("AccountsWindow")
             window.select_account(account)
 
     @staticmethod
