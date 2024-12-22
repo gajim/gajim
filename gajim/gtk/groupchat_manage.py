@@ -1,8 +1,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import cast
-
 import logging
 from pathlib import Path
 
@@ -26,7 +24,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import SignalManager
-from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.groupchat_manage")
 
@@ -318,7 +315,8 @@ class GroupchatManage(Gtk.Box, SignalManager):
         alternate_jid = self._ui.destroy_alternate_entry.get_text()
         self._client.get_module("MUC").destroy(self._contact.jid, reason, alternate_jid)
 
-        window = cast(GajimAppWindow, get_app_window("GroupchatDetails"))
+        window = get_app_window("GroupchatDetails")
+        assert window is not None
         window.close()
 
     def _on_destroy_cancelled(self, _button: Gtk.Button) -> None:

@@ -26,7 +26,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 import os
 import sys
@@ -64,7 +63,6 @@ from gajim.common.util.uri import open_uri
 from gajim.gtk import menus
 from gajim.gtk import structs
 from gajim.gtk.about import AboutDialog
-from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
@@ -78,7 +76,6 @@ from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.menus import get_main_menu
-from gajim.gtk.start_chat import StartChatDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import get_app_windows
 from gajim.gtk.util import get_icon_theme
@@ -550,7 +547,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         # Action must be added before account window is updated
         self.add_account_actions(account)
 
-        window = cast(AccountsWindow | None, get_app_window("AccountsWindow"))
+        window = get_app_window("AccountsWindow")
         if window is not None:
             window.add_account(account)
 
@@ -558,7 +555,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         CoreApplication.enable_account(self, account)
         menus.build_accounts_menu()
         self.update_app_actions_state()
-        window = cast(AccountsWindow | None, get_app_window("AccountsWindow"))
+        window = get_app_window("AccountsWindow")
         if window is not None:
             window.enable_account(account, True)
 
@@ -580,7 +577,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.remove_account_actions(account)
 
-        window = cast(AccountsWindow | None, get_app_window("AccountsWindow"))
+        window = get_app_window("AccountsWindow")
         if window is not None:
             window.remove_account(account)
 
@@ -614,9 +611,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_accounts_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        window = open_window("AccountsWindow")
         account = param.get_string()
         if account:
+            window = open_window("AccountsWindow")
             window.select_account(account)
 
     @staticmethod
@@ -878,8 +875,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
         _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
 
-        window = cast(StartChatDialog, get_app_window("StartChatDialog"))
-        window.remove_row(params.account, str(params.jid))
+        window = get_app_window("StartChatDialog")
+        if window is not None:
+            window.remove_row(params.account, str(params.jid))
 
         client = app.get_client(params.account)
         client.get_module("MUC").leave(params.jid)

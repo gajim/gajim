@@ -8,12 +8,9 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.account_wizard import AccountWizard
-from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.preferences import Preferences
 from gajim.gtk.util import get_app_window
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -82,13 +79,10 @@ class ManageProxies(GajimAppWindow):
         window_accounts = get_app_window("AccountsWindow")
         window_account_wizard = get_app_window("AccountWizard")
         if window_pref is not None:
-            assert isinstance(window_pref, Preferences)
             window_pref.update_proxy_list()
         if window_accounts is not None:
-            assert isinstance(window_accounts, AccountsWindow)
             window_accounts.update_proxy_list()
         if window_account_wizard is not None:
-            assert isinstance(window_account_wizard, AccountWizard)
             window_account_wizard.update_proxy_list()
 
     def _fill_proxies_treeview(self) -> None:

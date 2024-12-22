@@ -554,8 +554,9 @@ class Sounds(PreferenceBox):
 
     @staticmethod
     def _on_manage_sounds(_button: Gtk.Button) -> None:
-        preferences = cast(Preferences, get_app_window("Preferences"))
-        open_window("ManageSounds", transient_for=preferences.window)
+        window = get_app_window("Preferences")
+        assert window is not None
+        open_window("ManageSounds", transient_for=window.window)
 
 
 class StatusMessage(PreferenceBox):
@@ -747,7 +748,9 @@ class Themes(PreferenceBox):
         dropdown_row.select_key(app.settings.get("roster_theme"))
 
     def _on_edit_themes(self, _button: Gtk.Button) -> None:
-        open_window("Themes", transient=self.get_root())
+        window = get_app_window("Preferences")
+        assert window is not None
+        open_window("Themes", transient=window.window)
 
     def _on_theme_changed(self, value: str, *args: Any) -> None:
         app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
@@ -939,8 +942,9 @@ class Video(PreferenceBox):
 
     @staticmethod
     def _on_video_input_changed(_value: str, *args: Any) -> None:
-        pref_win = cast(Preferences, get_app_window("Preferences"))
-        preview = pref_win.get_video_preview()
+        window = get_app_window("Preferences")
+        assert window is not None
+        preview = window.get_video_preview()
         if preview is None or not preview.is_active:
             # changed signal gets triggered when we fill the combobox
             return
@@ -948,8 +952,9 @@ class Video(PreferenceBox):
 
     @staticmethod
     def _toggle_live_preview(value: bool, *args: Any) -> None:
-        pref_win = cast(Preferences, get_app_window("Preferences"))
-        preview = pref_win.get_video_preview()
+        window = get_app_window("Preferences")
+        assert window is not None
+        preview = window.get_video_preview()
         if preview is not None:
             preview.toggle_preview(value)
 
@@ -1036,8 +1041,9 @@ class Miscellaneous(PreferenceBox):
 
     @staticmethod
     def _on_proxy_edit(*args: Any) -> None:
-        preferences = cast(Preferences, get_app_window("Preferences"))
-        open_window("ManageProxies", transient_for=preferences.window)
+        window = get_app_window("Preferences")
+        assert window is not None
+        open_window("ManageProxies", transient_for=window.window)
 
     def update_proxy_list(self) -> None:
         dropdown_row = cast(DropDownSetting, self.get_setting("global_proxy"))
@@ -1117,5 +1123,6 @@ class Advanced(PreferenceBox):
 
     @staticmethod
     def _on_advanced_config_editor(*args: Any) -> None:
-        preferences = cast(Preferences, get_app_window("Preferences"))
-        open_window("AdvancedConfig", transient_for=preferences.window)
+        window = get_app_window("Preferences")
+        assert window is not None
+        open_window("AdvancedConfig", transient_for=window.window)

@@ -43,7 +43,6 @@ from gajim.plugins.repository import PluginRepository
 from gajim.gtk.account_side_bar import AccountSideBar
 from gajim.gtk.app_side_bar import AppSideBar
 from gajim.gtk.builder import get_builder
-from gajim.gtk.call_window import CallWindow
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_stack import ChatStack
@@ -1384,7 +1383,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         win = get_app_window("CallWindow")
         if win is not None:
             win.close()
-        CallWindow(event.account, event.resource_jid)
+        open_window(
+            "CallWindow", account=event.account, resource_jid=event.resource_jid
+        )
 
     def _on_jingle_request(self, event: events.JingleRequestReceived) -> None:
         if not self.chat_exists(event.account, event.jid):

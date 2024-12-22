@@ -106,7 +106,7 @@ class Themes(GajimAppWindow):
     def __init__(self, transient: Gtk.Window) -> None:
         GajimAppWindow.__init__(
             self,
-            name="ThemesWindow",
+            name="Themes",
             title=_("Gajim Themes"),
             default_width=600,
             default_height=400,
@@ -362,7 +362,8 @@ class Option(Gtk.ListBoxRow, SignalManager):
         )
         app.ged.raise_event(StyleChanged())
 
-        themes_win = cast(Themes, get_app_window("ThemesWindow"))
+        themes_win = get_app_window("Themes")
+        assert themes_win is not None
         themes_win.reload_roster_theme()
 
     def _on_font_set(self, font_button: Gtk.FontDialogButton, *args: Any) -> None:
@@ -372,7 +373,8 @@ class Option(Gtk.ListBoxRow, SignalManager):
         app.css_config.set_font(self.option.selector, desc, pre=True)
         app.ged.raise_event(StyleChanged())
 
-        themes_win = cast(Themes, get_app_window("ThemesWindow"))
+        themes_win = get_app_window("Themes")
+        assert themes_win is not None
         themes_win.reload_roster_theme()
 
     def _on_remove(self, *args: Any) -> None:

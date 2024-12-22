@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -47,7 +46,6 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import get_country_flag_from_code
 from gajim.common.util.uri import open_uri
 
-from gajim.gtk.accounts import AccountsWindow
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
@@ -987,13 +985,14 @@ class AdvancedSettings(Page):
         self.update_page_complete()
 
     def get_visible_buttons(self) -> list[str]:
-        return [
-            "back",
-            cast(AccountWizard, get_app_window("AccountWizard")).get_current_method(),
-        ]
+        window = get_app_window("AccountWizard")
+        assert window is not None
+        return ["back", window.get_current_method()]
 
     def get_default_button(self) -> str:
-        return cast(AccountWizard, get_app_window("AccountWizard")).get_current_method()
+        window = get_app_window("AccountWizard")
+        assert window is not None
+        return window.get_current_method()
 
 
 class SecurityWarning(Page):
@@ -1053,10 +1052,9 @@ class SecurityWarning(Page):
         return self._ui.trust_cert_checkbutton.get_active()
 
     def get_visible_buttons(self) -> list[str]:
-        return [
-            "back",
-            cast(AccountWizard, get_app_window("AccountWizard")).get_current_method(),
-        ]
+        window = get_app_window("AccountWizard")
+        assert window is not None
+        return ["back", window.get_current_method()]
 
     def get_default_button(self) -> str:
         return "back"
@@ -1229,7 +1227,7 @@ class Success(SuccessPage):
                 self._account, "account_label", self._label
             )
         app.css_config.refresh()
-        window = cast(AccountsWindow | None, get_app_window("AccountsWindow"))
+        window = get_app_window("AccountsWindow")
         if window is not None:
             window.update_account_label(self._account)
 

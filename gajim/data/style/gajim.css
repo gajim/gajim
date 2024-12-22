@@ -1188,7 +1188,7 @@ popover.combo scrollbar.vertical {
 }
 #GroupchatConfig treeview { padding: 5px; }
 
-/* ThemesWindow */
+/* Themes */
 .theme_listbox row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; padding: 5px 10px 5px 10px;}
 .theme_listbox row:last-child { border-bottom: 0px; }
 .theme_listbox row.activatable:active { box-shadow: none; }
