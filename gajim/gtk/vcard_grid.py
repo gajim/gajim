@@ -217,6 +217,7 @@ class VCardGrid(Gtk.Grid):
         self._props: list[VCardPropertyGui] = []
 
     def do_unroot(self) -> None:
+        self.clear()
         Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
 
@@ -270,6 +271,7 @@ class VCardGrid(Gtk.Grid):
         self._row_count = 0
         for prop in list(self._props):
             self.remove_row(prop.row_number)
+            prop.destroy()
 
         self._props = []
 
@@ -624,8 +626,10 @@ class RemoveButton(Gtk.Button):
         self.set_visible(False)
 
 
-class VCardPropertyGui:
+class VCardPropertyGui(SignalManager):
     def __init__(self, prop: PropertyT) -> None:
+        SignalManager.__init__(self)
+
         self._prop = prop
 
         self._second_column: list[Gtk.Widget] = []
@@ -633,14 +637,16 @@ class VCardPropertyGui:
 
         self._desc_label = DescriptionLabel(prop.name)
         self._remove_button = RemoveButton()
-        self._remove_button.connect("clicked", self._on_remove_clicked)
+        self._connect(self._remove_button, "clicked", self._on_remove_clicked)
 
         self._edit_widgets: list[Gtk.Widget] = [self._remove_button]
         self._read_widgets: list[Gtk.Widget] = []
 
         if prop.name in PROPERTIES_WITH_TYPE:
             self._type_combobox = TypeComboBox(prop.parameters)
-            self._type_combobox.connect("notify::active-id", self._on_type_changed)
+            self._connect(
+                self._type_combobox, "notify::active-id", self._on_type_changed
+            )
             type_ = self._type_combobox.get_active_id()
             assert type_ is not None
             icon_name = self._get_icon_name(type_)
@@ -654,6 +660,10 @@ class VCardPropertyGui:
             self._edit_widgets.append(self._type_combobox)
             self._read_widgets.append(self._type_image)
             self._second_column.extend([self._type_combobox, self._type_image])
+
+    def destroy(self) -> None:
+        self._disconnect_all()
+        app.check_finalize(self)
 
     @staticmethod
     def _get_icon_name(type_: str) -> str | None:
@@ -707,7 +717,7 @@ class TextEntryPropertyGui(VCardPropertyGui):
         VCardPropertyGui.__init__(self, prop)
 
         self._value_entry = ValueEntry(prop)
-        self._value_entry.connect("notify::text", self._on_text_changed)
+        self._connect(self._value_entry, "notify::text", self._on_text_changed)
 
         self._value_label = ValueLabel(prop, account)
 
@@ -765,20 +775,20 @@ class DatePropertyGui(VCardPropertyGui):
         self._box = Gtk.Box(spacing=6)
         self._value_entry = ValueEntry(prop)
         self._value_entry.set_placeholder_text(_("YYYY-MM-DD"))
-        self._value_entry.connect("notify::text", self._on_text_changed)
+        self._connect(self._value_entry, "notify::text", self._on_text_changed)
 
         self._calendar_button = Gtk.MenuButton()
         image = Gtk.Image.new_from_icon_name("lucide-calendar-symbolic")
         self._calendar_button.set_child(image)
-        self._calendar_button.connect(
-            "notify::active", self._on_calendar_button_clicked
+        self._connect(
+            self._calendar_button, "notify::active", self._on_calendar_button_clicked
         )
         self._box.append(self._value_entry)
         self._box.append(self._calendar_button)
 
         self.calendar = Gtk.Calendar(year=1980, month=5, day=15)
         self.calendar.set_visible(True)
-        self.calendar.connect("day-selected", self._on_calendar_day_selected)
+        self._connect(self.calendar, "day-selected", self._on_calendar_day_selected)
 
         popover = Gtk.Popover()
         popover.set_child(self.calendar)
@@ -828,7 +838,7 @@ class KeyPropertyGui(VCardPropertyGui):
         self._scrolled_window.add_css_class("profile-scrolled")
 
         self._copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
-        self._copy_button.connect("clicked", self._on_copy_clicked)
+        self._connect(self._copy_button, "clicked", self._on_copy_clicked)
         self._copy_button.set_halign(Gtk.Align.START)
         self._copy_button.set_valign(Gtk.Align.CENTER)
 
@@ -847,12 +857,14 @@ class GenderPropertyGui(VCardPropertyGui):
 
         value_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self._value_combobox = GenderComboBox(prop)
-        self._value_combobox.connect("notify::active-id", self._on_active_id_changed)
+        self._connect(
+            self._value_combobox, "notify::active-id", self._on_active_id_changed
+        )
         self._value_combobox.show()
 
         self._value_entry = IdentityEntry(prop)
         self._value_entry.show()
-        self._value_entry.connect("notify::text", self._on_text_changed)
+        self._connect(self._value_entry, "notify::text", self._on_text_changed)
 
         value_box.append(self._value_combobox)
         value_box.append(self._value_entry)
@@ -890,7 +902,7 @@ class AdrPropertyGui(VCardPropertyGui):
         VCardPropertyGui.__init__(self, prop)
 
         self._entry_box = AdrBox(prop)
-        self._entry_box.connect("field-changed", self._on_field_changed)
+        self._connect(self._entry_box, "field-changed", self._on_field_changed)
 
         self._read_box = AdrBoxReadOnly(prop)
 
