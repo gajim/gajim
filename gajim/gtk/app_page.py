@@ -94,6 +94,9 @@ class AppMessageListBox(Gtk.ListBox):
 
         app.settings.connect_signal("last_update_check", self._on_update_check)
 
+    def do_unroot(self) -> None:
+        app.settings.disconnect_signals(self)
+
     def add_app_message(
         self,
         category: str,
