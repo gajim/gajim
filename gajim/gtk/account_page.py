@@ -39,9 +39,10 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         SignalManager.__init__(self)
 
         self._account = account
-        client = app.get_client(account)
-        jid = client.get_own_jid().bare
-        self._contact = client.get_module("Contacts").get_contact(jid)
+        self._client = app.get_client(account)
+
+        jid = self._client.get_own_jid().bare
+        self._contact = self._client.get_module("Contacts").get_contact(jid)
         self._contact.connect("avatar-update", self._on_avatar_update)
 
         self._ui = get_builder("account_page.ui")
@@ -73,12 +74,14 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         self._ui.roster_box.append(self._roster)
 
         self._ui.paned.set_position(app.settings.get("chat_handle_position"))
-        self._ui.paned.connect("notify::position", self._on_handle_position_notify)
+        self._connect(
+            self._ui.paned, "notify::position", self._on_handle_position_notify
+        )
 
         self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
         self._ui.account_page_menu_button.set_menu_model(get_account_menu(account))
 
-        client.connect_signal("state-changed", self._on_client_state_changed)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         app.settings.connect_signal(
             "account_label", self._on_account_label_changed, account
@@ -105,11 +108,12 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         self._disconnect_all()
         self.unregister_events()
         self._contact.disconnect_all_from_obj(self)
+        self._client.disconnect_all_from_obj(self)
         app.settings.disconnect_signals(self)
         Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 
-    def _on_account_label_changed(self, value: str, *args: Any) -> None:
+    def _on_account_label_changed(self, _value: str, *args: Any) -> None:
         self.update()
 
     def _on_avatar_update(self, *args: Any) -> None:
