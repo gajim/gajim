@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 import cairo
 import nbxmpp
 from gi.repository import Gdk
@@ -21,17 +23,23 @@ from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.util import get_gtk_version
+from gajim.gtk.util import SignalManager
 
 
-class AboutDialog(Gtk.AboutDialog):
+class AboutDialog(Gtk.AboutDialog, SignalManager):
     def __init__(self):
-        Gtk.AboutDialog.__init__(self)
-        self.set_transient_for(app.window)
-        self.set_name("Gajim")
-        self.set_version(get_extended_app_version())
-        self.set_copyright("Copyright © 2003-2024 Gajim Team")
-        self.set_license_type(Gtk.License.GPL_3_0_ONLY)
-        self.set_website("https://gajim.org/")
+        Gtk.AboutDialog.__init__(
+            self,
+            transient_for=app.window,
+            name="Gajim",
+            version=get_extended_app_version(),
+            copyright="Copyright © 2003-2024 Gajim Team",
+            license_type=Gtk.License.GPL_3_0_ONLY,
+            website="https://gajim.org/",
+            logo_icon_name="gajim",
+            translator_credits=_("translator-credits"),
+        )
+        SignalManager.__init__(self)
 
         cairo_ver = cairo.cairo_version_string()
         python_cairo_ver = cairo.version
@@ -60,11 +68,13 @@ class AboutDialog(Gtk.AboutDialog):
         thanks.append(_("we would like to thank all the package maintainers."))
         self.add_credit_section(_("Thanks"), thanks)
 
-        self.set_translator_credits(_("translator-credits"))
-        self.set_logo_icon_name("gajim")
-
-        self.connect("activate-link", self._on_activate_link)
+        self._connect(self, "activate-link", self._on_activate_link)
+        self._connect(self, "close-request", self._on_close_request)
         self.show()
+
+    def _on_close_request(self, window: AboutDialog) -> None:
+        self._disconnect_all()
+        app.check_finalize(self)
 
     @staticmethod
     def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
