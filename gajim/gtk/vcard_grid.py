@@ -2,7 +2,10 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 from typing import Any
+from typing import cast
 
 import datetime as dt
 
@@ -10,6 +13,39 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from nbxmpp.modules.vcard4 import AdrProperty
+from nbxmpp.modules.vcard4 import BDayProperty
+from nbxmpp.modules.vcard4 import CaladruriProperty
+from nbxmpp.modules.vcard4 import CaluriProperty
+from nbxmpp.modules.vcard4 import CategoriesProperty
+from nbxmpp.modules.vcard4 import ClientpidmapProperty
+from nbxmpp.modules.vcard4 import EmailProperty
+from nbxmpp.modules.vcard4 import FBurlProperty
+from nbxmpp.modules.vcard4 import FnProperty
+from nbxmpp.modules.vcard4 import GenderProperty
+from nbxmpp.modules.vcard4 import GeoProperty
+from nbxmpp.modules.vcard4 import ImppProperty
+from nbxmpp.modules.vcard4 import KeyProperty
+from nbxmpp.modules.vcard4 import LangProperty
+from nbxmpp.modules.vcard4 import LogoProperty
+from nbxmpp.modules.vcard4 import MemberProperty
+from nbxmpp.modules.vcard4 import NicknameProperty
+from nbxmpp.modules.vcard4 import NoteProperty
+from nbxmpp.modules.vcard4 import NProperty
+from nbxmpp.modules.vcard4 import OrgProperty
+from nbxmpp.modules.vcard4 import Parameters
+from nbxmpp.modules.vcard4 import PhotoProperty
+from nbxmpp.modules.vcard4 import ProdidProperty
+from nbxmpp.modules.vcard4 import RelatedProperty
+from nbxmpp.modules.vcard4 import RevProperty
+from nbxmpp.modules.vcard4 import RoleProperty
+from nbxmpp.modules.vcard4 import SoundProperty
+from nbxmpp.modules.vcard4 import SourceProperty
+from nbxmpp.modules.vcard4 import TelProperty
+from nbxmpp.modules.vcard4 import TitleProperty
+from nbxmpp.modules.vcard4 import TzProperty
+from nbxmpp.modules.vcard4 import UidProperty
+from nbxmpp.modules.vcard4 import UrlProperty
 from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common import app
@@ -23,6 +59,41 @@ from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.util import convert_py_to_glib_datetime
 from gajim.gtk.util import SignalManager
+
+PropertyT = (
+    AdrProperty
+    | BDayProperty
+    | CaladruriProperty
+    | CaluriProperty
+    | CategoriesProperty
+    | ClientpidmapProperty
+    | EmailProperty
+    | FBurlProperty
+    | FnProperty
+    | GenderProperty
+    | GeoProperty
+    | ImppProperty
+    | KeyProperty
+    | LangProperty
+    | LogoProperty
+    | MemberProperty
+    | NicknameProperty
+    | NoteProperty
+    | NProperty
+    | OrgProperty
+    | PhotoProperty
+    | ProdidProperty
+    | RelatedProperty
+    | RevProperty
+    | RoleProperty
+    | SoundProperty
+    | SourceProperty
+    | TelProperty
+    | TitleProperty
+    | TzProperty
+    | UidProperty
+    | UrlProperty
+)
 
 LABEL_DICT = {
     "fn": _("Full Name"),
@@ -59,7 +130,7 @@ ADR_PLACEHOLDER_TEXT = {
 }
 
 
-DEFAULT_KWARGS: dict[str, Any] = {
+DEFAULT_KWARGS: dict[str, dict[str, str | list[Any]]] = {
     "fn": {"value": ""},
     "bday": {"value": "", "value_type": "date"},
     "gender": {"sex": "", "identity": ""},
@@ -125,25 +196,25 @@ class VCardGrid(Gtk.Grid):
         )
 
         self._callbacks = {
-            "fn": TextEntryProperty,
-            "bday": DateProperty,
-            "gender": GenderProperty,
-            "adr": AdrProperty,
-            "tel": TextEntryProperty,
-            "email": TextEntryProperty,
-            "impp": TextEntryProperty,
-            "title": TextEntryProperty,
-            "role": TextEntryProperty,
-            "org": TextEntryProperty,
-            "url": TextEntryProperty,
-            "key": KeyProperty,
-            "note": MultiLineProperty,
+            "fn": TextEntryPropertyGui,
+            "bday": DatePropertyGui,
+            "gender": GenderPropertyGui,
+            "adr": AdrPropertyGui,
+            "tel": TextEntryPropertyGui,
+            "email": TextEntryPropertyGui,
+            "impp": TextEntryPropertyGui,
+            "title": TextEntryPropertyGui,
+            "role": TextEntryPropertyGui,
+            "org": TextEntryPropertyGui,
+            "url": TextEntryPropertyGui,
+            "key": KeyPropertyGui,
+            "note": MultiLinePropertyGui,
         }
 
         self._account = account
         self._row_count: int = 0
         self._vcard: VCard | None = None
-        self._props = []
+        self._props: list[VCardPropertyGui] = []
 
     def do_unroot(self) -> None:
         Gtk.Grid.do_unroot(self)
@@ -158,7 +229,7 @@ class VCardGrid(Gtk.Grid):
         self._vcard = vcard
 
         for entry in ORDER:
-            for prop in vcard.get_properties():
+            for prop in cast(list[PropertyT], vcard.get_properties()):
                 if entry != prop.name:
                     continue
 
@@ -175,10 +246,10 @@ class VCardGrid(Gtk.Grid):
 
     def add_new_property(self, name: str) -> None:
         kwargs = DEFAULT_KWARGS[name]
-        prop = self._vcard.add_property(name, **kwargs)
+        prop = cast(PropertyT, self._vcard.add_property(name, **kwargs))
         self.add_property(prop, editable=True)
 
-    def add_property(self, prop, editable=False):
+    def add_property(self, prop: PropertyT, editable: bool = False) -> None:
         prop_class = self._callbacks.get(prop.name)
         if prop_class is None:
             return
@@ -189,7 +260,7 @@ class VCardGrid(Gtk.Grid):
         self._props.append(prop_obj)
         self._row_count += 1
 
-    def remove_property(self, prop):
+    def remove_property(self, prop: VCardPropertyGui) -> None:
         self.remove_row(prop.row_number)
         self._props.remove(prop)
         self._vcard.remove_property(prop.get_base_property())
@@ -221,7 +292,7 @@ class DescriptionLabel(Gtk.Label):
 
 
 class ValueLabel(Gtk.Label, SignalManager):
-    def __init__(self, prop, account):
+    def __init__(self, prop: PropertyT, account: str) -> None:
         Gtk.Label.__init__(self)
         SignalManager.__init__(self)
 
@@ -236,6 +307,7 @@ class ValueLabel(Gtk.Label, SignalManager):
 
         self._connect(self, "activate-link", self._on_activate_link)
         if prop.name == "org":
+            assert isinstance(prop, OrgProperty)
             self.set_value(prop.values[0] if prop.values else "")
         else:
             self.set_value(prop.value)
@@ -309,7 +381,7 @@ class ValueLabel(Gtk.Label, SignalManager):
 
 
 class SexLabel(Gtk.Label):
-    def __init__(self, prop):
+    def __init__(self, prop: GenderProperty) -> None:
         Gtk.Label.__init__(self)
         self._prop = prop
 
@@ -321,7 +393,7 @@ class SexLabel(Gtk.Label):
 
         self.set_text(prop.sex)
 
-    def set_text(self, value: str) -> None:
+    def set_text(self, value: str) -> None:  # type: ignore
         if not value or value == "-":
             super().set_text("")
         else:
@@ -329,7 +401,7 @@ class SexLabel(Gtk.Label):
 
 
 class IdentityLabel(Gtk.Label):
-    def __init__(self, prop):
+    def __init__(self, prop: GenderProperty) -> None:
         Gtk.Label.__init__(self)
         self._prop = prop
 
@@ -341,23 +413,24 @@ class IdentityLabel(Gtk.Label):
 
         self.set_text(prop.identity)
 
-    def set_text(self, value: str) -> None:
+    def set_text(self, value: str) -> None:  # type: ignore
         super().set_text("" if not value else value)
 
 
 class ValueEntry(Gtk.Entry):
-    def __init__(self, prop):
+    def __init__(self, prop: PropertyT) -> None:
         Gtk.Entry.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_max_width_chars(50)
         if prop.name == "org":
+            assert isinstance(prop, OrgProperty)
             self.set_text(prop.values[0] if prop.values else "")
         else:
             self.set_text(prop.value)
 
 
 class AdrEntry(Gtk.Entry):
-    def __init__(self, prop, type_):
+    def __init__(self, prop: AdrProperty, type_: str) -> None:
         Gtk.Entry.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_max_width_chars(50)
@@ -371,7 +444,7 @@ class AdrEntry(Gtk.Entry):
 
 
 class IdentityEntry(Gtk.Entry):
-    def __init__(self, prop):
+    def __init__(self, prop: GenderProperty):
         Gtk.Entry.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_max_width_chars(50)
@@ -388,7 +461,7 @@ class AdrBox(Gtk.Box, SignalManager):
         )
     }
 
-    def __init__(self, prop):
+    def __init__(self, prop: AdrProperty) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
         SignalManager.__init__(self)
 
@@ -407,7 +480,7 @@ class AdrBox(Gtk.Box, SignalManager):
 
 
 class AdrLabel(Gtk.Label):
-    def __init__(self, prop, type_):
+    def __init__(self, prop: AdrProperty, type_: str) -> None:
         Gtk.Label.__init__(self)
         self.set_selectable(True)
         self.set_xalign(0)
@@ -421,13 +494,13 @@ class AdrLabel(Gtk.Label):
             value = values[0]
         self.set_text(value)
 
-    def set_text(self, value: str) -> None:
+    def set_text(self, value: str) -> None:  # type: ignore
         self.set_visible(bool(value))
         super().set_text(value)
 
 
 class AdrBoxReadOnly(Gtk.Box):
-    def __init__(self, prop):
+    def __init__(self, prop: AdrProperty) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=6)
 
         self._labels: dict[str, AdrLabel] = {}
@@ -442,7 +515,7 @@ class AdrBoxReadOnly(Gtk.Box):
 
 
 class ValueTextView(Gtk.TextView, SignalManager):
-    def __init__(self, prop) -> None:
+    def __init__(self, prop: PropertyT) -> None:
         Gtk.TextView.__init__(self)
         SignalManager.__init__(self)
 
@@ -473,7 +546,7 @@ class ValueTextView(Gtk.TextView, SignalManager):
 
 
 class TypeComboBox(Gtk.ComboBoxText, SignalManager):
-    def __init__(self, parameters) -> None:
+    def __init__(self, parameters: Parameters) -> None:
         Gtk.ComboBoxText.__init__(self)
         SignalManager.__init__(self)
 
@@ -517,11 +590,14 @@ class TypeComboBox(Gtk.ComboBoxText, SignalManager):
         type_value = self.get_active_id()
         if type_value == "-":
             return ""
-        return self.get_active_text()
+
+        text = self.get_active_text()
+        assert text is not None
+        return text
 
 
 class GenderComboBox(Gtk.ComboBoxText):
-    def __init__(self, prop):
+    def __init__(self, prop: GenderProperty) -> None:
         Gtk.ComboBoxText.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
@@ -539,7 +615,7 @@ class GenderComboBox(Gtk.ComboBoxText):
 
 
 class RemoveButton(Gtk.Button):
-    def __init__(self):
+    def __init__(self) -> None:
         Gtk.Button.__init__(self)
         self.set_valign(Gtk.Align.CENTER)
         self.set_halign(Gtk.Align.START)
@@ -548,8 +624,8 @@ class RemoveButton(Gtk.Button):
         self.set_visible(False)
 
 
-class VCardProperty:
-    def __init__(self, prop):
+class VCardPropertyGui:
+    def __init__(self, prop: PropertyT) -> None:
         self._prop = prop
 
         self._second_column: list[Gtk.Widget] = []
@@ -566,6 +642,7 @@ class VCardProperty:
             self._type_combobox = TypeComboBox(prop.parameters)
             self._type_combobox.connect("notify::active-id", self._on_type_changed)
             type_ = self._type_combobox.get_active_id()
+            assert type_ is not None
             icon_name = self._get_icon_name(type_)
             self._type_image = Gtk.Image.new_from_icon_name(icon_name)
             self._type_image.set_tooltip_text(TYPE_VALUES[type_])
@@ -588,19 +665,21 @@ class VCardProperty:
 
     def _on_type_changed(self, _combobox: Gtk.ComboBox, _param: Any) -> None:
         type_ = self._type_combobox.get_active_id()
+        assert type_ is not None
         icon_name = self._get_icon_name(type_)
         self._type_image.set_from_icon_name(icon_name)
         self._type_image.set_tooltip_text(TYPE_VALUES[type_])
 
     def _on_remove_clicked(self, button: Gtk.Button) -> None:
-        button.get_parent().remove_property(self)
+        vcard_grid = cast(VCardGrid, button.get_parent())
+        vcard_grid.remove_property(self)
 
     @property
     def row_number(self) -> int:
-        grid = self._desc_label.get_parent()
+        grid = cast(Gtk.Grid, self._desc_label.get_parent())
         return grid.query_child(self._desc_label).row
 
-    def get_base_property(self):
+    def get_base_property(self) -> PropertyT:
         return self._prop
 
     def set_editable(self, enabled: bool) -> None:
@@ -623,9 +702,9 @@ class VCardProperty:
         grid.attach(self._remove_button, 3, row_number, 1, 1)
 
 
-class TextEntryProperty(VCardProperty):
-    def __init__(self, prop, account):
-        VCardProperty.__init__(self, prop)
+class TextEntryPropertyGui(VCardPropertyGui):
+    def __init__(self, prop: PropertyT, account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         self._value_entry = ValueEntry(prop)
         self._value_entry.connect("notify::text", self._on_text_changed)
@@ -640,15 +719,16 @@ class TextEntryProperty(VCardProperty):
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
         if self._prop.name == "org":
+            assert isinstance(self._prop, OrgProperty)
             self._prop.values = [text]
         else:
             self._prop.value = text
         self._value_label.set_value(text)
 
 
-class MultiLineProperty(VCardProperty):
-    def __init__(self, prop, _account):
-        VCardProperty.__init__(self, prop)
+class MultiLinePropertyGui(VCardPropertyGui):
+    def __init__(self, prop: PropertyT, _account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         self._edit_text_view = ValueTextView(prop)
         self._edit_text_view.show()
@@ -678,9 +758,9 @@ class MultiLineProperty(VCardProperty):
         self._third_column = [self._edit_scrolled, self._read_scrolled]
 
 
-class DateProperty(VCardProperty):
-    def __init__(self, prop, account):
-        VCardProperty.__init__(self, prop)
+class DatePropertyGui(VCardPropertyGui):
+    def __init__(self, prop: PropertyT, account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         self._box = Gtk.Box(spacing=6)
         self._value_entry = ValueEntry(prop)
@@ -733,9 +813,9 @@ class DateProperty(VCardProperty):
         self._value_entry.set_text(date.isoformat())
 
 
-class KeyProperty(VCardProperty):
-    def __init__(self, prop, _account):
-        VCardProperty.__init__(self, prop)
+class KeyPropertyGui(VCardPropertyGui):
+    def __init__(self, prop: KeyProperty, _account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         self._value_text_view = ValueTextView(prop)
         self._value_text_view.show()
@@ -761,9 +841,9 @@ class KeyProperty(VCardProperty):
         app.window.get_clipboard().set(self._value_text_view.get_text())
 
 
-class GenderProperty(VCardProperty):
-    def __init__(self, prop, _account):
-        VCardProperty.__init__(self, prop)
+class GenderPropertyGui(VCardPropertyGui):
+    def __init__(self, prop: GenderProperty, _account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         value_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self._value_combobox = GenderComboBox(prop)
@@ -793,19 +873,21 @@ class GenderProperty(VCardProperty):
 
     def _on_text_changed(self, entry: Gtk.Entry, _param: Any) -> None:
         text = entry.get_text()
+        assert isinstance(self._prop, GenderProperty)
         self._prop.identity = text
         self._identity_label.set_text(text)
 
     def _on_active_id_changed(self, combobox: Gtk.ComboBox, _param: Any) -> None:
         sex = combobox.get_active_id()
+        assert isinstance(self._prop, GenderProperty)
         self._prop.sex = None if sex == "-" else sex
         assert sex is not None
         self._sex_label.set_text(sex)
 
 
-class AdrProperty(VCardProperty):
-    def __init__(self, prop, _account):
-        VCardProperty.__init__(self, prop)
+class AdrPropertyGui(VCardPropertyGui):
+    def __init__(self, prop: AdrProperty, _account: str) -> None:
+        VCardPropertyGui.__init__(self, prop)
 
         self._entry_box = AdrBox(prop)
         self._entry_box.connect("field-changed", self._on_field_changed)
@@ -817,6 +899,6 @@ class AdrProperty(VCardProperty):
 
         self._third_column = [self._entry_box, self._read_box]
 
-    def _on_field_changed(self, _box, field, value):
+    def _on_field_changed(self, _box: Gtk.Box, field: str, value: str) -> None:
         setattr(self._prop, field, [value])
         self._read_box.set_field(field, value)
