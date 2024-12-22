@@ -8,24 +8,31 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.app_page import AppPage
+from gajim.gtk.util import SignalManager
 
 
-class AppSideBar(Gtk.ListBox):
+class AppSideBar(Gtk.ListBox, SignalManager):
     def __init__(self, app_page: AppPage) -> None:
-        Gtk.ListBox.__init__(self)
-        self.set_valign(Gtk.Align.START)
-        self.set_selection_mode(Gtk.SelectionMode.SINGLE)
+        Gtk.ListBox.__init__(
+            self, valign=Gtk.Align.START, selection_mode=Gtk.SelectionMode.SINGLE
+        )
+        SignalManager.__init__(self)
+
         self.add_css_class("workspace-sidebar")
 
-        self.connect("row-activated", self._on_app_row_activated)
+        self._connect(self, "row-activated", self._on_app_row_activated)
 
-        app_page.connect("unread-count-changed", self._on_unread_count_changed)
+        self._connect(app_page, "unread-count-changed", self._on_unread_count_changed)
 
         self._app_row = AppRow()
         self.append(self._app_row)
 
         # Use idle_add to unselect listbox selection on startup
         GLib.idle_add(self.unselect_all)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        app.check_finalize(self)
 
     @staticmethod
     def _on_app_row_activated(_listbox: Gtk.ListBox, _row: Gtk.ListBoxRow) -> None:
