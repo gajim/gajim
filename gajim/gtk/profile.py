@@ -162,6 +162,7 @@ class ProfileWindow(GajimAppWindow):
         del self._avatar_edit_button
         self._running_tasks.clear()
         self._avatar_selector = None
+        self._client.disconnect_all_from_obj(self)
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, state: SimpleClientState
