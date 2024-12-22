@@ -61,6 +61,9 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         self._button.set_sensitive(True)
 
     def _set_status_image(self, state: str, tooltip_text: str = "") -> None:
+        self._status_image.remove_css_class("success-color")
+        self._status_image.remove_css_class("warning-color")
+
         icon_name = "feather-check-symbolic"
         css_class = "success-color"
 
