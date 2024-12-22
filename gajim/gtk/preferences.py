@@ -1036,7 +1036,8 @@ class Miscellaneous(PreferenceBox):
 
     @staticmethod
     def _on_proxy_edit(*args: Any) -> None:
-        open_window("ManageProxies")
+        preferences = cast(Preferences, get_app_window("Preferences"))
+        open_window("ManageProxies", transient_for=preferences.window)
 
     def update_proxy_list(self) -> None:
         dropdown_row = cast(DropDownSetting, self.get_setting("global_proxy"))

@@ -19,12 +19,13 @@ from gajim.gtk.widgets import GajimAppWindow
 
 
 class ManageProxies(GajimAppWindow):
-    def __init__(self) -> None:
+    def __init__(self, transient_for: Gtk.Window | None) -> None:
         GajimAppWindow.__init__(
             self,
             name="ManageProxies",
             title=_("Manage Proxies"),
             default_width=500,
+            transient_for=transient_for,
             modal=True,
         )
 
