@@ -26,6 +26,7 @@ from gajim.common.types import ChatContactT
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.util import GajimPopover
+from gajim.gtk.util import SignalManager
 
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow
@@ -453,9 +454,11 @@ class MessageIcons(Gtk.Box):
         self._error_image.set_tooltip_markup(text)
 
 
-class AvatarBox(Gtk.Box):
+class AvatarBox(Gtk.Box, SignalManager):
     def __init__(self, contact: ChatContactT) -> None:
         Gtk.Box.__init__(self)
+        SignalManager.__init__(self)
+
         self.set_size_request(AvatarSize.ROSTER, -1)
         self.set_valign(Gtk.Align.START)
 
@@ -472,12 +475,17 @@ class AvatarBox(Gtk.Box):
         self.append(self._menu_popover)
 
         gesture_left_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
-        gesture_left_click.connect("pressed", self._on_avatar_clicked)
+        self._connect(gesture_left_click, "pressed", self._on_avatar_clicked)
         self.add_controller(gesture_left_click)
 
         gesture_right_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_right_click.connect("pressed", self._on_avatar_clicked)
+        self._connect(gesture_right_click, "pressed", self._on_avatar_clicked)
         self.add_controller(gesture_right_click)
+
+    def do_unroot(self):
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def set_from_paintable(self, texture: Gdk.Texture | None) -> None:
         self._image.set_from_paintable(texture)
