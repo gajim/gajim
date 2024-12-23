@@ -37,7 +37,7 @@ from .util import clear_listbox
 from .util import open_window
 from .util import SignalManager
 
-log = logging.getLogger("gajim.gui.omemo_trust_dialog")
+log = logging.getLogger("gajim.gtk.omemo_trust_manager")
 
 
 TRUST_DATA = {
