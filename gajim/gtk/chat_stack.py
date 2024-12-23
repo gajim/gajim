@@ -744,6 +744,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             self._chat_control.drag_data_file_transfer(
                 [file.get_uri() for file in files]
             )
+            self._drop_area.set_visible(False)
             return True
 
         return False
