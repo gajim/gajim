@@ -297,7 +297,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         for feature in MUC_FEATURES:
             if feature in features:
                 icon, name, tooltip = MUC_FEATURES.get(feature, (None, None, None))
-                if icon is None:
+                if icon is None or name is None or tooltip is None:
                     continue
                 grid.attach(self._get_feature_icon(icon, tooltip), 0, row, 1, 1)
                 grid.attach(self._get_feature_label(name), 1, row, 1, 1)
