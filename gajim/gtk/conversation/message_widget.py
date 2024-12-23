@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from gi.repository import Gtk
 
+from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.styling import ParsingResult
 from gajim.common.styling import PlainBlock
@@ -19,20 +20,28 @@ from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
 from gajim.gtk.util import container_remove_all
 from gajim.gtk.util import iterate_children
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 ContentT = ParsingResult | QuoteBlock
 
 
-class MessageWidget(Gtk.Box):
+class MessageWidget(Gtk.Box, SignalManager):
     def __init__(self, account: str, selectable: bool = True) -> None:
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
+        SignalManager.__init__(self)
+
         self._account = account
         self._selectable = selectable
 
         self._content: ContentT | None = None
         self._original_text = ""
         self._action_phrase_text = ""
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def get_content(self) -> ContentT | None:
         return self._content
@@ -99,7 +108,7 @@ class MessageWidget(Gtk.Box):
     def _add_read_more_button(self, text: str) -> None:
         link_button = Gtk.LinkButton(label=_("[read more]"))
         link_button.set_halign(Gtk.Align.START)
-        link_button.connect("activate-link", self._on_read_more, text)
+        self._connect(link_button, "activate-link", self._on_read_more, text)
         self.append(link_button)
 
     def _on_read_more(self, _button: Gtk.LinkButton, text: str) -> bool:
