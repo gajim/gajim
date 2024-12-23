@@ -13,6 +13,7 @@ from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
+from gajim.common import app
 from gajim.common.const import URIType
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
@@ -24,6 +25,7 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
 from gajim.gtk.menus import get_uri_context_menu
 from gajim.gtk.util import make_pango_attributes
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.conversaion.plain_widget")
 
@@ -51,7 +53,7 @@ class PlainWidget(Gtk.Box):
         self._text_widget.add_action_phrase(text, nickname)
 
 
-class MessageLabel(Gtk.Label):
+class MessageLabel(Gtk.Label, SignalManager):
     def __init__(self, account: str, selectable: bool) -> None:
         Gtk.Label.__init__(
             self,
@@ -60,6 +62,7 @@ class MessageLabel(Gtk.Label):
             xalign=0,
             wrap=True,
         )
+        SignalManager.__init__(self)
 
         # WrapMode.WORD_CHAR can cause a segfault
         # https://gitlab.gnome.org/GNOME/pango/-/issues/798
@@ -72,16 +75,21 @@ class MessageLabel(Gtk.Label):
 
         self.add_css_class("gajim-conversation-text")
 
-        self.connect("activate-link", self._on_activate_link)
+        self._connect(self, "activate-link", self._on_activate_link)
 
         gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
-        gesture_secondary_click.connect("pressed", self._on_secondary_clicked)
+        self._connect(gesture_secondary_click, "pressed", self._on_secondary_clicked)
         self.add_controller(gesture_secondary_click)
 
         focus_controller = Gtk.EventControllerFocus()
-        focus_controller.connect("enter", self._on_focus_enter)
-        focus_controller.connect("leave", self._on_focus_leave)
+        self._connect(focus_controller, "enter", self._on_focus_enter)
+        self._connect(focus_controller, "leave", self._on_focus_leave)
         self.add_controller(focus_controller)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Label.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_secondary_clicked(
         self,
