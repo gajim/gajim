@@ -24,7 +24,8 @@ class ReadMarkerRow(BaseRow):
         self.timestamp = FIRST_LOCAL_DATETIME
         self._last_incoming_timestamp = FIRST_LOCAL_DATETIME
 
-        contact.connect("nickname-update", self._on_nickname_update)
+        self._contact = contact
+        self._contact.connect("nickname-update", self._on_nickname_update)
 
         text = _("%s has read up to this point") % contact.name
         self.label.set_text(text)
@@ -53,4 +54,5 @@ class ReadMarkerRow(BaseRow):
             self._last_incoming_timestamp = timestamp + timedelta(microseconds=1)
 
     def do_unroot(self) -> None:
+        self._contact.disconnect_all_from_obj(self)
         BaseRow.do_unroot(self)
