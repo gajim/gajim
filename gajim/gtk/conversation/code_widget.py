@@ -15,14 +15,16 @@ from gajim.common.i18n import _
 from gajim.common.styling import PreBlock
 
 from gajim.gtk.util import get_source_view_style_scheme
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.conversation.code_widget")
 
 
-class CodeWidget(Gtk.Box):
+class CodeWidget(Gtk.Box, SignalManager):
     def __init__(self, account: str) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
-        self.set_vexpand(True)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, vexpand=True)
+        SignalManager.__init__(self)
+
         self.add_css_class("code-widget")
 
         self._account = account
@@ -35,7 +37,7 @@ class CodeWidget(Gtk.Box):
 
         copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
         copy_button.set_tooltip_text(_("Copy code snippet"))
-        copy_button.connect("clicked", self._on_copy)
+        self._connect(copy_button, "clicked", self._on_copy)
         header.append(copy_button)
         self.append(header)
 
@@ -50,6 +52,12 @@ class CodeWidget(Gtk.Box):
         self._scrolled.set_child(self._textview)
 
         self.append(self._scrolled)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_copy(self, _button: Gtk.Button) -> None:
         self.get_clipboard().set(self._textview.get_code())
@@ -95,6 +103,12 @@ class CodeTextview(GtkSource.View):
         style_scheme = get_source_view_style_scheme()
         if style_scheme is not None:
             self.get_buffer().set_style_scheme(style_scheme)
+
+    def do_unroot(self) -> None:
+        app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
+
+        GtkSource.View.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_style_changed(self, *args: Any) -> None:
         style_scheme = get_source_view_style_scheme()
