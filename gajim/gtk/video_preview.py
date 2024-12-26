@@ -15,7 +15,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.gstreamer import create_gtk_widget
+from gajim.gtk.gstreamer import create_video_elements
 
 try:
     from gi.repository import Gst
@@ -66,8 +66,8 @@ class VideoPreview(Gtk.Box):
             self._set_error_text()
             return
 
-        gtk_widget = create_gtk_widget()
-        if gtk_widget is None:
+        video_elements = create_video_elements()
+        if video_elements is None:
             log.error(
                 "Failed to obtain a working Gstreamer GTK+ sink, "
                 "video support will be disabled"
@@ -75,7 +75,7 @@ class VideoPreview(Gtk.Box):
             self._set_error_text()
             return
 
-        sink, widget, name = gtk_widget
+        sink, paintable, name = video_elements
         self._set_sink_text(name)
 
         if self._av_pipeline is None:
@@ -90,8 +90,8 @@ class VideoPreview(Gtk.Box):
             self._ui.video_preview_box.remove(self._av_widget)
 
         self._ui.video_preview_placeholder.set_visible(False)
-        self._ui.video_preview_box.append(widget)
-        self._av_widget = widget
+        self._av_widget = Gtk.Picture(paintable=paintable)
+        self._ui.video_preview_box.append(self._av_widget)
 
         assert self._av_src is not None
         self._av_pipeline.add(self._av_src)
@@ -115,6 +115,8 @@ class VideoPreview(Gtk.Box):
             self._av_widget = None
         self._av_pipeline = None
 
+        self._ui.video_source_label.set_visible(False)
+
     def _set_sink_text(self, sink_name: str) -> None:
         label_markup = '<span color="%s" font-weight="bold">%s</span>'
         color = "black"
@@ -129,11 +131,13 @@ class VideoPreview(Gtk.Box):
 
         label_markup = label_markup % (color, label_text)
         self._ui.video_source_label.set_markup(label_markup)
+        self._ui.video_source_label.set_visible(True)
 
     def _set_error_text(self) -> None:
         self._ui.video_source_label.set_text(
             _("Something went wrong. Video feature disabled.")
         )
+        self._ui.video_source_label.set_visible(True)
 
     def refresh(self) -> None:
         self.toggle_preview(False)

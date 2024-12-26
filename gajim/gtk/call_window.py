@@ -24,7 +24,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.gstreamer import create_gtk_widget
+from gajim.gtk.gstreamer import create_video_elements
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.call_window")
@@ -273,14 +273,16 @@ class CallWindow(GajimAppWindow, EventHelper):
                 self._ui.outgoing_viewport.set_visible(False)
                 self._ui.outgoing_viewport.hide()
 
-            other_gtk_widget = create_gtk_widget()
-            self_gtk_widget = create_gtk_widget()
-            if other_gtk_widget is None or self_gtk_widget is None:
+            other_video_elements = create_video_elements()
+            self_video_elements = create_video_elements()
+            if other_video_elements is None or self_video_elements is None:
                 log.warning("Could not create GStreamer widgets")
                 return
 
-            sink_other, self._video_widget_other, _name = other_gtk_widget
-            sink_self, self._video_widget_self, _name = self_gtk_widget
+            sink_other, paintable_other, _name = other_video_elements
+            sink_self, paintable_self, _name = self_video_elements
+            self._video_widget_other = Gtk.Picture(paintable=paintable_other)
+            self._video_widget_self = Gtk.Picture(paintable=paintable_self)
             self._ui.incoming_viewport.set_child(self._video_widget_other)
             self._ui.outgoing_viewport.set_child(self._video_widget_self)
 

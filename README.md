@@ -52,6 +52,7 @@ thoughts or discuss the news with your groups.
 - [Farstream](https://gitlab.freedesktop.org/farstream/farstream)
 - [GStreamer](https://gitlab.freedesktop.org/gstreamer/gstreamer)
 - [gst-plugins-base](https://gitlab.freedesktop.org/gstreamer/gst-plugins-base)
+- [gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs) (for gst-plugin-gtk4)
 - [gst-plugins-ugly](https://gitlab.freedesktop.org/gstreamer/gst-plugins-ugly)
 - [gst-libav](https://gitlab.freedesktop.org/gstreamer/gst-libav)
 
