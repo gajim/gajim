@@ -21,11 +21,12 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
 from gajim.gtk.util import clear_listbox
+from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.resource_selector")
 
 
-class ResourceSelector(Gtk.ScrolledWindow):
+class ResourceSelector(Gtk.ScrolledWindow, SignalManager):
 
     __gsignals__ = {
         "selection-changed": (GObject.SignalFlags.RUN_LAST, None, (bool,)),
@@ -34,13 +35,14 @@ class ResourceSelector(Gtk.ScrolledWindow):
     def __init__(
         self, contact: BareContact, constraints: list[str] | None = None
     ) -> None:
-        Gtk.ScrolledWindow.__init__(self)
-        self.set_size_request(-1, 200)
+        Gtk.ScrolledWindow.__init__(self, height_request=200)
+        SignalManager.__init__(self)
+
         self.add_css_class("resource-selector")
 
         self._listbox = Gtk.ListBox()
         self._listbox.set_sort_func(self._sort_func)
-        self._listbox.connect("row-selected", self._on_row_selected)
+        self._connect(self._listbox, "row-selected", self._on_row_selected)
         self.set_child(self._listbox)
 
         self._contact = contact
@@ -53,6 +55,14 @@ class ResourceSelector(Gtk.ScrolledWindow):
         self._set_placeholder()
         self._add_entries()
 
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        self._contact.disconnect_all_from_obj(self)
+
+        self._listbox.set_sort_func(None)
+        Gtk.ScrolledWindow.do_unroot(self)
+        app.check_finalize(self)
+
     @staticmethod
     def _sort_func(row1: ResourceRow, row2: ResourceRow) -> int:
         return locale.strcoll(row1.device_text.lower(), row2.device_text.lower())
@@ -64,8 +74,9 @@ class ResourceSelector(Gtk.ScrolledWindow):
     def _set_placeholder(self) -> None:
         image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
         label = Gtk.Label(label=_("No devices online"))
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        box.set_valign(Gtk.Align.CENTER)
+        box = Gtk.Box(
+            orientation=Gtk.Orientation.VERTICAL, spacing=6, valign=Gtk.Align.CENTER
+        )
         box.add_css_class("dim-label")
         box.append(image)
         box.append(label)
