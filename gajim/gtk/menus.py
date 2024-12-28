@@ -189,9 +189,6 @@ def get_account_menu(account: str) -> GajimMenu:
         (_("Synchronize History…"), f"app.{account}-sync-history", account),
     ]
 
-    if app.settings.get("developer_modus"):
-        advanced_menuitems.append((_("Bookmarks"), f"app.{account}-bookmarks", account))
-
     menu.append_submenu(_("Advanced"), GajimMenu.from_list(advanced_menuitems))
 
     return menu

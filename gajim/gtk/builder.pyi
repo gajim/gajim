@@ -124,16 +124,6 @@ class BlockingListBuilder(Builder):
     remove_button: Gtk.Button
     save_button: Gtk.Button
 
-class BookmarksBuilder(Builder):
-    bookmarks_store: Gtk.ListStore
-    bookmarks_grid: Gtk.Grid
-    bookmarks_view: Gtk.TreeView
-    jid: Gtk.CellRendererText
-    name: Gtk.CellRendererText
-    nick: Gtk.CellRendererText
-    password: Gtk.CellRendererText
-    autojoin: Gtk.CellRendererToggle
-
 class CallWindowBuilder(Builder):
     adjustment1: Gtk.Adjustment
     adjustment2: Gtk.Adjustment
@@ -1020,10 +1010,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> BlockingListBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["bookmarks.ui"], instance: Any = None, widgets: list[str] = ...
-) -> BookmarksBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["call_window.ui"], instance: Any = None, widgets: list[str] = ...

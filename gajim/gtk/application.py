@@ -452,7 +452,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     def _connect_account_actions(self, account: str) -> None:
         actions = [
-            ("bookmarks", self._on_bookmarks_action),
             ("add-contact", self._on_add_contact_account_action),
             ("services", self._on_services_action),
             ("profile", self._on_profile_action),
@@ -616,11 +615,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         account = param.get_string()
         if account:
             window.select_account(account)
-
-    @staticmethod
-    def _on_bookmarks_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account = param.get_string()
-        open_window("Bookmarks", account=account)
 
     @staticmethod
     def _on_quit_action(_action: Gio.SimpleAction, _param: GLib.Variant | None) -> None:
