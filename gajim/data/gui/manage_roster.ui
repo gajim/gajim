@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="box">
+    <property name="orientation">1</property>
+    <property name="spacing">18</property>
+    <child>
+      <object class="GtkScrolledWindow" id="scrolled">
+        <property name="vexpand">1</property>
+        <property name="focusable">1</property>
+        <property name="hscrollbar-policy">never</property>
+        <child>
+          <object class="GtkColumnView" id="column_view">
+            <property name="show-column-separators">true</property>
+            <property name="show-row-separators">true</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <child>
+              <object class="GtkColumnViewColumn" id="jid_col">
+                <property name="title" translatable="no">JID</property>
+                <property name="resizable">true</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory"></object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="name_col">
+                <property name="title" translatable="no">Name</property>
+                <property name="resizable">true</property>
+                <property name="expand">true</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory"></object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="subscription_col">
+                <property name="title" translatable="no">Subscription</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory"></object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkColumnViewColumn" id="ask_col">
+                <property name="title" translatable="no">Ask</property>
+                <property name="factory">
+                  <object class="GtkSignalListItemFactory"></object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

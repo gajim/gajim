@@ -80,6 +80,7 @@ if TYPE_CHECKING:
     from gajim.gtk.history_export import HistoryExport
     from gajim.gtk.history_sync import HistorySyncAssistant
     from gajim.gtk.mam_preferences import MamPreferences
+    from gajim.gtk.manage_roster import ManageRoster
     from gajim.gtk.manage_sounds import ManageSounds
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
@@ -118,6 +119,7 @@ if TYPE_CHECKING:
         | HistoryExport
         | HistorySyncAssistant
         | MamPreferences
+        | ManageRoster
         | ManageProxies
         | ManageSounds
         | PasswordDialog
@@ -158,6 +160,7 @@ if TYPE_CHECKING:
         | Literal["HistoryExport"]
         | Literal["HistorySyncAssistant"]
         | Literal["MamPreferences"]
+        | Literal["ManageRoster"]
         | Literal["ManageProxies"]
         | Literal["ManageSounds"]
         | Literal["PasswordDialog"]
@@ -720,6 +723,14 @@ def get_app_window(
 
 @overload
 def get_app_window(
+    name: Literal["ManageRoster"],
+    account: str | None = None,
+    jid: str | JID | None = None,
+) -> ManageRoster | None: ...
+
+
+@overload
+def get_app_window(
     name: Literal["ManageProxies"],
     account: str | None = None,
     jid: str | JID | None = None,
@@ -928,6 +939,8 @@ def open_window(
 ) -> HistorySyncAssistant: ...
 @overload
 def open_window(name: Literal["MamPreferences"], **kwargs: Any) -> MamPreferences: ...
+@overload
+def open_window(name: Literal["ManageRoster"], **kwargs: Any) -> ManageRoster: ...
 @overload
 def open_window(name: Literal["ManageProxies"], **kwargs: Any) -> ManageProxies: ...
 @overload

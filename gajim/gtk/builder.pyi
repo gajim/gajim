@@ -583,6 +583,15 @@ class ManageProxiesBuilder(Builder):
     proxytype_combobox: Gtk.ComboBox
     proxyname_entry: Gtk.Entry
 
+class ManageRosterBuilder(Builder):
+    box: Gtk.Box
+    scrolled: Gtk.ScrolledWindow
+    column_view: Gtk.ColumnView
+    jid_col: Gtk.ColumnViewColumn
+    name_col: Gtk.ColumnViewColumn
+    subscription_col: Gtk.ColumnViewColumn
+    ask_col: Gtk.ColumnViewColumn
+
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
     sounds_treeview: Gtk.TreeView
@@ -1180,6 +1189,12 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ManageProxiesBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["manage_roster.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ManageRosterBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["manage_sounds.ui"],
