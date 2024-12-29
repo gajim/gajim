@@ -9,6 +9,7 @@ from typing import cast
 
 import logging
 
+from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -19,6 +20,8 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.menus import get_manage_roster_menu
+from gajim.gtk.util import GajimPopover
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.manage_roster")
@@ -35,6 +38,7 @@ class ManageRoster(GajimAppWindow):
             add_window_padding=False,
         )
 
+        self._account = account
         self._ui = get_builder("manage_roster.ui")
         self.set_child(self._ui.box)
 
@@ -79,17 +83,28 @@ class ManageRoster(GajimAppWindow):
         )
         sorter = Gtk.StringSorter.new(expression=expression)
 
-        self._sort_model = Gtk.SortListModel(
+        sort_model = Gtk.SortListModel(
             model=self._model, sorter=sorter, section_sorter=section_sorter
         )
 
-        self._selection_model = Gtk.MultiSelection(model=self._sort_model)
+        self._selection_model = Gtk.MultiSelection(model=sort_model)
         self._ui.column_view.set_model(self._selection_model)
+
+        self._popover_menu = GajimPopover(None)
+        self._ui.box.append(self._popover_menu)
+
+        gesture_secondary_click = Gtk.GestureClick(
+            button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE
+        )
+        self._connect(gesture_secondary_click, "pressed", self._popup_menu)
+        self._ui.box.add_controller(gesture_secondary_click)
 
         self.show()
 
     def _cleanup(self, *args: Any) -> None:
-        pass
+        del self._selection_model
+        del self._popover_menu
+        del self._model
 
     @staticmethod
     def _on_factory_setup(
@@ -136,6 +151,49 @@ class ManageRoster(GajimAppWindow):
     ) -> None:
         roster_view_item: HeaderViewItem = cast(HeaderViewItem, list_item.get_child())
         roster_view_item.unbind()
+
+    def get_selected_items(self) -> list[RosterListItem]:
+        bitset = self._selection_model.get_selection()
+        valid, iter_, value = Gtk.BitsetIter.init_first(bitset)
+
+        items: list[RosterListItem] = []
+
+        if not valid:
+            return items
+
+        items.append(cast(RosterListItem, self._model.get_item(value)))
+
+        while res := iter_.next():
+            valid, value = res
+            if not valid:
+                break
+
+            items.append(cast(RosterListItem, self._model.get_item(value)))
+
+        return items
+
+    def _popup_menu(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> bool:
+
+        items = self.get_selected_items()
+        if not items:
+            return Gdk.EVENT_STOP
+
+        single_selection = len(items) == 1
+        groups = app.get_client(self._account).get_module("Roster").get_groups()
+        groups = sorted(groups)
+
+        menu = get_manage_roster_menu(groups, single_selection)
+        self._popover_menu.set_menu_model(menu)
+        self._popover_menu.set_pointing_to_coord(x, y)
+        self._popover_menu.popup()
+
+        return Gdk.EVENT_STOP
 
 
 class RosterListItem(GObject.Object):

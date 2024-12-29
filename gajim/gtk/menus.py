@@ -919,6 +919,24 @@ def get_workspace_menu(workspace_id: str) -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
+def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMenu:
+    menu = GajimMenu()
+
+    menuitems: MenuItemListT = [(_("New Group…"), "win.new-group", None)]
+
+    for group in groups:
+        menuitems.append((group, "win.move-to-group", group))
+
+    menu.append_submenu(_("Move to Group"), GajimMenu.from_list(menuitems))
+
+    if single_selection:
+        menu.add_item(_("Rename…"), "win.rename", None)
+
+    menu.add_item(_("Remove"), "win.remove", None)
+
+    return menu
+
+
 def escape_mnemonic(label: str | None) -> str | None:
     if label is None:
         return None
