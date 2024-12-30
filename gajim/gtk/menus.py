@@ -922,13 +922,21 @@ def get_workspace_menu(workspace_id: str) -> GajimMenu:
 def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMenu:
     menu = GajimMenu()
 
-    menuitems: MenuItemListT = [(_("New Group…"), "win.new-group", None)]
+    menuitems: MenuItemListT = [(_("New Group…"), "win.move-to-new-group", None)]
 
     for group in groups:
         menuitems.append((group, "win.move-to-group", group))
 
     menu.append_submenu(_("Move to Group"), GajimMenu.from_list(menuitems))
 
+    menuitems: MenuItemListT = [(_("New Group…"), "win.add-to-new-group", None)]
+
+    for group in groups:
+        menuitems.append((group, "win.add-to-group", group))
+
+    menu.append_submenu(_("Add to Group"), GajimMenu.from_list(menuitems))
+
+    menu.add_item(_("Remove from Group"), "win.rename", None)
     if single_selection:
         menu.add_item(_("Rename…"), "win.rename", None)
 
