@@ -936,11 +936,11 @@ def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMe
 
     menu.append_submenu(_("Add to Group"), GajimMenu.from_list(menuitems))
 
-    menu.add_item(_("Remove from Group"), "win.rename", None)
+    menu.add_item(_("Remove from Group"), "win.remove-from-group", None)
     if single_selection:
-        menu.add_item(_("Rename…"), "win.rename", None)
+        menu.add_item(_("Change Name…"), "win.change-name", None)
 
-    menu.add_item(_("Remove"), "win.remove", None)
+    menu.add_item(_("Remove from Roster…"), "win.remove-from-roster", None)
 
     return menu
 

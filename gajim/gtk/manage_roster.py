@@ -11,13 +11,19 @@ import logging
 
 from gi.repository import Gdk
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
+from nbxmpp.protocol import JID
 from nbxmpp.structs import RosterItem
 
 from gajim.common import app
+from gajim.common import ged
+from gajim.common.events import RosterPush
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
+from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_manage_roster_menu
@@ -27,7 +33,7 @@ from gajim.gtk.widgets import GajimAppWindow
 log = logging.getLogger("gajim.gtk.manage_roster")
 
 
-class ManageRoster(GajimAppWindow):
+class ManageRoster(GajimAppWindow, EventHelper):
     def __init__(self, account: str) -> None:
         GajimAppWindow.__init__(
             self,
@@ -37,6 +43,7 @@ class ManageRoster(GajimAppWindow):
             default_width=700,
             add_window_padding=False,
         )
+        EventHelper.__init__(self)
 
         self._account = account
         self._ui = get_builder("manage_roster.ui")
@@ -99,12 +106,35 @@ class ManageRoster(GajimAppWindow):
         self._connect(gesture_secondary_click, "pressed", self._popup_menu)
         self._ui.box.add_controller(gesture_secondary_click)
 
+        self.register_event("roster-push", ged.GUI2, self._on_roster_push)
+
+        self._add_actions()
         self.show()
 
     def _cleanup(self, *args: Any) -> None:
         del self._selection_model
         del self._popover_menu
         del self._model
+        self.unregister_events()
+
+    def _add_actions(self) -> None:
+
+        actions = [
+            ("add-to-group", "s", self._on_add_to_group),
+            ("add-to-new-group", None, self._on_add_to_new_group),
+            ("move-to-group", "s", self._on_move_to_group),
+            ("move-to-new-group", None, self._on_move_to_new_group),
+            ("remove-from-group", None, self._remove_from_group),
+            ("remove-from-roster", None, self._on_remove_from_roster),
+            ("change-name", None, self._on_change_name),
+        ]
+
+        for action, variant_type, callback in actions:
+            if variant_type is not None:
+                variant_type = GLib.VariantType(variant_type)
+            act = Gio.SimpleAction.new(action, variant_type)
+            act.connect("activate", callback)
+            self.window.add_action(act)
 
     @staticmethod
     def _on_factory_setup(
@@ -152,6 +182,93 @@ class ManageRoster(GajimAppWindow):
         roster_view_item: HeaderViewItem = cast(HeaderViewItem, list_item.get_child())
         roster_view_item.unbind()
 
+    @event_filter(["account"])
+    def _on_roster_push(self, event: RosterPush) -> None:
+        pos = 0
+        while item := cast(RosterListItem, self._model.get_item(pos)):
+            if item.jid == event.item.jid:
+                self._model.remove(pos)
+            else:
+                pos += 1
+
+        if event.item.subscription == "remove":
+            return
+
+        groups = event.item.groups or {"No Group"}
+        for group in groups:
+            self._model.append(RosterListItem(event.item, group))
+
+    def _on_add_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        client = app.get_client(self._account)
+        if not client.state.is_available:
+            return
+
+        group = param.get_string()
+        items = self.get_selected_items()
+
+        for item in items:
+            client.get_module("Roster").add_to_group(JID.from_string(item.jid), group)
+
+    def _on_add_to_new_group(
+        self, _action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        pass
+
+    def _on_move_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        client = app.get_client(self._account)
+        if not client.state.is_available:
+            return
+
+        group = param.get_string()
+        items = self.get_selected_items()
+
+        for item in items:
+            client.get_module("Roster").change_group(
+                JID.from_string(item.jid), item.group, group
+            )
+
+    def _on_move_to_new_group(
+        self, _action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        pass
+
+    def _remove_from_group(self, _action: Gio.SimpleAction, param: None) -> None:
+        client = app.get_client(self._account)
+        if not client.state.is_available:
+            return
+
+        items = self.get_selected_items()
+
+        for item in items:
+            client.get_module("Roster").remove_from_group(
+                JID.from_string(item.jid), item.group
+            )
+
+    def _on_remove_from_roster(self, _action: Gio.SimpleAction, param: None) -> None:
+        client = app.get_client(self._account)
+        if not client.state.is_available:
+            return
+
+        items = self.get_selected_items()
+
+        # TODO Warning Dialog
+
+        for item in items:
+            client.get_module("Roster").delete_item(JID.from_string(item.jid))
+
+    def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
+        client = app.get_client(self._account)
+        if not client.state.is_available:
+            return
+
+        # TODO Add Name Dialog
+
+        # name = param.get_string() or None
+        items = self.get_selected_items()
+
+        for item in items:
+            client.get_module("Roster").change_name(JID.from_string(item.jid), "")
+
     def get_selected_items(self) -> list[RosterListItem]:
         bitset = self._selection_model.get_selection()
         valid, iter_, value = Gtk.BitsetIter.init_first(bitset)
@@ -161,14 +278,14 @@ class ManageRoster(GajimAppWindow):
         if not valid:
             return items
 
-        items.append(cast(RosterListItem, self._model.get_item(value)))
+        items.append(cast(RosterListItem, self._selection_model.get_item(value)))
 
         while res := iter_.next():
             valid, value = res
             if not valid:
                 break
 
-            items.append(cast(RosterListItem, self._model.get_item(value)))
+            items.append(cast(RosterListItem, self._selection_model.get_item(value)))
 
         return items
 
