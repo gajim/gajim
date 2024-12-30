@@ -1092,6 +1092,13 @@ popover.combo scrollbar.vertical {
 /* FullMessageWindow */
 #FullMessageWindow textview { padding: 10px; }
 
+/* ManageRoster */
+#ManageRoster listview header {
+    font-weight: bold;
+    padding: 6px;
+    background: alpha(@borders, 0.3);
+}
+
 /* HistorySyncAssistant */
 #HistorySyncAssistant notebook { padding: 18px; }
 #HistorySyncAssistant progressbar text { font-size: 1.6rem; padding: 10px;}
