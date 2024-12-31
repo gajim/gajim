@@ -26,6 +26,8 @@ from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.menus import get_manage_roster_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.widgets import GajimAppWindow
@@ -45,7 +47,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         )
         EventHelper.__init__(self)
 
-        self._account = account
+        self.account = account
         self._ui = get_builder("manage_roster.ui")
         self.set_child(self._ui.box)
 
@@ -199,27 +201,52 @@ class ManageRoster(GajimAppWindow, EventHelper):
             self._model.append(RosterListItem(event.item, group))
 
     def _on_add_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        client = app.get_client(self._account)
+        self._add_to_group(param.get_string())
+
+    def _on_add_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
+
+        InputDialog(
+            _("Choose group name"),
+            "",
+            "",
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Accept", text=_("OK"), callback=self._add_to_group),
+            ],
+            transient_for=self.window,
+        ).show()
+
+    def _add_to_group(self, group: str) -> None:
+        client = app.get_client(self.account)
         if not client.state.is_available:
             return
 
-        group = param.get_string()
         items = self.get_selected_items()
 
         for item in items:
             client.get_module("Roster").add_to_group(JID.from_string(item.jid), group)
 
-    def _on_add_to_new_group(
-        self, _action: Gio.SimpleAction, param: GLib.Variant
-    ) -> None:
-        pass
-
     def _on_move_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        client = app.get_client(self._account)
+        self._move_to_group(param.get_string())
+
+    def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
+
+        InputDialog(
+            _("Choose group name"),
+            "",
+            "",
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Accept", text=_("OK"), callback=self._move_to_group),
+            ],
+            transient_for=self.window,
+        ).show()
+
+    def _move_to_group(self, group: str) -> None:
+        client = app.get_client(self.account)
         if not client.state.is_available:
             return
 
-        group = param.get_string()
         items = self.get_selected_items()
 
         for item in items:
@@ -227,13 +254,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 JID.from_string(item.jid), item.group, group
             )
 
-    def _on_move_to_new_group(
-        self, _action: Gio.SimpleAction, param: GLib.Variant
-    ) -> None:
-        pass
-
     def _remove_from_group(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self._account)
+        client = app.get_client(self.account)
         if not client.state.is_available:
             return
 
@@ -245,7 +267,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             )
 
     def _on_remove_from_roster(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self._account)
+        client = app.get_client(self.account)
         if not client.state.is_available:
             return
 
@@ -257,17 +279,26 @@ class ManageRoster(GajimAppWindow, EventHelper):
             client.get_module("Roster").delete_item(JID.from_string(item.jid))
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self._account)
+        client = app.get_client(self.account)
         if not client.state.is_available:
             return
 
-        # TODO Add Name Dialog
+        item = self.get_selected_items()[0]
 
-        # name = param.get_string() or None
-        items = self.get_selected_items()
+        def _on_change_name(name: str) -> None:
+            client.get_module("Roster").change_name(JID.from_string(item.jid), name)
 
-        for item in items:
-            client.get_module("Roster").change_name(JID.from_string(item.jid), "")
+        InputDialog(
+            _("Choose name"),
+            "",
+            "",
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Accept", text=_("OK"), callback=_on_change_name),
+            ],
+            input_str=item.name,
+            transient_for=self.window,
+        ).show()
 
     def get_selected_items(self) -> list[RosterListItem]:
         bitset = self._selection_model.get_selection()
@@ -302,7 +333,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             return Gdk.EVENT_STOP
 
         single_selection = len(items) == 1
-        groups = app.get_client(self._account).get_module("Roster").get_groups()
+        groups = app.get_client(self.account).get_module("Roster").get_groups()
         groups = sorted(groups)
 
         menu = get_manage_roster_menu(groups, single_selection)
