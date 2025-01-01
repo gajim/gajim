@@ -462,7 +462,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ("blocking", self._on_blocking_action),
             ("open-event", self._on_open_event_action),
             ("mark-as-read", self._on_mark_as_read_action),
-            ("import-contacts", self._on_import_contacts_action),
             ("export-history", self._on_export_history),
             ("manage-roster", self._on_manage_roster_action),
         ]
@@ -674,12 +673,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
         open_window("AccountWizard")
-
-    @staticmethod
-    def _on_import_contacts_action(
-        _action: Gio.SimpleAction, param: GLib.Variant
-    ) -> None:
-        open_window("SynchronizeAccounts", account=param.get_string())
 
     @staticmethod
     def _on_export_history(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

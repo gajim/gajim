@@ -655,13 +655,6 @@ class GeneralPage(GenericSettingPage):
                 inverted=True,
                 props={"dialog": LoginDialog},
             ),
-            Setting(
-                SettingKind.ACTION,
-                _("Import Contacts"),
-                SettingType.ACTION,
-                "-import-contacts",
-                props={"account": account},
-            ),
             # Currently not supported by nbxmpp
             #
             # Setting(SettingKind.DIALOG,
