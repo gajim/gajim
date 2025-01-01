@@ -1093,6 +1093,9 @@ popover.combo scrollbar.vertical {
 #FullMessageWindow textview { padding: 10px; }
 
 /* ManageRoster */
+#ManageRoster #scrolled {
+    border: 1px solid @borders;
+}
 #ManageRoster listview header {
     font-weight: bold;
     padding: 6px;

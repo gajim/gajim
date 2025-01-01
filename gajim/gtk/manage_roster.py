@@ -65,7 +65,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             title=_("Manage Contact List"),
             default_height=600,
             default_width=700,
-            add_window_padding=False,
         )
         EventHelper.__init__(self)
 
@@ -153,7 +152,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._add_actions()
-        self.show()
 
     def _cleanup(self, *args: Any) -> None:
         del self._selection_model

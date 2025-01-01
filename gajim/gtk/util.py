@@ -119,8 +119,8 @@ if TYPE_CHECKING:
         | HistoryExport
         | HistorySyncAssistant
         | MamPreferences
-        | ManageRoster
         | ManageProxies
+        | ManageRoster
         | ManageSounds
         | PasswordDialog
         | PEPConfig
@@ -160,8 +160,8 @@ if TYPE_CHECKING:
         | Literal["HistoryExport"]
         | Literal["HistorySyncAssistant"]
         | Literal["MamPreferences"]
-        | Literal["ManageRoster"]
         | Literal["ManageProxies"]
+        | Literal["ManageRoster"]
         | Literal["ManageSounds"]
         | Literal["PasswordDialog"]
         | Literal["PEPConfig"]
@@ -723,18 +723,18 @@ def get_app_window(
 
 @overload
 def get_app_window(
-    name: Literal["ManageRoster"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> ManageRoster | None: ...
-
-
-@overload
-def get_app_window(
     name: Literal["ManageProxies"],
     account: str | None = None,
     jid: str | JID | None = None,
 ) -> ManageProxies | None: ...
+
+
+@overload
+def get_app_window(
+    name: Literal["ManageRoster"],
+    account: str | None = None,
+    jid: str | JID | None = None,
+) -> ManageRoster | None: ...
 
 
 @overload
@@ -940,9 +940,9 @@ def open_window(
 @overload
 def open_window(name: Literal["MamPreferences"], **kwargs: Any) -> MamPreferences: ...
 @overload
-def open_window(name: Literal["ManageRoster"], **kwargs: Any) -> ManageRoster: ...
-@overload
 def open_window(name: Literal["ManageProxies"], **kwargs: Any) -> ManageProxies: ...
+@overload
+def open_window(name: Literal["ManageRoster"], **kwargs: Any) -> ManageRoster: ...
 @overload
 def open_window(name: Literal["ManageSounds"], **kwargs: Any) -> ManageSounds: ...
 @overload
