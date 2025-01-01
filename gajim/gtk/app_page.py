@@ -139,7 +139,7 @@ class AppMessageListBox(Gtk.ListBox):
 
         date = datetime.strptime(last_check, "%Y-%m-%d %H:%M")
         format_string = app.settings.get("date_format")
-        gajim = _("Gajim: No updates available " "(last check: %s)") % date.strftime(
+        gajim = _("Gajim: No updates available (last check: %s)") % date.strftime(
             format_string
         )
         return f"{gajim}\n{plugins}"

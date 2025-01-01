@@ -395,7 +395,7 @@ class AccountWizard(Assistant):
                 self._show_error_page(
                     _("Anonymous login not supported"),
                     _("Anonymous login not supported"),
-                    _("This server does not support " "anonymous login."),
+                    _("This server does not support anonymous login."),
                 )
             else:
                 self._show_error_page(
@@ -544,7 +544,7 @@ class AccountWizard(Assistant):
         error_text = error.get_text()
         if not error_text:
             error_text = _(
-                "The server rejected the registration " "without an error message"
+                "The server rejected the registration without an error message"
             )
         self._show_error_page(_("Error"), _("Error"), error_text)
 

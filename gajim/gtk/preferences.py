@@ -207,7 +207,7 @@ class Plugins(PreferenceBox):
                 _("Notify after update"),
                 SettingType.CONFIG,
                 "plugins_notify_after_update",
-                desc=_("Notify me when the automatic " "update was successful"),
+                desc=_("Notify me when the automatic update was successful"),
                 bind="plugins_auto_update",
             ),
         ]
@@ -343,7 +343,7 @@ class GroupChats(PreferenceBox):
                 props={
                     "button-text": _("Reset"),
                     "button-tooltip": _(
-                        "Reset all group chats to the " "current default value"
+                        "Reset all group chats to the current default value"
                     ),
                     "button-style": "destructive-action",
                     "button-callback": self._reset_join_left,
@@ -358,7 +358,7 @@ class GroupChats(PreferenceBox):
                 props={
                     "button-text": _("Reset"),
                     "button-tooltip": _(
-                        "Reset all group chats to the " "current default value"
+                        "Reset all group chats to the current default value"
                     ),
                     "button-style": "destructive-action",
                     "button-callback": self._reset_print_status,
@@ -449,9 +449,7 @@ class FilePreview(PreferenceBox):
                 _("Preview all Image URLs"),
                 SettingType.CONFIG,
                 "preview_allow_all_images",
-                desc=_(
-                    "Show previews for any URLs containing images " "(may be unsafe)"
-                ),
+                desc=_("Show previews for any URLs containing images (may be unsafe)"),
                 bind="enable_file_preview",
             ),
             Setting(
@@ -515,7 +513,7 @@ class NotificationsDialog(SettingsDialog):
                 _("Notifications When Away"),
                 SettingType.CONFIG,
                 "show_notifications_away",
-                desc=_("Show notifications even if you are Away, " "Busy, etc."),
+                desc=_("Show notifications even if you are Away, Busy, etc."),
                 bind="show_notifications",
             ),
         ]
@@ -845,7 +843,7 @@ class Audio(PreferenceBox):
                 _("Audio Output Device"),
                 SettingType.CONFIG,
                 "audio_output_device",
-                desc=_("Select an audio output (e.g. speakers, " "headphones)"),
+                desc=_("Select an audio output (e.g. speakers, headphones)"),
                 props={"data": audio_output_items},
             ),
         ]
@@ -901,9 +899,7 @@ class Video(PreferenceBox):
                 SettingType.CONFIG,
                 "video_input_device",
                 props={"data": video_input_items},
-                desc=_(
-                    "Select your video input device (e.g. webcam, " "screen capture)"
-                ),
+                desc=_("Select your video input device (e.g. webcam, screen capture)"),
                 callback=self._on_video_input_changed,
             ),
             Setting(

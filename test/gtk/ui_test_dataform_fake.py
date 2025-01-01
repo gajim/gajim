@@ -8,7 +8,7 @@ from gajim.gtk.widgets import GajimAppWindow
 from . import util
 
 fake_form = {
-    "instructions": ("This is the a long long long long long " "long test instruction"),
+    "instructions": ("This is the a long long long long long long test instruction"),
     "username": "",
     "nick": "",
     "password": "",

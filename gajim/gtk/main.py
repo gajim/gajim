@@ -342,7 +342,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             )
 
         account = event.client.account
-        message = _("HTTP (%(method)s) Authorization " "for %(url)s (ID: %(id)s)") % {
+        message = _("HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)") % {
             "method": event.data.method,
             "url": event.data.url,
             "id": event.data.id,
@@ -1322,7 +1322,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             contact, BareContact | GroupchatContact | GroupchatParticipant
         )
         sec_text = _(
-            "You are about to remove %(name)s (%(jid)s) from " "your contact list.\n"
+            "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
         ) % {"name": contact.name, "jid": jid}
 
         ConfirmationDialog(

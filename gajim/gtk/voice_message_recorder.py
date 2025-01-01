@@ -348,7 +348,7 @@ class VoiceMessageRecorder:
 
     def _handle_error_output_dir_inaccessible(self) -> None:
         log.error(
-            "Voice message lost. Temporary output folder %s " "not accessible",
+            "Voice message lost. Temporary output folder %s not accessible",
             self._file_path.parent,
         )
         error_message = _("Voice message could not be saved. Please try again.")

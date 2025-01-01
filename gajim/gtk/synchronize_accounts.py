@@ -114,7 +114,7 @@ class SynchronizeAccounts(GajimAppWindow):
         if not app.account_is_available(self._remote_account):
             ErrorDialog(
                 _("This account is not connected to the server"),
-                _("You cannot synchronize with an account unless it is " "connected."),
+                _("You cannot synchronize with an account unless it is connected."),
             )
             return
 

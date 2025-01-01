@@ -47,7 +47,7 @@ STANZA_PRESETS = {
         "</presence>"
     ),
     "Message": (
-        '<message to="" type="" xmlns="jabber:client">\n' "<body></body>\n" "</message>"
+        '<message to="" type="" xmlns="jabber:client">\n<body></body>\n</message>'
     ),
     "Iq": (
         '<iq to="" type="" xmlns="jabber:client">\n'

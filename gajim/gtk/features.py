@@ -123,7 +123,7 @@ class Features(GajimAppWindow):
             Feature(
                 _("Spell Checker"),
                 app.is_installed("SPELLING"),
-                _("Enables Gajim to spell check your messages while " "composing"),
+                _("Enables Gajim to spell check your messages while composing"),
                 _("Requires: libspelling"),
                 _("No additional requirements"),
                 spell_check_enabled,

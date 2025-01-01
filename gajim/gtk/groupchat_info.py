@@ -42,12 +42,12 @@ MUC_FEATURES = {
     "muc_membersonly": (
         "feather-user-check-symbolic",
         p_("Group chat feature", "Members Only"),
-        _("This group chat is restricted " "to members only"),
+        _("This group chat is restricted to members only"),
     ),
     "muc_nonanonymous": (
         "feather-eye-symbolic",
         p_("Group chat feature", "Not Anonymous"),
-        _("All other group chat participants " "can see your XMPP address"),
+        _("All other group chat participants can see your XMPP address"),
     ),
     "muc_semianonymous": (
         "feather-eye-off-symbolic",
@@ -65,7 +65,7 @@ MUC_FEATURES = {
     "muc_unmoderated": (
         "feather-mic-symbolic",
         p_("Group chat feature", "Not Moderated"),
-        _("Participants entering this group chat are " "allowed to send messages"),
+        _("Participants entering this group chat are allowed to send messages"),
     ),
     "muc_public": (
         "lucide-megaphone-symbolic",
@@ -80,22 +80,22 @@ MUC_FEATURES = {
     "muc_passwordprotected": (
         "feather-lock-symbolic",
         p_("Group chat feature", "Password Required"),
-        _("This group chat " "does require a password upon entry"),
+        _("This group chat does require a password upon entry"),
     ),
     "muc_unsecured": (
         "feather-unlock-symbolic",
         p_("Group chat feature", "No Password Required"),
-        _("This group chat does not require " "a password upon entry"),
+        _("This group chat does not require a password upon entry"),
     ),
     "muc_persistent": (
         "feather-hard-drive-symbolic",
         p_("Group chat feature", "Persistent"),
-        _("This group chat persists " "even if there are no participants"),
+        _("This group chat persists even if there are no participants"),
     ),
     "muc_temporary": (
         "feather-clock-symbolic",
         p_("Group chat feature", "Temporary"),
-        _("This group chat will be destroyed " "once the last participant left"),
+        _("This group chat will be destroyed once the last participant left"),
     ),
     "mam": (
         "feather-server-symbolic",

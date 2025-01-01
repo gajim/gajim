@@ -561,9 +561,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         else:
             icon_name = "channel-insecure-symbolic"
             if isinstance(contact, GroupchatContact):
-                tooltip = _(
-                    "This is a public group chat. " "Encryption is not available."
-                )
+                tooltip = _("This is a public group chat. Encryption is not available.")
             elif isinstance(contact, GroupchatParticipant):
                 tooltip = _("Encryption is not available in private chats")
             else:

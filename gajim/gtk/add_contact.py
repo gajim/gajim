@@ -169,7 +169,7 @@ class AddContact(Assistant):
                     # category 'conference'
                     error_page = cast(ErrorPage, self.get_page("error"))
                     error_page.set_text(
-                        _("This address does not seem to offer any gateway " "service.")
+                        _("This address does not seem to offer any gateway service.")
                     )
                     self.show_page("error")
                     return

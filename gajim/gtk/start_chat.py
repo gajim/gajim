@@ -469,7 +469,7 @@ class StartChatDialog(GajimAppWindow):
         if groupchat:
             if not app.account_is_available(item.account):
                 self._show_error_page(
-                    _("You can not join a group chat " "unless you are connected.")
+                    _("You can not join a group chat unless you are connected.")
                 )
                 return
 
@@ -609,7 +609,7 @@ class StartChatDialog(GajimAppWindow):
 
         if not app.account_is_available(account):
             self._show_error_page(
-                _("You can not join a group chat " "unless you are connected.")
+                _("You can not join a group chat unless you are connected.")
             )
             return
 

@@ -603,7 +603,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         if not app.account_is_available(account):
             ErrorDialog(
                 _("You are not connected to the server"),
-                _("Without a connection, you can not browse " "available services"),
+                _("Without a connection, you can not browse available services"),
             )
             raise RuntimeError("You must be connected to browse services")
 

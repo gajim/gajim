@@ -275,8 +275,7 @@ class FileTransferJingleRow(BaseRow, EventHelper):
             self._ui.action_stack.set_visible_child_name("error")
             self._ui.transfer_action.set_text(_("File Transfer Cancelled"))
             error_text = (
-                _("Connection with %s could not be " "established.")
-                % self._contact.name
+                _("Connection with %s could not be established.") % self._contact.name
             )
             if event.error_msg:
                 error_text = f"{error_text} ({event.error_msg})"

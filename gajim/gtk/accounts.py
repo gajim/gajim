@@ -637,7 +637,7 @@ class GeneralPage(GenericSettingPage):
                 SettingType.ACCOUNT_CONFIG,
                 "default_workspace",
                 props={"data": workspaces},
-                desc=_("Chats from this account will use this workspace by " "default"),
+                desc=_("Chats from this account will use this workspace by default"),
             ),
             Setting(
                 SettingKind.COLOR,
@@ -686,7 +686,7 @@ class GeneralPage(GenericSettingPage):
                 _("Remember Last Status"),
                 SettingType.ACCOUNT_CONFIG,
                 "restore_last_status",
-                desc=_("Restore status and status message of your " "last session"),
+                desc=_("Restore status and status message of your last session"),
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -772,7 +772,7 @@ class PrivacyPage(GenericSettingPage):
                 SettingType.ACCOUNT_CONFIG,
                 "send_time_info",
                 callback=self._send_time_info,
-                desc=_("Disclose the local system time of the " "device Gajim runs on"),
+                desc=_("Disclose the local system time of the device Gajim runs on"),
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -801,7 +801,7 @@ class PrivacyPage(GenericSettingPage):
                 _("Ignore Unknown Contacts"),
                 SettingType.ACCOUNT_CONFIG,
                 "ignore_unknown_contacts",
-                desc=_("Ignore everything from contacts not in your " "contact list"),
+                desc=_("Ignore everything from contacts not in your contact list"),
             ),
             Setting(
                 SettingKind.SWITCH,
@@ -819,9 +819,7 @@ class PrivacyPage(GenericSettingPage):
                 props={
                     "data": chatstate_entries,
                     "button-text": _("Reset"),
-                    "button-tooltip": _(
-                        "Reset all chats to the " "current default value"
-                    ),
+                    "button-tooltip": _("Reset all chats to the current default value"),
                     "button-style": "destructive-action",
                     "button-callback": self._reset_send_chatstate,
                 },
@@ -836,7 +834,7 @@ class PrivacyPage(GenericSettingPage):
                     "data": chatstate_entries,
                     "button-text": _("Reset"),
                     "button-tooltip": _(
-                        "Reset all group chats to the " "current default value"
+                        "Reset all group chats to the current default value"
                     ),
                     "button-style": "destructive-action",
                     "button-callback": self._reset_gc_send_chatstate,
@@ -851,9 +849,7 @@ class PrivacyPage(GenericSettingPage):
                 desc=_("Default for chats and private group chats"),
                 props={
                     "button-text": _("Reset"),
-                    "button-tooltip": _(
-                        "Reset all chats to the " "current default value"
-                    ),
+                    "button-tooltip": _("Reset all chats to the current default value"),
                     "button-style": "destructive-action",
                     "button-callback": self._reset_send_read_marker,
                 },
@@ -996,7 +992,7 @@ class ConnectionPage(GenericSettingPage):
                 _("Confirm Unencrypted Connection"),
                 SettingType.ACCOUNT_CONFIG,
                 "confirm_unencrypted_connection",
-                desc=_("Show a confirmation dialog before connecting " "unencrypted"),
+                desc=_("Show a confirmation dialog before connecting unencrypted"),
             ),
         ]
         GenericSettingPage.__init__(self, account, settings)

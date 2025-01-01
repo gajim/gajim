@@ -599,8 +599,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.connection_icon.set_from_icon_name("feather-zap-symbolic")
         self._ui.connection_icon.add_css_class("error-color")
         self._ui.connection_icon.set_tooltip_text(
-            _("There has been an error while trying to " "fetch messages: %s")
-            % error_text
+            _("There has been an error while trying to fetch messages: %s") % error_text
         )
         self._ui.connection_icon.show()
 

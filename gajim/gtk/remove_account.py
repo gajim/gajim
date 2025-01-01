@@ -177,8 +177,7 @@ class RemoveChoice(Page):
         service = app.get_hostname_from_account(account)
         check_label = Gtk.Label()
         check_label.set_markup(
-            _("Do you want to unregister your account on <b>%s</b> as " "well?")
-            % service
+            _("Do you want to unregister your account on <b>%s</b> as well?") % service
         )
         check_label.set_max_width_chars(50)
         check_label.set_wrap_mode(Pango.WrapMode.WORD)

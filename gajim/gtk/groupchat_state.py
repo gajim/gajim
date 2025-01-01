@@ -116,8 +116,7 @@ class GroupchatState(Gtk.Box, SignalManager):
         self.set_visible(True)
         self._ui.groupchat_state.set_visible_child_name(signal_name)
         self._ui.mam_error_label.set_text(
-            _("There has been an error while trying to " "fetch messages: %s")
-            % error_text
+            _("There has been an error while trying to fetch messages: %s") % error_text
         )
         self._ui.mam_sync_spinner.stop()
 

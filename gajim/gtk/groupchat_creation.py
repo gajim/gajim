@@ -304,7 +304,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper, SignalManager):
         assert self._account is not None
 
         if app.window.chat_exists(self._account, JID.from_string(room_jid)):
-            log.error("Trying to create groupchat " "which is already added as chat")
+            log.error("Trying to create groupchat which is already added as chat")
             self.close()
             return
 

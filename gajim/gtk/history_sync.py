@@ -177,7 +177,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         received_count = progress_page.get_received_count()
         success_page = self.get_page("success")
         success_page.set_text(
-            _("Finished synchronising chat history:\n" "%s messages downloaded")
+            _("Finished synchronising chat history:\n%s messages downloaded")
             % received_count
         )
         self.show_page("success")

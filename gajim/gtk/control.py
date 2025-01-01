@@ -639,7 +639,7 @@ class ChatControl(EventHelper):
         if event.is_self:
             message = _("You are now known as %s") % event.new_name
         else:
-            message = _("{nick} is now known " "as {new_nick}").format(
+            message = _("{nick} is now known as {new_nick}").format(
                 nick=event.old_name, new_nick=event.new_name
             )
         self.add_info_message(message, event.timestamp)
@@ -661,24 +661,22 @@ class ChatControl(EventHelper):
         actor = "" if actor is None else _(" by {actor}").format(actor=actor)
 
         # Group Chat: We have been removed from the room by Alice: reason
-        message = _("You have been removed from the " "group chat{actor}{reason}")
+        message = _("You have been removed from the group chat{actor}{reason}")
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
             # Group Chat: Server kicked us because of an server error
-            message = _("You have left due " "to an error{reason}").format(
-                reason=reason
-            )
+            message = _("You have left due to an error{reason}").format(reason=reason)
 
         elif StatusCode.REMOVED_KICKED in status_codes:
             # Group Chat: We have been kicked by Alice: reason
-            message = _("You have been " "kicked{actor}{reason}").format(
+            message = _("You have been kicked{actor}{reason}").format(
                 actor=actor, reason=reason
             )
 
         elif StatusCode.REMOVED_BANNED in status_codes:
             # Group Chat: We have been banned by Alice: reason
-            message = _("You have been " "banned{actor}{reason}").format(
+            message = _("You have been banned{actor}{reason}").format(
                 actor=actor, reason=reason
             )
 
@@ -728,7 +726,7 @@ class ChatControl(EventHelper):
 
         if event.is_self:
             message = _(
-                "** Your Affiliation has been set to " "{affiliation}{actor}{reason}"
+                "** Your Affiliation has been set to {affiliation}{actor}{reason}"
             ).format(affiliation=affiliation, actor=actor, reason=reason)
         else:
             message = self.__format_affiliation_change(
@@ -761,7 +759,7 @@ class ChatControl(EventHelper):
         nick: str, affiliation: str, actor: str = "", reason: str = ""
     ) -> str:
         return _(
-            "** Affiliation of {nick} has been set to " "{affiliation}{actor}{reason}"
+            "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
         ).format(nick=nick, affiliation=affiliation, actor=actor, reason=reason)
 
     def _on_user_role_changed(
@@ -787,12 +785,12 @@ class ChatControl(EventHelper):
         actor = "" if actor is None else _(" by {actor}").format(actor=actor)
 
         if event.is_self:
-            message = _("** Your Role has been set to " "{role}{actor}{reason}").format(
+            message = _("** Your Role has been set to {role}{actor}{reason}").format(
                 role=role, actor=actor, reason=reason
             )
         else:
             message = _(
-                "** Role of {nick} has been set to " "{role}{actor}{reason}"
+                "** Role of {nick} has been set to {role}{actor}{reason}"
             ).format(nick=nick, role=role, actor=actor, reason=reason)
         self.add_info_message(message, event.timestamp)
 
@@ -890,10 +888,10 @@ class ChatControl(EventHelper):
             changes.append(_("Group chat now shows unavailable members"))
 
         if StatusCode.NOT_SHOWING_UNAVAILABLE in status_codes:
-            changes.append(_("Group chat now does not show " "unavailable members"))
+            changes.append(_("Group chat now does not show unavailable members"))
 
         if StatusCode.CONFIG_NON_PRIVACY_RELATED in status_codes:
-            changes.append(_("A setting not related to privacy has been " "changed"))
+            changes.append(_("A setting not related to privacy has been changed"))
             self.client.get_module("Discovery").disco_muc(self.contact.jid)
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
@@ -994,7 +992,7 @@ class ChatControl(EventHelper):
             message = _("You (%s) joined the group chat") % event.nick
 
         if StatusCode.NON_ANONYMOUS in status_codes:
-            message = _("Any participant is allowed to see your full " "XMPP Address")
+            message = _("Any participant is allowed to see your full XMPP Address")
 
         if StatusCode.CONFIG_ROOM_LOGGING in status_codes:
             message = _("Conversations are stored on the server")
@@ -1037,15 +1035,15 @@ class ChatControl(EventHelper):
         # Group Chat: You have been kicked by Alice
         actor = "" if actor is None else _(" by {actor}").format(actor=actor)
 
-        message = _("{nick} has been removed from the group " "chat{by}{reason}")
+        message = _("{nick} has been removed from the group chat{by}{reason}")
 
         if StatusCode.REMOVED_KICKED in status_codes:
-            message = _("{nick} has been " "kicked{actor}{reason}").format(
+            message = _("{nick} has been kicked{actor}{reason}").format(
                 nick=nick, actor=actor, reason=reason
             )
 
         elif StatusCode.REMOVED_BANNED in status_codes:
-            message = _("{nick} has been " "banned{actor}{reason}").format(
+            message = _("{nick} has been banned{actor}{reason}").format(
                 nick=nick, actor=actor, reason=reason
             )
 

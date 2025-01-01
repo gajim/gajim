@@ -449,7 +449,7 @@ class InvitationReceivedRow(NotificationRow):
                 "chat": event.info.muc_name,
             }
         else:
-            invitation_text = _("You have been invited " "to %s") % event.info.muc_name
+            invitation_text = _("You have been invited to %s") % event.info.muc_name
         text_label = self._generate_label()
         text_label.set_text(invitation_text)
         text_label.set_tooltip_text(invitation_text)
@@ -504,7 +504,7 @@ class InvitationDeclinedRow(NotificationRow):
         contact = self._client.get_module("Contacts").get_contact(jid)
         assert isinstance(contact, BareContact)
         muc_name = get_groupchat_name(self._client, event.muc)
-        invitation_text = _("%(contact)s declined your invitation " "to %(chat)s") % {
+        invitation_text = _("%(contact)s declined your invitation to %(chat)s") % {
             "contact": contact.name,
             "chat": muc_name,
         }
