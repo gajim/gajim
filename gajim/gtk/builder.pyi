@@ -918,17 +918,6 @@ class StartChatDialogBuilder(Builder):
     account_back_button: Gtk.Button
     account_select_button: Gtk.Button
 
-class SynchronizeAccountsBuilder(Builder):
-    stack: Gtk.Stack
-    sync_accounts_box: Gtk.Box
-    accounts_treeview: Gtk.TreeView
-    select_contacts_button: Gtk.Button
-    connection_warning_label: Gtk.Label
-    sync_contacts_box: Gtk.Box
-    contacts_treeview: Gtk.TreeView
-    synchronize_button: Gtk.Button
-    back_button: Gtk.Button
-
 class ThemesWindowBuilder(Builder):
     option_popover: Gtk.Popover
     choose_option_listbox: Gtk.ListBox
@@ -1276,12 +1265,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> StartChatDialogBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["synchronize_accounts.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> SynchronizeAccountsBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["themes_window.ui"],

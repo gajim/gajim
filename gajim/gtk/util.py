@@ -93,7 +93,6 @@ if TYPE_CHECKING:
     from gajim.gtk.service_registration import ServiceRegistration
     from gajim.gtk.ssl_error_dialog import SSLErrorDialog
     from gajim.gtk.start_chat import StartChatDialog
-    from gajim.gtk.synchronize_accounts import SynchronizeAccounts
     from gajim.gtk.themes import Themes
     from gajim.gtk.workspace_dialog import WorkspaceDialog
 
@@ -133,7 +132,6 @@ if TYPE_CHECKING:
         | ServiceRegistration
         | SSLErrorDialog
         | StartChatDialog
-        | SynchronizeAccounts
         | Themes
         | WorkspaceDialog
     )
@@ -173,7 +171,6 @@ if TYPE_CHECKING:
         | Literal["ServiceRegistration"]
         | Literal["SSLErrorDialog"]
         | Literal["StartChatDialog"]
-        | Literal["SynchronizeAccounts"]
         | Literal["Themes"]
         | Literal["WorkspaceDialog"]
     )
@@ -838,14 +835,6 @@ def get_app_window(
 
 @overload
 def get_app_window(
-    name: Literal["SynchronizeAccounts"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> SynchronizeAccounts | None: ...
-
-
-@overload
-def get_app_window(
     name: Literal["Themes"], account: str | None = None, jid: str | JID | None = None
 ) -> Themes | None: ...
 
@@ -964,10 +953,6 @@ def open_window(
 def open_window(name: Literal["SSLErrorDialog"], **kwargs: Any) -> SSLErrorDialog: ...
 @overload
 def open_window(name: Literal["StartChatDialog"], **kwargs: Any) -> StartChatDialog: ...
-@overload
-def open_window(
-    name: Literal["SynchronizeAccounts"], **kwargs: Any
-) -> SynchronizeAccounts: ...
 @overload
 def open_window(name: Literal["Themes"], **kwargs: Any) -> Themes: ...
 @overload

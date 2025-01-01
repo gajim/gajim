@@ -167,7 +167,6 @@ WINDOW_MODULES = {
     "ServiceRegistration": "gajim.gtk.service_registration",
     "SSLErrorDialog": "gajim.gtk.ssl_error_dialog",
     "StartChatDialog": "gajim.gtk.start_chat",
-    "SynchronizeAccounts": "gajim.gtk.synchronize_accounts",
     "Themes": "gajim.gtk.themes",
     "WorkspaceDialog": "gajim.gtk.workspace_dialog",
 }
@@ -301,7 +300,6 @@ ACCOUNT_ACTIONS = [
     ("archive", "s"),
     ("blocking", "s"),
     ("export-history", "s"),
-    ("import-contacts", "s"),
     ("mark-as-read", "a{sv}"),
     ("open-event", "a{sv}"),
     ("pep-config", "s"),
@@ -314,7 +312,6 @@ ACCOUNT_ACTIONS = [
 
 ALWAYS_ACCOUNT_ACTIONS = {
     "export-history",
-    "import-contacts",
     "open-event",
 }
 
@@ -325,7 +322,6 @@ ONLINE_ACCOUNT_ACTIONS = {
     "contact-info",
     "execute-command",
     "modify-gateway",
-    "import-contacts",
     "pep-config",
     "profile",
     "server-info",
