@@ -6,8 +6,12 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import NamedTuple
 
+import csv
+import enum
 import logging
+from pathlib import Path
 
 from gi.repository import Gdk
 from gi.repository import Gio
@@ -26,13 +30,27 @@ from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.menus import get_manage_roster_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.manage_roster")
+
+
+class CSVColumn(enum.IntEnum):
+    JID = 0
+    NAME = 1
+    GROUPS = 2
+
+
+class ImportedItem(NamedTuple):
+    jid: JID
+    name: str | None
+    groups: set[str]
 
 
 class ManageRoster(GajimAppWindow, EventHelper):
@@ -49,7 +67,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         self.account = account
         self._ui = get_builder("manage_roster.ui")
-        self.set_child(self._ui.box)
+        self.set_child(self._ui.main)
 
         self._model = Gio.ListStore(item_type=RosterListItem)
 
@@ -100,13 +118,25 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._ui.column_view.set_model(self._selection_model)
 
         self._popover_menu = GajimPopover(None)
-        self._ui.box.append(self._popover_menu)
+        self._ui.scrolled_box.append(self._popover_menu)
 
         gesture_secondary_click = Gtk.GestureClick(
             button=Gdk.BUTTON_SECONDARY, propagation_phase=Gtk.PropagationPhase.BUBBLE
         )
         self._connect(gesture_secondary_click, "pressed", self._popup_menu)
-        self._ui.box.add_controller(gesture_secondary_click)
+        self._ui.scrolled_box.add_controller(gesture_secondary_click)
+
+        import_button = FileChooserButton(multiple=False, label=_("Import Roster…"))
+        self._ui.main.append(import_button)
+
+        self._connect(import_button, "path-picked", self._on_import_path_picked)
+
+        export_button = FileChooserButton(
+            mode="save", multiple=False, label=_("Export Roster…")
+        )
+        self._ui.main.append(export_button)
+
+        self._connect(export_button, "path-picked", self._on_export_path_picked)
 
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
 
@@ -221,7 +251,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if not client.state.is_available:
             return
 
-        items = self.get_selected_items()
+        items = self._get_selected_items()
 
         for item in items:
             client.get_module("Roster").add_to_group(JID.from_string(item.jid), group)
@@ -247,7 +277,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if not client.state.is_available:
             return
 
-        items = self.get_selected_items()
+        items = self._get_selected_items()
 
         for item in items:
             client.get_module("Roster").change_group(
@@ -259,7 +289,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if not client.state.is_available:
             return
 
-        items = self.get_selected_items()
+        items = self._get_selected_items()
 
         for item in items:
             client.get_module("Roster").remove_from_group(
@@ -271,7 +301,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if not client.state.is_available:
             return
 
-        items = self.get_selected_items()
+        items = self._get_selected_items()
 
         # TODO Warning Dialog
 
@@ -283,7 +313,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if not client.state.is_available:
             return
 
-        item = self.get_selected_items()[0]
+        item = self._get_selected_items()[0]
 
         def _on_change_name(name: str) -> None:
             client.get_module("Roster").change_name(JID.from_string(item.jid), name)
@@ -300,7 +330,76 @@ class ManageRoster(GajimAppWindow, EventHelper):
             transient_for=self.window,
         ).show()
 
-    def get_selected_items(self) -> list[RosterListItem]:
+    def _on_export_path_picked(
+        self, _button: FileChooserButton, paths: list[Path]
+    ) -> None:
+        self._export(paths[0])
+
+    def _export(self, path: Path) -> None:
+        client = app.get_client(self.account)
+
+        with path.open(mode="w", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            for jid, item in client.get_module("Roster").iter():
+                writer.writerow([jid, item.name, ";".join(item.groups)])
+
+    def _on_import_path_picked(
+        self, _button: FileChooserButton, paths: list[Path]
+    ) -> None:
+        self._import(paths[0])
+
+    def _import(self, path: Path) -> None:
+        client = app.get_client(self.account)
+        jids = {str(jid) for jid, _item in client.get_module("Roster").iter()}
+
+        items: list[ImportedItem] = []
+        with path.open(encoding="utf-8") as csvfile:
+            reader = csv.reader(csvfile, strict=True)
+            for row in reader:
+                if row[CSVColumn.JID] in jids:
+                    continue
+
+                item = self._validate_imported_item(row)
+                if item is not None:
+                    items.append(item)
+
+        if not items:
+            log.warning("No items to import found")
+            return
+
+        def _on_import():
+            for item in items:
+                client.get_module("Presence").subscribe(
+                    item.jid, name=item.name, groups=item.groups, auto_auth=True
+                )
+
+        ConfirmationDialog(
+            _("Import"),
+            "",
+            _("Found %s items to import") % len(items),
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Accept", text=_("Import"), callback=_on_import),
+            ],
+            transient_for=self.window,
+        ).show()
+
+    def _validate_imported_item(self, row: list[str]) -> ImportedItem | None:
+        try:
+            jid = JID.from_string(row[CSVColumn.JID])
+        except Exception:
+            log.warning("Invalid jid: %s", row[CSVColumn.JID])
+            return None
+
+        name = row[CSVColumn.NAME] or None
+
+        groups: set[str] = set()
+        if row[CSVColumn.GROUPS]:
+            groups = set(row[CSVColumn.GROUPS].split(";"))
+
+        return ImportedItem(jid=jid, name=name, groups=groups)
+
+    def _get_selected_items(self) -> list[RosterListItem]:
         bitset = self._selection_model.get_selection()
         valid, iter_, value = Gtk.BitsetIter.init_first(bitset)
 
@@ -328,7 +427,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         y: float,
     ) -> bool:
 
-        items = self.get_selected_items()
+        items = self._get_selected_items()
         if not items:
             return Gdk.EVENT_STOP
 

@@ -584,7 +584,8 @@ class ManageProxiesBuilder(Builder):
     proxyname_entry: Gtk.Entry
 
 class ManageRosterBuilder(Builder):
-    box: Gtk.Box
+    main: Gtk.Box
+    scrolled_box: Gtk.Box
     scrolled: Gtk.ScrolledWindow
     column_view: Gtk.ColumnView
     jid_col: Gtk.ColumnViewColumn
