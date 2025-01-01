@@ -62,7 +62,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         GajimAppWindow.__init__(
             self,
             name="ManageRoster",
-            title=_("Manage Roster"),
+            title=_("Manage Contact List"),
             default_height=600,
             default_width=700,
             add_window_padding=False,
@@ -326,7 +326,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         ConfirmationDialog(
             _("Remove Contacts"),
-            _("Remove %s contacts from your roster?") % len(items),
+            _("Remove %s contacts from your contact list?") % len(items),
             "",
             [
                 DialogButton.make("Cancel"),
@@ -411,7 +411,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         dialog = Gtk.FileDialog(
             default_filter=Gtk.FileFilter(name="csv", patterns=["*.csv"]),
-            title=_("Import Roster"),
+            title=_("Import Contacts"),
             accept_label=_("Import"),
             modal=True,
         )

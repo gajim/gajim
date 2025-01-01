@@ -183,7 +183,7 @@ def get_account_menu(account: str) -> GajimMenu:
     menu = GajimMenu.from_list(menuitems)
 
     advanced_menuitems: MenuItemListT = [
-        (_("Manage Roster"), f"app.{account}-manage-roster", account),
+        (_("Manage Contact List"), f"app.{account}-manage-roster", account),
         (_("Archiving Preferences"), f"app.{account}-archive", account),
         (_("Blocking List"), f"app.{account}-blocking", account),
         (_("PEP Configuration"), f"app.{account}-pep-config", account),
@@ -940,7 +940,7 @@ def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMe
     if single_selection:
         menu.add_item(_("Change Name…"), "win.change-name", None)
 
-    menu.add_item(_("Remove from Roster…"), "win.remove-from-roster", None)
+    menu.add_item(_("Remove from Contact List…"), "win.remove-from-roster", None)
 
     return menu
 
