@@ -18,10 +18,7 @@ class GajimBuilder:
 class Builder(Gtk.Builder): ...
 
 class AccountPageBuilder(Builder):
-    paned: Gtk.Paned
-    roster_box: Gtk.Box
-    roster_menu_button: Gtk.MenuButton
-    roster_search_entry: Gtk.SearchEntry
+    scrolled: Gtk.ScrolledWindow
     account_box: Gtk.Box
     avatar_image: Gtk.Image
     account_label: Gtk.Label
@@ -795,13 +792,6 @@ class QuitDialogBuilder(Builder):
     minimize_button: Gtk.Button
     quit_button: Gtk.Button
 
-class RosterBuilder(Builder):
-    roster_treeview: Gtk.TreeView
-    contact_column: Gtk.TreeViewColumn
-    avatar_renderer: Gtk.CellRendererPixbuf
-    text_renderer: Gtk.CellRendererText
-    expander: Gtk.TreeViewColumn
-
 class RosterItemExchangeBuilder(Builder):
     roster_item_exchange: Gtk.Box
     type_label: Gtk.Label
@@ -1243,10 +1233,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["quit_dialog.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> QuitDialogBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["roster.ui"], instance: Any = None, widgets: list[str] = ...
-) -> RosterBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["roster_item_exchange.ui"],

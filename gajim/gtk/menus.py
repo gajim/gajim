@@ -20,7 +20,6 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
-from gajim.common.helpers import jid_is_blocked
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
 from gajim.common.i18n import p_
@@ -448,47 +447,6 @@ def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu:
     extra_menu = Gio.Menu()
     extra_menu.append_section(None, menu)
     return extra_menu
-
-
-def get_roster_menu(
-    account: str, contact: BareContact, gateway: bool = False
-) -> GajimMenu:
-
-    block_label = _("Block…")
-    if jid_is_blocked(account, str(contact.jid)):
-        block_label = _("Unblock")
-
-    value = str(contact.jid)
-
-    jids = [str(c.jid) for c in contact.get_resources()]
-    if not jids:
-        jids = [contact.jid.bare]
-
-    jids_v = GLib.Variant.new_strv(jids)
-
-    menuitems: MenuItemListT = [
-        (_("Details"), f"app.{account}-contact-info", value),
-        (_("Execute Command…"), f"app.{account}-execute-command", jids_v),
-        (block_label, f"app.{account}-block-contact", value),
-        (_("Remove…"), f"app.{account}-remove-contact", value),
-    ]
-
-    if gateway:
-        menuitems.insert(
-            1, (_("Modify Gateway…"), f"app.{account}-modify-gateway", value)
-        )
-
-    return GajimMenu.from_list(menuitems)
-
-
-def get_roster_view_menu() -> GajimMenu:
-    menuitems: MenuItemListT = [
-        (_("Show Offline Contacts"), "win.show-offline", None),
-        (_("Sort by Status"), "win.sort-by-show", None),
-        (_("Add Contact…"), "app.add-contact", ""),
-    ]
-
-    return GajimMenu.from_list(menuitems)
 
 
 def get_account_notifications_menu(account: str) -> GajimMenu:

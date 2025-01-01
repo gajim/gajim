@@ -396,24 +396,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def _add_stateful_actions(self) -> None:
         action = Gio.SimpleAction.new_stateful(
-            "show-offline", None, GLib.Variant("b", app.settings.get("showoffline"))
-        )
-
-        action.connect("change-state", self._on_show_offline)
-
-        self.add_action(action)
-
-        action = Gio.SimpleAction.new_stateful(
-            "sort-by-show",
-            None,
-            GLib.Variant("b", app.settings.get("sort_by_show_in_roster")),
-        )
-
-        action.connect("change-state", self._on_sort_by_show)
-
-        self.add_action(action)
-
-        action = Gio.SimpleAction.new_stateful(
             "set-encryption", GLib.VariantType("s"), GLib.Variant("s", "disabled")
         )
 
@@ -696,16 +678,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 open_file(preview.orig_path)
             else:
                 open_uri(preview.uri)
-
-    def _on_show_offline(self, action: Gio.SimpleAction, value: GLib.Variant) -> None:
-
-        action.set_state(value)
-        app.settings.set("showoffline", value.get_boolean())
-
-    def _on_sort_by_show(self, action: Gio.SimpleAction, value: GLib.Variant) -> None:
-
-        action.set_state(value)
-        app.settings.set("sort_by_show_in_roster", value.get_boolean())
 
     def _toggle_chat_list(self) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
