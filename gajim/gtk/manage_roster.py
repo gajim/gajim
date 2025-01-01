@@ -25,6 +25,8 @@ from nbxmpp.structs import RosterItem
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.client import Client
+from gajim.common.const import SimpleClientState
 from gajim.common.events import RosterPush
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
@@ -68,6 +70,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
         EventHelper.__init__(self)
 
         self.account = account
+        self._client = app.get_client(account)
+        self._actions: list[tuple[str, Any, Any]] = []
         self._ui = get_builder("manage_roster.ui")
         self.set_child(self._ui.main)
 
@@ -79,8 +83,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._connect(h_factory, "unbind", self._on_factory_unbind)
         self._ui.column_view.set_header_factory(h_factory)
 
-        for _jid, item in app.get_client(account).get_module("Roster").iter():
-            groups = item.groups or {"No Group"}
+        for _jid, item in self._client.get_module("Roster").iter():
+            groups = item.groups or {""}
             for group in groups:
                 self._model.append(RosterListItem(item, group))
 
@@ -134,6 +138,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._ui.import_button.set_menu_model(get_manage_roster_import_menu(accounts))
 
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
+        self._client.connect_signal("state-changed", self._on_client_state_changed)
 
         self._add_actions()
         self.show()
@@ -142,11 +147,12 @@ class ManageRoster(GajimAppWindow, EventHelper):
         del self._selection_model
         del self._popover_menu
         del self._model
+        del self._actions
+        self._client.disconnect_all_from_obj(self)
         self.unregister_events()
 
     def _add_actions(self) -> None:
-
-        actions = [
+        self._actions = [
             ("add-to-group", "s", self._on_add_to_group),
             ("add-to-new-group", None, self._on_add_to_new_group),
             ("move-to-group", "s", self._on_move_to_group),
@@ -159,7 +165,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             ("export-to-csv", None, self._on_export_to_csv),
         ]
 
-        for action, variant_type, callback in actions:
+        for action, variant_type, callback in self._actions:
             if variant_type is not None:
                 variant_type = GLib.VariantType(variant_type)
             act = Gio.SimpleAction.new(action, variant_type)
@@ -224,9 +230,18 @@ class ManageRoster(GajimAppWindow, EventHelper):
         if event.item.subscription == "remove":
             return
 
-        groups = event.item.groups or {"No Group"}
+        groups = event.item.groups or {""}
         for group in groups:
             self._model.append(RosterListItem(event.item, group))
+
+    def _on_client_state_changed(
+        self, _client: Client, _signal_name: str, state: SimpleClientState
+    ) -> None:
+
+        for actions in self._actions:
+            action = self.window.lookup_action(actions[0])
+            assert isinstance(action, Gio.SimpleAction)
+            action.set_enabled(state.is_connected)
 
     def _on_add_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         self._add_to_group(param.get_string())
@@ -234,8 +249,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
     def _on_add_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
 
         InputDialog(
-            _("Choose group name"),
-            "",
+            _("Add new group"),
+            "Enter the name of the new group",
             "",
             [
                 DialogButton.make("Cancel"),
@@ -245,22 +260,20 @@ class ManageRoster(GajimAppWindow, EventHelper):
         ).show()
 
     def _add_to_group(self, group: str) -> None:
-        client = app.get_client(self.account)
-        if not client.state.is_available:
-            return
-
         items = self._get_selected_items()
 
         for item in items:
-            client.get_module("Roster").add_to_group(JID.from_string(item.jid), group)
+            self._client.get_module("Roster").add_to_group(
+                JID.from_string(item.jid), group
+            )
 
     def _on_move_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         self._move_to_group(param.get_string())
 
     def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
         InputDialog(
-            _("Choose group name"),
-            "",
+            _("Move to new group"),
+            _("Enter the name of the new group"),
             "",
             [
                 DialogButton.make("Cancel"),
@@ -270,54 +283,56 @@ class ManageRoster(GajimAppWindow, EventHelper):
         ).show()
 
     def _move_to_group(self, group: str) -> None:
-        client = app.get_client(self.account)
-        if not client.state.is_available:
-            return
-
         items = self._get_selected_items()
 
         for item in items:
-            client.get_module("Roster").change_group(
+            self._client.get_module("Roster").change_group(
                 JID.from_string(item.jid), item.group, group
             )
 
     def _remove_from_group(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self.account)
-        if not client.state.is_available:
-            return
-
         items = self._get_selected_items()
 
         for item in items:
-            client.get_module("Roster").remove_from_group(
+            self._client.get_module("Roster").remove_from_group(
                 JID.from_string(item.jid), item.group
             )
 
     def _on_remove_from_roster(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self.account)
-        if not client.state.is_available:
-            return
-
         items = self._get_selected_items()
 
-        # TODO Warning Dialog
+        def _on_remove():
+            if not self._client.state.is_available:
+                return
 
-        for item in items:
-            client.get_module("Roster").delete_item(JID.from_string(item.jid))
+            for item in items:
+                self._client.get_module("Roster").delete_item(JID.from_string(item.jid))
+
+        ConfirmationDialog(
+            _("Remove Contacts"),
+            _("Remove %s contacts from your roster?") % len(items),
+            "",
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Remove", callback=_on_remove),
+            ],
+            transient_for=self.window,
+        ).show()
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
-        client = app.get_client(self.account)
-        if not client.state.is_available:
-            return
 
         item = self._get_selected_items()[0]
 
         def _on_change_name(name: str) -> None:
-            client.get_module("Roster").change_name(JID.from_string(item.jid), name)
+            if not self._client.state.is_available:
+                return
+            self._client.get_module("Roster").change_name(
+                JID.from_string(item.jid), name
+            )
 
         InputDialog(
-            _("Choose name"),
-            "",
+            _("Change name"),
+            "Enter the new name for the contact",
             "",
             [
                 DialogButton.make("Cancel"),
@@ -330,30 +345,29 @@ class ManageRoster(GajimAppWindow, EventHelper):
     def _on_import_from_account(
         self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-        remote_client = app.get_client(param.get_string())
-        local_client = app.get_client(self.account)
 
+        remote_client = app.get_client(param.get_string())
         remote_items = [
             item for _jid, item in remote_client.get_module("Roster").iter()
         ]
 
         if not remote_items:
-            ErrorDialog(_("Import Error"), _("No items found to import"))
+            ErrorDialog(_("Import Error"), _("No contacts found to import"))
             return
 
         def _on_import():
-            if not local_client.state.is_available:
+            if not self._client.state.is_available:
                 return
 
             for item in remote_items:
-                local_client.get_module("Presence").subscribe(
+                self._client.get_module("Presence").subscribe(
                     item.jid, name=item.name, groups=item.groups, auto_auth=True
                 )
 
         ConfirmationDialog(
             _("Import"),
+            _("Found %s contacts to import") % len(remote_items),
             "",
-            _("Found %s items to import") % len(remote_items),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),
@@ -420,16 +434,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
         dialog.save(self.window, None, _on_file_picked)
 
     def _export(self, path: Path) -> None:
-        client = app.get_client(self.account)
-
         with path.open(mode="w", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
-            for jid, item in client.get_module("Roster").iter():
+            for jid, item in self._client.get_module("Roster").iter():
                 writer.writerow([jid, item.name, ";".join(item.groups)])
 
     def _import(self, path: Path) -> None:
-        client = app.get_client(self.account)
-        jids = {str(jid) for jid, _item in client.get_module("Roster").iter()}
+        jids = {str(jid) for jid, _item in self._client.get_module("Roster").iter()}
 
         items: list[ImportedItem] = []
         with path.open(encoding="utf-8") as csvfile:
@@ -443,22 +454,22 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     items.append(item)
 
         if not items:
-            ErrorDialog(_("Import Error"), _("No items found to import"))
+            ErrorDialog(_("Import Error"), _("No contact found to import"))
             return
 
         def _on_import():
-            if not client.state.is_available:
+            if not self._client.state.is_available:
                 return
 
             for item in items:
-                client.get_module("Presence").subscribe(
+                self._client.get_module("Presence").subscribe(
                     item.jid, name=item.name, groups=item.groups, auto_auth=True
                 )
 
         ConfirmationDialog(
             _("Import"),
+            _("Found %s contacts to import") % len(items),
             "",
-            _("Found %s items to import") % len(items),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),
@@ -514,7 +525,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             return Gdk.EVENT_STOP
 
         single_selection = len(items) == 1
-        groups = app.get_client(self.account).get_module("Roster").get_groups()
+        groups = self._client.get_module("Roster").get_groups()
         groups = sorted(groups)
 
         menu = get_manage_roster_menu(groups, single_selection)
@@ -550,13 +561,25 @@ class RosterListItem(GObject.Object):
     def _get_subscription_data(self, subscription: str | None) -> tuple[str, str, str]:
         match subscription:
             case "both":
-                return ("lucide-arrow-right-left-symbolic", "success-color", "both")
+                return (
+                    "lucide-arrow-right-left-symbolic",
+                    "success-color",
+                    _("Status is shared"),
+                )
             case "to":
-                return ("lucide-arrow-right-symbolic", "warning-color", "to")
+                return (
+                    "lucide-arrow-right-symbolic",
+                    "warning-color",
+                    _("You don't share your status with this contact"),
+                )
             case "from":
-                return ("lucide-arrow-left-symbolic", "info-color", "from")
+                return (
+                    "lucide-arrow-left-symbolic",
+                    "info-color",
+                    _("This contact does not share his status with you"),
+                )
             case "none":
-                return ("lucide-x-symbolic", "error-color", "none")
+                return ("lucide-x-symbolic", "error-color", _("Status is not shared"))
             case _:
                 raise ValueError("Invalid value: %s" % subscription)
 
@@ -567,7 +590,7 @@ class RosterListItem(GObject.Object):
             case None:
                 return (None, None, None)
             case "subscribe":
-                return ("feather-clock-symbolic", None, "pending")
+                return ("feather-clock-symbolic", None, _("Pending"))
             case _:
                 raise ValueError("Invalid value: %s" % ask)
 
@@ -672,11 +695,21 @@ class HeaderViewItem(Gtk.Label):
             xalign=0,
         )
 
+        self._group_data = ""
         self.__bindings: list[GObject.Binding] = []
+
+    @GObject.Property(type=str)
+    def group_data(self) -> str:  # pyright: ignore
+        return self._group_data
+
+    @group_data.setter
+    def group_data(self, value: str) -> None:
+        self._group_data = value or _("No group assigned")
+        self.set_label(self._group_data)
 
     def bind(self, obj: RosterListItem) -> None:
         bind_spec = [
-            ("group", self, "label"),
+            ("group", self, "group_data"),
         ]
 
         for source_prop, widget, target_prop in bind_spec:
