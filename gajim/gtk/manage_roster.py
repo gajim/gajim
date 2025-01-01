@@ -120,7 +120,17 @@ class ManageRoster(GajimAppWindow, EventHelper):
             model=self._model, sorter=sorter, section_sorter=section_sorter
         )
 
-        self._selection_model = Gtk.MultiSelection(model=sort_model)
+        expression = Gtk.PropertyExpression.new(
+            this_type=RosterListItem,
+            expression=None,
+            property_name="search_string",
+        )
+
+        self._string_filter = Gtk.StringFilter.new(expression)
+
+        filter_model = Gtk.FilterListModel(model=sort_model, filter=self._string_filter)
+
+        self._selection_model = Gtk.MultiSelection(model=filter_model)
         self._ui.column_view.set_model(self._selection_model)
 
         self._popover_menu = GajimPopover(None)
@@ -137,6 +147,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         self._ui.import_button.set_menu_model(get_manage_roster_import_menu(accounts))
 
+        self._connect(self._ui.search_entry, "search-changed", self._on_search_changed)
+
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
 
@@ -148,6 +160,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         del self._popover_menu
         del self._model
         del self._actions
+        del self._string_filter
         self._client.disconnect_all_from_obj(self)
         self.unregister_events()
 
@@ -242,6 +255,9 @@ class ManageRoster(GajimAppWindow, EventHelper):
             action = self.window.lookup_action(actions[0])
             assert isinstance(action, Gio.SimpleAction)
             action.set_enabled(state.is_connected)
+
+    def _on_search_changed(self, search_entry: Gtk.SearchEntry) -> None:
+        self._string_filter.set_search(search_entry.get_text())
 
     def _on_add_to_group(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
         self._add_to_group(param.get_string())
@@ -544,6 +560,7 @@ class RosterListItem(GObject.Object):
     ask = GObject.Property(type=object)
     subscription = GObject.Property(type=object)
     group = GObject.Property(type=str)
+    search_string = GObject.Property(type=str)
 
     def __init__(self, item: RosterItem, group: str) -> None:
 
@@ -556,6 +573,7 @@ class RosterListItem(GObject.Object):
             ask=ask,
             subscription=subscription,
             group=group,
+            search_string=f"{item.jid}|{item.name or ''}",
         )
 
     def _get_subscription_data(self, subscription: str | None) -> tuple[str, str, str]:
