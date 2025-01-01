@@ -263,13 +263,14 @@ class ManageRoster(GajimAppWindow, EventHelper):
     def _on_add_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
 
         InputDialog(
-            _("Add new group"),
-            "Enter the name of the new group",
-            "",
+            _("Add to new Group"),
+            _("Add to new Group"),
+            _("Enter group name"),
             [
                 DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("OK"), callback=self._add_to_group),
+                DialogButton.make("Accept", text=_("Add"), callback=self._add_to_group),
             ],
+            input_str=_("New Group"),
             transient_for=self.window,
         ).show()
 
@@ -286,13 +287,16 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
     def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
         InputDialog(
-            _("Move to new group"),
-            _("Enter the name of the new group"),
-            "",
+            _("Move Contact"),
+            _("Move Contact to new Group"),
+            _("Enter group name"),
             [
                 DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("OK"), callback=self._move_to_group),
+                DialogButton.make(
+                    "Accept", text=_("Move"), callback=self._move_to_group
+                ),
             ],
+            input_str=_("New Group"),
             transient_for=self.window,
         ).show()
 
@@ -324,8 +328,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         ConfirmationDialog(
             _("Remove Contacts"),
+            _("Remove Contacts"),
             _("Remove %s contacts from your contact list?") % len(items),
-            "",
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_on_remove),
@@ -345,12 +349,12 @@ class ManageRoster(GajimAppWindow, EventHelper):
             )
 
         InputDialog(
-            _("Change name"),
-            "Enter the new name for the contact",
-            "",
+            _("Rename Contact"),
+            _("Rename Contact"),
+            _("Enter new contact name"),
             [
                 DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("OK"), callback=_on_change_name),
+                DialogButton.make("Accept", text=_("Rename"), callback=_on_change_name),
             ],
             input_str=item.name,
             transient_for=self.window,
@@ -468,7 +472,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     items.append(item)
 
         if not items:
-            ErrorDialog(_("Import Error"), _("No contact found to import"))
+            ErrorDialog(_("Import Error"), _("No contacts found to import"))
             return
 
         def _on_import():
@@ -592,7 +596,7 @@ class RosterListItem(GObject.Object):
                 return (
                     "lucide-arrow-left-symbolic",
                     "info-color",
-                    _("This contact does not share his status with you"),
+                    _("This contact does not share their status with you"),
                 )
             case "none":
                 return ("lucide-x-symbolic", "error-color", _("Status is not shared"))
@@ -606,7 +610,7 @@ class RosterListItem(GObject.Object):
             case None:
                 return (None, None, None)
             case "subscribe":
-                return ("feather-clock-symbolic", None, _("Pending"))
+                return ("feather-clock-symbolic", None, _("Request pending"))
             case _:
                 raise ValueError("Invalid value: %s" % ask)
 
