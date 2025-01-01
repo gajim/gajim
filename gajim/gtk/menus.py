@@ -955,6 +955,8 @@ def get_manage_roster_import_menu(accounts: list[tuple[str, str]]) -> GajimMenu:
             menuitems.append((label, "win.import-from-account", account))
 
         menu.append_submenu(_("Import from Account"), GajimMenu.from_list(menuitems))
+    else:
+        menu.add_item(_("Import from Account"), "", None)
 
     return menu
 

@@ -585,6 +585,8 @@ class ManageProxiesBuilder(Builder):
 
 class ManageRosterBuilder(Builder):
     main: Gtk.Box
+    top_box: Gtk.Box
+    search_entry: Gtk.SearchEntry
     scrolled_box: Gtk.Box
     scrolled: Gtk.ScrolledWindow
     column_view: Gtk.ColumnView
@@ -592,7 +594,6 @@ class ManageRosterBuilder(Builder):
     name_col: Gtk.ColumnViewColumn
     subscription_col: Gtk.ColumnViewColumn
     ask_col: Gtk.ColumnViewColumn
-    scrolled_box: Gtk.Box
     import_button: Gtk.MenuButton
     export_button: Gtk.Button
 
