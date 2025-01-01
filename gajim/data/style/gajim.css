@@ -478,16 +478,8 @@ button.flat.link { padding: 0; border: 0; }
 .account-page {
     background: transparent;
 }
-.account-page-roster {
-	padding: 12px;
-}
 .account-page-box {
     padding: 18px;
-}
-
-/* Roster */
-.roster treeview {
-	padding: 0 3px;
 }
 
 /* NotificationManager */
