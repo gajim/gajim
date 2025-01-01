@@ -947,7 +947,7 @@ def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMe
 
 def get_manage_roster_import_menu(accounts: list[tuple[str, str]]) -> GajimMenu:
     menu = GajimMenu()
-    menu.add_item(_("Import with File"), "win.import-from-file", None)
+    menu.add_item(_("Import from File"), "win.import-from-file", None)
 
     if accounts:
         menuitems: MenuItemListT = []
