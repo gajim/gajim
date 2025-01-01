@@ -9,6 +9,7 @@ from typing import cast
 from typing import NamedTuple
 
 import csv
+import datetime
 import enum
 import logging
 from pathlib import Path
@@ -32,8 +33,9 @@ from gajim.common.util.decorators import event_filter
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.filechoosers import FileChooserButton
+from gajim.gtk.menus import get_manage_roster_import_menu
 from gajim.gtk.menus import get_manage_roster_menu
 from gajim.gtk.util import GajimPopover
 from gajim.gtk.widgets import GajimAppWindow
@@ -126,17 +128,10 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._connect(gesture_secondary_click, "pressed", self._popup_menu)
         self._ui.scrolled_box.add_controller(gesture_secondary_click)
 
-        import_button = FileChooserButton(multiple=False, label=_("Import Roster…"))
-        self._ui.main.append(import_button)
+        accounts = app.get_enabled_accounts_with_labels()
+        accounts = [(acc, label) for acc, label in accounts if acc != self.account]
 
-        self._connect(import_button, "path-picked", self._on_import_path_picked)
-
-        export_button = FileChooserButton(
-            mode="save", multiple=False, label=_("Export Roster…")
-        )
-        self._ui.main.append(export_button)
-
-        self._connect(export_button, "path-picked", self._on_export_path_picked)
+        self._ui.import_button.set_menu_model(get_manage_roster_import_menu(accounts))
 
         self.register_event("roster-push", ged.GUI2, self._on_roster_push)
 
@@ -159,6 +154,9 @@ class ManageRoster(GajimAppWindow, EventHelper):
             ("remove-from-group", None, self._remove_from_group),
             ("remove-from-roster", None, self._on_remove_from_roster),
             ("change-name", None, self._on_change_name),
+            ("import-from-account", "s", self._on_import_from_account),
+            ("import-from-file", None, self._on_import_from_file),
+            ("export-to-csv", None, self._on_export_to_csv),
         ]
 
         for action, variant_type, callback in actions:
@@ -260,7 +258,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._move_to_group(param.get_string())
 
     def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
-
         InputDialog(
             _("Choose group name"),
             "",
@@ -330,10 +327,97 @@ class ManageRoster(GajimAppWindow, EventHelper):
             transient_for=self.window,
         ).show()
 
-    def _on_export_path_picked(
-        self, _button: FileChooserButton, paths: list[Path]
+    def _on_import_from_account(
+        self, _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
-        self._export(paths[0])
+        remote_client = app.get_client(param.get_string())
+        local_client = app.get_client(self.account)
+
+        remote_items = [
+            item for _jid, item in remote_client.get_module("Roster").iter()
+        ]
+
+        if not remote_items:
+            ErrorDialog(_("Import Error"), _("No items found to import"))
+            return
+
+        def _on_import():
+            if not local_client.state.is_available:
+                return
+
+            for item in remote_items:
+                local_client.get_module("Presence").subscribe(
+                    item.jid, name=item.name, groups=item.groups, auto_auth=True
+                )
+
+        ConfirmationDialog(
+            _("Import"),
+            "",
+            _("Found %s items to import") % len(remote_items),
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Accept", text=_("Import"), callback=_on_import),
+            ],
+            transient_for=self.window,
+        ).show()
+
+    def _on_import_from_file(self, _action: Gio.SimpleAction, param: None) -> None:
+
+        def _on_file_picked(dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
+
+            try:
+                g_file = dialog.open_finish(result)
+            except GLib.Error as e:
+                if e.code == 2:
+                    # User dismissed dialog, do nothing
+                    return
+
+                log.exception(e)
+                return
+
+            path = g_file.get_path()
+            assert path is not None
+            self._import(Path(path))
+
+        dialog = Gtk.FileDialog(
+            default_filter=Gtk.FileFilter(name="csv", patterns=["*.csv"]),
+            title=_("Import Roster"),
+            accept_label=_("Import"),
+            modal=True,
+        )
+
+        dialog.open(self.window, None, _on_file_picked)
+
+    def _on_export_to_csv(self, _action: Gio.SimpleAction, param: None) -> None:
+
+        def _on_file_picked(dialog: Gtk.FileDialog, result: Gio.AsyncResult) -> None:
+
+            try:
+                g_file = dialog.save_finish(result)
+            except GLib.Error as e:
+                if e.code == 2:
+                    # User dismissed dialog, do nothing
+                    return
+
+                log.exception(e)
+                return
+
+            path = g_file.get_path()
+            assert path is not None
+            self._export(Path(path))
+
+        now = datetime.datetime.now()
+        filename = f"{self.account}-{now.strftime('%Y-%m-%d')}.csv"
+
+        dialog = Gtk.FileDialog(
+            default_filter=Gtk.FileFilter(name="csv", patterns=["*.csv"]),
+            title=_("Export CSV"),
+            accept_label=_("Export"),
+            initial_file=Gio.File.new_for_path(filename),
+            modal=True,
+        )
+
+        dialog.save(self.window, None, _on_file_picked)
 
     def _export(self, path: Path) -> None:
         client = app.get_client(self.account)
@@ -342,11 +426,6 @@ class ManageRoster(GajimAppWindow, EventHelper):
             writer = csv.writer(csvfile)
             for jid, item in client.get_module("Roster").iter():
                 writer.writerow([jid, item.name, ";".join(item.groups)])
-
-    def _on_import_path_picked(
-        self, _button: FileChooserButton, paths: list[Path]
-    ) -> None:
-        self._import(paths[0])
 
     def _import(self, path: Path) -> None:
         client = app.get_client(self.account)
@@ -364,10 +443,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     items.append(item)
 
         if not items:
-            log.warning("No items to import found")
+            ErrorDialog(_("Import Error"), _("No items found to import"))
             return
 
         def _on_import():
+            if not client.state.is_available:
+                return
+
             for item in items:
                 client.get_module("Presence").subscribe(
                     item.jid, name=item.name, groups=item.groups, auto_auth=True

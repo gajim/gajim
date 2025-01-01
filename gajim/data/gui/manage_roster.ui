@@ -59,5 +59,21 @@
           </child>
         </object>
     </child>
+    <child>
+      <object class="GtkBox">
+          <property name="orientation">0</property>
+          <child>
+            <object class="GtkMenuButton" id="import_button">
+              <property name="icon-name">lucide-file-up-symbolic</property>
+            </object>
+          </child>
+          <child>
+            <object class="GtkButton" id="export_button">
+              <property name="icon-name">lucide-file-down-symbolic</property>
+              <property name="action-name">win.export-to-csv</property>
+            </object>
+          </child>
+      </object>
+    </child>
   </object>
 </interface>

@@ -592,6 +592,9 @@ class ManageRosterBuilder(Builder):
     name_col: Gtk.ColumnViewColumn
     subscription_col: Gtk.ColumnViewColumn
     ask_col: Gtk.ColumnViewColumn
+    scrolled_box: Gtk.Box
+    import_button: Gtk.MenuButton
+    export_button: Gtk.Button
 
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box

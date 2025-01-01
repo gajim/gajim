@@ -945,6 +945,20 @@ def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMe
     return menu
 
 
+def get_manage_roster_import_menu(accounts: list[tuple[str, str]]) -> GajimMenu:
+    menu = GajimMenu()
+    menu.add_item(_("Import with File"), "win.import-from-file", None)
+
+    if accounts:
+        menuitems: MenuItemListT = []
+        for account, label in accounts:
+            menuitems.append((label, "win.import-from-account", account))
+
+        menu.append_submenu(_("Import from Account"), GajimMenu.from_list(menuitems))
+
+    return menu
+
+
 def escape_mnemonic(label: str | None) -> str | None:
     if label is None:
         return None
