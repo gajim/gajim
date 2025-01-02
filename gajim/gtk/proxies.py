@@ -142,7 +142,6 @@ class ManageProxies(GajimAppWindow):
             self._block_signal = False
 
         ConfirmationDialog(
-            _("Remove Proxy"),
             _("Remove Proxy?"),
             _("Do you really want to remove this proxy?"),
             [

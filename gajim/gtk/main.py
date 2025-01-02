@@ -309,7 +309,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_plain_connection(event: events.PlainConnection) -> None:
         ConfirmationDialog(
             _("Insecure Connection"),
-            _("Insecure Connection"),
             _(
                 "You are about to connect to the account %(account)s "
                 "(%(server)s) using an insecure connection method. This means "
@@ -355,7 +354,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         message = message + "\n" + sec_msg
 
         ConfirmationDialog(
-            _("Authorization Request"),
             _("HTTP Authorization Request"),
             message,
             [
@@ -709,7 +707,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             )
 
         InputDialog(
-            _("Moderate Message"),
             _("Moderate message?"),
             _("Why do you want to moderate this message?"),
             [
@@ -746,10 +743,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 )
 
         InputDialog(
-            _("Moderate Messages"),
-            _("Moderate %(count)s messages from %(participant)s?")
+            _("Moderate Messages?"),
+            _(
+                "%(count)s messages from %(participant)s will be moderated.\n"
+                "Why do you want to moderate these messages?"
+            )
             % {"count": len(messages), "participant": params.nickname},
-            _("Why do you want to moderate these messages?"),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),
@@ -772,7 +771,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             )
 
         ConfirmationDialog(
-            _("Delete Message"),
             _("Delete message locally?"),
             _("This message will be deleted from your local chat history"),
             [
@@ -953,8 +951,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         if open_chats:
             ConfirmationDialog(
-                _("Remove Workspace"),
-                _("Remove Workspace"),
+                _("Remove Workspace?"),
                 _(
                     "This workspace contains chats. All chats will be moved to "
                     "the next workspace. Remove anyway?"
@@ -1263,8 +1260,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self._chat_page.remove_chat(account, contact.jid)
 
         ConfirmationDialog(
-            _("Block Contact"),
-            _("Really block this contact?"),
+            _("Block Contact?"),
             _(
                 "You will appear offline for this contact and you "
                 "will not receive further messages."
@@ -1298,8 +1294,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         ) % {"name": contact.name, "jid": jid}
 
         ConfirmationDialog(
-            _("Remove Contact"),
-            _("Remove contact from contact list"),
+            _("Remove contact from contact list?"),
             sec_text,
             [
                 DialogButton.make("Cancel"),
@@ -1394,7 +1389,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
             # if transfer_active:
             #     ConfirmationDialog(
-            #         _('Stop File Transfers'),
             #         _('You still have running file transfers'),
             #         _('If you quit now, the file(s) being transferred will '
             #           'be lost.\n'
@@ -1415,7 +1409,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             # Check for unread messages
             if self.get_total_unread_count():
                 ConfirmationDialog(
-                    _("Unread Messages"),
                     _("You still have unread messages"),
                     _(
                         "Messages will only be available for reading them later "

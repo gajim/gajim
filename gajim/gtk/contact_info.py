@@ -385,7 +385,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
             switch.set_state(state)
         else:
             ConfirmationDialog(
-                _("Online Status"),
                 _("Stop sharing online status?"),
                 _(
                     "The contact will be informed that you stopped sharing your "
@@ -462,9 +461,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
             del model[iter_]
 
         ConfirmationDialog(
-            _("Remove Group"),
-            _("Remove Group"),
-            _('Do you really want to remove "%s"?') % group,
+            _("Remove Group?"),
+            _('Do you really want to remove "%(group)s"?') % {"group": group},
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove_group),

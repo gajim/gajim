@@ -135,7 +135,6 @@ class ErrorDialog(HigDialog):
 class ConfirmationDialog(Gtk.MessageDialog):
     def __init__(
         self,
-        title: str,
         text: str,
         sec_text: str,
         buttons: list[DialogButton],
@@ -146,7 +145,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
             transient_for = app.app.get_active_window()
         Gtk.MessageDialog.__init__(
             self,
-            title=title,
+            title=text,
             text=text,
             transient_for=transient_for,
             message_type=Gtk.MessageType.QUESTION,
@@ -199,7 +198,6 @@ class ConfirmationDialog(Gtk.MessageDialog):
 class ConfirmationCheckDialog(ConfirmationDialog):
     def __init__(
         self,
-        title: str,
         text: str,
         sec_text: str,
         check_text: str,
@@ -209,7 +207,6 @@ class ConfirmationCheckDialog(ConfirmationDialog):
     ) -> None:
         ConfirmationDialog.__init__(
             self,
-            title,
             text,
             sec_text,
             buttons,
@@ -246,7 +243,6 @@ class ConfirmationCheckDialog(ConfirmationDialog):
 class InputDialog(ConfirmationDialog):
     def __init__(
         self,
-        title: str,
         text: str,
         sec_text: str,
         buttons: list[DialogButton],
@@ -256,7 +252,6 @@ class InputDialog(ConfirmationDialog):
     ) -> None:
         ConfirmationDialog.__init__(
             self,
-            title,
             text,
             sec_text,
             buttons,

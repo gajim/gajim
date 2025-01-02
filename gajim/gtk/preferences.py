@@ -1061,8 +1061,7 @@ class Miscellaneous(PreferenceBox):
             app.window.quit()
 
         ConfirmationDialog(
-            _("Purge all Chat History"),
-            _("Purge all Chat History"),
+            _("Purge all Chat History?"),
             _(
                 "Do you really want to remove all chat messages from Gajim?\n"
                 "Warning: This can’t be undone!\n"
