@@ -1,37 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkPaned" id="paned">
-    <property name="shrink-start-child">false</property>
-    <property name="resize-start-child">false</property>
+  <object class="GtkScrolledWindow" id="scrolled">
     <property name="focusable">true</property>
-    <property name="start-child">
-      <object class="GtkBox" id="roster_box">
-        <property name="orientation">1</property>
-        <property name="spacing">6</property>
-        <child>
-          <object class="GtkBox">
+    <property name="child">
+      <object class="GtkViewport">
+        <property name="child">
+          <object class="GtkBox" id="account_box">
+            <property name="hexpand">true</property>
             <property name="orientation">1</property>
-            <property name="spacing">3</property>
+            <property name="spacing">18</property>
             <child>
               <object class="GtkBox">
-                <property name="spacing">12</property>
+                <property name="orientation">1</property>
+                <property name="spacing">6</property>
                 <child>
+                  <object class="GtkImage" id="avatar_image">
+                    <property name="icon-name">missging-image</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCenterBox">
+                    <child type="center">
+                      <object class="GtkBox">
+                        <property name="margin-bottom">12</property>
+                        <property name="margin-end">12</property>
+                        <property name="orientation">1</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkLabel" id="account_label">
+                            <property name="focusable">true</property>
+                            <property name="label">&lt;name&gt;</property>
+                            <property name="selectable">true</property>
+                            <style>
+                              <class name="large-header"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="our_jid_label">
+                            <property name="focusable">true</property>
+                            <property name="tooltip-text" translatable="true">This is your XMPP address</property>
+                            <property name="wrap">true</property>
+                            <property name="wrap-mode">2</property>
+                            <property name="selectable">true</property>
+                            <property name="max-width-chars">52</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkBox">
+                        <property name="valign">1</property>
+                        <property name="hexpand">true</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkButton" id="account_settings_button">
+                            <property name="focusable">true</property>
+                            <property name="receives-default">true</property>
+                            <property name="tooltip-text" translatable="true">Account Settings…</property>
+                            <property name="valign">3</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">preferences-system-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkMenuButton" id="account_page_menu_button">
+                            <property name="focusable">true</property>
+                            <property name="focus-on-click">false</property>
+                            <property name="receives-default">true</property>
+                            <property name="valign">3</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">view-more-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="status_box">
+                <property name="halign">3</property>
+                <property name="orientation">1</property>
+                <property name="spacing">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCenterBox">
+                <child type="center">
                   <object class="GtkLabel">
-                    <property name="hexpand">true</property>
-                    <property name="halign">1</property>
-                    <property name="label" translatable="true">Contact List</property>
+                    <property name="margin-top">6</property>
+                    <property name="label" translatable="true">Notifications</property>
                     <style>
                       <class name="bold16"/>
                     </style>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkMenuButton" id="roster_menu_button">
+                <child type="end">
+                  <object class="GtkMenuButton" id="notifications_menu_button">
                     <property name="focusable">true</property>
                     <property name="focus-on-click">false</property>
                     <property name="receives-default">true</property>
-                    <property name="halign">2</property>
+                    <property name="halign">1</property>
+                    <property name="valign">3</property>
+                    <property name="margin-start">12</property>
+                    <property name="hexpand">true</property>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">view-more-symbolic</property>
@@ -41,156 +125,9 @@
                 </child>
               </object>
             </child>
-            <child>
-              <object class="GtkSearchEntry" id="roster_search_entry">
-                <property name="focusable">true</property>
-                <property name="placeholder-text" translatable="true">Search…</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="margin-top">12</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <style>
-          <class name="account-page-roster"/>
-        </style>
-      </object>
-    </property>
-    <property name="end-child">
-      <object class="GtkScrolledWindow">
-        <property name="focusable">true</property>
-        <property name="child">
-          <object class="GtkViewport">
-            <property name="child">
-              <object class="GtkBox" id="account_box">
-                <property name="hexpand">true</property>
-                <property name="orientation">1</property>
-                <property name="spacing">18</property>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">1</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkImage" id="avatar_image">
-                        <property name="icon-name">missging-image</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkCenterBox">
-                        <child type="center">
-                          <object class="GtkBox">
-                            <property name="margin-bottom">12</property>
-                            <property name="margin-end">12</property>
-                            <property name="orientation">1</property>
-                            <property name="spacing">6</property>
-                            <child>
-                              <object class="GtkLabel" id="account_label">
-                                <property name="focusable">true</property>
-                                <property name="label">&lt;name&gt;</property>
-                                <property name="selectable">true</property>
-                                <style>
-                                  <class name="large-header"/>
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="our_jid_label">
-                                <property name="focusable">true</property>
-                                <property name="tooltip-text" translatable="true">This is your XMPP address</property>
-                                <property name="wrap">true</property>
-                                <property name="wrap-mode">2</property>
-                                <property name="selectable">true</property>
-                                <property name="max-width-chars">52</property>
-                                <style>
-                                  <class name="dim-label"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child type="end">
-                          <object class="GtkBox">
-                            <property name="valign">1</property>
-                            <property name="hexpand">true</property>
-                            <property name="spacing">12</property>
-                            <child>
-                              <object class="GtkButton" id="account_settings_button">
-                                <property name="focusable">true</property>
-                                <property name="receives-default">true</property>
-                                <property name="tooltip-text" translatable="true">Account Settings…</property>
-                                <property name="valign">3</property>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="icon-name">preferences-system-symbolic</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkMenuButton" id="account_page_menu_button">
-                                <property name="focusable">true</property>
-                                <property name="focus-on-click">false</property>
-                                <property name="receives-default">true</property>
-                                <property name="valign">3</property>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="icon-name">view-more-symbolic</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="status_box">
-                    <property name="halign">3</property>
-                    <property name="orientation">1</property>
-                    <property name="spacing">12</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCenterBox">
-                    <child type="center">
-                      <object class="GtkLabel">
-                        <property name="margin-top">6</property>
-                        <property name="label" translatable="true">Notifications</property>
-                        <style>
-                          <class name="bold16"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkMenuButton" id="notifications_menu_button">
-                        <property name="focusable">true</property>
-                        <property name="focus-on-click">false</property>
-                        <property name="receives-default">true</property>
-                        <property name="halign">1</property>
-                        <property name="valign">3</property>
-                        <property name="margin-start">12</property>
-                        <property name="hexpand">true</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">view-more-symbolic</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <style>
-                  <class name="account-page-box"/>
-                </style>
-              </object>
-            </property>
+            <style>
+              <class name="account-page-box"/>
+            </style>
           </object>
         </property>
       </object>

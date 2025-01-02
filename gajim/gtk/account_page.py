@@ -23,9 +23,7 @@ from gajim.common.modules.contacts import BareContact
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_account_menu
 from gajim.gtk.menus import get_account_notifications_menu
-from gajim.gtk.menus import get_roster_view_menu
 from gajim.gtk.notification_manager import NotificationManager
-from gajim.gtk.roster import Roster
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
 from gajim.gtk.util import open_window
@@ -46,9 +44,8 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
         self._contact.connect("avatar-update", self._on_avatar_update)
 
         self._ui = get_builder("account_page.ui")
-        self.append(self._ui.paned)
+        self.append(self._ui.scrolled)
 
-        self._connect(self._ui.roster_search_entry, "changed", self._on_search_changed)
         self._connect(
             self._ui.account_settings_button, "clicked", self._on_account_settings
         )
@@ -70,15 +67,6 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
             get_account_notifications_menu(account)
         )
 
-        self._roster = Roster(account)
-        self._ui.roster_box.append(self._roster)
-
-        self._ui.paned.set_position(app.settings.get("chat_handle_position"))
-        self._connect(
-            self._ui.paned, "notify::position", self._on_handle_position_notify
-        )
-
-        self._ui.roster_menu_button.set_menu_model(get_roster_view_menu())
         self._ui.account_page_menu_button.set_menu_model(get_account_menu(account))
 
         self._client.connect_signal("state-changed", self._on_client_state_changed)
@@ -129,18 +117,6 @@ class AccountPage(Gtk.Box, EventHelper, SignalManager):
 
         jid = client.get_own_jid().bare
         self._ui.our_jid_label.set_text(jid)
-
-    def _on_search_changed(self, widget: Gtk.SearchEntry) -> None:
-        text = widget.get_text().lower()
-        self._roster.set_search_string(text)
-
-    @staticmethod
-    def _on_handle_position_notify(paned: Gtk.Paned, *args: Any) -> None:
-        position = paned.get_position()
-        app.settings.set("chat_handle_position", position)
-
-    def get_roster(self) -> Roster:
-        return self._roster
 
     def update(self) -> None:
         account_label = app.settings.get_account_setting(self._account, "account_label")
