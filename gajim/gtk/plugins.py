@@ -422,7 +422,6 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             if error_text == _('Plugin already exists'):
                 ConfirmationDialog(
                     _('Overwrite Plugin?'),
-                    _('Plugin already exists'),
                     _('Do you want to overwrite the currently installed version?'),
                     [DialogButton.make('Cancel'),
                      DialogButton.make('Remove',

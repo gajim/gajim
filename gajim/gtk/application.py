@@ -880,7 +880,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             control.reset_view()
 
         ConfirmationDialog(
-            _("Remove Chat History"),
             _("Remove Chat History?"),
             _("Do you really want to remove your chat history for this chat?"),
             [

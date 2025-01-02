@@ -211,8 +211,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
             self._omemo.clear_devicelist()
 
         ConfirmationDialog(
-            _("Clear Devices"),
-            _("Clear Devices Now?"),
+            _("Clear Devices?"),
             _("This will clear the devices store for your account."),
             [
                 DialogButton.make("Cancel"),
@@ -301,8 +300,7 @@ class KeyRow(Gtk.ListBoxRow):
             listbox.remove(self)
 
         ConfirmationDialog(
-            _("Delete"),
-            _("Delete Fingerprint"),
+            _("Delete Fingerprint?"),
             _("Doing so will permanently delete this Fingerprint"),
             [
                 DialogButton.make("Cancel"),

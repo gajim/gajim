@@ -295,8 +295,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
                 text += _("Additionally, you will lose your owner affiliation.")
 
         ConfirmationCheckDialog(
-            _("Leave Group Chat"),
-            _("Are you sure you want to leave this group chat?"),
+            _("Leave Group Chat?"),
             text,
             _("_Do not ask me again"),
             buttons,

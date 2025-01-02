@@ -284,8 +284,7 @@ class Themes(GajimAppWindow):
             )
 
         ConfirmationDialog(
-            _("Delete"),
-            _("Delete Theme"),
+            _("Delete Theme?"),
             text,
             [
                 DialogButton.make("Cancel"),
