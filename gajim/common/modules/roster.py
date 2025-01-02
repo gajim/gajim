@@ -193,6 +193,23 @@ class Roster(BaseModule):
         groups.add(new_group)
         self._nbxmpp('Roster').set_item(jid, item.name, groups)
 
+    def add_to_group(self, jid: JID, group: str) -> None:
+        item = self.get_item(jid)
+        assert item is not None
+        new_groups = item.groups | {group}
+        self._nbxmpp('Roster').set_item(jid, item.name, new_groups)
+
+    def remove_from_group(self, jid: JID, group: str) -> None:
+        item = self.get_item(jid)
+        assert item is not None
+        new_groups = item.groups - {group}
+        self._nbxmpp('Roster').set_item(jid, item.name, new_groups)
+
+    def change_name(self, jid: JID, name: str | None) -> None:
+        item = self.get_item(jid)
+        assert item is not None
+        self._nbxmpp('Roster').set_item(jid, name, item.groups)
+
     def iter(self) -> Iterator[tuple[JID, RosterItem]]:
         yield from self._roster.items()
 

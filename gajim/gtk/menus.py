@@ -183,6 +183,7 @@ def get_account_menu(account: str) -> GajimMenu:
     menu = GajimMenu.from_list(menuitems)
 
     advanced_menuitems: MenuItemListT = [
+        (_("Manage Contact List"), f"app.{account}-manage-roster", account),
         (_("Archiving Preferences"), f"app.{account}-archive", account),
         (_("Blocking List"), f"app.{account}-blocking", account),
         (_("PEP Configuration"), f"app.{account}-pep-config", account),
@@ -916,6 +917,48 @@ def get_workspace_menu(workspace_id: str) -> GajimMenu:
     ]
 
     return GajimMenu.from_list(menuitems)
+
+
+def get_manage_roster_menu(groups: list[str], single_selection: bool) -> GajimMenu:
+    menu = GajimMenu()
+
+    menuitems: MenuItemListT = [(_("New Group…"), "win.move-to-new-group", None)]
+
+    for group in groups:
+        menuitems.append((group, "win.move-to-group", group))
+
+    menu.append_submenu(_("Move to Group"), GajimMenu.from_list(menuitems))
+
+    menuitems: MenuItemListT = [(_("New Group…"), "win.add-to-new-group", None)]
+
+    for group in groups:
+        menuitems.append((group, "win.add-to-group", group))
+
+    menu.append_submenu(_("Add to Group"), GajimMenu.from_list(menuitems))
+
+    menu.add_item(_("Remove from Group"), "win.remove-from-group", None)
+    if single_selection:
+        menu.add_item(_("Rename…"), "win.change-name", None)
+
+    menu.add_item(_("Remove from Contact List…"), "win.remove-from-roster", None)
+
+    return menu
+
+
+def get_manage_roster_import_menu(accounts: list[tuple[str, str]]) -> GajimMenu:
+    menu = GajimMenu()
+    menu.add_item(_("Import from File"), "win.import-from-file", None)
+
+    if accounts:
+        menuitems: MenuItemListT = []
+        for account, label in accounts:
+            menuitems.append((label, "win.import-from-account", account))
+
+        menu.append_submenu(_("Import from Account"), GajimMenu.from_list(menuitems))
+    else:
+        menu.add_item(_("Import from Account"), "", None)
+
+    return menu
 
 
 def escape_mnemonic(label: str | None) -> str | None:

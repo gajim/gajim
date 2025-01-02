@@ -109,9 +109,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
         client = app.get_client(self._contact.account)
 
         if isinstance(self._contact, BareContact):
-            client.get_module("Roster").set_item(
-                self._contact.jid, name, self._contact.groups
-            )
+            client.get_module("Roster").change_name(self._contact.jid, name)
         else:
             client.get_module("Bookmarks").modify(self._contact.jid, name=name)
 
