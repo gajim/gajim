@@ -297,6 +297,7 @@ ACCOUNT_ACTIONS = [
     ("block-contact", "s"),
     ("remove-contact", "s"),
     ("execute-command", "as"),
+    ("modify-gateway", "s"),
     ("archive", "s"),
     ("blocking", "s"),
     ("manage-roster", "s"),
