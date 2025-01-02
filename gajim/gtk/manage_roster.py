@@ -264,7 +264,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
         InputDialog(
             _("Add to new Group"),
-            _("Add to new Group"),
+            _("Add Contact to new Group"),
             _("Enter group name"),
             [
                 DialogButton.make("Cancel"),
