@@ -16,7 +16,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.client import Client
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
@@ -1027,10 +1026,12 @@ class SecurityWarning(Page):
             box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
             image.add_css_class("warning-color")
-            label = Gtk.Label(label=error_text)
-            label.set_wrap_mode(Pango.WrapMode.WORD)
-            label.set_xalign(0)
-            label.set_selectable(True)
+            label = Gtk.Label(
+                label=error_text,
+                wrap=True,
+                xalign=0,
+                selectable=True,
+            )
             box.append(image)
             box.append(label)
             self._ui.error_list.append(box)
@@ -1068,13 +1069,14 @@ class Form(Page):
         self.title: str = _("Create Account")
         self._current_form: Any | None = None
 
-        heading = Gtk.Label(label=_("Create Account"))
+        heading = Gtk.Label(
+            label=_("Create Account"),
+            wrap=True,
+            max_width_chars=30,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
         heading.add_css_class("large-header")
-        heading.set_max_width_chars(30)
-        heading.set_wrap(True)
-        heading.set_wrap_mode(Pango.WrapMode.WORD)
-        heading.set_halign(Gtk.Align.CENTER)
-        heading.set_justify(Gtk.Justification.CENTER)
         self.append(heading)
 
     @property

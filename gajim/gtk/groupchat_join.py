@@ -8,7 +8,6 @@ from typing import cast
 import logging
 
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
 
@@ -147,13 +146,13 @@ class ErrorPage(Gtk.Box):
         error_icon = Gtk.Image.new_from_icon_name("dialog-error")
         error_icon.set_valign(Gtk.Align.END)
 
-        self._error_label = Gtk.Label()
-        self._error_label.set_justify(Gtk.Justification.CENTER)
-        self._error_label.set_valign(Gtk.Align.START)
+        self._error_label = Gtk.Label(
+            wrap=True,
+            width_request=150,
+            justify=Gtk.Justification.CENTER,
+            valign=Gtk.Align.START,
+        )
         self._error_label.add_css_class("bold16")
-        self._error_label.set_wrap(True)
-        self._error_label.set_wrap_mode(Pango.WrapMode.WORD)
-        self._error_label.set_size_request(150, -1)
 
         self.append(error_icon)
         self.append(self._error_label)

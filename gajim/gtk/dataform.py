@@ -291,7 +291,6 @@ class Title:
         self._label = Gtk.Label(
             label=title,
             wrap=True,
-            wrap_mode=Pango.WrapMode.WORD,
             justify=Gtk.Justification.CENTER,
         )
         self._label.add_css_class("data-form-title")
@@ -302,11 +301,8 @@ class Title:
 
 class Instructions:
     def __init__(self, instructions: str) -> None:
-        self._label = Gtk.Label()
+        self._label = Gtk.Label(wrap=True, justify=Gtk.Justification.CENTER)
         self._label.set_markup(make_href_markup(instructions))
-        self._label.set_wrap(True)
-        self._label.set_wrap_mode(Pango.WrapMode.WORD)
-        self._label.set_justify(Gtk.Justification.CENTER)
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._label, 0, row_number, 2, 1)
@@ -326,13 +322,13 @@ class Field(GObject.GObject, SignalManager):
         self._validate_source_id: int | None = None
         self._read_only = options.get("read-only", False)
 
-        self._label = Gtk.Label(label=field.label)
-        self._label.set_single_line_mode(False)
-        self._label.set_wrap(True)
-        self._label.set_wrap_mode(Pango.WrapMode.WORD)
-        self._label.set_width_chars(15)
-        self._label.set_xalign(bool(options.get("right-align")))
-        self._label.set_tooltip_text(field.description)
+        self._label = Gtk.Label(
+            label=field.label,
+            tooltip_text=field.description,
+            wrap=True,
+            width_chars=15,
+            xalign=bool(options.get("right-align")),
+        )
 
         self._warning_image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
         self._warning_image.add_css_class("warning-color")
@@ -922,11 +918,13 @@ class FakeDataFormWidget(Gtk.ScrolledWindow, SignalManager):
 
         instructions = fields.pop("instructions", None)
         if instructions is not None:
-            label = Gtk.Label(label=instructions)
-            label.set_justify(Gtk.Justification.CENTER)
-            label.set_max_width_chars(40)
-            label.set_wrap(True)
-            label.set_wrap_mode(Pango.WrapMode.WORD)
+            label = Gtk.Label(
+                label=instructions,
+                justify=Gtk.Justification.CENTER,
+                max_width_chars=40,
+                wrap=True,
+            )
+
             self._grid.attach(label, 0, self._row_count, 2, 1)
             self._row_count += 1
 

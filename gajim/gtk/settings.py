@@ -17,7 +17,6 @@ from pathlib import Path
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.protocol import JID
 
 from gajim.common import app
@@ -222,15 +221,16 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         description_box.append(settingtext)
 
         if desc is not None:
-            description = Gtk.Label(label=desc)
-            description.set_name("SubDescription")
-            description.set_hexpand(True)
-            description.set_halign(Gtk.Align.START)
-            description.set_valign(Gtk.Align.CENTER)
-            description.set_xalign(0)
-            description.set_wrap(True)
-            description.set_wrap_mode(Pango.WrapMode.WORD)
-            description.set_max_width_chars(50)
+            description = Gtk.Label(
+                label=desc,
+                name="SubDescription",
+                hexpand=True,
+                halign=Gtk.Align.START,
+                valign=Gtk.Align.CENTER,
+                xalign=0,
+                wrap=True,
+                max_width_chars=50,
+            )
             description_box.append(description)
 
         self._grid.attach(description_box, 0, 1, 1, 1)

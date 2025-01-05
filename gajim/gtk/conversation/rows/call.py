@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from gi.repository import GdkPixbuf
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import types
@@ -186,11 +185,13 @@ class CallRow(BaseRow):
             text += _(" (Video Call)")
         else:
             text += _(" (Voice Call)")
-        label = Gtk.Label(label=text)
+        label = Gtk.Label(
+            label=text,
+            max_width_chars=40,
+            wrap=True,
+        )
         label.add_css_class("bold")
-        label.set_max_width_chars(40)
-        label.set_wrap(True)
-        label.set_wrap_mode(Pango.WrapMode.WORD)
+
         self._call_box.append(label)
 
         self._decline_button = Gtk.Button()

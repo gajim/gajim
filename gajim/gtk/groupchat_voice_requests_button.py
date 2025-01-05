@@ -90,7 +90,6 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             label=_("Participants asking for voice:"),
             max_width_chars=35,
             wrap=True,
-            wrap_mode=Pango.WrapMode.WORD,
             margin_bottom=6,
         )
         desc_label.add_css_class("dim-label")

@@ -14,7 +14,6 @@ from typing import NamedTuple
 import sys
 
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import passwords
@@ -172,7 +171,6 @@ class FeatureItem(Gtk.Grid):
             feature_dependency.set_xalign(0.0)
             feature_dependency.set_yalign(0.0)
             feature_dependency.set_wrap(True)
-            feature_dependency.set_wrap_mode(Pango.WrapMode.WORD)
             feature_dependency.set_max_width_chars(50)
             feature_dependency.set_selectable(True)
             self._box.append(feature_dependency)

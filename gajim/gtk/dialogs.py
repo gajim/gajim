@@ -9,7 +9,6 @@ from typing import cast
 from typing import NamedTuple
 
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import ButtonAction
@@ -219,7 +218,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
 
         label = Gtk.Label(
             label=check_text,
-            wrap_mode=Pango.WrapMode.WORD,
+            wrap=True,
             max_width_chars=50,
             halign=Gtk.Align.START,
             margin_start=10,

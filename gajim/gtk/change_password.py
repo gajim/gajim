@@ -11,7 +11,6 @@ from typing import overload
 import logging
 
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.errors import ChangePasswordStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
@@ -129,20 +128,22 @@ class EnterPassword(Page):
         self.complete = False
         self.title = _("Change Password")
 
-        heading = Gtk.Label(label=_("Change Password"))
-        heading.add_css_class("large-header")
-        heading.set_max_width_chars(30)
-        heading.set_wrap_mode(Pango.WrapMode.WORD)
-        heading.set_halign(Gtk.Align.CENTER)
-        heading.set_justify(Gtk.Justification.CENTER)
+        heading = Gtk.Label(
+            label=_("Change Password"),
+            wrap=True,
+            max_width_chars=30,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
 
-        label = Gtk.Label(label=_("Please enter your new password."))
-        label.set_max_width_chars(50)
-        label.set_wrap(True)
-        label.set_wrap_mode(Pango.WrapMode.WORD)
-        label.set_halign(Gtk.Align.CENTER)
-        label.set_justify(Gtk.Justification.CENTER)
-        label.set_margin_bottom(12)
+        label = Gtk.Label(
+            label=_("Please enter your new password."),
+            wrap=True,
+            max_width_chars=50,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+            margin_bottom=12,
+        )
 
         self._password1_entry = Gtk.Entry()
         self._password1_entry.set_input_purpose(Gtk.InputPurpose.PASSWORD)

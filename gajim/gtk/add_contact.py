@@ -478,12 +478,14 @@ class GroupChat(Page):
 
         self._result: DiscoInfo | None = None
 
-        heading = Gtk.Label(label=_("Join Group Chat?"))
+        heading = Gtk.Label(
+            label=_("Join Group Chat?"),
+            wrap=True,
+            max_width_chars=30,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
         heading.add_css_class("large-header")
-        heading.set_max_width_chars(30)
-        heading.set_natural_wrap_mode(Gtk.NaturalWrapMode.WORD)
-        heading.set_halign(Gtk.Align.CENTER)
-        heading.set_justify(Gtk.Justification.CENTER)
         self.append(heading)
 
         self._info_box = GroupChatInfoScrolled(minimal=True)

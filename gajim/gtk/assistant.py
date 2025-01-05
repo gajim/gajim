@@ -13,7 +13,6 @@ from collections.abc import Callable
 
 from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.ged import EventHelper
@@ -244,24 +243,24 @@ class DefaultPage(Page):
     def __init__(self, icon_name: str, icon_css_class: str) -> None:
         Page.__init__(self)
 
-        self._heading = Gtk.Label()
+        self._heading = Gtk.Label(
+            max_width_chars=30,
+            wrap=True,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
         self._heading.add_css_class("large-header")
-        self._heading.set_max_width_chars(30)
-        self._heading.set_wrap(True)
-        self._heading.set_wrap_mode(Pango.WrapMode.WORD)
-        self._heading.set_halign(Gtk.Align.CENTER)
-        self._heading.set_justify(Gtk.Justification.CENTER)
 
         icon = Gtk.Image.new_from_icon_name(icon_name)
         icon.set_pixel_size(64)
         icon.add_css_class(icon_css_class)
 
-        self._label = Gtk.Label()
-        self._label.set_max_width_chars(50)
-        self._label.set_wrap(True)
-        self._label.set_wrap_mode(Pango.WrapMode.WORD)
-        self._label.set_halign(Gtk.Align.CENTER)
-        self._label.set_justify(Gtk.Justification.CENTER)
+        self._label = Gtk.Label(
+            wrap=True,
+            max_width_chars=50,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
 
         self.append(self._heading)
         self.append(icon)
@@ -295,12 +294,12 @@ class ProgressPage(Page):
     def __init__(self) -> None:
         Page.__init__(self)
 
-        self._label = Gtk.Label()
-        self._label.set_max_width_chars(50)
-        self._label.set_wrap(True)
-        self._label.set_wrap_mode(Pango.WrapMode.WORD)
-        self._label.set_halign(Gtk.Align.CENTER)
-        self._label.set_justify(Gtk.Justification.CENTER)
+        self._label = Gtk.Label(
+            wrap=True,
+            max_width_chars=50,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
 
         spinner = Gtk.Spinner()
         spinner.start()

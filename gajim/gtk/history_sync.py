@@ -15,7 +15,6 @@ from datetime import timezone
 
 from gi.repository import GLib
 from gi.repository import Gtk
-from gi.repository import Pango
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
 from nbxmpp.task import Task
@@ -200,22 +199,21 @@ class SelectTime(Page):
         self.complete = False
         self._timedelta: timedelta | None = None
 
-        heading = Gtk.Label()
+        heading = Gtk.Label(
+            label=_("Synchronize Chat History"),
+            max_width_chars=30,
+            wrap=True,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+        )
         heading.add_css_class("large-header")
-        heading.set_max_width_chars(30)
-        heading.set_wrap(True)
-        heading.set_wrap_mode(Pango.WrapMode.WORD)
-        heading.set_halign(Gtk.Align.CENTER)
-        heading.set_justify(Gtk.Justification.CENTER)
-        heading.set_text(_("Synchronize Chat History"))
 
         label = Gtk.Label(
-            label=_("How far back should the chat history be synchronized?")
+            label=_("How far back should the chat history be synchronized?"),
+            halign=Gtk.Align.CENTER,
+            wrap=True,
+            max_width_chars=40,
         )
-        label.set_halign(Gtk.Align.CENTER)
-        label.set_wrap(True)
-        label.set_wrap_mode(Pango.WrapMode.WORD)
-        label.set_max_width_chars(40)
 
         listbox = Gtk.ListBox()
         listbox.set_hexpand(False)

@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 from gi.repository import Gtk
-from gi.repository import Pango
 
 # Avoid circular imports from common.helpers
 from gajim.common import app  # type: ignore # noqa: F401
@@ -107,13 +106,14 @@ class Start(Page):
         heading = Gtk.Label(label="Test Assistant")
         heading.add_css_class("large-header")
 
-        label1 = Gtk.Label(label="This is label 1 with some text")
-        label1.set_max_width_chars(50)
-        label1.set_wrap(True)
-        label1.set_wrap_mode(Pango.WrapMode.WORD)
-        label1.set_halign(Gtk.Align.CENTER)
-        label1.set_justify(Gtk.Justification.CENTER)
-        label1.set_margin_bottom(24)
+        label1 = Gtk.Label(
+            label="This is label 1 with some text",
+            wrap=True,
+            max_width_chars=50,
+            halign=Gtk.Align.CENTER,
+            justify=Gtk.Justification.CENTER,
+            margin_bottom=24,
+        )
 
         entry = Gtk.Entry()
         entry.set_activates_default(True)
