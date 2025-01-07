@@ -314,6 +314,11 @@ class CoreApplication(ged.EventHelper):
 
     def check_for_gajim_updates(self) -> None:
         self._log.info('Checking for Gajim updates')
+
+        if sys.platform == 'win32':
+            # Disable update check for win32 until we do releases again
+            return
+
         request = create_http_request()
         request.send('GET', 'https://gajim.org/current-version.json',
                      callback=self._on_update_response)

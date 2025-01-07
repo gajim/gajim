@@ -124,26 +124,26 @@ build-debian-nightly:
     paths:
       - debian_build/*
 
-build-windows:
-  image: gajim-build
-  stage: build
-  dependencies: []
-  rules:
-    - if: '$CI_COMMIT_TAG'
-  script:
-    - >
-      release-helper build-windows-pkg \
-        --account=lovetox \
-        --repository=https://dev.gajim.org/gajim/gajim \
-        --branch=master \
-        --version=$CI_COMMIT_TAG \
-        --commit-sha=$CI_COMMIT_SHA \
-        --api-key=$APPVEYOR_API_KEY \
-        .ci/appveyor.yml
-  artifacts:
-    expire_in: 1 day
-    paths:
-      - windows_build/*.json
+# build-windows:
+#   image: gajim-build
+#   stage: build
+#   dependencies: []
+#   rules:
+#     - if: '$CI_COMMIT_TAG'
+#   script:
+#     - >
+#       release-helper build-windows-pkg \
+#         --account=lovetox \
+#         --repository=https://dev.gajim.org/gajim/gajim \
+#         --branch=master \
+#         --version=$CI_COMMIT_TAG \
+#         --commit-sha=$CI_COMMIT_SHA \
+#         --api-key=$APPVEYOR_API_KEY \
+#         .ci/appveyor.yml
+#   artifacts:
+#     expire_in: 1 day
+#     paths:
+#       - windows_build/*.json
 
 build-windows-nightly:
   image: gajim-build
@@ -232,23 +232,23 @@ deploy-debian-nightly:
         --directory=debian/gajim/"$(date +'%Y%m%d')" \
         debian_build
 
-deploy-windows:
-  image: gajim-deploy
-  stage: deploy
-  dependencies:
-    - build-windows
-  rules:
-    - if: '$CI_COMMIT_TAG'
-  script:
-    - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
-    - rm windows_build/*.json
-    - >
-      release-helper deploy-to-ftp \
-        --host=$FTP_HOST \
-        --user=$FTP_USER \
-        --password=$FTP_PASS \
-        --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
-        windows_build
+# deploy-windows:
+#   image: gajim-deploy
+#   stage: deploy
+#   dependencies:
+#     - build-windows
+#   rules:
+#     - if: '$CI_COMMIT_TAG'
+#   script:
+#     - release-helper download-appveyor-artifacts "$(find windows_build/*.json)" windows_build
+#     - rm windows_build/*.json
+#     - >
+#       release-helper deploy-to-ftp \
+#         --host=$FTP_HOST \
+#         --user=$FTP_USER \
+#         --password=$FTP_PASS \
+#         --directory=downloads/"$(echo $CI_COMMIT_TAG | cut -c 1-3)" \
+#         windows_build
 
 deploy-windows-nightly:
   image: gajim-deploy
