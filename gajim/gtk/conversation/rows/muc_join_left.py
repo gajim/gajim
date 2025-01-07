@@ -13,6 +13,7 @@ from gajim.common.util.datetime import utc_now
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
+from gajim.gtk.util import process_non_spacing_marks
 
 
 class MUCJoinLeft(BaseRow):
@@ -52,7 +53,7 @@ class MUCJoinLeft(BaseRow):
         self.grid.attach(icon, 1, 0, 1, 1)
 
         self._label = SimpleLabel()
-        self._label.set_text(text)
+        self._label.set_text(process_non_spacing_marks(text))
         self._label.add_css_class("gajim-status-message")
         self.grid.attach(self._label, 2, 0, 1, 1)
 

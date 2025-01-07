@@ -14,6 +14,7 @@ from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
 from gajim.gtk.conversation.rows.base import BaseRow
+from gajim.gtk.util import process_non_spacing_marks
 
 
 class ReadMarkerRow(BaseRow):
@@ -28,7 +29,7 @@ class ReadMarkerRow(BaseRow):
         self._contact.connect("nickname-update", self._on_nickname_update)
 
         text = _("%s has read up to this point") % contact.name
-        self.label.set_text(text)
+        self.label.set_text(process_non_spacing_marks(text))
         self.label.set_halign(Gtk.Align.CENTER)
         self.label.set_hexpand(True)
         self.label.set_sensitive(False)
@@ -38,7 +39,7 @@ class ReadMarkerRow(BaseRow):
 
     def _on_nickname_update(self, contact: ChatContactT, _signal_name: str) -> None:
         text = _("%s has read up to this point") % contact.name
-        self.label.set_text(text)
+        self.label.set_text(process_non_spacing_marks(text))
 
     def set_timestamp(self, timestamp: datetime, force: bool = False) -> None:
         if timestamp <= self._last_incoming_timestamp and not force:

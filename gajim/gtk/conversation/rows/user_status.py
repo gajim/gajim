@@ -17,6 +17,7 @@ from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
 from gajim.gtk.util import convert_surface_to_texture
+from gajim.gtk.util import process_non_spacing_marks
 
 
 class UserStatus(BaseRow):
@@ -45,7 +46,7 @@ class UserStatus(BaseRow):
 
         self._label = SimpleLabel()
         self._label.set_valign(Gtk.Align.END)
-        self._label.set_text(message)
+        self._label.set_text(process_non_spacing_marks(message))
         self._label.add_css_class("gajim-status-message")
         self.grid.attach(self._label, 2, 0, 1, 1)
 

@@ -25,6 +25,7 @@ from gajim.common.util.uri import open_uri
 from gajim.gtk.util import make_href_markup
 from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import MultiLineLabel
+from gajim.gtk.util import process_non_spacing_marks
 from gajim.gtk.util import SignalManager
 
 # Options
@@ -847,7 +848,9 @@ class TextMultiField(Field):
         length = len(field.value)
 
         if self.read_only:
-            self._textview = MultiLineLabel(label=field.value, xalign=0)
+            self._textview = MultiLineLabel(
+                label=process_non_spacing_marks(field.value), xalign=0
+            )
 
         else:
             self._textview = Gtk.TextView()

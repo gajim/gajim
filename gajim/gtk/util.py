@@ -46,6 +46,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.regex import NON_SPACING_MARKS_REGEX
 from gajim.common.regex import URL_REGEX
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
@@ -1400,6 +1401,16 @@ def convert_py_to_glib_datetime(dt: datetime.datetime | datetime.date) -> GLib.D
     g_dt = GLib.DateTime.new_from_iso8601(dt.isoformat())
     assert g_dt is not None
     return g_dt
+
+
+def process_non_spacing_marks(string: str) -> str:
+    """
+    Helper function for working around unicode non-spacing marks in
+    conjunction with Pango.WrapMode.WORD_CHAR, see:
+    https://gitlab.gnome.org/GNOME/pango/-/issues/798
+    Unbreaks spaces around non-spacing marks.
+    """
+    return NON_SPACING_MARKS_REGEX.sub("\u00a0", string)
 
 
 class SignalManager:

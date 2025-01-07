@@ -11,6 +11,7 @@ from gajim.common.util.datetime import utc_now
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
+from gajim.gtk.util import process_non_spacing_marks
 
 
 class CommandOutputRow(BaseRow):
@@ -44,7 +45,7 @@ class CommandOutputRow(BaseRow):
             self._label.add_css_class("gajim-command-error")
         else:
             self._label.add_css_class("gajim-command-output")
-        self._label.set_markup(markup)
+        self._label.set_markup(process_non_spacing_marks(markup))
         self.grid.attach(self._label, 1, 1, 1, 1)
 
     def do_unroot(self) -> None:

@@ -36,6 +36,7 @@ from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.util import container_remove_all
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.util import MultiLineLabel
+from gajim.gtk.util import process_non_spacing_marks
 
 log = logging.getLogger("gajim.gtk.adhoc")
 
@@ -295,7 +296,9 @@ class Stage(Page):
 
         for note in notes:
             label = Gtk.Label(
-                label=note.text, wrap=True, wrap_mode=Pango.WrapMode.WORD_CHAR
+                label=process_non_spacing_marks(note.text),
+                wrap=True,
+                wrap_mode=Pango.WrapMode.WORD_CHAR,
             )
             label.show()
             self._notes.append(label)
@@ -393,7 +396,7 @@ class Completed(Page):
                 icon.show()
                 self._notes.attach(icon, 0, i, 1, 1)
 
-            label = MultiLineLabel(label=note.text)
+            label = MultiLineLabel(label=process_non_spacing_marks(note.text))
             label.set_justify(Gtk.Justification.CENTER)
             label.set_vexpand(False)
             label.show()

@@ -17,6 +17,7 @@ from gajim.common.i18n import _
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
+from gajim.gtk.util import process_non_spacing_marks
 
 
 class MUCSubject(BaseRow):
@@ -59,7 +60,7 @@ class MUCSubject(BaseRow):
         meta_str = f"{author}\n{date}"
         meta = Gtk.Label(
             halign=Gtk.Align.START,
-            label=meta_str,
+            label=process_non_spacing_marks(meta_str),
             selectable=True,
             wrap=True,
             wrap_mode=Pango.WrapMode.WORD_CHAR,

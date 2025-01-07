@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 import logging
-import os
 
 import emoji
 from gi.repository import Gdk
@@ -25,6 +24,7 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
 from gajim.gtk.menus import get_uri_context_menu
 from gajim.gtk.util import make_pango_attributes
+from gajim.gtk.util import process_non_spacing_marks
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.conversaion.plain_widget")
@@ -61,15 +61,9 @@ class MessageLabel(Gtk.Label, SignalManager):
             selectable=selectable,
             xalign=0,
             wrap=True,
+            wrap_mode=Pango.WrapMode.WORD_CHAR,
         )
         SignalManager.__init__(self)
-
-        # WrapMode.WORD_CHAR can cause a segfault
-        # https://gitlab.gnome.org/GNOME/pango/-/issues/798
-        if os.environ.get("GAJIM_FORCE_WORD_WRAP"):
-            self.set_wrap_mode(Pango.WrapMode.WORD)
-        else:
-            self.set_wrap_mode(Pango.WrapMode.WORD_CHAR)
 
         self._account = account
 
@@ -125,7 +119,7 @@ class MessageLabel(Gtk.Label, SignalManager):
 
     def print_text_with_styling(self, block: PlainBlock) -> None:
         text = self._build_link_markup(block.text, block.uris)
-        self.set_markup(text)
+        self.set_markup(process_non_spacing_marks(text))
         if len(self.get_text()) > MAX_MESSAGE_LENGTH:
             # Limit message styling processing
             return
@@ -147,7 +141,7 @@ class MessageLabel(Gtk.Label, SignalManager):
         text = text.replace("/me", f"* {nickname}", 1)
         uris = process_uris(text)
         text = self._build_link_markup(text, uris)
-        self.set_markup(f"<i>{text}</i>")
+        self.set_markup(process_non_spacing_marks(f"<i>{text}</i>"))
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
         puri = parse_uri(uri)
