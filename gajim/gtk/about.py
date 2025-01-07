@@ -33,7 +33,7 @@ class AboutDialog(Gtk.AboutDialog, SignalManager):
             transient_for=app.window,
             name="Gajim",
             version=get_extended_app_version(),
-            copyright="Copyright © 2003-2024 Gajim Team",
+            copyright="Copyright © 2003-2025 Gajim Team",
             license_type=Gtk.License.GPL_3_0_ONLY,
             website="https://gajim.org/",
             logo_icon_name="gajim",
