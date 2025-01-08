@@ -293,10 +293,9 @@ MAIN_WIN_ACTIONS = [
 
 ACCOUNT_ACTIONS = [
     ("add-contact", "as"),
-    ("contact-info", "s"),
-    ("block-contact", "s"),
-    ("remove-contact", "s"),
-    ("execute-command", "as"),
+    ("block-contact", "a{sv}"),
+    ("remove-contact", "as"),
+    ("execute-command", "(sas)"),
     ("archive", "s"),
     ("blocking", "s"),
     ("manage-roster", "s"),
@@ -320,7 +319,6 @@ ALWAYS_ACCOUNT_ACTIONS = {
 ONLINE_ACCOUNT_ACTIONS = {
     "add-contact",
     "remove-contact",
-    "contact-info",
     "execute-command",
     "manage-roster",
     "pep-config",

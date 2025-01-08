@@ -104,8 +104,10 @@ def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
 def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
 
+    params = AccountJidParam(account=account, jid=contact.jid)
+
     menu = GajimMenu()
-    menu.add_item(_("Block Contact…"), f"app.{account}-block-contact", str(contact.jid))
+    menu.add_item(_("Block Contact…"), f"app.{account}-block-contact", params)
 
     submenu = get_send_file_submenu()
     menu.append_submenu(_("Send File"), submenu)
@@ -119,12 +121,12 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
 
     jids = [str(c.jid) for c in contact.get_resources()]
     if not jids:
-        jids = [contact.jid.bare]
+        jids = [str(contact.jid)]
 
     menu.add_item(
         _("Execute Command…"),
         f"app.{account}-execute-command",
-        GLib.Variant.new_strv(jids),
+        GLib.Variant("(sas)", (account, jids)),
     )
 
     return menu
@@ -170,12 +172,12 @@ def get_account_menu(account: str) -> GajimMenu:
     server_jid = client.get_own_jid().domain
     assert server_jid is not None
 
-    server_jid = GLib.Variant.new_strv([server_jid])
+    params = GLib.Variant("(sas)", (account, [server_jid]))
 
     menuitems: MenuItemListT = [
         (_("Profile"), f"app.{account}-profile", account),
         (_("Discover Services…"), f"app.{account}-services", account),
-        (_("Execute Command…"), f"app.{account}-execute-command", server_jid),
+        (_("Execute Command…"), f"app.{account}-execute-command", params),
         (_("Server Info"), f"app.{account}-server-info", account),
     ]
 

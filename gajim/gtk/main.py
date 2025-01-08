@@ -1238,23 +1238,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             "start-chat", GLib.Variant("as", [str(jid), message or ""])
         )
 
-    @staticmethod
-    def contact_info(account: str, jid: str) -> None:
-        client = app.get_client(account)
-        contact = client.get_module("Contacts").get_contact(jid)
-        open_window("ContactInfo", account=account, contact=contact)
-
-    @staticmethod
-    def execute_command(account: str, jids: list[str]) -> None:
-        open_window("AdHocCommands", account=account, jids=jids)
-
-    def block_contact(self, account: str, jid: str) -> None:
+    def block_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
 
         contact = client.get_module("Contacts").get_contact(jid)
         assert isinstance(contact, BareContact)
         if contact.is_blocked:
-            client.get_module("Blocking").unblock([jid])
+            client.get_module("Blocking").unblock([contact.jid])
             return
 
         # TODO: Keep "confirm_block" setting?

@@ -406,7 +406,9 @@ class UnsubscribedRow(NotificationRow):
         remove_button.set_valign(Gtk.Align.CENTER)
         remove_button.set_tooltip_text(_("Remove from contact list"))
         remove_button.set_action_name(f"win.{self._account}-remove-contact")
-        remove_button.set_action_target_value(GLib.Variant("s", str(self.jid)))
+        remove_button.set_action_target_value(
+            GLib.Variant("as", [self._account, str(self.jid)])
+        )
         self.grid.attach(remove_button, 3, 1, 1, 2)
 
         dismiss_button = Gtk.Button.new_from_icon_name("window-close-symbolic")

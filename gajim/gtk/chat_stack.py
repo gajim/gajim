@@ -600,7 +600,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             if isinstance(contact, GroupchatContact):
                 open_window("GroupchatDetails", contact=contact)
             else:
-                app.window.contact_info(account, str(jid))
+                open_window("ContactInfo", account=contact.account, contact=contact)
 
         elif action_name == "muc-contact-info":
             assert param is not None

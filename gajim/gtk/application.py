@@ -464,6 +464,9 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ("mark-as-read", self._on_mark_as_read_action),
             ("export-history", self._on_export_history),
             ("manage-roster", self._on_manage_roster_action),
+            ("block-contact", self._on_block_contact),
+            ("remove-contact", self._on_remove_contact),
+            ("execute-command", self._on_execute_command),
         ]
 
         for action_name, func in actions:
@@ -684,6 +687,24 @@ class GajimApplication(Gtk.Application, CoreApplication):
     ) -> None:
         account = param.get_string()
         open_window("ManageRoster", account=account)
+
+    @structs.actionmethod
+    def _on_block_contact(
+        self, _action: Gio.SimpleAction, params: structs.AccountJidParam
+    ) -> None:
+        app.window.block_contact(params.account, params.jid)
+
+    def _on_remove_contact(
+        self, _action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        account, jid = param.unpack()
+        app.window.remove_contact(account, JID.from_string(jid))
+
+    def _on_execute_command(
+        self, _action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        account, jids = param.unpack()
+        open_window("AdHocCommands", account=account, jids=jids)
 
     @staticmethod
     def _on_pep_config_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

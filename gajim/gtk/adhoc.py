@@ -44,8 +44,7 @@ class AdHocCommands(Assistant):
     def __init__(self, account: str, jids: list[str]) -> None:
         Assistant.__init__(self, width=600, height=500)
         self.account = account
-        self.jids = jids
-        self.jid = self.jids[0]  # TODO: Add resource chooser
+        self.jid = str(jids[0])  # TODO: Add resource chooser
 
         self._destroyed = False
 
