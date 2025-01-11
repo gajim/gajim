@@ -203,8 +203,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.interface = None
 
-        GLib.set_application_name("Gajim")
-
     @staticmethod
     def _get_remaining_entry():
         option = GLib.OptionEntry()
@@ -369,10 +367,13 @@ class GajimApplication(Gtk.Application, CoreApplication):
             return 0
 
         profile = options.lookup_value("profile")
-        if profile is not None:
+        if profile is None:
+            GLib.set_application_name("Gajim")
+        else:
             # Incorporate profile name into application id
             # to have a single app instance for each profile.
             profile = profile.get_string()
+            GLib.set_application_name(f"Gajim ({profile})")
             app_id = f"{self.get_application_id()}.{profile}"
             self.set_application_id(app_id)
             configpaths.set_profile(profile)

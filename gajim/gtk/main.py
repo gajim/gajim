@@ -80,7 +80,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         Gtk.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
-        self.set_title("Gajim")
+        self.set_title(GLib.get_application_name())
         self.set_default_icon_name("gajim")
 
         app.window = self
