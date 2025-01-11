@@ -844,7 +844,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
     ) -> None:
-        texture = clipboard.read_texture_finish(result)
+        try:
+            texture = clipboard.read_texture_finish(result)
+        except GLib.Error as e:
+            log.error("Could not read clipboard content: %s", e)
+            return
+
         if texture is None:
             log.info("No image pasted")
             self._ui.input_overlay.set_visible(False)
