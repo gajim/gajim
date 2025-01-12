@@ -195,7 +195,8 @@
             </child>
             <child>
               <object class="GtkButton" id="configure_plugin_button">
-                <property name="halign">center</property>
+                <property name="halign">end</property>
+                <property name="hexpand">1</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="1">Plugin Settings</property>
