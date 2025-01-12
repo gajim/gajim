@@ -917,9 +917,6 @@ button.flat.link { padding: 0; border: 0; }
 .data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }
 .data-form-widget textview { padding: 5px; }
 
-/* Assistant */
-.assistant-grid > box stack  { padding: 18px; }
-
 /* Miscellaneous widgets ================================================== */
 
 /* Notification (Windows) */
