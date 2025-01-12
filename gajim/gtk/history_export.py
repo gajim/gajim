@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import Literal
 from typing import overload
 
@@ -12,10 +13,14 @@ from datetime import datetime
 from pathlib import Path
 
 from gi.repository import Gtk
+from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
@@ -25,16 +30,18 @@ from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 
 log = logging.getLogger("gajim.gtk.history_export")
 
 
 class HistoryExport(Assistant):
-    def __init__(self, account: str | None = None) -> None:
+    def __init__(self, account: str | None = None, jid: JID | None = None) -> None:
         Assistant.__init__(self)
 
         self.account = account
+        self.jid = jid
 
         self.add_button(
             "export", _("Export"), complete=True, css_class="suggested-action"
@@ -43,7 +50,7 @@ class HistoryExport(Assistant):
         self.add_button("back", _("Back"))
         self.set_button_visible_func(self._visible_func)
 
-        self.add_pages({"start": SelectAccountDir(account)})
+        self.add_pages({"start": ExportSettings(account, jid)})
 
         progress_page = self.add_default_page("progress")
         progress_page.set_title(_("Exporting History..."))
@@ -57,13 +64,13 @@ class HistoryExport(Assistant):
         error_page.set_title(_("Error while Exporting"))
         error_page.set_text(_("An error occurred while exporting your messages"))
 
-        self.connect("button-clicked", self._on_button_clicked)
+        self._connect(self, "button-clicked", self._on_button_clicked)
 
     @overload
     def get_page(self, name: Literal["error"]) -> ErrorPage: ...
 
     @overload
-    def get_page(self, name: Literal["start"]) -> SelectAccountDir: ...
+    def get_page(self, name: Literal["start"]) -> ExportSettings: ...
 
     def get_page(self, name: str) -> Page:
         return self._pages[name]
@@ -96,13 +103,16 @@ class HistoryExport(Assistant):
 
     def _on_export(self) -> None:
         start_page = self.get_page("start")
-        account, directory = start_page.get_account_and_directory()
+        account, jid, directory = start_page.get_export_settings()
 
         current_time = datetime.now()
         time_str = current_time.strftime("%Y-%m-%d-%H-%M-%S")
         export_dir = directory / f"export_{time_str}"
 
-        jids = app.storage.archive.get_conversation_jids(account)
+        if jid is None:
+            jids = app.storage.archive.get_conversation_jids(account)
+        else:
+            jids = [jid]
 
         for jid in jids:
             messages = app.storage.archive.get_messages_for_export(account, jid)
@@ -158,10 +168,12 @@ class HistoryExport(Assistant):
         return f'{timestamp} {name}: {text or ""}\n'
 
 
-class SelectAccountDir(Page):
-    def __init__(self, account: str | None) -> None:
+class ExportSettings(Page):
+    def __init__(self, account: str | None, jid: JID | None) -> None:
         Page.__init__(self)
         self._account = account
+        self._jid = jid
+
         self._export_directory = configpaths.get("MY_DATA")
 
         self.title = _("Export Chat History")
@@ -169,17 +181,22 @@ class SelectAccountDir(Page):
         self._ui = get_builder("history_export.ui")
         self.append(self._ui.select_account_box)
 
-        accounts = app.get_enabled_accounts_with_labels()
-        liststore = Gtk.ListStore(str, str)
-        for acc in accounts:
-            liststore.append(acc)
+        accounts_data: dict[str, str] = {}
+        for account_data in app.get_enabled_accounts_with_labels():
+            accounts_data[account_data[0]] = account_data[1]
 
-        self._ui.account_combo.set_model(liststore)
+        self._accounts_dropdown = GajimDropDown(data=accounts_data, fixed_width=40)
+        self._ui.settings_grid.attach(self._accounts_dropdown, 1, 0, 1, 1)
+        self._connect(
+            self._accounts_dropdown, "notify::selected", self._on_account_changed
+        )
+
+        self._chats_dropdown = GajimDropDown(fixed_width=40)
+        self._connect(self._chats_dropdown, "notify::selected", self._on_chat_changed)
+        self._ui.settings_grid.attach(self._chats_dropdown, 1, 1, 1, 1)
 
         if self._account is not None:
-            self._ui.account_combo.set_active_id(self._account)
-        else:
-            self._ui.account_combo.set_active(0)
+            self._accounts_dropdown.select_key(self._account)
 
         file_chooser_button = FileChooserButton(
             path=self._export_directory,
@@ -188,16 +205,48 @@ class SelectAccountDir(Page):
         )
         file_chooser_button.set_size_request(250, -1)
         self._connect(file_chooser_button, "path-picked", self._on_path_picked)
-        self._ui.settings_grid.attach(file_chooser_button, 1, 1, 1, 1)
-
-        self._connect(self._ui.account_combo, "changed", self._on_account_changed)
+        self._ui.settings_grid.attach(file_chooser_button, 1, 2, 1, 1)
 
         self._set_complete()
 
-    def _on_account_changed(self, combobox: Gtk.ComboBox) -> None:
-        account = combobox.get_active_id()
+    def _on_account_changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+        item = dropdown.get_selected_item()
+        assert item is not None
+        account = item.props.key
         self._account = account
+        self._update_chat_dropdown()
         self._set_complete()
+
+    def _on_chat_changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+        item = dropdown.get_selected_item()
+        if item is None:
+            return
+
+        address = item.props.key
+        if address:
+            self._jid = JID.from_string(address)
+        else:
+            self._jid = None
+
+    def _update_chat_dropdown(self) -> None:
+        if self._account is None:
+            self._chats_dropdown.set_data({})
+            return
+
+        jids = app.storage.archive.get_conversation_jids(self._account)
+        client = app.get_client(self._account)
+
+        chats: dict[str, str] = {"": _("All Chats")}
+        for jid in jids:
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(
+                contact, BareContact | GroupchatContact | GroupchatParticipant
+            )
+            chats[str(jid)] = f"{contact.name} ({jid})"
+
+        self._chats_dropdown.set_data(chats)
+        if self._jid is not None:
+            self._chats_dropdown.select_key(str(self._jid))
 
     def _set_complete(self) -> None:
         self.complete = bool(self._account is not None)
@@ -210,7 +259,7 @@ class SelectAccountDir(Page):
             return
         self._export_directory = paths[0]
 
-    def get_account_and_directory(self) -> tuple[str, Path]:
+    def get_export_settings(self) -> tuple[str, JID | None, Path]:
         assert self._account is not None
         assert self._export_directory is not None
-        return self._account, self._export_directory
+        return self._account, self._jid, self._export_directory

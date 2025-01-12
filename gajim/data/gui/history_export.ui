@@ -17,7 +17,7 @@
     <child>
       <object class="GtkLabel">
         <property name="label" translatable="1">Please select one of your accounts.
-Gajim will export all messages from the selected account to a directory of your choice.</property>
+Gajim will export all messages from the selected account and chats to a directory of your choice.</property>
         <property name="justify">center</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
@@ -45,19 +45,15 @@ Gajim will export all messages from the selected account to a directory of your 
           </object>
         </child>
         <child>
-          <object class="GtkComboBox" id="account_combo">
-            <property name="width-request">250</property>
-            <property name="id-column">0</property>
-            <property name="active-id">-1</property>
-            <child>
-              <object class="GtkCellRendererText"/>
-              <attributes>
-                <attribute name="text">1</attribute>
-              </attributes>
-            </child>
+          <object class="GtkLabel">
+            <property name="halign">end</property>
+            <property name="label" translatable="1">Chat</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
             <layout>
-              <property name="column">1</property>
-              <property name="row">0</property>
+              <property name="column">0</property>
+              <property name="row">1</property>
             </layout>
           </object>
         </child>
@@ -70,7 +66,7 @@ Gajim will export all messages from the selected account to a directory of your 
             </style>
             <layout>
               <property name="column">0</property>
-              <property name="row">1</property>
+              <property name="row">2</property>
             </layout>
           </object>
         </child>
