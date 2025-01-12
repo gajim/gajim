@@ -44,7 +44,6 @@ from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
-from gajim.gtk.structs import RemoveHistoryActionParams
 from gajim.gtk.util import GajimMenu
 from gajim.gtk.util import MenuItemListT
 
@@ -96,7 +95,8 @@ def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     submenu = get_send_file_submenu()
     menu.append_submenu(_("Send File"), submenu)
 
-    params = RemoveHistoryActionParams(account=account, jid=jid)
+    params = AccountJidParam(account=account, jid=jid)
+    menu.add_item(_("Export History…"), "app.export-history", params)
     menu.add_item(_("Remove History…"), "app.remove-history", params)
     return menu
 
@@ -128,6 +128,8 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
         f"app.{account}-execute-command",
         GLib.Variant("(sas)", (account, jids)),
     )
+    menu.add_item(_("Export History…"), "app.export-history", params)
+    menu.add_item(_("Remove History…"), "app.remove-history", params)
 
     return menu
 
@@ -139,8 +141,11 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 
     menu.add_item(_("Upload File…"), "win.send-file-httpupload", value)
 
+    params = AccountJidParam(account=contact.account, jid=contact.jid)
+    menu.add_item(_("Export History…"), "app.export-history", params)
+    menu.add_item(_("Remove History…"), "app.remove-history", params)
+
     if can_add_to_roster(contact):
-        params = AccountJidParam(account=contact.account, jid=contact.jid)
         menu.add_item(_("Add to Contact List…"), "win.add-to-roster", params)
 
     return menu
@@ -157,13 +162,17 @@ def get_send_file_submenu() -> GajimMenu:
 
 
 def get_groupchat_menu(contact: GroupchatContact) -> GajimMenu:
-    menuitems: MenuItemListT = [
-        (_("Change Nickname…"), "win.muc-change-nickname", None),
-        (_("Request Voice"), "win.muc-request-voice", None),
-        (_("Execute Command…"), "win.muc-execute-command", ""),
-    ]
+    menu = GajimMenu()
 
-    return GajimMenu.from_list(menuitems)
+    menu.add_item(_("Change Nickname…"), "win.muc-change-nickname", None)
+    menu.add_item(_("Request Voice"), "win.muc-request-voice", None)
+    menu.add_item(_("Execute Command…"), "win.muc-execute-command", "")
+
+    params = AccountJidParam(account=contact.account, jid=contact.jid)
+    menu.add_item(_("Export History…"), "app.export-history", params)
+    menu.add_item(_("Remove History…"), "app.remove-history", params)
+
+    return menu
 
 
 def get_account_menu(account: str) -> GajimMenu:

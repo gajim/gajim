@@ -192,11 +192,15 @@ class ExportSettings(Page):
         )
 
         self._chats_dropdown = GajimDropDown(fixed_width=40)
+        self._update_chat_dropdown()
         self._connect(self._chats_dropdown, "notify::selected", self._on_chat_changed)
         self._ui.settings_grid.attach(self._chats_dropdown, 1, 1, 1, 1)
 
         if self._account is not None:
             self._accounts_dropdown.select_key(self._account)
+
+        if self._jid is not None:
+            self._chats_dropdown.select_key(str(self._jid))
 
         file_chooser_button = FileChooserButton(
             path=self._export_directory,
@@ -245,8 +249,6 @@ class ExportSettings(Page):
             chats[str(jid)] = f"{contact.name} ({jid})"
 
         self._chats_dropdown.set_data(chats)
-        if self._jid is not None:
-            self._chats_dropdown.select_key(str(self._jid))
 
     def _set_complete(self) -> None:
         self.complete = bool(self._account is not None)

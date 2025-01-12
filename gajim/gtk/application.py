@@ -425,6 +425,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ("add-contact", self._on_add_contact_action),
             ("copy-text", self._on_copy_text_action),
             ("open-link", self._on_open_link_action),
+            ("export-history", self._on_export_history_action),
             ("remove-history", self._on_remove_history_action),
             ("create-groupchat", self._on_create_groupchat_action),
             ("forget-groupchat", self._on_forget_groupchat_action),
@@ -463,7 +464,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             ("blocking", self._on_blocking_action),
             ("open-event", self._on_open_event_action),
             ("mark-as-read", self._on_mark_as_read_action),
-            ("export-history", self._on_export_history),
             ("manage-roster", self._on_manage_roster_action),
             ("block-contact", self._on_block_contact),
             ("remove-contact", self._on_remove_contact),
@@ -679,10 +679,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         open_window("AccountWizard")
 
     @staticmethod
-    def _on_export_history(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        open_window("HistoryExport", account=param.get_string())
-
-    @staticmethod
     def _on_manage_roster_action(
         _action: Gio.SimpleAction, param: GLib.Variant
     ) -> None:
@@ -863,8 +859,15 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     @structs.actionfunction
+    def _on_export_history_action(
+        _action: Gio.SimpleAction, params: structs.AccountJidParam
+    ) -> None:
+        open_window("HistoryExport", account=params.account, jid=params.jid)
+
+    @staticmethod
+    @structs.actionfunction
     def _on_remove_history_action(
-        _action: Gio.SimpleAction, params: structs.RemoveHistoryActionParams
+        _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
         def _remove() -> None:
             app.storage.archive.remove_history_for_jid(params.account, params.jid)

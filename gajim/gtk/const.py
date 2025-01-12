@@ -191,6 +191,7 @@ APP_ACTIONS = [
     ("plugins", None),
     ("preferences", None),
     ("quit", None),
+    ("export-history", "a{sv}"),
     ("remove-history", "a{sv}"),
     ("shortcuts", None),
     ("show", None),
@@ -299,7 +300,6 @@ ACCOUNT_ACTIONS = [
     ("archive", "s"),
     ("blocking", "s"),
     ("manage-roster", "s"),
-    ("export-history", "s"),
     ("mark-as-read", "a{sv}"),
     ("open-event", "a{sv}"),
     ("pep-config", "s"),
@@ -311,7 +311,6 @@ ACCOUNT_ACTIONS = [
 
 
 ALWAYS_ACCOUNT_ACTIONS = {
-    "export-history",
     "open-event",
 }
 

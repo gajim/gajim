@@ -12,6 +12,7 @@ import logging
 from collections import defaultdict
 
 from gi.repository import Gdk
+from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -739,6 +740,11 @@ class PrivacyPage(GenericSettingPage):
             "PGP": "PGP",
         }
 
+        export_history_variant = GLib.Variant(
+            "a{sv}",
+            {"account": GLib.Variant("s", account), "jid": GLib.Variant("s", "")},
+        )
+
         settings = [
             Setting(
                 SettingKind.DROPDOWN,
@@ -859,8 +865,8 @@ class PrivacyPage(GenericSettingPage):
                 SettingKind.ACTION,
                 _("Export Chat History"),
                 SettingType.ACTION,
-                "-export-history",
-                props={"account": account},
+                "app.export-history",
+                props={"variant": export_history_variant},
                 desc=_("Export your chat history from Gajim"),
             ),
         ]

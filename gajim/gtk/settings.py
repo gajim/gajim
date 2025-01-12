@@ -644,14 +644,19 @@ class CallbackSetting(GenericSetting):
 
 
 class ActionSetting(GenericSetting):
-    def __init__(self, *args: Any, account: str) -> None:
+    def __init__(self, *args: Any, variant: GLib.Variant) -> None:
         GenericSetting.__init__(self, *args)
-        action_name = f"{account}{self.value}"
-        self.action = app.app.lookup_action(action_name)
+        assert isinstance(self.value, str)
+        if self.value.startswith("app."):
+            self.action = app.app.lookup_action(self.value[4:])
+        else:
+            self.action = app.window.lookup_action(self.value)
+
         if self.action is None:
-            log.error("Action not found: %s", action_name)
+            log.error("Action not found: %s", self.value)
             return
-        self.variant = GLib.Variant.new_string(account)
+
+        self.variant = variant
         self.on_enable()
 
         self._connect(self.action, "notify::enabled", self.on_enable)
