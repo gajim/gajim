@@ -30,12 +30,6 @@ class OpenEventActionParams(VariantMixin):
 
 
 @dataclass
-class RemoveHistoryActionParams(VariantMixin):
-    account: str
-    jid: JID
-
-
-@dataclass
 class AddChatActionParams(VariantMixin):
     account: str
     jid: JID

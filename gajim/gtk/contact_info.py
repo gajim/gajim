@@ -42,7 +42,7 @@ from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.vcard_grid import VCardGrid
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -265,7 +265,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         contact_settings = ContactSettings(self.account, contact.jid)
         self._ui.contact_settings_box.append(contact_settings)
 
-        params = RemoveHistoryActionParams(account=self.account, jid=self.contact.jid)
+        params = AccountJidParam(account=self.account, jid=self.contact.jid)
         self._ui.remove_history_button.set_action_name("app.remove-history")
         self._ui.remove_history_button.set_action_target_value(params.to_variant())
 

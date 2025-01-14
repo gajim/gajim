@@ -22,7 +22,7 @@ from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 from gajim.gtk.groupchat_settings import GroupChatSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.structs import RemoveHistoryActionParams
+from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -135,7 +135,7 @@ class GroupchatDetails(GajimAppWindow):
         remove_history_button = Gtk.Button(label=_("Remove History…"))
         remove_history_button.set_halign(Gtk.Align.START)
         remove_history_button.add_css_class("destructive-action")
-        params = RemoveHistoryActionParams(account=self.account, jid=self._contact.jid)
+        params = AccountJidParam(account=self.account, jid=self._contact.jid)
         remove_history_button.set_action_name("app.remove-history")
         remove_history_button.set_action_target_value(params.to_variant())
         main_box.append(remove_history_button)
