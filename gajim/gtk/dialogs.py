@@ -15,6 +15,7 @@ from gajim.common.const import ButtonAction
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
+from gajim.gtk.util import iterate_children
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -171,6 +172,11 @@ class ConfirmationDialog(Gtk.MessageDialog):
 
         self.props.secondary_use_markup = True
         self.props.secondary_text = sec_text
+
+        for child in iterate_children(self.get_message_area()):
+            if not isinstance(child, Gtk.Label):
+                continue
+            child.set_justify(Gtk.Justification.CENTER)
 
         self.connect("response", self._on_response)
 
