@@ -75,7 +75,7 @@ class ChatControl(EventHelper):
 
         self._message_selection = MessageSelection()
         self._message_selection.connect("copy", self._on_copy_selection)
-        self._message_selection.connect("cancel", self._on_cancel_selection)
+        self._message_selection.connect("cancel", self._reset_message_selection)
         self._ui.conv_view_overlay.add_overlay(self._message_selection)
 
         self._jump_to_end_button = JumpToEndButton()
@@ -195,6 +195,14 @@ class ChatControl(EventHelper):
     def mark_as_read(self) -> None:
         self._jump_to_end_button.reset_unread_count()
 
+    def process_escape(self) -> bool:
+        message_selection_active = self._message_selection.get_visible()
+        if message_selection_active:
+            self._reset_message_selection()
+            return True
+
+        return False
+
     def switch_contact(
         self, contact: BareContact | GroupchatContact | GroupchatParticipant
     ) -> None:
@@ -214,8 +222,7 @@ class ChatControl(EventHelper):
         self._groupchat_state.switch_contact(contact)
         self._roster.switch_contact(contact)
 
-        self._message_selection.set_visible(False)
-        self._message_selection.hide()
+        self._reset_message_selection()
 
         self._register_events()
 
@@ -440,11 +447,13 @@ class ChatControl(EventHelper):
         self._scrolled_view.enable_row_selection(pk)
         self._message_selection.show()
 
+    def _reset_message_selection(self, *args: Any) -> None:
+        self._scrolled_view.disable_row_selection()
+        self._message_selection.set_visible(False)
+        self._message_selection.hide()
+
     def _on_copy_selection(self, _widget: MessageSelection) -> None:
         self._scrolled_view.copy_selected_messages()
-
-    def _on_cancel_selection(self, _widget: MessageSelection) -> None:
-        self._scrolled_view.disable_row_selection()
 
     def _on_jump_to_message(
         self, _action: Gio.SimpleAction, param: GLib.Variant

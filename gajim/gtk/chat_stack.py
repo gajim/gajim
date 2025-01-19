@@ -141,6 +141,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             self._chat_function_page.process_escape()
             return True
 
+        if self._chat_control.process_escape():
+            return True
+
         return self._message_action_box.process_escape()
 
     def get_chat_control(self) -> ChatControl:
