@@ -28,7 +28,8 @@ class BlockingList(GajimAppWindow):
         GajimAppWindow.__init__(
             self,
             name="BlockingList",
-            title=_("Blocking List for %s") % account,
+            title=_("Blocking List for %s")
+            % app.settings.get_account_setting(account, "account_label"),
         )
 
         self.account = account
@@ -41,7 +42,7 @@ class BlockingList(GajimAppWindow):
         self._blocking_store = Gtk.ListStore(str)
         self._ui.block_view.set_model(self._blocking_store)
 
-        self._spinner = Gtk.Spinner()
+        self._spinner = Gtk.Spinner(valign=Gtk.Align.CENTER)
         self._ui.overlay.add_overlay(self._spinner)
 
         self._set_grid_state(False)
