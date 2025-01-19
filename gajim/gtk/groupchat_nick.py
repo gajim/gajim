@@ -3,10 +3,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
 
 from gi.repository import Gtk
-from nbxmpp.protocol import InvalidJid
 from nbxmpp.protocol import validate_resourcepart
 
 from gajim.common import app
+from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util import SignalManager
@@ -48,8 +48,12 @@ class NickChooser(Gtk.MenuButton, SignalManager):
         try:
             validate_resourcepart(entry.get_text())
             self._ui.apply_button.set_sensitive(True)
-        except InvalidJid:
+            self._ui.apply_button.set_tooltip_text(None)
+        except Exception:
             self._ui.apply_button.set_sensitive(False)
+            self._ui.apply_button.set_tooltip_text(
+                _("Nickname contains invalid characters")
+            )
 
     def _on_apply_nickname(self, _button: Gtk.Button) -> None:
         nickname = self._ui.entry.get_text()
