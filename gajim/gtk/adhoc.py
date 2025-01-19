@@ -6,6 +6,8 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
+from typing import overload
 
 import logging
 
@@ -81,6 +83,27 @@ class AdHocCommands(Assistant):
         )
         self.show_all()
 
+    @overload
+    def get_page(self, name: Literal["request"]) -> RequestCommandList: ...
+
+    @overload
+    def get_page(self, name: Literal["commands"]) -> Commands: ...
+
+    @overload
+    def get_page(self, name: Literal["stage"]) -> Stage: ...
+
+    @overload
+    def get_page(self, name: Literal["completed"]) -> Completed: ...
+
+    @overload
+    def get_page(self, name: Literal["error"]) -> Error: ...
+
+    @overload
+    def get_page(self, name: Literal["executing"]) -> Executing: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
     @ensure_not_destroyed
     def _received_command_list(self, task: Task) -> None:
         try:
@@ -93,7 +116,7 @@ class AdHocCommands(Assistant):
             self._set_error(_("No commands available"), False)
             return
 
-        commands_page = cast(Commands, self.get_page("commands"))
+        commands_page = self.get_page("commands")
         commands_page.add_commands(commands)
         self.show_page("commands")
 
@@ -109,12 +132,12 @@ class AdHocCommands(Assistant):
         if stage.is_completed:
             page_name = "completed"
 
-        page = cast(Stage | Completed, self.get_page(page_name))
+        page = self.get_page(page_name)
         page.process_stage(stage)
         self.show_page(page_name)
 
     def _set_error(self, text: str, show_command_button: bool) -> None:
-        error_page = cast(Error, self.get_page("error"))
+        error_page = self.get_page("error")
         error_page.set_show_commands_button(show_command_button)
         error_page.set_text(text)
         self.show_page("error")
@@ -141,7 +164,7 @@ class AdHocCommands(Assistant):
             raise ValueError("Invalid button name: %s" % button_name)
 
     def _on_stage_action(self, action: AdHocAction) -> None:
-        stage_page = cast(Stage, self.get_page("stage"))
+        stage_page = self.get_page("stage")
         command, dataform = stage_page.stage_data
         if action == AdHocAction.PREV:
             dataform = None
@@ -151,11 +174,11 @@ class AdHocCommands(Assistant):
         )
 
         self.show_page("executing")
-        stage_page = cast(Stage, self.get_page("stage"))
+        stage_page = self.get_page("stage")
         stage_page.clear()
 
     def _on_execute(self, *args: Any) -> None:
-        commands_page = cast(Commands, self.get_page("commands"))
+        commands_page = self.get_page("commands")
         command = commands_page.get_selected_command()
         if command is None:
             return
@@ -167,7 +190,7 @@ class AdHocCommands(Assistant):
         self.show_page("executing")
 
     def _on_cancel(self) -> None:
-        stage_page = cast(Stage, self.get_page("stage"))
+        stage_page = self.get_page("stage")
         command, _ = stage_page.stage_data
         self._client.get_module("AdHocCommands").execute_command(
             command, AdHocAction.CANCEL
