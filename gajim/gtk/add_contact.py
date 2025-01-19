@@ -5,7 +5,8 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
+from typing import Literal
+from typing import overload
 
 import logging
 
@@ -71,9 +72,27 @@ class AddContact(Assistant):
 
         self.show_all()
 
+    @overload
+    def get_page(self, name: Literal["address"]) -> Address: ...
+
+    @overload
+    def get_page(self, name: Literal["error"]) -> Error: ...
+
+    @overload
+    def get_page(self, name: Literal["contact"]) -> Contact: ...
+
+    @overload
+    def get_page(self, name: Literal["groupchat"]) -> GroupChat: ...
+
+    @overload
+    def get_page(self, name: Literal["gateway"]) -> Gateway: ...
+
+    def get_page(self, name: str) -> Page:
+        return self._pages[name]
+
     def _on_button_clicked(self, _assistant: Assistant, button_name: str) -> None:
         page = self.get_current_page()
-        address_page = cast(Address, self.get_page("address"))
+        address_page = self.get_page("address")
         account, _ = address_page.get_account_and_jid()
 
         if button_name == "next":
@@ -88,7 +107,7 @@ class AddContact(Assistant):
         if button_name == "add":
             client = app.get_client(account)
             if page == "contact":
-                contact_page = cast(Contact, self.get_page("contact"))
+                contact_page = self.get_page("contact")
                 data = contact_page.get_subscription_data()
                 client.get_module("Presence").subscribe(
                     self._result.jid,
@@ -114,7 +133,7 @@ class AddContact(Assistant):
         self._result = None
         self.show_page("progress", Gtk.StackTransitionType.SLIDE_LEFT)
 
-        address_page = cast(Address, self.get_page("address"))
+        address_page = self.get_page("address")
         account, jid = address_page.get_account_and_jid()
         assert account is not None
         self._disco_info(account, jid)
@@ -149,12 +168,12 @@ class AddContact(Assistant):
             and result.condition in contact_conditions
         ):
             # It seems to be a contact
-            address_page = cast(Contact, self.get_page("contact"))
+            address_page = self.get_page("contact")
             address_page.prepare(account, result)
             self.show_page("contact", Gtk.StackTransitionType.SLIDE_LEFT)
         else:
             # TimeoutStanzaError is handled here
-            error_page = cast(ErrorPage, self.get_page("error"))
+            error_page = self.get_page("error")
             error_page.set_text(result.get_text())
             self.show_page("error", Gtk.StackTransitionType.SLIDE_LEFT)
 
@@ -167,7 +186,7 @@ class AddContact(Assistant):
                 if identity.type == "text" and result.jid.is_domain:
                     # It's a group chat component advertising
                     # category 'conference'
-                    error_page = cast(ErrorPage, self.get_page("error"))
+                    error_page = self.get_page("error")
                     error_page.set_text(
                         _("This address does not seem to offer any gateway service.")
                     )
@@ -176,23 +195,23 @@ class AddContact(Assistant):
 
                 if identity.type == "irc" and result.jid.is_domain:
                     # It's an IRC gateway advertising category 'conference'
-                    gateway_page = cast(Gateway, self.get_page("gateway"))
+                    gateway_page = self.get_page("gateway")
                     gateway_page.prepare(account, result)
                     self.show_page("gateway", Gtk.StackTransitionType.SLIDE_LEFT)
                     return
 
-            groupchat_page = cast(GroupChat, self.get_page("groupchat"))
+            groupchat_page = self.get_page("groupchat")
             groupchat_page.prepare(account, result)
             self.show_page("groupchat", Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
         if result.is_gateway:
-            gateway_page = cast(Gateway, self.get_page("gateway"))
+            gateway_page = self.get_page("gateway")
             gateway_page.prepare(account, result)
             self.show_page("gateway", Gtk.StackTransitionType.SLIDE_LEFT)
             return
 
-        contact_page = cast(Contact, self.get_page("contact"))
+        contact_page = self.get_page("contact")
         contact_page.prepare(account, result)
         self.show_page("contact", Gtk.StackTransitionType.SLIDE_LEFT)
 
