@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
 from typing import TYPE_CHECKING
 
 import logging
@@ -1040,7 +1041,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self,
         account: str,
         jid: JID,
-        type_: str,
+        type_: Literal["chat", "groupchat", "pm"],
         select: bool = False,
         message: str | None = None,
     ) -> None:
@@ -1325,7 +1326,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.add_private_chat(event.account, event.jid)
 
         else:
-            self.add_chat(event.account, event.jid, "contact")
+            self.add_chat(event.account, event.jid, "chat")
 
     def _on_read_state_sync(self, event: events.ReadStateSync) -> None:
         last_message = app.storage.archive.get_last_conversation_row(
@@ -1354,12 +1355,12 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             for item in event.contents:
                 if item.media not in ("audio", "video"):
                     return
-                self.add_chat(event.account, event.jid, "contact")
+                self.add_chat(event.account, event.jid, "chat")
                 break
 
     def _on_file_request(self, event: events.FileRequestReceivedEvent) -> None:
         if not self.chat_exists(event.account, event.jid):
-            self.add_chat(event.account, event.jid, "contact")
+            self.add_chat(event.account, event.jid, "chat")
 
     def quit(self) -> None:
         window_width, window_height = self.get_width(), self.get_height()

@@ -647,7 +647,7 @@ class BareContact(CommonContact):
         return True
 
     @property
-    def type_string(self) -> str:
+    def type_string(self) -> Literal['chat']:
         return 'chat'
 
     @property
@@ -935,7 +935,7 @@ class GroupchatContact(CommonContact):
         return all_ or room
 
     @property
-    def type_string(self) -> str:
+    def type_string(self) -> Literal['groupchat']:
         return 'groupchat'
 
     def has_composing_participants(self) -> bool:
@@ -1068,7 +1068,7 @@ class GroupchatParticipant(CommonContact):
         self.notify('user-avatar-update')
 
     @property
-    def type_string(self) -> str:
+    def type_string(self) -> Literal['pm']:
         return 'pm'
 
     @property

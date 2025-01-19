@@ -480,7 +480,7 @@ AllWorkspaceSettings = Literal[StringWorkspaceSettings, 'chats']
 class OpenChatSettingDetails(TypedDict):
     account: str
     jid: JID
-    type: str
+    type: Literal["chat", "groupchat", "pm"]
     pinned: bool
     position: int
 

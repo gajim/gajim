@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 import functools
 import inspect
@@ -33,7 +34,7 @@ class OpenEventActionParams(VariantMixin):
 class AddChatActionParams(VariantMixin):
     account: str
     jid: JID
-    type: str
+    type: Literal["chat", "groupchat", "pm"]
     select: bool
 
 

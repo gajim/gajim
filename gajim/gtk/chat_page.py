@@ -17,6 +17,9 @@ from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_filter import ChatFilter
@@ -237,7 +240,7 @@ class ChatPage(Gtk.Box, SignalManager):
         workspace_id: str,
         account: str,
         jid: JID,
-        type_: str,
+        type_: Literal["chat", "groupchat", "pm"],
         pinned: bool = False,
         position: int = -1,
         select: bool = False,
@@ -301,7 +304,9 @@ class ChatPage(Gtk.Box, SignalManager):
 
         client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact(jid)
-
+        assert isinstance(
+            contact, BareContact | GroupchatContact | GroupchatParticipant
+        )
         self.add_chat_for_workspace(
             workspace_id, account, jid, contact.type_string, select=True
         )

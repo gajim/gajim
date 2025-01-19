@@ -483,7 +483,7 @@ class StartChatDialog(GajimAppWindow):
         else:
             initial_message = self._initial_message.get(item.jid)
             app.window.add_chat(
-                item.account, jid, "contact", select=True, message=initial_message
+                item.account, jid, "chat", select=True, message=initial_message
             )
             self.close()
 

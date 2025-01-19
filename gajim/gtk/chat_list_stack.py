@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import cast
+from typing import Literal
 
 from functools import partial
 
@@ -171,7 +172,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         workspace_id: str,
         account: str,
         jid: JID,
-        type_: str,
+        type_: Literal["chat", "groupchat", "pm"],
         pinned: bool,
         position: int,
     ) -> None:
