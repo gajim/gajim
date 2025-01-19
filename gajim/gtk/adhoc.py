@@ -282,7 +282,7 @@ class Stage(Page):
         form = dataforms.extend_form(node=form)
         options = {"entry-activates-default": True}
         self._dataform_widget = DataFormWidget(form, options)
-        self._dataform_widget.connect("is-valid", self._on_is_valid)
+        self._connect(self._dataform_widget, "is-valid", self._on_is_valid)
         self._dataform_widget.validate()
         self.append(self._dataform_widget)
 
