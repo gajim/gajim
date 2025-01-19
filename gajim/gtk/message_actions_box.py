@@ -90,10 +90,10 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             "show_send_message_button", self._ui.send_message_button, "set_visible"
         )
 
-        self.voice_message_recorder_button = VoiceMessageRecorderButton()
-        self._ui.action_box.append(self.voice_message_recorder_button)
+        voice_message_recorder_button = VoiceMessageRecorderButton()
+        self._ui.action_box.append(voice_message_recorder_button)
         self._ui.action_box.reorder_child_after(
-            self.voice_message_recorder_button, self._ui.send_message_button
+            voice_message_recorder_button, self._ui.send_message_button
         )
 
         self._security_label_selector = SecurityLabelSelector()
