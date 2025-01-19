@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
 
 import logging
 from collections.abc import Iterator
@@ -142,10 +143,12 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._current_filter_text = text
         self.invalidate_filter()
 
-    def get_chat_type(self, account: str, jid: JID) -> str | None:
+    def get_chat_type(
+        self, account: str, jid: JID
+    ) -> Literal["chat", "groupchat", "pm"] | None:
         row = self._chats.get((account, jid))
         if row is not None:
-            return row.type
+            return row.type  # type: ignore
         return None
 
     def get_selected_chat(self) -> ChatListRow | None:
@@ -162,7 +165,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
                 {
                     "account": account,
                     "jid": jid,
-                    "type": row.type,
+                    "type": row.type,  # type: ignore
                     "pinned": row.is_pinned,
                     "position": row.position,
                 }
@@ -189,7 +192,12 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self.invalidate_sort()
 
     def add_chat(
-        self, account: str, jid: JID, type_: str, pinned: bool, position: int
+        self,
+        account: str,
+        jid: JID,
+        type_: Literal["chat", "groupchat", "pm"],
+        pinned: bool,
+        position: int,
     ) -> None:
 
         key = (account, jid)

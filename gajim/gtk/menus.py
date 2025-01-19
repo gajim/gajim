@@ -472,7 +472,7 @@ def get_account_notifications_menu(account: str) -> GajimMenu:
 
 
 def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
-    params = AddChatActionParams(account=account, jid=jid, type="contact", select=True)
+    params = AddChatActionParams(account=account, jid=jid, type="chat", select=True)
     value = str(jid)
     menuitems: MenuItemListT = [
         (_("Start Chat"), "win.add-chat", params),

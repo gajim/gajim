@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 from datetime import datetime
 from urllib.parse import urlparse
@@ -58,7 +59,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         workspace_id: str,
         account: str,
         jid: JID,
-        type_: str,
+        type_: Literal["chat", "groupchat", "pm"],
         pinned: bool,
         position: int,
     ) -> None:
