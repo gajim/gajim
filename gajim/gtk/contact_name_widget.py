@@ -41,7 +41,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
             name="ContactNameEntry",
             sensitive=False,
             text=name,
-            xalign=1.0,
+            xalign=0.5,
         )
         self._connect(self._entry, "activate", self._on_entry_activated)
         self.append(self._entry)
