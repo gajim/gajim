@@ -101,7 +101,7 @@ class AddContact(Assistant):
                 client.get_module("Presence").subscribe(
                     self._result.jid, name=self._result.gateway_name, auto_auth=True
                 )
-            app.window.show_account_page(account)
+            app.window.add_chat(account, self._result.jid, "chat", select=True)
             self.close()
             return
 
