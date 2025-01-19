@@ -239,7 +239,9 @@ class FormGrid(Gtk.Grid, SignalManager):
             widget = self._fields[field.type_]
             if single_field and widget is ListSingleField:
                 row = widget(field, self, options, treeview=True)
-                row.connect("row-activated", self._on_single_list_field_activated)
+                self._connect(
+                    row, "row-activated", self._on_single_list_field_activated
+                )
                 self._add_row(row)
             else:
                 self._add_row(widget(field, self, options))
