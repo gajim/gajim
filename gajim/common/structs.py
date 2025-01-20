@@ -244,7 +244,7 @@ class VariantMixin:
         if 'Optional' in field_type:
             variant_str = 'm'
 
-        if 'str' in field_type:
+        if 'str' in field_type or 'Literal' in field_type:
             return str, f'{variant_str}s'
 
         if 'int' in field_type:
