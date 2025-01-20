@@ -458,7 +458,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         for account in accounts:
             label = app.get_account_label(account)
             combo_accounts.append((account, label))
-        combo_accounts.append(("AccountWizard", "Account Wizard"))
+        combo_accounts.append(("AccountWizard", _("Account Wizard")))
         return combo_accounts
 
     def _on_filter_options(self, _button: Gtk.Button) -> None:
@@ -599,7 +599,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
     def _print_stanza(self, event: StanzaReceived | StanzaSent, kind: str) -> None:
         if event.account == "AccountWizard":
-            account_label = "Account Wizard"
+            account_label = _("Account Wizard")
         else:
             account_label = app.get_account_label(event.account)
 

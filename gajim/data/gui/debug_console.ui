@@ -275,6 +275,7 @@
     <child>
       <object class="GtkToggleButton" id="search_toggle">
         <property name="focusable">1</property>
+        <property name="sensitive">0</property>
         <property name="receives-default">1</property>
         <property name="margin-start">6</property>
         <child>
