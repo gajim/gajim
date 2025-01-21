@@ -142,8 +142,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
             )
 
         ConfirmationDialog(
-            _("Delete"),
-            _("Delete PEP node?"),
+            _("Delete Node?"),
             _("Do you really want to delete this PEP node?"),
             [
                 DialogButton.make("Cancel"),

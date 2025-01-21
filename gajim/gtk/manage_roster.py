@@ -261,10 +261,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._add_to_group(param.get_string())
 
     def _on_add_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
-
         InputDialog(
-            _("Add to new Group"),
-            _("Add Contact to new Group"),
+            _("Add Contact to New Group?"),
             _("Enter group name"),
             [
                 DialogButton.make("Cancel"),
@@ -287,8 +285,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
 
     def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
         InputDialog(
-            _("Move Contact"),
-            _("Move Contact to new Group"),
+            _("Move Contact to New Group?"),
             _("Enter group name"),
             [
                 DialogButton.make("Cancel"),
@@ -327,8 +324,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 self._client.get_module("Roster").delete_item(JID.from_string(item.jid))
 
         ConfirmationDialog(
-            _("Remove Contacts"),
-            _("Remove Contacts"),
+            _("Remove Contacts?"),
             _("Remove %s contacts from your contact list?") % len(items),
             [
                 DialogButton.make("Cancel"),
@@ -349,8 +345,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             )
 
         InputDialog(
-            _("Rename Contact"),
-            _("Rename Contact"),
+            _("Rename Contact?"),
             _("Enter new contact name"),
             [
                 DialogButton.make("Cancel"),
@@ -383,9 +378,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 )
 
         ConfirmationDialog(
-            _("Import"),
+            _("Import Contacts?"),
             _("Found %s contacts to import") % len(remote_items),
-            "",
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),
@@ -485,9 +479,8 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 )
 
         ConfirmationDialog(
-            _("Import"),
+            _("Import Contacts?"),
             _("Found %s contacts to import") % len(items),
-            "",
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),

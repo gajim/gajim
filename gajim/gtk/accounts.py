@@ -113,8 +113,7 @@ class AccountsWindow(GajimAppWindow):
             client.disconnect(gracefully=True, reconnect=True, destroy_client=True)
 
         ConfirmationDialog(
-            _("Re-Login"),
-            _("Re-Login now?"),
+            _("Re-Login Now?"),
             _("To apply all changes instantly, you have to re-login."),
             [
                 DialogButton.make("Cancel", text=_("_Later")),
@@ -537,9 +536,12 @@ class AccountRow(Gtk.ListBoxRow):
 
             account_label = app.get_account_label(account)
             ConfirmationDialog(
-                _("Disable Account"),
-                _("Account %s is still connected") % account_label,
-                _("All chat and group chat windows will be closed."),
+                _("Disable Account?"),
+                _(
+                    "Account %(name)s is still connected\n"
+                    "All chat and group chat windows will be closed."
+                )
+                % {"name": account_label},
                 [
                     DialogButton.make(
                         "Cancel", callback=lambda: switch.set_active(True)

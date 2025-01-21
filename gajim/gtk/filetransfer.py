@@ -385,7 +385,6 @@
 #             file_name = file_props.name
 #         ConfirmationDialog(
 #             _('File Transfer Error'),
-#             _('File Transfer Error'),
 #             _('The file %s has been received, but it seems to have '
 #               'been damaged along the way.\n'
 #               'Do you want to download it again?') % file_name,

@@ -101,7 +101,6 @@ class MamPreferences(GajimAppWindow):
             self.close()
 
         ConfirmationDialog(
-            _("Archiving Preferences"),
             _("Archiving Preferences Saved"),
             _("Your archiving preferences have successfully been saved."),
             [DialogButton.make("OK", callback=_on_ok)],
