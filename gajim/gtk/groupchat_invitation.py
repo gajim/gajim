@@ -41,6 +41,9 @@ class GroupChatInvitationDialog(GajimAppWindow):
     def _on_invitation_widget_action(self, _widget: GroupChatInvitation) -> None:
         self.close()
 
+    def _cleanup(self) -> None:
+        pass
+
 
 class GroupChatInvitation(Gtk.Box, SignalManager):
 
@@ -139,6 +142,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
     def do_unroot(self) -> None:
         Gtk.Box.do_unroot(self)
         self._disconnect_all()
+        app.check_finalize(self)
 
     def _on_join(self, _button: Gtk.Button) -> None:
         nickname = self._nick_chooser.get_text()
