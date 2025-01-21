@@ -27,6 +27,8 @@ class GroupChatInvitationDialog(GajimAppWindow):
             self,
             name="GroupChatInvitationDialog",
             title=_("Group Chat Invitation"),
+            default_width=450,
+            default_height=500,
         )
 
         self.account = account
@@ -68,7 +70,6 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         main_box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=12, valign=Gtk.Align.FILL
         )
-        main_box.add_css_class("p-18")
 
         muc_info_box = GroupChatInfoScrolled(account, minimal=True)
         muc_info_box.set_from_disco_info(event.info)
@@ -103,6 +104,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
 
         decline_button = Gtk.Button.new_with_mnemonic(_("_Decline"))
         decline_button.set_halign(Gtk.Align.START)
+        decline_button.set_margin_end(24)
         self._connect(decline_button, "clicked", self._on_decline)
 
         self._nick_chooser = NickChooser()
@@ -120,7 +122,12 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         join_box.append(self._nick_chooser)
         join_box.append(join_button)
 
-        button_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, margin_top=6)
+        button_box = Gtk.Box(
+            orientation=Gtk.Orientation.HORIZONTAL,
+            margin_top=6,
+            vexpand=True,
+            valign=Gtk.Align.END,
+        )
         button_box.prepend(decline_button)
         button_box.append(join_box)
 
