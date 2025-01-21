@@ -99,11 +99,20 @@ class HigDialog(Gtk.MessageDialog):
             destroy_with_parent=True,
             message_type=self._message_type,
             buttons=self._buttons_type,
+            title=text,
             text=text,
             use_markup=use_markup,
             secondary_text=secondary_text or "",
             secondary_use_markup=secondary_use_markup,
         )
+
+        self.add_css_class("hig-dialog")
+
+        for child in iterate_children(self.get_message_area()):
+            if not isinstance(child, Gtk.Label):
+                continue
+            child.set_justify(Gtk.Justification.CENTER)
+            child.set_max_width_chars(50)
 
         self.connect("response", self.on_response)
         self.show()
@@ -177,6 +186,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
             if not isinstance(child, Gtk.Label):
                 continue
             child.set_justify(Gtk.Justification.CENTER)
+            child.set_max_width_chars(50)
 
         self.connect("response", self._on_response)
 

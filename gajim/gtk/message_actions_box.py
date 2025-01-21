@@ -775,7 +775,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             if not app.account_is_available(self._contact.account):
                 # we are not connected
                 ErrorDialog(
-                    _("No Connection Available"),
+                    _("Not Connected"),
                     _("Your message can not be sent until you are connected."),
                 )
                 return Gdk.EVENT_STOP

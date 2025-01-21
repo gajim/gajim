@@ -700,7 +700,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                     )
                 )
             else:
-                ErrorDialog(
+                error_message = (
                     _(
                         "An error occurred while trying to make "
                         "{occupant_jid} {affiliation_or_role} in group "
@@ -710,8 +710,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                         affiliation_or_role=affiliation_or_role,
                         group=muc.name,
                     ),
-                    str(error),
                 )
+                ErrorDialog(_("Error"), f"{error_message}\n{error}")
         else:
             log.debug("Affiliation/role change success: %s", result)
 
@@ -803,7 +803,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         elif encryption:
             if encryption not in app.plugin_manager.encryption_plugins:
                 ErrorDialog(
-                    _("Encryption error"), _("Missing necessary encryption plugin")
+                    _("Encryption Error"), _("Missing necessary encryption plugin")
                 )
                 return
 

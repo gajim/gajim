@@ -348,7 +348,7 @@
 #         sectext += '\n\t' + _('Recipient: %s') % jid
 #         if error_msg:
 #             sectext += '\n\t' + _('Error message: %s') % error_msg
-#         ErrorDialog(_('File transfer stopped'), sectext)
+#         ErrorDialog(_('File Transfer Stopped'), sectext)
 #         self._ui.transfers_list.get_selection().unselect_all()
 
 #     def show_hash_error(self,
@@ -405,7 +405,7 @@
 #         Start the real transfer(upload) of the file
 #         '''
 #         if file_is_locked(file_path):
-#             pritext = _('Gajim can not read this file')
+#             pritext = _('File Not Readable')
 #             sextext = _('Another process is using this file.')
 #             ErrorDialog(pritext, sextext)
 #             return False
@@ -475,9 +475,11 @@
 #                     file_name = GLib.markup_escape_text(
 #                         os.path.basename(file_path))
 #                     ErrorDialog(
-#                         _('Cannot overwrite existing file "%s"') % file_name,
-#                         _('A file with this name already exists and you do '
-#                           'not have permission to overwrite it.'))
+#                         _('File Already Exists'),
+#                         _('Cannot overwrite existing file "%s". '
+#                           'A file with this name already exists and you do '
+#                           'not have permission to overwrite it.') % file_name
+#                     )
 #                     return
 
 #             # File does not exist yet
@@ -487,9 +489,11 @@
 #                 # windows, not to mark that a folder is read-only.
 #                 # See ticket #3587
 #                 ErrorDialog(
-#                     _('Directory "%s" is not writable') % dirname,
-#                     _('You do not have permissions to create files '
-#                       'in this directory.'))
+#                     _('Directory Not Writable'),
+#                     _('Directory "%s" is not writable. '
+#                       'You do not have permissions to create files '
+#                       'in this directory.') % dirname
+#                 )
 #                 return
 #             self._start_receive(file_path, account, contact, file_props)
 

@@ -118,7 +118,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
         try:
             result = task.finish()
         except StanzaError as error:
-            ErrorDialog("Error", to_user_string(error))
+            ErrorDialog(_("Error"), to_user_string(error))
             return
 
         jid = result.jid.bare
@@ -158,7 +158,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
             task.finish()
         except StanzaError as error:
             WarningDialog(
-                _("PEP node was not removed"),
+                _("PEP Node Not Removed"),
                 _("PEP node %(node)s was not removed:\n%(message)s")
                 % {"node": node, "message": error},
             )

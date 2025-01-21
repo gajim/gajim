@@ -336,7 +336,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             try:
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
-                WarningDialog(_('Plugin failed'), str(e))
+                WarningDialog(_('Plugin Failed'), str(e))
                 return
 
         self._update_selected_plugin()
@@ -358,15 +358,15 @@ class PluginsWindow(GajimAppWindow, EventHelper):
 
         manifest = model.get_value(iter_, Column.MANIFEST)
         plugin = app.plugin_manager.get_plugin(manifest.short_name)
+        error_text = _('Unable to properly remove the plugin')
         if plugin is None:
-            WarningDialog(_('Unable to properly remove the plugin'))
+            WarningDialog(_('Warning'), error_text)
             return
 
         try:
             app.plugin_manager.uninstall_plugin(plugin)
         except PluginsystemError as error:
-            WarningDialog(_('Unable to properly remove the plugin'),
-                          str(error))
+            WarningDialog(_('Warning'), f"{error_text}\n{error}")
             return
 
     def _on_plugin_removed(self, event: PluginRemoved) -> None:
@@ -412,7 +412,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             plugin = app.plugin_manager.install_from_zip(zip_filename,
                                                          overwrite=True)
             if not plugin:
-                WarningDialog(_('Archive is malformed'))
+                WarningDialog(_('Archive Malformed'), _('Archive is malformed'))
                 return
 
         try:
@@ -434,7 +434,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             return
 
         if not plugin:
-            WarningDialog(_('Archive is malformed'))
+            WarningDialog(_('Archive Malformed'), _('Archive is malformed'))
 
     def _on_download_started(self,
                              _repository: PluginRepositoryT,

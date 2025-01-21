@@ -35,8 +35,10 @@ button.flat.link { padding: 0; border: 0; }
 
 .tabular-digits { font-feature-settings: "tnum"; }
 
-.confirmation-dialog > box { margin: 18px; }
-.confirmation-dialog > box > box > box > box > :first-child {
+.confirmation-dialog > box,
+.hig-dialog > box { margin: 18px; }
+.confirmation-dialog > box > box > box > box > :first-child,
+.hig-dialog > box > box > box > box > :first-child {
     font-size: large;
 }
 

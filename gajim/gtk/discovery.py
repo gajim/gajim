@@ -602,8 +602,11 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         # Check connection
         if not app.account_is_available(account):
             ErrorDialog(
-                _("You are not connected to the server"),
-                _("Without a connection, you can not browse available services"),
+                _("Not Connected"),
+                _(
+                    "You are not connected to the server. "
+                    "Without a connection, you can not browse available services"
+                ),
             )
             raise RuntimeError("You must be connected to browse services")
 
@@ -788,7 +791,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
             assert self.parent is not None
             ErrorDialog(
-                _("The service could not be found"),
+                _("Service Not Found"),
                 _(
                     "There is no service at the address you entered, or it is "
                     "not responding. Check the address and try again."
@@ -803,7 +806,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         klass = self.cache.get_browser(identities, features)
         if not klass:
             ErrorDialog(
-                _("The service is not browsable"),
+                _("Service Not Browsable"),
                 _("This type of service does not contain any items to browse."),
                 transient_for=self.window,
             )
@@ -1192,7 +1195,7 @@ class AgentBrowser:
         if not items:
             assert self.window.parent is not None
             ErrorDialog(
-                _("The service is not browsable"),
+                _("Service Not Browsable"),
                 _("This service does not contain any items to browse."),
                 transient_for=self.window.parent.window,
             )

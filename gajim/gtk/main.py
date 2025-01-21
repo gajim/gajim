@@ -594,7 +594,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
                     log.exception(e)
                     ErrorDialog(
-                        _("Could not save file"),
+                        _("Could Not Save File"),
                         _("Could not save file to selected directory."),
                         transient_for=self,
                     )
@@ -616,11 +616,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 dirname = target_path.parent
                 if not os.access(dirname, os.W_OK):
                     ErrorDialog(
-                        _('Directory "%s" is not writable') % dirname,
+                        _("Directory Not Writable") % dirname,
                         _(
+                            'Directory "%s" is not writable. '
                             "You do not have the proper permissions to "
                             "create files in this directory."
-                        ),
+                        )
+                        % dirname,
                         transient_for=self,
                     )
                     return
@@ -629,7 +631,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     shutil.copyfile(preview.orig_path, target_path)
                 except PermissionError as e:
                     ErrorDialog(
-                        _("Could not save file"),
+                        _("Could Not Save File"),
                         _(
                             "You do not have permissions for this directory.\n"
                             "Error: %s."
@@ -726,7 +728,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             params.account, params.jid, params.occupant_id
         )
         if messages is None:
-            ErrorDialog(_("Could not find any messages for this participant."))
+            ErrorDialog(
+                _("No Messages Found"),
+                _("Could not find any messages for this participant."),
+            )
             return
 
         def _on_moderate(reason: str) -> None:
@@ -734,7 +739,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             groupchat_contact = client.get_module("Contacts").get_contact(params.jid)
             assert isinstance(groupchat_contact, GroupchatContact)
             if not groupchat_contact.is_joined:
-                ErrorDialog(_("You are currently not joined this group chat"))
+                ErrorDialog(
+                    _("Not Joined"), _("You are currently not joined this group chat")
+                )
                 return
 
             muc_module = client.get_module("MUC")

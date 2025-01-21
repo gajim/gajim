@@ -204,10 +204,11 @@ class RosterItemExchange(GajimAppWindow):
                     )
                 iter_ = self._model.iter_next(iter_)
             InformationDialog(
+                _("Successfully Added Contacts"),
                 i18n.ngettext(
                     "Added %(count)s contact", "Added %(count)s contacts", count
                 )
-                % {"count": count}
+                % {"count": count},
             )
         elif self._action == "modify":
             count = 0
@@ -236,10 +237,11 @@ class RosterItemExchange(GajimAppWindow):
                     self._client.get_module("Roster").delete_item(jid)
                 iter_ = self._model.iter_next(iter_)
             InformationDialog(
+                _("Successfully Removed Contacts"),
                 i18n.ngettext(
                     "Removed %(count)s contact", "Removed %(count)s contacts", count
                 )
-                % {"count": count}
+                % {"count": count},
             )
         self.close()
 

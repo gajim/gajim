@@ -59,7 +59,7 @@ class BlockingList(GajimAppWindow):
         )
 
     def _show_error(self, error: str) -> None:
-        ErrorDialog(_("Error!"), error)
+        ErrorDialog(_("Error"), error)
 
     def _on_blocking_list_received(self, task: Task) -> None:
         try:

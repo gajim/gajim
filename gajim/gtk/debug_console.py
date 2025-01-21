@@ -315,7 +315,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         if not app.account_is_available(self._selected_send_account):
             # If offline or connecting
             ErrorDialog(
-                _("Connection not available"),
+                _("Not Connected"),
                 _('Please make sure you are connected with "%s".')
                 % self._selected_send_account,
             )
