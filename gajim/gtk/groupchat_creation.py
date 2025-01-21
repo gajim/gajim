@@ -27,13 +27,12 @@ from gajim.common.util.muc import get_random_muc_localpart
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.groupchat_creation")
 
 
-class CreateGroupchatWindow(GajimAppWindow, EventHelper, SignalManager):
+class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     def __init__(self, account: str | None) -> None:
         GajimAppWindow.__init__(
             self,
@@ -41,9 +40,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper, SignalManager):
             title=_("Create Group Chat"),
             default_width=500,
         )
-
         EventHelper.__init__(self)
-        SignalManager.__init__(self)
 
         self._ui = get_builder("groupchat_creation.ui")
         self.set_child(self._ui.stack)
@@ -76,9 +73,8 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper, SignalManager):
         self._ui.create_button.grab_focus()
 
     def _cleanup(self) -> None:
-        self._disconnect_all()
-        self._destroyed = True
         self.unregister_events()
+        self._destroyed = True
 
     def _on_account_state(self, _event: AccountConnected | AccountDisconnected) -> None:
         any_account_connected = app.get_number_of_connected_accounts() > 0
