@@ -2,6 +2,7 @@ from typing import Any
 from typing import Literal
 from typing import overload
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -577,6 +578,7 @@ class HistoryExportBuilder(Builder):
     settings_grid: Gtk.Grid
 
 class MainBuilder(Builder):
+    main_view: Adw.ToolbarView
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
     activity_box: Gtk.Box
