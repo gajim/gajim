@@ -35,6 +35,7 @@ from datetime import timedelta
 from datetime import UTC
 from urllib.parse import unquote
 
+from gi.repository import Adw
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -82,7 +83,7 @@ from gajim.gtk.util.window import open_window
 ActionListT = list[tuple[str, Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
 
-class GajimApplication(Gtk.Application, CoreApplication):
+class GajimApplication(Adw.Application, CoreApplication):
     """Main class handling activation and command line."""
 
     def __init__(self):
@@ -91,7 +92,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             Gio.ApplicationFlags.HANDLES_COMMAND_LINE
             | Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID
         )
-        Gtk.Application.__init__(
+        Adw.Application.__init__(
             self, application_id=app.get_default_app_id(), flags=flags
         )
 
