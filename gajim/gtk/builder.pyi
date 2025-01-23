@@ -2,6 +2,7 @@ from typing import Any
 from typing import Literal
 from typing import overload
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -349,7 +350,7 @@ class DebugConsoleBuilder(Builder):
     menubutton: Gtk.MenuButton
     account_label: Gtk.Label
     send: Gtk.Button
-    headerbar: Gtk.HeaderBar
+    header_box: Gtk.Box
     search_toggle: Gtk.ToggleButton
 
 class ExceptionDialogBuilder(Builder):
@@ -576,6 +577,8 @@ class HistoryExportBuilder(Builder):
     settings_grid: Gtk.Grid
 
 class MainBuilder(Builder):
+    main_view: Adw.ToolbarView
+    main_menu_bar: Gtk.PopoverMenuBar
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
     activity_box: Gtk.Box

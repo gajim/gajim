@@ -1,115 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkGrid" id="main_grid">
-    <property name="hexpand">1</property>
-    <property name="vexpand">1</property>
-    <child>
-      <object class="GtkGrid" id="left_grid">
-        <property name="vexpand">1</property>
-        <property name="orientation">vertical</property>
-        <property name="row-spacing">6</property>
-        <child>
-          <object class="GtkBox" id="activity_box">
-            <property name="visible">True</property>
-            <property name="can-focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">5</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <object class="GtkSeparator"/>
-            </child>
-            <style>
-              <class name="activity-box"/>
-            </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">1</property>
-            </layout>
-          </object>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow" id="workspace_scrolled">
-            <property name="focusable">1</property>
-            <property name="vexpand">1</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="propagate-natural-height">1</property>
-            <child>
-              <placeholder/>
-            </child>
-            <style>
-              <class name="no-border"/>
-              <class name="workspace-scrolled"/>
-            </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">2</property>
-            </layout>
-          </object>
-        </child>
+  <object class="AdwToolbarView" id="main_view">
+    <child type="top">
+      <object class="AdwHeaderBar">
         <child>
           <object class="GtkBox">
-            <property name="valign">end</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
             <child>
-              <object class="GtkButton" id="toggle_chat_list_button">
-                <property name="focusable">1</property>
-                <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="yes">Hide chat list</property>
-                <property name="halign">center</property>
-                <property name="action-name">win.toggle-chat-list</property>
+              <object class="GtkPopoverMenuBar" id="main_menu_bar"></object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <property name="content">
+      <object class="GtkGrid" id="main_grid">
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkGrid" id="left_grid">
+            <property name="vexpand">true</property>
+            <property name="orientation">1</property>
+            <property name="row-spacing">6</property>
+            <child>
+              <object class="GtkBox" id="activity_box">
+                <property name="visible">true</property>
+                <property name="can-focus">false</property>
+                <property name="orientation">1</property>
+                <property name="spacing">5</property>
                 <child>
-                  <object class="GtkImage" id="toggle_chat_list_icon">
-                    <property name="icon-name">go-previous-symbolic</property>
+                  <object class="GtkSeparator"></object>
+                </child>
+                <style>
+                  <class name="activity-box"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="workspace_scrolled">
+                <property name="focusable">true</property>
+                <property name="vexpand">true</property>
+                <property name="hscrollbar-policy">2</property>
+                <property name="propagate-natural-height">true</property>
+                <style>
+                  <class name="no-border"/>
+                  <class name="workspace-scrolled"/>
+                </style>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="valign">2</property>
+                <property name="orientation">1</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkButton" id="toggle_chat_list_button">
+                    <property name="focusable">true</property>
+                    <property name="receives-default">true</property>
+                    <property name="tooltip-text" translatable="yes">Hide chat list</property>
+                    <property name="halign">3</property>
+                    <property name="action-name">win.toggle-chat-list</property>
+                    <child>
+                      <object class="GtkImage" id="toggle_chat_list_icon">
+                        <property name="icon-name">go-previous-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="flat"/>
+                    </style>
                   </object>
                 </child>
-                <style>
-                  <class name="flat"/>
-                </style>
+                <child>
+                  <object class="GtkBox" id="account_box">
+                    <property name="valign">2</property>
+                    <property name="orientation">1</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkSeparator"></object>
+                    </child>
+                    <style>
+                      <class name="account-box"/>
+                    </style>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
               </object>
             </child>
-            <child>
-              <object class="GtkBox" id="account_box">
-                <property name="valign">end</property>
-                <property name="orientation">vertical</property>
-                <property name="spacing">6</property>
-                <child>
-                  <object class="GtkSeparator"/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <style>
-                  <class name="account-box"/>
-                </style>
-              </object>
-            </child>
+            <style>
+              <class name="chatlist-left-grid"/>
+            </style>
             <layout>
               <property name="column">0</property>
-              <property name="row">3</property>
+              <property name="row">0</property>
             </layout>
           </object>
         </child>
-        <child>
-          <placeholder/>
-        </child>
         <style>
-          <class name="chatlist-left-grid"/>
+          <class name="mainwindow-grid"/>
         </style>
-        <layout>
-          <property name="column">0</property>
-          <property name="row">0</property>
-        </layout>
       </object>
-    </child>
-    <child>
-      <placeholder/>
-    </child>
-    <style>
-      <class name="mainwindow-grid"/>
-    </style>
+    </property>
   </object>
 </interface>

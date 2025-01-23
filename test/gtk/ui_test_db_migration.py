@@ -2,6 +2,8 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+from typing import cast
+
 import time
 
 from gi.repository import Gtk
@@ -38,8 +40,7 @@ def _on_error_clicked(_button: Gtk.Button) -> None:
 util.init_settings()
 
 window = DBMigration()
-box = window.window.get_child()
-assert isinstance(box, Gtk.Box)
+box = cast(Gtk.Box, util.get_content_widget(window))
 box.set_orientation(Gtk.Orientation.VERTICAL)
 
 button_box = Gtk.Box(spacing=12, halign=Gtk.Align.CENTER)

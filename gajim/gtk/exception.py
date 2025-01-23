@@ -39,6 +39,7 @@ from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_adw_version
 from gajim.gtk.util.misc import get_gtk_version
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -60,6 +61,7 @@ ISSUE_TEXT = """## Versions:
 - GTK Version: {}
 - PyGObject Version: {}
 - GLib Version : {}
+- Adw Version: {}
 - libsoup Version: {}
 - python-nbxmpp Version: {}
 - Gajim Version: {}
@@ -149,6 +151,7 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
             get_gtk_version(),
             get_gobject_version(),
             get_glib_version(),
+            get_adw_version(),
             get_soup_version(),
             nbxmpp.__version__,
             gajim.__version__,
@@ -230,6 +233,8 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
                 "GTK": get_gtk_version(),
                 "GObject": get_gobject_version(),
                 "GLib": get_glib_version(),
+                "Adw": get_adw_version(),
+                "libsoup": get_soup_version(),
             },
         )
 

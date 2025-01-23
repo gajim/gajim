@@ -20,6 +20,7 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
 
         self.set_vexpand(True)
         self.add_css_class("settings-menu")
+        self.add_css_class("navigation-sidebar")
         if width is not None:
             self.set_size_request(width, -1)
 
