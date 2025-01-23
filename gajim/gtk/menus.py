@@ -112,8 +112,9 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     submenu = get_send_file_submenu()
     menu.append_submenu(_("Send File"), submenu)
 
-    menu.add_item(_("Start Voice Call…"), "win.start-voice-call")
-    menu.add_item(_("Start Video Call…"), "win.start-video-call")
+    # Disable because not maintained
+    # menu.add_item(_("Start Voice Call…"), "win.start-voice-call")
+    # menu.add_item(_("Start Video Call…"), "win.start-video-call")
 
     if can_add_to_roster(contact):
         params = AccountJidParam(account=account, jid=contact.jid)
