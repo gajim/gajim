@@ -14,6 +14,7 @@ import os
 import shutil
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
@@ -76,9 +77,9 @@ if app.is_display(Display.X11):
 log = logging.getLogger("gajim.gtk.main")
 
 
-class MainWindow(Gtk.ApplicationWindow, EventHelper):
+class MainWindow(Adw.ApplicationWindow, EventHelper):
     def __init__(self) -> None:
-        Gtk.ApplicationWindow.__init__(self)
+        Adw.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
         self.set_application(app.app)
         self.set_title(GLib.get_application_name())
@@ -93,8 +94,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._startup_finished: bool = False
 
         self._ui = get_builder("main.ui")
-
-        self.set_child(self._ui.main_grid)
+        self.set_content(self._ui.main_view)
 
         self._emoji_chooser: EmojiChooser | None = None
 

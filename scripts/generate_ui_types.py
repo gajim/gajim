@@ -28,6 +28,7 @@ from typing import Any
 from typing import Literal
 from typing import overload
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import GtkSource
 
@@ -87,6 +88,8 @@ def parse(path: Path, file: TextIOWrapper) -> str:
         klass = node.attrib["class"]
         if klass.startswith("GtkSource"):
             klass = f'GtkSource.{klass.removeprefix("GtkSource")}'
+        elif klass.startswith("Adw"):
+            klass = f'Adw.{klass.removeprefix("Adw")}'
         elif klass.startswith("Atk"):
             klass = f'Atk.{klass.removeprefix("Atk")}'
         else:
