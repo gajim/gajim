@@ -10,6 +10,7 @@ from typing import cast
 import datetime as dt
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GObject
@@ -42,11 +43,13 @@ class GajimAppWindow(SignalManager):
 
         SignalManager.__init__(self)
 
+        self._add_window_padding = add_window_padding
+
         window_size = app.settings.get_window_size(name)
         if window_size is not None:
             default_width, default_height = window_size
 
-        self.window = Gtk.ApplicationWindow(
+        self.window = Adw.ApplicationWindow(
             application=app.app,
             resizable=True,
             name=name,
@@ -59,16 +62,13 @@ class GajimAppWindow(SignalManager):
         # Hack to get the instance in get_app_window
         self.window.wrapper = self  # pyright: ignore
 
+        self._header_bar = Adw.HeaderBar()
+
         log.debug("Load Window: %s", name)
 
         self._ui = cast(GajimBuilder, None)
 
         self.window.add_css_class("gajim-app-window")
-
-        if add_window_padding:
-            self.window.add_css_class("window-padding")
-
-        self.window.set_child(Gtk.Box())
 
         self.__default_controller = Gtk.EventControllerKey(
             propagation_phase=Gtk.PropagationPhase.CAPTURE
@@ -96,15 +96,15 @@ class GajimAppWindow(SignalManager):
         self.window.set_default_widget(widget)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
-        box = cast(Gtk.Box, self.window.get_child())
-        current_child = box.get_first_child()
-        if current_child is not None:
-            box.remove(current_child)
+        if child is not None and self._add_window_padding:
+            child.add_css_class("window-padding")
 
-        if child is None:
-            return
+        toolbar_view = Adw.ToolbarView(content=child)
+        toolbar_view.add_top_bar(self._header_bar)
+        self.window.set_content(toolbar_view)
 
-        box.append(child)
+    def get_header_bar(self) -> Adw.HeaderBar:
+        return self._header_bar
 
     def get_default_controller(self) -> Gtk.EventController:
         return self.__default_controller

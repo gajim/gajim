@@ -20,8 +20,7 @@ class MainMenuButton(Gtk.MenuButton):
             icon_name="open-menu-symbolic",
         )
 
-        menu_model = app.app.get_menubar()
-        assert menu_model is not None
+        menu_model = app.window.get_main_menu()
 
         menu = Gtk.PopoverMenu.new_from_model_full(
             menu_model, Gtk.PopoverMenuFlags.NESTED
@@ -38,4 +37,4 @@ class MainMenuButton(Gtk.MenuButton):
     def _on_menu_toggle_action(
         self, _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        self.set_visible(not app.window.get_show_menubar())
+        self.set_visible(not app.settings.get_app_setting("show_main_menu"))

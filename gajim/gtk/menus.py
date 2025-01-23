@@ -279,8 +279,8 @@ def get_account_menu(account: str) -> GajimMenu:
 
 
 def build_accounts_menu() -> None:
-    menubar = app.app.get_menubar()
-    assert isinstance(menubar, Gio.Menu)
+    menubar = app.window.get_main_menu()
+
     # Accounts Submenu
     menu_position = 1
 

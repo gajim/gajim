@@ -50,6 +50,8 @@ class MessageRowActions(Gtk.Box):
             margin_end=40,
             visible=False,
         )
+        self.add_css_class("background")
+
         self._message_row: MessageRow | None = None
         self._contact: ChatContactT | None = None
 
