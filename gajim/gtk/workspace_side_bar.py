@@ -53,7 +53,9 @@ class WorkspaceSideBar(Gtk.ListBox, SignalManager):
 
         self._connect(self, "row-activated", self._on_row_activated)
 
-        self.append(AddWorkspace("add"))
+        self.append(AddWorkspace())
+
+        self.set_sort_func(self._sort_func)
 
         chat_list_stack = chat_page.get_chat_list_stack()
         self._connect(
@@ -74,34 +76,44 @@ class WorkspaceSideBar(Gtk.ListBox, SignalManager):
         for row in iterate_listbox_children(self):
             yield cast(CommonWorkspace, row)
 
+    def _sort_func(self, row1: CommonWorkspace, row2: CommonWorkspace) -> int:
+        return -1 if row1.index < row2.index else 1
+
     def _on_drop(
-        self, _drop_target: Gtk.DropTarget, value: GObject.Value, _x: float, y: float
+        self, _drop_target: Gtk.DropTarget, item: GObject.Value, _x: float, y: float
     ) -> bool:
         target_workspace = self.get_row_at_y(int(y))
         app.window.highlight_dnd_targets(self, False)
 
-        if not value or not isinstance(target_workspace, Workspace):
+        if not item or not isinstance(target_workspace, Workspace):
             # Reject drop
             return False
 
-        app.window.highlight_dnd_targets(value, False)
+        app.window.highlight_dnd_targets(item, False)
 
-        if isinstance(value, Workspace):
-            target_index = target_workspace.get_index()
-            self.remove(value)
-            self.insert(value, target_index)
+        if isinstance(item, Workspace):
+            workspaces = list(self._iterate_rows())
+            moved_workspace = workspaces.pop(item.index)
+            workspaces.insert(target_workspace.get_index(), moved_workspace)
+
+            for index, workspace in enumerate(workspaces):
+                if workspace.workspace_id == "add":
+                    continue
+                workspace.index = index
+
+            self.invalidate_sort()
             target_workspace.set_state_flags(Gtk.StateFlags.NORMAL, True)
 
             self.store_workspace_order()
-            app.window.activate_workspace(value.workspace_id)
+            app.window.activate_workspace(item.workspace_id)
             return True
 
-        if isinstance(value, ChatListRow):
+        if isinstance(item, ChatListRow):
             params = ChatListEntryParam(
                 workspace_id=target_workspace.workspace_id,
-                source_workspace_id=value.workspace_id,
-                account=value.account,
-                jid=value.jid,
+                source_workspace_id=item.workspace_id,
+                account=item.account,
+                jid=item.jid,
             )
             app.window.activate_action(
                 "win.move-chat-to-workspace", params.to_variant()
@@ -131,11 +143,10 @@ class WorkspaceSideBar(Gtk.ListBox, SignalManager):
             app.window.activate_workspace(row.workspace_id)
 
     def add_workspace(self, workspace_id: str) -> None:
-        row = Workspace(workspace_id)
+        row = Workspace(workspace_id, self.get_row_count() - 1)
         self._workspaces[workspace_id] = row
 
-        # Insert row before AddWorkspace row
-        self.insert(row, self.get_row_count() - 1)
+        self.insert(row, 0)
 
     def store_workspace_order(self) -> None:
         workspaces = list(self._iterate_rows())
@@ -193,6 +204,7 @@ class CommonWorkspace(Gtk.ListBoxRow, SignalManager):
         Gtk.ListBoxRow.__init__(self)
         SignalManager.__init__(self)
         self.workspace_id = workspace_id
+        self.index = 0
 
     def do_unroot(self) -> None:
         self._disconnect_all()
@@ -201,9 +213,11 @@ class CommonWorkspace(Gtk.ListBoxRow, SignalManager):
 
 
 class Workspace(CommonWorkspace):
-    def __init__(self, workspace_id: str) -> None:
+    def __init__(self, workspace_id: str, index: int) -> None:
         CommonWorkspace.__init__(self, workspace_id)
         self.add_css_class("workspace-sidebar-item")
+
+        self.index = index
 
         self._unread_label = Gtk.Label()
         self._unread_label.add_css_class("unread-counter")
@@ -297,8 +311,11 @@ class Workspace(CommonWorkspace):
 
 
 class AddWorkspace(CommonWorkspace):
-    def __init__(self, workspace_id: str) -> None:
-        CommonWorkspace.__init__(self, workspace_id)
+    def __init__(self) -> None:
+        CommonWorkspace.__init__(self, "add")
+
+        self.index = 999
+
         self.set_selectable(False)
         self.set_tooltip_text(_("Add Workspace"))
         self.add_css_class("workspace-add")
