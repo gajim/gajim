@@ -1273,7 +1273,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         client = app.get_client(account)
 
         def _remove_contact():
-            self._chat_page.remove_chat(account, jid)
             client.get_module("Roster").delete_item(jid)
 
         contact = client.get_module("Contacts").get_contact(jid)
