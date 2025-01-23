@@ -34,6 +34,7 @@ from datetime import datetime
 from datetime import timedelta
 from datetime import UTC
 
+from gi.repository import Adw
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -71,7 +72,6 @@ from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ShortcutsWindow
-from gajim.gtk.menus import get_main_menu
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
@@ -80,7 +80,7 @@ from gajim.gtk.util.window import open_window
 ActionListT = list[tuple[str, Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 
 
-class GajimApplication(Gtk.Application, CoreApplication):
+class GajimApplication(Adw.Application, CoreApplication):
     """Main class handling activation and command line."""
 
     def __init__(self):
@@ -89,7 +89,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             Gio.ApplicationFlags.HANDLES_COMMAND_LINE
             | Gio.ApplicationFlags.CAN_OVERRIDE_APP_ID
         )
-        Gtk.Application.__init__(
+        Adw.Application.__init__(
             self, application_id=app.get_default_app_id(), flags=flags
         )
 
@@ -223,8 +223,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         icon_theme = get_icon_theme()
         icon_theme.add_search_path(str(configpaths.get("ICONS")))
 
-        self.set_menubar(get_main_menu())
-
         from gajim.gtk import notification
 
         notification.init()
@@ -247,7 +245,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
             self.add_account_actions(account)
 
         self._load_shortcuts()
-        menus.build_accounts_menu()
         self.update_app_actions_state()
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
