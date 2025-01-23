@@ -107,10 +107,10 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     params = AccountJidParam(account=account, jid=contact.jid)
 
     menu = GajimMenu()
-    menu.add_item(_("Block Contact…"), f"app.{account}-block-contact", params)
 
     submenu = get_send_file_submenu()
     menu.append_submenu(_("Send File"), submenu)
+    menu.add_item(_("Block Contact…"), f"app.{account}-block-contact", params)
 
     # Disable because not maintained
     # menu.add_item(_("Start Voice Call…"), "win.start-voice-call")
@@ -118,7 +118,11 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
 
     if can_add_to_roster(contact):
         params = AccountJidParam(account=account, jid=contact.jid)
-        menu.add_item(_("Add to Contact List…"), "win.add-to-roster", params)
+        menu.add_item(_("Add Contact…"), "win.add-to-roster", params)
+
+    if contact.is_in_roster:
+        params = GLib.Variant("as", [account, str(contact.jid)])
+        menu.add_item(_("Remove Contact…"), f"app.{account}-remove-contact", params)
 
     jids = [str(c.jid) for c in contact.get_resources()]
     if not jids:
