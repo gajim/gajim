@@ -147,18 +147,19 @@ class ConfirmationDialog(Gtk.MessageDialog):
         text: str,
         sec_text: str,
         buttons: list[DialogButton],
-        modal: bool = True,
         transient_for: Gtk.Window | None = None,
     ) -> None:
         if transient_for is None:
             transient_for = app.app.get_active_window()
+
         Gtk.MessageDialog.__init__(
             self,
             title=text,
             text=text,
             transient_for=transient_for,
             message_type=Gtk.MessageType.QUESTION,
-            modal=modal,
+            modal=True,
+            decorated=False,
         )
 
         self.add_css_class("confirmation-dialog")
@@ -175,9 +176,17 @@ class ConfirmationDialog(Gtk.MessageDialog):
             self.add_button(button.text, button.response)
             if button.is_default:
                 self.set_default_response(button.response)
+
+            widget = cast(Gtk.Button, self.get_widget_for_response(button.response))
+            widget.add_css_class("hig-dialog-button")
             if button.action is not None:
-                widget = cast(Gtk.Button, self.get_widget_for_response(button.response))
                 widget.add_css_class(button.action.value)
+
+        if buttons:
+            widget = self.get_widget_for_response(buttons[0].response)
+            assert widget is not None
+            button_box = cast(Gtk.Box, widget.get_parent())
+            button_box.set_spacing(6)
 
         self.props.secondary_use_markup = True
         self.props.secondary_text = sec_text

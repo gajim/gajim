@@ -1273,7 +1273,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Remove", text=_("_Block"), callback=_block_contact),
             ],
-            modal=False,
         ).show()
 
     def remove_contact(self, account: str, jid: JID) -> None:
