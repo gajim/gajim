@@ -10,6 +10,7 @@ from typing import cast
 import datetime as dt
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GObject
@@ -46,7 +47,7 @@ class GajimAppWindow(SignalManager):
         if window_size is not None:
             default_width, default_height = window_size
 
-        self.window = Gtk.ApplicationWindow(
+        self.window = Adw.ApplicationWindow(
             application=app.app,
             resizable=True,
             name=name,
@@ -67,8 +68,6 @@ class GajimAppWindow(SignalManager):
 
         if add_window_padding:
             self.window.add_css_class("window-padding")
-
-        self.window.set_child(Gtk.Box())
 
         self.__default_controller = Gtk.EventControllerKey(
             propagation_phase=Gtk.PropagationPhase.CAPTURE
@@ -96,15 +95,9 @@ class GajimAppWindow(SignalManager):
         self.window.set_default_widget(widget)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
-        box = cast(Gtk.Box, self.window.get_child())
-        current_child = box.get_first_child()
-        if current_child is not None:
-            box.remove(current_child)
-
-        if child is None:
-            return
-
-        box.append(child)
+        toolbar_view = Adw.ToolbarView(content=child)
+        toolbar_view.add_top_bar(Adw.HeaderBar())
+        self.window.set_content(toolbar_view)
 
     def get_default_controller(self) -> Gtk.EventController:
         return self.__default_controller
