@@ -40,6 +40,7 @@ def gi_require_versions() -> None:
 
     gi.require_versions(
         {
+            "Adw": "1",
             "GLib": "2.0",
             "Gio": "2.0",
             "Gdk": "4.0",
