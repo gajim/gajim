@@ -25,7 +25,7 @@ from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_random_muc_localpart
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -240,7 +240,7 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
     def _on_create_clicked(self, _button: Gtk.Button) -> None:
         assert self._account is not None
         if not app.account_is_available(self._account):
-            ErrorDialog(
+            SimpleDialog(
                 _("Not Connected"),
                 _("You have to be connected to create a group chat."),
             )

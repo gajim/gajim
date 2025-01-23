@@ -14,7 +14,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.widgets import GajimAppWindow
 
 
@@ -203,7 +203,7 @@ class RosterItemExchange(GajimAppWindow):
                         auto_auth=True,
                     )
                 iter_ = self._model.iter_next(iter_)
-            InformationDialog(
+            SimpleDialog(
                 _("Successfully Added Contacts"),
                 i18n.ngettext(
                     "Added %(count)s contact", "Added %(count)s contacts", count
@@ -236,7 +236,7 @@ class RosterItemExchange(GajimAppWindow):
                     self._client.get_module("Presence").unsubscribe(jid)
                     self._client.get_module("Roster").delete_item(jid)
                 iter_ = self._model.iter_next(iter_)
-            InformationDialog(
+            SimpleDialog(
                 _("Successfully Removed Contacts"),
                 i18n.ngettext(
                     "Removed %(count)s contact", "Removed %(count)s contacts", count

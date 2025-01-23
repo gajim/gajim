@@ -22,7 +22,7 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.groupchat_affiliation")
@@ -139,7 +139,7 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
             if self._store[path][Column.AFFILIATION] == "owner":
                 if owner_count < 2:
                     # There must be at least one owner
-                    ErrorDialog(_("Error"), _("A Group Chat needs at least one Owner"))
+                    SimpleDialog(_("Error"), _("A Group Chat needs at least one Owner"))
                     return
                 owner_count -= 1
             references.append(Gtk.TreeRowReference(self._store, path))
@@ -348,4 +348,4 @@ class GroupchatAffiliation(Gtk.Box, SignalManager):
 
     @staticmethod
     def _raise_error() -> None:
-        ErrorDialog(_("Error"), _("An entry with this XMPP Address already exists"))
+        SimpleDialog(_("Error"), _("An entry with this XMPP Address already exists"))

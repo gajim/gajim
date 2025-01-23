@@ -72,75 +72,6 @@ class DialogButton(NamedTuple):
         return cls(**default_kwargs)
 
 
-class HigDialog(Gtk.MessageDialog):
-
-    _message_type = Gtk.MessageType.INFO
-    _buttons_type = Gtk.ButtonsType.OK
-    _modal = True
-
-    def __init__(
-        self,
-        text: str,
-        secondary_text: str | None = None,
-        *,
-        use_markup: bool = False,
-        secondary_use_markup: bool = False,
-        transient_for: Gtk.Window | None = None,
-    ) -> None:
-
-        if transient_for is None:
-            transient_for = app.app.get_active_window()
-            assert transient_for is not None
-
-        Gtk.MessageDialog.__init__(
-            self,
-            transient_for=transient_for,
-            modal=self._modal,
-            destroy_with_parent=True,
-            message_type=self._message_type,
-            buttons=self._buttons_type,
-            title=text,
-            text=text,
-            use_markup=use_markup,
-            secondary_text=secondary_text or "",
-            secondary_use_markup=secondary_use_markup,
-        )
-
-        self.add_css_class("hig-dialog")
-
-        for child in iterate_children(self.get_message_area()):
-            if not isinstance(child, Gtk.Label):
-                continue
-            child.set_justify(Gtk.Justification.CENTER)
-            child.set_max_width_chars(50)
-
-        self.connect("response", self.on_response)
-        self.show()
-
-    def on_response(
-        self, _dialog: Gtk.MessageDialog, _response_id: Gtk.ResponseType
-    ) -> None:
-        self.destroy()
-
-
-class InformationDialog(HigDialog):
-
-    _message_type = Gtk.MessageType.INFO
-    _modal = False
-
-
-class WarningDialog(HigDialog):
-
-    _message_type = Gtk.MessageType.WARNING
-    _modal = False
-
-
-class ErrorDialog(HigDialog):
-
-    _message_type = Gtk.MessageType.ERROR
-    _modal = True
-
-
 class ConfirmationDialog(Gtk.MessageDialog):
     def __init__(
         self,
@@ -178,7 +109,7 @@ class ConfirmationDialog(Gtk.MessageDialog):
                 self.set_default_response(button.response)
 
             widget = cast(Gtk.Button, self.get_widget_for_response(button.response))
-            widget.add_css_class("hig-dialog-button")
+            widget.add_css_class("confirmation-dialog-button")
             if button.action is not None:
                 widget.add_css_class(button.action.value)
 
@@ -219,6 +150,23 @@ class ConfirmationDialog(Gtk.MessageDialog):
         self.destroy()
 
 
+class SimpleDialog(ConfirmationDialog):
+    def __init__(
+        self,
+        text: str,
+        sec_text: str,
+        transient_for: Gtk.Window | None = None,
+    ) -> None:
+        ConfirmationDialog.__init__(
+            self,
+            text,
+            sec_text,
+            buttons=[DialogButton.make("OK")],
+            transient_for=transient_for,
+        )
+        self.show()
+
+
 class ConfirmationCheckDialog(ConfirmationDialog):
     def __init__(
         self,
@@ -226,7 +174,6 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         sec_text: str,
         check_text: str,
         buttons: list[DialogButton],
-        modal: bool = True,
         transient_for: Gtk.Window | None = None,
     ) -> None:
         ConfirmationDialog.__init__(
@@ -235,7 +182,6 @@ class ConfirmationCheckDialog(ConfirmationDialog):
             sec_text,
             buttons,
             transient_for=transient_for,
-            modal=modal,
         )
 
         label = Gtk.Label(
@@ -280,7 +226,6 @@ class InputDialog(ConfirmationDialog):
             sec_text,
             buttons,
             transient_for=transient_for,
-            modal=modal,
         )
 
         self._entry = Gtk.Entry()

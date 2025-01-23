@@ -25,7 +25,7 @@ from gajim.common.i18n import _
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import SignalManager
@@ -147,7 +147,7 @@ class Themes(GajimAppWindow):
         old_name = self._ui.theme_store[iter_][Column.THEME]
 
         if new_name == "default":
-            ErrorDialog(
+            SimpleDialog(
                 _("Invalid Name"),
                 _("Name <b>default</b> is not allowed"),
                 secondary_use_markup=True,
@@ -155,7 +155,7 @@ class Themes(GajimAppWindow):
             return
 
         if " " in new_name:
-            ErrorDialog(_("Invalid Name"), _("Spaces are not allowed"))
+            SimpleDialog(_("Invalid Name"), _("Spaces are not allowed"))
             return
 
         if new_name == "":

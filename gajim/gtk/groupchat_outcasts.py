@@ -22,7 +22,7 @@ from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import SignalManager
 
 log = logging.getLogger("gajim.gtk.groupchat_outcasts")
@@ -246,4 +246,4 @@ class GroupchatOutcasts(Gtk.Box, SignalManager):
 
     @staticmethod
     def _raise_error() -> None:
-        ErrorDialog(_("Error"), _("An entry with this XMPP Address already exists"))
+        SimpleDialog(_("Error"), _("An entry with this XMPP Address already exists"))

@@ -45,7 +45,7 @@ from gajim.common.events import FileHashError
 from gajim.common.events import FileProgress
 from gajim.common.file_props import FileProp
 
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 
 # from gajim.gtk.filetransfer import FileTransfersWindow
 
@@ -75,7 +75,7 @@ class Interface:
     @staticmethod
     def handle_event_file_error(title: str, message: str) -> None:
         # TODO: integrate this better
-        ErrorDialog(title, message)
+        SimpleDialog(title, message)
 
     def handle_event_file_progress(self, _account: str, file_props: FileProp) -> None:
         if time.time() - self._last_ft_progress_update < 0.5:

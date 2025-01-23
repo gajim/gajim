@@ -35,8 +35,8 @@ from gajim.common.util.decorators import event_filter
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.menus import get_manage_roster_import_menu
 from gajim.gtk.menus import get_manage_roster_menu
 from gajim.gtk.util import GajimPopover
@@ -365,7 +365,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
         ]
 
         if not remote_items:
-            ErrorDialog(_("Import Error"), _("No contacts found to import"))
+            SimpleDialog(_("Import Error"), _("No contacts found to import"))
             return
 
         def _on_import():
@@ -466,7 +466,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     items.append(item)
 
         if not items:
-            ErrorDialog(_("Import Error"), _("No contacts found to import"))
+            SimpleDialog(_("Import Error"), _("No contacts found to import"))
             return
 
         def _on_import():

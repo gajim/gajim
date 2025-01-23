@@ -32,7 +32,7 @@ from gajim.plugins.manifest import PluginManifest
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import WarningDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.widgets import GajimAppWindow
@@ -336,7 +336,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             try:
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
-                WarningDialog(_('Plugin Failed'), str(e))
+                SimpleDialog(_('Plugin Failed'), str(e))
                 return
 
         self._update_selected_plugin()
@@ -360,13 +360,13 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         plugin = app.plugin_manager.get_plugin(manifest.short_name)
         error_text = _('Unable to properly remove the plugin')
         if plugin is None:
-            WarningDialog(_('Warning'), error_text)
+            SimpleDialog(_('Warning'), error_text)
             return
 
         try:
             app.plugin_manager.uninstall_plugin(plugin)
         except PluginsystemError as error:
-            WarningDialog(_('Warning'), f"{error_text}\n{error}")
+            SimpleDialog(_('Warning'), f"{error_text}\n{error}")
             return
 
     def _on_plugin_removed(self, event: PluginRemoved) -> None:
@@ -412,7 +412,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             plugin = app.plugin_manager.install_from_zip(zip_filename,
                                                          overwrite=True)
             if not plugin:
-                WarningDialog(_('Archive Malformed'), _('Archive is malformed'))
+                SimpleDialog(_('Archive Malformed'), _('Archive is malformed'))
                 return
 
         try:
@@ -430,11 +430,11 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                 ).show()
                 return
 
-            WarningDialog(error_text, f'"{zip_filename}"')
+            SimpleDialog(error_text, f'"{zip_filename}"')
             return
 
         if not plugin:
-            WarningDialog(_('Archive Malformed'), _('Archive is malformed'))
+            SimpleDialog(_('Archive Malformed'), _('Archive is malformed'))
 
     def _on_download_started(self,
                              _repository: PluginRepositoryT,
