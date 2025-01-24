@@ -35,7 +35,6 @@ button.flat.link { padding: 0; border: 0; }
 
 .tabular-digits { font-feature-settings: "tnum"; }
 
-.confirmation-dialog { box-shadow: none; border: none; }
 .confirmation-dialog .dialog-vbox { margin: 18px; }
 .confirmation-dialog .dialog-vbox > :first-child { margin-bottom: 12px; }
 .confirmation-dialog button {

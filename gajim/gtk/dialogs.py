@@ -90,7 +90,6 @@ class ConfirmationDialog(Gtk.MessageDialog):
             transient_for=transient_for,
             message_type=Gtk.MessageType.QUESTION,
             modal=True,
-            decorated=False,
         )
 
         self.add_css_class("confirmation-dialog")
