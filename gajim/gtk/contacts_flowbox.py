@@ -17,12 +17,13 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
 from gajim.gtk.util import iterate_children
+from gajim.gtk.util import SignalManager
 
 
-class ContactItem(Gtk.FlowBoxChild):
+class ContactItem(Gtk.FlowBoxChild, SignalManager):
     def __init__(self, account: str, jid: str, is_new: bool = False) -> None:
-        Gtk.FlowBoxChild.__init__(self)
-        self.set_size_request(150, -1)
+        Gtk.FlowBoxChild.__init__(self, width_request=150)
+        SignalManager.__init__(self)
 
         self.account = account
         self.jid = jid
@@ -45,6 +46,7 @@ class ContactItem(Gtk.FlowBoxChild):
             )
             texture = contact.get_avatar(AvatarSize.ROSTER, self.get_scale_factor())
             avatar_image = Gtk.Image.new_from_paintable(texture)
+            avatar_image.set_pixel_size(AvatarSize.ROSTER)
             name_label.set_text(contact.name)
             name_label.set_tooltip_text(contact.name)
 
@@ -53,7 +55,7 @@ class ContactItem(Gtk.FlowBoxChild):
         remove_button.set_halign(Gtk.Align.END)
         remove_button.set_hexpand(True)
         remove_button.set_tooltip_text(_("Remove"))
-        remove_button.connect("clicked", self._on_remove)
+        self._connect(remove_button, "clicked", self._on_remove)
 
         box = Gtk.Box(spacing=6)
         box.set_valign(Gtk.Align.CENTER)
@@ -62,6 +64,11 @@ class ContactItem(Gtk.FlowBoxChild):
         box.append(remove_button)
         box.add_css_class("contact-flowbox-item")
         self.set_child(box)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.FlowBoxChild.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_remove(self, _button: Gtk.Button) -> None:
         flow_box = cast(ContactsFlowBox, self.get_parent())
@@ -81,6 +88,10 @@ class ContactsFlowBox(Gtk.FlowBox):
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_valign(Gtk.Align.START)
         self.set_can_focus(False)
+
+    def do_unroot(self) -> None:
+        Gtk.FlowBox.do_unroot(self)
+        app.check_finalize(self)
 
     def clear(self) -> None:
         self.remove_all()
