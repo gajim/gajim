@@ -91,6 +91,10 @@ class ContactRow(Gtk.ListBoxRow):
 
         self.set_child(grid)
 
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
+
     def _get_avatar_image(self, contact: types.BareContact | None) -> Gtk.Image:
         if contact is None:
             icon_name = "avatar-default"
