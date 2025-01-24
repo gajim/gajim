@@ -452,8 +452,8 @@ class EntrySetting(GenericSetting):
 
         self.entry = Gtk.Entry()
         self.entry.set_text(str(self.setting_value))
-        self._text_handler_id = self._connect(
-            self.entry, "notify::text", self.on_text_change
+        self._changed_handler_id = self._connect(
+            self.entry, "changed", self._on_text_change
         )
         self.entry.set_valign(Gtk.Align.CENTER)
         self.entry.set_alignment(1)
@@ -470,11 +470,13 @@ class EntrySetting(GenericSetting):
         )
 
     def _on_setting_changed(self, value: str, *args: Any) -> None:
-        with self.entry.handler_block(self._text_handler_id):
-            # If the handler is not blocked we enter a infinite loop
+        if self.entry.get_text() == value:
+            return
+
+        with self.entry.handler_block(self._changed_handler_id):
             self.entry.set_text(value)
 
-    def on_text_change(self, *args: Any) -> None:
+    def _on_text_change(self, *args: Any) -> None:
         text = self.entry.get_text()
         self.set_value(text)
 
