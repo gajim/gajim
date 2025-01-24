@@ -38,7 +38,7 @@ button.flat.link { padding: 0; border: 0; }
 .confirmation-dialog .dialog-vbox { margin: 18px; }
 .confirmation-dialog .dialog-vbox > :first-child { margin-bottom: 12px; }
 .confirmation-dialog button {
-    border-radius: 9px; border: none;
+    border-radius: 9px;
 }
 
 /* InfoBar */
