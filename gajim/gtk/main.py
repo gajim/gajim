@@ -1286,7 +1286,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             contact, BareContact | GroupchatContact | GroupchatParticipant
         )
         sec_text = _(
-            "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+            "You are about to remove %(name)s (%(jid)s) from your contact list."
         ) % {"name": contact.name, "jid": jid}
 
         ConfirmationDialog(
