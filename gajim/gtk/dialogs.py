@@ -108,9 +108,8 @@ class ConfirmationDialog(Gtk.MessageDialog):
             if button.is_default:
                 self.set_default_response(button.response)
 
-            widget = cast(Gtk.Button, self.get_widget_for_response(button.response))
-            widget.add_css_class("confirmation-dialog-button")
             if button.action is not None:
+                widget = cast(Gtk.Button, self.get_widget_for_response(button.response))
                 widget.add_css_class(button.action.value)
 
         if buttons:
