@@ -692,7 +692,7 @@ class DropDownSetting(GenericSetting):
         box.set_hexpand(True)
 
         self._dropdown = GajimDropDown(data=data, fixed_width=15)
-        self._dropdown.select_key(self.get_value())
+        self._dropdown.select_key(self.setting_value)
         self._dropdown.connect("notify::selected", self._on_selected)
         box.append(self._dropdown)
 
