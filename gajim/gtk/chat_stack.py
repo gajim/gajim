@@ -42,7 +42,7 @@ from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
 from gajim.gtk.control import ChatControl
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util import allow_send_message
@@ -711,7 +711,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                         group=muc.name,
                     ),
                 )
-                ErrorDialog(_("Error"), f"{error_message}\n{error}")
+                SimpleDialog(_("Error"), f"{error_message}\n{error}")
         else:
             log.debug("Affiliation/role change success: %s", result)
 
@@ -802,7 +802,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         elif encryption:
             if encryption not in app.plugin_manager.encryption_plugins:
-                ErrorDialog(
+                SimpleDialog(
                     _("Encryption Error"), _("Missing necessary encryption plugin")
                 )
                 return

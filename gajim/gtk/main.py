@@ -50,8 +50,8 @@ from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ErrorDialog
 from gajim.gtk.dialogs import InputDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
@@ -593,7 +593,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                         return
 
                     log.exception(e)
-                    ErrorDialog(
+                    SimpleDialog(
                         _("Could Not Save File"),
                         _("Could not save file to selected directory."),
                         transient_for=self,
@@ -615,7 +615,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     target_path = target_path.with_suffix(orig_ext)
                 dirname = target_path.parent
                 if not os.access(dirname, os.W_OK):
-                    ErrorDialog(
+                    SimpleDialog(
                         _("Directory Not Writable") % dirname,
                         _(
                             'Directory "%s" is not writable. '
@@ -630,7 +630,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 try:
                     shutil.copyfile(preview.orig_path, target_path)
                 except PermissionError as e:
-                    ErrorDialog(
+                    SimpleDialog(
                         _("Could Not Save File"),
                         _(
                             "You do not have permissions for this directory.\n"
@@ -728,7 +728,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             params.account, params.jid, params.occupant_id
         )
         if messages is None:
-            ErrorDialog(
+            SimpleDialog(
                 _("No Messages Found"),
                 _("Could not find any messages for this participant."),
             )
@@ -739,7 +739,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             groupchat_contact = client.get_module("Contacts").get_contact(params.jid)
             assert isinstance(groupchat_contact, GroupchatContact)
             if not groupchat_contact.is_joined:
-                ErrorDialog(
+                SimpleDialog(
                     _("Not Joined"), _("You are currently not joined this group chat")
                 )
                 return
@@ -1273,7 +1273,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Remove", text=_("_Block"), callback=_block_contact),
             ],
-            modal=False,
         ).show()
 
     def remove_contact(self, account: str, jid: JID) -> None:
@@ -1287,7 +1286,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             contact, BareContact | GroupchatContact | GroupchatParticipant
         )
         sec_text = _(
-            "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+            "You are about to remove %(name)s (%(jid)s) from your contact list."
         ) % {"name": contact.name, "jid": jid}
 
         ConfirmationDialog(

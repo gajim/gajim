@@ -17,7 +17,7 @@ from gajim.common.i18n import _
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import InformationDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -109,7 +109,7 @@ class MamPreferences(GajimAppWindow):
     def _on_error(self, error: str) -> None:
         self._disable_spinner()
 
-        InformationDialog(
+        SimpleDialog(
             _("Archiving Preferences Error"), _("Error received: {}").format(error)
         )
 

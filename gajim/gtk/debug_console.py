@@ -30,7 +30,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_source_view_style_scheme
@@ -314,7 +314,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             return
         if not app.account_is_available(self._selected_send_account):
             # If offline or connecting
-            ErrorDialog(
+            SimpleDialog(
                 _("Not Connected"),
                 _('Please make sure you are connected with "%s".')
                 % self._selected_send_account,
@@ -327,7 +327,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             try:
                 node = nbxmpp.Node(node=stanza)
             except Exception as error:
-                ErrorDialog(_("Invalid Node"), str(error))
+                SimpleDialog(_("Invalid Node"), str(error))
                 return
 
             if node.getName() in ("message", "presence", "iq"):
@@ -340,7 +340,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
                         node=stanza, attrs={"xmlns": "jabber:client"}
                     )
                 except Exception as error:
-                    ErrorDialog(_("Invalid Stanza"), str(error))
+                    SimpleDialog(_("Invalid Stanza"), str(error))
                     return
 
             client = app.get_client(self._selected_send_account)

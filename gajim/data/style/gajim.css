@@ -35,11 +35,10 @@ button.flat.link { padding: 0; border: 0; }
 
 .tabular-digits { font-feature-settings: "tnum"; }
 
-.confirmation-dialog > box,
-.hig-dialog > box { margin: 18px; }
-.confirmation-dialog > box > box > box > box > :first-child,
-.hig-dialog > box > box > box > box > :first-child {
-    font-size: large;
+.confirmation-dialog .dialog-vbox { margin: 18px; }
+.confirmation-dialog .dialog-vbox > :first-child { margin-bottom: 12px; }
+.confirmation-dialog button {
+    border-radius: 9px;
 }
 
 /* InfoBar */

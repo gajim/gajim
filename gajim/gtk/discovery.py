@@ -63,7 +63,7 @@ from gajim.common.util.jid import parse_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.component_search import ComponentSearch
-from gajim.gtk.dialogs import ErrorDialog
+from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util import icon_exists
 from gajim.gtk.util import open_window
 from gajim.gtk.widgets import GajimAppWindow
@@ -601,7 +601,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         # Check connection
         if not app.account_is_available(account):
-            ErrorDialog(
+            SimpleDialog(
                 _("Not Connected"),
                 _(
                     "You are not connected to the server. "
@@ -790,7 +790,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
                 self._destroy()
 
             assert self.parent is not None
-            ErrorDialog(
+            SimpleDialog(
                 _("Service Not Found"),
                 _(
                     "There is no service at the address you entered, or it is "
@@ -805,7 +805,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         klass = self.cache.get_browser(identities, features)
         if not klass:
-            ErrorDialog(
+            SimpleDialog(
                 _("Service Not Browsable"),
                 _("This type of service does not contain any items to browse."),
                 transient_for=self.window,
@@ -848,7 +848,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
             try:
                 jid = parse_jid(jid)
             except InvalidFormat as s:
-                ErrorDialog(_("Invalid Server Name"), str(s))
+                SimpleDialog(_("Invalid Server Name"), str(s))
                 return
             self.travel(jid, "")
 
@@ -859,7 +859,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         try:
             jid = parse_jid(jid)
         except InvalidFormat as s:
-            ErrorDialog(_("Invalid Server Name"), str(s), transient_for=self.window)
+            SimpleDialog(_("Invalid Server Name"), str(s), transient_for=self.window)
             return
         if jid == self.jid:  # jid has not changed
             return
@@ -1194,7 +1194,7 @@ class AgentBrowser:
         # The server returned an error
         if not items:
             assert self.window.parent is not None
-            ErrorDialog(
+            SimpleDialog(
                 _("Service Not Browsable"),
                 _("This service does not contain any items to browse."),
                 transient_for=self.window.parent.window,
