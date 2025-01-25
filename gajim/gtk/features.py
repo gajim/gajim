@@ -58,7 +58,7 @@ class Features(GajimAppWindow):
         self.feature_listbox.append(item)
 
     def _get_features(self) -> list[Feature]:
-        av_available = app.is_installed("AV") and sys.platform != "win32"
+        # av_available = app.is_installed("AV") and sys.platform != "win32"
         notification_sounds_available: bool = app.is_installed(
             "GSOUND"
         ) or sys.platform in ("win32", "darwin")
@@ -69,26 +69,26 @@ class Features(GajimAppWindow):
         auto_status_enabled = bool(any(auto_status))
 
         return [
-            Feature(
-                _("Audio Preview"),
-                app.is_installed("GST"),
-                _("Enables Gajim to provide a Audio preview"),
-                _("Requires: gstreamer-1.0, gst-plugins-base-1.0"),
-                _("No additional requirements"),
-                None,
-            ),
-            Feature(
-                _("Audio / Video Calls"),
-                av_available,
-                _("Enables Gajim to provide Audio and Video chats"),
-                _(
-                    "Requires: farstream-0.2, gstreamer-1.0, "
-                    "gst-plugins-base-1.0, gst-plugins-ugly-1.0, "
-                    "gst-libav"
-                ),
-                _("Feature not available on Windows"),
-                None,
-            ),
+            # Feature(
+            #     _("Audio Preview"),
+            #     app.is_installed("GST"),
+            #     _("Enables Gajim to provide a Audio preview"),
+            #     _("Requires: gstreamer-1.0, gst-plugins-base-1.0"),
+            #     _("No additional requirements"),
+            #     None,
+            # ),
+            # Feature(
+            #     _("Audio / Video Calls"),
+            #     av_available,
+            #     _("Enables Gajim to provide Audio and Video chats"),
+            #     _(
+            #         "Requires: farstream-0.2, gstreamer-1.0, "
+            #         "gst-plugins-base-1.0, gst-plugins-ugly-1.0, "
+            #         "gst-libav"
+            #     ),
+            #     _("Feature not available on Windows"),
+            #     None,
+            # ),
             Feature(
                 _("Automatic Status"),
                 self._idle_available(),
@@ -127,17 +127,17 @@ class Features(GajimAppWindow):
                 _("No additional requirements"),
                 spell_check_enabled,
             ),
-            Feature(
-                _("UPnP-IGD Port Forwarding"),
-                app.is_installed("UPNP"),
-                _(
-                    "Enables Gajim to request your router to forward ports "
-                    "for file transfers"
-                ),
-                _("Requires: gupnpigd-1.0"),
-                _("Feature not available on Windows"),
-                None,
-            ),
+            # Feature(
+            #     _("UPnP-IGD Port Forwarding"),
+            #     app.is_installed("UPNP"),
+            #     _(
+            #         "Enables Gajim to request your router to forward ports "
+            #         "for file transfers"
+            #     ),
+            #     _("Requires: gupnpigd-1.0"),
+            #     _("Feature not available on Windows"),
+            #     None,
+            # ),
         ]
 
     @staticmethod
