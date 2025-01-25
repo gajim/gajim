@@ -150,7 +150,6 @@ class Themes(GajimAppWindow):
             SimpleDialog(
                 _("Invalid Name"),
                 _("Name <b>default</b> is not allowed"),
-                secondary_use_markup=True,
             )
             return
 
