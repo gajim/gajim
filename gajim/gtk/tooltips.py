@@ -187,7 +187,7 @@ class ContactTooltip:
 
         self._append_pep_info(contact)
 
-        app.plugin_manager.extension_point("roster_tooltip_populate", self, contact)
+        app.plugin_manager.extension_point("contact_tooltip_populate", self, contact)
 
         # This sets the bottom-most widget to expand, in case the avatar
         # takes more space than the labels
@@ -267,7 +267,7 @@ class ContactTooltip:
             resource_box.append(idle_label)
 
         app.plugin_manager.extension_point(
-            "roster_tooltip_resource_populate", resource_box, contact
+            "contact_tooltip_resource_populate", resource_box, contact
         )
 
         self._ui.resources_box.append(resource_box)
