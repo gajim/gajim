@@ -71,9 +71,9 @@ class AccountsWindow(GajimAppWindow):
             self.add_account(account, initial=True)
 
         self._connect(self._menu, "menu-activated", self._on_menu_activated)
+        self._connect(self.window, "close-request", self._on_close_request)
 
     def _cleanup(self) -> None:
-        self._check_relogin()
         app.check_finalize(self)
 
     def _on_menu_activated(
@@ -81,7 +81,6 @@ class AccountsWindow(GajimAppWindow):
     ) -> None:
         if name == "back":
             self._settings.set_page("add-account")
-            self._check_relogin()
         elif name == "remove":
             self.on_remove_account(account)
         else:
@@ -94,7 +93,7 @@ class AccountsWindow(GajimAppWindow):
         for account in self._accounts:
             self._settings.update_proxy_list(account)
 
-    def _check_relogin(self) -> None:
+    def _check_relogin(self) -> bool:
         for account, r_settings in self._need_relogin.items():
             settings = self._get_relogin_settings(account)
             active = app.settings.get_account_setting(account, "active")
@@ -102,24 +101,25 @@ class AccountsWindow(GajimAppWindow):
                 self._need_relogin[account] = settings
                 if active:
                     self._relog(account)
+                    return True
                 break
 
+        return False
+
     def _relog(self, account: str) -> None:
-        if not app.account_is_connected(account):
-            return
 
         def relog():
             client = app.get_client(account)
             client.disconnect(gracefully=True, reconnect=True, destroy_client=True)
+            self.close()
 
         ConfirmationDialog(
             _("Re-Login Now?"),
             _("To apply all changes instantly, you have to re-login."),
             [
-                DialogButton.make("Cancel", text=_("_Later")),
+                DialogButton.make("Cancel", text=_("_Later"), callback=self.close),
                 DialogButton.make("Accept", text=_("_Re-Login"), callback=relog),
             ],
-            transient_for=self.window,
         ).show()
 
     @staticmethod
@@ -155,6 +155,11 @@ class AccountsWindow(GajimAppWindow):
 
     def enable_account(self, account: str, state: bool) -> None:
         self._accounts[account].enable_account(state)
+
+    def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> bool:
+        if self._check_relogin():
+            return Gdk.EVENT_STOP
+        return Gdk.EVENT_PROPAGATE
 
 
 class Settings(Gtk.ScrolledWindow):
