@@ -79,20 +79,20 @@ class Preferences(GajimAppWindow):
             ("status_message", StatusMessage),
             ("automatic_status", AutomaticStatus),
             ("themes", Themes),
-            ("server", Server),
-            ("audio", Audio),
-            ("video", Video),
+            # ("server", Server),
+            # ("audio", Audio),
+            # ("video", Video),
             ("miscellaneous", Miscellaneous),
             ("advanced", Advanced),
         ]
 
         self._add_prefs(prefs)
-        self._add_video_preview()
+        # self._add_video_preview()
 
-        self._ui.av_info_bar.set_reveal_child(
-            not app.is_installed("AV") or sys.platform == "win32"
-        )
-        self._ui.av_info_bar_label.set_text(_("Video calls are not supported"))
+        # self._ui.av_info_bar.set_reveal_child(
+        #     not app.is_installed("AV") or sys.platform == "win32"
+        # )
+        # self._ui.av_info_bar_label.set_text(_("Video calls are not supported"))
 
     def get_ui(self):
         return self._ui

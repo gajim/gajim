@@ -562,7 +562,7 @@
             </property>
           </object>
         </child>
-        <child>
+<!--         <child>
           <object class="GtkStackPage">
             <property name="name">audio_video</property>
             <property name="title" translatable="1">Audio/Video</property>
@@ -770,7 +770,7 @@
               </object>
             </property>
           </object>
-        </child>
+        </child> -->
         <child>
           <object class="GtkStackPage">
             <property name="name">advanced</property>
