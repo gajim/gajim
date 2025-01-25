@@ -21,7 +21,7 @@ class GajimPluginActivateException(Exception):
 
 
 def get_builder(
-    file_name: str, instance: Any, widgets: list[str] | None = None
+    file_name: str, instance: Any = None, widgets: list[str] | None = None
 ) -> GajimBuilder:
     return GajimBuilder(file_name,
                         instance,

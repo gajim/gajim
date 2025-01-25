@@ -348,7 +348,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             manifest = model.get_value(iter_, Column.MANIFEST)
             plugin = app.plugin_manager.get_plugin(manifest.short_name)
             assert plugin is not None
-            plugin.config_dialog(self)  # pyright: ignore
+            plugin.config_dialog(self.window)  # pyright: ignore
 
     def _on_uninstall_plugin(self, _button: Gtk.Button) -> None:
         selection = self._ui.plugins_treeview.get_selection()
