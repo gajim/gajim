@@ -249,9 +249,8 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         app.settings.disconnect_signals(self)
         del self.callback
         del self.enabled_func
-
         Gtk.ListBoxRow.do_unroot(self)
-        app.check_finalize(self)
+        # app.check_finalize() is called when the SettingsBox is destroyed
 
     def _bind_sensitive_state(self) -> None:
         if self.bind is None:
