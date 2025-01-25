@@ -161,6 +161,11 @@ class Client(Observable, ClientModules):
 
     def _create_client(self) -> None:
         log.info('Create new nbxmpp client')
+
+        if self._client is not None:
+            self._client.destroy()
+            self._destroy_client = False
+
         self._client = NBXMPPClient(log_context=self._account)
         self.connection = self._client
         self._client.set_domain(self._address.domain)
@@ -214,13 +219,27 @@ class Client(Observable, ClientModules):
                    reconnect: bool,
                    destroy_client: bool = False) -> None:
 
+        self._reconnect = reconnect
+        self._destroy_client = destroy_client
+
+        if self._state.is_reconnect_scheduled:
+            self._abort_reconnect()
+            if reconnect:
+                self.connect()
+            return
+
+        if self._state.is_disconnected:
+            if destroy_client:
+                self._create_client()
+            if reconnect:
+                self.connect()
+            return
+
         if self._state.is_disconnecting:
             log.warning('Disconnect already in progress')
             return
 
         self._set_state(ClientState.DISCONNECTING)
-        self._reconnect = reconnect
-        self._destroy_client = destroy_client
 
         log.info('Starting to disconnect %s', self._account)
         self._client.disconnect(immediate=not gracefully)
@@ -299,9 +318,6 @@ class Client(Observable, ClientModules):
         self.get_module('Bytestream').remove_all_transfers()
 
         if self._destroy_client:
-            self._client.destroy()
-            self._client = None
-            self._destroy_client = False
             self._create_client()
 
         app.ged.raise_event(AccountDisconnected(account=self._account))
@@ -580,9 +596,6 @@ class Client(Observable, ClientModules):
         self._disable_reconnect_timer()
 
         if self._destroy_client:
-            self._client.destroy()
-            self._client = None
-            self._destroy_client = False
             self._create_client()
 
         self.notify('state-changed', SimpleClientState.DISCONNECTED)
