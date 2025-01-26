@@ -238,13 +238,13 @@ class FileTransferSelector(Gtk.Box, SignalManager):
         self.emit("changed", True)
 
     def _on_resource_selection(self, _selector: ResourceSelector, state: bool) -> None:
-
         self.emit("changed", state)
 
     def _on_choose_files_clicked(
         self, _button: FileChooserButton, paths: list[Path]
     ) -> None:
         self.add_files([p.as_uri() for p in paths])
+        self._file_chooser_button.reset()
 
 
 class FileRow(Gtk.ListBoxRow, SignalManager):
