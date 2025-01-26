@@ -60,7 +60,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         # action.connect('notify::enabled', self._on_send_file_action_changed)
 
         action = app.window.get_action("send-file-httpupload")
-        action.connect("notify::enabled", self._on_send_file_action_changed)
+        self._connect(action, "notify::enabled", self._on_send_file_action_changed)
 
         gesture_direct_record_pressed = Gtk.GestureLongPress(button=Gdk.BUTTON_PRIMARY)
         gesture_direct_record_pressed.set_propagation_phase(
