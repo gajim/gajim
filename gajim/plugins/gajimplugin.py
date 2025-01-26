@@ -9,12 +9,12 @@ from typing import Any
 import logging
 import os
 import pickle
+import types
 from collections.abc import Generator
 
 from gajim.common import configpaths
 from gajim.common.events import ApplicationEvent
 from gajim.common.ged import HandlerFuncT
-from gajim.common.modules.base import BaseModule
 from gajim.common.types import PluginExtensionPoints
 
 from .manifest import PluginManifest
@@ -71,7 +71,7 @@ class GajimPlugin:
     '''
     New network event classes to be registered in Network Events Controller.
     '''
-    modules: list[BaseModule] = []
+    modules: list[types.ModuleType] = []
 
     def __init__(self) -> None:
         self.config = GajimPluginConfig(self)
