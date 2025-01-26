@@ -180,7 +180,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             if variant_type is not None:
                 variant_type = GLib.VariantType(variant_type)
             act = Gio.SimpleAction.new(action, variant_type)
-            act.connect("activate", callback)
+            self._connect(act, "activate", callback)
             self.window.add_action(act)
 
     @staticmethod
