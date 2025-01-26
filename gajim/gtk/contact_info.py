@@ -87,8 +87,10 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
-        self._ui.main_stack.connect(
-            "notify::visible-child-name", self._on_stack_child_changed
+        self._connect(
+            self._ui.main_stack,
+            "notify::visible-child-name",
+            self._on_stack_child_changed,
         )
 
         self._load_avatar()
@@ -175,6 +177,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         del self._switcher
         del self._contact_name_widget
+
+        self._client.disconnect_all_from_obj(self)
         self._disconnect_all()
         self.unregister_events()
         app.check_finalize(self)
