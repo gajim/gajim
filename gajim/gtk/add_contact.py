@@ -68,7 +68,7 @@ class AddContact(Assistant):
         progress.set_title(_("Gathering information…"))
         progress.set_text(_("Trying to gather information on this address…"))
 
-        self.connect("button-clicked", self._on_button_clicked)
+        self._connect(self, "button-clicked", self._on_button_clicked)
 
         self.show_all()
 
