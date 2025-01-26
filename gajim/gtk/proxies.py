@@ -68,8 +68,10 @@ class ManageProxies(GajimAppWindow):
         self._block_signal = False
 
         controller = Gtk.EventControllerKey()
-        self.get_default_controller().connect(
-            "key-pressed", self._on_proxies_treeview_key_pressed
+        self._connect(
+            self.get_default_controller(),
+            "key-pressed",
+            self._on_proxies_treeview_key_pressed,
         )
         self._ui.proxies_treeview.add_controller(controller)
 
