@@ -80,7 +80,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         success_page.set_title(_("Synchronize Chat History"))
         success_page.set_heading(_("Finished"))
 
-        self.connect("button-clicked", self._on_button_clicked)
+        self._connect(self, "button-clicked", self._on_button_clicked)
 
         # pylint: disable=line-too-long
         self.register_events(
