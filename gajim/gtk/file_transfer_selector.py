@@ -184,6 +184,7 @@ class FileTransferSelector(Gtk.Box, SignalManager):
         self._on_files_changed()
 
     def _on_row_removed(self, row: FileRow) -> None:
+        self._disconnect_object(row)
         self._ui.listbox.remove(row)
         self._on_files_changed()
 
