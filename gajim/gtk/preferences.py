@@ -1022,11 +1022,11 @@ class Miscellaneous(PreferenceBox):
         PreferenceBox.__init__(self, settings)
 
         reset_button = pref_window.get_ui().reset_button
-        reset_button.connect("clicked", self._on_reset_hints)
+        self._connect(reset_button, "clicked", self._on_reset_hints)
         reset_button.set_sensitive(self._check_hints_reset())
 
         purge_history_button = pref_window.get_ui().purge_history_button
-        purge_history_button.connect("clicked", self._on_purge_history_clicked)
+        self._connect(purge_history_button, "clicked", self._on_purge_history_clicked)
 
     @staticmethod
     def _get_proxies() -> dict[str, str]:
