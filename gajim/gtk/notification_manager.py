@@ -40,9 +40,11 @@ NotificationActionListT = list[
 ]
 
 
-class NotificationManager(Gtk.ListBox):
+class NotificationManager(Gtk.ListBox, SignalManager):
     def __init__(self, account: str) -> None:
         Gtk.ListBox.__init__(self)
+        SignalManager.__init__(self)
+
         self._account = account
         self._client = app.get_client(account)
         self._client.connect_signal("state-changed", self._on_client_state_changed)
@@ -60,6 +62,7 @@ class NotificationManager(Gtk.ListBox):
         self._add_actions()
 
     def do_unroot(self) -> None:
+        self._disconnect_all()
         self._remove_actions()
         self._client.disconnect_all_from_obj(self)
         Gtk.ListBox.do_unroot(self)
@@ -82,7 +85,7 @@ class NotificationManager(Gtk.ListBox):
             if typ is not None:
                 typ = GLib.VariantType.new(typ)
             act = Gio.SimpleAction.new(f"{action_name}-{self._account}", typ)
-            act.connect("activate", func)
+            self._connect(act, "activate", func)
             app.window.add_action(act)
 
     def update_actions(self) -> None:
@@ -428,7 +431,9 @@ class InvitationReceivedRow(NotificationRow):
     ) -> None:
         NotificationRow.__init__(self, account, str(event.muc))
         self.type = "invitation-received"
-        muc_contact.connect("room-joined", self._on_room_joined)
+
+        self._muc_contact = muc_contact
+        self._muc_contact.connect("room-joined", self._on_room_joined)
 
         self._event = event
 
@@ -441,7 +446,7 @@ class InvitationReceivedRow(NotificationRow):
         title_label.add_css_class("bold")
         self.grid.attach(title_label, 2, 1, 1, 1)
 
-        if muc_contact.muc_context == "private" and not event.muc.bare_match(
+        if self._muc_contact.muc_context == "private" and not event.muc.bare_match(
             event.from_
         ):
             contact = self._client.get_module("Contacts").get_contact(jid)
@@ -470,6 +475,10 @@ class InvitationReceivedRow(NotificationRow):
         decline_button.set_tooltip_text(_("Decline Invitation"))
         self._connect(decline_button, "clicked", self._on_decline_invitation)
         self.grid.attach(decline_button, 4, 1, 1, 2)
+
+    def do_unroot(self) -> None:
+        self._muc_contact.disconnect_all_from_obj(self)
+        NotificationRow.do_unroot(self)
 
     def _on_show_invitation(self, _button: Gtk.Button) -> None:
         open_window(
