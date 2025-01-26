@@ -116,6 +116,8 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         if self._client is not None:
             self._client.disconnect_all_from_obj(self)
 
+        if self._widget is not None:
+            self._disconnect_object(self._widget)
         container_remove_all(self._content_box)
 
         self._widget = None

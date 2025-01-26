@@ -1441,3 +1441,9 @@ class SignalManager:
         for obj, signal_id in self._signal_data:
             obj.disconnect(signal_id)
         self._signal_data.clear()
+
+    def _disconnect_object(self, obj: GObject.Object) -> None:
+        for obj_, signal_id in list(self._signal_data):
+            if obj is obj_:
+                obj.disconnect(signal_id)
+                self._signal_data.remove((obj, signal_id))
