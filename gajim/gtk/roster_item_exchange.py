@@ -50,27 +50,28 @@ class RosterItemExchange(GajimAppWindow):
         self._connect(self._ui.cancel_button, "clicked", self._on_cancel_button_clicked)
         self._connect(self._ui.accept_button, "clicked", self._on_accept_button_clicked)
 
-        # Set label depending on action
-        contact = self._client.get_module("Contacts").get_contact(jid_from)
+        contact = self._client.get_module("Contacts").get_contact(jid_from.bare)
         assert isinstance(
             contact, BareContact | GroupchatContact | GroupchatParticipant
         )
+
+        # Set label depending on action
         type_label = ""
         if action == "add":
             type_label = _(
                 "%(name)s (%(jid)s) would like to add some "
                 "contacts to your contact list."
-            ) % {"name": contact.name, "jid": self._jid_from}
+            ) % {"name": contact.name, "jid": self._jid_from.bare}
         elif action == "modify":
             type_label = _(
                 "%(name)s (%(jid)s) would like to modify some "
                 "contacts in your contact list."
-            ) % {"name": contact.name, "jid": self._jid_from}
+            ) % {"name": contact.name, "jid": self._jid_from.bare}
         elif action == "delete":
             type_label = _(
                 "%(name)s (%(jid)s) would like to delete some "
                 "contacts from your contact list."
-            ) % {"name": contact.name, "jid": self._jid_from}
+            ) % {"name": contact.name, "jid": self._jid_from.bare}
         self._ui.type_label.set_text(type_label)
 
         if message_body:
@@ -175,7 +176,7 @@ class RosterItemExchange(GajimAppWindow):
                     count += 1
                     # It is selected
                     contact = self._client.get_module("Contacts").get_contact(
-                        self._jid_from
+                        self._jid_from.bare
                     )
                     assert isinstance(
                         contact, BareContact | GroupchatContact | GroupchatParticipant
@@ -183,7 +184,7 @@ class RosterItemExchange(GajimAppWindow):
                     message = _(
                         "%(name)s %(jid)s suggested me to add you to "
                         "my contact list."
-                    ) % {"name": contact.name, "jid": self._jid_from}
+                    ) % {"name": contact.name, "jid": self._jid_from.bare}
                     # Keep same groups and same nickname
                     groups: list[str] = []
                     groups = self._model[iter_][3].split(", ")
