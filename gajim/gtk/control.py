@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 import datetime as dt
 import logging
@@ -95,7 +94,7 @@ class ChatControl(EventHelper):
             "activate", self._on_jump_to_message
         )
 
-        self.widget = cast(Gtk.Box, self._ui.get_object("control_box"))
+        self.widget = self._ui.control_box
 
     @property
     def contact(self) -> types.ChatContactT:
