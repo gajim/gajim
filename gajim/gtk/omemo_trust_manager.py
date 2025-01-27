@@ -50,7 +50,6 @@ TRUST_DATA = {
 
 class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
     def __init__(self, account: str, contact: types.ChatContactT | None = None) -> None:
-
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
         SignalManager.__init__(self)
@@ -89,11 +88,12 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._update()
 
     def do_unroot(self) -> None:
-        Gtk.Box.do_unroot(self)
         self.unregister_events()
         self._disconnect_all()
         self._ui.list.set_filter_func(None)
         self._ui.list.set_sort_func(None)
+
+        Gtk.Box.do_unroot(self)
         app.check_finalize(self)
 
     def _update(self) -> None:
@@ -128,9 +128,9 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list_heading.set_text(header_text)
         self._ui.comparing_instructions.set_text(popover_qr_text)
 
-        self._omemo = client.get_module("OMEMO")
-
-        our_fpr_formatted = self._omemo.backend.get_our_fingerprint(formatted=True)
+        our_fpr_formatted = client.get_module("OMEMO").backend.get_our_fingerprint(
+            formatted=True
+        )
         self._ui.our_fingerprint_1.set_text(our_fpr_formatted)
         self._ui.our_fingerprint_2.set_text(our_fpr_formatted)
 
@@ -192,13 +192,17 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list.invalidate_filter()
 
     def _load_fingerprints(self, contact: types.ChatContactT) -> None:
-        for identity_info in self._omemo.backend.get_identity_infos(str(contact.jid)):
+        client = app.get_client(self._account)
+        for identity_info in client.get_module("OMEMO").backend.get_identity_infos(
+            str(contact.jid)
+        ):
             self._ui.list.append(KeyRow(contact, identity_info))
 
     def _load_qrcode(self) -> None:
+        client = app.get_client(self._account)
         uri = compose_trust_uri(
-            app.get_client(self._account).get_own_jid(),
-            [self._omemo.backend.get_our_identity()],
+            client.get_own_jid(),
+            [client.get_module("OMEMO").backend.get_our_identity()],
         )
         log.debug("Trust URI: %s", uri)
         self._ui.qr_code_image.set_from_paintable(generate_qr_code(uri))
@@ -208,7 +212,8 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
 
     def _on_clear_devices_clicked(self, _button: Gtk.Button) -> None:
         def _clear():
-            self._omemo.clear_devicelist()
+            client = app.get_client(self._account)
+            client.get_module("OMEMO").clear_devicelist()
 
         ConfirmationDialog(
             _("Clear Devices?"),
@@ -234,12 +239,11 @@ class KeyRow(Gtk.ListBoxRow):
         self.set_activatable(False)
 
         self._contact = contact
+        self._client = app.get_client(contact.account)
+
         self._address = identity_info.address
         self._identity_info = identity_info
         self._trust = identity_info.trust
-
-        client = app.get_client(contact.account)
-        self._omemo = client.get_module("OMEMO")
 
         grid = Gtk.Grid()
         grid.set_column_spacing(12)
@@ -285,14 +289,15 @@ class KeyRow(Gtk.ListBoxRow):
         self.set_child(grid)
 
     def do_unroot(self) -> None:
-        Gtk.ListBoxRow.do_unroot(self)
         del self._trust_button
+
+        Gtk.ListBoxRow.do_unroot(self)
         app.check_finalize(self)
 
     def delete_fingerprint(self, *args: Any) -> None:
 
         def _remove():
-            self._omemo.backend.delete_session(
+            self._client.get_module("OMEMO").backend.delete_session(
                 self._address, self._identity_info.device_id, delete_identity=True
             )
 
@@ -316,7 +321,7 @@ class KeyRow(Gtk.ListBoxRow):
         image.add_css_class(css_class)
         image.set_tooltip_text(tooltip)
 
-        self._omemo.backend.set_trust(
+        self._client.get_module("OMEMO").backend.set_trust(
             self._address, self._identity_info.public_key, trust
         )
 
@@ -344,9 +349,10 @@ class TrustButton(Gtk.MenuButton):
         self.update()
 
     def do_unroot(self) -> None:
-        Gtk.MenuButton.do_unroot(self)
         del self._trust_popover
         del self._row
+
+        Gtk.MenuButton.do_unroot(self)
         app.check_finalize(self)
 
     def update(self) -> None:
