@@ -40,6 +40,7 @@ from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import get_app_window
 from gajim.gtk.util import iterate_listbox_children
 from gajim.gtk.util import open_window
+from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.accounts")
@@ -74,7 +75,7 @@ class AccountsWindow(GajimAppWindow):
         self._connect(self.window, "close-request", self._on_close_request)
 
     def _cleanup(self) -> None:
-        app.check_finalize(self)
+        pass
 
     def _on_menu_activated(
         self, _listbox: Gtk.ListBox, account: str, name: str
@@ -201,16 +202,15 @@ class Settings(Gtk.ScrolledWindow):
             page.update_proxy_entries()
 
 
-class AccountMenu(Gtk.Box):
+class AccountMenu(Gtk.Box, SignalManager):
 
     __gsignals__ = {
         "menu-activated": (GObject.SignalFlags.RUN_FIRST, None, (str, str)),
     }
 
     def __init__(self) -> None:
-        Gtk.Box.__init__(self)
-        self.set_hexpand(False)
-        self.set_size_request(160, -1)
+        Gtk.Box.__init__(self, hexpand=False, width_request=160)
+        SignalManager.__init__(self)
 
         self.add_css_class("accounts-menu")
 
@@ -220,13 +220,20 @@ class AccountMenu(Gtk.Box):
         self._accounts_listbox = Gtk.ListBox()
         self._accounts_listbox.set_sort_func(self._sort_func)
         self._accounts_listbox.add_css_class("accounts-menu-listbox")
-        self._accounts_listbox.connect("row-activated", self._on_account_row_activated)
+        self._connect(
+            self._accounts_listbox, "row-activated", self._on_account_row_activated
+        )
 
         scrolled = Gtk.ScrolledWindow()
         scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scrolled.set_child(self._accounts_listbox)
         self._stack.add_named(scrolled, "accounts")
         self.append(self._stack)
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.Box.do_unroot(self)
+        app.check_finalize(self)
 
     @staticmethod
     def _sort_func(row1: AccountRow, row2: AccountRow) -> int:
@@ -237,7 +244,7 @@ class AccountMenu(Gtk.Box):
         sub_menu = AccountSubMenu(row.account)
         self._stack.add_named(sub_menu, f"{row.account}-menu")
 
-        sub_menu.connect("row-activated", self._on_sub_menu_row_activated)
+        self._connect(sub_menu, "row-activated", self._on_sub_menu_row_activated)
 
     def remove_account(self, row: AccountRow) -> None:
         if self._stack.get_visible_child_name() != "accounts":
@@ -324,9 +331,10 @@ class AccountSubMenu(Gtk.ListBox):
         self.emit("update", self._account)
 
 
-class MenuItem(Gtk.ListBoxRow):
+class MenuItem(Gtk.ListBoxRow, SignalManager):
     def __init__(self, name: str) -> None:
         Gtk.ListBoxRow.__init__(self)
+        SignalManager.__init__(self)
         self._name = name
         self._box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self._label = Gtk.Label()
@@ -336,6 +344,11 @@ class MenuItem(Gtk.ListBoxRow):
     @property
     def name(self) -> str:
         return self._name
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
 
 class RemoveMenuItem(MenuItem):
@@ -370,7 +383,7 @@ class AccountLabelMenuItem(MenuItem):
         self._box.append(image)
         self._box.append(self._label)
 
-        parent.connect("update", self._update_account_label)
+        self._connect(parent, "update", self._update_account_label)
 
     def _update_account_label(self, _listbox: Gtk.ListBox, account: str) -> None:
         account_label = app.get_account_label(account)
@@ -462,10 +475,10 @@ class Account:
         return self._account
 
 
-class AccountRow(Gtk.ListBoxRow):
+class AccountRow(Gtk.ListBoxRow, SignalManager):
     def __init__(self, account: str) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        self.set_selectable(False)
+        Gtk.ListBoxRow.__init__(self, selectable=False)
+        SignalManager.__init__(self)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
 
@@ -493,7 +506,7 @@ class AccountRow(Gtk.ListBoxRow):
         self._switch_state_label.set_width_chars(label_width)
         self._set_label(account_enabled)
 
-        self._switch.connect("state-set", self._on_enable_switch, self._account)
+        self._connect(self._switch, "state-set", self._on_enable_switch, self._account)
 
         box.append(self._switch)
         box.append(self._switch_state_label)
@@ -509,6 +522,11 @@ class AccountRow(Gtk.ListBoxRow):
     @property
     def label(self) -> str:
         return self._label.get_text()
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
     def update_account_label(self) -> None:
         self._label.set_text(app.get_account_label(self._account))
