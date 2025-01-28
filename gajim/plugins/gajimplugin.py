@@ -108,8 +108,8 @@ class GajimPlugin:
     def deactivate(self) -> None:
         pass
 
-    def activate_encryption(self, chat_control: Any) -> None:
-        pass
+    def activate_encryption(self, chat_control: Any) -> bool:
+        raise NotImplementedError
 
 
 class GajimPluginConfig:
