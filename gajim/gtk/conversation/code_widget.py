@@ -130,6 +130,5 @@ class CodeTextview(GtkSource.View):
         return buffer_.get_text(start, end, False)
 
     def print_code(self, code: str) -> None:
-        self.set_show_line_numbers(True)
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), code)
