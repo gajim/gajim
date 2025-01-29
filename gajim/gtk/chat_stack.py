@@ -857,6 +857,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if self._current_contact is not None:
             self._current_contact.disconnect_all_from_obj(self)
 
+        app.preview_manager.clear_previews()
+
         self._last_quoted_id = None
         self.set_visible_child_name("empty")
         self._chat_banner.clear()
