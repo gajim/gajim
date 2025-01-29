@@ -239,8 +239,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.plugin_manager.extension_point("switch_contact", self._current_contact)
 
-        # TODO GTK4: This creates a loop raising CPU load
-        # GLib.idle_add(self._message_action_box.msg_textview.grab_focus)
+        self._message_action_box.msg_textview.grab_focus_delayed()
 
     def _on_primary_clipboard_read_text_finished(
         self,
