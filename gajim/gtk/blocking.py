@@ -120,7 +120,7 @@ class BlockingList(GajimAppWindow):
             if not item[0]:
                 # No address/placeholder
                 continue
-            blocked_jids.add(JID.from_string(item[0].lower()))
+            blocked_jids.add(JID.from_string(item[0]))
 
         unblock_jids = self._prev_blocked_jids - blocked_jids
         block_jids = blocked_jids - self._prev_blocked_jids
