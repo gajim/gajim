@@ -825,22 +825,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.settings.set("is_window_visible", False)
         self.hide()
 
-    def _on_window_state_changed(self, toplevel: Gdk.Toplevel, *args: Any) -> None:
-        # TODO GTK4
-        toplevel_state = toplevel.get_state()
-        log.debug("Window state changed: %s", toplevel_state)
-
-        # states = Gdk.WindowState.WITHDRAWN | Gdk.WindowState.ICONIFIED
-        # if states & event.changed_mask:
-        #     is_withdrawn = bool(Gdk.WindowState.WITHDRAWN &
-        #                         event.new_window_state)
-        #     is_iconified = bool(Gdk.WindowState.ICONIFIED &
-        #                         event.new_window_state)
-        #     log.debug('Window state changed: ICONIFIED: %s, WITHDRAWN: %s',
-        #               is_iconified, is_withdrawn)
-
-        #     app.settings.set('is_window_visible', not is_withdrawn)
-
     def _set_startup_finished(self) -> None:
         self._startup_finished = True
         self._chat_page.set_startup_finished()
