@@ -392,7 +392,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         return -1
 
     def _on_activate(self, _application: Gtk.Application) -> None:
-        app.window.show()
+        app.window.show_window()
 
     def _add_app_actions(self) -> None:
         for action in APP_ACTIONS:

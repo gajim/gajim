@@ -274,7 +274,7 @@ class QuitDialog(GajimAppWindow):
         if action == "minimize":
             app.window.minimize()
         elif action == "hide":
-            app.window.hide()
+            app.window.hide_window()
         elif action == "quit":
             app.window.quit()
 

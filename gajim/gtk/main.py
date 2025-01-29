@@ -229,21 +229,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self.show()
 
-        toplevel_surface = self.get_surface()
-        assert toplevel_surface is not None
-        toplevel_surface.connect("notify::state", self._on_window_state_changed)
-
         if app.is_display(Display.X11):
             self.set_skip_taskbar_hint(not app.settings.get("show_in_taskbar"))
 
         show_main_window = app.settings.get("show_main_window_on_startup")
         if show_main_window == "never":
-            self.hide()
+            self.hide_window()
 
         elif show_main_window == "last_state" and not app.settings.get(
             "is_window_visible"
         ):
-            self.hide()
+            self.hide_window()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         self._account_side_bar.add_account(event.account)
@@ -813,13 +809,21 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         action = app.settings.get("action_on_close")
         if action == "hide":
-            self.hide()
+            self.hide_window()
         elif action == "minimize":
             self.minimize()
         else:
             self.quit()
 
         return Gdk.EVENT_STOP
+
+    def show_window(self) -> None:
+        app.settings.set("is_window_visible", True)
+        self.show()
+
+    def hide_window(self) -> None:
+        app.settings.set("is_window_visible", False)
+        self.hide()
 
     def _on_window_state_changed(self, toplevel: Gdk.Toplevel, *args: Any) -> None:
         # TODO GTK4
@@ -1363,9 +1367,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.add_chat(event.account, event.jid, "chat")
 
     def quit(self) -> None:
-        window_width, window_height = self.get_width(), self.get_height()
-        app.settings.set("mainwin_width", window_width)
-        app.settings.set("mainwin_height", window_height)
+        if self.is_visible():
+            window_width, window_height = self.get_width(), self.get_height()
+            app.settings.set("mainwin_width", window_width)
+            app.settings.set("mainwin_height", window_height)
+
         app.settings.save()
 
         def on_continue2(message: str | None) -> None:

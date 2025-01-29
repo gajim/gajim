@@ -128,9 +128,9 @@ class StatusIconBackend(EventHelper):
 
     def _on_show_hide(self) -> None:
         if app.window.is_visible():
-            app.window.hide()
+            app.window.hide_window()
         else:
-            app.window.show()
+            app.window.show_window()
 
     @staticmethod
     def _on_preferences() -> None:
