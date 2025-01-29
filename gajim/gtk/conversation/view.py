@@ -238,17 +238,12 @@ class ConversationView(Gtk.ScrolledWindow):
             GLib.idle_add(self.emit, signal_name, *args)
 
     def _reset_list_box(self) -> None:
-        # TODO GTK4
-        # self._list_box.destroy()
-        self._list_box = Gtk.ListBox()
         self._list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        self._list_box.set_sort_func(self._sort_func)
-        self._list_box.show()
+        # Performance: Disable sort function before removing all rows
+        self._list_box.set_sort_func(None)
+        self._list_box.remove_all()
 
-        current_child = self.get_child()
-        assert current_child is not None
-        # current_child.destroy()
-        self.set_child(self._list_box)
+        self._list_box.set_sort_func(self._sort_func)
 
     def _reset(self) -> None:
         self._current_upper = 0
