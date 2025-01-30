@@ -109,9 +109,11 @@ class MessageInputTextView(GtkSource.View):
     def get_completion_popover(self) -> CompletionPopover:
         return self._completion_popover
 
-    def grab_focus_delayed(self) -> None:
-        # This is a workaround; GLib.idle_add creates a loop raising CPU load
-        GLib.timeout_add(500, self.grab_focus)
+    def grab_focus_delayed(self) -> bool:
+        # Use this function if calling via GLib.idle_add to avoid
+        # creating a loop raising CPU load
+        self.grab_focus()
+        return False
 
     def start_correction(self, message: mod.Message | None = None) -> None:
         if message is None:
