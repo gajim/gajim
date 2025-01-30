@@ -127,10 +127,10 @@ class StatusIconBackend(EventHelper):
         app.settings.set("sounds_on", not current_state)
 
     def _on_show_hide(self) -> None:
-        if app.window.is_visible():
-            app.window.hide_window()
-        else:
+        if not app.window.is_visible() or app.window.is_suspended():
             app.window.show_window()
+        else:
+            app.window.hide_window()
 
     @staticmethod
     def _on_preferences() -> None:
