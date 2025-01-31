@@ -458,7 +458,6 @@ class EntrySetting(GenericSetting):
         self.entry.set_alignment(1)
 
         if self.value == "password":
-            self.entry.set_invisible_char("*")
             self.entry.set_visibility(False)
 
         self.setting_box.append(self.entry)
