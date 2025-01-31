@@ -1207,8 +1207,6 @@ class AgentBrowser:
         # We got a list of items
         def fill_partial_rows(items: list[DiscoItem]) -> Iterator[bool]:
             """Generator to fill the listmodel of a treeview progressively."""
-            # TODO GTK4
-            # self.window.services_treeview.freeze_child_notify()
             for item in items:
                 if self.window.dying:
                     yield False
@@ -1220,10 +1218,7 @@ class AgentBrowser:
                 self._total_items += 1
                 self._add_item(node, item, force)
                 if (self._total_items % 10) == 0:
-                    # self.window.services_treeview.thaw_child_notify()
                     yield True
-                    # self.window.services_treeview.freeze_child_notify()
-            # self.window.services_treeview.thaw_child_notify()
             # Stop idle_add()
             yield False
 
