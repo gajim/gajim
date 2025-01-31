@@ -36,7 +36,6 @@ from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
-from gajim.gtk.util import clear_listbox
 from gajim.gtk.util import convert_py_to_glib_datetime
 from gajim.gtk.util import SignalManager
 
@@ -145,7 +144,9 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         # Unset the header_func to reduce load when clearing
         self._ui.results_listbox.set_header_func(None)
 
-        clear_listbox(self._ui.results_listbox)
+        self._ui.results_listbox.remove_all()
+        # Set placeholder again, otherwise it won't be shown
+        self._ui.results_listbox.set_placeholder(self._ui.placeholder)
 
         self._ui.results_listbox.set_header_func(self._header_func)
         self._ui.results_scrolled.get_vadjustment().set_value(0)
