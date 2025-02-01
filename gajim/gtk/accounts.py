@@ -1132,7 +1132,7 @@ class PriorityDialog(SettingsDialog):
 class CutstomHostnameDialog(SettingsDialog):
     def __init__(self, account: str, parent: Gtk.Window) -> None:
 
-        type_values = ("START TLS", "DIRECT TLS", "PLAIN")
+        type_values = ["START TLS", "DIRECT TLS", "PLAIN"]
 
         settings = [
             Setting(
@@ -1157,12 +1157,12 @@ class CutstomHostnameDialog(SettingsDialog):
                 props={"range_": (0, 65535, 1)},
             ),
             Setting(
-                SettingKind.COMBO,
+                SettingKind.DROPDOWN,
                 _("Type"),
                 SettingType.ACCOUNT_CONFIG,
                 "custom_type",
                 bind="account::use_custom_host",
-                props={"combo_items": type_values},
+                props={"data": type_values},
             ),
         ]
 
