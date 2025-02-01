@@ -31,10 +31,10 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import SimpleDialog
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util import at_the_end
 from gajim.gtk.util import get_source_view_style_scheme
-from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import scroll_to_end
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -100,20 +100,17 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         self._ui.paned.set_position(self._ui.paned.get_property("max-position"))
 
-        self._combo = MaxWidthComboBoxText()
-        self._combo.set_max_width_chars(15)
-        self._combo.set_hexpand(False)
-        self._combo.set_halign(Gtk.Align.END)
-        self._combo.set_visible(False)
-        self._combo.set_visible(False)
-        self._connect(self._combo, "changed", self._on_value_change)
-        available_accounts = self._get_accounts()
-        for account, label in available_accounts:
-            self._combo.append(account, label)
-        if available_accounts:
-            self._combo.set_active(0)
-        self._ui.actionbox.append(self._combo)
-        self._ui.actionbox.reorder_child_after(self._combo, self._ui.account_label)
+        self._account_dropdown = GajimDropDown(
+            fixed_width=15, data=self._get_accounts()
+        )
+        self._connect(
+            self._account_dropdown, "notify::selected", self._on_account_change
+        )
+        self._account_dropdown.set_visible(False)
+        self._ui.actionbox.append(self._account_dropdown)
+        self._ui.actionbox.reorder_child_after(
+            self._account_dropdown, self._ui.account_label
+        )
 
         self._create_tags()
         self._add_stanza_presets()
@@ -199,8 +196,10 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         vadjustment = self._ui.scrolled.get_vadjustment()
         vadjustment.set_value(vadjustment.get_upper())
 
-    def _on_value_change(self, combo: Gtk.ComboBox) -> None:
-        self._selected_send_account = combo.get_active_id()
+    def _on_account_change(self, dropdown: GajimDropDown, *args: Any) -> None:
+        item = dropdown.get_selected_item()
+        assert item is not None
+        self._selected_send_account = item.props.key
 
     def _set_title(self) -> None:
         if self._selected_account == "AllAccounts":
@@ -367,7 +366,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             self._ui.send.show()
             self._ui.paste.show()
             self._ui.account_label.show()
-            self._combo.show()
+            self._account_dropdown.show()
             self._ui.menubutton.show()
             self._ui.input_entry.grab_focus()
         else:
@@ -375,7 +374,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             self._ui.send.hide()
             self._ui.paste.hide()
             self._ui.account_label.hide()
-            self._combo.hide()
+            self._account_dropdown.hide()
             self._ui.menubutton.hide()
 
     def _on_search_toggled(self, button: Gtk.ToggleButton) -> None:
@@ -452,31 +451,43 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._ui.protocol_view.scroll_to_mark(mark, 0, True, 0.5, 0.5)
 
     @staticmethod
-    def _get_accounts() -> list[tuple[str | None, str]]:
-        accounts = app.get_accounts_sorted()
-        combo_accounts: list[tuple[str | None, str]] = []
-        for account in accounts:
+    def _get_accounts() -> dict[str, str]:
+        """Gets a dictionary of accounts ready to use with GajimDropdown.
+        All available accounts are added, connected accounts are placed first.
+        Additionally, AccountWizard is added as a special account.
+        """
+        dropdown_data: dict[str, str] = {}
+
+        connected_accounts = app.get_connected_accounts()
+        for account in connected_accounts:
             label = app.get_account_label(account)
-            combo_accounts.append((account, label))
-        combo_accounts.append(("AccountWizard", _("Account Wizard")))
-        return combo_accounts
+            dropdown_data[account] = label
+
+        for account in app.get_accounts_sorted():
+            if account in connected_accounts:
+                continue
+            label = app.get_account_label(account)
+            dropdown_data[account] = label
+
+        dropdown_data["AccountWizard"] = _("Account Wizard")
+
+        return dropdown_data
 
     def _on_filter_options(self, _button: Gtk.Button) -> None:
         if self._filter_dialog is not None:
             self._filter_dialog.present()
             return
 
-        combo_accounts = self._get_accounts()
-        combo_accounts.insert(0, ("AllAccounts", _("All Accounts")))
+        all_accounts = {"AllAccounts": _("All Accounts"), **self._get_accounts()}
 
         settings = [
             Setting(
-                SettingKind.COMBO,
+                SettingKind.DROPDOWN,
                 _("Account"),
                 SettingType.VALUE,
                 self._selected_account,
                 callback=self._set_account,
-                props={"combo_items": combo_accounts},
+                props={"data": all_accounts},
             ),
             Setting(
                 SettingKind.SWITCH,
