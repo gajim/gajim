@@ -29,6 +29,8 @@ from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import optparser
 from gajim.common.setting_values import ACCOUNT_SETTINGS
+from gajim.common.setting_values import AllAccountSettings
+from gajim.common.setting_values import AllAccountSettingsT
 from gajim.common.setting_values import AllContactSettings
 from gajim.common.setting_values import AllContactSettingsT
 from gajim.common.setting_values import AllGroupChatSettings
@@ -833,7 +835,7 @@ class Settings:
 
     def get_account_setting(self,
                             account: str,
-                            setting: str) -> AllSettingsT:
+                            setting: AllAccountSettings) -> AllAccountSettingsT:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')
@@ -869,8 +871,8 @@ class Settings:
 
     def set_account_setting(self,
                             account: str,
-                            setting: str,
-                            value: AllSettingsT | None) -> None:
+                            setting: AllAccountSettings,
+                            value: AllAccountSettingsT | None) -> None:
 
         if account not in self._account_settings:
             raise ValueError(f'Account missing: {account}')

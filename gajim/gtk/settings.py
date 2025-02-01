@@ -99,7 +99,7 @@ class SettingsBox(Gtk.ListBox, SignalManager):
         self.jid = jid
         self.named_settings: dict[str, GenericSetting] = {}
 
-        self.map: dict[SettingKind, GenericSetting] = {
+        self.settings_type_map: dict[SettingKind, GenericSetting] = {
             SettingKind.SWITCH: SwitchSetting,
             SettingKind.SPIN: SpinSetting,
             SettingKind.DIALOG: DialogSetting,
@@ -120,8 +120,8 @@ class SettingsBox(Gtk.ListBox, SignalManager):
         }
 
         if extend is not None:
-            for setting, callback in extend:
-                self.map[setting] = callback
+            for setting, callback in extend.items():
+                self.settings_type_map[setting] = callback
 
         self._connect(self, "row-activated", self.on_row_activated)
 
@@ -139,15 +139,14 @@ class SettingsBox(Gtk.ListBox, SignalManager):
         row.on_row_activated()
 
     def add_setting(self, setting: Setting) -> None:
-        if not isinstance(setting, Gtk.ListBoxRow):
-            if setting.props is not None:
-                listitem = self.map[setting.kind](
-                    self.account, self.jid, *setting[1:-1], **setting.props
-                )
-            else:
-                listitem = self.map[setting.kind](
-                    self.account, self.jid, *setting[1:-1]
-                )
+        if setting.props is not None:
+            listitem = self.settings_type_map[setting.kind](
+                self.account, self.jid, *setting[1:-1], **setting.props
+            )
+        else:
+            listitem = self.settings_type_map[setting.kind](
+                self.account, self.jid, *setting[1:-1]
+            )
 
         if setting.name is not None:
             self.named_settings[setting.name] = listitem
@@ -266,17 +265,23 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         )
 
         if bind_setting_type == SettingType.CONTACT:
+            assert account is not None
+            assert jid is not None
             value = app.settings.get_contact_setting(account, jid, setting)
 
         elif bind_setting_type == SettingType.GROUP_CHAT:
+            assert account is not None
+            assert jid is not None
             value = app.settings.get_group_chat_setting(account, jid, setting)
 
         elif bind_setting_type == SettingType.ACCOUNT_CONFIG:
+            assert account is not None
             value = app.settings.get_account_setting(account, setting)
 
         else:
             value = app.settings.get(setting)
 
+        assert isinstance(value, bool)
         if self.inverted:
             value = not value
         self.set_sensitive(value)
@@ -297,15 +302,16 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
             return SettingType.GROUP_CHAT, setting, self.account, self.jid
         raise ValueError(f"Invalid bind argument: {self.bind}")
 
-    def get_value(self):
+    def get_value(self) -> AllSettingsT | None:
         return self.__get_value(self.type_, self.value, self.account, self.jid)
 
     @staticmethod
     def __get_value(
-        type_: SettingType, value: AllSettingsT, account: str, jid: JID
+        type_: SettingType, value: AllSettingsT | None, account: str, jid: JID
     ) -> AllSettingsT | None:
         if value is None:
             return None
+
         if type_ == SettingType.VALUE:
             return value
 
@@ -358,6 +364,7 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
 
     def update_activatable(self) -> None:
         if self.type_ == SettingType.CONFIG:
+            assert isinstance(self.value, str)
             if app.settings.has_app_override(self.value):
                 self.set_activatable(False)
                 self.set_sensitive(False)
@@ -374,21 +381,24 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
     def _add_action_button(
         self, kwargs: dict[str, str | Callable[..., None] | None]
     ) -> None:
-        icon_name = cast(str, kwargs.get("button-icon-name"))
-        button_text = cast(str, kwargs.get("button-text"))
+        icon_name = kwargs.get("button-icon-name")
+        button_text = kwargs.get("button-text")
         tooltip_text = cast(str, kwargs.get("button-tooltip") or "")
-        style = cast(str, kwargs.get("button-style"))
+        style = kwargs.get("button-style")
 
         if icon_name is not None:
+            assert isinstance(icon_name, str)
             button = Gtk.Button.new_from_icon_name(icon_name)
 
         elif button_text is not None:
+            assert isinstance(button_text, str)
             button = Gtk.Button(label=button_text)
 
         else:
             return
 
         if style is not None:
+            assert isinstance(style, str)
             for css_class in style.split(" "):
                 button.add_css_class(css_class)
 
@@ -570,7 +580,7 @@ class SpinSetting(GenericSetting):
             width_chars=5,
         )
 
-        assert isinstance(self.setting_value, int | float)
+        assert isinstance(self.setting_value, int | float | str)
         if isinstance(self.setting_value, float):
             self.spin.set_digits(3)
 

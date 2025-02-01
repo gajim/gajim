@@ -337,6 +337,8 @@ AllAccountSettings = Literal[BoolAccountSettings,
                              IntAccountSettings,
                              StringAccountSettings]
 
+AllAccountSettingsT = bool | int | str
+
 
 BoolGroupChatSettings = Literal[
     'notify_on_all_messages',
