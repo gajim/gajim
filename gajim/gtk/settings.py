@@ -408,8 +408,10 @@ class SwitchSetting(GenericSetting):
             self.switch.set_action_name(f"app.{self.setting_value}")
             assert isinstance(self.setting_value, str)
             state = app.app.get_action_state(self.setting_value)
+            assert state is not None
             self.switch.set_active(state.get_boolean())
         else:
+            assert isinstance(self.setting_value, bool)
             self.switch.set_active(self.setting_value)
         self._connect(self.switch, "notify::active", self.on_switch)
         self.switch.set_hexpand(True)
@@ -419,6 +421,7 @@ class SwitchSetting(GenericSetting):
         self._switch_state_label = Gtk.Label()
         self._switch_state_label.set_xalign(1)
         self._switch_state_label.set_valign(Gtk.Align.CENTER)
+        assert isinstance(self.setting_value, bool)
         self._set_label(self.setting_value)
 
         box = Gtk.Box(spacing=12)
@@ -567,7 +570,7 @@ class SpinSetting(GenericSetting):
             width_chars=5,
         )
 
-        assert self.setting_value is not None
+        assert isinstance(self.setting_value, int | float)
         if isinstance(self.setting_value, float):
             self.spin.set_digits(3)
 
@@ -611,7 +614,7 @@ class FileChooserSetting(GenericSetting):
         clear_button = button = Gtk.Button(
             icon_name="edit-clear-all-symbolic", tooltip_text=_("Clear File")
         )
-        self._connect(clear_button, "clicked", lambda *args: button.reset())
+        self._connect(clear_button, "clicked", lambda *args: button.reset())  # type: ignore
         self.setting_box.append(button)
         self.setting_box.append(clear_button)
 
