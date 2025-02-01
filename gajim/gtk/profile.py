@@ -262,8 +262,6 @@ class ProfileWindow(GajimAppWindow):
         self._show_profile_page()
 
     def _on_save_clicked(self, _button: Gtk.Button) -> None:
-        self._ui.spinner.start()
-        self._ui.profile_stack.set_visible_child_name("spinner")
         self._ui.add_entry_button.hide()
         self._ui.cancel_button.hide()
         self._ui.save_button.hide()
@@ -271,6 +269,11 @@ class ProfileWindow(GajimAppWindow):
         self._ui.remove_avatar_button.hide()
         self._ui.privacy_button.hide()
         self._ui.nickname_entry.set_sensitive(False)
+
+        # Switch page after setting other widget's visibility
+        # This avoids a leak caused by switching stack pages
+        self._ui.spinner.start()
+        self._ui.profile_stack.set_visible_child_name("spinner")
 
         self._vcard_grid.validate()
         self._vcard_grid.sort()
