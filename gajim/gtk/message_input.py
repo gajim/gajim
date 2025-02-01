@@ -94,6 +94,10 @@ class MessageInputTextView(GtkSource.View):
             "completion-picked", self._on_completion_picked
         )
 
+        gesture_secondary_click = Gtk.GestureClick(button=Gdk.BUTTON_SECONDARY)
+        gesture_secondary_click.connect("pressed", self._on_secondary_click)
+        self.add_controller(gesture_secondary_click)
+
         focus_controller = Gtk.EventControllerFocus()
         focus_controller.connect("enter", self._on_focus_enter)
         focus_controller.connect("leave", self._on_focus_leave)
@@ -201,6 +205,21 @@ class MessageInputTextView(GtkSource.View):
         buf.delete(start, end)
         buf.insert(start, complete_string)
         self.grab_focus()
+
+    def _on_secondary_click(
+        self,
+        _gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+        # Place the cursor at click position to trigger an update
+        # for spelling suggestions, see:
+        # https://gitlab.gnome.org/GNOME/libspelling/-/issues/5
+        _, iter_, _ = self.get_iter_at_position(int(x), int(y))
+        buf = self.get_buffer()
+        buf.place_cursor(iter_)
+        return Gdk.EVENT_PROPAGATE
 
     def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:
         scrolled = self.get_parent()
