@@ -33,7 +33,6 @@ from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import open_window
 from gajim.gtk.util import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
@@ -113,7 +112,6 @@ class SettingsBox(Gtk.ListBox, SignalManager):
             SettingKind.PRIORITY: PrioritySetting,
             SettingKind.HOSTNAME: CutstomHostnameSetting,
             SettingKind.CHANGEPASSWORD: ChangePasswordSetting,
-            SettingKind.COMBO: ComboSetting,
             SettingKind.AUTO_AWAY: CutstomAutoAwaySetting,
             SettingKind.AUTO_EXTENDED_AWAY: CutstomAutoExtendedAwaySetting,
             SettingKind.USE_STUN_SERVER: CustomStunServerSetting,
@@ -718,52 +716,6 @@ class DropDownSetting(GenericSetting):
         self._dropdown.disconnect_by_func(self._on_selected)
         self._dropdown.select_key(key)
         self._dropdown.connect("notify::selected", self._on_selected)
-
-    def on_row_activated(self) -> None:
-        pass
-
-
-class PopoverRow(Gtk.ListBoxRow):
-    def __init__(self, label: str, value: str) -> None:
-        Gtk.ListBoxRow.__init__(self)
-        self.label = label
-        self.value = value
-
-        row_label = Gtk.Label(label=label)
-        row_label.set_xalign(0)
-        self.set_child(row_label)
-
-
-class ComboSetting(GenericSetting):
-    def __init__(self, *args: Any, combo_items: list[str | tuple[str, str]]) -> None:
-        GenericSetting.__init__(self, *args)
-
-        self.combo = MaxWidthComboBoxText()
-        self.combo.set_valign(Gtk.Align.CENTER)
-
-        for index, value in enumerate(combo_items):
-            if isinstance(value, tuple):
-                value, label = value
-                self.combo.append(value, _(label))
-            else:
-                self.combo.append(value, value)
-            if value == self.setting_value or index == 0:
-                self.combo.set_active(index)
-
-        self._connect(self.combo, "changed", self.on_value_change)
-
-        self.setting_box.append(self.combo)
-
-    def do_unroot(self) -> None:
-        self._disconnect_all()
-        self.combo = None
-        del self.combo
-        GenericSetting.do_unroot(self)
-
-    def on_value_change(self, combo: Gtk.ComboBox) -> None:
-        active_id = combo.get_active_id()
-        if active_id is not None:
-            self.set_value(active_id)
 
     def on_row_activated(self) -> None:
         pass
