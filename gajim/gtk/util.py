@@ -406,21 +406,6 @@ class MultiLineLabel(Gtk.Label):
         self.set_selectable(True)
 
 
-class MaxWidthComboBoxText(Gtk.ComboBoxText):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        Gtk.ComboBoxText.__init__(self, *args, **kwargs)
-        text_renderer = self.get_cells()[0]
-        text_renderer.set_property("ellipsize", Pango.EllipsizeMode.END)
-
-    def do_unroot(self) -> None:
-        Gtk.ComboBoxText.do_unroot(self)
-        app.check_finalize(self)
-
-    def set_max_width_chars(self, count: int) -> None:
-        text_renderer = self.get_cells()[0]
-        text_renderer.set_property("max-width-chars", count)
-
-
 def text_to_color(text: str) -> tuple[float, float, float]:
     if app.css_config.prefer_dark:
         lightness = 60
