@@ -22,8 +22,8 @@ from gajim.common.i18n import _
 from gajim.common.util.image import get_texture_from_data
 from gajim.common.util.uri import open_uri
 
+from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.util import make_href_markup
-from gajim.gtk.util import MaxWidthComboBoxText
 from gajim.gtk.util import MultiLineLabel
 from gajim.gtk.util import process_non_spacing_marks
 from gajim.gtk.util import SignalManager
@@ -492,18 +492,21 @@ class ListSingleField(Field):
         del self._treeview
 
     def _setup_dropdown(self, field: DataField) -> None:
-        self._widget = MaxWidthComboBoxText()
-        self._widget.set_valign(Gtk.Align.CENTER)
+        data: dict[str, str] = {}
         for value, label in field.iter_options():
             if not label:
                 label = value
-            self._widget.append(value, label)
+            data[value] = label
 
-        self._widget.set_active_id(field.value)
-        self._connect(self._widget, "changed", self._changed)
+        self._widget = GajimDropDown(data=data)
+        self._widget.set_valign(Gtk.Align.CENTER)
+        self._widget.select_key(field.value)
+        self._connect(self._widget, "notify::selected", self._changed)
 
-    def _changed(self, widget: MaxWidthComboBoxText) -> None:
-        self._field.value = widget.get_active_id()
+    def _changed(self, dropdown: GajimDropDown, *args: Any) -> None:
+        item = dropdown.get_selected_item()
+        assert item is not None
+        self._field.value = item.props.key
         self._validate()
 
     def _setup_treeview(self, field: DataField) -> None:
