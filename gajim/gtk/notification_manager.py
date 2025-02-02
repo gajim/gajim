@@ -66,6 +66,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
         self._remove_actions()
         self._client.disconnect_all_from_obj(self)
         Gtk.ListBox.do_unroot(self)
+        app.check_finalize(self)
 
     def _on_client_state_changed(
         self, _client: types.Client, _signal_name: str, _state: SimpleClientState
@@ -144,6 +145,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
             )
         if row is not None:
             self.remove(row)
+            self.update_unread_count()
 
     def _on_subscription_block(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -154,6 +156,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
         row = self._get_notification_row(jid)
         if row is not None:
             self.remove(row)
+            self.update_unread_count()
 
     def _on_subscription_report(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -164,6 +167,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
         row = self._get_notification_row(jid)
         if row is not None:
             self.remove(row)
+            self.update_unread_count()
 
     def _on_subscription_deny(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -173,6 +177,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
         row = self._get_notification_row(jid)
         if row is not None:
             self.remove(row)
+            self.update_unread_count()
 
     def _on_subscription_deny_all(
         self, _action: Gio.SimpleAction, _param: GLib.Variant
@@ -183,6 +188,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
                 continue
             self._deny_request(row.jid)
             self.remove(row)
+        self.update_unread_count()
 
     def _deny_request(self, jid: str) -> None:
         self._client.get_module("Presence").unsubscribed(jid)
@@ -218,9 +224,10 @@ class NotificationManager(Gtk.ListBox, SignalManager):
                     text=text,
                 )
             )
-            self.update_unread_count()
         elif row.type == "unsubscribed":
             self.remove(row)
+
+        self.update_unread_count()
 
     def add_unsubscribed(self, event: UnsubscribedPresenceReceived) -> None:
         row = self._get_notification_row(event.jid)
@@ -244,6 +251,8 @@ class NotificationManager(Gtk.ListBox, SignalManager):
             )
         elif row.type == "subscribe":
             self.remove(row)
+
+        self.update_unread_count()
 
     def add_invitation_received(self, event: MucInvitation) -> None:
         row = self._get_notification_row(str(event.muc))
@@ -307,6 +316,7 @@ class NotificationRow(Gtk.ListBoxRow, SignalManager):
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
     @staticmethod
     def _generate_label() -> Gtk.Label:
