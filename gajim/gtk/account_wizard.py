@@ -67,7 +67,7 @@ class AccountWizard(Assistant):
     def __init__(self) -> None:
         Assistant.__init__(self, name="AccountWizard", height=500)
         self._client: Client | None = None
-        self._method: str = "login"
+        self._method: Literal["login"] | Literal["signup"] = "login"
         self._destroyed: bool = False
 
         self.add_button(
@@ -132,7 +132,7 @@ class AccountWizard(Assistant):
     def get_page(self, name: str) -> Page:
         return self._pages[name]
 
-    def get_current_method(self) -> str:
+    def get_current_method(self) -> Literal["login"] | Literal["signup"]:
         return self._method
 
     def _on_button_clicked(self, _page: Gtk.Widget, button_name: str) -> None:
@@ -419,6 +419,7 @@ class AccountWizard(Assistant):
             self._show_error_page(_("Error"), _("Error"), text or error)
 
         self.get_page("form").remove_form()
+        assert self._client is not None
         self._client.destroy()
         self._client = None
 
@@ -597,7 +598,11 @@ class Login(Page):
         )
 
     def _on_address_entry_activate(self, _entry: Gtk.Entry) -> None:
-        GLib.idle_add(self._ui.log_in_password_entry.grab_focus)
+        GLib.idle_add(self._grab_password_entry_focus)
+
+    def _grab_password_entry_focus(self) -> bool:
+        self._ui.log_in_password_entry.grab_focus()
+        return False
 
     def _on_password_entry_activate(self, _entry: Gtk.Entry) -> None:
         if self._ui.log_in_button.get_sensitive():
@@ -697,8 +702,12 @@ class Signup(Page):
         )
         self._entry.set_completion(self._entry_completion)
 
-        self._ui.recommendation_link1.connect("activate-link", self._on_activate_link)
-        self._ui.recommendation_link2.connect("activate-link", self._on_activate_link)
+        self._connect(
+            self._ui.recommendation_link1, "activate-link", self._on_activate_link
+        )
+        self._connect(
+            self._ui.recommendation_link2, "activate-link", self._on_activate_link
+        )
         self._connect(self._ui.visit_server_button, "clicked", self._on_visit_server)
         self._connect(self._entry, "changed", self._set_complete)
 
@@ -774,8 +783,10 @@ class Signup(Page):
         cell_area.add(language_renderer)
         cell_area.attribute_connect(language_renderer, "text", 1)
 
-        self._ui.server_comboboxtext_sign_up.connect(
-            "changed", self._on_sign_up_server_changed
+        self._connect(
+            self._ui.server_comboboxtext_sign_up,
+            "changed",
+            self._on_sign_up_server_changed,
         )
 
     def _on_sign_up_server_changed(self, combo: Gtk.ComboBox) -> None:
@@ -1067,7 +1078,7 @@ class Form(Page):
         self.set_valign(Gtk.Align.FILL)
         self.complete: bool = False
         self.title: str = _("Create Account")
-        self._current_form: Any | None = None
+        self._current_form: DataFormWidget | None = None
 
         heading = Gtk.Label(
             label=_("Create Account"),
@@ -1083,13 +1094,6 @@ class Form(Page):
     def has_form(self) -> bool:
         return self._current_form is not None
 
-    def _validate_password(self, password: str) -> str | None:
-        try:
-            return saslprep(password)
-        except Exception:
-            self._show_password_warning()
-            return None
-
     def _on_is_valid(self, _widget: DataFormWidget, is_valid: bool) -> None:
         try:
             self.get_credentials()
@@ -1104,7 +1108,7 @@ class Form(Page):
 
         options = {"hide-fallback-fields": True, "entry-activates-default": True}
         self._current_form = DataFormWidget(form, options)
-        self._current_form.connect("is-valid", self._on_is_valid)
+        self._connect(self._current_form, "is-valid", self._on_is_valid)
         self._current_form.validate()
         self.append(self._current_form)
 
@@ -1124,7 +1128,6 @@ class Form(Page):
             return
 
         self.remove(self._current_form)
-        self._current_form.destroy()
         self._current_form = None
 
     def focus(self) -> None:
@@ -1148,7 +1151,7 @@ class Redirect(Page):
         self.append(self._ui.redirect_box)
         self._connect(self._ui.link_button, "clicked", self._on_link_button)
 
-    def set_redirect(self, link: str, instructions: str) -> None:
+    def set_redirect(self, link: str, instructions: str | None) -> None:
         if instructions is None:
             instructions = _("Register on the Website")
         self._ui.instructions.set_text(instructions)

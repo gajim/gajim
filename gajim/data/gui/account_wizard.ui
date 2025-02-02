@@ -303,6 +303,7 @@
     <child>
       <object class="GtkImage">
         <property name="halign">center</property>
+        <property name="pixel-size">48</property>
         <property name="icon-name">applications-internet-symbolic</property>
       </object>
     </child>
@@ -462,6 +463,9 @@ Creating an account with one provider allows you to communicate with contacts fr
             <property name="xalign">0</property>
           </object>
         </child>
+        <style>
+          <class name="p-6"/>
+        </style>
       </object>
     </property>
   </object>
