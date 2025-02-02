@@ -15,6 +15,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
+from nbxmpp.const import Affiliation
 from nbxmpp.const import StatusCode
 from nbxmpp.structs import MucSubject
 
@@ -659,50 +660,48 @@ class ChatControl(EventHelper):
         status_codes = event.status_codes or []
 
         reason = event.reason
-        reason = "" if reason is None else f": {reason}"
+        reason = "" if reason is None else _("(reason: %s)") % reason
 
         actor = event.actor
-        # Group Chat: You have been kicked by Alice
-        actor = "" if actor is None else _(" by {actor}").format(actor=actor)
 
         # Group Chat: We have been removed from the room by Alice: reason
-        message = _("You have been removed from the group chat{actor}{reason}")
+        message = _("You have been removed from this group chat")
+        if actor:
+            message = _("You have been removed from this group chat by %s") % actor
 
         if StatusCode.REMOVED_ERROR in status_codes:
             # Handle 333 before 307, some MUCs add both
             # Group Chat: Server kicked us because of an server error
-            message = _("You have left due to an error{reason}").format(reason=reason)
+            message = _("You have left due to an error")
 
         elif StatusCode.REMOVED_KICKED in status_codes:
             # Group Chat: We have been kicked by Alice: reason
-            message = _("You have been kicked{actor}{reason}").format(
-                actor=actor, reason=reason
-            )
+            message = _("You have been kicked")
+            if actor:
+                message = _("You have been kicked by %s") % actor
 
         elif StatusCode.REMOVED_BANNED in status_codes:
             # Group Chat: We have been banned by Alice: reason
-            message = _("You have been banned{actor}{reason}").format(
-                actor=actor, reason=reason
-            )
+            message = _("You have been banned")
+            if actor:
+                message = _("You have been banned by %s") % actor
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
             # Group Chat: We were removed because of an affiliation change
-            reason = _(": Affiliation changed")
-            message = message.format(actor=actor, reason=reason)
+            reason = _("(reason: affiliation changed)")
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
             # Group Chat: Room configuration changed
-            reason = _(": Group chat configuration changed to members-only")
-            message = message.format(actor=actor, reason=reason)
+            reason = _("(reason: group chat configuration changed to members-only)")
 
         elif StatusCode.REMOVED_SERVICE_SHUTDOWN in status_codes:
             # Group Chat: Kicked because of server shutdown
-            reason = ": System shutdown"
-            message = message.format(actor=actor, reason=reason)
-
+            reason = _("(reason: system shutdown)")
         else:
             # No formatted message available
             return
+
+        message = f"{message} {reason}"
 
         self.add_info_message(message, event.timestamp)
 
@@ -719,23 +718,23 @@ class ChatControl(EventHelper):
     def _process_muc_user_affiliation_changed(
         self, event: events.MUCUserAffiliationChanged
     ) -> None:
-
-        affiliation = get_uf_affiliation(event.affiliation)
-
-        reason = event.reason
-        reason = "" if reason is None else f": {reason}"
-
         actor = event.actor
         # Group Chat: You have been kicked by Alice
-        actor = "" if actor is None else _(" by {actor}").format(actor=actor)
+        actor = "" if actor is None else _("(changed by %s)") % actor
+
+        reason = event.reason
+        reason = "" if reason is None else _("(reason: %s)") % reason
 
         if event.is_self:
-            message = _(
-                "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-            ).format(affiliation=affiliation, actor=actor, reason=reason)
+            message = self.__format_affiliation_change_self(
+                affiliation=event.affiliation, actor=actor, reason=reason
+            )
         else:
-            message = self.__format_affiliation_change(
-                nick=event.nick, affiliation=affiliation, actor=actor, reason=reason
+            message = self.__format_affiliation_change_other(
+                nick=event.nick,
+                affiliation=event.affiliation,
+                actor=actor,
+                reason=reason,
             )
 
         self.add_info_message(message, event.timestamp)
@@ -753,19 +752,59 @@ class ChatControl(EventHelper):
         event: events.MUCAffiliationChanged,
     ) -> None:
         self.add_info_message(
-            self.__format_affiliation_change(
-                event.nick, get_uf_affiliation(event.affiliation)
-            ),
+            self.__format_affiliation_change_other(event.nick, event.affiliation),
             event.timestamp,
         )
 
     @staticmethod
-    def __format_affiliation_change(
-        nick: str, affiliation: str, actor: str = "", reason: str = ""
+    def __format_affiliation_change_self(
+        affiliation: Affiliation, actor: str = "", reason: str = ""
     ) -> str:
-        return _(
-            "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
-        ).format(nick=nick, affiliation=affiliation, actor=actor, reason=reason)
+        uf_affiliation = get_uf_affiliation(affiliation)
+
+        if affiliation.value == "outcast":
+            message = _("You have been banned")
+            if actor:
+                message = _("You have been banned by %s") % actor
+            return f"{message} {reason}"
+
+        if affiliation.value in ("owner", "admin", "member"):
+            message = (
+                _("You are now %(affiliation)s of this group chat") % uf_affiliation
+            )
+        else:
+            # "none"
+            message = _("Your affiliations to this group chat have been removed")
+
+        return f"{message} {actor} {reason}"
+
+    @staticmethod
+    def __format_affiliation_change_other(
+        nick: str, affiliation: Affiliation, actor: str = "", reason: str = ""
+    ) -> str:
+        uf_affiliation = get_uf_affiliation(affiliation)
+
+        if affiliation.value == "outcast":
+            message = _("%s has been banned") % nick
+            if actor:
+                message = _("%(nick)s has been banned by %(actor)s") % {
+                    "nick": nick,
+                    "actor": actor,
+                }
+            return f"{message} {reason}"
+
+        if affiliation.value in ("owner", "admin", "member"):
+            message = _("%(nick)s is now %(affiliation)s of this group chat") % {
+                "nick": nick,
+                "affiliation": uf_affiliation,
+            }
+        else:
+            # "none"
+            message = _(
+                "Affiliations of %(nick)s to this group chat have been removed"
+            ) % {"nick": nick}
+
+        return f"{message} {actor} {reason}"
 
     def _on_user_role_changed(
         self,
@@ -779,25 +818,33 @@ class ChatControl(EventHelper):
 
     def _process_muc_user_role_changed(self, event: events.MUCUserRoleChanged) -> None:
 
-        role = get_uf_role(event.role)
+        uf_role = get_uf_role(event.role)
         nick = event.nick
 
-        reason = event.reason
-        reason = "" if reason is None else f": {reason}"
+        if event.is_self:
+            if event.role.value in ("moderator", "participant", "visitor"):
+                message = _("You are now %(role)s of this group chat") % {
+                    "role": uf_role
+                }
+            else:
+                message = _("Your roles in this group chat have been removed")
+        else:
+            if event.role.value in ("moderator", "participant", "visitor"):
+                message = _("%(user)s is now %(role)s of this group chat") % {
+                    "user": nick,
+                    "role": uf_role,
+                }
+            else:
+                message = _("Roles of %s have been removed in this group chat") % nick
 
         actor = event.actor
         # Group Chat: You have been kicked by Alice
-        actor = "" if actor is None else _(" by {actor}").format(actor=actor)
+        actor = "" if actor is None else _("(changed by %s)") % actor
 
-        if event.is_self:
-            message = _("** Your Role has been set to {role}{actor}{reason}").format(
-                role=role, actor=actor, reason=reason
-            )
-        else:
-            message = _(
-                "** Role of {nick} has been set to {role}{actor}{reason}"
-            ).format(nick=nick, role=role, actor=actor, reason=reason)
-        self.add_info_message(message, event.timestamp)
+        reason = event.reason
+        reason = "" if reason is None else _("(reason: %s)") % reason
+
+        self.add_info_message(f"{message} {actor} {reason}", event.timestamp)
 
     def _on_user_hats_changed(
         self,
@@ -814,14 +861,18 @@ class ChatControl(EventHelper):
         if event.hats:
             hats = ", ".join(event.hats)
             if event.is_self:
-                message = _("** Your hats are now ") + hats
+                message = _("You now have the following hats: %s") % hats
             else:
-                message = _("** The hats of %s are now %s") % (event.nick, hats)
+                message = _("%(user)s now has the following hats: %(hats)s") % {
+                    "user": event.nick,
+                    "hats": hats,
+                }
         else:
             if event.is_self:
-                message = _("** You lost all your hats!")
+                message = _("All of your hats have been removed")
             else:
-                message = _("** %s lost all their hats!") % (event.nick,)
+                message = _("All hats of %s have been removed") % event.nick
+
         self.add_info_message(message, event.timestamp)
 
     def _on_user_status_show_changed(
@@ -960,9 +1011,10 @@ class ChatControl(EventHelper):
     def _process_muc_room_destroyed(self, event: events.MUCRoomDestroyed) -> None:
 
         reason = event.reason
-        reason = "" if reason is None else f": {reason}"
+        reason = "" if reason is None else _("(reason: %s)") % reason
 
-        message = _("Group chat has been destroyed%s") % reason
+        message = _("Group chat has been destroyed")
+        message = f"{message} {reason}"
 
         if event.alternate is not None:
             message += "\n" + _("You can join this group chat instead: %s") % (
@@ -1033,32 +1085,37 @@ class ChatControl(EventHelper):
             self._scrolled_view.add_muc_user_left(event, error=True)
             return
 
-        reason = event.reason
-        reason = "" if reason is None else f": {reason}"
+        message = _("%s has been removed from this group chat") % nick
 
         actor = event.actor
-        # Group Chat: You have been kicked by Alice
-        actor = "" if actor is None else _(" by {actor}").format(actor=actor)
-
-        message = _("{nick} has been removed from the group chat{by}{reason}")
-
         if StatusCode.REMOVED_KICKED in status_codes:
-            message = _("{nick} has been kicked{actor}{reason}").format(
-                nick=nick, actor=actor, reason=reason
-            )
+            message = _("%s has been kicked") % nick
+            if actor:
+                message = _("%(nick)s has been kicked by %(actor)s") % {
+                    "nick": nick,
+                    "actor": actor,
+                }
 
         elif StatusCode.REMOVED_BANNED in status_codes:
-            message = _("{nick} has been banned{actor}{reason}").format(
-                nick=nick, actor=actor, reason=reason
-            )
+            message = _("%s has been banned") % nick
+            if actor:
+                message = _("%(nick)s has been banned by %(actor)s") % {
+                    "nick": nick,
+                    "actor": actor,
+                }
+
+        reason = event.reason
+        if reason:
+            reason = _("(reason: %s)") % reason
+            message = f"{message} {reason}"
 
         elif StatusCode.REMOVED_AFFILIATION_CHANGE in status_codes:
-            reason = _(": Affiliation changed")
-            message = message.format(nick=nick, by=actor, reason=reason)
+            reason = _("(reason: affiliation changed)")
+            message = f"{message} {reason}"
 
         elif StatusCode.REMOVED_NONMEMBER_IN_MEMBERS_ONLY in status_codes:
-            reason = _(": Group chat configuration changed to members-only")
-            message = message.format(nick=nick, by=actor, reason=reason)
+            reason = _("(reason: group chat configuration changed to members-only)")
+            message = f"{message} {reason}"
 
         else:
             self._scrolled_view.add_muc_user_left(event)
