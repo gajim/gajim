@@ -11,7 +11,7 @@ from gajim.common import app
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
 
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class BaseRow(Gtk.ListBoxRow, SignalManager):

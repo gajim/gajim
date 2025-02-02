@@ -21,7 +21,7 @@ from gajim.common.util.text import format_duration
 from gajim.gtk.builder import get_builder
 from gajim.gtk.preview_audio import AudioWidget
 from gajim.gtk.preview_audio_visualizer import AudioVisualizerWidget
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.voice_message_recorder import GST_ERROR_ON_RECORDING
 from gajim.gtk.voice_message_recorder import GST_ERROR_ON_START
 from gajim.gtk.voice_message_recorder import VoiceMessageRecorder

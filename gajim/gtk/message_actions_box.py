@@ -48,9 +48,9 @@ from gajim.gtk.menus import get_format_menu
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.referenced_message import ReplyBox
 from gajim.gtk.security_label_selector import SecurityLabelSelector
-from gajim.gtk.util import allow_send_message
-from gajim.gtk.util import open_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import allow_send_message
+from gajim.gtk.util.window import open_window
 from gajim.gtk.voice_message_recorder_widget import VoiceMessageRecorderButton
 
 log = logging.getLogger("gajim.gtk.messageactionsbox")

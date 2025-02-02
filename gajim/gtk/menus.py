@@ -30,6 +30,7 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.structs import URI
+from gajim.common.structs import VariantMixin
 from gajim.common.util.muc import is_affiliation_change_allowed
 from gajim.common.util.muc import is_moderation_allowed
 from gajim.common.util.muc import is_role_change_allowed
@@ -44,11 +45,55 @@ from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
-from gajim.gtk.util import GajimMenu
-from gajim.gtk.util import MenuItemListT
 
+MenuValueT = None | str | GLib.Variant | VariantMixin
+MenuItemListT = list[tuple[str, str, MenuValueT]]
 UriMenuItemsT = list[tuple[str, list[str], str]]
 UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
+
+
+class GajimMenu(Gio.Menu):
+    def __init__(self):
+        Gio.Menu.__init__(self)
+
+    @classmethod
+    def from_list(cls, menulist: MenuItemListT) -> GajimMenu:
+        menu = cls()
+        for item in menulist:
+            menuitem = make_menu_item(*item)
+            menu.append_item(menuitem)
+        return menu
+
+    def add_item(
+        self, label: str, action: str, value: MenuValueT | None = None
+    ) -> None:
+        item = make_menu_item(label, action, value)
+        self.append_item(item)
+
+    def add_submenu(self, label: str) -> GajimMenu:
+        menu = GajimMenu()
+        self.append_submenu(label, menu)
+        return menu
+
+
+def make_menu_item(
+    label: str, action: str | None = None, value: MenuValueT = None
+) -> Gio.MenuItem:
+
+    item = Gio.MenuItem.new(label)
+
+    if value is None:
+        item.set_action_and_target_value(action, None)
+        return item
+
+    item = Gio.MenuItem.new(label)
+    if isinstance(value, str):
+        item.set_action_and_target_value(action, GLib.Variant("s", value))
+    elif isinstance(value, VariantMixin):
+        item.set_action_and_target_value(action, value.to_variant())
+    else:
+        item.set_action_and_target_value(action, value)
+    return item
 
 
 def get_main_menu() -> GajimMenu:

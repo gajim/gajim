@@ -76,10 +76,10 @@ from gajim.gtk.dialogs import ShortcutsWindow
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.menus import get_main_menu
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import get_app_windows
-from gajim.gtk.util import get_icon_theme
-from gajim.gtk.util import open_window
+from gajim.gtk.util.icons import get_icon_theme
+from gajim.gtk.util.window import get_app_window
+from gajim.gtk.util.window import get_app_windows
+from gajim.gtk.util.window import open_window
 
 ActionListT = list[tuple[str, Callable[[Gio.SimpleAction, GLib.Variant], Any]]]
 

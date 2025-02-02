@@ -29,9 +29,9 @@ from gajim.common.util.preview import guess_simple_file_type
 from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.text import quote_text
 
-from gajim.gtk.util import get_avatar_for_message
-from gajim.gtk.util import get_contact_name_for_message
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_avatar_for_message
+from gajim.gtk.util.misc import get_contact_name_for_message
 
 log = logging.getLogger("gajim.gtk.referenced_message_widget")
 

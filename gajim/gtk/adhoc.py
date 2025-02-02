@@ -29,16 +29,16 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
+from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import MultiLineLabel
-from gajim.gtk.util import process_non_spacing_marks
+from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import ensure_not_destroyed
+from gajim.gtk.widgets import MultiLineLabel
 
 log = logging.getLogger("gajim.gtk.adhoc")
 

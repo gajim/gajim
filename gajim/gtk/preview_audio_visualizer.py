@@ -15,7 +15,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.preview import AudioSampleT
 
-from gajim.gtk.util import make_rgba
+from gajim.gtk.util.styling import make_rgba
 
 log = logging.getLogger("gajim.gtk.preview_audio_visualizer")
 

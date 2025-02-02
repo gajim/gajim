@@ -7,7 +7,8 @@ import unicodedata
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.gtk.util import process_non_spacing_marks
+from gajim.common.util.text import process_non_spacing_marks
+
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util

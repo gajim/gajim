@@ -48,7 +48,7 @@ from gajim.gtk.avatar import convert_surface_to_texture
 from gajim.gtk.avatar import merge_avatars
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
-from gajim.gtk.util import load_icon_surface
+from gajim.gtk.util.icons import load_icon_surface
 
 MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
 

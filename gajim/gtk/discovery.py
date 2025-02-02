@@ -64,8 +64,8 @@ from gajim.common.util.jid import parse_jid
 from gajim.gtk.builder import get_builder
 from gajim.gtk.component_search import ComponentSearch
 from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.util import icon_exists
-from gajim.gtk.util import open_window
+from gajim.gtk.util.icons import icon_exists
+from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import GajimAppWindow
 
 _T = TypeVar("_T")

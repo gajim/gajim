@@ -25,8 +25,8 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.file_transfer_selector import FileTransferSelector
 from gajim.gtk.groupchat_inviter import GroupChatInviter
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import container_remove_all
 
 
 class FunctionMode(Enum):

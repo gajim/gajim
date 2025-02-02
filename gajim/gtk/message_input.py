@@ -36,8 +36,8 @@ from gajim.gtk.completion.nickname import NicknameCompletionProvider
 from gajim.gtk.completion.popover import CompletionPopover
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_message_input_extra_context_menu
-from gajim.gtk.util import GdkRectangle
-from gajim.gtk.util import scroll_to_end
+from gajim.gtk.util.misc import scroll_to_end
+from gajim.gtk.widgets import GdkRectangle
 
 if app.is_installed("SPELLING") or typing.TYPE_CHECKING:
     from gi.repository import Spelling

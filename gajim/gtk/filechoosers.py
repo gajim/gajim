@@ -23,7 +23,7 @@ from gi.repository import Pango
 from gajim.common import app
 from gajim.common.i18n import _
 
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 AcceptCallbackT = Callable[[list[str]], None]
 

@@ -10,14 +10,14 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
-from gajim.gtk.util import convert_surface_to_texture
-from gajim.gtk.util import process_non_spacing_marks
+from gajim.gtk.util.misc import convert_surface_to_texture
 
 
 class UserStatus(BaseRow):

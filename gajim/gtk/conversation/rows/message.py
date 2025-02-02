@@ -26,6 +26,7 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 from gajim.common.types import ChatContactT
 from gajim.common.util.muc import message_needs_highlight
+from gajim.common.util.text import format_fingerprint
 from gajim.common.util.user_strings import get_moderation_text
 
 from gajim.gtk.conversation.message_widget import MessageWidget
@@ -36,16 +37,15 @@ from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import MessageIcons
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
 from gajim.gtk.conversation.rows.widgets import NicknameLabel
+from gajim.gtk.menus import GajimMenu
 from gajim.gtk.menus import get_chat_row_menu
 from gajim.gtk.preview import PreviewWidget
 from gajim.gtk.referenced_message import ReferencedMessageNotFoundWidget
 from gajim.gtk.referenced_message import ReferencedMessageWidget
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import format_fingerprint
-from gajim.gtk.util import GajimMenu
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import get_avatar_for_message
-from gajim.gtk.util import get_contact_name_for_message
+from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import get_avatar_for_message
+from gajim.gtk.util.misc import get_contact_name_for_message
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.conversation.rows.message")
 

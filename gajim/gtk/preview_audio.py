@@ -28,7 +28,7 @@ from gajim.common.util.text import format_duration
 from gajim.gtk.builder import get_builder
 from gajim.gtk.preview_audio_analyzer import AudioAnalyzer
 from gajim.gtk.preview_audio_visualizer import AudioVisualizerWidget
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.preview_audio")
 

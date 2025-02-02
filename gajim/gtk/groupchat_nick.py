@@ -9,7 +9,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class NickChooser(Gtk.MenuButton, SignalManager):

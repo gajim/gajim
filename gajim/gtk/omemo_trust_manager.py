@@ -30,12 +30,12 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.omemo import compose_trust_uri
 
-from .builder import get_builder
-from .dialogs import ConfirmationDialog
-from .dialogs import DialogButton
-from .util import clear_listbox
-from .util import open_window
-from .util import SignalManager
+from gajim.gtk.builder import get_builder
+from gajim.gtk.dialogs import ConfirmationDialog
+from gajim.gtk.dialogs import DialogButton
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import clear_listbox
+from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.omemo_trust_manager")
 

@@ -10,7 +10,7 @@ from gi.repository import Gtk
 
 from gajim.common import app
 
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class SideBarSwitcher(Gtk.ListBox, SignalManager):

@@ -37,9 +37,9 @@ from gajim.common.util.user_strings import get_moderation_text
 from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.start_chat import ChatTypeFilter
-from gajim.gtk.util import get_listbox_row_count
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_listbox_row_count
+from gajim.gtk.util.misc import iterate_listbox_children
 
 log = logging.getLogger("gajim.gtk.chatlist")
 

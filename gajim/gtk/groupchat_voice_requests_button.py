@@ -13,7 +13,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.types import ChatContactT
 
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class VoiceRequestsButton(Gtk.Button, SignalManager):

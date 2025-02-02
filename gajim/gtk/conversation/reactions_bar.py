@@ -23,8 +23,8 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 
 from gajim.gtk.emoji_chooser import EmojiChooser
-from gajim.gtk.util import iterate_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_children
 
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow

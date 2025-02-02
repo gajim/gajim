@@ -36,8 +36,8 @@ from gajim.common.storage.archive.models import Message
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.message_widget import MessageWidget
-from gajim.gtk.util import convert_py_to_glib_datetime
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import convert_py_to_glib_datetime
 
 log = logging.getLogger("gajim.gtk.search_view")
 

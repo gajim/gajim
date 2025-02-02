@@ -30,8 +30,8 @@ from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.menus import get_component_search_menu
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import GajimPopover
+from gajim.gtk.util.misc import ensure_not_destroyed
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.search")
 

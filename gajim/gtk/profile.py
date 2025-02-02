@@ -31,9 +31,9 @@ from gajim.gtk.avatar import clip_circle
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import AvatarFileChooserButton
-from gajim.gtk.util import convert_surface_to_texture
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import scroll_to_end
+from gajim.gtk.util.misc import convert_surface_to_texture
+from gajim.gtk.util.misc import ensure_not_destroyed
+from gajim.gtk.util.misc import scroll_to_end
 from gajim.gtk.vcard_grid import VCardGrid
 from gajim.gtk.widgets import GajimAppWindow
 

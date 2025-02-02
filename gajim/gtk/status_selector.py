@@ -21,8 +21,8 @@ from gajim.common.util.status import get_uf_show
 from gajim.common.util.status import statuses_unified
 
 from gajim.gtk.avatar import get_show_circle
-from gajim.gtk.util import convert_surface_to_texture
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import convert_surface_to_texture
 
 
 class StatusSelector(Gtk.MenuButton, EventHelper, SignalManager):

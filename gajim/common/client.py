@@ -48,7 +48,7 @@ from gajim.common.util.http import create_http_session
 from gajim.common.util.status import get_idle_status_message
 from gajim.common.util.text import to_one_line
 
-from gajim.gtk.util import open_window
+from gajim.gtk.util.window import open_window
 
 log = logging.getLogger('gajim.client')
 

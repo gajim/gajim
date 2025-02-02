@@ -33,8 +33,8 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.tooltips import GCTooltip
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.groupchat_roster")
 

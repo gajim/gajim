@@ -18,7 +18,7 @@ from gajim.common.i18n import _
 from gajim.common.util.status import get_global_status_message
 from gajim.common.util.text import to_one_line
 
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class StatusMessageSelector(Gtk.Box, EventHelper, SignalManager):

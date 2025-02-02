@@ -43,8 +43,8 @@ from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_chat_list_row_menu
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.widgets import GajimPopover
 
 
 class ChatListRow(Gtk.ListBoxRow, SignalManager):

@@ -30,8 +30,8 @@ from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.resource_selector import ResourceSelector
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
 
 PREVIEW_SIZE = 72
 

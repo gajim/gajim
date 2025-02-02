@@ -37,10 +37,10 @@ from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import open_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
+from gajim.gtk.util.window import get_app_window
+from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.accounts")

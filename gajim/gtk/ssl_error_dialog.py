@@ -11,7 +11,7 @@ from gajim.common.const import GIO_TLS_ERRORS
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import open_window
+from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import GajimAppWindow
 
 

@@ -30,7 +30,7 @@ from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
-from gajim.gtk.util import open_window
+from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.add_contact")
 

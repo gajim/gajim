@@ -8,7 +8,7 @@ from gi.repository import Gtk
 from gajim.common import app
 
 from gajim.gtk.app_page import AppPage
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class AppSideBar(Gtk.ListBox, SignalManager):

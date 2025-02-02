@@ -38,8 +38,8 @@ from gajim.common.util.version import get_os_version
 from gajim.common.util.version import get_soup_version
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import get_gtk_version
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_gtk_version
 from gajim.gtk.widgets import GajimAppWindow
 
 try:

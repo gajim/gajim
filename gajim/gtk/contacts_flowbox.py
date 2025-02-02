@@ -16,8 +16,8 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
-from gajim.gtk.util import iterate_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_children
 
 
 class ContactItem(Gtk.FlowBoxChild, SignalManager):

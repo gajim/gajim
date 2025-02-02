@@ -37,8 +37,8 @@ from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import open_window
+from gajim.gtk.util.window import get_app_window
+from gajim.gtk.util.window import open_window
 from gajim.gtk.video_preview import VideoPreview
 from gajim.gtk.widgets import GajimAppWindow
 

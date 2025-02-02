@@ -25,7 +25,7 @@ from gajim.common.i18n import get_short_lang_code
 from gajim.gtk.completion.base import BaseCompletionListItem
 from gajim.gtk.completion.base import BaseCompletionProvider
 from gajim.gtk.completion.base import BaseCompletionViewItem
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.completion.emoji")
 

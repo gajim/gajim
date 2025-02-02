@@ -22,8 +22,8 @@ from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_soup_version
 
-from gajim.gtk.util import get_gtk_version
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_gtk_version
 
 
 class AboutDialog(Gtk.AboutDialog, SignalManager):

@@ -20,8 +20,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 
-from gajim.gtk.util import clear_listbox
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import clear_listbox
 
 log = logging.getLogger("gajim.gtk.resource_selector")
 

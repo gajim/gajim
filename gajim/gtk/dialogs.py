@@ -15,7 +15,7 @@ from gajim.common.const import ButtonAction
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util.misc import iterate_children
 from gajim.gtk.widgets import GajimAppWindow
 
 

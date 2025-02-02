@@ -25,8 +25,8 @@ from gajim.common.types import ChatContactT
 
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_groupchat_participant_menu
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.widgets import GajimPopover
 
 if TYPE_CHECKING:
     from gajim.gtk.conversation.rows.message import MessageRow

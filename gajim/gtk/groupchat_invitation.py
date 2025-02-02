@@ -16,8 +16,8 @@ from gajim.common.util.muc import get_group_chat_nick
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
-from gajim.gtk.util import AccountBadge
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.widgets import AccountBadge
 from gajim.gtk.widgets import GajimAppWindow
 
 

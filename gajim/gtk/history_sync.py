@@ -31,7 +31,7 @@ from gajim.common.util.decorators import event_filter
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
-from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util.misc import iterate_listbox_children
 
 log = logging.getLogger("gajim.gtk.history_sync")
 

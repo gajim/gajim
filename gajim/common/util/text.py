@@ -8,11 +8,19 @@ import math
 import random
 import re
 import string
+import textwrap
+from re import Match
 
 import emoji
 from gi.repository import GLib
+from nbxmpp.structs import LocationData
+from nbxmpp.structs import TuneData
 
 from gajim.common import regex
+from gajim.common.const import LOCATION_DATA
+from gajim.common.i18n import _
+from gajim.common.regex import NON_SPACING_MARKS_REGEX
+from gajim.common.regex import URL_REGEX
 
 # from RFC 3986, 3.3. Path (pchar without unreserved and pct-encoded):
 _reserved_chars_allowed_in_path_segment = regex.sub_delims + ':@'
@@ -70,6 +78,70 @@ def format_duration(ns: float, total_ns: float) -> str:
     return f'0:{i_seconds:02d}'
 
 
+def format_eta(time_: int | float) -> str:
+    times = {"minutes": 0, "seconds": 0}
+    time_ = int(time_)
+    times["seconds"] = time_ % 60
+    if time_ >= 60:
+        time_ = int(time_ / 60)
+        times["minutes"] = round(time_ % 60)
+        return _("%(minutes)s min %(seconds)s s") % times
+    return _("%s s") % times["seconds"]
+
+
+def format_fingerprint(fingerprint: str) -> str:
+    fplen = len(fingerprint)
+    wordsize = fplen // 8
+    buf = ""
+    for char in range(0, fplen, wordsize):
+        buf += f"{fingerprint[char:char + wordsize]} "
+    buf = textwrap.fill(buf, width=36)
+    return buf.rstrip().upper()
+
+
+def format_tune(data: TuneData) -> str:
+    artist = GLib.markup_escape_text(data.artist or _("Unknown Artist"))
+    title = GLib.markup_escape_text(data.title or _("Unknown Title"))
+    source = GLib.markup_escape_text(data.source or _("Unknown Source"))
+
+    return _('<b>"%(title)s"</b> by <i>%(artist)s</i>\n' "from <i>%(source)s</i>") % {
+        "title": title,
+        "artist": artist,
+        "source": source,
+    }
+
+
+def format_location(location: LocationData) -> str:
+    location_dict = location._asdict()
+    location_string = ""
+    for attr, value in location_dict.items():
+        if value is None:
+            continue
+        text = GLib.markup_escape_text(value)
+        # Translate standard location tag
+        tag = LOCATION_DATA.get(attr)
+        if tag is None:
+            continue
+        location_string += f"\n<b>{tag.capitalize()}</b>: {text}"
+
+    return location_string.strip()
+
+
+def make_href_markup(string: str | None) -> str:
+    if not string:
+        return ""
+
+    string = GLib.markup_escape_text(string)
+
+    def _to_href(match: Match[str]) -> str:
+        url = match.group()
+        if "://" not in url:
+            url = f"https://{url}"
+        return f'<a href="{url}">{match.group()}</a>'
+
+    return URL_REGEX.sub(_to_href, string)
+
+
 def format_bytes_as_hex(bytes_: bytes, line_count: int = 1) -> str:
     line_length = math.ceil(len(bytes_) / line_count)
 
@@ -79,6 +151,16 @@ def format_bytes_as_hex(bytes_: bytes, line_count: int = 1) -> str:
     for pos in range(0, len(bytes_), line_length):
         lines.append(':'.join(hex_list[pos:pos + line_length]))
     return '\n'.join(lines)
+
+
+def process_non_spacing_marks(string: str) -> str:
+    """
+    Helper function for working around unicode non-spacing marks in
+    conjunction with Pango.WrapMode.WORD_CHAR, see:
+    https://gitlab.gnome.org/GNOME/pango/-/issues/798
+    Unbreaks spaces around non-spacing marks.
+    """
+    return NON_SPACING_MARKS_REGEX.sub("\u00a0", string)
 
 
 def normalize_reactions(reactions: list[str]) -> tuple[set[str], set[str]]:

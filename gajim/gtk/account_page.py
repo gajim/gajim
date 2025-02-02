@@ -26,8 +26,8 @@ from gajim.gtk.menus import get_account_notifications_menu
 from gajim.gtk.notification_manager import NotificationManager
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
-from gajim.gtk.util import open_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.window import open_window
 
 
 class AccountPage(Gtk.Box, EventHelper, SignalManager):

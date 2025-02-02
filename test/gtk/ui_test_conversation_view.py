@@ -25,7 +25,7 @@ from gajim.common.util.datetime import utc_now
 
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.control import ChatControl
-from gajim.gtk.util import convert_surface_to_texture
+from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.widgets import GajimAppWindow
 
 from . import util

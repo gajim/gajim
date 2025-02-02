@@ -22,8 +22,8 @@ from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.window import get_app_window
 
 log = logging.getLogger("gajim.gtk.groupchat_manage")
 

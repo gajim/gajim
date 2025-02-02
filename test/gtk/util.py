@@ -11,7 +11,7 @@ from gi.repository import Gtk
 
 from gajim.common.const import CSSPriority
 
-from gajim.gtk.util import get_icon_theme
+from gajim.gtk.util.icons import get_icon_theme
 
 
 def get_gajim_dir() -> Path:

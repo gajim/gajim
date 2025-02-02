@@ -4,7 +4,7 @@
 
 import unittest
 
-from gajim.gtk.util import get_first_grapheme
+from gajim.gtk.util.misc import get_first_grapheme
 
 
 class Test(unittest.TestCase):

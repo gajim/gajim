@@ -33,9 +33,9 @@ from gajim.gtk.const import SettingType
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.settings import SettingsDialog
-from gajim.gtk.util import at_the_end
-from gajim.gtk.util import get_source_view_style_scheme
-from gajim.gtk.util import scroll_to_end
+from gajim.gtk.util.misc import at_the_end
+from gajim.gtk.util.misc import scroll_to_end
+from gajim.gtk.util.styling import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
 
 STANZA_PRESETS = {

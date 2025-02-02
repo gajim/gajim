@@ -45,9 +45,9 @@ from gajim.gtk.control import ChatControl
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
-from gajim.gtk.util import allow_send_message
-from gajim.gtk.util import open_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import allow_send_message
+from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.chatstack")
 

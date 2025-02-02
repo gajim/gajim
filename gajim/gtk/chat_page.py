@@ -28,7 +28,7 @@ from gajim.gtk.chat_list_stack import ChatListStack
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.menus import get_start_chat_button_menu
 from gajim.gtk.search_view import SearchView
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 if TYPE_CHECKING:
     from gajim.gtk.control import ChatControl

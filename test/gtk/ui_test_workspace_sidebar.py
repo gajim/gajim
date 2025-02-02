@@ -12,8 +12,8 @@ from gajim.common.settings import Settings
 
 from gajim.gtk.avatar import make_workspace_avatar
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
-from gajim.gtk.util import make_rgba
-from gajim.gtk.util import rgba_to_float
+from gajim.gtk.util.styling import make_rgba
+from gajim.gtk.util.styling import rgba_to_float
 from gajim.gtk.widgets import GajimAppWindow
 from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 

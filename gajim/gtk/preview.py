@@ -24,9 +24,9 @@ from gajim.common.util.preview import split_geo_uri
 from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_preview_menu
 from gajim.gtk.preview_audio import AudioWidget
-from gajim.gtk.util import ensure_not_destroyed
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import ensure_not_destroyed
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.preview")
 

@@ -13,11 +13,11 @@ from nbxmpp.structs import MucSubject
 
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
+from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
-from gajim.gtk.util import process_non_spacing_marks
 
 
 class MUCSubject(BaseRow):

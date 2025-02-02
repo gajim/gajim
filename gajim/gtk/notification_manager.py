@@ -31,9 +31,9 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.menus import get_subscription_menu
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import open_window
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
+from gajim.gtk.util.window import open_window
 
 NotificationActionListT = list[
     tuple[str, Callable[[Gio.SimpleAction, GLib.Variant], Any], str | None]

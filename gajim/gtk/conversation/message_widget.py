@@ -18,9 +18,9 @@ from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.conversation.code_widget import CodeWidget
 from gajim.gtk.conversation.plain_widget import PlainWidget
 from gajim.gtk.conversation.quote_widget import QuoteWidget
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import iterate_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import iterate_children
 from gajim.gtk.widgets import GajimAppWindow
 
 ContentT = ParsingResult | QuoteBlock

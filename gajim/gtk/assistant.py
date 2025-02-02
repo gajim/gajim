@@ -18,7 +18,7 @@ from gajim.common import app
 from gajim.common.ged import EventHelper
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.widgets import GajimAppWindow
 
 

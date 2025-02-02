@@ -18,7 +18,7 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.mam_preferences")

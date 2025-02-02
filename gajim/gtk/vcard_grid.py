@@ -57,8 +57,8 @@ from gajim.common.util.text import escape_iri_path_segment
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import parse_uri
 
-from gajim.gtk.util import convert_py_to_glib_datetime
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import convert_py_to_glib_datetime
 
 PropertyT = (
     AdrProperty

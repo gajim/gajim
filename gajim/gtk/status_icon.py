@@ -34,8 +34,8 @@ from gajim.common.i18n import _
 from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
 
-from gajim.gtk.util import get_status_icon_name
-from gajim.gtk.util import open_window
+from gajim.gtk.util.icons import get_status_icon_name
+from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.statusicon")
 

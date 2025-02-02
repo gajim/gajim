@@ -15,12 +15,12 @@ from gajim.common.const import FTState
 from gajim.common.i18n import _
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.text import format_eta
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.util import format_eta
 
 
 class FileTransferRow(BaseRow):

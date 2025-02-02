@@ -62,9 +62,9 @@ from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import open_window
-from gajim.gtk.util import resize_window
+from gajim.gtk.util.window import get_app_window
+from gajim.gtk.util.window import open_window
+from gajim.gtk.util.window import resize_window
 from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:

@@ -52,7 +52,7 @@
 # from gajim.gtk.dialogs import DialogButton
 # from gajim.gtk.dialogs import SimpleDialog
 # from gajim.gtk.filechoosers import FileSaveDialog
-# from gajim.gtk.util import format_eta
+# from gajim.common.util.text import format_eta
 
 # log = logging.getLogger('gajim.gtk.filetransfer')
 

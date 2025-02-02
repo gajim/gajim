@@ -30,15 +30,15 @@ from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
-from gajim.gtk.util import convert_rgb_string_to_float
-from gajim.gtk.util import convert_surface_to_texture
-from gajim.gtk.util import convert_texture_to_surface
-from gajim.gtk.util import get_contact_color
-from gajim.gtk.util import get_css_show_class
-from gajim.gtk.util import get_first_graphemes
-from gajim.gtk.util import load_icon_surface
-from gajim.gtk.util import make_rgba
-from gajim.gtk.util import rgba_to_float
+from gajim.gtk.util.icons import load_icon_surface
+from gajim.gtk.util.misc import convert_surface_to_texture
+from gajim.gtk.util.misc import convert_texture_to_surface
+from gajim.gtk.util.misc import get_first_graphemes
+from gajim.gtk.util.styling import convert_rgb_string_to_float
+from gajim.gtk.util.styling import get_contact_color
+from gajim.gtk.util.styling import get_css_show_class
+from gajim.gtk.util.styling import make_rgba
+from gajim.gtk.util.styling import rgba_to_float
 
 log = logging.getLogger("gajim.gtk.avatar")
 

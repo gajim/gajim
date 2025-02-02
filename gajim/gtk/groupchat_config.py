@@ -20,7 +20,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.apply_button_box import ApplyButtonBox
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.groupchat_config")
 

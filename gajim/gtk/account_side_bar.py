@@ -17,8 +17,8 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.status import get_client_status
 
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
 
 
 class AccountSideBar(Gtk.ListBox, SignalManager):

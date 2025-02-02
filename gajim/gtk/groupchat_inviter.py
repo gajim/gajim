@@ -24,9 +24,9 @@ from gajim.common.util.jid import validate_jid
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contacts_flowbox import ContactsFlowBox
-from gajim.gtk.util import AccountBadge
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
+from gajim.gtk.widgets import AccountBadge
 
 
 class ContactRow(Gtk.ListBoxRow):

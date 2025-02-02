@@ -50,7 +50,7 @@ from gajim.gtk.conversation.rows.read_marker import ReadMarkerRow
 from gajim.gtk.conversation.rows.scroll_hint import ScrollHintRow
 from gajim.gtk.conversation.rows.user_status import UserStatus
 from gajim.gtk.conversation.rows.widgets import MessageRowActions
-from gajim.gtk.util import iterate_listbox_children
+from gajim.gtk.util.misc import iterate_listbox_children
 
 log = logging.getLogger("gajim.gtk.conversation_view")
 

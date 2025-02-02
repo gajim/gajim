@@ -52,11 +52,11 @@ from gajim.gtk.assistant import ProgressPage
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import clear_listbox
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import get_color_for_account
-from gajim.gtk.util import open_window
+from gajim.gtk.util.misc import clear_listbox
+from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.styling import get_color_for_account
+from gajim.gtk.util.window import get_app_window
+from gajim.gtk.util.window import open_window
 
 CustomHostT = tuple[str, ConnectionProtocol, ConnectionType]
 

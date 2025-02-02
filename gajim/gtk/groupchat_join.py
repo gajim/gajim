@@ -20,7 +20,7 @@ from gajim.common.util.muc import get_group_chat_nick
 
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
-from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.groupchat_join")

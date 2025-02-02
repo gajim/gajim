@@ -26,6 +26,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.text import make_href_markup
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
@@ -34,9 +35,8 @@ from gajim.gtk.menus import get_private_chat_menu
 from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge
-from gajim.gtk.util import make_href_markup
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.widgets import AccountBadge
 
 
 class ChatBanner(Gtk.Box, EventHelper, SignalManager):

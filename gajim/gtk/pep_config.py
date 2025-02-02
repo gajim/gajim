@@ -26,7 +26,7 @@ from gajim.gtk.dataform import DataFormWidget
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.util import get_source_view_style_scheme
+from gajim.gtk.util.styling import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.pep_config")

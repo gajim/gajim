@@ -7,11 +7,11 @@ from gi.repository import Gtk
 
 from gajim.common.const import AvatarSize
 from gajim.common.util.datetime import utc_now
+from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
-from gajim.gtk.util import process_non_spacing_marks
 
 
 class CommandOutputRow(BaseRow):

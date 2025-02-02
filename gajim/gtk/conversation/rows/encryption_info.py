@@ -14,7 +14,7 @@ from gajim.common.util.datetime import utc_now
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
 from gajim.gtk.conversation.rows.widgets import SimpleLabel
-from gajim.gtk.util import open_window
+from gajim.gtk.util.window import open_window
 
 
 class EncryptionInfoRow(BaseRow):

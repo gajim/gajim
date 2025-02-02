@@ -16,7 +16,7 @@ from gajim.common import app
 from gajim.common.i18n import _
 
 from gajim.gtk.dropdown import GajimDropDown
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class ChatTypeFilter(Enum):

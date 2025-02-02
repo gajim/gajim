@@ -29,7 +29,7 @@ from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
 
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 log = logging.getLogger("gajim.gtk.avatar_selector")
 

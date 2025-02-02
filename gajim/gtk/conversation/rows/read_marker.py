@@ -12,9 +12,9 @@ from gi.repository import Gtk
 from gajim.common.i18n import _
 from gajim.common.types import ChatContactT
 from gajim.common.util.datetime import FIRST_LOCAL_DATETIME
+from gajim.common.util.text import process_non_spacing_marks
 
 from gajim.gtk.conversation.rows.base import BaseRow
-from gajim.gtk.util import process_non_spacing_marks
 
 
 class ReadMarkerRow(BaseRow):

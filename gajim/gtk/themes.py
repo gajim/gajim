@@ -26,9 +26,9 @@ from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.util import get_app_window
-from gajim.gtk.util import iterate_listbox_children
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import iterate_listbox_children
+from gajim.gtk.util.window import get_app_window
 from gajim.gtk.widgets import GajimAppWindow
 
 

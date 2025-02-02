@@ -21,7 +21,7 @@ from gajim.plugins.manifest import PluginManifest
 from gajim.gtk.builder import get_builder
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class AppPage(Gtk.Box):

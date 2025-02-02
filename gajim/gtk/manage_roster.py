@@ -39,8 +39,8 @@ from gajim.gtk.dialogs import InputDialog
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.menus import get_manage_roster_import_menu
 from gajim.gtk.menus import get_manage_roster_menu
-from gajim.gtk.util import GajimPopover
 from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.manage_roster")
 

@@ -53,15 +53,15 @@ from gajim.gtk.chat_filter import ChatTypeFilter
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
 from gajim.gtk.menus import get_start_chat_row_menu
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.icons import get_icon_theme
 
 # from gajim.gtk.tooltips import ContactTooltip
-from gajim.gtk.util import AccountBadge
-from gajim.gtk.util import GajimPopover
-from gajim.gtk.util import get_icon_theme
-from gajim.gtk.util import GroupBadgeBox
-from gajim.gtk.util import IdleBadge
-from gajim.gtk.util import SignalManager
+from gajim.gtk.widgets import AccountBadge
 from gajim.gtk.widgets import GajimAppWindow
+from gajim.gtk.widgets import GajimPopover
+from gajim.gtk.widgets import GroupBadgeBox
+from gajim.gtk.widgets import IdleBadge
 
 ContactT = BareContact | GroupchatContact
 L = TypeVar("L", bound=type[GObject.Object])

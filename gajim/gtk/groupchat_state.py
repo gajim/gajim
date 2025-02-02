@@ -13,7 +13,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
 
 
 class GroupchatState(Gtk.Box, SignalManager):

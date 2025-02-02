@@ -23,13 +23,13 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.util.muc import get_groupchat_name
+from gajim.common.util.text import make_href_markup
 from gajim.common.util.uri import open_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import make_href_markup
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import container_remove_all
 
 log = logging.getLogger("gajim.gtk.groupchat_info")
 

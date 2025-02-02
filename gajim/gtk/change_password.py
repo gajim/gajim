@@ -27,7 +27,7 @@ from gajim.gtk.assistant import ErrorPage
 from gajim.gtk.assistant import Page
 from gajim.gtk.assistant import SuccessPage
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.util import ensure_not_destroyed
+from gajim.gtk.util.misc import ensure_not_destroyed
 
 log = logging.getLogger("gajim.gtk.change_password")
 

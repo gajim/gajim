@@ -17,15 +17,15 @@ from gajim.common.const import URIType
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
+from gajim.common.util.text import process_non_spacing_marks
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import parse_uri
 
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
 from gajim.gtk.menus import get_conv_action_context_menu
 from gajim.gtk.menus import get_uri_context_menu
-from gajim.gtk.util import make_pango_attributes
-from gajim.gtk.util import process_non_spacing_marks
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import make_pango_attributes
 
 log = logging.getLogger("gajim.gtk.conversaion.plain_widget")
 

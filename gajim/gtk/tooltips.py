@@ -29,16 +29,16 @@ from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.util.status import get_uf_show
+from gajim.common.util.text import format_location
+from gajim.common.util.text import format_tune
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_sub
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.builder import get_builder
-from gajim.gtk.util import container_remove_all
-from gajim.gtk.util import convert_surface_to_texture
-from gajim.gtk.util import format_location
-from gajim.gtk.util import format_tune
-from gajim.gtk.util import iterate_children
+from gajim.gtk.util.misc import container_remove_all
+from gajim.gtk.util.misc import convert_surface_to_texture
+from gajim.gtk.util.misc import iterate_children
 
 log = logging.getLogger("gajim.gtk.tooltips")
 

@@ -14,8 +14,8 @@ from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.styling import PreBlock
 
-from gajim.gtk.util import get_source_view_style_scheme
-from gajim.gtk.util import SignalManager
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.styling import get_source_view_style_scheme
 
 log = logging.getLogger("gajim.gtk.conversation.code_widget")
 
