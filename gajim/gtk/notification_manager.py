@@ -32,6 +32,7 @@ from gajim.common.util.muc import get_groupchat_name
 
 from gajim.gtk.menus import get_subscription_menu
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_listbox_row_count
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import open_window
 
@@ -120,7 +121,7 @@ class NotificationManager(Gtk.ListBox, SignalManager):
             app.window.remove_action(f"{action}-{self._account}")
 
     def update_unread_count(self):
-        count = len(list(iterate_listbox_children(self)))
+        count = get_listbox_row_count(self)
         app.window.update_account_unread_count(self._account, count)
 
     def remove_row(self, row: NotificationRow) -> None:
