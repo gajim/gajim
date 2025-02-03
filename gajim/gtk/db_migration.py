@@ -34,6 +34,7 @@ class DBMigration(GajimAppWindow, EventHelper):
             title=_("Database Migration"),
             default_width=600,
             default_height=300,
+            add_window_padding=False,
             transient_for=app.window,
             modal=True,
         )
