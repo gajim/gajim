@@ -96,7 +96,7 @@ def build_man() -> None:
         man_out_path = METADATA / f"{man_file_name}.gz"
         logging.info("Compress %s >> %s", man_file_name, man_out_path)
 
-        with gzip.open(man_out_path, "wb") as f_out:
+        with gzip.GzipFile(man_out_path, "wb", mtime=0) as f_out:
             f_out.write(data)
 
 
