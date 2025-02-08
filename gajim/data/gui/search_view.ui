@@ -283,7 +283,7 @@
       <object class="GtkEntry" id="filter_from_entry">
         <property name="visible">0</property>
         <property name="focusable">1</property>
-        <property name="placeholder-text" translatable="yes">User name…</property>
+        <property name="placeholder-text" translatable="yes">Nickname…</property>
         <layout>
           <property name="column">1</property>
           <property name="row">0</property>
