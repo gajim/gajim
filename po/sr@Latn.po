@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"POT-Creation-Date: 2025-02-08 22:23+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -42,6 +42,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact Vas je pozvao na grupni razgovor u sobu %(room_jid)s"
+
+#, python-format
+msgid ""
+"%(count)s messages from %(participant)s will be moderated.\n"
+"Why do you want to moderate these messages?"
+msgstr ""
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -125,10 +131,6 @@ msgid "%s can be joined by invite only."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "%s group chats found"
-msgstr "%s nije pronađen"
-
-#, fuzzy, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%(nick)s je izbačen iz sobe (%(reason)s)"
 
@@ -156,12 +158,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s nije ispravan nivo logovanja"
 
-#, python-format
-msgid ""
-"%s is online with multiple devices.\n"
-"Choose the device you would like to send the files to."
-msgstr ""
-
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "Piše"
@@ -186,10 +182,6 @@ msgstr ""
 msgid "%s stopped the transfer"
 msgstr "Udaljeni kontakt je prekinuo prenos"
 
-#, fuzzy, python-format
-msgid "%s wants to send you a file"
-msgstr "%s Vam želi poslati datoteku."
-
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
@@ -209,14 +201,6 @@ msgstr ""
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
-
-#. Translators:
-#. This should make the string KB/s,
-#. where 'KB' part is taken from %s.
-#. Only the 's' after / (which means second) should be translated.
-#, python-format
-msgid "(%(filesize_unit)s/s)"
-msgstr "(%(filesize_unit)s/sek)"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -334,15 +318,17 @@ msgstr "<b>Font</b>"
 msgid "<b>6</b> mno"
 msgstr "<b>Font</b>"
 
+#, fuzzy
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>Font</b>"
 
 #, fuzzy
 msgid "<b>8</b> tuv"
 msgstr "<b>Font</b>"
 
+#, fuzzy
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>Font</b>"
 
 #, fuzzy
 msgid ""
@@ -374,16 +360,8 @@ msgstr "?Uloga kontakta u grupnom razgovoru:Nikakva"
 msgid "A feature comparison of various providers"
 msgstr ""
 
-msgid ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-msgstr "Datoteka sa ovim imenom već postoji i nemate privilegijaprepisati je."
-
 msgid "A fully-featured XMPP chat client"
 msgstr ""
-
-msgid "A list of active, completed and stopped file transfers"
-msgstr "Lista prenosa aktivnih, završenih i zaustavljenih datoteka"
 
 #, fuzzy
 msgid ""
@@ -421,10 +399,6 @@ msgstr "O_dsutan"
 msgid "Abort"
 msgstr ""
 
-msgctxt "File transfer state"
-msgid "Aborted"
-msgstr ""
-
 msgid "Abuse"
 msgstr ""
 
@@ -440,8 +414,12 @@ msgid "Account"
 msgstr "Nalog"
 
 #, fuzzy, python-format
-msgid "Account %s is still connected"
-msgstr "Račun \"%s\" je povezan na server"
+msgid ""
+"Account %(name)s is still connected\n"
+"All chat and group chat windows will be closed."
+msgstr ""
+"Prozori svih razgovora i grupnih razgovora će biti zatvoreni. Želite li da "
+"nastavite?"
 
 #, fuzzy
 msgid "Account Added"
@@ -508,6 +486,10 @@ msgstr "Gajim"
 msgid "Action when closing Gajim’s window"
 msgstr "Uvek zatvori Gajim"
 
+#, fuzzy, python-format
+msgid "Actions for \"%s\""
+msgstr "_Akcije za nalog \"%s\""
+
 #, fuzzy
 msgid "Activate"
 msgstr "Aktivirano"
@@ -527,6 +509,10 @@ msgstr "_Dodaj kontakt..."
 
 #, fuzzy
 msgid "Add Contact"
+msgstr "_Dodaj kontakt..."
+
+#, fuzzy
+msgid "Add Contact to New Group?"
 msgstr "_Dodaj kontakt..."
 
 #, fuzzy
@@ -582,10 +568,6 @@ msgid "Add new line"
 msgstr "Napravi novu objavu"
 
 #, fuzzy
-msgid "Add reaction"
-msgstr "Registracija neuspela"
-
-#, fuzzy
 msgid "Add some details…"
 msgstr "_Dodaj kontakt..."
 
@@ -598,6 +580,10 @@ msgstr ""
 #, fuzzy
 msgid "Add to Contact List…"
 msgstr "_Dodaj kontakt..."
+
+#, fuzzy
+msgid "Add to Group"
+msgstr "Izmeni _grupe"
 
 #, fuzzy, python-format
 msgid "Added %(count)s contact"
@@ -696,10 +682,8 @@ msgid "All Chat States"
 msgstr "Svi statusi"
 
 #, fuzzy
-msgid "All chat and group chat windows will be closed."
-msgstr ""
-"Prozori svih razgovora i grupnih razgovora će biti zatvoreni. Želite li da "
-"nastavite?"
+msgid "All Chats"
+msgstr "Svi statusi"
 
 msgid "All files"
 msgstr "Sve datoteke"
@@ -768,9 +752,6 @@ msgstr "Nalog"
 msgid "Anonymous login not supported"
 msgstr ""
 
-msgid "Another process is using this file."
-msgstr ""
-
 #, fuzzy
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Svima prisutnima je dozvoljeno da vide vaš pun džaber ID"
@@ -795,6 +776,10 @@ msgstr ""
 #, fuzzy
 msgid "Archive"
 msgstr "Datoteka je prazna"
+
+#, fuzzy
+msgid "Archive Malformed"
+msgstr "Servis je poslao loše podatke"
 
 msgid "Archive corrupted"
 msgstr ""
@@ -828,10 +813,6 @@ msgstr "_Podešavanja"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#, fuzzy
-msgid "Are you sure you want to leave this group chat?"
-msgstr "Jeste li sigurni da želite napustiti grupni razgovor \"%s\"?"
-
 msgid "Artists"
 msgstr ""
 
@@ -849,13 +830,6 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "Primljena Prva Poruka"
 
-msgid "Audio"
-msgstr ""
-
-#, fuzzy
-msgid "Audio / Video Calls"
-msgstr "Privatni Razgovori"
-
 #, fuzzy
 msgid "Audio File"
 msgstr "Datoteka: "
@@ -869,17 +843,10 @@ msgid "Audio Output Device"
 msgstr "Podrazumevana poruka"
 
 #, fuzzy
-msgid "Audio Preview"
-msgstr "Datoteka: "
-
-#, fuzzy
 msgid "Audio preview is not available"
 msgstr "Veza nije dostupna"
 
 msgid "Audio test"
-msgstr ""
-
-msgid "Audio/Video"
 msgstr ""
 
 #, fuzzy
@@ -912,10 +879,6 @@ msgid "Authority and subject key identifier mismatch"
 msgstr "Identifikator ključa autorizatora i teme se ne poklapaju"
 
 #, fuzzy
-msgid "Authorization Request"
-msgstr "Autorizacija poslata"
-
-#, fuzzy
 msgid "Authors"
 msgstr "_Odobri autorizaciju"
 
@@ -937,10 +900,6 @@ msgstr "Nedostupan"
 
 msgid "Autodetect"
 msgstr ""
-
-#, fuzzy
-msgid "Autojoin"
-msgstr "Automatsko povezivanje"
 
 #, fuzzy
 msgid "Automatic Status"
@@ -1023,7 +982,7 @@ msgid "Block"
 msgstr "_Blokiraj"
 
 #, fuzzy
-msgid "Block Contact"
+msgid "Block Contact?"
 msgstr "Blokirani kontakti"
 
 #, fuzzy
@@ -1037,18 +996,6 @@ msgstr "Lista zabrana"
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Lista privatnosti za %s"
-
-#, fuzzy
-msgid "Block…"
-msgstr "_Blokiraj"
-
-#, fuzzy
-msgid "Bookmarks"
-msgstr "_Markiraj ovu so_bu"
-
-#, fuzzy, python-format
-msgid "Bookmarks for %s"
-msgstr "_Markiraj ovu so_bu"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1122,14 +1069,6 @@ msgstr "_Odustani"
 #, fuzzy
 msgid "Cancel Download"
 msgstr "Skidanje"
-
-#, fuzzy
-msgid "Cancel the selected file transfer and remove incomplete files"
-msgstr "Prekini prenos označene datoteke i izbriši nedovršenu datoteku"
-
-#, fuzzy, python-format
-msgid "Cannot overwrite existing file \"%s\""
-msgstr "Nije moguće prepisati postojeću datoteku \"%s\""
 
 #, fuzzy
 msgid "Certificate"
@@ -1223,6 +1162,10 @@ msgstr ""
 "(tasterom tab) u grupnom razgovoru"
 
 #, fuzzy
+msgid "Chat"
+msgstr "Razgovori"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Kontakt Na Vezi"
 
@@ -1239,6 +1182,10 @@ msgstr "Veza"
 #, fuzzy
 msgid "Chat List"
 msgstr "Kontakti"
+
+#, fuzzy
+msgid "Chat Type"
+msgstr "Tip"
 
 #, fuzzy
 msgid "Chat history"
@@ -1270,24 +1217,8 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
-msgid "Checking file…"
-msgstr "Slanje profila..."
-
-#, fuzzy
-msgid "Choose Archive"
-msgstr "Odaberite sliku"
-
-#, fuzzy
-msgid "Choose Avatar…"
-msgstr "Odaberite sliku"
-
-#, fuzzy
 msgid "Choose Device"
 msgstr "Odaberite sliku"
-
-#, fuzzy
-msgid "Choose File to Send…"
-msgstr "Odaberite datoteku za slanje..."
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1321,11 +1252,8 @@ msgid "Clear"
 msgstr "Čisti"
 
 #, fuzzy
-msgid "Clear Devices"
+msgid "Clear Devices?"
 msgstr "Server"
-
-msgid "Clear Devices Now?"
-msgstr ""
 
 #, fuzzy
 msgid "Clear Devices…"
@@ -1382,8 +1310,9 @@ msgstr "Pretraga"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+#, fuzzy
 msgid "Close chat"
-msgstr ""
+msgstr "Pretraga"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1435,11 +1364,6 @@ msgstr "Završen"
 msgid "Complete a command or a nickname"
 msgstr "Molimo Vas napravite novu čistu temu sa željenim imenom."
 
-msgid "Completed"
-msgstr "Završen"
-
-#, fuzzy
-msgctxt "File transfer state"
 msgid "Completed"
 msgstr "Završen"
 
@@ -1506,9 +1430,6 @@ msgstr "Veza"
 #, fuzzy
 msgid "Connection failed"
 msgstr "Veza prekinuta"
-
-msgid "Connection not available"
-msgstr "Veza nije dostupna"
 
 #, fuzzy, python-format
 msgid "Connection with %s could not be established."
@@ -1671,20 +1592,27 @@ msgid "Correct…"
 msgstr ""
 
 #, fuzzy
+msgid "Could Not Save File"
+msgstr "Ne mogu učitati sliku"
+
+#, fuzzy
 msgid "Could not access file"
 msgstr "Ne mogu učitati sliku"
+
+msgid "Could not find any messages for this participant."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Ne mogu učitati sliku"
 
 #, fuzzy
-msgid "Could not save file"
-msgstr "Ne mogu učitati sliku"
-
-#, fuzzy
 msgid "Could not save file to selected directory."
 msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+
+#, fuzzy
+msgid "Could not select file or folder"
+msgstr "Ne mogu učitati sliku"
 
 #, fuzzy
 msgid "Could not update providers list"
@@ -1718,9 +1646,6 @@ msgstr "Napusti grupne razgovore"
 msgid "Create new group chat"
 msgstr "Napusti grupne razgovore"
 
-msgid "Create new post"
-msgstr "Napravi novu objavu"
-
 #, fuzzy
 msgid "Creating Account..."
 msgstr "Uklanjanje računa %s"
@@ -1731,10 +1656,6 @@ msgstr ""
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Sertifikat je istekao"
-
-#, fuzzy
-msgid "Current Developers"
-msgstr "Trenutni programeri:"
 
 msgid "D-Bus Interface"
 msgstr ""
@@ -1752,10 +1673,6 @@ msgstr "Registracija neuspela"
 
 msgid "Deactivated"
 msgstr "Deaktivirano"
-
-#, fuzzy
-msgid "Debug Console"
-msgstr "XML Konzola"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1819,11 +1736,11 @@ msgstr "Napusti grupne razgovore"
 msgid "Delete"
 msgstr "Obriši"
 
-msgid "Delete Fingerprint"
+msgid "Delete Fingerprint?"
 msgstr ""
 
 #, fuzzy
-msgid "Delete Message"
+msgid "Delete Message Locally?"
 msgstr "Podrazumevana poruka"
 
 #, fuzzy
@@ -1831,15 +1748,13 @@ msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr "Podrazumevana poruka"
 
-msgid "Delete PEP node?"
-msgstr ""
-
 #, fuzzy
-msgid "Delete Theme"
+msgid "Delete Node?"
 msgstr "Aktivno"
 
-msgid "Delete message locally?"
-msgstr ""
+#, fuzzy
+msgid "Delete Theme?"
+msgstr "Aktivno"
 
 msgid "Deny"
 msgstr "Odbij"
@@ -1851,9 +1766,6 @@ msgstr "Zahtev za pretplatom"
 msgid "Description"
 msgstr "Opis"
 
-msgid "Description: "
-msgstr "Opis:"
-
 #, fuzzy
 msgid "Destroy Group Chat…"
 msgstr "Novi grupni razgovor"
@@ -1864,6 +1776,10 @@ msgstr "Novi grupni razgovor"
 
 msgid "Details"
 msgstr "Detalji"
+
+#, fuzzy
+msgid "Developers"
+msgstr "Prošli programeri:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1890,19 +1806,25 @@ msgid "Direct Messages"
 msgstr "Podrazumevana poruka"
 
 #, fuzzy
-msgid "Direct transfer (not encrypted)"
-msgstr "Prenos datoteke zaustavljen"
+msgid "Direct Message…"
+msgstr "Podrazumevana poruka"
 
 #, fuzzy
 msgid "Directory"
 msgstr "_Istorijat"
 
 #, fuzzy, python-format
-msgid "Directory \"%s\" is not writable"
+msgid ""
+"Directory \"%s\" is not writable. You do not have the proper permissions to "
+"create files in this directory."
+msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+
+#, fuzzy
+msgid "Directory Not Writable"
 msgstr "U fasciklu \"%s\" nije moguće pisanje"
 
 #, fuzzy
-msgid "Disable Account"
+msgid "Disable Account?"
 msgstr "Neispravan nalog"
 
 msgid "Disabled"
@@ -1954,7 +1876,7 @@ msgid "Do you really want to delete this PEP node?"
 msgstr "Da li zaista želite da izbrišete označenu poruku?"
 
 #, fuzzy, python-format
-msgid "Do you really want to remove \"%s\"?"
+msgid "Do you really want to remove \"%(group)s\"?"
 msgstr "Da li zaista želite da ih sve zatvorite?"
 
 msgid ""
@@ -1962,6 +1884,10 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
+
+#, fuzzy
+msgid "Do you really want to remove this proxy?"
+msgstr "Da li zaista želite da ih sve zatvorite?"
 
 #, fuzzy
 msgid "Do you really want to remove your chat history for this chat?"
@@ -1987,11 +1913,6 @@ msgid "Don’t show this again"
 msgstr "_Ne pitaj me više"
 
 #, fuzzy
-msgid "Download"
-msgstr "Skidanje"
-
-#, fuzzy
-msgctxt "Noun"
 msgid "Download"
 msgstr "Skidanje"
 
@@ -2025,10 +1946,6 @@ msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files here"
-msgstr "Šalje datoteku kontaktu"
-
-#, fuzzy
-msgid "Drop files or contacts"
 msgstr "Šalje datoteku kontaktu"
 
 msgid "Easily send pictures, videos or other files to friends and groups"
@@ -2067,6 +1984,9 @@ msgstr "Novi E-mejl"
 msgid "Emoji Shortcodes"
 msgstr ""
 
+msgid "Emojis"
+msgstr ""
+
 msgid "Enable"
 msgstr "Omogući"
 
@@ -2087,19 +2007,6 @@ msgstr ""
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
-msgid "Enables Gajim to provide Audio and Video chats"
-msgstr ""
-
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
-msgid "Enables Gajim to provide a notification area icon"
-msgstr ""
-
-msgid ""
-"Enables Gajim to request your router to forward ports for file transfers"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2108,9 +2015,6 @@ msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr "Lozinke se mogu sačuvati i pouzdanije od običnog teksta."
-
-msgid "Enables libappindicator, an alternative tray icon provider"
-msgstr ""
 
 #, python-format
 msgid "Encrypted (%s)"
@@ -2126,6 +2030,10 @@ msgstr "E2E enkripcija onemogućena"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Zahtev za pretplatom"
+
+#, fuzzy
+msgid "Encryption Error"
 msgstr "Zahtev za pretplatom"
 
 #, fuzzy
@@ -2152,6 +2060,14 @@ msgid "Enter a password to join this chat"
 msgstr ""
 
 #, fuzzy
+msgid "Enter group name"
+msgstr "Ubaci nadimak"
+
+#, fuzzy
+msgid "Enter new contact name"
+msgstr "Ubaci nadimak"
+
+#, fuzzy
 msgid "Enter new password..."
 msgstr "Unesite novu lozinku:"
 
@@ -2173,10 +2089,6 @@ msgstr "Odaberite sliku"
 msgid "Error in audio data stream."
 msgstr ""
 
-#, python-format
-msgid "Error message: %s"
-msgstr "Poruka greške: %s"
-
 msgid "Error opening file"
 msgstr "Greška pri otvaranju datoteke"
 
@@ -2187,9 +2099,6 @@ msgstr "Greška u primanju forme za podatke"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Greška prilikom dodavanja servisa. %s"
-
-msgid "Error while merging recordings, please try again."
-msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -2206,10 +2115,6 @@ msgstr "Greška prilikom dodavanja servisa. %s"
 #, fuzzy
 msgid "Error while uploading avatar"
 msgstr "Greška prilikom dodavanja servisa. %s"
-
-#, fuzzy
-msgid "Error!"
-msgstr "Greška"
 
 #, python-format
 msgid "Error: %s"
@@ -2254,12 +2159,24 @@ msgid "Export"
 msgstr "Izvezi"
 
 #, fuzzy
+msgid "Export CSV"
+msgstr "Izvezi"
+
+#, fuzzy
 msgid "Export Chat History"
 msgstr "Nedavno:"
 
 #, fuzzy
+msgid "Export Contacts"
+msgstr "Pozovi kontakte"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Završi"
+
+#, fuzzy
+msgid "Export History…"
+msgstr "Nedavno:"
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2271,6 +2188,10 @@ msgstr "Izvoženje dnevnika istorijata..."
 #, fuzzy
 msgid "Exporting your messages..."
 msgstr "Šifrujem poruke razgovora."
+
+#, fuzzy
+msgid "Export…"
+msgstr "Izvezi"
 
 #, fuzzy
 msgid "Extended Address"
@@ -2303,10 +2224,6 @@ msgctxt "Group chat name"
 msgid "Family"
 msgstr ""
 
-#, fuzzy
-msgid "Feature not available on Windows"
-msgstr "Mogućnost nije dostupna pod Vindouz sistemom."
-
 msgid "Features"
 msgstr "Mogućnosti"
 
@@ -2326,14 +2243,6 @@ msgstr "piše poruku..."
 
 msgid "File"
 msgstr "Datoteka"
-
-#, fuzzy
-msgid "File Name: "
-msgstr "Ime datoteke: %s"
-
-#, fuzzy
-msgid "File Offered"
-msgstr "Prenosi datoteka"
 
 msgid "File Offered…"
 msgstr ""
@@ -2356,18 +2265,8 @@ msgstr "Prenos datoteke prekinut"
 msgid "File Transfer Completed"
 msgstr "Prenos datoteke završen"
 
-msgid "File Transfer Error"
-msgstr "Greška pri prenosu datoteke"
-
-#, fuzzy
-msgid "File Transfer Failed"
-msgstr "Prenosi datoteka"
-
 msgid "File Transfer Stopped"
 msgstr "Prenos datoteke zaustavljen"
-
-msgid "File Transfers"
-msgstr "Prenosi datoteka"
 
 #, fuzzy
 msgid "File Verification Failed"
@@ -2380,10 +2279,6 @@ msgstr "Prekini prenos datoteke"
 msgid "File does not exist"
 msgstr "Datoteka ne postoji"
 
-#, fuzzy
-msgid "File error"
-msgstr "Greška pri prenosu datoteke"
-
 msgid "File is empty"
 msgstr "Datoteka je prazna"
 
@@ -2394,11 +2289,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
-msgid "File too big, will use direct transfer (not encrypted)"
-msgstr ""
-
-msgid "File transfer stopped"
-msgstr "Prenos datoteke zaustavljen"
+#, fuzzy
+msgid "File too big"
+msgstr "Slika je prevelika"
 
 #, fuzzy
 msgid "File transfers"
@@ -2407,14 +2300,6 @@ msgstr "Prenosi datoteka"
 #, python-format
 msgid "File: %s"
 msgstr "Datoteka: %s"
-
-#, python-format
-msgid "Filename: %s"
-msgstr "Ime datoteke: %s"
-
-#, fuzzy
-msgid "Filetransfer Preference"
-msgstr "Greška pri prenosu datoteke"
 
 #, fuzzy
 msgid "Filter"
@@ -2425,8 +2310,12 @@ msgid "Filter Chats"
 msgstr "Privatni Razgovori"
 
 #, fuzzy
-msgid "Filter Chats…"
-msgstr "Privatni Razgovori"
+msgid "Filters"
+msgstr "Filter:"
+
+#, fuzzy
+msgid "Filters (active)"
+msgstr "Primljena Prva Poruka"
 
 msgid "Fingerprint for this Device"
 msgstr ""
@@ -2443,6 +2332,10 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Folder: %s"
+msgstr "Datoteka: %s"
 
 msgid "For example: \"Julia is now online\""
 msgstr ""
@@ -2480,6 +2373,10 @@ msgid "Format your message"
 msgstr "Prosledi nepročitane poruke"
 
 msgid "Forward 10 seconds"
+msgstr ""
+
+#, python-format
+msgid "Found %s contacts to import"
 msgstr ""
 
 #, fuzzy
@@ -2534,18 +2431,15 @@ msgstr "Gajim - %s"
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
+#, fuzzy
 msgid "Gajim Update"
-msgstr ""
+msgstr "Osveži poruku dana..."
 
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim can not read this file"
-msgstr "Gajim ne može pristupiti ovoj datoteci"
 
 msgid ""
 "Gajim encountered an error.\n"
@@ -2698,10 +2592,6 @@ msgstr "Grupni razgovori"
 msgid "Groups"
 msgstr "Grupe"
 
-msgctxt "proxy configuration"
-msgid "HTTP"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) Autorizacija za %(url)s (id: %(id)s)"
@@ -2731,9 +2621,6 @@ msgstr ""
 #, fuzzy
 msgid "Hide chat list"
 msgstr "Učesnik"
-
-msgid "Hide this menu"
-msgstr "Sakrij ovaj meni"
 
 #, fuzzy
 msgid "Home"
@@ -2803,11 +2690,6 @@ msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will save the main window position when hiding it, and "
-"restore it when showing the window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
@@ -2822,11 +2704,6 @@ msgstr ""
 "nalog u prozoru za izmenu podešavanja naloga. BUDITE OPREZNI, kada ste "
 "povezani sa negativnim prioritetom NEĆETE primati nikakve poruke od servera."
 
-msgid ""
-"If you quit now, the file(s) being transferred will be lost.\n"
-"Do you still want to quit?"
-msgstr ""
-
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Pozovi kontakte"
@@ -2839,12 +2716,30 @@ msgstr "_Ignoriši događaje od kontakata koji nisu na listi"
 msgid "Image"
 msgstr "Slike"
 
-msgid "Images"
-msgstr "Slike"
+#, fuzzy
+msgid "Import"
+msgstr "Izvezi"
 
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Pozovi kontakte"
+
+#, fuzzy
+msgid "Import Contacts?"
+msgstr "Pozovi kontakte"
+
+msgid "Import Error"
+msgstr ""
+
+#, fuzzy
+msgid "Import from Account"
+msgstr "Uklanjanje računa %s"
+
+msgid "Import from File"
+msgstr ""
+
+msgid "Import…"
+msgstr ""
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2884,9 +2779,6 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-msgid "Install from File…"
-msgstr ""
-
 #, fuzzy
 msgid "Installation failed"
 msgstr "Registracija neuspela"
@@ -2905,9 +2797,6 @@ msgstr "Neispravna datoteka"
 
 msgid "Invalid CA certificate"
 msgstr "Neispravan sertifikat sertifikacionog tela (CA)"
-
-msgid "Invalid File"
-msgstr "Neispravna datoteka"
 
 #, fuzzy
 msgid "Invalid Name"
@@ -2976,9 +2865,6 @@ msgstr ""
 msgid "Issued to\n"
 msgstr ""
 
-msgid "It is not possible to send empty files"
-msgstr "Nije moguće poslati praznu datoteku"
-
 #, fuzzy
 msgid "I’m eating."
 msgstr "Radim."
@@ -2986,12 +2872,6 @@ msgstr "Radim."
 #, fuzzy
 msgid "I’m out enjoying life."
 msgstr "Napolju sam, uživam u životu."
-
-#, python-format
-msgid ""
-"I’m synchronizing my contacts from my account at \"%s\". Could you please "
-"add this address to your contact list?"
-msgstr ""
 
 #, fuzzy
 msgid "I’m watching a movie."
@@ -3086,7 +2966,7 @@ msgid "Last seen: %s"
 msgstr "Razlog"
 
 #, fuzzy
-msgid "Leave Group Chat"
+msgid "Leave Group Chat?"
 msgstr "Napusti grupne razgovore"
 
 msgid "Leave _Permanently"
@@ -3181,6 +3061,9 @@ msgid ""
 "from the chat window"
 msgstr ""
 
+msgid "Maintainers"
+msgstr ""
+
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3202,6 +3085,10 @@ msgstr ""
 #, fuzzy
 msgid "Manage"
 msgstr "Podesi..."
+
+#, fuzzy
+msgid "Manage Contact List"
+msgstr "Kontakti"
 
 #, fuzzy
 msgid "Manage Proxies"
@@ -3316,18 +3203,20 @@ msgstr "_Zapisuj u dnevnik statusne promene kontakata"
 msgid "Miscellaneous"
 msgstr "<b>Ostalo</b>"
 
-msgid "Missing dependencies for Audio/Video"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
-msgid "Moderate Message"
+msgid "Moderate Message?"
 msgstr "Statusna poruka"
 
 #, fuzzy
-msgid "Moderate message?"
+msgid "Moderate Messages?"
+msgstr "Statusna poruka"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate all messages…"
 msgstr "statusna poruka"
 
 #, fuzzy
@@ -3357,16 +3246,24 @@ msgstr "Moderatori"
 msgid "Modify"
 msgstr "Izmenite"
 
-#, fuzzy
-msgid "Modify Gateway…"
-msgstr "Izmeni nalog"
-
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
 #, fuzzy
+msgid "Move"
+msgstr "Zahtev za prenosom datoteke"
+
+#, fuzzy
 msgid "Move Chat"
 msgstr "Zahtev za prenosom datoteke"
+
+#, fuzzy
+msgid "Move Contact to New Group?"
+msgstr "Prikaži događaj u listi kontakata"
+
+#, fuzzy
+msgid "Move to Group"
+msgstr "Ukloni grupu"
 
 msgid "Movie"
 msgstr "Film"
@@ -3391,7 +3288,7 @@ msgstr "Ime"
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
 
-msgid "Needs gspell to be installed"
+msgid "Needs libspelling to be installed"
 msgstr ""
 
 #, fuzzy
@@ -3407,6 +3304,10 @@ msgstr "Dodaj novi kontakt"
 
 #, fuzzy
 msgid "New Group"
+msgstr "Novi grupni razgovor"
+
+#, fuzzy
+msgid "New Group…"
 msgstr "Novi grupni razgovor"
 
 #, fuzzy
@@ -3431,17 +3332,24 @@ msgstr ""
 msgid "Nickname"
 msgstr "Nadimak"
 
+msgid "Nickname contains invalid characters"
+msgstr ""
+
+#, fuzzy
+msgid "Nickname…"
+msgstr "Nadimak"
+
 #, fuzzy
 msgid "No"
 msgstr "Ništa"
 
 #, fuzzy
-msgid "No Connection Available"
-msgstr "Veza nije dostupna"
-
-#, fuzzy
 msgid "No File Transfer available"
 msgstr "Prenosi datoteka"
+
+#, fuzzy
+msgid "No Messages Found"
+msgstr "Nema rezultata"
 
 #, fuzzy
 msgid "No Notifications"
@@ -3455,10 +3363,6 @@ msgstr "Lozinka zahtevana"
 #, fuzzy
 msgid "No Proxy"
 msgstr "Proksi:"
-
-#, fuzzy
-msgid "No Results Found"
-msgstr "Nema rezultata"
 
 msgid "No Sync"
 msgstr ""
@@ -3488,6 +3392,9 @@ msgid ""
 "You can also type an XMPP address"
 msgstr ""
 
+msgid "No contacts found to import"
+msgstr ""
+
 msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
@@ -3497,6 +3404,9 @@ msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
+msgstr ""
+
+msgid "No group assigned"
 msgstr ""
 
 #, fuzzy
@@ -3559,6 +3469,10 @@ msgid "Not Decided"
 msgstr "Na vezi"
 
 #, fuzzy
+msgid "Not Joined"
+msgstr "Na vezi"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Not Moderated"
 msgstr "Nije počeo"
@@ -3577,11 +3491,6 @@ msgstr "Na vezi"
 
 #, fuzzy
 msgid "Not encrypted"
-msgstr "Nije počeo"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Not started"
 msgstr "Nije počeo"
 
 msgctxt "Profile"
@@ -3648,10 +3557,6 @@ msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-#, fuzzy
-msgid "Online Status"
-msgstr "Status"
 
 msgid "Only Admins and Owners can modify the affiliation"
 msgstr ""
@@ -3722,8 +3627,9 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Na odmoru"
 
+#, fuzzy
 msgid "Organization (O)"
-msgstr ""
+msgstr "Na odmoru"
 
 msgid "Organization (O): "
 msgstr ""
@@ -3772,6 +3678,10 @@ msgstr "Vlasnik"
 msgid "PEP Configuration"
 msgstr "Konfiguracija sobe"
 
+#, fuzzy
+msgid "PEP Node Not Removed"
+msgstr "PEP čvor nije uklonjen"
+
 #, fuzzy, python-format
 msgid "PEP Service Configuration (%s)"
 msgstr "PEP konfiguracija servisa"
@@ -3782,18 +3692,12 @@ msgid ""
 "%(message)s"
 msgstr "PEP čvor %(node)s nije uklonjen: %(message)s"
 
-msgid "PEP node was not removed"
-msgstr "PEP čvor nije uklonjen"
-
 msgid "PKCS12 Files"
 msgstr ""
 
 #, fuzzy
 msgid "PNG files"
 msgstr "Sve datoteke"
-
-msgid "Pa_use/Resume"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3858,11 +3762,8 @@ msgid "Passwords do not match"
 msgstr "Lozinke se ne poklapaju"
 
 #, fuzzy
-msgid "Past Developers"
-msgstr "Prošli programeri:"
-
 msgid "Paste Last Input"
-msgstr ""
+msgstr "Odaberite sliku"
 
 #, fuzzy
 msgid "Paste as Code Block"
@@ -3876,19 +3777,7 @@ msgid "Path length constraint exceeded"
 msgstr "Prekoračena dužina putanje"
 
 #, fuzzy
-msgid "Pause or resume file transfer"
-msgstr "Prekini prenos datoteke"
-
-msgctxt "File transfer state"
-msgid "Paused"
-msgstr ""
-
-#, fuzzy
 msgid "Pending"
-msgstr "Prikaži sv_e događaje na čekanju"
-
-#, fuzzy
-msgid "Pending Event"
 msgstr "Prikaži sv_e događaje na čekanju"
 
 #, fuzzy
@@ -3975,12 +3864,16 @@ msgstr "Molimo potvrdite da ste spojeni na \"%s\"."
 
 msgid ""
 "Please select one of your accounts.\n"
-"Gajim will export all messages from the selected account to a directory of "
-"your choice."
+"Gajim will export all messages from the selected account and chats to a "
+"directory of your choice."
 msgstr ""
 
 msgid "Please use these settings with caution!"
 msgstr ""
+
+#, fuzzy
+msgid "Plugin Failed"
+msgstr "Registracija neuspela"
 
 #, fuzzy
 msgid "Plugin Settings"
@@ -3993,10 +3886,6 @@ msgstr "Registracija neuspela"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Ova datoteka već postoji"
-
-#, fuzzy
-msgid "Plugin failed"
-msgstr "Registracija neuspela"
 
 #, fuzzy
 msgid "Plugin manager"
@@ -4043,9 +3932,6 @@ msgstr "Ime postavke"
 msgid "Preferences"
 msgstr "Podešavanja"
 
-msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Prisutnost"
@@ -4083,14 +3969,15 @@ msgid "Private"
 msgstr "Lista privatnosti"
 
 #, fuzzy
+msgid "Processing image…"
+msgstr "Isteklo vreme za učitavanje slike"
+
+#, fuzzy
 msgid "Profile"
 msgstr "datoteka"
 
 msgid "Profile application with cprofile"
 msgstr ""
-
-msgid "Progress"
-msgstr "Napredak"
 
 msgctxt "Group chat description"
 msgid "Project discussion"
@@ -4115,6 +4002,10 @@ msgid "Prox_y"
 msgstr "Prok_si:"
 
 #, fuzzy
+msgid "Proxies"
+msgstr "Podešavanje proksi profila"
+
+#, fuzzy
 msgid "Proxy"
 msgstr "Proksi:"
 
@@ -4130,8 +4021,9 @@ msgstr "Proksi:"
 msgid "Proxy, custom hostname and port"
 msgstr "Koristi Vaše određeno ime hosta/port "
 
+#, fuzzy
 msgid "Public"
-msgstr ""
+msgstr "Zahtev za pretplatom"
 
 msgctxt "Group chat feature"
 msgid "Public"
@@ -4159,7 +4051,7 @@ msgid "Purge Chat History…"
 msgstr "Nedavno:"
 
 #, fuzzy
-msgid "Purge all Chat History"
+msgid "Purge all Chat History?"
 msgstr "Svi statusi"
 
 #, fuzzy, python-format
@@ -4187,11 +4079,7 @@ msgid "Quote…"
 msgstr ""
 
 #, fuzzy
-msgid "Re-Login"
-msgstr "Otići sa veze i povezati se odmah?"
-
-#, fuzzy
-msgid "Re-Login now?"
+msgid "Re-Login Now?"
 msgstr "Otići sa veze i povezati se odmah?"
 
 msgid "Re_gister"
@@ -4207,10 +4095,6 @@ msgstr "Pročitajte članak na _Vikipediji"
 msgid "Read more about blind trust"
 msgstr ""
 
-#, fuzzy
-msgid "Really block this contact?"
-msgstr "Da li je OpenPGP omogućen za ovaj kontakt?"
-
 msgid "Reason"
 msgstr "Razlog"
 
@@ -4222,8 +4106,9 @@ msgstr "Možete takođe uneti i alternativnu lokaciju:"
 msgid "Reason (optional)..."
 msgstr "Razlog"
 
+#, fuzzy
 msgid "Reason for destruction"
-msgstr ""
+msgstr "Možete takođe uneti i alternativnu lokaciju:"
 
 #, fuzzy, python-format
 msgid "Reason: %s"
@@ -4241,13 +4126,6 @@ msgstr "Primljena Prva Poruka"
 #, fuzzy
 msgid "Recent history"
 msgstr "Nedavno:"
-
-msgid "Recipient: "
-msgstr "Primaoc: "
-
-#, python-format
-msgid "Recipient: %s"
-msgstr "Primaoc: %s"
 
 msgid "Recognize your account by color"
 msgstr ""
@@ -4298,27 +4176,36 @@ msgstr ""
 msgid "Remove"
 msgstr "_Ukloni"
 
+#, fuzzy, python-format
+msgid "Remove %s contacts from your contact list?"
+msgstr "Uklanja kontakt sa liste"
+
 #, fuzzy
 msgid "Remove Account"
 msgstr "Uklanjanje računa %s"
-
-#, fuzzy
-msgid "Remove Chat History"
-msgstr "Nedavno:"
 
 #, fuzzy
 msgid "Remove Chat History?"
 msgstr "Nedavno:"
 
 #, fuzzy
-msgid "Remove Contact"
+msgid "Remove Contacts?"
 msgstr "Preimenuj kontakt"
 
-msgid "Remove Group"
+#, fuzzy
+msgid "Remove Contact…"
+msgstr "Preimenuj kontakt"
+
+#, fuzzy
+msgid "Remove From Contact List?"
+msgstr "Uklanja kontakt sa liste"
+
+#, fuzzy
+msgid "Remove Group?"
 msgstr "Ukloni grupu"
 
 #, fuzzy
-msgid "Remove Group..."
+msgid "Remove Group…"
 msgstr "Ukloni grupu"
 
 #, fuzzy
@@ -4334,6 +4221,10 @@ msgid "Remove Proxy"
 msgstr "Ukloni grupu"
 
 #, fuzzy
+msgid "Remove Proxy?"
+msgstr "Ukloni grupu"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Registracija neuspela"
 
@@ -4342,33 +4233,31 @@ msgid "Remove Theme"
 msgstr "Aktivno"
 
 #, fuzzy
-msgid "Remove Transport"
-msgstr "Prikaži trans_porte"
-
-#, fuzzy
-msgid "Remove Workspace"
+msgid "Remove Workspace?"
 msgstr "Preimenuj kontakt"
 
 #, fuzzy
-msgid "Remove completed, cancelled and failed file transfers from the list"
-msgstr "Ukloni završene, prekinute i neuspele prenose datoteka iz liste"
+msgid "Remove from Contact List…"
+msgstr "Uklanja kontakt sa liste"
 
 #, fuzzy
-msgid "Remove contact from contact list"
-msgstr "Uklanja kontakt sa liste"
+msgid "Remove from Group"
+msgstr "Ukloni grupu"
 
 #, fuzzy
 msgid "Remove from contact list"
 msgstr "Uklanja kontakt sa liste"
 
+#, fuzzy
 msgid "Remove this workspace"
-msgstr ""
+msgstr "Preimenuj kontakt"
 
 msgid "Remove your group chat avatar"
 msgstr ""
 
+#, fuzzy
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Promeni nadimak (Ctrl+N)"
 
 #, fuzzy, python-format
 msgid "Removed %(count)s contact"
@@ -4378,12 +4267,20 @@ msgstr[1] "Uklanja kontakt sa liste"
 msgstr[2] "Uklanja kontakt sa liste"
 
 #, fuzzy
-msgid "Remove…"
-msgstr "_Ukloni"
-
-#, fuzzy
 msgid "Removing Account..."
 msgstr "Uklanjanje računa %s"
+
+#, fuzzy
+msgid "Rename"
+msgstr "_Korisničko ime:"
+
+#, fuzzy
+msgid "Rename Contact?"
+msgstr "Preimenuj kontakt"
+
+#, fuzzy
+msgid "Rename…"
+msgstr "_Korisničko ime:"
 
 msgctxt "Group chat name"
 msgid "Repairs"
@@ -4396,6 +4293,10 @@ msgstr ""
 msgid "Report"
 msgstr "_Prijavi grešku"
 
+#, fuzzy
+msgid "Request"
+msgstr "_Glas"
+
 msgid "Request Search Form"
 msgstr ""
 
@@ -4406,6 +4307,10 @@ msgstr "_Glas"
 #, fuzzy
 msgid "Request contact information (Tune, Location)"
 msgstr "Pozovi kontakte u konverzaciju (Ctrl+G)"
+
+#, fuzzy
+msgid "Request pending"
+msgstr "Zahteva libgtkspell."
 
 #, fuzzy
 msgid "Request to see this contact's online status"
@@ -4432,15 +4337,6 @@ msgid "Required"
 msgstr "Lozinka zahtevana"
 
 #, fuzzy
-msgid "Requires: Gspell"
-msgstr "Zahteva libgtkspell."
-
-msgid ""
-"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
-msgstr ""
-
-#, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Zahteva gnome-keyring and python-gnome2-desktop, ili kwalletcli."
 
@@ -4448,16 +4344,9 @@ msgstr "Zahteva gnome-keyring and python-gnome2-desktop, ili kwalletcli."
 msgid "Requires: gsound"
 msgstr "Zahteva python-dbus."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
-msgid "Requires: gupnpigd-1.0"
-msgstr "Zahteva python-gnome2."
-
-#, fuzzy
-msgid "Requires: libappindicator3"
-msgstr "Zahteva libxss biblioteku."
+msgid "Requires: libspelling"
+msgstr "Zahteva libgtkspell."
 
 #, fuzzy
 msgid "Requires: libxss"
@@ -4471,11 +4360,17 @@ msgstr "Ime postavke"
 msgid "Reset"
 msgstr "_Prisutnost"
 
-msgid "Reset Hints"
-msgstr ""
+#, fuzzy
+msgid "Reset Filters"
+msgstr "Poruka Poslata"
 
+#, fuzzy
+msgid "Reset Hints"
+msgstr "Poruka Poslata"
+
+#, fuzzy
 msgid "Reset User Interface Font Size"
-msgstr ""
+msgstr "_Korisničko ime:"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4542,10 +4437,6 @@ msgstr ""
 msgid "SHA-256:"
 msgstr ""
 
-msgctxt "proxy configuration"
-msgid "SOCKS5"
-msgstr ""
-
 #, fuzzy
 msgid "SSL Certificate Verification Error"
 msgstr "Greška SSL sertifikata"
@@ -4575,10 +4466,6 @@ msgstr ""
 #, fuzzy
 msgid "Save"
 msgstr "Imam "
-
-#, fuzzy
-msgid "Save File as…"
-msgstr "Snimi datoteku kao..."
 
 #, fuzzy
 msgid "Save Password"
@@ -4681,6 +4568,12 @@ msgstr "Pretraga"
 msgid "Searching…"
 msgstr "Pretraga"
 
+#, fuzzy, python-format
+msgid ""
+"Searching…\n"
+"%s results"
+msgstr "Pretraga"
+
 #, fuzzy
 msgid "Search…"
 msgstr "Pretraga"
@@ -4705,14 +4598,6 @@ msgid "Select Account"
 msgstr "Uklanjanje računa %s"
 
 #, fuzzy
-msgid "Select Contacts"
-msgstr "Poslati kontakti:"
-
-#, fuzzy
-msgid "Select File…"
-msgstr "Pošalji _datoteku"
-
-#, fuzzy
 msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Podrazumevana poruka"
@@ -4728,14 +4613,6 @@ msgstr ""
 
 msgid "Select playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Select the account with which you want to synchronize"
-msgstr "Odaberite nalog sa kojim želite da se sinhronizujete"
-
-#, fuzzy
-msgid "Select the contacts you want to synchronize"
-msgstr "Odaberite kontakte koje želite da sinhronizujete"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
@@ -4782,16 +4659,8 @@ msgid "Send File (max. %s)…"
 msgstr "Snimi datoteku kao..."
 
 #, fuzzy
-msgid "Send File Directly…"
-msgstr "Snimi datoteku kao..."
-
-#, fuzzy
 msgid "Send Files"
 msgstr "Pošalji _datoteku"
-
-#, fuzzy
-msgid "Send Files Directly"
-msgstr "Snimi datoteku kao..."
 
 #, fuzzy
 msgid "Send File…"
@@ -4826,9 +4695,6 @@ msgstr ""
 #, fuzzy
 msgid "Send the message"
 msgstr "Pošalji poruku"
-
-msgid "Sender: "
-msgstr "Pošaljilac: "
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4887,6 +4753,14 @@ msgid "Service Gateway"
 msgstr "Server"
 
 #, fuzzy
+msgid "Service Not Browsable"
+msgstr "Usluge nisu pretražive"
+
+#, fuzzy
+msgid "Service Not Found"
+msgstr "Usluga ne može biti nađena"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Konfiguracija sobe"
 
@@ -4923,8 +4797,9 @@ msgstr "Napusti grupne razgovore"
 msgid "Share Status"
 msgstr "Status"
 
+#, fuzzy
 msgid "Share Video"
-msgstr ""
+msgstr "Započni razgovor"
 
 #, fuzzy
 msgid "Share my online status"
@@ -4975,10 +4850,6 @@ msgid "Show Notifications"
 msgstr "Obaveštenja"
 
 #, fuzzy
-msgid "Show Offline Contacts"
-msgstr "Prikaži kontakte koji nisu na vezi"
-
-#, fuzzy
 msgid "Show Send Message Button"
 msgstr "Pošalji poruku"
 
@@ -4997,10 +4868,6 @@ msgstr "Prikaži trans_porte"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Pošalji poruku"
-
-#, fuzzy
-msgid "Show _Features"
-msgstr "Mogućnosti"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -5099,10 +4966,6 @@ msgid "Show/Hide Window"
 msgstr "Sakriva prozor"
 
 #, fuzzy
-msgid "Shows a list of file transfers between you and your contacts"
-msgstr "Prikazuje listu prenosa datoteka između Vas i ostalih"
-
-#, fuzzy
 msgid "Shutting down Gajim"
 msgstr "Gajim"
 
@@ -5145,10 +5008,6 @@ msgid "Sort Participant List by Status"
 msgstr "Sortiraj kontakte po statusu"
 
 #, fuzzy
-msgid "Sort by Status"
-msgstr "Sortiraj kontakte po statusu"
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav Zvukovi"
 
@@ -5177,16 +5036,8 @@ msgctxt "Group chat description"
 msgid "Spring gathering"
 msgstr ""
 
-msgid "Sta_tus"
-msgstr "Sta_tus"
-
 msgid "Stage"
 msgstr ""
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Stalled"
-msgstr "Zastoj"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -5210,14 +5061,6 @@ msgstr "Započni razgovor"
 #, fuzzy
 msgid "Start Search..."
 msgstr "_Započni razgovor"
-
-#, fuzzy
-msgid "Start Video Call…"
-msgstr "Započni razgovor"
-
-#, fuzzy
-msgid "Start Voice Call…"
-msgstr "Započni razgovor"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5261,13 +5104,16 @@ msgid "Status and status message for all accounts"
 msgstr "Menja status jednog ili više naloga"
 
 #, fuzzy
-msgid "Status message…"
-msgstr "_Statusna poruka:"
+msgid "Status is not shared"
+msgstr "Statusna poruka"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Status: "
-msgstr "Status: "
+msgid "Status is shared"
+msgstr "Statusna poruka"
+
+#, fuzzy
+msgid "Status message…"
+msgstr "_Statusna poruka:"
 
 #, fuzzy, python-format
 msgid "Status: %s"
@@ -5290,11 +5136,7 @@ msgid "Status: Online Color"
 msgstr "Statusna poruka"
 
 #, fuzzy
-msgid "Stop File Transfers"
-msgstr "Prenosi datoteka"
-
-#, fuzzy
-msgid "Stop sharing online status?"
+msgid "Stop Sharing Online Status?"
 msgstr "da mi pošalje status"
 
 msgid "Stopped sharing their status with you"
@@ -5319,9 +5161,6 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Pogrešna tema izdavača sertifikata"
 
-msgid "Submit"
-msgstr ""
-
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5330,12 +5169,24 @@ msgstr "Pretplatite se"
 msgid "Subscribed"
 msgstr "Pretplaćen"
 
+#, fuzzy
+msgid "Subscription"
+msgstr "Pretplata: "
+
 msgid "Subscription Request"
 msgstr "Zahtev za pretplatom"
 
 #, fuzzy
 msgid "Subscription:"
 msgstr "Pretplata: "
+
+#, fuzzy
+msgid "Successfully Added Contacts"
+msgstr "Poslati kontakti:"
+
+#, fuzzy
+msgid "Successfully Removed Contacts"
+msgstr "Preimenuj kontakt"
 
 msgid "Support"
 msgstr ""
@@ -5359,21 +5210,25 @@ msgstr ""
 msgid "Switch Workspace"
 msgstr "Preimenuj kontakt"
 
+#, fuzzy
 msgid "Switch to the first - ninth chat"
-msgstr ""
+msgstr "Započni razgovor"
 
 #, fuzzy
 msgid "Switch to the next chat"
 msgstr "Započni razgovor"
 
+#, fuzzy
 msgid "Switch to the next unread chat"
-msgstr ""
+msgstr "Započni razgovor"
 
+#, fuzzy
 msgid "Switch to the previous chat"
-msgstr ""
+msgstr "Započni razgovor"
 
+#, fuzzy
 msgid "Switch to the previous unread chat"
-msgstr ""
+msgstr "Započni razgovor"
 
 msgid "Sync Threshold"
 msgstr ""
@@ -5381,10 +5236,6 @@ msgstr ""
 #, fuzzy
 msgid "Synchronize"
 msgstr "Sinhronizuj"
-
-#, fuzzy
-msgid "Synchronize Accounts"
-msgstr "Sinhronizuj kontakte"
 
 #, fuzzy
 msgid "Synchronize Chat History"
@@ -5470,13 +5321,6 @@ msgid ""
 "note that this can have other side effects."
 msgstr ""
 
-#, python-format
-msgid ""
-"The file %s has been received, but it seems to have been damaged along the "
-"way.\n"
-"Do you want to download it again?"
-msgstr ""
-
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
@@ -5503,12 +5347,6 @@ msgstr "Servis je vratio grešku."
 #, fuzzy
 msgid "The server was shut down."
 msgstr "Vaš server ne podržava Vcard"
-
-msgid "The service could not be found"
-msgstr "Usluga ne može biti nađena"
-
-msgid "The service is not browsable"
-msgstr "Usluge nisu pretražive"
 
 msgid "The signing certificate authority is not known"
 msgstr ""
@@ -5568,9 +5406,6 @@ msgstr "Odaberite sliku"
 msgid "This account has already been added"
 msgstr "Nalog je uspešno dodat"
 
-msgid "This account is not connected to the server"
-msgstr "Ovaj nalog nije povezan na server"
-
 #, fuzzy
 msgid "This address does not seem to offer any gateway service."
 msgstr "Ovo nije grupni razgovor"
@@ -5582,6 +5417,9 @@ msgstr "Usluge nisu pretražive"
 msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
+
+msgid "This contact does not share their status with you"
 msgstr ""
 
 #, fuzzy
@@ -5703,9 +5541,6 @@ msgstr ""
 msgid "Three Months"
 msgstr ""
 
-msgid "Time"
-msgstr "Vreme"
-
 msgid "Time Until Away"
 msgstr ""
 
@@ -5736,30 +5571,17 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Učesnik"
 
+#, fuzzy
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "Prikaži trans_porte"
 
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Učesnik"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Transferred: "
-msgstr "Prenosi datoteka"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Transferring"
-msgstr "Prenos u toku"
-
-#, fuzzy
 msgid "Transferring File…"
 msgstr "Prenos u toku"
-
-#, fuzzy, python-format
-msgid "Transport \"%s\" will be removed"
-msgstr "Transport \"%s\" će biti uklonjen"
 
 msgid "Transports"
 msgstr "Prenosi"
@@ -5816,14 +5638,6 @@ msgstr "Tip"
 msgid "Type to search for values..."
 msgstr ""
 
-#, fuzzy
-msgctxt "File transfer type"
-msgid "Type: "
-msgstr "Tip"
-
-msgid "UPnP-IGD Port Forwarding"
-msgstr ""
-
 msgid "URI"
 msgstr ""
 
@@ -5857,10 +5671,6 @@ msgstr "Ne mogu učitati sliku"
 
 msgid "Unable to verify the first certificate"
 msgstr "U nemogućnosti da verifikujem prvi sertifikat"
-
-#, fuzzy
-msgid "Unblock"
-msgstr "_Odblokiraj"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -5920,10 +5730,6 @@ msgstr "Zahtev za prenosom datoteke"
 msgid "Unpin Chat"
 msgstr "Zahtev za prenosom datoteke"
 
-#, fuzzy
-msgid "Unread Messages"
-msgstr "Nepročitani događaji"
-
 msgid "Unsupported certificate purpose"
 msgstr "Nepodržana svrha sertifikata"
 
@@ -5967,17 +5773,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+#, fuzzy
 msgid "Updating provider list…"
-msgstr ""
-
-#, fuzzy
-msgctxt "Noun"
-msgid "Upload"
-msgstr "Snimi datoteku kao..."
-
-#, fuzzy
-msgid "Upload Files"
-msgstr "Snimi datoteku kao..."
+msgstr "Ne mogu učitati sliku"
 
 #, fuzzy
 msgid "Upload File…"
@@ -6050,10 +5848,6 @@ msgstr "_Korisničko ime:"
 msgid "User Interface Font Size"
 msgstr ""
 
-#, fuzzy
-msgid "User name…"
-msgstr "_Korisničko ime:"
-
 msgid "Users"
 msgstr "Korisnici"
 
@@ -6099,18 +5893,15 @@ msgstr "Podrazumevana poruka"
 msgid "Video Resolution"
 msgstr "Privatni Razgovori"
 
-#, fuzzy
-msgid "Video calls are not available on Windows"
-msgstr "Veza nije dostupna"
-
 msgid "Video test"
 msgstr ""
 
 msgid "Visit Provider's Website"
 msgstr ""
 
+#, fuzzy
 msgid "Visit Website"
-msgstr ""
+msgstr "Registruj se na %s"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -6138,15 +5929,16 @@ msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
 #, fuzzy
+msgid "WAV Sounds"
+msgstr "Wav Zvukovi"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Piše"
 
 #, fuzzy
 msgid "Warning"
 msgstr "Zabranjujem %s"
-
-msgid "Wav Sounds"
-msgstr "Wav Zvukovi"
 
 #, fuzzy, python-format
 msgid "Web Search URL is missing a \"%s\""
@@ -6168,8 +5960,9 @@ msgstr "Sakrij ovaj meni"
 msgid "What happened"
 msgstr ""
 
+#, fuzzy
 msgid "Where participants should go"
-msgstr ""
+msgstr "Učesnik"
 
 #, fuzzy
 msgid ""
@@ -6189,9 +5982,6 @@ msgstr ""
 
 msgid "Windows"
 msgstr ""
-
-msgid "Without a connection, you can not browse available services"
-msgstr "Bez uspostavljene veze, ne možete razgledati dostupne usluge"
 
 msgid "Work"
 msgstr "Posao"
@@ -6251,6 +6041,10 @@ msgstr "Vi"
 msgid "You (%s) joined the group chat"
 msgstr "%s se pridružio grupnom razgovoru"
 
+#, fuzzy
+msgid "You Have Unread Messages"
+msgstr "Imate nepročitanih poruka"
+
 msgid "You are a visitor"
 msgstr ""
 
@@ -6267,7 +6061,7 @@ msgstr ""
 "PyOpenSSL da sprečite ovo. Da li želite da nastavite?"
 
 #, fuzzy, python-format
-msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
 msgstr "Upravo ćete ukloniti \"%(name)s\" (%(jid)s) iz vaše liste kontakata.\n"
 
 #, fuzzy
@@ -6281,8 +6075,11 @@ msgstr ""
 msgid "You are not connected"
 msgstr "Niste povezani na server"
 
-msgid "You are not connected to the server"
-msgstr "Niste povezani na server"
+#, fuzzy
+msgid ""
+"You are not connected to the server. Without a connection, you can not "
+"browse available services"
+msgstr "Bez uspostavljene veze, ne možete razgledati dostupne usluge"
 
 #, python-format
 msgid "You are now known as %s"
@@ -6321,9 +6118,6 @@ msgstr "Ne možete dodati sebe u Vašu listu kontakata."
 msgid "You cannot see this contact's online status"
 msgstr "Ne možete dodati sebe u Vašu listu kontakata."
 
-msgid "You cannot synchronize with an account unless it is connected."
-msgstr "Ne možete se sinhronizovati sa nalogom ako niste povezani."
-
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
@@ -6333,14 +6127,8 @@ msgid ""
 "Error: %s."
 msgstr "Nemate privilegija za pisanje u ovoj fascikli"
 
-#, fuzzy
-msgid "You do not have permissions to create files in this directory."
-msgstr "Nemate privilegija za pisanje u ovoj fascikli"
-
-#, fuzzy
-msgid ""
-"You do not have the proper permissions to create files in this directory."
-msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+msgid "You don't share your status with this contact"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -6389,26 +6177,10 @@ msgid "You requested to see this contact's online status"
 msgstr "Traži njegov/njen status"
 
 #, fuzzy
-msgid "You still have running file transfers"
-msgstr "Prekini prenos datoteke"
-
-#, fuzzy
-msgid "You still have unread messages"
-msgstr "Imate nepročitanih poruka"
-
-#, fuzzy
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
 msgstr "Džaber ID kontakta koji će primiti poruku"
-
-#, fuzzy
-msgid ""
-"You will no longer be able to send and receive messages from and to contacts "
-"using this transport."
-msgstr ""
-"Nećete više biti u mogućnosti da razmenjujete poruke sa kontkatima sa ovog "
-"transporta."
 
 #, fuzzy
 msgid "Your Nickname"
@@ -6486,10 +6258,6 @@ msgstr "_Nalozi"
 msgid "_Accounts"
 msgstr "Nalozi"
 
-#, python-format
-msgid "_Actions for \"%s\""
-msgstr "_Akcije za nalog \"%s\""
-
 #, fuzzy
 msgid "_Add Account…"
 msgstr "_Dodaj kontakt..."
@@ -6525,9 +6293,6 @@ msgstr "_Zauzet"
 
 msgid "_Cancel"
 msgstr "_Odustani"
-
-msgid "_Clear"
-msgstr ""
 
 #, fuzzy
 msgid "_Clear Devices"
@@ -6593,20 +6358,12 @@ msgstr "_Ne pitaj me više"
 msgid "_Download"
 msgstr "_Ne pitaj me više"
 
-#, fuzzy
-msgid "_Download Again"
-msgstr "_Ne pitaj me više"
-
 msgid "_Edit"
 msgstr "_Izmeni"
 
 #, fuzzy
 msgid "_Features"
 msgstr "Mogućnosti"
-
-#, fuzzy
-msgid "_File Transfer"
-msgstr "Prenosi datoteka"
 
 #, fuzzy
 msgctxt "User status"
@@ -6640,8 +6397,9 @@ msgstr ""
 msgid "_Leave"
 msgstr ""
 
+#, fuzzy
 msgid "_Log In"
-msgstr ""
+msgstr "Otići sa veze i povezati se odmah?"
 
 #, fuzzy
 msgid "_Manage Accounts…"
@@ -6664,10 +6422,6 @@ msgid "_Name"
 msgstr "_Ime:"
 
 #, fuzzy
-msgid "_New post"
-msgstr "Nova objava"
-
-#, fuzzy
 msgid "_No"
 msgstr "Ništa"
 
@@ -6685,10 +6439,6 @@ msgstr "_Nije na vezi"
 #, fuzzy
 msgid "_Open"
 msgstr "OpenPGP"
-
-#, fuzzy
-msgid "_Open Folder"
-msgstr "_Otvori sadržavajuću fasciklu"
 
 msgid "_Overwrite"
 msgstr ""
@@ -6759,19 +6509,12 @@ msgid "_Show Certificate"
 msgstr "Samopotpisani sertifikat"
 
 #, fuzzy
-msgid "_Show notification when file transfer is complete"
-msgstr "_Obavesti me kada se završi prenos datoteke"
-
-#, fuzzy
 msgid "_Sign Up"
 msgstr "Prijavljivanju"
 
 #, fuzzy
 msgid "_Start / Join Chat…"
 msgstr "Započni razgovor"
-
-msgid "_Start Chat..."
-msgstr "_Započni razgovor"
 
 msgid "_Stop Sharing"
 msgstr ""
@@ -6861,9 +6604,6 @@ msgstr "Nalog"
 msgid "countrycode"
 msgstr "Nalog"
 
-msgid "dark skin tone"
-msgstr ""
-
 msgid "datum"
 msgstr ""
 
@@ -6885,9 +6625,6 @@ msgstr ""
 msgctxt "Group chat address"
 msgid "family"
 msgstr ""
-
-msgid "file transfers list"
-msgstr "lista prenosa datoteka"
 
 msgid "floor"
 msgstr ""
@@ -6919,11 +6656,6 @@ msgstr ""
 msgid "libsoup Version: %s"
 msgstr "GTK+ verzija:"
 
-#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
-#. You can use the hex value to find the matching string.
-msgid "light skin tone"
-msgstr ""
-
 msgid "locality"
 msgstr ""
 
@@ -6932,15 +6664,6 @@ msgid "lon"
 msgstr "jedan"
 
 msgid "macOS"
-msgstr ""
-
-msgid "medium skin tone"
-msgstr ""
-
-msgid "medium-dark skin tone"
-msgstr ""
-
-msgid "medium-light skin tone"
 msgstr ""
 
 msgctxt "Group chat address"
@@ -7046,6 +6769,18 @@ msgstr "%(nick)s je trenutno %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s nije pronađen"
+
+#, fuzzy, python-format
+#~ msgid "%s wants to send you a file"
+#~ msgstr "%s Vam želi poslati datoteku."
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/sek)"
 
 #, fuzzy
 #~ msgid "<Description>"
@@ -7254,8 +6989,97 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?status prenosa:Pauziran"
 
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "Datoteka sa ovim imenom već postoji i nemate privilegijaprepisati je."
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "Lista prenosa aktivnih, završenih i zaustavljenih datoteka"
+
+#, fuzzy, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "Račun \"%s\" je povezan na server"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Registracija neuspela"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Izmeni _grupe"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Grupe"
+
+#, fuzzy
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Jeste li sigurni da želite napustiti grupni razgovor \"%s\"?"
+
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Jeste li sigurni da želite zatvoriti Gajim?"
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Privatni Razgovori"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Datoteka: "
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Autorizacija poslata"
+
+#, fuzzy
+#~ msgid "Autojoin"
+#~ msgstr "Automatsko povezivanje"
+
+#, fuzzy
+#~ msgid "Block…"
+#~ msgstr "_Blokiraj"
+
+#, fuzzy
+#~ msgid "Bookmarks"
+#~ msgstr "_Markiraj ovu so_bu"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "_Markiraj ovu so_bu"
+
+#, fuzzy
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr "Prekini prenos označene datoteke i izbriši nedovršenu datoteku"
+
+#, fuzzy, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "Nije moguće prepisati postojeću datoteku \"%s\""
+
+#, fuzzy
+#~ msgid "Checking file…"
+#~ msgstr "Slanje profila..."
+
+#, fuzzy
+#~ msgid "Choose Archive"
+#~ msgstr "Odaberite sliku"
+
+#, fuzzy
+#~ msgid "Choose Avatar…"
+#~ msgstr "Odaberite sliku"
+
+#, fuzzy
+#~ msgid "Choose File to Send…"
+#~ msgstr "Odaberite datoteku za slanje..."
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Završen"
+
+#~ msgid "Connection not available"
+#~ msgstr "Veza nije dostupna"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7265,6 +7089,37 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "_Kopiraj lokaciju veze"
 
+#~ msgid "Create new post"
+#~ msgstr "Napravi novu objavu"
+
+#, fuzzy
+#~ msgid "Current Developers"
+#~ msgstr "Trenutni programeri:"
+
+#, fuzzy
+#~ msgid "Debug Console"
+#~ msgstr "XML Konzola"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Podrazumevana poruka"
+
+#~ msgid "Description: "
+#~ msgstr "Opis:"
+
+#, fuzzy
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "Prenos datoteke zaustavljen"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "Skidanje"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Šalje datoteku kontaktu"
+
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Slanje profila..."
@@ -7273,13 +7128,75 @@ msgstr ""
 #~ msgid "Edit workspace…"
 #~ msgstr "Izmeni _grupe"
 
+#, python-format
+#~ msgid "Error message: %s"
+#~ msgstr "Poruka greške: %s"
+
+#, fuzzy
+#~ msgid "Error!"
+#~ msgstr "Greška"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Mogućnost nije dostupna pod Vindouz sistemom."
+
+#, fuzzy
+#~ msgid "File Name: "
+#~ msgstr "Ime datoteke: %s"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "Prenosi datoteka"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "Greška pri prenosu datoteke"
+
+#, fuzzy
+#~ msgid "File Transfer Failed"
+#~ msgstr "Prenosi datoteka"
+
+#~ msgid "File Transfers"
+#~ msgstr "Prenosi datoteka"
+
+#, fuzzy
+#~ msgid "File error"
+#~ msgstr "Greška pri prenosu datoteke"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "Prenos datoteke zaustavljen"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Ime datoteke: %s"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Greška pri prenosu datoteke"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Privatni Razgovori"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
 
 #, fuzzy
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim ne može pristupiti ovoj datoteci"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Sakrij ovaj meni"
+
+#~ msgid "Images"
+#~ msgstr "Slike"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Aktivno"
+
+#~ msgid "Invalid File"
+#~ msgstr "Neispravna datoteka"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"
@@ -7289,6 +7206,9 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Pozovi kontakte"
 
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "Nije moguće poslati praznu datoteku"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Razlog"
@@ -7296,6 +7216,105 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Poruke"
+
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "statusna poruka"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "Izmeni nalog"
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Preimenuj kontakt"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "Veza nije dostupna"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Nije počeo"
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Prekini prenos datoteke"
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Prikaži sv_e događaje na čekanju"
+
+#~ msgid "Progress"
+#~ msgstr "Napredak"
+
+#, fuzzy
+#~ msgid "Re-Login"
+#~ msgstr "Otići sa veze i povezati se odmah?"
+
+#, fuzzy
+#~ msgid "Really block this contact?"
+#~ msgstr "Da li je OpenPGP omogućen za ovaj kontakt?"
+
+#~ msgid "Recipient: "
+#~ msgstr "Primaoc: "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Primaoc: %s"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Nedavno:"
+
+#, fuzzy
+#~ msgid "Remove Group..."
+#~ msgstr "Ukloni grupu"
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "Prikaži trans_porte"
+
+#, fuzzy
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr "Ukloni završene, prekinute i neuspele prenose datoteka iz liste"
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Uklanja kontakt sa liste"
+
+#, fuzzy
+#~ msgid "Remove…"
+#~ msgstr "_Ukloni"
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Zahteva python-gnome2."
+
+#, fuzzy
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Zahteva libxss biblioteku."
+
+#, fuzzy
+#~ msgid "Save File as…"
+#~ msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "Pošalji _datoteku"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "Odaberite nalog sa kojim želite da se sinhronizujete"
+
+#, fuzzy
+#~ msgid "Select the contacts you want to synchronize"
+#~ msgstr "Odaberite kontakte koje želite da sinhronizujete"
 
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
@@ -7306,27 +7325,180 @@ msgstr ""
 #~ msgstr "_Pošalji"
 
 #, fuzzy
+#~ msgid "Send File Directly…"
+#~ msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Snimi datoteku kao..."
+
+#~ msgid "Sender: "
+#~ msgstr "Pošaljilac: "
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Prikaži kontakte koji nisu na vezi"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Mogućnosti"
+
+#, fuzzy
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr "Prikazuje listu prenosa datoteka između Vas i ostalih"
+
+#, fuzzy
+#~ msgid "Sort by Status"
+#~ msgstr "Sortiraj kontakte po statusu"
+
+#~ msgid "Sta_tus"
+#~ msgstr "Sta_tus"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Zastoj"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Započni razgovor"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "Prenosi datoteka"
 
 #~ msgid "Synchronise"
 #~ msgstr "Sinhronizuj"
 
 #, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Sinhronizuj kontakte"
+
+#~ msgid "The service could not be found"
+#~ msgstr "Usluga ne može biti nađena"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "Ovaj nalog nije povezan na server"
+
+#~ msgid "Time"
+#~ msgstr "Vreme"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Prenosi datoteka"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Prenos u toku"
+
+#, fuzzy, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "Transport \"%s\" će biti uklonjen"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Tip"
+
+#, fuzzy
+#~ msgid "Unblock"
+#~ msgstr "_Odblokiraj"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "Nepročitani događaji"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Upload"
+#~ msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Snimi datoteku kao..."
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Korisničko ime:"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Veza nije dostupna"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "Da li zaista želite da izbrišete označenu poruku?"
+
+#, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Jeste li sigurni da želite zatvoriti Gajim?"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "Niste povezani na server"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr "Ne možete se sinhronizovati sa nalogom ako niste povezani."
+
+#, fuzzy
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "Nemate privilegija za pisanje u ovoj fascikli"
+
+#, fuzzy
+#~ msgid "You still have running file transfers"
+#~ msgstr "Prekini prenos datoteke"
+
+#, fuzzy
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr ""
+#~ "Nećete više biti u mogućnosti da razmenjujete poruke sa kontkatima sa "
+#~ "ovog transporta."
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Ne pitaj me više"
 
 #, fuzzy
-#~ msgid "_Login"
-#~ msgstr "Otići sa veze i povezati se odmah?"
+#~ msgid "_Download Again"
+#~ msgstr "_Ne pitaj me više"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "Prenosi datoteka"
 
 #, fuzzy
 #~ msgid "_Modify Account…"
 #~ msgstr "Izmeni nalog"
+
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "Nova objava"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "_Otvori sadržavajuću fasciklu"
+
+#, fuzzy
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "_Obavesti me kada se završi prenos datoteke"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "_Započni razgovor"
+
+#~ msgid "file transfers list"
+#~ msgstr "lista prenosa datoteka"
 
 #, fuzzy
 #~ msgid "yesterday "

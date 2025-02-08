@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 10:56+0000\n"
+"POT-Creation-Date: 2025-02-08 22:23+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -41,6 +41,12 @@ msgstr "%(contact)s a refuzat invitația dumneavoastră la %(chat)s"
 #, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "%(contact)s v-a invitat la %(chat)s"
+
+#, python-format
+msgid ""
+"%(count)s messages from %(participant)s will be moderated.\n"
+"Why do you want to moderate these messages?"
+msgstr ""
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -128,10 +134,6 @@ msgid "%s can be joined by invite only."
 msgstr "%s se poate alătura doar pe bază de invitație."
 
 #, python-format
-msgid "%s group chats found"
-msgstr "%s grupuri de chat găsite"
-
-#, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%s a fost invitat la acest grup de chat"
 
@@ -160,14 +162,6 @@ msgid "%s is not a valid loglevel"
 msgstr "%s nu este un nivel de jurnal valid"
 
 #, python-format
-msgid ""
-"%s is online with multiple devices.\n"
-"Choose the device you would like to send the files to."
-msgstr ""
-"%s este online cu mai multe dispozitive.\n"
-"Alegeți dispozitivul la care doriți să trimiteți fișierul."
-
-#, python-format
 msgid "%s is typing…"
 msgstr "%s tastează…"
 
@@ -192,10 +186,6 @@ msgid "%s stopped the transfer"
 msgstr "%s a oprit transferul"
 
 #, python-format
-msgid "%s wants to send you a file"
-msgstr "%s vrea să vă trimită un fișier"
-
-#, python-format
 msgctxt "positive longitude"
 msgid "%sE"
 msgstr "%sE"
@@ -214,14 +204,6 @@ msgstr "%sS"
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr "%sW"
-
-#. Translators:
-#. This should make the string KB/s,
-#. where 'KB' part is taken from %s.
-#. Only the 's' after / (which means second) should be translated.
-#, python-format
-msgid "(%(filesize_unit)s/s)"
-msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -366,17 +348,8 @@ msgstr "Un chat de grup are nevoie de cel puțin un proprietar"
 msgid "A feature comparison of various providers"
 msgstr "O comparație de caracteristici a diferitelor servere"
 
-msgid ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-msgstr ""
-"Există deja un fișier cu acest nume și nu aveți permisiunea de a-l înlocui."
-
 msgid "A fully-featured XMPP chat client"
 msgstr "Gajim, un client de chat XMPP cu funcționalități complete"
-
-msgid "A list of active, completed and stopped file transfers"
-msgstr "O listă a transferurilor de fișiere active, finalizate și oprite"
 
 msgid ""
 "A list of words (semicolon separated) that will be highlighted in group "
@@ -409,10 +382,6 @@ msgstr "D_eparte"
 msgid "Abort"
 msgstr "Abandon"
 
-msgctxt "File transfer state"
-msgid "Aborted"
-msgstr "Abandonat"
-
 msgid "Abuse"
 msgstr "Abuz"
 
@@ -425,9 +394,11 @@ msgstr "Acceptați toate cererile de contact"
 msgid "Account"
 msgstr "Cont"
 
-#, python-format
-msgid "Account %s is still connected"
-msgstr "Contul %s este încă conectat"
+#, fuzzy, python-format
+msgid ""
+"Account %(name)s is still connected\n"
+"All chat and group chat windows will be closed."
+msgstr "Toate ferestrele de chat și de chat în grup vor fi închise."
 
 msgid "Account Added"
 msgstr "Cont adăugat"
@@ -481,6 +452,10 @@ msgstr "Acțiune la închidere"
 msgid "Action when closing Gajim’s window"
 msgstr "Acțiune la închiderea ferestrei lui Gajim"
 
+#, fuzzy, python-format
+msgid "Actions for \"%s\""
+msgstr "_Acțiuni pentru \"%s\""
+
 msgid "Activate"
 msgstr "Activați"
 
@@ -499,6 +474,10 @@ msgstr "Adăugați un cont"
 msgid "Add Contact"
 msgstr "Adăugați un contact"
 
+#, fuzzy
+msgid "Add Contact to New Group?"
+msgstr "Adăugați un contact"
+
 msgid "Add Contact…"
 msgstr "Adăugați Contact…"
 
@@ -508,6 +487,7 @@ msgstr "Adaugă intrare"
 msgid "Add Files…"
 msgstr "Adăugați fișiere…"
 
+#, fuzzy
 msgid "Add Group…"
 msgstr "Adăugați grup…"
 
@@ -541,9 +521,6 @@ msgstr "Adăugați o nouă temă"
 msgid "Add new line"
 msgstr "Adăugați o nouă linie"
 
-msgid "Add reaction"
-msgstr "Adăugați reacția"
-
 msgid "Add some details…"
 msgstr "Adăugați câteva detalii…"
 
@@ -552,6 +529,10 @@ msgstr "Adăugați acest certificat la lista de certificate de _încredere"
 
 msgid "Add to Contact List…"
 msgstr "Adăugați la lista de contacte…"
+
+#, fuzzy
+msgid "Add to Group"
+msgstr "Adăugați grup…"
 
 #, fuzzy, python-format
 msgid "Added %(count)s contact"
@@ -632,8 +613,9 @@ msgstr "Toate conturile"
 msgid "All Chat States"
 msgstr "Toate stările de chat"
 
-msgid "All chat and group chat windows will be closed."
-msgstr "Toate ferestrele de chat și de chat în grup vor fi închise."
+#, fuzzy
+msgid "All Chats"
+msgstr "Toate stările de chat"
 
 msgid "All files"
 msgstr "Toate fișierele"
@@ -703,9 +685,6 @@ msgstr "Și multe altele..."
 msgid "Anonymous login not supported"
 msgstr "Nu se acceptă autentificarea anonimă"
 
-msgid "Another process is using this file."
-msgstr "Un alt proces folosește acest fișier."
-
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Orice participant are voie să vă vadă adresa XMPP completă"
 
@@ -726,6 +705,10 @@ msgstr "Aprobați"
 
 msgid "Archive"
 msgstr "Arhivă"
+
+#, fuzzy
+msgid "Archive Malformed"
+msgstr "Arhiva este malformată"
 
 msgid "Archive corrupted"
 msgstr "Arhivă coruptă"
@@ -753,9 +736,6 @@ msgstr "Preferințe de arhivare salvate"
 msgid "Archiving Preferences for %s"
 msgstr "Preferințe de arhivare pentru %s"
 
-msgid "Are you sure you want to leave this group chat?"
-msgstr "Ești sigur că vrei să părăsești acest grup de chat?"
-
 msgid "Artists"
 msgstr "Artiști"
 
@@ -771,12 +751,6 @@ msgstr "Întrebați înainte de a părăsi când fereastra lui Gajim este închi
 msgid "Attention Message Received"
 msgstr "Atenție mesaj primit"
 
-msgid "Audio"
-msgstr "Audio"
-
-msgid "Audio / Video Calls"
-msgstr "Apeluri audio / video"
-
 msgid "Audio File"
 msgstr "Fișier audio"
 
@@ -786,17 +760,11 @@ msgstr "Dispozitiv de intrare audio"
 msgid "Audio Output Device"
 msgstr "Dispozitiv de ieșire audio"
 
-msgid "Audio Preview"
-msgstr "Previzualizare audio"
-
 msgid "Audio preview is not available"
 msgstr "Previzualizarea audio nu este disponibilă"
 
 msgid "Audio test"
 msgstr "Test audio"
-
-msgid "Audio/Video"
-msgstr "Audio/Video"
 
 msgid "Authentication aborted"
 msgstr "Autentificarea a eșuat"
@@ -824,9 +792,6 @@ msgstr ""
 "Necorelări între identificatorul de autoritate și identificatorul de cheie "
 "al subiectului"
 
-msgid "Authorization Request"
-msgstr "Cerere de autorizare"
-
 msgid "Authors"
 msgstr "Autori"
 
@@ -844,9 +809,6 @@ msgstr "Auto Nu este disponibil"
 
 msgid "Autodetect"
 msgstr "Autodetecție"
-
-msgid "Autojoin"
-msgstr "Alăturare automată"
 
 msgid "Automatic Status"
 msgstr "Stare automată"
@@ -917,7 +879,8 @@ msgstr "Aveți încredere oarbă în noile dispozitive până când le verifica�
 msgid "Block"
 msgstr "Blochează"
 
-msgid "Block Contact"
+#, fuzzy
+msgid "Block Contact?"
 msgstr "Contact blocat"
 
 msgid "Block Contact…"
@@ -929,16 +892,6 @@ msgstr "Lista de blocare"
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Lista de blocare pentru %s"
-
-msgid "Block…"
-msgstr "Blochează…"
-
-msgid "Bookmarks"
-msgstr "Semne de carte"
-
-#, python-format
-msgid "Bookmarks for %s"
-msgstr "Marcaje pentru %s"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1005,14 +958,6 @@ msgstr "Anulează"
 
 msgid "Cancel Download"
 msgstr "Anulați Descărcarea"
-
-msgid "Cancel the selected file transfer and remove incomplete files"
-msgstr ""
-"Anularea transferului de fișiere selectat și eliminarea fișierelor incomplete"
-
-#, python-format
-msgid "Cannot overwrite existing file \"%s\""
-msgstr "Nu se poate suprascrie fișierul existent \"%s\""
 
 msgid "Certificate"
 msgstr "Certificat"
@@ -1098,6 +1043,10 @@ msgstr ""
 "Caracter de adăugat după poreclă atunci când se utilizează completarea "
 "poreclei (tab) în chat-ul de grup."
 
+#, fuzzy
+msgid "Chat"
+msgstr "Chat-uri"
+
 msgid "Chat Banner: Background Color"
 msgstr "Banner de chat: Culoare de fundal"
 
@@ -1112,6 +1061,10 @@ msgstr "Detalii și Setări pentru chat"
 
 msgid "Chat List"
 msgstr "Lista de chat"
+
+#, fuzzy
+msgid "Chat Type"
+msgstr "Tip"
 
 msgid "Chat history"
 msgstr "Istoric chat"
@@ -1141,20 +1094,8 @@ msgstr "Verificați dacă există actualizări"
 msgid "Check for updates periodically"
 msgstr "Verificați dacă există actualizări"
 
-msgid "Checking file…"
-msgstr "Verificarea fișierului…"
-
-msgid "Choose Archive"
-msgstr "Alegeți Arhiva"
-
-msgid "Choose Avatar…"
-msgstr "Alege Avatar…"
-
 msgid "Choose Device"
 msgstr "Alegeți dispozitivul"
-
-msgid "Choose File to Send…"
-msgstr "Alegeți Fișier de trimis…"
 
 msgid "Choose History Export Directory"
 msgstr "Alegeți Directorul de export istoric"
@@ -1183,11 +1124,9 @@ msgstr "Orașul"
 msgid "Clear"
 msgstr "Clar"
 
-msgid "Clear Devices"
+#, fuzzy
+msgid "Clear Devices?"
 msgstr "Dispozitive Șterse"
-
-msgid "Clear Devices Now?"
-msgstr "Ștergeți dispozitivele acum?"
 
 msgid "Clear Devices…"
 msgstr "Ștergeți Dispozitivele…"
@@ -1299,10 +1238,6 @@ msgstr "Completați o comandă sau o poreclă"
 msgid "Completed"
 msgstr "Completat"
 
-msgctxt "File transfer state"
-msgid "Completed"
-msgstr "Efectuat"
-
 msgid "Composing Only"
 msgstr "Doar pentru compoziție"
 
@@ -1355,9 +1290,6 @@ msgstr "Setări de conectare"
 
 msgid "Connection failed"
 msgstr "Conexiunea a eșuat"
-
-msgid "Connection not available"
-msgstr "Conexiunea nu este disponibilă"
 
 #, python-format
 msgid "Connection with %s could not be established."
@@ -1488,18 +1420,26 @@ msgctxt "Message row action"
 msgid "Correct…"
 msgstr "Corect…"
 
+#, fuzzy
+msgid "Could Not Save File"
+msgstr "Nu s-a putut salva fișierul"
+
 msgid "Could not access file"
 msgstr "Nu s-a putut accesa fișierul"
+
+msgid "Could not find any messages for this participant."
+msgstr ""
 
 #, python-format
 msgid "Could not open file (%s)"
 msgstr "Datei konnte nicht geöffnet werden (%s)"
 
-msgid "Could not save file"
-msgstr "Nu s-a putut salva fișierul"
-
 msgid "Could not save file to selected directory."
 msgstr "Nu s-a putut salva fișierul în directorul selectat."
+
+#, fuzzy
+msgid "Could not select file or folder"
+msgstr "Nu s-a putut salva fișierul"
 
 #, fuzzy
 msgid "Could not update providers list"
@@ -1526,9 +1466,6 @@ msgstr "Creați _Group Chat…"
 msgid "Create new group chat"
 msgstr "Creați un nou chat de grup"
 
-msgid "Create new post"
-msgstr "Creați un post nou"
-
 msgid "Creating Account..."
 msgstr "Crearea contului..."
 
@@ -1537,9 +1474,6 @@ msgstr "Crearea miniaturii a eșuat"
 
 msgid "Credentials expired"
 msgstr "Credențiale expirate"
-
-msgid "Current Developers"
-msgstr "Dezvoltatorii actuali"
 
 msgid "D-Bus Interface"
 msgstr "Interfață D-Bus"
@@ -1555,9 +1489,6 @@ msgstr "Migrarea bazei de date a eșuat"
 
 msgid "Deactivated"
 msgstr "Dezactivat"
-
-msgid "Debug Console"
-msgstr "Consola Debug"
 
 msgid "Debug Logging"
 msgstr "Jurnalizare de depanare"
@@ -1610,24 +1541,25 @@ msgstr "Implicit pentru noile chat-uri de grup publice"
 msgid "Delete"
 msgstr "Ștergeți"
 
-msgid "Delete Fingerprint"
+#, fuzzy
+msgid "Delete Fingerprint?"
 msgstr "Ștergeți amprenta digitală"
 
-msgid "Delete Message"
-msgstr "Ștergeți mesajul"
+#, fuzzy
+msgid "Delete Message Locally?"
+msgstr "Ștergeți mesajul local…"
 
 msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr "Ștergeți mesajul local…"
 
-msgid "Delete PEP node?"
+#, fuzzy
+msgid "Delete Node?"
 msgstr "Ștergeți nodul PEP?"
 
-msgid "Delete Theme"
+#, fuzzy
+msgid "Delete Theme?"
 msgstr "Ștergeți tema"
-
-msgid "Delete message locally?"
-msgstr "Ștergeți mesajul local?"
 
 msgid "Deny"
 msgstr "Refuzați"
@@ -1638,9 +1570,6 @@ msgstr "Refuzați toate cererile de abonament"
 msgid "Description"
 msgstr "Descriere"
 
-msgid "Description: "
-msgstr "Descriere: "
-
 msgid "Destroy Group Chat…"
 msgstr "Distrugeți Grupchatul…"
 
@@ -1649,6 +1578,10 @@ msgstr "Distruge acest chat"
 
 msgid "Details"
 msgstr "Detalii"
+
+#, fuzzy
+msgid "Developers"
+msgstr "Dezvoltatori din trecut"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1671,17 +1604,26 @@ msgstr "La URL-ul dicționarului lipsește un \"%s\""
 msgid "Direct Messages"
 msgstr "Mesaje directe"
 
-msgid "Direct transfer (not encrypted)"
-msgstr "Transfer direct (necriptat)"
+#, fuzzy
+msgid "Direct Message…"
+msgstr "Mesaje directe"
 
 msgid "Directory"
 msgstr "Director"
 
-#, python-format
-msgid "Directory \"%s\" is not writable"
+#, fuzzy, python-format
+msgid ""
+"Directory \"%s\" is not writable. You do not have the proper permissions to "
+"create files in this directory."
+msgstr ""
+"Nu aveți permisiunile necesare pentru a crea fișiere în acest director."
+
+#, fuzzy
+msgid "Directory Not Writable"
 msgstr "Directorul \"%s\" nu poate fi scris"
 
-msgid "Disable Account"
+#, fuzzy
+msgid "Disable Account?"
 msgstr "Dezactivați contul"
 
 msgid "Disabled"
@@ -1728,8 +1670,8 @@ msgstr "Acceptați această cerere?"
 msgid "Do you really want to delete this PEP node?"
 msgstr "Chiar doriți să ștergeți acest nod PEP?"
 
-#, python-format
-msgid "Do you really want to remove \"%s\"?"
+#, fuzzy, python-format
+msgid "Do you really want to remove \"%(group)s\"?"
 msgstr "Chiar doriți să eliminați \"%s\"?"
 
 msgid ""
@@ -1740,6 +1682,10 @@ msgstr ""
 "Chiar vrei să elimini toate mesajele de chat din Gajim?\n"
 "Atenție: Acest lucru nu poate fi anulat!\n"
 "Gajim va ieși din joc după aceea."
+
+#, fuzzy
+msgid "Do you really want to remove this proxy?"
+msgstr "Chiar doriți să eliminați \"%s\"?"
 
 msgid "Do you really want to remove your chat history for this chat?"
 msgstr "Chiar doriți să ștergeți istoricul de chat pentru acest chat?"
@@ -1762,10 +1708,6 @@ msgstr "Nu mai aratați asta din nou"
 
 msgid "Download"
 msgstr "Descărcați"
-
-msgctxt "Noun"
-msgid "Download"
-msgstr "Descărcare"
 
 msgid "Download File"
 msgstr "Descărcați fișierul"
@@ -1793,9 +1735,6 @@ msgstr "Schiță: %s"
 
 msgid "Drop files here"
 msgstr "Aruncați fișierele aici"
-
-msgid "Drop files or contacts"
-msgstr "Aruncați fișiere sau contacte"
 
 msgid "Easily send pictures, videos or other files to friends and groups"
 msgstr ""
@@ -1832,6 +1771,9 @@ msgstr "E-mail"
 msgid "Emoji Shortcodes"
 msgstr "Shortcodes Emoji"
 
+msgid "Emojis"
+msgstr ""
+
 msgid "Enable"
 msgstr "Activați"
 
@@ -1851,21 +1793,6 @@ msgstr ""
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Permite lui Gajim să redea sunete pentru diverse notificări"
 
-msgid "Enables Gajim to provide Audio and Video chats"
-msgstr "Permite Gajim să ofere chat-uri audio și video"
-
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Permite Gajim să ofere o previzualizare audio"
-
-msgid "Enables Gajim to provide a notification area icon"
-msgstr "Permite lui Gajim să furnizeze o pictogramă pentru zona de notificare"
-
-msgid ""
-"Enables Gajim to request your router to forward ports for file transfers"
-msgstr ""
-"Permite lui Gajim să solicite routerului dumneavoastră să redirecționeze "
-"porturile pentru transferuri de fișiere"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Permite lui Gajim să vă verifice ortografia mesajelor în timp ce le compuneți"
@@ -1876,10 +1803,6 @@ msgid ""
 msgstr ""
 "Permite lui Gajim să stocheze parolele în siguranță în loc să le stocheze în "
 "text simplu"
-
-msgid "Enables libappindicator, an alternative tray icon provider"
-msgstr ""
-"Activează libappindicator, un furnizor alternativ de pictograme de tavă"
 
 #, python-format
 msgid "Encrypted (%s)"
@@ -1893,6 +1816,10 @@ msgstr "Criptarea fișierului…"
 
 msgid "Encryption (OMEMO)"
 msgstr "Criptare (OMEMO)"
+
+#, fuzzy
+msgid "Encryption Error"
+msgstr "Eroare de criptare"
 
 msgid "Encryption error"
 msgstr "Eroare de criptare"
@@ -1917,6 +1844,14 @@ msgstr ""
 msgid "Enter a password to join this chat"
 msgstr "Introduceți o parolă pentru a vă alătura acestui chat"
 
+#, fuzzy
+msgid "Enter group name"
+msgstr "Introduceți noul dumneavoastră pseudonim"
+
+#, fuzzy
+msgid "Enter new contact name"
+msgstr "Introduceți noul dumneavoastră pseudonim"
+
 msgid "Enter new password..."
 msgstr "Introduceți o nouă parolă..."
 
@@ -1938,10 +1873,6 @@ msgstr "Eroare la încărcarea imaginii"
 msgid "Error in audio data stream."
 msgstr "Eroare în fluxul de date audio."
 
-#, python-format
-msgid "Error message: %s"
-msgstr "Mesaj de eroare: %s"
-
 msgid "Error opening file"
 msgstr "Eroare la deschiderea fișierului"
 
@@ -1950,9 +1881,6 @@ msgstr "Eroare primită: {}"
 
 msgid "Error while Exporting"
 msgstr "Eroare în timpul exportului"
-
-msgid "Error while merging recordings, please try again."
-msgstr ""
 
 msgid "Error while processing image"
 msgstr "Eroare în timpul procesării imaginii"
@@ -1965,9 +1893,6 @@ msgstr "Eroare la preluarea formularului de căutare."
 
 msgid "Error while uploading avatar"
 msgstr "Eroare la încărcarea avatarului"
-
-msgid "Error!"
-msgstr "Eroare!"
 
 #, python-format
 msgid "Error: %s"
@@ -2007,11 +1932,23 @@ msgstr "Expiră la: "
 msgid "Export"
 msgstr "Exportați"
 
+#, fuzzy
+msgid "Export CSV"
+msgstr "Exportați"
+
 msgid "Export Chat History"
 msgstr "Exportați istoricul de chat"
 
+#, fuzzy
+msgid "Export Contacts"
+msgstr "Importați contacte"
+
 msgid "Export Finished"
 msgstr "Export Finalizat"
+
+#, fuzzy
+msgid "Export History…"
+msgstr "Exportați istoricul de chat"
 
 msgid "Export your chat history from Gajim"
 msgstr "Exportați istoricul de chat din Gajim"
@@ -2021,6 +1958,10 @@ msgstr "Exportul istoricului..."
 
 msgid "Exporting your messages..."
 msgstr "Exportul mesajelor dumneavoastră..."
+
+#, fuzzy
+msgid "Export…"
+msgstr "Exportați"
 
 msgid "Extended Address"
 msgstr "Adresa extinsă"
@@ -2047,9 +1988,6 @@ msgctxt "Group chat name"
 msgid "Family"
 msgstr "Familie"
 
-msgid "Feature not available on Windows"
-msgstr "Funcția nu este valabilă pe Windows"
-
 msgid "Features"
 msgstr "Funcții"
 
@@ -2067,12 +2005,6 @@ msgstr "Preluarea mesajelor…"
 
 msgid "File"
 msgstr "Fișier"
-
-msgid "File Name: "
-msgstr "Numele fișierului: "
-
-msgid "File Offered"
-msgstr "Fișier oferit"
 
 msgid "File Offered…"
 msgstr "Fișier oferit…"
@@ -2092,17 +2024,8 @@ msgstr "Transfer de fișiere anulat"
 msgid "File Transfer Completed"
 msgstr "Transfer de fișiere finalizat"
 
-msgid "File Transfer Error"
-msgstr "Eroare de transfer de fișiere"
-
-msgid "File Transfer Failed"
-msgstr "Transferul de fișiere a eșuat"
-
 msgid "File Transfer Stopped"
 msgstr "Transferul de fișiere s-a oprit"
-
-msgid "File Transfers"
-msgstr "Transferuri de fișiere"
 
 msgid "File Verification Failed"
 msgstr "Verificarea fișierelor a eșuat"
@@ -2112,9 +2035,6 @@ msgstr "Fișier corupt în timpul transferului"
 
 msgid "File does not exist"
 msgstr "Fișierul nu există"
-
-msgid "File error"
-msgstr "Eroare fișier"
 
 msgid "File is empty"
 msgstr "Fișierul este gol"
@@ -2126,11 +2046,9 @@ msgstr "Fișierul este prea mare, dimensiunea maximă permisă este: %s"
 msgid "File size unknown"
 msgstr "Dimensiunea fișierului necunoscută"
 
-msgid "File too big, will use direct transfer (not encrypted)"
-msgstr "Fișier prea mare, se va folosi transferul direct (necriptat)"
-
-msgid "File transfer stopped"
-msgstr "Transfer de fișiere oprit"
+#, fuzzy
+msgid "File too big"
+msgstr "Dimensiunea fișierului Avatar prea mare"
 
 msgid "File transfers"
 msgstr "Transferuri de fișiere"
@@ -2139,21 +2057,19 @@ msgstr "Transferuri de fișiere"
 msgid "File: %s"
 msgstr "Fișier: %s"
 
-#, python-format
-msgid "Filename: %s"
-msgstr "Numele fișierului: %s"
-
-msgid "Filetransfer Preference"
-msgstr "Preferința de transfer de fișiere"
-
 msgid "Filter"
 msgstr "Filtru"
 
 msgid "Filter Chats"
 msgstr "Filtrați chat-urile"
 
-msgid "Filter Chats…"
-msgstr "Filtrați chat-urile…"
+#, fuzzy
+msgid "Filters"
+msgstr "Filtru"
+
+#, fuzzy
+msgid "Filters (active)"
+msgstr "Mesaj primit"
 
 msgid "Fingerprint for this Device"
 msgstr "Amprenta digitală pentru acest dispozitiv"
@@ -2171,6 +2087,10 @@ msgid ""
 msgstr ""
 "S-a terminat sincronizarea istoricului de chat:\n"
 "%s mesaje descărcate"
+
+#, fuzzy, python-format
+msgid "Folder: %s"
+msgstr "Fișier: %s"
 
 msgid "For example: \"Julia is now online\""
 msgstr "De exemplu: \"Julia este acum online\""
@@ -2204,6 +2124,10 @@ msgstr "Formatați mesajul dumneavoastră"
 
 msgid "Forward 10 seconds"
 msgstr "Înainte 10 secunde"
+
+#, python-format
+msgid "Found %s contacts to import"
+msgstr ""
 
 msgctxt "User status"
 msgid "Free for Chat"
@@ -2261,9 +2185,6 @@ msgstr ""
 "Gajim își propune să fie un client XMPP ușor de utilizat și complet echipat. "
 "Pur și simplu discutați cu prietenii sau familia, împărtășiți cu ușurință "
 "imagini și gânduri sau discutați știrile cu grupurile dumneavoastră."
-
-msgid "Gajim can not read this file"
-msgstr "Gajim nu poate citi acest fișier"
 
 msgid ""
 "Gajim encountered an error.\n"
@@ -2399,10 +2320,6 @@ msgstr "Suport pentru grupul de chat"
 msgid "Groups"
 msgstr "Grupuri"
 
-msgctxt "proxy configuration"
-msgid "HTTP"
-msgstr "HTTP"
-
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) Autorizare pentru %(url)s (ID: %(id)s)"
@@ -2429,9 +2346,6 @@ msgstr "Ascundeți"
 
 msgid "Hide chat list"
 msgstr "Ascundeți lista de chat"
-
-msgid "Hide this menu"
-msgstr "Ascundeți acest meniu"
 
 msgid "Home"
 msgstr "Acasă"
@@ -2497,13 +2411,6 @@ msgstr ""
 "Dacă este activată, Gajim va ignora cererile de atenție primite (\"wizz\")."
 
 msgid ""
-"If enabled, Gajim will save the main window position when hiding it, and "
-"restore it when showing the window again."
-msgstr ""
-"Dacă este activată, Gajim va salva poziția ferestrei principale atunci când "
-"o ascunde și o va restabili atunci când o afișează din nou."
-
-msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
@@ -2520,14 +2427,6 @@ msgstr ""
 "dumneavoastră în fereastra Conturi. ATENȚIE, atunci când vă conectați cu o "
 "prioritate negativă, NU veți primi niciun mesaj de la server."
 
-msgid ""
-"If you quit now, the file(s) being transferred will be lost.\n"
-"Do you still want to quit?"
-msgstr ""
-"Dacă renunțați acum, fișierul (fișierele) transferat(e) va (vor) fi "
-"pierdut(e).\n"
-"Mai doriți să renunțați?"
-
 msgid "Ignore Unknown Contacts"
 msgstr "Ignoră contactele necunoscute"
 
@@ -2539,11 +2438,30 @@ msgstr ""
 msgid "Image"
 msgstr "Imagine"
 
-msgid "Images"
-msgstr "Imagini"
+#, fuzzy
+msgid "Import"
+msgstr "Exportați"
 
 msgid "Import Contacts"
 msgstr "Importați contacte"
+
+#, fuzzy
+msgid "Import Contacts?"
+msgstr "Importați contacte"
+
+msgid "Import Error"
+msgstr ""
+
+#, fuzzy
+msgid "Import from Account"
+msgstr "Suport pentru conturi multiple"
+
+#, fuzzy
+msgid "Import from File"
+msgstr "Instalare din fișier…"
+
+msgid "Import…"
+msgstr ""
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2583,9 +2501,6 @@ msgstr "Instalați Plugin-ul din fișierul ZIP"
 msgid "Install a keyring to store passwords on your system."
 msgstr "Instalați un breloc pentru a stoca parolele pe sistemul dumneavoastră."
 
-msgid "Install from File…"
-msgstr "Instalare din fișier…"
-
 msgid "Installation failed"
 msgstr "Instalarea a eșuat"
 
@@ -2601,9 +2516,6 @@ msgstr "Adresă invalidă"
 
 msgid "Invalid CA certificate"
 msgstr "Certificat CA invalid"
-
-msgid "Invalid File"
-msgstr "Fișier invalid"
 
 msgid "Invalid Name"
 msgstr "Nume invalid"
@@ -2664,22 +2576,11 @@ msgstr "Eliberat pentru"
 msgid "Issued to\n"
 msgstr "Eliberat pentru\n"
 
-msgid "It is not possible to send empty files"
-msgstr "Nu este posibil să se trimită fișiere goale"
-
 msgid "I’m eating."
 msgstr "Mănânc."
 
 msgid "I’m out enjoying life."
 msgstr "Am ieșit să mă bucur de viață."
-
-#, python-format
-msgid ""
-"I’m synchronizing my contacts from my account at \"%s\". Could you please "
-"add this address to your contact list?"
-msgstr ""
-"Îmi sincronizez contactele din contul meu de la \"%s\". Puteți să adăugați "
-"această adresă la lista de contacte?"
 
 msgid "I’m watching a movie."
 msgstr "Mă uit la un film."
@@ -2759,7 +2660,8 @@ msgstr "Nu în ultimul rând"
 msgid "Last seen: %s"
 msgstr "Ultima vizualizare: %s"
 
-msgid "Leave Group Chat"
+#, fuzzy
+msgid "Leave Group Chat?"
 msgstr "Părăsiți grupul de chat"
 
 #, fuzzy
@@ -2848,6 +2750,9 @@ msgstr ""
 "Căutați lucruri pe Wikipedia, dicționare sau alte motoare de căutare direct "
 "din fereastra de chat"
 
+msgid "Maintainers"
+msgstr ""
+
 msgid "Make Admin"
 msgstr "Faceți Admin"
 
@@ -2867,6 +2772,10 @@ msgstr "Masculin"
 
 msgid "Manage"
 msgstr "Gestionați"
+
+#, fuzzy
+msgid "Manage Contact List"
+msgstr "Lista de contacte"
 
 msgid "Manage Proxies"
 msgstr "Gestionați proxy-urile"
@@ -2965,16 +2874,20 @@ msgstr "Minute până când statutul tău se schimbă"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-msgid "Missing dependencies for Audio/Video"
-msgstr "Dependențe lipsă pentru Audio/Video"
-
 msgid "Missing necessary encryption plugin"
 msgstr "Lipsește plugin-ul de criptare necesar"
 
-msgid "Moderate Message"
+#, fuzzy
+msgid "Moderate Message?"
 msgstr "Mesajul moderat"
 
-msgid "Moderate message?"
+#, fuzzy
+msgid "Moderate Messages?"
+msgstr "Mesajul moderat"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate all messages…"
 msgstr "Moderați mesajul?"
 
 msgctxt "Group chat feature"
@@ -2999,14 +2912,23 @@ msgstr "Moderatori"
 msgid "Modify"
 msgstr "Modificați"
 
-msgid "Modify Gateway…"
-msgstr "Modificare Gateway…"
-
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
+#, fuzzy
+msgid "Move"
+msgstr "Mutați chat-ul"
+
 msgid "Move Chat"
 msgstr "Mutați chat-ul"
+
+#, fuzzy
+msgid "Move Contact to New Group?"
+msgstr "Lista de contacte: Font de grup"
+
+#, fuzzy
+msgid "Move to Group"
+msgstr "Eliminați grupul"
 
 msgid "Movie"
 msgstr "Film"
@@ -3029,7 +2951,8 @@ msgstr "Nume"
 msgid "Name <b>default</b> is not allowed"
 msgstr "Numele <b>default</b> nu este permis"
 
-msgid "Needs gspell to be installed"
+#, fuzzy
+msgid "Needs libspelling to be installed"
 msgstr "Necesită ca gspell să fie instalat"
 
 msgid "Never"
@@ -3043,6 +2966,10 @@ msgid "New Contact"
 msgstr "Contact nou"
 
 msgid "New Group"
+msgstr "Grup nou"
+
+#, fuzzy
+msgid "New Group…"
 msgstr "Grup nou"
 
 msgid "New Search"
@@ -3064,14 +2991,23 @@ msgstr "Următorul"
 msgid "Nickname"
 msgstr "Pseudonimul"
 
+#, fuzzy
+msgid "Nickname contains invalid characters"
+msgstr "Parola conține caractere interzise"
+
+#, fuzzy
+msgid "Nickname…"
+msgstr "Pseudonimul"
+
 msgid "No"
 msgstr "Nu"
 
-msgid "No Connection Available"
-msgstr "Nici o conexiune disponibilă"
-
 msgid "No File Transfer available"
 msgstr "Nu este disponibil transferul de fișiere"
+
+#, fuzzy
+msgid "No Messages Found"
+msgstr "Nu s-au găsit rezultate"
 
 msgid "No Notifications"
 msgstr "Nu există notificări"
@@ -3082,9 +3018,6 @@ msgstr "Nu este nevoie de parolă"
 
 msgid "No Proxy"
 msgstr "Fără Proxy"
-
-msgid "No Results Found"
-msgstr "Nu s-au găsit rezultate"
 
 msgid "No Sync"
 msgstr "Fără sincronizare"
@@ -3114,6 +3047,9 @@ msgstr ""
 "Nu s-au găsit contacte\n"
 "De asemenea, puteți introduce o adresă XMPP"
 
+msgid "No contacts found to import"
+msgstr ""
+
 msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
@@ -3128,6 +3064,9 @@ msgstr ""
 
 msgid "No devices online"
 msgstr "Nu există dispozitive online"
+
+msgid "No group assigned"
+msgstr ""
 
 msgid "No info available"
 msgstr "Nu există informații disponibile"
@@ -3181,6 +3120,10 @@ msgstr "Nu este conectat"
 msgid "Not Decided"
 msgstr "Nu s-a decis"
 
+#, fuzzy
+msgid "Not Joined"
+msgstr "Nu este conectat"
+
 msgctxt "Group chat feature"
 msgid "Not Moderated"
 msgstr "Nu este moderat"
@@ -3196,10 +3139,6 @@ msgstr "Neconectat"
 
 msgid "Not encrypted"
 msgstr "Necriptat"
-
-msgctxt "File transfer state"
-msgid "Not started"
-msgstr "Nu a început"
 
 msgctxt "Profile"
 msgid "Note"
@@ -3258,9 +3197,6 @@ msgstr "O lună"
 
 msgid "One Year"
 msgstr "Un an"
-
-msgid "Online Status"
-msgstr "Starea online"
 
 msgid "Only Admins and Owners can modify the affiliation"
 msgstr "Numai administratorii și proprietarii pot modifica afilierea"
@@ -3363,6 +3299,10 @@ msgstr "Proprietari"
 msgid "PEP Configuration"
 msgstr "Configurația PEP"
 
+#, fuzzy
+msgid "PEP Node Not Removed"
+msgstr "Nodul PEP nu a fost îndepărtat"
+
 #, python-format
 msgid "PEP Service Configuration (%s)"
 msgstr "Configurația serviciului PEP (%s)"
@@ -3375,17 +3315,11 @@ msgstr ""
 "Nodul PEP %(node)s nu a fost eliminat:\n"
 "%(message)s"
 
-msgid "PEP node was not removed"
-msgstr "Nodul PEP nu a fost îndepărtat"
-
 msgid "PKCS12 Files"
 msgstr "Fișiere PKCS12"
 
 msgid "PNG files"
 msgstr "Fișiere PNG"
-
-msgid "Pa_use/Resume"
-msgstr "Pa_use/Rezumat"
 
 #, python-format
 msgid "Pango Version: %s"
@@ -3446,9 +3380,6 @@ msgstr "Parola conține caractere interzise"
 msgid "Passwords do not match"
 msgstr "Parolele nu se potrivesc"
 
-msgid "Past Developers"
-msgstr "Dezvoltatori din trecut"
-
 msgid "Paste Last Input"
 msgstr "Lipiți ultima intrare"
 
@@ -3461,18 +3392,8 @@ msgstr "Lipiți ca citat"
 msgid "Path length constraint exceeded"
 msgstr "Constrângerea de lungime a traseului a fost depășită"
 
-msgid "Pause or resume file transfer"
-msgstr "Întrerupeți sau reluați transferul de fișiere"
-
-msgctxt "File transfer state"
-msgid "Paused"
-msgstr "Pauză"
-
 msgid "Pending"
 msgstr "În așteptare"
-
-msgid "Pending Event"
-msgstr "Eveniment în așteptare"
 
 msgid "Pending Voice Requests"
 msgstr "Solicitări vocale în așteptare"
@@ -3546,10 +3467,11 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Vă rugăm să vă asigurați că sunteți conectat cu \"%s\"."
 
+#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
-"Gajim will export all messages from the selected account to a directory of "
-"your choice."
+"Gajim will export all messages from the selected account and chats to a "
+"directory of your choice."
 msgstr ""
 "Vă rugăm să selectați unul dintre conturile dumneavoastră.\n"
 "Gajim va exporta toate mesajele din contul selectat într-un director la "
@@ -3557,6 +3479,10 @@ msgstr ""
 
 msgid "Please use these settings with caution!"
 msgstr "Vă rugăm să utilizați aceste setări cu prudență!"
+
+#, fuzzy
+msgid "Plugin Failed"
+msgstr "Plugin eșuat"
 
 msgid "Plugin Settings"
 msgstr "Setări Plugin"
@@ -3566,9 +3492,6 @@ msgstr "Actualizări Plugin"
 
 msgid "Plugin already exists"
 msgstr "Plugin-ul există deja"
-
-msgid "Plugin failed"
-msgstr "Plugin eșuat"
 
 msgid "Plugin manager"
 msgstr "Manager de plugin-uri"
@@ -3607,11 +3530,6 @@ msgstr "Preferință Nume"
 msgid "Preferences"
 msgstr "Preferințe"
 
-msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-"Mecanismul preferat de transfer de fișiere pentru glisarea și plasarea "
-"fișierelor pe o fereastră de chat"
-
 msgid "Presets"
 msgstr "Presetări"
 
@@ -3642,14 +3560,15 @@ msgstr "Confidențialitate"
 msgid "Private"
 msgstr "Privat"
 
+#, fuzzy
+msgid "Processing image…"
+msgstr "Eroare în timpul procesării imaginii"
+
 msgid "Profile"
 msgstr "Profil"
 
 msgid "Profile application with cprofile"
 msgstr "Profilarea aplicației cu cprofile"
-
-msgid "Progress"
-msgstr "Progresul"
 
 msgctxt "Group chat description"
 msgid "Project discussion"
@@ -3671,6 +3590,10 @@ msgstr ""
 
 msgid "Prox_y"
 msgstr "Prox_i"
+
+#, fuzzy
+msgid "Proxies"
+msgstr "Gestionați proxy-urile"
 
 msgid "Proxy"
 msgstr "Proxy-ul"
@@ -3708,7 +3631,8 @@ msgstr "Puls: %s"
 msgid "Purge Chat History…"
 msgstr "Epurare Istoric chat…"
 
-msgid "Purge all Chat History"
+#, fuzzy
+msgid "Purge all Chat History?"
 msgstr "Curățați tot istoricul de chat"
 
 #, python-format
@@ -3731,10 +3655,8 @@ msgctxt "Message row action"
 msgid "Quote…"
 msgstr "Citat…"
 
-msgid "Re-Login"
-msgstr "Reconectare"
-
-msgid "Re-Login now?"
+#, fuzzy
+msgid "Re-Login Now?"
 msgstr "Re-Autentificare acum?"
 
 msgid "Re_gister"
@@ -3749,9 +3671,6 @@ msgstr "Citiți articolul _Wikipedia"
 
 msgid "Read more about blind trust"
 msgstr "Citiți mai multe despre blind trust"
-
-msgid "Really block this contact?"
-msgstr "Chiar blochezi acest contact?"
 
 msgid "Reason"
 msgstr "Motivul"
@@ -3778,13 +3697,6 @@ msgstr "Primit"
 
 msgid "Recent history"
 msgstr "Istoria recentă"
-
-msgid "Recipient: "
-msgstr "Beneficiar: "
-
-#, python-format
-msgid "Recipient: %s"
-msgstr "Destinatarul: %s"
 
 msgid "Recognize your account by color"
 msgstr "Recunoașteți contul dumneavoastră după culoare"
@@ -3830,23 +3742,35 @@ msgstr "Timeout al serverului la distanță"
 msgid "Remove"
 msgstr "Eliminați"
 
+#, fuzzy, python-format
+msgid "Remove %s contacts from your contact list?"
+msgstr "Eliminarea contactului din lista de contacte"
+
 msgid "Remove Account"
 msgstr "Eliminați contul"
-
-msgid "Remove Chat History"
-msgstr "Eliminarea istoricului de chat"
 
 msgid "Remove Chat History?"
 msgstr "Eliminați istoricul conversațiilor?"
 
-msgid "Remove Contact"
+#, fuzzy
+msgid "Remove Contacts?"
 msgstr "Eliminați contactul"
 
-msgid "Remove Group"
+#, fuzzy
+msgid "Remove Contact…"
+msgstr "Eliminați contactul"
+
+#, fuzzy
+msgid "Remove From Contact List?"
+msgstr "Eliminarea din lista de contacte"
+
+#, fuzzy
+msgid "Remove Group?"
 msgstr "Eliminați grupul"
 
-msgid "Remove Group..."
-msgstr "Eliminați grupul..."
+#, fuzzy
+msgid "Remove Group…"
+msgstr "Eliminați grupul"
 
 msgid "Remove History…"
 msgstr "Eliminați istoria…"
@@ -3857,25 +3781,27 @@ msgstr "Eliminarea notificării"
 msgid "Remove Proxy"
 msgstr "Eliminați Proxy"
 
+#, fuzzy
+msgid "Remove Proxy?"
+msgstr "Eliminați Proxy"
+
 msgid "Remove Setting"
 msgstr "Eliminați setarea"
 
 msgid "Remove Theme"
 msgstr "Eliminați tema"
 
-msgid "Remove Transport"
-msgstr "Îndepărtarea transportului"
-
-msgid "Remove Workspace"
+#, fuzzy
+msgid "Remove Workspace?"
 msgstr "Eliminarea spațiului de lucru"
 
-msgid "Remove completed, cancelled and failed file transfers from the list"
-msgstr ""
-"Eliminarea din listă a transferurilor de fișiere finalizate, anulate și "
-"eșuate"
+#, fuzzy
+msgid "Remove from Contact List…"
+msgstr "Eliminarea din lista de contacte"
 
-msgid "Remove contact from contact list"
-msgstr "Eliminarea contactului din lista de contacte"
+#, fuzzy
+msgid "Remove from Group"
+msgstr "Eliminați grupul"
 
 msgid "Remove from contact list"
 msgstr "Eliminarea din lista de contacte"
@@ -3896,11 +3822,20 @@ msgstr[0] "A eliminat %s contact"
 msgstr[1] "A eliminat %s contacte"
 msgstr[2] "A eliminat %s de contacte"
 
-msgid "Remove…"
-msgstr "Eliminați…"
-
 msgid "Removing Account..."
 msgstr "Eliminarea contului..."
+
+#, fuzzy
+msgid "Rename"
+msgstr "_Utilizator"
+
+#, fuzzy
+msgid "Rename Contact?"
+msgstr "Eliminați contactul"
+
+#, fuzzy
+msgid "Rename…"
+msgstr "_Utilizator"
 
 msgctxt "Group chat name"
 msgid "Repairs"
@@ -3912,6 +3847,10 @@ msgstr "Răspundeți…"
 msgid "Report"
 msgstr "Raport"
 
+#, fuzzy
+msgid "Request"
+msgstr "_Solicitare"
+
 msgid "Request Search Form"
 msgstr "Formular de cerere de căutare"
 
@@ -3920,6 +3859,10 @@ msgstr "Solicită voce"
 
 msgid "Request contact information (Tune, Location)"
 msgstr "Solicitați informații de contact (Tune, Locație)"
+
+#, fuzzy
+msgid "Request pending"
+msgstr "Necesită: Gspell"
 
 msgid "Request to see this contact's online status"
 msgstr "Cereți să vedeți starea online a acestui contact"
@@ -3942,30 +3885,15 @@ msgstr "Solicitarea formularului de căutare de pe server"
 msgid "Required"
 msgstr "Necesar"
 
-msgid "Requires: Gspell"
-msgstr "Necesită: Gspell"
-
-msgid ""
-"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
-msgstr ""
-"Necesită: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-"ugly-1.0, gst-libav și gstreamer-gtk3-plugin"
-
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Necesită: gnome-keyring sau kwallet"
 
 msgid "Requires: gsound"
 msgstr "Necesită: gsound"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
-
-msgid "Requires: gupnpigd-1.0"
-msgstr "Necesită: gupnpigd-1.0"
-
-msgid "Requires: libappindicator3"
-msgstr "Necesită: libappindicator3"
+#, fuzzy
+msgid "Requires: libspelling"
+msgstr "Necesită: Gspell"
 
 msgid "Requires: libxss"
 msgstr "Necesită: libxss"
@@ -3976,6 +3904,11 @@ msgstr "Nume rezervat"
 msgid "Reset"
 msgstr "Resetare"
 
+#, fuzzy
+msgid "Reset Filters"
+msgstr "Sfaturi de resetare"
+
+#, fuzzy
 msgid "Reset Hints"
 msgstr "Sfaturi de resetare"
 
@@ -4037,10 +3970,6 @@ msgstr "SHA-256"
 msgid "SHA-256:"
 msgstr "SHA-256:"
 
-msgctxt "proxy configuration"
-msgid "SOCKS5"
-msgstr "SOCKS5"
-
 msgid "SSL Certificate Verification Error"
 msgstr "Eroare de verificare a certificatului SSL"
 
@@ -4064,9 +3993,6 @@ msgstr "Vânzări"
 
 msgid "Save"
 msgstr "Salvați"
-
-msgid "Save File as…"
-msgstr "Salvați fișierul ca…"
 
 msgid "Save Password"
 msgstr "Salvați parola"
@@ -4158,6 +4084,12 @@ msgstr "Căutând"
 msgid "Searching…"
 msgstr "Căutând…"
 
+#, fuzzy, python-format
+msgid ""
+"Searching…\n"
+"%s results"
+msgstr "Căutând…"
+
 msgid "Search…"
 msgstr "Căutare…"
 
@@ -4176,12 +4108,6 @@ msgstr "Avertisment de securitate"
 msgid "Select Account"
 msgstr "Selectați contul"
 
-msgid "Select Contacts"
-msgstr "Selectați Contacte"
-
-msgid "Select File…"
-msgstr "Selectați File…"
-
 msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Selectați Mesaje…"
@@ -4197,14 +4123,6 @@ msgstr "Selectați un emoji"
 
 msgid "Select playback speed"
 msgstr "Selectați viteza de redare"
-
-#, fuzzy
-msgid "Select the account with which you want to synchronize"
-msgstr "Selectați contul cu care doriți să vă sincronizați"
-
-#, fuzzy
-msgid "Select the contacts you want to synchronize"
-msgstr "Selectați contactele pe care doriți să le sincronizați"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Selectați intrarea audio (de exemplu, microfonul)"
@@ -4246,14 +4164,8 @@ msgstr "Trimiteți fișierul"
 msgid "Send File (max. %s)…"
 msgstr "Trimiteți fișierul (max. %s)…"
 
-msgid "Send File Directly…"
-msgstr "Trimiteți fișierul direct…"
-
 msgid "Send Files"
 msgstr "Trimiteți fișiere"
-
-msgid "Send Files Directly"
-msgstr "Trimiteți fișierele direct"
 
 msgid "Send File…"
 msgstr "Trimiteți fișierul…"
@@ -4278,9 +4190,6 @@ msgstr "Trimiteți mesajul cu Ctrl+Inter și creați o nouă linie cu Enter."
 
 msgid "Send the message"
 msgstr "Trimiteți mesajul"
-
-msgid "Sender: "
-msgstr "Expeditor: "
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4331,6 +4240,14 @@ msgstr "Service Discovery utilizând contul %s"
 
 msgid "Service Gateway"
 msgstr "Portal de servicii"
+
+#, fuzzy
+msgid "Service Not Browsable"
+msgstr "Serviciul nu poate fi răsfoit"
+
+#, fuzzy
+msgid "Service Not Found"
+msgstr "Serverul de la distanță nu a fost găsit"
 
 msgid "Set configuration directory"
 msgstr "Setați directorul de configurare"
@@ -4409,9 +4326,6 @@ msgstr "Afișați fluxul meu video"
 msgid "Show Notifications"
 msgstr "Afișați notificările"
 
-msgid "Show Offline Contacts"
-msgstr "Afișați contactele offline"
-
 msgid "Show Send Message Button"
 msgstr "Afișați butonul Trimite mesaj"
 
@@ -4426,9 +4340,6 @@ msgstr "Afișați transferurile"
 
 msgid "Show Voice Message Button"
 msgstr "Afișați butonul Trimite mesaj"
-
-msgid "Show _Features"
-msgstr "Afișați _Funcții"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Afișarea unui dialog de confirmare înainte de conectarea necriptată"
@@ -4517,11 +4428,6 @@ msgstr "Afișați-vă propriul flux video în apeluri"
 msgid "Show/Hide Window"
 msgstr "Afișează/ Ascunde fereastra"
 
-msgid "Shows a list of file transfers between you and your contacts"
-msgstr ""
-"Afișează o listă de transferuri de fișiere între dumneavoastră și contactele "
-"voastre"
-
 msgid "Shutting down Gajim"
 msgstr "Închiderea Gajim"
 
@@ -4559,9 +4465,6 @@ msgstr "Îmi pare rău, asta nu ar fi trebuit să se întâmple"
 msgid "Sort Participant List by Status"
 msgstr "Sortați lista de participanți după status"
 
-msgid "Sort by Status"
-msgstr "Sortați după status"
-
 msgid "Sounds"
 msgstr "Sunete"
 
@@ -4588,15 +4491,8 @@ msgctxt "Group chat description"
 msgid "Spring gathering"
 msgstr "Reuniunea de primăvară"
 
-msgid "Sta_tus"
-msgstr "Sta_re"
-
 msgid "Stage"
 msgstr "Etapă"
-
-msgctxt "File transfer state"
-msgid "Stalled"
-msgstr "Înțepenit"
 
 msgid "Start / Join Chat"
 msgstr "Începeți / Intrați în chat"
@@ -4615,12 +4511,6 @@ msgstr "Începeți un nou chat"
 
 msgid "Start Search..."
 msgstr "Începeți căutarea..."
-
-msgid "Start Video Call…"
-msgstr "Începeți apelul video…"
-
-msgid "Start Voice Call…"
-msgstr "Începeți apelul vocal…"
 
 msgid "Start a new chat"
 msgstr "Începeți un nou chat"
@@ -4659,12 +4549,16 @@ msgstr "Mesaje de stare în lista participanților"
 msgid "Status and status message for all accounts"
 msgstr "Stare și mesaj de stare pentru toate conturile"
 
+#, fuzzy
+msgid "Status is not shared"
+msgstr "Mesaj de stare"
+
+#, fuzzy
+msgid "Status is shared"
+msgstr "Mesaj de stare"
+
 msgid "Status message…"
 msgstr "Mesaj de stare…"
-
-msgctxt "File transfer state"
-msgid "Status: "
-msgstr "Stare: "
 
 #, python-format
 msgid "Status: %s"
@@ -4682,10 +4576,8 @@ msgstr "Stare: Culoare offline"
 msgid "Status: Online Color"
 msgstr "Stare: Culoare online"
 
-msgid "Stop File Transfers"
-msgstr "Opriți transferurile de fișiere"
-
-msgid "Stop sharing online status?"
+#, fuzzy
+msgid "Stop Sharing Online Status?"
 msgstr "Nu mai împărtășiți statutul online?"
 
 msgid "Stopped sharing their status with you"
@@ -4709,9 +4601,6 @@ msgstr "Subiect Nume Alternativ "
 msgid "Subject issuer mismatch"
 msgstr "Necorelări între emitentul subiectului"
 
-msgid "Submit"
-msgstr "Trimiteți"
-
 msgctxt "Contact subscription"
 msgid "Subscribe"
 msgstr "Abonează-te"
@@ -4719,11 +4608,24 @@ msgstr "Abonează-te"
 msgid "Subscribed"
 msgstr "Abonat"
 
+#, fuzzy
+msgid "Subscription"
+msgstr "Abonament:"
+
 msgid "Subscription Request"
 msgstr "Cerere de abonament"
 
+#, fuzzy
 msgid "Subscription:"
 msgstr "Abonament:"
+
+#, fuzzy
+msgid "Successfully Added Contacts"
+msgstr "Selectați Contacte"
+
+#, fuzzy
+msgid "Successfully Removed Contacts"
+msgstr "Eliminați contactul"
 
 msgid "Support"
 msgstr "Suport"
@@ -4767,9 +4669,6 @@ msgstr "Prag de sincronizare"
 
 msgid "Synchronize"
 msgstr "Sincronizați"
-
-msgid "Synchronize Accounts"
-msgstr "Sincronizarea conturilor"
 
 msgid "Synchronize Chat History"
 msgstr "Sincronizarea istoricului de chat"
@@ -4849,15 +4748,6 @@ msgstr ""
 "statutul. Vă rugăm să rețineți că acest lucru poate avea și alte efecte "
 "secundare."
 
-#, python-format
-msgid ""
-"The file %s has been received, but it seems to have been damaged along the "
-"way.\n"
-"Do you want to download it again?"
-msgstr ""
-"Fișierul %s a fost primit, dar se pare că a fost deteriorat pe parcurs.\n"
-"Doriți să îl descărcați din nou?"
-
 #, fuzzy
 msgid ""
 "The following warnings came up while trying to verify the provider's "
@@ -4886,12 +4776,6 @@ msgstr "Serverul a returnat un transport nesigur (HTTP)."
 
 msgid "The server was shut down."
 msgstr "Serverul a fost închis."
-
-msgid "The service could not be found"
-msgstr "Serviciul nu a putut fi găsit"
-
-msgid "The service is not browsable"
-msgstr "Serviciul nu poate fi răsfoit"
 
 msgid "The signing certificate authority is not known"
 msgstr "Autoritatea care semnează certificatul nu este cunoscută"
@@ -4950,9 +4834,6 @@ msgstr "Acest Dispozitiv"
 msgid "This account has already been added"
 msgstr "Acest cont a fost deja adăugat"
 
-msgid "This account is not connected to the server"
-msgstr "Acest cont nu este conectat la server"
-
 msgid "This address does not seem to offer any gateway service."
 msgstr "Această adresă nu pare să ofere niciun serviciu de gateway."
 
@@ -4966,6 +4847,10 @@ msgstr ""
 "Configurația acestui chat nu este potrivită pentru criptarea cu OMEMO. "
 "Pentru a utiliza OMEMO în acest chat, acesta trebuie să fie non-anonim și "
 "destinat exclusiv membrilor."
+
+#, fuzzy
+msgid "This contact does not share their status with you"
+msgstr "Nu-și mai împărtășesc starea cu tine"
 
 msgid "This contact is a bot"
 msgstr "Acest contact este un bot"
@@ -5085,9 +4970,6 @@ msgstr ""
 msgid "Three Months"
 msgstr "Trei luni"
 
-msgid "Time"
-msgstr "Timp"
-
 msgid "Time Until Away"
 msgstr "Timp până la distanță"
 
@@ -5117,26 +4999,15 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Schimbă lista de chat-uri"
 
+#, fuzzy
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "_Afișează bara de meniu"
 
 msgid "Toggle participants list"
 msgstr "Comutați lista participanților"
 
-msgctxt "File transfer state"
-msgid "Transferred: "
-msgstr "Transferat: "
-
-msgctxt "File transfer state"
-msgid "Transferring"
-msgstr "Se transferă"
-
 msgid "Transferring File…"
 msgstr "Transferul de fișiere…"
-
-#, python-format
-msgid "Transport \"%s\" will be removed"
-msgstr "Transportul \"%s\" va fi eliminat"
 
 msgid "Transports"
 msgstr "Transporturi"
@@ -5188,13 +5059,6 @@ msgstr "Tip"
 msgid "Type to search for values..."
 msgstr "Tastați pentru a căuta valori..."
 
-msgctxt "File transfer type"
-msgid "Type: "
-msgstr "Tip: "
-
-msgid "UPnP-IGD Port Forwarding"
-msgstr "Redirecționarea porturilor UPnP-IGD"
-
 msgid "URI"
 msgstr "URI"
 
@@ -5227,9 +5091,6 @@ msgstr "Nu se poate salva profilul"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nu se poate verifica primul certificat"
-
-msgid "Unblock"
-msgstr "Deblocați"
 
 msgid "Unencrypted"
 msgstr "Necriptat"
@@ -5280,9 +5141,6 @@ msgstr "Dezactivați modul Silențios pentru Chat"
 msgid "Unpin Chat"
 msgstr "Desprindeți Chat"
 
-msgid "Unread Messages"
-msgstr "Mesaje necitite"
-
 msgid "Unsupported certificate purpose"
 msgstr "Scopul nesuportat al certificatului"
 
@@ -5319,15 +5177,9 @@ msgstr "Actualizări"
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Actualizările vor fi instalate data viitoare când Gajim va fi pornit"
 
+#, fuzzy
 msgid "Updating provider list…"
-msgstr ""
-
-msgctxt "Noun"
-msgid "Upload"
-msgstr "Încărcați"
-
-msgid "Upload Files"
-msgstr "Încărcați fișiere"
+msgstr "Datei konnte nicht geöffnet werden (%s)"
 
 msgid "Upload File…"
 msgstr "Încărcați fișierul…"
@@ -5392,10 +5244,6 @@ msgstr "Interfață Utilizator"
 msgid "User Interface Font Size"
 msgstr "Dimensiunea fontului interfeței utilizatorului"
 
-#, fuzzy
-msgid "User name…"
-msgstr "_Utilizator"
-
 msgid "Users"
 msgstr "Utilizatori"
 
@@ -5435,9 +5283,6 @@ msgstr "Dispozitiv de intrare video"
 msgid "Video Resolution"
 msgstr "Rezoluție video"
 
-msgid "Video calls are not available on Windows"
-msgstr "Apelurile video nu sunt disponibile pe Windows"
-
 msgid "Video test"
 msgstr "Test video"
 
@@ -5468,14 +5313,15 @@ msgstr "Mesajele vocale nu sunt disponibile"
 msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
+#, fuzzy
+msgid "WAV Sounds"
+msgstr "Sunete Wav"
+
 msgid "Waiting…"
 msgstr "Așteptând…"
 
 msgid "Warning"
 msgstr "Avertisment"
-
-msgid "Wav Sounds"
-msgstr "Sunete Wav"
 
 #, python-format
 msgid "Web Search URL is missing a \"%s\""
@@ -5518,9 +5364,6 @@ msgstr "Lățimea listei de chat de grup în pixeli"
 
 msgid "Windows"
 msgstr "Windows"
-
-msgid "Without a connection, you can not browse available services"
-msgstr "Fără o conexiune, nu puteți naviga prin serviciile disponibile"
 
 msgid "Work"
 msgstr "Muncă"
@@ -5572,6 +5415,10 @@ msgstr "Tu"
 msgid "You (%s) joined the group chat"
 msgstr "V-ați alăturat (%s) grupului de chat"
 
+#, fuzzy
+msgid "You Have Unread Messages"
+msgstr "Aveți încă mesaje necitite"
+
 msgid "You are a visitor"
 msgstr "Sunteți vizitator"
 
@@ -5588,8 +5435,8 @@ msgstr ""
 "o metodă de conectare nesigură. Acest lucru înseamnă că conversațiile nu vor "
 "fi criptate. Conectarea PLAIN este puternic descurajată."
 
-#, python-format
-msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+#, fuzzy, python-format
+msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
 msgstr ""
 "Sunteți pe cale să eliminați %(name)s (%(jid)s) din lista dumneavoastră de "
 "contacte.\n"
@@ -5604,8 +5451,11 @@ msgstr ""
 msgid "You are not connected"
 msgstr "Nu sunteți conectat"
 
-msgid "You are not connected to the server"
-msgstr "Nu sunteți conectat la server"
+#, fuzzy
+msgid ""
+"You are not connected to the server. Without a connection, you can not "
+"browse available services"
+msgstr "Fără o conexiune, nu puteți naviga prin serviciile disponibile"
 
 #, python-format
 msgid "You are now known as %s"
@@ -5640,9 +5490,6 @@ msgstr "Nu vă puteți adăuga la lista de contacte."
 msgid "You cannot see this contact's online status"
 msgstr "Nu puteți vedea starea online a acestui contact"
 
-msgid "You cannot synchronize with an account unless it is connected."
-msgstr "Nu puteți sincroniza cu un cont decât dacă acesta este conectat."
-
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 "Nu puteți trimite mesaje private contactelor dacă acestea sunt offline."
@@ -5655,13 +5502,8 @@ msgstr ""
 "Nu aveți permisiuni pentru acest director.\n"
 "Eroare: %s."
 
-msgid "You do not have permissions to create files in this directory."
-msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
-
-msgid ""
-"You do not have the proper permissions to create files in this directory."
+msgid "You don't share your status with this contact"
 msgstr ""
-"Nu aveți permisiunile necesare pentru a crea fișiere în acest director."
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -5707,24 +5549,11 @@ msgstr ""
 msgid "You requested to see this contact's online status"
 msgstr "Ați solicitat să vedeți statutul online al acestui contact"
 
-msgid "You still have running file transfers"
-msgstr "Aveți în continuare transferuri de fișiere în curs de execuție"
-
-msgid "You still have unread messages"
-msgstr "Aveți încă mesaje necitite"
-
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
 msgstr ""
 "Veți apărea offline pentru acest contact și nu veți mai primi alte mesaje."
-
-msgid ""
-"You will no longer be able to send and receive messages from and to contacts "
-"using this transport."
-msgstr ""
-"Nu veți mai putea să trimiteți și să primiți mesaje de la și către "
-"contactele care utilizează acest mijloc de transport."
 
 msgid "Your Nickname"
 msgstr "Pseudonimul dumneavoastră"
@@ -5795,10 +5624,6 @@ msgstr "_Cont"
 msgid "_Accounts"
 msgstr "_Conturi"
 
-#, python-format
-msgid "_Actions for \"%s\""
-msgstr "_Acțiuni pentru \"%s\""
-
 msgid "_Add Account…"
 msgstr "_Adăugați cont…"
 
@@ -5827,9 +5652,6 @@ msgstr "_Ocupat"
 
 msgid "_Cancel"
 msgstr "_Anulează"
-
-msgid "_Clear"
-msgstr "_Curăță"
 
 msgid "_Clear Devices"
 msgstr ":Ștergeți Dispozitivul"
@@ -5879,17 +5701,11 @@ msgstr "Nu mă mai întreba din nou"
 msgid "_Download"
 msgstr "_Descărcare"
 
-msgid "_Download Again"
-msgstr "_Descărcați din nou"
-
 msgid "_Edit"
 msgstr "_Editați"
 
 msgid "_Features"
 msgstr "_Funcții"
-
-msgid "_File Transfer"
-msgstr "_Transfer de fișiere"
 
 msgctxt "User status"
 msgid "_Free for Chat"
@@ -5938,9 +5754,6 @@ msgstr "_Moderat"
 msgid "_Name"
 msgstr "_Nume"
 
-msgid "_New post"
-msgstr "_Postare nouă"
-
 msgid "_No"
 msgstr "_Nu"
 
@@ -5956,9 +5769,6 @@ msgstr "_în offline"
 
 msgid "_Open"
 msgstr "_Deschideți"
-
-msgid "_Open Folder"
-msgstr "_Deschideți dosarul"
 
 msgid "_Overwrite"
 msgstr "_Suprascrieți"
@@ -5994,6 +5804,7 @@ msgstr "_Îndepărtați"
 msgid "_Report Spam"
 msgstr "_Reportați spam-ul"
 
+#, fuzzy
 msgid "_Request"
 msgstr "_Solicitare"
 
@@ -6018,18 +5829,11 @@ msgstr "_Trimiteți"
 msgid "_Show Certificate"
 msgstr "_Arată certificatul"
 
-msgid "_Show notification when file transfer is complete"
-msgstr ""
-"_Afișează o notificare atunci când transferul de fișiere este finalizat"
-
 msgid "_Sign Up"
 msgstr "_Inregistreaza-te"
 
 msgid "_Start / Join Chat…"
 msgstr "_Începeți / Intrați pe chat…"
-
-msgid "_Start Chat..."
-msgstr "_Începeți chat-ul..."
 
 msgid "_Stop Sharing"
 msgstr "_Opriți distribuirea"
@@ -6050,6 +5854,7 @@ msgstr "_Dezînregistrarea contului din serviciu"
 msgid "_Unsubscribe"
 msgstr "_Dezabonare"
 
+#, fuzzy
 msgid "_Username"
 msgstr "_Utilizator"
 
@@ -6110,9 +5915,6 @@ msgstr "țară"
 msgid "countrycode"
 msgstr "cod de țară"
 
-msgid "dark skin tone"
-msgstr "tonul închis al pielii"
-
 msgid "datum"
 msgstr "data"
 
@@ -6132,9 +5934,6 @@ msgstr "exemplu.org"
 msgctxt "Group chat address"
 msgid "family"
 msgstr "familie"
-
-msgid "file transfers list"
-msgstr "lista transferurilor de fișiere"
 
 msgid "floor"
 msgstr "pardoseală"
@@ -6165,11 +5964,6 @@ msgstr "latid"
 msgid "libsoup Version: %s"
 msgstr "versiunea libsoup: %s"
 
-#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
-#. You can use the hex value to find the matching string.
-msgid "light skin tone"
-msgstr "ton deschis al pielii"
-
 msgid "locality"
 msgstr "localitate"
 
@@ -6178,15 +5972,6 @@ msgstr "long"
 
 msgid "macOS"
 msgstr "macOS"
-
-msgid "medium skin tone"
-msgstr "ton mediu al pielii"
-
-msgid "medium-dark skin tone"
-msgstr "ton mediu-închis al pielii"
-
-msgid "medium-light skin tone"
-msgstr "ton mediu deschis al pielii"
 
 msgctxt "Group chat address"
 msgid "news"
@@ -6285,6 +6070,26 @@ msgstr "{nick} este acum {show}{status}"
 
 msgid "…or drop it here"
 msgstr "...sau lăsați-o aici"
+
+#, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s grupuri de chat găsite"
+
+#, python-format
+#~ msgid ""
+#~ "%s is online with multiple devices.\n"
+#~ "Choose the device you would like to send the files to."
+#~ msgstr ""
+#~ "%s este online cu mai multe dispozitive.\n"
+#~ "Alegeți dispozitivul la care doriți să trimiteți fișierul."
+
+#, python-format
+#~ msgid "%s wants to send you a file"
+#~ msgstr "%s vrea să vă trimită un fișier"
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
 
 #, fuzzy
 #~ msgctxt "Profile"
@@ -6501,8 +6306,102 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "?user status:_Available"
 #~ msgstr "_Disponibil"
 
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "Există deja un fișier cu acest nume și nu aveți permisiunea de a-l "
+#~ "înlocui."
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "O listă a transferurilor de fișiere active, finalizate și oprite"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Aborted"
+#~ msgstr "Abandonat"
+
+#, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "Contul %s este încă conectat"
+
+#~ msgid "Add reaction"
+#~ msgstr "Adăugați reacția"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Adăugați grup…"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Grupuri"
+
+#~ msgid "Another process is using this file."
+#~ msgstr "Un alt proces folosește acest fișier."
+
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Ești sigur că vrei să părăsești acest grup de chat?"
+
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Ești sigur că vrei să renunți la Gajim?"
+
+#~ msgid "Audio"
+#~ msgstr "Audio"
+
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Apeluri audio / video"
+
+#~ msgid "Audio Preview"
+#~ msgstr "Previzualizare audio"
+
+#~ msgid "Audio/Video"
+#~ msgstr "Audio/Video"
+
+#~ msgid "Authorization Request"
+#~ msgstr "Cerere de autorizare"
+
+#~ msgid "Autojoin"
+#~ msgstr "Alăturare automată"
+
+#~ msgid "Block…"
+#~ msgstr "Blochează…"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Semne de carte"
+
+#, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "Marcaje pentru %s"
+
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr ""
+#~ "Anularea transferului de fișiere selectat și eliminarea fișierelor "
+#~ "incomplete"
+
+#, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "Nu se poate suprascrie fișierul existent \"%s\""
+
+#~ msgid "Checking file…"
+#~ msgstr "Verificarea fișierului…"
+
+#~ msgid "Choose Archive"
+#~ msgstr "Alegeți Arhiva"
+
+#~ msgid "Choose Avatar…"
+#~ msgstr "Alege Avatar…"
+
+#~ msgid "Choose File to Send…"
+#~ msgstr "Alegeți Fișier de trimis…"
+
+#~ msgid "Clear Devices Now?"
+#~ msgstr "Ștergeți dispozitivele acum?"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Efectuat"
+
+#~ msgid "Connection not available"
+#~ msgstr "Conexiunea nu este disponibilă"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversație: Culoare URL"
@@ -6510,26 +6409,160 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Copy Location"
 #~ msgstr "Copiați locația"
 
+#~ msgid "Create new post"
+#~ msgstr "Creați un post nou"
+
+#~ msgid "Current Developers"
+#~ msgstr "Dezvoltatorii actuali"
+
+#~ msgid "Debug Console"
+#~ msgstr "Consola Debug"
+
+#~ msgid "Delete Message"
+#~ msgstr "Ștergeți mesajul"
+
+#~ msgid "Delete message locally?"
+#~ msgstr "Ștergeți mesajul local?"
+
+#~ msgid "Description: "
+#~ msgstr "Descriere: "
+
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "Transfer direct (necriptat)"
+
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "Descărcare"
+
+#~ msgid "Drop files or contacts"
+#~ msgstr "Aruncați fișiere sau contacte"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Editați profilurile…"
 
 #~ msgid "Edit workspace…"
 #~ msgstr "Editați spațiul de lucru…"
 
+#~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr "Permite Gajim să ofere chat-uri audio și video"
+
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr "Permite Gajim să ofere o previzualizare audio"
+
+#~ msgid "Enables Gajim to provide a notification area icon"
+#~ msgstr ""
+#~ "Permite lui Gajim să furnizeze o pictogramă pentru zona de notificare"
+
+#~ msgid ""
+#~ "Enables Gajim to request your router to forward ports for file transfers"
+#~ msgstr ""
+#~ "Permite lui Gajim să solicite routerului dumneavoastră să redirecționeze "
+#~ "porturile pentru transferuri de fișiere"
+
+#~ msgid "Enables libappindicator, an alternative tray icon provider"
+#~ msgstr ""
+#~ "Activează libappindicator, un furnizor alternativ de pictograme de tavă"
+
+#, python-format
+#~ msgid "Error message: %s"
+#~ msgstr "Mesaj de eroare: %s"
+
+#~ msgid "Error!"
+#~ msgstr "Eroare!"
+
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Funcția nu este valabilă pe Windows"
+
+#~ msgid "File Name: "
+#~ msgstr "Numele fișierului: "
+
+#~ msgid "File Offered"
+#~ msgstr "Fișier oferit"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "Eroare de transfer de fișiere"
+
+#~ msgid "File Transfer Failed"
+#~ msgstr "Transferul de fișiere a eșuat"
+
+#~ msgid "File Transfers"
+#~ msgstr "Transferuri de fișiere"
+
+#~ msgid "File error"
+#~ msgstr "Eroare fișier"
+
+#~ msgid "File too big, will use direct transfer (not encrypted)"
+#~ msgstr "Fișier prea mare, se va folosi transferul direct (necriptat)"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "Transfer de fișiere oprit"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Numele fișierului: %s"
+
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Preferința de transfer de fișiere"
+
+#~ msgid "Filter Chats…"
+#~ msgstr "Filtrați chat-urile…"
+
 #~ msgid "Gajim Team"
 #~ msgstr "Echipa Gajim"
+
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim nu poate citi acest fișier"
+
+#~ msgctxt "proxy configuration"
+#~ msgid "HTTP"
+#~ msgstr "HTTP"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Ascundeți acest meniu"
 
 #~ msgid "Hide/show the main window menu"
 #~ msgstr "Ascundeți/afișează meniul ferestrei principale"
 
+#~ msgid ""
+#~ "If enabled, Gajim will save the main window position when hiding it, and "
+#~ "restore it when showing the window again."
+#~ msgstr ""
+#~ "Dacă este activată, Gajim va salva poziția ferestrei principale atunci "
+#~ "când o ascunde și o va restabili atunci când o afișează din nou."
+
+#~ msgid ""
+#~ "If you quit now, the file(s) being transferred will be lost.\n"
+#~ "Do you still want to quit?"
+#~ msgstr ""
+#~ "Dacă renunțați acum, fișierul (fișierele) transferat(e) va (vor) fi "
+#~ "pierdut(e).\n"
+#~ "Mai doriți să renunțați?"
+
+#~ msgid "Images"
+#~ msgstr "Imagini"
+
 #~ msgid "Inactive"
 #~ msgstr "Inactiv"
+
+#~ msgid "Invalid File"
+#~ msgstr "Fișier invalid"
 
 #~ msgid "Invite Contacts…"
 #~ msgstr "Invitați contacte…"
 
 #~ msgid "Invite New Contact"
 #~ msgstr "Invitați un nou contact"
+
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "Nu este posibil să se trimită fișiere goale"
+
+#, python-format
+#~ msgid ""
+#~ "I’m synchronizing my contacts from my account at \"%s\". Could you please "
+#~ "add this address to your contact list?"
+#~ msgstr ""
+#~ "Îmi sincronizez contactele din contul meu de la \"%s\". Puteți să "
+#~ "adăugați această adresă la lista de contacte?"
 
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
@@ -6538,18 +6571,131 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Corectarea mesajului: Culoarea de fundal"
 
+#~ msgid "Missing dependencies for Audio/Video"
+#~ msgstr "Dependențe lipsă pentru Audio/Video"
+
+#~ msgid "Moderate message?"
+#~ msgstr "Moderați mesajul?"
+
+#~ msgid "Modify Gateway…"
+#~ msgstr "Modificare Gateway…"
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Eliminați contactul"
+
+#~ msgid "No Connection Available"
+#~ msgstr "Nici o conexiune disponibilă"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Nu a început"
+
+#~ msgid "Online Status"
+#~ msgstr "Starea online"
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Unitatea organizațională (OU)"
 
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unitatea organizațională (OU): "
 
+#~ msgid "Pa_use/Resume"
+#~ msgstr "Pa_use/Rezumat"
+
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Întrerupeți sau reluați transferul de fișiere"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Paused"
+#~ msgstr "Pauză"
+
+#~ msgid "Pending Event"
+#~ msgstr "Eveniment în așteptare"
+
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Vă rugăm să folosiți aaaa-ll-zz"
+
+#~ msgid ""
+#~ "Preferred file transfer mechanism for file drag&drop on a chat window"
+#~ msgstr ""
+#~ "Mecanismul preferat de transfer de fișiere pentru glisarea și plasarea "
+#~ "fișierelor pe o fereastră de chat"
+
+#~ msgid "Progress"
+#~ msgstr "Progresul"
+
+#~ msgid "Re-Login"
+#~ msgstr "Reconectare"
+
+#~ msgid "Really block this contact?"
+#~ msgstr "Chiar blochezi acest contact?"
+
+#~ msgid "Recipient: "
+#~ msgstr "Beneficiar: "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Destinatarul: %s"
+
+#~ msgid "Remove Chat History"
+#~ msgstr "Eliminarea istoricului de chat"
+
+#~ msgid "Remove Group..."
+#~ msgstr "Eliminați grupul..."
+
+#~ msgid "Remove Transport"
+#~ msgstr "Îndepărtarea transportului"
+
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr ""
+#~ "Eliminarea din listă a transferurilor de fișiere finalizate, anulate și "
+#~ "eșuate"
+
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Eliminarea contactului din lista de contacte"
+
+#~ msgid "Remove…"
+#~ msgstr "Eliminați…"
+
+#, fuzzy
+#~ msgid ""
+#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+#~ "ugly-1.0, gst-libav"
+#~ msgstr ""
+#~ "Necesită: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+#~ "ugly-1.0, gst-libav și gstreamer-gtk3-plugin"
+
+#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+#~ msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
+
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Necesită: gupnpigd-1.0"
+
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Necesită: libappindicator3"
 
 #~ msgctxt "Message row action"
 #~ msgid "Retract…"
 #~ msgstr "Retrageți…"
+
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#~ msgid "Save File as…"
+#~ msgstr "Salvați fișierul ca…"
+
+#~ msgid "Select File…"
+#~ msgstr "Selectați File…"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "Selectați contul cu care doriți să vă sincronizați"
+
+#, fuzzy
+#~ msgid "Select the contacts you want to synchronize"
+#~ msgstr "Selectați contactele pe care doriți să le sincronizați"
 
 #, python-format
 #~ msgid "Selected security label: %s"
@@ -6559,13 +6705,59 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Send"
 #~ msgstr "_Trimiteți"
 
+#~ msgid "Send File Directly…"
+#~ msgstr "Trimiteți fișierul direct…"
+
+#~ msgid "Send Files Directly"
+#~ msgstr "Trimiteți fișierele direct"
+
+#~ msgid "Sender: "
+#~ msgstr "Expeditor: "
+
 #~ msgid "Show Gajim"
 #~ msgstr "Afișați Gajim"
+
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Afișați contactele offline"
+
+#~ msgid "Show _Features"
+#~ msgstr "Afișați _Funcții"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""
 #~ "Afișați starea de chat (de exemplu, \"tastează...\") lângă numele "
 #~ "contactului dumneavoastră"
+
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr ""
+#~ "Afișează o listă de transferuri de fișiere între dumneavoastră și "
+#~ "contactele voastre"
+
+#~ msgid "Sort by Status"
+#~ msgstr "Sortați după status"
+
+#~ msgid "Sta_tus"
+#~ msgstr "Sta_re"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Înțepenit"
+
+#~ msgid "Start Video Call…"
+#~ msgstr "Începeți apelul video…"
+
+#~ msgid "Start Voice Call…"
+#~ msgstr "Începeți apelul vocal…"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Stare: "
+
+#~ msgid "Stop File Transfers"
+#~ msgstr "Opriți transferurile de fișiere"
+
+#~ msgid "Submit"
+#~ msgstr "Trimiteți"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Treceți la primul - al nouălea spațiu de lucru"
@@ -6573,8 +6765,61 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Synchronise"
 #~ msgstr "Sincronizare"
 
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Sincronizarea conturilor"
+
+#, python-format
+#~ msgid ""
+#~ "The file %s has been received, but it seems to have been damaged along "
+#~ "the way.\n"
+#~ "Do you want to download it again?"
+#~ msgstr ""
+#~ "Fișierul %s a fost primit, dar se pare că a fost deteriorat pe parcurs.\n"
+#~ "Doriți să îl descărcați din nou?"
+
+#~ msgid "The service could not be found"
+#~ msgstr "Serviciul nu a putut fi găsit"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "Acest cont nu este conectat la server"
+
+#~ msgid "Time"
+#~ msgstr "Timp"
+
 #~ msgid "Topic"
 #~ msgstr "Subiect"
+
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Transferat: "
+
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Se transferă"
+
+#, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "Transportul \"%s\" va fi eliminat"
+
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Tip: "
+
+#~ msgid "UPnP-IGD Port Forwarding"
+#~ msgstr "Redirecționarea porturilor UPnP-IGD"
+
+#~ msgid "Unblock"
+#~ msgstr "Deblocați"
+
+#~ msgid "Unread Messages"
+#~ msgstr "Mesaje necitite"
+
+#~ msgctxt "Noun"
+#~ msgid "Upload"
+#~ msgstr "Încărcați"
+
+#~ msgid "Upload Files"
+#~ msgstr "Încărcați fișiere"
 
 #, fuzzy
 #~ msgid ""
@@ -6588,14 +6833,54 @@ msgstr "...sau lăsați-o aici"
 #~ "înainte de:aaaa-ll-zz\n"
 #~ "după: aaaa-ll-zz"
 
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Utilizator"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Apelurile video nu sunt disponibile pe Windows"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "De ce doriți să moderați acest mesaj?"
+
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ești pe cale să renunți la Gajim"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "Nu sunteți conectat la server"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr "Nu puteți sincroniza cu un cont decât dacă acesta este conectat."
+
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "Nu aveți permisiuni pentru a crea fișiere în acest director."
 
 #~ msgid "You dropped something Gajim could not process: %s"
 #~ msgstr "Ai pierdut ceva ce Gajim nu a putut procesa: %s"
 
+#~ msgid "You still have running file transfers"
+#~ msgstr "Aveți în continuare transferuri de fișiere în curs de execuție"
+
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr ""
+#~ "Nu veți mai putea să trimiteți și să primiți mesaje de la și către "
+#~ "contactele care utilizează acest mijloc de transport."
+
+#~ msgid "_Clear"
+#~ msgstr "_Curăță"
+
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Nu mă mai întreba din nou"
+
+#~ msgid "_Download Again"
+#~ msgstr "_Descărcați din nou"
+
+#~ msgid "_File Transfer"
+#~ msgstr "_Transfer de fișiere"
 
 #~ msgid "_Login"
 #~ msgstr "_Autentificare"
@@ -6603,11 +6888,42 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "_Modify Account…"
 #~ msgstr "_Modifică contul…"
 
+#~ msgid "_New post"
+#~ msgstr "_Postare nouă"
+
+#~ msgid "_Open Folder"
+#~ msgstr "_Deschideți dosarul"
+
 #~ msgid "_Retract"
 #~ msgstr "_Retrageți"
 
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr ""
+#~ "_Afișează o notificare atunci când transferul de fișiere este finalizat"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "_Începeți chat-ul..."
+
 #~ msgid "_Undo"
 #~ msgstr "_Anulați"
+
+#~ msgid "dark skin tone"
+#~ msgstr "tonul închis al pielii"
+
+#~ msgid "file transfers list"
+#~ msgstr "lista transferurilor de fișiere"
+
+#~ msgid "light skin tone"
+#~ msgstr "ton deschis al pielii"
+
+#~ msgid "medium skin tone"
+#~ msgstr "ton mediu al pielii"
+
+#~ msgid "medium-dark skin tone"
+#~ msgstr "ton mediu-închis al pielii"
+
+#~ msgid "medium-light skin tone"
+#~ msgstr "ton mediu deschis al pielii"
 
 #~ msgid "org.gajim.Gajim"
 #~ msgstr "org.gajim.Gajim"

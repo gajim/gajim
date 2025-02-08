@@ -3,13 +3,14 @@
 #
 # Stéphan Kochen <stephan@kochen.nl>, 2005.
 # Gerard Kusters <gk1mst+gajim-translate@hotmail.com>, 2024.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 10:56+0000\n"
-"PO-Revision-Date: 2024-08-27 21:18+0000\n"
-"Last-Translator: Gerard Kusters <gk1mst+gajim-translate@hotmail.com>\n"
+"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"PO-Revision-Date: 2024-11-19 21:11+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
 ">\n"
 "Language: nl\n"
@@ -43,6 +44,12 @@ msgstr "%(jid)s heeft de uitnodiging geweigerd: %(reason)s"
 msgid "%(contact)s invited you to %(chat)s"
 msgstr ""
 "<b>%(contact)s</b> heeft u uitgenodigd in groepsgesprek <b>%(room_jid)s</b>"
+
+#, python-format
+msgid ""
+"%(count)s messages from %(participant)s will be moderated.\n"
+"Why do you want to moderate these messages?"
+msgstr ""
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -123,10 +130,6 @@ msgid "%s can be joined by invite only."
 msgstr "%s kan alleen op uitnodiging worden toegetreden."
 
 #, fuzzy, python-format
-msgid "%s group chats found"
-msgstr "%s groepsgesprekken gevonden"
-
-#, fuzzy, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 
@@ -155,14 +158,6 @@ msgid "%s is not a valid loglevel"
 msgstr "%s is geen geldig logniveau"
 
 #, python-format
-msgid ""
-"%s is online with multiple devices.\n"
-"Choose the device you would like to send the files to."
-msgstr ""
-"%s is online met meerdere apparaten.\n"
-"Kies het apparaat waarnaar u de bestanden wilt verzenden."
-
-#, python-format
 msgid "%s is typing…"
 msgstr "%s is aan het typen…"
 
@@ -186,10 +181,6 @@ msgstr "%s gestopt met het delen van hun status"
 msgid "%s stopped the transfer"
 msgstr "%s heeft de overdracht gestopt"
 
-#, fuzzy, python-format
-msgid "%s wants to send you a file"
-msgstr "%s wil je een bestand sturen."
-
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
@@ -209,14 +200,6 @@ msgstr ""
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
-
-#. Translators:
-#. This should make the string KB/s,
-#. where 'KB' part is taken from %s.
-#. Only the 's' after / (which means second) should be translated.
-#, python-format
-msgid "(%(filesize_unit)s/s)"
-msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -310,26 +293,33 @@ msgstr "<b>1</b>"
 msgid "<b>2</b> abc"
 msgstr "<b>2</b> abc"
 
+#, fuzzy
 msgid "<b>3</b> def"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>4</b> ghi"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>5</b> jkl"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>6</b> mno"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>8</b> tuv"
-msgstr ""
+msgstr "<b>#</b>"
 
+#, fuzzy
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>#</b>"
 
 msgid ""
 "<b>XMPP Address</b>\n"
@@ -358,18 +348,8 @@ msgstr "Een groepsgesprek heeft minstens één eigenaar nodig"
 msgid "A feature comparison of various providers"
 msgstr "Een vergelijking van de functies van verschillende aanbieders"
 
-msgid ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-msgstr ""
-"Een bestand met deze naam bestaat al en je hebt geen toestemming om het te "
-"overschrijven."
-
 msgid "A fully-featured XMPP chat client"
 msgstr "Een volledig uitgeruste XMPP-chatclient"
-
-msgid "A list of active, completed and stopped file transfers"
-msgstr "Een lijst van actieve, afgeronde en gestopte bestandsoverdrachten"
 
 #, fuzzy
 msgid ""
@@ -407,11 +387,6 @@ msgstr "Af_wezig"
 msgid "Abort"
 msgstr "Afgebroken"
 
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Aborted"
-msgstr "Afgebroken"
-
 msgid "Abuse"
 msgstr ""
 
@@ -425,9 +400,13 @@ msgstr "Audiogespreksverzoek"
 msgid "Account"
 msgstr "Account"
 
-#, python-format
-msgid "Account %s is still connected"
-msgstr "Account %s is nog verbonden"
+#, fuzzy, python-format
+msgid ""
+"Account %(name)s is still connected\n"
+"All chat and group chat windows will be closed."
+msgstr ""
+"Alle gespreks- en groepsgespreksvensters zullen worden gesloten. Wil je "
+"doorgaan?"
 
 #, fuzzy
 msgid "Account Added"
@@ -494,6 +473,10 @@ msgstr "Gajim afsluiten"
 msgid "Action when closing Gajim’s window"
 msgstr "Gajim altijd sluiten"
 
+#, fuzzy, python-format
+msgid "Actions for \"%s\""
+msgstr "_Acties voor ‘%s’"
+
 #, fuzzy
 msgid "Activate"
 msgstr "Ingeschakeld"
@@ -512,6 +495,10 @@ msgid "Add Account"
 msgstr "Account toevoegen…"
 
 msgid "Add Contact"
+msgstr "Contact toevoegen"
+
+#, fuzzy
+msgid "Add Contact to New Group?"
 msgstr "Contact toevoegen"
 
 #, fuzzy
@@ -565,10 +552,6 @@ msgid "Add new line"
 msgstr "Nieuwe regel toevoegen"
 
 #, fuzzy
-msgid "Add reaction"
-msgstr "Instellingen"
-
-#, fuzzy
 msgid "Add some details…"
 msgstr "Contact toevoegen…"
 
@@ -581,6 +564,10 @@ msgstr ""
 #, fuzzy
 msgid "Add to Contact List…"
 msgstr "Contact toevoegen…"
+
+#, fuzzy
+msgid "Add to Group"
+msgstr "_Groepen bewerken…"
 
 #, fuzzy, python-format
 msgid "Added %(count)s contact"
@@ -671,10 +658,8 @@ msgid "All Chat States"
 msgstr "Alle gesprekstoestanden"
 
 #, fuzzy
-msgid "All chat and group chat windows will be closed."
-msgstr ""
-"Alle gespreks- en groepsgespreksvensters zullen worden gesloten. Wil je "
-"doorgaan?"
+msgid "All Chats"
+msgstr "Alle gesprekstoestanden"
 
 msgid "All files"
 msgstr "Alle bestanden"
@@ -746,9 +731,6 @@ msgstr "Accountrijlettertype"
 msgid "Anonymous login not supported"
 msgstr ""
 
-msgid "Another process is using this file."
-msgstr "Dit bestand is in gebruik door een ander proces."
-
 #, fuzzy
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Elke deelnemer kan je volledige JID te zien"
@@ -773,6 +755,10 @@ msgstr "approve"
 
 msgid "Archive"
 msgstr "Archiveren"
+
+#, fuzzy
+msgid "Archive Malformed"
+msgstr "Archief is misvormd"
 
 msgid "Archive corrupted"
 msgstr "Archief corrupt"
@@ -803,10 +789,6 @@ msgstr "Archiefvoorkeuren"
 msgid "Archiving Preferences for %s"
 msgstr "Archiefvoorkeuren voor %s"
 
-#, fuzzy
-msgid "Are you sure you want to leave this group chat?"
-msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
-
 msgid "Artists"
 msgstr "Artiesten"
 
@@ -824,13 +806,6 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
-msgid "Audio"
-msgstr "Audio"
-
-#, fuzzy
-msgid "Audio / Video Calls"
-msgstr "Audio / video"
-
 #, fuzzy
 msgid "Audio File"
 msgstr "Bestanden:"
@@ -844,18 +819,11 @@ msgid "Audio Output Device"
 msgstr "A_udio-uitvoerapparaat"
 
 #, fuzzy
-msgid "Audio Preview"
-msgstr "Bestanden:"
-
-#, fuzzy
 msgid "Audio preview is not available"
 msgstr "Audiosessies zijn niet beschikbaar"
 
 msgid "Audio test"
 msgstr "Audiotest"
-
-msgid "Audio/Video"
-msgstr "Audio/video"
 
 #, fuzzy
 msgid "Authentication aborted"
@@ -886,10 +854,6 @@ msgstr "Autoriteit en uitgeverserienummer komen niet overeen"
 msgid "Authority and subject key identifier mismatch"
 msgstr "Autoriteit en subjectsleutelidentificatie komen niet overeen"
 
-#, fuzzy
-msgid "Authorization Request"
-msgstr "Machtiging verzonden"
-
 msgid "Authors"
 msgstr "Auteurs"
 
@@ -911,9 +875,6 @@ msgstr "Niet beschikbaar"
 
 msgid "Autodetect"
 msgstr "Automatisch herkennen"
-
-msgid "Autojoin"
-msgstr "Automatisch deelnemen"
 
 msgid "Automatic Status"
 msgstr "Automatische status"
@@ -994,7 +955,7 @@ msgid "Block"
 msgstr "_Blokkeren"
 
 #, fuzzy
-msgid "Block Contact"
+msgid "Block Contact?"
 msgstr "Geblokkeerde contacten"
 
 #, fuzzy
@@ -1007,17 +968,6 @@ msgstr "Blokkeringslijst"
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Blokkeringslijst voor %s"
-
-#, fuzzy
-msgid "Block…"
-msgstr "_Blokkeren"
-
-msgid "Bookmarks"
-msgstr "Bladwijzers"
-
-#, fuzzy, python-format
-msgid "Bookmarks for %s"
-msgstr "Bladwijzers"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1089,15 +1039,6 @@ msgstr "Annuleren"
 #, fuzzy
 msgid "Cancel Download"
 msgstr "?Znw:Download"
-
-msgid "Cancel the selected file transfer and remove incomplete files"
-msgstr ""
-"De geselecteerde bestandsoverdracht annuleren en onvolledige bestanden "
-"verwijderen"
-
-#, fuzzy, python-format
-msgid "Cannot overwrite existing file \"%s\""
-msgstr "Kan bestaand bestand ‘%s’ niet overschrijven"
 
 msgid "Certificate"
 msgstr "Certificaat"
@@ -1191,6 +1132,10 @@ msgstr ""
 "in groepsgesprekken."
 
 #, fuzzy
+msgid "Chat"
+msgstr "Gesprekken"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Banier achtergrondkleur"
 
@@ -1209,6 +1154,10 @@ msgstr "Verbindingsopties"
 #, fuzzy
 msgid "Chat List"
 msgstr "Contacten"
+
+#, fuzzy
+msgid "Chat Type"
+msgstr "Type"
 
 msgid "Chat history"
 msgstr "Gespreksgeschiedenis"
@@ -1240,21 +1189,9 @@ msgstr "Controleren op updates bij opstarten"
 msgid "Check for updates periodically"
 msgstr ""
 
-msgid "Checking file…"
-msgstr "Bestand wordt gecontroleerd…"
-
-msgid "Choose Archive"
-msgstr "Kies archief"
-
-msgid "Choose Avatar…"
-msgstr "Kies avatar…"
-
 #, fuzzy
 msgid "Choose Device"
 msgstr "Kies archief"
-
-msgid "Choose File to Send…"
-msgstr "Kies het bestand om te verzenden…"
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1286,11 +1223,8 @@ msgid "Clear"
 msgstr "Wissen"
 
 #, fuzzy
-msgid "Clear Devices"
+msgid "Clear Devices?"
 msgstr "Server"
-
-msgid "Clear Devices Now?"
-msgstr ""
 
 #, fuzzy
 msgid "Clear Devices…"
@@ -1400,11 +1334,6 @@ msgid "Completed"
 msgstr "Afgerond"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Completed"
-msgstr "Afgerond"
-
-#, fuzzy
 msgid "Composing Only"
 msgstr "Alleen ‘aan het typen’"
 
@@ -1464,9 +1393,6 @@ msgstr "Verbindingsopties"
 #, fuzzy
 msgid "Connection failed"
 msgstr "Verbinding mislukt"
-
-msgid "Connection not available"
-msgstr "Verbinding niet beschikbaar"
 
 #, fuzzy, python-format
 msgid "Connection with %s could not be established."
@@ -1626,20 +1552,27 @@ msgid "Correct…"
 msgstr ""
 
 #, fuzzy
+msgid "Could Not Save File"
+msgstr "Kon bestand niet openen"
+
+#, fuzzy
 msgid "Could not access file"
 msgstr "Kon bestand niet openen"
+
+msgid "Could not find any messages for this participant."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Kon bestand niet openen"
 
 #, fuzzy
-msgid "Could not save file"
-msgstr "Kon bestand niet openen"
-
-#, fuzzy
 msgid "Could not save file to selected directory."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+
+#, fuzzy
+msgid "Could not select file or folder"
+msgstr "Kon bestand niet openen"
 
 #, fuzzy
 msgid "Could not update providers list"
@@ -1672,9 +1605,6 @@ msgstr "Groepsgesprekken verlaten"
 msgid "Create new group chat"
 msgstr "Groepsgesprekken verlaten"
 
-msgid "Create new post"
-msgstr "Nieuwe post maken"
-
 #, fuzzy
 msgid "Creating Account..."
 msgstr "Account %s wordt verwijderd"
@@ -1685,9 +1615,6 @@ msgstr ""
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Gebruikersreferenties"
-
-msgid "Current Developers"
-msgstr "Huidige ontwikkelaars"
 
 msgid "D-Bus Interface"
 msgstr ""
@@ -1705,10 +1632,6 @@ msgstr "Registratie mislukt"
 
 msgid "Deactivated"
 msgstr "Uitgeschakeld"
-
-#, fuzzy
-msgid "Debug Console"
-msgstr "XML-console"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1772,11 +1695,11 @@ msgid "Delete"
 msgstr "Verwijderen"
 
 #, fuzzy
-msgid "Delete Fingerprint"
+msgid "Delete Fingerprint?"
 msgstr "Vingerafdrukken"
 
 #, fuzzy
-msgid "Delete Message"
+msgid "Delete Message Locally?"
 msgstr "Bericht verwijderen"
 
 #, fuzzy
@@ -1784,14 +1707,13 @@ msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr "Bericht verwijderen"
 
-msgid "Delete PEP node?"
-msgstr ""
-
-msgid "Delete Theme"
+#, fuzzy
+msgid "Delete Node?"
 msgstr "Thema verwijderen"
 
-msgid "Delete message locally?"
-msgstr ""
+#, fuzzy
+msgid "Delete Theme?"
+msgstr "Thema verwijderen"
 
 msgid "Deny"
 msgstr "Weigeren"
@@ -1803,9 +1725,6 @@ msgstr "Abonneringsverzoek"
 msgid "Description"
 msgstr "Beschrijving"
 
-msgid "Description: "
-msgstr "Beschrijving: "
-
 #, fuzzy
 msgid "Destroy Group Chat…"
 msgstr "Nieuw groepsgesprek"
@@ -1816,6 +1735,10 @@ msgstr "Nieuw groepsgesprek"
 
 msgid "Details"
 msgstr "Details"
+
+#, fuzzy
+msgid "Developers"
+msgstr "Vroegere ontwikkelaars"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1842,18 +1765,25 @@ msgid "Direct Messages"
 msgstr "Bericht verwijderen"
 
 #, fuzzy
-msgid "Direct transfer (not encrypted)"
-msgstr "Bestandsoverdracht gestopt"
+msgid "Direct Message…"
+msgstr "Bericht verwijderen"
 
 #, fuzzy
 msgid "Directory"
 msgstr "Geschiedenis"
 
 #, fuzzy, python-format
-msgid "Directory \"%s\" is not writable"
+msgid ""
+"Directory \"%s\" is not writable. You do not have the proper permissions to "
+"create files in this directory."
+msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+
+#, fuzzy
+msgid "Directory Not Writable"
 msgstr "Map ‘%s’ is niet schrijfbaar"
 
-msgid "Disable Account"
+#, fuzzy
+msgid "Disable Account?"
 msgstr "Account uitschakelen"
 
 msgid "Disabled"
@@ -1905,7 +1835,7 @@ msgid "Do you really want to delete this PEP node?"
 msgstr "Wil je dit thema voorgoed verwijderen?"
 
 #, fuzzy, python-format
-msgid "Do you really want to remove \"%s\"?"
+msgid "Do you really want to remove \"%(group)s\"?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
 msgid ""
@@ -1913,6 +1843,10 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
+
+#, fuzzy
+msgid "Do you really want to remove this proxy?"
+msgstr "Wil je ze echt allemaal sluiten?"
 
 #, fuzzy
 msgid "Do you really want to remove your chat history for this chat?"
@@ -1938,11 +1872,6 @@ msgid "Don’t show this again"
 msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
-msgid "Download"
-msgstr "?Znw:Download"
-
-#, fuzzy
-msgctxt "Noun"
 msgid "Download"
 msgstr "?Znw:Download"
 
@@ -1976,10 +1905,6 @@ msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files here"
-msgstr "Stuurt een bestand naar een contact"
-
-#, fuzzy
-msgid "Drop files or contacts"
 msgstr "Stuurt een bestand naar een contact"
 
 msgid "Easily send pictures, videos or other files to friends and groups"
@@ -2017,6 +1942,9 @@ msgstr "E-mail"
 msgid "Emoji Shortcodes"
 msgstr ""
 
+msgid "Emojis"
+msgstr ""
+
 msgid "Enable"
 msgstr "Inschakelen"
 
@@ -2038,23 +1966,6 @@ msgstr ""
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
-msgid "Enables Gajim to provide Audio and Video chats"
-msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
-
-#, fuzzy
-msgid "Enables Gajim to provide a Audio preview"
-msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
-
-#, fuzzy
-msgid "Enables Gajim to provide a notification area icon"
-msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
-
-msgid ""
-"Enables Gajim to request your router to forward ports for file transfers"
-msgstr ""
-"Geeft Gajim de mogelijkheid om je router te vragen een poort door te sturen "
-"voor bestandsoverdrachten"
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 "Geeft Gajim de mogelijkheid om de spelling in je berichten te controleren "
@@ -2066,9 +1977,6 @@ msgid ""
 msgstr ""
 "Geeft Gajim de mogelijkheid om wachtwoorden veilig op te slaan in plaats van "
 "onversleuteld"
-
-msgid "Enables libappindicator, an alternative tray icon provider"
-msgstr ""
 
 #, python-format
 msgid "Encrypted (%s)"
@@ -2082,6 +1990,10 @@ msgstr "Bestand versleutelen…"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "Versleutelingsfout"
+
+#, fuzzy
+msgid "Encryption Error"
 msgstr "Versleutelingsfout"
 
 #, fuzzy
@@ -2108,6 +2020,14 @@ msgid "Enter a password to join this chat"
 msgstr ""
 
 #, fuzzy
+msgid "Enter group name"
+msgstr "Bijnaam invoeren"
+
+#, fuzzy
+msgid "Enter new contact name"
+msgstr "Bijnaam invoeren"
+
+#, fuzzy
 msgid "Enter new password..."
 msgstr "Voer nieuw wachtwoord in:"
 
@@ -2129,10 +2049,6 @@ msgstr "Kies afbeelding"
 msgid "Error in audio data stream."
 msgstr ""
 
-#, python-format
-msgid "Error message: %s"
-msgstr "Foutbericht: %s"
-
 msgid "Error opening file"
 msgstr "Fout bij openen van bestand"
 
@@ -2142,9 +2058,6 @@ msgstr "Fout ontvangen: {}"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Fout bij toevoegen van dienst. %s"
-
-msgid "Error while merging recordings, please try again."
-msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -2161,9 +2074,6 @@ msgstr "Fout bij toevoegen van dienst. %s"
 #, fuzzy
 msgid "Error while uploading avatar"
 msgstr "Fout bij toevoegen van transportcontact"
-
-msgid "Error!"
-msgstr "Fout!"
 
 #, python-format
 msgid "Error: %s"
@@ -2208,12 +2118,24 @@ msgid "Export"
 msgstr "_Exporteren"
 
 #, fuzzy
+msgid "Export CSV"
+msgstr "_Exporteren"
+
+#, fuzzy
 msgid "Export Chat History"
 msgstr "Gespreksgeschiedenis"
 
 #, fuzzy
+msgid "Export Contacts"
+msgstr "Contacten importeren"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "Voltooid"
+
+#, fuzzy
+msgid "Export History…"
+msgstr "Gespreksgeschiedenis"
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2225,6 +2147,10 @@ msgstr "Geschiedenislogboeken worden geëxporteerd…"
 #, fuzzy
 msgid "Exporting your messages..."
 msgstr "Berichten worden versleuteld."
+
+#, fuzzy
+msgid "Export…"
+msgstr "_Exporteren"
 
 #, fuzzy
 msgid "Extended Address"
@@ -2257,10 +2183,6 @@ msgctxt "Group chat name"
 msgid "Family"
 msgstr ""
 
-#, fuzzy
-msgid "Feature not available on Windows"
-msgstr "Functie niet beschikbaar voor Windows"
-
 msgid "Features"
 msgstr "Functies"
 
@@ -2279,14 +2201,6 @@ msgstr "is een bericht aan het typen…"
 
 msgid "File"
 msgstr "Bestand"
-
-#, fuzzy
-msgid "File Name: "
-msgstr "Bestandsnaam: %s"
-
-#, fuzzy
-msgid "File Offered"
-msgstr "Bestandsoverdracht"
 
 msgid "File Offered…"
 msgstr ""
@@ -2308,17 +2222,8 @@ msgstr "Bestandsoverdracht geannuleerd"
 msgid "File Transfer Completed"
 msgstr "Bestandsoverdracht voltooid"
 
-msgid "File Transfer Error"
-msgstr "Fout bij bestandsoverdracht"
-
-msgid "File Transfer Failed"
-msgstr "Bestandsoverdracht mislukt"
-
 msgid "File Transfer Stopped"
 msgstr "Bestandsoverdracht gestopt"
-
-msgid "File Transfers"
-msgstr "Bestandsoverdrachten"
 
 #, fuzzy
 msgid "File Verification Failed"
@@ -2331,9 +2236,6 @@ msgstr "Bestandsoverdracht annuleren"
 msgid "File does not exist"
 msgstr "Bestand bestaat niet"
 
-msgid "File error"
-msgstr "Bestandsfout"
-
 msgid "File is empty"
 msgstr "Bestand is leeg"
 
@@ -2344,11 +2246,9 @@ msgstr "Bestand is te groot, maximale bestandsgrootte is: %s"
 msgid "File size unknown"
 msgstr ""
 
-msgid "File too big, will use direct transfer (not encrypted)"
-msgstr ""
-
-msgid "File transfer stopped"
-msgstr "Bestandsoverdracht gestopt"
+#, fuzzy
+msgid "File too big"
+msgstr "Afbeelding is te groot"
 
 msgid "File transfers"
 msgstr "Bestandsoverdrachten"
@@ -2356,14 +2256,6 @@ msgstr "Bestandsoverdrachten"
 #, python-format
 msgid "File: %s"
 msgstr "Bestand: %s"
-
-#, python-format
-msgid "Filename: %s"
-msgstr "Bestandsnaam: %s"
-
-#, fuzzy
-msgid "Filetransfer Preference"
-msgstr "Fout bij bestandsoverdracht"
 
 msgid "Filter"
 msgstr "Filteren"
@@ -2373,8 +2265,13 @@ msgid "Filter Chats"
 msgstr "Privégesprekken"
 
 #, fuzzy
-msgid "Filter Chats…"
-msgstr "Privégesprekken"
+msgid "Filters"
+msgstr "Filteren"
+
+# Eerste bericht ontvangen?
+#, fuzzy
+msgid "Filters (active)"
+msgstr "Eerste ontvangen bericht"
 
 #, fuzzy
 msgid "Fingerprint for this Device"
@@ -2396,6 +2293,10 @@ msgstr ""
 "        Geschiedenis gesynchroniseerd.\n"
 "        {received} berichten gedownload.\n"
 "        "
+
+#, fuzzy, python-format
+msgid "Folder: %s"
+msgstr "Bestand: %s"
 
 msgid "For example: \"Julia is now online\""
 msgstr ""
@@ -2433,6 +2334,10 @@ msgid "Format your message"
 msgstr "Ongelezen berichten doorsturen"
 
 msgid "Forward 10 seconds"
+msgstr ""
+
+#, python-format
+msgid "Found %s contacts to import"
 msgstr ""
 
 #, fuzzy
@@ -2485,8 +2390,9 @@ msgstr "Gajim - %s"
 msgid "Gajim Themes"
 msgstr "Gajim-thema’s"
 
+#, fuzzy
 msgid "Gajim Update"
-msgstr ""
+msgstr "MOTD bijwerken…"
 
 #, fuzzy
 msgid ""
@@ -2496,9 +2402,6 @@ msgid ""
 msgstr ""
 "Chat met je vrienden of familie, wissel eenvoudig foto’s en gedachten uit of "
 "praat over het nieuws met je groepen."
-
-msgid "Gajim can not read this file"
-msgstr "Gajim kan dit bestand niet lezen"
 
 msgid ""
 "Gajim encountered an error.\n"
@@ -2656,10 +2559,6 @@ msgstr "Ondersteuning voor groepsgesprekken"
 msgid "Groups"
 msgstr "Groepen"
 
-msgctxt "proxy configuration"
-msgid "HTTP"
-msgstr ""
-
 #, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s)-machtiging voor %(url)s (id: %(id)s)"
@@ -2689,9 +2588,6 @@ msgstr ""
 #, fuzzy
 msgid "Hide chat list"
 msgstr "Videosessie in-/uitschakelen"
-
-msgid "Hide this menu"
-msgstr "Verberg dit menu"
 
 #, fuzzy
 msgid "Home"
@@ -2739,9 +2635,9 @@ msgstr "SSL-certificaatfout"
 msgid "Idle Time"
 msgstr "Inactief sinds:"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Idle since: %s"
-msgstr "Inactief sinds:"
+msgstr "Inactief sinds: %s"
 
 #, fuzzy
 msgid ""
@@ -2758,14 +2654,6 @@ msgstr ""
 msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 "Indien ingeschakeld zal Gajim inkomende aandachtsverzoeken negeren (‘wizz’)."
-
-#, fuzzy
-msgid ""
-"If enabled, Gajim will save the main window position when hiding it, and "
-"restore it when showing the window again."
-msgstr ""
-"Indien ingeschakeld zal Gajim de positie van het rooster onthouden bij "
-"verbergen, en deze herstellen wanneer het rooster weer wordt weergegeven."
 
 #, fuzzy
 msgid ""
@@ -2787,14 +2675,6 @@ msgstr ""
 "je GEEN ENKEL bericht van je server ontvangen."
 
 #, fuzzy
-msgid ""
-"If you quit now, the file(s) being transferred will be lost.\n"
-"Do you still want to quit?"
-msgstr ""
-"Als je nu afsluit zullen de momenteel bezige bestandsoverdrachten worden "
-"stopgezet. Wil je nog steeds afsluiten?"
-
-#, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Contacten uitnodigen"
 
@@ -2805,11 +2685,30 @@ msgstr "_Negeer gebeurtenissen van contacten die niet op mijn rooster staan"
 msgid "Image"
 msgstr "Afbeelding"
 
-msgid "Images"
-msgstr "Afbeeldingen"
+#, fuzzy
+msgid "Import"
+msgstr "_Exporteren"
 
 msgid "Import Contacts"
 msgstr "Contacten importeren"
+
+#, fuzzy
+msgid "Import Contacts?"
+msgstr "Contacten importeren"
+
+msgid "Import Error"
+msgstr ""
+
+#, fuzzy
+msgid "Import from Account"
+msgstr "Ondersteuning voor meerdere accounts"
+
+#, fuzzy
+msgid "Import from File"
+msgstr "Installeren van bestand…"
+
+msgid "Import…"
+msgstr ""
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2850,9 +2749,6 @@ msgstr "Plug-in installeren van bestand"
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-msgid "Install from File…"
-msgstr "Installeren van bestand…"
-
 #, fuzzy
 msgid "Installation failed"
 msgstr "Registratie mislukt"
@@ -2870,9 +2766,6 @@ msgstr "Ongeldig knooppunt"
 
 msgid "Invalid CA certificate"
 msgstr "Ongeldig CA-certificaat"
-
-msgid "Invalid File"
-msgstr "Ongeldig bestand"
 
 msgid "Invalid Name"
 msgstr "Ongeldige naam"
@@ -2942,9 +2835,6 @@ msgstr "Uitgegeven aan"
 msgid "Issued to\n"
 msgstr "Uitgegeven aan"
 
-msgid "It is not possible to send empty files"
-msgstr "Het is onmogelijk lege bestanden te sturen"
-
 #, fuzzy
 msgid "I’m eating."
 msgstr "Ik ben aan het werk."
@@ -2952,12 +2842,6 @@ msgstr "Ik ben aan het werk."
 #, fuzzy
 msgid "I’m out enjoying life."
 msgstr "Ik ben buiten van het leven aan het genieten."
-
-#, python-format
-msgid ""
-"I’m synchronizing my contacts from my account at \"%s\". Could you please "
-"add this address to your contact list?"
-msgstr ""
 
 #, fuzzy
 msgid "I’m watching a movie."
@@ -3050,7 +2934,7 @@ msgid "Last seen: %s"
 msgstr "Reden"
 
 #, fuzzy
-msgid "Leave Group Chat"
+msgid "Leave Group Chat?"
 msgstr "Groepsgesprekken verlaten"
 
 msgid "Leave _Permanently"
@@ -3148,6 +3032,9 @@ msgstr ""
 "Zoek dingen op op Wikipedia, in woordenboeken of met andere zoekmachines, "
 "rechtstreeks vanuit het gespreksvenster"
 
+msgid "Maintainers"
+msgstr ""
+
 #, fuzzy
 msgid "Make Admin"
 msgstr "Admin"
@@ -3169,6 +3056,10 @@ msgstr ""
 #, fuzzy
 msgid "Manage"
 msgstr "Beheren…"
+
+#, fuzzy
+msgid "Manage Contact List"
+msgstr "Contacten"
 
 msgid "Manage Proxies"
 msgstr "Proxy’s beheren"
@@ -3283,18 +3174,20 @@ msgstr "Statusveranderingen tonen"
 msgid "Miscellaneous"
 msgstr "Overige"
 
-msgid "Missing dependencies for Audio/Video"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
-msgid "Moderate Message"
+msgid "Moderate Message?"
 msgstr "Statusbericht"
 
 #, fuzzy
-msgid "Moderate message?"
+msgid "Moderate Messages?"
+msgstr "Statusbericht"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate all messages…"
 msgstr "statusbericht"
 
 #, fuzzy
@@ -3324,16 +3217,24 @@ msgstr "Beheerders"
 msgid "Modify"
 msgstr "Bewerken"
 
-#, fuzzy
-msgid "Modify Gateway…"
-msgstr "Account Be_werken..."
-
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
 #, fuzzy
+msgid "Move"
+msgstr "Audiogespreksverzoek"
+
+#, fuzzy
 msgid "Move Chat"
 msgstr "Audiogespreksverzoek"
+
+#, fuzzy
+msgid "Move Contact to New Group?"
+msgstr "Contactrijlettertype"
+
+#, fuzzy
+msgid "Move to Group"
+msgstr "Groep verwijderen"
 
 msgid "Movie"
 msgstr "Film"
@@ -3358,7 +3259,7 @@ msgstr "Naam"
 msgid "Name <b>default</b> is not allowed"
 msgstr "Naam <b>standaard</b> is niet toegestaan"
 
-msgid "Needs gspell to be installed"
+msgid "Needs libspelling to be installed"
 msgstr ""
 
 msgid "Never"
@@ -3372,6 +3273,10 @@ msgstr "Nieuw contact"
 
 #, fuzzy
 msgid "New Group"
+msgstr "Nieuw groepsgesprek"
+
+#, fuzzy
+msgid "New Group…"
 msgstr "Nieuw groepsgesprek"
 
 #, fuzzy
@@ -3396,15 +3301,22 @@ msgstr "Volgende"
 msgid "Nickname"
 msgstr "Bijnaam"
 
+msgid "Nickname contains invalid characters"
+msgstr ""
+
+#, fuzzy
+msgid "Nickname…"
+msgstr "Bijnaam"
+
 msgid "No"
 msgstr "Nee"
 
-#, fuzzy
-msgid "No Connection Available"
-msgstr "Verbinding niet beschikbaar"
-
 msgid "No File Transfer available"
 msgstr "Geen bestandsoverdracht beschikbaar"
+
+#, fuzzy
+msgid "No Messages Found"
+msgstr "Geen resultaten gevonden"
 
 #, fuzzy
 msgid "No Notifications"
@@ -3417,9 +3329,6 @@ msgstr "Wachtwoord vereist"
 
 msgid "No Proxy"
 msgstr "Geen proxy"
-
-msgid "No Results Found"
-msgstr "Geen resultaten gevonden"
 
 msgid "No Sync"
 msgstr ""
@@ -3450,6 +3359,9 @@ msgid ""
 "You can also type an XMPP address"
 msgstr ""
 
+msgid "No contacts found to import"
+msgstr ""
+
 msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
@@ -3459,6 +3371,9 @@ msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
+msgstr ""
+
+msgid "No group assigned"
 msgstr ""
 
 #, fuzzy
@@ -3521,6 +3436,10 @@ msgid "Not Decided"
 msgstr "Vertrouwen nog niet bepaald"
 
 #, fuzzy
+msgid "Not Joined"
+msgstr "Verbonden"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Not Moderated"
 msgstr "Niet versleuteld"
@@ -3538,11 +3457,6 @@ msgid "Not connected"
 msgstr "Verbonden"
 
 msgid "Not encrypted"
-msgstr "Niet versleuteld"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Not started"
 msgstr "Niet versleuteld"
 
 msgctxt "Profile"
@@ -3608,10 +3522,6 @@ msgstr "Een maand"
 
 msgid "One Year"
 msgstr "Een jaar"
-
-#, fuzzy
-msgid "Online Status"
-msgstr "Status"
 
 msgid "Only Admins and Owners can modify the affiliation"
 msgstr "Enkel administrators en eigenaars kunnen de aansluiting wijzigen"
@@ -3734,6 +3644,10 @@ msgstr "Eigenaar"
 msgid "PEP Configuration"
 msgstr "Configuratie"
 
+#, fuzzy
+msgid "PEP Node Not Removed"
+msgstr "PEP-knooppunt niet verwijderd"
+
 #, fuzzy, python-format
 msgid "PEP Service Configuration (%s)"
 msgstr "PEP-dienstconfiguratie"
@@ -3744,18 +3658,11 @@ msgid ""
 "%(message)s"
 msgstr "PEP-knooppunt %(node)s niet verwijderd: %(message)s"
 
-msgid "PEP node was not removed"
-msgstr "PEP-knooppunt niet verwijderd"
-
 msgid "PKCS12 Files"
 msgstr "PKCS12-bestanden"
 
 msgid "PNG files"
 msgstr "PNG-bestanden"
-
-#, fuzzy
-msgid "Pa_use/Resume"
-msgstr "He_rvatten"
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3817,11 +3724,9 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr "Wachtwoord komt niet overeen"
 
-msgid "Past Developers"
-msgstr "Vroegere ontwikkelaars"
-
+#, fuzzy
 msgid "Paste Last Input"
-msgstr ""
+msgstr "Kies afbeelding"
 
 #, fuzzy
 msgid "Paste as Code Block"
@@ -3835,19 +3740,7 @@ msgid "Path length constraint exceeded"
 msgstr "Padlengtelimiet overschreden"
 
 #, fuzzy
-msgid "Pause or resume file transfer"
-msgstr "Bestandsoverdracht annuleren"
-
-msgctxt "File transfer state"
-msgid "Paused"
-msgstr ""
-
-#, fuzzy
 msgid "Pending"
-msgstr "Toon alle wachtende gebeurt_enissen"
-
-#, fuzzy
-msgid "Pending Event"
 msgstr "Toon alle wachtende gebeurt_enissen"
 
 #, fuzzy
@@ -3932,13 +3825,17 @@ msgstr "Zorg ervoor dat je verbinding hebt met ‘%s’."
 
 msgid ""
 "Please select one of your accounts.\n"
-"Gajim will export all messages from the selected account to a directory of "
-"your choice."
+"Gajim will export all messages from the selected account and chats to a "
+"directory of your choice."
 msgstr ""
 
 #, fuzzy
 msgid "Please use these settings with caution!"
 msgstr "Let op: wees voorzichtig in het gebruik van deze opties!"
+
+#, fuzzy
+msgid "Plugin Failed"
+msgstr "Plug-in mislukt"
 
 msgid "Plugin Settings"
 msgstr "Plug-in-instellingen"
@@ -3949,9 +3846,6 @@ msgstr "Updates voor plug-ins"
 
 msgid "Plugin already exists"
 msgstr "Plug-in bestaat al"
-
-msgid "Plugin failed"
-msgstr "Plug-in mislukt"
 
 msgid "Plugin manager"
 msgstr "Plug-inbeheer"
@@ -3996,12 +3890,6 @@ msgstr "Voorkeurnaam"
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#, fuzzy
-msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-"Voorkeursmechanisme voor bestandsoverdracht bij verslepen en neerzetten van "
-"bestand op gespreksvenster. Kan ‘httpupload’ (standaard) of ‘jingle’ zijn"
-
 msgid "Presets"
 msgstr "Voorinstellingen"
 
@@ -4034,14 +3922,15 @@ msgstr "Privacy"
 msgid "Private"
 msgstr "Start Gesprek"
 
+#, fuzzy
+msgid "Processing image…"
+msgstr "Fout bij laden van afbeelding"
+
 msgid "Profile"
 msgstr "Profiel"
 
 msgid "Profile application with cprofile"
 msgstr ""
-
-msgid "Progress"
-msgstr "Voortgang"
 
 msgctxt "Group chat description"
 msgid "Project discussion"
@@ -4065,6 +3954,10 @@ msgstr ""
 msgid "Prox_y"
 msgstr "Prox_y:"
 
+#, fuzzy
+msgid "Proxies"
+msgstr "Proxy’s beheren"
+
 msgid "Proxy"
 msgstr "Proxy"
 
@@ -4080,8 +3973,9 @@ msgstr "Proxy"
 msgid "Proxy, custom hostname and port"
 msgstr "Gebruik aangepaste hostnaam/poort"
 
+#, fuzzy
 msgid "Public"
-msgstr ""
+msgstr "Versleutelingsfout"
 
 msgctxt "Group chat feature"
 msgid "Public"
@@ -4109,7 +4003,7 @@ msgid "Purge Chat History…"
 msgstr "Gespreksgeschiedenis"
 
 #, fuzzy
-msgid "Purge all Chat History"
+msgid "Purge all Chat History?"
 msgstr "Status: "
 
 #, python-format
@@ -4136,11 +4030,7 @@ msgid "Quote…"
 msgstr ""
 
 #, fuzzy
-msgid "Re-Login"
-msgstr "Inloggen"
-
-#, fuzzy
-msgid "Re-Login now?"
+msgid "Re-Login Now?"
 msgstr "Nu opnieuw inloggen?"
 
 msgid "Re_gister"
@@ -4156,10 +4046,6 @@ msgstr "_Wikipedia-artikel lezen"
 msgid "Read more about blind trust"
 msgstr ""
 
-#, fuzzy
-msgid "Really block this contact?"
-msgstr "Is OpenPGP ingeschakeld voor dit contact?"
-
 msgid "Reason"
 msgstr "Reden"
 
@@ -4171,8 +4057,9 @@ msgstr "Je kan ook een andere locatie opgeven:"
 msgid "Reason (optional)..."
 msgstr "Reden"
 
+#, fuzzy
 msgid "Reason for destruction"
-msgstr ""
+msgstr "Je kan ook een andere locatie opgeven:"
 
 #, fuzzy, python-format
 msgid "Reason: %s"
@@ -4191,13 +4078,6 @@ msgstr "Eerste ontvangen bericht"
 
 msgid "Recent history"
 msgstr "Recente geschiedenis"
-
-msgid "Recipient: "
-msgstr "Ontvanger: "
-
-#, python-format
-msgid "Recipient: %s"
-msgstr "Ontvanger: %s"
 
 msgid "Recognize your account by color"
 msgstr ""
@@ -4245,27 +4125,36 @@ msgstr ""
 msgid "Remove"
 msgstr "Verwijderen"
 
+#, fuzzy, python-format
+msgid "Remove %s contacts from your contact list?"
+msgstr "Verwijdert contact van rooster"
+
 #, fuzzy
 msgid "Remove Account"
 msgstr "Account %s wordt verwijderd"
-
-#, fuzzy
-msgid "Remove Chat History"
-msgstr "Gespreksgeschiedenis"
 
 #, fuzzy
 msgid "Remove Chat History?"
 msgstr "Gespreksgeschiedenis"
 
 #, fuzzy
-msgid "Remove Contact"
+msgid "Remove Contacts?"
 msgstr "Contact hernoemen"
 
-msgid "Remove Group"
+#, fuzzy
+msgid "Remove Contact…"
+msgstr "Contact hernoemen"
+
+#, fuzzy
+msgid "Remove From Contact List?"
+msgstr "Verwijdert contact van rooster"
+
+#, fuzzy
+msgid "Remove Group?"
 msgstr "Groep verwijderen"
 
 #, fuzzy
-msgid "Remove Group..."
+msgid "Remove Group…"
 msgstr "Groep verwijderen"
 
 #, fuzzy
@@ -4280,6 +4169,10 @@ msgid "Remove Proxy"
 msgstr "Proxy verwijderen"
 
 #, fuzzy
+msgid "Remove Proxy?"
+msgstr "Proxy verwijderen"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Plug-in-instellingen"
 
@@ -4288,34 +4181,31 @@ msgid "Remove Theme"
 msgstr "Actief thema"
 
 #, fuzzy
-msgid "Remove Transport"
-msgstr "Transporten weergeven"
-
-#, fuzzy
-msgid "Remove Workspace"
+msgid "Remove Workspace?"
 msgstr "Contact hernoemen"
 
-msgid "Remove completed, cancelled and failed file transfers from the list"
-msgstr ""
-"Afgeronde, geannuleerde en mislukte bestandsoverdrachten van de lijst "
-"verwijderen"
+#, fuzzy
+msgid "Remove from Contact List…"
+msgstr "Verwijdert contact van rooster"
 
 #, fuzzy
-msgid "Remove contact from contact list"
-msgstr "Verwijdert contact van rooster"
+msgid "Remove from Group"
+msgstr "Groep verwijderen"
 
 #, fuzzy
 msgid "Remove from contact list"
 msgstr "Verwijdert contact van rooster"
 
+#, fuzzy
 msgid "Remove this workspace"
-msgstr ""
+msgstr "Contact hernoemen"
 
 msgid "Remove your group chat avatar"
 msgstr ""
 
+#, fuzzy
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Je bijnaam veranderen (Ctrl+N)"
 
 #, fuzzy, python-format
 msgid "Removed %(count)s contact"
@@ -4324,12 +4214,20 @@ msgstr[0] "%d contact verwijderd"
 msgstr[1] "%d contacten verwijderd"
 
 #, fuzzy
-msgid "Remove…"
-msgstr "Verwijderen"
-
-#, fuzzy
 msgid "Removing Account..."
 msgstr "Account %s wordt verwijderd"
+
+#, fuzzy
+msgid "Rename"
+msgstr "Gebr_uikersnaam"
+
+#, fuzzy
+msgid "Rename Contact?"
+msgstr "Contact hernoemen"
+
+#, fuzzy
+msgid "Rename…"
+msgstr "Gebr_uikersnaam"
 
 msgctxt "Group chat name"
 msgid "Repairs"
@@ -4342,6 +4240,10 @@ msgstr ""
 msgid "Report"
 msgstr "_Fout melden"
 
+#, fuzzy
+msgid "Request"
+msgstr "Stem aanv_ragen"
+
 msgid "Request Search Form"
 msgstr ""
 
@@ -4351,6 +4253,10 @@ msgstr "Stem aanvragen"
 #, fuzzy
 msgid "Request contact information (Tune, Location)"
 msgstr "Contacten uitnodigen in gesprek (Ctrl+G)"
+
+#, fuzzy
+msgid "Request pending"
+msgstr "Vereist: Gspell"
 
 #, fuzzy
 msgid "Request to see this contact's online status"
@@ -4376,17 +4282,6 @@ msgstr ""
 msgid "Required"
 msgstr "Vereist"
 
-msgid "Requires: Gspell"
-msgstr "Vereist: Gspell"
-
-#, fuzzy
-msgid ""
-"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
-msgstr ""
-"Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
-"gstreamer1.0-plugins-ugly"
-
 #, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Vereist gnome-keyring en python-gnome2-desktop, of kwalletcli."
@@ -4395,16 +4290,9 @@ msgstr "Vereist gnome-keyring en python-gnome2-desktop, of kwalletcli."
 msgid "Requires: gsound"
 msgstr "Vereist: python-dbus"
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
-msgid "Requires: gupnpigd-1.0"
-msgstr "Vereist: gir1.2-gupnpigd-1.0"
-
-#, fuzzy
-msgid "Requires: libappindicator3"
-msgstr "Vereist: libxss"
+msgid "Requires: libspelling"
+msgstr "Vereist: Gspell"
 
 msgid "Requires: libxss"
 msgstr "Vereist: libxss"
@@ -4416,11 +4304,17 @@ msgstr "Gereserveerde naam"
 msgid "Reset"
 msgstr "Voorinstellingen"
 
-msgid "Reset Hints"
-msgstr ""
+#, fuzzy
+msgid "Reset Filters"
+msgstr "Bericht verzonden"
 
+#, fuzzy
+msgid "Reset Hints"
+msgstr "Bericht verzonden"
+
+#, fuzzy
 msgid "Reset User Interface Font Size"
-msgstr ""
+msgstr "Gebr_uikersnaam"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4491,11 +4385,6 @@ msgid "SHA-256:"
 msgstr "SHA-256"
 
 #, fuzzy
-msgctxt "proxy configuration"
-msgid "SOCKS5"
-msgstr "SOCKS5"
-
-#, fuzzy
 msgid "SSL Certificate Verification Error"
 msgstr "SSL-certificaatverificatie voor %s"
 
@@ -4523,9 +4412,6 @@ msgstr ""
 #, fuzzy
 msgid "Save"
 msgstr "Opslaan _als"
-
-msgid "Save File as…"
-msgstr "Bestand opslaan als…"
 
 msgid "Save Password"
 msgstr "Wachtwoord opslaan"
@@ -4628,6 +4514,12 @@ msgstr "Zoeken"
 msgid "Searching…"
 msgstr "Zoeken"
 
+#, fuzzy, python-format
+msgid ""
+"Searching…\n"
+"%s results"
+msgstr "Zoeken"
+
 #, fuzzy
 msgid "Search…"
 msgstr "Zoeken"
@@ -4650,15 +4542,6 @@ msgstr "Waarschuwing"
 msgid "Select Account"
 msgstr "Account %s wordt verwijderd"
 
-# Verzonden aan contacten?
-#, fuzzy
-msgid "Select Contacts"
-msgstr "Verzonden contacten:"
-
-#, fuzzy
-msgid "Select File…"
-msgstr "Bestand verzenden…"
-
 #, fuzzy
 msgctxt "Message row action"
 msgid "Select Messages…"
@@ -4675,14 +4558,6 @@ msgstr "Selecteer een emoji"
 
 msgid "Select playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Select the account with which you want to synchronize"
-msgstr "Selecteer de account waarmee je wil synchroniseren"
-
-#, fuzzy
-msgid "Select the contacts you want to synchronize"
-msgstr "Selecteer de contacten die je wil synchroniseren"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
@@ -4727,16 +4602,9 @@ msgstr "_Bestand Verzenden"
 msgid "Send File (max. %s)…"
 msgstr "Bestand opslaan als…"
 
-msgid "Send File Directly…"
-msgstr "Bestand rechtstreeks verzenden…"
-
 #, fuzzy
 msgid "Send Files"
 msgstr "_Bestand Verzenden"
-
-#, fuzzy
-msgid "Send Files Directly"
-msgstr "Bestand rechtstreeks verzenden…"
 
 msgid "Send File…"
 msgstr "Bestand verzenden…"
@@ -4769,9 +4637,6 @@ msgstr ""
 
 msgid "Send the message"
 msgstr "Bericht verzenden"
-
-msgid "Sender: "
-msgstr "Afzender: "
 
 #, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4826,6 +4691,14 @@ msgstr "Dienstontdekking met account %s"
 #, fuzzy
 msgid "Service Gateway"
 msgstr "Server"
+
+#, fuzzy
+msgid "Service Not Browsable"
+msgstr "De dienst kan niet worden doorbladerd"
+
+#, fuzzy
+msgid "Service Not Found"
+msgstr "De dienst kon niet gevonden worden"
 
 msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
@@ -4920,10 +4793,6 @@ msgid "Show Notifications"
 msgstr "Meldingen"
 
 #, fuzzy
-msgid "Show Offline Contacts"
-msgstr "Offline contacten weergeven"
-
-#, fuzzy
 msgid "Show Send Message Button"
 msgstr "Bericht verzenden"
 
@@ -4942,10 +4811,6 @@ msgstr "Transporten weergeven"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Bericht verzenden"
-
-#, fuzzy
-msgid "Show _Features"
-msgstr "Functies"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -5041,10 +4906,6 @@ msgid "Show/Hide Window"
 msgstr "Venster verbergen"
 
 #, fuzzy
-msgid "Shows a list of file transfers between you and your contacts"
-msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
-
-#, fuzzy
 msgid "Shutting down Gajim"
 msgstr "Gajim"
 
@@ -5086,10 +4947,6 @@ msgstr "Sorry, dat zou niet mogen gebeuren"
 msgid "Sort Participant List by Status"
 msgstr "Sorteer contacten op status"
 
-#, fuzzy
-msgid "Sort by Status"
-msgstr "Sorteer contacten op status"
-
 msgid "Sounds"
 msgstr "Geluiden"
 
@@ -5117,16 +4974,8 @@ msgctxt "Group chat description"
 msgid "Spring gathering"
 msgstr ""
 
-msgid "Sta_tus"
-msgstr "Sta_tus"
-
 msgid "Stage"
 msgstr ""
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Stalled"
-msgstr "Geïnstalleerd"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -5150,14 +4999,6 @@ msgstr "Gesprek beginnen"
 #, fuzzy
 msgid "Start Search..."
 msgstr "Gesprek beginnen…"
-
-#, fuzzy
-msgid "Start Video Call…"
-msgstr "Gesprek beginnen"
-
-#, fuzzy
-msgid "Start Voice Call…"
-msgstr "Gesprek beginnen"
 
 msgid "Start a new chat"
 msgstr "Nieuw gesprek beginnen"
@@ -5199,13 +5040,16 @@ msgid "Status and status message for all accounts"
 msgstr "Status van alle accounts synchroniseren"
 
 #, fuzzy
-msgid "Status message…"
-msgstr "_Statusbericht"
+msgid "Status is not shared"
+msgstr "Statusbericht"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Status: "
-msgstr "Status: "
+msgid "Status is shared"
+msgstr "Statusbericht"
+
+#, fuzzy
+msgid "Status message…"
+msgstr "_Statusbericht"
 
 #, fuzzy, python-format
 msgid "Status: %s"
@@ -5228,11 +5072,7 @@ msgid "Status: Online Color"
 msgstr "Statusberichtkleur"
 
 #, fuzzy
-msgid "Stop File Transfers"
-msgstr "Bestandsoverdrachten"
-
-#, fuzzy
-msgid "Stop sharing online status?"
+msgid "Stop Sharing Online Status?"
 msgstr "mij status te sturen"
 
 msgid "Stopped sharing their status with you"
@@ -5256,9 +5096,6 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Subjectuitgever komt niet overeen"
 
-msgid "Submit"
-msgstr ""
-
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5267,11 +5104,25 @@ msgstr "Abonneren"
 msgid "Subscribed"
 msgstr "Geabonneerd"
 
+#, fuzzy
+msgid "Subscription"
+msgstr "Abonnement:"
+
 msgid "Subscription Request"
 msgstr "Abonneringsverzoek"
 
+#, fuzzy
 msgid "Subscription:"
 msgstr "Abonnement:"
+
+# Verzonden aan contacten?
+#, fuzzy
+msgid "Successfully Added Contacts"
+msgstr "Verzonden contacten:"
+
+#, fuzzy
+msgid "Successfully Removed Contacts"
+msgstr "Contact hernoemen"
 
 msgid "Support"
 msgstr ""
@@ -5322,10 +5173,6 @@ msgstr "Drempelwaarde voor synchronisatie"
 #, fuzzy
 msgid "Synchronize"
 msgstr "Synchroniseren"
-
-#, fuzzy
-msgid "Synchronize Accounts"
-msgstr "Contacten synchroniseren"
 
 #, fuzzy
 msgid "Synchronize Chat History"
@@ -5409,15 +5256,6 @@ msgid ""
 "note that this can have other side effects."
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"The file %s has been received, but it seems to have been damaged along the "
-"way.\n"
-"Do you want to download it again?"
-msgstr ""
-"Het bestand %(file)s is ontvangen, maar lijkt onderweg beschadigd te zijn.\n"
-"Wil je het opnieuw downloaden?"
-
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
@@ -5444,12 +5282,6 @@ msgstr "Server gaf een onveilig transport weer (HTTP)"
 #, fuzzy
 msgid "The server was shut down."
 msgstr "Je server biedt geen ondersteuning voor vCard"
-
-msgid "The service could not be found"
-msgstr "De dienst kon niet gevonden worden"
-
-msgid "The service is not browsable"
-msgstr "De dienst kan niet worden doorbladerd"
 
 msgid "The signing certificate authority is not known"
 msgstr ""
@@ -5508,9 +5340,6 @@ msgstr "Kies archief"
 msgid "This account has already been added"
 msgstr "Account is toegevoegd"
 
-msgid "This account is not connected to the server"
-msgstr "Deze account is niet verbonden met de server"
-
 #, fuzzy
 msgid "This address does not seem to offer any gateway service."
 msgstr "%s is geen groepsgespreksserver"
@@ -5522,6 +5351,9 @@ msgstr "De dienst kan niet worden doorbladerd"
 msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
+
+msgid "This contact does not share their status with you"
 msgstr ""
 
 #, fuzzy
@@ -5653,9 +5485,6 @@ msgstr ""
 msgid "Three Months"
 msgstr "Drie maanden"
 
-msgid "Time"
-msgstr "Duur"
-
 msgid "Time Until Away"
 msgstr ""
 
@@ -5686,30 +5515,17 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Videosessie in-/uitschakelen"
 
+#, fuzzy
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "Transporten weergeven"
 
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Deelnemer"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Transferred: "
-msgstr "Bestandsoverdracht"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Transferring"
-msgstr "Verzenden"
-
-#, fuzzy
 msgid "Transferring File…"
 msgstr "Verzenden"
-
-#, fuzzy, python-format
-msgid "Transport \"%s\" will be removed"
-msgstr "Transport ‘%s’ zal worden verwijderd"
 
 msgid "Transports"
 msgstr "Transporten"
@@ -5765,14 +5581,6 @@ msgstr "Type"
 msgid "Type to search for values..."
 msgstr ""
 
-#, fuzzy
-msgctxt "File transfer type"
-msgid "Type: "
-msgstr "Type"
-
-msgid "UPnP-IGD Port Forwarding"
-msgstr "UPnP-IGD-poortdoorsturen"
-
 msgid "URI"
 msgstr "URI"
 
@@ -5807,10 +5615,6 @@ msgstr "Kon bestand niet openen"
 
 msgid "Unable to verify the first certificate"
 msgstr "Kan het eerste certificaat niet verifiëren"
-
-#, fuzzy
-msgid "Unblock"
-msgstr "_Deblokkeren"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -5868,10 +5672,6 @@ msgstr "Audiogespreksverzoek"
 msgid "Unpin Chat"
 msgstr "Audiogespreksverzoek"
 
-#, fuzzy
-msgid "Unread Messages"
-msgstr "Ongelezen gebeurtenissen"
-
 msgid "Unsupported certificate purpose"
 msgstr "Niet-ondersteund certificaatsdoel"
 
@@ -5914,17 +5714,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+#, fuzzy
 msgid "Updating provider list…"
-msgstr ""
-
-#, fuzzy
-msgctxt "Noun"
-msgid "Upload"
-msgstr "Bestand uploaden…"
-
-#, fuzzy
-msgid "Upload Files"
-msgstr "Bestand uploaden…"
+msgstr "Kon bestand niet openen"
 
 msgid "Upload File…"
 msgstr "Bestand uploaden…"
@@ -5996,10 +5788,6 @@ msgstr "Gebr_uikersnaam"
 msgid "User Interface Font Size"
 msgstr ""
 
-#, fuzzy
-msgid "User name…"
-msgstr "Gebr_uikersnaam"
-
 msgid "Users"
 msgstr "Gebruikers"
 
@@ -6044,18 +5832,15 @@ msgstr "_Video-invoerapparaat"
 msgid "Video Resolution"
 msgstr "Videosessie"
 
-#, fuzzy
-msgid "Video calls are not available on Windows"
-msgstr "Videosessies zijn niet beschikbaar"
-
 msgid "Video test"
 msgstr "Videotest"
 
 msgid "Visit Provider's Website"
 msgstr ""
 
+#, fuzzy
 msgid "Visit Website"
-msgstr ""
+msgstr "Registreren bij %s"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -6082,15 +5867,16 @@ msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
 #, fuzzy
+msgid "WAV Sounds"
+msgstr "WAV-geluiden"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Schrijven"
 
 #, fuzzy
 msgid "Warning"
 msgstr "Waarschuwing"
-
-msgid "Wav Sounds"
-msgstr "WAV-geluiden"
 
 #, fuzzy, python-format
 msgid "Web Search URL is missing a \"%s\""
@@ -6112,8 +5898,9 @@ msgstr "Verberg dit menu"
 msgid "What happened"
 msgstr ""
 
+#, fuzzy
 msgid "Where participants should go"
-msgstr ""
+msgstr "Deelnemer"
 
 #, fuzzy
 msgid ""
@@ -6135,10 +5922,6 @@ msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
 #, fuzzy
 msgid "Windows"
 msgstr "venster1"
-
-msgid "Without a connection, you can not browse available services"
-msgstr ""
-"Zonder verbinding is het niet mogelijk te bladeren door aangeboden diensten"
 
 msgid "Work"
 msgstr "Werk"
@@ -6198,6 +5981,10 @@ msgstr "Jij"
 msgid "You (%s) joined the group chat"
 msgstr "%s neemt nu deel aan het groepsgesprek"
 
+#, fuzzy
+msgid "You Have Unread Messages"
+msgstr "Je hebt ongelezen berichten"
+
 msgid "You are a visitor"
 msgstr ""
 
@@ -6216,7 +6003,7 @@ msgstr ""
 "Ben je zeker dat je wil doorgaan?"
 
 #, fuzzy, python-format
-msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
 msgstr ""
 "Je staat op het punt ‘%(name)s’ (%(jid)s) uit je rooster te verwijderen.\n"
 
@@ -6233,8 +6020,12 @@ msgstr ""
 msgid "You are not connected"
 msgstr "Er is geen verbinding met de server"
 
-msgid "You are not connected to the server"
-msgstr "Er is geen verbinding met de server"
+#, fuzzy
+msgid ""
+"You are not connected to the server. Without a connection, you can not "
+"browse available services"
+msgstr ""
+"Zonder verbinding is het niet mogelijk te bladeren door aangeboden diensten"
 
 #, python-format
 msgid "You are now known as %s"
@@ -6276,11 +6067,6 @@ msgstr "Je kan jezelf niet aan je rooster toevoegen."
 msgid "You cannot see this contact's online status"
 msgstr "Je kan jezelf niet aan je rooster toevoegen."
 
-msgid "You cannot synchronize with an account unless it is connected."
-msgstr ""
-"Het is niet mogelijk met een account te synchroniseren zonder dat deze "
-"verbonden is."
-
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
@@ -6290,14 +6076,8 @@ msgid ""
 "Error: %s."
 msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
 
-#, fuzzy
-msgid "You do not have permissions to create files in this directory."
-msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
-
-#, fuzzy
-msgid ""
-"You do not have the proper permissions to create files in this directory."
-msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+msgid "You don't share your status with this contact"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -6346,26 +6126,10 @@ msgid "You requested to see this contact's online status"
 msgstr "Vraag hem/haar toe_stemming zijn/haar status te zien"
 
 #, fuzzy
-msgid "You still have running file transfers"
-msgstr "Je hebt lopende bestandsoverdrachten"
-
-#, fuzzy
-msgid "You still have unread messages"
-msgstr "Je hebt ongelezen berichten"
-
-#, fuzzy
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
 msgstr "JID of contact die het bericht zal ontvangen"
-
-#, fuzzy
-msgid ""
-"You will no longer be able to send and receive messages from and to contacts "
-"using this transport."
-msgstr ""
-"Het zal niet meer mogelijk zijn berichten te sturen en ontvangen van "
-"contacten via dit transport."
 
 #, fuzzy
 msgid "Your Nickname"
@@ -6442,10 +6206,6 @@ msgstr "_Accounts"
 msgid "_Accounts"
 msgstr "Accounts"
 
-#, python-format
-msgid "_Actions for \"%s\""
-msgstr "_Acties voor ‘%s’"
-
 #, fuzzy
 msgid "_Add Account…"
 msgstr "Account toevoegen…"
@@ -6481,9 +6241,6 @@ msgstr "_Bezig"
 
 msgid "_Cancel"
 msgstr "_Annuleren"
-
-msgid "_Clear"
-msgstr "_Wissen"
 
 #, fuzzy
 msgid "_Clear Devices"
@@ -6546,20 +6303,12 @@ msgstr "Vraag mij _dit niet nogmaals"
 msgid "_Download"
 msgstr "Vraag mij _dit niet nogmaals"
 
-#, fuzzy
-msgid "_Download Again"
-msgstr "Vraag mij _dit niet nogmaals"
-
 msgid "_Edit"
 msgstr "B_ewerken"
 
 #, fuzzy
 msgid "_Features"
 msgstr "Functies"
-
-#, fuzzy
-msgid "_File Transfer"
-msgstr "Bestandsoverdracht"
 
 #, fuzzy
 msgctxt "User status"
@@ -6618,10 +6367,6 @@ msgid "_Name"
 msgstr "_Naam"
 
 #, fuzzy
-msgid "_New post"
-msgstr "Nieuwe post"
-
-#, fuzzy
 msgid "_No"
 msgstr "Nee"
 
@@ -6639,10 +6384,6 @@ msgstr "_Offline"
 #, fuzzy
 msgid "_Open"
 msgstr "Openen"
-
-#, fuzzy
-msgid "_Open Folder"
-msgstr "_Open bovenliggende map"
 
 #, fuzzy
 msgid "_Overwrite"
@@ -6714,19 +6455,12 @@ msgid "_Show Certificate"
 msgstr "Certificaat bekijken…"
 
 #, fuzzy
-msgid "_Show notification when file transfer is complete"
-msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
-
-#, fuzzy
 msgid "_Sign Up"
 msgstr "_inlog"
 
 #, fuzzy
 msgid "_Start / Join Chat…"
 msgstr "Gesprek beginnen"
-
-msgid "_Start Chat..."
-msgstr "Ge_sprek beginnen…"
 
 msgid "_Stop Sharing"
 msgstr ""
@@ -6747,6 +6481,7 @@ msgstr ""
 msgid "_Unsubscribe"
 msgstr "Abonnement _opzeggen"
 
+#, fuzzy
 msgid "_Username"
 msgstr "Gebr_uikersnaam"
 
@@ -6810,9 +6545,6 @@ msgstr "land"
 msgid "countrycode"
 msgstr "landcode"
 
-msgid "dark skin tone"
-msgstr ""
-
 msgid "datum"
 msgstr "datum"
 
@@ -6833,9 +6565,6 @@ msgstr "gebruiker@voorbeeld.nl"
 msgctxt "Group chat address"
 msgid "family"
 msgstr ""
-
-msgid "file transfers list"
-msgstr "bestandsoverdrachtlijst"
 
 msgid "floor"
 msgstr "verdiep"
@@ -6866,11 +6595,6 @@ msgstr "breedte"
 msgid "libsoup Version: %s"
 msgstr "GTK+-versie: %s"
 
-#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
-#. You can use the hex value to find the matching string.
-msgid "light skin tone"
-msgstr ""
-
 msgid "locality"
 msgstr "plaats"
 
@@ -6878,15 +6602,6 @@ msgid "lon"
 msgstr "lengte"
 
 msgid "macOS"
-msgstr ""
-
-msgid "medium skin tone"
-msgstr ""
-
-msgid "medium-dark skin tone"
-msgstr ""
-
-msgid "medium-light skin tone"
 msgstr ""
 
 msgctxt "Group chat address"
@@ -6991,6 +6706,26 @@ msgstr "{nick} is nu {show}{status}"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s groepsgesprekken gevonden"
+
+#, python-format
+#~ msgid ""
+#~ "%s is online with multiple devices.\n"
+#~ "Choose the device you would like to send the files to."
+#~ msgstr ""
+#~ "%s is online met meerdere apparaten.\n"
+#~ "Kies het apparaat waarnaar u de bestanden wilt verzenden."
+
+#, fuzzy, python-format
+#~ msgid "%s wants to send you a file"
+#~ msgstr "%s wil je een bestand sturen."
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
 
 #~ msgid "<Description>"
 #~ msgstr "<Beschrijving>"
@@ -7198,8 +6933,107 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "?gebruikersstatus:_Aanwezig"
 
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "Een bestand met deze naam bestaat al en je hebt geen toestemming om het "
+#~ "te overschrijven."
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "Een lijst van actieve, afgeronde en gestopte bestandsoverdrachten"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Aborted"
+#~ msgstr "Afgebroken"
+
+#, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "Account %s is nog verbonden"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Instellingen"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "_Groepen bewerken…"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Groepen"
+
+#~ msgid "Another process is using this file."
+#~ msgstr "Dit bestand is in gebruik door een ander proces."
+
+#, fuzzy
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Weet je zeker dat je het groepsgesprek ‘%s’ wil verlaten?"
+
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
+#~ msgid "Audio"
+#~ msgstr "Audio"
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Audio / video"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "Bestanden:"
+
+#~ msgid "Audio/Video"
+#~ msgstr "Audio/video"
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Machtiging verzonden"
+
+#~ msgid "Autojoin"
+#~ msgstr "Automatisch deelnemen"
+
+#, fuzzy
+#~ msgid "Block…"
+#~ msgstr "_Blokkeren"
+
+#~ msgid "Bookmarks"
+#~ msgstr "Bladwijzers"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "Bladwijzers"
+
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr ""
+#~ "De geselecteerde bestandsoverdracht annuleren en onvolledige bestanden "
+#~ "verwijderen"
+
+#, fuzzy, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "Kan bestaand bestand ‘%s’ niet overschrijven"
+
+#~ msgid "Checking file…"
+#~ msgstr "Bestand wordt gecontroleerd…"
+
+#~ msgid "Choose Archive"
+#~ msgstr "Kies archief"
+
+#~ msgid "Choose Avatar…"
+#~ msgstr "Kies avatar…"
+
+#~ msgid "Choose File to Send…"
+#~ msgstr "Kies het bestand om te verzenden…"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Afgerond"
+
+#~ msgid "Connection not available"
+#~ msgstr "Verbinding niet beschikbaar"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7209,6 +7043,36 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "Verwijzingslocatie kopiëren"
 
+#~ msgid "Create new post"
+#~ msgstr "Nieuwe post maken"
+
+#~ msgid "Current Developers"
+#~ msgstr "Huidige ontwikkelaars"
+
+#, fuzzy
+#~ msgid "Debug Console"
+#~ msgstr "XML-console"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Bericht verwijderen"
+
+#~ msgid "Description: "
+#~ msgstr "Beschrijving: "
+
+#, fuzzy
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "Bestandsoverdracht gestopt"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "?Znw:Download"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Stuurt een bestand naar een contact"
+
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profiel wordt verzonden…"
@@ -7217,13 +7081,107 @@ msgstr ""
 #~ msgid "Edit workspace…"
 #~ msgstr "_Groepen bewerken…"
 
+#~ msgid "Enables Gajim to provide Audio and Video chats"
+#~ msgstr ""
+#~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a Audio preview"
+#~ msgstr ""
+#~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#, fuzzy
+#~ msgid "Enables Gajim to provide a notification area icon"
+#~ msgstr ""
+#~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#~ msgid ""
+#~ "Enables Gajim to request your router to forward ports for file transfers"
+#~ msgstr ""
+#~ "Geeft Gajim de mogelijkheid om je router te vragen een poort door te "
+#~ "sturen voor bestandsoverdrachten"
+
+#, python-format
+#~ msgid "Error message: %s"
+#~ msgstr "Foutbericht: %s"
+
+#~ msgid "Error!"
+#~ msgstr "Fout!"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Functie niet beschikbaar voor Windows"
+
+#, fuzzy
+#~ msgid "File Name: "
+#~ msgstr "Bestandsnaam: %s"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "Bestandsoverdracht"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "Fout bij bestandsoverdracht"
+
+#~ msgid "File Transfer Failed"
+#~ msgstr "Bestandsoverdracht mislukt"
+
+#~ msgid "File Transfers"
+#~ msgstr "Bestandsoverdrachten"
+
+#~ msgid "File error"
+#~ msgstr "Bestandsfout"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "Bestandsoverdracht gestopt"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Bestandsnaam: %s"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "Fout bij bestandsoverdracht"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Privégesprekken"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "Gajim-thema’s"
 
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim kan dit bestand niet lezen"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Verberg dit menu"
+
+#, fuzzy
+#~ msgid ""
+#~ "If enabled, Gajim will save the main window position when hiding it, and "
+#~ "restore it when showing the window again."
+#~ msgstr ""
+#~ "Indien ingeschakeld zal Gajim de positie van het rooster onthouden bij "
+#~ "verbergen, en deze herstellen wanneer het rooster weer wordt weergegeven."
+
+#, fuzzy
+#~ msgid ""
+#~ "If you quit now, the file(s) being transferred will be lost.\n"
+#~ "Do you still want to quit?"
+#~ msgstr ""
+#~ "Als je nu afsluit zullen de momenteel bezige bestandsoverdrachten worden "
+#~ "stopgezet. Wil je nog steeds afsluiten?"
+
+#~ msgid "Images"
+#~ msgstr "Afbeeldingen"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Actief"
+
+#~ msgid "Invalid File"
+#~ msgstr "Ongeldig bestand"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"
@@ -7233,6 +7191,9 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Contacten uitnodigen"
 
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "Het is onmogelijk lege bestanden te sturen"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reden"
@@ -7241,12 +7202,136 @@ msgstr ""
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Contactrij achtergrondkleur"
 
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "statusbericht"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "Account Be_werken..."
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Contact hernoemen"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "Verbinding niet beschikbaar"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Niet versleuteld"
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Status"
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organisatorische eenheid (OU)"
 
 #, fuzzy
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Organisatorische eenheid (OU)"
+
+#, fuzzy
+#~ msgid "Pa_use/Resume"
+#~ msgstr "He_rvatten"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Bestandsoverdracht annuleren"
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Toon alle wachtende gebeurt_enissen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Preferred file transfer mechanism for file drag&drop on a chat window"
+#~ msgstr ""
+#~ "Voorkeursmechanisme voor bestandsoverdracht bij verslepen en neerzetten "
+#~ "van bestand op gespreksvenster. Kan ‘httpupload’ (standaard) of ‘jingle’ "
+#~ "zijn"
+
+#~ msgid "Progress"
+#~ msgstr "Voortgang"
+
+#, fuzzy
+#~ msgid "Re-Login"
+#~ msgstr "Inloggen"
+
+#, fuzzy
+#~ msgid "Really block this contact?"
+#~ msgstr "Is OpenPGP ingeschakeld voor dit contact?"
+
+#~ msgid "Recipient: "
+#~ msgstr "Ontvanger: "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Ontvanger: %s"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Gespreksgeschiedenis"
+
+#, fuzzy
+#~ msgid "Remove Group..."
+#~ msgstr "Groep verwijderen"
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "Transporten weergeven"
+
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr ""
+#~ "Afgeronde, geannuleerde en mislukte bestandsoverdrachten van de lijst "
+#~ "verwijderen"
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Verwijdert contact van rooster"
+
+#, fuzzy
+#~ msgid "Remove…"
+#~ msgstr "Verwijderen"
+
+#, fuzzy
+#~ msgid ""
+#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
+#~ "ugly-1.0, gst-libav"
+#~ msgstr ""
+#~ "Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
+#~ "gstreamer1.0-plugins-ugly"
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Vereist: gir1.2-gupnpigd-1.0"
+
+#, fuzzy
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Vereist: libxss"
+
+#, fuzzy
+#~ msgctxt "proxy configuration"
+#~ msgid "SOCKS5"
+#~ msgstr "SOCKS5"
+
+#~ msgid "Save File as…"
+#~ msgstr "Bestand opslaan als…"
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "Bestand verzenden…"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "Selecteer de account waarmee je wil synchroniseren"
+
+#, fuzzy
+#~ msgid "Select the contacts you want to synchronize"
+#~ msgstr "Selecteer de contacten die je wil synchroniseren"
 
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
@@ -7256,9 +7341,60 @@ msgstr ""
 #~ msgid "Send"
 #~ msgstr "Ver_zenden"
 
+#~ msgid "Send File Directly…"
+#~ msgstr "Bestand rechtstreeks verzenden…"
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Bestand rechtstreeks verzenden…"
+
+#~ msgid "Sender: "
+#~ msgstr "Afzender: "
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Offline contacten weergeven"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Functies"
+
+#, fuzzy
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
+
+#, fuzzy
+#~ msgid "Sort by Status"
+#~ msgstr "Sorteer contacten op status"
+
+#~ msgid "Sta_tus"
+#~ msgstr "Sta_tus"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Geïnstalleerd"
+
+#, fuzzy
+#~ msgid "Start Video Call…"
+#~ msgstr "Gesprek beginnen"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Gesprek beginnen"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "Bestandsoverdrachten"
 
 #, fuzzy
 #~ msgid "Switch to the first - ninth workspace"
@@ -7268,12 +7404,121 @@ msgstr ""
 #~ msgstr "Synchroniseren"
 
 #, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Contacten synchroniseren"
+
+#, fuzzy, python-format
+#~ msgid ""
+#~ "The file %s has been received, but it seems to have been damaged along "
+#~ "the way.\n"
+#~ "Do you want to download it again?"
+#~ msgstr ""
+#~ "Het bestand %(file)s is ontvangen, maar lijkt onderweg beschadigd te "
+#~ "zijn.\n"
+#~ "Wil je het opnieuw downloaden?"
+
+#~ msgid "The service could not be found"
+#~ msgstr "De dienst kon niet gevonden worden"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "Deze account is niet verbonden met de server"
+
+#~ msgid "Time"
+#~ msgstr "Duur"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "Bestandsoverdracht"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Verzenden"
+
+#, fuzzy, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "Transport ‘%s’ zal worden verwijderd"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Type"
+
+#~ msgid "UPnP-IGD Port Forwarding"
+#~ msgstr "UPnP-IGD-poortdoorsturen"
+
+#, fuzzy
+#~ msgid "Unblock"
+#~ msgstr "_Deblokkeren"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "Ongelezen gebeurtenissen"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Upload"
+#~ msgstr "Bestand uploaden…"
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Bestand uploaden…"
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "Gebr_uikersnaam"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Videosessies zijn niet beschikbaar"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "Wil je dit bericht voorgoed verwijderen"
+
+#, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "Er is geen verbinding met de server"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr ""
+#~ "Het is niet mogelijk met een account te synchroniseren zonder dat deze "
+#~ "verbonden is."
+
+#, fuzzy
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "Je hebt geen toestemming om bestanden aan te maken in deze map."
+
+#, fuzzy
+#~ msgid "You still have running file transfers"
+#~ msgstr "Je hebt lopende bestandsoverdrachten"
+
+#, fuzzy
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr ""
+#~ "Het zal niet meer mogelijk zijn berichten te sturen en ontvangen van "
+#~ "contacten via dit transport."
+
+#~ msgid "_Clear"
+#~ msgstr "_Wissen"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy
+#~ msgid "_Download Again"
+#~ msgstr "Vraag mij _dit niet nogmaals"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "Bestandsoverdracht"
 
 #, fuzzy
 #~ msgid "_Login"
@@ -7283,8 +7528,26 @@ msgstr ""
 #~ msgid "_Modify Account…"
 #~ msgstr "Account Be_werken..."
 
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "Nieuwe post"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "_Open bovenliggende map"
+
+#, fuzzy
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "Ge_sprek beginnen…"
+
 #~ msgid "_Undo"
 #~ msgstr "_Ongedaan maken"
+
+#~ msgid "file transfers list"
+#~ msgstr "bestandsoverdrachtlijst"
 
 #, fuzzy
 #~ msgid "yesterday "

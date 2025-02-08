@@ -2,19 +2,22 @@
 # This file is distributed under the same license as the Gajim package.
 #
 # Jeff Bailes <thepizzaking@gmail.com>, 2006, 2009.
+# Daniel Brötzmann <mailtrash@posteo.de>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-02 10:56+0000\n"
-"PO-Revision-Date: 2009-11-20 20:49+1100\n"
-"Last-Translator: Jeff Bailes <thepizzaking@gmail.com>\n"
-"Language-Team: English <en_gb@li.org>\n"
-"Language: en\n"
+"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"PO-Revision-Date: 2024-11-19 21:11+0000\n"
+"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
+"Language-Team: English (United Kingdom) <https://translate.gajim.org/"
+"projects/gajim/master/en_GB/>\n"
+"Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.0\n"
 
 #, fuzzy
 msgid " (Video Call)"
@@ -39,6 +42,12 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%(contact)s invited you to %(chat)s"
 msgstr "$Contact has invited you to group chat %(room_jid)s"
+
+#, python-format
+msgid ""
+"%(count)s messages from %(participant)s will be moderated.\n"
+"Why do you want to moderate these messages?"
+msgstr ""
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -119,10 +128,6 @@ msgid "%s can be joined by invite only."
 msgstr ""
 
 #, fuzzy, python-format
-msgid "%s group chats found"
-msgstr "%s not found"
-
-#, fuzzy, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%(nick)s has been removed from the room (%(reason)s)"
 
@@ -150,12 +155,6 @@ msgstr ""
 msgid "%s is not a valid loglevel"
 msgstr "%s is not a valid loglevel"
 
-#, python-format
-msgid ""
-"%s is online with multiple devices.\n"
-"Choose the device you would like to send the files to."
-msgstr ""
-
 #, fuzzy, python-format
 msgid "%s is typing…"
 msgstr "Writing"
@@ -180,10 +179,6 @@ msgstr ""
 msgid "%s stopped the transfer"
 msgstr "Remote contact stopped transfer"
 
-#, fuzzy, python-format
-msgid "%s wants to send you a file"
-msgstr "%s wants to send you a file."
-
 #, python-format
 msgctxt "positive longitude"
 msgid "%sE"
@@ -203,14 +198,6 @@ msgstr ""
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
-
-#. Translators:
-#. This should make the string KB/s,
-#. where 'KB' part is taken from %s.
-#. Only the 's' after / (which means second) should be translated.
-#, python-format
-msgid "(%(filesize_unit)s/s)"
-msgstr "(%(filesize_unit)s/s)"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -328,15 +315,17 @@ msgstr "<b>Font</b>"
 msgid "<b>6</b> mno"
 msgstr "<b>Font</b>"
 
+#, fuzzy
 msgid "<b>7</b> pqrs"
-msgstr ""
+msgstr "<b>Font</b>"
 
 #, fuzzy
 msgid "<b>8</b> tuv"
 msgstr "<b>Font</b>"
 
+#, fuzzy
 msgid "<b>9</b> wxyz"
-msgstr ""
+msgstr "<b>Font</b>"
 
 #, fuzzy
 msgid ""
@@ -368,18 +357,8 @@ msgstr "None"
 msgid "A feature comparison of various providers"
 msgstr ""
 
-msgid ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-msgstr ""
-"A file with this name already exists and you do not have permission to "
-"overwrite it."
-
 msgid "A fully-featured XMPP chat client"
 msgstr ""
-
-msgid "A list of active, completed and stopped file transfers"
-msgstr "A list of active, completed and stopped file transfers"
 
 #, fuzzy
 msgid ""
@@ -414,10 +393,6 @@ msgstr "A_way"
 msgid "Abort"
 msgstr ""
 
-msgctxt "File transfer state"
-msgid "Aborted"
-msgstr ""
-
 msgid "Abuse"
 msgstr ""
 
@@ -433,8 +408,11 @@ msgid "Account"
 msgstr "Account"
 
 #, fuzzy, python-format
-msgid "Account %s is still connected"
-msgstr "Account \"%s\" is connected to the server"
+msgid ""
+"Account %(name)s is still connected\n"
+"All chat and group chat windows will be closed."
+msgstr ""
+"All chat and groupchat windows will be closed. Do you want to continue?"
 
 #, fuzzy
 msgid "Account Added"
@@ -501,6 +479,10 @@ msgstr "Gajim"
 msgid "Action when closing Gajim’s window"
 msgstr "Always close Gajim"
 
+#, fuzzy, python-format
+msgid "Actions for \"%s\""
+msgstr "_Actions for \"%s\""
+
 #, fuzzy
 msgid "Activate"
 msgstr "Activated"
@@ -520,6 +502,10 @@ msgstr "_Add Contact..."
 
 #, fuzzy
 msgid "Add Contact"
+msgstr "_Add Contact..."
+
+#, fuzzy
+msgid "Add Contact to New Group?"
 msgstr "_Add Contact..."
 
 #, fuzzy
@@ -575,10 +561,6 @@ msgid "Add new line"
 msgstr "Create new post"
 
 #, fuzzy
-msgid "Add reaction"
-msgstr "Registration failed"
-
-#, fuzzy
 msgid "Add some details…"
 msgstr "_Add Contact..."
 
@@ -591,6 +573,10 @@ msgstr ""
 #, fuzzy
 msgid "Add to Contact List…"
 msgstr "_Add Contact..."
+
+#, fuzzy
+msgid "Add to Group"
+msgstr "Edit _Groups"
 
 #, fuzzy, python-format
 msgid "Added %(count)s contact"
@@ -688,9 +674,8 @@ msgid "All Chat States"
 msgstr "All statuses"
 
 #, fuzzy
-msgid "All chat and group chat windows will be closed."
-msgstr ""
-"All chat and groupchat windows will be closed. Do you want to continue?"
+msgid "All Chats"
+msgstr "All statuses"
 
 msgid "All files"
 msgstr "All files"
@@ -759,9 +744,6 @@ msgstr "Account"
 msgid "Anonymous login not supported"
 msgstr ""
 
-msgid "Another process is using this file."
-msgstr ""
-
 #, fuzzy
 msgid "Any participant is allowed to see your full XMPP Address"
 msgstr "Any occupant is allowed to see your full JID"
@@ -786,6 +768,10 @@ msgstr ""
 #, fuzzy
 msgid "Archive"
 msgstr "File is empty"
+
+#, fuzzy
+msgid "Archive Malformed"
+msgstr "Service sent malformed data"
 
 msgid "Archive corrupted"
 msgstr ""
@@ -819,10 +805,6 @@ msgstr "_Preferences"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-#, fuzzy
-msgid "Are you sure you want to leave this group chat?"
-msgstr "Are you sure you want to leave group chat \"%s\"?"
-
 msgid "Artists"
 msgstr ""
 
@@ -840,13 +822,6 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "First Message Received"
 
-msgid "Audio"
-msgstr ""
-
-#, fuzzy
-msgid "Audio / Video Calls"
-msgstr "Private Chat"
-
 #, fuzzy
 msgid "Audio File"
 msgstr "File: "
@@ -860,17 +835,10 @@ msgid "Audio Output Device"
 msgstr "Default Message"
 
 #, fuzzy
-msgid "Audio Preview"
-msgstr "File: "
-
-#, fuzzy
 msgid "Audio preview is not available"
 msgstr "A connection is not available"
 
 msgid "Audio test"
-msgstr ""
-
-msgid "Audio/Video"
 msgstr ""
 
 #, fuzzy
@@ -903,10 +871,6 @@ msgid "Authority and subject key identifier mismatch"
 msgstr "Authority and subject key identifier mismatch"
 
 #, fuzzy
-msgid "Authorization Request"
-msgstr "Authorisation has been sent"
-
-#, fuzzy
 msgid "Authors"
 msgstr "Au_thorise"
 
@@ -928,10 +892,6 @@ msgstr "Not Available"
 
 msgid "Autodetect"
 msgstr ""
-
-#, fuzzy
-msgid "Autojoin"
-msgstr "Auto join"
 
 #, fuzzy
 msgid "Automatic Status"
@@ -1014,7 +974,7 @@ msgid "Block"
 msgstr "_Block"
 
 #, fuzzy
-msgid "Block Contact"
+msgid "Block Contact?"
 msgstr "Blocked Contacts"
 
 #, fuzzy
@@ -1028,18 +988,6 @@ msgstr "Ban List"
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Privacy List for %s"
-
-#, fuzzy
-msgid "Block…"
-msgstr "_Block"
-
-#, fuzzy
-msgid "Bookmarks"
-msgstr "_Bookmark"
-
-#, fuzzy, python-format
-msgid "Bookmarks for %s"
-msgstr "_Bookmark"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1113,14 +1061,6 @@ msgstr "_Cancel"
 #, fuzzy
 msgid "Cancel Download"
 msgstr "Download"
-
-#, fuzzy
-msgid "Cancel the selected file transfer and remove incomplete files"
-msgstr "Cancels the selected file transfer and removes incomplete file"
-
-#, fuzzy, python-format
-msgid "Cannot overwrite existing file \"%s\""
-msgstr "Cannot overwrite existing file \"%s\""
 
 #, fuzzy
 msgid "Certificate"
@@ -1214,6 +1154,10 @@ msgstr ""
 "chat."
 
 #, fuzzy
+msgid "Chat"
+msgstr "Chats"
+
+#, fuzzy
 msgid "Chat Banner: Background Color"
 msgstr "Contact Connected"
 
@@ -1230,6 +1174,10 @@ msgstr "Connection"
 #, fuzzy
 msgid "Chat List"
 msgstr "Contacts"
+
+#, fuzzy
+msgid "Chat Type"
+msgstr "Type"
 
 #, fuzzy
 msgid "Chat history"
@@ -1260,24 +1208,8 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
-msgid "Checking file…"
-msgstr "Sending profile..."
-
-#, fuzzy
-msgid "Choose Archive"
-msgstr "Choose Image"
-
-#, fuzzy
-msgid "Choose Avatar…"
-msgstr "Choose Image"
-
-#, fuzzy
 msgid "Choose Device"
 msgstr "Choose Image"
-
-#, fuzzy
-msgid "Choose File to Send…"
-msgstr "Choose File to Send..."
 
 msgid "Choose History Export Directory"
 msgstr ""
@@ -1312,11 +1244,8 @@ msgid "Clear"
 msgstr "Cleaning"
 
 #, fuzzy
-msgid "Clear Devices"
+msgid "Clear Devices?"
 msgstr "Server"
-
-msgid "Clear Devices Now?"
-msgstr ""
 
 #, fuzzy
 msgid "Clear Devices…"
@@ -1373,8 +1302,9 @@ msgstr "Search"
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
 
+#, fuzzy
 msgid "Close chat"
-msgstr ""
+msgstr "Search"
 
 msgid "Close with Escape"
 msgstr ""
@@ -1426,11 +1356,6 @@ msgstr "Completed"
 msgid "Complete a command or a nickname"
 msgstr "Please create a clean new theme with your desired name."
 
-msgid "Completed"
-msgstr "Completed"
-
-#, fuzzy
-msgctxt "File transfer state"
 msgid "Completed"
 msgstr "Completed"
 
@@ -1497,9 +1422,6 @@ msgstr "Connection"
 #, fuzzy
 msgid "Connection failed"
 msgstr "Connection Failed"
-
-msgid "Connection not available"
-msgstr "Connection not available"
 
 #, fuzzy, python-format
 msgid "Connection with %s could not be established."
@@ -1662,20 +1584,27 @@ msgid "Correct…"
 msgstr ""
 
 #, fuzzy
+msgid "Could Not Save File"
+msgstr "Could not load image"
+
+#, fuzzy
 msgid "Could not access file"
 msgstr "Could not load image"
+
+msgid "Could not find any messages for this participant."
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Could not open file (%s)"
 msgstr "Could not load image"
 
 #, fuzzy
-msgid "Could not save file"
-msgstr "Could not load image"
-
-#, fuzzy
 msgid "Could not save file to selected directory."
 msgstr "You do not have permission to create files in this directory."
+
+#, fuzzy
+msgid "Could not select file or folder"
+msgstr "Could not load image"
 
 #, fuzzy
 msgid "Could not update providers list"
@@ -1709,9 +1638,6 @@ msgstr "Leave Groupchats"
 msgid "Create new group chat"
 msgstr "Leave Groupchats"
 
-msgid "Create new post"
-msgstr "Create new post"
-
 #, fuzzy
 msgid "Creating Account..."
 msgstr "Removing %s account"
@@ -1722,10 +1648,6 @@ msgstr ""
 #, fuzzy
 msgid "Credentials expired"
 msgstr "Certificate has expired"
-
-#, fuzzy
-msgid "Current Developers"
-msgstr "Current Developers:"
 
 msgid "D-Bus Interface"
 msgstr ""
@@ -1743,10 +1665,6 @@ msgstr "Registration failed"
 
 msgid "Deactivated"
 msgstr "Deactivated"
-
-#, fuzzy
-msgid "Debug Console"
-msgstr "XML Console"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1810,11 +1728,11 @@ msgstr "Leave Groupchats"
 msgid "Delete"
 msgstr "Delete"
 
-msgid "Delete Fingerprint"
+msgid "Delete Fingerprint?"
 msgstr ""
 
 #, fuzzy
-msgid "Delete Message"
+msgid "Delete Message Locally?"
 msgstr "Default Message"
 
 #, fuzzy
@@ -1822,15 +1740,13 @@ msgctxt "Message row action"
 msgid "Delete Message Locally…"
 msgstr "Default Message"
 
-msgid "Delete PEP node?"
-msgstr ""
-
 #, fuzzy
-msgid "Delete Theme"
+msgid "Delete Node?"
 msgstr "Active"
 
-msgid "Delete message locally?"
-msgstr ""
+#, fuzzy
+msgid "Delete Theme?"
+msgstr "Active"
 
 msgid "Deny"
 msgstr "Deny"
@@ -1842,9 +1758,6 @@ msgstr "Subscription Request"
 msgid "Description"
 msgstr "Description"
 
-msgid "Description: "
-msgstr "Description: "
-
 #, fuzzy
 msgid "Destroy Group Chat…"
 msgstr "New Group Chat"
@@ -1855,6 +1768,10 @@ msgstr "New Group Chat"
 
 msgid "Details"
 msgstr "Details"
+
+#, fuzzy
+msgid "Developers"
+msgstr "Past Developers:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1881,19 +1798,25 @@ msgid "Direct Messages"
 msgstr "Default Message"
 
 #, fuzzy
-msgid "Direct transfer (not encrypted)"
-msgstr "File transfer stopped"
+msgid "Direct Message…"
+msgstr "Default Message"
 
 #, fuzzy
 msgid "Directory"
 msgstr "_History"
 
 #, fuzzy, python-format
-msgid "Directory \"%s\" is not writable"
+msgid ""
+"Directory \"%s\" is not writable. You do not have the proper permissions to "
+"create files in this directory."
+msgstr "You do not have permission to create files in this directory."
+
+#, fuzzy
+msgid "Directory Not Writable"
 msgstr "Directory \"%s\" is not writable"
 
 #, fuzzy
-msgid "Disable Account"
+msgid "Disable Account?"
 msgstr "Invalid Account"
 
 msgid "Disabled"
@@ -1945,7 +1868,7 @@ msgid "Do you really want to delete this PEP node?"
 msgstr "Do you really want to delete the selected message?"
 
 #, fuzzy, python-format
-msgid "Do you really want to remove \"%s\"?"
+msgid "Do you really want to remove \"%(group)s\"?"
 msgstr "Do you really want to close them all?"
 
 msgid ""
@@ -1953,6 +1876,10 @@ msgid ""
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
+
+#, fuzzy
+msgid "Do you really want to remove this proxy?"
+msgstr "Do you really want to close them all?"
 
 #, fuzzy
 msgid "Do you really want to remove your chat history for this chat?"
@@ -1978,11 +1905,6 @@ msgid "Don’t show this again"
 msgstr "Do _not ask me again"
 
 #, fuzzy
-msgid "Download"
-msgstr "Download"
-
-#, fuzzy
-msgctxt "Noun"
 msgid "Download"
 msgstr "Download"
 
@@ -2016,10 +1938,6 @@ msgstr "Status: "
 
 #, fuzzy
 msgid "Drop files here"
-msgstr "Sends file to a contact"
-
-#, fuzzy
-msgid "Drop files or contacts"
 msgstr "Sends file to a contact"
 
 msgid "Easily send pictures, videos or other files to friends and groups"
@@ -2058,6 +1976,9 @@ msgstr "New E-mail"
 msgid "Emoji Shortcodes"
 msgstr ""
 
+msgid "Emojis"
+msgstr ""
+
 msgid "Enable"
 msgstr "Enable"
 
@@ -2076,19 +1997,6 @@ msgstr "Ability to measure idle time, in order to set auto status."
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 
-msgid "Enables Gajim to provide Audio and Video chats"
-msgstr ""
-
-msgid "Enables Gajim to provide a Audio preview"
-msgstr ""
-
-msgid "Enables Gajim to provide a notification area icon"
-msgstr ""
-
-msgid ""
-"Enables Gajim to request your router to forward ports for file transfers"
-msgstr ""
-
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
 
@@ -2097,9 +2005,6 @@ msgid ""
 "Enables Gajim to store Passwords securely instead of storing them in "
 "plaintext"
 msgstr "Passwords can be stored securely and not just in plaintext."
-
-msgid "Enables libappindicator, an alternative tray icon provider"
-msgstr ""
 
 #, python-format
 msgid "Encrypted (%s)"
@@ -2115,6 +2020,10 @@ msgstr "E2E encryption disabled"
 
 #, fuzzy
 msgid "Encryption (OMEMO)"
+msgstr "E2E encryption enabled"
+
+#, fuzzy
+msgid "Encryption Error"
 msgstr "E2E encryption enabled"
 
 #, fuzzy
@@ -2141,6 +2050,14 @@ msgid "Enter a password to join this chat"
 msgstr ""
 
 #, fuzzy
+msgid "Enter group name"
+msgstr "Insert Nickname"
+
+#, fuzzy
+msgid "Enter new contact name"
+msgstr "Insert Nickname"
+
+#, fuzzy
 msgid "Enter new password..."
 msgstr "Enter new password:"
 
@@ -2162,10 +2079,6 @@ msgstr "Choose Image"
 msgid "Error in audio data stream."
 msgstr ""
 
-#, python-format
-msgid "Error message: %s"
-msgstr "Error message: %s"
-
 msgid "Error opening file"
 msgstr "Error opening file"
 
@@ -2176,9 +2089,6 @@ msgstr "Error in received dataform"
 #, fuzzy
 msgid "Error while Exporting"
 msgstr "Error while adding service. %s"
-
-msgid "Error while merging recordings, please try again."
-msgstr ""
 
 #, fuzzy
 msgid "Error while processing image"
@@ -2195,10 +2105,6 @@ msgstr "Error while adding service. %s"
 #, fuzzy
 msgid "Error while uploading avatar"
 msgstr "Error while adding service. %s"
-
-#, fuzzy
-msgid "Error!"
-msgstr "Error"
 
 #, python-format
 msgid "Error: %s"
@@ -2243,12 +2149,24 @@ msgid "Export"
 msgstr "Export"
 
 #, fuzzy
+msgid "Export CSV"
+msgstr "Export"
+
+#, fuzzy
 msgid "Export Chat History"
 msgstr "Recently:"
 
 #, fuzzy
+msgid "Export Contacts"
+msgstr "Invite _Contacts"
+
+#, fuzzy
 msgid "Export Finished"
 msgstr "_Finish"
+
+#, fuzzy
+msgid "Export History…"
+msgstr "Recently:"
 
 msgid "Export your chat history from Gajim"
 msgstr ""
@@ -2260,6 +2178,10 @@ msgstr "Exporting History Logs..."
 #, fuzzy
 msgid "Exporting your messages..."
 msgstr "Encrypting chat messages."
+
+#, fuzzy
+msgid "Export…"
+msgstr "Export"
 
 #, fuzzy
 msgid "Extended Address"
@@ -2292,10 +2214,6 @@ msgctxt "Group chat name"
 msgid "Family"
 msgstr ""
 
-#, fuzzy
-msgid "Feature not available on Windows"
-msgstr "Feature not available under Windows."
-
 msgid "Features"
 msgstr "Features"
 
@@ -2315,14 +2233,6 @@ msgstr "is composing a message..."
 
 msgid "File"
 msgstr "File"
-
-#, fuzzy
-msgid "File Name: "
-msgstr "Filename: %s"
-
-#, fuzzy
-msgid "File Offered"
-msgstr "File Transfers"
 
 msgid "File Offered…"
 msgstr ""
@@ -2345,18 +2255,8 @@ msgstr "File transfer cancelled"
 msgid "File Transfer Completed"
 msgstr "File Transfer Completed"
 
-msgid "File Transfer Error"
-msgstr "File Transfer Error"
-
-#, fuzzy
-msgid "File Transfer Failed"
-msgstr "File Transfers"
-
 msgid "File Transfer Stopped"
 msgstr "File Transfer Stopped"
-
-msgid "File Transfers"
-msgstr "File Transfers"
 
 #, fuzzy
 msgid "File Verification Failed"
@@ -2369,10 +2269,6 @@ msgstr "Cancel file transfer"
 msgid "File does not exist"
 msgstr "File does not exist"
 
-#, fuzzy
-msgid "File error"
-msgstr "File Transfer Error"
-
 msgid "File is empty"
 msgstr "File is empty"
 
@@ -2383,11 +2279,9 @@ msgstr ""
 msgid "File size unknown"
 msgstr ""
 
-msgid "File too big, will use direct transfer (not encrypted)"
-msgstr ""
-
-msgid "File transfer stopped"
-msgstr "File transfer stopped"
+#, fuzzy
+msgid "File too big"
+msgstr "Image is too big"
 
 #, fuzzy
 msgid "File transfers"
@@ -2396,14 +2290,6 @@ msgstr "File Transfers"
 #, python-format
 msgid "File: %s"
 msgstr "File: %s"
-
-#, python-format
-msgid "Filename: %s"
-msgstr "Filename: %s"
-
-#, fuzzy
-msgid "Filetransfer Preference"
-msgstr "File Transfer Error"
 
 #, fuzzy
 msgid "Filter"
@@ -2414,8 +2300,12 @@ msgid "Filter Chats"
 msgstr "Private Chats"
 
 #, fuzzy
-msgid "Filter Chats…"
-msgstr "Private Chats"
+msgid "Filters"
+msgstr "Filter:"
+
+#, fuzzy
+msgid "Filters (active)"
+msgstr "First Message Received"
 
 msgid "Fingerprint for this Device"
 msgstr ""
@@ -2432,6 +2322,10 @@ msgid ""
 "Finished synchronising chat history:\n"
 "%s messages downloaded"
 msgstr ""
+
+#, fuzzy, python-format
+msgid "Folder: %s"
+msgstr "File: %s"
 
 msgid "For example: \"Julia is now online\""
 msgstr ""
@@ -2469,6 +2363,10 @@ msgid "Format your message"
 msgstr "Forward unread messages"
 
 msgid "Forward 10 seconds"
+msgstr ""
+
+#, python-format
+msgid "Found %s contacts to import"
 msgstr ""
 
 #, fuzzy
@@ -2523,18 +2421,15 @@ msgstr "Gajim - %s"
 msgid "Gajim Themes"
 msgstr "gajim-remote"
 
+#, fuzzy
 msgid "Gajim Update"
-msgstr ""
+msgstr "Update MOTD..."
 
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
 "the news with your groups."
 msgstr ""
-
-#, fuzzy
-msgid "Gajim can not read this file"
-msgstr "Gajim cannot access this file"
 
 msgid ""
 "Gajim encountered an error.\n"
@@ -2687,10 +2582,6 @@ msgstr "Groupchats"
 msgid "Groups"
 msgstr "Groups"
 
-msgctxt "proxy configuration"
-msgid "HTTP"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "HTTP (%(method)s) Authorization for %(url)s (ID: %(id)s)"
 msgstr "HTTP (%(method)s) Authorisation for %(url)s (id: %(id)s)"
@@ -2720,9 +2611,6 @@ msgstr ""
 #, fuzzy
 msgid "Hide chat list"
 msgstr "Participant"
-
-msgid "Hide this menu"
-msgstr "Hide this menu"
 
 #, fuzzy
 msgid "Home"
@@ -2768,13 +2656,12 @@ msgstr "Id"
 msgid "Identified Error"
 msgstr "SSL certificate error"
 
-#, fuzzy
 msgid "Idle Time"
-msgstr "Idle since:"
+msgstr "Idle Time"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Idle since: %s"
-msgstr "Idle since:"
+msgstr "Idle since: %s"
 
 #, fuzzy
 msgid ""
@@ -2792,11 +2679,6 @@ msgid "If enabled, Gajim will ignore incoming attention requests (\"wizz\")."
 msgstr ""
 
 msgid ""
-"If enabled, Gajim will save the main window position when hiding it, and "
-"restore it when showing the window again."
-msgstr ""
-
-msgid ""
 "If enabled, Gajim will try to use a STUN server when using Jingle. The one "
 "in \"stun_server\" option, or the one given by the XMPP server."
 msgstr ""
@@ -2811,11 +2693,6 @@ msgstr ""
 "account modification window. BE CAREFUL, when you are logged in with a "
 "negative priority, you will NOT receive any message from your server."
 
-msgid ""
-"If you quit now, the file(s) being transferred will be lost.\n"
-"Do you still want to quit?"
-msgstr ""
-
 #, fuzzy
 msgid "Ignore Unknown Contacts"
 msgstr "Invite _Contacts"
@@ -2828,12 +2705,30 @@ msgstr "_Ignore events from contacts not in the roster"
 msgid "Image"
 msgstr "Images"
 
-msgid "Images"
-msgstr "Images"
+#, fuzzy
+msgid "Import"
+msgstr "Export"
 
 #, fuzzy
 msgid "Import Contacts"
 msgstr "Invite _Contacts"
+
+#, fuzzy
+msgid "Import Contacts?"
+msgstr "Invite _Contacts"
+
+msgid "Import Error"
+msgstr ""
+
+#, fuzzy
+msgid "Import from Account"
+msgstr "Removing %s account"
+
+msgid "Import from File"
+msgstr ""
+
+msgid "Import…"
+msgstr ""
 
 msgid ""
 "In order to write messages in this chat, you need to request voice first.\n"
@@ -2873,9 +2768,6 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-msgid "Install from File…"
-msgstr ""
-
 #, fuzzy
 msgid "Installation failed"
 msgstr "Registration failed"
@@ -2894,9 +2786,6 @@ msgstr "Invalid File"
 
 msgid "Invalid CA certificate"
 msgstr "Invalid CA certificate"
-
-msgid "Invalid File"
-msgstr "Invalid File"
 
 #, fuzzy
 msgid "Invalid Name"
@@ -2965,9 +2854,6 @@ msgstr ""
 msgid "Issued to\n"
 msgstr ""
 
-msgid "It is not possible to send empty files"
-msgstr "It is not possible to send empty files"
-
 #, fuzzy
 msgid "I’m eating."
 msgstr "I'm working."
@@ -2975,12 +2861,6 @@ msgstr "I'm working."
 #, fuzzy
 msgid "I’m out enjoying life."
 msgstr "I'm out enjoying life."
-
-#, python-format
-msgid ""
-"I’m synchronizing my contacts from my account at \"%s\". Could you please "
-"add this address to your contact list?"
-msgstr ""
 
 #, fuzzy
 msgid "I’m watching a movie."
@@ -3075,7 +2955,7 @@ msgid "Last seen: %s"
 msgstr "Reason"
 
 #, fuzzy
-msgid "Leave Group Chat"
+msgid "Leave Group Chat?"
 msgstr "Leave Groupchats"
 
 msgid "Leave _Permanently"
@@ -3171,6 +3051,9 @@ msgid ""
 "from the chat window"
 msgstr ""
 
+msgid "Maintainers"
+msgstr ""
+
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3192,6 +3075,10 @@ msgstr ""
 #, fuzzy
 msgid "Manage"
 msgstr "Manage..."
+
+#, fuzzy
+msgid "Manage Contact List"
+msgstr "Contacts"
 
 #, fuzzy
 msgid "Manage Proxies"
@@ -3306,18 +3193,20 @@ msgstr "_Log status changes of contacts"
 msgid "Miscellaneous"
 msgstr "<b>Miscellaneous</b>"
 
-msgid "Missing dependencies for Audio/Video"
-msgstr ""
-
 msgid "Missing necessary encryption plugin"
 msgstr ""
 
 #, fuzzy
-msgid "Moderate Message"
+msgid "Moderate Message?"
 msgstr "Status Message"
 
 #, fuzzy
-msgid "Moderate message?"
+msgid "Moderate Messages?"
+msgstr "Status Message"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Moderate all messages…"
 msgstr "status message"
 
 #, fuzzy
@@ -3347,16 +3236,24 @@ msgstr "Moderators"
 msgid "Modify"
 msgstr "Modify"
 
-#, fuzzy
-msgid "Modify Gateway…"
-msgstr "_Modify Account"
-
 msgid "More infos at providers.xmpp.net"
 msgstr ""
 
 #, fuzzy
+msgid "Move"
+msgstr "File Transfer Request"
+
+#, fuzzy
 msgid "Move Chat"
 msgstr "File Transfer Request"
+
+#, fuzzy
+msgid "Move Contact to New Group?"
+msgstr "_Show event in roster"
+
+#, fuzzy
+msgid "Move to Group"
+msgstr "Remove Group"
 
 msgid "Movie"
 msgstr "Movie"
@@ -3381,7 +3278,7 @@ msgstr "Name"
 msgid "Name <b>default</b> is not allowed"
 msgstr ""
 
-msgid "Needs gspell to be installed"
+msgid "Needs libspelling to be installed"
 msgstr ""
 
 #, fuzzy
@@ -3397,6 +3294,10 @@ msgstr "Add New Contact"
 
 #, fuzzy
 msgid "New Group"
+msgstr "New Group Chat"
+
+#, fuzzy
+msgid "New Group…"
 msgstr "New Group Chat"
 
 #, fuzzy
@@ -3421,17 +3322,24 @@ msgstr ""
 msgid "Nickname"
 msgstr "Nickname"
 
+msgid "Nickname contains invalid characters"
+msgstr ""
+
+#, fuzzy
+msgid "Nickname…"
+msgstr "Nickname"
+
 #, fuzzy
 msgid "No"
 msgstr "None"
 
 #, fuzzy
-msgid "No Connection Available"
-msgstr "Connection not available"
-
-#, fuzzy
 msgid "No File Transfer available"
 msgstr "File Transfers"
+
+#, fuzzy
+msgid "No Messages Found"
+msgstr "No result"
 
 #, fuzzy
 msgid "No Notifications"
@@ -3445,10 +3353,6 @@ msgstr "Password Required"
 #, fuzzy
 msgid "No Proxy"
 msgstr "Proxy:"
-
-#, fuzzy
-msgid "No Results Found"
-msgstr "No result"
 
 msgid "No Sync"
 msgstr ""
@@ -3478,6 +3382,9 @@ msgid ""
 "You can also type an XMPP address"
 msgstr ""
 
+msgid "No contacts found to import"
+msgstr ""
+
 msgid ""
 "No contacts left.\n"
 "You can also type an XMPP address."
@@ -3487,6 +3394,9 @@ msgid "No devices found to encrypt this message to. Querying for devices now…"
 msgstr ""
 
 msgid "No devices online"
+msgstr ""
+
+msgid "No group assigned"
 msgstr ""
 
 #, fuzzy
@@ -3549,6 +3459,10 @@ msgid "Not Decided"
 msgstr "Connected"
 
 #, fuzzy
+msgid "Not Joined"
+msgstr "Connected"
+
+#, fuzzy
 msgctxt "Group chat feature"
 msgid "Not Moderated"
 msgstr "Not started"
@@ -3567,11 +3481,6 @@ msgstr "Connected"
 
 #, fuzzy
 msgid "Not encrypted"
-msgstr "Not started"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Not started"
 msgstr "Not started"
 
 msgctxt "Profile"
@@ -3638,10 +3547,6 @@ msgstr ""
 
 msgid "One Year"
 msgstr ""
-
-#, fuzzy
-msgid "Online Status"
-msgstr "Status"
 
 msgid "Only Admins and Owners can modify the affiliation"
 msgstr ""
@@ -3712,8 +3617,9 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "On Vacation"
 
+#, fuzzy
 msgid "Organization (O)"
-msgstr ""
+msgstr "On Vacation"
 
 msgid "Organization (O): "
 msgstr ""
@@ -3762,6 +3668,10 @@ msgstr "Owner"
 msgid "PEP Configuration"
 msgstr "Room Configuration"
 
+#, fuzzy
+msgid "PEP Node Not Removed"
+msgstr "PEP node was not removed"
+
 #, fuzzy, python-format
 msgid "PEP Service Configuration (%s)"
 msgstr "PEP Service Configuration"
@@ -3772,18 +3682,12 @@ msgid ""
 "%(message)s"
 msgstr "PEP node %(node)s was not removed: %(message)s"
 
-msgid "PEP node was not removed"
-msgstr "PEP node was not removed"
-
 msgid "PKCS12 Files"
 msgstr ""
 
 #, fuzzy
 msgid "PNG files"
 msgstr "All files"
-
-msgid "Pa_use/Resume"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3848,11 +3752,8 @@ msgid "Passwords do not match"
 msgstr "Passwords do not match"
 
 #, fuzzy
-msgid "Past Developers"
-msgstr "Past Developers:"
-
 msgid "Paste Last Input"
-msgstr ""
+msgstr "Choose Image"
 
 #, fuzzy
 msgid "Paste as Code Block"
@@ -3866,19 +3767,7 @@ msgid "Path length constraint exceeded"
 msgstr "Path length constraint exceeded"
 
 #, fuzzy
-msgid "Pause or resume file transfer"
-msgstr "Cancel file transfer"
-
-msgctxt "File transfer state"
-msgid "Paused"
-msgstr ""
-
-#, fuzzy
 msgid "Pending"
-msgstr "Show All Pending _Events"
-
-#, fuzzy
-msgid "Pending Event"
 msgstr "Show All Pending _Events"
 
 #, fuzzy
@@ -3965,12 +3854,16 @@ msgstr "Please make sure you are connected with \"%s\"."
 
 msgid ""
 "Please select one of your accounts.\n"
-"Gajim will export all messages from the selected account to a directory of "
-"your choice."
+"Gajim will export all messages from the selected account and chats to a "
+"directory of your choice."
 msgstr ""
 
 msgid "Please use these settings with caution!"
 msgstr ""
+
+#, fuzzy
+msgid "Plugin Failed"
+msgstr "Registration failed"
 
 #, fuzzy
 msgid "Plugin Settings"
@@ -3983,10 +3876,6 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
-
-#, fuzzy
-msgid "Plugin failed"
-msgstr "Registration failed"
 
 #, fuzzy
 msgid "Plugin manager"
@@ -4033,9 +3922,6 @@ msgstr "Preference Name"
 msgid "Preferences"
 msgstr "Preferences"
 
-msgid "Preferred file transfer mechanism for file drag&drop on a chat window"
-msgstr ""
-
 #, fuzzy
 msgid "Presets"
 msgstr "_Presence"
@@ -4073,14 +3959,15 @@ msgid "Private"
 msgstr "Privacy List"
 
 #, fuzzy
+msgid "Processing image…"
+msgstr "Timeout loading image"
+
+#, fuzzy
 msgid "Profile"
 msgstr "file"
 
 msgid "Profile application with cprofile"
 msgstr ""
-
-msgid "Progress"
-msgstr "Progress"
 
 msgctxt "Group chat description"
 msgid "Project discussion"
@@ -4105,6 +3992,10 @@ msgid "Prox_y"
 msgstr "Prox_y:"
 
 #, fuzzy
+msgid "Proxies"
+msgstr "Manage Proxy Profiles"
+
+#, fuzzy
 msgid "Proxy"
 msgstr "Proxy:"
 
@@ -4120,8 +4011,9 @@ msgstr "Proxy:"
 msgid "Proxy, custom hostname and port"
 msgstr "Use custom hostname/port"
 
+#, fuzzy
 msgid "Public"
-msgstr ""
+msgstr "E2E encryption enabled"
 
 msgctxt "Group chat feature"
 msgid "Public"
@@ -4149,7 +4041,7 @@ msgid "Purge Chat History…"
 msgstr "Recently:"
 
 #, fuzzy
-msgid "Purge all Chat History"
+msgid "Purge all Chat History?"
 msgstr "Old stories"
 
 #, fuzzy, python-format
@@ -4177,11 +4069,7 @@ msgid "Quote…"
 msgstr ""
 
 #, fuzzy
-msgid "Re-Login"
-msgstr "Relogin now?"
-
-#, fuzzy
-msgid "Re-Login now?"
+msgid "Re-Login Now?"
 msgstr "Relogin now?"
 
 msgid "Re_gister"
@@ -4197,10 +4085,6 @@ msgstr "Read _Wikipedia Article"
 msgid "Read more about blind trust"
 msgstr ""
 
-#, fuzzy
-msgid "Really block this contact?"
-msgstr "Is OpenPGP enabled for this contact?"
-
 msgid "Reason"
 msgstr "Reason"
 
@@ -4212,8 +4096,9 @@ msgstr "You may also enter an alternate venue:"
 msgid "Reason (optional)..."
 msgstr "Reason"
 
+#, fuzzy
 msgid "Reason for destruction"
-msgstr ""
+msgstr "You may also enter an alternate venue:"
 
 #, fuzzy, python-format
 msgid "Reason: %s"
@@ -4231,13 +4116,6 @@ msgstr "First Message Received"
 #, fuzzy
 msgid "Recent history"
 msgstr "Recently:"
-
-msgid "Recipient: "
-msgstr "Recipient: "
-
-#, python-format
-msgid "Recipient: %s"
-msgstr "Recipient: %s"
 
 msgid "Recognize your account by color"
 msgstr ""
@@ -4288,27 +4166,36 @@ msgstr ""
 msgid "Remove"
 msgstr "_Remove"
 
+#, fuzzy, python-format
+msgid "Remove %s contacts from your contact list?"
+msgstr "Removes contact from roster"
+
 #, fuzzy
 msgid "Remove Account"
 msgstr "Removing %s account"
-
-#, fuzzy
-msgid "Remove Chat History"
-msgstr "Recently:"
 
 #, fuzzy
 msgid "Remove Chat History?"
 msgstr "Recently:"
 
 #, fuzzy
-msgid "Remove Contact"
+msgid "Remove Contacts?"
 msgstr "Rename Contact"
 
-msgid "Remove Group"
+#, fuzzy
+msgid "Remove Contact…"
+msgstr "Rename Contact"
+
+#, fuzzy
+msgid "Remove From Contact List?"
+msgstr "Removes contact from roster"
+
+#, fuzzy
+msgid "Remove Group?"
 msgstr "Remove Group"
 
 #, fuzzy
-msgid "Remove Group..."
+msgid "Remove Group…"
 msgstr "Remove Group"
 
 #, fuzzy
@@ -4324,6 +4211,10 @@ msgid "Remove Proxy"
 msgstr "Remove Group"
 
 #, fuzzy
+msgid "Remove Proxy?"
+msgstr "Remove Group"
+
+#, fuzzy
 msgid "Remove Setting"
 msgstr "Registration failed"
 
@@ -4332,33 +4223,31 @@ msgid "Remove Theme"
 msgstr "Active"
 
 #, fuzzy
-msgid "Remove Transport"
-msgstr "Show Trans_ports"
-
-#, fuzzy
-msgid "Remove Workspace"
+msgid "Remove Workspace?"
 msgstr "Rename Contact"
 
 #, fuzzy
-msgid "Remove completed, cancelled and failed file transfers from the list"
-msgstr "Removes completed, cancelled and failed file transfers from the list"
+msgid "Remove from Contact List…"
+msgstr "Removes contact from roster"
 
 #, fuzzy
-msgid "Remove contact from contact list"
-msgstr "Removes contact from roster"
+msgid "Remove from Group"
+msgstr "Remove Group"
 
 #, fuzzy
 msgid "Remove from contact list"
 msgstr "Removes contact from roster"
 
+#, fuzzy
 msgid "Remove this workspace"
-msgstr ""
+msgstr "Rename Contact"
 
 msgid "Remove your group chat avatar"
 msgstr ""
 
+#, fuzzy
 msgid "Remove your profile picture"
-msgstr ""
+msgstr "Change your nickname (Ctrl+N)"
 
 #, fuzzy, python-format
 msgid "Removed %(count)s contact"
@@ -4367,12 +4256,20 @@ msgstr[0] "Removes contact from roster"
 msgstr[1] "Removes contact from roster"
 
 #, fuzzy
-msgid "Remove…"
-msgstr "_Remove"
-
-#, fuzzy
 msgid "Removing Account..."
 msgstr "Removing %s account"
+
+#, fuzzy
+msgid "Rename"
+msgstr "_Username:"
+
+#, fuzzy
+msgid "Rename Contact?"
+msgstr "Rename Contact"
+
+#, fuzzy
+msgid "Rename…"
+msgstr "_Username:"
 
 msgctxt "Group chat name"
 msgid "Repairs"
@@ -4385,6 +4282,10 @@ msgstr ""
 msgid "Report"
 msgstr "_Report Bug"
 
+#, fuzzy
+msgid "Request"
+msgstr "_Voice"
+
 msgid "Request Search Form"
 msgstr ""
 
@@ -4395,6 +4296,10 @@ msgstr "_Voice"
 #, fuzzy
 msgid "Request contact information (Tune, Location)"
 msgstr "Invite contacts to the conversation (Ctrl+G)"
+
+#, fuzzy
+msgid "Request pending"
+msgstr "Requires libgtkspell."
 
 #, fuzzy
 msgid "Request to see this contact's online status"
@@ -4421,15 +4326,6 @@ msgid "Required"
 msgstr "Password Required"
 
 #, fuzzy
-msgid "Requires: Gspell"
-msgstr "Requires libgtkspell."
-
-msgid ""
-"Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-"ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
-msgstr ""
-
-#, fuzzy
 msgid "Requires: gnome-keyring or kwallet"
 msgstr "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
 
@@ -4437,16 +4333,9 @@ msgstr "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
 msgid "Requires: gsound"
 msgstr "Requires python-dbus."
 
-msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-msgstr ""
-
 #, fuzzy
-msgid "Requires: gupnpigd-1.0"
-msgstr "Requires python-gnome2."
-
-#, fuzzy
-msgid "Requires: libappindicator3"
-msgstr "Requires libxss library."
+msgid "Requires: libspelling"
+msgstr "Requires libgtkspell."
 
 #, fuzzy
 msgid "Requires: libxss"
@@ -4460,11 +4349,17 @@ msgstr "Preference Name"
 msgid "Reset"
 msgstr "_Presence"
 
-msgid "Reset Hints"
-msgstr ""
+#, fuzzy
+msgid "Reset Filters"
+msgstr "Message Sent"
 
+#, fuzzy
+msgid "Reset Hints"
+msgstr "Message Sent"
+
+#, fuzzy
 msgid "Reset User Interface Font Size"
-msgstr ""
+msgstr "_Username:"
 
 msgid "Reset all chats to the current default value"
 msgstr ""
@@ -4529,10 +4424,6 @@ msgstr ""
 msgid "SHA-256:"
 msgstr ""
 
-msgctxt "proxy configuration"
-msgid "SOCKS5"
-msgstr ""
-
 #, fuzzy
 msgid "SSL Certificate Verification Error"
 msgstr "SSL certificate error"
@@ -4562,10 +4453,6 @@ msgstr ""
 #, fuzzy
 msgid "Save"
 msgstr "Have "
-
-#, fuzzy
-msgid "Save File as…"
-msgstr "Save File as..."
 
 #, fuzzy
 msgid "Save Password"
@@ -4668,6 +4555,12 @@ msgstr "Search"
 msgid "Searching…"
 msgstr "Search"
 
+#, fuzzy, python-format
+msgid ""
+"Searching…\n"
+"%s results"
+msgstr "Search"
+
 #, fuzzy
 msgid "Search…"
 msgstr "Search"
@@ -4692,14 +4585,6 @@ msgid "Select Account"
 msgstr "Removing %s account"
 
 #, fuzzy
-msgid "Select Contacts"
-msgstr "Sent contacts:"
-
-#, fuzzy
-msgid "Select File…"
-msgstr "Send _File"
-
-#, fuzzy
 msgctxt "Message row action"
 msgid "Select Messages…"
 msgstr "Default Message"
@@ -4715,14 +4600,6 @@ msgstr ""
 
 msgid "Select playback speed"
 msgstr ""
-
-#, fuzzy
-msgid "Select the account with which you want to synchronize"
-msgstr "Select the account with which you want to synchronise"
-
-#, fuzzy
-msgid "Select the contacts you want to synchronize"
-msgstr "Select the contacts you want to synchronise"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr ""
@@ -4769,16 +4646,8 @@ msgid "Send File (max. %s)…"
 msgstr "Save File as..."
 
 #, fuzzy
-msgid "Send File Directly…"
-msgstr "Save File as..."
-
-#, fuzzy
 msgid "Send Files"
 msgstr "Send _File"
-
-#, fuzzy
-msgid "Send Files Directly"
-msgstr "Save File as..."
 
 #, fuzzy
 msgid "Send File…"
@@ -4813,9 +4682,6 @@ msgstr ""
 #, fuzzy
 msgid "Send the message"
 msgstr "Send message"
-
-msgid "Sender: "
-msgstr "Sender: "
 
 #, fuzzy, python-format
 msgid "Sent contact: \"%(jid)s\" (%(name)s)"
@@ -4874,6 +4740,14 @@ msgid "Service Gateway"
 msgstr "Server"
 
 #, fuzzy
+msgid "Service Not Browsable"
+msgstr "The service is not browsable"
+
+#, fuzzy
+msgid "Service Not Found"
+msgstr "The service could not be found"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Room Configuration"
 
@@ -4910,8 +4784,9 @@ msgstr "Leave Groupchats"
 msgid "Share Status"
 msgstr "Status"
 
+#, fuzzy
 msgid "Share Video"
-msgstr ""
+msgstr "Start Chat"
 
 #, fuzzy
 msgid "Share my online status"
@@ -4962,10 +4837,6 @@ msgid "Show Notifications"
 msgstr "Notifications"
 
 #, fuzzy
-msgid "Show Offline Contacts"
-msgstr "Show _Offline Contacts"
-
-#, fuzzy
 msgid "Show Send Message Button"
 msgstr "Send message"
 
@@ -4984,10 +4855,6 @@ msgstr "Show Trans_ports"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Send message"
-
-#, fuzzy
-msgid "Show _Features"
-msgstr "Features"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -5086,10 +4953,6 @@ msgid "Show/Hide Window"
 msgstr "Hides the window"
 
 #, fuzzy
-msgid "Shows a list of file transfers between you and your contacts"
-msgstr "Shows a list of file transfers between you and others"
-
-#, fuzzy
 msgid "Shutting down Gajim"
 msgstr "Gajim"
 
@@ -5132,10 +4995,6 @@ msgid "Sort Participant List by Status"
 msgstr "Sort contacts by status"
 
 #, fuzzy
-msgid "Sort by Status"
-msgstr "Sort contacts by status"
-
-#, fuzzy
 msgid "Sounds"
 msgstr "Wav Sounds"
 
@@ -5164,16 +5023,8 @@ msgctxt "Group chat description"
 msgid "Spring gathering"
 msgstr ""
 
-msgid "Sta_tus"
-msgstr "Sta_tus"
-
 msgid "Stage"
 msgstr ""
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Stalled"
-msgstr "Stalled"
 
 #, fuzzy
 msgid "Start / Join Chat"
@@ -5197,14 +5048,6 @@ msgstr "Start Chat"
 #, fuzzy
 msgid "Start Search..."
 msgstr "_Start Chat..."
-
-#, fuzzy
-msgid "Start Video Call…"
-msgstr "Start Chat"
-
-#, fuzzy
-msgid "Start Voice Call…"
-msgstr "Start Chat"
 
 #, fuzzy
 msgid "Start a new chat"
@@ -5248,13 +5091,16 @@ msgid "Status and status message for all accounts"
 msgstr "Changes the status of account or accounts"
 
 #, fuzzy
-msgid "Status message…"
-msgstr "_Status message:"
+msgid "Status is not shared"
+msgstr "Status Message"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Status: "
-msgstr "Status: "
+msgid "Status is shared"
+msgstr "Status Message"
+
+#, fuzzy
+msgid "Status message…"
+msgstr "_Status message:"
 
 #, fuzzy, python-format
 msgid "Status: %s"
@@ -5277,11 +5123,7 @@ msgid "Status: Online Color"
 msgstr "Status Message"
 
 #, fuzzy
-msgid "Stop File Transfers"
-msgstr "File Transfers"
-
-#, fuzzy
-msgid "Stop sharing online status?"
+msgid "Stop Sharing Online Status?"
 msgstr "to send me status"
 
 msgid "Stopped sharing their status with you"
@@ -5306,9 +5148,6 @@ msgstr ""
 msgid "Subject issuer mismatch"
 msgstr "Subject issuer mismatch"
 
-msgid "Submit"
-msgstr ""
-
 #, fuzzy
 msgctxt "Contact subscription"
 msgid "Subscribe"
@@ -5317,11 +5156,24 @@ msgstr "Subscribe"
 msgid "Subscribed"
 msgstr "Subscribed"
 
+#, fuzzy
+msgid "Subscription"
+msgstr "Subscription:"
+
 msgid "Subscription Request"
 msgstr "Subscription Request"
 
+#, fuzzy
 msgid "Subscription:"
 msgstr "Subscription:"
+
+#, fuzzy
+msgid "Successfully Added Contacts"
+msgstr "Sent contacts:"
+
+#, fuzzy
+msgid "Successfully Removed Contacts"
+msgstr "Rename Contact"
 
 msgid "Support"
 msgstr ""
@@ -5345,21 +5197,25 @@ msgstr ""
 msgid "Switch Workspace"
 msgstr "Rename Contact"
 
+#, fuzzy
 msgid "Switch to the first - ninth chat"
-msgstr ""
+msgstr "Start Chat"
 
 #, fuzzy
 msgid "Switch to the next chat"
 msgstr "Start Chat"
 
+#, fuzzy
 msgid "Switch to the next unread chat"
-msgstr ""
+msgstr "Start Chat"
 
+#, fuzzy
 msgid "Switch to the previous chat"
-msgstr ""
+msgstr "Start Chat"
 
+#, fuzzy
 msgid "Switch to the previous unread chat"
-msgstr ""
+msgstr "Start Chat"
 
 msgid "Sync Threshold"
 msgstr ""
@@ -5367,10 +5223,6 @@ msgstr ""
 #, fuzzy
 msgid "Synchronize"
 msgstr "Synchronise"
-
-#, fuzzy
-msgid "Synchronize Accounts"
-msgstr "Synchronise contacts"
 
 #, fuzzy
 msgid "Synchronize Chat History"
@@ -5456,13 +5308,6 @@ msgid ""
 "note that this can have other side effects."
 msgstr ""
 
-#, python-format
-msgid ""
-"The file %s has been received, but it seems to have been damaged along the "
-"way.\n"
-"Do you want to download it again?"
-msgstr ""
-
 msgid ""
 "The following warnings came up while trying to verify the provider's "
 "certificate"
@@ -5489,12 +5334,6 @@ msgstr "Service returned an error."
 #, fuzzy
 msgid "The server was shut down."
 msgstr "Your server doesn't support Vcard"
-
-msgid "The service could not be found"
-msgstr "The service could not be found"
-
-msgid "The service is not browsable"
-msgstr "The service is not browsable"
 
 msgid "The signing certificate authority is not known"
 msgstr ""
@@ -5554,9 +5393,6 @@ msgstr "Choose Image"
 msgid "This account has already been added"
 msgstr "Account has been added successfully"
 
-msgid "This account is not connected to the server"
-msgstr "This account is not connected to the server"
-
 #, fuzzy
 msgid "This address does not seem to offer any gateway service."
 msgstr "This is not a group chat"
@@ -5568,6 +5404,9 @@ msgstr "The service is not browsable"
 msgid ""
 "This chat’s configuration is unsuitable for encryption with OMEMO. To use "
 "OMEMO in this chat, it should be non-anonymous and members-only."
+msgstr ""
+
+msgid "This contact does not share their status with you"
 msgstr ""
 
 #, fuzzy
@@ -5690,9 +5529,6 @@ msgstr ""
 msgid "Three Months"
 msgstr ""
 
-msgid "Time"
-msgstr "Time"
-
 msgid "Time Until Away"
 msgstr ""
 
@@ -5722,30 +5558,17 @@ msgstr ""
 msgid "Toggle Chat List"
 msgstr "Participant"
 
+#, fuzzy
 msgid "Toggle Menu Bar"
-msgstr ""
+msgstr "Show Trans_ports"
 
 #, fuzzy
 msgid "Toggle participants list"
 msgstr "Participant"
 
 #, fuzzy
-msgctxt "File transfer state"
-msgid "Transferred: "
-msgstr "File Transfers"
-
-#, fuzzy
-msgctxt "File transfer state"
-msgid "Transferring"
-msgstr "Transferring"
-
-#, fuzzy
 msgid "Transferring File…"
 msgstr "Transferring"
-
-#, fuzzy, python-format
-msgid "Transport \"%s\" will be removed"
-msgstr "Transport \"%s\" will be removed"
 
 msgid "Transports"
 msgstr "Transports"
@@ -5802,14 +5625,6 @@ msgstr "Type"
 msgid "Type to search for values..."
 msgstr ""
 
-#, fuzzy
-msgctxt "File transfer type"
-msgid "Type: "
-msgstr "Type"
-
-msgid "UPnP-IGD Port Forwarding"
-msgstr ""
-
 msgid "URI"
 msgstr ""
 
@@ -5843,10 +5658,6 @@ msgstr "Could not load image"
 
 msgid "Unable to verify the first certificate"
 msgstr "Unable to verify the first certificate"
-
-#, fuzzy
-msgid "Unblock"
-msgstr "_Unblock"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -5906,10 +5717,6 @@ msgstr "File Transfer Request"
 msgid "Unpin Chat"
 msgstr "File Transfer Request"
 
-#, fuzzy
-msgid "Unread Messages"
-msgstr "Unread events"
-
 msgid "Unsupported certificate purpose"
 msgstr "Unsupported certificate purpose"
 
@@ -5953,17 +5760,9 @@ msgstr ""
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
 
+#, fuzzy
 msgid "Updating provider list…"
-msgstr ""
-
-#, fuzzy
-msgctxt "Noun"
-msgid "Upload"
-msgstr "Save File as..."
-
-#, fuzzy
-msgid "Upload Files"
-msgstr "Save File as..."
+msgstr "Could not load image"
 
 #, fuzzy
 msgid "Upload File…"
@@ -6036,10 +5835,6 @@ msgstr "_Username:"
 msgid "User Interface Font Size"
 msgstr ""
 
-#, fuzzy
-msgid "User name…"
-msgstr "_Username:"
-
 msgid "Users"
 msgstr "Users"
 
@@ -6085,18 +5880,15 @@ msgstr "Default Message"
 msgid "Video Resolution"
 msgstr "Private Chat"
 
-#, fuzzy
-msgid "Video calls are not available on Windows"
-msgstr "Connection not available"
-
 msgid "Video test"
 msgstr ""
 
 msgid "Visit Provider's Website"
 msgstr ""
 
+#, fuzzy
 msgid "Visit Website"
-msgstr ""
+msgstr "Register to %s"
 
 #, fuzzy
 msgctxt "Group chat contact role"
@@ -6124,15 +5916,16 @@ msgid "Voice message could not be saved. Please try again."
 msgstr ""
 
 #, fuzzy
+msgid "WAV Sounds"
+msgstr "Wav Sounds"
+
+#, fuzzy
 msgid "Waiting…"
 msgstr "Writing"
 
 #, fuzzy
 msgid "Warning"
 msgstr "Banning %s"
-
-msgid "Wav Sounds"
-msgstr "Wav Sounds"
 
 #, fuzzy, python-format
 msgid "Web Search URL is missing a \"%s\""
@@ -6154,8 +5947,9 @@ msgstr "Hide this menu"
 msgid "What happened"
 msgstr ""
 
+#, fuzzy
 msgid "Where participants should go"
-msgstr ""
+msgstr "Participant"
 
 #, fuzzy
 msgid ""
@@ -6175,9 +5969,6 @@ msgstr ""
 
 msgid "Windows"
 msgstr ""
-
-msgid "Without a connection, you can not browse available services"
-msgstr "Without a connection, you can not browse available services"
 
 msgid "Work"
 msgstr "Work"
@@ -6237,6 +6028,10 @@ msgstr "You"
 msgid "You (%s) joined the group chat"
 msgstr "%s has joined the group chat"
 
+#, fuzzy
+msgid "You Have Unread Messages"
+msgstr "You have unread messages"
+
 msgid "You are a visitor"
 msgstr ""
 
@@ -6253,7 +6048,7 @@ msgstr ""
 "install PyOpenSSL to prevent that. Are you sure you want to do that?"
 
 #, fuzzy, python-format
-msgid "You are about to remove %(name)s (%(jid)s) from your contact list.\n"
+msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
 msgstr "You are about to remove \"%(name)s\" (%(jid)s) from your roster.\n"
 
 #, fuzzy
@@ -6267,8 +6062,11 @@ msgstr ""
 msgid "You are not connected"
 msgstr "You are not connected to the server"
 
-msgid "You are not connected to the server"
-msgstr "You are not connected to the server"
+#, fuzzy
+msgid ""
+"You are not connected to the server. Without a connection, you can not "
+"browse available services"
+msgstr "Without a connection, you can not browse available services"
 
 #, python-format
 msgid "You are now known as %s"
@@ -6308,9 +6106,6 @@ msgstr "You cannot add yourself to your roster."
 msgid "You cannot see this contact's online status"
 msgstr "You cannot add yourself to your roster."
 
-msgid "You cannot synchronize with an account unless it is connected."
-msgstr "You cannot synchronise with an account unless it is connected."
-
 msgid "You can’t send private messages to contacts if they are offline."
 msgstr ""
 
@@ -6320,14 +6115,8 @@ msgid ""
 "Error: %s."
 msgstr "You do not have permission to create files in this directory."
 
-#, fuzzy
-msgid "You do not have permissions to create files in this directory."
-msgstr "You do not have permission to create files in this directory."
-
-#, fuzzy
-msgid ""
-"You do not have the proper permissions to create files in this directory."
-msgstr "You do not have permission to create files in this directory."
+msgid "You don't share your status with this contact"
+msgstr ""
 
 #, python-brace-format
 msgid "You have been banned{actor}{reason}"
@@ -6376,26 +6165,10 @@ msgid "You requested to see this contact's online status"
 msgstr "A_sk to see his/her status"
 
 #, fuzzy
-msgid "You still have running file transfers"
-msgstr "Cancel file transfer"
-
-#, fuzzy
-msgid "You still have unread messages"
-msgstr "You have unread messages"
-
-#, fuzzy
 msgid ""
 "You will appear offline for this contact and you will not receive further "
 "messages."
 msgstr "JID of the contact that will receive the message"
-
-#, fuzzy
-msgid ""
-"You will no longer be able to send and receive messages from and to contacts "
-"using this transport."
-msgstr ""
-"You will no longer be able to send and receive messages from contacts using "
-"this transport."
 
 #, fuzzy
 msgid "Your Nickname"
@@ -6473,10 +6246,6 @@ msgstr "_Accounts"
 msgid "_Accounts"
 msgstr "Accounts"
 
-#, python-format
-msgid "_Actions for \"%s\""
-msgstr "_Actions for \"%s\""
-
 #, fuzzy
 msgid "_Add Account…"
 msgstr "_Add Contact..."
@@ -6512,9 +6281,6 @@ msgstr "_Busy"
 
 msgid "_Cancel"
 msgstr "_Cancel"
-
-msgid "_Clear"
-msgstr ""
 
 #, fuzzy
 msgid "_Clear Devices"
@@ -6580,20 +6346,12 @@ msgstr "Do _not ask me again"
 msgid "_Download"
 msgstr "Do _not ask me again"
 
-#, fuzzy
-msgid "_Download Again"
-msgstr "Do _not ask me again"
-
 msgid "_Edit"
 msgstr "_Edit"
 
 #, fuzzy
 msgid "_Features"
 msgstr "Features"
-
-#, fuzzy
-msgid "_File Transfer"
-msgstr "File Transfers"
 
 #, fuzzy
 msgctxt "User status"
@@ -6652,10 +6410,6 @@ msgid "_Name"
 msgstr "_Name:"
 
 #, fuzzy
-msgid "_New post"
-msgstr "New post"
-
-#, fuzzy
 msgid "_No"
 msgstr "None"
 
@@ -6673,10 +6427,6 @@ msgstr "_Offline"
 #, fuzzy
 msgid "_Open"
 msgstr "OpenGPG"
-
-#, fuzzy
-msgid "_Open Folder"
-msgstr "_Open Containing Folder"
 
 msgid "_Overwrite"
 msgstr ""
@@ -6747,19 +6497,12 @@ msgid "_Show Certificate"
 msgstr "Self signed certificate"
 
 #, fuzzy
-msgid "_Show notification when file transfer is complete"
-msgstr "_Notify me when a file transfer is complete"
-
-#, fuzzy
 msgid "_Sign Up"
 msgstr "Sign _in"
 
 #, fuzzy
 msgid "_Start / Join Chat…"
 msgstr "Start Chat"
-
-msgid "_Start Chat..."
-msgstr "_Start Chat..."
 
 msgid "_Stop Sharing"
 msgstr ""
@@ -6849,9 +6592,6 @@ msgstr "Country:"
 msgid "countrycode"
 msgstr "Account"
 
-msgid "dark skin tone"
-msgstr ""
-
 msgid "datum"
 msgstr ""
 
@@ -6873,9 +6613,6 @@ msgstr ""
 msgctxt "Group chat address"
 msgid "family"
 msgstr ""
-
-msgid "file transfers list"
-msgstr "file transfers list"
 
 msgid "floor"
 msgstr ""
@@ -6907,11 +6644,6 @@ msgstr ""
 msgid "libsoup Version: %s"
 msgstr "GTK+ Version:"
 
-#. Translators: Translations have to match https://github.com/milesj/emojibase/blob/master/packages/data/{LANG}/data.raw.json
-#. You can use the hex value to find the matching string.
-msgid "light skin tone"
-msgstr ""
-
 msgid "locality"
 msgstr ""
 
@@ -6920,15 +6652,6 @@ msgid "lon"
 msgstr "one"
 
 msgid "macOS"
-msgstr ""
-
-msgid "medium skin tone"
-msgstr ""
-
-msgid "medium-dark skin tone"
-msgstr ""
-
-msgid "medium-light skin tone"
 msgstr ""
 
 msgctxt "Group chat address"
@@ -7033,6 +6756,18 @@ msgstr "%(nick)s is now %(status)s"
 
 msgid "…or drop it here"
 msgstr ""
+
+#, fuzzy, python-format
+#~ msgid "%s group chats found"
+#~ msgstr "%s not found"
+
+#, fuzzy, python-format
+#~ msgid "%s wants to send you a file"
+#~ msgstr "%s wants to send you a file."
+
+#, python-format
+#~ msgid "(%(filesize_unit)s/s)"
+#~ msgstr "(%(filesize_unit)s/s)"
 
 #, fuzzy
 #~ msgid "<Description>"
@@ -7241,8 +6976,98 @@ msgstr ""
 #~ msgid "?user status:_Available"
 #~ msgstr "Paused"
 
+#~ msgid ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+#~ msgstr ""
+#~ "A file with this name already exists and you do not have permission to "
+#~ "overwrite it."
+
+#~ msgid "A list of active, completed and stopped file transfers"
+#~ msgstr "A list of active, completed and stopped file transfers"
+
+#, fuzzy, python-format
+#~ msgid "Account %s is still connected"
+#~ msgstr "Account \"%s\" is connected to the server"
+
+#, fuzzy
+#~ msgid "Add reaction"
+#~ msgstr "Registration failed"
+
+#, fuzzy
+#~ msgid "Add to new Group"
+#~ msgstr "Edit _Groups"
+
+#, fuzzy
+#~ msgid "All Groups"
+#~ msgstr "Groups"
+
+#, fuzzy
+#~ msgid "Are you sure you want to leave this group chat?"
+#~ msgstr "Are you sure you want to leave group chat \"%s\"?"
+
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Are you sure you want to quit Gajim?"
+
+#, fuzzy
+#~ msgid "Audio / Video Calls"
+#~ msgstr "Private Chat"
+
+#, fuzzy
+#~ msgid "Audio Preview"
+#~ msgstr "File: "
+
+#, fuzzy
+#~ msgid "Authorization Request"
+#~ msgstr "Authorisation has been sent"
+
+#, fuzzy
+#~ msgid "Autojoin"
+#~ msgstr "Auto join"
+
+#, fuzzy
+#~ msgid "Block…"
+#~ msgstr "_Block"
+
+#, fuzzy
+#~ msgid "Bookmarks"
+#~ msgstr "_Bookmark"
+
+#, fuzzy, python-format
+#~ msgid "Bookmarks for %s"
+#~ msgstr "_Bookmark"
+
+#, fuzzy
+#~ msgid "Cancel the selected file transfer and remove incomplete files"
+#~ msgstr "Cancels the selected file transfer and removes incomplete file"
+
+#, fuzzy, python-format
+#~ msgid "Cannot overwrite existing file \"%s\""
+#~ msgstr "Cannot overwrite existing file \"%s\""
+
+#, fuzzy
+#~ msgid "Checking file…"
+#~ msgstr "Sending profile..."
+
+#, fuzzy
+#~ msgid "Choose Archive"
+#~ msgstr "Choose Image"
+
+#, fuzzy
+#~ msgid "Choose Avatar…"
+#~ msgstr "Choose Image"
+
+#, fuzzy
+#~ msgid "Choose File to Send…"
+#~ msgstr "Choose File to Send..."
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Completed"
+#~ msgstr "Completed"
+
+#~ msgid "Connection not available"
+#~ msgstr "Connection not available"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7252,6 +7077,37 @@ msgstr ""
 #~ msgid "Copy Location"
 #~ msgstr "_Copy Link Location"
 
+#~ msgid "Create new post"
+#~ msgstr "Create new post"
+
+#, fuzzy
+#~ msgid "Current Developers"
+#~ msgstr "Current Developers:"
+
+#, fuzzy
+#~ msgid "Debug Console"
+#~ msgstr "XML Console"
+
+#, fuzzy
+#~ msgid "Delete Message"
+#~ msgstr "Default Message"
+
+#~ msgid "Description: "
+#~ msgstr "Description: "
+
+#, fuzzy
+#~ msgid "Direct transfer (not encrypted)"
+#~ msgstr "File transfer stopped"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Download"
+#~ msgstr "Download"
+
+#, fuzzy
+#~ msgid "Drop files or contacts"
+#~ msgstr "Sends file to a contact"
+
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Sending profile..."
@@ -7260,13 +7116,75 @@ msgstr ""
 #~ msgid "Edit workspace…"
 #~ msgstr "Edit _Groups"
 
+#, python-format
+#~ msgid "Error message: %s"
+#~ msgstr "Error message: %s"
+
+#, fuzzy
+#~ msgid "Error!"
+#~ msgstr "Error"
+
+#, fuzzy
+#~ msgid "Feature not available on Windows"
+#~ msgstr "Feature not available under Windows."
+
+#, fuzzy
+#~ msgid "File Name: "
+#~ msgstr "Filename: %s"
+
+#, fuzzy
+#~ msgid "File Offered"
+#~ msgstr "File Transfers"
+
+#~ msgid "File Transfer Error"
+#~ msgstr "File Transfer Error"
+
+#, fuzzy
+#~ msgid "File Transfer Failed"
+#~ msgstr "File Transfers"
+
+#~ msgid "File Transfers"
+#~ msgstr "File Transfers"
+
+#, fuzzy
+#~ msgid "File error"
+#~ msgstr "File Transfer Error"
+
+#~ msgid "File transfer stopped"
+#~ msgstr "File transfer stopped"
+
+#, python-format
+#~ msgid "Filename: %s"
+#~ msgstr "Filename: %s"
+
+#, fuzzy
+#~ msgid "Filetransfer Preference"
+#~ msgstr "File Transfer Error"
+
+#, fuzzy
+#~ msgid "Filter Chats…"
+#~ msgstr "Private Chats"
+
 #, fuzzy
 #~ msgid "Gajim Team"
 #~ msgstr "gajim-remote"
 
 #, fuzzy
+#~ msgid "Gajim can not read this file"
+#~ msgstr "Gajim cannot access this file"
+
+#~ msgid "Hide this menu"
+#~ msgstr "Hide this menu"
+
+#~ msgid "Images"
+#~ msgstr "Images"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Active"
+
+#~ msgid "Invalid File"
+#~ msgstr "Invalid File"
 
 #, fuzzy
 #~ msgid "Invite Contacts…"
@@ -7276,6 +7194,9 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Invite _Contacts"
 
+#~ msgid "It is not possible to send empty files"
+#~ msgstr "It is not possible to send empty files"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reason"
@@ -7283,6 +7204,106 @@ msgstr ""
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
+
+#, fuzzy
+#~ msgid "Moderate message?"
+#~ msgstr "status message"
+
+#, fuzzy
+#~ msgid "Modify Gateway…"
+#~ msgstr "_Modify Account"
+
+#, fuzzy
+#~ msgid "Move Contact"
+#~ msgstr "Rename Contact"
+
+#, fuzzy
+#~ msgid "No Connection Available"
+#~ msgstr "Connection not available"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Not started"
+#~ msgstr "Not started"
+
+#, fuzzy
+#~ msgid "Online Status"
+#~ msgstr "Status"
+
+#, fuzzy
+#~ msgid "Pause or resume file transfer"
+#~ msgstr "Cancel file transfer"
+
+#, fuzzy
+#~ msgid "Pending Event"
+#~ msgstr "Show All Pending _Events"
+
+#~ msgid "Progress"
+#~ msgstr "Progress"
+
+#, fuzzy
+#~ msgid "Re-Login"
+#~ msgstr "Relogin now?"
+
+#, fuzzy
+#~ msgid "Really block this contact?"
+#~ msgstr "Is OpenPGP enabled for this contact?"
+
+#~ msgid "Recipient: "
+#~ msgstr "Recipient: "
+
+#, python-format
+#~ msgid "Recipient: %s"
+#~ msgstr "Recipient: %s"
+
+#, fuzzy
+#~ msgid "Remove Chat History"
+#~ msgstr "Recently:"
+
+#, fuzzy
+#~ msgid "Remove Group..."
+#~ msgstr "Remove Group"
+
+#, fuzzy
+#~ msgid "Remove Transport"
+#~ msgstr "Show Trans_ports"
+
+#, fuzzy
+#~ msgid "Remove completed, cancelled and failed file transfers from the list"
+#~ msgstr ""
+#~ "Removes completed, cancelled and failed file transfers from the list"
+
+#, fuzzy
+#~ msgid "Remove contact from contact list"
+#~ msgstr "Removes contact from roster"
+
+#, fuzzy
+#~ msgid "Remove…"
+#~ msgstr "_Remove"
+
+#, fuzzy
+#~ msgid "Requires: gupnpigd-1.0"
+#~ msgstr "Requires python-gnome2."
+
+#, fuzzy
+#~ msgid "Requires: libappindicator3"
+#~ msgstr "Requires libxss library."
+
+#, fuzzy
+#~ msgid "Save File as…"
+#~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Select File…"
+#~ msgstr "Send _File"
+
+#, fuzzy
+#~ msgid "Select the account with which you want to synchronize"
+#~ msgstr "Select the account with which you want to synchronise"
+
+#, fuzzy
+#~ msgid "Select the contacts you want to synchronize"
+#~ msgstr "Select the contacts you want to synchronise"
 
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
@@ -7293,19 +7314,158 @@ msgstr ""
 #~ msgstr "_Send"
 
 #, fuzzy
+#~ msgid "Send File Directly…"
+#~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Send Files Directly"
+#~ msgstr "Save File as..."
+
+#~ msgid "Sender: "
+#~ msgstr "Sender: "
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Offline Contacts"
+#~ msgstr "Show _Offline Contacts"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Features"
+
+#, fuzzy
+#~ msgid "Shows a list of file transfers between you and your contacts"
+#~ msgstr "Shows a list of file transfers between you and others"
+
+#, fuzzy
+#~ msgid "Sort by Status"
+#~ msgstr "Sort contacts by status"
+
+#~ msgid "Sta_tus"
+#~ msgstr "Sta_tus"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Stalled"
+#~ msgstr "Stalled"
+
+#, fuzzy
+#~ msgid "Start Voice Call…"
+#~ msgstr "Start Chat"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy
+#~ msgid "Stop File Transfers"
+#~ msgstr "File Transfers"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synchronise"
 
 #, fuzzy
+#~ msgid "Synchronize Accounts"
+#~ msgstr "Synchronise contacts"
+
+#~ msgid "The service could not be found"
+#~ msgstr "The service could not be found"
+
+#~ msgid "This account is not connected to the server"
+#~ msgstr "This account is not connected to the server"
+
+#~ msgid "Time"
+#~ msgstr "Time"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferred: "
+#~ msgstr "File Transfers"
+
+#, fuzzy
+#~ msgctxt "File transfer state"
+#~ msgid "Transferring"
+#~ msgstr "Transferring"
+
+#, fuzzy, python-format
+#~ msgid "Transport \"%s\" will be removed"
+#~ msgstr "Transport \"%s\" will be removed"
+
+#, fuzzy
+#~ msgctxt "File transfer type"
+#~ msgid "Type: "
+#~ msgstr "Type"
+
+#, fuzzy
+#~ msgid "Unblock"
+#~ msgstr "_Unblock"
+
+#, fuzzy
+#~ msgid "Unread Messages"
+#~ msgstr "Unread events"
+
+#, fuzzy
+#~ msgctxt "Noun"
+#~ msgid "Upload"
+#~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "Upload Files"
+#~ msgstr "Save File as..."
+
+#, fuzzy
+#~ msgid "User name…"
+#~ msgstr "_Username:"
+
+#, fuzzy
+#~ msgid "Video calls are not supported"
+#~ msgstr "Connection not available"
+
+#, fuzzy
+#~ msgid "Why do you want to moderate these messages?"
+#~ msgstr "Do you really want to delete the selected message?"
+
+#, fuzzy
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Are you sure you want to quit Gajim?"
+
+#~ msgid "You are not connected to the server"
+#~ msgstr "You are not connected to the server"
+
+#~ msgid "You cannot synchronize with an account unless it is connected."
+#~ msgstr "You cannot synchronise with an account unless it is connected."
+
+#, fuzzy
+#~ msgid "You do not have permissions to create files in this directory."
+#~ msgstr "You do not have permission to create files in this directory."
+
+#, fuzzy
+#~ msgid "You still have running file transfers"
+#~ msgstr "Cancel file transfer"
+
+#, fuzzy
+#~ msgid ""
+#~ "You will no longer be able to send and receive messages from and to "
+#~ "contacts using this transport."
+#~ msgstr ""
+#~ "You will no longer be able to send and receive messages from contacts "
+#~ "using this transport."
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "_Download Again"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "_File Transfer"
+#~ msgstr "File Transfers"
 
 #, fuzzy
 #~ msgid "_Login"
@@ -7314,6 +7474,24 @@ msgstr ""
 #, fuzzy
 #~ msgid "_Modify Account…"
 #~ msgstr "_Modify Account"
+
+#, fuzzy
+#~ msgid "_New post"
+#~ msgstr "New post"
+
+#, fuzzy
+#~ msgid "_Open Folder"
+#~ msgstr "_Open Containing Folder"
+
+#, fuzzy
+#~ msgid "_Show notification when file transfer is complete"
+#~ msgstr "_Notify me when a file transfer is complete"
+
+#~ msgid "_Start Chat..."
+#~ msgstr "_Start Chat..."
+
+#~ msgid "file transfers list"
+#~ msgstr "file transfers list"
 
 #, fuzzy
 #~ msgid "yesterday "
