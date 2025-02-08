@@ -13,7 +13,6 @@ from functools import partial
 from functools import wraps
 from logging import LoggerAdapter
 
-import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
@@ -51,7 +50,7 @@ def to_xs_boolean(value: bool | None) -> str:
     raise ValueError(f'Cant convert {value} to xs:boolean')
 
 
-def event_node(node: nbxmpp.Node) -> Any:
+def event_node(node: str) -> Any:
     def event_node_decorator(func: Any):
         @wraps(func)
         def func_wrapper(self: Any,
@@ -61,6 +60,8 @@ def event_node(node: nbxmpp.Node) -> Any:
                          ) -> Any:
             if not properties.is_pubsub_event:
                 return
+
+            assert properties.pubsub_event is not None
             if properties.pubsub_event.node != node:
                 return
             func(self, _con, _stanza, properties)
