@@ -18,7 +18,7 @@
     <child>
       <object class="GtkStackPage">
         <property name="name">log</property>
-        <property name="title" translatable="1">Log</property>
+        <property name="title" translatable="yes">Log</property>
         <property name="child">
           <object class="GtkScrolledWindow">
             <property name="focusable">1</property>
@@ -41,7 +41,7 @@
     <child>
       <object class="GtkStackPage">
         <property name="name">protocol</property>
-        <property name="title" translatable="1">Protocol</property>
+        <property name="title" translatable="yes">Protocol</property>
         <property name="child">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
@@ -68,7 +68,7 @@
                                 <child>
                                   <object class="GtkSearchEntry" id="search_entry">
                                     <property name="focusable">1</property>
-                                    <property name="placeholder-text" translatable="1">Start Search...</property>
+                                    <property name="placeholder-text" translatable="yes">Start Search...</property>
                                   </object>
                                 </child>
                               </object>
@@ -177,7 +177,7 @@
                   <object class="GtkButton" id="filter_options_button">
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Filter</property>
+                    <property name="tooltip-text" translatable="yes">Filter</property>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">applications-system-symbolic</property>
@@ -189,7 +189,7 @@
                   <object class="GtkButton" id="clear_button">
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Clear</property>
+                    <property name="tooltip-text" translatable="yes">Clear</property>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">edit-clear-all-symbolic</property>
@@ -215,7 +215,7 @@
                     <property name="receives-default">1</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="tooltip-text" translatable="1">Paste Last Input</property>
+                        <property name="tooltip-text" translatable="yes">Paste Last Input</property>
                         <property name="icon-name">insert-text-symbolic</property>
                       </object>
                     </child>
@@ -226,7 +226,7 @@
                     <property name="focusable">1</property>
                     <property name="visible">0</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Presets</property>
+                    <property name="tooltip-text" translatable="yes">Presets</property>
                     <property name="popover">popover</property>
                     <child>
                       <placeholder/>
@@ -235,7 +235,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="account_label">
-                    <property name="label" translatable="1">Account</property>
+                    <property name="label" translatable="yes">Account</property>
                     <property name="visible">0</property>
                     <property name="hexpand">1</property>
                     <property name="halign">end</property>
@@ -246,7 +246,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="send">
-                    <property name="label" translatable="1">_Send</property>
+                    <property name="label" translatable="yes">_Send</property>
                     <property name="focusable">1</property>
                     <property name="visible">0</property>
                     <property name="receives-default">1</property>

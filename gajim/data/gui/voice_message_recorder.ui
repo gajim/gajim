@@ -9,7 +9,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Voice Message</property>
+            <property name="label" translatable="yes">Voice Message</property>
             <style>
               <class name="bold"/>
             </style>
@@ -18,7 +18,7 @@
         <child>
           <object class="GtkLabel" id="error_label">
             <property name="visible">0</property>
-            <property name="label" translatable="1">An error occurred</property>
+            <property name="label" translatable="yes">An error occurred</property>
             <property name="justify">center</property>
             <style>
               <class name="error"/>
@@ -73,7 +73,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="cancel_button">
-                    <property name="label" translatable="1">_Cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="use-underline">1</property>
@@ -85,7 +85,7 @@
                     <property name="hexpand">1</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Start/Stop recording</property>
+                    <property name="tooltip-text" translatable="yes">Start/Stop recording</property>
                     <child>
                       <object class="GtkBox">
                         <property name="spacing">6</property>
@@ -96,7 +96,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="1">Record</property>
+                            <property name="label" translatable="yes">Record</property>
                           </object>
                         </child>
                       </object>
@@ -105,7 +105,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="send_button">
-                    <property name="label" translatable="1">_Send</property>
+                    <property name="label" translatable="yes">_Send</property>
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>

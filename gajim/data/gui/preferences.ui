@@ -8,7 +8,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">general</property>
-            <property name="title" translatable="1">General</property>
+            <property name="title" translatable="yes">General</property>
             <property name="icon-name">computer-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -27,7 +27,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Behaviour of Application Window</property>
+                                <property name="label" translatable="yes">Behaviour of Application Window</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -46,7 +46,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Plugins</property>
+                                <property name="label" translatable="yes">Plugins</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -70,7 +70,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">chats</property>
-            <property name="title" translatable="1">Chats</property>
+            <property name="title" translatable="yes">Chats</property>
             <property name="icon-name">user-available-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -89,7 +89,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">General</property>
+                                <property name="label" translatable="yes">General</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -132,7 +132,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Chats</property>
+                                <property name="label" translatable="yes">Chats</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -175,7 +175,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Group Chats</property>
+                                <property name="label" translatable="yes">Group Chats</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -218,7 +218,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">File Preview</property>
+                                <property name="label" translatable="yes">File Preview</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -269,7 +269,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">notifications</property>
-            <property name="title" translatable="1">Notifications</property>
+            <property name="title" translatable="yes">Notifications</property>
             <property name="icon-name">mail-unread-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -288,7 +288,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Visual Notifications</property>
+                                <property name="label" translatable="yes">Visual Notifications</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -331,7 +331,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Sounds</property>
+                                <property name="label" translatable="yes">Sounds</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -382,7 +382,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">status</property>
-            <property name="title" translatable="1">Status</property>
+            <property name="title" translatable="yes">Status</property>
             <property name="icon-name">user-status-pending-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -401,7 +401,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Ask For Status Message on…</property>
+                                <property name="label" translatable="yes">Ask For Status Message on…</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -444,7 +444,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Automatic Status Change</property>
+                                <property name="label" translatable="yes">Automatic Status Change</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -495,7 +495,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">style</property>
-            <property name="title" translatable="1">Style</property>
+            <property name="title" translatable="yes">Style</property>
             <property name="icon-name">applications-graphics-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -514,7 +514,7 @@
                             <property name="row-spacing">12</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Themes</property>
+                                <property name="label" translatable="yes">Themes</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -565,7 +565,7 @@
 <!--         <child>
           <object class="GtkStackPage">
             <property name="name">audio_video</property>
-            <property name="title" translatable="1">Audio/Video</property>
+            <property name="title" translatable="yes">Audio/Video</property>
             <property name="icon-name">audio-input-microphone-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -598,7 +598,7 @@
                                     </child>
                                     <child>
                                       <object class="GtkLabel" id="av_info_bar_label">
-                                        <property name="label" translatable="true">Missing dependencies for Audio/Video</property>
+                                        <property name="label" translatable="yes">Missing dependencies for Audio/Video</property>
                                         <property name="hexpand">1</property>
                                         <property name="wrap">true</property>
                                         <property name="max-width-chars">46</property>
@@ -608,7 +608,7 @@
                                     <child>
                                       <object class="GtkButton">
                                         <property name="valign">center</property>
-                                        <property name="label" translatable="true">Show _Features</property>
+                                        <property name="label" translatable="yes">Show _Features</property>
                                         <property name="use-underline">1</property>
                                         <property name="action-name">app.features</property>
                                       </object>
@@ -632,7 +632,7 @@
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Server</property>
+                                    <property name="label" translatable="yes">Server</property>
                                     <property name="xalign">0</property>
                                     <style>
                                       <class name="bold"/>
@@ -675,7 +675,7 @@
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Audio</property>
+                                    <property name="label" translatable="yes">Audio</property>
                                     <property name="xalign">0</property>
                                     <style>
                                       <class name="bold"/>
@@ -718,7 +718,7 @@
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Video</property>
+                                    <property name="label" translatable="yes">Video</property>
                                     <property name="xalign">0</property>
                                     <style>
                                       <class name="bold"/>
@@ -774,7 +774,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">advanced</property>
-            <property name="title" translatable="1">Advanced</property>
+            <property name="title" translatable="yes">Advanced</property>
             <property name="icon-name">preferences-system-symbolic</property>
             <property name="child">
               <object class="GtkScrolledWindow">
@@ -796,7 +796,7 @@
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Miscellaneous</property>
+                                    <property name="label" translatable="yes">Miscellaneous</property>
                                     <property name="xalign">0</property>
                                     <style>
                                       <class name="bold"/>
@@ -841,10 +841,10 @@
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkButton" id="reset_button">
-                                    <property name="label" translatable="1">Reset Hints</property>
+                                    <property name="label" translatable="yes">Reset Hints</property>
                                     <property name="focusable">1</property>
                                     <property name="receives-default">1</property>
-                                    <property name="tooltip-text" translatable="1">This will reset all introduction hints</property>
+                                    <property name="tooltip-text" translatable="yes">This will reset all introduction hints</property>
                                   </object>
                                 </child>
                                 <layout>
@@ -857,7 +857,7 @@
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkButton" id="purge_history_button">
-                                    <property name="label" translatable="1">Purge Chat History…</property>
+                                    <property name="label" translatable="yes">Purge Chat History…</property>
                                     <property name="focusable">1</property>
                                     <property name="receives-default">1</property>
                                     <style>
@@ -900,7 +900,7 @@
                                 <property name="row-spacing">12</property>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">Advanced Settings</property>
+                                    <property name="label" translatable="yes">Advanced Settings</property>
                                     <property name="xalign">0</property>
                                     <style>
                                       <class name="bold"/>
@@ -945,10 +945,10 @@
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkButton" id="ace_button">
-                                    <property name="label" translatable="1">Advanced Configuration Editor… </property>
+                                    <property name="label" translatable="yes">Advanced Configuration Editor… </property>
                                     <property name="focusable">1</property>
                                     <property name="receives-default">1</property>
-                                    <property name="tooltip-text" translatable="1">Please use these settings with caution!</property>
+                                    <property name="tooltip-text" translatable="yes">Please use these settings with caution!</property>
                                   </object>
                                 </child>
                                 <layout>

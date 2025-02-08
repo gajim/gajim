@@ -33,7 +33,7 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="delete_button">
-                    <property name="label" translatable="1">_Delete</property>
+                    <property name="label" translatable="yes">_Delete</property>
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
@@ -50,7 +50,7 @@
                     <property name="receives-default">1</property>
                     <property name="halign">end</property>
                     <property name="hexpand">1</property>
-                    <property name="tooltip-text" translatable="1">Configure</property>
+                    <property name="tooltip-text" translatable="yes">Configure</property>
                     <property name="use-underline">1</property>
                     <child>
                       <object class="GtkImage">
@@ -61,7 +61,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="show_content_button">
-                    <property name="label" translatable="1">Show Content</property>
+                    <property name="label" translatable="yes">Show Content</property>
                     <property name="sensitive">0</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
@@ -118,7 +118,7 @@
             </child>
             <child>
               <object class="GtkButton" id="items_back_button">
-                <property name="label" translatable="1">Back</property>
+                <property name="label" translatable="yes">Back</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="halign">start</property>
@@ -158,7 +158,7 @@
               <object class="GtkBox">
                 <child>
                   <object class="GtkButton" id="config_back_button">
-                    <property name="label" translatable="1">Back</property>
+                    <property name="label" translatable="yes">Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">start</property>
@@ -166,7 +166,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="save_button">
-                    <property name="label" translatable="1">Save</property>
+                    <property name="label" translatable="yes">Save</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">end</property>

@@ -22,7 +22,7 @@
       <object class="GtkLabel" id="tune_label">
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Tune:</property>
+        <property name="label" translatable="yes">Tune:</property>
         <layout>
           <property name="column">0</property>
           <property name="row">3</property>
@@ -33,7 +33,7 @@
       <object class="GtkLabel" id="location_label">
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Location:</property>
+        <property name="label" translatable="yes">Location:</property>
         <layout>
           <property name="column">0</property>
           <property name="row">4</property>
@@ -96,7 +96,7 @@
       <object class="GtkLabel" id="sub_label">
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Subscription:</property>
+        <property name="label" translatable="yes">Subscription:</property>
         <layout>
           <property name="column">0</property>
           <property name="row">5</property>

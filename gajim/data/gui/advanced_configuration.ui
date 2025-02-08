@@ -6,7 +6,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">A restart may be required for some settings to take effect</property>
+        <property name="label" translatable="yes">A restart may be required for some settings to take effect</property>
         <property name="xalign">0</property>
         <attributes>
           <attribute name="foreground" value="#efef29292929"></attribute>
@@ -16,7 +16,7 @@
     <child>
       <object class="GtkSearchEntry" id="search_entry">
         <property name="focusable">1</property>
-        <property name="placeholder_text" translatable="1">Type to search for values...</property>
+        <property name="placeholder_text" translatable="yes">Type to search for values...</property>
       </object>
     </child>
     <child>
@@ -43,7 +43,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Description</property>
+            <property name="label" translatable="yes">Description</property>
             <property name="use_markup">1</property>
             <property name="xalign">0</property>
             <style>
@@ -65,10 +65,10 @@
     </child>
     <child>
       <object class="GtkButton" id="reset_button">
-        <property name="label" translatable="1">_Reset Value</property>
+        <property name="label" translatable="yes">_Reset Value</property>
         <property name="sensitive">0</property>
         <property name="focusable">1</property>
-        <property name="tooltip_text" translatable="1">Resets value to default</property>
+        <property name="tooltip_text" translatable="yes">Resets value to default</property>
         <property name="halign">end</property>
         <property name="use_underline">1</property>
         <style>

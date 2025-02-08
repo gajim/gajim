@@ -25,7 +25,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel">
-                        <property name="label" translatable="true">Start a new chat, join a group chat or search for new group chats globally. You can also enter an XMPP address.</property>
+                        <property name="label" translatable="yes">Start a new chat, join a group chat or search for new group chats globally. You can also enter an XMPP address.</property>
                         <property name="hexpand">1</property>
                         <property name="wrap">true</property>
                         <property name="max-width-chars">46</property>
@@ -61,14 +61,14 @@
                       <object class="GtkSearchEntry" id="search_entry">
                         <property name="focusable">1</property>
                         <property name="hexpand">1</property>
-                        <property name="placeholder-text" translatable="1">Search…</property>
+                        <property name="placeholder-text" translatable="yes">Search…</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="global_search_toggle">
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
-                        <property name="tooltip-text" translatable="1">Global Group Chat Search</property>
+                        <property name="tooltip-text" translatable="yes">Global Group Chat Search</property>
                         <property name="halign">end</property>
                         <child>
                           <object class="GtkImage">
@@ -90,7 +90,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="search_error_label">
-                        <property name="label" translatable="true">Invalid Address</property>
+                        <property name="label" translatable="yes">Invalid Address</property>
                         <property name="wrap">true</property>
                         <property name="max-width-chars">46</property>
                         <property name="xalign">0</property>
@@ -131,7 +131,7 @@
                                 </child>
                                 <child>
                                   <object class="GtkLabel">
-                                    <property name="label" translatable="1">No contacts found
+                                    <property name="label" translatable="yes">No contacts found
 You can also type an XMPP address</property>
                                     <property name="justify">center</property>
                                     <property name="wrap">1</property>
@@ -183,7 +183,7 @@ You can also type an XMPP address</property>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="label" translatable="1">Search for group chats globally
+                                            <property name="label" translatable="yes">Search for group chats globally
 (press Return to start search)</property>
                                             <property name="justify">center</property>
                                             <property name="wrap">1</property>
@@ -217,7 +217,7 @@ You can also type an XMPP address</property>
                                         </child>
                                         <child>
                                           <object class="GtkLabel">
-                                            <property name="label" translatable="1">No results</property>
+                                            <property name="label" translatable="yes">No results</property>
                                             <style>
                                               <class name="dim-label"/>
                                             </style>
@@ -321,7 +321,7 @@ You can also type an XMPP address</property>
             </child>
             <child>
               <object class="GtkButton" id="error_back_button">
-                <property name="label" translatable="1">_Back</property>
+                <property name="label" translatable="yes">_Back</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="halign">start</property>
@@ -349,7 +349,7 @@ You can also type an XMPP address</property>
               <object class="GtkBox">
                 <child>
                   <object class="GtkButton" id="info_back_button">
-                    <property name="label" translatable="1">_Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">start</property>
@@ -365,7 +365,7 @@ You can also type an XMPP address</property>
                     </child>
                     <child>
                       <object class="GtkButton" id="join_button">
-                        <property name="label" translatable="1">_Join</property>
+                        <property name="label" translatable="yes">_Join</property>
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
                         <property name="halign">end</property>
@@ -398,7 +398,7 @@ You can also type an XMPP address</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Select Account</property>
+                <property name="label" translatable="yes">Select Account</property>
                 <property name="justify">center</property>
                 <property name="wrap">1</property>
                 <style>
@@ -456,7 +456,7 @@ You can also type an XMPP address</property>
                 <property name="homogeneous">1</property>
                 <child>
                   <object class="GtkButton" id="account_back_button">
-                    <property name="label" translatable="1">_Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">start</property>
@@ -465,7 +465,7 @@ You can also type an XMPP address</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="account_select_button">
-                    <property name="label" translatable="1">_Select</property>
+                    <property name="label" translatable="yes">_Select</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">end</property>

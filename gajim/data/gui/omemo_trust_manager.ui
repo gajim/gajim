@@ -15,7 +15,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">This Device</property>
+            <property name="label" translatable="yes">This Device</property>
             <style>
               <class name="bold16"/>
             </style>
@@ -72,7 +72,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">This Device</property>
+                <property name="label" translatable="yes">This Device</property>
                 <property name="xalign">0</property>
                 <style>
                   <class name="bold"/>
@@ -95,7 +95,7 @@
                             <property name="spacing">3</property>
                             <child>
                               <object class="GtkLabel">
-                                <property name="label" translatable="1">Fingerprint for this Device</property>
+                                <property name="label" translatable="yes">Fingerprint for this Device</property>
                                 <property name="xalign">0</property>
                                 <style>
                                   <class name="bold"/>
@@ -119,7 +119,7 @@
                           <object class="GtkMenuButton" id="qr_menu_button">
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="1">Scan QR Code</property>
+                            <property name="tooltip-text" translatable="yes">Scan QR Code</property>
                             <property name="hexpand">1</property>
                             <property name="halign">end</property>
                             <property name="valign">center</property>
@@ -140,7 +140,7 @@
                             <property name="visible">0</property>
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="1">Manage your Devices…</property>
+                            <property name="tooltip-text" translatable="yes">Manage your Devices…</property>
                             <property name="valign">center</property>
                             <child>
                               <object class="GtkImage">
@@ -184,7 +184,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Show Inactive Devices</property>
+                    <property name="label" translatable="yes">Show Inactive Devices</property>
                   </object>
                 </child>
                 <child>
@@ -192,7 +192,7 @@
                     <property name="visible">0</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Search…</property>
+                    <property name="tooltip-text" translatable="yes">Search…</property>
                     <property name="halign">start</property>
                     <property name="valign">center</property>
                     <property name="popover">search_popover</property>
@@ -214,7 +214,7 @@
             <child>
               <object class="GtkButton" id="clear_devices_button">
                 <property name="visible">0</property>
-                <property name="label" translatable="1">Clear Devices…</property>
+                <property name="label" translatable="yes">Clear Devices…</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="halign">start</property>
@@ -241,7 +241,7 @@
             <property name="orientation">vertical</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Account is not connected.</property>
+                <property name="label" translatable="yes">Account is not connected.</property>
                 <property name="wrap">1</property>
                 <property name="max-width-chars">42</property>
                 <style>

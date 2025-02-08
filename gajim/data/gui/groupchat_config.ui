@@ -14,7 +14,7 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Loading…</property>
+                <property name="label" translatable="yes">Loading…</property>
                 <style>
                   <class name="bold24"/>
                   <class name="dim-label"/>

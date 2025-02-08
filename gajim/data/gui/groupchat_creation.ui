@@ -18,7 +18,7 @@
             <property name="spacing">18</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Create Group Chat</property>
+                <property name="label" translatable="yes">Create Group Chat</property>
                 <property name="wrap">1</property>
                 <style>
                   <class name="large-header"/>
@@ -33,7 +33,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="halign">end</property>
-                    <property name="label" translatable="1">_Name</property>
+                    <property name="label" translatable="yes">_Name</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">name_entry</property>
                     <style>
@@ -48,7 +48,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="halign">end</property>
-                    <property name="label" translatable="1">_Description</property>
+                    <property name="label" translatable="yes">_Description</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">description_entry</property>
                     <style>
@@ -106,7 +106,7 @@
                     <property name="visible">0</property>
                     <property name="halign">end</property>
                     <property name="margin-bottom">12</property>
-                    <property name="label" translatable="1">_Account</property>
+                    <property name="label" translatable="yes">_Account</property>
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">account_combo</property>
                     <style>
@@ -133,7 +133,7 @@
                   <object class="GtkLabel" id="advanced_switch_label">
                     <property name="halign">start</property>
                     <property name="margin-top">12</property>
-                    <property name="label" translatable="1">Advanced Settings</property>
+                    <property name="label" translatable="yes">Advanced Settings</property>
                     <layout>
                       <property name="column">1</property>
                       <property name="row">3</property>
@@ -176,7 +176,7 @@
                     <property name="visible">0</property>
                     <property name="halign">end</property>
                     <property name="margin-top">12</property>
-                    <property name="label" translatable="1">_Address</property>
+                    <property name="label" translatable="yes">_Address</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="dim-label"/>
@@ -211,7 +211,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">Public</property>
+                            <property name="label" translatable="yes">Public</property>
                             <property name="use-markup">1</property>
                             <property name="xalign">0</property>
                             <style>
@@ -222,7 +222,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">Anyone can join</property>
+                            <property name="label" translatable="yes">Anyone can join</property>
                             <property name="wrap">1</property>
                             <property name="xalign">0</property>
                             <style>
@@ -251,7 +251,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">Private</property>
+                            <property name="label" translatable="yes">Private</property>
                             <property name="use-markup">1</property>
                             <property name="wrap">1</property>
                             <property name="xalign">0</property>
@@ -263,7 +263,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">start</property>
-                            <property name="label" translatable="1">You have to invite people so they can join</property>
+                            <property name="label" translatable="yes">You have to invite people so they can join</property>
                             <property name="wrap">1</property>
                             <property name="xalign">0</property>
                             <style>
@@ -299,7 +299,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="create_button">
-                    <property name="label" translatable="1">_Create</property>
+                    <property name="label" translatable="yes">_Create</property>
                     <property name="focusable">1</property>
                     <property name="halign">end</property>
                     <property name="use-underline">1</property>
@@ -323,7 +323,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="hexpand">1</property>
-                <property name="label" translatable="1">You are not connected</property>
+                <property name="label" translatable="yes">You are not connected</property>
                 <property name="justify">center</property>
                 <property name="wrap">1</property>
                 <property name="max-width-chars">30</property>

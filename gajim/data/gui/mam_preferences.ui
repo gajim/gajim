@@ -12,7 +12,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Default</property>
+            <property name="label" translatable="yes">_Default</property>
             <property name="use_underline">1</property>
             <property name="xalign">0</property>
             <style>
@@ -53,7 +53,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="1">XMPP Address</property>
+                    <property name="title" translatable="yes">XMPP Address</property>
                     <property name="expand">1</property>
                     <property name="clickable">1</property>
                     <property name="sort_indicator">1</property>
@@ -71,7 +71,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="1">Archive</property>
+                    <property name="title" translatable="yes">Archive</property>
                     <property name="clickable">1</property>
                     <property name="sort_indicator">1</property>
                     <property name="sort_column_id">1</property>

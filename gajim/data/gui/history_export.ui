@@ -6,7 +6,7 @@
     <property name="spacing">18</property>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Export Chat History</property>
+        <property name="label" translatable="yes">Export Chat History</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
@@ -16,7 +16,7 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Please select one of your accounts.
+        <property name="label" translatable="yes">Please select one of your accounts.
 Gajim will export all messages from the selected account and chats to a directory of your choice.</property>
         <property name="justify">center</property>
         <property name="wrap">1</property>
@@ -34,7 +34,7 @@ Gajim will export all messages from the selected account and chats to a director
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Account</property>
+            <property name="label" translatable="yes">Account</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -47,7 +47,7 @@ Gajim will export all messages from the selected account and chats to a director
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Chat</property>
+            <property name="label" translatable="yes">Chat</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -60,7 +60,7 @@ Gajim will export all messages from the selected account and chats to a director
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Directory</property>
+            <property name="label" translatable="yes">Directory</property>
             <style>
               <class name="dim-label"/>
             </style>

@@ -8,7 +8,7 @@
     <child>
       <object class="GtkLabel" id="address_label">
         <property name="halign">end</property>
-        <property name="label" translatable="1">Address</property>
+        <property name="label" translatable="yes">Address</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -23,7 +23,7 @@
         <property name="visible">0</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Description</property>
+        <property name="label" translatable="yes">Description</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -38,7 +38,7 @@
         <property name="visible">0</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Subject</property>
+        <property name="label" translatable="yes">Subject</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -53,7 +53,7 @@
         <property name="visible">0</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Author</property>
+        <property name="label" translatable="yes">Author</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -113,7 +113,7 @@
         <property name="visible">0</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Contact</property>
+        <property name="label" translatable="yes">Contact</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -128,7 +128,7 @@
         <property name="visible">0</property>
         <property name="halign">end</property>
         <property name="valign">start</property>
-        <property name="label" translatable="1">Discussion Logs</property>
+        <property name="label" translatable="yes">Discussion Logs</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -171,7 +171,7 @@
     <child>
       <object class="GtkImage" id="users_image">
         <property name="visible">0</property>
-        <property name="tooltip-text" translatable="1">Participants</property>
+        <property name="tooltip-text" translatable="yes">Participants</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
         <property name="icon-name">system-users-symbolic</property>
@@ -187,7 +187,7 @@
     <child>
       <object class="GtkImage" id="lang_image">
         <property name="visible">0</property>
-        <property name="tooltip-text" translatable="1">Group Chat Language</property>
+        <property name="tooltip-text" translatable="yes">Group Chat Language</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
         <property name="icon-name">preferences-desktop-locale-symbolic</property>
@@ -261,7 +261,7 @@
           <object class="GtkButton" id="address_copy_button">
             <property name="sensitive">0</property>
             <property name="focusable">1</property>
-            <property name="tooltip-text" translatable="1">Copy Address</property>
+            <property name="tooltip-text" translatable="yes">Copy Address</property>
             <property name="halign">start</property>
             <property name="valign">start</property>
             <child>

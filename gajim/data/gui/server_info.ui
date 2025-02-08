@@ -13,7 +13,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Hostname</property>
+                <property name="label" translatable="yes">Hostname</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -39,7 +39,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Server Software</property>
+                <property name="label" translatable="yes">Server Software</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -65,7 +65,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Server Uptime</property>
+                <property name="label" translatable="yes">Server Uptime</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -90,7 +90,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="margin-top">12</property>
-                <property name="label" translatable="1">Contact Addresses</property>
+                <property name="label" translatable="yes">Contact Addresses</property>
                 <style>
                   <class name="bold16"/>
                 </style>
@@ -104,7 +104,7 @@
             <child>
               <object class="GtkLabel" id="no_addresses_label">
                 <property name="visible">0</property>
-                <property name="label" translatable="1">No contact addresses published for this server.</property>
+                <property name="label" translatable="yes">No contact addresses published for this server.</property>
                 <property name="wrap">1</property>
                 <property name="max-width-chars">50</property>
                 <style>
@@ -124,7 +124,7 @@
         </property>
         <property name="tab">
           <object class="GtkLabel">
-            <property name="label" translatable="1">Server</property>
+            <property name="label" translatable="yes">Server</property>
           </object>
         </property>
       </object>
@@ -153,7 +153,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Proxy Type</property>
+                <property name="label" translatable="yes">Proxy Type</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -167,7 +167,7 @@
               <object class="GtkLabel" id="proxy_type">
                 <property name="focusable">1</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="1">No proxy used</property>
+                <property name="label" translatable="yes">No proxy used</property>
                 <property name="selectable">1</property>
                 <property name="xalign">0</property>
                 <layout>
@@ -179,7 +179,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Proxy Host</property>
+                <property name="label" translatable="yes">Proxy Host</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -205,7 +205,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Type</property>
+                <property name="label" translatable="yes">Type</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -324,7 +324,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">TLS Version</property>
+                <property name="label" translatable="yes">TLS Version</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -337,7 +337,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">end</property>
-                <property name="label" translatable="1">Cipher Suite</property>
+                <property name="label" translatable="yes">Cipher Suite</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -376,7 +376,7 @@
         </property>
         <property name="tab">
           <object class="GtkLabel">
-            <property name="label" translatable="1">Connection</property>
+            <property name="label" translatable="yes">Connection</property>
           </object>
         </property>
       </object>
@@ -403,7 +403,7 @@
                 <property name="vexpand">1</property>
                 <property name="visible">0</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="1">No certificate</property>
+                <property name="label" translatable="yes">No certificate</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -413,7 +413,7 @@
         </property>
         <property name="tab">
           <object class="GtkLabel">
-            <property name="label" translatable="1">Certificate</property>
+            <property name="label" translatable="yes">Certificate</property>
           </object>
         </property>
       </object>
@@ -447,7 +447,7 @@
               <object class="GtkButton" id="clipboard_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Copy info to clipboard</property>
+                <property name="tooltip-text" translatable="yes">Copy info to clipboard</property>
                 <property name="halign">end</property>
                 <property name="margin-end">12</property>
                 <property name="margin-bottom">12</property>
@@ -462,7 +462,7 @@
         </property>
         <property name="tab">
           <object class="GtkLabel">
-            <property name="label" translatable="1">Features</property>
+            <property name="label" translatable="yes">Features</property>
           </object>
         </property>
       </object>

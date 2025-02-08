@@ -22,7 +22,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Join Group Chat as…</property>
+            <property name="label" translatable="yes">Join Group Chat as…</property>
             <style>
               <class name="bold"/>
             </style>
@@ -33,7 +33,7 @@
             <child>
               <object class="GtkEntry" id="entry">
                 <property name="focusable">1</property>
-                <property name="tooltip_text" translatable="1">Your Nickname</property>
+                <property name="tooltip_text" translatable="yes">Your Nickname</property>
                 <property name="activates_default">1</property>
                 <style>
                   <class name="linked"/>

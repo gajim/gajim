@@ -41,7 +41,7 @@
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">What does this mean?</property>
+            <property name="tooltip-text" translatable="yes">What does this mean?</property>
             <property name="valign">center</property>
             <property name="margin-end">6</property>
             <property name="popover">visitor_popover</property>
@@ -71,7 +71,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Edit your message (Esc to cancel)…</property>
+            <property name="label" translatable="yes">Edit your message (Esc to cancel)…</property>
             <style>
               <class name="small-label"/>
             </style>
@@ -81,7 +81,7 @@
           <object class="GtkButton" id="cancel_correction_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Cancel</property>
+            <property name="tooltip-text" translatable="yes">Cancel</property>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">window-close-symbolic</property>
@@ -100,7 +100,7 @@
             <property name="valign">center</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Show a list of emojis</property>
+            <property name="tooltip-text" translatable="yes">Show a list of emojis</property>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">face-smile-symbolic</property>
@@ -114,7 +114,7 @@
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Format your message</property>
+            <property name="tooltip-text" translatable="yes">Format your message</property>
             <property name="direction">up</property>
             <child>
               <object class="GtkImage">
@@ -177,7 +177,7 @@
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Send Message</property>
+            <property name="tooltip-text" translatable="yes">Send Message</property>
             <property name="action-name">win.send-message</property>
             <child>
               <object class="GtkImage">
@@ -237,7 +237,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">You are a visitor</property>
+            <property name="label" translatable="yes">You are a visitor</property>
             <style>
               <class name="bold"/>
             </style>
@@ -245,7 +245,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">In order to write messages in this chat, you need to request voice first.
+            <property name="label" translatable="yes">In order to write messages in this chat, you need to request voice first.
 A moderator will process your request.</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">30</property>
@@ -253,7 +253,7 @@ A moderator will process your request.</property>
         </child>
         <child>
           <object class="GtkButton" id="request_voice_button">
-            <property name="label" translatable="1">_Request</property>
+            <property name="label" translatable="yes">_Request</property>
             <property name="focusable">1</property>
             <property name="halign">center</property>
             <property name="use-underline">1</property>

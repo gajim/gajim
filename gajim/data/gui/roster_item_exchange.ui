@@ -24,7 +24,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Contact List Exchange</property>
+            <property name="label" translatable="yes">Contact List Exchange</property>
             <style>
               <class name="large-header"/>
             </style>
@@ -83,14 +83,14 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="1">_Cancel</property>
+            <property name="label" translatable="yes">_Cancel</property>
             <property name="focusable">1</property>
             <property name="use-underline">1</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="accept_button">
-            <property name="label" translatable="1">OK</property>
+            <property name="label" translatable="yes">OK</property>
             <property name="hexpand">1</property>
             <property name="halign">end</property>
             <property name="focusable">1</property>

@@ -83,7 +83,7 @@
           <object class="GtkButton" id="close_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Close Search</property>
+            <property name="tooltip-text" translatable="yes">Close Search</property>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">window-close-symbolic</property>
@@ -93,7 +93,7 @@
         </child>
         <child type="center">
           <object class="GtkLabel">
-            <property name="label" translatable="1">Search</property>
+            <property name="label" translatable="yes">Search</property>
             <style>
               <class name="bold16"/>
             </style>
@@ -105,7 +105,7 @@
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Browse history by date</property>
+            <property name="tooltip-text" translatable="yes">Browse history by date</property>
             <property name="popover">calendar_popover</property>
             <child>
               <object class="GtkImage">
@@ -121,12 +121,12 @@
         <property name="width-request">200</property>
         <property name="focusable">1</property>
         <property name="halign">center</property>
-        <property name="placeholder-text" translatable="1">Search…</property>
+        <property name="placeholder-text" translatable="yes">Search…</property>
       </object>
     </child>
     <child>
       <object class="GtkCheckButton" id="search_checkbutton">
-        <property name="label" translatable="1">Search all Chats</property>
+        <property name="label" translatable="yes">Search all Chats</property>
         <property name="focusable">1</property>
         <property name="halign">center</property>
       </object>
@@ -169,7 +169,7 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="placeholder_label">
-                        <property name="label" translatable="1">No results</property>
+                        <property name="label" translatable="yes">No results</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
@@ -199,7 +199,7 @@
         </child>
         <child>
           <object class="GtkButton" id="filter_date_before_reset_button">
-            <property name="label" translatable="1">Reset</property>
+            <property name="label" translatable="yes">Reset</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="halign">center</property>
@@ -223,7 +223,7 @@
         </child>
         <child>
           <object class="GtkButton" id="filter_date_after_reset_button">
-            <property name="label" translatable="1">Reset</property>
+            <property name="label" translatable="yes">Reset</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="halign">center</property>
@@ -243,7 +243,7 @@
       <object class="GtkLabel" id="filter_from_desc_label">
         <property name="visible">0</property>
         <property name="halign">end</property>
-        <property name="label" translatable="1">From</property>
+        <property name="label" translatable="yes">From</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -256,7 +256,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">Before</property>
+        <property name="label" translatable="yes">Before</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -269,7 +269,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">After</property>
+        <property name="label" translatable="yes">After</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -283,7 +283,7 @@
       <object class="GtkEntry" id="filter_from_entry">
         <property name="visible">0</property>
         <property name="focusable">1</property>
-        <property name="placeholder-text" translatable="1">User name…</property>
+        <property name="placeholder-text" translatable="yes">User name…</property>
         <layout>
           <property name="column">1</property>
           <property name="row">0</property>
@@ -296,7 +296,7 @@
         <property name="focusable">1</property>
         <property name="focus-on-click">0</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Set date…</property>
+        <property name="tooltip-text" translatable="yes">Set date…</property>
         <property name="halign">end</property>
         <property name="popover">filter_date_before_popover</property>
         <child>
@@ -315,7 +315,7 @@
         <property name="focusable">1</property>
         <property name="focus-on-click">0</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Set date…</property>
+        <property name="tooltip-text" translatable="yes">Set date…</property>
         <property name="halign">end</property>
         <property name="popover">filter_date_after_popover</property>
         <child>

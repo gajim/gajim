@@ -54,7 +54,7 @@
                 <property name="resizable">1</property>
                 <property name="sizing">fixed</property>
                 <property name="min-width">150</property>
-                <property name="title" translatable="1">XMPP Address</property>
+                <property name="title" translatable="yes">XMPP Address</property>
                 <property name="expand">1</property>
                 <property name="clickable">1</property>
                 <property name="sort-indicator">1</property>
@@ -75,7 +75,7 @@
               <object class="GtkTreeViewColumn" id="reserved_name_column">
                 <property name="resizable">1</property>
                 <property name="sizing">fixed</property>
-                <property name="title" translatable="1">Reserved Name</property>
+                <property name="title" translatable="yes">Reserved Name</property>
                 <property name="clickable">1</property>
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">1</property>
@@ -93,7 +93,7 @@
                 <property name="resizable">1</property>
                 <property name="sizing">fixed</property>
                 <property name="min-width">120</property>
-                <property name="title" translatable="1">Affiliation</property>
+                <property name="title" translatable="yes">Affiliation</property>
                 <property name="clickable">1</property>
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">3</property>
@@ -131,7 +131,7 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
+                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">
@@ -146,7 +146,7 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
+                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">feather-trash-symbolic</property>

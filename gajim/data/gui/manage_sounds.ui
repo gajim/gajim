@@ -17,7 +17,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="1">Active</property>
+                <property name="title" translatable="yes">Active</property>
                 <property name="clickable">1</property>
                 <child>
                   <object class="GtkCellRendererToggle" id="toggle_cell_renderer">
@@ -30,7 +30,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="1">Event</property>
+                <property name="title" translatable="yes">Event</property>
                 <child>
                   <object class="GtkCellRendererText"/>
                   <attributes>
@@ -50,7 +50,7 @@
           <object class="GtkButton" id="clear_sound_button">
             <property name="focusable">1</property>
             <property name="receives_default">1</property>
-            <property name="tooltip_text" translatable="1">Clear Sound</property>
+            <property name="tooltip_text" translatable="yes">Clear Sound</property>
             <child>
               <object class="GtkImage">
                 <property name="icon_name">edit-clear-all-symbolic</property>
@@ -62,7 +62,7 @@
           <object class="GtkButton" id="play_sound_button">
             <property name="halign">center</property>
             <property name="focusable">1</property>
-            <property name="tooltip_text" translatable="1">Play Sound</property>
+            <property name="tooltip_text" translatable="yes">Play Sound</property>
             <child>
               <object class="GtkImage">
                 <property name="icon_name">media-playback-start-symbolic</property>

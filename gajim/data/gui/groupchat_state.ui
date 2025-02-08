@@ -11,14 +11,14 @@
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">You left this group chat</property>
+                <property name="label" translatable="yes">You left this group chat</property>
                 <property name="wrap">1</property>
                 <property name="max-width-chars">32</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="join_button">
-                <property name="label" translatable="1">Join</property>
+                <property name="label" translatable="yes">Join</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="valign">center</property>
@@ -45,14 +45,14 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Joining…</property>
+                <property name="label" translatable="yes">Joining…</property>
                 <property name="hexpand">1</property>
                 <property name="halign">start</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="abort_join_button">
-                <property name="label" translatable="1">Abort</property>
+                <property name="label" translatable="yes">Abort</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="valign">center</property>
@@ -76,7 +76,7 @@
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">Fetching messages…</property>
+                <property name="label" translatable="yes">Fetching messages…</property>
                 <property name="hexpand">1</property>
                 <property name="halign">start</property>
               </object>
@@ -113,7 +113,7 @@
               <object class="GtkButton" id="close_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Close</property>
+                <property name="tooltip-text" translatable="yes">Close</property>
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkImage">

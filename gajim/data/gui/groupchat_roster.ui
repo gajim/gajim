@@ -27,8 +27,8 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="tooltip-text" translatable="1">Invite to this chat</property>
-                    <property name="label" translatable="1">Invite to this chat</property>
+                    <property name="tooltip-text" translatable="yes">Invite to this chat</property>
+                    <property name="label" translatable="yes">Invite to this chat</property>
                     <property name="ellipsize">end</property>
                   </object>
                 </child>
@@ -39,7 +39,7 @@
         <child>
           <object class="GtkSearchEntry" id="search_entry">
             <property name="focusable">1</property>
-            <property name="placeholder-text" translatable="1">Search Participants…</property>
+            <property name="placeholder-text" translatable="yes">Search Participants…</property>
           </object>
         </child>
       </object>

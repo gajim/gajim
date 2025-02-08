@@ -12,7 +12,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Gajim Update</property>
+            <property name="label" translatable="yes">Gajim Update</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -36,7 +36,7 @@
     </child>
         <child>
       <object class="GtkButton" id="download_update">
-        <property name="label" translatable="1">Download</property>
+        <property name="label" translatable="yes">Download</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
@@ -49,7 +49,7 @@
       <object class="GtkButton" id="dismiss_gajim_update">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Dismiss</property>
+        <property name="tooltip-text" translatable="yes">Dismiss</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">
@@ -73,7 +73,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Update Check</property>
+            <property name="label" translatable="yes">Update Check</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -85,7 +85,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Search for Gajim updates periodically?</property>
+            <property name="label" translatable="yes">Search for Gajim updates periodically?</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -98,7 +98,7 @@
     </child>
         <child>
       <object class="GtkButton" id="activate_update_check">
-        <property name="label" translatable="1">Activate</property>
+        <property name="label" translatable="yes">Activate</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
@@ -111,7 +111,7 @@
       <object class="GtkButton" id="dismiss_update_check">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Dismiss</property>
+        <property name="tooltip-text" translatable="yes">Dismiss</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">
@@ -135,7 +135,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Plugin Updates</property>
+            <property name="label" translatable="yes">Plugin Updates</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -147,7 +147,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">There are updates for Gajim’s plugins</property>
+            <property name="label" translatable="yes">There are updates for Gajim’s plugins</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -158,7 +158,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="auto_update_plugins">
-            <property name="label" translatable="1">Update plugins automatically</property>
+            <property name="label" translatable="yes">Update plugins automatically</property>
             <property name="focusable">1</property>
           </object>
         </child>
@@ -166,7 +166,7 @@
     </child>
     <child>
       <object class="GtkButton" id="update_plugins">
-        <property name="label" translatable="1">Update</property>
+        <property name="label" translatable="yes">Update</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="valign">center</property>
@@ -178,7 +178,7 @@
     <child>
       <object class="GtkButton" id="open_plugins">
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Open Plugins…</property>
+        <property name="tooltip-text" translatable="yes">Open Plugins…</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">
@@ -191,7 +191,7 @@
       <object class="GtkButton" id="dismiss_plugin_updates">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Dismiss</property>
+        <property name="tooltip-text" translatable="yes">Dismiss</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">
@@ -215,7 +215,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Plugins Updated Successfully</property>
+            <property name="label" translatable="yes">Plugins Updated Successfully</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <property name="xalign">0</property>
@@ -227,7 +227,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
-            <property name="label" translatable="1">Updates will be installed next time Gajim is started</property>
+            <property name="label" translatable="yes">Updates will be installed next time Gajim is started</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -238,7 +238,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="notify_after_plugin_updates">
-            <property name="label" translatable="1">Don’t show this again</property>
+            <property name="label" translatable="yes">Don’t show this again</property>
             <property name="focusable">1</property>
           </object>
         </child>
@@ -248,7 +248,7 @@
       <object class="GtkButton" id="dismiss_update_notification">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Dismiss</property>
+        <property name="tooltip-text" translatable="yes">Dismiss</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkImage">

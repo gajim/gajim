@@ -40,7 +40,7 @@
                         <child>
                           <object class="GtkLabel" id="our_jid_label">
                             <property name="focusable">true</property>
-                            <property name="tooltip-text" translatable="true">This is your XMPP address</property>
+                            <property name="tooltip-text" translatable="yes">This is your XMPP address</property>
                             <property name="wrap">true</property>
                             <property name="wrap-mode">2</property>
                             <property name="selectable">true</property>
@@ -61,7 +61,7 @@
                           <object class="GtkButton" id="account_settings_button">
                             <property name="focusable">true</property>
                             <property name="receives-default">true</property>
-                            <property name="tooltip-text" translatable="true">Account Settings…</property>
+                            <property name="tooltip-text" translatable="yes">Account Settings…</property>
                             <property name="valign">3</property>
                             <child>
                               <object class="GtkImage">
@@ -101,7 +101,7 @@
                 <child type="center">
                   <object class="GtkLabel">
                     <property name="margin-top">6</property>
-                    <property name="label" translatable="true">Notifications</property>
+                    <property name="label" translatable="yes">Notifications</property>
                     <style>
                       <class name="bold16"/>
                     </style>

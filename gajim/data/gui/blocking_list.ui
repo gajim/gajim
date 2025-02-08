@@ -24,7 +24,7 @@
                 </child>
                 <child>
                   <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="1">XMPP Address</property>
+                    <property name="title" translatable="yes">XMPP Address</property>
                     <property name="expand">1</property>
                     <property name="clickable">1</property>
                     <property name="sort_indicator">1</property>

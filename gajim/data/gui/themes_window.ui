@@ -29,7 +29,7 @@
       <object class="GtkLabel">
         <property name="vexpand">1</property>
         <property name="wrap">1</property>
-        <property name="label" translatable="1">Add a setting you would like to change</property>
+        <property name="label" translatable="yes">Add a setting you would like to change</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -58,7 +58,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="1">Themes</property>
+                <property name="title" translatable="yes">Themes</property>
                 <child>
                   <object class="GtkCellRendererText" id="theme_name_cell_renderer">
                     <property name="editable">1</property>
@@ -122,7 +122,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Add Setting</property>
+                    <property name="label" translatable="yes">Add Setting</property>
                   </object>
                 </child>
               </object>
@@ -142,7 +142,7 @@
         <child>
           <object class="GtkButton" id="add_theme_button">
             <property name="can_focus">0</property>
-            <property name="tooltip_text" translatable="1">Add new Theme</property>
+            <property name="tooltip_text" translatable="yes">Add new Theme</property>
             <property name="use_underline">1</property>
             <property name="icon_name">feather-plus-symbolic</property>
           </object>
@@ -151,7 +151,7 @@
           <object class="GtkButton" id="remove_theme_button">
             <property name="sensitive">0</property>
             <property name="can_focus">0</property>
-            <property name="tooltip_text" translatable="1">Remove Theme</property>
+            <property name="tooltip_text" translatable="yes">Remove Theme</property>
             <property name="use_underline">1</property>
             <property name="icon_name">feather-trash-symbolic</property>
           </object>

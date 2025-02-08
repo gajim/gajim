@@ -8,7 +8,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Add Contact</property>
+        <property name="label" translatable="yes">Add Contact</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -23,7 +23,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Please choose an account</property>
+            <property name="label" translatable="yes">Please choose an account</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -44,7 +44,7 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Please enter an XMPP address</property>
+        <property name="label" translatable="yes">Please enter an XMPP address</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -55,7 +55,7 @@
         <property name="width-request">250</property>
         <property name="focusable">1</property>
         <property name="activates-default">1</property>
-        <property name="placeholder-text" translatable="1">XMPP Address…</property>
+        <property name="placeholder-text" translatable="yes">XMPP Address…</property>
       </object>
     </child>
   </object>
@@ -66,7 +66,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Add Contact</property>
+        <property name="label" translatable="yes">Add Contact</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -80,7 +80,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">Share Status</property>
+        <property name="label" translatable="yes">Share Status</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -104,7 +104,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">Group</property>
+        <property name="label" translatable="yes">Group</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -126,7 +126,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">Message</property>
+        <property name="label" translatable="yes">Message</property>
         <style>
           <class name="dim-label"/>
         </style>
@@ -140,7 +140,7 @@
       <object class="GtkEntry" id="message_entry">
         <property name="width-request">275</property>
         <property name="focusable">1</property>
-        <property name="placeholder-text" translatable="1">Say hi to your new contact…</property>
+        <property name="placeholder-text" translatable="yes">Say hi to your new contact…</property>
         <layout>
           <property name="column">1</property>
           <property name="row">2</property>
@@ -151,7 +151,7 @@
       <object class="GtkButton" id="contact_info_button">
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Show Contact Infos</property>
+        <property name="tooltip-text" translatable="yes">Show Contact Infos</property>
         <property name="halign">center</property>
         <property name="margin-bottom">6</property>
         <child>
@@ -174,7 +174,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Service Gateway</property>
+        <property name="label" translatable="yes">Service Gateway</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -206,14 +206,14 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkButton" id="register_button">
-            <property name="label" translatable="1">Register</property>
+            <property name="label" translatable="yes">Register</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="commands_button">
-            <property name="label" translatable="1">Show Commands</property>
+            <property name="label" translatable="yes">Show Commands</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
           </object>

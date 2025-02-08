@@ -7,7 +7,7 @@
     <property name="spacing">12</property>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Add a name and color for your account</property>
+        <property name="label" translatable="yes">Add a name and color for your account</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">50</property>
         <style>
@@ -21,7 +21,7 @@
         <child>
           <object class="GtkEntry" id="account_name_entry">
             <property name="focusable">1</property>
-            <property name="placeholder-text" translatable="1">Account Name...</property>
+            <property name="placeholder-text" translatable="yes">Account Name...</property>
           </object>
         </child>
         <child>
@@ -59,7 +59,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">_Port</property>
+        <property name="label" translatable="yes">_Port</property>
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">custom_port_entry</property>
         <style>
@@ -86,7 +86,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">_Hostname</property>
+        <property name="label" translatable="yes">_Hostname</property>
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">custom_host_entry</property>
         <style>
@@ -101,7 +101,7 @@
     <child>
       <object class="GtkEntry" id="custom_host_entry">
         <property name="focusable">1</property>
-        <property name="placeholder-text" translatable="1">example.org</property>
+        <property name="placeholder-text" translatable="yes">example.org</property>
         <layout>
           <property name="column">1</property>
           <property name="row">2</property>
@@ -112,7 +112,7 @@
       <object class="GtkLabel">
         <property name="halign">end</property>
         <property name="margin-bottom">18</property>
-        <property name="label" translatable="1">Prox_y</property>
+        <property name="label" translatable="yes">Prox_y</property>
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">proxies_combobox</property>
         <style>
@@ -143,7 +143,7 @@
     <child>
       <object class="GtkButton" id="manage_proxies_button">
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Manage Proxies...</property>
+        <property name="tooltip-text" translatable="yes">Manage Proxies...</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <child>
@@ -160,7 +160,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Advanced Settings</property>
+        <property name="label" translatable="yes">Advanced Settings</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -188,7 +188,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">end</property>
-        <property name="label" translatable="1">_Type</property>
+        <property name="label" translatable="yes">_Type</property>
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">con_type_combo</property>
         <style>
@@ -224,7 +224,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Welcome</property>
+        <property name="label" translatable="yes">Welcome</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -233,7 +233,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">center</property>
-        <property name="label" translatable="1">Please enter your credentials or Sign Up</property>
+        <property name="label" translatable="yes">Please enter your credentials or Sign Up</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
@@ -245,7 +245,7 @@
       <object class="GtkEntry" id="log_in_address_entry">
         <property name="width-request">300</property>
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Your XMPP address (e.g. user@example.org)</property>
+        <property name="tooltip-text" translatable="yes">Your XMPP address (e.g. user@example.org)</property>
         <property name="activates-default">1</property>
         <property name="placeholder-text">user@example.org</property>
         <property name="completion">entrycompletion1</property>
@@ -254,28 +254,28 @@
     <child>
       <object class="GtkEntry" id="log_in_password_entry">
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Your password</property>
+        <property name="tooltip-text" translatable="yes">Your password</property>
         <property name="visibility">0</property>
         <property name="activates-default">1</property>
-        <property name="placeholder-text" translatable="1">Password</property>
+        <property name="placeholder-text" translatable="yes">Password</property>
         <property name="input-purpose">password</property>
       </object>
     </child>
     <child>
       <object class="GtkCheckButton" id="login_advanced_checkbutton">
-        <property name="label" translatable="1">_Advanced Settings</property>
+        <property name="label" translatable="yes">_Advanced Settings</property>
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Proxy, custom hostname and port</property>
+        <property name="tooltip-text" translatable="yes">Proxy, custom hostname and port</property>
         <property name="halign">start</property>
         <property name="use-underline">1</property>
       </object>
     </child>
     <child>
       <object class="GtkButton" id="log_in_button">
-        <property name="label" translatable="1">_Log In</property>
+        <property name="label" translatable="yes">_Log In</property>
         <property name="sensitive">0</property>
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Log in with your credentials</property>
+        <property name="tooltip-text" translatable="yes">Log in with your credentials</property>
         <property name="use-underline">1</property>
         <style>
           <class name="suggested-action"/>
@@ -284,15 +284,15 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">or</property>
+        <property name="label" translatable="yes">or</property>
       </object>
     </child>
     <child>
       <object class="GtkButton" id="sign_up_button">
-        <property name="label" translatable="1">_Sign Up</property>
+        <property name="label" translatable="yes">_Sign Up</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
-        <property name="tooltip-text" translatable="1">Sign up for a new account with a provider of your choice</property>
+        <property name="tooltip-text" translatable="yes">Sign up for a new account with a provider of your choice</property>
         <property name="use-underline">1</property>
       </object>
     </child>
@@ -316,7 +316,7 @@
     </child>
     <child>
       <object class="GtkButton" id="link_button">
-        <property name="label" translatable="1">Visit Website</property>
+        <property name="label" translatable="yes">Visit Website</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="halign">center</property>
@@ -339,7 +339,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">center</property>
-        <property name="label" translatable="1">Certificate Verification Failed</property>
+        <property name="label" translatable="yes">Certificate Verification Failed</property>
         <property name="justify">center</property>
         <property name="wrap">1</property>
         <style>
@@ -350,7 +350,7 @@
     <child>
       <object class="GtkLabel">
         <property name="halign">center</property>
-        <property name="label" translatable="1">The following warnings came up while trying to verify the provider&apos;s certificate</property>
+        <property name="label" translatable="yes">The following warnings came up while trying to verify the provider&apos;s certificate</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">42</property>
       </object>
@@ -367,7 +367,7 @@
     </child>
     <child>
       <object class="GtkButton" id="view_cert_button">
-        <property name="label" translatable="1">_Show Certificate</property>
+        <property name="label" translatable="yes">_Show Certificate</property>
         <property name="focusable">1</property>
         <property name="receives-default">1</property>
         <property name="halign">center</property>
@@ -377,7 +377,7 @@
     <child>
       <object class="GtkCheckButton" id="trust_cert_checkbutton">
         <property name="visible">0</property>
-        <property name="label" translatable="1">_Add to Trusted Certificates</property>
+        <property name="label" translatable="yes">_Add to Trusted Certificates</property>
         <property name="focusable">1</property>
         <property name="halign">center</property>
         <property name="use-underline">1</property>
@@ -392,7 +392,7 @@
         <property name="spacing">6</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Which provider should I choose?</property>
+            <property name="label" translatable="yes">Which provider should I choose?</property>
             <style>
               <class name="bold"/>
             </style>
@@ -400,7 +400,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">There are plenty of providers to choose from.
+            <property name="label" translatable="yes">There are plenty of providers to choose from.
 Creating an account with one provider allows you to communicate with contacts from other providers as well.</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">36</property>
@@ -410,7 +410,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <child>
           <object class="GtkButton" id="visit_server_button">
             <property name="visible">0</property>
-            <property name="label" translatable="1">Visit Provider&apos;s Website</property>
+            <property name="label" translatable="yes">Visit Provider&apos;s Website</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="halign">center</property>
@@ -422,7 +422,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <child>
           <object class="GtkLabel">
             <property name="margin-top">3</property>
-            <property name="label" translatable="1">Listing of providers</property>
+            <property name="label" translatable="yes">Listing of providers</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -444,7 +444,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <child>
           <object class="GtkLabel">
             <property name="margin-top">3</property>
-            <property name="label" translatable="1">A feature comparison of various providers</property>
+            <property name="label" translatable="yes">A feature comparison of various providers</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">40</property>
             <property name="xalign">0</property>
@@ -476,7 +476,7 @@ Creating an account with one provider allows you to communicate with contacts fr
     <child>
       <object class="GtkLabel">
         <property name="margin-bottom">12</property>
-        <property name="label" translatable="1">Sign Up</property>
+        <property name="label" translatable="yes">Sign Up</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -489,7 +489,7 @@ Creating an account with one provider allows you to communicate with contacts fr
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">_Please choose a provider</property>
+        <property name="label" translatable="yes">_Please choose a provider</property>
         <property name="use-markup">1</property>
         <property name="use-underline">1</property>
         <style>
@@ -504,9 +504,9 @@ Creating an account with one provider allows you to communicate with contacts fr
     </child>
     <child>
       <object class="GtkCheckButton" id="sign_up_advanced_checkbutton">
-        <property name="label" translatable="1">_Advanced Settings</property>
+        <property name="label" translatable="yes">_Advanced Settings</property>
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Proxy, custom hostname and port</property>
+        <property name="tooltip-text" translatable="yes">Proxy, custom hostname and port</property>
         <property name="halign">start</property>
         <property name="use-underline">1</property>
         <layout>
@@ -518,9 +518,9 @@ Creating an account with one provider allows you to communicate with contacts fr
     </child>
     <child>
       <object class="GtkCheckButton" id="sign_up_anonymously">
-        <property name="label" translatable="1">Sign up Anonymously</property>
+        <property name="label" translatable="yes">Sign up Anonymously</property>
         <property name="focusable">1</property>
-        <property name="tooltip-text" translatable="1">Note: Anonymous accounts are not possible with all providers</property>
+        <property name="tooltip-text" translatable="yes">Note: Anonymous accounts are not possible with all providers</property>
         <property name="halign">start</property>
         <property name="valign">start</property>
         <layout>
@@ -560,7 +560,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         </child>
         <child>
           <object class="GtkImage" id="update_provider_list_icon">
-            <property name="tooltip-text" translatable="1">Updating provider list…</property>
+            <property name="tooltip-text" translatable="yes">Updating provider list…</property>
             <property name="icon-name">view-refresh-symbolic</property>
           </object>
         </child>
@@ -568,7 +568,7 @@ Creating an account with one provider allows you to communicate with contacts fr
           <object class="GtkMenuButton">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Which provider should I choose?</property>
+            <property name="tooltip-text" translatable="yes">Which provider should I choose?</property>
             <property name="popover">server_recommendations</property>
             <child>
               <object class="GtkImage">

@@ -27,14 +27,14 @@
             <property name="css-classes">toolbar</property>
             <child>
               <object class="GtkButton" id="add_proxy_button">
-                <property name="tooltip_text" translatable="1">Add Proxy</property>
+                <property name="tooltip_text" translatable="yes">Add Proxy</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">feather-plus-symbolic</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="remove_proxy_button">
-                <property name="tooltip_text" translatable="1">Remove Proxy</property>
+                <property name="tooltip_text" translatable="yes">Remove Proxy</property>
                 <property name="use_underline">1</property>
                 <property name="icon_name">feather-trash-symbolic</property>
               </object>
@@ -66,7 +66,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Pass_word</property>
+            <property name="label" translatable="yes">Pass_word</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxypass_entry</property>
             <style>
@@ -89,7 +89,7 @@
         </child>
         <child>
           <object class="GtkCheckButton" id="useauth_checkbutton">
-            <property name="label" translatable="1">Use proxy auth_entication</property>
+            <property name="label" translatable="yes">Use proxy auth_entication</property>
             <property name="focusable">1</property>
             <property name="halign">start</property>
             <property name="margin_top">12</property>
@@ -103,7 +103,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Username</property>
+            <property name="label" translatable="yes">_Username</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyuser_entry</property>
             <style>
@@ -129,7 +129,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Port</property>
+            <property name="label" translatable="yes">_Port</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyport_entry</property>
             <style>
@@ -145,7 +145,7 @@
           <object class="GtkEntry" id="proxyhost_entry">
             <property name="focusable">1</property>
             <property name="hexpand">1</property>
-            <property name="placeholder_text" translatable="1">example.org</property>
+            <property name="placeholder_text" translatable="yes">example.org</property>
             <property name="input_purpose">url</property>
             <layout>
               <property name="column">1</property>
@@ -156,7 +156,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Host</property>
+            <property name="label" translatable="yes">_Host</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyhost_entry</property>
             <style>
@@ -172,7 +172,7 @@
           <object class="GtkLabel">
             <property name="margin_top">12</property>
             <property name="margin_bottom">6</property>
-            <property name="label" translatable="1">Settings</property>
+            <property name="label" translatable="yes">Settings</property>
             <property name="use_markup">1</property>
             <style>
               <class name="bold16"/>
@@ -201,7 +201,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Type</property>
+            <property name="label" translatable="yes">_Type</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxytype_combobox</property>
             <style>
@@ -216,7 +216,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">_Name</property>
+            <property name="label" translatable="yes">_Name</property>
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyname_entry</property>
             <style>
@@ -242,7 +242,7 @@
         <child>
           <object class="GtkLabel">
             <property name="margin_bottom">6</property>
-            <property name="label" translatable="1">Proxy</property>
+            <property name="label" translatable="yes">Proxy</property>
             <property name="use_markup">1</property>
             <style>
               <class name="bold16"/>

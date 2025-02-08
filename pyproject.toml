@@ -84,7 +84,7 @@ force-exclude = "common|plugins"
 required-version = "24.10.0"
 
 [tool.codespell]
-skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.pot,*.nsi,*.spec"
+skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.egg-info,.git,*.po,*.po~,*.pot,*.nsi,*.spec"
 ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin"
 
 [tool.pyright]

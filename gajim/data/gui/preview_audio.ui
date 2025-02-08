@@ -60,7 +60,7 @@
             <child>
               <object class="GtkLabel" id="progress_label">
                 <property name="name">progressbar_label</property>
-                <property name="tooltip-text" translatable="1">Click to change time display</property>
+                <property name="tooltip-text" translatable="yes">Click to change time display</property>
                 <property name="halign">end</property>
                 <property name="valign">center</property>
                 <property name="label">-0:00/0:00</property>
@@ -95,7 +95,7 @@
               <object class="GtkButton" id="rewind_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Rewind 10 seconds</property>
+                <property name="tooltip-text" translatable="yes">Rewind 10 seconds</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">media-seek-backward-symbolic</property>
@@ -109,7 +109,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage" id="play_icon">
-                    <property name="tooltip-text" translatable="1">Start/stop playback</property>
+                    <property name="tooltip-text" translatable="yes">Start/stop playback</property>
                     <property name="icon-name">media-playback-start-symbolic</property>
                   </object>
                 </child>
@@ -121,7 +121,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="tooltip-text" translatable="1">Forward 10 seconds</property>
+                    <property name="tooltip-text" translatable="yes">Forward 10 seconds</property>
                     <property name="icon-name">media-seek-forward-symbolic</property>
                   </object>
                 </child>
@@ -138,7 +138,7 @@
               <object class="GtkButton" id="speed_dec_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Decrease playback speed</property>
+                <property name="tooltip-text" translatable="yes">Decrease playback speed</property>
                 <child>
                   <object class="GtkImage">
                     <property name="halign">center</property>
@@ -153,7 +153,7 @@
                 <property name="focusable">1</property>
                 <property name="focus-on-click">0</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Select playback speed</property>
+                <property name="tooltip-text" translatable="yes">Select playback speed</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="popover">speed_popover</property>
@@ -188,7 +188,7 @@
               <object class="GtkButton" id="speed_inc_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Increase playback speed</property>
+                <property name="tooltip-text" translatable="yes">Increase playback speed</property>
                 <child>
                   <object class="GtkImage">
                     <property name="halign">center</property>

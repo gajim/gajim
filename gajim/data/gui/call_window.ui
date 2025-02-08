@@ -24,7 +24,7 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">center</property>
-                <property name="label" translatable="1">&lt;b&gt;1&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;1&lt;/b&gt;</property>
                 <property name="use-markup">1</property>
                 <property name="xalign">0</property>
               </object>
@@ -42,7 +42,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;2&lt;/b&gt; abc</property>
+                <property name="label" translatable="yes">&lt;b&gt;2&lt;/b&gt; abc</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -59,7 +59,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;3&lt;/b&gt; def</property>
+                <property name="label" translatable="yes">&lt;b&gt;3&lt;/b&gt; def</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -76,7 +76,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;4&lt;/b&gt; ghi</property>
+                <property name="label" translatable="yes">&lt;b&gt;4&lt;/b&gt; ghi</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -93,7 +93,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;5&lt;/b&gt; jkl</property>
+                <property name="label" translatable="yes">&lt;b&gt;5&lt;/b&gt; jkl</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -110,7 +110,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;6&lt;/b&gt; mno</property>
+                <property name="label" translatable="yes">&lt;b&gt;6&lt;/b&gt; mno</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -127,7 +127,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;7&lt;/b&gt; pqrs</property>
+                <property name="label" translatable="yes">&lt;b&gt;7&lt;/b&gt; pqrs</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -144,7 +144,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;8&lt;/b&gt; tuv</property>
+                <property name="label" translatable="yes">&lt;b&gt;8&lt;/b&gt; tuv</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -161,7 +161,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;9&lt;/b&gt; wxyz</property>
+                <property name="label" translatable="yes">&lt;b&gt;9&lt;/b&gt; wxyz</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -178,7 +178,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;*&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;*&lt;/b&gt;</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -195,7 +195,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;0&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;0&lt;/b&gt;</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -212,7 +212,7 @@
             <property name="receives-default">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label" translatable="1">&lt;b&gt;#&lt;/b&gt;</property>
+                <property name="label" translatable="yes">&lt;b&gt;#&lt;/b&gt;</property>
                 <property name="use-markup">1</property>
               </object>
             </child>
@@ -291,7 +291,7 @@
         <child>
           <object class="GtkButton" id="answer_video_button">
             <property name="visible">0</property>
-            <property name="label" translatable="1">Share Video</property>
+            <property name="label" translatable="yes">Share Video</property>
             <property name="focusable">1</property>
             <property name="halign">center</property>
           </object>
@@ -310,7 +310,7 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Turn Camera on</property>
+                <property name="tooltip-text" translatable="yes">Turn Camera on</property>
                 <child>
                   <object class="GtkImage" id="av_cam_image">
                     <property name="icon-name">feather-camera-symbolic</property>
@@ -323,7 +323,7 @@
                 <property name="width-request">70</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">End call</property>
+                <property name="tooltip-text" translatable="yes">End call</property>
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">

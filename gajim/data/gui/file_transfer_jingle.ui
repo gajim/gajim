@@ -84,7 +84,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkButton" id="accept_file_request">
-                            <property name="label" translatable="1">Download</property>
+                            <property name="label" translatable="yes">Download</property>
                             <property name="focusable">1</property>
                             <property name="valign">start</property>
                             <style>
@@ -96,7 +96,7 @@
                           <object class="GtkButton" id="reject_file_request">
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="1">Reject file transfer</property>
+                            <property name="tooltip-text" translatable="yes">Reject file transfer</property>
                             <property name="valign">start</property>
                             <child>
                               <object class="GtkImage">
@@ -119,7 +119,7 @@
                           <object class="GtkButton" id="open_folder">
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="1">Open Folder</property>
+                            <property name="tooltip-text" translatable="yes">Open Folder</property>
                             <property name="valign">start</property>
                             <child>
                               <object class="GtkImage">
@@ -130,7 +130,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="open_file">
-                            <property name="label" translatable="1">Open</property>
+                            <property name="label" translatable="yes">Open</property>
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="valign">start</property>
@@ -149,7 +149,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkButton" id="error_show_transfers">
-                            <property name="label" translatable="1">Show Transfers</property>
+                            <property name="label" translatable="yes">Show Transfers</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
                           </object>
@@ -175,7 +175,7 @@
                         <property name="spacing">12</property>
                         <child>
                           <object class="GtkButton" id="retry_bad_hash">
-                            <property name="label" translatable="1">Try Again</property>
+                            <property name="label" translatable="yes">Try Again</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
                           </object>
@@ -183,7 +183,7 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">end</property>
-                            <property name="label" translatable="1">File corrupted during transfer</property>
+                            <property name="label" translatable="yes">File corrupted during transfer</property>
                           </object>
                         </child>
                       </object>
@@ -201,14 +201,14 @@
                         <child>
                           <object class="GtkLabel">
                             <property name="halign">end</property>
-                            <property name="label" translatable="1">You cancelled the transfer</property>
+                            <property name="label" translatable="yes">You cancelled the transfer</property>
                             <property name="wrap">1</property>
                             <property name="max-width-chars">20</property>
                           </object>
                         </child>
                         <child>
                           <object class="GtkButton" id="rejected_show_transfers">
-                            <property name="label" translatable="1">Show Transfers</property>
+                            <property name="label" translatable="yes">Show Transfers</property>
                             <property name="focusable">1</property>
                             <property name="halign">end</property>
                           </object>
@@ -236,7 +236,7 @@
                         </child>
                         <child>
                           <object class="GtkButton" id="cancel_transfer">
-                            <property name="label" translatable="1">Cancel</property>
+                            <property name="label" translatable="yes">Cancel</property>
                             <property name="focusable">1</property>
                             <property name="receives-default">1</property>
                             <property name="halign">end</property>

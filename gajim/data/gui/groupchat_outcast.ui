@@ -4,7 +4,7 @@
   <object class="GtkPopover" id="info_popover">
     <property name="child">
       <object class="GtkLabel">
-        <property name="label" translatable="1">&lt;b&gt;XMPP Address&lt;/b&gt;
+        <property name="label" translatable="yes">&lt;b&gt;XMPP Address&lt;/b&gt;
 &amp;lt;user@domain/resource&amp;gt; (only that resource matches)
 &amp;lt;user@domain&amp;gt; (any resource matches)
 &amp;lt;domain/resource&amp;gt; (only that resource matches)
@@ -48,7 +48,7 @@
                 <property name="resizable">1</property>
                 <property name="sizing">fixed</property>
                 <property name="min-width">150</property>
-                <property name="title" translatable="1">XMPP Address</property>
+                <property name="title" translatable="yes">XMPP Address</property>
                 <property name="expand">1</property>
                 <property name="clickable">1</property>
                 <property name="sort-indicator">1</property>
@@ -70,7 +70,7 @@
                 <property name="resizable">1</property>
                 <property name="sizing">fixed</property>
                 <property name="min-width">120</property>
-                <property name="title" translatable="1">Reason</property>
+                <property name="title" translatable="yes">Reason</property>
                 <property name="clickable">1</property>
                 <property name="sort-indicator">1</property>
                 <property name="sort-column-id">1</property>
@@ -104,7 +104,7 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
+                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <property name="halign">center</property>
                 <child>
                   <object class="GtkImage">
@@ -119,7 +119,7 @@
                 <property name="sensitive">0</property>
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Only Admins and Owners can modify the affiliation</property>
+                <property name="tooltip-text" translatable="yes">Only Admins and Owners can modify the affiliation</property>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">feather-trash-symbolic</property>

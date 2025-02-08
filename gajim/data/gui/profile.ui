@@ -8,7 +8,7 @@
         <property name="column-spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Privacy</property>
+            <property name="label" translatable="yes">Privacy</property>
             <style>
               <class name="bold"/>
             </style>
@@ -22,7 +22,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Contact Infos</property>
+            <property name="label" translatable="yes">Contact Infos</property>
             <layout>
               <property name="column">0</property>
               <property name="row">3</property>
@@ -32,7 +32,7 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Picture and Name</property>
+            <property name="label" translatable="yes">Picture and Name</property>
             <layout>
               <property name="column">0</property>
               <property name="row">2</property>
@@ -42,7 +42,7 @@
         <child>
           <object class="GtkLabel">
             <property name="margin-bottom">6</property>
-            <property name="label" translatable="1">Make your profile visible for everyone or just for your contacts.</property>
+            <property name="label" translatable="yes">Make your profile visible for everyone or just for your contacts.</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">42</property>
             <layout>
@@ -75,7 +75,7 @@
         <child>
           <object class="GtkLabel" id="avatar_nick_access_label">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Contacts</property>
+            <property name="label" translatable="yes">Contacts</property>
             <layout>
               <property name="column">1</property>
               <property name="row">2</property>
@@ -85,7 +85,7 @@
         <child>
           <object class="GtkLabel" id="vcard_access_label">
             <property name="halign">end</property>
-            <property name="label" translatable="1">Contacts</property>
+            <property name="label" translatable="yes">Contacts</property>
             <layout>
               <property name="column">1</property>
               <property name="row">3</property>
@@ -142,7 +142,7 @@
                               <object class="GtkButton" id="remove_avatar_button">
                                 <property name="visible">0</property>
                                 <property name="focusable">1</property>
-                                <property name="tooltip-text" translatable="1">Remove your profile picture</property>
+                                <property name="tooltip-text" translatable="yes">Remove your profile picture</property>
                                 <property name="halign">start</property>
                                 <property name="valign">end</property>
                                 <child>
@@ -160,10 +160,10 @@
                             <property name="width-request">250</property>
                             <property name="sensitive">0</property>
                             <property name="focusable">1</property>
-                            <property name="tooltip-text" translatable="1">Enter your nickname. This is how your name is displayed to your contacts.</property>
+                            <property name="tooltip-text" translatable="yes">Enter your nickname. This is how your name is displayed to your contacts.</property>
                             <property name="halign">center</property>
                             <property name="xalign">0.5</property>
-                            <property name="placeholder-text" translatable="1">Nickname</property>
+                            <property name="placeholder-text" translatable="yes">Nickname</property>
                           </object>
                         </child>
                         <style>
@@ -180,7 +180,7 @@
                 <child>
                   <object class="GtkButton" id="cancel_button">
                     <property name="visible">0</property>
-                    <property name="label" translatable="1">_Cancel</property>
+                    <property name="label" translatable="yes">_Cancel</property>
                     <property name="use-underline">1</property>
                   </object>
                 </child>
@@ -197,7 +197,7 @@
                         </child>
                         <child>
                           <object class="GtkLabel">
-                            <property name="label" translatable="1">Add Entry</property>
+                            <property name="label" translatable="yes">Add Entry</property>
                           </object>
                         </child>
                       </object>
@@ -210,7 +210,7 @@
                     <child>
                       <object class="GtkMenuButton" id="privacy_button">
                         <property name="visible">0</property>
-                        <property name="tooltip-text" translatable="1">Privacy</property>
+                        <property name="tooltip-text" translatable="yes">Privacy</property>
                         <property name="direction">up</property>
                         <property name="popover">privacy_popover</property>
                         <child>
@@ -223,7 +223,7 @@
                     <child>
                       <object class="GtkButton" id="save_button">
                         <property name="visible">0</property>
-                        <property name="label" translatable="1">_Save</property>
+                        <property name="label" translatable="yes">_Save</property>
                         <property name="use-underline">1</property>
                         <style>
                           <class name="suggested-action"/>
@@ -234,7 +234,7 @@
                 </child>
                 <child type="end">
                   <object class="GtkButton" id="edit_button">
-                    <property name="label" translatable="1">_Edit</property>
+                    <property name="label" translatable="yes">_Edit</property>
                     <property name="use-underline">1</property>
                     <style>
                       <class name="suggested-action"/>
@@ -260,13 +260,13 @@
                 <property name="spacing">12</property>
                 <child>
                   <object class="GtkButton" id="avatar_cancel">
-                    <property name="label" translatable="1">Cancel</property>
+                    <property name="label" translatable="yes">Cancel</property>
                     <property name="focusable">1</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="avatar_update_button">
-                    <property name="label" translatable="1">Update</property>
+                    <property name="label" translatable="yes">Update</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <style>
@@ -335,7 +335,7 @@
               <object class="GtkActionBar">
                 <child type="end">
                   <object class="GtkButton" id="back_button">
-                    <property name="label" translatable="1">_Back</property>
+                    <property name="label" translatable="yes">_Back</property>
                     <property name="focusable">1</property>
                     <property name="use-underline">1</property>
                     <style>

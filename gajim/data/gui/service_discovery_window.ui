@@ -46,7 +46,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">_Address</property>
+            <property name="label" translatable="yes">_Address</property>
             <property name="use_underline">1</property>
             <style>
               <class name="dim-label"/>
@@ -63,7 +63,7 @@
         <child>
           <object class="GtkButton" id="browse_button">
             <property name="focusable">1</property>
-            <property name="tooltip_text" translatable="1">Go</property>
+            <property name="tooltip_text" translatable="yes">Go</property>
             <property name="use_underline">1</property>
             <child>
               <object class="GtkImage">

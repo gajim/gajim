@@ -59,7 +59,7 @@
           <object class="GtkLabel" id="transfer_progress">
             <property name="halign">start</property>
             <property name="valign">center</property>
-            <property name="label" translatable="1">Waiting…</property>
+            <property name="label" translatable="yes">Waiting…</property>
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <style>
@@ -69,7 +69,7 @@
         </child>
         <child>
           <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="1">Cancel</property>
+            <property name="label" translatable="yes">Cancel</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="halign">end</property>

@@ -7,7 +7,7 @@
     <child>
       <object class="GtkLabel">
         <property name="margin_bottom">6</property>
-        <property name="label" translatable="1">SSL Certificate Verification Error</property>
+        <property name="label" translatable="yes">SSL Certificate Verification Error</property>
         <style>
           <class name="large-header"/>
         </style>
@@ -23,7 +23,7 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Identified Error</property>
+        <property name="label" translatable="yes">Identified Error</property>
         <style>
           <class name="bold"/>
         </style>
@@ -32,7 +32,7 @@
     <child>
       <object class="GtkLabel" id="ssl_error">
         <property name="margin_bottom">12</property>
-        <property name="label" translatable="1">&lt;error&gt;</property>
+        <property name="label" translatable="yes">&lt;error&gt;</property>
         <property name="wrap">1</property>
         <property name="max_width_chars">42</property>
       </object>
@@ -40,7 +40,7 @@
     <child>
       <object class="GtkCheckButton" id="add_certificate_checkbutton">
         <property name="visible">0</property>
-        <property name="label" translatable="1">Add this certificate to the list of _trusted certificates</property>
+        <property name="label" translatable="yes">Add this certificate to the list of _trusted certificates</property>
         <property name="focusable">1</property>
         <property name="halign">start</property>
         <property name="margin_start">15</property>
@@ -59,7 +59,7 @@
         <property name="homogeneous">1</property>
         <child>
           <object class="GtkButton" id="view_cert_button">
-            <property name="label" translatable="1">_View Certificate</property>
+            <property name="label" translatable="yes">_View Certificate</property>
             <property name="focusable">1</property>
             <property name="receives_default">1</property>
             <property name="halign">start</property>
@@ -68,7 +68,7 @@
         </child>
         <child>
           <object class="GtkButton" id="connect_button">
-            <property name="label" translatable="1">_Connect</property>
+            <property name="label" translatable="yes">_Connect</property>
             <property name="sensitive">0</property>
             <property name="focusable">1</property>
             <property name="receives_default">1</property>

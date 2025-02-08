@@ -35,7 +35,7 @@
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Your chat history is being migrated.
+                    <property name="label" translatable="yes">Your chat history is being migrated.
 This may take a while…</property>
                     <property name="justify">center</property>
                     <style>
@@ -65,7 +65,7 @@ This may take a while…</property>
                 </child>
                 <child>
                   <object class="GtkLabel" id="error_label">
-                    <property name="label" translatable="1">Database migration failed</property>
+                    <property name="label" translatable="yes">Database migration failed</property>
                     <property name="justify">center</property>
                     <property name="wrap">1</property>
                     <property name="max-width-chars">52</property>
@@ -108,7 +108,7 @@ This may take a while…</property>
                             <child>
                               <object class="GtkButton" id="error_copy_button">
                                 <property name="can-focus">0</property>
-                                <property name="label" translatable="1">C_opy</property>
+                                <property name="label" translatable="yes">C_opy</property>
                                 <property name="use-underline">1</property>
                               </object>
                             </child>
@@ -121,14 +121,14 @@ This may take a while…</property>
                     </child>
                     <child type="label">
                       <object class="GtkLabel">
-                        <property name="label" translatable="1">Show Details</property>
+                        <property name="label" translatable="yes">Show Details</property>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton" id="error_close_button">
-                    <property name="label" translatable="1">_Close</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">center</property>
@@ -159,7 +159,7 @@ This may take a while…</property>
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="1">Your chat history database has been migrated successfully.</property>
+                    <property name="label" translatable="yes">Your chat history database has been migrated successfully.</property>
                     <property name="justify">center</property>
                     <property name="wrap">1</property>
                     <property name="max-width-chars">52</property>
@@ -167,7 +167,7 @@ This may take a while…</property>
                 </child>
                 <child>
                   <object class="GtkButton" id="success_close_button">
-                    <property name="label" translatable="1">_Close</property>
+                    <property name="label" translatable="yes">_Close</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="halign">center</property>

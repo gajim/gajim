@@ -38,7 +38,7 @@
     <child>
       <object class="GtkBox">
         <property name="spacing">6</property>
-        <property name="tooltip-text" translatable="true">Participants Count</property>
+        <property name="tooltip-text" translatable="yes">Participants Count</property>
         <child>
           <object class="GtkImage">
             <property name="icon-name">system-users-symbolic</property>

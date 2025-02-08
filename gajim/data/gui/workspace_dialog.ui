@@ -23,7 +23,7 @@
           <object class="GtkButton" id="remove_workspace_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Remove this workspace</property>
+            <property name="tooltip-text" translatable="yes">Remove this workspace</property>
             <child>
               <object class="GtkImage">
                 <property name="icon-name">edit-delete-symbolic</property>
@@ -35,7 +35,7 @@
     </child>
     <child>
       <object class="GtkLabel">
-        <property name="label" translatable="1">Choose a color or select an image</property>
+        <property name="label" translatable="yes">Choose a color or select an image</property>
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
@@ -55,7 +55,7 @@
         </child>
         <child>
           <object class="GtkLabel">
-            <property name="label" translatable="1">Use Image</property>
+            <property name="label" translatable="yes">Use Image</property>
           </object>
         </child>
       </object>
@@ -65,7 +65,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">color</property>
-            <property name="title" translatable="1">Color</property>
+            <property name="title" translatable="yes">Color</property>
             <property name="child">
               <object class="GtkBox">
                 <property name="halign">center</property>
@@ -75,7 +75,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="valign">center</property>
-                    <property name="label" translatable="1">Color</property>
+                    <property name="label" translatable="yes">Color</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -94,7 +94,7 @@
         <child>
           <object class="GtkStackPage">
             <property name="name">image</property>
-            <property name="title" translatable="1">Image</property>
+            <property name="title" translatable="yes">Image</property>
             <property name="child">
               <object class="GtkBox" id="image_box">
                 <property name="halign">center</property>
@@ -116,14 +116,14 @@
         <property name="halign">end</property>
         <child>
           <object class="GtkButton" id="cancel_button">
-            <property name="label" translatable="1">_Cancel</property>
+            <property name="label" translatable="yes">_Cancel</property>
             <property name="focusable">1</property>
             <property name="use-underline">1</property>
           </object>
         </child>
         <child>
           <object class="GtkButton" id="save_button">
-            <property name="label" translatable="1">_Save</property>
+            <property name="label" translatable="yes">_Save</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
             <property name="use-underline">1</property>

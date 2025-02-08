@@ -44,7 +44,7 @@
               <object class="GtkButton" id="copy_jid_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
-                <property name="tooltip-text" translatable="1">Copy to clipboard</property>
+                <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
                 <property name="valign">center</property>
                 <child>
                   <object class="GtkImage">
@@ -95,7 +95,7 @@
                 <child>
                   <object class="GtkImage" id="phone_image">
                     <property name="visible">0</property>
-                    <property name="tooltip-text" translatable="1">The last message was written on a mobile client</property>
+                    <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
                     <property name="halign">start</property>
                     <property name="margin-end">4</property>
                     <property name="icon-name">phone-symbolic</property>
@@ -104,7 +104,7 @@
                 <child>
                   <object class="GtkImage" id="robot_image">
                     <property name="visible">0</property>
-                    <property name="tooltip-text" translatable="1">This contact is a bot</property>
+                    <property name="tooltip-text" translatable="yes">This contact is a bot</property>
                     <property name="halign">start</property>
                     <property name="margin-end">4</property>
                     <property name="icon-name">lucide-bot-symbolic</property>
@@ -156,7 +156,7 @@
           <object class="GtkButton">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Search…</property>
+            <property name="tooltip-text" translatable="yes">Search…</property>
             <property name="valign">center</property>
             <property name="action-name">win.search-history</property>
             <child>
@@ -170,7 +170,7 @@
           <object class="GtkButton" id="contact_info_button">
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Chat Details and Settings</property>
+            <property name="tooltip-text" translatable="yes">Chat Details and Settings</property>
             <property name="valign">center</property>
             <property name="action-name">win.show-contact-info</property>
             <child>
@@ -185,7 +185,7 @@
             <property name="visible">0</property>
             <property name="focusable">1</property>
             <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="1">Toggle participants list</property>
+            <property name="tooltip-text" translatable="yes">Toggle participants list</property>
             <property name="valign">center</property>
             <child>
               <object class="GtkBox">

@@ -33,7 +33,7 @@
                   <object class="GtkSearchEntry" id="search_entry">
                     <property name="focusable">1</property>
                     <property name="hexpand">1</property>
-                    <property name="placeholder-text" translatable="1">Search…</property>
+                    <property name="placeholder-text" translatable="yes">Search…</property>
                   </object>
                 </child>
                 <child>
@@ -41,7 +41,7 @@
                     <property name="focusable">1</property>
                     <property name="focus-on-click">0</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="1">Start Chat…</property>
+                    <property name="tooltip-text" translatable="yes">Start Chat…</property>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">feather-plus-symbolic</property>
@@ -81,7 +81,7 @@
                         <property name="visible">0</property>
                         <property name="focusable">1</property>
                         <property name="receives-default">1</property>
-                        <property name="tooltip-text" translatable="1">Workspace settings…</property>
+                        <property name="tooltip-text" translatable="yes">Workspace settings…</property>
                         <property name="valign">center</property>
                         <child>
                           <object class="GtkImage">
