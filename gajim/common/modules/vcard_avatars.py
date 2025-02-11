@@ -13,7 +13,7 @@ from collections.abc import Callable
 from collections.abc import Generator
 
 from nbxmpp.const import AvatarState
-from nbxmpp.modules.util import is_error
+from nbxmpp.errors import is_error
 from nbxmpp.modules.vcard_temp import VCard
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID

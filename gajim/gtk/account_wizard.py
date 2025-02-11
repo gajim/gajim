@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -16,7 +17,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
-from nbxmpp.client import Client
+from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
 from nbxmpp.const import Mode
@@ -29,6 +30,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import validate_domainpart
 from nbxmpp.stringprep import saslprep
 from nbxmpp.structs import ProxyData
+from nbxmpp.structs import RegisterData
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -66,7 +68,7 @@ log = logging.getLogger("gajim.gtk.account_wizard")
 class AccountWizard(Assistant):
     def __init__(self) -> None:
         Assistant.__init__(self, name="AccountWizard", height=500)
-        self._client: Client | None = None
+        self._client: NBXMPPClient | None = None
         self._method: Literal["login"] | Literal["signup"] = "login"
         self._destroyed: bool = False
 
@@ -264,9 +266,9 @@ class AccountWizard(Assistant):
 
     def _get_base_client(
         self, address: JID, mode: Mode, advanced: bool, ignore_all_errors: bool
-    ) -> Client:
+    ) -> NBXMPPClient:
 
-        client = Client(log_context="Account Wizard")
+        client = NBXMPPClient(log_context="Account Wizard")
         client.set_domain(address.domain)
         client.set_username(address.localpart)
         client.set_mode(mode)
@@ -295,11 +297,13 @@ class AccountWizard(Assistant):
         self._client = None
 
     @staticmethod
-    def _on_stanza_sent(_client: Client, _signal_name: str, stanza: Any) -> None:
+    def _on_stanza_sent(_client: NBXMPPClient, _signal_name: str, stanza: Any) -> None:
         app.ged.raise_event(StanzaSent(account="AccountWizard", stanza=stanza))
 
     @staticmethod
-    def _on_stanza_received(_client: Client, _signal_name: str, stanza: Any) -> None:
+    def _on_stanza_received(
+        _client: NBXMPPClient, _signal_name: str, stanza: Any
+    ) -> None:
         app.ged.raise_event(StanzaReceived(account="AccountWizard", stanza=stanza))
 
     def _test_credentials(self, ignore_all_errors: bool = False) -> None:
@@ -346,7 +350,7 @@ class AccountWizard(Assistant):
 
         self._client.connect()
 
-    def _on_login_successful(self, client: Client, _signal_name: str) -> None:
+    def _on_login_successful(self, client: NBXMPPClient, _signal_name: str) -> None:
         account = self._generate_account_name(client.domain)
         proxy_name = None
         if client.proxy is not None:
@@ -361,12 +365,12 @@ class AccountWizard(Assistant):
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
         self._disconnect()
 
-    def _on_connected(self, client: Client, _signal_name: str) -> None:
+    def _on_connected(self, client: NBXMPPClient, _signal_name: str) -> None:
         client.get_module("Register").request_register_form(
             callback=self._on_register_form
         )
 
-    def _on_anonymous_supported(self, client: Client, _signal_name: str) -> None:
+    def _on_anonymous_supported(self, client: NBXMPPClient, _signal_name: str) -> None:
         account = self._generate_account_name(client.domain)
         proxy_name = None
         if client.proxy is not None:
@@ -387,7 +391,7 @@ class AccountWizard(Assistant):
         self.show_page("success", Gtk.StackTransitionType.SLIDE_LEFT)
         self._disconnect()
 
-    def _on_disconnected(self, client: Client, _signal_name: str) -> None:
+    def _on_disconnected(self, client: NBXMPPClient, _signal_name: str) -> None:
         domain, error, text = client.get_error()
         if domain == StreamError.SASL:
             if error == "anonymous-not-supported":
@@ -423,7 +427,7 @@ class AccountWizard(Assistant):
         self._client.destroy()
         self._client = None
 
-    def _on_connection_failed(self, _client: Client, _signal_name: str) -> None:
+    def _on_connection_failed(self, _client: NBXMPPClient, _signal_name: str) -> None:
         self._show_error_page(
             _("Connection failed"),
             _("Connection failed"),
@@ -456,7 +460,7 @@ class AccountWizard(Assistant):
 
     def _on_register_form(self, task: Task) -> None:
         try:
-            result = task.finish()
+            result = cast(RegisterData, task.finish())
         except (StanzaError, MalformedStanzaError) as error:
             self._show_error_page(_("Error"), _("Error"), error.get_text())
             self._disconnect()

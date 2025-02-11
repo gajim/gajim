@@ -8,8 +8,8 @@ from __future__ import annotations
 
 from collections.abc import Generator
 
+from nbxmpp.errors import is_error
 from nbxmpp.modules.user_avatar import AvatarData
-from nbxmpp.modules.util import is_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties

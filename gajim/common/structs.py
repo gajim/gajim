@@ -22,6 +22,7 @@ from nbxmpp.const import Role
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.protocol import JID
+from nbxmpp.protocol import Message
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import HatData
 from nbxmpp.structs import MucSubject
@@ -145,10 +146,10 @@ class OutgoingMessage:
     def is_encrypted(self) -> bool:
         return self._encryption_data is not None
 
-    def set_stanza(self, stanza: Any) -> None:
+    def set_stanza(self, stanza: Message) -> None:
         self._stanza = stanza
 
-    def get_stanza(self) -> Any:
+    def get_stanza(self) -> Message:
         return self._stanza
 
 

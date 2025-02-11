@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Literal
 
 import binascii
 import threading
@@ -18,10 +19,10 @@ from pathlib import Path
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import PresenceType
+from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.omemo import create_omemo_message
 from nbxmpp.modules.omemo import get_key_transport_message
-from nbxmpp.modules.util import is_error
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -326,7 +327,7 @@ class OMEMO(BaseModule):
         GLib.idle_add(callback, transfer)
 
     def _send_key_transport_message(self,
-                                    typ: str,
+                                    typ: Literal['chat', 'groupchat'],
                                     jid: str,
                                     devices: list[int]
                                     ) -> None:

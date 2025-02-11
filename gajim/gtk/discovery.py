@@ -46,7 +46,7 @@ from collections.abc import Iterator
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import Node
-from nbxmpp.client import Client
+from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.errors import StanzaError
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -2230,7 +2230,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
             self.jid, node, self._on_pep_unsubscribe, groupnode=node
         )
 
-    def _on_pep_subscriptions(self, _nbxmpp_client: Client, stanza: Node) -> None:
+    def _on_pep_subscriptions(self, _nbxmpp_client: NBXMPPClient, stanza: Node) -> None:
         """
         We got the subscribed groups list stanza. Now, if we already have items
         on the list, we should actualize them
@@ -2267,7 +2267,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.update_actions()
 
     def _on_pep_subscribe(
-        self, _nbxmpp_client: Client, _stanza: Node, groupnode: str
+        self, _nbxmpp_client: NBXMPPClient, _stanza: Node, groupnode: str
     ) -> None:
         """
         We have just subscribed to a node. Update UI
@@ -2285,7 +2285,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.update_actions()
 
     def _on_pep_unsubscribe(
-        self, _nbxmpp_client: Client, _stanza: Node, groupnode: str
+        self, _nbxmpp_client: NBXMPPClient, _stanza: Node, groupnode: str
     ) -> None:
         """
         We have just unsubscribed from a node. Update UI

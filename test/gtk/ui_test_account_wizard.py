@@ -6,7 +6,7 @@ from functools import partial
 from unittest.mock import MagicMock
 
 from gi.repository import Gtk
-from nbxmpp.client import Client
+from nbxmpp.client import Client as NBXMPPClient
 
 from gajim.common import app
 from gajim.common.settings import Settings
@@ -20,7 +20,7 @@ ACCOUNT = "testacc1"
 
 
 def _on_login_successful(
-    self: AccountWizard, client: Client, _signal_name: str
+    self: AccountWizard, client: NBXMPPClient, _signal_name: str
 ) -> None:
     account = self._generate_account_name(client.domain)  # type: ignore
     app.settings.add_account(account)

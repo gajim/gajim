@@ -33,6 +33,7 @@ from gi.repository import GLib
 from gi.repository import GObject
 from nbxmpp.idlequeue import IdleQueue
 from nbxmpp.protocol import JID
+from nbxmpp.task import Task
 
 import gajim
 from gajim.common import config as c_config
@@ -127,7 +128,7 @@ _dependencies = {
     'SENTRY_SDK': False,
 }
 
-_tasks: dict[int, list[Any]] = defaultdict(list)
+_tasks: dict[int, list[Task]] = defaultdict(list)
 
 
 def print_version() -> None:
@@ -542,11 +543,11 @@ def get_stored_bob_data(algo_hash: str) -> bytes | None:
     return None
 
 
-def register_task(self, task):
+def register_task(self: Any, task: Task) -> None:
     _tasks[id(self)].append(task)
 
 
-def remove_task(task, id_) -> None:
+def remove_task(task: Task, id_: int) -> None:
     try:
         _tasks[id_].remove(task)
     except Exception:

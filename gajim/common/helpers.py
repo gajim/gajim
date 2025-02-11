@@ -287,7 +287,7 @@ def get_global_proxy() -> ProxyData | None:
     return get_proxy(proxy_name)
 
 
-def get_account_proxy(account: str, fallback=True) -> ProxyData | None:
+def get_account_proxy(account: str, fallback: bool = True) -> ProxyData | None:
     proxy_name = app.settings.get_account_setting(account, 'proxy')
     if proxy_name:
         return get_proxy(proxy_name)

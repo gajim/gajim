@@ -19,10 +19,12 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp import JID
+from nbxmpp.client import Client as NBXMPPClient
 from nbxmpp.errors import CancelledError
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
 from nbxmpp.errors import TimeoutStanzaError
+from nbxmpp.modules.muc.util import MucInfoResult
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MuclumbusItem
 from nbxmpp.structs import MuclumbusResult
@@ -548,7 +550,7 @@ class StartChatDialog(GajimAppWindow):
 
     def _muc_disco_info_received(self, task: Task) -> None:
         try:
-            result = cast(DiscoInfo, task.finish())
+            result = cast(MucInfoResult, task.finish())
         except (StanzaError, TimeoutStanzaError) as error:
             self._set_error(error)
             return
@@ -673,7 +675,7 @@ class StartChatDialog(GajimAppWindow):
             self._start_iq_search(client, text)
 
     @as_task
-    def _start_iq_search(self, client, text):
+    def _start_iq_search(self, client: NBXMPPClient, text: str):
         _task = yield  # noqa: F841
 
         if self._parameter_form is None:
@@ -707,7 +709,7 @@ class StartChatDialog(GajimAppWindow):
         self._global_search_view.end_search()
 
     @as_task
-    def _start_http_search(self, client, text):
+    def _start_http_search(self, client: NBXMPPClient, text: str):
         _task = yield  # noqa: F841
 
         self._keywords = text.split(" ")
