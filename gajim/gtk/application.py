@@ -246,7 +246,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         from gajim.gui_interface import Interface
 
         self.interface = Interface()
-        self.interface.run(self)
 
         from gajim.gtk.status_icon import StatusIcon
 
