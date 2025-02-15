@@ -15,8 +15,9 @@ from nbxmpp.namespaces import Namespace
 from gajim.common import app
 from gajim.common import types
 from gajim.common.jingle_transport import TransportType
-from gajim.common.socks5 import Socks5ReceiverClient
-from gajim.common.socks5 import Socks5SenderClient
+
+# from gajim.common.socks5 import Socks5ReceiverClient
+# from gajim.common.socks5 import Socks5SenderClient
 
 if TYPE_CHECKING:
     from gajim.common.jingle_ft import JingleFileTransfer

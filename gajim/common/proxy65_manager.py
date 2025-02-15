@@ -12,7 +12,8 @@ import socket
 import struct
 
 import nbxmpp
-from nbxmpp.idlequeue import IdleObject
+
+# from nbxmpp.idlequeue import IdleObject
 from nbxmpp.namespaces import Namespace
 
 from gajim.common import app

@@ -312,9 +312,14 @@ exclude = [
   "*.pyi",
   # Code Folders
   "typings",
-  "gajim/common/config.py",     # legacy module, will be removed
-  "gajim/common/optparser.py",  # legacy module, will be removed
-  "gajim/common/socks5.py",     # legacy module, will be removed
+  # legacy modules, will be removed
+  "gajim/gui_interface.py",
+  "gajim/common/config.py",
+  "gajim/common/jingle_ftstates.py",
+  "gajim/common/modules/bytestream.py",
+  "gajim/common/optparser.py",
+  "gajim/common/proxy65_manager.py",
+  "gajim/common/socks5.py",
 ]
 
 # Allow unused variables when underscore-prefixed.

@@ -36,7 +36,8 @@ from gajim.common.events import FileRequestError
 from gajim.common.file_props import FileProp
 from gajim.common.file_props import FilesProp
 from gajim.common.modules.base import BaseModule
-from gajim.common.socks5 import Socks5SenderClient
+
+# from gajim.common.socks5 import Socks5SenderClient
 from gajim.common.util.jid import get_full_jid_from_iq
 from gajim.common.util.jid import get_jid_from_iq
 from gajim.common.util.jid import parse_jid
@@ -112,9 +113,9 @@ class Bytestream(BaseModule):
             our_fjid = self._con.get_own_jid()
             testit = app.settings.get_account_setting(
                 self._account, 'test_ft_proxies_on_startup')
-            app.proxy65_manager.resolve(
-                info.jid, self._con.connection, str(our_fjid),
-                default=self._account, testit=testit)
+            # app.proxy65_manager.resolve(
+            #     info.jid, self._con.connection, str(our_fjid),
+            #     default=self._account, testit=testit)
             raise nbxmpp.NodeProcessed
 
     @staticmethod

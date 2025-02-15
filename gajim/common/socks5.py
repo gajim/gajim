@@ -22,10 +22,11 @@ from errno import EISCONN
 from errno import ENOBUFS
 from errno import EWOULDBLOCK
 
-from nbxmpp.idlequeue import IdleObject
-
 from gajim.common import app
 from gajim.common.file_props import FilesProp
+
+# from nbxmpp.idlequeue import IdleObject
+
 
 log = logging.getLogger('gajim.c.socks5')
 MAX_BUFF_LEN = 65536

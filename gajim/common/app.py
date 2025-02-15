@@ -31,7 +31,6 @@ from collections import defaultdict
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
-from nbxmpp.idlequeue import IdleQueue
 from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
@@ -107,10 +106,6 @@ call_manager = cast('CallManager', None)
 preview_manager = cast('PreviewManager', None)
 
 task_manager = cast('TaskManager', None)
-
-# These will be set in app.gui_interface.
-idlequeue = cast(IdleQueue, None)
-socks5queue = None
 
 gupnp_igd = None
 
