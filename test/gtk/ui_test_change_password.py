@@ -35,7 +35,7 @@ def _apply(self: ChangePassword, next_stage: bool = False) -> None:
 
 
 window = ChangePassword("")
-window._on_apply = partial(_apply, window)
+window._on_apply = partial(_apply, window)  # type: ignore
 window.show()
 
 util.run_app()
