@@ -162,12 +162,13 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
     # menu.add_item(_("Start Video Call…"), "win.start-video-call")
 
     if can_add_to_roster(contact):
-        params = AccountJidParam(account=account, jid=contact.jid)
         menu.add_item(_("Add Contact…"), "win.add-to-roster", params)
 
     if contact.is_in_roster:
-        params = GLib.Variant("as", [account, str(contact.jid)])
-        menu.add_item(_("Remove Contact…"), f"app.{account}-remove-contact", params)
+        roster_add_params = GLib.Variant("as", [account, str(contact.jid)])
+        menu.add_item(
+            _("Remove Contact…"), f"app.{account}-remove-contact", roster_add_params
+        )
 
     jids = [str(c.jid) for c in contact.get_resources()]
     if not jids:
@@ -178,6 +179,7 @@ def get_singlechat_menu(contact: types.BareContact) -> GajimMenu:
         f"app.{account}-execute-command",
         GLib.Variant("(sas)", (account, jids)),
     )
+
     menu.add_item(_("Export History…"), "app.export-history", params)
     menu.add_item(_("Remove History…"), "app.remove-history", params)
 
