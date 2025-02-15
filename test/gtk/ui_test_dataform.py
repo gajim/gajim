@@ -5,7 +5,7 @@
 from base64 import b64decode
 from unittest.mock import MagicMock
 
-from nbxmpp.modules.dataforms import extend_form  # pyright: ignore
+from nbxmpp.modules.dataforms import extend_form
 from nbxmpp.simplexml import Node
 
 from gajim.common import app
@@ -129,9 +129,7 @@ class TestDataFormWindow(GajimAppWindow):
             "left-width": 100,
             "form-width": 435,
         }
-        self._widget = DataFormWidget(
-            extend_form(node=Node(node=FORM)), options  # pyright: ignore
-        )
+        self._widget = DataFormWidget(extend_form(node=Node(node=FORM)), options)
         self.set_child(self._widget)
 
 

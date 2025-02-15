@@ -401,9 +401,7 @@ class ProfileWindow(GajimAppWindow):
             return
 
         self._new_avatar = Avatar()
-        self._new_avatar.add_image_source(  # pyright: ignore
-            data, "image/png", height, width
-        )
+        self._new_avatar.add_image_source(data, "image/png", height, width)
 
         scale = self.get_scale_factor()
         surface = app.app.avatar_storage.surface_from_filename(

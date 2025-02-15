@@ -515,15 +515,15 @@ class Migration:
         assert log_row.message_id is not None
 
         by = error.by
-        e_type = error.type  # pyright: ignore
-        text = error.get_text() or None  # pyright: ignore
-        condition = error.condition  # pyright: ignore
-        condition_text = error.condition_data or None  # pyright: ignore
+        e_type = error.type
+        text = error.get_text() or None
+        condition = error.condition
+        condition_text = error.condition_data or None
 
         if e_type is None or condition is None:
             return None
 
-        error_data = {  # pyright: ignore
+        error_data = {
             'fk_account_pk': fk_account_pk,
             'fk_remote_pk': fk_remote_pk,
             'message_id': log_row.message_id,
@@ -536,7 +536,7 @@ class Migration:
         }
 
         try:
-            conn.execute(sa.insert(mod.MessageError), [error_data])  # pyright: ignore
+            conn.execute(sa.insert(mod.MessageError), [error_data])
         except IntegrityError as error:
             if is_unique_constraint_error(error):
                 return

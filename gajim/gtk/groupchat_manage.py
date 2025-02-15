@@ -267,7 +267,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
             return
 
         vcard = VCard()
-        vcard.set_avatar(data, "image/png")  # pyright: ignore
+        vcard.set_avatar(data, "image/png")
 
         self._client.get_module("VCardTemp").set_vcard(
             vcard, jid=self._contact.jid, callback=self._on_upload_avatar_result
