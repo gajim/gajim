@@ -174,7 +174,7 @@ class Discovery(BaseModule):
                 self._con.available_transports[identity.type] = [jid]
 
     def _answer_disco_items(self,
-                            _con: types.xmppClient,
+                            _con: types.NBXMPPClient,
                             stanza: Iq,
                             _properties: IqProperties
                             ) -> None:
@@ -188,7 +188,7 @@ class Discovery(BaseModule):
             raise nbxmpp.NodeProcessed
 
     def _answer_disco_info(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            stanza: Iq,
                            _properties: IqProperties
                            ) -> None:

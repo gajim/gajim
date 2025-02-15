@@ -46,7 +46,7 @@ class UserLocation(BaseModule):
 
     @event_node(Namespace.LOCATION)
     def _location_received(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            _stanza: Message,
                            properties: MessageProperties
                            ) -> None:

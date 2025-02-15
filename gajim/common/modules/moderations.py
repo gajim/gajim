@@ -57,7 +57,7 @@ class Moderations(BaseModule):
 
     def _process_message_moderated_tombstone(
         self,
-        _client: types.xmppClient,
+        _client: types.NBXMPPClient,
         stanza: Message,
         properties: MessageProperties
     ) -> None:
@@ -91,7 +91,7 @@ class Moderations(BaseModule):
 
     def _process_fasten_message(
         self,
-        _client: types.xmppClient,
+        _client: types.NBXMPPClient,
         stanza: Message,
         properties: MessageProperties
     ) -> None:

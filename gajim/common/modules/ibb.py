@@ -45,7 +45,7 @@ class IBB(BaseModule):
         ]
 
     def _ibb_received(self,
-                      _con: types.xmppClient,
+                      _con: types.NBXMPPClient,
                       stanza: Iq,
                       properties: IqProperties
                       ) -> None:

@@ -93,7 +93,7 @@ class Blocking(BaseModule):
         yield True
 
     def _blocking_push_received(self,
-                                _con: types.xmppClient,
+                                _con: types.NBXMPPClient,
                                 _stanza: Iq,
                                 properties: BlockingProperties
                                 ) -> None:

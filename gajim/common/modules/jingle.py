@@ -84,7 +84,7 @@ class Jingle(BaseModule):
             del self._sessions[sid]
 
     def _on_jingle_iq(self,
-                      _con: types.xmppClient,
+                      _con: types.NBXMPPClient,
                       stanza: Iq,
                       _properties: IqProperties
                       ) -> None:

@@ -40,7 +40,7 @@ class UserAvatar(BaseModule):
 
     @event_node(Namespace.AVATAR_METADATA)
     def _avatar_metadata_received(self,
-                                  _con: types.xmppClient,
+                                  _con: types.NBXMPPClient,
                                   _stanza: Message,
                                   properties: MessageProperties
                                   ) -> None:

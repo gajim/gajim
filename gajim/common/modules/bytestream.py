@@ -561,7 +561,7 @@ class Bytestream(BaseModule):
         self._con.connection.send(iq)
 
     def _on_bytestream_error(self,
-                             _con: types.xmppClient,
+                             _con: types.NBXMPPClient,
                              iq_obj: Iq,
                              _properties: IqProperties
                              ) -> None:
@@ -583,7 +583,7 @@ class Bytestream(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _on_bytestream_set(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            iq_obj: Iq,
                            _properties: IqProperties):
         target = iq_obj.getAttr('to')
@@ -644,7 +644,7 @@ class Bytestream(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _on_result(self,
-                   _con: types.xmppClient,
+                   _con: types.NBXMPPClient,
                    iq_obj: Iq,
                    _properties: IqProperties
                    ) -> None:
@@ -666,7 +666,7 @@ class Bytestream(BaseModule):
                     raise nbxmpp.NodeProcessed
 
     def _on_bytestream_result(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               iq_obj: Iq,
                               _properties: IqProperties
                               ) -> None:

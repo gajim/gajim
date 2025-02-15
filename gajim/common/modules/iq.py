@@ -32,7 +32,7 @@ class Iq(BaseModule):
         ]
 
     def _iq_error_received(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            _stanza: nbxmpp.protocol.Iq,
                            properties: IqProperties
                            ) -> None:

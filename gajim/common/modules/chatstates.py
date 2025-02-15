@@ -129,7 +129,7 @@ class Chatstate(BaseModule):
 
     @ensure_enabled
     def _presence_received(
-        self, _con: types.xmppClient, _stanza: Presence, properties: PresenceProperties
+        self, _con: types.NBXMPPClient, _stanza: Presence, properties: PresenceProperties
     ) -> None:
         if properties.is_self_bare:
             return
@@ -155,7 +155,7 @@ class Chatstate(BaseModule):
             raise NodeProcessed
 
     def _process_chatstate(
-        self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
+        self, _con: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
     ) -> None:
         if properties.chatstate is None:
             return
@@ -186,7 +186,7 @@ class Chatstate(BaseModule):
         return self._raise_if_necessary(properties)
 
     def _process_groupchat_chatstate(
-        self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
+        self, _con: types.NBXMPPClient, _stanza: Any, properties: MessageProperties
     ) -> None:
         if properties.chatstate is None:
             return

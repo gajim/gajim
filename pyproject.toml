@@ -155,7 +155,6 @@ exclude = [
   "gajim/common/settings.py",
   "gajim/common/socks5.py",
   "gajim/common/structs.py",
-  "gajim/common/types.py",
   "gajim/common/util/av.py",
   "gajim/common/winapi/system_style.py",
   "gajim/gtk/account_wizard.py",
@@ -243,6 +242,7 @@ select = [
 
 ignore = [
   "A003",   # Class attribute is shadowing python builtin
+  "A005",   # Module shadows a Python standard-library module
   "B904",   # Within an except clause ..
   "BLE001", # Blind except Exception: statement
   "C901",   # too complex

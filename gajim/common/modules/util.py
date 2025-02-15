@@ -54,7 +54,7 @@ def event_node(node: str) -> Any:
     def event_node_decorator(func: Any):
         @wraps(func)
         def func_wrapper(self: Any,
-                         _con: types.xmppClient,
+                         _con: types.NBXMPPClient,
                          _stanza: Message,
                          properties: MessageProperties
                          ) -> Any:

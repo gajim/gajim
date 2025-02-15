@@ -261,11 +261,11 @@ class BaseModule(EventHelper):
     @overload
     def _nbxmpp(self, name: Literal['VCardTemp']) -> VCardTemp: ...
     @overload
-    def _nbxmpp(self) -> types.xmppClient: ...
+    def _nbxmpp(self) -> types.NBXMPPClient: ...
 
     def _nbxmpp(self,
                 name: str | None = None
-                ) -> Mock | types.xmppClient | NBXMPPBaseModule:
+                ) -> Mock | types.NBXMPPClient | NBXMPPBaseModule:
 
         if not app.account_is_connected(self._client.account):
             self._log.warning('Account not connected, can’t use nbxmpp method')

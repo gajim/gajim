@@ -38,7 +38,7 @@ class RosterItemExchange(BaseModule):
         ]
 
     def received_item(self,
-                      _con: types.xmppClient,
+                      _con: types.NBXMPPClient,
                       stanza: Iq,
                       properties: IqProperties
                       ) -> None:

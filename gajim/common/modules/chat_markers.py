@@ -42,7 +42,7 @@ class ChatMarkers(BaseModule):
         ]
 
     def _process_chat_marker(self,
-                             _client: types.xmppClient,
+                             _client: types.NBXMPPClient,
                              _stanza: Any,
                              properties: MessageProperties) -> None:
 

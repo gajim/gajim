@@ -37,7 +37,7 @@ class HTTPAuth(BaseModule):
         ]
 
     def _http_auth(self,
-                   _con: types.xmppClient,
+                   _con: types.NBXMPPClient,
                    stanza: Iq | Message,
                    properties: IqProperties | MessageProperties
                    ) -> None:

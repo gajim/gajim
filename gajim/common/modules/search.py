@@ -30,7 +30,7 @@ class Search(BaseModule):
         self._con.connection.SendAndCallForResponse(iq, self._fields_received)
 
     def _fields_received(self,
-                         _nbxmpp_client: types.xmppClient,
+                         _nbxmpp_client: types.NBXMPPClient,
                          stanza: Iq
                          ) -> None:
         data = None
@@ -75,7 +75,7 @@ class Search(BaseModule):
         self._con.connection.SendAndCallForResponse(iq, self._received_result)
 
     def _received_result(self,
-                         _nbxmpp_client: types.xmppClient,
+                         _nbxmpp_client: types.NBXMPPClient,
                          stanza: Iq
                          ) -> None:
         data = None

@@ -125,7 +125,7 @@ class MAM(BaseModule):
         return None
 
     def _set_message_archive_info(self,
-                                  _con: types.xmppClient,
+                                  _con: types.NBXMPPClient,
                                   _stanza: Message,
                                   properties: MessageProperties
                                   ) -> None:
@@ -178,7 +178,7 @@ class MAM(BaseModule):
         )
 
     def _mam_message_received(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               stanza: Message,
                               properties: MessageProperties
                               ) -> None:

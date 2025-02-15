@@ -122,7 +122,7 @@ class Roster(BaseModule):
         self._store_roster()
 
     def _process_roster_push(self,
-                             _con: types.xmppClient,
+                             _con: types.NBXMPPClient,
                              _stanza: Iq,
                              properties: IqProperties
                              ) -> None:

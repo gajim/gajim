@@ -92,7 +92,7 @@ class Caps(BaseModule):
         self._queued_tasks_by_hash.clear()
 
     def _entity_caps(self,
-                     _con: types.xmppClient,
+                     _con: types.NBXMPPClient,
                      _stanza: Presence,
                      properties: PresenceProperties
                      ) -> None:

@@ -95,7 +95,7 @@ class VCardAvatars(BaseModule):
         contact.update_avatar(avatar_sha)
 
     def _presence_received(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            _stanza: Presence,
                            properties: PresenceProperties
                            ) -> None:

@@ -20,11 +20,11 @@ from nbxmpp.structs import BookmarkData
 from gajim.common.const import PresenceShowExt
 
 if TYPE_CHECKING:
-    from nbxmpp.client import Client as xmppClient  # noqa: F401
+    from nbxmpp.client import Client as NBXMPPClient  # type: ignore # noqa: F401
 
     from gajim.common.client import Client
     from gajim.common.modules.contacts import BareContact
-    from gajim.common.modules.contacts import CommonContact  # noqa: F401
+    from gajim.common.modules.contacts import CommonContact  # type: ignore # noqa: F401
     from gajim.common.modules.contacts import GroupchatContact
     from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.modules.contacts import ResourceContact

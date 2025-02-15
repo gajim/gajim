@@ -67,7 +67,7 @@ class Bookmarks(BaseModule):
 
     @event_node(Namespace.BOOKMARKS)
     def _bookmark_event_received(self,
-                                 _con: types.xmppClient,
+                                 _con: types.NBXMPPClient,
                                  _stanza: Any,
                                  properties: MessageProperties
                                  ) -> None:
@@ -97,7 +97,7 @@ class Bookmarks(BaseModule):
 
     @event_node(Namespace.BOOKMARKS_1)
     def _bookmark_1_event_received(self,
-                                   _con: types.xmppClient,
+                                   _con: types.NBXMPPClient,
                                    _stanza: Any,
                                    properties: MessageProperties
                                    ) -> None:

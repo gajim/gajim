@@ -496,7 +496,7 @@ class MUC(BaseModule):
             status=message)
 
     def _on_error_presence(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            stanza: Presence,
                            properties: PresenceProperties
                            ) -> None:
@@ -558,7 +558,7 @@ class MUC(BaseModule):
             room.notify('room-presence-error', event)
 
     def _on_muc_user_presence(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               stanza: Presence,
                               properties: PresenceProperties
                               ) -> None:
@@ -794,7 +794,7 @@ class MUC(BaseModule):
             occupant.notify(signal, event)
 
     def _on_muc_normal_user_message(self,
-                                    _con: types.xmppClient,
+                                    _con: types.NBXMPPClient,
                                     stanza: Presence,
                                     properties: MessageProperties) -> None:
         if not properties.muc_user or not properties.muc_user.jid:
@@ -869,7 +869,7 @@ class MUC(BaseModule):
             del self._rejoin_timeouts[room_jid]
 
     def _on_subject_change(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            _stanza: Message,
                            properties: MessageProperties
                            ) -> None:
@@ -936,7 +936,7 @@ class MUC(BaseModule):
                 muc_data.jid)
 
     def _on_voice_request(self,
-                          _con: types.xmppClient,
+                          _con: types.NBXMPPClient,
                           _stanza: Message,
                           properties: MessageProperties
                           ) -> None:
@@ -974,7 +974,7 @@ class MUC(BaseModule):
         self._voice_requests[contact].remove(voice_request)
 
     def _on_captcha_challenge(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               _stanza: Message,
                               properties: MessageProperties
                               ) -> None:
@@ -1044,7 +1044,7 @@ class MUC(BaseModule):
             room.notify('room-captcha-error', error_text)
 
     def _on_config_change(self,
-                          _con: types.xmppClient,
+                          _con: types.NBXMPPClient,
                           _stanza: Message,
                           properties: MessageProperties
                           ) -> None:
@@ -1070,7 +1070,7 @@ class MUC(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _on_invite_or_decline(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               _stanza: Message,
                               properties: MessageProperties
                               ) -> None:

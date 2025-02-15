@@ -59,7 +59,7 @@ class Message(BaseModule):
         self._message_namespaces = {Namespace.ROSTERX, Namespace.IBB}
 
     def _check_if_unknown_contact(self,
-                                  _con: types.xmppClient,
+                                  _con: types.NBXMPPClient,
                                   stanza: nbxmpp.Message,
                                   properties: MessageProperties
                                   ) -> None:
@@ -85,7 +85,7 @@ class Message(BaseModule):
             raise nbxmpp.NodeProcessed
 
     def _message_received(self,
-                          _con: types.xmppClient,
+                          _con: types.NBXMPPClient,
                           stanza: nbxmpp.Message,
                           properties: MessageProperties
                           ) -> None:
@@ -279,7 +279,7 @@ class Message(BaseModule):
                                             pk=pk))
 
     def _message_error_received(self,
-                                _con: types.xmppClient,
+                                _con: types.NBXMPPClient,
                                 stanza: nbxmpp.Message,
                                 properties: MessageProperties
                                 ) -> None:

@@ -44,7 +44,7 @@ class BitsOfBinary(BaseModule):
         self.awaiting_cids: dict[str, list[tuple[Callable[..., Any], Any, int]]] = {}
 
     def _answer_bob_request(self,
-                            _con: types.xmppClient,
+                            _con: types.NBXMPPClient,
                             stanza: Iq,
                             _properties: IqProperties
                             ) -> None:
@@ -57,7 +57,7 @@ class BitsOfBinary(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _on_bob_received(self,
-                         _nbxmpp_client: types.xmppClient,
+                         _nbxmpp_client: types.NBXMPPClient,
                          result: Iq,
                          cid: str
                          ) -> None:

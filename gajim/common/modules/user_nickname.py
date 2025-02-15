@@ -31,7 +31,7 @@ class UserNickname(BaseModule):
 
     @event_node(Namespace.NICK)
     def _nickname_received(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            _stanza: Any,
                            properties: MessageProperties
                            ) -> None:

@@ -33,7 +33,7 @@ class Gateway(BaseModule):
         self._con.get_module('Roster').delete_item(agent)
 
     def _on_unsubscribe_result(self,
-                               _nbxmpp_client: types.xmppClient,
+                               _nbxmpp_client: types.NBXMPPClient,
                                stanza: nbxmpp.Protocol
                                ) -> None:
         if not nbxmpp.isResultNode(stanza):
@@ -75,7 +75,7 @@ class Gateway(BaseModule):
         self._con.connection.SendAndCallForResponse(iq, self._on_prompt_result)
 
     def _on_prompt_result(self,
-                          _nbxmpp_client: types.xmppClient,
+                          _nbxmpp_client: types.NBXMPPClient,
                           stanza: Iq
                           ) -> None:
         jid = str(stanza.getFrom())

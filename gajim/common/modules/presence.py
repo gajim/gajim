@@ -78,7 +78,7 @@ class Presence(BaseModule):
         self._jids_for_auto_auth: set[str] = set()
 
     def _presence_received(self,
-                           _con: types.xmppClient,
+                           _con: types.NBXMPPClient,
                            stanza: nbxmpp.protocol.Presence,
                            properties: PresenceProperties
                            ) -> None:
@@ -147,7 +147,7 @@ class Presence(BaseModule):
         app.ged.raise_event(PresenceReceived(**event_attrs))
 
     def _subscribe_received(self,
-                            _con: types.xmppClient,
+                            _con: types.NBXMPPClient,
                             _stanza: nbxmpp.protocol.Presence,
                             properties: PresenceProperties
                             ) -> None:
@@ -183,7 +183,7 @@ class Presence(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _subscribed_received(self,
-                             _con: types.xmppClient,
+                             _con: types.NBXMPPClient,
                              _stanza: nbxmpp.protocol.Presence,
                              properties: PresenceProperties
                              ) -> None:
@@ -200,7 +200,7 @@ class Presence(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _unsubscribe_received(self,
-                              _con: types.xmppClient,
+                              _con: types.NBXMPPClient,
                               _stanza: nbxmpp.protocol.Presence,
                               properties: PresenceProperties
                               ) -> None:
@@ -208,7 +208,7 @@ class Presence(BaseModule):
         raise nbxmpp.NodeProcessed
 
     def _unsubscribed_received(self,
-                               _con: types.xmppClient,
+                               _con: types.NBXMPPClient,
                                _stanza: nbxmpp.protocol.Presence,
                                properties: PresenceProperties
                                ) -> None:

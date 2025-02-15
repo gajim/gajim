@@ -46,7 +46,7 @@ class UserTune(BaseModule):
 
     @event_node(Namespace.TUNE)
     def _tune_received(self,
-                       _con: types.xmppClient,
+                       _con: types.NBXMPPClient,
                        _stanza: Any,
                        properties: MessageProperties
                        ) -> None:

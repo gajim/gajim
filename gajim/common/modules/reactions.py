@@ -45,7 +45,7 @@ class Reactions(BaseModule):
 
     def _process_reaction(
         self,
-        _client: types.xmppClient,
+        _client: types.NBXMPPClient,
         _stanza: Message,
         properties: MessageProperties,
     ) -> None:

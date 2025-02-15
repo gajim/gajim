@@ -35,7 +35,7 @@ class Receipts(BaseModule):
         ]
 
     def _process_message_receipt(self,
-                                 _con: types.xmppClient,
+                                 _con: types.NBXMPPClient,
                                  stanza: Message,
                                  properties: MessageProperties
                                  ) -> None:

@@ -347,7 +347,7 @@ class OMEMO(BaseModule):
         self._client.send_stanza(transport_message)
 
     def _message_received(self,
-                          _client: types.xmppClient,
+                          _client: types.NBXMPPClient,
                           stanza: Message,
                           properties: MessageProperties
                           ) -> None:
@@ -448,7 +448,7 @@ class OMEMO(BaseModule):
         return properties.from_.bare
 
     def _on_muc_user_presence(self,
-                              _client: types.xmppClient,
+                              _client: types.NBXMPPClient,
                               _stanza: Presence,
                               properties: PresenceProperties
                               ) -> None:
@@ -611,7 +611,7 @@ class OMEMO(BaseModule):
 
     @event_node(Namespace.OMEMO_TEMP_DL)
     def _devicelist_notification_received(self,
-                                          _client: types.xmppClient,
+                                          _client: types.NBXMPPClient,
                                           _stanza: Message,
                                           properties: MessageProperties
                                           ) -> None:
