@@ -171,7 +171,10 @@ def contains_audio_streams(file_path: Path) -> bool:
 def get_previewable_mime_types() -> set[str]:
     previewable_mime_types: set[str] = set()
     for fmt in GdkPixbuf.Pixbuf.get_formats():
-        for mime_type in fmt.get_mime_types():
+        mime_types = fmt.get_mime_types()
+        if mime_types is None:
+            continue
+        for mime_type in mime_types:
             previewable_mime_types.add(mime_type.lower())
 
     Image.init()
