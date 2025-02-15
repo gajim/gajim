@@ -57,7 +57,6 @@ if typing.TYPE_CHECKING:
     from gajim.gtk.main import MainWindow  # noqa: F401
 
 
-interface = cast(types.InterfaceT, None)
 config = c_config.Config()
 settings = cast(types.SettingsT, None)
 version = gajim.__version__

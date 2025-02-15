@@ -29,7 +29,6 @@ if TYPE_CHECKING:
     from gajim.common.modules.contacts import GroupchatParticipant
     from gajim.common.modules.contacts import ResourceContact
     from gajim.common.settings import Settings
-    from gajim.gui_interface import Interface
     from gajim.plugins.pluginmanager import PluginManager
     from gajim.plugins.repository import PluginRepository
 
@@ -40,7 +39,6 @@ if TYPE_CHECKING:
                 GroupchatContact |
                 GroupchatParticipant)
 
-InterfaceT = Union['Interface']
 PluginManagerT = Union['PluginManager']
 PluginRepositoryT = Union['PluginRepository']
 
