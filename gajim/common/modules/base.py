@@ -13,6 +13,8 @@ import logging
 from functools import partial
 from unittest.mock import Mock
 
+from nbxmpp.dispatcher import NBXMPPModuleNameT
+from nbxmpp.dispatcher import NBXMPPModuleT
 from nbxmpp.modules.activity import Activity
 from nbxmpp.modules.adhoc import AdHoc
 from nbxmpp.modules.annotations import Annotations
@@ -27,6 +29,7 @@ from nbxmpp.modules.chat_markers import ChatMarkers
 from nbxmpp.modules.chatstates import Chatstates
 from nbxmpp.modules.correction import Correction
 from nbxmpp.modules.delay import Delay
+from nbxmpp.modules.delimiter import Delimiter
 from nbxmpp.modules.discovery import Discovery
 from nbxmpp.modules.eme import EME
 from nbxmpp.modules.entity_caps import EntityCaps
@@ -39,6 +42,7 @@ from nbxmpp.modules.iq import BaseIq
 from nbxmpp.modules.last_activity import LastActivity
 from nbxmpp.modules.location import Location
 from nbxmpp.modules.mam import MAM
+from nbxmpp.modules.mds import MDS
 from nbxmpp.modules.message import BaseMessage
 from nbxmpp.modules.mood import Mood
 from nbxmpp.modules.muc.hats import Hats
@@ -57,6 +61,7 @@ from nbxmpp.modules.reactions import Reactions
 from nbxmpp.modules.receipts import Receipts
 from nbxmpp.modules.register.register import Register
 from nbxmpp.modules.replies import Replies
+from nbxmpp.modules.retraction import Retraction
 from nbxmpp.modules.roster import Roster
 from nbxmpp.modules.security_labels import SecurityLabels
 from nbxmpp.modules.software_version import SoftwareVersion
@@ -77,7 +82,7 @@ from gajim.common.modules.util import LogAdapter
 
 class BaseModule(EventHelper):
 
-    _nbxmpp_extends = ''
+    _nbxmpp_extends: NBXMPPModuleNameT = ''  # type: ignore
     _nbxmpp_methods: list[str] = []
 
     def __init__(self,
@@ -185,6 +190,8 @@ class BaseModule(EventHelper):
     @overload
     def _nbxmpp(self, name: Literal['Delay']) -> Delay: ...
     @overload
+    def _nbxmpp(self, name: Literal['Delimiter']) -> Delimiter: ...
+    @overload
     def _nbxmpp(self, name: Literal['Discovery']) -> Discovery: ...
     @overload
     def _nbxmpp(self, name: Literal['EME']) -> EME: ...
@@ -212,6 +219,8 @@ class BaseModule(EventHelper):
     def _nbxmpp(self, name: Literal['MAM']) -> MAM: ...
     @overload
     def _nbxmpp(self, name: Literal['BaseMessage']) -> BaseMessage: ...
+    @overload
+    def _nbxmpp(self, name: Literal['MDS']) -> MDS: ...
     @overload
     def _nbxmpp(self, name: Literal['Mood']) -> Mood: ...
     @overload
@@ -245,6 +254,8 @@ class BaseModule(EventHelper):
     @overload
     def _nbxmpp(self, name: Literal['Replies']) -> Replies: ...
     @overload
+    def _nbxmpp(self, name: Literal['Retraction']) -> Retraction: ...
+    @overload
     def _nbxmpp(self, name: Literal['Roster']) -> Roster: ...
     @overload
     def _nbxmpp(self, name: Literal['SecurityLabels']) -> SecurityLabels: ...
@@ -264,8 +275,8 @@ class BaseModule(EventHelper):
     def _nbxmpp(self) -> types.NBXMPPClient: ...
 
     def _nbxmpp(self,
-                name: str | None = None
-                ) -> Mock | types.NBXMPPClient | NBXMPPBaseModule:
+                name: NBXMPPModuleNameT | None = None
+                ) -> Mock | types.NBXMPPClient | NBXMPPModuleT:
 
         if not app.account_is_connected(self._client.account):
             self._log.warning('Account not connected, can’t use nbxmpp method')

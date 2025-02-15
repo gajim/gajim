@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from collections.abc import Generator
 
 import nbxmpp
@@ -62,7 +64,9 @@ class Blocking(BaseModule):
         return jid in self.blocked
 
     @as_task
-    def get_blocking_list(self) -> Generator[set[JID], None, None]:
+    def get_blocking_list(
+        self
+    ) -> Generator[Generator[Any, Any] | set[JID] | None, set[JID]]:
         _task = yield  # noqa: F841
 
         blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()

@@ -7,6 +7,8 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import ParamSpec
+from typing import TypeVar
 
 from collections.abc import Callable
 from functools import partial
@@ -20,6 +22,9 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import types
+
+T = TypeVar("T")
+P = ParamSpec("P")
 
 
 def from_xs_boolean(value: str | bool) -> bool:
@@ -86,15 +91,16 @@ class LogAdapter(LoggerAdapter):
         return f'({self.extra["account"]}) {msg}', kwargs
 
 
-def as_task(func: Any) -> Any:
+def as_task(func: Callable[P, T]) -> Callable[P, T]:
     @wraps(func)
-    def func_wrapper(self: Any,
-                     *args: Any,
-                     timeout: int | None =None,
-                     callback: Callable[..., Any] | None = None,
-                     user_data: Any = None,
-                     **kwargs: Any):
-
+    def func_wrapper(
+        self: Any,
+        *args: Any,
+        timeout: int | None = None,
+        callback: Callable[..., Any] | None = None,
+        user_data: Any = None,
+        **kwargs: Any,
+    ) -> T:
         task_ = Task(func(self, *args, **kwargs))
         task_.set_timeout(timeout)
         app.register_task(self, task_)
