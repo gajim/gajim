@@ -11,6 +11,7 @@ from typing import Any
 import hashlib
 import logging
 from base64 import b64decode
+from collections.abc import Callable
 from pathlib import Path
 
 import nbxmpp
@@ -40,7 +41,7 @@ class BitsOfBinary(BaseModule):
         ]
 
         # Used to track which cids are in-flight.
-        self.awaiting_cids: dict[str, tuple[Any, Any, int]] = {}
+        self.awaiting_cids: dict[str, list[tuple[Callable[..., Any], Any, int]]] = {}
 
     def _answer_bob_request(self,
                             _con: types.xmppClient,
@@ -76,12 +77,13 @@ class BitsOfBinary(BaseModule):
                     pos = func[2]
                     bob_data = data.getData()
 
-                    def recurs(node, cid, data):
+                    def recurs(node: nbxmpp.Node, cid: str, data: BobData) -> None:
                         if node.getData() == 'cid:' + cid:
                             node.setData(data)
                         else:
                             for child in node.getChildren():
                                 recurs(child, cid, data)
+
                     recurs(args[pos], cid, bob_data)
                     cb(*args)
                 del self.awaiting_cids[cid]
@@ -97,7 +99,7 @@ class BitsOfBinary(BaseModule):
     def get_bob_data(self,
                      cid: str,
                      to: str,
-                     callback: Any,
+                     callback: Callable[..., Any],
                      args: Any,
                      position: int
                      ) -> None:
@@ -107,7 +109,7 @@ class BitsOfBinary(BaseModule):
         args[position]
         '''
         if cid in self.awaiting_cids:
-            self.awaiting_cids[cid].appends((callback, args, position))
+            self.awaiting_cids[cid].append((callback, args, position))
         else:
             self.awaiting_cids[cid] = [(callback, args, position)]
         iq = nbxmpp.Iq(to=to, typ='get')
