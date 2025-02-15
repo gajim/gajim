@@ -415,8 +415,6 @@ class CoreApplication(ged.EventHelper):
 
         app.get_client(account).cleanup()
         del app.connections[account]
-        if account in app.interface.instances:
-            del app.interface.instances[account]
         del app.nicks[account]
         del app.to_be_removed[account]
 

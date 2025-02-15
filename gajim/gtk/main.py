@@ -1359,33 +1359,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         app.settings.save()
 
         def on_continue2(message: str | None) -> None:
-            if "file_transfers" not in app.interface.instances:
-                app.app.start_shutdown(message=message)
-                return
-
-            # TODO Jingle FT
-            # check if there is an active file transfer
-            # files_props = app.interface.instances['file_transfers'].files_props
-            # transfer_active = False
-            # for x in files_props:
-            #     for y in files_props[x]:
-            #         if is_transfer_active(files_props[x][y]):
-            #             transfer_active = True
-            #             break
-
-            # if transfer_active:
-            #     ConfirmationDialog(
-            #         _('You still have running file transfers'),
-            #         _('If you quit now, the file(s) being transferred will '
-            #           'be lost.\n'
-            #           'Do you still want to quit?'),
-            #         [DialogButton.make('Cancel'),
-            #          DialogButton.make('Remove',
-            #                            text=_('_Quit'),
-            #                            callback=app.app.start_shutdown,
-            #                            kwargs={'message': message})]).show()
-            #     return
-            # app.app.start_shutdown(message=message)
+            app.app.start_shutdown(message=message)
 
         def on_continue(message: str | None) -> None:
             if message is None:
@@ -1412,6 +1386,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     ],
                 ).show()
                 return
+
             on_continue2(message)
 
         on_continue("")

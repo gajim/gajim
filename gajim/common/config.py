@@ -571,9 +571,6 @@ class Config:
             self.__options[1]['use_keyring'] = False
 
     def _really_save(self):
-        from gajim.common import app
-        if app.interface:
-            app.interface.save_config()
         self.save_timeout_id = None
         return False
 

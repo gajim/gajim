@@ -344,10 +344,11 @@ class FileTransferJingleRow(BaseRow, EventHelper):
         self._ui.transfer_action.set_text(_("File Transfer Completed"))
 
     def _on_accept_file_request(self, _button: Gtk.Button) -> None:
-        app.interface.instances["file_transfers"].on_file_request_accepted(
-            self._account, self._contact, self._file_props
-        )
-        self._start_time = time.time()
+        pass
+        # app.interface.instances["file_transfers"].on_file_request_accepted(
+        #     self._account, self._contact, self._file_props
+        # )
+        # self._start_time = time.time()
 
     def _on_reject_file_request(self, _button: Gtk.Button) -> None:
         assert self._file_props is not None
@@ -368,16 +369,19 @@ class FileTransferJingleRow(BaseRow, EventHelper):
         show_in_folder(Path(self._file_props.file_name))
 
     def _on_bad_hash_retry(self, _button: Gtk.Button) -> None:
-        app.interface.instances["file_transfers"].show_hash_error(
-            self._contact.jid, self._file_props, self._account
-        )
+        pass
+        # app.interface.instances["file_transfers"].show_hash_error(
+        #     self._contact.jid, self._file_props, self._account
+        # )
 
     def _on_cancel_transfer(self, _button: Gtk.Button) -> None:
-        app.interface.instances["file_transfers"].cancel_transfer(self._file_props)
+        pass
+        # app.interface.instances["file_transfers"].cancel_transfer(self._file_props)
 
     def _on_show_transfers(self, _button: Gtk.Button) -> None:
-        file_transfers = app.interface.instances["file_transfers"]
-        if file_transfers.window.get_property("visible"):
-            file_transfers.window.present()
-        else:
-            file_transfers.window.show_all()
+        pass
+        # file_transfers = app.interface.instances["file_transfers"]
+        # if file_transfers.window.get_property("visible"):
+        #     file_transfers.window.present()
+        # else:
+        #     file_transfers.window.show_all()

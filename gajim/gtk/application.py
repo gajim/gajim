@@ -54,7 +54,6 @@ from gajim.common.const import GAJIM_FAQ_URI
 from gajim.common.const import GAJIM_PRIVACY_POLICY_URI
 from gajim.common.const import GAJIM_SUPPORT_JID
 from gajim.common.const import GAJIM_WIKI_URI
-from gajim.common.exceptions import GajimGeneralException
 from gajim.common.helpers import load_json
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import ResourceContact
@@ -73,8 +72,6 @@ from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ShortcutsWindow
-from gajim.gtk.dialogs import SimpleDialog
-from gajim.gtk.discovery import ServiceDiscoveryWindow
 from gajim.gtk.menus import get_main_menu
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.window import get_app_window
@@ -201,8 +198,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         self.connect("command-line", self._command_line)
         self.connect("shutdown", self._shutdown)
 
-        self.interface = None
-
     @staticmethod
     def _get_remaining_entry():
         option = GLib.OptionEntry()
@@ -242,10 +237,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
         idle.Monitor.set_interval(
             app.settings.get("autoawaytime") * 60, app.settings.get("autoxatime") * 60
         )
-
-        from gajim.gui_interface import Interface
-
-        self.interface = Interface()
 
         from gajim.gtk.status_icon import StatusIcon
 
@@ -641,19 +632,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     def _on_services_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
         account = param.get_string()
-        server_jid = app.get_hostname_from_account(account)
-        if account not in app.interface.instances:
-            app.interface.instances[account] = {"disco": {}}
-
-        disco = app.interface.instances[account]["disco"]
-        if server_jid in disco:
-            disco[server_jid].window.present()
-        else:
-            try:
-                # Object will add itself to the window dict
-                ServiceDiscoveryWindow(account, address_entry=True)
-            except (GajimGeneralException, RuntimeError) as e:
-                SimpleDialog(_("Error"), str(e))
+        open_window("ServiceDiscoveryWindow", account=account, address_entry=True)
 
     @staticmethod
     def _on_create_groupchat_action(

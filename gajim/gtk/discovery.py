@@ -720,11 +720,6 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         self.dying = True
 
         # self.browser._get_agent_address() would break when no browser.
-        assert self.jid is not None
-        addr = get_agent_address(self.jid, self.node)
-        if addr in app.interface.instances[self.account]["disco"]:
-            del app.interface.instances[self.account]["disco"][addr]
-
         if self.browser:
             self.window.hide()
             self.browser.cleanup()
@@ -758,13 +753,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         if self.browser:
             self.browser.cleanup()
             self.browser = None
-        # Update the window list
-        if self.jid:
-            old_addr = get_agent_address(self.jid, self.node)
-            if old_addr in app.interface.instances[self.account]["disco"]:
-                del app.interface.instances[self.account]["disco"][old_addr]
-        addr = get_agent_address(jid, node)
-        app.interface.instances[self.account]["disco"][addr] = self
+
         # We need to store these, self.browser is not always available.
         self.jid = jid
         self.node = node
@@ -789,16 +778,16 @@ class ServiceDiscoveryWindow(GajimAppWindow):
                 # We can't travel anywhere else.
                 self._destroy()
 
-            assert self.parent is not None
-            SimpleDialog(
-                _("Service Not Found"),
-                _(
-                    "There is no service at the address you entered, or it is "
-                    "not responding. Check the address and try again."
-                ),
-                transient_for=self.parent.window,
-            )
-            return
+            if self.parent is not None:
+                SimpleDialog(
+                    _("Service Not Found"),
+                    _(
+                        "There is no service at the address you entered, or it is "
+                        "not responding. Check the address and try again."
+                    ),
+                    transient_for=self.parent.window,
+                )
+                return
 
         assert features is not None
         assert data is not None
@@ -821,19 +810,13 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         """
         Open an agent. By default, this happens in a new window
         """
-        try:
-            win = app.interface.instances[self.account]["disco"][
-                get_agent_address(jid, node)
-            ]
-            win.window.present()
-            return
-        except KeyError:
-            pass
-        try:
-            win = ServiceDiscoveryWindow(self.account, jid, node, parent=self)
-        except RuntimeError:
-            # Disconnected, perhaps
-            return
+        win = open_window(
+            "ServiceDiscoveryWindow",
+            account=self.account,
+            jid=jid,
+            node=node,
+            parent=self,
+        )
         self.children.append(win)
 
     def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> None:
@@ -1193,12 +1176,12 @@ class AgentBrowser:
         self.window.progressbar.hide()
         # The server returned an error
         if not items:
-            assert self.window.parent is not None
-            SimpleDialog(
-                _("Service Not Browsable"),
-                _("This service does not contain any items to browse."),
-                transient_for=self.window.parent.window,
-            )
+            if self.window.parent is not None:
+                SimpleDialog(
+                    _("Service Not Browsable"),
+                    _("This service does not contain any items to browse."),
+                    transient_for=self.window.parent.window,
+                )
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.
                 self.window.window.close()
