@@ -41,7 +41,7 @@ class HTTPAuth(BaseModule):
                    stanza: Iq | Message,
                    properties: IqProperties | MessageProperties
                    ) -> None:
-        if not properties.is_http_auth:
+        if properties.http_auth is None:
             return
 
         self._log.info('Auth request received')

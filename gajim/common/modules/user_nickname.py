@@ -35,6 +35,7 @@ class UserNickname(BaseModule):
                            _stanza: Any,
                            properties: MessageProperties
                            ) -> None:
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
@@ -45,6 +46,7 @@ class UserNickname(BaseModule):
             app.nicks[self._account] = nick
             return
 
+        assert properties.jid is not None
         app.storage.cache.set_contact(
             self._account, properties.jid, 'nickname', nick)
 

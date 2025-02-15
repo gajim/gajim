@@ -34,7 +34,7 @@ class Gateway(BaseModule):
 
     def _on_unsubscribe_result(self,
                                _nbxmpp_client: types.xmppClient,
-                               stanza: nbxmpp.Node
+                               stanza: nbxmpp.Protocol
                                ) -> None:
         if not nbxmpp.isResultNode(stanza):
             self._log.info('Error: %s', stanza.getError())

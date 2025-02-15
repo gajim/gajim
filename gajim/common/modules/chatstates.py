@@ -157,14 +157,15 @@ class Chatstate(BaseModule):
     def _process_chatstate(
         self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
     ) -> None:
-        if not properties.has_chatstate:
+        if properties.chatstate is None:
             return
 
+        assert properties.carbon is not None
         if (
             properties.is_self_message
             or properties.is_mam_message
-            or properties.is_carbon_message
-            and properties.carbon.is_sent
+            or (properties.is_carbon_message
+            and properties.carbon.is_sent)
         ):
             return self._raise_if_necessary(properties)
 
@@ -187,7 +188,7 @@ class Chatstate(BaseModule):
     def _process_groupchat_chatstate(
         self, _con: types.xmppClient, _stanza: Any, properties: MessageProperties
     ) -> None:
-        if not properties.has_chatstate:
+        if properties.chatstate is None:
             return
 
         jid = properties.jid

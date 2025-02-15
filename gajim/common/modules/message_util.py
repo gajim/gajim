@@ -34,6 +34,7 @@ def get_chat_type_and_direction(
     muc_data: MUCData | None, own_jid: JID, properties: MessageProperties
 ) -> tuple[MessageType, ChatDirection]:
 
+    assert properties.jid is not None
     if properties.type.is_groupchat:
         assert muc_data is not None
         direction = ChatDirection.INCOMING
@@ -127,7 +128,7 @@ def get_message_timestamp(
     properties: MessageProperties
 ) -> datetime:
     timestamp = properties.timestamp
-    if properties.is_mam_message:
+    if properties.mam is not None:
         timestamp = properties.mam.timestamp
     return datetime.fromtimestamp(timestamp, tz=timezone.utc)
 

@@ -50,9 +50,10 @@ class Receipts(BaseModule):
             # Don't propagate this event further
             raise nbxmpp.NodeProcessed
 
+        assert properties.carbon is not None
         if (properties.type.is_groupchat or
                 properties.is_self_message or
-                properties.is_carbon_message and properties.carbon.is_sent):
+                (properties.is_carbon_message and properties.carbon.is_sent)):
 
             if properties.receipt.is_received:
                 # Don't propagate this event further
@@ -80,7 +81,7 @@ class Receipts(BaseModule):
                            properties.jid,
                            properties.receipt.id)
 
-            if properties.is_mam_message:
+            if properties.mam is not None:
                 timestamp = properties.mam.timestamp
             else:
                 timestamp = properties.timestamp

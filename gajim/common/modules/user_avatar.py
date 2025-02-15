@@ -17,6 +17,9 @@ from nbxmpp.structs import MessageProperties
 from gajim.common import app
 from gajim.common import types
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import event_node
 
@@ -41,12 +44,18 @@ class UserAvatar(BaseModule):
                                   _stanza: Message,
                                   properties: MessageProperties
                                   ) -> None:
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
         metadata = properties.pubsub_event.data
+        assert properties.jid is not None
         jid = properties.jid
         contact = self._con.get_module('Contacts').get_contact(jid)
+        assert isinstance(
+            contact,
+            BareContact | GroupchatContact | GroupchatParticipant
+        )
 
         if metadata is None or not metadata.infos:
             self._log.info('No avatar published: %s', jid)

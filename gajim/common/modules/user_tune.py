@@ -36,7 +36,7 @@ class UserTune(BaseModule):
         BaseModule.__init__(self, con)
         self._register_pubsub_handler(self._tune_received)
         self._current_tune: TuneData | None = None
-        self._contact_tunes: dict[JID, TuneData] = {}
+        self._contact_tunes: dict[JID, TuneData | None] = {}
 
     def get_current_tune(self) -> TuneData | None:
         return self._current_tune
@@ -50,6 +50,7 @@ class UserTune(BaseModule):
                        _stanza: Any,
                        properties: MessageProperties
                        ) -> None:
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
@@ -57,6 +58,7 @@ class UserTune(BaseModule):
         if properties.is_self_message:
             self._current_tune = data
 
+        assert properties.jid is not None
         self._contact_tunes[properties.jid] = data
 
         contact = self._get_contact(properties.jid)

@@ -578,7 +578,7 @@ class BareContact(CommonContact):
                 contact.update_presence(presence_data, notify=False)
         self.notify('presence-update')
 
-    def update_avatar(self, sha: str) -> None:
+    def update_avatar(self, sha: str | None) -> None:
         if self._avatar_sha == sha:
             return
 
