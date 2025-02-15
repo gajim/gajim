@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import cast
+from typing import Literal
 
 from gi.repository import GLib
 from nbxmpp.namespaces import Namespace
@@ -70,6 +71,7 @@ class Bookmarks(BaseModule):
                                  _stanza: Any,
                                  properties: MessageProperties
                                  ) -> None:
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
@@ -113,6 +115,7 @@ class Bookmarks(BaseModule):
 
         old_bookmarks = self._bookmarks.copy()
 
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.deleted or properties.pubsub_event.purged:
             self._log.info('Bookmark node deleted/purged')
             self._bookmarks = {}
@@ -125,7 +128,7 @@ class Bookmarks(BaseModule):
                 self._bookmarks.pop(jid, None)
 
         else:
-            new_bookmark: BookmarkData = properties.pubsub_event.data
+            new_bookmark = cast(BookmarkData, properties.pubsub_event.data)
             self._bookmarks[new_bookmark.jid] = new_bookmark
 
         self._act_on_changed_bookmarks(old_bookmarks)
@@ -138,7 +141,9 @@ class Bookmarks(BaseModule):
         self._compat = Namespace.BOOKMARKS_COMPAT in info.features
         self._conversion = Namespace.BOOKMARK_CONVERSION in info.features
 
-    def _bookmark_module(self) -> str:
+    def _bookmark_module(
+        self
+    ) -> Literal['PrivateBookmarks', 'NativeBookmarks', 'PEPBookmarks']:
         if not self._con.get_module('PubSub').publish_options:
             return 'PrivateBookmarks'
 

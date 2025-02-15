@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 import nbxmpp
+from nbxmpp.errors import StanzaError
 from nbxmpp.structs import IqProperties
 from nbxmpp.structs import StanzaHandler
 
@@ -36,7 +37,7 @@ class Iq(BaseModule):
                            properties: IqProperties
                            ) -> None:
         self._log.info('Error: %s', properties.error)
-        assert properties.error is not None
+        assert isinstance(properties.error, StanzaError)
         if properties.error.condition in ('jid-malformed',
                                           'forbidden',
                                           'not-acceptable'):

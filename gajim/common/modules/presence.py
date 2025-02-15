@@ -26,6 +26,8 @@ from gajim.common.events import SubscribePresenceReceived
 from gajim.common.events import UnsubscribedPresenceReceived
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.structs import PresenceData
 
 
@@ -87,6 +89,7 @@ class Presence(BaseModule):
             # MUC occupant presences are already handled in MUC module
             return
 
+        assert properties.jid is not None
         muc = self._con.get_module('MUC').get_muc_data(properties.jid)
         if muc is not None:
             # Presence from the MUC itself, used for MUC avatar
@@ -106,6 +109,7 @@ class Presence(BaseModule):
         self._presence_store[properties.jid] = presence_data
 
         contact = self._con.get_module('Contacts').get_contact(properties.jid)
+        assert isinstance(contact, BareContact | ResourceContact)
         contact.update_presence(presence_data)
 
         if properties.is_self_presence:
@@ -147,6 +151,7 @@ class Presence(BaseModule):
                             _stanza: nbxmpp.protocol.Presence,
                             properties: PresenceProperties
                             ) -> None:
+        assert properties.jid is not None
         jid = properties.jid.bare
         fjid = str(properties.jid)
 
@@ -182,6 +187,7 @@ class Presence(BaseModule):
                              _stanza: nbxmpp.protocol.Presence,
                              properties: PresenceProperties
                              ) -> None:
+        assert properties.jid is not None
         jid = properties.jid.bare
         self._log.info('Received Subscribed: %s', properties.jid)
         if jid in self.automatically_added:
@@ -206,6 +212,7 @@ class Presence(BaseModule):
                                _stanza: nbxmpp.protocol.Presence,
                                properties: PresenceProperties
                                ) -> None:
+        assert properties.jid is not None
         self._log.info('Received Unsubscribed: %s', properties.jid)
         app.ged.raise_event(UnsubscribedPresenceReceived(
             conn=self._con,

@@ -11,7 +11,6 @@ import datetime as dt
 import nbxmpp
 from nbxmpp.modules.receipts import build_receipt
 from nbxmpp.namespaces import Namespace
-from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
@@ -20,6 +19,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import ReceiptReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 from gajim.common.storage.archive import models as mod
 
 
@@ -89,6 +89,7 @@ class Receipts(BaseModule):
             timestamp = dt.datetime.fromtimestamp(
                 timestamp, dt.timezone.utc)
 
+            assert properties.remote_jid is not None
             receipt_data = mod.Receipt(
                 account_=self._account,
                 remote_jid_=properties.remote_jid,
@@ -108,5 +109,7 @@ class Receipts(BaseModule):
         if properties.is_muc_pm:
             return True
 
-        contact = self._get_contact(JID.from_string(properties.jid.bare))
+        assert properties.jid is not None
+        contact = self._get_contact(properties.jid.new_as_bare())
+        assert isinstance(contact, BareContact)
         return contact.is_subscribed

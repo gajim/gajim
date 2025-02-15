@@ -547,7 +547,7 @@ class BareContact(CommonContact):
         return app.storage.cache.get_contact(
             self._account, self._jid, 'avatar')
 
-    def set_avatar_sha(self, sha: str) -> None:
+    def set_avatar_sha(self, sha: str | None) -> None:
         app.storage.cache.set_contact(self._account, self._jid, 'avatar', sha)
 
     def get_avatar(self,
@@ -843,7 +843,7 @@ class GroupchatContact(CommonContact):
     def avatar_sha(self) -> str | None:
         return app.storage.cache.get_muc(self._account, self._jid, 'avatar')
 
-    def set_avatar_sha(self, sha: str) -> None:
+    def set_avatar_sha(self, sha: str | None) -> None:
         app.storage.cache.set_muc(self._account, self._jid, 'avatar', sha)
 
     def get_avatar(self, size: int, scale: int) -> Gdk.Texture:

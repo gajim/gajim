@@ -104,6 +104,7 @@ class VCardAvatars(BaseModule):
                                        AvatarState.NOT_READY):
             return
 
+        assert properties.jid is not None
         if self._con.get_own_jid().bare_match(properties.jid):
             return
 
@@ -141,6 +142,7 @@ class VCardAvatars(BaseModule):
                         ) -> None:
         contact = self._con.get_module('Contacts').get_contact(
             jid, groupchat=groupchat)
+        assert isinstance(contact, BareContact | GroupchatContact)
 
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
@@ -171,6 +173,7 @@ class VCardAvatars(BaseModule):
                 app.task_manager.add_task(task)
 
     def _muc_update_received(self, properties: PresenceProperties) -> None:
+        assert properties.jid is not None
         contact = self._con.get_module('Contacts').get_contact(properties.jid,
                                                                groupchat=True)
         assert isinstance(contact, GroupchatParticipant)

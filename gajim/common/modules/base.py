@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 from typing import overload
 
@@ -16,6 +17,7 @@ from nbxmpp.modules.activity import Activity
 from nbxmpp.modules.adhoc import AdHoc
 from nbxmpp.modules.annotations import Annotations
 from nbxmpp.modules.attention import Attention
+from nbxmpp.modules.base import BaseModule as NBXMPPBaseModule
 from nbxmpp.modules.blocking import Blocking
 from nbxmpp.modules.bookmarks.native_bookmarks import NativeBookmarks
 from nbxmpp.modules.bookmarks.pep_bookmarks import PEPBookmarks
@@ -116,17 +118,20 @@ class BaseModule(EventHelper):
             self._log.warning('Account not connected, can’t use %s', key)
             return None
 
-        module = self._con.connection.get_module(self._nbxmpp_extends)
+        module = cast(
+            NBXMPPBaseModule,
+            self._con.connection.get_module(self._nbxmpp_extends)
+        )
 
         callback = self._nbxmpp_callbacks.get(key)
         if callback is None:
             return getattr(module, key)
         return partial(getattr(module, key), callback=callback)
 
-    def _register_callback(self, method, callback) -> None:
+    def _register_callback(self, method: str, callback: types.AnyCallableT) -> None:
         self._nbxmpp_callbacks[method] = callback
 
-    def _register_pubsub_handler(self, callback: types.AnyCallableT):
+    def _register_pubsub_handler(self, callback: types.AnyCallableT) -> None:
         handler = StanzaHandler(name='message',
                                 callback=callback,
                                 ns=Namespace.PUBSUB_EVENT,
@@ -256,11 +261,11 @@ class BaseModule(EventHelper):
     @overload
     def _nbxmpp(self, name: Literal['VCardTemp']) -> VCardTemp: ...
     @overload
-    def _nbxmpp(self) -> types.Client: ...
+    def _nbxmpp(self) -> types.xmppClient: ...
 
     def _nbxmpp(self,
                 name: str | None = None
-                ) -> Mock | types.Client | BaseModule:
+                ) -> Mock | types.xmppClient | NBXMPPBaseModule:
 
         if not app.account_is_connected(self._client.account):
             self._log.warning('Account not connected, can’t use nbxmpp method')

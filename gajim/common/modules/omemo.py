@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 from typing import Literal
 
 import binascii
@@ -16,6 +17,7 @@ import threading
 from collections.abc import Callable
 from pathlib import Path
 
+import nbxmpp
 from gi.repository import GLib
 from nbxmpp.const import Affiliation
 from nbxmpp.const import PresenceType
@@ -59,7 +61,9 @@ from gajim.common.events import MucDiscoUpdate
 from gajim.common.events import SignedIn
 from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.modules.util import as_task
 from gajim.common.modules.util import event_node
@@ -351,7 +355,7 @@ class OMEMO(BaseModule):
         if not properties.is_omemo:
             return
 
-        if properties.is_carbon_message and properties.carbon.is_sent:
+        if properties.carbon is not None and properties.carbon.is_sent:
             from_jid = self._own_jid
 
         elif properties.is_mam_message:
@@ -413,6 +417,7 @@ class OMEMO(BaseModule):
                              properties: MessageProperties
                              ) -> str | None:
 
+        assert properties.jid is not None
         resource = properties.jid.resource
         if properties.muc_ofrom is not None:
             # History Message from MUC
@@ -420,6 +425,7 @@ class OMEMO(BaseModule):
 
         contact = self._client.get_module('Contacts').get_contact(
             properties.jid)
+        assert isinstance(contact, GroupchatParticipant)
         if contact.real_jid is not None:
             return contact.real_jid.bare
 
@@ -453,6 +459,7 @@ class OMEMO(BaseModule):
         if properties.is_muc_destroyed:
             return
 
+        assert properties.jid is not None
         room = properties.jid.bare
 
         if properties.muc_user is None or properties.muc_user.jid is None:
@@ -505,6 +512,7 @@ class OMEMO(BaseModule):
             return False
 
         contact = self._client.get_module('Contacts').get_contact(jid)
+        assert isinstance(contact, BareContact)
         return contact.subscription == 'both'
 
     def _check_if_omemo_capable(self, jid: str) -> None:
@@ -608,10 +616,11 @@ class OMEMO(BaseModule):
                                           properties: MessageProperties
                                           ) -> None:
 
+        assert properties.pubsub_event is not None
         if properties.pubsub_event.retracted:
             return
 
-        devicelist = properties.pubsub_event.data or []
+        devicelist = cast(list[int], properties.pubsub_event.data or [])
 
         self._process_devicelist_update(str(properties.jid), devicelist)
 
@@ -636,7 +645,7 @@ class OMEMO(BaseModule):
 
         self._request_bundles_for_new_devices(jid)
 
-    def _debug_print_stanza(self, stanza: Any) -> None:
+    def _debug_print_stanza(self, stanza: nbxmpp.Node) -> None:
         stanzastr = '\n' + stanza.__str__(fancy=True)
         stanzastr = stanzastr[0:-1]
         self._log.debug(stanzastr)

@@ -77,6 +77,7 @@ class Message(BaseModule):
                                                 'ignore_unknown_contacts'):
             return
 
+        assert properties.jid is not None
         jid = properties.jid.bare
         if self._con.get_module('Roster').get_item(jid) is None:
             self._log.warning('Ignore message from unknown contact: %s', jid)
@@ -108,7 +109,7 @@ class Message(BaseModule):
             stanza=stanza,
             account=self._account))
 
-        if properties.is_carbon_message and properties.carbon.is_sent:
+        if properties.carbon is not None and properties.carbon.is_sent:
             # Ugly, we treat the from attr as the remote jid,
             # to make that work with sent carbons we have to do this.
             # TODO: Check where in Gajim and plugins we depend on that behavior
@@ -198,7 +199,7 @@ class Message(BaseModule):
         oob_data = parse_oob(properties)
 
         encryption_data = None
-        if properties.is_encrypted:
+        if properties.encrypted is not None:
             encryption_data = mod.Encryption(
                 **dataclasses.asdict(properties.encrypted))
 

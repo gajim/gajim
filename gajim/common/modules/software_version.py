@@ -11,6 +11,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import types
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 from gajim.common.util.version import get_os_info
 
 
@@ -42,4 +43,5 @@ class SoftwareVersion(BaseModule):
             return False
 
         contact = self._get_contact(JID.from_string(jid.bare))
+        assert isinstance(contact, BareContact)
         return contact.is_subscribed

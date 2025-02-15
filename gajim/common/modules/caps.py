@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 
 import weakref
 from collections import defaultdict
@@ -20,6 +21,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import DiscoIdentity
+from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.task import Task as nbxmpp_Task
@@ -31,6 +33,7 @@ from gajim.common.const import COMMON_FEATURES
 from gajim.common.const import Entity
 from gajim.common.helpers import get_optional_features
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.task_manager import Task
 
 
@@ -114,6 +117,7 @@ class Caps(BaseModule):
             self._queue_task(task)
             return
 
+        assert properties.jid is not None
         app.storage.cache.set_last_disco_info(properties.jid,
                                               disco_info,
                                               cache_only=True)
@@ -139,7 +143,7 @@ class Caps(BaseModule):
         self._remove_task(task)
 
         try:
-            disco_info = nbxmpp_task.finish()
+            disco_info = cast(DiscoInfo, nbxmpp_task.finish())
         except StanzaError as error:
             self._log.warning(error)
             return
@@ -204,6 +208,8 @@ class EntityCapsTask(Task):
         self._account = account
         self._callback = weakref.WeakMethod(callback)
 
+        assert properties.jid is not None
+        assert properties.entity_caps is not None
         self.entity = Entity(jid=properties.jid,
                              node=properties.entity_caps.node,
                              hash=properties.entity_caps.ver,
@@ -227,6 +233,7 @@ class EntityCapsTask(Task):
                 self.entity.jid.bare,
                 groupchat=True)
 
+            assert isinstance(contact, GroupchatContact)
             if not contact.is_joined:
                 self.set_obsolete()
                 return False
