@@ -5,6 +5,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 
 import logging
 import os
@@ -24,6 +25,7 @@ from gajim.common import modules
 from gajim.common.client import Client
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.i18n import _
+from gajim.common.modules import BaseModule
 from gajim.common.util.classes import Singleton
 
 from .events import PluginAdded
@@ -400,7 +402,7 @@ class PluginManager(metaclass=Singleton):
             return
         for client in app.get_clients():
             for module in plugin.modules:
-                instance = client.get_module(module.name)
+                instance = cast(BaseModule, client.get_module(module.name))
                 modules.unregister_single_module(client, module.name)
 
                 for handler in instance.handlers:
@@ -629,7 +631,7 @@ class PluginManager(metaclass=Singleton):
             # access is denied or other
             raise PluginsystemError(str(error[1]))
 
-        rmtree(plugin_path, False, _on_error)
+        rmtree(plugin_path, False, _on_error)  # type: ignore
 
     def uninstall_plugin(self, plugin: GajimPlugin) -> None:
         '''
