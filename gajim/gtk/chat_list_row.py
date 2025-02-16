@@ -508,7 +508,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             drag,
             Gtk.WidgetPaintable().new(self),
             int(self._drag_hotspot_x),
-            int(self._drag_hotspot_y)
+            int(self._drag_hotspot_y),
         )
 
         app.window.highlight_dnd_targets(self, True)
