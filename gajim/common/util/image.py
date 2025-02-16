@@ -284,7 +284,7 @@ def extract_and_resize_frames_from_gif(
             # each frame will have its own palette.
             # If not, we need to apply the global palette to the new frame.
 
-            if not image.getpalette():
+            if not image.getpalette():  # type: ignore
                 assert palette is not None
                 image.putpalette(palette)
 
@@ -322,7 +322,7 @@ def analyse_gif_image(
     before processing all frames.
     '''
 
-    duration = cast(int, image.info.get('duration', 0))
+    duration = cast(int, image.info.get('duration', 0))  # type: ignore
     result = {
         'size': image.size,
         'mode': 'full',
@@ -331,9 +331,9 @@ def analyse_gif_image(
 
     try:
         while True:
-            if image.tile:
-                tile = image.tile[0]
-                update_region = tile[1]
+            if image.tile:  # type: ignore
+                tile = image.tile[0]  # type: ignore
+                update_region = tile[1]  # type: ignore
                 update_region_dimensions = update_region[2:]  # type: ignore
                 if update_region_dimensions != image.size:
                     result['mode'] = 'partial'

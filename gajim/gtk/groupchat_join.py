@@ -82,7 +82,7 @@ class GroupchatJoin(GajimAppWindow):
             jid,
             allow_redirect=True,
             request_vcard=True,
-            callback=self._disco_info_received,
+            callback=self._disco_info_received,  # type: ignore
         )
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:

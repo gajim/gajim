@@ -126,7 +126,7 @@ class BlockingList(GajimAppWindow):
         block_jids = blocked_jids - self._prev_blocked_jids
 
         self._client.get_module("Blocking").update_blocking_list(
-            block_jids, unblock_jids, callback=self._on_save_result
+            block_jids, unblock_jids, callback=self._on_save_result  # type: ignore
         )
 
     def _activate_spinner(self) -> None:
