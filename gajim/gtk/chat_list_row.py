@@ -503,11 +503,12 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         return Gdk.ContentProvider.new_for_value(value)
 
     def _on_drag_begin(self, _drag_source: Gtk.DragSource, drag: Gdk.Drag) -> None:
-        # TODO: Use widget's snapshot
         assert not isinstance(self.contact, ResourceContact)
-        texture = self.contact.get_avatar(AvatarSize.CHAT, 1)
         Gtk.DragIcon.set_from_paintable(
-            drag, texture, int(self._drag_hotspot_x), int(self._drag_hotspot_y)
+            drag,
+            Gtk.WidgetPaintable().new(self),
+            int(self._drag_hotspot_x),
+            int(self._drag_hotspot_y)
         )
 
         app.window.highlight_dnd_targets(self, True)

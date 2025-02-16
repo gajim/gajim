@@ -521,6 +521,7 @@ button.flat.link { padding: 0; border: 0; }
     margin: 0 10px 3px 10px;
     border: 2px solid transparent;
     border-radius: 6px;
+    background-color: @theme_base_color;
 }
 .chatlist-row:hover{
 	background-color: @theme_bg_color;
