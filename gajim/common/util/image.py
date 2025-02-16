@@ -286,7 +286,7 @@ def extract_and_resize_frames_from_gif(
 
             if not image.getpalette():
                 assert palette is not None
-                image.putpalette(palette)  # type: ignore
+                image.putpalette(palette)
 
             new_frame = Image.new('RGBA', image.size)
 
@@ -322,7 +322,7 @@ def analyse_gif_image(
     before processing all frames.
     '''
 
-    duration = cast(int, image.info.get('duration', 0))  # type: ignore
+    duration = cast(int, image.info.get('duration', 0))
     result = {
         'size': image.size,
         'mode': 'full',
@@ -331,9 +331,9 @@ def analyse_gif_image(
 
     try:
         while True:
-            if image.tile:  # type: ignore
-                tile = image.tile[0]  # type: ignore
-                update_region = tile[1]  # type: ignore
+            if image.tile:
+                tile = image.tile[0]
+                update_region = tile[1]
                 update_region_dimensions = update_region[2:]  # type: ignore
                 if update_region_dimensions != image.size:
                     result['mode'] = 'partial'

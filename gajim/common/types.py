@@ -39,11 +39,11 @@ if TYPE_CHECKING:
                 GroupchatContact |
                 GroupchatParticipant)
 
-PluginManagerT = Union['PluginManager']  # type: ignore
-PluginRepositoryT = Union['PluginRepository']  # type: ignore
+PluginManagerT = Union['PluginManager']
+PluginRepositoryT = Union['PluginRepository']
 
-ConnectionT = Union['Client']  # type: ignore
-CSSConfigT = Union['CSSConfig']  # type: ignore
+ConnectionT = Union['Client']
+CSSConfigT = Union['CSSConfig']
 
 # PEP
 PEPNotifyCallback = Callable[[nbxmpp.JID, nbxmpp.Node], None]
@@ -53,7 +53,7 @@ PEPHandlersDict = dict[str, list[PEPNotifyCallback]]
 PluginExtensionPoints = dict[str, tuple[Callable[..., None] | None,
                                         Callable[..., None] | None]]
 
-SettingsT = Union['Settings']  # type: ignore
+SettingsT = Union['Settings']
 
 BookmarksDict = dict[JID, BookmarkData]
 
@@ -62,9 +62,9 @@ GdkPixbufType = GdkPixbuf.Pixbuf | GdkPixbuf.PixbufAnimation
 AnyCallableT = Callable[..., Any]
 ObservableCbDict = dict[str, list[weakref.WeakMethod[AnyCallableT]]]
 
-BareContactT = Union['BareContact']  # type: ignore
+BareContactT = Union['BareContact']
 ChatContactT = Union['BareContact', 'GroupchatContact', 'GroupchatParticipant']
 OneOnOneContactT = Union['BareContact', 'GroupchatParticipant']
-GroupchatContactT = Union['GroupchatContact']  # type: ignore
+GroupchatContactT = Union['GroupchatContact']
 
 PresenceShowT = PresenceShowExt | PresenceShow
