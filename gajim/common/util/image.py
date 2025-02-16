@@ -284,9 +284,9 @@ def extract_and_resize_frames_from_gif(
             # each frame will have its own palette.
             # If not, we need to apply the global palette to the new frame.
 
-            if not image.getpalette():  # type: ignore
+            if not image.getpalette():
                 assert palette is not None
-                image.putpalette(palette)
+                image.putpalette(palette)  # type: ignore
 
             new_frame = Image.new('RGBA', image.size)
 
