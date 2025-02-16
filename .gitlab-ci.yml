@@ -22,6 +22,7 @@ test-other:
   interruptible: true
 
 test-black:
+  image: gajim-test
   stage: test
   rules:
     - changes:
