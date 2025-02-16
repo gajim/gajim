@@ -6,10 +6,13 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from collections.abc import Generator
 
 from nbxmpp.errors import is_error
 from nbxmpp.modules.user_avatar import AvatarData
+from nbxmpp.modules.user_avatar import AvatarMetaData
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
 from nbxmpp.structs import MessageProperties
@@ -62,6 +65,7 @@ class UserAvatar(BaseModule):
             contact.update_avatar(None)
             return
 
+        assert isinstance(metadata, AvatarMetaData)
         sha = contact.avatar_sha
         if sha is not None:
             if (sha in metadata.avatar_shas and
@@ -89,11 +93,11 @@ class UserAvatar(BaseModule):
     def _request_avatar_data(self,
                              contact: types.ChatContactT,
                              sha: str
-                             ) -> Generator[AvatarData | None, None, None]:
+                             ) -> Generator[Any, Any]:
 
         self._log.info('Request: %s %s', contact.jid, sha)
 
-        _task = yield  # noqa: F841
+        _task = yield
 
         avatar = yield self._nbxmpp('UserAvatar').request_avatar_data(
             sha, jid=contact.jid)
@@ -107,6 +111,7 @@ class UserAvatar(BaseModule):
             self._log.warning(avatar)
             return
 
+        assert isinstance(avatar, AvatarData)
         self._log.info('Received Avatar: %s %s', contact.jid, avatar.sha)
         app.app.avatar_storage.save_avatar(avatar.data)
         contact.update_avatar(avatar.sha)

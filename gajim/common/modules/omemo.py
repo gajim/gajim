@@ -15,6 +15,7 @@ from typing import Literal
 import binascii
 import threading
 from collections.abc import Callable
+from collections.abc import Generator
 from pathlib import Path
 
 import nbxmpp
@@ -30,6 +31,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import NodeProcessed
 from nbxmpp.protocol import Presence
+from nbxmpp.structs import AffiliationResult
 from nbxmpp.structs import EncryptionData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import OMEMOMessage
@@ -195,7 +197,7 @@ class OMEMO(BaseModule):
 
     def check_send_preconditions(self, contact: types.ChatContactT) -> bool:
         jid = str(contact.jid)
-        if contact.is_groupchat:
+        if isinstance(contact, GroupchatContact):
             if not self._groupchat_pre_conditions_satisfied(contact):
                 return False
 
@@ -352,7 +354,7 @@ class OMEMO(BaseModule):
                           properties: MessageProperties
                           ) -> None:
 
-        if not properties.is_omemo:
+        if properties.omemo is None:
             return
 
         if properties.carbon is not None and properties.carbon.is_sent:
@@ -495,6 +497,7 @@ class OMEMO(BaseModule):
             self._log.info('Affiliation request failed: %s', error)
             return
 
+        assert isinstance(result, AffiliationResult)
         for user_jid in result.users:
             jid = str(user_jid)
             self.backend.add_group_member(room_jid, jid)
@@ -548,7 +551,7 @@ class OMEMO(BaseModule):
         self.request_bundle(jid, device_id)
 
     @as_task
-    def request_bundle(self, jid: str, device_id: int):
+    def request_bundle(self, jid: str, device_id: int) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         self._log.info('Request device bundle %s %s', device_id, jid)
@@ -594,7 +597,7 @@ class OMEMO(BaseModule):
         self.request_devicelist(jid)
 
     @as_task
-    def request_devicelist(self, jid: str | None = None):
+    def request_devicelist(self, jid: str | None = None) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         if jid is None:
@@ -607,7 +610,7 @@ class OMEMO(BaseModule):
             self._log.info('Devicelist request failed: %s %s', jid, devicelist)
             devicelist = []
 
-        self._process_devicelist_update(jid, devicelist)
+        self._process_devicelist_update(jid, cast(list[int], devicelist))
 
     @event_node(Namespace.OMEMO_TEMP_DL)
     def _devicelist_notification_received(self,

@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import cast
 
 from collections.abc import Generator
 
@@ -23,6 +24,7 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import FeatureDiscovered
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.util import as_task
 
 
@@ -66,7 +68,7 @@ class Blocking(BaseModule):
     @as_task
     def get_blocking_list(
         self
-    ) -> Generator[Generator[Any, Any] | set[JID] | None, set[JID]]:
+    ) -> Generator[Any, set[JID]]:
         _task = yield  # noqa: F841
 
         blocking_list = yield self._nbxmpp('Blocking').request_blocking_list()
@@ -83,7 +85,7 @@ class Blocking(BaseModule):
     def update_blocking_list(self,
                              block: set[JID],
                              unblock: set[JID]
-                             ) -> Generator[bool, None, None]:
+                             ) -> Generator[Any, bool]:
         _task = yield  # noqa: F841
 
         if block:
@@ -131,7 +133,7 @@ class Blocking(BaseModule):
 
     def _get_contacts_from_jids(self,
                                 jids: set[JID]
-                                ) -> Generator[types.BareContactT, None, None]:
+                                ) -> Generator[BareContact, BareContact, None]:
         for jid in jids:
             if jid.resource is not None:
                 # Currently not supported by GUI
@@ -145,11 +147,11 @@ class Blocking(BaseModule):
                         # Currently not supported by GUI
                         continue
 
-                    yield contact
+                    yield cast(BareContact, contact)
 
                 continue
 
-            yield self._get_contact(jid)
+            yield cast(BareContact, self._get_contact(jid))
 
     def _presence_probe(self, jid: JID) -> None:
         self._log.info('Presence probe: %s', jid)

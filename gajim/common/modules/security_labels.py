@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 from collections.abc import Generator
 
 from nbxmpp.errors import is_error
@@ -42,9 +44,8 @@ class SecLabels(BaseModule):
         self._log.info('Discovered security labels: %s', info.jid)
 
     @as_task
-    def request_catalog(self, jid: JID) -> Generator[Catalog, None, None]:
-
-        _task = yield  # noqa: F841
+    def request_catalog(self, jid: JID) -> Generator[Any, Any]:
+        _task = yield
 
         catalog = yield self._nbxmpp('SecurityLabels').request_catalog(str(jid))
 
@@ -52,7 +53,7 @@ class SecLabels(BaseModule):
             self._log.info(catalog)
             return
 
-        assert catalog is not None
+        assert isinstance(catalog, Catalog)
         self._catalogs[jid] = catalog
 
         self._log.info('Received catalog: %s', jid)

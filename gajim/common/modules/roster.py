@@ -78,7 +78,7 @@ class Roster(BaseModule):
 
         self._log.info('Request version: %s', version)
         self._nbxmpp('Roster').request_roster(
-            version, callback=self._on_request_roster)
+            version, callback=self._on_request_roster)  # type: ignore
 
     def _on_request_roster(self, task: Task) -> None:
         try:
@@ -215,4 +215,4 @@ class Roster(BaseModule):
 
     def iter_contacts(self) -> Iterator[BareContact]:
         for jid in self._roster:
-            yield self._get_contact(jid)
+            yield cast(BareContact, self._get_contact(jid))

@@ -61,8 +61,8 @@ class VCardAvatars(BaseModule):
     def _request_vcard(self,
                        contact: types.ChatContactT,
                        expected_sha: str
-                       ) -> Generator[VCard, None, None]:
-        _task = yield  # noqa: F841
+                       ) -> Generator[Any, Any]:
+        _task = yield
 
         vcard = yield self._con.get_module('VCardTemp').request_vcard(
             jid=contact.jid)
@@ -71,6 +71,7 @@ class VCardAvatars(BaseModule):
             self._log.warning(vcard)
             return
 
+        assert isinstance(vcard, VCard)
         avatar, avatar_sha = vcard.get_avatar()
         if avatar is None:
             self._log.info('Avatar missing: %s %s', contact.jid, expected_sha)

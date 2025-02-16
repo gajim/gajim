@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+from typing import Any
+
 import time
 from collections.abc import Generator
 
@@ -36,8 +38,8 @@ class Ping(BaseModule):
     @as_task
     def send_ping(self,
                   contact: types.ContactT
-                  ) -> Generator[CommonResult, None, None]:
-        _task = yield  # noqa: F841
+                  ) -> Generator[Any, Any]:
+        _task = yield
 
         if not app.account_is_available(self._account):
             return
@@ -57,6 +59,8 @@ class Ping(BaseModule):
                 contact=contact,
                 error=str(response)))
             return
+
+        assert isinstance(response, CommonResult)
 
         diff = round(time.time() - ping_time, 2)
         self._log.info('Received pong from %s after %s seconds',
