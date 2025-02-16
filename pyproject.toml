@@ -52,7 +52,7 @@ repository = "https://dev.gajim.org/gajim/gajim"
 [project.optional-dependencies]
 dev = [
   "ruff>=0.6.8",
-  "codespell[toml]>=2.3.0",
+  "codespell[toml]>=2.4.1",
   "isort>=5.13.2",
   "nbxmpp @ git+https://dev.gajim.org/gajim/python-nbxmpp.git",
   "PyGObject-stubs @ git+https://github.com/pygobject/pygobject-stubs.git",

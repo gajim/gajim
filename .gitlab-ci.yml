@@ -21,6 +21,16 @@ test-other:
     - appstream-util validate dist/metadata/org.gajim.Gajim.metainfo.xml
   interruptible: true
 
+test-black:
+  stage: test
+  rules:
+    - changes:
+      - "**/*.py"
+  script:
+    - black --version
+    - black --check .
+  interruptible: true
+
 test-codespell:
   image: gajim-test
   stage: test
