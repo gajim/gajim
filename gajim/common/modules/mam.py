@@ -6,6 +6,9 @@
 
 from __future__ import annotations
 
+from typing import Any
+
+from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
 from datetime import timezone
@@ -19,6 +22,7 @@ from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.structs import DiscoInfo
+from nbxmpp.structs import MAMQueryData
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import StanzaIDData
@@ -113,6 +117,7 @@ class MAM(BaseModule):
         else:
             expected_archive = self._con.get_own_jid()
 
+        assert properties.mam is not None
         return properties.mam.archive.bare_match(expected_archive)
 
     @staticmethod
@@ -135,6 +140,7 @@ class MAM(BaseModule):
             return
 
         if properties.type.is_groupchat:
+            assert properties.jid is not None
             archive_jid = properties.jid.bare
             timestamp = properties.timestamp
 
@@ -191,6 +197,7 @@ class MAM(BaseModule):
                                   stanza=stanza,
                                   properties=properties))
 
+        assert properties.mam is not None
         if not self._from_valid_archive(stanza, properties):
             self._log.warning('Message from invalid archive %s',
                               properties.mam.archive)
@@ -216,6 +223,7 @@ class MAM(BaseModule):
             raise nbxmpp.NodeProcessed
 
     def _is_valid_request(self, properties: MessageProperties) -> bool:
+        assert properties.mam is not None
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)
         return valid_id == properties.mam.query_id
 
@@ -247,7 +255,7 @@ class MAM(BaseModule):
 
     def _get_muc_query_params(self,
                               jid: JID,
-                              threshold: SyncThreshold
+                              threshold: int
                               ) -> tuple[str | None, datetime | None]:
 
         archive = app.storage.archive.get_mam_archive_state(self._account, jid)
@@ -292,7 +300,7 @@ class MAM(BaseModule):
         return mam_id, start_date
 
     @as_task
-    def request_archive_on_signin(self):
+    def request_archive_on_signin(self) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         own_jid = self._con.get_own_jid().bare
@@ -319,6 +327,7 @@ class MAM(BaseModule):
                 self._log.warning(result)
                 return
 
+        assert isinstance(result, MAMQueryData)
         if result.rsm.last is not None:
             # <last> is not provided if the requested page was empty
             # so this means we did not get anything hence we only need
@@ -345,7 +354,7 @@ class MAM(BaseModule):
             )
 
     @as_task
-    def request_archive_on_muc_join(self, jid: JID):
+    def request_archive_on_muc_join(self, jid: JID) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         threshold = app.settings.get_group_chat_setting(self._account,
@@ -379,6 +388,7 @@ class MAM(BaseModule):
                 contact.notify('mam-sync-error', result.get_text())
                 return
 
+        assert isinstance(result, MAMQueryData)
         if result.rsm.last is not None:
             # <last> is not provided if the requested page was empty
             # so this means we did not get anything hence we only need
@@ -399,7 +409,7 @@ class MAM(BaseModule):
                        jid: JID,
                        mam_id: str | None,
                        start_date: datetime | None
-                       ):
+                       ) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         if jid in self._catch_up_finished:
@@ -416,6 +426,7 @@ class MAM(BaseModule):
 
         raise_if_error(result)
 
+        assert isinstance(result, MAMQueryData)
         while not result.complete:
             app.storage.archive.upsert_row(
                 mod.MAMArchiveState(
@@ -485,6 +496,7 @@ class MAM(BaseModule):
         else:
             timestamp = ArchiveState.ALL
 
+        assert isinstance(result, MAMQueryData)
         if result.complete:
             self._log.info('Request finished: %s, last mam id: %s',
                            result.jid, result.rsm.last)

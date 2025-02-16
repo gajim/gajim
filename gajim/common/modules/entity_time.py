@@ -6,11 +6,14 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common import types
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
 
 
 class EntityTime(BaseModule):
@@ -44,5 +47,5 @@ class EntityTime(BaseModule):
         if item is None:
             return False
 
-        contact = self._get_contact(jid.bare)
+        contact = cast(BareContact, self._get_contact(jid.bare))
         return contact.is_subscribed

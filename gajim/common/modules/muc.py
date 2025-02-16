@@ -19,6 +19,7 @@ from nbxmpp.const import InviteType
 from nbxmpp.const import StatusCode
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.modules.muc.util import MucInfoResult
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
@@ -26,6 +27,7 @@ from nbxmpp.protocol import Presence
 from nbxmpp.structs import CommonError
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
+from nbxmpp.structs import MucConfigResult
 from nbxmpp.structs import PresenceProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.structs import VoiceRequest
@@ -160,7 +162,7 @@ class MUC(BaseModule):
         return self._muc_service_jid is not None
 
     @property
-    def service_jid(self):
+    def service_jid(self) -> JID | None:
         return self._muc_service_jid
 
     def pass_disco(self, info: DiscoInfo) -> None:
@@ -405,7 +407,7 @@ class MUC(BaseModule):
 
     def configure_room(self, room_jid: str) -> None:
         self._nbxmpp('MUC').request_config(room_jid,
-                                           callback=self._on_room_config)
+                                           callback=self._on_room_config)  # type: ignore
 
     def _on_room_config(self, task: Task) -> None:
         try:
@@ -418,6 +420,7 @@ class MUC(BaseModule):
             room.notfiy('room-config-failed', error_text)
             return
 
+        assert isinstance(result, MucConfigResult)
         self._log.info('Configure room: %s', result.jid)
 
         muc_data = self._mucs[result.jid]
@@ -452,6 +455,7 @@ class MUC(BaseModule):
             room.notfiy('room-config-failed', error_text)
             return
 
+        assert isinstance(result, MucConfigResult)
         self._con.get_module('Discovery').disco_muc(
             result.jid, callback=self._on_disco_result_after_config)
 
@@ -462,6 +466,7 @@ class MUC(BaseModule):
             self._log.info('Disco %s failed: %s', error.jid, error.get_text())
             return
 
+        assert isinstance(result, MucInfoResult)
         jid = result.info.jid
         muc_data = self._mucs[jid]
         self._room_join_complete(muc_data)
@@ -570,12 +575,14 @@ class MUC(BaseModule):
             return
 
         muc_data = self._mucs[room_jid]
+        assert properties.jid is not None
         occupant = self._get_contact(properties.jid, groupchat=True)
         room = self._get_contact(properties.jid.bare)
+        assert isinstance(room, GroupchatContact)
 
         timestamp = utc_now()
 
-        if properties.is_muc_destroyed:
+        if properties.muc_destroyed is not None:
             self._log.info('MUC destroyed: %s', room_jid)
             self._set_muc_state(room_jid, MUCJoinedState.NOT_JOINED)
             self._con.get_module('Bookmarks').remove(room_jid)
@@ -592,6 +599,7 @@ class MUC(BaseModule):
             return
 
         if properties.is_nickname_changed:
+            assert properties.muc_user is not None
             if properties.is_muc_self_presence:
                 muc_data.nick = properties.muc_user.nick
                 self._con.get_module('Bookmarks').modify(muc_data.jid,
@@ -943,6 +951,7 @@ class MUC(BaseModule):
         if not properties.is_voice_request:
             return
 
+        assert properties.jid is not None
         room = self._get_contact(properties.jid.bare)
         assert isinstance(room, GroupchatContact)
         assert properties.voice_request is not None
@@ -986,6 +995,7 @@ class MUC(BaseModule):
             self._log.warning('Ignore captcha challenge received from MAM')
             raise nbxmpp.NodeProcessed
 
+        assert properties.jid is not None
         muc_data = self._mucs.get(properties.jid)
         if muc_data is None:
             return
@@ -1029,7 +1039,7 @@ class MUC(BaseModule):
         self._set_muc_state(room_jid, MUCJoinedState.JOINING)
         self._nbxmpp('MUC').send_captcha(room_jid,
                                          form_node,
-                                         callback=self._on_captcha_result)
+                                         callback=self._on_captcha_result)  # type: ignore
 
     def _on_captcha_result(self, task: Task) -> None:
         try:
@@ -1090,6 +1100,7 @@ class MUC(BaseModule):
         if properties.muc_invite is not None:
             data = properties.muc_invite
             contact = self._get_contact(data.muc, groupchat=True)
+            assert isinstance(contact, GroupchatContact)
 
             self._log.info('Invite from: %s, to: %s', data.from_, data.muc)
 
@@ -1101,8 +1112,8 @@ class MUC(BaseModule):
             self._con.get_module('Discovery').disco_muc(
                 data.muc,
                 request_vcard=True,
-                callback=self._on_disco_result_after_invite,
-                user_data=data)
+                callback=self._on_disco_result_after_invite,  # type: ignore
+                user_data=data)  # type: ignore
 
             raise nbxmpp.NodeProcessed
 

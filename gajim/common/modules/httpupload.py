@@ -218,8 +218,8 @@ class HTTPUpload(BaseModule):
             filename=transfer.filename,
             size=transfer.size,
             content_type=transfer.mime,
-            callback=self._received_slot,
-            user_data=transfer)
+            callback=self._received_slot,  # type: ignore
+            user_data=transfer)  # type: ignore
 
     def _received_slot(self, task: Task) -> None:
         transfer = cast(HTTPFileTransfer, task.get_user_data())

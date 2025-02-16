@@ -6,6 +6,10 @@
 
 from __future__ import annotations
 
+from typing import Any
+
+from collections.abc import Generator
+
 import nbxmpp
 from nbxmpp.errors import is_error
 from nbxmpp.errors import StanzaError
@@ -203,7 +207,7 @@ class Discovery(BaseModule):
                   jid: JID | str,
                   request_vcard: bool = False,
                   allow_redirect: bool = False
-                  ) -> MucInfoResult | None:
+                  ) -> Generator[Any, Any]:
 
         _task = yield  # noqa: F841
 
@@ -217,12 +221,14 @@ class Discovery(BaseModule):
         if is_error(result):
             raise result
 
+        assert isinstance(result, MucInfoResult)
         if result.redirected:
             self._log.info('MUC info received after redirect: %s -> %s',
                            jid, result.info.jid)
         else:
             self._log.info('MUC info received: %s', result.info.jid)
 
+        assert result.info.jid is not None
         app.storage.cache.set_last_disco_info(result.info.jid, result.info)
 
         if result.vcard is not None:
@@ -247,7 +253,7 @@ class Discovery(BaseModule):
         yield result
 
     @as_task
-    def disco_contact(self, contact: types.ContactT):
+    def disco_contact(self, contact: types.ContactT) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
         result = yield self.disco_info(contact.jid)
@@ -256,6 +262,8 @@ class Discovery(BaseModule):
 
         self._log.info('Disco Info received: %s', contact.jid)
 
+        assert isinstance(result, DiscoInfo)
+        assert result.jid is not None
         app.storage.cache.set_last_disco_info(result.jid,
                                               result,
                                               cache_only=True)
