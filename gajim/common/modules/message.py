@@ -211,8 +211,7 @@ class Message(BaseModule):
             return
 
         securitylabel_data = None
-        if properties.has_security_label:
-            assert properties.security_label is not None
+        if properties.security_label is not None:
             displaymarking = properties.security_label.displaymarking
             if displaymarking is not None:
                 securitylabel_data = mod.SecurityLabel(

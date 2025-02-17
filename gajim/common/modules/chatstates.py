@@ -160,11 +160,10 @@ class Chatstate(BaseModule):
         if properties.chatstate is None:
             return
 
-        assert properties.carbon is not None
         if (
             properties.is_self_message
             or properties.is_mam_message
-            or (properties.is_carbon_message
+            or (properties.carbon is not None
             and properties.carbon.is_sent)
         ):
             return self._raise_if_necessary(properties)

@@ -99,8 +99,6 @@ class Moderations(BaseModule):
         if not properties.is_moderation:
             return
 
-        assert properties.moderation is not None
-
         is_occupant_id_supported = self._is_occupant_id_supported(properties)
 
         self._insert_moderation_message(properties, is_occupant_id_supported)
