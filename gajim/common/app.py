@@ -37,7 +37,6 @@ from nbxmpp.protocol import JID
 from nbxmpp.task import Task
 
 import gajim
-from gajim.common import config as c_config
 from gajim.common import configpaths
 from gajim.common import ged as ged_module
 from gajim.common import types
@@ -59,7 +58,6 @@ if typing.TYPE_CHECKING:
     from gajim.gtk.main import MainWindow  # noqa: F401
 
 
-config = c_config.Config()
 settings = cast(types.SettingsT, None)
 version = gajim.__version__
 connections: dict[str, types.Client] = {}

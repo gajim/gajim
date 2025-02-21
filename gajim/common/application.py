@@ -40,7 +40,6 @@ from gajim.common.events import AllowGajimUpdateCheck
 from gajim.common.events import DBMigrationError
 from gajim.common.events import GajimUpdateAvailable
 from gajim.common.events import SignedIn
-from gajim.common.settings import LegacyConfig
 from gajim.common.settings import Settings
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.storage.cache import CacheStorage
@@ -71,7 +70,6 @@ class CoreApplication(ged.EventHelper):
 
         passwords.init()
 
-        app.config = LegacyConfig()
         app.commands = ChatCommands()
 
         try:

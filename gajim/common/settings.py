@@ -27,7 +27,6 @@ from nbxmpp.protocol import JID
 from gajim import IS_PORTABLE
 from gajim.common import app
 from gajim.common import configpaths
-from gajim.common import optparser
 from gajim.common.setting_values import ACCOUNT_SETTINGS
 from gajim.common.setting_values import AllAccountSettings
 from gajim.common.setting_values import AllAccountSettingsT
@@ -216,11 +215,6 @@ class Settings:
             self._connect_database()
         self._load_settings()
         self._load_account_settings()
-        if not self._settings['app']:
-            # ['app'] is empty in a newly created database.
-            # If there is an old config, it gets migrated at this point.
-            self._migrate_old_config()
-            self._commit()
         self._migrate_database()
         self._load_app_overrides()
         self._commit()
@@ -406,191 +400,6 @@ class Settings:
                 self._commit_account_settings(account)
 
             self._set_user_version(6)
-
-    def _migrate_old_config(self) -> None:
-        if self._in_memory:
-            return
-
-        config_file = configpaths.get('CONFIG_FILE')
-        if not config_file.exists():
-            return
-
-        # Read legacy config
-        optparser.OptionsParser(str(configpaths.get('CONFIG_FILE'))).read()
-
-        account_settings = app.config.get_all_per('accounts')
-        self._cleanup_account_default_values('account', account_settings)
-
-        contact_settings = app.config.get_all_per('contacts')
-        self._cleanup_account_default_values('contact', contact_settings)
-
-        group_chat_settings = app.config.get_all_per('rooms')
-        self._cleanup_account_default_values('group_chat',
-                                             group_chat_settings)
-
-        for account, settings in account_settings.items():
-            if account == 'Local':
-                # Zeroconf support was dropped so don’t migrate the account
-                continue
-            self.add_account(account)
-            self._account_settings[account]['account'] = settings
-            self._account_settings[account]['contact'] = contact_settings
-            self._account_settings[account]['group_chat'] = group_chat_settings
-            self._commit_account_settings(account)
-
-        self._migrate_encryption_settings()
-
-        # Migrate plugin settings
-        self._settings['plugins'] = app.config.get_all_per('plugins')
-        self._commit_settings('plugins')
-
-        self._migrate_app_settings()
-        self._migrate_soundevent_settings()
-        self._migrate_status_preset_settings()
-        self._migrate_proxy_settings()
-
-        new_path = config_file.with_name(f'{config_file.name}.old')
-        config_file.rename(new_path)
-        log.info('Successfully migrated config')
-
-    def _migrate_app_settings(self) -> None:
-        app_settings = app.config.get_all()
-
-        # Migrate deprecated settings
-        value = app_settings.pop('send_chatstate_muc_default', None)
-        if value is not None:
-            for settings in self._account_settings.values():
-                settings['account']['gc_send_chatstate_default'] = value
-
-        value = app_settings.pop('send_chatstate_default', None)
-        if value is not None:
-            for settings in self._account_settings.values():
-                settings['account']['send_chatstate_default'] = value
-
-        value = app_settings.pop('print_join_left_default', None)
-        if value is not None:
-            app_settings['gc_print_join_left_default'] = value
-
-        value = app_settings.pop('print_status_muc_default', None)
-        if value is not None:
-            app_settings['gc_print_status_default'] = value
-
-        # Cleanup values which are equal to current defaults
-        for setting, value in list(app_settings.items()):
-            if (setting not in APP_SETTINGS or
-                    value == APP_SETTINGS[setting]):
-                del app_settings[setting]
-
-        self._settings['app'] = app_settings
-        self._commit_settings('app')
-
-        for account in self._account_settings:
-            self._commit_account_settings(account)
-
-    def _migrate_encryption_settings(self) -> None:
-        # Migrate encryption settings into contact/group chat settings
-        encryption_settings = app.config.get_all_per('encryption')
-        for key, settings in encryption_settings.items():
-            account, jid = self._split_encryption_config_key(key)
-            if account is None:
-                continue
-
-            assert jid is not None
-            encryption = settings.get('encryption')
-            if not encryption:
-                continue
-
-            if '@' not in jid:
-                continue
-
-            # Sad try to determine if the jid is a group chat
-            # At this point there is no better way
-            domain = jid.split('@')[1]
-            subdomain = domain.split('.')[0]
-            if subdomain in ('muc', 'conference', 'conf',
-                             'rooms', 'room', 'chat'):
-                category = 'group_chat'
-            else:
-                category = 'contact'
-
-            if jid not in self._account_settings[account][category]:
-                self._account_settings[account][category][jid] = {
-                    'encryption': encryption}
-            else:
-                self._account_settings[account][category][
-                    jid]['encryption'] = encryption
-            self._commit_account_settings(account)
-
-    def _split_encryption_config_key(self, key: str) -> tuple[str | None,
-                                                              str | None]:
-        for account in self._account_settings:
-            if not key.startswith(account):
-                continue
-            jid = key.replace(f'{account}-', '', 1)
-            return account, jid
-        return None, None
-
-    def _migrate_soundevent_settings(self) -> None:
-        soundevent_settings = app.config.get_all_per('soundevents')
-        for soundevent, settings in list(soundevent_settings.items()):
-            if soundevent not in DEFAULT_SOUNDEVENT_SETTINGS:
-                del soundevent_settings[soundevent]
-                continue
-
-            for setting, value in list(settings.items()):
-                if DEFAULT_SOUNDEVENT_SETTINGS[soundevent][setting] == value:
-                    del soundevent_settings[soundevent][setting]
-                    if not soundevent_settings[soundevent]:
-                        del soundevent_settings[soundevent]
-
-        self._settings['soundevents'] = soundevent_settings
-        self._commit_settings('soundevents')
-
-    def _migrate_status_preset_settings(self) -> None:
-        status_preset_settings = app.config.get_all_per('statusmsg')
-        for preset, settings in list(status_preset_settings.items()):
-            if '_last_' in preset:
-                del status_preset_settings[preset]
-                continue
-
-            for setting, value in list(settings.items()):
-                if setting not in STATUS_PRESET_SETTINGS:
-                    continue
-                if STATUS_PRESET_SETTINGS[setting] == value:
-                    del status_preset_settings[preset][setting]
-                    if not status_preset_settings[preset]:
-                        del status_preset_settings[preset]
-
-        self._settings['status_presets'] = status_preset_settings
-        self._commit_settings('status_presets')
-
-    def _migrate_proxy_settings(self) -> None:
-        proxy_settings = app.config.get_all_per('proxies')
-        for proxy_name, settings in proxy_settings.items():
-            for setting, value in list(settings.items()):
-                if (setting not in PROXY_SETTINGS or
-                        PROXY_SETTINGS[setting] == value):
-                    del proxy_settings[proxy_name][setting]
-
-        self._settings['proxies'] = proxy_settings
-        self._commit_settings('proxies')
-
-    @staticmethod
-    def _cleanup_account_default_values(category: str, settings: Any) -> None:
-        for contact, settings_ in list(settings.items()):
-            for setting, value in list(settings_.items()):
-                if setting not in ACCOUNT_SETTINGS[category]:
-                    del settings[contact][setting]
-                    if not settings[contact]:
-                        del settings[contact]
-                    continue
-
-                default = ACCOUNT_SETTINGS[category][setting]
-                if default == value:
-                    del settings[contact][setting]
-                    if not settings[contact]:
-                        del settings[contact]
-                    continue
 
     def close(self) -> None:
         log.info('Close settings')
@@ -1417,29 +1226,3 @@ class Settings:
         self._commit()
         self._con.close()
         del self._con
-
-
-class LegacyConfig:
-
-    @staticmethod
-    def get(setting: str) -> SETTING_TYPE:
-        return app.settings.get_app_setting(setting)
-
-    @staticmethod
-    def set(setting: str, value: SETTING_TYPE) -> None:
-        app.settings.set_app_setting(setting, value)
-
-    @staticmethod
-    def get_per(kind: str, key: str, setting: str) -> SETTING_TYPE:
-        if kind == 'accounts':
-            return app.settings.get_account_setting(key, setting)
-
-        if kind == 'plugins':
-            return app.settings.get_plugin_setting(key, setting)
-        raise ValueError
-
-    @staticmethod
-    def set_per(kind: str, key: str, setting: str, value: SETTING_TYPE) -> None:
-        if kind == 'accounts':
-            app.settings.set_account_setting(key, setting, value)
-        raise ValueError

@@ -104,10 +104,8 @@ exclude = [
   "build",
   "debian_build",
   "dist",
-  "gajim/__init__.py",
   "gajim/common/app.py",
   "gajim/common/client.py",
-  "gajim/common/config.py",
   "gajim/common/file_props.py",
   "gajim/common/helpers.py",
   "gajim/common/jingle_content.py",
@@ -141,7 +139,6 @@ exclude = [
   "gajim/common/modules/user_avatar.py",
   "gajim/common/modules/util.py",
   "gajim/common/modules/vcard_avatars.py",
-  "gajim/common/optparser.py",
   "gajim/common/proxy65_manager.py",
   "gajim/common/settings.py",
   "gajim/common/socks5.py",
@@ -293,10 +290,8 @@ exclude = [
   # Code Folders
   "typings",
   # legacy modules, will be removed
-  "gajim/common/config.py",
   "gajim/common/jingle_ftstates.py",
   "gajim/common/modules/bytestream.py",
-  "gajim/common/optparser.py",
   "gajim/common/proxy65_manager.py",
   "gajim/common/socks5.py",
 ]
