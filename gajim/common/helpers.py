@@ -535,11 +535,10 @@ def write_file_async(
                       None,
                       _on_file_created)
 
-
 def load_file_async(path: Path,
                     callback: Callable[[bytes | None,
                                         GLib.Error | None,
-                                        Any | None], Any],
+                                        Any], Any],
                     user_data: Any | None = None) -> None:
 
     def _on_load_finished(file: Gio.File,

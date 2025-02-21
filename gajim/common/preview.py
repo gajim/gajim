@@ -33,7 +33,6 @@ from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
 from gajim.common.storage.archive import models as mod
-from gajim.common.types import GdkPixbufType
 from gajim.common.util.http import create_http_request
 from gajim.common.util.image import create_thumbnail
 from gajim.common.util.preview import aes_decrypt
@@ -145,7 +144,7 @@ class Preview:
         return self._filename
 
     @property
-    def request(self) -> HTTPRequest:
+    def request(self) -> HTTPRequest | None:
         return self._request
 
     @property
@@ -176,7 +175,7 @@ class Preview:
             return False
         return self.orig_path.exists()
 
-    def update_widget(self, data: GdkPixbufType | None = None) -> None:
+    def update_widget(self, data: bytes | None = None) -> None:
         self._widget.update(self, data)
 
     def update_progress(self, progress: float, request: HTTPRequest) -> None:
@@ -396,7 +395,7 @@ class PreviewManager:
 
     def _on_orig_load_finished(self,
                                data: bytes | None,
-                               error: Gio.AsyncResult,
+                               error: GLib.Error | None,
                                preview: Preview) -> None:
         if preview.thumb_path is None or preview.orig_path is None:
             return
@@ -415,7 +414,7 @@ class PreviewManager:
 
     @staticmethod
     def _on_thumb_load_finished(data: bytes | None,
-                                error: Gio.AsyncResult,
+                                error: GLib.Error | None,
                                 preview: Preview) -> None:
 
         if preview.thumb_path is None or preview.orig_path is None:
@@ -485,7 +484,9 @@ class PreviewManager:
                             force: bool
                             ) -> None:
 
-        uri = request.get_uri().to_string()
+        uri = request.get_uri()
+        assert uri is not None
+        uri = uri.to_string()
         preview = cast(Preview, request.get_user_data())
         preview.mime_type = content_type
         preview.file_size = content_length
@@ -604,5 +605,6 @@ class PreviewManager:
         preview.update_widget(data=preview.thumbnail)
 
     def cancel_download(self, preview: Preview) -> None:
+        assert preview.request is not None
         preview.request.cancel()
         preview.download_in_progress = False

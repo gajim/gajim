@@ -142,7 +142,6 @@ exclude = [
   "gajim/common/modules/util.py",
   "gajim/common/modules/vcard_avatars.py",
   "gajim/common/optparser.py",
-  "gajim/common/preview.py",
   "gajim/common/proxy65_manager.py",
   "gajim/common/settings.py",
   "gajim/common/socks5.py",
