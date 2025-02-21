@@ -14,6 +14,7 @@ import uuid
 from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
+from functools import partial
 from pathlib import Path
 from urllib.parse import ParseResult
 from urllib.parse import urlparse
@@ -174,14 +175,6 @@ class Preview:
         if self.orig_path is None:
             return False
         return self.orig_path.exists()
-
-    def create_thumbnail(self, data: bytes) -> bool:
-        self.thumbnail = create_thumbnail(data, self.size, self.mime_type)
-        if self.thumbnail is None:
-            self.info_message = _('Creating thumbnail failed')
-            log.warning('Creating thumbnail failed for: %s', self.orig_path)
-            return False
-        return True
 
     def update_widget(self, data: GdkPixbufType | None = None) -> None:
         self._widget.update(self, data)
@@ -357,6 +350,27 @@ class PreviewManager:
                             self._on_thumb_load_finished,
                             preview)
 
+    def create_thumbnail(self, preview: Preview, data: bytes) -> None:
+        app.process_pool.apply_async(
+            create_thumbnail,
+            (data, preview.size, preview.mime_type),
+            callback=partial(self._write_thumbnail, preview),
+        )
+
+    def _write_thumbnail(self, preview: Preview, data: bytes) -> None:
+        if data is None:
+            preview.info_message = _('Creating thumbnail failed')
+            preview.update_widget()
+            log.warning('Creating thumbnail failed for: %s', self.orig_path)
+            return
+
+        preview.thumbnail = data
+
+        write_file_async(preview.thumb_path,
+                         preview.thumbnail,
+                         self._on_thumb_write_finished,
+                         preview)
+
     def _process_web_uri(self,
                          uri: str,
                          widget: Any,
@@ -392,14 +406,11 @@ class PreviewManager:
 
         preview.mime_type = guess_mime_type(preview.orig_path, data)
         preview.file_size = os.path.getsize(preview.orig_path)
+
         if preview.is_previewable:
-            if preview.create_thumbnail(data):
-                assert preview.thumbnail is not None
-                write_file_async(preview.thumb_path,
-                                 preview.thumbnail,
-                                 self._on_thumb_write_finished,
-                                 preview)
-        preview.update_widget()
+            self.create_thumbnail(preview, data)
+        else:
+            preview.update_widget()
 
     @staticmethod
     def _on_thumb_load_finished(data: bytes | None,
@@ -549,14 +560,7 @@ class PreviewManager:
             return
 
         if preview.is_previewable:
-            if preview.create_thumbnail(data):
-                assert preview.thumb_path is not None
-                write_file_async(preview.thumb_path,
-                                 preview.thumbnail,
-                                 self._on_thumb_write_finished,
-                                 preview)
-            else:
-                preview.update_widget()
+            self.create_thumbnail(preview, data)
 
     @staticmethod
     def _on_orig_write_finished(_result: bool,

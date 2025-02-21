@@ -248,6 +248,7 @@ class CoreApplication(ged.EventHelper):
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
         app.settings.shutdown()
+        app.process_pool.terminate()
         self.end_profiling()
         configpaths.cleanup_temp()
         logind.shutdown()

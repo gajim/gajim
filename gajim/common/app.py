@@ -22,8 +22,10 @@ from typing import cast
 
 import gc
 import logging
+import multiprocessing
 import os
 import pprint
+import signal
 import sys
 import weakref
 from collections import defaultdict
@@ -109,6 +111,11 @@ task_manager = cast('TaskManager', None)
 gupnp_igd = None
 
 gsound_ctx = None
+
+process_pool = multiprocessing.Pool(
+    initializer=lambda: signal.signal(signal.SIGINT, signal.SIG_IGN),
+    maxtasksperchild=10
+)
 
 _dependencies = {
     'FARSTREAM': False,
