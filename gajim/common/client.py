@@ -314,7 +314,6 @@ class Client(Observable, ClientModules):
     def _after_disconnect(self) -> None:
         self._disable_reconnect_timer()
 
-        # app.proxy65_manager.disconnect(self._client)
         self.get_module('Bytestream').remove_all_transfers()
 
         if self._destroy_client:

@@ -96,8 +96,6 @@ notification = None
 # list of our nick names in each account
 nicks: dict[str, str] = {}
 
-proxy65_manager = None
-
 cert_store = cast('CertificateStore', None)
 
 call_manager = cast('CallManager', None)
