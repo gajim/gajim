@@ -357,15 +357,16 @@ class PreviewManager:
             callback=partial(self._write_thumbnail, preview),
         )
 
-    def _write_thumbnail(self, preview: Preview, data: bytes) -> None:
+    def _write_thumbnail(self, preview: Preview, data: bytes | None) -> None:
         if data is None:
             preview.info_message = _('Creating thumbnail failed')
             preview.update_widget()
-            log.warning('Creating thumbnail failed for: %s', self.orig_path)
+            log.warning('Creating thumbnail failed for: %s', preview.orig_path)
             return
 
         preview.thumbnail = data
 
+        assert preview.thumb_path is not None
         write_file_async(preview.thumb_path,
                          preview.thumbnail,
                          self._on_thumb_write_finished,
@@ -550,6 +551,7 @@ class PreviewManager:
             if preview.orig_path is not None:
                 preview.mime_type = guess_mime_type(preview.orig_path, data)
 
+        assert preview.orig_path is not None
         write_file_async(preview.orig_path,
                          data,
                          self._on_orig_write_finished,
