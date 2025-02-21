@@ -335,7 +335,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
         _controller: Gtk.EventControllerMotion,
     ) -> None:
         assert self._preview is not None
-        if self._preview.mime_type.startswith("image/"):
+        if self._preview.mime_type.startswith("image/") and self._preview.orig_exists:
             self._ui.button_box.set_visible(False)
 
     def _on_cancel_download_clicked(self, _button: Gtk.Button) -> None:
