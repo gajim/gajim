@@ -63,6 +63,7 @@ class CoreApplication(ged.EventHelper):
         app.app = self
         app.print_version()
         app.detect_dependencies()
+        app.init_process_pool()
         configpaths.create_paths()
 
         app.settings = Settings()

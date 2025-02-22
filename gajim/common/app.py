@@ -22,7 +22,7 @@ from typing import cast
 
 import gc
 import logging
-import multiprocessing
+import multiprocessing.pool
 import os
 import pprint
 import signal
@@ -108,10 +108,7 @@ gupnp_igd = None
 
 gsound_ctx = None
 
-process_pool = multiprocessing.Pool(
-    initializer=lambda: signal.signal(signal.SIGINT, signal.SIG_IGN),
-    maxtasksperchild=10
-)
+process_pool = cast(multiprocessing.pool.Pool, None)
 
 _dependencies = {
     'FARSTREAM': False,
@@ -127,6 +124,13 @@ _dependencies = {
 
 _tasks: dict[int, list[Task]] = defaultdict(list)
 
+
+def init_process_pool() -> None:
+    global process_pool
+    process_pool = multiprocessing.Pool(
+        initializer=lambda: signal.signal(signal.SIGINT, signal.SIG_IGN),
+        maxtasksperchild=10
+    )
 
 def print_version() -> None:
     log('gajim').info('Gajim Version: %s', gajim.__version__)
