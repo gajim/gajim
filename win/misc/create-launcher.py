@@ -65,7 +65,31 @@ def build_exe(
 
 
 def get_launcher_code(*, debug: bool) -> str:
-    template = """\
+
+    main_code = """
+import os
+import sys
+from ctypes import windll
+from pathlib import Path
+
+os.environ['GAJIM_DEBUG'] = '%s'
+sys.frozen = True
+root_path = Path(sys.executable).parents[1]
+windll.kernel32.SetDllDirectoryW(str(root_path / 'bin'))
+
+if __name__ == '__main__':
+    import gajim.main
+    gajim.main.run()
+""".strip() % int(
+        debug
+    )
+
+    c_string = ""
+    for line in main_code.splitlines():
+        c_string += f'        "{line}\\n"\n'
+
+    template = (
+        """\
 #include "Python.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -93,20 +117,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     Py_Initialize();
     PySys_SetArgvEx(__argc, szArglist, 0);
     result = PyRun_SimpleString(
-        "import sys; import os;"
-        "os.environ['GAJIM_DEBUG'] = '%s';"
-        "sys.frozen=True;"
-        "from pathlib import Path;"
-        "root_path = Path(sys.executable).parents[1];"
-        "from ctypes import windll;"
-        "windll.kernel32.SetDllDirectoryW(str(root_path / 'bin'));"
-        "import gajim.main;"
-        "gajim.main.run();");
+%s
+    );
     Py_Finalize();
     return result;
 }
-    """ % int(
-        debug
+    """
+        % c_string[:-1]
     )
 
     return template

@@ -22,13 +22,13 @@ from typing import cast
 
 import gc
 import logging
-import multiprocessing.pool
+import multiprocessing
 import os
 import pprint
-import signal
 import sys
 import weakref
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -42,6 +42,7 @@ from gajim.common import ged as ged_module
 from gajim.common import types
 from gajim.common.const import Display
 from gajim.common.i18n import get_default_lang
+from gajim.common.multiprocess import init_process
 
 if typing.TYPE_CHECKING:
     from gajim.common.call_manager import CallManager
@@ -108,7 +109,7 @@ gupnp_igd = None
 
 gsound_ctx = None
 
-process_pool = cast(multiprocessing.pool.Pool, None)
+process_pool = cast(ProcessPoolExecutor, None)
 
 _dependencies = {
     'FARSTREAM': False,
@@ -127,10 +128,15 @@ _tasks: dict[int, list[Task]] = defaultdict(list)
 
 def init_process_pool() -> None:
     global process_pool
-    process_pool = multiprocessing.Pool(
-        initializer=lambda: signal.signal(signal.SIGINT, signal.SIG_IGN),
-        maxtasksperchild=10
+
+    mp_context = multiprocessing.get_context("spawn")
+    process_pool = ProcessPoolExecutor(
+        max_workers=4,
+        mp_context=mp_context,
+        # max_tasks_per_child=5,
+        initializer=init_process,
     )
+
 
 def print_version() -> None:
     log('gajim').info('Gajim Version: %s', gajim.__version__)

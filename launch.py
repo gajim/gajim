@@ -3,15 +3,19 @@
 import subprocess
 from pathlib import Path
 
-import gajim
-import gajim.main
+if __name__ == "__main__":
+    # Protect the entry point of the application because we use
+    # the multiprocessing module with "spawn"
 
-try:
-    res = subprocess.check_output(
-        ["git", "-C", f"{Path(__file__).parent}", "rev-parse", "--short=12", "HEAD"]
-    )
-    gajim.__version__ += f"+{res.decode().strip()}"
-except Exception:
-    pass
+    import gajim
+    import gajim.main
 
-gajim.main.run()
+    try:
+        res = subprocess.check_output(
+            ["git", "-C", f"{Path(__file__).parent}", "rev-parse", "--short=12", "HEAD"]
+        )
+        gajim.__version__ += f"+{res.decode().strip()}"
+    except Exception:
+        pass
+
+    gajim.main.run()

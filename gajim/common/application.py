@@ -243,11 +243,11 @@ class CoreApplication(ged.EventHelper):
 
     def _shutdown_core(self) -> None:
         # Commit any outstanding SQL transactions
+        app.process_pool.shutdown(cancel_futures=True)
         app.storage.archive.cleanup_chat_history()
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
         app.settings.shutdown()
-        app.process_pool.terminate()
         self.end_profiling()
         configpaths.cleanup_temp()
         logind.shutdown()

@@ -12,6 +12,7 @@ import os
 import re
 import uuid
 from collections.abc import Callable
+from concurrent.futures import Future
 from dataclasses import dataclass
 from dataclasses import field
 from functools import partial
@@ -32,9 +33,9 @@ from gajim.common.const import MIME_TYPES
 from gajim.common.helpers import load_file_async
 from gajim.common.helpers import write_file_async
 from gajim.common.i18n import _
+from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.storage.archive import models as mod
 from gajim.common.util.http import create_http_request
-from gajim.common.util.image import create_thumbnail
 from gajim.common.util.preview import aes_decrypt
 from gajim.common.util.preview import filename_from_uri
 from gajim.common.util.preview import get_image_paths
@@ -350,20 +351,27 @@ class PreviewManager:
                             preview)
 
     def create_thumbnail(self, preview: Preview, data: bytes) -> None:
-        app.process_pool.apply_async(
+        future = app.process_pool.submit(
             create_thumbnail,
-            (data, preview.size, preview.mime_type),
-            callback=partial(self._write_thumbnail, preview),
+            data,
+            preview.size,
+            preview.mime_type,
         )
+        future.add_done_callback(partial(self._write_thumbnail, preview))
 
-    def _write_thumbnail(self, preview: Preview, data: bytes | None) -> None:
-        if data is None:
+    def _write_thumbnail(self, preview: Preview, future: Future[bytes | None]) -> None:
+        try:
+            result = future.result()
+            if result is None:
+                raise ValueError("result is None")
+        except Exception as error:
             preview.info_message = _('Creating thumbnail failed')
             preview.update_widget()
-            log.warning('Creating thumbnail failed for: %s', preview.orig_path)
+            log.warning('Creating thumbnail failed for: %s %s',
+                        preview.orig_path, error)
             return
 
-        preview.thumbnail = data
+        preview.thumbnail = result
 
         assert preview.thumb_path is not None
         write_file_async(preview.thumb_path,

@@ -21,8 +21,8 @@ from gajim.common import types
 from gajim.common.helpers import load_file_async
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
+from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.preview import PREVIEWABLE_MIME_TYPES
-from gajim.common.util.image import create_thumbnail
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import guess_mime_type
 from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
