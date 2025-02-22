@@ -4,6 +4,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 
+import multiprocessing
 import os
 import platform
 import signal
@@ -175,6 +176,7 @@ def _set_proc_title() -> None:
 
 
 def run() -> None:
+    multiprocessing.freeze_support()
     if sys.platform != "win32":
         if os.geteuid() == 0:
             sys.exit("You must not launch gajim as root, it is insecure.")
