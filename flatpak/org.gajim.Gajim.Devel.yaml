@@ -90,22 +90,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-44.0.0-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-44.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.0-cp39-abi3-manylinux_2_28_aarch64.whl
-        sha256: c5eb858beed7835e5ad1faba59e865109f3e52b3783b9ac21e7e47dc5554e289
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.1-cp39-abi3-manylinux_2_28_aarch64.whl
+        sha256: 436df4f203482f41aad60ed1813811ac4ab102765ecae7a2bbb1dbb66dcff5a7
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-44.0.0-cp39-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-44.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.0-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: f53c2c87e0fb4b0c00fa9571082a057e37690a8f12233306161c8f4b819960b7
+        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.1-cp39-abi3-manylinux_2_28_x86_64.whl
+        sha256: 72198e2b5925155497a5a3e8c216c7fb3e64c16ccee11f0e7da272fa93b35c4c
 
   - name: python3-jeepney
     buildsystem: simple
@@ -253,11 +253,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.20.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.22.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.20.0-py2.py3-none-any.whl
-        sha256: c359a1edf950eb5e80cffd7d9111f3dbeef57994cb4415df37d39fda2cf22364
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.22.0-py2.py3-none-any.whl
+        sha256: 3d791d631a6c97aad4da7074081a57073126c69487560c6f8bffcf586461de66
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -280,11 +280,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.37-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.38-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.37-py3-none-any.whl
-        sha256: a8998bf9f8658bd3839cbc44ddbe982955641863da0c1efe5b00c1ab4f5c16b1
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.38-py3-none-any.whl
+        sha256: 63178c675d4c80def39f1febd625a6333f44c0ba269edd8a468b156394b27753
 
   - name: python3-emoji
     buildsystem: simple
@@ -299,11 +299,11 @@ modules:
   - name: python3-decorator
     buildsystem: simple
     build-commands:
-      - pip3 install decorator-5.1.1-py3-none-any.whl
+      - pip3 install decorator-5.2.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.1.1-py3-none-any.whl
-        sha256: b8c3f85900b9dc423225913c5aace94729fe1fa9763b38939a95226f02d37186
+        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.2.0-py3-none-any.whl
+        sha256: f30a69c066f698c7c11fa1fa3425f684d3b4b01b494ee41e73c0a14f3de48427
 
   # qrcode dependencies
   - name: python3-pypng
