@@ -32,7 +32,7 @@ import sys
 from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
+from datetime import UTC
 from urllib.parse import unquote
 
 from gi.repository import Gio
@@ -832,7 +832,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
             contact.settings.set("mute_until", None)
             return
 
-        until = datetime.now(timezone.utc) + timedelta(minutes=params.state)
+        until = datetime.now(UTC) + timedelta(minutes=params.state)
         contact.settings.set("mute_until", until.isoformat())
 
     @staticmethod

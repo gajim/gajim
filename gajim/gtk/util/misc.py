@@ -287,7 +287,7 @@ def convert_py_to_glib_datetime(dt: datetime.datetime | datetime.date) -> GLib.D
             hour=0,
             minute=0,
             second=0,
-            tzinfo=datetime.timezone.utc,
+            tzinfo=datetime.UTC,
         )
 
     g_dt = GLib.DateTime.new_from_iso8601(dt.isoformat())

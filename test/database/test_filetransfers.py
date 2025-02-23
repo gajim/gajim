@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -43,7 +43,7 @@ class ForeignKeyTest(unittest.TestCase):
         app.settings.set_account_setting("testacc1", "address", "user@domain.org")
 
     def test_filetransfer_join(self) -> None:
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         source1 = UrlData(
             type="urldata",

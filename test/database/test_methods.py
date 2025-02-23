@@ -8,7 +8,6 @@ import datetime as dt
 import unittest
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
 
 import sqlalchemy.exc
 from nbxmpp.protocol import JID
@@ -64,7 +63,7 @@ class MethodsTest(unittest.TestCase):
 
             timestamp_ = timestamp
             if timestamp_ is None:
-                timestamp_ = datetime.now(timezone.utc)
+                timestamp_ = datetime.now(dt.UTC)
 
             message_id_ = message_id
             if message_id_ is None:
@@ -138,14 +137,14 @@ class MethodsTest(unittest.TestCase):
         self._insert_messages("testacc1", remote_jid=remote_jid, count=10)
 
         messages = self._archive.get_conversation_before_after(
-            "testacc1", remote_jid, True, datetime.now(timezone.utc), 10
+            "testacc1", remote_jid, True, datetime.now(dt.UTC), 10
         )
 
         self.assertEqual(messages[0].id, "messageid9")
         self.assertEqual(messages[1].id, "messageid8")
 
         messages = self._archive.get_conversation_before_after(
-            "testacc1", remote_jid, False, datetime.fromtimestamp(0, timezone.utc), 10
+            "testacc1", remote_jid, False, datetime.fromtimestamp(0, dt.UTC), 10
         )
 
         self.assertEqual(messages[0].id, "messageid0")
@@ -156,7 +155,7 @@ class MethodsTest(unittest.TestCase):
         self._insert_messages(
             "testacc1",
             remote_jid=remote_jid,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(dt.UTC),
             count=10,
         )
 
@@ -180,14 +179,14 @@ class MethodsTest(unittest.TestCase):
         # messages = list(iterator)
 
     def test_get_days_containing_messages(self) -> None:
-        localtime = datetime(2023, 12, 31, 23, 59, 59, tzinfo=timezone.utc).astimezone()
+        localtime = datetime(2023, 12, 31, 23, 59, 59, tzinfo=dt.UTC).astimezone()
         offset = localtime.utcoffset()
         assert offset is not None
         offset_s = offset.total_seconds()
 
         remote_jid = JID.from_string("remote1@jid.org")
 
-        timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=timezone.utc)
+        timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=dt.UTC)
         for day in range(1, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
@@ -211,7 +210,7 @@ class MethodsTest(unittest.TestCase):
     def test_get_last_message_ts(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
 
-        timestamp = datetime(2024, 1, 1, tzinfo=timezone.utc)
+        timestamp = datetime(2024, 1, 1, tzinfo=dt.UTC)
         for day in range(2, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
@@ -224,12 +223,12 @@ class MethodsTest(unittest.TestCase):
 
         timestamp = self._archive.get_last_message_ts("testacc1", remote_jid)
 
-        self.assertEqual(timestamp, datetime(2024, 1, 4, tzinfo=timezone.utc))
+        self.assertEqual(timestamp, datetime(2024, 1, 4, tzinfo=dt.UTC))
 
     def test_get_first_message_ts(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
 
-        timestamp = datetime(2024, 1, 1, tzinfo=timezone.utc)
+        timestamp = datetime(2024, 1, 1, tzinfo=dt.UTC)
         for day in range(2, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
@@ -242,17 +241,17 @@ class MethodsTest(unittest.TestCase):
 
         timestamp = self._archive.get_first_message_ts("testacc1", remote_jid)
 
-        self.assertEqual(timestamp, datetime(2024, 1, 2, tzinfo=timezone.utc))
+        self.assertEqual(timestamp, datetime(2024, 1, 2, tzinfo=dt.UTC))
 
     def test_get_first_message_meta_for_date(self) -> None:
-        localtime = datetime(2023, 12, 31, 23, 59, 59, tzinfo=timezone.utc).astimezone()
+        localtime = datetime(2023, 12, 31, 23, 59, 59, tzinfo=dt.UTC).astimezone()
         offset = localtime.utcoffset()
         assert offset is not None
         offset_s = offset.total_seconds()
 
         remote_jid = JID.from_string("remote1@jid.org")
 
-        timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=timezone.utc)
+        timestamp = datetime(2023, 12, 30, 23, 59, 59, 0, tzinfo=dt.UTC)
         for day in range(1, 5):
             timestamp += timedelta(days=1)
             self._insert_messages(
@@ -272,12 +271,12 @@ class MethodsTest(unittest.TestCase):
         if offset_s > 0:
             self.assertEqual(pk, 1)
             self.assertEqual(
-                timestamp, datetime(2023, 12, 31, 23, 59, 59, 0, tzinfo=timezone.utc)
+                timestamp, datetime(2023, 12, 31, 23, 59, 59, 0, tzinfo=dt.UTC)
             )
         else:
             self.assertEqual(pk, 2)
             self.assertEqual(
-                timestamp, datetime(2024, 1, 1, 23, 59, 59, 0, tzinfo=timezone.utc)
+                timestamp, datetime(2024, 1, 1, 23, 59, 59, 0, tzinfo=dt.UTC)
             )
 
         metadata = self._archive.get_first_message_meta_for_date(
@@ -288,7 +287,7 @@ class MethodsTest(unittest.TestCase):
     def test_get_recent_muc_nicks(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")
 
-        timestamp = datetime.now(timezone.utc) - timedelta(days=91)
+        timestamp = datetime.now(dt.UTC) - timedelta(days=91)
 
         self._insert_messages(
             "testacc1",
@@ -311,9 +310,9 @@ class MethodsTest(unittest.TestCase):
             account_="testacc1",
             remote_jid_=remote_jid,
             from_stanza_id="stanzaid1",
-            from_stanza_ts=datetime.now(timezone.utc),
+            from_stanza_ts=datetime.now(dt.UTC),
             to_stanza_id="stanzaid2",
-            to_stanza_ts=datetime.now(timezone.utc),
+            to_stanza_ts=datetime.now(dt.UTC),
         )
         self._archive.upsert_row(state)
 

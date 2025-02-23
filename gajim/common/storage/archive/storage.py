@@ -17,7 +17,6 @@ from collections.abc import Iterator
 from collections.abc import Sequence
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
 from pathlib import Path
 
 import sqlalchemy as sa
@@ -649,7 +648,7 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        min_time = datetime.now(timezone.utc) - timedelta(
+        min_time = datetime.now(dt.UTC) - timedelta(
             seconds=MAX_MESSAGE_CORRECTION_DELAY
         )
 
@@ -780,7 +779,7 @@ class MessageArchiveStorage(AlchemyStorage):
         # TODO: Does not search in corrections
 
         if before is None:
-            before = datetime.now(timezone.utc)
+            before = datetime.now(dt.UTC)
 
         if after is None:
             after = FIRST_UTC_DATETIME
@@ -848,8 +847,8 @@ class MessageArchiveStorage(AlchemyStorage):
         _, days = calendar.monthrange(year, month)
         local_end = datetime.combine(datetime(year, month, days), dt.time.max)
 
-        start = local_start.astimezone(timezone.utc)
-        end = local_end.astimezone(timezone.utc)
+        start = local_start.astimezone(dt.UTC)
+        end = local_end.astimezone(dt.UTC)
 
         stmt = (
             select(
@@ -931,8 +930,8 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        start = datetime.combine(date, dt.time.min).astimezone(timezone.utc)
-        end = datetime.combine(date, dt.time.max).astimezone(timezone.utc)
+        start = datetime.combine(date, dt.time.min).astimezone(dt.UTC)
+        end = datetime.combine(date, dt.time.max).astimezone(dt.UTC)
 
         stmt = (
             select(Message.pk, Message.timestamp)
@@ -960,7 +959,7 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
-        recent = datetime.now(timezone.utc) - timedelta(days=30)
+        recent = datetime.now(dt.UTC) - timedelta(days=30)
 
         stmt = (
             select(Message.resource)
@@ -1103,7 +1102,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
             fk_account_pk = self._get_account_pk(session, account)
 
-            now = datetime.now(timezone.utc)
+            now = datetime.now(dt.UTC)
             threshold = now - timedelta(seconds=max_age)
 
             stmt = select(Message).where(

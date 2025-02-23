@@ -82,7 +82,7 @@ class EventStorage(AlchemyStorage):
         timestamp_: float,
         n_lines: int,
     ) -> list[events.ApplicationEvent]:
-        timestamp = dt.datetime.fromtimestamp(timestamp_, dt.timezone.utc)
+        timestamp = dt.datetime.fromtimestamp(timestamp_, dt.UTC)
 
         stmt = sa.select(mod.Event).where(
             mod.Event.account == contact.account, mod.Event.jid == contact.jid

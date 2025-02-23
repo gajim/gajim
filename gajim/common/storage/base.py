@@ -20,7 +20,7 @@ import sys
 import time
 from collections.abc import Callable
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 from pathlib import Path
 
 import nbxmpp.const
@@ -481,7 +481,7 @@ class EpochTimestampType(sa.types.TypeDecorator[Any]):
         if value is None or isinstance(value, ValueMissingT):
             return None
 
-        if value.tzinfo != timezone.utc:
+        if value.tzinfo != UTC:
             raise ValueError('DateTime must be UTC')
         return value.timestamp()
 
@@ -490,7 +490,7 @@ class EpochTimestampType(sa.types.TypeDecorator[Any]):
     ) -> datetime | None:
         if value is None:
             return None
-        return datetime.fromtimestamp(value, timezone.utc)
+        return datetime.fromtimestamp(value, UTC)
 
 
 class JSONType(sa.types.TypeDecorator[Any]):

@@ -459,9 +459,7 @@ class ChatControl(EventHelper):
     ) -> None:
 
         pk, timestamp = param.unpack()
-        self.scroll_to_message(
-            pk, dt.datetime.fromtimestamp(timestamp, dt.timezone.utc)
-        )
+        self.scroll_to_message(pk, dt.datetime.fromtimestamp(timestamp, dt.UTC))
 
     def _on_jump_to_end(self, _button: Gtk.Button) -> None:
         self.reset_view()
@@ -527,9 +525,9 @@ class ChatControl(EventHelper):
             row = self._scrolled_view.get_last_row()
 
         if row is None:
-            timestamp = dt.datetime.now(dt.timezone.utc)
+            timestamp = dt.datetime.now(dt.UTC)
         else:
-            timestamp = dt.datetime.fromtimestamp(row.db_timestamp, dt.timezone.utc)
+            timestamp = dt.datetime.fromtimestamp(row.db_timestamp, dt.UTC)
 
         return app.storage.archive.get_conversation_before_after(
             self.contact.account,

@@ -11,7 +11,7 @@ from typing import Any
 from collections.abc import Generator
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
+from datetime import UTC
 
 import nbxmpp
 from nbxmpp.errors import is_error
@@ -172,7 +172,7 @@ class MAM(BaseModule):
             return
 
         if timestamp is not None:
-            timestamp = datetime.fromtimestamp(timestamp, timezone.utc)
+            timestamp = datetime.fromtimestamp(timestamp, UTC)
 
         app.storage.archive.upsert_row(
             mod.MAMArchiveState(
@@ -248,7 +248,7 @@ class MAM(BaseModule):
 
         else:
             # First Start, we request the last week
-            start_date = datetime.now(timezone.utc) - timedelta(days=7)
+            start_date = datetime.now(UTC) - timedelta(days=7)
             self._log.info('Request archive: %s, after date %s',
                            own_jid, start_date)
         return mam_id, start_date
@@ -261,7 +261,7 @@ class MAM(BaseModule):
         archive = app.storage.archive.get_mam_archive_state(self._account, jid)
         mam_id = None
         start_date = None
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         if archive is None or archive.to_stanza_id is None:
             # First join
@@ -337,7 +337,7 @@ class MAM(BaseModule):
                     account_=self._account,
                     remote_jid_=result.jid,
                     to_stanza_id=result.rsm.last,
-                    to_stanza_ts=datetime.now(timezone.utc),
+                    to_stanza_ts=datetime.now(UTC),
                 )
             )
 
@@ -398,7 +398,7 @@ class MAM(BaseModule):
                     account_=self._account,
                     remote_jid_=result.jid,
                     to_stanza_id=result.rsm.last,
-                    to_stanza_ts=datetime.now(timezone.utc)
+                    to_stanza_ts=datetime.now(UTC)
                 )
             )
 

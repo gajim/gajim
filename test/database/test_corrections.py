@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 
@@ -48,7 +48,7 @@ class CorrectionsTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             id=occupant_id,
             nickname="peter",
-            updated_at=datetime.fromtimestamp(50, timezone.utc),
+            updated_at=datetime.fromtimestamp(50, UTC),
         )
 
     def _create_base_message(self) -> Message:
@@ -58,7 +58,7 @@ class CorrectionsTest(unittest.TestCase):
             type=MessageType.GROUPCHAT,
             direction=ChatDirection.INCOMING,
             state=MessageState.ACKNOWLEDGED,
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
             resource="res1",
             text="Some Message",
             id="messageid1",
@@ -80,7 +80,7 @@ class CorrectionsTest(unittest.TestCase):
         m = self._create_base_message()
         m.text = "second correction"
         m.id = "messageid3"
-        m.timestamp = datetime.fromtimestamp(2, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(2, UTC)
         m.correction_id = "messageid1"
         assert m.oob
         m.oob[0].description = "second corrected desc"
@@ -94,7 +94,7 @@ class CorrectionsTest(unittest.TestCase):
         m.text = "first correction"
         m.resource = "otherres"
         m.id = "messageid2"
-        m.timestamp = datetime.fromtimestamp(1, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(1, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -105,7 +105,7 @@ class CorrectionsTest(unittest.TestCase):
         m.occupant_ = self._create_base_occupant("occupantid2")
         m.text = "third correction"
         m.id = "messageid4"
-        m.timestamp = datetime.fromtimestamp(3, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(3, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -116,7 +116,7 @@ class CorrectionsTest(unittest.TestCase):
         m.occupant_ = None
         m.text = "third correction"
         m.id = "messageid5"
-        m.timestamp = datetime.fromtimestamp(4, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(4, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -145,7 +145,7 @@ class CorrectionsTest(unittest.TestCase):
         m.occupant_ = None
         m.text = "first correction"
         m.id = "messageid2"
-        m.timestamp = datetime.fromtimestamp(1, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(1, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -157,7 +157,7 @@ class CorrectionsTest(unittest.TestCase):
         m.resource = "unrelatedres"
         m.text = "second correction"
         m.id = "messageid3"
-        m.timestamp = datetime.fromtimestamp(2, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(2, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -182,7 +182,7 @@ class CorrectionsTest(unittest.TestCase):
         m.type = MessageType.CHAT
         m.text = "first correction"
         m.id = "messageid2"
-        m.timestamp = datetime.fromtimestamp(1, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(1, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -195,7 +195,7 @@ class CorrectionsTest(unittest.TestCase):
         m.text = "second correction"
         m.resource = "otherres"
         m.id = "messageid3"
-        m.timestamp = datetime.fromtimestamp(2, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(2, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -207,7 +207,7 @@ class CorrectionsTest(unittest.TestCase):
         m.remote_jid_ = JID.from_string("other@remote.jid")
         m.text = "third correction"
         m.id = "messageid4"
-        m.timestamp = datetime.fromtimestamp(3, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(3, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -219,7 +219,7 @@ class CorrectionsTest(unittest.TestCase):
         m.account_ = "testacc2"
         m.text = "fourth correction"
         m.id = "messageid5"
-        m.timestamp = datetime.fromtimestamp(4, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(4, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)
@@ -231,7 +231,7 @@ class CorrectionsTest(unittest.TestCase):
         m.direction = ChatDirection.OUTGOING
         m.text = "fifth correction"
         m.id = "messageid6"
-        m.timestamp = datetime.fromtimestamp(5, timezone.utc)
+        m.timestamp = datetime.fromtimestamp(5, UTC)
         m.correction_id = "messageid1"
 
         self._archive.insert_object(m)

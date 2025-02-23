@@ -573,7 +573,7 @@ class SearchFilters(Gtk.Expander, SignalManager):
 
     def _on_date_selected(self, calendar: Gtk.Calendar) -> None:
         g_datetime = calendar.get_date()
-        datetime = dt.datetime(*g_datetime.get_ymd(), tzinfo=dt.timezone.utc)
+        datetime = dt.datetime(*g_datetime.get_ymd(), tzinfo=dt.UTC)
         date_format = app.settings.get("date_format")
 
         if self._ui.filter_before_button.get_active():

@@ -11,7 +11,7 @@ import logging
 import uuid
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
+from datetime import UTC
 
 import sqlalchemy as sa
 from nbxmpp.protocol import JID
@@ -314,12 +314,12 @@ class Migration:
             to_stanza_ts = None
 
         if to_stanza_ts is not None:
-            to_stanza_ts = datetime.fromtimestamp(float(to_stanza_ts), tz=timezone.utc)
+            to_stanza_ts = datetime.fromtimestamp(float(to_stanza_ts), tz=UTC)
 
         from_stanza_ts = None
         if archive_row.oldest_mam_timestamp is not None:
             from_stanza_ts = datetime.fromtimestamp(
-                float(archive_row.oldest_mam_timestamp), tz=timezone.utc
+                float(archive_row.oldest_mam_timestamp), tz=UTC
             )
 
         if (from_stanza_ts, to_stanza_id, to_stanza_ts) == (None, None, None):
@@ -394,9 +394,9 @@ class Migration:
         user_timestamp = additional_data.get('user_timestamp')
         user_delay_ts = None
         if user_timestamp is not None:
-            user_delay_ts = datetime.fromtimestamp(user_timestamp, timezone.utc)
+            user_delay_ts = datetime.fromtimestamp(user_timestamp, UTC)
 
-        timestamp = datetime.fromtimestamp(log_row.time, timezone.utc)
+        timestamp = datetime.fromtimestamp(log_row.time, UTC)
 
         encryption_pk = self._insert_encryption_data(conn, additional_data)
 

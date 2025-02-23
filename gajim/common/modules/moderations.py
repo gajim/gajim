@@ -171,7 +171,7 @@ class Moderations(BaseModule):
             message_occupant_id = properties.occupant_id
 
         timestamp = dt.datetime.fromtimestamp(
-            properties.mam.timestamp, dt.timezone.utc)
+            properties.mam.timestamp, dt.UTC)
 
         occupant_data = None
         if message_occupant_id is not None:

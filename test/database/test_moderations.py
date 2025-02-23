@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -48,7 +48,7 @@ class ModerationTest(unittest.TestCase):
             stanza_id=uuid,
             by=JID.from_string("some@domain.com"),
             reason="some reason",
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
         )
 
         pk = self._archive.insert_row(mod_data, ignore_on_conflict=True)
@@ -61,7 +61,7 @@ class ModerationTest(unittest.TestCase):
         self.assertEqual(moderation.by, "some@domain.com")
         self.assertIsInstance(moderation.by, JID)
         self.assertEqual(moderation.reason, "some reason")
-        self.assertEqual(moderation.timestamp, datetime.fromtimestamp(0, timezone.utc))
+        self.assertEqual(moderation.timestamp, datetime.fromtimestamp(0, UTC))
         self.assertEqual(moderation.stanza_id, uuid)
         self.assertEqual(moderation.occupant, None)
 
@@ -72,7 +72,7 @@ class ModerationTest(unittest.TestCase):
             stanza_id=uuid,
             by=JID.from_string("someother@domain.com"),
             reason="some other reason",
-            timestamp=datetime.fromtimestamp(1, timezone.utc),
+            timestamp=datetime.fromtimestamp(1, UTC),
         )
 
         pk = self._archive.insert_row(mod_data, ignore_on_conflict=True)
@@ -86,7 +86,7 @@ class ModerationTest(unittest.TestCase):
             resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             id="1",
             stanza_id=uuid,
@@ -102,7 +102,7 @@ class ModerationTest(unittest.TestCase):
             stanza_id=uuid,
             by=JID.from_string("some@domain.com"),
             reason="some reason",
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
         )
 
         self._archive.insert_row(mod_data, ignore_on_conflict=True)
@@ -114,9 +114,7 @@ class ModerationTest(unittest.TestCase):
         self.assertEqual(message.moderation.by, "some@domain.com")
         self.assertIsInstance(message.moderation.by, JID)
         self.assertEqual(message.moderation.reason, "some reason")
-        self.assertEqual(
-            message.moderation.timestamp, datetime.fromtimestamp(0, timezone.utc)
-        )
+        self.assertEqual(message.moderation.timestamp, datetime.fromtimestamp(0, UTC))
         self.assertEqual(message.moderation.stanza_id, uuid)
         self.assertEqual(message.moderation.occupant, None)
 

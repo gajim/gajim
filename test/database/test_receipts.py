@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy.exc import IntegrityError
@@ -43,14 +43,14 @@ class ReceiptTest(unittest.TestCase):
             account_=self._account,
             remote_jid_=self._remote_jid,
             id="messageid1",
-            timestamp=datetime.fromtimestamp(1, timezone.utc),
+            timestamp=datetime.fromtimestamp(1, UTC),
         )
 
         receipt_data2 = Receipt(
             account_=self._account,
             remote_jid_=self._remote_jid,
             id="messageid1",
-            timestamp=datetime.fromtimestamp(3, timezone.utc),
+            timestamp=datetime.fromtimestamp(3, UTC),
         )
 
         self._archive.insert_object(receipt_data1)
@@ -63,7 +63,7 @@ class ReceiptTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.CHAT,
             direction=ChatDirection.OUTGOING,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some Message",
@@ -81,9 +81,7 @@ class ReceiptTest(unittest.TestCase):
 
         self.assertIsNotNone(message.receipt)
 
-        self.assertEqual(
-            message.receipt.timestamp, datetime.fromtimestamp(1, timezone.utc)
-        )
+        self.assertEqual(message.receipt.timestamp, datetime.fromtimestamp(1, UTC))
 
 
 if __name__ == "__main__":

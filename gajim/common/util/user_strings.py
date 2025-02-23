@@ -19,7 +19,7 @@ from gajim.common.i18n import p_
 
 
 def format_idle_time(idle_time: dt.datetime) -> str:
-    now = dt.datetime.now(dt.timezone.utc)
+    now = dt.datetime.now(dt.UTC)
 
     now_date = now.date()
     idle_date = idle_time.date()

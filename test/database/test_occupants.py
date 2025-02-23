@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -44,7 +44,7 @@ class OccupantTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             id="someid",
             nickname="peter",
-            updated_at=datetime.fromtimestamp(50, timezone.utc),
+            updated_at=datetime.fromtimestamp(50, UTC),
         )
 
         pk = self._archive.upsert_row(occupant_data)
@@ -57,7 +57,7 @@ class OccupantTest(unittest.TestCase):
         self.assertEqual(occupant.real_remote, None)
         self.assertEqual(occupant.nickname, "peter")
         self.assertEqual(occupant.avatar_sha, None)
-        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(50, timezone.utc))
+        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(50, UTC))
 
         occupant_data = Occupant(
             account_=self._account,
@@ -66,7 +66,7 @@ class OccupantTest(unittest.TestCase):
             real_remote_jid_=JID.from_string("real@remote.jid"),
             nickname="peter",
             avatar_sha="sha1",
-            updated_at=datetime.fromtimestamp(100, timezone.utc),
+            updated_at=datetime.fromtimestamp(100, UTC),
         )
 
         pk = self._archive.upsert_row(occupant_data)
@@ -81,7 +81,7 @@ class OccupantTest(unittest.TestCase):
         self.assertIsInstance(occupant.real_remote.jid, JID)
         self.assertEqual(occupant.nickname, "peter")
         self.assertEqual(occupant.avatar_sha, "sha1")
-        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, timezone.utc))
+        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, UTC))
 
         # Update with old data should be ignored
 
@@ -92,7 +92,7 @@ class OccupantTest(unittest.TestCase):
             real_remote_jid_=JID.from_string("real2@remote.jid"),
             nickname="peter2",
             avatar_sha="sha2",
-            updated_at=datetime.fromtimestamp(50, timezone.utc),
+            updated_at=datetime.fromtimestamp(50, UTC),
         )
 
         pk = self._archive.upsert_row(occupant_data)
@@ -108,7 +108,7 @@ class OccupantTest(unittest.TestCase):
         self.assertIsInstance(occupant.real_remote.jid, JID)
         self.assertEqual(occupant.nickname, "peter")
         self.assertEqual(occupant.avatar_sha, "sha1")
-        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, timezone.utc))
+        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(100, UTC))
 
         # Update with new data
         # Remote JID should not be overwritten
@@ -120,7 +120,7 @@ class OccupantTest(unittest.TestCase):
             real_remote_jid_=JID.from_string("real2@remote.jid"),
             nickname="peter2",
             avatar_sha="sha2",
-            updated_at=datetime.fromtimestamp(200, timezone.utc),
+            updated_at=datetime.fromtimestamp(200, UTC),
         )
 
         pk = self._archive.upsert_row(occupant_data)
@@ -136,7 +136,7 @@ class OccupantTest(unittest.TestCase):
         self.assertIsInstance(occupant.real_remote.jid, JID)
         self.assertEqual(occupant.nickname, "peter2")
         self.assertEqual(occupant.avatar_sha, "sha2")
-        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(200, timezone.utc))
+        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(200, UTC))
 
         # Set avatar_sha None
         # Passing None to for nickname should be ignored
@@ -147,7 +147,7 @@ class OccupantTest(unittest.TestCase):
             id="someid",
             nickname=None,
             avatar_sha=None,
-            updated_at=datetime.fromtimestamp(300, timezone.utc),
+            updated_at=datetime.fromtimestamp(300, UTC),
         )
 
         pk = self._archive.upsert_row(occupant_data)
@@ -163,7 +163,7 @@ class OccupantTest(unittest.TestCase):
         self.assertIsInstance(occupant.real_remote.jid, JID)
         self.assertEqual(occupant.nickname, "peter2")
         self.assertEqual(occupant.avatar_sha, None)
-        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(300, timezone.utc))
+        self.assertEqual(occupant.updated_at, datetime.fromtimestamp(300, UTC))
 
     def test_occupant_join(self) -> None:
         occupant_data = Occupant(
@@ -173,7 +173,7 @@ class OccupantTest(unittest.TestCase):
             real_remote_jid_=JID.from_string("real@remote.jid"),
             nickname="peter3",
             avatar_sha="sha1",
-            updated_at=datetime.fromtimestamp(300, timezone.utc),
+            updated_at=datetime.fromtimestamp(300, UTC),
         )
 
         message_data = Message(
@@ -182,7 +182,7 @@ class OccupantTest(unittest.TestCase):
             resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             id="1",
             text="message",

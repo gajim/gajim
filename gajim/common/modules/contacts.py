@@ -11,7 +11,7 @@ from typing import overload
 import operator
 from collections.abc import Iterator
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from gi.repository import Gdk
 from gi.repository import GLib
@@ -345,7 +345,7 @@ class CommonContact(Observable, ClientModules):
             return False
 
         until = datetime.fromisoformat(mute_until)
-        is_muted = until > datetime.now(timezone.utc)
+        is_muted = until > datetime.now(UTC)
         if not is_muted:
             # Reset the setting to default
             GLib.idle_add(self.settings.set, 'mute_until', None)

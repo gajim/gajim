@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -42,7 +42,7 @@ class SecurityLabelsTest(unittest.TestCase):
         sec_data = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            updated_at=datetime.fromtimestamp(0, timezone.utc),
+            updated_at=datetime.fromtimestamp(0, UTC),
             label_hash="label1hash",
             displaymarking="SECRET",
             fgcolor="black",
@@ -54,7 +54,7 @@ class SecurityLabelsTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some Message",
@@ -78,7 +78,7 @@ class SecurityLabelsTest(unittest.TestCase):
         sec_data1 = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            updated_at=datetime.fromtimestamp(0, timezone.utc),
+            updated_at=datetime.fromtimestamp(0, UTC),
             label_hash="label1hash",
             displaymarking="SECRET",
             fgcolor="black",
@@ -88,7 +88,7 @@ class SecurityLabelsTest(unittest.TestCase):
         sec_data2 = SecurityLabel(
             account_=self._account,
             remote_jid_=self._remote_jid,
-            updated_at=datetime.fromtimestamp(1, timezone.utc),
+            updated_at=datetime.fromtimestamp(1, UTC),
             label_hash="label1hash",
             displaymarking="NOT SECRET",
             fgcolor="white",
@@ -109,7 +109,7 @@ class SecurityLabelsTest(unittest.TestCase):
         self.assertEqual(res.displaymarking, "NOT SECRET")
         self.assertEqual(res.fgcolor, "white")
         self.assertEqual(res.bgcolor, "blue")
-        self.assertEqual(res.updated_at, datetime.fromtimestamp(1, timezone.utc))
+        self.assertEqual(res.updated_at, datetime.fromtimestamp(1, UTC))
 
 
 if __name__ == "__main__":

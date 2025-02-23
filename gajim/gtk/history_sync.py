@@ -11,7 +11,7 @@ from typing import overload
 import logging
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
+from datetime import UTC
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -46,7 +46,7 @@ class HistorySyncAssistant(Assistant, EventHelper):
         self._client = app.get_client(account)
 
         self._timedelta: timedelta | None = None
-        self._now = datetime.now(timezone.utc)
+        self._now = datetime.now(UTC)
         self._query_id: str | None = None
         self._start: datetime = ArchiveState.ALL
         self._end: datetime | None = None

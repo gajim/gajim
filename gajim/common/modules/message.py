@@ -136,7 +136,7 @@ class Message(BaseModule):
         user_delay_ts = None
         if properties.user_timestamp is not None:
             user_delay_ts = dt.datetime.fromtimestamp(
-                properties.user_timestamp, tz=dt.timezone.utc)
+                properties.user_timestamp, tz=dt.UTC)
 
         message_id = properties.id
         if message_id is None:

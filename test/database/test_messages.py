@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 
@@ -48,7 +48,7 @@ class MessagesTest(unittest.TestCase):
             resource="someres1",
             type=MessageType.CHAT,
             direction=direction,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             id=message_id,
             stanza_id=stanza_id,

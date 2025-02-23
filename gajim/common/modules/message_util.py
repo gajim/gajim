@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
@@ -130,7 +130,7 @@ def get_message_timestamp(
     timestamp = properties.timestamp
     if properties.mam is not None:
         timestamp = properties.mam.timestamp
-    return datetime.fromtimestamp(timestamp, tz=timezone.utc)
+    return datetime.fromtimestamp(timestamp, tz=UTC)
 
 
 def convert_message_type(type_: MessageType) -> str:

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy.exc import IntegrityError
@@ -45,7 +45,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=None,
             id="messageid1",
-            timestamp=datetime.fromtimestamp(1, timezone.utc),
+            timestamp=datetime.fromtimestamp(1, UTC),
         )
 
         marker_data2 = DisplayedMarker(
@@ -53,7 +53,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=None,
             id="messageid1",
-            timestamp=datetime.fromtimestamp(3, timezone.utc),
+            timestamp=datetime.fromtimestamp(3, UTC),
         )
 
         self._archive.insert_object(marker_data1)
@@ -66,7 +66,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.CHAT,
             direction=ChatDirection.OUTGOING,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some Message",
@@ -84,9 +84,7 @@ class DisplayedMarkersTest(unittest.TestCase):
 
         self.assertTrue(len(message.markers), 1)
 
-        self.assertEqual(
-            message.markers[0].timestamp, datetime.fromtimestamp(1, timezone.utc)
-        )
+        self.assertEqual(message.markers[0].timestamp, datetime.fromtimestamp(1, UTC))
 
     def test_markers_join_groupchat(self):
         # Entries are stored per occupant
@@ -96,7 +94,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             id="occupantid1",
             nickname="nickname1",
-            updated_at=datetime.fromtimestamp(0, timezone.utc),
+            updated_at=datetime.fromtimestamp(0, UTC),
         )
 
         occupant_data2 = Occupant(
@@ -104,7 +102,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             id="occupantid2",
             nickname="nickname1",
-            updated_at=datetime.fromtimestamp(0, timezone.utc),
+            updated_at=datetime.fromtimestamp(0, UTC),
         )
 
         uuid = get_uuid()
@@ -114,7 +112,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=occupant_data1,
             id=uuid,
-            timestamp=datetime.fromtimestamp(1, timezone.utc),
+            timestamp=datetime.fromtimestamp(1, UTC),
         )
 
         marker_data2 = DisplayedMarker(
@@ -122,7 +120,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=occupant_data2,
             id=uuid,
-            timestamp=datetime.fromtimestamp(2, timezone.utc),
+            timestamp=datetime.fromtimestamp(2, UTC),
         )
 
         marker_data3 = DisplayedMarker(
@@ -130,7 +128,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             occupant_=occupant_data1,
             id=uuid,
-            timestamp=datetime.fromtimestamp(4, timezone.utc),
+            timestamp=datetime.fromtimestamp(4, UTC),
         )
 
         pk1 = self._archive.insert_object(marker_data1, ignore_on_conflict=False)
@@ -146,7 +144,7 @@ class DisplayedMarkersTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.GROUPCHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some Message",
@@ -169,9 +167,9 @@ class DisplayedMarkersTest(unittest.TestCase):
         assert marker2.occupant is not None
 
         self.assertEqual(marker1.occupant.id, "occupantid1")
-        self.assertEqual(marker1.timestamp, datetime.fromtimestamp(1, timezone.utc))
+        self.assertEqual(marker1.timestamp, datetime.fromtimestamp(1, UTC))
         self.assertEqual(marker2.occupant.id, "occupantid2")
-        self.assertEqual(marker2.timestamp, datetime.fromtimestamp(2, timezone.utc))
+        self.assertEqual(marker2.timestamp, datetime.fromtimestamp(2, UTC))
 
 
 if __name__ == "__main__":

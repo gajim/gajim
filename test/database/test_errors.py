@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -88,7 +88,7 @@ class ErrorTest(unittest.TestCase):
             resource="someres1",
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.now(timezone.utc),
+            timestamp=datetime.now(UTC),
             state=MessageState.ACKNOWLEDGED,
             id="1",
             stanza_id=get_uuid(),

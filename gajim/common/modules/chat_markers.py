@@ -106,7 +106,7 @@ class ChatMarkers(BaseModule):
                 timestamp = properties.timestamp
 
             timestamp = dt.datetime.fromtimestamp(
-                timestamp, dt.timezone.utc)
+                timestamp, dt.UTC)
 
             marker_data = mod.DisplayedMarker(
                 account_=self._account,

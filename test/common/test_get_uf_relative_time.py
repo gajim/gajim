@@ -5,14 +5,14 @@
 import unittest
 from datetime import datetime
 from datetime import timedelta
-from datetime import timezone
+from datetime import UTC
 
 from gajim.common import app
 from gajim.common.i18n import _
 from gajim.common.i18n import ngettext
 from gajim.common.util.user_strings import get_uf_relative_time
 
-local_timezone = datetime.now(timezone.utc).astimezone().tzinfo
+local_timezone = datetime.now(UTC).astimezone().tzinfo
 
 
 class GetRelativeTimeTest(unittest.TestCase):

@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import unittest
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from nbxmpp.protocol import JID
 from sqlalchemy import select
@@ -48,7 +48,7 @@ class EncryptionTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.fromtimestamp(0, timezone.utc),
+            timestamp=datetime.fromtimestamp(0, UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some Message",
@@ -62,7 +62,7 @@ class EncryptionTest(unittest.TestCase):
             remote_jid_=self._remote_jid,
             type=MessageType.CHAT,
             direction=ChatDirection.INCOMING,
-            timestamp=datetime.fromtimestamp(1, timezone.utc),
+            timestamp=datetime.fromtimestamp(1, UTC),
             state=MessageState.ACKNOWLEDGED,
             resource="res",
             text="Some other Message",

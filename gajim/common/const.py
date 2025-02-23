@@ -8,7 +8,7 @@ from typing import NamedTuple
 
 from dataclasses import dataclass
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 from enum import Enum
 from enum import IntEnum
 from enum import unique
@@ -76,7 +76,7 @@ class AvatarSize(IntEnum):
 
 class ArchiveState:
     NEVER = None
-    ALL = datetime(1970, 1, 1, tzinfo=timezone.utc)
+    ALL = datetime(1970, 1, 1, tzinfo=UTC)
 
 
 @unique

@@ -86,7 +86,7 @@ class Receipts(BaseModule):
                 timestamp = properties.timestamp
 
             timestamp = dt.datetime.fromtimestamp(
-                timestamp, dt.timezone.utc)
+                timestamp, dt.UTC)
 
             assert properties.remote_jid is not None
             receipt_data = mod.Receipt(

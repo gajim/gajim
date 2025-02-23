@@ -11,7 +11,7 @@ from typing import Any
 
 import logging
 from datetime import datetime
-from datetime import timezone
+from datetime import UTC
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -123,5 +123,5 @@ class LocationListener:
 
     @staticmethod
     def _timestamp_to_string(timestamp: float) -> str:
-        utc_datetime = datetime.fromtimestamp(timestamp, timezone.utc)
+        utc_datetime = datetime.fromtimestamp(timestamp, UTC)
         return utc_datetime.strftime('%Y-%m-%dT%H:%MZ')
