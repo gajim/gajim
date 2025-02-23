@@ -630,8 +630,8 @@ class SearchFilters(Gtk.Expander, SignalManager):
 
     def set_context(self, account: str | None, jid: JID | None) -> None:
         if account is None or jid is None:
-            self._ui.filter_from_desc_label.hide()
-            self._ui.filter_from_entry.hide()
+            self._ui.filter_from_desc_label.set_visible(False)
+            self._ui.filter_from_entry.set_visible(False)
             return
 
         client = app.get_client(account)

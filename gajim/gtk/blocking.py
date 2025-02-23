@@ -130,11 +130,11 @@ class BlockingList(GajimAppWindow):
         )
 
     def _activate_spinner(self) -> None:
-        self._spinner.show()
+        self._spinner.set_visible(True)
         self._spinner.start()
 
     def _disable_spinner(self) -> None:
-        self._spinner.hide()
+        self._spinner.set_visible(False)
         self._spinner.stop()
 
     def _cleanup(self) -> None:

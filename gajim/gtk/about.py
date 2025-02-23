@@ -70,7 +70,7 @@ class AboutDialog(Gtk.AboutDialog, SignalManager):
 
         self._connect(self, "activate-link", self._on_activate_link)
         self._connect(self, "close-request", self._on_close_request)
-        self.show()
+        self.set_visible(True)
 
     def _on_close_request(self, window: AboutDialog) -> None:
         self._disconnect_all()

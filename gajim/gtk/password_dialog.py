@@ -52,14 +52,14 @@ class PasswordDialog(GajimAppWindow):
             _("Please enter your password for\n%(jid)s\n(Account: %(account)s)")
             % {"jid": own_jid, "account": account_label}
         )
-        self._ui.save_pass_checkbutton.show()
+        self._ui.save_pass_checkbutton.set_visible(True)
 
         is_keyring_available = passwords.is_keyring_available()
         self._ui.save_pass_checkbutton.set_sensitive(
             not app.settings.get("use_keyring") or is_keyring_available
         )
         if not is_keyring_available:
-            self._ui.keyring_hint.show()
+            self._ui.keyring_hint.set_visible(True)
 
     def _on_ok(self, _button: Gtk.Button) -> None:
         password = self._ui.pass_entry.get_text()

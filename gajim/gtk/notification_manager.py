@@ -57,7 +57,6 @@ class NotificationManager(Gtk.ListBox, SignalManager):
         label = Gtk.Label(label=_("No Notifications"))
         label.set_valign(Gtk.Align.START)
         label.add_css_class("dim-label")
-        label.show()
         self.set_placeholder(label)
 
         self._add_actions()

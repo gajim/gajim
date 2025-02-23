@@ -83,7 +83,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         self._ui.toolbar.reorder_child_after(self._ui.download_button)
 
         if app.is_flatpak():
-            self._ui.help_button.show()
+            self._ui.help_button.set_visible(True)
             self._ui.download_button.set_visible(False)
             self._ui.uninstall_plugin_button.set_visible(False)
             self._file_chooser_button.set_visible(False)
@@ -427,7 +427,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                      DialogButton.make('Remove',
                                        text=_('_Overwrite'),
                                        callback=_on_overwrite)],
-                ).show()
+                ).set_visible(True)
                 return
 
             SimpleDialog(error_text, f'"{zip_filename}"')

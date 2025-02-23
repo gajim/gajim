@@ -327,7 +327,7 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._ui.popover.set_autohide(False)
         self._hide_recording_controls()
         self._show_recording_box()
-        self._ui.popover.show()
+        self._ui.popover.set_visible(True)
         self._start_recording()
 
     def _on_direct_record_long_press_end(self, _x: float, _y: float) -> None:

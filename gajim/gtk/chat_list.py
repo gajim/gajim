@@ -344,7 +344,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         button.set_halign(Gtk.Align.CENTER)
         button.set_valign(Gtk.Align.CENTER)
         button.connect("clicked", self._on_start_chat_clicked)
-        button.show()
         self.set_placeholder(button)
 
     def _emit_unread_changed(self) -> None:

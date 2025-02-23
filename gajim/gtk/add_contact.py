@@ -238,7 +238,7 @@ class Address(Page):
             liststore.append(acc)
 
         if len(accounts) > 1:
-            self._ui.account_box.show()
+            self._ui.account_box.set_visible(True)
 
             if account is not None:
                 self._ui.account_combo.set_active_id(account)

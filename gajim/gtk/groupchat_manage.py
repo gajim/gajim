@@ -179,8 +179,8 @@ class GroupchatManage(Gtk.Box, SignalManager):
             return
 
         if vcard_support and self_contact.affiliation.is_owner:
-            self._avatar_chooser_button.show()
-            self._ui.remove_avatar_button.show()
+            self._avatar_chooser_button.set_visible(True)
+            self._ui.remove_avatar_button.set_visible(True)
 
         if self_contact.affiliation.is_owner:
             self._client.get_module("MUC").request_config(

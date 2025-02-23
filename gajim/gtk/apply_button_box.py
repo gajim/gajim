@@ -41,22 +41,22 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
 
     def _on_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
-        self._spinner.show()
+        self._spinner.set_visible(True)
         self._spinner.start()
 
     def set_button_state(self, state: bool) -> None:
         if state:
-            self._status_image.hide()
+            self._status_image.set_visible(False)
         self._button.set_sensitive(state)
 
     def set_success(self) -> None:
         self._spinner.stop()
-        self._spinner.hide()
+        self._spinner.set_visible(False)
         self._set_status_image("success")
 
     def set_error(self, tooltip_text: str):
         self._spinner.stop()
-        self._spinner.hide()
+        self._spinner.set_visible(False)
         self._set_status_image("error", tooltip_text)
         self._button.set_sensitive(True)
 
@@ -74,4 +74,4 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         self._status_image.set_from_icon_name(icon_name)
         self._status_image.add_css_class(css_class)
         self._status_image.set_tooltip_text(tooltip_text)
-        self._status_image.show()
+        self._status_image.set_visible(True)

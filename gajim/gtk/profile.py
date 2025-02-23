@@ -217,7 +217,7 @@ class ProfileWindow(GajimAppWindow):
             AvatarSize.VCARD, scale, add_show=False
         )
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
-        self._ui.avatar_image.show()
+        self._ui.avatar_image.set_visible(True)
 
     def _add_actions(self) -> None:
         for action in MENU_DICT:
@@ -234,24 +234,24 @@ class ProfileWindow(GajimAppWindow):
 
     def _on_edit_clicked(self, *args: Any) -> None:
         self._vcard_grid.set_editable(True)
-        self._ui.edit_button.hide()
+        self._ui.edit_button.set_visible(False)
 
-        self._ui.add_entry_button.show()
-        self._ui.cancel_button.show()
-        self._ui.save_button.show()
-        self._ui.remove_avatar_button.show()
-        self._avatar_edit_button.show()
+        self._ui.add_entry_button.set_visible(True)
+        self._ui.cancel_button.set_visible(True)
+        self._ui.save_button.set_visible(True)
+        self._ui.remove_avatar_button.set_visible(True)
+        self._avatar_edit_button.set_visible(True)
         self._ui.nickname_entry.set_sensitive(True)
-        self._ui.privacy_button.show()
+        self._ui.privacy_button.set_visible(True)
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         self._vcard_grid.set_editable(False)
-        self._ui.edit_button.show()
-        self._ui.add_entry_button.hide()
-        self._ui.cancel_button.hide()
-        self._ui.save_button.hide()
-        self._ui.remove_avatar_button.hide()
-        self._ui.privacy_button.hide()
+        self._ui.edit_button.set_visible(True)
+        self._ui.add_entry_button.set_visible(False)
+        self._ui.cancel_button.set_visible(False)
+        self._ui.save_button.set_visible(False)
+        self._ui.remove_avatar_button.set_visible(False)
+        self._ui.privacy_button.set_visible(False)
         self._ui.nickname_entry.set_sensitive(False)
         self._ui.avatar_image.set_from_paintable(self._current_avatar)
         self._ui.nickname_entry.set_text(app.nicks[self.account])
@@ -262,12 +262,12 @@ class ProfileWindow(GajimAppWindow):
         self._show_profile_page()
 
     def _on_save_clicked(self, _button: Gtk.Button) -> None:
-        self._ui.add_entry_button.hide()
-        self._ui.cancel_button.hide()
-        self._ui.save_button.hide()
-        self._ui.edit_button.show()
-        self._ui.remove_avatar_button.hide()
-        self._ui.privacy_button.hide()
+        self._ui.add_entry_button.set_visible(False)
+        self._ui.cancel_button.set_visible(False)
+        self._ui.save_button.set_visible(False)
+        self._ui.edit_button.set_visible(True)
+        self._ui.remove_avatar_button.set_visible(False)
+        self._ui.privacy_button.set_visible(False)
         self._ui.nickname_entry.set_sensitive(False)
 
         # Switch page after setting other widget's visibility
@@ -363,7 +363,7 @@ class ProfileWindow(GajimAppWindow):
         )
 
         self._ui.avatar_image.set_from_paintable(texture)
-        self._ui.remove_avatar_button.hide()
+        self._ui.remove_avatar_button.set_visible(False)
         self._new_avatar = None
 
     def _on_edit_avatar(
@@ -413,7 +413,7 @@ class ProfileWindow(GajimAppWindow):
         self._ui.avatar_image.set_from_paintable(
             convert_surface_to_texture(clip_circle(surface))
         )
-        self._ui.remove_avatar_button.show()
+        self._ui.remove_avatar_button.set_visible(True)
         self._show_profile_page()
 
     def _set_vcard_access_switch(self, state: bool) -> None:

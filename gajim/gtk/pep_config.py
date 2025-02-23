@@ -148,7 +148,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
                 DialogButton.make("Delete", callback=_delete),
             ],
             transient_for=self.window,
-        ).show()
+        ).set_visible(True)
 
     def _on_node_delete(self, task: Task) -> None:
         node = task.get_user_data()
@@ -200,7 +200,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
         form = dataforms.extend_form(node=result.form)
         self._dataform_widget = DataFormWidget(form)
         self._dataform_widget.set_propagate_natural_height(True)
-        self._dataform_widget.show()
+        self._dataform_widget.set_visible(True)
         self._ui.form_box.append(self._dataform_widget)
         self._ui.form_label.set_text(result.node)
 

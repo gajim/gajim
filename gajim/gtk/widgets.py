@@ -80,7 +80,7 @@ class GajimAppWindow(SignalManager):
         self.window.present()
 
     def show(self) -> None:
-        self.window.show()
+        self.window.set_visible(True)
 
     def close(self) -> None:
         self.window.close()
@@ -230,13 +230,13 @@ class AccountBadge(Gtk.Label):
         self.set_max_width_chars(12)
         self.set_size_request(50, -1)
         self.add_css_class("badge")
-        self.set_visible(False)
 
         self._bind_setting = bind_setting
 
         if account is not None:
             self.set_account(account)
-            self.show()
+
+        self.set_visible(account is not None)
 
     def do_unroot(self) -> None:
         app.settings.disconnect_signals(self)

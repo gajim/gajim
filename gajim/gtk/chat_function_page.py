@@ -126,7 +126,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         self._confirm_button.remove_css_class("suggested-action")
         self._confirm_button.set_sensitive(False)
         self._forget_button.set_sensitive(True)
-        self._forget_button.hide()
+        self._forget_button.set_visible(False)
 
         self._ready_state = True
 

@@ -215,11 +215,11 @@ class Result(Page):
         if self._treeview is not None:
             self._scrolled.set_child(None)
             self._treeview = None
-            self._label.hide()
-            self._scrolled.hide()
+            self._label.set_visible(False)
+            self._scrolled.set_visible(False)
 
         if not form:
-            self._label.show()
+            self._label.set_visible(True)
             return
 
         form = dataforms.extend_form(node=form)
@@ -266,7 +266,7 @@ class Result(Page):
             )
 
         self._treeview.set_model(liststore)
-        self._treeview.show()
+        self._treeview.set_visible(True)
 
         self._scrolled.set_visible(True)
 

@@ -279,16 +279,16 @@ class FileRow(Gtk.ListBoxRow, SignalManager):
         # if size_warning:
         #     self._ui.warning_label.set_text(
         #         _('File too big, will use direct transfer (not encrypted)'))
-        #     self._ui.warning_label.show()
+        #     self._ui.warning_label.set_visible(True)
 
         if size_warning:
             self._ui.warning_label.set_text(_("File too big"))
-            self._ui.warning_label.show()
+            self._ui.warning_label.set_visible(True)
 
         # if jingle_warning:
         #     self._ui.warning_label.set_text(
         #         _('Direct transfer (not encrypted)'))
-        #     self._ui.warning_label.show()
+        #     self._ui.warning_label.set_visible(True)
 
         self._ui.preview_image_box.set_size_request(PREVIEW_SIZE, -1)
         self._set_preview(path)

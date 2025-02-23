@@ -73,7 +73,7 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
         if state:
             self._update_combo_box()
         else:
-            self.hide()
+            self.set_visible(False)
             self.remove_all()
 
     def _sec_labels_received(self, event: SecCatalogReceived) -> None:
@@ -104,7 +104,7 @@ class SecurityLabelSelector(Gtk.ComboBoxText):
                 self.append(selector, selector)
             self.set_active_id(catalog.default)
 
-        self.show()
+        self.set_visible(True)
 
     def get_seclabel(self) -> SecurityLabel | None:
         assert self._contact is not None

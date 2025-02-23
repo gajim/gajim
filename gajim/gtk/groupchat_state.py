@@ -49,7 +49,7 @@ class GroupchatState(Gtk.Box, SignalManager):
 
         self._contact = None
         self._client = None
-        self.hide()
+        self.set_visible(False)
 
     def switch_contact(self, contact: types.ChatContactT) -> None:
         self.clear()
@@ -107,7 +107,7 @@ class GroupchatState(Gtk.Box, SignalManager):
             self._ui.mam_sync_spinner.start()
             return
 
-        self.hide()
+        self.set_visible(False)
 
     def _on_mam_sync_error(
         self, _contact: GroupchatContact, signal_name: str, error_text: str
@@ -121,7 +121,7 @@ class GroupchatState(Gtk.Box, SignalManager):
         self._ui.mam_sync_spinner.stop()
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
-        self.hide()
+        self.set_visible(False)
 
     def _on_join_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None

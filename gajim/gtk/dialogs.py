@@ -162,7 +162,7 @@ class SimpleDialog(ConfirmationDialog):
             buttons=[DialogButton.make("OK")],
             transient_for=transient_for,
         )
-        self.show()
+        self.set_visible(True)
 
 
 class ConfirmationCheckDialog(ConfirmationDialog):

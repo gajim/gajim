@@ -185,7 +185,7 @@ class ReactionsBar(Gtk.Box, SignalManager):
                 log.debug("Too many reactions: %s", len(aggregated_reactions))
                 break
 
-        self.show()
+        self.set_visible(True)
 
     def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
         emoji_chooser = app.window.get_emoji_chooser()

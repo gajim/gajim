@@ -185,19 +185,19 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         self._ui.grid.set_sensitive(not enabled)
 
     def _unset_info(self) -> None:
-        self._ui.info_label.hide()
+        self._ui.info_label.set_visible(False)
 
     def _set_info(self, text: str) -> None:
         self._ui.info_label.set_text(text)
-        self._ui.info_label.show()
+        self._ui.info_label.set_visible(True)
 
     def _unset_error(self) -> None:
-        self._ui.error_label.hide()
+        self._ui.error_label.set_visible(False)
         self._ui.create_button.set_sensitive(True)
 
     def _set_error(self, text: str) -> None:
         self._ui.error_label.set_text(text)
-        self._ui.error_label.show()
+        self._ui.error_label.set_visible(True)
         self._ui.create_button.set_sensitive(False)
 
     def _set_error_from_error(self, error: StanzaError) -> None:

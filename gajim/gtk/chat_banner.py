@@ -191,7 +191,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._update_robot_image()
 
     def _on_room_voice_request(self, *args: Any) -> None:
-        self._voice_requests_button.show()
+        self._voice_requests_button.set_visible(True)
 
     def _on_user_state_changed(self, *args: Any) -> None:
         self._update_avatar()
@@ -363,14 +363,14 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
             and self._contact.muc_context == "private"
         ):
             # Don't display QR code for private MUCs (they require an invite)
-            self._ui.qr_code_image.hide()
+            self._ui.qr_code_image.set_visible(False)
             return
 
         # Generate QR code on demand (i.e. not when switching chats)
         self._ui.qr_code_image.set_from_paintable(
             generate_qr_code(self._get_share_uri())
         )
-        self._ui.qr_code_image.show()
+        self._ui.qr_code_image.set_visible(True)
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
         self.get_clipboard().set(self._get_share_uri())

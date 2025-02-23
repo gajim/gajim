@@ -865,7 +865,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
                 DialogButton.make("Remove", callback=_remove),
             ],
             transient_for=app.window,
-        ).show()
+        ).set_visible(True)
 
     @staticmethod
     @structs.actionfunction

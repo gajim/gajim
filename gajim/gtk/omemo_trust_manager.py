@@ -142,12 +142,12 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         clear_listbox(self._ui.list)
 
         if isinstance(self._contact, BareContact) and self._contact.is_self:
-            self._ui.clear_devices_button.show()
+            self._ui.clear_devices_button.set_visible(True)
             self._ui.list_heading_box.set_halign(Gtk.Align.START)
         else:
-            self._ui.manage_trust_button.show()
+            self._ui.manage_trust_button.set_visible(True)
             if self._contact.is_groupchat:
-                self._ui.search_button.show()
+                self._ui.search_button.set_visible(True)
             else:
                 self._ui.list_heading_box.set_halign(Gtk.Align.START)
 
@@ -222,7 +222,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("_Clear Devices"), callback=_clear),
             ],
-        ).show()
+        ).set_visible(True)
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
@@ -311,7 +311,7 @@ class KeyRow(Gtk.ListBoxRow):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("Delete"), callback=_remove),
             ],
-        ).show()
+        ).set_visible(True)
 
     def set_trust(self, trust: OMEMOTrust) -> None:
         self._trust = trust

@@ -76,7 +76,7 @@ class SettingsDialog(GajimAppWindow):
         self.listbox.update_states()
 
         self.set_child(self.listbox)
-        self.show()
+        self.set_visible(True)
 
     def _cleanup(self) -> None:
         del self.listbox
@@ -368,7 +368,7 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
             if app.settings.has_app_override(self.value):
                 self.set_activatable(False)
                 self.set_sensitive(False)
-                self._locked_icon.show()
+                self._locked_icon.set_visible(True)
                 return
 
         if self.enabled_func is None:
@@ -549,7 +549,7 @@ class DialogSetting(GenericSetting):
         self.setting_value.set_text(self.get_setting_value())
 
     def get_setting_value(self) -> str:
-        self.setting_value.hide()
+        self.setting_value.set_visible(False)
         return ""
 
     def on_row_activated(self) -> None:

@@ -410,7 +410,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if self._is_correcting:
             self._set_correcting(None)
             self.msg_textview.end_correction()
-            self._ui.edit_box.hide()
+            self._ui.edit_box.set_visible(False)
             return
 
         last_message_id = self._last_message_id.get(self._contact)
@@ -430,7 +430,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             message = message.get_last_correction()
 
         self.msg_textview.start_correction(message)
-        self._ui.edit_box.show()
+        self._ui.edit_box.set_visible(True)
 
         referenced_message = message.get_referenced_message()
         if referenced_message is not None:
@@ -474,7 +474,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         assert self._client
         state = self._client.state.is_available
 
-        self._ui.visitor_menu_button.hide()
+        self._ui.visitor_menu_button.set_visible(False)
 
         if not state:
             self._ui.state_box_label.set_text(
@@ -490,7 +490,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
                 state = not self_contact.role.is_visitor
 
                 if self_contact.role.is_visitor:
-                    self._ui.visitor_menu_button.show()
+                    self._ui.visitor_menu_button.set_visible(True)
                     self._ui.state_box_label.set_text(_("You are a visitor."))
                     self._ui.state_box_image.set_from_icon_name(
                         "feather-mic-off-symbolic"

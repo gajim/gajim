@@ -475,9 +475,9 @@ class MessageRow(BaseRow):
         if merged:
             self.add_css_class("merged")
             self._meta_box.set_visible(False)
-            self._meta_box.hide()
+            self._meta_box.set_visible(False)
         else:
             self.remove_css_class("merged")
-            self._meta_box.show()
+            self._meta_box.set_visible(True)
 
         self._avatar_box.set_merged(merged)

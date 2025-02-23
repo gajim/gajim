@@ -78,7 +78,7 @@ class RosterItemExchange(GajimAppWindow):
             buffer_ = self._ui.body_textview.get_buffer()
             buffer_.set_text(message_body)
         else:
-            self._ui.body_scrolledwindow.hide()
+            self._ui.body_scrolledwindow.set_visible(False)
 
         # Treeview
         self._model = Gtk.ListStore(bool, str, str, str, str)

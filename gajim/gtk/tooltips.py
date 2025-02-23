@@ -66,7 +66,7 @@ class GCTooltip:
         Hide all Elements of the Tooltip Grid
         """
         for widget in iterate_children(self._ui.tooltip_grid):
-            widget.hide()
+            widget.set_visible(False)
 
     def _populate_grid(self, contact: GroupchatParticipant) -> None:
         """
@@ -75,19 +75,19 @@ class GCTooltip:
         self._hide_grid_children()
 
         self._ui.nick.set_text(contact.name)
-        self._ui.nick.show()
+        self._ui.nick.set_visible(True)
 
         # Status Message
         if contact.status:
             status = contact.status.strip()
             if status != "":
                 self._ui.status.set_text(status)
-                self._ui.status.show()
+                self._ui.status.set_visible(True)
 
         # JID
         if contact.real_jid is not None:
             self._ui.jid.set_text(str(contact.real_jid.bare))
-            self._ui.jid.show()
+            self._ui.jid.set_visible(True)
 
         # Affiliation
         if not contact.affiliation.is_none:
@@ -96,7 +96,7 @@ class GCTooltip:
                 "owner_or_admin_or_member": uf_affiliation
             }
             self._ui.affiliation.set_text(uf_affiliation)
-            self._ui.affiliation.show()
+            self._ui.affiliation.set_visible(True)
 
         if contact.hats is not None:
 
@@ -127,8 +127,8 @@ class GCTooltip:
         texture = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         self._ui.avatar.set_pixel_size(AvatarSize.TOOLTIP)
         self._ui.avatar.set_from_paintable(texture)
-        self._ui.avatar.show()
-        self._ui.fillelement.show()
+        self._ui.avatar.set_visible(True)
+        self._ui.fillelement.set_visible(True)
 
         app.plugin_manager.extension_point(
             "gc_tooltip_populate", self, contact, self._ui.tooltip_grid
@@ -145,7 +145,7 @@ class ContactTooltip:
             return
         container_remove_all(self._ui.resources_box)
         for widget in iterate_children(self._ui.tooltip_grid):
-            widget.hide()
+            widget.set_visible(False)
 
     def get_tooltip(self, contact: types.BareContact) -> tuple[bool, Gtk.Grid]:
         if not hasattr(self, "_ui"):
@@ -165,13 +165,13 @@ class ContactTooltip:
         texture = contact.get_avatar(AvatarSize.TOOLTIP, scale)
         self._ui.avatar.set_pixel_size(AvatarSize.TOOLTIP)
         self._ui.avatar.set_from_paintable(texture)
-        self._ui.avatar.show()
+        self._ui.avatar.set_visible(True)
 
         self._ui.name.set_markup(GLib.markup_escape_text(contact.name))
-        self._ui.name.show()
+        self._ui.name.set_visible(True)
 
         self._ui.jid.set_text(str(contact.jid))
-        self._ui.jid.show()
+        self._ui.jid.set_visible(True)
 
         if contact.has_resources():
             for res in contact.iter_resources():
@@ -182,8 +182,8 @@ class ContactTooltip:
         if contact.subscription and contact.subscription != "both":
             # 'both' is the normal subscription value, just omit it
             self._ui.sub.set_text(get_uf_sub(contact.subscription))
-            self._ui.sub.show()
-            self._ui.sub_label.show()
+            self._ui.sub.set_visible(True)
+            self._ui.sub_label.set_visible(True)
 
         self._append_pep_info(contact)
 
@@ -271,19 +271,19 @@ class ContactTooltip:
         )
 
         self._ui.resources_box.append(resource_box)
-        self._ui.resources_box.show()
+        self._ui.resources_box.set_visible(True)
 
     def _append_pep_info(self, contact: types.BareContact) -> None:
         tune = contact.get_tune()
         if tune is not None:
             tune_str = format_tune(tune)
             self._ui.tune.set_markup(tune_str)
-            self._ui.tune.show()
-            self._ui.tune_label.show()
+            self._ui.tune.set_visible(True)
+            self._ui.tune_label.set_visible(True)
 
         location = contact.get_location()
         if location is not None:
             location_str = format_location(location)
             self._ui.location.set_markup(location_str)
-            self._ui.location.show()
-            self._ui.location_label.show()
+            self._ui.location.set_visible(True)
+            self._ui.location_label.set_visible(True)

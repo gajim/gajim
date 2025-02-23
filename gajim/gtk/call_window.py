@@ -117,7 +117,7 @@ class CallWindow(GajimAppWindow, EventHelper):
 
     def _on_upgrade_to_video_clicked(self, button: Gtk.Button) -> None:
         app.call_manager.upgrade_to_video_call()
-        button.hide()
+        button.set_visible(False)
 
     def _on_end_call_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
@@ -179,16 +179,16 @@ class CallWindow(GajimAppWindow, EventHelper):
         if event.audio_state == JingleState.NULL:
             self._ui.audio_buttons_box.set_sensitive(False)
             self._ui.jingle_audio_state.set_visible(False)
-            self._ui.jingle_audio_state.hide()
+            self._ui.jingle_audio_state.set_visible(False)
             self._ui.jingle_connection_state.set_text("")
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)
 
             if event.video_state == JingleState.NULL:
                 self._ui.jingle_connection_state.set_text(_("Call ended"))
                 self._close_with_timeout()
         else:
-            self._ui.jingle_connection_spinner.show()
+            self._ui.jingle_connection_spinner.set_visible(True)
             self._ui.jingle_connection_spinner.start()
 
         if event.audio_state == JingleState.CONNECTING:
@@ -199,10 +199,10 @@ class CallWindow(GajimAppWindow, EventHelper):
             self._ui.jingle_connection_state.set_text(_("Incoming Call"))
 
         elif event.audio_state == JingleState.CONNECTED:
-            self._ui.jingle_audio_state.show()
+            self._ui.jingle_audio_state.set_visible(True)
             self._ui.jingle_connection_state.set_text("")
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)
             if self._contact.supports_video:
                 self._ui.av_cam_button.set_sensitive(True)
 
@@ -213,21 +213,21 @@ class CallWindow(GajimAppWindow, EventHelper):
             self._ui.audio_buttons_box.set_sensitive(True)
 
         elif event.audio_state == JingleState.ERROR:
-            self._ui.jingle_audio_state.hide()
+            self._ui.jingle_audio_state.set_visible(False)
             self._ui.jingle_connection_state.set_text(_("Connection Error"))
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)
 
         if not event.audio_sid:
             self._ui.audio_buttons_box.set_sensitive(False)
 
     def _update_video(self, event: CallUpdated) -> None:
         if event.video_state == JingleState.NULL:
-            self._ui.avatar_image.show()
+            self._ui.avatar_image.set_visible(True)
             self._ui.video_box.set_visible(False)
-            self._ui.video_box.hide()
+            self._ui.video_box.set_visible(False)
             self._ui.outgoing_viewport.set_visible(False)
-            self._ui.outgoing_viewport.hide()
+            self._ui.outgoing_viewport.set_visible(False)
 
             if self._video_widget_other:
                 self._ui.incoming_viewport.set_child(None)
@@ -240,7 +240,7 @@ class CallWindow(GajimAppWindow, EventHelper):
             if event.audio_state != JingleState.CONNECTED:
                 self._ui.jingle_connection_state.set_text("")
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera on"))
             self._ui.av_cam_image.set_from_icon_name("feather-camera-symbolic")
@@ -248,7 +248,7 @@ class CallWindow(GajimAppWindow, EventHelper):
                 self._ui.jingle_connection_state.set_text(_("Call ended"))
                 self._close_with_timeout()
         else:
-            self._ui.jingle_connection_spinner.show()
+            self._ui.jingle_connection_spinner.set_visible(True)
             self._ui.jingle_connection_spinner.start()
 
         if event.video_state == JingleState.CONNECTING:
@@ -259,19 +259,19 @@ class CallWindow(GajimAppWindow, EventHelper):
 
         elif event.video_state == JingleState.CONNECTION_RECEIVED:
             self._ui.jingle_connection_state.set_text(_("Incoming Call (Video)"))
-            self._ui.answer_video_button.show()
+            self._ui.answer_video_button.set_visible(True)
             self._ui.av_cam_button.set_sensitive(False)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera off"))
             self._ui.av_cam_image.set_from_icon_name("feather-camera-off-symbolic")
 
         elif event.video_state == JingleState.CONNECTED:
-            self._ui.avatar_image.hide()
-            self._ui.answer_video_button.hide()
+            self._ui.avatar_image.set_visible(False)
+            self._ui.answer_video_button.set_visible(False)
             if app.settings.get("video_see_self"):
-                self._ui.outgoing_viewport.show()
+                self._ui.outgoing_viewport.set_visible(True)
             else:
                 self._ui.outgoing_viewport.set_visible(False)
-                self._ui.outgoing_viewport.hide()
+                self._ui.outgoing_viewport.set_visible(False)
 
             other_video_elements = create_video_elements()
             self_video_elements = create_video_elements()
@@ -296,7 +296,7 @@ class CallWindow(GajimAppWindow, EventHelper):
 
             self._ui.jingle_connection_state.set_text("")
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)
 
             self._ui.av_cam_button.set_sensitive(True)
             self._ui.av_cam_button.set_tooltip_text(_("Turn Camera off"))
@@ -305,4 +305,4 @@ class CallWindow(GajimAppWindow, EventHelper):
         elif event.video_state == JingleState.ERROR:
             self._ui.jingle_connection_state.set_text(_("Connection Error"))
             self._ui.jingle_connection_spinner.stop()
-            self._ui.jingle_connection_spinner.hide()
+            self._ui.jingle_connection_spinner.set_visible(False)

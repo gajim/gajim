@@ -244,7 +244,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             row.set_child(label)
             self._ui.stanza_presets_listbox.append(row)
 
-        self._ui.stanza_presets_listbox.show()
+        self._ui.stanza_presets_listbox.set_visible(True)
 
     def _add_log_record(self, message: str) -> None:
         buf = self._ui.log_view.get_buffer()
@@ -359,21 +359,17 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
     def _on_input(self, button: Gtk.ToggleButton) -> None:
         child2 = self._ui.paned.get_end_child()
         assert child2 is not None
-        if button.get_active():
-            child2.show()
-            self._ui.send.show()
-            self._ui.paste.show()
-            self._ui.account_label.show()
-            self._account_dropdown.show()
-            self._ui.menubutton.show()
+        active = button.get_active()
+
+        child2.set_visible(active)
+        self._ui.send.set_visible(active)
+        self._ui.paste.set_visible(active)
+        self._ui.account_label.set_visible(active)
+        self._account_dropdown.set_visible(active)
+        self._ui.menubutton.set_visible(active)
+
+        if active:
             self._ui.input_entry.grab_focus()
-        else:
-            child2.hide()
-            self._ui.send.hide()
-            self._ui.paste.hide()
-            self._ui.account_label.hide()
-            self._account_dropdown.hide()
-            self._ui.menubutton.hide()
 
     def _on_search_toggled(self, button: Gtk.ToggleButton) -> None:
         self._ui.search_revealer.set_reveal_child(button.get_active())

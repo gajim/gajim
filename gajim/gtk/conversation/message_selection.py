@@ -41,10 +41,10 @@ class MessageSelection(Gtk.Grid):
 
     def _on_copy_clicked(self, _button: Gtk.Button) -> None:
         self.set_visible(False)
-        self.hide()
+        self.set_visible(False)
         self.emit("copy")
 
     def _on_cancel_clicked(self, _button: Gtk.Button) -> None:
         self.set_visible(False)
-        self.hide()
+        self.set_visible(False)
         self.emit("cancel")

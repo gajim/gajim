@@ -220,7 +220,7 @@ class MessageRowActions(Gtk.Box):
 
         self._message_row.remove_css_class("conversation-row-hover")
 
-        self.hide()
+        self.set_visible(False)
 
     def _on_cursor_enter(
         self,
@@ -436,10 +436,10 @@ class MessageIcons(Gtk.Box):
             tooltip_text = _("Received")
         self._message_state_image.set_from_icon_name(icon_name)
         self._message_state_image.set_tooltip_text(tooltip_text)
-        self._message_state_image.show()
+        self._message_state_image.set_visible(True)
 
     def hide_message_state_icon(self):
-        self._message_state_image.hide()
+        self._message_state_image.set_visible(False)
 
     def set_correction_icon_visible(self, visible: bool) -> None:
         self._correction_image.set_visible(visible)

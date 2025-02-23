@@ -227,7 +227,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         window_height = app.settings.get("mainwin_height")
         resize_window(self, window_width, window_height)
 
-        self.show()
+        self.set_visible(True)
 
         if app.is_display(Display.X11):
             self.set_skip_taskbar_hint(not app.settings.get("show_in_taskbar"))
@@ -324,7 +324,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     "Remove", text=_("_Connect Anyway"), callback=event.connect
                 ),
             ],
-        ).show()
+        ).set_visible(True)
 
     @staticmethod
     def _on_password_required(event: events.PasswordRequired) -> None:
@@ -359,7 +359,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Accept", callback=_response, args=["yes"]),
             ],
-        ).show()
+        ).set_visible(True)
 
     def _on_muc_added(self, event: events.MucAdded) -> None:
         if self.chat_exists(event.account, event.jid):
@@ -714,7 +714,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ],
             input_str=_("Spam"),
             transient_for=app.window,
-        ).show()
+        ).set_visible(True)
 
     @actionmethod
     def _on_moderate_all_messages(
@@ -759,7 +759,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ],
             input_str=_("Spam"),
             transient_for=app.window,
-        ).show()
+        ).set_visible(True)
 
     @actionmethod
     def _on_delete_message_locally(
@@ -782,7 +782,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 DialogButton.make("Delete", callback=_on_delete),
             ],
             transient_for=app.window,
-        ).show()
+        ).set_visible(True)
 
     def _on_window_motion_notify(
         self,
@@ -819,11 +819,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
     def show_window(self) -> None:
         app.settings.set("is_window_visible", True)
-        self.show()
+        self.set_visible(True)
 
     def hide_window(self) -> None:
         app.settings.set("is_window_visible", False)
-        self.hide()
+        self.set_visible(False)
 
     def _set_startup_finished(self) -> None:
         self._startup_finished = True
@@ -956,7 +956,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     DialogButton.make("Cancel", text=_("_No")),
                     DialogButton.make("Remove", callback=_continue_removing_workspace),
                 ],
-            ).show()
+            ).set_visible(True)
             return
 
         # No chats in chat list, it is save to remove this workspace
@@ -1261,7 +1261,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Remove", text=_("_Block"), callback=_block_contact),
             ],
-        ).show()
+        ).set_visible(True)
 
     def remove_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
@@ -1284,7 +1284,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove_contact),
             ],
-        ).show()
+        ).set_visible(True)
 
     @staticmethod
     def _check_for_account() -> None:
@@ -1384,7 +1384,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                             args=[message],
                         ),
                     ],
-                ).show()
+                ).set_visible(True)
                 return
 
             on_continue2(message)

@@ -120,7 +120,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
 
         self._edit_button.set_tooltip_text(_("Edit display name…"))
         self._edit_button.set_icon_name("document-edit-symbolic")
-        self._clear_button.hide()
+        self._clear_button.set_visible(False)
 
     def set_contact(
         self, contact: BareContact | GroupchatContact | GroupchatParticipant
@@ -142,7 +142,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
 
         self._edit_button.set_tooltip_text(_("Save display name"))
         self._edit_button.set_icon_name("document-save-symbolic")
-        self._clear_button.show()
+        self._clear_button.set_visible(True)
 
     def update_displayed_name(self, name: str) -> None:
         if self._contact is not None:

@@ -67,14 +67,14 @@ class SSLErrorDialog(GajimAppWindow):
         self._ui.ssl_error.set_text(ssl_error)
 
         if self._error == Gio.TlsCertificateFlags.UNKNOWN_CA:
-            self._ui.add_certificate_checkbutton.show()
+            self._ui.add_certificate_checkbutton.set_visible(True)
 
         elif self._error == Gio.TlsCertificateFlags.EXPIRED:
             self._ui.connect_button.set_sensitive(True)
 
         else:
             self._ui.connect_button.set_visible(False)
-            self._ui.connect_button.hide()
+            self._ui.connect_button.set_visible(False)
 
     def _on_view_cert_clicked(self, _button: Gtk.Button) -> None:
         open_window(

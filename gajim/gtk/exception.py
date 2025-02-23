@@ -79,8 +79,7 @@ def _hook(type_: type[BaseException], value: BaseException, tb: TracebackType) -
         sys.__excepthook__(type_, value, tb)
         return
 
-    window = ExceptionDialog(type_, value, tb)
-    window.show()
+    ExceptionDialog(type_, value, tb)
 
     _exception_in_progress.release()
 
@@ -123,6 +122,8 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
 
         if self._sentry_available:
             self._ui.user_feedback_entry.grab_focus()
+
+        self.show()
 
     def _on_report_clicked(self, _button: Gtk.Button) -> None:
         if self._sentry_available and determine_proxy() is None:

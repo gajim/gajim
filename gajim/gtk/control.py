@@ -269,7 +269,7 @@ class ChatControl(EventHelper):
                     muc_data.subject, muc_data.last_subject_timestamp
                 )
 
-        self.widget.show()
+        self.widget.set_visible(True)
 
     def _register_events(self) -> None:
         if self.has_events_registered():
@@ -444,12 +444,11 @@ class ChatControl(EventHelper):
 
         pk = param.get_uint32()
         self._scrolled_view.enable_row_selection(pk)
-        self._message_selection.show()
+        self._message_selection.set_visible(True)
 
     def _reset_message_selection(self, *args: Any) -> None:
         self._scrolled_view.disable_row_selection()
         self._message_selection.set_visible(False)
-        self._message_selection.hide()
 
     def _on_copy_selection(self, _widget: MessageSelection) -> None:
         self._scrolled_view.copy_selected_messages()

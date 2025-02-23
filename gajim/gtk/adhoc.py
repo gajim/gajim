@@ -323,7 +323,7 @@ class Stage(Page):
                 wrap=True,
                 wrap_mode=Pango.WrapMode.WORD_CHAR,
             )
-            label.show()
+            label.set_visible(True)
             self._notes.append(label)
             self.append(label)
 
@@ -350,10 +350,10 @@ class Completed(Page):
         self._dataform_widget = None
 
         self._icon = SeverityIcon(self._severity)
-        self._icon.show()
+        self._icon.set_visible(True)
 
         self._label = Gtk.Label(label=_("Completed"))
-        self._label.show()
+        self._label.set_visible(True)
 
         self._icon_text = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         self._icon_text.set_spacing(12)
@@ -390,7 +390,7 @@ class Completed(Page):
             self._icon_text.set_visible(True)
         else:
             self.set_valign(Gtk.Align.FILL)
-            self._icon_text.hide()
+            self._icon_text.set_visible(False)
 
         if self._severity == AdHocNoteType.INFO:
             self._set_status(_("Completed"))
@@ -416,13 +416,13 @@ class Completed(Page):
         for i, note in enumerate(notes):
             if len(notes) > 1:
                 icon = SeverityIcon(note.type)
-                icon.show()
+                icon.set_visible(True)
                 self._notes.attach(icon, 0, i, 1, 1)
 
             label = MultiLineLabel(label=process_non_spacing_marks(note.text))
             label.set_justify(Gtk.Justification.CENTER)
             label.set_vexpand(False)
-            label.show()
+            label.set_visible(True)
             self._notes.attach(label, 1, i, 1, 1)
 
             self._bump_severity(note.type)
@@ -431,7 +431,7 @@ class Completed(Page):
         if show:
             self._icon.set_severity(self._severity)
         else:
-            self._icon.hide()
+            self._icon.set_visible(False)
 
     def _reset_severity(self):
         self._severity = AdHocNoteType.INFO

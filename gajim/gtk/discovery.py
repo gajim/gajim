@@ -667,7 +667,6 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         else:
             # Don't show it at all if we didn't ask for it
             self._ui.address_box.set_visible(False)
-            self._ui.address_box.hide()
 
         self._initial_state()
         self.travel(jid, node)
@@ -690,20 +689,20 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         Set some initial state on the window. Separated in a method because it's
         handy to use within browser's cleanup method
         """
-        self.progressbar.hide()
+        self.progressbar.set_visible(False)
         title_text = _("Service Discovery using account %s") % self.account
         self.window.set_title(title_text)
         self._set_window_banner_text(_("Service Discovery"))
         self.banner_icon.clear()
-        self.banner_icon.hide()  # Just clearing it doesn't work
+        self.banner_icon.set_visible(False)  # Just clearing it doesn't work
 
     def _set_window_banner_text(self, text: str, text_after: str | None = None) -> None:
         self.banner_header.set_text(text)
         if text_after is not None:
-            self.banner_subheader.show()
+            self.banner_subheader.set_visible(True)
             self.banner_subheader.set_text(text_after)
         else:
-            self.banner_subheader.hide()
+            self.banner_subheader.set_visible(False)
 
     def _cleanup(self) -> None:
         self._destroy()
@@ -721,7 +720,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         # self.browser._get_agent_address() would break when no browser.
         if self.browser:
-            self.window.hide()
+            self.window.set_visible(False)
             self.browser.cleanup()
             self.browser = None
         self.window.close()
@@ -953,7 +952,7 @@ class AgentBrowser:
         self.browse_button.connect("clicked", self.on_browse_button_clicked)
         self.window.action_buttonbox.append(self.browse_button)
         self.browse_button.set_label(_("Browse"))
-        self.browse_button.show()
+        self.browse_button.set_visible(True)
 
     def _clean_actions(self):
         """
@@ -998,7 +997,7 @@ class AgentBrowser:
         # Add an icon to the banner.
         icon_name = self.cache.get_icon(identities, addr=self._get_agent_address())
         self.window.banner_icon.set_from_icon_name(icon_name)
-        self.window.banner_icon.show()
+        self.window.banner_icon.set_visible(True)
 
     def _clean_title(self) -> None:
         # Everything done here is done in window._initial_state
@@ -1129,7 +1128,7 @@ class AgentBrowser:
         """
         self.model.clear()
         self._total_items = self._progress = 0
-        self.window.progressbar.show()
+        self.window.progressbar.set_visible(True)
         self._pulse_timeout = GLib.timeout_add(250, self._pulse_timeout_cb)
         self.cache.get_items(
             self.jid, self.node, self._agent_items, force=force, args=(force,)
@@ -1173,7 +1172,7 @@ class AgentBrowser:
         self.add_self_line()
         self._total_items = 0
         GLib.source_remove(self._pulse_timeout)
-        self.window.progressbar.hide()
+        self.window.progressbar.set_visible(False)
         # The server returned an error
         if not items:
             if self.window.parent is not None:
@@ -1421,24 +1420,24 @@ class ToplevelAgentBrowser(AgentBrowser):
         image = Gtk.Image.new_from_icon_name("utilities-terminal-symbolic")
         self.execute_button.set_child(image)
         self.window.action_buttonbox.append(self.execute_button)
-        self.execute_button.show()
+        self.execute_button.set_visible(True)
 
         self.register_button = Gtk.Button(label=_("Re_gister"), use_underline=True)
         self.register_button.connect("clicked", self._on_register_button_clicked)
         self.window.action_buttonbox.append(self.register_button)
-        self.register_button.show()
+        self.register_button.set_visible(True)
 
         self.join_button = Gtk.Button(label=_("Join"), use_underline=True)
         self.join_button.connect("clicked", self._on_join_button_clicked)
         self.window.action_buttonbox.append(self.join_button)
-        self.join_button.show()
+        self.join_button.set_visible(True)
 
         self.search_button = Gtk.Button(label=_("_Search"), use_underline=True)
         self.search_button.connect("clicked", self.on_search_button_clicked)
         image = Gtk.Image.new_from_icon_name("edit-find-symbolic")
         self.search_button.set_child(image)
         self.window.action_buttonbox.append(self.search_button)
-        self.search_button.show()
+        self.search_button.set_visible(True)
 
     def _clean_actions(self) -> None:
         if self.execute_button:
@@ -1630,7 +1629,7 @@ class ToplevelAgentBrowser(AgentBrowser):
                 id_ = GLib.timeout_add_seconds(2, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
             else:
-                self.window.progressbar.show()
+                self.window.progressbar.set_visible(True)
                 # Hide the progressbar if we're timing out anyways. (20 secs)
                 id_ = GLib.timeout_add_seconds(20, self._hide_progressbar_cb)
                 self._progressbar_sourceid = id_
@@ -1641,7 +1640,7 @@ class ToplevelAgentBrowser(AgentBrowser):
         Simple callback to hide the progressbar a second after we finish
         """
         if self.active:
-            self.window.progressbar.hide()
+            self.window.progressbar.set_visible(False)
         return False
 
     def _friendly_category(self, category: str, type_: str = "") -> str:
@@ -1866,7 +1865,7 @@ class MucBrowser(AgentBrowser):
         self.join_button = Gtk.Button(label=_("_Join"), use_underline=True)
         self.join_button.connect("clicked", self._on_join_button_clicked)
         self.window.action_buttonbox.append(self.join_button)
-        self.join_button.show()
+        self.join_button.set_visible(True)
 
     def _clean_actions(self):
         if self.join_button:
@@ -2142,7 +2141,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.subscribe_button.set_sensitive(False)
         self.subscribe_button.connect("clicked", self._on_subscribe_button_clicked)
         self.window.action_buttonbox.append(self.subscribe_button)
-        self.subscribe_button.show()
+        self.subscribe_button.set_visible(True)
 
         self.unsubscribe_button = Gtk.Button(
             label=_("_Unsubscribe"), use_underline=True
@@ -2150,7 +2149,7 @@ class DiscussionGroupsBrowser(AgentBrowser):
         self.unsubscribe_button.set_sensitive(False)
         self.unsubscribe_button.connect("clicked", self._on_unsubscribe_button_clicked)
         self.window.action_buttonbox.append(self.unsubscribe_button)
-        self.unsubscribe_button.show()
+        self.unsubscribe_button.set_visible(True)
 
     def _clean_actions(self) -> None:
         assert self.subscribe_button is not None

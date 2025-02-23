@@ -89,7 +89,6 @@ class AppMessageListBox(Gtk.ListBox):
 
         self._placeholder = Gtk.Label(label=self._get_update_text())
         self._placeholder.add_css_class("dim-label")
-        self._placeholder.show()
         self.set_placeholder(self._placeholder)
 
         app.settings.connect_signal("last_update_check", self._on_update_check)

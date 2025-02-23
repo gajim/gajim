@@ -117,9 +117,9 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._preview = preview
 
         self._ui.preview_stack.set_visible_child_name("preview")
-        self._ui.download_button.hide()
+        self._ui.download_button.set_visible(False)
 
-        self._ui.progress_box.show()
+        self._ui.progress_box.set_visible(True)
         self._ui.progress_text.set_label(f"{int(progress * 100)} %")
         self._ui.progressbar.set_fraction(progress)
         self._ui.info_message.set_text(_("Downloading…"))
@@ -130,20 +130,20 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._preview = preview
 
         self._ui.preview_stack.set_visible_child_name("preview")
-        self._ui.progress_box.hide()
-        self._ui.info_message.hide()
+        self._ui.progress_box.set_visible(False)
+        self._ui.info_message.set_visible(False)
 
         if preview.is_geo_uri:
             image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
             image.set_pixel_size(preview.size)
             self._ui.image_button.set_child(image)
 
-            self._ui.icon_event_box.hide()
+            self._ui.icon_event_box.set_visible(False)
             self._ui.file_name.set_text(_("Click to view location"))
             self._ui.file_name.set_selectable(False)
-            self._ui.save_as_button.hide()
-            self._ui.open_folder_button.hide()
-            self._ui.download_button.hide()
+            self._ui.save_as_button.set_visible(False)
+            self._ui.open_folder_button.set_visible(False)
+            self._ui.download_button.set_visible(False)
 
             location = split_geo_uri(preview.uri)
             text = format_geo_coords(float(location.lat), float(location.lon))
@@ -207,13 +207,13 @@ class PreviewWidget(Gtk.Box, SignalManager):
         preview_enabled = app.settings.get("enable_file_preview")
 
         if preview_enabled and preview.is_previewable and preview.orig_exists:
-            self._ui.icon_event_box.hide()
-            self._ui.image_button.show()
-            self._ui.save_as_button.show()
-            self._ui.open_folder_button.show()
+            self._ui.icon_event_box.set_visible(False)
+            self._ui.image_button.set_visible(True)
+            self._ui.save_as_button.set_visible(True)
+            self._ui.open_folder_button.set_visible(True)
         else:
-            self._ui.image_button.hide()
-            self._ui.icon_event_box.show()
+            self._ui.image_button.set_visible(False)
+            self._ui.icon_event_box.set_visible(True)
 
         file_size_string = _("File size unknown")
         if preview.file_size != 0:
@@ -229,15 +229,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
         if preview.info_message is not None:
             self._ui.info_message.set_text(preview.info_message)
             self._ui.info_message.set_tooltip_text(preview.info_message)
-            self._ui.info_message.show()
+            self._ui.info_message.set_visible(True)
 
         if preview.orig_exists:
             if preview_enabled:
-                self._ui.link_button.hide()
+                self._ui.link_button.set_visible(False)
 
-            self._ui.download_button.hide()
-            self._ui.open_folder_button.show()
-            self._ui.save_as_button.show()
+            self._ui.download_button.set_visible(False)
+            self._ui.open_folder_button.set_visible(True)
+            self._ui.save_as_button.set_visible(True)
 
             if (
                 preview_enabled
@@ -246,7 +246,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 and app.is_installed("GST")
                 and contains_audio_streams(preview.orig_path)
             ):
-                self._ui.image_button.hide()
+                self._ui.image_button.set_visible(False)
                 audio_widget = AudioWidget(preview.orig_path)
                 self._ui.right_box.append(audio_widget)
                 self._ui.right_box.reorder_child_after(
@@ -255,14 +255,14 @@ class PreviewWidget(Gtk.Box, SignalManager):
         else:
             if preview.file_size == 0:
                 if preview_enabled:
-                    self._ui.download_button.hide()
+                    self._ui.download_button.set_visible(False)
                 else:
-                    self._ui.download_button.show()
-                self._ui.link_button.show()
+                    self._ui.download_button.set_visible(True)
+                self._ui.link_button.set_visible(True)
             else:
-                self._ui.download_button.show()
-            self._ui.save_as_button.hide()
-            self._ui.open_folder_button.hide()
+                self._ui.download_button.set_visible(True)
+            self._ui.save_as_button.set_visible(False)
+            self._ui.open_folder_button.set_visible(False)
             allow_in_public = app.settings.get("preview_anonymous_muc")
             if (
                 preview.context == "public"
@@ -272,7 +272,7 @@ class PreviewWidget(Gtk.Box, SignalManager):
                 image = Gtk.Image.new_from_icon_name("dialog-question")
                 image.set_pixel_size(64)
                 self._ui.icon_button.set_child(image)
-                self._ui.download_button.show()
+                self._ui.download_button.set_visible(True)
                 file_size_string = _("Automatic preview disabled")
 
         self._ui.file_size.set_text(file_size_string)

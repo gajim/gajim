@@ -392,7 +392,7 @@
 #                                text=_('_No')),
 #              DialogButton.make('Accept',
 #                                text=_('_Download Again'),
-#                                callback=_on_yes)]).show()
+#                                callback=_on_yes)]).set_visible(True)
 
 #     def send_file(self,
 #                   account: str,
@@ -948,7 +948,7 @@
 #         app.settings.set('notify_on_file_complete', widget.get_active())
 
 #     def _on_file_transfers_dialog_delete_event(self, widget, event):
-#         self.window.hide()
+#         self.window.set_visible(False)
 #         return True  # Do NOT destroy window
 
 #     def _show_context_menu(self, event, iter_):
@@ -1051,4 +1051,4 @@
 
 #     def _on_file_transfers_window_key_press_event(self, widget, event):
 #         if event.keyval == Gdk.KEY_Escape:  # ESCAPE
-#             self.window.hide()
+#             self.window.set_visible(False)

@@ -48,7 +48,7 @@ class ReadMarkerRow(BaseRow):
         self.timestamp = timestamp
 
         self.changed()
-        self.show()
+        self.set_visible(True)
 
     def set_last_incoming_timestamp(self, timestamp: datetime) -> None:
         if timestamp > self._last_incoming_timestamp:

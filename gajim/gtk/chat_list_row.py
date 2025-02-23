@@ -131,7 +131,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.add_controller(drag_source)
 
         if self.type == "groupchat":
-            self._ui.group_chat_indicator.show()
+            self._ui.group_chat_indicator.set_visible(True)
 
         self.update_avatar()
         self.update_name()
@@ -149,7 +149,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self.contact.account, self.contact.jid
         )
         if message is None:
-            self.show()
+            self.set_visible(True)
             return
 
         assert isinstance(
@@ -295,10 +295,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.message_label.set_markup(text)
 
         if icon is None:
-            self._ui.message_icon.hide()
+            self._ui.message_icon.set_visible(False)
         else:
             self._ui.message_icon.set_from_gicon(icon)
-            self._ui.message_icon.show()
+            self._ui.message_icon.set_visible(True)
 
     def set_nick(self, nickname: str | None) -> None:
         self._ui.nick_label.set_visible(bool(nickname))
@@ -573,12 +573,12 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.connection_icon.add_css_class("spin")
             self._ui.connection_icon.add_css_class("dim-label")
             self._ui.connection_icon.set_tooltip_text(_("Joining Group Chat…"))
-            self._ui.connection_icon.show()
+            self._ui.connection_icon.set_visible(True)
         elif self.contact.is_not_joined or not self._client.state.is_available:
             self._ui.connection_icon.set_from_icon_name("feather-zap-symbolic")
             self._ui.connection_icon.add_css_class("warning-color")
             self._ui.connection_icon.set_tooltip_text(_("Not connected"))
-            self._ui.connection_icon.show()
+            self._ui.connection_icon.set_visible(True)
 
     def _on_mam_sync_changed(
         self, _contact: GroupchatContact, signal_name: str
@@ -591,7 +591,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.connection_icon.add_css_class("spin")
             self._ui.connection_icon.add_css_class("info-color")
             self._ui.connection_icon.set_tooltip_text(_("Fetching messages…"))
-            self._ui.connection_icon.show()
+            self._ui.connection_icon.set_visible(True)
 
     def _on_mam_sync_error(
         self, _contact: GroupchatContact, _signal_name: str, error_text: str
@@ -603,10 +603,10 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.connection_icon.set_tooltip_text(
             _("There has been an error while trying to fetch messages: %s") % error_text
         )
-        self._ui.connection_icon.show()
+        self._ui.connection_icon.set_visible(True)
 
     def _reset_connection_icon(self) -> None:
-        self._ui.connection_icon.hide()
+        self._ui.connection_icon.set_visible(False)
         self._ui.connection_icon.remove_css_class("spin")
         self._ui.connection_icon.remove_css_class("dim-label")
         self._ui.connection_icon.remove_css_class("info-color")
@@ -630,7 +630,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             return
 
         if contact.chatstate is None:
-            self._ui.chatstate_image.hide()
+            self._ui.chatstate_image.set_visible(False)
         else:
             self._ui.chatstate_image.set_visible(contact.chatstate.is_composing)
 

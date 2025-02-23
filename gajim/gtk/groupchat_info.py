@@ -348,5 +348,4 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         button.set_halign(Gtk.Align.START)
         button.add_css_class("link-button")
         self._connect(button, "activate-link", self._on_activate_contact_link)
-        button.show()
         return button

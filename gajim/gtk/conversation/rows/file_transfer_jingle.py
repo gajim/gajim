@@ -216,9 +216,9 @@ class FileTransferJingleRow(BaseRow, EventHelper):
 
     def _show_file_infos(self) -> None:
         if self._file_props is None:
-            self._ui.file_name.hide()
-            self._ui.file_description.hide()
-            self._ui.file_size.hide()
+            self._ui.file_name.set_visible(False)
+            self._ui.file_description.set_visible(False)
+            self._ui.file_size.set_visible(False)
             return
 
         file_name = GLib.markup_escape_text(str(self._file_props.name))
@@ -232,7 +232,7 @@ class FileTransferJingleRow(BaseRow, EventHelper):
             self._ui.file_description.set_text(desc)
             self._ui.file_description.set_tooltip_text(desc)
         else:
-            self._ui.file_description.hide()
+            self._ui.file_description.set_visible(False)
 
         assert self._file_props.size is not None
         self._ui.file_size.set_text(

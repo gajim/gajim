@@ -72,7 +72,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
     def show_all(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
         self.emit("page-changed", page_name)
-        self.window.show()
+        self.window.set_visible(True)
 
     def _update_page_complete(self, *args: Any) -> None:
         page_widget = cast(Page, self._ui.stack.get_visible_child())
@@ -86,7 +86,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
     def _hide_buttons(self) -> None:
         for button, _complete in self._buttons.values():
-            button.hide()
+            button.set_visible(False)
 
     def _set_buttons_visible(self) -> None:
         page_name = self._ui.stack.get_visible_child_name()
@@ -110,7 +110,7 @@ class Assistant(GObject.Object, GajimAppWindow, EventHelper):
 
         for button_name in buttons:
             button, _complete = self._buttons[button_name]
-            button.show()
+            button.set_visible(True)
 
     def set_button_visible_func(self, func: Callable[..., list[str]]) -> None:
         self._button_visible_func = func

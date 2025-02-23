@@ -45,7 +45,7 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
         if not isinstance(contact, GroupchatContact):
             self._contact = None
             self.set_visible(False)
-            self.hide()
+            self.set_visible(False)
             return
 
         self._contact = contact
@@ -59,13 +59,13 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
 
     def _update(self) -> None:
         self.set_visible(False)
-        self.hide()
+        self.set_visible(False)
 
         assert self._contact is not None
         client = app.get_client(self._contact.account)
         voice_requests = client.get_module("MUC").get_voice_requests(self._contact)
         if voice_requests:
-            self.show()
+            self.set_visible(True)
 
     def _on_button_clicked(self, _button: VoiceRequestsButton) -> None:
         assert self._contact is not None

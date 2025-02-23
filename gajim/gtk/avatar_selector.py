@@ -94,8 +94,8 @@ class AvatarSelector(Gtk.Box, SignalManager):
     def reset(self) -> None:
         self._crop_area.reset()
         self._file_chooser_button.reset()
-        self._file_chooser_button.show()
-        self._helper_label.show()
+        self._file_chooser_button.set_visible(True)
+        self._helper_label.set_visible(True)
 
     def prepare_crop_area(self, path: str) -> None:
         pixbuf = self._get_pixbuf_from_path(path)
@@ -104,9 +104,9 @@ class AvatarSelector(Gtk.Box, SignalManager):
             return
 
         self._crop_area.set_pixbuf(pixbuf)
-        self._file_chooser_button.hide()
-        self._helper_label.hide()
-        self._crop_area.show()
+        self._file_chooser_button.set_visible(False)
+        self._helper_label.set_visible(False)
+        self._crop_area.set_visible(True)
 
     def _on_path_picked(
         self, _button: AvatarFileChooserButton, paths: list[Path]
@@ -239,7 +239,7 @@ class CropArea(Gtk.DrawingArea, SignalManager):
 
     def reset(self) -> None:
         self._browse_pixbuf = None
-        self.hide()
+        self.set_visible(False)
 
     def set_pixbuf(self, pixbuf: GdkPixbuf.Pixbuf) -> None:
         self._browse_pixbuf = pixbuf

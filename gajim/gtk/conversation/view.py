@@ -84,7 +84,7 @@ class ConversationView(Gtk.ScrolledWindow):
         # Using set_hscroll_policy(Gtk.Scrollable.Policy.NEVER) would cause bad
         # performance during resize, and prevent the window from being shrunk
         # horizontally under certain conditions (applies to GroupchatControl)
-        self.get_hscrollbar().hide()
+        self.get_hscrollbar().set_visible(False)
 
         self._message_row_actions = message_row_actions
 
@@ -534,7 +534,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         if message.direction == ChatDirection.INCOMING:
             if message.timestamp > self._read_marker_row.timestamp:
-                self._read_marker_row.hide()
+                self._read_marker_row.set_visible(False)
 
     def _add_date_row(self, timestamp: datetime) -> None:
         start_of_day = get_start_of_day(timestamp.astimezone())

@@ -60,20 +60,18 @@ class JumpToEndButton(Gtk.Overlay):
         self.emit("clicked")
 
     def toggle(self, visible: bool) -> None:
-        if visible:
-            self.show()
-        else:
-            self.hide()
+        self.set_visible(visible)
+        if not visible:
             self.reset_unread_count()
 
     def reset_unread_count(self) -> None:
         self._count = 0
-        self._unread_label.hide()
+        self._unread_label.set_visible(False)
 
     def add_unread_count(self) -> None:
         self._count += 1
         if self._count > 0:
             self._unread_label.set_text(str(self._count))
-            self._unread_label.show()
+            self._unread_label.set_visible(True)
         else:
-            self._unread_label.hide()
+            self._unread_label.set_visible(False)

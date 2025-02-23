@@ -741,7 +741,7 @@ class MultiLinePropertyGui(VCardPropertyGui):
         VCardPropertyGui.__init__(self, prop)
 
         self._edit_text_view = ValueTextView(prop)
-        self._edit_text_view.show()
+        self._edit_text_view.set_visible(True)
 
         self._edit_scrolled = Gtk.ScrolledWindow()
         self._edit_scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -753,7 +753,7 @@ class MultiLinePropertyGui(VCardPropertyGui):
         self._read_text_view = ValueTextView(prop)
         self._read_text_view.set_sensitive(False)
         self._read_text_view.set_left_margin(0)
-        self._read_text_view.show()
+        self._read_text_view.set_visible(True)
 
         self._read_scrolled = Gtk.ScrolledWindow()
         self._read_scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -828,7 +828,7 @@ class KeyPropertyGui(VCardPropertyGui):
         VCardPropertyGui.__init__(self, prop)
 
         self._value_text_view = ValueTextView(prop)
-        self._value_text_view.show()
+        self._value_text_view.set_visible(True)
 
         self._scrolled_window = Gtk.ScrolledWindow()
         self._scrolled_window.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -860,10 +860,10 @@ class GenderPropertyGui(VCardPropertyGui):
         self._connect(
             self._value_combobox, "notify::active-id", self._on_active_id_changed
         )
-        self._value_combobox.show()
+        self._value_combobox.set_visible(True)
 
         self._value_entry = IdentityEntry(prop)
-        self._value_entry.show()
+        self._value_entry.set_visible(True)
         self._connect(self._value_entry, "notify::text", self._on_text_changed)
 
         value_box.append(self._value_combobox)
@@ -871,9 +871,9 @@ class GenderPropertyGui(VCardPropertyGui):
 
         label_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         self._identity_label = IdentityLabel(prop)
-        self._identity_label.show()
+        self._identity_label.set_visible(True)
         self._sex_label = SexLabel(prop)
-        self._sex_label.show()
+        self._sex_label.set_visible(True)
 
         label_box.append(self._sex_label)
         label_box.append(self._identity_label)

@@ -93,11 +93,11 @@ class ServerInfo(GajimAppWindow, EventHelper):
         self._add_connection_info()
 
         if self._client.certificate is None:
-            self._ui.no_certificate_label.show()
+            self._ui.no_certificate_label.set_visible(True)
         else:
             cert_box = CertificateBox(account, self._client.certificate)
             self._ui.cert_scrolled.set_child(cert_box)
-            self._ui.cert_scrolled.show()
+            self._ui.cert_scrolled.set_visible(True)
 
         for feature in self._get_features():
             self._add_feature(feature)
@@ -372,7 +372,7 @@ class FeatureItem(Gtk.ListBoxRow):
         self._feature_label.set_text(self._feature.name)
         if self._feature.additional is not None:
             self._additional_label.set_text(self._feature.additional)
-            self._additional_label.show()
+            self._additional_label.set_visible(True)
 
         self._icon.remove_css_class("error-color")
         self._icon.remove_css_class("success-color")

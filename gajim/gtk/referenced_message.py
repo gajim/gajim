@@ -263,7 +263,7 @@ class ReplyBox(Gtk.Box, SignalManager):
         )
         self.append(self._ref_widget)
         self.reorder_child_after(self._close_button, self._ref_widget)
-        self.show()
+        self.set_visible(True)
 
     def disable_reply_mode(self, *args: Any) -> None:
         if self._ref_widget is not None:
@@ -271,7 +271,6 @@ class ReplyBox(Gtk.Box, SignalManager):
             self._ref_widget = None
 
         self.set_visible(False)
-        self.hide()
 
     @property
     def is_in_reply_mode(self) -> bool:

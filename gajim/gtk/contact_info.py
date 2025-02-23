@@ -221,7 +221,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if isinstance(contact, GroupchatParticipant):
             self._ui.role_label.set_text(get_uf_role(contact.role))
             self._ui.affiliation_label.set_text(get_uf_affiliation(contact.affiliation))
-            self._ui.group_chat_grid.show()
+            self._ui.group_chat_grid.set_visible(True)
 
         self._switcher.set_row_visible("information", True)
 
@@ -403,7 +403,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                     ),
                 ],
                 transient_for=self.window,
-            ).show()
+            ).set_visible(True)
         return Gdk.EVENT_STOP
 
     def _on_to_subscription_button_clicked(self, _widget: Gtk.Button) -> None:
@@ -472,7 +472,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                 DialogButton.make("Remove", callback=_remove_group),
             ],
             transient_for=self.window,
-        ).show()
+        ).set_visible(True)
         return Gdk.EVENT_STOP
 
     def _on_group_toggled(self, _renderer: Gtk.CellRendererToggle, path: str) -> None:
@@ -522,8 +522,8 @@ class DeviceGrid:
         self._ui.status_value.set_text(get_uf_show(contact.show.value))
 
         self._ui.priority_value.set_text(str(self._contact.priority))
-        self._ui.priority_value.show()
-        self._ui.priority_label.show()
+        self._ui.priority_value.set_visible(True)
+        self._ui.priority_label.set_visible(True)
 
         self._ui.resource_box.append(self._spinner)
 
@@ -536,8 +536,8 @@ class DeviceGrid:
     def set_entity_time(self, entity_time: str | None) -> None:
         if entity_time is not None:
             self._ui.time_value.set_text(entity_time)
-            self._ui.time_value.show()
-            self._ui.time_label.show()
+            self._ui.time_value.set_visible(True)
+            self._ui.time_label.set_visible(True)
 
         self._check_complete()
 
@@ -545,12 +545,12 @@ class DeviceGrid:
         if software is not None:
             software_string = f"{software.name} {software.version}"
             self._ui.software_value.set_text(software_string)
-            self._ui.software_value.show()
-            self._ui.software_label.show()
+            self._ui.software_value.set_visible(True)
+            self._ui.software_label.set_visible(True)
             if software.os is not None:
                 self._ui.system_value.set_text(software.os)
-                self._ui.system_value.show()
-                self._ui.system_label.show()
+                self._ui.system_value.set_visible(True)
+                self._ui.system_label.set_visible(True)
 
         self._check_complete()
 

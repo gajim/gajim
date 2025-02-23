@@ -300,7 +300,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
             _("_Do not ask me again"),
             buttons,
             transient_for=app.window,
-        ).show()
+        ).set_visible(True)
 
     def remove_chats_for_account(self, account: str) -> None:
         for workspace_id, chat_list in self._chat_lists.items():
