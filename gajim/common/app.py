@@ -133,7 +133,7 @@ def init_process_pool() -> None:
     process_pool = ProcessPoolExecutor(
         max_workers=4,
         mp_context=mp_context,
-        # max_tasks_per_child=5,
+        max_tasks_per_child=5,
         initializer=init_process,
     )
 
