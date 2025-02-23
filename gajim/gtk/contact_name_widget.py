@@ -158,7 +158,7 @@ class ContactNameWidget(Gtk.Box, SignalManager):
 
         self._entry.set_text(name)
 
-        width_chars = len(name) if len(name) <= 20 else 20
+        width_chars = min(len(name), 20)
         self._entry.set_width_chars(width_chars)
 
         self.emit("name-updated", name)

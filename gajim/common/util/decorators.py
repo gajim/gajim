@@ -18,7 +18,7 @@ def lru_cache_with_ttl(maxsize: int, typed: bool = False, ttl: int = 2) -> Any:
     '''LRU-Cache with TTL'''
 
     class Result:
-        __slots__ = ('value', 'timeout')
+        __slots__ = ('timeout', 'value')
 
         def __init__(self, value: Any, timeout: float) -> None:
             self.value = value

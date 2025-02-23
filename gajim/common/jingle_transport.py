@@ -56,8 +56,15 @@ class JingleTransport:
     An abstraction of a transport in Jingle sessions
     '''
 
-    __slots__ = ['type_', 'candidates', 'remote_candidates', 'connection',
-                 'file_props', 'ourjid', 'sid']
+    __slots__ = [
+        'candidates',
+        'connection',
+        'file_props',
+        'ourjid',
+        'remote_candidates',
+        'sid',
+        'type_',
+    ]
 
     def __init__(self, type_: TransportType) -> None:
         self.type_ = type_

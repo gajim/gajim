@@ -266,10 +266,8 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             self.close()
 
         if (
-            state & Gdk.ModifierType.CONTROL_MASK
-            and keyval == Gdk.KEY_Return
-            or keyval == Gdk.KEY_KP_Enter
-        ):
+            state & Gdk.ModifierType.CONTROL_MASK and keyval == Gdk.KEY_Return
+        ) or keyval == Gdk.KEY_KP_Enter:
             self._on_send()
             return Gdk.EVENT_STOP
 

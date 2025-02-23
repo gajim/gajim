@@ -33,9 +33,9 @@ PRE_RX = r'(?P<pre>^```.+?(^```$(.|\Z)))'
 PRE_NESTED_RX = r'(?P<pre>^```.+?((^```$(.|\Z))|\Z))'
 QUOTE_RX = r'(?P<quote>^(?=>).*?(^|\Z)(?!>))'
 
-BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.S | re.M)
-BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.S | re.M)
-UNQUOTE_RX = re.compile(r'^> |^>', re.M)
+BLOCK_RX = re.compile(PRE_RX + '|' + QUOTE_RX, re.DOTALL | re.MULTILINE)
+BLOCK_NESTED_RX = re.compile(PRE_NESTED_RX + '|' + QUOTE_RX, re.DOTALL | re.MULTILINE)
+UNQUOTE_RX = re.compile(r'^> |^>', re.MULTILINE)
 
 URI_OR_JID_RX = re.compile(
     fr'(?P<uri>(?<![\w+.-]){regex.IRI})|(?P<jid>{regex.XMPP.jid})')

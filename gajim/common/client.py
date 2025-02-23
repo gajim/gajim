@@ -616,8 +616,8 @@ class Client(Observable, ClientModules):
         if not app.settings.get(f'auto{state}'):
             return
 
-        if (state in ('away', 'xa') and self._status == 'online' or
-                state == 'xa' and self._idle_status == 'away'):
+        if ((state in ('away', 'xa') and self._status == 'online') or
+                (state == 'xa' and self._idle_status == 'away')):
 
             self._idle_status = state
             self._idle_status_message = get_idle_status_message(

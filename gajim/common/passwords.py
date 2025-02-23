@@ -22,11 +22,11 @@ from gajim.common import app
 from gajim.common.util.version import package_version
 
 __all__ = [
+    'delete_password',
+    'get_password',
     'init',
     'is_keyring_available',
-    'get_password',
-    'save_password',
-    'delete_password'
+    'save_password'
 ]
 
 log = logging.getLogger('gajim.c.passwords')
