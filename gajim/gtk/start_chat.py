@@ -1046,7 +1046,7 @@ class ContactViewItem(Gtk.Grid, SignalManager):
 
         self.__bindings: list[GObject.Binding] = []
 
-        # TODO GTK4
+        # TODO: add back tooltip
         # self._tooltip = ContactTooltip()
         # image.set_has_tooltip(True)
         # self._connect(image, 'query-tooltip', self._on_query_tooltip)
