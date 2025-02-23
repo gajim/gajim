@@ -25,6 +25,7 @@ from nbxmpp.protocol import JID
 from nbxmpp.protocol import Message
 from nbxmpp.protocol import Presence
 from nbxmpp.structs import CommonError
+from nbxmpp.structs import CommonResult
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import MucConfigResult
@@ -455,7 +456,7 @@ class MUC(BaseModule):
             room.notfiy('room-config-failed', error_text)
             return
 
-        assert isinstance(result, MucConfigResult)
+        assert isinstance(result, CommonResult)
         self._con.get_module('Discovery').disco_muc(
             result.jid, callback=self._on_disco_result_after_config)
 
