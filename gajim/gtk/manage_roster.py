@@ -270,7 +270,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             ],
             input_str=_("New Group"),
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _add_to_group(self, group: str) -> None:
         items = self._get_selected_items()
@@ -295,7 +295,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             ],
             input_str=_("New Group"),
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _move_to_group(self, group: str) -> None:
         items = self._get_selected_items()
@@ -331,7 +331,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 DialogButton.make("Remove", callback=_on_remove),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
 
@@ -353,7 +353,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
             ],
             input_str=item.name,
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _on_import_from_account(
         self, _action: Gio.SimpleAction, param: GLib.Variant
@@ -385,7 +385,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _on_import_from_file(self, _action: Gio.SimpleAction, param: None) -> None:
 
@@ -486,7 +486,7 @@ class ManageRoster(GajimAppWindow, EventHelper):
                 DialogButton.make("Accept", text=_("Import"), callback=_on_import),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _validate_imported_item(self, row: list[str]) -> ImportedItem | None:
         try:

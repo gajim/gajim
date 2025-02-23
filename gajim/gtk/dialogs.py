@@ -72,7 +72,7 @@ class DialogButton(NamedTuple):
         return cls(**default_kwargs)
 
 
-class ConfirmationDialog(Gtk.MessageDialog):
+class BaseConfirmationDialog(Gtk.MessageDialog):
     def __init__(
         self,
         text: str,
@@ -148,14 +148,32 @@ class ConfirmationDialog(Gtk.MessageDialog):
         self.destroy()
 
 
-class SimpleDialog(ConfirmationDialog):
+class ConfirmationDialog(BaseConfirmationDialog):
+    def __init__(
+        self,
+        text: str,
+        sec_text: str,
+        buttons: list[DialogButton],
+        transient_for: Gtk.Window | None = None,
+    ) -> None:
+        BaseConfirmationDialog.__init__(
+            self,
+            text,
+            sec_text,
+            buttons=buttons,
+            transient_for=transient_for,
+        )
+        self.set_visible(True)
+
+
+class SimpleDialog(BaseConfirmationDialog):
     def __init__(
         self,
         text: str,
         sec_text: str,
         transient_for: Gtk.Window | None = None,
     ) -> None:
-        ConfirmationDialog.__init__(
+        BaseConfirmationDialog.__init__(
             self,
             text,
             sec_text,
@@ -165,7 +183,7 @@ class SimpleDialog(ConfirmationDialog):
         self.set_visible(True)
 
 
-class ConfirmationCheckDialog(ConfirmationDialog):
+class ConfirmationCheckDialog(BaseConfirmationDialog):
     def __init__(
         self,
         text: str,
@@ -174,7 +192,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         buttons: list[DialogButton],
         transient_for: Gtk.Window | None = None,
     ) -> None:
-        ConfirmationDialog.__init__(
+        BaseConfirmationDialog.__init__(
             self,
             text,
             sec_text,
@@ -198,6 +216,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         self._checkbutton.set_margin_end(30)
 
         self.get_content_area().append(self._checkbutton)
+        self.set_visible(True)
 
     def _on_response(
         self, _dialog: Gtk.MessageDialog, response: Gtk.ResponseType
@@ -208,7 +227,7 @@ class ConfirmationCheckDialog(ConfirmationDialog):
         super()._on_response(_dialog, response)
 
 
-class InputDialog(ConfirmationDialog):
+class InputDialog(BaseConfirmationDialog):
     def __init__(
         self,
         text: str,
@@ -218,7 +237,7 @@ class InputDialog(ConfirmationDialog):
         modal: bool = True,
         transient_for: Gtk.Window | None = None,
     ) -> None:
-        ConfirmationDialog.__init__(
+        BaseConfirmationDialog.__init__(
             self,
             text,
             sec_text,
@@ -236,6 +255,7 @@ class InputDialog(ConfirmationDialog):
             self._entry.select_region(0, -1)  # select all
 
         self.get_content_area().append(self._entry)
+        self.set_visible(True)
 
     def _on_response(
         self, _dialog: Gtk.MessageDialog, response: Gtk.ResponseType

@@ -324,7 +324,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     "Remove", text=_("_Connect Anyway"), callback=event.connect
                 ),
             ],
-        ).set_visible(True)
+        )
 
     @staticmethod
     def _on_password_required(event: events.PasswordRequired) -> None:
@@ -359,7 +359,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Accept", callback=_response, args=["yes"]),
             ],
-        ).set_visible(True)
+        )
 
     def _on_muc_added(self, event: events.MucAdded) -> None:
         if self.chat_exists(event.account, event.jid):
@@ -714,7 +714,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ],
             input_str=_("Spam"),
             transient_for=app.window,
-        ).set_visible(True)
+        )
 
     @actionmethod
     def _on_moderate_all_messages(
@@ -759,7 +759,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ],
             input_str=_("Spam"),
             transient_for=app.window,
-        ).set_visible(True)
+        )
 
     @actionmethod
     def _on_delete_message_locally(
@@ -782,7 +782,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 DialogButton.make("Delete", callback=_on_delete),
             ],
             transient_for=app.window,
-        ).set_visible(True)
+        )
 
     def _on_window_motion_notify(
         self,
@@ -956,7 +956,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                     DialogButton.make("Cancel", text=_("_No")),
                     DialogButton.make("Remove", callback=_continue_removing_workspace),
                 ],
-            ).set_visible(True)
+            )
             return
 
         # No chats in chat list, it is save to remove this workspace
@@ -1261,7 +1261,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ),
                 DialogButton.make("Remove", text=_("_Block"), callback=_block_contact),
             ],
-        ).set_visible(True)
+        )
 
     def remove_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
@@ -1284,7 +1284,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove_contact),
             ],
-        ).set_visible(True)
+        )
 
     @staticmethod
     def _check_for_account() -> None:
@@ -1384,7 +1384,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                             args=[message],
                         ),
                     ],
-                ).set_visible(True)
+                )
                 return
 
             on_continue2(message)

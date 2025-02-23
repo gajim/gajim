@@ -151,7 +151,7 @@ class ManageProxies(GajimAppWindow):
                 DialogButton.make("Remove", callback=_remove),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:
         if self._block_signal:

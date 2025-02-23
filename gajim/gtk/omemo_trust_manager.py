@@ -222,7 +222,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Accept", text=_("_Clear Devices"), callback=_clear),
             ],
-        ).set_visible(True)
+        )
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
         assert self._contact is not None
@@ -311,7 +311,7 @@ class KeyRow(Gtk.ListBoxRow):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("Delete"), callback=_remove),
             ],
-        ).set_visible(True)
+        )
 
     def set_trust(self, trust: OMEMOTrust) -> None:
         self._trust = trust

@@ -104,7 +104,7 @@ class MamPreferences(GajimAppWindow):
             _("Archiving Preferences Saved"),
             _("Your archiving preferences have successfully been saved."),
             [DialogButton.make("OK", callback=_on_ok)],
-        ).set_visible(True)
+        )
 
     def _on_error(self, error: str) -> None:
         self._disable_spinner()

@@ -403,7 +403,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                     ),
                 ],
                 transient_for=self.window,
-            ).set_visible(True)
+            )
         return Gdk.EVENT_STOP
 
     def _on_to_subscription_button_clicked(self, _widget: Gtk.Button) -> None:
@@ -472,7 +472,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                 DialogButton.make("Remove", callback=_remove_group),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
         return Gdk.EVENT_STOP
 
     def _on_group_toggled(self, _renderer: Gtk.CellRendererToggle, path: str) -> None:

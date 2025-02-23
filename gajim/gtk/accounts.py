@@ -121,7 +121,7 @@ class AccountsWindow(GajimAppWindow):
                 DialogButton.make("Cancel", text=_("_Later"), callback=self.close),
                 DialogButton.make("Accept", text=_("_Re-Login"), callback=relog),
             ],
-        ).set_visible(True)
+        )
 
     @staticmethod
     def _get_relogin_settings(account: str) -> list[AllSettingsT]:
@@ -574,7 +574,7 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
                     ),
                 ],
                 transient_for=window.window,
-            ).set_visible(True)
+            )
             return Gdk.EVENT_STOP
 
         if state:

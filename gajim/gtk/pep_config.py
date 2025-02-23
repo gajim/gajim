@@ -148,7 +148,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
                 DialogButton.make("Delete", callback=_delete),
             ],
             transient_for=self.window,
-        ).set_visible(True)
+        )
 
     def _on_node_delete(self, task: Task) -> None:
         node = task.get_user_data()

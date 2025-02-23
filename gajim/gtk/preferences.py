@@ -1071,7 +1071,7 @@ class Miscellaneous(PreferenceBox):
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("_Purge"), callback=_purge),
             ],
-        ).set_visible(True)
+        )
 
 
 class Advanced(PreferenceBox):

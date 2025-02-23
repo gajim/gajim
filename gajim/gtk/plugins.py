@@ -427,7 +427,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                      DialogButton.make('Remove',
                                        text=_('_Overwrite'),
                                        callback=_on_overwrite)],
-                ).set_visible(True)
+                )
                 return
 
             SimpleDialog(error_text, f'"{zip_filename}"')

@@ -392,7 +392,7 @@
 #                                text=_('_No')),
 #              DialogButton.make('Accept',
 #                                text=_('_Download Again'),
-#                                callback=_on_yes)]).set_visible(True)
+#                                callback=_on_yes)])
 
 #     def send_file(self,
 #                   account: str,
