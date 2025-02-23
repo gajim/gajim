@@ -15,7 +15,7 @@ from gi.repository import Gtk
 from gi.repository import Pango
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
-from nbxmpp.modules.dataforms import SimpleDataForm
+from nbxmpp.modules.dataforms import DataForm
 from nbxmpp.namespaces import Namespace
 from nbxmpp.structs import LastActivityData
 from nbxmpp.structs import SoftwareVersionResult
@@ -110,6 +110,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         nbxmpp_client = self._client.connection
         address = nbxmpp_client.current_address
 
+        assert address is not None
         self._ui.connection_type.set_text(address.type.value)
         if address.type.is_plain:
             self._ui.connection_type.add_css_class("error-color")
@@ -137,12 +138,13 @@ class ServerInfo(GajimAppWindow, EventHelper):
         self._ui.websocket.set_visible(visible)
         self._ui.websocket.set_text(address.uri or "")
 
+        assert nbxmpp_client is not None
         tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
         self._ui.tls_version.set_text(tls_version or _("Not available"))
 
         self._ui.cipher_suite.set_text(nbxmpp_client.ciphersuite or _("Not available"))
 
-    def _add_contact_addresses(self, dataforms: list[SimpleDataForm]) -> None:
+    def _add_contact_addresses(self, dataforms: list[DataForm]) -> None:
         fields = {
             "admin-addresses": _("Admin"),
             "status-addresses": _("Status"),
@@ -170,7 +172,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
     @staticmethod
     def _get_addresses(
-        fields: dict[str, str], dataforms: list[SimpleDataForm]
+        fields: dict[str, str], dataforms: list[DataForm]
     ) -> dict[str, list[str]] | None:
         addresses: dict[str, list[str]] = {}
         for form in dataforms:
@@ -260,7 +262,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         if http_upload_module.available:
             max_size = http_upload_module.max_file_size
             if max_size is not None:
-                max_size = GLib.format_size_full(max_size, self._units)
+                max_size = GLib.format_size_full(int(max_size), self._units)
                 http_upload_info = f"{http_upload_info} (max. {max_size})"
 
         return [
@@ -289,7 +291,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
             ),
             Feature(
                 "XEP-0198: Stream Management",
-                self._client.features.has_sm,
+                self._client.features.has_sm(),
                 Namespace.STREAM_MGMT,
             ),
             Feature(
