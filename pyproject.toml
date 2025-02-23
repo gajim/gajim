@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 name = "gajim"
 description = "A GTK XMPP Client"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {text = "GPL-3.0-or-later"}
 authors = [
     {name = "Philipp Hörist", email = "philipp@hoerist.com"},
@@ -20,7 +20,7 @@ classifiers = [
   "Environment :: X11 Applications :: GTK",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Topic :: Communications :: Chat",
 ]
 dependencies = [
@@ -79,7 +79,7 @@ version = {attr = "gajim.__version__"}
 
 [tool.black]
 line-length = 88
-target-version = ["py310", "py311", "py312"]
+target-version = ["py311", "py312", "py313"]
 force-exclude = "common|plugins"
 required-version = "24.10.0"
 
@@ -88,7 +88,7 @@ skip = "*__pycache__*,_build_root,build,debian_build,dist,shared-modules,test,*.
 ignore-words-list = "claus,pres,ser,trough,THIRDPARTY,addin"
 
 [tool.pyright]
-pythonVersion = "3.10"
+pythonVersion = "3.11"
 pythonPlatform = "All"
 typeCheckingMode = "strict"
 
@@ -164,7 +164,7 @@ exclude = [
 
 [tool.ruff]
 line-length = 88
-target-version = "py310"
+target-version = "py311"
 
 [tool.ruff.lint]
 
