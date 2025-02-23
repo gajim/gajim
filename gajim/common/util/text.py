@@ -131,6 +131,7 @@ def make_href_markup(string: str | None) -> str:
     if not string:
         return ""
 
+    string = process_non_spacing_marks(string)
     string = GLib.markup_escape_text(string)
 
     def _to_href(match: Match[str]) -> str:
