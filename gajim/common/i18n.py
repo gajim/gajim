@@ -94,7 +94,7 @@ class Translation:
         if sys.platform == 'darwin':
             return self._get_darwin_default_lang()
 
-        return locale.getdefaultlocale()[0] or 'en'
+        return locale.getlocale()[0] or 'en'
 
     def init(self) -> None:
         try:
