@@ -152,6 +152,7 @@ class SearchForm(Page):
 
     @property
     def search_form(self) -> dataforms.SimpleDataForm:
+        assert self._dataform_widget is not None
         return self._dataform_widget.get_submit_form()
 
     def clear(self) -> None:
@@ -180,6 +181,7 @@ class SearchForm(Page):
         self.update_page_complete()
 
     def get_submit_form(self) -> dataforms.SimpleDataForm:
+        assert self._dataform_widget is not None
         return self._dataform_widget.get_submit_form()
 
     def get_visible_buttons(self) -> list[str]:
@@ -243,8 +245,10 @@ class Result(Page):
 
         liststore = Gtk.ListStore(*fieldtypes)
 
+        assert isinstance(form, dataforms.MultipleDataForm)
         for item in form.iter_records():
             iter_ = liststore.append()
+            assert isinstance(item, dataforms.DataRecord)
             for field in item.iter_fields():
                 if field.var in fieldvars:
                     liststore.set_value(iter_, fieldvars.index(field.var), field.value)
