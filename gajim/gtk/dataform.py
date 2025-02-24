@@ -11,7 +11,11 @@ from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
-from nbxmpp.modules.dataforms import DataField
+from nbxmpp.modules.dataforms import BooleanField as NBXMPPBooleanField
+from nbxmpp.modules.dataforms import DataField as NBXMPPDataField
+from nbxmpp.modules.dataforms import DataRecord
+from nbxmpp.modules.dataforms import ListField as NBXMPPListField
+from nbxmpp.modules.dataforms import ListMultiField as NBXMPPListMultiField
 from nbxmpp.modules.dataforms import MultipleDataForm
 from nbxmpp.modules.dataforms import SimpleDataForm
 from nbxmpp.modules.dataforms import Uri
@@ -113,6 +117,7 @@ class DataFormWidget(Gtk.ScrolledWindow, SignalManager):
         if self._form_node.is_reported:
             return
 
+        assert isinstance(self._form_widget, FormGrid)
         for row in range(self._form_widget.row_count):
             widget = self._form_widget.get_child_at(1, row)
             if isinstance(widget, Gtk.Entry):
@@ -246,11 +251,11 @@ class FormGrid(Gtk.Grid, SignalManager):
             else:
                 self._add_row(widget(field, self, options))
 
-    def _add_media_field(self, field: DataField, options: dict[str, Any]) -> bool:
-
+    def _add_media_field(self, field: NBXMPPDataField, options: dict[str, Any]) -> bool:
         if field.type_ not in ("text-single", "text-private", "text-multi"):
             return False
 
+        assert field.media is not None
         for uri in field.media.uris:
             if not uri.type_.startswith("image/"):
                 continue
@@ -313,7 +318,7 @@ class Instructions:
 
 class Field(GObject.GObject, SignalManager):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         GObject.GObject.__init__(self)
@@ -414,7 +419,7 @@ class Field(GObject.GObject, SignalManager):
 
 class BooleanField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPBooleanField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -431,13 +436,14 @@ class BooleanField(Field):
 
     def _toggled(self, _widget: Gtk.CheckButton) -> None:
         assert isinstance(self._widget, Gtk.CheckButton)
+        assert isinstance(self._field, NBXMPPBooleanField)
         self._field.value = self._widget.get_active()
         self._validate()
 
 
 class FixedField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -464,7 +470,7 @@ class ListSingleField(Field):
 
     def __init__(
         self,
-        field: DataField,
+        field: NBXMPPListField,
         form_grid: FormGrid,
         options: dict[str, Any],
         treeview: bool = False,
@@ -491,7 +497,7 @@ class ListSingleField(Field):
             app.check_finalize(self._treeview)
         del self._treeview
 
-    def _setup_dropdown(self, field: DataField) -> None:
+    def _setup_dropdown(self, field: NBXMPPListField) -> None:
         data: dict[str, str] = {}
         for value, label in field.iter_options():
             if not label:
@@ -509,7 +515,7 @@ class ListSingleField(Field):
         self._field.value = item.props.key
         self._validate()
 
-    def _setup_treeview(self, field: DataField) -> None:
+    def _setup_treeview(self, field: NBXMPPListField) -> None:
         self._treeview = ListSingleTreeView(field, self)
         self._connect(self._treeview, "row-activated", self._on_row_activated)
         self._connect(self._treeview, "cursor-changed", self._on_cursor_changed)
@@ -524,6 +530,7 @@ class ListSingleField(Field):
         self._widget.set_child(self._treeview)
 
     def _on_cursor_changed(self, *_args: Any) -> None:
+        assert self._treeview is not None
         model, treeiter = self._treeview.get_selection().get_selected()
         if treeiter is None:
             return None
@@ -535,13 +542,14 @@ class ListSingleField(Field):
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
         if self._unique:
+            assert self._widget is not None
             form_grid.attach(self._widget, 0, row_number, 2, 1)
         else:
             super().add(form_grid, row_number)
 
 
 class ListSingleTreeView(Gtk.TreeView):
-    def __init__(self, field: DataField, multi_field: ListSingleField) -> None:
+    def __init__(self, field: NBXMPPListField, multi_field: ListSingleField) -> None:
 
         Gtk.TreeView.__init__(self)
 
@@ -580,7 +588,7 @@ class ListSingleTreeView(Gtk.TreeView):
 
 class ListMultiField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPListMultiField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -605,7 +613,9 @@ class ListMultiField(Field):
 
 
 class ListMultiTreeView(Gtk.TreeView, SignalManager):
-    def __init__(self, field: DataField, multi_field: ListMultiField) -> None:
+    def __init__(
+        self, field: NBXMPPListMultiField, multi_field: ListMultiField
+    ) -> None:
 
         Gtk.TreeView.__init__(self)
         SignalManager.__init__(self)
@@ -678,7 +688,7 @@ class ListMultiTreeView(Gtk.TreeView, SignalManager):
 
 class JidMultiField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPListMultiField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -724,7 +734,11 @@ class JidMultiField(Field):
         model.append([""])
 
     def _remove_clicked(self, _widget: Gtk.Button) -> None:
-        mod, paths = self._treeview.get_selection().get_selected_rows()
+        selected_rows = self._treeview.get_selection().get_selected_rows()
+        if selected_rows is None:
+            return
+
+        mod, paths = selected_rows
         for path in paths:
             iter_ = mod.get_iter(path)
             model = self._treeview.get_model()
@@ -738,6 +752,8 @@ class JidMultiField(Field):
             if not row[0]:
                 continue
             jids.append(row[0])
+
+        assert isinstance(self._field, NBXMPPListMultiField)
         self._field.values = jids
         self._validate()
 
@@ -746,7 +762,7 @@ class JidMultiField(Field):
 
 
 class JidMutliTreeView(Gtk.TreeView, SignalManager):
-    def __init__(self, field: DataField, multi_field: JidMultiField) -> None:
+    def __init__(self, field: NBXMPPListMultiField, multi_field: JidMultiField) -> None:
 
         Gtk.TreeView.__init__(self)
         SignalManager.__init__(self)
@@ -800,7 +816,7 @@ class JidMutliTreeView(Gtk.TreeView, SignalManager):
 
 class TextSingleField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -825,7 +841,7 @@ class TextSingleField(Field):
 
 class TextPrivateField(TextSingleField):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         TextSingleField.__init__(self, field, form_grid, options)
@@ -836,7 +852,7 @@ class TextPrivateField(TextSingleField):
 
 class JidSingleField(TextSingleField):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         TextSingleField.__init__(self, field, form_grid, options)
@@ -844,7 +860,7 @@ class JidSingleField(TextSingleField):
 
 class TextMultiField(Field):
     def __init__(
-        self, field: DataField, form_grid: FormGrid, options: dict[str, Any]
+        self, field: NBXMPPDataField, form_grid: FormGrid, options: dict[str, Any]
     ) -> None:
 
         Field.__init__(self, field, form_grid, options)
@@ -942,7 +958,7 @@ class FakeDataFormWidget(Gtk.ScrolledWindow, SignalManager):
             button = Gtk.Button(label="Register")
             button.set_halign(Gtk.Align.CENTER)
             button.add_css_class("suggested-action")
-            self._connect(button, "clicked", lambda *args: open_uri(redirect_url))
+            self._connect(button, "clicked", lambda *args: open_uri(redirect_url))  # type: ignore
             self._grid.attach(button, 0, self._row_count, 2, 1)
         else:
             self._add_fields()
@@ -1015,7 +1031,8 @@ class DataFormReportedTable(Gtk.Grid, SignalManager):
             self._column_names.append(field.label)
 
         rows: list[list[str]] = [
-            [f.value for f in record.fields] for record in self._form_node.items
+            [f.value for f in record.fields]
+            for record in cast(list[DataRecord], self._form_node.items)
         ]
 
         self._rows = rows
