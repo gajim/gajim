@@ -157,10 +157,13 @@ class Caps(BaseModule):
                               disco_info.jid, error)
             return
 
+        assert disco_info.jid is not None
+        caps_hash = disco_info.get_caps_hash()
+        assert caps_hash is not None
         app.storage.cache.add_caps_entry(
             disco_info.jid,
             task.entity.method,
-            disco_info.get_caps_hash(),
+            caps_hash,
             disco_info)
 
         self._log.info('Finished query for %s', task.entity.hash)
