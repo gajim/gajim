@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -2102,10 +2102,6 @@ msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας.
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Μήνυμα σφάλματος: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Σφάλμα: το αρχείο %s δε μπορεί να ανοιχθεί για ανάγνωση"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7125,6 +7121,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Σφάλμα:"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Σφάλμα: το αρχείο %s δε μπορεί να ανοιχθεί για ανάγνωση"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

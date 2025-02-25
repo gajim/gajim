@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -2159,11 +2159,6 @@ msgstr "שגיאה בעת הוספת שירות. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "שגיאה: %s"
-
-# cli
-#, fuzzy, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "שגיאה: אין אפשרות לפתוח את %s לקריאה"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7304,6 +7299,11 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "שגיאה"
+
+# cli
+#, fuzzy, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "שגיאה: אין אפשרות לפתוח את %s לקריאה"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
-"PO-Revision-Date: 2025-01-26 00:12+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"PO-Revision-Date: 2025-02-09 15:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -477,9 +477,8 @@ msgstr "Új bejegyzés"
 msgid "Add Files…"
 msgstr "Fájlok kiválasztása…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Csoporthoz adás"
+msgstr "Csoport hozzáadása…"
 
 msgid "Add Proxy"
 msgstr "Proxy hozzáadása"
@@ -1024,7 +1023,6 @@ msgstr ""
 "Egy társalgóban a névkiegészítés (TAB) használatakor a becenév után "
 "elhelyezendő karakter."
 
-#, fuzzy
 msgid "Chat"
 msgstr "Beszélgetések"
 
@@ -1854,10 +1852,6 @@ msgstr "A profilkép feltöltése nem sikerült"
 #, python-format
 msgid "Error: %s"
 msgstr "Hiba: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Hiba: %s nem olvasható"
 
 msgid "Even more features via plugins"
 msgstr "További funkciók hozzáadása bővítmények segítségével"
@@ -2913,9 +2907,8 @@ msgstr "Becenév"
 msgid "Nickname contains invalid characters"
 msgstr "A becenév érvénytelen karaktereket tartalmaz"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "Becenév"
+msgstr "Becenév…"
 
 msgid "No"
 msgstr "Nem"
@@ -3376,14 +3369,13 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Ellenőrizni kell, hogy csatlakozva van-e a fiók (%s)."
 
-#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
 "Választani kell egy fiókot.\n"
-"Ennek a fióknak az összes üzenete a megadott könyvtárba lesz exportálva."
+"Ennek a fióknak az összes üzenete a kiválasztott könyvtárba lesz exportálva."
 
 msgid "Please use these settings with caution!"
 msgstr "Ez a funkció körültekintéssel használandó!"
@@ -3665,9 +3657,8 @@ msgstr "Törlés a névjegyekből"
 msgid "Remove Group?"
 msgstr "Csoport törlése"
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "Csoport törlése"
+msgstr "Csoport törlése…"
 
 msgid "Remove History…"
 msgstr "Előzmények törlése…"
@@ -3793,9 +3784,8 @@ msgstr "Alaphelyzet"
 msgid "Reset Filters"
 msgstr "Szűrők alaphelyzetbe"
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "Szűrők alaphelyzetbe"
+msgstr "Javaslatok alaphelyzetbe"
 
 msgid "Reset User Interface Font Size"
 msgstr "A betűméret visszaállítása"
@@ -4486,9 +4476,8 @@ msgstr "Feliratkozás"
 msgid "Subscription Request"
 msgstr "Feliratkozási kérelem"
 
-#, fuzzy
 msgid "Subscription:"
-msgstr "Feliratkozás"
+msgstr "Feliratkozás:"
 
 msgid "Successfully Added Contacts"
 msgstr "Sikeres névjegyfelvétel"
@@ -5652,9 +5641,8 @@ msgstr "_Eltávolítás"
 msgid "_Report Spam"
 msgstr "_Spam jelentése"
 
-#, fuzzy
 msgid "_Request"
-msgstr "Kérelem"
+msgstr "_Kérelem"
 
 msgid "_Reset Value"
 msgstr "_Alaphelyzetbe"
@@ -5701,9 +5689,8 @@ msgstr "_Leiratkozás a szolgáltatásról"
 msgid "_Unsubscribe"
 msgstr "_Leiratkozás"
 
-#, fuzzy
 msgid "_Username"
-msgstr "Átnevezés"
+msgstr "_Felhasználónév"
 
 msgid "_View"
 msgstr "_Nézet"
@@ -6324,6 +6311,10 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Error!"
 #~ msgstr "Hiba!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Hiba: %s nem olvasható"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "A funkció Windows rendszeren nem érhető el"

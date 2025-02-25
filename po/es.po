@@ -4,14 +4,14 @@
 # El gran Pirujo <boina@disroot.org>, 2022, 2023, 2024, 2025.
 # Juan <jumase@disroot.org>, 2022, 2024.
 # André <git@apitzsch.eu>, 2023.
-# Juan M Sevilla <jumase@disroot.org>, 2024.
+# Juan M Sevilla <jumase@disroot.org>, 2024, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
-"PO-Revision-Date: 2025-01-25 14:12+0000\n"
-"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"PO-Revision-Date: 2025-02-25 04:12+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -489,9 +489,8 @@ msgstr "Añadir entrada"
 msgid "Add Files…"
 msgstr "Añadir ficheros…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Añadir a grupo"
+msgstr "Añadir grupo…"
 
 msgid "Add Proxy"
 msgstr "Añadir proxy"
@@ -1037,9 +1036,8 @@ msgstr ""
 "Carácter a añadir después del apodo cuando se usa el completado de apodos "
 "(tab) en salas de chat."
 
-#, fuzzy
 msgid "Chat"
-msgstr "Charlas"
+msgstr "Chat"
 
 msgid "Chat Banner: Background Color"
 msgstr "Chat Banner: Color de fondo"
@@ -1865,10 +1863,6 @@ msgstr "Error al subir avatar"
 #, python-format
 msgid "Error: %s"
 msgstr "Error: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Error: no se puede abrir %s para lectura"
 
 msgid "Even more features via plugins"
 msgstr "Incluso más funciones a través de extensiones"
@@ -2929,9 +2923,8 @@ msgstr "Alias"
 msgid "Nickname contains invalid characters"
 msgstr "El alias contiene caracteres no válidos"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "Alias"
+msgstr "Alias…"
 
 msgid "No"
 msgstr "No"
@@ -3396,15 +3389,14 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Por favor, asegúrate de estar conectado con '%s'."
 
-#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
 "Por favor, elige una de tus cuentas.\n"
-"Gajim exportará todos los mensajes de la cuenta seleccionada a un directorio "
-"de tu elección."
+"Gajim exportará todos los mensajes de la cuenta y chats seleccionados a un "
+"directorio de tu elección."
 
 msgid "Please use these settings with caution!"
 msgstr "¡Por favor, usa estas opciones con precaución!"
@@ -3687,9 +3679,8 @@ msgstr "¿Eliminar de la lista de contactos?"
 msgid "Remove Group?"
 msgstr "¿Eliminar grupo?"
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "¿Eliminar grupo?"
+msgstr "Eliminar grupo…"
 
 msgid "Remove History…"
 msgstr "Eliminar histórico…"
@@ -3815,9 +3806,8 @@ msgstr "Reiniciar"
 msgid "Reset Filters"
 msgstr "Reiniciar filtros"
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "Reiniciar filtros"
+msgstr "Restablecer sugerencias"
 
 msgid "Reset User Interface Font Size"
 msgstr "Resetear el tamaño de letra de la interfaz de usuario"
@@ -4448,7 +4438,7 @@ msgid "Status Messages in Participants List"
 msgstr "Mensajes de Estado en la Lista de Participantes"
 
 msgid "Status and status message for all accounts"
-msgstr "Estado y estado de los mensajes para todas las cuentas"
+msgstr "Estado y mensaje de estado para todas las cuentas"
 
 msgid "Status is not shared"
 msgstr "Estado no compartido"
@@ -4512,9 +4502,8 @@ msgstr "Subscripción"
 msgid "Subscription Request"
 msgstr "Petición de adición"
 
-#, fuzzy
 msgid "Subscription:"
-msgstr "Subscripción"
+msgstr "Suscripción:"
 
 msgid "Successfully Added Contacts"
 msgstr "Contactos añadidos con éxito"
@@ -5729,9 +5718,8 @@ msgstr "Anular la cuenta del servicio"
 msgid "_Unsubscribe"
 msgstr "_Eliminar"
 
-#, fuzzy
 msgid "_Username"
-msgstr "Renombrar"
+msgstr "_Usuario"
 
 msgid "_View"
 msgstr "_Ver"
@@ -6355,6 +6343,10 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Error!"
 #~ msgstr "¡Error!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Error: no se puede abrir %s para lectura"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Característica no disponible en Windows"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2025-01-31 05:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -1851,10 +1851,6 @@ msgstr "アバターのアップロード中のエラー"
 #, python-format
 msgid "Error: %s"
 msgstr "エラー: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "エラー: 読み込みモードで %s を開けません"
 
 msgid "Even more features via plugins"
 msgstr "プラグインによる機能拡張"
@@ -6334,6 +6330,10 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Error!"
 #~ msgstr "エラー !"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "エラー: 読み込みモードで %s を開けません"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Windows ではこの機能は無効です"

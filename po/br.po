@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -2086,10 +2086,6 @@ msgstr "fazi en ur gas %s ( %s )"
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Fazi en ur lenn ar restr:"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Fazi: dibosupl eo digeriñ %s evit e lenn"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7063,6 +7059,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Fazi en ur lenn ar restr:"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Fazi: dibosupl eo digeriñ %s evit e lenn"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

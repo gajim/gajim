@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -1995,10 +1995,6 @@ msgstr ""
 
 #, python-format
 msgid "Error: %s"
-msgstr ""
-
-#, python-format
-msgid "Error: cannot open %s for reading"
 msgstr ""
 
 msgid "Even more features via plugins"

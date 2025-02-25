@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
-"PO-Revision-Date: 2025-01-30 14:12+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"PO-Revision-Date: 2025-02-10 10:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -607,7 +607,7 @@ msgid "Affiliations"
 msgstr "Роли"
 
 msgid "After"
-msgstr ""
+msgstr "После"
 
 msgid "Algorithm"
 msgstr "Алгоритм"
@@ -866,7 +866,7 @@ msgid "Ban…"
 msgstr "Забанить…"
 
 msgid "Before"
-msgstr ""
+msgstr "До"
 
 msgid "Behaviour of Application Window"
 msgstr "Поведение окна приложения"
@@ -1891,10 +1891,6 @@ msgstr "Ошибка загрузки аватара"
 #, python-format
 msgid "Error: %s"
 msgstr "Ошибка: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Ошибка: не удалось открыть %s для чтения"
 
 msgid "Even more features via plugins"
 msgstr "Ещё больше возможностей при использовании подключаемых модулей"
@@ -3695,7 +3691,7 @@ msgid "Recognize your account by color"
 msgstr "Подсвечивать учётную запись цветом"
 
 msgid "Record"
-msgstr ""
+msgstr "Запись"
 
 msgid "Record Voice Message… (hold button to record directly)"
 msgstr "Записать голосовое сообщение... (удерживайте кнопку для записи)"
@@ -4515,7 +4511,7 @@ msgstr ""
 "глобальный поиск групповых чатов. Также возможен ввод XMPP-адреса."
 
 msgid "Start/Stop recording"
-msgstr ""
+msgstr "Запустить/Остановить запись"
 
 msgid "Start/stop playback"
 msgstr "Начать/остановить воспроизведение"
@@ -4635,6 +4631,11 @@ msgid ""
 "Alternatively, you can either minimize Gajim’s window, or hide it "
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
+"Вы уверены, что хотите выйти из Gajim?\n"
+"В этом случае вы не сможете отправлять и получать сообщения.\n"
+"\n"
+"Вместо этого, вы можете свернуть окно Gajim, либо полностью его скрыть. "
+"Используйте значок Gajim в системном трее, чтобы восстановить окно."
 
 msgid "Switch Workspace"
 msgstr "Переключить вкладку"
@@ -5698,7 +5699,7 @@ msgid "_Help"
 msgstr "_Помощь"
 
 msgid "_Hide (Tray Icon)"
-msgstr ""
+msgstr "_Скрыть (В трей)"
 
 msgid "_Host"
 msgstr "_Хост"
@@ -5781,7 +5782,7 @@ msgid "_Re-Login"
 msgstr "_Переавторизоваться"
 
 msgid "_Remember my decision"
-msgstr ""
+msgstr "_Запомнить мой выбор"
 
 msgid "_Remove"
 msgstr "_Удалить"
@@ -6443,6 +6444,10 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Error!"
 #~ msgstr "Ошибка!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Ошибка: не удалось открыть %s для чтения"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Функция недоступна в Windows"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -2090,10 +2090,6 @@ msgstr "eraro dum aldonado de servo %s"
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Erara mesaĝo: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Eraro: ne povas malfermi %s por legi"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7108,6 +7104,10 @@ msgstr ""
 
 #~ msgid "Error!"
 #~ msgstr "Eraro !"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Eraro: ne povas malfermi %s por legi"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

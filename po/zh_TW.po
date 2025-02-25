@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2024-12-03 12:11+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -2018,10 +2018,6 @@ msgstr "加入服務錯誤。 %s"
 #, python-format
 msgid "Error: %s"
 msgstr "錯誤: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "錯誤: 無法按讀開啟檔案 %s"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7045,6 +7041,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "錯誤"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "錯誤: 無法按讀開啟檔案 %s"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

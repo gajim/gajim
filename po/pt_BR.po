@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2025-01-03 23:12+0000\n"
 "Last-Translator: soneca <acenos@danwin1210.me>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -1922,10 +1922,6 @@ msgstr "Erro ao enviar avatar"
 #, python-format
 msgid "Error: %s"
 msgstr "Erro: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Erro: impossível abrir %s para leitura"
 
 msgid "Even more features via plugins"
 msgstr "Ainda mais recursos através de plugins"
@@ -6874,6 +6870,10 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Error!"
 #~ msgstr "Erro!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Erro: impossível abrir %s para leitura"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

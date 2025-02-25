@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -2106,10 +2106,6 @@ msgstr "Chyba pri pridávaní služby. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "Chyba: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Chyba: nie je možné otvoriť %s na čítanie"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7125,6 +7121,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Chyba"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Chyba: nie je možné otvoriť %s na čítanie"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

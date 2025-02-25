@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -2093,10 +2093,6 @@ msgstr "Errorea zerbitzarian sartzean.%s"
 #, fuzzy, python-format
 msgid "Error: %s"
 msgstr "Errore mezua: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Errorea: ezin da %s ireki irakurtzeko"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7108,6 +7104,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Avahi error"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Errorea: ezin da %s ireki irakurtzeko"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

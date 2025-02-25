@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -1897,10 +1897,6 @@ msgstr "Eroare la încărcarea avatarului"
 #, python-format
 msgid "Error: %s"
 msgstr "Eroare: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Eroare: nu se poate deschide %s pentru citire"
 
 msgid "Even more features via plugins"
 msgstr "Chiar mai multe caracteristici prin intermediul plugin-urilor"
@@ -6469,6 +6465,10 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Error!"
 #~ msgstr "Eroare!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Eroare: nu se poate deschide %s pentru citire"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Funcția nu este valabilă pe Windows"

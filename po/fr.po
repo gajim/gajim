@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
-"PO-Revision-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"PO-Revision-Date: 2025-02-22 15:12+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
-">\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
+"\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1601,10 +1601,10 @@ msgid "Dictionary URL is missing a \"%s\""
 msgstr "Il manque un \"%s\" dans l'URL de dictionnaire"
 
 msgid "Direct Messages"
-msgstr "Messages directs"
+msgstr "Messages Directs"
 
 msgid "Direct Message…"
-msgstr "Message direct…"
+msgstr "Envoyer un message direct…"
 
 msgid "Directory"
 msgstr "Répertoire"
@@ -1889,10 +1889,6 @@ msgstr "Erreur durant l'envois de l'image de profil"
 #, python-format
 msgid "Error: %s"
 msgstr "Erreur : %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Erreur : impossible d'ouvrir %s en lecture"
 
 msgid "Even more features via plugins"
 msgstr "Encore plus de fonctionnalités avec des extensions"
@@ -2961,9 +2957,8 @@ msgstr "Pseudonyme"
 msgid "Nickname contains invalid characters"
 msgstr "Le nom d'utilisateur⋅ice contient des caractères interdits"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "Pseudonyme"
+msgstr "Pseudonyme…"
 
 msgid "No"
 msgstr "Non"
@@ -6421,6 +6416,10 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Error!"
 #~ msgstr "Erreur !"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Erreur : impossible d'ouvrir %s en lecture"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Fonctionnalité indisponible sous Windows"

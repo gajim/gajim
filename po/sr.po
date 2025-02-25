@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2114,10 +2114,6 @@ msgstr "Грешка приликом додавања сервиса. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "Грешка: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Грешка: није могуће отворити %s за читање"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -7128,6 +7124,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Error!"
 #~ msgstr "Грешка"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Грешка: није могуће отворити %s за читање"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"

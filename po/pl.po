@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
-"PO-Revision-Date: 2025-01-26 09:12+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"PO-Revision-Date: 2025-02-09 15:12+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
 "Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
 ">\n"
@@ -489,9 +489,8 @@ msgstr "Dodaj wpis"
 msgid "Add Files…"
 msgstr "Dodaj pliki…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "Dodaj do grupy"
+msgstr "Dodaj grupę…"
 
 msgid "Add Proxy"
 msgstr "Dodaj proxy"
@@ -1035,9 +1034,8 @@ msgstr ""
 "Znak dodawany do pseudonimu przy użyciu autouzupełniania (tab) w czacie "
 "grupowym."
 
-#, fuzzy
 msgid "Chat"
-msgstr "Rozmowy"
+msgstr "Rozmowa"
 
 msgid "Chat Banner: Background Color"
 msgstr "Baner rozmowy: kolor tła"
@@ -1863,10 +1861,6 @@ msgstr "Błąd podczas wysyłania awataru"
 #, python-format
 msgid "Error: %s"
 msgstr "Błąd: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "błąd: nie można otworzyć %s do odczytu"
 
 msgid "Even more features via plugins"
 msgstr "Jeszcze więcej funkcjonalności dzięki wtyczkom"
@@ -2930,9 +2924,8 @@ msgstr "Pseudonim"
 msgid "Nickname contains invalid characters"
 msgstr "Pseudonim zawiera niedozwolone znaki"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "Pseudonim"
+msgstr "Pseudonim…"
 
 msgid "No"
 msgstr "Nie"
@@ -3397,15 +3390,14 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "Upewnij się, że jesteś połączony z „%s”."
 
-#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
 "directory of your choice."
 msgstr ""
 "Wybierz jedno z Twoich kont.\n"
-"Gajim wyeksportuje wszystkie wiadomości z wybranego konta do wybranego "
-"katalogu."
+"Gajim wyeksportuje wszystkie wiadomości z wybranego konta i rozmowy do "
+"wybranego katalogu."
 
 msgid "Please use these settings with caution!"
 msgstr "Proszę używać tych ustawień z ostrożnością!"
@@ -3687,9 +3679,8 @@ msgstr "Usunąć z listy kontaktów?"
 msgid "Remove Group?"
 msgstr "Usunąć grupę?"
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "Usunąć grupę?"
+msgstr "Usuń grupę…"
 
 msgid "Remove History…"
 msgstr "Usuń historię…"
@@ -3816,9 +3807,8 @@ msgstr "Zresetuj"
 msgid "Reset Filters"
 msgstr "Zresetuj filtry"
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "Zresetuj filtry"
+msgstr "Zresetuj podpowiedzi"
 
 msgid "Reset User Interface Font Size"
 msgstr "Zresetuj rozmiar czcionki interfejsu użytkownika"
@@ -4514,9 +4504,8 @@ msgstr "Subskrypcja"
 msgid "Subscription Request"
 msgstr "Prośba o autoryzację"
 
-#, fuzzy
 msgid "Subscription:"
-msgstr "Subskrypcja"
+msgstr "Subskrypcja:"
 
 msgid "Successfully Added Contacts"
 msgstr "Pomyślnie dodano kontakty"
@@ -5692,9 +5681,8 @@ msgstr "_Usuń"
 msgid "_Report Spam"
 msgstr "_Zgłoś spam"
 
-#, fuzzy
 msgid "_Request"
-msgstr "Zażądaj"
+msgstr "_Zażądaj"
 
 msgid "_Reset Value"
 msgstr "_Zresetuj wartość"
@@ -5741,9 +5729,8 @@ msgstr "_Wyrejestruj konto z usługi"
 msgid "_Unsubscribe"
 msgstr "_Cofnij autoryzację"
 
-#, fuzzy
 msgid "_Username"
-msgstr "Zmień nazwę"
+msgstr "_Nazwa użytkownika"
 
 msgid "_View"
 msgstr "_Widok"
@@ -6363,6 +6350,10 @@ msgstr "…lub upuść tutaj"
 
 #~ msgid "Error!"
 #~ msgstr "Błąd!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "błąd: nie można otworzyć %s do odczytu"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Funkcjonalność niedostępna pod Windows"

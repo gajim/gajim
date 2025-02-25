@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-08 22:23+0000\n"
+"POT-Creation-Date: 2025-02-21 23:22+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -1873,10 +1873,6 @@ msgstr "Аватарды жүктеп салу кезіндегі қате"
 #, python-format
 msgid "Error: %s"
 msgstr "Қате: %s"
-
-#, python-format
-msgid "Error: cannot open %s for reading"
-msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
 msgid "Even more features via plugins"
 msgstr "Плагиндер арқылы одан да көп мүмкіндіктер"
@@ -6410,6 +6406,10 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Error!"
 #~ msgstr "Қате!"
+
+#, python-format
+#~ msgid "Error: cannot open %s for reading"
+#~ msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Бұл мүмкіндік Windows-та қолжетімді емес"
