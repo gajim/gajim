@@ -201,11 +201,10 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
             "feather-lock-symbolic",
         )
         self._locked_icon.set_visible(False)
-        self._locked_icon.set_visible(False)
         self._locked_icon.set_halign(Gtk.Align.END)
         self._locked_icon.set_tooltip_text(_("Setting is locked by the system"))
 
-        self._grid.attach(self._locked_icon, 0, 0, 1, 1)
+        self._grid.attach(self._locked_icon, 2, 0, 1, 2)
 
         description_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
         description_box.set_valign(Gtk.Align.CENTER)
