@@ -106,11 +106,11 @@ modules:
   - name: python3-jeepney
     buildsystem: simple
     build-commands:
-      - pip3 install jeepney-0.8.0-py3-none-any.whl
+      - pip3 install jeepney-0.9.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jeepney/jeepney-0.8.0-py3-none-any.whl
-        sha256: c0a454ad016ca575060802ee4d590dd912e35c122fa04e70306de3d076cce755
+        url: https://files.pythonhosted.org/packages/py3/j/jeepney/jeepney-0.9.0-py3-none-any.whl
+        sha256: 97e5714520c16fc0a45695e5365a2e11b81ea79bba796e26f9f1d178cb182683
 
   - name: python3-secretstorage
     buildsystem: simple
@@ -295,11 +295,11 @@ modules:
   - name: python3-decorator
     buildsystem: simple
     build-commands:
-      - pip3 install decorator-5.2.0-py3-none-any.whl
+      - pip3 install decorator-5.2.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.2.0-py3-none-any.whl
-        sha256: f30a69c066f698c7c11fa1fa3425f684d3b4b01b494ee41e73c0a14f3de48427
+        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.2.1-py3-none-any.whl
+        sha256: d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
 
   # qrcode dependencies
   - name: python3-pypng
@@ -352,11 +352,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-5.0.4-py3-none-any.whl
+      - pip3 install nbxmpp-6.0.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-5.0.4-py3-none-any.whl
-        sha256: da86eae1ad33deb7e5055fe44c87f928873e998581105742822a326b988f031e
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.0-py3-none-any.whl
+        sha256: 46da45559e719f91309d3dbf0c48f37ce352951ef071a033554d01d4f0122d1a
 
   - name: gajim
     buildsystem: simple
