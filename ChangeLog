@@ -1,3 +1,79 @@
+Gajim 2.0.0 (27 Feb 2025)
+
+  New
+
+  * Port to Gtk4
+  * Generate previews with multiple processes
+  * Add Manage Roster Dialog
+  * Add message row menu entry for moderating all messages of participant
+  * Add new completion popover
+
+  Improvements
+
+  * DebugConsole: Use Dropdown for account selection and improve account order
+  * StatusIcon: Consider suspended state on show/hide action
+  * Features: Hide not maintained features
+  * Preferences: Hide Audio/Video settings
+  * Don’t close chat on remove contact action
+  * Chat: Add remove contact menu entry
+  * NickChooser: Show error tooltip for invalid nicknames
+  * Control: Disable message selection via Escape key
+  * Make exporting/removing individual chat history accessible
+  * HistoryExport: Allow exporting individual chats
+  * Add profile name to window title (#12168)
+  * GroupChatVoiceRequestButton: Fix updating content, scroll content, improve test
+  * MessageActionsBox: Enable more actions for offline message composing
+  * MessageActionsBox: Enable message composing while offline (#11759)
+  * FullMessageWindow: Wrap text and add padding
+  * StartChat: Make dialog look more compact
+  * VoiceRequestsButton: Show JID for each request
+  * ChatFilter: Add account filter
+  * Chat Filters: Use a popover for filters and add roster group filter
+  * Message Actions Box: Show user feedback when pasting images (#11489)
+  * Start Chat: Include contact groups in search
+  * Group Chats: Add 'Direct Message' menu item to participants menu (#12146)
+  * Logging: Harmonize logging timestamps
+  * Preview: Use native theme colors and improve styling
+  * MessageRowActions: Don't show actions if message selection is active
+  * Preview: Style and layout improvements
+  * Preview: Show controls on hover and improve styling
+  * Debug Console: Use different colors depending on light/dark preference
+
+  Change
+
+  * Raise nbxmpp version
+  * Require Python 3.11
+  * Remove legacy config code and migration
+  * Plugins: Rename tooltip extension point
+  * Remove Roster
+  * Remove Synchronize Accounts Dialog
+  * Remove Bookmark Dialog
+  * Preview: Raise default size from 300 to 400
+  * Windows: Store images in the users Downloads folder
+  * Disable Jingle file transfer support
+
+  Performance
+
+  * Message display: Reduce maximum message length to 1000 characters
+
+  Bug Fixes
+
+  * BitsOfBinary: Fix module data handling
+  * ChatStack: Fix leak with Previews when switching to another workspace
+  * Blocking: Don’t convert to lower case when saving
+  * Fix app.window.add_chat() calls and add typings for chat type
+  * Labels: Fix Pango word/character wrapping
+  * Hide drop area after file drop (#12143)
+  * MessageActionsBox: Fix message input scrolling out of view (#12158)
+  * Profile: Fix handling async result while closing (#12159)
+  * PasswordDialog: Show dialog for multiple accounts
+  * Contacts: Check for existing chat contacts when adding group chat contact
+  * NicknameCompletion: Only consider incoming messages
+  * RosterItemExchange: Fix accessing contact subscription
+  * Debug Console: Fix search occurrence position (#11999)
+  * Voice Message: Handle error when temp folder is not available
+  * Translations: Use standard ngettext method (#11997)
+
 Gajim 1.9.5 (30 Sep 2024)
 
   Improvements
