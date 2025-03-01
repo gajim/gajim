@@ -527,7 +527,7 @@ class PluginManager(metaclass=Singleton):
         try:
             return PluginManifest.from_path(plugin_path)
         except Exception as error:
-            log.warning('Unable to load manifest: %s', error)
+            log.debug('Unable to load manifest: %s', error)
             return None
 
     def _load_manifests(self) -> None:
