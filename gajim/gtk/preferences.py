@@ -100,9 +100,9 @@ class Preferences(GajimAppWindow):
 
     def _add_prefs(self, prefs: list[tuple[str, type[PreferenceBox]]]):
         for ui_name, klass in prefs:
-            pref_box = getattr(self._ui, ui_name)
+            pref_box = cast(Gtk.Grid, getattr(self._ui, ui_name))
             pref = klass(self)  # pyright: ignore
-            pref_box.attach(pref, 0, 0, 1, 1)
+            pref_box.attach(pref, 0, 1, 1, 1)
             self._prefs[ui_name] = pref
 
     def _add_video_preview(self) -> None:
