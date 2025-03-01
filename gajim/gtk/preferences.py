@@ -724,12 +724,10 @@ class Themes(PreferenceBox):
 
         PreferenceBox.__init__(self, settings)
 
-        app.ged.register_event_handler(
-            "style-changed", ged.GUI1, self._on_style_changed
-        )
+        app.ged.register_event_handler("theme-update", ged.GUI1, self._on_theme_update)
 
     def do_unroot(self) -> None:
-        app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
+        app.ged.remove_event_handler("theme-update", ged.GUI1, self._on_theme_update)
         PreferenceBox.do_unroot(self)
 
     @staticmethod
@@ -740,7 +738,7 @@ class Themes(PreferenceBox):
     def _get_theme_items() -> list[str]:
         return ["default", *app.css_config.themes]
 
-    def _on_style_changed(self, *args: Any) -> None:
+    def _on_theme_update(self, *args: Any) -> None:
         dropdown_row = cast(DropDownSetting, self.get_setting("roster_theme"))
         dropdown_row.update_entries(self._get_theme_items())
         dropdown_row.select_key(app.settings.get("roster_theme"))
@@ -751,15 +749,12 @@ class Themes(PreferenceBox):
         open_window("Themes", transient=window.window)
 
     def _on_theme_changed(self, value: str, *args: Any) -> None:
-        app.ged.remove_event_handler("style-changed", ged.GUI1, self._on_style_changed)
+        app.ged.remove_event_handler("theme-update", ged.GUI1, self._on_theme_update)
 
         app.css_config.change_theme(value)
         app.ged.raise_event(ThemeUpdate())
-        app.ged.raise_event(StyleChanged())
 
-        app.ged.register_event_handler(
-            "style-changed", ged.GUI1, self._on_style_changed
-        )
+        app.ged.register_event_handler("theme-update", ged.GUI1, self._on_theme_update)
 
     @staticmethod
     def _on_dark_theme(value: str, *args: Any) -> None:

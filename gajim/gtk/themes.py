@@ -263,9 +263,10 @@ class Themes(GajimAppWindow):
         def _remove_theme():
             if theme == app.settings.get("roster_theme"):
                 self._apply_theme("default")
-                app.ged.raise_event(StyleChanged())
 
             app.css_config.remove_theme(theme)
+            app.ged.raise_event(ThemeUpdate())
+
             assert isinstance(store, Gtk.ListStore)
             assert iter_ is not None
             store.remove(iter_)
