@@ -873,12 +873,23 @@ class GajimApplication(Gtk.Application, CoreApplication):
         _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
 
-        window = get_app_window("StartChatDialog")
-        if window is not None:
-            window.remove_row(params.account, str(params.jid))
+        def _forget():
+            window = get_app_window("StartChatDialog")
+            if window is not None:
+                window.remove_row(params.account, str(params.jid))
 
-        client = app.get_client(params.account)
-        client.get_module("MUC").leave(params.jid)
-        client.get_module("Bookmarks").remove(params.jid)
+            client = app.get_client(params.account)
+            client.get_module("MUC").leave(params.jid)
+            client.get_module("Bookmarks").remove(params.jid)
 
-        app.storage.archive.remove_history_for_jid(params.account, params.jid)
+            app.storage.archive.remove_history_for_jid(params.account, params.jid)
+
+        ConfirmationDialog(
+            _("Forget this Group Chat?"),
+            _("Do you really want to remove this chat including its chat history?"),
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Remove", callback=_forget),
+            ],
+            transient_for=app.window,
+        )
