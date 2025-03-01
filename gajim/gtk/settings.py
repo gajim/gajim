@@ -76,6 +76,7 @@ class SettingsDialog(GajimAppWindow):
         self.listbox.update_states()
 
         self.set_child(self.listbox)
+        self.show()
 
     def _cleanup(self) -> None:
         del self.listbox
