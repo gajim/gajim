@@ -69,14 +69,14 @@ class Features(GajimAppWindow):
         auto_status_enabled = bool(any(auto_status))
 
         return [
-            # Feature(
-            #     _("Audio Preview"),
-            #     app.is_installed("GST"),
-            #     _("Enables Gajim to provide a Audio preview"),
-            #     _("Requires: gstreamer-1.0, gst-plugins-base-1.0"),
-            #     _("No additional requirements"),
-            #     None,
-            # ),
+            Feature(
+                _("Audio Preview"),
+                app.is_installed("GST"),
+                _("Enables Gajim to provide a Audio preview"),
+                _("Requires: gstreamer-1.0, gst-plugins-base-1.0"),
+                _("No additional requirements"),
+                None,
+            ),
             # Feature(
             #     _("Audio / Video Calls"),
             #     av_available,

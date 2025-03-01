@@ -20,8 +20,9 @@ from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.i18n import _
 from gajim.common.setting_values import BoolSettings
+
+# from gajim.common.util.av import AudioOutputManager
 from gajim.common.util.av import AudioInputManager
-from gajim.common.util.av import AudioOutputManager
 from gajim.common.util.av import VideoInputManager
 from gajim.common.util.uri import open_directory
 from gajim.common.util.version import package_version
@@ -80,7 +81,7 @@ class Preferences(GajimAppWindow):
             ("automatic_status", AutomaticStatus),
             ("themes", Themes),
             # ("server", Server),
-            # ("audio", Audio),
+            ("audio", Audio),
             # ("video", Video),
             ("miscellaneous", Miscellaneous),
             ("advanced", Advanced),
@@ -816,13 +817,13 @@ class Audio(PreferenceBox):
         deps_installed = app.is_installed("GST")
 
         audio_input_devices = {}
-        audio_output_devices = {}
+        # audio_output_devices = {}
         if deps_installed:
             audio_input_devices = AudioInputManager().get_devices()
-            audio_output_devices = AudioOutputManager().get_devices()
+            # audio_output_devices = AudioOutputManager().get_devices()
 
         audio_input_items = self._create_av_combo_items(audio_input_devices)
-        audio_output_items = self._create_av_combo_items(audio_output_devices)
+        # audio_output_items = self._create_av_combo_items(audio_output_devices)
 
         settings = [
             Setting(
@@ -833,14 +834,14 @@ class Audio(PreferenceBox):
                 desc=_("Select your audio input (e.g. microphone)"),
                 props={"data": audio_input_items},
             ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Audio Output Device"),
-                SettingType.CONFIG,
-                "audio_output_device",
-                desc=_("Select an audio output (e.g. speakers, headphones)"),
-                props={"data": audio_output_items},
-            ),
+            # Setting(
+            #     SettingKind.DROPDOWN,
+            #     _("Audio Output Device"),
+            #     SettingType.CONFIG,
+            #     "audio_output_device",
+            #     desc=_("Select an audio output (e.g. speakers, headphones)"),
+            #     props={"data": audio_output_items},
+            # ),
         ]
 
         PreferenceBox.__init__(self, settings)
