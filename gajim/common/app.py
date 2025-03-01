@@ -208,23 +208,27 @@ def detect_dependencies() -> None:
     except Exception:
         pass
 
-    try:
-        gi.require_version('Farstream', '0.2')
-        from gi.repository import Farstream
-        _dependencies['FARSTREAM'] = True
-    except Exception as error:
-        log('gajim').warning('AV dependency test failed: %s', error)
+    # try:
+    #     gi.require_version('Farstream', '0.2')
+    #     from gi.repository import Farstream
+    #     _dependencies['FARSTREAM'] = True
+    # except Exception as error:
+    #     log('gajim').warning('AV dependency test failed: %s', error)
 
-    try:
-        if _dependencies['GST'] and _dependencies['FARSTREAM']:
-            conference = Gst.ElementFactory.make('fsrtpconference', None)
-            conference.new_session(Farstream.MediaType.AUDIO)
-            from gajim.gtk.gstreamer import create_video_elements
-            video_elements = create_video_elements()
-            if video_elements is not None:
-                _dependencies['AV'] = True
-    except Exception as error:
-        log('gajim').warning('AV dependency test failed: %s', error)
+    # try:
+    #     if _dependencies['GST'] and _dependencies['FARSTREAM']:
+    #         # This creates a GTK critical
+    #         # gst_base_auto_convert_register_filter: assertion
+    #         # 'g_strcmp0 (name, ((GstAutoConvertFilterInfo *) tmp->data)->name)'
+    #         # failed
+    #         conference = Gst.ElementFactory.make('fsrtpconference', None)
+    #         conference.new_session(Farstream.MediaType.AUDIO)
+    #         from gajim.gtk.gstreamer import create_video_elements
+    #         video_elements = create_video_elements()
+    #         if video_elements is not None:
+    #             _dependencies['AV'] = True
+    # except Exception as error:
+    #     log('gajim').warning('AV dependency test failed: %s', error)
 
     # GEOCLUE
     try:
