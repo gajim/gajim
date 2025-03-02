@@ -93,14 +93,17 @@ class ChatMarkers(BaseModule):
                           jid=jid,
                           marker_id=marker_id))
 
-    def _raise_event(self, name: str, properties: Any) -> None:
+    def _raise_event(self, name: str, properties: MessageProperties) -> None:
+        assert properties.marker is not None
+        assert properties.remote_jid is not None
+
         self._log.info('%s: %s %s',
                        name,
                        properties.jid,
                        properties.marker.id)
 
         if not properties.is_muc_pm and not properties.type.is_groupchat:
-            if properties.is_mam_message:
+            if properties.mam is not None:
                 timestamp = properties.mam.timestamp
             else:
                 timestamp = properties.timestamp

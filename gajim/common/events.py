@@ -17,6 +17,7 @@ from functools import cached_property
 
 from nbxmpp.const import Affiliation
 from nbxmpp.const import InviteType
+from nbxmpp.const import MessageType as NBXMPPMessageType
 from nbxmpp.const import Role
 from nbxmpp.const import StatusCode
 from nbxmpp.modules.security_labels import Catalog
@@ -314,7 +315,7 @@ class DisplayedReceived(ApplicationEvent):
     account: str
     jid: JID
     properties: Any
-    type: str
+    type: NBXMPPMessageType
     is_muc_pm: bool
     marker_id: str
 
