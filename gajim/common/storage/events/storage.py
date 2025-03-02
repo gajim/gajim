@@ -6,7 +6,6 @@ from __future__ import annotations
 
 from typing import Any
 
-import dataclasses
 import datetime as dt
 import json
 import logging
@@ -17,11 +16,26 @@ from sqlalchemy.orm import Session
 
 from gajim.common import events
 from gajim.common.storage.base import AlchemyStorage
-from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
 from gajim.common.storage.base import with_session
 from gajim.common.storage.events import models as mod
 from gajim.common.types import ChatContactT
+
+EventStorageEventT = (
+    events.MUCNicknameChanged
+    | events.MUCRoomConfigChanged
+    | events.MUCRoomConfigFinished
+    | events.MUCRoomPresenceError
+    | events.MUCRoomKicked
+    | events.MUCRoomDestroyed
+    | events.MUCUserJoined
+    | events.MUCUserLeft
+    | events.MUCUserRoleChanged
+    | events.MUCUserAffiliationChanged
+    | events.MUCUserStatusShowChanged
+    | events.MUCUserHatsChanged
+    | events.MUCAffiliationChanged
+)
 
 EVENT_CLASSES: dict[str, Any] = {
     'muc-nickname-changed': events.MUCNicknameChanged,
@@ -58,17 +72,13 @@ class EventStorage(AlchemyStorage):
         pass
 
     @with_session
-    def store(self, session: Session, contact: ChatContactT, event_: Any) -> None:
-        event_dict = dataclasses.asdict(event_)
-        name = event_dict.pop('name')
-        timestamp = event_dict.pop('timestamp')
-
+    def store(self, session: Session, contact: ChatContactT, event_: EventStorageEventT) -> None:
         event = mod.Event(
             account=contact.account,
             jid=contact.jid,
-            event=name,
-            timestamp=timestamp,
-            data=json.dumps(event_dict, cls=Encoder),
+            event=event_.name,
+            timestamp=event_.timestamp,
+            data=event_.serialize(),
         )
 
         session.add(event)

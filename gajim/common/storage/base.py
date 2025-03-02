@@ -137,6 +137,9 @@ class Encoder(json.JSONEncoder):
         if isinstance(o, set):
             return list(o)  # pyright: ignore
 
+        if isinstance(o, datetime):
+            return {'__type': 'datetime', 'value': o.isoformat()}
+
         if isinstance(o, JID):
             return {'__type': 'JID', 'value': str(o)}
 
@@ -158,6 +161,9 @@ def json_decoder(dct: dict[str, Any]) -> Any:
 
     if type_ == 'JID':
         return JID.from_string(dct['value'])
+
+    if type_ == "datetime":
+        return datetime.fromisoformat(dct['value'])
 
     if type_ == 'RosterItem':
         return RosterItem(

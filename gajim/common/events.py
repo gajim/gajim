@@ -9,6 +9,7 @@ from typing import Any
 from typing import Union
 
 import datetime
+import json
 from collections.abc import Callable
 from dataclasses import dataclass
 from dataclasses import field
@@ -31,6 +32,7 @@ from gajim.common.const import JingleState
 from gajim.common.file_props import FileProp
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.base import Encoder
 
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
@@ -51,6 +53,14 @@ ChatListEventT = Union[
 @dataclass
 class ApplicationEvent:
     name: str
+
+    def serialize(self) -> str:
+        '''Convert to a json formatted string for database storage'''
+        event_data = self.__dict__.copy()
+
+        # Drop timestamp, since it is already handled while storing
+        event_data.pop("timestamp", None)
+        return json.dumps(event_data, cls=Encoder)
 
 
 @dataclass
