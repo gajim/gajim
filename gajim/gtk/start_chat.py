@@ -227,6 +227,10 @@ class StartChatDialog(GajimAppWindow):
             for jid, _data in client.get_module("Roster").iter():
                 contact = client.get_module("Contacts").get_contact(jid)
 
+                if isinstance(contact, GroupchatContact):
+                    # Workaround if groupchats are in the roster
+                    continue
+
                 item = ContactListItem(
                     account,
                     contact,
