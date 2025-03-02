@@ -203,7 +203,7 @@ class HTTPUpload(BaseModule):
 
             plugin = app.plugin_manager.encryption_plugins[transfer.encryption]
             if hasattr(plugin, 'encrypt_file'):
-                plugin.encrypt_file(transfer,
+                plugin.encrypt_file(transfer,  # type: ignore
                                     self._account,
                                     self._start_transfer)
             else:
@@ -280,7 +280,7 @@ class HTTPUpload(BaseModule):
                             certificate_errors: Gio.TlsCertificateFlags,
                             ) -> bool:
 
-        transfer = request.get_user_data()
+        transfer = cast(HTTPFileTransfer, request.get_user_data())
         phrases = get_tls_error_phrases(
             convert_tls_error_flags(certificate_errors))
         self._log.warning(
@@ -290,7 +290,7 @@ class HTTPUpload(BaseModule):
         return False
 
     def _on_finish(self, request: HTTPRequest) -> None:
-        transfer = request.get_user_data()
+        transfer = cast(HTTPFileTransfer, request.get_user_data())
 
         self._requests_in_progress.pop(id(transfer), None)
 
@@ -315,7 +315,7 @@ class HTTPUpload(BaseModule):
                              progress: float
                              ) -> None:
 
-        transfer = request.get_user_data()
+        transfer = cast(HTTPFileTransfer, request.get_user_data())
         transfer.set_progress(progress)
 
 
