@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -851,6 +851,10 @@ msgid "Attention Message Received"
 msgstr "התקבלה הודעת הקשב"
 
 #, fuzzy
+msgid "Audio"
+msgstr "בדיקת קול"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "קובץ: "
 
@@ -859,8 +863,8 @@ msgid "Audio Input Device"
 msgstr "התקן קלט שמע"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "התקן פלט שמע"
+msgid "Audio Preview"
+msgstr "קובץ: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1918,6 +1922,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
@@ -2040,6 +2048,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr "יכולת לערוך שיחות קוליות וחזותיות."
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "יכולת לערוך שיחות קוליות וחזותיות."
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2400,6 +2412,10 @@ msgstr "עזוב שיחות קבוצה"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "עזוב שיחות קבוצה"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "עזוב שיחות קבוצה"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3275,6 +3291,9 @@ msgstr "הצג _הודעות מצב"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>שונות</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4430,6 +4449,9 @@ msgstr "יש צורך בהתקנת gnome-keyring וגם python-gnome2-desktop, �
 msgid "Requires: gsound"
 msgstr "יש צורך בהתקנת python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "יש צורך בהתקנת libgtkspell."
@@ -4692,9 +4714,6 @@ msgid "Select Messages…"
 msgstr "הודעה שגרתית"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4962,6 +4981,10 @@ msgstr "הצג מו_בילים"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "מסירת הודעה"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "תכונות"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7157,16 +7180,12 @@ msgstr ""
 #~ msgstr "האם אתה בטוח כי ברצונך לסגור את Gajim?"
 
 #, fuzzy
-#~ msgid "Audio"
-#~ msgstr "בדיקת קול"
-
-#, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "קול / וידאו"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "קובץ: "
+#~ msgid "Audio Output Device"
+#~ msgstr "התקן פלט שמע"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7274,10 +7293,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "יכולת לערוך שיחות קוליות וחזותיות."
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "יכולת לערוך שיחות קוליות וחזותיות."
 
 #, fuzzy
@@ -7534,10 +7549,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "הצג אנשי קשר _לא מקוונים"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "תכונות"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

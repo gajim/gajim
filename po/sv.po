@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -753,6 +753,10 @@ msgid "Attention Message Received"
 msgstr "Första meddelandet mottaget"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Fil: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Fil: "
 
@@ -761,8 +765,8 @@ msgid "Audio Input Device"
 msgstr "Standardmeddelande"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Standardmeddelande"
+msgid "Audio Preview"
+msgstr "Fil: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1751,6 +1755,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Vill du verkligen stänga alla dem?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Vill du verkligen stänga alla dem?"
 
@@ -1858,6 +1866,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2171,6 +2182,10 @@ msgid "Forget Group Chat"
 msgstr "Glöm gruppchatt"
 
 msgid "Forget this Group Chat"
+msgstr "Glöm den här gruppchatten"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Glöm den här gruppchatten"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2969,6 +2984,9 @@ msgstr "_Logga statusändringar för kontakter"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4054,6 +4072,9 @@ msgstr "Kräver: gnome-keyring eller kwallet"
 msgid "Requires: gsound"
 msgstr "Kräver: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Kräver: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kräver: Gspell"
@@ -4305,9 +4326,6 @@ msgid "Select Messages…"
 msgstr "Standardmeddelande"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 #, fuzzy
@@ -4573,6 +4591,10 @@ msgstr "Visa _transporter"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Skicka meddelande"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Funktioner"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -6747,8 +6769,8 @@ msgstr ""
 #~ msgstr "Privat Chatt"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Fil: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Standardmeddelande"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7014,9 +7036,6 @@ msgstr ""
 #~ "Kräver: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 #~ "ugly-1.0, gst-libav och gstreamer-gtk3-plugin"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Kräver: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Kräver: gupnpigd-1.0"
 
@@ -7065,10 +7084,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Visa frånkopplade _kontakter"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Funktioner"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

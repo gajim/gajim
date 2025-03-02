@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -821,6 +821,10 @@ msgid "Attention Message Received"
 msgstr "Prvá prijatá správa"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Zvukový test"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Súbor:"
 
@@ -829,8 +833,8 @@ msgid "Audio Input Device"
 msgstr "Vstupné zariadenie zvuku"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Výstupné zariadenie zvuku"
+msgid "Audio Preview"
+msgstr "Súbor:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1874,6 +1878,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Naozaj chcete zavrieť všetky?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Naozaj chcete zavrieť všetky?"
 
@@ -1992,6 +2000,9 @@ msgstr ""
 "Schopnosť odhadnúť čas nečinnosti v nastavení poradia automatických stavov."
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2337,6 +2348,10 @@ msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Opustiť diskusnú skupinu"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Opustiť diskusnú skupinu"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3182,6 +3197,9 @@ msgstr "_Zaznamenať zmenu stavu kontaktu"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Rôzne</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4321,6 +4339,9 @@ msgstr "Požaduje gnome-keyring a python-gnome2-desktop, alebo kwalletcli."
 msgid "Requires: gsound"
 msgstr "Vyžaduje python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vyžaduje libgtkspell."
@@ -4578,9 +4599,6 @@ msgid "Select Messages…"
 msgstr "Predvolená správa"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4843,6 +4861,10 @@ msgstr "Zobraziť trans_porty"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Poslať správu"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Funkcie"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7000,16 +7022,12 @@ msgstr ""
 #~ msgstr "Ste si istý, že chcete ukončiť program Gajim?"
 
 #, fuzzy
-#~ msgid "Audio"
-#~ msgstr "Zvukový test"
-
-#, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Zvuk / Video"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Súbor:"
+#~ msgid "Audio Output Device"
+#~ msgstr "Výstupné zariadenie zvuku"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7332,10 +7350,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Zobraziť _odhlásené kontakty"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Funkcie"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -833,6 +833,10 @@ msgid "Attention Message Received"
 msgstr "Prva Poruka Primljena"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Datoteka: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Datoteka: "
 
@@ -841,8 +845,8 @@ msgid "Audio Input Device"
 msgstr "Predefinirana Poruka"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Predefinirana Poruka"
+msgid "Audio Preview"
+msgstr "Datoteka: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1888,6 +1892,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Da li ih zaista želite sve zatvoriti?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Da li ih zaista želite sve zatvoriti?"
 
@@ -2006,6 +2014,9 @@ msgstr ""
 "Mogućnost mjerenja vremena neaktivnosti, da bi se postavio automatski status."
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2351,6 +2362,10 @@ msgstr "Novi Grupni Razgovor"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Novi Grupni Razgovor"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Novi Grupni Razgovor"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3201,6 +3216,9 @@ msgstr "_Pamti promjene statusa kontakata"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Ostalo</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4343,6 +4361,9 @@ msgstr "Potrebni su gnome-keyring i python-gnome2-desktop, ili kwalletcli."
 msgid "Requires: gsound"
 msgstr "Potreban je python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Potreban je libgtkspell."
@@ -4602,9 +4623,6 @@ msgid "Select Messages…"
 msgstr "Predefinirana Poruka"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4867,6 +4885,10 @@ msgstr "Prikaži _Prijenose"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Pošalji poruku"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Mogućnosti"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7028,8 +7050,8 @@ msgstr ""
 #~ msgstr "Privanti Razgovori"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Datoteka: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Predefinirana Poruka"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7349,10 +7371,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Prikaži _Odspojene Kontakte"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Mogućnosti"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

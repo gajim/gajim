@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-10-18 03:11+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -748,14 +748,18 @@ msgstr "اسأل قبل الخروج من غاجِم حين تكون الناف�
 msgid "Attention Message Received"
 msgstr "استُلِمَت رسالة الانتباه"
 
+msgid "Audio"
+msgstr "الصوت"
+
 msgid "Audio File"
 msgstr "ملف صوتي"
 
 msgid "Audio Input Device"
 msgstr "جهاز الإدخال الصوتي"
 
-msgid "Audio Output Device"
-msgstr "جهاز الإخراج الصوتي"
+#, fuzzy
+msgid "Audio Preview"
+msgstr "ملف صوتي"
 
 msgid "Audio preview is not available"
 msgstr "معاينة الصوت غير متوفرة"
@@ -1659,6 +1663,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "هل أنت متأكد من مغادرة مجموعة الدردشة هذه؟"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "هل أنت متأكد من مغادرة مجموعة الدردشة هذه؟"
 
@@ -1761,6 +1769,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2058,6 +2069,10 @@ msgstr ""
 
 msgid "Forget this Group Chat"
 msgstr ""
+
+#, fuzzy
+msgid "Forget this Group Chat?"
+msgstr "غادَرت مجموعة الدردشة هذه"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr ""
@@ -2788,6 +2803,9 @@ msgid "Minutes until your status gets changed"
 msgstr ""
 
 msgid "Miscellaneous"
+msgstr ""
+
+msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3796,6 +3814,9 @@ msgstr ""
 msgid "Requires: gsound"
 msgstr ""
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -4022,9 +4043,6 @@ msgstr ""
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4246,6 +4264,10 @@ msgstr "ن_قل الملفات"
 
 msgid "Show Voice Message Button"
 msgstr ""
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "الم_زايا"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -5963,11 +5985,11 @@ msgstr "…أو ألقِها هنا"
 #~ msgid "Are you sure you want to leave this group chat?"
 #~ msgstr "هل أنت متأكد من مغادرة مجموعة الدردشة هذه؟"
 
-#~ msgid "Audio"
-#~ msgstr "الصوت"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "المكالمات الصوتية/المرئية"
+
+#~ msgid "Audio Output Device"
+#~ msgstr "جهاز الإخراج الصوتي"
 
 #~ msgid "Audio/Video"
 #~ msgstr "الصوت/المرئية"

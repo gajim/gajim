@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
-"PO-Revision-Date: 2025-02-09 15:12+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"PO-Revision-Date: 2025-03-02 00:26+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -734,14 +734,17 @@ msgstr "A Gajim ablakának bezárásakor kilépés előtt legyen megerősítés"
 msgid "Attention Message Received"
 msgstr "Figyelemfelhívás érkezett"
 
+msgid "Audio"
+msgstr "Hang"
+
 msgid "Audio File"
 msgstr "Hangfájl"
 
 msgid "Audio Input Device"
 msgstr "Bemeneti eszköz"
 
-msgid "Audio Output Device"
-msgstr "Kimeneti eszköz"
+msgid "Audio Preview"
+msgstr "Hangbemutató"
 
 msgid "Audio preview is not available"
 msgstr "A hangbemutató nem áll rendelkezésre"
@@ -1649,6 +1652,9 @@ msgstr ""
 "Figyelem: ez a művelet nem vonható vissza!\n"
 "A Gajim ki fog lépni a művelet végeztével."
 
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Biztos törölhető ez a beszélgetés az előzményeivel együtt?"
+
 msgid "Do you really want to remove this proxy?"
 msgstr "Biztosan törölhető ez a proxy?"
 
@@ -1755,6 +1761,9 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Hangok lejátszása a különféle értesítésekhez"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Hangok kipróbálása a Gajimban"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Az üzenetek automatikus helyesírás-ellenőrzése"
@@ -2046,10 +2055,13 @@ msgid "Forever"
 msgstr "Korlátlan"
 
 msgid "Forget Group Chat"
-msgstr "Társalgó elfelejtése"
+msgstr "Társalgó eltávolítása"
 
 msgid "Forget this Group Chat"
-msgstr "Társalgó elfelejtése"
+msgstr "Társalgó eltávolítása"
+
+msgid "Forget this Group Chat?"
+msgstr "Társalgó eltávolítása"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "A CRL lastUpdate mezője formailag hibás"
@@ -2795,6 +2807,9 @@ msgstr "Percben megadott tétlenség, miután a jelenléti állapot megváltozik
 
 msgid "Miscellaneous"
 msgstr "Vegyes"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "A hang-/videóhíváshoz szükséges összetevők hiányoznak"
 
 msgid "Missing necessary encryption plugin"
 msgstr "A titkosítás bővítménye hiányzik"
@@ -3769,6 +3784,9 @@ msgstr "Követelmény: gnome-keyring vagy kwallet"
 msgid "Requires: gsound"
 msgstr "Követelmény: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
+
 msgid "Requires: libspelling"
 msgstr "Követelmény: libspelling"
 
@@ -3992,9 +4010,6 @@ msgstr "Üzenetek kijelölése…"
 msgid "Select a security label for your message…"
 msgstr "Az üzenet biztonsági címkéjének kiválasztása…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "A hangkimeneti eszköz (pl. hangszórók, fejhallgatók) kiválasztása"
-
 msgid "Select an emoji"
 msgstr "Hangulatjel beszúrása"
 
@@ -4208,6 +4223,9 @@ msgstr "Fájlátvitelek"
 
 msgid "Show Voice Message Button"
 msgstr "Hangüzenet gomb megjelenítése"
+
+msgid "Show _Features"
+msgstr "_Tulajdonságok"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Legyen megerősítő kérdés a titkosítás nélküli kapcsolódás előtt"
@@ -6186,14 +6204,11 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Biztos leállítható a Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Hang"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Hang- / videohívás"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Hangbemutató"
+#~ msgid "Audio Output Device"
+#~ msgstr "Kimeneti eszköz"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Hang/Videó"
@@ -6286,9 +6301,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Hang- és videóbeszélgetések a Gajimban"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Hangok kipróbálása a Gajimban"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "A Gajim ikonjának megjelenítése az értesítési területen"
@@ -6423,9 +6435,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Üzenet helyesbítése: háttérszín"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "A hang-/videóhíváshoz szükséges összetevők hiányoznak"
-
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s %(count)s üzenetének moderálása?"
@@ -6518,9 +6527,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Követelmény: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-"
 #~ "plugins-ugly-1.0, gst-libav"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Követelmény: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Követelmény: gupnpigd-1.0"
 
@@ -6540,6 +6546,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Select File…"
 #~ msgstr "Fájl választása…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "A hangkimeneti eszköz (pl. hangszórók, fejhallgatók) kiválasztása"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "A szinkronizálandó fiók kiválasztása"
@@ -6569,9 +6578,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Kilépettek megjelenítése"
-
-#~ msgid "Show _Features"
-#~ msgstr "_Tulajdonságok"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""

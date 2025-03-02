@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2025-01-03 23:12+0000\n"
 "Last-Translator: soneca <acenos@danwin1210.me>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -763,14 +763,18 @@ msgstr "Pergunte antes de sair quando a janela de Gajim estiver fechada"
 msgid "Attention Message Received"
 msgstr "Mensagem de Atenção Recebida"
 
+msgid "Audio"
+msgstr "Áudio"
+
 msgid "Audio File"
 msgstr "Arquivo de Áudio"
 
 msgid "Audio Input Device"
 msgstr "Dispositivo de Entrada de Áudio"
 
-msgid "Audio Output Device"
-msgstr "Dispositivo de Saída de Áudio"
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Arquivo de Áudio"
 
 msgid "Audio preview is not available"
 msgstr "A escuta de áudio não está disponível"
@@ -1708,6 +1712,10 @@ msgstr ""
 "Gajim ira fechar apos."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Você realmente quer deletar seu historico de chat para este chat?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Você realmente deseja remover \"%s\"?"
 
@@ -1817,6 +1825,10 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Permite que o Gajim toque sons para várias notificações"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Permite que o Gajim forneça chats de Áudio e Vídeo"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Permite que o Gajim verifique a ortografia enquanto digita"
@@ -2140,6 +2152,10 @@ msgstr "Sair das salas"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Sair das salas"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Sair das salas"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2953,6 +2969,9 @@ msgstr "_Log mudanças de status dos contatos"
 
 msgid "Miscellaneous"
 msgstr "Diversos"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Faltando dependências para Áudio/Vídeo"
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4054,6 +4073,12 @@ msgid "Requires: gsound"
 msgstr "Requer: gsound"
 
 #, fuzzy
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+"Requer: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
+"gstreamer1.0-plugins-ugly"
+
+#, fuzzy
 msgid "Requires: libspelling"
 msgstr "Requer: Gspell"
 
@@ -4315,9 +4340,6 @@ msgstr "Mensagem direta"
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 #, fuzzy
 msgid "Select an emoji"
 msgstr "Selecione um emoji"
@@ -4569,6 +4591,10 @@ msgstr "Exibir trans_portes"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Enviar mensagem"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Recursos"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6746,16 +6772,12 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Você tem certeza que deseja sair do Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Áudio"
-
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Áudio / Vídeo"
 
-#, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Arquivo de Áudio"
+#~ msgid "Audio Output Device"
+#~ msgstr "Dispositivo de Saída de Áudio"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Áudio/Vídeo"
@@ -6848,10 +6870,6 @@ msgstr "...ou solte-o aqui"
 #~ msgstr "Editar area de trabalho…"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "Permite que o Gajim forneça chats de Áudio e Vídeo"
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "Permite que o Gajim forneça chats de Áudio e Vídeo"
 
 #, fuzzy
@@ -6973,9 +6991,6 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Cor de fundo da linha de contato"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Faltando dependências para Áudio/Vídeo"
-
 #~ msgid "Moderate message?"
 #~ msgstr "Moderar mensagem?"
 
@@ -7067,14 +7082,6 @@ msgstr "...ou solte-o aqui"
 #~ msgstr "Remover"
 
 #, fuzzy
-#~ msgid ""
-#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-#~ "ugly-1.0, gst-libav"
-#~ msgstr ""
-#~ "Requer: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
-#~ "gstreamer1.0-plugins-ugly"
-
-#, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Requer: gir1.2-gupnpigd-1.0"
 
@@ -7127,10 +7134,6 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Exibir desc_onectados"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Recursos"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

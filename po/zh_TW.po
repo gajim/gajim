@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-12-03 12:11+0000\n"
 "Last-Translator: hsfg6 <hsfg6@proton.me>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -767,14 +767,18 @@ msgstr "當 Gajim 的窗口關閉時退出前詢問"
 msgid "Attention Message Received"
 msgstr "收到的注意消息"
 
+#, fuzzy
+msgid "Audio"
+msgstr "音訊測試"
+
 msgid "Audio File"
 msgstr "音訊檔"
 
 msgid "Audio Input Device"
 msgstr "音訊輸入裝置"
 
-msgid "Audio Output Device"
-msgstr "音訊輸出裝置"
+msgid "Audio Preview"
+msgstr "音訊預覽"
 
 msgid "Audio preview is not available"
 msgstr "音訊預覽不可用"
@@ -1786,6 +1790,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "您確定要關閉所有這些嗎"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "您確定要關閉所有這些嗎"
 
@@ -1904,6 +1912,10 @@ msgstr "測算閒置時間以自動調整狀態的能力。"
 
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr "開始進行語音視訊通話的能力。"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "開始進行語音視訊通話的能力。"
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2251,6 +2263,10 @@ msgstr "離開聊天室"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "離開聊天室"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "離開聊天室"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3102,6 +3118,9 @@ msgstr "記錄聯絡人狀態變化(_L)"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>雜項</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4238,6 +4257,9 @@ msgstr "需要 gnome-keyring 和 python-gnome2-desktop，或 kwalletcli。"
 msgid "Requires: gsound"
 msgstr "需要 python-dbus。"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "需要 libgtkspell。"
@@ -4498,9 +4520,6 @@ msgstr "預設訊息"
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4759,6 +4778,10 @@ msgstr "顯示代理(_P)"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "傳送訊息"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "特性"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6908,15 +6931,11 @@ msgstr ""
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "您確定您要離開 Gajim 嗎?"
 
-#, fuzzy
-#~ msgid "Audio"
-#~ msgstr "音訊測試"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "音訊/視訊通話"
 
-#~ msgid "Audio Preview"
-#~ msgstr "音訊預覽"
+#~ msgid "Audio Output Device"
+#~ msgstr "音訊輸出裝置"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7019,10 +7038,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "開始進行語音視訊通話的能力。"
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "開始進行語音視訊通話的能力。"
 
 #, fuzzy
@@ -7273,10 +7288,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "顯示離線聯絡人"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "特性"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

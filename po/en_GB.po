@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -823,6 +823,10 @@ msgid "Attention Message Received"
 msgstr "First Message Received"
 
 #, fuzzy
+msgid "Audio"
+msgstr "File: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "File: "
 
@@ -831,8 +835,8 @@ msgid "Audio Input Device"
 msgstr "Default Message"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Default Message"
+msgid "Audio Preview"
+msgstr "File: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1878,6 +1882,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Do you really want to close them all?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Do you really want to close them all?"
 
@@ -1995,6 +2003,9 @@ msgid ""
 msgstr "Ability to measure idle time, in order to set auto status."
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2340,6 +2351,10 @@ msgstr "Leave Groupchats"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Leave Groupchats"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Leave Groupchats"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3188,6 +3203,9 @@ msgstr "_Log status changes of contacts"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Miscellaneous</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4329,6 +4347,9 @@ msgstr "Requires gnome-keyring and python-gnome2-desktop, or kwalletcli."
 msgid "Requires: gsound"
 msgstr "Requires python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Requires libgtkspell."
@@ -4586,9 +4607,6 @@ msgid "Select Messages…"
 msgstr "Default Message"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4851,6 +4869,10 @@ msgstr "Show Trans_ports"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Send message"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Features"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7010,8 +7032,8 @@ msgstr ""
 #~ msgstr "Private Chat"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "File: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Default Message"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7331,10 +7353,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Show _Offline Contacts"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Features"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -814,6 +814,10 @@ msgid "Attention Message Received"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Fajł: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Fajł: "
 
@@ -822,8 +826,8 @@ msgid "Audio Input Device"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
+msgid "Audio Preview"
+msgstr "Fajł: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1864,6 +1868,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
 
@@ -1981,6 +1989,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2328,6 +2339,10 @@ msgstr "Pakiń pakoji"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Pakiń pakoji"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Pakiń pakoji"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3179,6 +3194,9 @@ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Roznaje</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4321,6 +4339,9 @@ msgstr "Kiraŭnik žurnałaŭ"
 msgid "Requires: gsound"
 msgstr "Vymahaje parolu"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vymahaje parolu"
@@ -4577,9 +4598,6 @@ msgid "Select Messages…"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4843,6 +4861,10 @@ msgstr "Pakažy _transparty"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Dašli paviedamleńnie"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Zdolnaści serveraŭ"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6994,8 +7016,8 @@ msgstr ""
 #~ msgstr "Прыватная размова"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Fajł: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7308,10 +7330,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Pakažy _adłučanyja kantakty"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Zdolnaści serveraŭ"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

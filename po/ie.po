@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -730,14 +730,18 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr ""
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Audio File"
 msgstr ""
 
 msgid "Audio Input Device"
 msgstr ""
 
-msgid "Audio Output Device"
-msgstr ""
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Cargante…"
 
 msgid "Audio preview is not available"
 msgstr ""
@@ -1633,6 +1637,9 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr ""
+
 msgid "Do you really want to remove this proxy?"
 msgstr ""
 
@@ -1733,6 +1740,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2031,6 +2041,9 @@ msgid "Forget Group Chat"
 msgstr ""
 
 msgid "Forget this Group Chat"
+msgstr ""
+
+msgid "Forget this Group Chat?"
 msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2753,6 +2766,9 @@ msgid "Minutes until your status gets changed"
 msgstr ""
 
 msgid "Miscellaneous"
+msgstr ""
+
+msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3729,6 +3745,9 @@ msgstr ""
 msgid "Requires: gsound"
 msgstr ""
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -3950,9 +3969,6 @@ msgstr ""
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4167,6 +4183,10 @@ msgstr ""
 
 msgid "Show Voice Message Button"
 msgstr ""
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Caracteristicas"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -5830,9 +5850,6 @@ msgstr ""
 #~ msgctxt "File transfer state"
 #~ msgid "Aborted"
 #~ msgstr "Interruptet"
-
-#~ msgid "Audio"
-#~ msgstr "Audio"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio e video"

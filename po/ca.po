@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -782,14 +782,19 @@ msgid "Attention Message Received"
 msgstr ""
 
 #, fuzzy
+msgid "Audio"
+msgstr "Envia _Fitxer"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Envia _Fitxer"
 
 msgid "Audio Input Device"
 msgstr ""
 
-msgid "Audio Output Device"
-msgstr ""
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Envia _Fitxer"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1786,6 +1791,9 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr ""
+
 msgid "Do you really want to remove this proxy?"
 msgstr ""
 
@@ -1892,6 +1900,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2224,6 +2235,10 @@ msgstr "Grups de xat"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Grups de xat"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Grups de xat"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3033,6 +3048,9 @@ msgstr "Mostra els canvis d'estat"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4140,6 +4158,9 @@ msgstr ""
 msgid "Requires: gsound"
 msgstr "requereix"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "requereix"
@@ -4391,9 +4412,6 @@ msgid "Select Messages…"
 msgstr "Missatges preconfigurats:"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4649,6 +4667,10 @@ msgstr "Mostra Transports"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Envia missatge"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Característiques"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -6609,10 +6631,6 @@ msgstr ""
 #~ msgstr "Disponible per parlar"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Envia _Fitxer"
-
-#, fuzzy
 #~ msgid "Authorization Request"
 #~ msgstr "Autors:"
 
@@ -6774,10 +6792,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Mostra els contactes desconnectats"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Característiques"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

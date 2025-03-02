@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -809,6 +809,10 @@ msgid "Attention Message Received"
 msgstr "Üyelik ileti _kaydet"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Ses testi"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Dosya: "
 
@@ -817,8 +821,8 @@ msgid "Audio Input Device"
 msgstr "Ses giriş aygıtı"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Ses çıkış aygıtı"
+msgid "Audio Preview"
+msgstr "Dosya: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1862,6 +1866,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
 
@@ -1978,6 +1986,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2323,6 +2334,10 @@ msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Tam-Ekrandan Çık"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Tam-Ekrandan Çık"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3159,6 +3174,9 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4300,6 +4318,9 @@ msgstr "Paket Yöneticisi"
 msgid "Requires: gsound"
 msgstr "Dbus Denetim Altyapısı"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr " (yetki gerektirir)"
@@ -4556,9 +4577,6 @@ msgid "Select Messages…"
 msgstr "Öntanımlı İlet"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4822,6 +4840,10 @@ msgstr "_XML Konsolu Göster"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Mesajı gönder"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Özellikler:"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -6956,16 +6978,12 @@ msgstr ""
 #~ msgstr "Onu kullanmak istediğinizden emin misiniz? (e/H) "
 
 #, fuzzy
-#~ msgid "Audio"
-#~ msgstr "Ses testi"
-
-#, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Ses / Video"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Dosya: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Ses çıkış aygıtı"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7288,10 +7306,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "_Çevredışı Kişileri Göster"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Özellikler:"
 
 #, fuzzy
 #~ msgid "Sort by Status"

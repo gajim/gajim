@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -752,14 +752,17 @@ msgstr "Zeptat se před ukončením, pokud je okno aplikace Gajim zavřené"
 msgid "Attention Message Received"
 msgstr "Zpráva o pozornost přijata"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Audio File"
 msgstr "Audio soubor"
 
 msgid "Audio Input Device"
 msgstr "Vstupní zařízení audio"
 
-msgid "Audio Output Device"
-msgstr "Výstupní zařízení audio"
+msgid "Audio Preview"
+msgstr "Náhled pro audio"
 
 msgid "Audio preview is not available"
 msgstr "Náhled pro audio není dostupný"
@@ -1675,6 +1678,10 @@ msgstr ""
 "Gajim bude poté ukončen."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Opravdu si přejete smazat historii této konverzace?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Opravdu si přejete odebrat \"%s\"?"
 
@@ -1779,6 +1786,9 @@ msgstr "Funkce pro měření času nečinnosti pro nastavení automatického sta
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Umožňuje Gajimu přehrát zvukové efekty pro různá upozornění"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Umožňuje náhled audia"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Umožňuje Gajim kontrolovat pravopis Vašich zpráv při psaní"
@@ -2084,6 +2094,10 @@ msgid "Forget Group Chat"
 msgstr "Zapomenout skupinovou konverzaci"
 
 msgid "Forget this Group Chat"
+msgstr "Zapomenout tuto skupinovou konverzaci"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Zapomenout tuto skupinovou konverzaci"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2850,6 +2864,9 @@ msgstr "Minuty, než se váš změní"
 
 msgid "Miscellaneous"
 msgstr "Ostatní"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Chybí závislosti pro audio/video"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Chybí nezbytný zásuvný modul pro šifrování"
@@ -3873,6 +3890,9 @@ msgstr "Vyžaduje gnome-keyring nebo kwallet"
 msgid "Requires: gsound"
 msgstr "Vyžaduje: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Vyžaduje: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vyžaduje: Gspell"
@@ -4100,9 +4120,6 @@ msgstr "Vyberte zprávy…"
 msgid "Select a security label for your message…"
 msgstr "Vyberte bezpečnostní štítek pro svou zprávu…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "Vyberte zvukový výstup (např. reproduktory, sluchátka)"
-
 msgid "Select an emoji"
 msgstr "Vyberte emotikon"
 
@@ -4326,6 +4343,9 @@ msgstr "Zobrazit přenosy"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Zobrazit tlačítko pro odesílání zpráv"
+
+msgid "Show _Features"
+msgstr "Zobrazit vlastnosti"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Zobrazit potvrzovací dialog před nešifrovaným připojením"
@@ -6358,14 +6378,11 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Opravdu chcete ukončit Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Audio"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Audio / Video hovory"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Náhled pro audio"
+#~ msgid "Audio Output Device"
+#~ msgstr "Výstupní zařízení audio"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
@@ -6456,9 +6473,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Umožňuje poskytnout audio a video hovory"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Umožňuje náhled audia"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Umožňuje zobrazení ikony v oznamovací oblasti"
@@ -6583,9 +6597,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Oprava zpráv: barva pozadí"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Chybí závislosti pro audio/video"
-
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Odvolat zprávu?"
@@ -6680,9 +6691,6 @@ msgstr "...nebo přetáhněte sem"
 #~ "plugins-base, gstreamer1.0-plugins-ugly, gstreamer1.0-libav a "
 #~ "gstreamer1.0-gtk3"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Vyžaduje: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Vyžaduje : gupnpigd-1.0"
 
@@ -6702,6 +6710,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Select File…"
 #~ msgstr "Vybrat soubor…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "Vyberte zvukový výstup (např. reproduktory, sluchátka)"
 
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
@@ -6733,9 +6744,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Zobrazit nepřipojené kontakty"
-
-#~ msgid "Show _Features"
-#~ msgstr "Zobrazit vlastnosti"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "Zobrazovat stav konverzace (např. „píše…“) vedle jména kontaktu"

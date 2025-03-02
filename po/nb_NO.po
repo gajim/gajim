@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -812,6 +812,10 @@ msgid "Attention Message Received"
 msgstr "Oppmerksomhetsmelding mottatt"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Lydtest"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Fil: "
 
@@ -820,8 +824,8 @@ msgid "Audio Input Device"
 msgstr "Lydenhet for mikrofon"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Lydenhet for avspilling"
+msgid "Audio Preview"
+msgstr "Fil: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1850,6 +1854,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Ønsker du å lukke alle sammen?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Ønsker du å lukke alle sammen?"
 
@@ -1967,6 +1975,10 @@ msgstr "Evnen til å måle uvirksom tid for å kunne sette auto-status."
 
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr "Evne til å starte lyd- og video-samtaler."
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "Evne til å starte lyd- og video-samtaler."
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2313,6 +2325,10 @@ msgstr "Forlat gruppesamtaler"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Forlat gruppesamtaler"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Forlat gruppesamtaler"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3167,6 +3183,9 @@ msgstr "_Vis statusendringer"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4293,6 +4312,12 @@ msgid "Requires: gsound"
 msgstr "Krever python-dbus."
 
 #, fuzzy
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+"Krever gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav og "
+"gstreamer1.0-plugins-ugly."
+
+#, fuzzy
 msgid "Requires: libspelling"
 msgstr "Krever Gspell"
 
@@ -4549,9 +4574,6 @@ msgid "Select Messages…"
 msgstr "Forvalgt melding"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 #, fuzzy
@@ -4811,6 +4833,10 @@ msgstr "Vis transporter"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Send melding"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Funksjonalitet"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6967,16 +6993,12 @@ msgstr ""
 #~ msgstr "Bekreft lukking av Gajim."
 
 #, fuzzy
-#~ msgid "Audio"
-#~ msgstr "Lydtest"
-
-#, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Lyd / Video"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Fil: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Lydenhet for avspilling"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7077,10 +7099,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "Evne til å starte lyd- og video-samtaler."
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "Evne til å starte lyd- og video-samtaler."
 
 #, fuzzy
@@ -7285,14 +7303,6 @@ msgstr ""
 #~ msgstr "Fjern"
 
 #, fuzzy
-#~ msgid ""
-#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-#~ "ugly-1.0, gst-libav"
-#~ msgstr ""
-#~ "Krever gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav og "
-#~ "gstreamer1.0-plugins-ugly."
-
-#, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Krever gir1.2-gupnpigd-1.0."
 
@@ -7346,10 +7356,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Vis _frakoblede kontakter"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Funksjonalitet"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
-"PO-Revision-Date: 2025-01-31 05:12+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"PO-Revision-Date: 2025-03-01 07:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
@@ -30,7 +30,7 @@ msgstr " (音声チャット)"
 
 #, fuzzy, python-format
 msgid " by %s"
-msgstr "%s が変更"
+msgstr " %s が変更"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -487,9 +487,8 @@ msgstr "項目を追加"
 msgid "Add Files…"
 msgstr "ファイルを追加…"
 
-#, fuzzy
 msgid "Add Group…"
-msgstr "グループに追加"
+msgstr "グループを追加…"
 
 msgid "Add Proxy"
 msgstr "プロキシを追加"
@@ -745,14 +744,17 @@ msgstr "Gajim のウィンドウを閉じる際、終了するか尋ねる"
 msgid "Attention Message Received"
 msgstr "注目メッセージを受信した"
 
+msgid "Audio"
+msgstr "音声"
+
 msgid "Audio File"
 msgstr "音声ファイル"
 
 msgid "Audio Input Device"
 msgstr "音声入力デバイス"
 
-msgid "Audio Output Device"
-msgstr "音声出力デバイス"
+msgid "Audio Preview"
+msgstr "音声のプレビュー"
 
 msgid "Audio preview is not available"
 msgstr "音声のプレビューは無効です"
@@ -1033,7 +1035,6 @@ msgstr ""
 "談話室で、ニックネーム補完 (タブ) を使うとき、ニックネームの後ろにつけ加えら"
 "れる文字。"
 
-#, fuzzy
 msgid "Chat"
 msgstr "チャット"
 
@@ -1652,6 +1653,10 @@ msgstr ""
 "注意: これはやり直せません。\n"
 "Gajim はその後終了します。"
 
+#, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "本当にこの会話の履歴を除去しますか ?"
+
 msgid "Do you really want to remove this proxy?"
 msgstr "このプロキシを本当に除去しますか ?"
 
@@ -1756,6 +1761,9 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "さまざまな通知の音を鳴らします"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "音声・ビデオチャットのプレビューを可能にします"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "メッセージ作成時にスペルチェックを行います"
@@ -2049,6 +2057,10 @@ msgid "Forget Group Chat"
 msgstr "談話室を忘れる"
 
 msgid "Forget this Group Chat"
+msgstr "この談話室を忘れる"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "この談話室を忘れる"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2806,6 +2818,9 @@ msgstr "在籍状況を変更するまでの時間(分)"
 msgid "Miscellaneous"
 msgstr "その他の設定"
 
+msgid "Missing dependencies for Audio/Video"
+msgstr "音声/ビデオの依存関係がありません"
+
 msgid "Missing necessary encryption plugin"
 msgstr "必要な暗号化プラグインが見当たりません"
 
@@ -2918,9 +2933,8 @@ msgstr "ニックネーム"
 msgid "Nickname contains invalid characters"
 msgstr "ニックネームに禁止文字が含まれています"
 
-#, fuzzy
 msgid "Nickname…"
-msgstr "ニックネーム"
+msgstr "ニックネーム…"
 
 # Auto の選択肢
 msgid "No"
@@ -3389,7 +3403,6 @@ msgstr ""
 msgid "Please make sure you are connected with \"%s\"."
 msgstr "\"%s\" に接続していることを確認してください。"
 
-#, fuzzy
 msgid ""
 "Please select one of your accounts.\n"
 "Gajim will export all messages from the selected account and chats to a "
@@ -3679,9 +3692,8 @@ msgstr "相手先一覧から除去しますか ?"
 msgid "Remove Group?"
 msgstr "グループを除去しますか ?"
 
-#, fuzzy
 msgid "Remove Group…"
-msgstr "グループを除去しますか ?"
+msgstr "グループを除去…"
 
 msgid "Remove History…"
 msgstr "履歴を除去…"
@@ -3751,7 +3763,7 @@ msgstr "報告"
 
 #, fuzzy
 msgid "Request"
-msgstr "申し込み (_R)"
+msgstr "申し込み"
 
 msgid "Request Search Form"
 msgstr "検索欄を要求"
@@ -3792,6 +3804,9 @@ msgstr "gnome-keyring または kwallet が必要です"
 msgid "Requires: gsound"
 msgstr "gsound が必要です"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "gstreamer-1.0, gst-plugins-base-1.0 が必要です"
+
 msgid "Requires: libspelling"
 msgstr "libspelling が必要です"
 
@@ -3808,9 +3823,8 @@ msgstr "リセット"
 msgid "Reset Filters"
 msgstr "フィルターをリセット"
 
-#, fuzzy
 msgid "Reset Hints"
-msgstr "フィルターをリセット"
+msgstr "ヒントをリセット"
 
 msgid "Reset User Interface Font Size"
 msgstr "ユーザーインターフェースのフォントサイズをリセット"
@@ -4017,9 +4031,6 @@ msgstr "メッセージを選択…"
 
 msgid "Select a security label for your message…"
 msgstr "メッセージの安全性ラベルを選択…"
-
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "音声出力を選択してください (例: スピーカー、ヘッドフォン)"
 
 msgid "Select an emoji"
 msgstr "絵文字を選択"
@@ -4233,6 +4244,9 @@ msgstr "中継先を表示"
 
 msgid "Show Voice Message Button"
 msgstr "音声メッセージボタンを表示"
+
+msgid "Show _Features"
+msgstr "特徴を表示 (_U)"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "暗号化されていない接続の前に確認のダイアログを表示します"
@@ -4499,7 +4513,7 @@ msgstr "継読中"
 
 #, fuzzy
 msgid "Subscription"
-msgstr "在席通知の承認:"
+msgstr "在席通知の承認"
 
 msgid "Subscription Request"
 msgstr "在席通知の申し込み"
@@ -5672,7 +5686,6 @@ msgstr "除去 (_R)"
 msgid "_Report Spam"
 msgstr "スパムを報告 (_R)"
 
-#, fuzzy
 msgid "_Request"
 msgstr "申し込み (_R)"
 
@@ -5722,9 +5735,8 @@ msgstr "サービスからアカウントを抹消する (_U)"
 msgid "_Unsubscribe"
 msgstr "継読の取り消し (_U)"
 
-#, fuzzy
 msgid "_Username"
-msgstr "名前を変更"
+msgstr "ユーザー名 (_U)"
 
 msgid "_View"
 msgstr "表示 (_V)"
@@ -6210,14 +6222,11 @@ msgstr "…またはここにドロップ"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "本当に Gajim を終了しますか ?"
 
-#~ msgid "Audio"
-#~ msgstr "音声"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "音声/ビデオ通話"
 
-#~ msgid "Audio Preview"
-#~ msgstr "音声のプレビュー"
+#~ msgid "Audio Output Device"
+#~ msgstr "音声出力デバイス"
 
 #~ msgid "Audio/Video"
 #~ msgstr "音声/ビデオ"
@@ -6310,9 +6319,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "音声・ビデオチャットを可能にします"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "音声・ビデオチャットのプレビューを可能にします"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "システム通知エリアのアイコンを使います"
@@ -6436,9 +6442,6 @@ msgstr "…またはここにドロップ"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "修正: 背景色"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "音声/ビデオの依存関係がありません"
-
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s からの %(count)s 件のメッセージを抑制しますか ?"
@@ -6531,9 +6534,6 @@ msgstr "…またはここにドロップ"
 #~ "farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-ugly-1.0, "
 #~ "gst-libav が必要です"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "gstreamer-1.0, gst-plugins-base-1.0 が必要です"
-
 # …
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "gupnpigd-1.0 が必要です"
@@ -6554,6 +6554,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Select File…"
 #~ msgstr "ファイルを選択…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "音声出力を選択してください (例: スピーカー、ヘッドフォン)"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "同期したいアカウントを選択してください"
@@ -6583,9 +6586,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "オフラインの相手先を表示"
-
-#~ msgid "Show _Features"
-#~ msgstr "特徴を表示 (_U)"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"

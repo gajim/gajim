@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -751,14 +751,17 @@ msgstr "Întrebați înainte de a părăsi când fereastra lui Gajim este închi
 msgid "Attention Message Received"
 msgstr "Atenție mesaj primit"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Audio File"
 msgstr "Fișier audio"
 
 msgid "Audio Input Device"
 msgstr "Dispozitiv de intrare audio"
 
-msgid "Audio Output Device"
-msgstr "Dispozitiv de ieșire audio"
+msgid "Audio Preview"
+msgstr "Previzualizare audio"
 
 msgid "Audio preview is not available"
 msgstr "Previzualizarea audio nu este disponibilă"
@@ -1684,6 +1687,10 @@ msgstr ""
 "Gajim va ieși din joc după aceea."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Chiar doriți să ștergeți istoricul de chat pentru acest chat?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Chiar doriți să eliminați \"%s\"?"
 
@@ -1792,6 +1799,9 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Permite lui Gajim să redea sunete pentru diverse notificări"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Permite Gajim să ofere o previzualizare audio"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
@@ -2101,6 +2111,10 @@ msgid "Forget Group Chat"
 msgstr "Uitați de grupul de chat"
 
 msgid "Forget this Group Chat"
+msgstr "Uitați de acest chat de grup"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Uitați de acest chat de grup"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2869,6 +2883,9 @@ msgstr "Minute până când statutul tău se schimbă"
 
 msgid "Miscellaneous"
 msgstr "Diverse"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Dependențe lipsă pentru Audio/Video"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Lipsește plugin-ul de criptare necesar"
@@ -3887,6 +3904,9 @@ msgstr "Necesită: gnome-keyring sau kwallet"
 msgid "Requires: gsound"
 msgstr "Necesită: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Necesită: Gspell"
@@ -4111,9 +4131,6 @@ msgstr "Selectați Mesaje…"
 msgid "Select a security label for your message…"
 msgstr "Selectați o etichetă de securitate pentru mesajul dumneavoastră…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "Selectați o ieșire audio (de exemplu, difuzoare, căști)"
-
 msgid "Select an emoji"
 msgstr "Selectați un emoji"
 
@@ -4336,6 +4353,9 @@ msgstr "Afișați transferurile"
 
 msgid "Show Voice Message Button"
 msgstr "Afișați butonul Trimite mesaj"
+
+msgid "Show _Features"
+msgstr "Afișați _Funcții"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Afișarea unui dialog de confirmare înainte de conectarea necriptată"
@@ -6340,14 +6360,11 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Ești sigur că vrei să renunți la Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Audio"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Apeluri audio / video"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Previzualizare audio"
+#~ msgid "Audio Output Device"
+#~ msgstr "Dispozitiv de ieșire audio"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Video"
@@ -6441,9 +6458,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Permite Gajim să ofere chat-uri audio și video"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Permite Gajim să ofere o previzualizare audio"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
@@ -6571,9 +6585,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Corectarea mesajului: Culoarea de fundal"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Dependențe lipsă pentru Audio/Video"
-
 #~ msgid "Moderate message?"
 #~ msgstr "Moderați mesajul?"
 
@@ -6666,9 +6677,6 @@ msgstr "...sau lăsați-o aici"
 #~ "Necesită: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 #~ "ugly-1.0, gst-libav și gstreamer-gtk3-plugin"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Necesită: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Necesită: gupnpigd-1.0"
 
@@ -6688,6 +6696,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Select File…"
 #~ msgstr "Selectați File…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "Selectați o ieșire audio (de exemplu, difuzoare, căști)"
 
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
@@ -6719,9 +6730,6 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Afișați contactele offline"
-
-#~ msgid "Show _Features"
-#~ msgstr "Afișați _Funcții"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""

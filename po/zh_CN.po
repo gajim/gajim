@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
-"PO-Revision-Date: 2025-02-14 12:34+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"PO-Revision-Date: 2025-03-02 16:08+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -736,14 +736,17 @@ msgstr "当 Gajim 窗口关闭时退出之前询问"
 msgid "Attention Message Received"
 msgstr "注意消息已收到"
 
+msgid "Audio"
+msgstr "音频"
+
 msgid "Audio File"
 msgstr "音频文件"
 
 msgid "Audio Input Device"
 msgstr "音频输入设备"
 
-msgid "Audio Output Device"
-msgstr "音频输出设备"
+msgid "Audio Preview"
+msgstr "音频预览"
 
 msgid "Audio preview is not available"
 msgstr "音频预览不可用"
@@ -1046,10 +1049,10 @@ msgid "Chat history"
 msgstr "聊天记录"
 
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "通过 OMEMO 或 OpenPGP 端对端加密安全聊天"
+msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天"
 
 msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "通过 OMEMO 或 OpenPGP 端对端加密安全聊天。"
+msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天。"
 
 msgid "Chats"
 msgstr "聊天"
@@ -1585,7 +1588,7 @@ msgid "Disabled"
 msgstr "已禁用"
 
 msgid "Disabled in Preferences"
-msgstr "在首选项中禁用"
+msgstr "在首选项中已禁用"
 
 msgid ""
 "Disclose information about media that is currently being played on your "
@@ -1632,6 +1635,9 @@ msgstr ""
 "是否确定要从 Gajim 中移除全部聊天消息？\n"
 "警告：此操作无法撤销！\n"
 "Gajim 之后会退出。"
+
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "是否确定要移除此聊天及其聊天记录？"
 
 msgid "Do you really want to remove this proxy?"
 msgstr "是否确定要移除此代理？"
@@ -1737,6 +1743,9 @@ msgstr "允许 Gajim 测量您的计算机的空闲时间以便自动设置您�
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "允许 Gajim 播放各种通知的声音"
 
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "允许 Gajim 提供音频预览"
+
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "允许 Gajim 在您输入消息时进行拼写检查"
 
@@ -1833,7 +1842,7 @@ msgid "Error: %s"
 msgstr "错误：%s"
 
 msgid "Even more features via plugins"
-msgstr "通过插件增加更多功能"
+msgstr "通过插件实现更多功能"
 
 msgid "Event"
 msgstr "事件"
@@ -2030,6 +2039,9 @@ msgstr "忘记群聊"
 msgid "Forget this Group Chat"
 msgstr "忘记此群聊"
 
+msgid "Forget this Group Chat?"
+msgstr "忘记此群聊？"
+
 msgid "Format error in CRL's lastUpdate field"
 msgstr "CRL 的 lastUpdate 字段格式错误"
 
@@ -2139,7 +2151,7 @@ msgid "Gajim: No updates available (last check: never)"
 msgstr "Gajim：无可用更新（上次检查：从未）"
 
 msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim：在首选项中禁用更新检查"
+msgstr "Gajim：在首选项中已禁用更新检查"
 
 msgid "Gathering information…"
 msgstr "正在收集信息…"
@@ -2276,7 +2288,7 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "应该同步多久前的聊天记录？"
 
 msgid "How long Gajim should keep your chat history"
-msgstr "Gajim 应该保存您的聊天记录多久"
+msgstr "Gajim 应保留您的聊天记录多久"
 
 msgid "I can see contact's online status"
 msgstr "我可以看到联系人的在线状态"
@@ -2446,7 +2458,7 @@ msgid "Invite Contacts"
 msgstr "邀请联系人"
 
 msgid "Invite friends to group chats or join one"
-msgstr "邀请朋友加入群聊或加入"
+msgstr "邀请朋友加入群聊或自己加入群聊"
 
 msgid "Invite to this chat"
 msgstr "邀请加入此聊天"
@@ -2527,7 +2539,7 @@ msgid "Keep Chat History"
 msgstr "保留聊天记录"
 
 msgid "Keep and manage all your chat history"
-msgstr "保留并管理您所有的聊天记录"
+msgstr "保留和管理您的所有聊天记录"
 
 msgid "Key Size"
 msgstr "密钥长度"
@@ -2761,6 +2773,9 @@ msgstr "状态更改前的分钟数"
 
 msgid "Miscellaneous"
 msgstr "杂项"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "缺失音频/视频所需的依赖"
 
 msgid "Missing necessary encryption plugin"
 msgstr "缺失必要的加密插件"
@@ -3369,7 +3384,7 @@ msgid "Plugins: No updates available"
 msgstr "插件：无可用更新"
 
 msgid "Plugins: Update check disabled in preferences"
-msgstr "插件：在首选项中禁用更新检查"
+msgstr "插件：在首选项中已禁用更新检查"
 
 msgid "Port"
 msgstr "端口"
@@ -3528,7 +3543,7 @@ msgid "Read _Wikipedia Article"
 msgstr "阅读维基百科文章(_W)"
 
 msgid "Read more about blind trust"
-msgstr "了解更多有关盲目信任的内容"
+msgstr "详细了解盲目信任"
 
 msgid "Reason"
 msgstr "原因"
@@ -3730,6 +3745,9 @@ msgstr "需要：gnome-keyring 或 kwallet"
 
 msgid "Requires: gsound"
 msgstr "需要：gsound"
+
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
 
 msgid "Requires: libspelling"
 msgstr "需要：libspelling"
@@ -3952,9 +3970,6 @@ msgstr "选择消息…"
 msgid "Select a security label for your message…"
 msgstr "为您的消息选择安全标签…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "选择音频输出（例如扬声器、耳机）"
-
 msgid "Select an emoji"
 msgstr "选择表情符号"
 
@@ -4167,6 +4182,9 @@ msgstr "显示传输"
 msgid "Show Voice Message Button"
 msgstr "显示语音消息按钮"
 
+msgid "Show _Features"
+msgstr "显示功能(_F)"
+
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "在以非加密连接前显示确认对话框"
 
@@ -4237,7 +4255,7 @@ msgid "Show window in the taskbar"
 msgstr "在任务栏中显示窗口"
 
 msgid "Show window when starting Gajim"
-msgstr "在启动 Gajim 时显示窗口"
+msgstr "启动 Gajim 时显示窗口"
 
 msgid "Show your own video stream in calls"
 msgstr "在通话中显示您本身的视频流"
@@ -4450,11 +4468,11 @@ msgid ""
 "Alternatively, you can either minimize Gajim’s window, or hide it "
 "completely. Use Gajim’s system tray icon to restore the window."
 msgstr ""
-"是否确定要退出 Gajim？\n"
-"如果退出，您将无法发送和接收消息。\n"
+"确定要退出 Gajim？\n"
+"退出后，您将无法发送和接收消息。\n"
 "\n"
-"另外，您可以最小化 Gajim 的窗口，或完全隐藏窗口。使用 Gajim 的系统托盘图标恢"
-"复窗口。"
+"另外，您可以最小化或完全隐藏 Gajim 的窗口。使用 Gajim "
+"的系统托盘图标恢复窗口。"
 
 msgid "Switch Workspace"
 msgstr "切换工作区"
@@ -5340,7 +5358,7 @@ msgstr ""
 "这可能需要一段时间…"
 
 msgid "Your message can not be sent until you are connected."
-msgstr "连接之后您的消息才能发送。"
+msgstr "连接后才能发送您的消息。"
 
 msgid "Your messages have been exported successfully"
 msgstr "您的消息已经成功导出"
@@ -6104,14 +6122,11 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "是否确定要退出 Gajim？"
 
-#~ msgid "Audio"
-#~ msgstr "音频"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "音频/视频通话"
 
-#~ msgid "Audio Preview"
-#~ msgstr "音频预览"
+#~ msgid "Audio Output Device"
+#~ msgstr "音频输出设备"
 
 #~ msgid "Audio/Video"
 #~ msgstr "音频/视频"
@@ -6203,9 +6218,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "允许 Gajim 提供音频和视频聊天"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "允许 Gajim 提供音频预览"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "允许 Gajim 提供系统通知区域图标"
@@ -6333,9 +6345,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "消息更正: 背景颜色"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "缺失音频/视频所需的依赖"
-
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "撤回来自 %(participant)s 的 %(count)s 条消息？"
@@ -6426,9 +6435,6 @@ msgstr "…或将其拖放到此处"
 #~ "需要：farstream-0.2、gstreamer-1.0、gst-plugins-base-1.0、gst-plugins-"
 #~ "ugly-1.0、gst-libav"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "需要：gstreamer-1.0、gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "需要：gupnpigd-1.0"
 
@@ -6448,6 +6454,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Select File…"
 #~ msgstr "选择文件…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "选择音频输出（例如扬声器、耳机）"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "选择您想要与之同步的账号"
@@ -6477,9 +6486,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "显示离线联系人"
-
-#~ msgid "Show _Features"
-#~ msgstr "显示功能(_F)"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"

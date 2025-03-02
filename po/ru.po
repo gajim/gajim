@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2025-02-10 10:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -757,14 +757,17 @@ msgstr "Спрашивать перед выходом, когда окно пр
 msgid "Attention Message Received"
 msgstr "Получено сообщение для привлечения внимания"
 
+msgid "Audio"
+msgstr "Аудио"
+
 msgid "Audio File"
 msgstr "Аудиофайл"
 
 msgid "Audio Input Device"
 msgstr "Устройство аудиовхода"
 
-msgid "Audio Output Device"
-msgstr "Устройство аудиовыхода"
+msgid "Audio Preview"
+msgstr "Предварительное прослушивание аудио"
 
 msgid "Audio preview is not available"
 msgstr "Предварительное прослушивание аудио недоступно"
@@ -1683,6 +1686,10 @@ msgstr ""
 "После выполнения очистки Gajim закроется."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Удалить Вашу историю этого чата?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Удалить группу «%s»?"
 
@@ -1790,6 +1797,9 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Воспроизведение звуков для различных уведомлений"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Позволяет Gajim выполнять предварительное прослушивание аудио"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Проверка орфографии при составлении сообщений"
@@ -2095,6 +2105,10 @@ msgid "Forget Group Chat"
 msgstr "Забыть групповой чат"
 
 msgid "Forget this Group Chat"
+msgstr "Забыть этот групповой чат"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Забыть этот групповой чат"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2862,6 +2876,9 @@ msgstr "Минуты до изменения вашего статуса"
 
 msgid "Miscellaneous"
 msgstr "Прочее"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Отсутствуют зависимости для Audio/Video"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Отсутствует требуемый подключаемый модуль шифрования"
@@ -3878,6 +3895,9 @@ msgstr "Требуется: gnome-keyring или kwallet"
 msgid "Requires: gsound"
 msgstr "Требуется: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Требуется: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Требуется: Gspell"
@@ -4102,9 +4122,6 @@ msgstr "Выбрать сообщения…"
 msgid "Select a security label for your message…"
 msgstr "Выберите метку конфиденциальности для данного сообщения…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "Выберите аудиовыход (динамики, наушники)"
-
 msgid "Select an emoji"
 msgstr "Выберите эмодзи"
 
@@ -4325,6 +4342,9 @@ msgstr "Показать передачу файлов"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Отображать кнопку отправки сообщения"
+
+msgid "Show _Features"
+msgstr "Показать _возможности"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -6323,14 +6343,11 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Закрыть Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Аудио"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Аудио / Видео звонки"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Предварительное прослушивание аудио"
+#~ msgid "Audio Output Device"
+#~ msgstr "Устройство аудиовыхода"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Аудио/Видео"
@@ -6422,9 +6439,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Возможность проведения аудио- и видеочатов"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Позволяет Gajim выполнять предварительное прослушивание аудио"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Отображение значка в области уведомлений"
@@ -6553,9 +6567,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Измененное сообщение: Цвет фона"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Отсутствуют зависимости для Audio/Video"
-
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "Модерировать %(count)s сообщений для %(participant)s?"
@@ -6650,9 +6661,6 @@ msgstr "…или перетащите его сюда"
 #~ "Требуются: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-"
 #~ "plugins-ugly-1.0, gst-libav and gstreamer-gtk3-plugin"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Требуется: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Требуется: gupnpigd-1.0"
 
@@ -6672,6 +6680,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Select File…"
 #~ msgstr "Выбрать файл…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "Выберите аудиовыход (динамики, наушники)"
 
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
@@ -6704,9 +6715,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Показывать отключённые контакты"
-
-#~ msgid "Show _Features"
-#~ msgstr "Показать _возможности"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""

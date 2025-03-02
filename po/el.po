@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -820,6 +820,10 @@ msgid "Attention Message Received"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Αρχείο:"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Αρχείο:"
 
@@ -828,8 +832,8 @@ msgid "Audio Input Device"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
+msgid "Audio Preview"
+msgstr "Αρχείο:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1870,6 +1874,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
@@ -1987,6 +1995,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2336,6 +2347,10 @@ msgstr "Ομαδικές συζητήσεις"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Ομαδικές συζητήσεις"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Ομαδικές συζητήσεις"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3183,6 +3198,9 @@ msgstr "Καταγραφή α_λλαγών κατάστασης των επαφ�
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Διάφορα</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4325,6 +4343,9 @@ msgstr "Διαχειριστής ιστορικού"
 msgid "Requires: gsound"
 msgstr "Απαιτείται κωδικός"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Απαιτείται κωδικός"
@@ -4584,9 +4605,6 @@ msgid "Select Messages…"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 #, fuzzy
@@ -4851,6 +4869,10 @@ msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Αποστολή μηνύματος"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Χαρακτηριστικά διακομιστή"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
@@ -7013,8 +7035,8 @@ msgstr ""
 #~ msgstr "Προσωπική συζήτηση"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Αρχείο:"
+#~ msgid "Audio Output Device"
+#~ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7331,10 +7353,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Χαρακτηριστικά διακομιστή"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

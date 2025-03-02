@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -809,6 +809,9 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "Unua mesaĝo ricevita"
 
+msgid "Audio"
+msgstr "Aŭdo"
+
 #, fuzzy
 msgid "Audio File"
 msgstr "Dosiero: "
@@ -818,8 +821,8 @@ msgid "Audio Input Device"
 msgstr "Defaŭlta statmesaĝo"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Defaŭlta statmesaĝo"
+msgid "Audio Preview"
+msgstr "Dosiero: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1860,6 +1863,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
 
@@ -1977,6 +1984,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2324,6 +2334,10 @@ msgstr "Nova babilejo"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Nova babilejo"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Nova babilejo"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3173,6 +3187,9 @@ msgstr "_Protokoli statŝanĝojn de kontaktoj"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Cetero</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4314,6 +4331,9 @@ msgstr "Historia administrilo"
 msgid "Requires: gsound"
 msgstr "Pasvorto necesas"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Pasvorto necesas"
@@ -4571,9 +4591,6 @@ msgid "Select Messages…"
 msgstr "Defaŭlta statmesaĝo"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4837,6 +4854,10 @@ msgstr "Montri Trans_portilojn"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Sendi mesaĝon"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Servilaj trajtoj"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6983,16 +7004,13 @@ msgstr ""
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Ĉu vi certe volas foriri el babilejo \"%s\"?"
 
-#~ msgid "Audio"
-#~ msgstr "Aŭdo"
-
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Privata interparolo"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Dosiero: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Defaŭlta statmesaĝo"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Aŭdo/Video"
@@ -7322,10 +7340,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Montri _senkonektajn kontaktojn"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Servilaj trajtoj"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

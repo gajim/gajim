@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -741,14 +741,17 @@ msgstr "Gajim терезесі жабылған кезде шығу алдынд
 msgid "Attention Message Received"
 msgstr "Назар аудару туралы хабарлама алынды"
 
+msgid "Audio"
+msgstr "Аудио"
+
 msgid "Audio File"
 msgstr "Аудио файлы"
 
 msgid "Audio Input Device"
 msgstr "Аудио енгізу құрылғысы"
 
-msgid "Audio Output Device"
-msgstr "Аудио шығару құрылғысы"
+msgid "Audio Preview"
+msgstr "Аудионы алдын ала қарау"
 
 msgid "Audio preview is not available"
 msgstr "Аудионы алдын ала қарау қолжетімді емес"
@@ -1662,6 +1665,10 @@ msgstr ""
 "Gajim одан кейін жабылады."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Осы чат үшін чат тарихын шынымен өшіргіңіз келе ме?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
 
@@ -1771,6 +1778,9 @@ msgstr ""
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr ""
 "Gajim-ге әртүрлі хабарландырулар үшін дыбыстарды ойнатуға мүмкіндік береді"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Gajim үшін аудио алдын ала қарауды қамтамасыз етеді"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Gajim-ге хабарламалар жазу кезінде емлені тексеруге мүмкіндік береді"
@@ -2078,6 +2088,10 @@ msgid "Forget Group Chat"
 msgstr "Топтық чатты ұмыту"
 
 msgid "Forget this Group Chat"
+msgstr "Бұл топтық чатты ұмыту"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Бұл топтық чатты ұмыту"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2840,6 +2854,9 @@ msgstr "Қалып-күйіңіздің өзгеруіне дейінгі мин
 
 msgid "Miscellaneous"
 msgstr "Әртүрлі"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Аудио/видео үшін тәуелділіктер жоқ"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Қажетті шифрлеу плагині жоқ"
@@ -3858,6 +3875,9 @@ msgstr "Талап етеді: gnome-keyring немесе kwallet"
 msgid "Requires: gsound"
 msgstr "Талап етеді: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Талап етеді: Gspell"
@@ -4085,9 +4105,6 @@ msgstr "Хабарламаларды таңдау…"
 msgid "Select a security label for your message…"
 msgstr "Хабарламаңыз үшін қауіпсіздік белгісін таңдау…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "Аудио шығысын таңдаңыз (мысалы, динамиктер, құлаққаптар)"
-
 msgid "Select an emoji"
 msgstr "Эмодзи таңдаңыз"
 
@@ -4306,6 +4323,9 @@ msgstr "Алмасуларды көрсету"
 
 msgid "Show Voice Message Button"
 msgstr "Дыбыстық хабарлама батырмасын көрсету"
+
+msgid "Show _Features"
+msgstr "_Мүмкіндіктерін көрсету"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Шифрленбеген байланыс алдында растау сұхбатын көрсету"
@@ -6283,14 +6303,11 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Gajim-нан шығуды шынымен қалайсыз ба?"
 
-#~ msgid "Audio"
-#~ msgstr "Аудио"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Аудио / Видео қоңыраулары"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Аудионы алдын ала қарау"
+#~ msgid "Audio Output Device"
+#~ msgstr "Аудио шығару құрылғысы"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Аудио/Видео"
@@ -6383,9 +6400,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr ""
 #~ "Gajim-ге аудио және видео чаттарды қамтамасыз етуге мүмкіндік береді"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Gajim үшін аудио алдын ала қарауды қамтамасыз етеді"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr "Gajim хабарландыру аймағының белгішесін қамтамасыз етеді"
@@ -6510,9 +6524,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Түзетілген хабарлама: Фон түсі"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Аудио/видео үшін тәуелділіктер жоқ"
-
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Хабарламаны қайтарып алу керек пе?"
@@ -6605,9 +6616,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ "Талап етіледі: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-"
 #~ "plugins-ugly-1.0, gst-libav және gstreamer-gtk3-plugin"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Талап етіледі: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Талап етеді: gupnpigd-1.0"
 
@@ -6627,6 +6635,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Select File…"
 #~ msgstr "Файлды таңдау…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "Аудио шығысын таңдаңыз (мысалы, динамиктер, құлаққаптар)"
 
 #, fuzzy
 #~ msgid "Select the account with which you want to synchronize"
@@ -6658,9 +6669,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Желіде емес контакттарды көрсету"
-
-#~ msgid "Show _Features"
-#~ msgstr "_Мүмкіндіктерін көрсету"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "Контакт атыңыздың жанында чат күйін көрсету (мысалы, \"теруде...\")"

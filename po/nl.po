@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -806,6 +806,9 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
+msgid "Audio"
+msgstr "Audio"
+
 #, fuzzy
 msgid "Audio File"
 msgstr "Bestanden:"
@@ -815,8 +818,8 @@ msgid "Audio Input Device"
 msgstr "_Audio-invoerapparaat"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "A_udio-uitvoerapparaat"
+msgid "Audio Preview"
+msgstr "Bestanden:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1845,6 +1848,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Wil je ze echt allemaal sluiten?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
@@ -1964,6 +1971,10 @@ msgstr ""
 
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2311,6 +2322,10 @@ msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Groepsgesprekken verlaten"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Groepsgesprekken verlaten"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3169,6 +3184,9 @@ msgstr "Statusveranderingen tonen"
 
 msgid "Miscellaneous"
 msgstr "Overige"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4287,6 +4305,12 @@ msgid "Requires: gsound"
 msgstr "Vereist: python-dbus"
 
 #, fuzzy
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+"Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
+"gstreamer1.0-plugins-ugly"
+
+#, fuzzy
 msgid "Requires: libspelling"
 msgstr "Vereist: Gspell"
 
@@ -4544,9 +4568,6 @@ msgid "Select Messages…"
 msgstr "Bericht verwijderen"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4807,6 +4828,10 @@ msgstr "Transporten weergeven"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Bericht verzenden"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Functies"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6970,16 +6995,13 @@ msgstr ""
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
 
-#~ msgid "Audio"
-#~ msgstr "Audio"
-
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Audio / video"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Bestanden:"
+#~ msgid "Audio Output Device"
+#~ msgstr "A_udio-uitvoerapparaat"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/video"
@@ -7078,11 +7100,6 @@ msgstr ""
 #~ msgstr "_Groepen bewerken…"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr ""
-#~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr ""
 #~ "Geeft Gajim de mogelijkheid om audio- en videogesprekken aan te bieden"
 
@@ -7298,14 +7315,6 @@ msgstr ""
 #~ msgstr "Verwijderen"
 
 #, fuzzy
-#~ msgid ""
-#~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
-#~ "ugly-1.0, gst-libav"
-#~ msgstr ""
-#~ "Vereist: gir1.2-farstream-0.2, gir1.2-gstreamer-1.0, gstreamer1.0-libav, "
-#~ "gstreamer1.0-plugins-ugly"
-
-#, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Vereist: gir1.2-gupnpigd-1.0"
 
@@ -7358,10 +7367,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Offline contacten weergeven"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Functies"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

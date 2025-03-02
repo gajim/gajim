@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -829,6 +829,10 @@ msgid "Attention Message Received"
 msgstr "Første Besked er Modtaget"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Lyd / Billede"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Fil: "
 
@@ -837,8 +841,8 @@ msgid "Audio Input Device"
 msgstr "Standard Besked"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Standard Besked"
+msgid "Audio Preview"
+msgstr "Fil: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1882,6 +1886,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Vil du virkelig lukke dem alle?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Vil du virkelig lukke dem alle?"
 
@@ -2000,6 +2008,10 @@ msgstr "Evnen til at måle tomgangs tid, for at kunne sætte automatisk status."
 
 #, fuzzy
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr "Understøtter start af lyd og billede chat."
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
 msgstr "Understøtter start af lyd og billede chat."
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2345,6 +2357,10 @@ msgstr "Forlad Gruppesamtaler"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Forlad Gruppesamtaler"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Forlad Gruppesamtaler"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3194,6 +3210,9 @@ msgstr "_Log status ændringer hos kontakter"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4334,6 +4353,9 @@ msgstr "Kræver gnome-keyring og python-gnome2-desktop, eller kwalletcli."
 msgid "Requires: gsound"
 msgstr "Kræver python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Kræver Gspell"
@@ -4593,9 +4615,6 @@ msgid "Select Messages…"
 msgstr "Standard Besked"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4858,6 +4877,10 @@ msgstr "Vis Trans_porter"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Send besked"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Egenskaber"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7014,16 +7037,12 @@ msgstr ""
 #~ msgstr "Er du sikker på du vil afslutte Gajim?"
 
 #, fuzzy
-#~ msgid "Audio"
-#~ msgstr "Lyd / Billede"
-
-#, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Lyd / Billede"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Fil: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Standard Besked"
 
 #, fuzzy
 #~ msgid "Audio/Video"
@@ -7129,10 +7148,6 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "Understøtter start af lyd og billede chat."
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "Understøtter start af lyd og billede chat."
 
 #, fuzzy
@@ -7355,10 +7370,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Vis _Afkoblede Kontakter"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Egenskaber"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

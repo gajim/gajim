@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
-"PO-Revision-Date: 2025-02-25 04:12+0000\n"
-"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"PO-Revision-Date: 2025-03-01 17:58+0000\n"
+"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -748,14 +748,17 @@ msgstr "Preguntar antes de salir cuando se cierre la ventana de Gajim"
 msgid "Attention Message Received"
 msgstr "Mensaje de atención recibido"
 
+msgid "Audio"
+msgstr "Audio"
+
 msgid "Audio File"
 msgstr "Fichero de Sonido"
 
 msgid "Audio Input Device"
 msgstr "Dispositivo de entrada de sonido"
 
-msgid "Audio Output Device"
-msgstr "Dispositivo de salida de sonido"
+msgid "Audio Preview"
+msgstr "Preaudición de audio"
 
 msgid "Audio preview is not available"
 msgstr "Preaudición de sonido no disponible"
@@ -1660,6 +1663,9 @@ msgstr ""
 "¡Atención: Esto no se puede revertir!\n"
 "Gajim se cerrará después."
 
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "¿Realmente quieres eliminar este chat incluyendo su historial?"
+
 msgid "Do you really want to remove this proxy?"
 msgstr "¿Realmente quieres eliminar este proxy?"
 
@@ -1765,6 +1771,9 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Habilita a Gajim para reproducir sonidos para varias notificaciones"
+
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Habilita a Gajim para proporcionar preaudición de ficheros de audio"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr ""
@@ -2061,6 +2070,9 @@ msgstr "Olvidar grupo de chat"
 
 msgid "Forget this Group Chat"
 msgstr "Olvidar este grupo de chat"
+
+msgid "Forget this Group Chat?"
+msgstr "¿Olvidar este grupo de chat?"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Error de formato en el campo lastUpdate del CRL"
@@ -2810,6 +2822,9 @@ msgstr "Minutos hasta que cambie tu estado"
 
 msgid "Miscellaneous"
 msgstr "Miscelánea"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr "Faltan dependencias para audio/video"
 
 msgid "Missing necessary encryption plugin"
 msgstr "Falta el complemento necesario de cifrado"
@@ -3791,6 +3806,9 @@ msgstr "Requiere: gnome-keyring o kwallet"
 msgid "Requires: gsound"
 msgstr "Requiere: gsound"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr "Requiere: gstreamer-1.0, gst-plugins-base-1.0"
+
 msgid "Requires: libspelling"
 msgstr "Requiere: libspelling"
 
@@ -4012,9 +4030,6 @@ msgstr "Seleccionar mensajes…"
 msgid "Select a security label for your message…"
 msgstr "Seleccionar una etiqueta de seguridad para tu mensaje…"
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr "Selecciona tu salida de sonido (p.ej. altavoces, auriculares)"
-
 msgid "Select an emoji"
 msgstr "Seleccionar un emoticono"
 
@@ -4231,6 +4246,9 @@ msgstr "Mostrar transferencias"
 
 msgid "Show Voice Message Button"
 msgstr "Mostrar botón de mensaje de voz"
+
+msgid "Show _Features"
+msgstr "Mostrar características"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Mostrar diálogo de confirmación antes de conectar sin cifrar"
@@ -5669,7 +5687,6 @@ msgstr "_Eliminar"
 msgid "_Report Spam"
 msgstr "Informar como spam"
 
-#, fuzzy
 msgid "_Request"
 msgstr "Petición"
 
@@ -6214,14 +6231,11 @@ msgstr "…o soltarla aqui"
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "¿Estás seguro de que quieres cerrar Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Audio"
-
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Llamadas Audio / Vídeo"
 
-#~ msgid "Audio Preview"
-#~ msgstr "Preaudición de audio"
+#~ msgid "Audio Output Device"
+#~ msgstr "Dispositivo de salida de sonido"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Audio/Vídeo"
@@ -6315,9 +6329,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
 #~ msgstr "Habilita a Gajim para proporcionar chats de audio y vídeo"
-
-#~ msgid "Enables Gajim to provide a Audio preview"
-#~ msgstr "Habilita a Gajim para proporcionar preaudición de ficheros de audio"
 
 #~ msgid "Enables Gajim to provide a notification area icon"
 #~ msgstr ""
@@ -6454,9 +6465,6 @@ msgstr "…o soltarla aqui"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Message Correction: Color de fondo"
 
-#~ msgid "Missing dependencies for Audio/Video"
-#~ msgstr "Faltan dependencias para audio/video"
-
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "¿Moderar %(count)s mensajes de %(participant)s?"
@@ -6550,9 +6558,6 @@ msgstr "…o soltarla aqui"
 #~ "Requiere: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
 #~ "ugly-1.0, gst-libav"
 
-#~ msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
-#~ msgstr "Requiere: gstreamer-1.0, gst-plugins-base-1.0"
-
 #~ msgid "Requires: gupnpigd-1.0"
 #~ msgstr "Requiere: gupnpigd-1.0"
 
@@ -6572,6 +6577,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Select File…"
 #~ msgstr "Seleccionar fichero…"
+
+#~ msgid "Select an audio output (e.g. speakers, headphones)"
+#~ msgstr "Selecciona tu salida de sonido (p.ej. altavoces, auriculares)"
 
 #~ msgid "Select the account with which you want to synchronize"
 #~ msgstr "Selecciona la cuenta con la que quieres sincronizar"
@@ -6601,9 +6609,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Mostrar contactos desconectados"
-
-#~ msgid "Show _Features"
-#~ msgstr "Mostrar características"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""

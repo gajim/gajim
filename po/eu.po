@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -815,6 +815,10 @@ msgid "Attention Message Received"
 msgstr "Lehen Mezu Jasoa"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Fitxeroa:"
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Fitxeroa:"
 
@@ -823,8 +827,8 @@ msgid "Audio Input Device"
 msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Berezko Egoera Mezuak"
+msgid "Audio Preview"
+msgstr "Fitxeroa:"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1862,6 +1866,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
@@ -1979,6 +1987,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2326,6 +2337,10 @@ msgstr "Txat Taldea Berria"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Txat Taldea Berria"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Txat Taldea Berria"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3175,6 +3190,9 @@ msgstr "Kontaktuen egoera aldaketak gorde"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Denetatik</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4315,6 +4333,9 @@ msgstr "Historial Administratzailea"
 msgid "Requires: gsound"
 msgstr "Pasahitza behar da"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Pasahitza behar da"
@@ -4573,9 +4594,6 @@ msgid "Select Messages…"
 msgstr "Berezko Egoera Mezuak"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4839,6 +4857,10 @@ msgstr "Trans_porteak Erakutsi"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Bidali mezua"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Zerbitzariaren Ezaugarriak:"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6996,8 +7018,8 @@ msgstr ""
 #~ msgstr "Txat Pribatua"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Fitxeroa:"
+#~ msgid "Audio Output Device"
+#~ msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7314,10 +7336,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Ikusi _Deskonektatutako Kontaktuak"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Zerbitzariaren Ezaugarriak:"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

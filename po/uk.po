@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -760,14 +760,18 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr "Отримано повідомлення уваги"
 
+msgid "Audio"
+msgstr "Аудіо"
+
 msgid "Audio File"
 msgstr "Аудіофайл"
 
 msgid "Audio Input Device"
 msgstr "Пристрій введення звуку"
 
-msgid "Audio Output Device"
-msgstr "Пристрій відтворення звуку"
+#, fuzzy
+msgid "Audio Preview"
+msgstr "Аудіофайл"
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1711,6 +1715,10 @@ msgstr ""
 "Gajim буде вимкнено після цього."
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Справді бажаєте видалити історію цієї балачки?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Справді бажаєте видалити «%s»?"
 
@@ -1820,6 +1828,10 @@ msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
 msgstr "Можливість програвати звуки сповіщень"
+
+#, fuzzy
+msgid "Enables Gajim to provide a Audio preview"
+msgstr "Можливість проводити аудіо та відео розмови"
 
 msgid "Enables Gajim to spell check your messages while composing"
 msgstr "Дозволяє перевіряти правопис повідомлень під час набору"
@@ -2136,6 +2148,10 @@ msgstr "Полишити групові балачки"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Полишити групові балачки"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Полишити групові балачки"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2991,6 +3007,9 @@ msgstr "_Показати зміни стану"
 
 msgid "Miscellaneous"
 msgstr "Різне"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4131,6 +4150,9 @@ msgstr "Потрібні gnome-keyring і python-gnome2-desktop, або kwalletc
 msgid "Requires: gsound"
 msgstr "Потрібен python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Потрібна бібліотека libgtkspell."
@@ -4391,9 +4413,6 @@ msgstr "Прямі повідомлення"
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4651,6 +4670,10 @@ msgstr "Показувати транс_порти"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Надіслати повідомлення"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Можливості"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6838,16 +6861,12 @@ msgstr ""
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Ви справді бажаєте вийти з Gajim?"
 
-#~ msgid "Audio"
-#~ msgstr "Аудіо"
-
 #, fuzzy
 #~ msgid "Audio / Video Calls"
 #~ msgstr "Аудіо/Відео"
 
-#, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Аудіофайл"
+#~ msgid "Audio Output Device"
+#~ msgstr "Пристрій відтворення звуку"
 
 #~ msgid "Audio/Video"
 #~ msgstr "Аудіо/Відео"
@@ -6938,10 +6957,6 @@ msgstr ""
 #~ msgstr "Редагувати робочий простір…"
 
 #~ msgid "Enables Gajim to provide Audio and Video chats"
-#~ msgstr "Можливість проводити аудіо та відео розмови"
-
-#, fuzzy
-#~ msgid "Enables Gajim to provide a Audio preview"
 #~ msgstr "Можливість проводити аудіо та відео розмови"
 
 #, fuzzy
@@ -7195,10 +7210,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Показувати _від’єднані контакти"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Можливості"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

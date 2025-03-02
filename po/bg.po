@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -826,6 +826,10 @@ msgid "Attention Message Received"
 msgstr "Първо получено съобщение"
 
 #, fuzzy
+msgid "Audio"
+msgstr "Файл: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "Файл: "
 
@@ -834,8 +838,8 @@ msgid "Audio Input Device"
 msgstr "Стандартно съобщение"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Стандартно съобщение"
+msgid "Audio Preview"
+msgstr "Файл: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1880,6 +1884,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Наистина ли искате да изтриете избраното съобщение?"
 
@@ -1999,6 +2007,9 @@ msgstr ""
 "автоматично съобщение за състояние."
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2347,6 +2358,10 @@ msgstr "Излизане от стаите"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Излизане от стаите"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Излизане от стаите"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3203,6 +3218,9 @@ msgstr "Запазване на промените на _състоянията 
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Разни</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4345,6 +4363,9 @@ msgstr "Изисква gnome-keyring и python-gnome2-desktop."
 msgid "Requires: gsound"
 msgstr "Изисква python-dbus."
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Изисква python-sexy."
@@ -4606,9 +4627,6 @@ msgstr "Стандартно съобщение"
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4868,6 +4886,10 @@ msgstr "Показване на т_ранспорти"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Изпращане на съобщение"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Възможности"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -7035,8 +7057,8 @@ msgstr ""
 #~ msgstr "Лични разговори"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "Файл: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Стандартно съобщение"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7358,10 +7380,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Показване на изкл_ючените контакти"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Възможности"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -714,13 +714,16 @@ msgstr ""
 msgid "Attention Message Received"
 msgstr ""
 
+msgid "Audio"
+msgstr ""
+
 msgid "Audio File"
 msgstr ""
 
 msgid "Audio Input Device"
 msgstr ""
 
-msgid "Audio Output Device"
+msgid "Audio Preview"
 msgstr ""
 
 msgid "Audio preview is not available"
@@ -1598,6 +1601,9 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr ""
+
 msgid "Do you really want to remove this proxy?"
 msgstr ""
 
@@ -1698,6 +1704,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -1989,6 +1998,9 @@ msgid "Forget Group Chat"
 msgstr ""
 
 msgid "Forget this Group Chat"
+msgstr ""
+
+msgid "Forget this Group Chat?"
 msgstr ""
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2705,6 +2717,9 @@ msgid "Minutes until your status gets changed"
 msgstr ""
 
 msgid "Miscellaneous"
+msgstr ""
+
+msgid "Missing dependencies for Audio/Video"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3666,6 +3681,9 @@ msgstr ""
 msgid "Requires: gsound"
 msgstr ""
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 msgid "Requires: libspelling"
 msgstr ""
 
@@ -3883,9 +3901,6 @@ msgstr ""
 msgid "Select a security label for your message…"
 msgstr ""
 
-msgid "Select an audio output (e.g. speakers, headphones)"
-msgstr ""
-
 msgid "Select an emoji"
 msgstr ""
 
@@ -4096,6 +4111,9 @@ msgid "Show Transfers"
 msgstr ""
 
 msgid "Show Voice Message Button"
+msgstr ""
+
+msgid "Show _Features"
 msgstr ""
 
 msgid "Show a confirmation dialog before connecting unencrypted"

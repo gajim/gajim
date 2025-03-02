@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-21 23:22+0000\n"
+"POT-Creation-Date: 2025-03-01 18:36+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -802,6 +802,10 @@ msgid "Attention Message Received"
 msgstr "First Message Received"
 
 #, fuzzy
+msgid "Audio"
+msgstr "File: "
+
+#, fuzzy
 msgid "Audio File"
 msgstr "File: "
 
@@ -810,8 +814,8 @@ msgid "Audio Input Device"
 msgstr "Žinutė pagal nutylėjimą"
 
 #, fuzzy
-msgid "Audio Output Device"
-msgstr "Žinutė pagal nutylėjimą"
+msgid "Audio Preview"
+msgstr "File: "
 
 #, fuzzy
 msgid "Audio preview is not available"
@@ -1846,6 +1850,10 @@ msgid ""
 msgstr ""
 
 #, fuzzy
+msgid "Do you really want to remove this chat including its chat history?"
+msgstr "Do you accept this request?"
+
+#, fuzzy
 msgid "Do you really want to remove this proxy?"
 msgstr "Do you accept this request?"
 
@@ -1960,6 +1968,9 @@ msgid ""
 msgstr ""
 
 msgid "Enables Gajim to play sounds for various notifications"
+msgstr ""
+
+msgid "Enables Gajim to provide a Audio preview"
 msgstr ""
 
 msgid "Enables Gajim to spell check your messages while composing"
@@ -2304,6 +2315,10 @@ msgstr "Leave Groupchats"
 
 #, fuzzy
 msgid "Forget this Group Chat"
+msgstr "Leave Groupchats"
+
+#, fuzzy
+msgid "Forget this Group Chat?"
 msgstr "Leave Groupchats"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -3146,6 +3161,9 @@ msgstr "_Registruoti asmenų būklės pakitimus"
 #, fuzzy
 msgid "Miscellaneous"
 msgstr "<b>Įvairūs</b>"
+
+msgid "Missing dependencies for Audio/Video"
+msgstr ""
 
 msgid "Missing necessary encryption plugin"
 msgstr ""
@@ -4279,6 +4297,9 @@ msgstr ""
 msgid "Requires: gsound"
 msgstr "Password Required"
 
+msgid "Requires: gstreamer-1.0, gst-plugins-base-1.0"
+msgstr ""
+
 #, fuzzy
 msgid "Requires: libspelling"
 msgstr "Password Required"
@@ -4536,9 +4557,6 @@ msgid "Select Messages…"
 msgstr "Žinutė pagal nutylėjimą"
 
 msgid "Select a security label for your message…"
-msgstr ""
-
-msgid "Select an audio output (e.g. speakers, headphones)"
 msgstr ""
 
 msgid "Select an emoji"
@@ -4801,6 +4819,10 @@ msgstr "Rodyti _Pernašas"
 #, fuzzy
 msgid "Show Voice Message Button"
 msgstr "Siųsti žinutę"
+
+#, fuzzy
+msgid "Show _Features"
+msgstr "Savybės"
 
 #, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
@@ -6929,8 +6951,8 @@ msgstr ""
 #~ msgstr "Private Chat"
 
 #, fuzzy
-#~ msgid "Audio Preview"
-#~ msgstr "File: "
+#~ msgid "Audio Output Device"
+#~ msgstr "Žinutė pagal nutylėjimą"
 
 #, fuzzy
 #~ msgid "Authorization Request"
@@ -7225,10 +7247,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Rodyti _Atsijungusius Asmenis"
-
-#, fuzzy
-#~ msgid "Show _Features"
-#~ msgstr "Savybės"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
