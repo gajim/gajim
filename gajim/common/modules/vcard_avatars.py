@@ -183,7 +183,8 @@ class VCardAvatars(BaseModule):
         if contact.room.get_disco() is not None:
             # We have no disco when we create a new room, but receive our
             # self presence
-            allow_query = contact.room.get_config_value('allow_query_users')
+            allow_query = contact.room.get_config_value(
+                'muc#roomconfig_allow_query_users')
             if allow_query is False:
                 self._log.debug('Room does not allow IQ queries: %s',
                                 contact.room.jid)
