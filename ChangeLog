@@ -1,3 +1,19 @@
+Gajim 2.0.1 (02 Mar 2025)
+
+  Improvements
+
+  * Start Chat: Add confirmation dialog for 'Forget this Group Chat' action (#12199)
+
+  Bug Fixes
+
+  * MUC: Don’t query avatars if not allowed
+  * EventStorage: Serialize JIDs correctly
+  * StartChat: Don't crash when groupchat is in Roster
+  * SettingsDialog: Fix showing dialogs
+  * Preferences: Show missing titles for settings again
+  * Show audio input selection again (for voice messages)
+  * Preferences: Update themes list when removing theme
+
 Gajim 2.0.0 (27 Feb 2025)
 
   New
