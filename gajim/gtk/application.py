@@ -859,7 +859,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         ConfirmationDialog(
             _("Remove Chat History?"),
-            _("Do you really want to remove your chat history for this chat?"),
+            _("Do you want to remove all chat history for this chat?"),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove),
@@ -886,7 +886,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         ConfirmationDialog(
             _("Forget this Group Chat?"),
-            _("Do you really want to remove this chat including its chat history?"),
+            _("Do you want to remove this chat including its chat history?"),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_forget),

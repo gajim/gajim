@@ -466,7 +466,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         ConfirmationDialog(
             _("Remove Group?"),
-            _('Do you really want to remove "%(group)s"?') % {"group": group},
+            _('Do you want to remove "%(group)s"?') % {"group": group},
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove_group),

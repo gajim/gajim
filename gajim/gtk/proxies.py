@@ -145,7 +145,7 @@ class ManageProxies(GajimAppWindow):
 
         ConfirmationDialog(
             _("Remove Proxy?"),
-            _("Do you really want to remove this proxy?"),
+            _("Do you want to remove this proxy?"),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", callback=_remove),
