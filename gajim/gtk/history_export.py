@@ -18,9 +18,7 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import BareContact
-from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
@@ -243,9 +241,9 @@ class ExportSettings(Page):
         chats: dict[str, str] = {"": _("All Chats")}
         for jid in jids:
             contact = client.get_module("Contacts").get_contact(jid)
-            assert isinstance(
-                contact, BareContact | GroupchatContact | GroupchatParticipant
-            )
+            if isinstance(contact, ResourceContact):
+                continue
+
             chats[str(jid)] = f"{contact.name} ({jid})"
 
         self._chats_dropdown.set_data(chats)
