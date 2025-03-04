@@ -5,8 +5,6 @@
 from functools import lru_cache
 
 from gi.repository import Gdk
-from gi.repository import GLib
-from gi.repository import Gtk
 from gi.repository import GtkSource
 from nbxmpp import util as nbxmpp_util
 
@@ -80,13 +78,6 @@ def get_css_show_class(show: str) -> str:
     if show == "connecting":
         return ".gajim-status-connecting"
     return ".gajim-status-offline"
-
-
-def add_css_to_widget(widget: Gtk.Widget, css: str) -> None:
-    provider = Gtk.CssProvider()
-    provider.load_from_bytes(GLib.Bytes.new(css.encode("utf-8")))
-    context = widget.get_style_context()
-    context.add_provider(provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
 
 def get_source_view_style_scheme() -> GtkSource.StyleScheme | None:
