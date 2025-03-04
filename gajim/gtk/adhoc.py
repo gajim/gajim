@@ -212,12 +212,16 @@ class Commands(Page):
         self.title = _("Command List")
 
         self._commands: dict[str, AdHocCommand] = {}
-        self._scrolled = Gtk.ScrolledWindow()
+        self._scrolled = Gtk.ScrolledWindow(
+            max_content_width=400,
+            max_content_height=400,
+            propagate_natural_height=True,
+            hscrollbar_policy=Gtk.PolicyType.NEVER,
+            vscrollbar_policy=Gtk.PolicyType.AUTOMATIC,
+            vexpand=True,
+        )
         self._scrolled.add_css_class("gajim-scrolled")
-        self._scrolled.set_max_content_height(400)
-        self._scrolled.set_max_content_width(400)
-        self._scrolled.set_propagate_natural_height(True)
-        self._scrolled.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+
         self._treeview = Gtk.TreeView()
         self._treeview.add_css_class("gajim-treeview")
         self._store = Gtk.ListStore(str, str)
