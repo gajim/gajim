@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Any
 from typing import Literal
+from typing import Optional
 
 import functools
 import inspect
@@ -57,6 +58,12 @@ class MuteContactParam(VariantMixin):
 class AccountJidParam(VariantMixin):
     account: str
     jid: JID
+
+
+@dataclass
+class ExportHistoryParam(VariantMixin):
+    account: str
+    jid: Optional[JID]  # noqa: UP007
 
 
 @dataclass

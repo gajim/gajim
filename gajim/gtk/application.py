@@ -838,7 +838,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
     @staticmethod
     @structs.actionfunction
     def _on_export_history_action(
-        _action: Gio.SimpleAction, params: structs.AccountJidParam
+        _action: Gio.SimpleAction, params: structs.ExportHistoryParam
     ) -> None:
         open_window("HistoryExport", account=params.account, jid=params.jid)
 

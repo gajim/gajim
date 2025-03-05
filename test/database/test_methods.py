@@ -127,10 +127,10 @@ class MethodsTest(unittest.TestCase):
         self._insert_messages("testacc1", count=10)
         self._insert_messages("testacc2", count=12)
 
-        jids = self._archive.get_conversation_jids("testacc1")
-        self.assertEqual(len(jids), 10)
-        jids = self._archive.get_conversation_jids("testacc2")
-        self.assertEqual(len(jids), 12)
+        rows = self._archive.get_conversation_jids("testacc1")
+        self.assertEqual(len(rows), 10)
+        rows = self._archive.get_conversation_jids("testacc2")
+        self.assertEqual(len(rows), 12)
 
     def test_get_conversation_before_after(self) -> None:
         remote_jid = JID.from_string("remote1@jid.org")

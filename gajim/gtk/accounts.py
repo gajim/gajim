@@ -12,7 +12,6 @@ import logging
 from collections import defaultdict
 
 from gi.repository import Gdk
-from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
 from gi.repository import Pango
@@ -37,6 +36,7 @@ from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
 from gajim.gtk.settings import SettingsDialog
+from gajim.gtk.structs import ExportHistoryParam
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import get_app_window
@@ -765,10 +765,7 @@ class PrivacyPage(GenericSettingPage):
             "PGP": "PGP",
         }
 
-        export_history_variant = GLib.Variant(
-            "a{sv}",
-            {"account": GLib.Variant("s", account), "jid": GLib.Variant("s", "")},
-        )
+        param = ExportHistoryParam(account=account, jid=None)
 
         settings = [
             Setting(
@@ -891,7 +888,7 @@ class PrivacyPage(GenericSettingPage):
                 _("Export Chat History"),
                 SettingType.ACTION,
                 "app.export-history",
-                props={"variant": export_history_variant},
+                props={"variant": param.to_variant()},
                 desc=_("Export your chat history from Gajim"),
             ),
         ]

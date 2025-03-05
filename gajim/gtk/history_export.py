@@ -108,7 +108,8 @@ class HistoryExport(Assistant):
         export_dir = directory / f"export_{time_str}"
 
         if jid is None:
-            jids = app.storage.archive.get_conversation_jids(account)
+            rows = app.storage.archive.get_conversation_jids(account)
+            jids = [jid for jid, _m_type in rows]
         else:
             jids = [jid]
 
@@ -235,15 +236,15 @@ class ExportSettings(Page):
             self._chats_dropdown.set_data({})
             return
 
-        jids = app.storage.archive.get_conversation_jids(self._account)
+        rows = app.storage.archive.get_conversation_jids(self._account)
         client = app.get_client(self._account)
 
         chats: dict[str, str] = {"": _("All Chats")}
-        for jid in jids:
-            contact = client.get_module("Contacts").get_contact(jid)
-            if isinstance(contact, ResourceContact):
-                continue
-
+        for jid, m_type in rows:
+            contact = client.get_module("Contacts").get_contact(
+                jid, groupchat=m_type != MessageType.CHAT
+            )
+            assert not isinstance(contact, ResourceContact)
             chats[str(jid)] = f"{contact.name} ({jid})"
 
         self._chats_dropdown.set_data(chats)

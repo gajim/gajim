@@ -22,6 +22,7 @@ from pathlib import Path
 import sqlalchemy as sa
 from nbxmpp import JID
 from sqlalchemy import delete
+from sqlalchemy import Row
 from sqlalchemy import select
 from sqlalchemy import union_all
 from sqlalchemy import update
@@ -495,18 +496,20 @@ class MessageArchiveStorage(AlchemyStorage):
 
     @with_session
     @timeit
-    def get_conversation_jids(self, session: Session, account: str) -> Sequence[JID]:
+    def get_conversation_jids(
+        self, session: Session, account: str
+    ) -> Sequence[Row[tuple[JID, int]]]:
         fk_account_pk = self._get_account_pk(session, account)
 
         subq = (
-            select(Message.fk_remote_pk)
+            select(Message.fk_remote_pk, Message.type)
             .distinct()
             .where(Message.fk_account_pk == fk_account_pk)
         ).subquery()
 
-        stmt = select(Remote.jid).join(subq)
+        stmt = select(Remote.jid, subq.c.type).join(subq)
         self._explain(session, stmt)
-        return session.scalars(stmt).all()
+        return session.execute(stmt).fetchall()
 
     @with_session
     @timeit
