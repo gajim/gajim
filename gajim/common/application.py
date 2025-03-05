@@ -92,8 +92,8 @@ class CoreApplication(ged.EventHelper):
         app.cert_store = CertificateStore()
         app.task_manager = TaskManager()
 
-        from gajim.common.call_manager import CallManager
-        app.call_manager = CallManager()
+        # from gajim.common.call_manager import CallManager
+        # app.call_manager = CallManager()
 
         from gajim.common.preview import PreviewManager
         app.preview_manager = PreviewManager()

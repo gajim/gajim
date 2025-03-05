@@ -208,12 +208,12 @@ def detect_dependencies() -> None:
     except Exception:
         pass
 
-    # try:
-    #     gi.require_version('Farstream', '0.2')
-    #     from gi.repository import Farstream
-    #     _dependencies['FARSTREAM'] = True
-    # except Exception as error:
-    #     log('gajim').warning('AV dependency test failed: %s', error)
+    try:
+        gi.require_version('Farstream', '0.2')
+        # from gi.repository import Farstream
+        # _dependencies['FARSTREAM'] = True
+    except Exception as error:
+        log('gajim').warning('AV dependency test failed: %s', error)
 
     # try:
     #     if _dependencies['GST'] and _dependencies['FARSTREAM']:
