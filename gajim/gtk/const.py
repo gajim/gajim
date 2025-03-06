@@ -227,7 +227,6 @@ MAIN_WIN_ACTIONS = [
     ("send-file-httpupload", "as", False),
     # ('send-file-jingle', 'as', False),
     ("send-file", "as", False),
-    ("add-to-roster", None, True),
     ("start-voice-call", None, False),
     ("start-video-call", None, False),
     ("show-contact-info", None, True),
@@ -282,7 +281,6 @@ MAIN_WIN_ACTIONS = [
     ("mark-workspace-as-read", "s", True),
     ("add-chat", "a{sv}", True),
     ("add-group-chat", "as", True),
-    ("add-to-roster", "a{sv}", True),
     ("preview-open", "s", True),
     ("preview-save-as", "s", True),
     ("preview-open-folder", "s", True),
@@ -293,7 +291,7 @@ MAIN_WIN_ACTIONS = [
 
 
 ACCOUNT_ACTIONS = [
-    ("add-contact", "as"),
+    ("add-contact", "a{sv}"),
     ("block-contact", "a{sv}"),
     ("remove-contact", "as"),
     ("execute-command", "(sas)"),

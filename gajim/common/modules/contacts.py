@@ -1086,16 +1086,7 @@ class GroupchatParticipant(CommonContact):
         return self._presence.hats
 
 
-def can_add_to_roster(
-    contact: BareContact | GroupchatContact | GroupchatParticipant
-) -> bool:
-
-    if isinstance(contact, GroupchatContact):
-        return False
-
-    if isinstance(contact, GroupchatParticipant):
-        return contact.real_jid is not None
-
+def can_add_to_roster(contact: BareContact) -> bool:
     if contact.is_self:
         return False
     return not contact.is_in_roster

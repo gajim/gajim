@@ -127,7 +127,6 @@ class Roster(BaseModule):
                              properties: IqProperties
                              ) -> None:
         self._log.info('Push received')
-
         assert properties.roster is not None
         item = properties.roster.item
         if item.subscription == 'remove':

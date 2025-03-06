@@ -55,7 +55,6 @@ from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
-from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
@@ -447,7 +446,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ("mark-workspace-as-read", self._mark_workspace_as_read),
             ("add-chat", self._add_chat),
             ("add-group-chat", self._add_group_chat),
-            ("add-to-roster", self._add_to_roster),
         ]
 
         for action, func in actions:
@@ -1075,13 +1073,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
             chat_list.select_chat_number(number)
-
-    @actionmethod
-    def _add_to_roster(
-        self, _action: Gio.SimpleAction, params: AccountJidParam
-    ) -> None:
-
-        open_window("AddContact", account=params.account, jid=params.jid)
 
     def show_app_page(self) -> None:
         self._account_side_bar.unselect_all()

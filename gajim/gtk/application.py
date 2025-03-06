@@ -641,14 +641,11 @@ class GajimApplication(Gtk.Application, CoreApplication):
         account = param.get_string()
         open_window("CreateGroupchatWindow", account=account or None)
 
-    @staticmethod
+    @structs.actionmethod
     def _on_add_contact_account_action(
-        _action: Gio.SimpleAction, param: GLib.Variant
+        self, _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-        account, jid = param.get_strv()
-        if jid:
-            jid = JID.from_string(jid)
-        open_window("AddContact", account=account or None, jid=jid or None)
+        open_window("AddContact", account=params.account, jid=params.jid)
 
     @staticmethod
     def _on_add_account_action(

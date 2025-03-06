@@ -471,7 +471,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
     def _connect_actions(self) -> None:
         actions = [
-            "add-to-roster",
             "send-file",
             "send-file-httpupload",
             # 'send-file-jingle',
@@ -589,14 +588,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             if param is not None:
                 uris = param.get_strv() or None
             self._show_chat_function_page(FunctionMode.SEND_FILE, method, uris)
-
-        elif action_name == "add-to-roster":
-            if (
-                isinstance(contact, GroupchatParticipant)
-                and contact.real_jid is not None
-            ):
-                jid = contact.real_jid
-            open_window("AddContact", account=account, jid=jid)
 
         elif action_name == "show-contact-info":
             if isinstance(contact, GroupchatContact):
