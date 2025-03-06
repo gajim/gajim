@@ -70,6 +70,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._connect(
             self._ui.share_menu_button, "notify::active", self._on_share_activated
         )
+        self._ui.chat_menu_button.set_create_popup_func(self._set_chat_menu)
 
         app.settings.connect_signal(
             "hide_groupchat_occupants_list", self._set_toggle_roster_button_icon
@@ -77,6 +78,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
     def do_unroot(self) -> None:
         self.clear()
+        self._ui.chat_menu_button.set_create_popup_func(None)
         Gtk.Box.do_unroot(self)
         self._disconnect_all()
         app.settings.disconnect_signals(self)
@@ -103,7 +105,6 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._voice_requests_button.switch_contact(self._contact)
 
-        self._set_chat_menu(contact)
         self._update_phone_image()
         self._update_robot_image()
         self._update_roster_button()
@@ -240,16 +241,22 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._update_phone_image()
 
-    def _set_chat_menu(self, contact: types.ChatContactT) -> None:
-        if isinstance(contact, GroupchatContact):
-            menu = get_groupchat_menu(contact)
-        elif isinstance(contact, GroupchatParticipant):
-            menu = get_private_chat_menu(contact)
-        elif contact.is_self:
-            menu = get_self_contact_menu(contact)
+    def _set_chat_menu(self, menu_button: Gtk.MenuButton) -> None:
+        assert self._contact is not None
+
+        if isinstance(self._contact, GroupchatContact):
+            menu = get_groupchat_menu(self._contact)
+
+        elif isinstance(self._contact, GroupchatParticipant):
+            menu = get_private_chat_menu(self._contact)
+
+        elif self._contact.is_self:
+            menu = get_self_contact_menu(self._contact)
+
         else:
-            menu = get_singlechat_menu(contact)
-        self._ui.chat_menu_button.set_menu_model(menu)
+            menu = get_singlechat_menu(self._contact)
+
+        menu_button.set_menu_model(menu)
 
     def _update_phone_image(self) -> None:
         self._ui.phone_image.set_visible(self._contact in self._last_message_from_phone)
