@@ -121,9 +121,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         )
         self._on_mute_setting_changed()
 
-        self._drag_hotspot_x: float = 0
-        self._drag_hotspot_y: float = 0
-
         drag_source = Gtk.DragSource(actions=Gdk.DragAction.MOVE)
         self._connect(drag_source, "prepare", self._on_prepare)
         self._connect(drag_source, "drag-begin", self._on_drag_begin)
@@ -491,11 +488,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self.emit("context-menu-state-changed", False)
 
     def _on_prepare(
-        self, _drag_source: Gtk.DragSource, x: float, y: float
+        self, _drag_source: Gtk.DragSource, _x: float, _y: float
     ) -> Gdk.ContentProvider:
-        self._drag_hotspot_x = x
-        self._drag_hotspot_y = y
-
         value = GObject.Value()
         value.init(ChatListRow)
         value.set_object(self)
@@ -504,11 +498,14 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
     def _on_drag_begin(self, _drag_source: Gtk.DragSource, drag: Gdk.Drag) -> None:
         assert not isinstance(self.contact, ResourceContact)
+
+        is_LTR = bool(self.get_direction() == Gtk.TextDirection.LTR)
+
         Gtk.DragIcon.set_from_paintable(
             drag,
             Gtk.WidgetPaintable().new(self),
-            int(self._drag_hotspot_x),
-            int(self._drag_hotspot_y),
+            hot_x=0 if is_LTR else self.get_width(),
+            hot_y=0,
         )
 
         app.window.highlight_dnd_targets(self, True)
