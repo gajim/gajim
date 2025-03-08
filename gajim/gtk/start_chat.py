@@ -847,6 +847,8 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self.set_model(self._selection_model)
 
     def do_unroot(self) -> None:
+        # The filter func needs to be unset before calling do_unroot (see #12213)
+        self._custom_filter.set_filter_func(None)
         Gtk.ListView.do_unroot(self)
         self._disconnect_all()
         app.check_finalize(self._model)
@@ -858,7 +860,6 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         del self._filter_model
         del self._sort_model
         del self._selection_model
-        self._custom_filter.set_filter_func(None)
         del self._custom_filter
         app.check_finalize(self)
 
