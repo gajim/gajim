@@ -44,14 +44,24 @@ class Moderations(BaseModule):
 
         self.handlers = [
             StanzaHandler(name='message',
-                          callback=self._process_fasten_message,
+                          callback=self._process_moderation_message,
                           typ='groupchat',
                           ns=Namespace.FASTEN,
+                          priority=48),
+            StanzaHandler(name='message',
+                          callback=self._process_moderation_message,
+                          typ='groupchat',
+                          ns=Namespace.MESSAGE_RETRACT_1,
                           priority=48),
             StanzaHandler(name='message',
                           callback=self._process_message_moderated_tombstone,
                           typ='groupchat',
                           ns=Namespace.MESSAGE_MODERATE,
+                          priority=48),
+            StanzaHandler(name='message',
+                          callback=self._process_message_moderated_tombstone,
+                          typ='groupchat',
+                          ns=Namespace.MESSAGE_RETRACT_1,
                           priority=48),
         ]
 
@@ -89,7 +99,7 @@ class Moderations(BaseModule):
 
         raise NodeProcessed
 
-    def _process_fasten_message(
+    def _process_moderation_message(
         self,
         _client: types.NBXMPPClient,
         stanza: Message,
