@@ -1132,7 +1132,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.correction_id.is_(None),
             )
-            .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
+            .order_by(Message.timestamp, Message.pk)
             .execution_options(yield_per=25)
         )
 
