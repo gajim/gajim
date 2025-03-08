@@ -9,6 +9,7 @@ import logging
 
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
+from nbxmpp.modules.muc.util import MucInfoResult
 from nbxmpp.task import Task
 
 from gajim.common import app
@@ -93,7 +94,7 @@ class GroupchatJoin(GajimAppWindow):
     @ensure_not_destroyed
     def _disco_info_received(self, task: Task) -> None:
         try:
-            result = task.finish()
+            result = cast(MucInfoResult, task.finish())
         except StanzaError as error:
             log.info("Disco %s failed: %s", error.jid, error.get_text())
             self._set_error(error)
@@ -104,6 +105,7 @@ class GroupchatJoin(GajimAppWindow):
 
         if result.info.is_muc:
             self._muc_info_box.set_from_disco_info(result.info)
+            assert result.info.jid is not None
             nickname = get_group_chat_nick(self.account, result.info.jid)
             self._nick_chooser.set_text(nickname)
             self.set_default_widget(self._join_button)
