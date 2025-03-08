@@ -101,7 +101,7 @@ class GroupchatJoin(GajimAppWindow):
             return
 
         if result.redirected:
-            self.jid = result.info.jid
+            self.jid = str(result.info.jid)
 
         if result.info.is_muc:
             self._muc_info_box.set_from_disco_info(result.info)
