@@ -104,6 +104,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self.msg_textview = MessageInputTextView(self)
         self._connect(self.msg_textview, "buffer-changed", self._on_buffer_changed)
+        self._connect(
+            self.msg_textview, "line-count-changed", self._on_line_count_changed
+        )
         self._connect(self.msg_textview, "paste-clipboard", self._on_paste_clipboard)
 
         self._ui.box.append(self.msg_textview.get_completion_popover())
@@ -113,11 +116,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self.msg_textview.add_controller(controller)
 
         self._ui.input_scrolled.set_child(self.msg_textview)
-
-        vadjustment = self._ui.input_scrolled.get_vadjustment()
-        self._connect(
-            vadjustment, "value-changed", self._on_input_scrolled_value_changed
-        )
 
         self._ui.sendfile_button.set_tooltip_text(_("No File Transfer available"))
         self._ui.formattings_button.set_menu_model(get_format_menu())
@@ -166,10 +164,25 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
-    def _on_input_scrolled_value_changed(self, vadjustment: Gtk.Adjustment) -> None:
-        if vadjustment.get_value() == 0:
+    def _on_line_count_changed(
+        self, _textview: MessageInputTextView, line_count: int
+    ) -> None:
+        """
+        This fixes #12158.
+
+        The scrollbar influences the view's height,
+        rendering it too tall in case of a single line text.
+        Therefore, set a min-height for the slider, which corresponds
+        to the expected view's height.
+
+        In cases of multiple lines, this CSS property however increases the
+        view's height to 1.5x the required min-height, see
+        https://dev.gajim.org/gajim/gajim/-/issues/9574.
+        Therefore, it needs to be removed again.
+        """
+        if line_count == 1:
             self._ui.input_scrolled.add_css_class("one-line-scrollbar")
-        else:
+        elif line_count == 2:
             self._ui.input_scrolled.remove_css_class("one-line-scrollbar")
 
     def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
