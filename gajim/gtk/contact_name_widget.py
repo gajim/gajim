@@ -55,7 +55,14 @@ class ContactNameWidget(Gtk.Box, SignalManager):
         self._edit_button.set_tooltip_text(_("Edit display name…"))
         self._connect(self._edit_button, "clicked", self._on_edit_clicked)
 
-        if isinstance(self._contact, GroupchatParticipant) or not edit_mode:
+        if (
+            isinstance(self._contact, GroupchatParticipant)
+            or (
+                isinstance(self._contact, BareContact)
+                and not self._contact.is_in_roster
+            )
+            or not edit_mode
+        ):
             self._edit_button.set_visible(False)
 
         button_box.append(self._edit_button)
