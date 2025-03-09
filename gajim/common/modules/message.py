@@ -78,9 +78,9 @@ class Message(BaseModule):
             return
 
         assert properties.jid is not None
-        jid = properties.jid.bare
-        if self._con.get_module('Roster').get_item(jid) is None:
-            self._log.warning('Ignore message from unknown contact: %s', jid)
+        bare_jid = properties.jid.new_as_bare()
+        if self._con.get_module('Roster').get_item(bare_jid) is None:
+            self._log.warning('Ignore message from unknown contact: %s', bare_jid)
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 

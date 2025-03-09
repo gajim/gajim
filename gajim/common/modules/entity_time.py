@@ -43,9 +43,10 @@ class EntityTime(BaseModule):
         self._nbxmpp('EntityTime').set_allow_reply_func(self._allow_reply)
 
     def _allow_reply(self, jid: JID) -> bool:
-        item = self._con.get_module('Roster').get_item(jid.bare)
+        bare_jid = jid.new_as_bare()
+        item = self._con.get_module('Roster').get_item(bare_jid)
         if item is None:
             return False
 
-        contact = cast(BareContact, self._get_contact(jid.bare))
+        contact = cast(BareContact, self._get_contact(bare_jid))
         return contact.is_subscribed

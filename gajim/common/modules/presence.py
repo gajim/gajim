@@ -96,8 +96,9 @@ class Presence(BaseModule):
             # handled in VCardAvatars module
             return
 
-        jid = properties.jid.bare
-        roster_item = self._con.get_module('Roster').get_item(jid)
+        roster_item = self._con.get_module('Roster').get_item(
+            properties.jid.new_as_bare()
+        )
 
         if roster_item is None and not properties.is_self_bare:
             # Handle only presence from roster contacts

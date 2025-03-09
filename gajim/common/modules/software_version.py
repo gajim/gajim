@@ -38,7 +38,7 @@ class SoftwareVersion(BaseModule):
         self._nbxmpp('SoftwareVersion').set_allow_reply_func(self._allow_reply)
 
     def _allow_reply(self, jid: JID) -> bool:
-        item = self._con.get_module('Roster').get_item(jid.bare)
+        item = self._con.get_module('Roster').get_item(jid.new_as_bare())
         if item is None:
             return False
 
