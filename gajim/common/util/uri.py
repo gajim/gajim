@@ -163,13 +163,6 @@ def _handle_message_qtype(jid: str, params: dict[str, str], account: str) -> Non
     app.window.start_chat_from_jid(account, jid, message=body)
 
 
-_xmpp_query_type_handlers = {
-    XmppUriQuery.NONE: _handle_message_qtype,
-    XmppUriQuery.MESSAGE: _handle_message_qtype,
-    XmppUriQuery.JOIN: _handle_message_qtype,
-}
-
-
 @catch_exceptions
 def open_uri(uri: URI | str, account: str | None = None) -> None:
     if not isinstance(uri, URI):
@@ -215,7 +208,8 @@ def open_uri(uri: URI | str, account: str | None = None) -> None:
             # > <xmpp:example-node@example.com> rather than
             # > <xmpp:example-node@example.com?query>."
             qtype, qparams = XmppUriQuery.NONE, {}
-        _xmpp_query_type_handlers[qtype](jid, qparams, account)
+
+        _handle_message_qtype(jid, qparams, account)
 
     elif uri.type == URIType.INVALID:
         log.warning('open_uri: Invalid %s', uri)

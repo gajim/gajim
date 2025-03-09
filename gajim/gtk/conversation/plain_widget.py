@@ -8,12 +8,12 @@ import logging
 
 import emoji
 from gi.repository import Gdk
+from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
 
 from gajim.common import app
-from gajim.common.const import URIType
 from gajim.common.styling import BaseHyperlink
 from gajim.common.styling import PlainBlock
 from gajim.common.styling import process_uris
@@ -92,18 +92,27 @@ class MessageLabel(Gtk.Label, SignalManager):
         _x: float,
         _y: float,
     ) -> int:
-        uri = self.get_current_uri()
+        current_uri = self.get_current_uri()
         selected, start, end = self.get_selection_bounds()
-        if uri:
-            puri = parse_uri(uri)
-            assert puri.type != URIType.INVALID  # would be a common.styling bug
-            self.set_extra_menu(get_uri_context_menu(self._account, puri))
+
+        uri_menu = None
+        action_menu = None
+        if current_uri:
+            uri_menu = get_uri_context_menu(self._account, parse_uri(current_uri))
         elif selected:
             selected_text = self.get_text()[start:end]
-            self.set_extra_menu(
-                get_conv_action_context_menu(self._account, selected_text)
-            )
+            action_menu = get_conv_action_context_menu(self._account, selected_text)
 
+        if uri_menu is None and action_menu is None:
+            return Gdk.EVENT_PROPAGATE
+
+        extra_menu = Gio.Menu()
+        if uri_menu is not None:
+            extra_menu.append_section(None, uri_menu)
+        if action_menu is not None:
+            extra_menu.append_section(None, action_menu)
+
+        self.set_extra_menu(extra_menu)
         return Gdk.EVENT_PROPAGATE
 
     def _build_link_markup(self, text: str, uris: list[BaseHyperlink]) -> str:

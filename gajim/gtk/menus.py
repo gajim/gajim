@@ -7,7 +7,6 @@
 from __future__ import annotations
 
 import textwrap
-from collections.abc import Callable
 from collections.abc import Iterator
 from datetime import datetime
 from urllib.parse import quote
@@ -35,7 +34,6 @@ from gajim.common.util.muc import is_affiliation_change_allowed
 from gajim.common.util.muc import is_moderation_allowed
 from gajim.common.util.muc import is_role_change_allowed
 from gajim.common.util.text import escape_iri_path_segment
-from gajim.common.util.uri import filesystem_path_from_uri
 
 from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
@@ -50,7 +48,6 @@ from gajim.gtk.structs import MuteContactParam
 MenuValueT = None | str | GLib.Variant | VariantMixin
 MenuItemListT = list[tuple[str, str, MenuValueT]]
 UriMenuItemsT = list[tuple[str, list[str] | VariantMixin, str]]
-UriMenuBuilderT = Callable[[URI, str], UriMenuItemsT]
 
 
 class GajimMenu(Gio.Menu):
@@ -392,66 +389,31 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
     return extra_menu
 
 
-def _xmpp_message_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    jid = uri.data["jid"]
-    # qparams = uri.query_params
-
-    params = AccountJidParam(account=account, jid=JID.from_string(jid))
-
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("copy-text", [jid], _("Copy XMPP Address")),
-        ("open-chat", [account, jid], _("Start Chat…")),
-        (f"{account}-add-contact", params, _("Add Contact…")),
-    ]
-
-
-def _xmpp_join_query_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("copy-text", [uri.data["jid"]], _("Copy XMPP Address")),
-        (
-            "open-chat",
-            [account, uri.data["jid"]],
-            # ^ TODO: pass qparams ^
-            _("Join Groupchat…"),
-        ),
-    ]
-
-
-_xmpp_uri_context_menus: dict[XmppUriQuery, UriMenuBuilderT] = {
-    XmppUriQuery.NONE: _xmpp_message_query_context_menu,
-    XmppUriQuery.MESSAGE: _xmpp_message_query_context_menu,
-    XmppUriQuery.JOIN: _xmpp_join_query_context_menu,
-}
-
-
 def _xmpp_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    return _xmpp_uri_context_menus[XmppUriQuery.from_str_or_none(uri.query_type)](
-        uri, account
-    )
-
-
-def _web_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("open-link", ["", uri.source], _("Open Link in Browser")),
+    menu_items: UriMenuItemsT = [
+        ("copy-text", [uri.data["jid"]], _("Copy XMPP Address")),
     ]
+    query_type = XmppUriQuery.from_str_or_none(uri.query_type)
+    if query_type in (XmppUriQuery.NONE, XmppUriQuery.MESSAGE):
+        params = AccountJidParam(account=account, jid=JID.from_string(uri.data["jid"]))
+        menu_items.extend(
+            [
+                ("open-chat", [account, uri.data["jid"]], _("Start Chat…")),
+                (f"{account}-add-contact", params, _("Add Contact…")),
+            ]
+        )
+        return menu_items
 
+    if query_type == XmppUriQuery.JOIN:
+        menu_items.append(
+            (
+                "open-chat",
+                [account, uri.data["jid"]],
+                _("Join Groupchat…"),
+            )
+        )
 
-def _mailto_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("copy-text", [uri.data["addr"]], _("Copy Email Address")),
-        ("open-link", ["", uri.source], _("Open Email Composer")),
-    ]
-
-
-def _geo_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("open-link", ["", uri.source], _("Show Location")),
-    ]
+    return menu_items
 
 
 def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
@@ -476,50 +438,17 @@ def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return items
 
 
-def _file_uri_context_menu(uri: URI, _account: str) -> UriMenuItemsT:
-    canopen = app.settings.get("allow_open_file_uris")
-    pathobj = filesystem_path_from_uri(uri.source)
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("open-link" if canopen else "-", ["", uri.source], _("Open Path")),
-        ("copy-text" if pathobj else "-", [str(pathobj)], _("Copy Path")),
-    ]
-
-
-def _tel_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("open-link", [account, uri.source], _("Dial Number")),
-        # TODO:
-        # ('copy-text', [uri.data['number']], _('Copy Number')),
-    ]
-
-
-def _other_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    return [
-        ("copy-text", [uri.source], _("Copy Link Location")),
-        ("open-link", [account, uri.source], _("Open Link")),
-    ]
-
-
-_uri_context_menus: dict[URIType, UriMenuBuilderT] = {
-    URIType.XMPP: _xmpp_uri_context_menu,
-    URIType.MAIL: _mailto_uri_context_menu,
-    URIType.GEO: _geo_uri_context_menu,
-    URIType.WEB: _web_uri_context_menu,
-    URIType.FILE: _file_uri_context_menu,
-    URIType.AT: _ambiguous_addr_context_menu,
-    URIType.TEL: _tel_uri_context_menu,
-    URIType.OTHER: _other_uri_context_menu,
-}
-
-
-def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu:
-    assert uri.type != URIType.INVALID  # it really begs to be a separate class
+def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu | None:
+    if uri.type == URIType.XMPP:
+        menu_data = _xmpp_uri_context_menu(uri, account)
+    elif uri.type == URIType.AT:
+        menu_data = _ambiguous_addr_context_menu(uri, account)
+    else:
+        return None
 
     menuitems: MenuItemListT = []
 
-    for action, args, label in _uri_context_menus[uri.type](uri, account):
+    for action, args, label in menu_data:
         if isinstance(args, VariantMixin):
             value = args.to_variant()
         elif len(args) == 1:
@@ -531,10 +460,7 @@ def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu:
             (label, f"app.{action}", value),
         )
 
-    menu = GajimMenu.from_list(menuitems)
-    extra_menu = Gio.Menu()
-    extra_menu.append_section(None, menu)
-    return extra_menu
+    return GajimMenu.from_list(menuitems)
 
 
 def get_account_notifications_menu(account: str) -> GajimMenu:
