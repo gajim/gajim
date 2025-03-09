@@ -89,6 +89,7 @@ class Receipts(BaseModule):
                 timestamp, dt.UTC)
 
             assert properties.remote_jid is not None
+            assert properties.receipt.id is not None
             receipt_data = mod.Receipt(
                 account_=self._account,
                 remote_jid_=properties.remote_jid,

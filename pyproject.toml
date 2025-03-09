@@ -131,7 +131,6 @@ exclude = [
   "gajim/common/modules/muc.py",
   "gajim/common/modules/omemo.py",
   "gajim/common/modules/presence.py",
-  "gajim/common/modules/receipts.py",
   "gajim/common/modules/roster_item_exchange.py",
   "gajim/common/modules/search.py",
   "gajim/common/modules/software_version.py",
