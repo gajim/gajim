@@ -549,7 +549,8 @@ def load_file_async(path: Path,
         except GLib.Error as error:
             callback(None, error, user_data)
         else:
-            callback(contents, None, user_data)
+            # "contents" may be an empty bytes object
+            callback(contents or None, None, user_data)
 
     file = Gio.File.new_for_path(str(path))
     file.load_contents_async(None, _on_load_finished)
