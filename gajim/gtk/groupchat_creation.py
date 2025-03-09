@@ -299,12 +299,13 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
         # Create new group chat by joining
         assert self._account is not None
 
-        if app.window.chat_exists(self._account, JID.from_string(room_jid)):
+        jid = JID.from_string(room_jid)
+        if app.window.chat_exists(self._account, jid):
             log.error("Trying to create groupchat which is already added as chat")
             self.close()
             return
 
         client = app.get_client(self._account)
-        client.get_module("MUC").create(room_jid, config)
+        client.get_module("MUC").create(jid, config)
 
         self.close()

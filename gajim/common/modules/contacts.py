@@ -924,7 +924,7 @@ class GroupchatContact(CommonContact):
 
     def get_user_nicknames(self) -> list[str]:
         client = app.get_client(self._account)
-        return client.get_module('MUC').get_joined_users(str(self._jid))
+        return client.get_module('MUC').get_joined_users(self._jid)
 
     def get_disco(self, max_age: int = 0) -> DiscoInfo | None:
         return app.storage.cache.get_last_disco_info(self.jid, max_age=max_age)

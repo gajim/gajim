@@ -65,10 +65,10 @@ class MAM(BaseModule):
         ]
 
         self.available = False
-        self._mam_query_ids: dict[str, str] = {}
+        self._mam_query_ids: dict[JID, str] = {}
 
         # Holds archive jids where catch up was successful
-        self._catch_up_finished: list[str] = []
+        self._catch_up_finished: list[JID] = []
 
         self._con.connect_signal('state-changed', self._on_client_state_changed)
         self._con.connect_signal('resume-failed', self._on_client_resume_failed)
@@ -105,7 +105,7 @@ class MAM(BaseModule):
     def _remove_query_id(self, jid: JID) -> None:
         self._mam_query_ids.pop(jid, None)
 
-    def is_catch_up_finished(self, jid: str) -> bool:
+    def is_catch_up_finished(self, jid: JID) -> bool:
         return jid in self._catch_up_finished
 
     def _from_valid_archive(self,
@@ -113,6 +113,7 @@ class MAM(BaseModule):
                             properties: MessageProperties
                             ) -> bool:
         if properties.type.is_groupchat:
+            assert properties.jid is not None
             expected_archive = properties.jid
         else:
             expected_archive = self._con.get_own_jid()
@@ -122,10 +123,10 @@ class MAM(BaseModule):
 
     @staticmethod
     def _get_stanza_id(properties: MessageProperties,
-                       archive_jid: str
+                       archive_jid: JID
                        ) -> StanzaIDData | None:
         for stanza_id in properties.stanza_ids:
-            if stanza_id.by == archive_jid:
+            if stanza_id.by == str(archive_jid):
                 return stanza_id
         return None
 
@@ -141,7 +142,7 @@ class MAM(BaseModule):
 
         if properties.type.is_groupchat:
             assert properties.jid is not None
-            archive_jid = properties.jid.bare
+            archive_jid = properties.jid.new_as_bare()
             timestamp = properties.timestamp
 
             disco_info = app.storage.cache.get_last_disco_info(archive_jid)
@@ -158,7 +159,7 @@ class MAM(BaseModule):
             if not self.available:
                 return
 
-            archive_jid = self._con.get_own_jid().bare
+            archive_jid = self._con.get_own_jid().new_as_bare()
             timestamp = None
 
         if not properties.stanza_ids:
@@ -218,7 +219,10 @@ class MAM(BaseModule):
             raise nbxmpp.NodeProcessed
 
         if app.storage.archive.check_if_stanza_id_exists(
-            self._account, properties.remote_jid, stanza_id):
+            self._account,
+            properties.remote_jid,
+            stanza_id
+        ):
             self._log.info('Received duplicated message from MAM: %s', stanza_id)
             raise nbxmpp.NodeProcessed
 
@@ -227,13 +231,13 @@ class MAM(BaseModule):
         valid_id = self._mam_query_ids.get(properties.mam.archive, None)
         return valid_id == properties.mam.query_id
 
-    def _get_query_id(self, jid: str) -> str:
+    def _get_query_id(self, jid: JID) -> str:
         query_id = generate_id()
         self._mam_query_ids[jid] = query_id
         return query_id
 
     def _get_query_params(self) -> tuple[str | None, datetime | None]:
-        own_jid = self._con.get_own_jid().bare
+        own_jid = self._con.get_own_jid().new_as_bare()
         archive = app.storage.archive.get_mam_archive_state(
             self._account, own_jid)
 
@@ -303,7 +307,7 @@ class MAM(BaseModule):
     def request_archive_on_signin(self) -> Generator[Any, Any]:
         _task = yield  # noqa: F841
 
-        own_jid = self._con.get_own_jid().bare
+        own_jid = self._con.get_own_jid().new_as_bare()
 
         if own_jid in self._mam_query_ids:
             self._log.warning('request already running for %s', own_jid)
@@ -459,7 +463,7 @@ class MAM(BaseModule):
                                  queryid: str | None = None
                                  ) -> str:
 
-        jid = self._con.get_own_jid().bare
+        jid = self._con.get_own_jid().new_as_bare()
 
         if after is None:
             self._log.info('Request interval: %s, from %s to %s',
