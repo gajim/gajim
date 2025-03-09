@@ -168,14 +168,7 @@ def open_uri(uri: URI | str, account: str | None = None) -> None:
     if not isinstance(uri, URI):
         uri = parse_uri(uri)
 
-    if uri.type == URIType.FILE:
-        opt_name = 'allow_open_file_uris'
-        if app.settings.get(opt_name):
-            open_file_uri(uri.source)
-        else:
-            log.info('Blocked opening a file URI, see %s option', opt_name)
-
-    elif uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB, URIType.OTHER):
+    if uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB, URIType.OTHER):
         open_uri_externally(uri.source)
 
     elif uri.type == URIType.GEO:

@@ -26,7 +26,6 @@ HAS_ACCOUNT_DEFAULT = _ACCOUNTDEFAULT()
 
 
 BoolSettings = Literal[
-    'allow_open_file_uris',
     'always_english_wikipedia',
     'always_english_wiktionary',
     'ascii_formatting',
@@ -150,7 +149,6 @@ AllSettingsT = str | int | float | bool | list[str]
 
 APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'additional_uri_schemes': '',
-    'allow_open_file_uris': False,
     'always_english_wikipedia': False,
     'always_english_wiktionary': True,
     'app_font_size': 1.0,
@@ -612,7 +610,6 @@ ADVANCED_SETTINGS = {
         'additional_uri_schemes': _(
             'Clickable schemes in addition to the hard-coded list of '
             'IANA-registered ones. Space-separated, lower-case, no colons.'),
-        'allow_open_file_uris': _('Allows opening file:/ URIs when clicked.'),
         'always_english_wikipedia': '',
         'always_english_wiktionary': '',
         'ascii_formatting': _(
