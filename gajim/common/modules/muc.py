@@ -232,7 +232,7 @@ class MUC(BaseModule):
             if bookmark.password is not None:
                 password = bookmark.password
 
-        return MUCData(room_jid, nick, None, password, config)
+        return MUCData(str(room_jid), nick, None, password, config)
 
     def join(self,
              jid: JID,
