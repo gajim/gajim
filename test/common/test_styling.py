@@ -311,7 +311,6 @@ URIS = [
     'file:///x:/foo/bar/baz',  # windows
     'file://localhost/foo/bar/baz',
     'file://nonlocalhost/foo/bar/baz',
-    'about:ambiguous-address?a@b.c',
 
     # These seem to be from https://mathiasbynens.be/demo/url-regex
     'http://foo.com/blah_blah',
@@ -436,11 +435,6 @@ UNACCEPTABLE_URIS = [
     'file:a/',
     'file:a/b',
 
-    'about:',
-    'about:asdfasdf',
-    'about:ambiguous-address',
-    'about:ambiguous-address?',
-
     'mailtomailto:foo@bar.com.uk',
 ]
 
@@ -546,7 +540,7 @@ class Test(unittest.TestCase):
     def test_jids(self):
         for jidlike in JIDS:
             text = self.wrap(jidlike)
-            uri = 'about:ambiguous-address?' + escape_iri_query(jidlike)
+            uri = escape_iri_query(jidlike)
             hlinks = process_uris(text)
             self.assertEqual([(link.text, link.uri) for link in hlinks],
                              [(jidlike, uri)], text)

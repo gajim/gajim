@@ -404,7 +404,7 @@ def _make_hyperlink(line: str,
             validate_jid(text)
         except ValueError:
             return None
-        uri = 'about:ambiguous-address?' + escape_iri_query(text)
+        uri = escape_iri_query(text)
 
     else:
         uri = text
