@@ -1,3 +1,35 @@
+Gajim 2.0.2 (10 Mar 2025)
+
+  New
+
+  * Use XEP-0172 nickname of contacts not in roster (#11476)
+  * Moderation: Support Message Moderation 0.3.0
+
+  Improvements
+
+  * Moderation: Improve moderation text
+  * Remove 'ambiguous-address' URI processing (#12192)
+  * Simplify URI context menu (#12207)
+  * Improve confirmation dialog strings
+
+  Change
+
+  * Don't handle file URIs
+  * Display a warning when trying to add domain JID
+
+  Bug Fixes
+
+  * MessageInput: Do not crash on message send (#12158)
+  * MUC: Ensure MUCData is initiated with jid string (#12222)
+  * ContactNameWidget: Add more conditions for enabling edit mode (#12221)
+  * Helpers: Check for empty bytes objects when loading file async (#12220)
+  * HistoryExport: Export messages in ascending order (#12218)
+  * StartChatDialog: Do not crash, when dialog closes after starting new chat (#12213)
+  * Make dragged chat stick to cursor
+  * Menus: Create menu on button click (#12214)
+  * Ad-hoc commands: Expand list of commands vertically (#12206)
+  * History export: Skip ResourceContacts for export (#12208)
+
 Gajim 2.0.1 (02 Mar 2025)
 
   Improvements
