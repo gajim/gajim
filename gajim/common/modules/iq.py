@@ -40,6 +40,7 @@ class Iq(BaseModule):
         if properties.error.condition in ('jid-malformed',
                                           'forbidden',
                                           'not-acceptable'):
+            assert properties.id is not None
             sid = self._get_sid(properties.id)
             file_props = FilesProp.getFileProp(self._account, sid)
             if file_props:
@@ -47,6 +48,8 @@ class Iq(BaseModule):
                     file_props.error = -3
                 else:
                     file_props.error = -4
+
+                assert properties.jid is not None
                 app.ged.raise_event(
                     FileRequestError(
                         conn=self._con,
@@ -58,6 +61,7 @@ class Iq(BaseModule):
                 raise nbxmpp.NodeProcessed
 
         if properties.error.condition == 'item-not-found':
+            assert properties.id is not None
             sid = self._get_sid(properties.id)
             file_props = FilesProp.getFileProp(self._account, sid)
             if file_props:
