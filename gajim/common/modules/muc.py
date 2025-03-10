@@ -46,6 +46,7 @@ from gajim.common.events import MucInvitation
 from gajim.common.helpers import to_user_string
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.bits_of_binary import store_bob_data
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.structs import MUCData
@@ -836,8 +837,10 @@ class MUC(BaseModule):
             nick = properties.muc_user.nick
         else:
             contact = self._get_contact(properties.muc_user.jid)
-            assert isinstance(contact, GroupchatParticipant)
-            nick = contact.name
+            if isinstance(contact, BareContact):
+                nick = contact.name
+            else:
+                nick = str(properties.muc_user.jid)
 
         assert properties.muc_user.affiliation is not None
         event = events.MUCAffiliationChanged(
