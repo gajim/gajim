@@ -102,8 +102,14 @@ class MAM(BaseModule):
         self._mam_query_ids.clear()
         self._catch_up_finished.clear()
 
-    def _remove_query_id(self, jid: JID) -> None:
+    def _remove_query_by_jid(self, jid: JID) -> None:
         self._mam_query_ids.pop(jid, None)
+
+    def _remove_query_by_id(self, queryid: str) -> None:
+        for jid, _queryid in list(self._mam_query_ids.items()):
+            if _queryid == queryid:
+                del self._mam_query_ids[jid]
+                return
 
     def is_catch_up_finished(self, jid: JID) -> bool:
         return jid in self._catch_up_finished
@@ -212,11 +218,8 @@ class MAM(BaseModule):
             self._log.warning(stanza)
             raise nbxmpp.NodeProcessed
 
+        assert properties.remote_jid is not None
         stanza_id = properties.mam.id
-        if stanza_id is None:
-            self._log.warning('Unable to determine stanza id')
-            self._log.warning(stanza)
-            raise nbxmpp.NodeProcessed
 
         if app.storage.archive.check_if_stanza_id_exists(
             self._account,
@@ -426,7 +429,7 @@ class MAM(BaseModule):
                                        after=mam_id,
                                        start=start_date)
 
-        self._remove_query_id(result.jid)
+        self._remove_query_by_jid(result.jid)
 
         raise_if_error(result)
 
@@ -447,7 +450,7 @@ class MAM(BaseModule):
                                            after=result.rsm.last,
                                            start=start_date)
 
-            self._remove_query_id(result.jid)
+            self._remove_query_by_jid(result.jid)
 
             raise_if_error(result)
 
@@ -489,11 +492,11 @@ class MAM(BaseModule):
 
         try:
             result = task.finish()
-        except (StanzaError, MalformedStanzaError) as error:
-            self._remove_query_id(error.jid)
+        except (StanzaError, MalformedStanzaError):
+            self._remove_query_by_id(queryid)
             return
 
-        self._remove_query_id(result.jid)
+        self._remove_query_by_jid(result.jid)
 
         if start_date:
             timestamp = start_date
