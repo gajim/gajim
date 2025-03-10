@@ -47,13 +47,16 @@ def get_subscription_request_msg(account: str | None = None) -> str:
 
 
 def get_moderation_text(by: str | JID | None, reason: str | None) -> str:
-    by_text = ''
+    text = _('This message has been moderated')
+
     if by is not None:
-        by_text = _(' by %s') % by
-    text = _('This message has been moderated%s.') % by_text
-    if reason is not None:
-        text += ' ' + _('Reason: %s') % reason
-    return text
+        text = _('This message has been moderated by %s') % by
+
+    if reason is None:
+        return text
+
+    reason_text = _('(reason: %s)') % reason
+    return f'{text} {reason_text}'
 
 
 def get_uf_sub(sub: str) -> str:
