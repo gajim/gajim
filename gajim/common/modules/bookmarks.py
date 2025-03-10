@@ -118,14 +118,19 @@ class Bookmarks(BaseModule):
         assert properties.pubsub_event is not None
         if properties.pubsub_event.deleted or properties.pubsub_event.purged:
             self._log.info('Bookmark node deleted/purged')
-            self._bookmarks = {}
+            self._bookmarks.clear()
 
         elif properties.pubsub_event.retracted:
-            jid = properties.pubsub_event.id
-            self._log.info('Retract: %s', jid)
-            bookmark = self._bookmarks.get(jid)
-            if bookmark is not None:
-                self._bookmarks.pop(jid, None)
+            try:
+                jid = JID.from_string(properties.pubsub_event.id)
+            except Exception as error:
+                self._log.info('Unable to parse retracted bookmark: %s %s',
+                                properties.pubsub_event.id, error)
+            else:
+                self._log.info('Retract: %s', jid)
+                bookmark = self._bookmarks.get(jid)
+                if bookmark is not None:
+                    self._bookmarks.pop(jid, None)
 
         else:
             new_bookmark = cast(BookmarkData, properties.pubsub_event.data)

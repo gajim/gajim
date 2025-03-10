@@ -115,7 +115,6 @@ exclude = [
   "gajim/common/jingle_session.py",
   "gajim/common/jingle_transport.py",
   "gajim/common/modules/bits_of_binary.py",
-  "gajim/common/modules/bookmarks.py",
   "gajim/common/modules/bytestream.py",
   "gajim/common/modules/contacts.py",
   "gajim/common/modules/discovery.py",
