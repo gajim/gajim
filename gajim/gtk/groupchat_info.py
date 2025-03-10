@@ -167,7 +167,9 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
     def get_jid(self) -> JID | None:
         if self._contact is not None:
             return self._contact.jid
-        return self._info.jid
+        if self._info is not None:
+            return self._info.jid
+        return None
 
     def set_subject(self, muc_subject: MucSubject | None) -> None:
         if muc_subject is None:
@@ -209,6 +211,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
             name = info.muc_name
         else:
             client = app.get_client(self._account)
+            assert info.jid is not None
             name = get_groupchat_name(client, info.jid)
             contact = client.get_module("Contacts").get_contact(
                 info.jid, groupchat=True
@@ -243,8 +246,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         # Set contacts
         container_remove_all(self._ui.contact_box)
 
-        has_contacts = bool(info.muc_contacts)
-        if has_contacts:
+        if info.muc_contacts:
             for contact in info.muc_contacts:
                 try:
                     jid = JID.from_string(contact).new_as_bare()
@@ -253,8 +255,8 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
                 else:
                     self._ui.contact_box.append(self._get_contact_button(jid))
 
-        self._ui.contact_box.set_visible(has_contacts)
-        self._ui.contact_label.set_visible(has_contacts)
+        self._ui.contact_box.set_visible(bool(info.muc_contacts))
+        self._ui.contact_label.set_visible(bool(info.muc_contacts))
 
         # Set discussion logs
         has_log_uri = bool(info.muc_log_uri)
@@ -264,13 +266,12 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         self._ui.logs_label.set_visible(has_log_uri)
 
         # Set room language
-        has_lang = bool(info.muc_lang)
         lang = ""
-        if has_lang:
+        if info.muc_lang:
             lang = RFC5646_LANGUAGE_TAGS.get(info.muc_lang, info.muc_lang)
         self._ui.lang.set_text(lang)
-        self._ui.lang.set_visible(has_lang)
-        self._ui.lang_image.set_visible(has_lang)
+        self._ui.lang.set_visible(bool(info.muc_lang))
+        self._ui.lang_image.set_visible(bool(info.muc_lang))
 
         self._add_features(info.features)
 
@@ -304,10 +305,16 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
                 row += 1
 
     def _on_copy_address(self, _button: Gtk.Button) -> None:
+        jid = None
         if self._contact is not None:
             jid = self._contact.jid
         else:
-            jid = self._info.jid
+            if self._info is not None:
+                jid = self._info.jid
+
+        if jid is None:
+            return
+
         self.get_clipboard().set(jid.to_iri(XmppUriQuery.JOIN.value))
 
     @staticmethod
