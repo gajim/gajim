@@ -324,11 +324,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-5.29.3-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.30.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-5.29.3-py3-none-any.whl
-        sha256: 0a18ed4a24198528f2333802eb075e59dea9d679ab7a6c5efb017a59004d849f
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-6.30.0-py3-none-any.whl
+        sha256: e5ef216ea061b262b8994cb6b7d6637a4fb27b3fb4d8e216a6040c0b93bd10d7
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -352,11 +352,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-6.0.0-py3-none-any.whl
+      - pip3 install nbxmpp-6.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.0-py3-none-any.whl
-        sha256: 46da45559e719f91309d3dbf0c48f37ce352951ef071a033554d01d4f0122d1a
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.1-py3-none-any.whl
+        sha256: b0bb5e1e352f6fb93c17d47bfc55703f6cd77c5f5022fbb3dd5d392d658828e3
 
   - name: gajim
     buildsystem: simple
