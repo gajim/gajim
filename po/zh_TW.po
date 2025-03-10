@@ -6,13 +6,14 @@
 # Guanhao Yin <yinguanhao@gmail.com>, 2010.
 # Wei-Lun Chao <chaoweilun@gmail.com>, 2011.
 # hsfg6 <hsfg6@proton.me>, 2024.
+# Shaw Knye-hsim <1020647955@qq.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
-"PO-Revision-Date: 2024-12-03 12:11+0000\n"
-"Last-Translator: hsfg6 <hsfg6@proton.me>\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
+"PO-Revision-Date: 2025-03-09 12:48+0000\n"
+"Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
 "gajim/master/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -27,10 +28,6 @@ msgstr " （視訊通話）"
 
 msgid " (Voice Call)"
 msgstr " （語音通話）"
-
-#, python-format
-msgid " by %s"
-msgstr " 由%s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -49,6 +46,8 @@ msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
+"來自 %(participant)s 的 %(count)s 消息將被審核。\n"
+"為什麼要審核這些消息？"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -199,6 +198,13 @@ msgctxt "negative longitude"
 msgid "%sW"
 msgstr "西經%s"
 
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr "位址中缺少 『@』。您確定這是正確的嗎？"
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "原因"
+
 #, python-format
 msgid "** %s lost all their hats!"
 msgstr "** %s 丟了所有的帽子！"
@@ -276,49 +282,38 @@ msgstr ""
 "<b>\"%(title)s\"</b> 作者 <i>%(artist)s</i>\n"
 "出自 <i>%(source)s</i>"
 
-#, fuzzy
 msgid "<b>#</b>"
-msgstr "<b>字型</b>"
+msgstr "<b>#</b>"
 
-#, fuzzy
 msgid "<b>*</b>"
-msgstr "<b>字型</b>"
+msgstr "<b>*</b>"
 
-#, fuzzy
 msgid "<b>0</b>"
-msgstr "<b>字型</b>"
+msgstr "<b>0</b>"
 
-#, fuzzy
 msgid "<b>1</b>"
-msgstr "<b>字型</b>"
+msgstr "<b>1</b>"
 
-#, fuzzy
 msgid "<b>2</b> abc"
-msgstr "<b>字型</b>"
+msgstr "<b>2</b> abc"
 
-#, fuzzy
 msgid "<b>3</b> def"
-msgstr "<b>字型</b>"
+msgstr "<b>3</b>def"
 
-#, fuzzy
 msgid "<b>4</b> ghi"
-msgstr "<b>字型</b>"
+msgstr "<b>4</b>  ghi"
 
-#, fuzzy
 msgid "<b>5</b> jkl"
-msgstr "<b>字型</b>"
+msgstr "<b>5</b>  jkl"
 
-#, fuzzy
 msgid "<b>6</b> mno"
-msgstr "<b>字型</b>"
+msgstr "<b>6</b>  mno"
 
-#, fuzzy
 msgid "<b>7</b> pqrs"
-msgstr "<b>字型</b>"
+msgstr "<b>7</b>  pqrs"
 
-#, fuzzy
 msgid "<b>8</b> tuv"
-msgstr "<b>字型</b>"
+msgstr "<b>8</b>  tuv"
 
 #, fuzzy
 msgid "<b>9</b> wxyz"
@@ -338,7 +333,7 @@ msgstr ""
 "2。user@domain (任何資源均匹配)。\n"
 "3。domain/resource (只有這個資源匹配)。\n"
 "4。domain (欄位名稱本身匹配，任何 user@domain，\n"
-"domain/resource，或是包含一個子欄位名稱的位址也匹配)。"
+"domain/resource，或是包含一個子欄位名稱的位址也匹配)。\n"
 
 #, fuzzy
 msgid "<error>"
@@ -351,7 +346,7 @@ msgid "A Group Chat needs at least one Owner"
 msgstr "群聊至少需要一個群主"
 
 msgid "A feature comparison of various providers"
-msgstr ""
+msgstr "各種供應商的功能比較"
 
 msgid "A fully-featured XMPP chat client"
 msgstr "功能齊全的 XMPP 聊天客戶端"
@@ -364,9 +359,8 @@ msgstr "將在群聊中高亮顯示的單詞清單（以分號分隔）。"
 msgid "A new group chat has been created"
 msgstr "已創建新的群聊"
 
-#, fuzzy
 msgid "A restart may be required for some settings to take effect"
-msgstr "<b>注意:</b>您必須重新啟動 gajim 以使某些設定生效"
+msgstr "某些設置可能需要重新啟動才能生效"
 
 msgid "A setting not related to privacy has been changed"
 msgstr "與隱私無關的設置已更改"
@@ -383,7 +377,7 @@ msgid "A_way"
 msgstr "A_way"
 
 msgid "Abort"
-msgstr ""
+msgstr "登出"
 
 msgid "Abuse"
 msgstr "虐待"
@@ -397,11 +391,13 @@ msgstr "接受所有聯絡請求"
 msgid "Account"
 msgstr "賬戶"
 
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Account %(name)s is still connected\n"
 "All chat and group chat windows will be closed."
-msgstr "所有聊天和群聊視窗都將關閉。"
+msgstr ""
+"帳戶 %(name)s 仍處於連接狀態\n"
+"所有聊天和群聊視窗都將關閉。"
 
 msgid "Account Added"
 msgstr "已添加帳戶"
@@ -543,9 +539,6 @@ msgstr ""
 "將這個證書加入到可信任證書清單。\n"
 "這個證書的 SHA1 指紋資訊: \n"
 
-msgid "Add to Contact List…"
-msgstr "新增到聯絡人清單…"
-
 #, fuzzy
 msgid "Add to Group"
 msgstr "編輯群組(_G)"
@@ -647,9 +640,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 "允許 Gajim 通過 D-Bus 廣播有用的資訊。它還允許其他應用程式遠端控制 Gajim。"
-
-msgid "Allows opening file:/ URIs when clicked."
-msgstr "允許在單擊時打開 file：/ URI。"
 
 #, fuzzy
 msgid "Alternate venue (optional)..."
@@ -1453,20 +1443,8 @@ msgid "Copy Certificate Information"
 msgstr "聯絡人資訊"
 
 #, fuzzy
-msgid "Copy Email Address"
-msgstr "複製 JID/電子郵件位址(_C)"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "複製連結位置(_C)"
-
-#, fuzzy
-msgid "Copy Link Location"
-msgstr "複製連結位置(_C)"
-
-#, fuzzy
-msgid "Copy Path"
-msgstr "聊天室 JID"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1701,10 +1679,6 @@ msgstr "伺服器"
 msgid "Devices connected with \"%s\""
 msgstr "請確認您已經連線到 \"%s\"。"
 
-#, fuzzy
-msgid "Dial Number"
-msgstr "GG 號碼:"
-
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "網路搜尋位址缺少 \"%s\""
@@ -1775,14 +1749,6 @@ msgstr "是否接受這個對帳號 %s 的請求?"
 msgid "Do you accept this request?"
 msgstr "是否接受這個請求?"
 
-#, fuzzy
-msgid "Do you really want to delete this PEP node?"
-msgstr "您確定要刪除所選取的訊息?"
-
-#, fuzzy, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "您確定要關閉所有這些嗎"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1790,16 +1756,8 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "您確定要關閉所有這些嗎"
-
-#, fuzzy
-msgid "Do you really want to remove this proxy?"
-msgstr "您確定要關閉所有這些嗎"
-
-#, fuzzy
-msgid "Do you really want to remove your chat history for this chat?"
-msgstr "您確定要關閉所有這些嗎"
+msgid "Do you want to delete this PEP node?"
+msgstr "您確定要刪除所選取的訊息?"
 
 #, fuzzy
 msgid "Do you want to delete this theme?"
@@ -1808,6 +1766,22 @@ msgstr "您確定要刪除所選取的訊息?"
 #, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "您是否接受邀請?"
+
+#, fuzzy, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "您確定要關閉所有這些嗎"
+
+#, fuzzy
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "您確定要關閉所有這些嗎"
+
+#, fuzzy
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "您確定要關閉所有這些嗎"
+
+#, fuzzy
+msgid "Do you want to remove this proxy?"
+msgstr "您確定要關閉所有這些嗎"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3498,20 +3472,12 @@ msgid "Open Folder"
 msgstr "開啟資料夾(_O)"
 
 #, fuzzy
-msgid "Open Link"
-msgstr "做為連結開啟(_L)"
-
-#, fuzzy
 msgid "Open Link in Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
-
-#, fuzzy
-msgid "Open Path"
-msgstr "OpenPGP: "
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -4024,10 +3990,6 @@ msgstr "原因"
 #, fuzzy
 msgid "Reason for destruction"
 msgstr "您也可以輸入一個可選的替代地點:"
-
-#, fuzzy, python-format
-msgid "Reason: %s"
-msgstr "原因"
 
 #, fuzzy
 msgid "Received"
@@ -4748,10 +4710,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-#, fuzzy
-msgid "Show Location"
-msgstr "位置: %s"
-
 msgid "Show My Video Stream"
 msgstr ""
 
@@ -5377,8 +5335,12 @@ msgstr "這個名稱已被使用。您想要覆寫這個狀態訊息嗎?"
 msgid "This is your XMPP address"
 msgstr "複製 JID/電子郵件位址(_C)"
 
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "證書已被吊銷"
+
 #, python-format
-msgid "This message has been moderated%s."
+msgid "This message has been moderated by %s"
 msgstr ""
 
 #, python-format
@@ -6681,6 +6643,10 @@ msgstr "%(nick)s 的狀態是 %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, python-format
+#~ msgid " by %s"
+#~ msgstr " 由%s"
+
 #, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr " %s 找不到"
@@ -6917,6 +6883,9 @@ msgstr ""
 #~ msgid "Add reaction"
 #~ msgstr "外掛程式"
 
+#~ msgid "Add to Contact List…"
+#~ msgstr "新增到聯絡人清單…"
+
 #, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "編輯群組(_G)"
@@ -6924,6 +6893,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "群組"
+
+#~ msgid "Allows opening file:/ URIs when clicked."
+#~ msgstr "允許在單擊時打開 file：/ URI。"
 
 #~ msgid "Are you sure you want to leave this group chat?"
 #~ msgstr "您確定要離開此群聊嗎？"
@@ -6994,8 +6966,20 @@ msgstr ""
 #~ msgstr "對話，與"
 
 #, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "複製 JID/電子郵件位址(_C)"
+
+#, fuzzy
+#~ msgid "Copy Link Location"
+#~ msgstr "複製連結位置(_C)"
+
+#, fuzzy
 #~ msgid "Copy Location"
 #~ msgstr "複製連結位置(_C)"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "聊天室 JID"
 
 #~ msgid "Create new post"
 #~ msgstr "建立新訊息"
@@ -7014,6 +6998,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "描述: "
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "GG 號碼:"
 
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
@@ -7180,6 +7168,14 @@ msgstr ""
 #~ msgstr "狀態"
 
 #, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "做為連結開啟(_L)"
+
+#, fuzzy
+#~ msgid "Open Path"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "再續(_R)"
 
@@ -7284,6 +7280,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "位置: %s"
 
 #, fuzzy
 #~ msgid "Show Offline Contacts"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,10 +22,6 @@ msgid " (Video Call)"
 msgstr ""
 
 msgid " (Voice Call)"
-msgstr ""
-
-#, python-format
-msgid " by %s"
 msgstr ""
 
 #, python-brace-format
@@ -194,6 +190,13 @@ msgstr ""
 #, python-format
 msgctxt "negative longitude"
 msgid "%sW"
+msgstr ""
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr ""
+
+#, python-format
+msgid "(reason: %s)"
 msgstr ""
 
 #, python-format
@@ -502,9 +505,6 @@ msgstr ""
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr ""
 
-msgid "Add to Contact List…"
-msgstr ""
-
 msgid "Add to Group"
 msgstr ""
 
@@ -598,9 +598,6 @@ msgstr ""
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
-msgstr ""
-
-msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 msgid "Alternate venue (optional)..."
@@ -1321,16 +1318,7 @@ msgstr ""
 msgid "Copy Certificate Information"
 msgstr ""
 
-msgid "Copy Email Address"
-msgstr ""
-
 msgid "Copy Link"
-msgstr ""
-
-msgid "Copy Link Location"
-msgstr ""
-
-msgid "Copy Path"
 msgstr ""
 
 msgid "Copy Text"
@@ -1524,9 +1512,6 @@ msgstr ""
 msgid "Devices connected with \"%s\""
 msgstr ""
 
-msgid "Dial Number"
-msgstr ""
-
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr ""
@@ -1588,32 +1573,32 @@ msgstr ""
 msgid "Do you accept this request?"
 msgstr ""
 
-msgid "Do you really want to delete this PEP node?"
-msgstr ""
-
-#, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr ""
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
 "Gajim will quit afterwards."
 msgstr ""
 
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr ""
-
-msgid "Do you really want to remove this proxy?"
-msgstr ""
-
-msgid "Do you really want to remove your chat history for this chat?"
+msgid "Do you want to delete this PEP node?"
 msgstr ""
 
 msgid "Do you want to delete this theme?"
 msgstr ""
 
 msgid "Do you want to overwrite the currently installed version?"
+msgstr ""
+
+#, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr ""
+
+msgid "Do you want to remove all chat history for this chat?"
+msgstr ""
+
+msgid "Do you want to remove this chat including its chat history?"
+msgstr ""
+
+msgid "Do you want to remove this proxy?"
 msgstr ""
 
 #, python-format
@@ -3045,16 +3030,10 @@ msgstr ""
 msgid "Open Folder"
 msgstr ""
 
-msgid "Open Link"
-msgstr ""
-
 msgid "Open Link in Browser"
 msgstr ""
 
 msgid "Open Link in _Browser"
-msgstr ""
-
-msgid "Open Path"
 msgstr ""
 
 msgid "Open Plugins…"
@@ -3489,10 +3468,6 @@ msgid "Reason (optional)..."
 msgstr ""
 
 msgid "Reason for destruction"
-msgstr ""
-
-#, python-format
-msgid "Reason: %s"
 msgstr ""
 
 msgid "Received"
@@ -4089,9 +4064,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-msgid "Show Location"
-msgstr ""
-
 msgid "Show My Video Stream"
 msgstr ""
 
@@ -4620,8 +4592,11 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr ""
 
+msgid "This message has been moderated"
+msgstr ""
+
 #, python-format
-msgid "This message has been moderated%s."
+msgid "This message has been moderated by %s"
 msgstr ""
 
 #, python-format

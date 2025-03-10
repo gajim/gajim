@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -26,10 +26,6 @@ msgstr " (Videosamtal)"
 
 msgid " (Voice Call)"
 msgstr " (Röstsamtal)"
-
-#, fuzzy, python-format
-msgid " by %s"
-msgstr "Ändrad av %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -199,6 +195,13 @@ msgstr "%sS"
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr "%sW"
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "Anledning"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -520,9 +523,6 @@ msgstr "Lägg till några detaljer…"
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "Lägg till det här certifikatet i listan över _betrodda certifikat"
 
-msgid "Add to Contact List…"
-msgstr "Lägg till i kontaktlistan…"
-
 #, fuzzy
 msgid "Add to Group"
 msgstr "Lägg till grupp…"
@@ -618,9 +618,6 @@ msgstr "Alla deltagare i gruppchatten kan se din XMPP-adress"
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
-msgstr ""
-
-msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -1442,18 +1439,8 @@ msgstr "Kopiera adress"
 msgid "Copy Certificate Information"
 msgstr "Kontaktinformation"
 
-#, fuzzy
-msgid "Copy Email Address"
-msgstr "_Kopiera JID/e-postadress"
-
 msgid "Copy Link"
 msgstr "Kopiera länk"
-
-msgid "Copy Link Location"
-msgstr "Kopiera länkadress"
-
-msgid "Copy Path"
-msgstr "Kopiera sökväg"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1662,10 +1649,6 @@ msgstr "Server"
 msgid "Devices connected with \"%s\""
 msgstr "Kontrollera att du är ansluten med \"%s\"."
 
-#, fuzzy
-msgid "Dial Number"
-msgstr "GG-nummer:"
-
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "URL för webbsökning saknar ett \"%s\""
@@ -1740,14 +1723,6 @@ msgstr "Accepterar du den här begäran på kontot %s?"
 msgid "Do you accept this request?"
 msgstr "Accepterar du den här förfrågan?"
 
-#, fuzzy
-msgid "Do you really want to delete this PEP node?"
-msgstr "Vill du verkligen ta bort det valda meddelandet?"
-
-#, fuzzy, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "Vill du verkligen stänga alla dem?"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1755,16 +1730,8 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "Vill du verkligen stänga alla dem?"
-
-#, fuzzy
-msgid "Do you really want to remove this proxy?"
-msgstr "Vill du verkligen stänga alla dem?"
-
-#, fuzzy
-msgid "Do you really want to remove your chat history for this chat?"
-msgstr "Vill du verkligen stänga alla dem?"
+msgid "Do you want to delete this PEP node?"
+msgstr "Vill du verkligen ta bort det valda meddelandet?"
 
 #, fuzzy
 msgid "Do you want to delete this theme?"
@@ -1773,6 +1740,22 @@ msgstr "Vill du verkligen ta bort det valda meddelandet?"
 #, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "Vill du acceptera inbjudan?"
+
+#, fuzzy, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "Vill du verkligen stänga alla dem?"
+
+#, fuzzy
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "Vill du verkligen stänga alla dem?"
+
+#, fuzzy
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "Vill du verkligen stänga alla dem?"
+
+#, fuzzy
+msgid "Do you want to remove this proxy?"
+msgstr "Vill du verkligen stänga alla dem?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3357,17 +3340,11 @@ msgstr "Öppna e-postkompositör"
 msgid "Open Folder"
 msgstr "Öppna mapp"
 
-msgid "Open Link"
-msgstr "Öppna länk"
-
 msgid "Open Link in Browser"
 msgstr "Öppna länk i webbläsaren"
 
 msgid "Open Link in _Browser"
 msgstr "Öppna länk i _Webbläsaren"
-
-msgid "Open Path"
-msgstr "Öppna sökvägen"
 
 msgid "Open Plugins…"
 msgstr "Öppna plugins…"
@@ -3852,10 +3829,6 @@ msgstr "Anledning"
 
 msgid "Reason for destruction"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Reason: %s"
-msgstr "Anledning"
 
 #, fuzzy
 msgid "Received"
@@ -4561,10 +4534,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-#, fuzzy
-msgid "Show Location"
-msgstr "Notifiering"
-
 msgid "Show My Video Stream"
 msgstr ""
 
@@ -5191,8 +5160,12 @@ msgstr "Detta namn används redan. Vill du skriva över detta statusmeddelande?"
 msgid "This is your XMPP address"
 msgstr "_Kopiera JID/e-postadress"
 
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "[Det här meddelandet är krypterat]"
+
 #, fuzzy, python-format
-msgid "This message has been moderated%s."
+msgid "This message has been moderated by %s"
 msgstr "[Det här meddelandet är krypterat]"
 
 #, python-format
@@ -6499,6 +6472,10 @@ msgstr "%(nick)s är nu %(status)s"
 msgid "…or drop it here"
 msgstr ""
 
+#, fuzzy, python-format
+#~ msgid " by %s"
+#~ msgstr "Ändrad av %s"
+
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s gruppchattar hittades"
@@ -6749,6 +6726,9 @@ msgstr ""
 #~ msgid "Add reaction"
 #~ msgstr "Lägg till reaktion"
 
+#~ msgid "Add to Contact List…"
+#~ msgstr "Lägg till i kontaktlistan…"
+
 #, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "Lägg till grupp…"
@@ -6822,8 +6802,18 @@ msgstr ""
 #~ msgstr "Konversation med "
 
 #, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "_Kopiera JID/e-postadress"
+
+#~ msgid "Copy Link Location"
+#~ msgstr "Kopiera länkadress"
+
+#, fuzzy
 #~ msgid "Copy Location"
 #~ msgstr "_Kopiera länkplats"
+
+#~ msgid "Copy Path"
+#~ msgstr "Kopiera sökväg"
 
 #~ msgid "Create new post"
 #~ msgstr "Skapa ny post"
@@ -6840,6 +6830,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Beskrivning: "
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "GG-nummer:"
 
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
@@ -6973,6 +6967,12 @@ msgstr ""
 #~ msgid "Online Status"
 #~ msgstr "Onlinestatus"
 
+#~ msgid "Open Link"
+#~ msgstr "Öppna länk"
+
+#~ msgid "Open Path"
+#~ msgstr "Öppna sökvägen"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
 
@@ -7080,6 +7080,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "Notifiering"
 
 #, fuzzy
 #~ msgid "Show Offline Contacts"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -23,10 +23,6 @@ msgstr "Лични разговори"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Запитване за файлов трансфер"
-
-#, fuzzy, python-format
-msgid " by %s"
-msgstr "Смяна на псе_вдоним…"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -199,6 +195,13 @@ msgstr ""
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "Причина"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -574,10 +577,6 @@ msgstr ""
 "Отпечатък тип SHA1 на сертификата:\n"
 
 #, fuzzy
-msgid "Add to Contact List…"
-msgstr "_Добавяне на контакт…"
-
-#, fuzzy
 msgid "Add to Group"
 msgstr "Редактиране на _групи"
 
@@ -689,9 +688,6 @@ msgstr ""
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
-msgstr ""
-
-msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -1543,20 +1539,8 @@ msgid "Copy Certificate Information"
 msgstr "Информация за контакта"
 
 #, fuzzy
-msgid "Copy Email Address"
-msgstr "Копиране на _JID/Е-поща"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Копиране на адреса на връзката"
-
-#, fuzzy
-msgid "Copy Link Location"
-msgstr "_Копиране на адреса на връзката"
-
-#, fuzzy
-msgid "Copy Path"
-msgstr "JID на стая"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1791,10 +1775,6 @@ msgstr "Сървър"
 msgid "Devices connected with \"%s\""
 msgstr "Уверете се, че сте свързани към „%s“."
 
-#, fuzzy
-msgid "Dial Number"
-msgstr "Номер на GG:"
-
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Липсва „%s“ в адреса за търсене"
@@ -1869,14 +1849,6 @@ msgstr "Приемате ли това запитване за акаунт %s?"
 msgid "Do you accept this request?"
 msgstr "Приемате ли това запитване?"
 
-#, fuzzy
-msgid "Do you really want to delete this PEP node?"
-msgstr "Наистина ли искате да изтриете избраното съобщение?"
-
-#, fuzzy, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "Наистина ли искате да изтриете избраното съобщение?"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1884,15 +1856,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "Наистина ли искате да изтриете избраното съобщение?"
-
-#, fuzzy
-msgid "Do you really want to remove this proxy?"
-msgstr "Наистина ли искате да изтриете избраното съобщение?"
-
-#, fuzzy
-msgid "Do you really want to remove your chat history for this chat?"
+msgid "Do you want to delete this PEP node?"
 msgstr "Наистина ли искате да изтриете избраното съобщение?"
 
 #, fuzzy
@@ -1902,6 +1866,22 @@ msgstr "Наистина ли искате да изтриете избрано�
 #, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "Искате ли да приемете поканата?"
+
+#, fuzzy, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
+
+#, fuzzy
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
+
+#, fuzzy
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
+
+#, fuzzy
+msgid "Do you want to remove this proxy?"
+msgstr "Наистина ли искате да изтриете избраното съобщение?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3602,20 +3582,12 @@ msgid "Open Folder"
 msgstr "_Отваряне на папката"
 
 #, fuzzy
-msgid "Open Link"
-msgstr "Отваряне като _връзка"
-
-#, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Отваряне на връзката в браузър"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Отваряне на връзката в браузър"
-
-#, fuzzy
-msgid "Open Path"
-msgstr "OpenGPG"
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -4128,10 +4100,6 @@ msgstr "Причина"
 #, fuzzy
 msgid "Reason for destruction"
 msgstr "Може да въведете и друго място за срещи:"
-
-#, fuzzy, python-format
-msgid "Reason: %s"
-msgstr "Причина"
 
 #, fuzzy
 msgid "Received"
@@ -4856,10 +4824,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-#, fuzzy
-msgid "Show Location"
-msgstr "Уведомления"
-
 msgid "Show My Video Stream"
 msgstr ""
 
@@ -5493,8 +5457,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "Копиране на _JID/Е-поща"
 
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "[Това съобщение е шифрирано]"
+
 #, fuzzy, python-format
-msgid "This message has been moderated%s."
+msgid "This message has been moderated by %s"
 msgstr "[Това съобщение е шифрирано]"
 
 #, python-format
@@ -6802,6 +6770,10 @@ msgid "…or drop it here"
 msgstr ""
 
 #, fuzzy, python-format
+#~ msgid " by %s"
+#~ msgstr "Смяна на псе_вдоним…"
+
+#, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s не е намерен"
 
@@ -7037,6 +7009,10 @@ msgstr ""
 #~ msgstr "Неуспех при свързването"
 
 #, fuzzy
+#~ msgid "Add to Contact List…"
+#~ msgstr "_Добавяне на контакт…"
+
+#, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "Редактиране на _групи"
 
@@ -7117,8 +7093,20 @@ msgstr ""
 #~ msgstr "Разговор с "
 
 #, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "Копиране на _JID/Е-поща"
+
+#, fuzzy
+#~ msgid "Copy Link Location"
+#~ msgstr "_Копиране на адреса на връзката"
+
+#, fuzzy
 #~ msgid "Copy Location"
 #~ msgstr "_Копиране на адреса на връзката"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "JID на стая"
 
 #~ msgid "Create new post"
 #~ msgstr "Създаване на ново съобщение"
@@ -7137,6 +7125,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Описание: "
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "Номер на GG:"
 
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
@@ -7279,6 +7271,14 @@ msgstr ""
 #~ msgstr "Състояние"
 
 #, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Отваряне като _връзка"
+
+#, fuzzy
+#~ msgid "Open Path"
+#~ msgstr "OpenGPG"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Отменя файловия трансфер"
 
@@ -7376,6 +7376,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "Уведомления"
 
 #, fuzzy
 #~ msgid "Show Offline Contacts"

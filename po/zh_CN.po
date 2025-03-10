@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
-"PO-Revision-Date: 2025-03-02 16:08+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
+"PO-Revision-Date: 2025-03-08 03:34+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -34,10 +34,6 @@ msgstr " (视频通话)"
 
 msgid " (Voice Call)"
 msgstr " (语音通话)"
-
-#, python-format
-msgid " by %s"
-msgstr " 由 %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -207,6 +203,13 @@ msgstr "南纬 %s"
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr "西经 %s"
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr "地址中缺少“@”。是否确定这是正确的？"
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "原因：%s"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -523,9 +526,6 @@ msgstr "添加一些详情…"
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "将此证书添加到可信证书列表(_T)"
 
-msgid "Add to Contact List…"
-msgstr "添加到联系人列表…"
-
 msgid "Add to Group"
 msgstr "添加到分组"
 
@@ -620,9 +620,6 @@ msgid ""
 "applications to control Gajim remotely."
 msgstr ""
 "允许 Gajim 通过 D-Bus 广播有用信息。这也允许其他应用程序远程控制 Gajim。"
-
-msgid "Allows opening file:/ URIs when clicked."
-msgstr "允许单击打开 file:/ URI。"
 
 msgid "Alternate venue (optional)..."
 msgstr "替代地址（可选）…"
@@ -1353,17 +1350,8 @@ msgstr "复制地址"
 msgid "Copy Certificate Information"
 msgstr "复制证书信息"
 
-msgid "Copy Email Address"
-msgstr "复制电子邮件地址"
-
 msgid "Copy Link"
 msgstr "复制链接"
-
-msgid "Copy Link Location"
-msgstr "复制链接位置"
-
-msgid "Copy Path"
-msgstr "复制路径"
 
 msgid "Copy Text"
 msgstr "复制文本"
@@ -1556,9 +1544,6 @@ msgstr "设备"
 msgid "Devices connected with \"%s\""
 msgstr "与“%s”连接的设备"
 
-msgid "Dial Number"
-msgstr "拨打此号码"
-
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "目录 URL 缺少“%s”"
@@ -1620,13 +1605,6 @@ msgstr "是否接受此请求（账号：%s）？"
 msgid "Do you accept this request?"
 msgstr "是否接受此请求？"
 
-msgid "Do you really want to delete this PEP node?"
-msgstr "是否确定要删除此 PEP 节点？"
-
-#, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "是否确定要移除“%(group)s”？"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1636,20 +1614,27 @@ msgstr ""
 "警告：此操作无法撤销！\n"
 "Gajim 之后会退出。"
 
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "是否确定要移除此聊天及其聊天记录？"
-
-msgid "Do you really want to remove this proxy?"
-msgstr "是否确定要移除此代理？"
-
-msgid "Do you really want to remove your chat history for this chat?"
-msgstr "是否确定要移除此聊天的聊天记录？"
+msgid "Do you want to delete this PEP node?"
+msgstr "是否要删除此 PEP 节点？"
 
 msgid "Do you want to delete this theme?"
 msgstr "是否要删除此主题？"
 
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "是否要覆盖当前已安装的版本？"
+
+#, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "是否要移除“%(group)s”？"
+
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "是否要移除此聊天的所有聊天记录？"
+
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "是否要移除此聊天及其聊天记录？"
+
+msgid "Do you want to remove this proxy?"
+msgstr "是否要移除此代理？"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3104,17 +3089,11 @@ msgstr "打开电子邮件编写器"
 msgid "Open Folder"
 msgstr "打开文件夹"
 
-msgid "Open Link"
-msgstr "打开链接"
-
 msgid "Open Link in Browser"
 msgstr "在浏览器中打开链接"
 
 msgid "Open Link in _Browser"
 msgstr "在浏览器中打开链接(_B)"
-
-msgid "Open Path"
-msgstr "打开路径"
 
 msgid "Open Plugins…"
 msgstr "打开插件…"
@@ -3556,10 +3535,6 @@ msgstr "原因（可选）…"
 
 msgid "Reason for destruction"
 msgstr "解散原因"
-
-#, python-format
-msgid "Reason: %s"
-msgstr "原因：%s"
 
 msgid "Received"
 msgstr "已收到"
@@ -4158,9 +4133,6 @@ msgstr "显示加入/离开"
 msgid "Show Joined / Left"
 msgstr "显示已加入/已离开"
 
-msgid "Show Location"
-msgstr "显示位置"
-
 msgid "Show My Video Stream"
 msgstr "显示我的视频流"
 
@@ -4471,8 +4443,8 @@ msgstr ""
 "确定要退出 Gajim？\n"
 "退出后，您将无法发送和接收消息。\n"
 "\n"
-"另外，您可以最小化或完全隐藏 Gajim 的窗口。使用 Gajim "
-"的系统托盘图标恢复窗口。"
+"另外，您可以最小化或完全隐藏 Gajim 的窗口。使用 Gajim 的系统托盘图标恢复窗"
+"口。"
 
 msgid "Switch Workspace"
 msgstr "切换工作区"
@@ -4702,8 +4674,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "这是您的 XMPP 地址"
 
-#, python-format
-msgid "This message has been moderated%s."
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "此消息已%s 撤回。"
+
+#, fuzzy, python-format
+msgid "This message has been moderated by %s"
 msgstr "此消息已%s 撤回。"
 
 #, python-format
@@ -5853,6 +5829,10 @@ msgstr "…或将其拖放到此处"
 #~ "如果您选择永久离开，可能需要别人邀请您才能再次加入此群聊"
 
 #, python-format
+#~ msgid " by %s"
+#~ msgstr " 由 %s"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s 个群聊已找到"
 
@@ -6106,12 +6086,18 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Add reaction"
 #~ msgstr "添加回应"
 
+#~ msgid "Add to Contact List…"
+#~ msgstr "添加到联系人列表…"
+
 #~ msgid "Add to new Group"
 #~ msgstr "添加到新分组"
 
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "群组"
+
+#~ msgid "Allows opening file:/ URIs when clicked."
+#~ msgstr "允许单击打开 file:/ URI。"
 
 #~ msgid "Another process is using this file."
 #~ msgstr "另一个进程正在使用此文件。"
@@ -6179,8 +6165,17 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Conversation: URL Color"
 #~ msgstr "对话：URL 颜色"
 
+#~ msgid "Copy Email Address"
+#~ msgstr "复制电子邮件地址"
+
+#~ msgid "Copy Link Location"
+#~ msgstr "复制链接位置"
+
 #~ msgid "Copy Location"
 #~ msgstr "复制位置"
+
+#~ msgid "Copy Path"
+#~ msgstr "复制路径"
 
 #~ msgid "Create new post"
 #~ msgstr "创建新消息"
@@ -6199,6 +6194,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Description: "
 #~ msgstr "描述： "
+
+#~ msgid "Dial Number"
+#~ msgstr "拨打此号码"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "直接传输（未加密）"
@@ -6368,6 +6366,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Online Status"
 #~ msgstr "在线状态"
 
+#~ msgid "Open Link"
+#~ msgstr "打开链接"
+
+#~ msgid "Open Path"
+#~ msgstr "打开路径"
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "组织单元 (OU)"
 
@@ -6483,6 +6487,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Show Gajim"
 #~ msgstr "显示 Gajim"
+
+#~ msgid "Show Location"
+#~ msgstr "显示位置"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "显示离线联系人"

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
-"PO-Revision-Date: 2025-03-02 00:26+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
+"PO-Revision-Date: 2025-03-09 08:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -24,10 +24,6 @@ msgstr " (Videóhívás)"
 
 msgid " (Voice Call)"
 msgstr " (Hanghívás)"
-
-#, python-format
-msgid " by %s"
-msgstr " %s"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -198,6 +194,13 @@ msgstr "d.sz. %s"
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr "ny.h. %s"
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr "Hiányzik a „@” a címből. Biztos így helyes?"
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "Ok: %s"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -516,9 +519,6 @@ msgstr "Részletezés…"
 msgid "Add this certificate to the list of _trusted certificates"
 msgstr "A _tanúsítvány felvétele a megbízható tanúsítványok közé"
 
-msgid "Add to Contact List…"
-msgstr "Hozzáadás a névjegyekhez…"
-
 msgid "Add to Group"
 msgstr "Csoporthoz adás"
 
@@ -615,9 +615,6 @@ msgid ""
 msgstr ""
 "Lehetővé teszi a D-Bus felületen keresztüli információközlést, illetve a "
 "Gajim távirányítását."
-
-msgid "Allows opening file:/ URIs when clicked."
-msgstr "A file:/ URI megnyitásának engedélyezése."
 
 msgid "Alternate venue (optional)..."
 msgstr "Alternatív hely (nem kötelező)…"
@@ -1366,17 +1363,8 @@ msgstr "Cím másolása"
 msgid "Copy Certificate Information"
 msgstr "Tanúsítvány adatainak másolása"
 
-msgid "Copy Email Address"
-msgstr "E-mail-cím _másolása"
-
 msgid "Copy Link"
 msgstr "Hivatkozás másolása"
-
-msgid "Copy Link Location"
-msgstr "Hivatkozás címének másolása"
-
-msgid "Copy Path"
-msgstr "Elérési út másolása"
 
 msgid "Copy Text"
 msgstr "Szöveg másolása"
@@ -1570,9 +1558,6 @@ msgstr "Eszközök"
 msgid "Devices connected with \"%s\""
 msgstr "„%s” eszközei"
 
-msgid "Dial Number"
-msgstr "Telefonszám hívása"
-
 #, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "A szótár URL-jében nincs „%s”"
@@ -1636,13 +1621,6 @@ msgstr "El legyen fogadva a kérés (fiók: %s)?"
 msgid "Do you accept this request?"
 msgstr "El legyen fogadva a kérés?"
 
-msgid "Do you really want to delete this PEP node?"
-msgstr "Biztos törölhető ez a PEP-elem?"
-
-#, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "Biztosan törölhető a csoport: „%(group)s”?"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1652,20 +1630,27 @@ msgstr ""
 "Figyelem: ez a művelet nem vonható vissza!\n"
 "A Gajim ki fog lépni a művelet végeztével."
 
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "Biztos törölhető ez a beszélgetés az előzményeivel együtt?"
-
-msgid "Do you really want to remove this proxy?"
-msgstr "Biztosan törölhető ez a proxy?"
-
-msgid "Do you really want to remove your chat history for this chat?"
-msgstr "Biztosan törölhetők a beszélgetés előzményei?"
+msgid "Do you want to delete this PEP node?"
+msgstr "Biztos törölhető ez a PEP-elem?"
 
 msgid "Do you want to delete this theme?"
 msgstr "Törölhető a téma?"
 
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "Felülírható a jelenleg telepített verzió?"
+
+#, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "Biztos törölhető a csoport: „%(group)s”?"
+
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "Biztos törölhetők ennek a beszélgetésnek az előzményei?"
+
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "Biztos törölhető ez a beszélgetés az előzményeivel együtt?"
+
+msgid "Do you want to remove this proxy?"
+msgstr "Biztos törölhető ez a proxy?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3140,17 +3125,11 @@ msgstr "Levelező _megnyitása"
 msgid "Open Folder"
 msgstr "Mappa megnyitása"
 
-msgid "Open Link"
-msgstr "Hivatkozás megnyitása"
-
 msgid "Open Link in Browser"
 msgstr "Hivatkozás megnyitása böngészőben"
 
 msgid "Open Link in _Browser"
 msgstr "_Hivatkozás megnyitása böngészőben"
-
-msgid "Open Path"
-msgstr "Elérési út megnyitása"
 
 msgid "Open Plugins…"
 msgstr "Bővítmények megnyitása…"
@@ -3593,10 +3572,6 @@ msgstr "Indoklás (nem kötelező)…"
 
 msgid "Reason for destruction"
 msgstr "A megszűnés oka"
-
-#, python-format
-msgid "Reason: %s"
-msgstr "Ok: %s"
 
 msgid "Received"
 msgstr "Kézbesítve"
@@ -4200,9 +4175,6 @@ msgstr "Be- és kilépések jelzése"
 msgid "Show Joined / Left"
 msgstr "Be- és kilépések jelzése"
 
-msgid "Show Location"
-msgstr "Hely megjelenítése"
-
 msgid "Show My Video Stream"
 msgstr "A saját képem megjelenítése"
 
@@ -4764,8 +4736,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "A saját XMPP-címem"
 
-#, python-format
-msgid "This message has been moderated%s."
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "Ezt az üzenetet%s moderálta."
+
+#, fuzzy, python-format
+msgid "This message has been moderated by %s"
 msgstr "Ezt az üzenetet%s moderálta."
 
 #, python-format
@@ -5935,6 +5911,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "társalgóba"
 
 #, python-format
+#~ msgid " by %s"
+#~ msgstr " %s"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s társalgó található"
 
@@ -6188,12 +6168,18 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Add reaction"
 #~ msgstr "Új visszajelzés"
 
+#~ msgid "Add to Contact List…"
+#~ msgstr "Hozzáadás a névjegyekhez…"
+
 #~ msgid "Add to new Group"
 #~ msgstr "Új csoporthoz adás"
 
 #, fuzzy
 #~ msgid "All Groups"
 #~ msgstr "Csoportok"
+
+#~ msgid "Allows opening file:/ URIs when clicked."
+#~ msgstr "A file:/ URI megnyitásának engedélyezése."
 
 #~ msgid "Another process is using this file."
 #~ msgstr "Ezt a fájlt egy másik folyamat használja."
@@ -6262,8 +6248,17 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Beszélgetés: hivatkozás színe"
 
+#~ msgid "Copy Email Address"
+#~ msgstr "E-mail-cím _másolása"
+
+#~ msgid "Copy Link Location"
+#~ msgstr "Hivatkozás címének másolása"
+
 #~ msgid "Copy Location"
 #~ msgstr "Hely másolása"
+
+#~ msgid "Copy Path"
+#~ msgstr "Elérési út másolása"
 
 #~ msgid "Create new post"
 #~ msgstr "Új üzenet küldése"
@@ -6282,6 +6277,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Description: "
 #~ msgstr "Leírás: "
+
+#~ msgid "Dial Number"
+#~ msgstr "Telefonszám hívása"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Közvetlen fájlátvitel (titkosítás nélkül)"
@@ -6458,6 +6456,12 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Online Status"
 #~ msgstr "Jelenléti állapot"
 
+#~ msgid "Open Link"
+#~ msgstr "Hivatkozás megnyitása"
+
+#~ msgid "Open Path"
+#~ msgstr "Elérési út megnyitása"
+
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Szervezeti egység (OU)"
 
@@ -6575,6 +6579,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Show Gajim"
 #~ msgstr "A főablak megnyitása"
+
+#~ msgid "Show Location"
+#~ msgstr "Hely megjelenítése"
 
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Kilépettek megjelenítése"

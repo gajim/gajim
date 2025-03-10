@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-01 18:36+0000\n"
+"POT-Creation-Date: 2025-03-10 17:39+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -32,10 +32,6 @@ msgstr "Προσωπική συζήτηση"
 #, fuzzy
 msgid " (Voice Call)"
 msgstr "Αίτηση μεταφοράς αρχείου"
-
-#, fuzzy, python-format
-msgid " by %s"
-msgstr "Αλλαγή _ψευδώνυμου"
 
 #, python-brace-format
 msgid " by {actor}"
@@ -204,6 +200,13 @@ msgstr ""
 msgctxt "negative longitude"
 msgid "%sW"
 msgstr ""
+
+msgid "'@' is missing in address. Are you sure this is correct?"
+msgstr ""
+
+#, fuzzy, python-format
+msgid "(reason: %s)"
+msgstr "Αιτία"
 
 #, python-format
 msgid "** %s lost all their hats!"
@@ -570,10 +573,6 @@ msgid "Add this certificate to the list of _trusted certificates"
 msgstr ""
 
 #, fuzzy
-msgid "Add to Contact List…"
-msgstr "_Προσθήκη επαφής..."
-
-#, fuzzy
 msgid "Add to Group"
 msgstr "Επεξεργασία _ομάδων"
 
@@ -684,9 +683,6 @@ msgstr ""
 msgid ""
 "Allow Gajim to broadcast useful information via D-Bus. It also allows other "
 "applications to control Gajim remotely."
-msgstr ""
-
-msgid "Allows opening file:/ URIs when clicked."
 msgstr ""
 
 #, fuzzy
@@ -1533,20 +1529,8 @@ msgid "Copy Certificate Information"
 msgstr "Πληροφορίες επαφής"
 
 #, fuzzy
-msgid "Copy Email Address"
-msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Αντιγραφή τοποθεσίας δεσμού"
-
-#, fuzzy
-msgid "Copy Link Location"
-msgstr "_Αντιγραφή τοποθεσίας δεσμού"
-
-#, fuzzy
-msgid "Copy Path"
-msgstr "Δωμάτιο:"
 
 #, fuzzy
 msgid "Copy Text"
@@ -1781,10 +1765,6 @@ msgstr "Εξυπηρετητής"
 msgid "Devices connected with \"%s\""
 msgstr "Παρακαλώ βεβαιωθείτε ότι είστε συνδεδεμένοι με το \"%s\"."
 
-#, fuzzy
-msgid "Dial Number"
-msgstr "Αριθμός χώρων εργασίας:"
-
 #, fuzzy, python-format
 msgid "Dictionary URL is missing a \"%s\""
 msgstr "Λείπει ένα \"%s\" από το URL της Δικτυακής αναζήτησης"
@@ -1859,14 +1839,6 @@ msgstr "Δέχεστε αυτό το αίτημα;"
 msgid "Do you accept this request?"
 msgstr "Δέχεστε αυτό το αίτημα;"
 
-#, fuzzy
-msgid "Do you really want to delete this PEP node?"
-msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
-
-#, fuzzy, python-format
-msgid "Do you really want to remove \"%(group)s\"?"
-msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
-
 msgid ""
 "Do you really want to remove all chat messages from Gajim?\n"
 "Warning: This can’t be undone!\n"
@@ -1874,15 +1846,7 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid "Do you really want to remove this chat including its chat history?"
-msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
-
-#, fuzzy
-msgid "Do you really want to remove this proxy?"
-msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
-
-#, fuzzy
-msgid "Do you really want to remove your chat history for this chat?"
+msgid "Do you want to delete this PEP node?"
 msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
 #, fuzzy
@@ -1892,6 +1856,22 @@ msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγ�
 #, fuzzy
 msgid "Do you want to overwrite the currently installed version?"
 msgstr "_Επιλέξτε εάν επιθυμείτε να καταχωρήσετε νέο jabber λογαριασμό"
+
+#, fuzzy, python-format
+msgid "Do you want to remove \"%(group)s\"?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#, fuzzy
+msgid "Do you want to remove all chat history for this chat?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#, fuzzy
+msgid "Do you want to remove this chat including its chat history?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#, fuzzy
+msgid "Do you want to remove this proxy?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -3582,20 +3562,12 @@ msgid "Open Folder"
 msgstr "_Άνοιγμα του περιέχοντος φακέλου"
 
 #, fuzzy
-msgid "Open Link"
-msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
-
-#, fuzzy
 msgid "Open Link in Browser"
 msgstr "_Άνοιγμα δεσμού στον περιηγητή"
 
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Άνοιγμα δεσμού στον περιηγητή"
-
-#, fuzzy
-msgid "Open Path"
-msgstr "OpenPGP: "
 
 #, fuzzy
 msgid "Open Plugins…"
@@ -4107,10 +4079,6 @@ msgstr "Αιτία"
 
 msgid "Reason for destruction"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Reason: %s"
-msgstr "Αιτία"
 
 #, fuzzy
 msgid "Received"
@@ -4839,10 +4807,6 @@ msgstr ""
 msgid "Show Joined / Left"
 msgstr ""
 
-#, fuzzy
-msgid "Show Location"
-msgstr "Τροποποίηση λογαριασμού"
-
 msgid "Show My Video Stream"
 msgstr ""
 
@@ -5463,8 +5427,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
 
+#, fuzzy
+msgid "This message has been moderated"
+msgstr "Η κατάσταση άλλαξε."
+
 #, python-format
-msgid "This message has been moderated%s."
+msgid "This message has been moderated by %s"
 msgstr ""
 
 #, python-format
@@ -6776,6 +6744,10 @@ msgid "…or drop it here"
 msgstr ""
 
 #, fuzzy, python-format
+#~ msgid " by %s"
+#~ msgstr "Αλλαγή _ψευδώνυμου"
+
+#, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "μη υπαρκτό %s"
 
@@ -7015,6 +6987,10 @@ msgstr ""
 #~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
+#~ msgid "Add to Contact List…"
+#~ msgstr "_Προσθήκη επαφής..."
+
+#, fuzzy
 #~ msgid "Add to new Group"
 #~ msgstr "Επεξεργασία _ομάδων"
 
@@ -7092,8 +7068,20 @@ msgstr ""
 #~ msgstr "Ιστορικό συζητήσεων"
 
 #, fuzzy
+#~ msgid "Copy Email Address"
+#~ msgstr "Α_ντιγραφή JID/Email διεύθυνσης"
+
+#, fuzzy
+#~ msgid "Copy Link Location"
+#~ msgstr "_Αντιγραφή τοποθεσίας δεσμού"
+
+#, fuzzy
 #~ msgid "Copy Location"
 #~ msgstr "_Αντιγραφή τοποθεσίας δεσμού"
+
+#, fuzzy
+#~ msgid "Copy Path"
+#~ msgstr "Δωμάτιο:"
 
 #, fuzzy
 #~ msgid "Create new post"
@@ -7114,6 +7102,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Περιγραφή: %s"
+
+#, fuzzy
+#~ msgid "Dial Number"
+#~ msgstr "Αριθμός χώρων εργασίας:"
 
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
@@ -7256,6 +7248,14 @@ msgstr ""
 #~ msgstr "Κατάσταση"
 
 #, fuzzy
+#~ msgid "Open Link"
+#~ msgstr "Το άνοιγμα του συνδέσμου απέτυχε"
+
+#, fuzzy
+#~ msgid "Open Path"
+#~ msgstr "OpenPGP: "
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Ακύρωση μεταφοράς αρχείου"
 
@@ -7349,6 +7349,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
+
+#, fuzzy
+#~ msgid "Show Location"
+#~ msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 #~ msgid "Show Offline Contacts"
