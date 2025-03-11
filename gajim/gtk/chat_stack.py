@@ -356,7 +356,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         if event.from_mam:
             return
 
-        if app.window.is_chat_active(event.account, event.jid):
+        if (
+            app.window.is_chat_active(event.account, event.jid)
+            and self._chat_control.view_is_at_bottom()
+        ):
             if event.message.id is None:
                 return
 

@@ -555,7 +555,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             return
 
         control = app.window.get_control()
-        if app.window.is_active() and row.is_selected() and control.get_autoscroll():
+        if app.window.is_active() and row.is_selected() and control.view_is_at_bottom():
             return
 
         assert message.text is not None

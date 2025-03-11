@@ -174,7 +174,7 @@ class ChatControl(EventHelper):
     def reset_view(self) -> None:
         self._scrolled_view.reset()
 
-    def get_autoscroll(self) -> bool:
+    def view_is_at_bottom(self) -> bool:
         return self._scrolled_view.get_autoscroll()
 
     def scroll_to_message(self, pk: int, timestamp: dt.datetime) -> None:
@@ -500,7 +500,7 @@ class ChatControl(EventHelper):
         if self._allow_add_message():
             self._scrolled_view.add_message_from_db(message)
 
-            if not self._scrolled_view.get_autoscroll():
+            if not self.view_is_at_bottom():
                 if message.direction == ChatDirection.OUTGOING:
                     self._scrolled_view.scroll_to_end()
                 else:

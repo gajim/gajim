@@ -1152,7 +1152,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         )
 
     def _on_window_active(self, window: Gtk.ApplicationWindow, _param: Any) -> None:
-
         if not window.is_active():
             return
 
@@ -1161,7 +1160,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not control.has_active_chat():
             return
 
-        if control.get_autoscroll():
+        if control.view_is_at_bottom():
             self.mark_as_read(control.contact.account, control.contact.jid)
 
     def get_preferred_ft_method(self, contact: types.ChatContactT) -> str | None:
