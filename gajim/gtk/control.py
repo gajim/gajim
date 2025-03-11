@@ -436,6 +436,11 @@ class ChatControl(EventHelper):
             return
 
         self._jump_to_end_button.toggle(False)
+
+        if not self.has_active_chat():
+            # This signal can be toggled without an active chat, see #12226
+            return
+
         if app.window.is_chat_active(self.contact.account, self.contact.jid):
             app.window.mark_as_read(self.contact.account, self.contact.jid)
 
