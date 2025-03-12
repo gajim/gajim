@@ -53,6 +53,7 @@ from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.storage.base import with_session
+from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.text import get_random_string
 
@@ -744,8 +745,7 @@ class MessageArchiveStorage(AlchemyStorage):
         result = cast(Sequence[str] | None, session.scalars(stmt).all())
         return result
 
-
-    @with_session
+    @with_session_yield_from
     @timeit
     def search_archive(
         self,
@@ -1117,7 +1117,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
             log.info('Removed messages older then %s', threshold.isoformat())
 
-    @with_session
+    @with_session_yield_from
     @timeit
     def get_messages_for_export(
         self, session: Session, account: str, jid: JID

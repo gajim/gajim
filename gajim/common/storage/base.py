@@ -19,6 +19,7 @@ import sqlite3
 import sys
 import time
 from collections.abc import Callable
+from collections.abc import Iterator
 from datetime import datetime
 from datetime import UTC
 from pathlib import Path
@@ -439,13 +440,21 @@ class AlchemyStorage:
         del self._session
         del self._engine
 
-
 def with_session(
     func: Callable[Concatenate[Any, Session, P], R]
 ) -> Callable[Concatenate[Any, P], R]:
     def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> R:
         with self._create_session() as session, session.begin():
             return func(self, session, *args, **kwargs)
+
+    return wrapper
+
+def with_session_yield_from(
+    func: Callable[Concatenate[Any, Session, P], Iterator[R]]
+) -> Callable[Concatenate[Any, P], Iterator[Any]]:
+    def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> Iterator[R]:
+        with self._create_session() as session, session.begin():
+            yield from func(self, session, *args, **kwargs)
 
     return wrapper
 
