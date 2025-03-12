@@ -63,11 +63,6 @@ class MessageInputTextView(GtkSource.View):
             None,
             (),
         ),
-        "line-count-changed": (
-            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
-            None,
-            (int,),
-        ),
     }
 
     def __init__(self, parent: Gtk.Widget) -> None:
@@ -77,6 +72,7 @@ class MessageInputTextView(GtkSource.View):
             wrap_mode=Gtk.WrapMode.WORD_CHAR,
             margin_top=3,
             margin_bottom=3,
+            valign=Gtk.Align.CENTER,
         )
 
         self._parent = parent
@@ -90,8 +86,6 @@ class MessageInputTextView(GtkSource.View):
         self.add_css_class("message-input-textview")
 
         self._contact: ChatContactT | None = None
-
-        self._line_count = 1
 
         self._text_buffer_manager = TextBufferManager(self)
         self._text_buffer_manager.connect("buffer-changed", self._on_buffer_changed)
@@ -156,27 +150,6 @@ class MessageInputTextView(GtkSource.View):
             menu.append_section(_("Spell Checking"), self._speller_menu)
         self.set_extra_menu(menu)
 
-    def _count_lines(self) -> int:
-        """
-        Return the number of visible lines, which determines the
-        height of the textview.
-
-        The number of visible lines is the sum of
-        line breaks due to new line characters and word/char wraps
-        at the view's boundary.
-
-        We cannot use Gtk.TextBuffer.get_line_count() as it only
-        counts line breaks as defined above.
-        """
-        buf = self.get_buffer()
-        start_iter = buf.get_start_iter()
-        line_count = 1
-
-        while self.forward_display_line(start_iter):
-            line_count += 1
-
-        return line_count
-
     def _on_buffer_changed(self, _text_buffer_manager: TextBufferManager) -> None:
 
         buf = self.get_buffer()
@@ -190,11 +163,6 @@ class MessageInputTextView(GtkSource.View):
             self._completion_popover.popdown()
 
         self._on_text_changed()
-
-        line_count = self._count_lines()
-        if self._line_count != line_count:
-            self._line_count = line_count
-            self.emit("line-count-changed", self._line_count)
 
         self.emit("buffer-changed")
 

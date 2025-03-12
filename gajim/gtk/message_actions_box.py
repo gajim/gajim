@@ -104,9 +104,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self.msg_textview = MessageInputTextView(self)
         self._connect(self.msg_textview, "buffer-changed", self._on_buffer_changed)
-        self._connect(
-            self.msg_textview, "line-count-changed", self._on_line_count_changed
-        )
         self._connect(self.msg_textview, "paste-clipboard", self._on_paste_clipboard)
 
         self._ui.box.append(self.msg_textview.get_completion_popover())
@@ -116,6 +113,12 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self.msg_textview.add_controller(controller)
 
         self._ui.input_scrolled.set_child(self.msg_textview)
+
+        self._wait_queue_resize = 0
+        self._vscrollbar_min_height = 0
+        vadjustment = self._ui.input_scrolled.get_vadjustment()
+        self._connect(vadjustment, "changed", self._on_input_scrolled_changed)
+        self._connect(self.msg_textview, "realize", self._on_view_realize)
 
         self._ui.sendfile_button.set_tooltip_text(_("No File Transfer available"))
         self._ui.formattings_button.set_menu_model(get_format_menu())
@@ -164,26 +167,55 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
     def get_seclabel(self) -> SecurityLabel | None:
         return self._security_label_selector.get_seclabel()
 
-    def _on_line_count_changed(
-        self, _textview: MessageInputTextView, line_count: int
-    ) -> None:
-        """
-        This fixes #12158.
+    def _on_input_scrolled_changed(self, adj: Gtk.Adjustment) -> None:
+        scrolled = self._ui.input_scrolled
+        view = self.msg_textview
 
-        The scrollbar influences the view's height,
-        rendering it too tall in case of a single line text.
-        Therefore, set a min-height for the slider, which corresponds
-        to the expected view's height.
-
-        In cases of multiple lines, this CSS property however increases the
-        view's height to 1.5x the required min-height, see
-        https://dev.gajim.org/gajim/gajim/-/issues/9574.
-        Therefore, it needs to be removed again.
         """
-        if line_count == 1:
-            self._ui.input_scrolled.add_css_class("one-line-scrollbar")
-        elif line_count == 2:
-            self._ui.input_scrolled.remove_css_class("one-line-scrollbar")
+        Fixes #12158. The textview would only show the last row(s),
+        when entering a new row on some systems.
+        """
+        new_height = min(
+            scrolled.get_max_content_height(),
+            adj.get_upper() + view.get_margin_top() + view.get_margin_bottom(),
+        )
+        scrolled.set_size_request(-1, int(new_height))
+
+        new_page_size = min(
+            scrolled.get_size_request()[1]
+            - (view.get_margin_top() + view.get_margin_bottom()),
+            adj.get_upper(),
+        )
+        adj.set_page_size(new_page_size)
+
+        """
+        Hack for vscrollbar not requiring space and making textview higher
+        TODO: doesn't resize immediately
+        """
+        scrolled.get_vscrollbar().set_visible(
+            adj.get_upper()
+            > scrolled.get_max_content_height() - 2 * self._vscrollbar_min_height
+        )
+
+        self._start_queue_resize_if_needed()
+
+    def _start_queue_resize_if_needed(self) -> None:
+        if self._wait_queue_resize == 0:
+            self._wait_queue_resize = GLib.timeout_add(50, self._queue_resize_if_needed)
+
+    def _queue_resize_if_needed(self) -> bool:
+        if (
+            self._ui.input_scrolled.get_height()
+            == self._ui.input_scrolled.get_size_request()[1]
+        ):
+            self._wait_queue_resize = 0
+            return False
+        self._ui.input_scrolled.queue_resize()
+        return True
+
+    def _on_view_realize(self, _view: Gtk.TextView) -> None:
+        min_size, _ = self._ui.input_scrolled.get_preferred_size()
+        self._vscrollbar_min_height = min_size.height
 
     def _on_emoji_create_popover(self, button: Gtk.MenuButton) -> None:
         emoji_chooser = app.window.get_emoji_chooser()
@@ -371,6 +403,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._contact.disconnect_all_from_obj(self)
 
         self._security_label_selector.clear()
+
+        if self._wait_queue_resize != 0:
+            GLib.Source.remove(self._wait_queue_resize)
 
         self._contact = None
         self._client = None

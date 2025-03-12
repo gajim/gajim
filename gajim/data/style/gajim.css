@@ -244,7 +244,6 @@ button.flat.link { padding: 0; border: 0; }
 .no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
 .scrollbar-style scrollbar trough {background-color:@theme_base_color; }
 .scrollbar-style scrollbar {border:none; }
-.one-line-scrollbar scrollbar.vertical slider { min-height: 20px; }
 
 /* Treeview */
 .gajim-treeview { padding: 5px; }
