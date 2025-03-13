@@ -280,10 +280,15 @@ class Stage(Page):
         self.default = None
 
     @property
-    def stage_data(self) -> tuple[AdHocCommand, SimpleDataForm | MultipleDataForm]:
+    def stage_data(
+        self,
+    ) -> tuple[AdHocCommand, SimpleDataForm | MultipleDataForm | None]:
         assert self._last_stage_data is not None
+        form = None
+        if self._dataform_widget is not None:
+            form = self._dataform_widget.get_submit_form()
         assert self._dataform_widget is not None
-        return self._last_stage_data, self._dataform_widget.get_submit_form()
+        return self._last_stage_data, form
 
     @property
     def actions(self) -> set[AdHocAction] | None:
