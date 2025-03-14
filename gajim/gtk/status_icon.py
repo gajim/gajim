@@ -179,7 +179,7 @@ class LinuxStatusIcon(StatusIconBackend):
             self.update_state(init=True)
 
     def _get_menu(self) -> DBusMenu:
-        toogle_state = int(app.settings.get("sounds_on"))
+        toogle_state = int(not app.settings.get("sounds_on"))
         return DBusMenu(
             items=[
                 DBusMenuItem(
