@@ -34,6 +34,12 @@ ACCOUNTS_COUNT = 2
 CONTACTS_PER_ACCOUNT_COUNT = 10
 CONTACTS_COUNT = int(CONTACTS_PER_ACCOUNT_COUNT / 2)
 GROUPCHATS_COUNT = int(CONTACTS_PER_ACCOUNT_COUNT / 2)
+CONTACT_GROUPS = {"Group A", "Group B", "Group C with long name"}
+STATUS_MESSAGES = [
+    "Status Message very very very very very long\nwith newline",
+    "Status message",
+    "",
+]
 
 
 class TestRosterModule:
@@ -51,6 +57,9 @@ class TestRosterModule:
                 groups=set(),
             )
 
+    def get_groups(self) -> set[str]:
+        return CONTACT_GROUPS
+
     def iter(self) -> Iterator[tuple[JID, RosterItem]]:
         yield from self._roster.items()
 
@@ -61,7 +70,7 @@ class TestBookmarksModule:
         self._bookmarks: dict[JID, BookmarkData] = {}
 
         for i in range(GROUPCHATS_COUNT):
-            jid = JID.from_string(f"test{i}@conference.{self._account}.org")
+            jid = JID.from_string(f"groupchat{i}@conference.{self._account}.org")
             self._bookmarks[jid] = BookmarkData(
                 jid=jid,
                 name=f"name{i}",
@@ -89,14 +98,18 @@ class TestContactsModule:
             )
             self._avatars.append(convert_surface_to_texture(avatar))
 
-    def get_contact(self, jid: str | JID, groupchat: bool = False) -> BareContact:
-        contact_name = f"Test Contact {random.randrange(CONTACTS_PER_ACCOUNT_COUNT)}"
+        self._contact_index = 0
+        self._groupchat_contact_index = 0
 
+    def get_contact(self, jid: str | JID, groupchat: bool = False) -> BareContact:
         if groupchat:
             spec_set = GroupchatContact
-            contact_name = f"{contact_name} (MUC)"
+            contact_name = f"Group Chat {self._groupchat_contact_index}"
+            self._groupchat_contact_index += 1
         else:
+            contact_name = f"Contact {self._contact_index}"
             spec_set = BareContact
+            self._contact_index += 1
 
         contact = MagicMock(spec_set=spec_set)
         contact.jid = jid
@@ -107,11 +120,9 @@ class TestContactsModule:
         contact.is_groupchat = groupchat
 
         if not groupchat:
-            contact.status = (
-                "Test Status Message very very very very very long\nwith newline"
-            )
+            contact.status = random.choice(STATUS_MESSAGES)
             contact.idle_datetime = dt.datetime.now()
-            contact.groups = {"testg1", "testg2", "testg3"}
+            contact.groups = set(random.sample(sorted(CONTACT_GROUPS), 1))
 
         return contact
 
@@ -167,6 +178,8 @@ for account in accounts:
         "account_color",
         f"rgb({random.randrange(255)}, {random.randrange(255)}, {random.randrange(255)})",  # noqa: E501
     )
+    app.settings.set_account_setting(account[0], "account_label", account[1])
+
 
 app.css_config = MagicMock()
 app.css_config.get_dynamic_class = MagicMock(side_effect=_get_dynamic_class)
