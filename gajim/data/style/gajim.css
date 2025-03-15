@@ -372,14 +372,22 @@ button.flat.link { padding: 0; border: 0; }
 /* ActivitySidebar */
 .activity-sidebar {
     background: transparent;
-}
-.activity-sidebar .selection-bar {
-    margin-top: 9px;
+    margin-top: 6px;
     margin-bottom: 6px;
 }
+
 .activity-sidebar image {
-    margin: 9px 8px 6px 7px;
+    background-color: grey;
+    border-radius: 9px;
+    padding: 6px;
+    margin: 6px 6px 0px 7px;
 }
+
+.activity-sidebar .selection-bar {
+    margin-top: 6px;
+    margin-bottom: 0px;
+}
+
 .activity-box {
     background-color: mix(@theme_base_color, @theme_fg_color, 0.15);
 }

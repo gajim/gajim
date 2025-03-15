@@ -43,11 +43,7 @@ class ActivitySideBar(Gtk.Box, SignalManager):
         self._selection_bar.add_css_class("selection-bar")
         container.append(self._selection_bar)
 
-        texture = app.app.avatar_storage.get_activity_sidebar_icon(
-            AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
-        )
-        image = Gtk.Image.new_from_paintable(texture)
-        image.set_pixel_size(AvatarSize.ACCOUNT_SIDE_BAR)
+        image = Gtk.Image(icon_name="feather-bell-symbolic", pixel_size=28)
         container.append(image)
 
         self._unread_label = Gtk.Label(
