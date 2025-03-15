@@ -12,7 +12,6 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.settings import Settings
 
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
@@ -99,14 +98,13 @@ class TestChatFunctionPage(GajimAppWindow):
         print("Message", message)
 
 
+util.init_settings()
+
 app.get_client = MagicMock()
 app.account_is_connected = MagicMock(return_value=True)
 
 app.window = MagicMock()
 app.window.get_preferred_ft_method = MagicMock(return_value="httpupload")
-
-app.settings = Settings(in_memory=True)
-app.settings.init()
 
 window = TestChatFunctionPage()
 window.show()

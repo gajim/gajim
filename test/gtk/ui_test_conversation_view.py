@@ -14,7 +14,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ContactSettings
 from gajim.common.preview import PreviewManager
-from gajim.common.settings import Settings
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
@@ -106,8 +105,8 @@ def add_archive_messages() -> None:
 app.get_client = MagicMock()
 app.window = MagicMock()
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
+
 app.settings.add_account(ACCOUNT)
 app.settings.set_account_setting(ACCOUNT, "address", "user@domain.org")
 

@@ -41,6 +41,8 @@ class TestFileChooserButton(GajimAppWindow):
         print(file_paths)
 
 
+util.init_settings()
+
 window = TestFileChooserButton()
 window.show()
 

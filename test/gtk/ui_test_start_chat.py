@@ -22,7 +22,6 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import CSSPriority
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
-from gajim.common.settings import Settings
 
 from gajim.gtk.avatar import convert_surface_to_texture
 from gajim.gtk.avatar import generate_default_avatar
@@ -168,8 +167,7 @@ for i in range(ACCOUNTS_COUNT):
         [f"account{i}", f"Account {i}"],
     )
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
 
 for account in accounts:
     app.settings.add_account(account[0])

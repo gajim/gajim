@@ -34,6 +34,8 @@ def _apply(self: ChangePassword, next_stage: bool = False) -> None:
         self.show_page("next_stage", Gtk.StackTransitionType.SLIDE_LEFT)
 
 
+util.init_settings()
+
 window = ChangePassword("")
 window._on_apply = partial(_apply, window)  # type: ignore
 window.show()

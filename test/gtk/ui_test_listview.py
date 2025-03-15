@@ -99,6 +99,8 @@ class TestListView(GajimAppWindow):
         pass
 
 
+util.init_settings()
+
 window = TestListView()
 window.show()
 

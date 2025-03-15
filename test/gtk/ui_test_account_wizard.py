@@ -9,7 +9,6 @@ from gi.repository import Gtk
 from nbxmpp.client import Client as NBXMPPClient
 
 from gajim.common import app
-from gajim.common.settings import Settings
 
 from gajim.gtk.account_wizard import AccountWizard
 from gajim.gtk.account_wizard import Success
@@ -37,11 +36,10 @@ def _save_config(self: Success) -> None:
     app.css_config.refresh()
 
 
+util.init_settings()
+
 app.get_client = MagicMock()
 
-
-app.settings = Settings(in_memory=True)
-app.settings.init()
 app.get_jid_from_account = MagicMock(return_value="testjid")
 
 app.cert_store = MagicMock()

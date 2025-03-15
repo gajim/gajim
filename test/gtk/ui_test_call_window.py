@@ -59,6 +59,8 @@ class TestClient:
         return MagicMock()
 
 
+util.init_settings()
+
 app.get_client = MagicMock(side_effect=TestClient)
 app.call_manager = CallManager()
 

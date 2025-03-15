@@ -55,6 +55,8 @@ def get_pango_wrap_mode(string: str) -> Pango.WrapMode:
     return Pango.WrapMode.WORD_CHAR
 
 
+util.init_settings()
+
 window = TestPangoWordWrap()
 window.show()
 

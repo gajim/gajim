@@ -9,7 +9,6 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common.const import StyleAttr
-from gajim.common.settings import Settings
 
 from gajim.gtk.themes import Themes
 
@@ -17,8 +16,7 @@ from . import util
 
 ACCOUNT = "test"
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
 app.settings.get_workspace_count = MagicMock(return_value=2)
 
 

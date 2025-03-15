@@ -77,6 +77,8 @@ class TestChatFilter(GajimAppWindow):
         self._chat_filter.reset()
 
 
+util.init_settings()
+
 app.get_client = MagicMock(side_effect=TestClient)
 app.get_connected_accounts = MagicMock(return_value=[ACCOUNT1, ACCOUNT2])
 

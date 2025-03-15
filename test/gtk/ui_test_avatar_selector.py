@@ -32,6 +32,8 @@ class TestAvatarSelector(GajimAppWindow):
         box.append(avatar_selector)
 
 
+util.init_settings()
+
 window = TestAvatarSelector()
 window.show()
 

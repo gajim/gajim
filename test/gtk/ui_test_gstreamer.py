@@ -62,6 +62,8 @@ Gst.init()
 
 app.is_installed = MagicMock(return_value=True)
 
+util.init_settings()
+
 window = TestGstreamer()
 window.show()
 

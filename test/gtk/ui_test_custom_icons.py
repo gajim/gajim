@@ -53,6 +53,8 @@ class TestCustomIcons(GajimAppWindow):
                 flow_box.append(image)
 
 
+util.init_settings()
+
 window = TestCustomIcons()
 window.show()
 

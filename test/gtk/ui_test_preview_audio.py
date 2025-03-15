@@ -67,7 +67,11 @@ class TestAudioWidget(GajimAppWindow):
         self._box.append(self._audio_widget)
 
 
+util.init_settings()
+
 Gst.init()
+
+app.is_installed = MagicMock(return_value=True)
 
 app.preview_manager = MagicMock()
 app.preview_manager.get_audio_state = MagicMock(return_value=AudioPreviewState())

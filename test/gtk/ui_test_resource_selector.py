@@ -77,6 +77,8 @@ class TestResourceSelector(GajimAppWindow):
         yield from self._resources
 
 
+util.init_settings()
+
 app.storage.cache = CacheStorage(in_memory=True)
 app.storage.cache.init()
 

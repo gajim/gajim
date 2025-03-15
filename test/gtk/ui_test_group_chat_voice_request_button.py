@@ -108,6 +108,8 @@ class TestGroupChatVoiceRequestButton(GajimAppWindow):
 test_client = TestClient(ACCOUNT)
 app.get_client = MagicMock(return_value=test_client)
 
+util.init_settings()
+
 window = TestGroupChatVoiceRequestButton()
 window.show()
 

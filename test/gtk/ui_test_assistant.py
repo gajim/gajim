@@ -4,9 +4,6 @@
 
 from gi.repository import Gtk
 
-# Avoid circular imports from common.helpers
-from gajim.common import app  # type: ignore # noqa: F401
-
 from gajim.gtk.assistant import Assistant
 from gajim.gtk.assistant import Page
 
@@ -131,6 +128,8 @@ class Start(Page):
         self.complete = bool(entry.get_text())
         self.update_page_complete()
 
+
+util.init_settings()
 
 window = TestAssistant()
 window.show()

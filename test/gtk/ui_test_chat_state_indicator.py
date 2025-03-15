@@ -102,6 +102,8 @@ class TestChatStateIndicator(GajimAppWindow):
         return participants
 
 
+util.init_settings()
+
 window = TestChatStateIndicator()
 window.show()
 

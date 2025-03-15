@@ -68,6 +68,8 @@ class TestSnapshot(GajimAppWindow):
         self._image.set_from_paintable(snapshot.to_paintable())
 
 
+util.init_settings()
+
 window = TestSnapshot()
 window.show()
 

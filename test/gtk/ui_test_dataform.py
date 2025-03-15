@@ -139,6 +139,8 @@ app.bob_cache["sha1+8f35fef110ffc5df08d579a50083ff9308fb6242"] = b64decode(
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value="rgb(100, 100, 255)")
 
+util.init_settings()
+
 window = TestDataFormWindow()
 window.show()
 

@@ -58,6 +58,8 @@ class TestGroupchatState(GajimAppWindow):
 
 app.get_client = MagicMock()
 
+util.init_settings()
+
 window = TestGroupchatState()
 window.show()
 

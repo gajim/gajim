@@ -8,7 +8,6 @@ from gi.repository import Gdk
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.settings import Settings
 
 from gajim.gtk.avatar import make_workspace_avatar
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
@@ -60,8 +59,8 @@ class TestWorkspaceSideBar(GajimAppWindow):
 
 
 app.window = MagicMock()
-app.settings = Settings(in_memory=True)
-app.settings.init()
+
+util.init_settings()
 
 for i in range(10):
     app.settings.add_workspace(str(i))

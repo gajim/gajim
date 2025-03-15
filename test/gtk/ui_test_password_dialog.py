@@ -10,7 +10,6 @@ from nbxmpp.protocol import JID
 
 from gajim.common import app
 from gajim.common.events import PasswordRequired
-from gajim.common.settings import Settings
 
 from gajim.gtk.password_dialog import PasswordDialog
 
@@ -19,8 +18,7 @@ from . import util
 ACCOUNT = "test"
 FROM_JID = "contact@example.org"
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
 app.settings.add_account(ACCOUNT)
 app.settings.set_account_setting(ACCOUNT, "account_label", "Test")
 

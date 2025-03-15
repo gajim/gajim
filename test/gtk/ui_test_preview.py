@@ -19,7 +19,6 @@ from gajim.common import configpaths
 from gajim.common import logging_helpers
 from gajim.common.const import CSSPriority
 from gajim.common.preview import PreviewManager
-from gajim.common.settings import Settings
 
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.dropdown import KeyValueItem
@@ -96,8 +95,7 @@ app.is_installed = MagicMock(return_value=True)
 
 logging_helpers.set_loglevels("gajim=DEBUG")
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
 app.settings.add_account(ACCOUNT)
 app.settings.set("preview_size", 400)
 

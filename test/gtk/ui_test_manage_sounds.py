@@ -6,9 +6,7 @@ import tempfile
 
 from gi.repository import Gtk
 
-from gajim.common import app
 from gajim.common import configpaths
-from gajim.common.settings import Settings
 
 from gajim.gtk.manage_sounds import ManageSounds
 
@@ -16,8 +14,7 @@ from . import util
 
 ACCOUNT = "test"
 
-app.settings = Settings(in_memory=True)
-app.settings.init()
+util.init_settings()
 
 configpaths.set_separation(True)
 configpaths.set_config_root(tempfile.gettempdir())

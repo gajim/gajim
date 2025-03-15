@@ -9,7 +9,9 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 
+from gajim.common import app
 from gajim.common.const import CSSPriority
+from gajim.common.settings import Settings
 
 from gajim.gtk.util.icons import get_icon_theme
 
@@ -32,6 +34,11 @@ def load_style(filename: str, priority: CSSPriority) -> None:
     display = Gdk.Display.get_default()
     assert display is not None
     Gtk.StyleContext.add_provider_for_display(display, provider, priority)
+
+
+def init_settings() -> None:
+    app.settings = Settings(in_memory=True)
+    app.settings.init()
 
 
 def run_app(load_default_styles: bool = True, load_custom_icons: bool = True) -> None:

@@ -35,6 +35,8 @@ def _on_error_clicked(_button: Gtk.Button) -> None:
         app.ged.raise_event(DBMigrationError(exception=e))
 
 
+util.init_settings()
+
 window = DBMigration()
 box = window.window.get_child()
 assert isinstance(box, Gtk.Box)

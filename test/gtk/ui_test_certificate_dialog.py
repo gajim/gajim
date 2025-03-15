@@ -44,6 +44,8 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 
+util.init_settings()
+
 window = CertificateDialog(None, "testacc", gio_cert)
 window.show()
 

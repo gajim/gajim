@@ -38,6 +38,8 @@ class TestApplyButtonBox(GajimAppWindow):
         print("Finished")
 
 
+util.init_settings()
+
 window = TestApplyButtonBox()
 window.show()
 

@@ -35,6 +35,8 @@ class TestNickChooser(GajimAppWindow):
         pass
 
 
+util.init_settings()
+
 window = TestNickChooser()
 window.show()
 

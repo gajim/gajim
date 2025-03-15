@@ -63,6 +63,8 @@ class TestGajimDropDown(GajimAppWindow):
         pass
 
 
+util.init_settings()
+
 window = TestGajimDropDown()
 window.show()
 

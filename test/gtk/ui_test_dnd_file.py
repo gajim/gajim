@@ -50,6 +50,8 @@ class TestDNDFile(GajimAppWindow):
         return True
 
 
+util.init_settings()
+
 window = TestDNDFile()
 window.show()
 

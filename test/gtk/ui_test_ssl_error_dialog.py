@@ -49,8 +49,9 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 -----END CERTIFICATE-----"""
 
 
-app.settings = MagicMock()
-app.settings.get_account_setting = MagicMock(return_value="myhost@example.tld")
+util.init_settings()
+app.settings.add_account("testacc")
+app.settings.set_account_setting("testacc", "address", "myhost@example.tld")
 
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 # Listing of Gio.TlsCertificateFlags:

@@ -126,6 +126,8 @@ class TestGroupchatInfo(GajimAppWindow):
 app.css_config = MagicMock()
 app.css_config.get_value = MagicMock(return_value="rgb(100, 100, 255)")
 
+util.init_settings()
+
 window = TestGroupchatInfo()
 window.show()
 

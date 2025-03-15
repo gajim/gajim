@@ -139,6 +139,8 @@ class TestVCardGrid(GajimAppWindow):
         self._is_editable = not self._is_editable
 
 
+util.init_settings()
+
 window = TestVCardGrid()
 window.show()
 

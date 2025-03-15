@@ -48,6 +48,8 @@ class TestDataFormWindow(GajimAppWindow):
         self.set_child(self._widget)
 
 
+util.init_settings()
+
 window = TestDataFormWindow()
 window.show()
 
