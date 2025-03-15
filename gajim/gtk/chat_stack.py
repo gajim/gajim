@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import logging
 import sys
-from functools import partial
 from urllib.parse import urlparse
 
 from gi.repository import Gdk
@@ -639,9 +638,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 contact.jid,
                 nick,
                 role,
-                callback=partial(
-                    self._on_affiliation_or_role_change, contact, jid, role
-                ),
+                callback=self._on_affiliation_or_role_change,
+                user_data=(contact, jid, role),
             )
 
         elif action_name == "muc-change-affiliation":
@@ -651,9 +649,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             client.get_module("MUC").set_affiliation(
                 contact.jid,
                 {jid: {"affiliation": affiliation}},
-                callback=partial(
-                    self._on_affiliation_or_role_change, contact, jid, affiliation
-                ),
+                callback=self._on_affiliation_or_role_change,
+                user_data=(contact, jid, affiliation),
             )
 
         elif action_name == "muc-request-voice":
@@ -670,13 +667,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 self._last_quoted_id = row.pk
                 self._message_action_box.insert_as_quote(row.get_text(), clear=True)
 
-    def _on_affiliation_or_role_change(
-        self,
-        muc: GroupchatContact,
-        jid: JID | str,
-        affiliation_or_role: str,
-        task: Task,
-    ) -> None:
+    def _on_affiliation_or_role_change(self, task: Task) -> None:
+        muc, jid, affiliation_or_role = task.get_user_data()
+
         try:
             result = task.finish()
         except StanzaError as error:
