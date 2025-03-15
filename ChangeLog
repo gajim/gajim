@@ -1,3 +1,22 @@
+Gajim 2.0.3 (15 Mar 2025)
+
+  New
+
+  * Store/Restore the size of dialogs
+
+  Improvements
+
+  * Group chats: Improve strings for events
+
+  Bug Fixes
+
+  * MUC: Fix handling affiliation/role change error handling
+  * StatusIcon: Show correct state for mute sounds option
+  * AdHoc: Don't fail if dataform widget is not set when cancelling (#12227)
+  * Chat: Send read marker only when chat is at bottom
+  * ChatControl: Handle autoscroll-changed without active chat (#12226)
+  * MUC: Don’t fail on displaying affiliation change
+
 Gajim 2.0.2 (10 Mar 2025)
 
   New
