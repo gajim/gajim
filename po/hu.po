@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 17:39+0000\n"
-"PO-Revision-Date: 2025-03-09 08:12+0000\n"
+"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"PO-Revision-Date: 2025-03-11 05:55+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -24,10 +24,6 @@ msgstr " (Videóhívás)"
 
 msgid " (Voice Call)"
 msgstr " (Hanghívás)"
-
-#, python-brace-format
-msgid " by {actor}"
-msgstr " {actor} döntése alapján"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -77,6 +73,18 @@ msgid "%(name)s cancelled the transfer (%(reason)s)"
 msgstr "%(name)s leállította a fájlátvitelt (%(reason)s)"
 
 #, python-format
+msgid "%(nick)s has been banned by %(actor)s"
+msgstr "%(nick)s ki lett tiltva %(actor)s által"
+
+#, python-format
+msgid "%(nick)s has been kicked by %(actor)s"
+msgstr "%(nick)s ki lett dobva %(actor)s által"
+
+#, python-format
+msgid "%(nick)s is now %(affiliation)s of this group chat"
+msgstr "%(nick)s mostantól %(affiliation)s ebben a társalgóban"
+
+#, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
 
@@ -103,6 +111,14 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(authenticated)s %(type)s titkosítás"
 
 #, python-format
+msgid "%(user)s is now %(role)s of this group chat"
+msgstr "%(user)s mostantól %(role)s ebben a társalgóban"
+
+#, python-format
+msgid "%(user)s now has the following hats: %(hats)s"
+msgstr "%(user)s hatáskörei mostantól: %(hats)s"
+
+#, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr "%s (én)"
@@ -124,8 +140,20 @@ msgid "%s can be joined by invite only."
 msgstr "%s csak meghívóval léphet be."
 
 #, python-format
+msgid "%s has been banned"
+msgstr "%s ki lett tiltva"
+
+#, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%s meg lett hívva ebbe a társalgóba"
+
+#, python-format
+msgid "%s has been kicked"
+msgstr "%s ki lett dobva"
+
+#, python-format
+msgid "%s has been removed from this group chat"
+msgstr "%s törölve lett ebből a társalgóból"
 
 #, python-format
 msgid "%s has joined"
@@ -198,39 +226,22 @@ msgstr "ny.h. %s"
 msgid "'@' is missing in address. Are you sure this is correct?"
 msgstr "Hiányzik a „@” a címből. Biztos így helyes?"
 
-#, fuzzy, python-format
+#, python-format
+msgid "(changed by %s)"
+msgstr "(%s által módosítva)"
+
+#, python-format
 msgid "(reason: %s)"
-msgstr "Ok: %s"
+msgstr "(ok: %s)"
 
-#, python-format
-msgid "** %s lost all their hats!"
-msgstr "** %s minden hatáskörét elvesztette!"
+msgid "(reason: affiliation changed)"
+msgstr "(ok: tagsági szint változása)"
 
-#, python-brace-format
-msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
-msgstr "** {nick} tagsági szintje mostantól {affiliation}{actor}{reason}"
+msgid "(reason: group chat configuration changed to members-only)"
+msgstr "(ok: a társalgóba mostantól csak tagok léphetnek be)"
 
-#, python-brace-format
-msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr "** {nick} szerepköre mostantól {role}{actor}{reason}"
-
-#, python-format
-msgid "** The hats of %s are now %s"
-msgstr "** %s hatásköre mostantól: %s"
-
-msgid "** You lost all your hats!"
-msgstr "** Minden hatásköröm elveszett!"
-
-#, python-brace-format
-msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr "** A tagsági szintem mostantól {affiliation}{actor}{reason}"
-
-#, python-brace-format
-msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr "** A szerepköröm mostantól {role}{actor}{reason}"
-
-msgid "** Your hats are now "
-msgstr "** A hatásköröm mostantól: "
+msgid "(reason: system shutdown)"
+msgstr "(ok: rendszerleállás)"
 
 msgid "1 Day"
 msgstr "1 nap"
@@ -264,12 +275,6 @@ msgstr "6 hónap"
 
 msgid "8 hours"
 msgstr "8 óra"
-
-msgid ": Affiliation changed"
-msgstr ": a tagság elvétele"
-
-msgid ": Group chat configuration changed to members-only"
-msgstr ": a társalgóba mostantól csak tagok léphetnek be"
 
 #, python-format
 msgid ""
@@ -585,6 +590,10 @@ msgstr "Tagsági szint"
 msgid "Affiliations"
 msgstr "Tagság"
 
+#, python-format
+msgid "Affiliations of %(nick)s to this group chat have been removed"
+msgstr "%(nick)s tagsági szintje ebben a társalgóban törölve lett"
+
 msgid "After"
 msgstr "Újabb, mint"
 
@@ -605,6 +614,13 @@ msgstr "Minden beszélgetés"
 
 msgid "All files"
 msgstr "Minden fájl"
+
+#, python-format
+msgid "All hats of %s have been removed"
+msgstr "%s összes hatásköre törölve lett"
+
+msgid "All of your hats have been removed"
+msgstr "Minden hatásköröm törölve lett"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr "A társalgóban jelenlévők látják egymás címét"
@@ -2231,9 +2247,8 @@ msgstr "A társalgó kereséssel megtalálható"
 msgid "Group chat does not exist"
 msgstr "A társalgó nem létezik"
 
-#, python-format
-msgid "Group chat has been destroyed%s"
-msgstr "A társalgó megszűnt%s"
+msgid "Group chat has been destroyed"
+msgstr "A társalgó megszűnt"
 
 msgid "Group chat is closed"
 msgstr "A társalgó be van zárva"
@@ -3828,6 +3843,10 @@ msgctxt "Profile"
 msgid "Role"
 msgstr "Szerepkör"
 
+#, python-format
+msgid "Roles of %s have been removed in this group chat"
+msgstr "%s szerepkörei ebben a társalgóban törölve lettek"
+
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -4736,13 +4755,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "A saját XMPP-címem"
 
-#, fuzzy
 msgid "This message has been moderated"
-msgstr "Ezt az üzenetet%s moderálta."
+msgstr "Ez az üzenet moderálva lett"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated by %s"
-msgstr "Ezt az üzenetet%s moderálta."
+msgstr "Ezt az üzenetet %s moderálta"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5292,6 +5310,14 @@ msgstr ""
 "elérhető szolgáltatásokat."
 
 #, python-format
+msgid "You are now %(affiliation)s of this group chat"
+msgstr "Mostantól ebben a társalgóban %(affiliation)s vagyok"
+
+#, python-format
+msgid "You are now %(role)s of this group chat"
+msgstr "Mostantól ebben a társalgóban %(role)s vagyok"
+
+#, python-format
 msgid "You are now known as %s"
 msgstr "A becenevem mostantól: %s"
 
@@ -5338,28 +5364,36 @@ msgstr ""
 msgid "You don't share your status with this contact"
 msgstr "A jelenléti állapot nincs megosztva az ismerőssel"
 
-#, python-brace-format
-msgid "You have been banned{actor}{reason}"
-msgstr "Ki lettem tiltva a társalgóból{actor}{reason}"
+msgid "You have been banned"
+msgstr "Ki lettem tiltva"
+
+#, python-format
+msgid "You have been banned by %s"
+msgstr "%s által ki lettem tiltva"
 
 #, python-format
 msgid "You have been invited to %s"
 msgstr "Egy %s nevű társalgóba szóló meghívó érkezett"
 
-#, python-brace-format
-msgid "You have been kicked{actor}{reason}"
-msgstr "Ki lettem dobva a társalgóból{actor}{reason}"
+msgid "You have been kicked"
+msgstr "Ki lettem dobva"
 
-#, python-brace-format
-msgid "You have been removed from the group chat{actor}{reason}"
-msgstr "El lettem távolítva a társalgóból{actor}{reason}"
+#, python-format
+msgid "You have been kicked by %s"
+msgstr "%s által ki lettem dobva"
+
+msgid "You have been removed from this group chat"
+msgstr "El lettem távolítva a társalgóból"
+
+#, python-format
+msgid "You have been removed from this group chat by %s"
+msgstr "%s eltávolított ebből a társalgóból"
 
 msgid "You have insufficient permissions"
 msgstr "Nincs engedélyezve a művelet"
 
-#, python-brace-format
-msgid "You have left due to an error{reason}"
-msgstr "A társalgó egy hiba miatt el lett hagyva{reason}"
+msgid "You have left due to an error"
+msgstr "A társalgó egy hiba miatt el lett hagyva"
 
 msgid "You have to be connected to create a group chat."
 msgstr "Társalgó létrehozásához előbb kapcsolódni kell."
@@ -5380,6 +5414,10 @@ msgstr ""
 msgid "You need Owner permission to change the configuration"
 msgstr "A beállítás megváltoztatásához tulajdonosi engedély kell"
 
+#, python-format
+msgid "You now have the following hats: %s"
+msgstr "A hatásköreim mostantól: %s"
+
 msgid "You requested to see this contact's online status"
 msgstr "Fel lett kérve a jelenléti állapotának megosztására"
 
@@ -5397,6 +5435,9 @@ msgstr "XMPP-cím (pl.: felhasznalo@pelda.hu)"
 
 msgid "Your account has has been removed successfully."
 msgstr "A fiók törlése sikerült."
+
+msgid "Your affiliations to this group chat have been removed"
+msgstr "A tagsági szintjeim ebben a társalgóban törölve lettek"
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Az archiválási beállítások mentése sikerült."
@@ -5425,6 +5466,9 @@ msgstr "A jelszó módosítása sikerült."
 
 msgid "Your public key or authentication certificate"
 msgstr "A saját nyilvános kulcs vagy hitelesítő tanúsítvány"
+
+msgid "Your roles in this group chat have been removed"
+msgstr "A szerepköreim ebben a társalgóban törölve lettek"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
@@ -5867,18 +5911,6 @@ msgid "we would like to thank all the package maintainers."
 msgstr "szeretnénk köszönetet mondani minden csomagkarbantartónak."
 
 #, python-brace-format
-msgid "{nick} has been banned{actor}{reason}"
-msgstr "{nick} ki lett tiltva{actor}{reason}"
-
-#, python-brace-format
-msgid "{nick} has been kicked{actor}{reason}"
-msgstr "{nick} ki lett dobva{actor}{reason}"
-
-#, python-brace-format
-msgid "{nick} has been removed from the group chat{by}{reason}"
-msgstr "{nick} el lett távolítva a társalgóból{by}{reason}"
-
-#, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "{nick} kilépett egy hiba miatt{reason}"
 
@@ -5914,6 +5946,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid " by %s"
 #~ msgstr " %s"
 
+#, python-brace-format
+#~ msgid " by {actor}"
+#~ msgstr " {actor} döntése alapján"
+
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s társalgó található"
@@ -5933,6 +5969,37 @@ msgstr "…vagy ide is ejthető egy kép"
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
 #~ msgstr "(%(filesize_unit)s/s)"
+
+#, python-format
+#~ msgid "** %s lost all their hats!"
+#~ msgstr "** %s minden hatáskörét elvesztette!"
+
+#, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr "** {nick} tagsági szintje mostantól {affiliation}{actor}{reason}"
+
+#, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr "** {nick} szerepköre mostantól {role}{actor}{reason}"
+
+#, python-format
+#~ msgid "** The hats of %s are now %s"
+#~ msgstr "** %s hatásköre mostantól: %s"
+
+#~ msgid "** You lost all your hats!"
+#~ msgstr "** Minden hatásköröm elveszett!"
+
+#, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr "** A tagsági szintem mostantól {affiliation}{actor}{reason}"
+
+#, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "** A szerepköröm mostantól {role}{actor}{reason}"
+
+#~ msgid "** Your hats are now "
+#~ msgstr "** A hatásköröm mostantól: "
 
 #, fuzzy
 #~ msgctxt "Profile"
@@ -6786,3 +6853,7 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "yesterday "
 #~ msgstr "tegnap "
+
+#, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "{nick} el lett távolítva a társalgóból{by}{reason}"

@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 17:39+0000\n"
-"PO-Revision-Date: 2025-03-10 06:37+0000\n"
+"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"PO-Revision-Date: 2025-03-15 12:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -34,10 +34,6 @@ msgstr " (Видеозвонок)"
 
 msgid " (Voice Call)"
 msgstr " Голосовой звонок"
-
-#, python-brace-format
-msgid " by {actor}"
-msgstr " от {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -91,6 +87,18 @@ msgstr ""
 msgid "%(name)s cancelled the transfer (%(reason)s)"
 msgstr "%(name)s отменил передачу (%(reason)s)"
 
+#, fuzzy, python-format
+msgid "%(nick)s has been banned by %(actor)s"
+msgstr "{nick} был забанен {actor}{reason}"
+
+#, fuzzy, python-format
+msgid "%(nick)s has been kicked by %(actor)s"
+msgstr "{nick} был выгнан {actor} {reason}"
+
+#, fuzzy, python-format
+msgid "%(nick)s is now %(affiliation)s of this group chat"
+msgstr "%s приглашен в групповой чат"
+
 #, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
@@ -118,6 +126,14 @@ msgstr "%(received)s из %(max)s"
 msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "%(type)s шифрование активно %(authenticated)s."
 
+#, fuzzy, python-format
+msgid "%(user)s is now %(role)s of this group chat"
+msgstr "%(owner_or_admin_or_member)s этого группового чата"
+
+#, python-format
+msgid "%(user)s now has the following hats: %(hats)s"
+msgstr "%(user)s сейчас имеет следующие шляпы: %(hats)s"
+
 #, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
@@ -139,8 +155,20 @@ msgstr "%s запрашивает доступ к просмотру вашег�
 msgid "%s can be joined by invite only."
 msgstr "%s может присоединиться только по приглашению."
 
+#, fuzzy, python-format
+msgid "%s has been banned"
+msgstr "%s присоединился"
+
 #, python-format
 msgid "%s has been invited to this group chat"
+msgstr "%s приглашен в групповой чат"
+
+#, fuzzy, python-format
+msgid "%s has been kicked"
+msgstr "%s присоединился"
+
+#, fuzzy, python-format
+msgid "%s has been removed from this group chat"
 msgstr "%s приглашен в групповой чат"
 
 #, python-format
@@ -215,38 +243,23 @@ msgid "'@' is missing in address. Are you sure this is correct?"
 msgstr "'@' отсутствует в адресе. Вы уверены в его правильности?"
 
 #, fuzzy, python-format
+msgid "(changed by %s)"
+msgstr "Изменено %s"
+
+#, fuzzy, python-format
 msgid "(reason: %s)"
 msgstr "Причина: %s"
 
-#, python-format
-msgid "** %s lost all their hats!"
-msgstr "** %s потеряли все свои шляпы!"
+#, fuzzy
+msgid "(reason: affiliation changed)"
+msgstr ": Роль изменена"
 
-#, python-brace-format
-msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
-msgstr "** Ранг {nick} изменён на {affiliation} {actor} {reason}"
+#, fuzzy
+msgid "(reason: group chat configuration changed to members-only)"
+msgstr ": Параметры группового чата изменены на «доступ только для участников»"
 
-#, python-brace-format
-msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr "** {nick} присвоены обязанности {role} {actor} {reason}"
-
-#, fuzzy, python-format
-msgid "** The hats of %s are now %s"
-msgstr "** Шляпы %s теперь %"
-
-msgid "** You lost all your hats!"
-msgstr "** Вы потеряли все ваши шляпы!"
-
-#, python-brace-format
-msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr "** Ваш ранг изменён на {affiliation} {actor} {reason}"
-
-#, python-brace-format
-msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr "** Вам присвоены обязанности {role} {actor} {reason}"
-
-msgid "** Your hats are now "
-msgstr "** Ваши шляпы сейчас "
+msgid "(reason: system shutdown)"
+msgstr "(причина: завершение работы)"
 
 msgid "1 Day"
 msgstr "1 день"
@@ -280,12 +293,6 @@ msgstr "6 месяцев"
 
 msgid "8 hours"
 msgstr "8 часов"
-
-msgid ": Affiliation changed"
-msgstr ": Роль изменена"
-
-msgid ": Group chat configuration changed to members-only"
-msgstr ": Параметры группового чата изменены на «доступ только для участников»"
 
 #, python-format
 msgid ""
@@ -606,6 +613,10 @@ msgstr "Роль"
 msgid "Affiliations"
 msgstr "Роли"
 
+#, python-format
+msgid "Affiliations of %(nick)s to this group chat have been removed"
+msgstr "Приглашения для %(nick)s в этом групповом чате были удалены"
+
 msgid "After"
 msgstr "После"
 
@@ -627,6 +638,14 @@ msgstr "Все состояния чата"
 
 msgid "All files"
 msgstr "Все файлы"
+
+#, python-format
+msgid "All hats of %s have been removed"
+msgstr "Все шляпы с %s были сняты"
+
+#, fuzzy
+msgid "All of your hats have been removed"
+msgstr "Создан новый групповой чат"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Все остальные участники группового чата могут видеть ваш адрес XMPP"
@@ -2283,8 +2302,8 @@ msgstr "Групповой чат можно найти через поиск"
 msgid "Group chat does not exist"
 msgstr "Групповой чат не существует"
 
-#, python-format
-msgid "Group chat has been destroyed%s"
+#, fuzzy
+msgid "Group chat has been destroyed"
 msgstr "Групповой чат уничтожен%s"
 
 msgid "Group chat is closed"
@@ -3942,6 +3961,10 @@ msgctxt "Profile"
 msgid "Role"
 msgstr "Обязанность"
 
+#, fuzzy, python-format
+msgid "Roles of %s have been removed in this group chat"
+msgstr "%s приглашен в групповой чат"
+
 msgid "SHA-1"
 msgstr "SHA-1"
 
@@ -5440,6 +5463,14 @@ msgid ""
 "browse available services"
 msgstr "Для просмотра сервисов необходимо подключиться к серверу"
 
+#, fuzzy, python-format
+msgid "You are now %(affiliation)s of this group chat"
+msgstr "Вы покинули этот групповой чат"
+
+#, fuzzy, python-format
+msgid "You are now %(role)s of this group chat"
+msgstr "Вы покинули этот групповой чат"
+
 #, python-format
 msgid "You are now known as %s"
 msgstr "Ваше новое имя %s"
@@ -5485,27 +5516,39 @@ msgstr "У вас отсутствуют разрешения на создан�
 msgid "You don't share your status with this contact"
 msgstr "Вы не делитесь статусом с этим контактом"
 
-#, python-brace-format
-msgid "You have been banned{actor}{reason}"
+#, fuzzy
+msgid "You have been banned"
 msgstr "Вы забанены{actor}{reason}"
+
+#, fuzzy, python-format
+msgid "You have been banned by %s"
+msgstr "Вас пригласили в %s"
 
 #, python-format
 msgid "You have been invited to %s"
 msgstr "Вас пригласили в %s"
 
-#, python-brace-format
-msgid "You have been kicked{actor}{reason}"
+#, fuzzy
+msgid "You have been kicked"
 msgstr "Вас выгнали{actor}{reason}"
 
-#, python-brace-format
-msgid "You have been removed from the group chat{actor}{reason}"
+#, fuzzy, python-format
+msgid "You have been kicked by %s"
+msgstr "Вас пригласили в %s"
+
+#, fuzzy
+msgid "You have been removed from this group chat"
+msgstr "Вас выгнали из группового чата {actor} {reason}"
+
+#, fuzzy, python-format
+msgid "You have been removed from this group chat by %s"
 msgstr "Вас выгнали из группового чата {actor} {reason}"
 
 msgid "You have insufficient permissions"
 msgstr "У вас недостаточно прав"
 
-#, python-brace-format
-msgid "You have left due to an error{reason}"
+#, fuzzy
+msgid "You have left due to an error"
 msgstr "Вы вышли из чата в результате ошибки{reason}"
 
 msgid "You have to be connected to create a group chat."
@@ -5527,6 +5570,10 @@ msgstr ""
 msgid "You need Owner permission to change the configuration"
 msgstr "Для изменения параметров конфигурации необходимы права владельца"
 
+#, python-format
+msgid "You now have the following hats: %s"
+msgstr "Теперь у вас есть следующие шляпы: %s"
+
 msgid "You requested to see this contact's online status"
 msgstr "Был отправлен запрос на просмотр сетевого статуса контакта"
 
@@ -5545,6 +5592,9 @@ msgstr "Ваш XMPP-адрес (например, user@example.org)"
 
 msgid "Your account has has been removed successfully."
 msgstr "Ваша учётная запись успешно удалена."
+
+msgid "Your affiliations to this group chat have been removed"
+msgstr "Ваше приглашение в этом групповом чате было удалено"
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Ваши параметры архивирования успешно сохранены."
@@ -5573,6 +5623,10 @@ msgstr "Ваш пароль был успешно изменён."
 
 msgid "Your public key or authentication certificate"
 msgstr "Ваш публичный ключ или сертификат аутентификации"
+
+#, fuzzy
+msgid "Your roles in this group chat have been removed"
+msgstr "Создан новый групповой чат"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
@@ -6028,18 +6082,6 @@ msgid "we would like to thank all the package maintainers."
 msgstr "мы хотели бы поблагодарить всех мейнтейнеров пакетов."
 
 #, python-brace-format
-msgid "{nick} has been banned{actor}{reason}"
-msgstr "{nick} был забанен {actor}{reason}"
-
-#, python-brace-format
-msgid "{nick} has been kicked{actor}{reason}"
-msgstr "{nick} был выгнан {actor} {reason}"
-
-#, python-brace-format
-msgid "{nick} has been removed from the group chat{by}{reason}"
-msgstr "{nick} был удалён из группового чата {by} {reason}"
-
-#, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "{nick} вышел из чата в результате ошибки{reason}"
 
@@ -6066,6 +6108,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid " by %s"
 #~ msgstr "Изменено %s"
 
+#, python-brace-format
+#~ msgid " by {actor}"
+#~ msgstr " от {actor}"
+
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "Найдено %s групповых чатов"
@@ -6085,6 +6131,37 @@ msgstr "…или перетащите его сюда"
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
 #~ msgstr "(%(filesize_unit)s/c)"
+
+#, python-format
+#~ msgid "** %s lost all their hats!"
+#~ msgstr "** %s потеряли все свои шляпы!"
+
+#, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr "** Ранг {nick} изменён на {affiliation} {actor} {reason}"
+
+#, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr "** {nick} присвоены обязанности {role} {actor} {reason}"
+
+#, fuzzy, python-format
+#~ msgid "** The hats of %s are now %s"
+#~ msgstr "** Шляпы %s теперь %"
+
+#~ msgid "** You lost all your hats!"
+#~ msgstr "** Вы потеряли все ваши шляпы!"
+
+#, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr "** Ваш ранг изменён на {affiliation} {actor} {reason}"
+
+#, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "** Вам присвоены обязанности {role} {actor} {reason}"
+
+#~ msgid "** Your hats are now "
+#~ msgstr "** Ваши шляпы сейчас "
 
 #~ msgid "<Description>"
 #~ msgstr "<Описание>"
@@ -6926,3 +7003,7 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "yesterday "
 #~ msgstr "Вчера"
+
+#, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "{nick} был удалён из группового чата {by} {reason}"

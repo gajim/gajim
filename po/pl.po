@@ -6,11 +6,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 17:39+0000\n"
-"PO-Revision-Date: 2025-03-09 10:12+0000\n"
+"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"PO-Revision-Date: 2025-03-11 10:12+0000\n"
 "Last-Translator: Grzegorz Szymaszek <gszymaszek@short.pl>\n"
-"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/"
-">\n"
+"Language-Team: Polish <https://translate.gajim.org/projects/gajim/master/pl/>"
+"\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,10 +26,6 @@ msgstr " (rozmowa wideo)"
 
 msgid " (Voice Call)"
 msgstr " (rozmowa głosowa)"
-
-#, python-brace-format
-msgid " by {actor}"
-msgstr " przez {actor}"
 
 #, python-format
 msgid "%(contact)s declined your invitation to %(chat)s"
@@ -82,6 +78,18 @@ msgid "%(name)s cancelled the transfer (%(reason)s)"
 msgstr "%(name)s anulował transfer (%(reason)s)"
 
 #, python-format
+msgid "%(nick)s has been banned by %(actor)s"
+msgstr "%(nick)s został zbanowany przez %(actor)s"
+
+#, python-format
+msgid "%(nick)s has been kicked by %(actor)s"
+msgstr "%(nick)s został wyrzucony przez %(actor)s"
+
+#, python-format
+msgid "%(nick)s is now %(affiliation)s of this group chat"
+msgstr "%(nick)s jest teraz %(affiliation)s tej rozmowy grupowej"
+
+#, python-format
 msgid "%(nickname)s:"
 msgstr "%(nickname)s:"
 
@@ -109,6 +117,14 @@ msgid "%(type)s encryption is active %(authenticated)s."
 msgstr "Szyfrowanie %(type)s jest aktywne %(authenticated)s."
 
 #, python-format
+msgid "%(user)s is now %(role)s of this group chat"
+msgstr "%(user)s jest teraz %(role)s w tej rozmowy grupowej"
+
+#, python-format
+msgid "%(user)s now has the following hats: %(hats)s"
+msgstr "%(user)s nosi teraz następujące kapelusze: %(hats)s"
+
+#, python-format
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr "%s (Ty)"
@@ -130,8 +146,20 @@ msgid "%s can be joined by invite only."
 msgstr "%s może dołączyć jedynie przez zaproszenie."
 
 #, python-format
+msgid "%s has been banned"
+msgstr "%s został zbanowany"
+
+#, python-format
 msgid "%s has been invited to this group chat"
 msgstr "%s został(a) zaproszony/a to tej rozmowy grupowej"
+
+#, python-format
+msgid "%s has been kicked"
+msgstr "%s został wyrzucony"
+
+#, python-format
+msgid "%s has been removed from this group chat"
+msgstr "%s został usunięty z tej rozmowy grupowej"
 
 #, python-format
 msgid "%s has joined"
@@ -204,42 +232,24 @@ msgstr "%s W"
 msgid "'@' is missing in address. Are you sure this is correct?"
 msgstr "Brakuje „@” w adresie. Czy jesteś pewien, że to jest prawidłowe?"
 
-#, fuzzy, python-format
+#, python-format
+msgid "(changed by %s)"
+msgstr "(zmieniony przez %s)"
+
+#, python-format
 msgid "(reason: %s)"
-msgstr "Powód: %s"
+msgstr "(powód: %s)"
 
-#, python-format
-msgid "** %s lost all their hats!"
-msgstr "** %s stracił wszystkie swoje kapelusze!"
+msgid "(reason: affiliation changed)"
+msgstr "(powód: zmieniona przynależność)"
 
-#, python-brace-format
-msgid "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+msgid "(reason: group chat configuration changed to members-only)"
 msgstr ""
-"** Przynależność użytkownika {nick} została ustawiona na {affiliation}{actor}"
-"{reason}"
+"(powód: konfiguracja rozmowy grupowej została zmieniona na „tylko dla "
+"członków”)"
 
-#, python-brace-format
-msgid "** Role of {nick} has been set to {role}{actor}{reason}"
-msgstr "** Rola użytkownika {nick} została zmieniona na {role}{actor}{reason}"
-
-#, python-format
-msgid "** The hats of %s are now %s"
-msgstr "** Kapelusze od %s są teraz %s"
-
-msgid "** You lost all your hats!"
-msgstr "** Straciłeś wszystkie swoje kapelusze!"
-
-#, python-brace-format
-msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
-msgstr ""
-"** Twoja przynależność została ustawiona na {affiliation}{actor}{reason}"
-
-#, python-brace-format
-msgid "** Your Role has been set to {role}{actor}{reason}"
-msgstr "** Twoja rola została zmieniona na {role}{actor}{reason}"
-
-msgid "** Your hats are now "
-msgstr "** Twoje kapelusze są teraz "
+msgid "(reason: system shutdown)"
+msgstr "(powód: wyłączenie systemu)"
 
 msgid "1 Day"
 msgstr "1 dzień"
@@ -273,13 +283,6 @@ msgstr "6 miesięcy"
 
 msgid "8 hours"
 msgstr "8 godzin"
-
-msgid ": Affiliation changed"
-msgstr ": Przynależność została zmieniona"
-
-msgid ": Group chat configuration changed to members-only"
-msgstr ""
-": Konfiguracja tej rozmowy grupowej została zmieniona na „tylko dla członków”"
 
 #, python-format
 msgid ""
@@ -598,6 +601,10 @@ msgstr "Afiliacja"
 msgid "Affiliations"
 msgstr "Afiliacje"
 
+#, python-format
+msgid "Affiliations of %(nick)s to this group chat have been removed"
+msgstr "Przynależność %(nick)s do tej rozmowy grupowej została usunięta"
+
 msgid "After"
 msgstr "Po"
 
@@ -618,6 +625,13 @@ msgstr "Wszystkie rozmowy"
 
 msgid "All files"
 msgstr "Wszystkie pliki"
+
+#, python-format
+msgid "All hats of %s have been removed"
+msgstr "Wszystkie kapelusze %s zostały usunięte"
+
+msgid "All of your hats have been removed"
+msgstr "Wszystkie Twoje kapelusze zostały usunięte"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr "Wszyscy inni uczestnicy rozmowy grupowej mogą zobaczyć Twój adres XMPP"
@@ -2241,9 +2255,8 @@ msgstr "Rozmowa grupowa może być znaleziona przez wyszukiwanie"
 msgid "Group chat does not exist"
 msgstr "Rozmowa grupowa nie istnieje"
 
-#, python-format
-msgid "Group chat has been destroyed%s"
-msgstr "Rozmowa grupowa została zniszczona%s"
+msgid "Group chat has been destroyed"
+msgstr "Rozmowa grupowa została zniszczona"
 
 msgid "Group chat is closed"
 msgstr "Rozmowa grupowa jest zamknięta"
@@ -3849,6 +3862,10 @@ msgctxt "Profile"
 msgid "Role"
 msgstr "Stanowisko"
 
+#, python-format
+msgid "Roles of %s have been removed in this group chat"
+msgstr "Role %s zostały usunięte w tej rozmowie grupowej"
+
 msgid "SHA-1"
 msgstr "SHA‑1"
 
@@ -4765,13 +4782,12 @@ msgstr ""
 msgid "This is your XMPP address"
 msgstr "To jest Twój adres XMPP"
 
-#, fuzzy
 msgid "This message has been moderated"
-msgstr "Ta wiadomość została zmoderowana%s."
+msgstr "Ta wiadomość została zmoderowana"
 
-#, fuzzy, python-format
+#, python-format
 msgid "This message has been moderated by %s"
-msgstr "Ta wiadomość została zmoderowana%s."
+msgstr "Ta wiadomość została zmoderowana przez %s"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5331,6 +5347,14 @@ msgstr ""
 "dostępnych usług"
 
 #, python-format
+msgid "You are now %(affiliation)s of this group chat"
+msgstr "Jesteś teraz %(affiliation)s tej rozmowy grupowej"
+
+#, python-format
+msgid "You are now %(role)s of this group chat"
+msgstr "Jesteś teraz %(role)s w tej rozmowie grupowej"
+
+#, python-format
 msgid "You are now known as %s"
 msgstr "Występujesz od teraz pod nazwą %s"
 
@@ -5377,28 +5401,36 @@ msgstr ""
 msgid "You don't share your status with this contact"
 msgstr "Nie udostępniasz swojego statusu temu kontaktowi"
 
-#, python-brace-format
-msgid "You have been banned{actor}{reason}"
-msgstr "Zostałeś/aś zbanowany/a{actor}{reason}"
+msgid "You have been banned"
+msgstr "Zostałeś zbanowany"
+
+#, python-format
+msgid "You have been banned by %s"
+msgstr "Zostałeś zbanowany przez %s"
 
 #, python-format
 msgid "You have been invited to %s"
 msgstr "Zostałeś zaproszony do %s"
 
-#, python-brace-format
-msgid "You have been kicked{actor}{reason}"
-msgstr "Zostałeś/aś wyrzucony/a{actor}{reason}"
+msgid "You have been kicked"
+msgstr "Zostałeś wyrzucony"
 
-#, python-brace-format
-msgid "You have been removed from the group chat{actor}{reason}"
-msgstr "Zostałeś/aś usunięty/a z tej rozmowy grupowej{actor}{reason}"
+#, python-format
+msgid "You have been kicked by %s"
+msgstr "Zostałeś wyrzucony przez %s"
+
+msgid "You have been removed from this group chat"
+msgstr "Zostałeś usunięty z tej rozmowy grupowej"
+
+#, python-format
+msgid "You have been removed from this group chat by %s"
+msgstr "Zostałeś usunięty z tej rozmowy grupowej przez %s"
 
 msgid "You have insufficient permissions"
 msgstr "Masz niewystarczające uprawnienia"
 
-#, python-brace-format
-msgid "You have left due to an error{reason}"
-msgstr "Wyszedłeś/wyszłaś z powodu błędu{reason}"
+msgid "You have left due to an error"
+msgstr "Opuściłeś z powodu błędu"
 
 msgid "You have to be connected to create a group chat."
 msgstr "Musisz być połączony przed utworzeniem rozmowy grupowej."
@@ -5419,6 +5451,10 @@ msgstr ""
 msgid "You need Owner permission to change the configuration"
 msgstr "Potrzebujesz uprawnień właściciela, żeby móc zmieniać konfigurację"
 
+#, python-format
+msgid "You now have the following hats: %s"
+msgstr "Obecnie masz następujące kapelusze: %s"
+
 msgid "You requested to see this contact's online status"
 msgstr "Zażądałeś możliwości widzenia stanu połączenia tego kontaktu"
 
@@ -5437,6 +5473,9 @@ msgstr "Twój adres XMPP (np. uzytkownik@example.org)"
 
 msgid "Your account has has been removed successfully."
 msgstr "Twoje konto zostało pomyślnie usunięte."
+
+msgid "Your affiliations to this group chat have been removed"
+msgstr "Twoje przynależności do tej rozmowy grupowej zostały usunięte"
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Twoje preferencje archiwizacji zostały pomyślnie zapisane."
@@ -5465,6 +5504,9 @@ msgstr "Twoje hasło zostało zmienione."
 
 msgid "Your public key or authentication certificate"
 msgstr "Twój klucz publiczny lub certyfikat uwierzytelnienia"
+
+msgid "Your roles in this group chat have been removed"
+msgstr "Twoje role w tej rozmowie grupowej zostały usunięte"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
@@ -5913,18 +5955,6 @@ msgid "we would like to thank all the package maintainers."
 msgstr "chcielibyśmy podziękować wszystkim opiekunom pakietów."
 
 #, python-brace-format
-msgid "{nick} has been banned{actor}{reason}"
-msgstr "{nick} został(a) zabanowany/a{actor}{reason}"
-
-#, python-brace-format
-msgid "{nick} has been kicked{actor}{reason}"
-msgstr "{nick} został(a) wyrzucony/a{actor}{reason}"
-
-#, python-brace-format
-msgid "{nick} has been removed from the group chat{by}{reason}"
-msgstr "{nick} został(a) usunięty/a z tej rozmowy grupowej{by}{reason}"
-
-#, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "{nick} wyszedł/wyszła z powodu błędu{reason}"
 
@@ -5951,6 +5981,10 @@ msgstr "…lub upuść tutaj"
 #~ msgid " by %s"
 #~ msgstr " przez %s"
 
+#, python-brace-format
+#~ msgid " by {actor}"
+#~ msgstr " przez {actor}"
+
 #, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "Znaleziono %s rozmów grupowych"
@@ -5970,6 +6004,41 @@ msgstr "…lub upuść tutaj"
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
 #~ msgstr "(%(filesize_unit)s/ów)"
+
+#, python-format
+#~ msgid "** %s lost all their hats!"
+#~ msgstr "** %s stracił wszystkie swoje kapelusze!"
+
+#, python-brace-format
+#~ msgid ""
+#~ "** Affiliation of {nick} has been set to {affiliation}{actor}{reason}"
+#~ msgstr ""
+#~ "** Przynależność użytkownika {nick} została ustawiona na {affiliation}"
+#~ "{actor}{reason}"
+
+#, python-brace-format
+#~ msgid "** Role of {nick} has been set to {role}{actor}{reason}"
+#~ msgstr ""
+#~ "** Rola użytkownika {nick} została zmieniona na {role}{actor}{reason}"
+
+#, python-format
+#~ msgid "** The hats of %s are now %s"
+#~ msgstr "** Kapelusze od %s są teraz %s"
+
+#~ msgid "** You lost all your hats!"
+#~ msgstr "** Straciłeś wszystkie swoje kapelusze!"
+
+#, python-brace-format
+#~ msgid "** Your Affiliation has been set to {affiliation}{actor}{reason}"
+#~ msgstr ""
+#~ "** Twoja przynależność została ustawiona na {affiliation}{actor}{reason}"
+
+#, python-brace-format
+#~ msgid "** Your Role has been set to {role}{actor}{reason}"
+#~ msgstr "** Twoja rola została zmieniona na {role}{actor}{reason}"
+
+#~ msgid "** Your hats are now "
+#~ msgstr "** Twoje kapelusze są teraz "
 
 #, fuzzy
 #~ msgctxt "Profile"
@@ -6823,3 +6892,7 @@ msgstr "…lub upuść tutaj"
 #, fuzzy
 #~ msgid "yesterday "
 #~ msgstr "Wczoraj"
+
+#, python-brace-format
+#~ msgid "{nick} has been removed from the group chat{by}{reason}"
+#~ msgstr "{nick} został(a) usunięty/a z tej rozmowy grupowej{by}{reason}"
