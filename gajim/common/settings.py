@@ -71,7 +71,7 @@ SETTING_TYPE = bool | int | str | object
 
 log = logging.getLogger('gajim.c.settings')
 
-CURRENT_USER_VERSION = 6
+CURRENT_USER_VERSION = 7
 
 CREATE_SQL = '''
     CREATE TABLE settings (
@@ -90,6 +90,7 @@ CREATE_SQL = '''
     INSERT INTO settings(name, settings) VALUES ('proxies', '{proxies}');
     INSERT INTO settings(name, settings) VALUES ('plugins', '{{}}');
     INSERT INTO settings(name, settings) VALUES ('workspaces', '{workspaces}');
+    INSERT INTO settings(name, settings) VALUES ('window_sizes', '{{}}');
 
     PRAGMA user_version={version};
     '''.format(status=json.dumps(STATUS_PRESET_EXAMPLES),  # noqa: UP032
@@ -116,6 +117,7 @@ class SettingsDictT(TypedDict):
     soundevents: dict[str, dict[str, Any]]
     status_presets: dict[str, dict[str, str]]
     proxies: dict[str, dict[str, Any]]
+    window_sizes: dict[str, tuple[int, int]]
 
 
 class Settings:
@@ -401,6 +403,13 @@ class Settings:
 
             self._set_user_version(6)
 
+        if version < 7:
+            sql = '''INSERT INTO settings(name, settings)
+                     VALUES ('window_sizes', '{}')'''
+            self._con.execute(sql)
+            self._settings['window_sizes'] = {}
+            self._set_user_version(7)
+
     def close(self) -> None:
         log.info('Close settings')
         self._con.commit()
@@ -534,6 +543,13 @@ class Settings:
         self._notify(value, setting)
 
     set = set_app_setting
+
+    def set_window_size(self, window_name: str, width: int, height: int) -> None:
+        self._settings['window_sizes'][window_name] = (width, height)
+        self._commit_settings('window_sizes')
+
+    def get_window_size(self, window_name: str) -> tuple[int, int] | None:
+        return self._settings['window_sizes'].get(window_name)
 
     def get_plugin_setting(self, plugin: str, setting: str) -> SETTING_TYPE:
         if setting not in PLUGIN_SETTINGS:

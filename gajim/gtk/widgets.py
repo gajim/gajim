@@ -42,6 +42,10 @@ class GajimAppWindow(SignalManager):
 
         SignalManager.__init__(self)
 
+        window_size = app.settings.get_window_size(name)
+        if window_size is not None:
+            default_width, default_height = window_size
+
         self.window = Gtk.ApplicationWindow(
             application=app.app,
             resizable=True,
@@ -120,6 +124,7 @@ class GajimAppWindow(SignalManager):
 
     def __on_close_request(self, _widget: Gtk.ApplicationWindow) -> bool:
         log.debug("Initiate Cleanup: %s", self.window.get_name())
+        self._store_win_size()
         self._disconnect_all()
         self._cleanup()
         app.check_finalize(self.window)
@@ -131,6 +136,13 @@ class GajimAppWindow(SignalManager):
         del self.window
 
         return Gdk.EVENT_PROPAGATE
+
+    def _store_win_size(self) -> None:
+        app.settings.set_window_size(
+            self.window.get_name(),
+            self.window.props.default_width,
+            self.window.props.default_height,
+        )
 
     def _cleanup(self) -> None:
         raise NotImplementedError
