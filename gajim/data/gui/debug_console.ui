@@ -266,12 +266,8 @@
       </object>
     </child>
   </object>
-  <object class="GtkHeaderBar" id="headerbar">
-    <child>
-      <object class="GtkImage">
-        <property name="icon-name">utilities-terminal-symbolic</property>
-      </object>
-    </child>
+  <object class="GtkBox" id="header_box">
+    <property name="spacing">12</property>
     <child>
       <object class="GtkToggleButton" id="search_toggle">
         <property name="focusable">1</property>
