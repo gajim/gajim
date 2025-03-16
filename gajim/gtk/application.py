@@ -73,7 +73,6 @@ from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
 from gajim.gtk.dialogs import ConfirmationDialog
 from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import ShortcutsWindow
-from gajim.gtk.menus import get_main_menu
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
@@ -225,8 +224,6 @@ class GajimApplication(Adw.Application, CoreApplication):
         icon_theme = get_icon_theme()
         icon_theme.add_search_path(str(configpaths.get("ICONS")))
 
-        self.set_menubar(get_main_menu())
-
         from gajim.gtk import notification
 
         notification.init()
@@ -249,7 +246,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             self.add_account_actions(account)
 
         self._load_shortcuts()
-        menus.build_accounts_menu()
         self.update_app_actions_state()
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
