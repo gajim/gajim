@@ -350,7 +350,7 @@ class DebugConsoleBuilder(Builder):
     menubutton: Gtk.MenuButton
     account_label: Gtk.Label
     send: Gtk.Button
-    headerbar: Gtk.HeaderBar
+    header_box: Gtk.Box
     search_toggle: Gtk.ToggleButton
 
 class ExceptionDialogBuilder(Builder):
