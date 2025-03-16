@@ -42,6 +42,7 @@ from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
 
+from gajim.gtk.about import AboutDialog
 from gajim.gtk.account_side_bar import AccountSideBar
 from gajim.gtk.activity_side_bar import ActivitySideBar
 from gajim.gtk.builder import get_builder
@@ -88,6 +89,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self.set_default_icon_name("gajim")
 
         app.window = self
+
+        self._about_dialog = AboutDialog()
 
         self._add_actions()
         self._add_stateful_actions()
@@ -170,6 +173,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             client.connect_signal(
                 "resume-successful", self._on_client_resume_successful
             )
+
+    @property
+    def about_dialog(self) -> AboutDialog:
+        return self._about_dialog
 
     def get_action(self, name: str) -> Gio.SimpleAction:
         action = self.lookup_action(name)

@@ -13,6 +13,7 @@ from collections.abc import Iterator
 from functools import wraps
 
 import cairo
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -40,6 +41,14 @@ def get_gtk_version() -> str:
         Gtk.get_major_version(),
         Gtk.get_minor_version(),
         Gtk.get_micro_version(),
+    )
+
+
+def get_adw_version() -> str:
+    return "%i.%i.%i" % (
+        Adw.get_major_version(),
+        Adw.get_minor_version(),
+        Adw.get_micro_version(),
     )
 
 
