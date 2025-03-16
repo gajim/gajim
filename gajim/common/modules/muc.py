@@ -574,6 +574,7 @@ class MUC(BaseModule):
                               properties: PresenceProperties
                               ) -> None:
 
+        assert properties.type is not None
         assert properties.muc_jid is not None
         room_jid = properties.muc_jid
         if room_jid not in self._mucs:
@@ -693,14 +694,14 @@ class MUC(BaseModule):
             # unavailable presence, because we left the MUC
             return
 
+        if properties.jid.resource is None:
+            # prosody allows broadcasting "unavailable" presences from
+            # offline room members
+            return
+
         try:
             presence = self._process_user_presence(properties)
         except KeyError:
-            if (properties.type.is_unavailable
-                    and properties.muc_user.role.is_none):
-                # prosody allows broadcasting "unavailable" presences from
-                # offline room members
-                return
             # Sometimes it seems to happen that we get unavailable presence
             # from occupants we don’t know
             log.warning('Unexpected presence received')
