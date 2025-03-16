@@ -579,6 +579,7 @@ class HistoryExportBuilder(Builder):
 
 class MainBuilder(Builder):
     main_view: Adw.ToolbarView
+    main_menu_bar: Gtk.PopoverMenuBar
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
     activity_box: Gtk.Box
