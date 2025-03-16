@@ -1106,6 +1106,14 @@ class MUC(BaseModule):
                               properties: MessageProperties
                               ) -> None:
 
+        assert properties.from_ is not None
+        if properties.from_.bare_match(self._get_own_bare_jid()):
+            # Invite/Decline sent by us and received via MAM or Carbons
+            # TODO: It could make sense to delete a pending invite
+            # if another device of ours decline the invite
+            self._log.warning('Ignored MUC Invite/Decline sent by other device')
+            return
+
         if properties.muc_decline is not None:
             data = properties.muc_decline
             contact = self._get_contact(data.muc, groupchat=True)
