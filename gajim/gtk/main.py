@@ -56,6 +56,8 @@ from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
+from gajim.gtk.menus import build_accounts_menu
+from gajim.gtk.menus import get_main_menu
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
@@ -95,6 +97,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._ui = get_builder("main.ui")
         self.set_content(self._ui.main_view)
+
+        self._main_menu = get_main_menu()
+        self._ui.main_menu_bar.set_menu_model(self._main_menu)
+        build_accounts_menu()
 
         self._emoji_chooser: EmojiChooser | None = None
 
@@ -182,6 +188,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             parent.set_popover(None)
 
         return self._emoji_chooser
+
+    def get_main_menu(self) -> Gio.Menu:
+        return self._main_menu
 
     def show(self) -> None:
         self.present()
@@ -501,9 +510,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self._toggle_chat_list()
 
         elif action_name == "toggle-menu-bar":
-            show_menu_bar = not self.get_show_menubar()
+            show_menu_bar = not app.settings.get_app_setting("show_main_menu")
             app.settings.set_app_setting("show_main_menu", show_menu_bar)
-            self.set_show_menubar(show_menu_bar)
+            self._ui.main_menu_bar.set_visible(show_menu_bar)
 
         return None
 
