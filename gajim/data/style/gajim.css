@@ -342,7 +342,7 @@ button.flat.link { padding: 0; border: 0; }
     background: @theme_base_color;
 }
 
-.gajim-app-window.window-padding > box {
+.gajim-app-window .window-padding {
     padding: 18px;
 }
 

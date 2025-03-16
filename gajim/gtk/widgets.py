@@ -43,6 +43,8 @@ class GajimAppWindow(SignalManager):
 
         SignalManager.__init__(self)
 
+        self._add_window_padding = add_window_padding
+
         window_size = app.settings.get_window_size(name)
         if window_size is not None:
             default_width, default_height = window_size
@@ -65,9 +67,6 @@ class GajimAppWindow(SignalManager):
         self._ui = cast(GajimBuilder, None)
 
         self.window.add_css_class("gajim-app-window")
-
-        if add_window_padding:
-            self.window.add_css_class("window-padding")
 
         self.__default_controller = Gtk.EventControllerKey(
             propagation_phase=Gtk.PropagationPhase.CAPTURE
@@ -95,6 +94,9 @@ class GajimAppWindow(SignalManager):
         self.window.set_default_widget(widget)
 
     def set_child(self, child: Gtk.Widget | None = None) -> None:
+        if child is not None and self._add_window_padding:
+            child.add_css_class("window-padding")
+
         toolbar_view = Adw.ToolbarView(content=child)
         toolbar_view.add_top_bar(Adw.HeaderBar())
         self.window.set_content(toolbar_view)
