@@ -53,12 +53,12 @@ class AdHocCommands(Assistant):
 
         self._client = app.get_client(account)
 
+        self.add_button("cancel", _("Cancel"))
+        self.add_button("prev", _("Previous"))
+        self.add_button("next", _("Next"), complete=True, css_class="suggested-action")
         self.add_button(
             "complete", _("Complete"), complete=True, css_class="suggested-action"
         )
-        self.add_button("next", _("Next"), complete=True, css_class="suggested-action")
-        self.add_button("prev", _("Previous"))
-        self.add_button("cancel", _("Cancel"), css_class="destructive-action")
         self.add_button("commands", _("Commands"), css_class="suggested-action")
         self.add_button("execute", _("Execute"), css_class="suggested-action")
 

@@ -30,9 +30,9 @@ class TestAssistant(Assistant):
         success.set_heading("Success Heading")
         success.set_text("This is the success text")
 
-        self.add_button("forward", "Forward", "suggested-action", complete=True)
-        self.add_button("close", "Close", "destructive-action")
         self.add_button("back", "Back")
+        self.add_button("close", "Close", "destructive-action")
+        self.add_button("forward", "Forward", "suggested-action", complete=True)
 
         self.set_button_visible_func(self._visible_func)
 

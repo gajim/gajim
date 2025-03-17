@@ -72,6 +72,7 @@ class AccountWizard(Assistant):
         self._method: Literal["login"] | Literal["signup"] = "login"
         self._destroyed: bool = False
 
+        self.add_button("back", _("Back"))
         self.add_button(
             "signup", _("Sign Up"), complete=True, css_class="suggested-action"
         )
@@ -80,7 +81,6 @@ class AccountWizard(Assistant):
         self.add_button(
             "login", _("Log In"), complete=True, css_class="suggested-action"
         )
-        self.add_button("back", _("Back"))
 
         self.add_pages(
             {

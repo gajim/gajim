@@ -41,11 +41,12 @@ class HistoryExport(Assistant):
         self.account = account
         self.jid = jid
 
+        self.add_button("back", _("Back"))
+        self.add_button("close", _("Close"))
         self.add_button(
             "export", _("Export"), complete=True, css_class="suggested-action"
         )
-        self.add_button("close", _("Close"))
-        self.add_button("back", _("Back"))
+
         self.set_button_visible_func(self._visible_func)
 
         self.add_pages({"start": ExportSettings(account, jid)})

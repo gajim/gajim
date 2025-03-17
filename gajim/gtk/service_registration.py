@@ -38,9 +38,9 @@ class ServiceRegistration(Assistant):
         self._client = app.get_client(account)
         self._service = address
 
-        self.add_button("register", _("Register"), "suggested-action")
-        self.add_button("close", _("Close"))
         self.add_button("back", _("Back"))
+        self.add_button("close", _("Close"))
+        self.add_button("register", _("Register"), "suggested-action")
 
         self.set_button_visible_func(self._visible_func)
 

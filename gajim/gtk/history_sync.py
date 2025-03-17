@@ -64,8 +64,8 @@ class HistorySyncAssistant(Assistant, EventHelper):
         else:
             self._current_start = mam_start
 
-        self.add_button("synchronize", _("Synchronize"), "suggested-action")
         self.add_button("close", _("Close"))
+        self.add_button("synchronize", _("Synchronize"), "suggested-action")
         self.set_button_visible_func(self._visible_func)
 
         self.add_pages(
