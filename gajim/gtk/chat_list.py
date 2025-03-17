@@ -339,11 +339,14 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             log.warning("Unhandled Event: %s", event.name)
 
     def _set_placeholder(self) -> None:
-        button = Gtk.Button.new_with_label(_("Start Chat"))
+        button = Gtk.Button(
+            label=_("Start Chat"),
+            halign=Gtk.Align.CENTER,
+            valign=Gtk.Align.CENTER,
+            action_name="app.start-chat",
+            action_target=GLib.Variant("as", ["", ""]),
+        )
         button.add_css_class("suggested-action")
-        button.set_halign(Gtk.Align.CENTER)
-        button.set_valign(Gtk.Align.CENTER)
-        button.connect("clicked", self._on_start_chat_clicked)
         self.set_placeholder(button)
 
     def _emit_unread_changed(self) -> None:
@@ -524,10 +527,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     def _on_cursor_leave(self, _controller: Gtk.EventControllerMotion) -> None:
         self._mouseover = False
         self._schedule_check_sort_inhibit()
-
-    @staticmethod
-    def _on_start_chat_clicked(_button: Gtk.Button) -> None:
-        app.app.activate_action("start-chat", GLib.Variant("as", ["", ""]))
 
     @staticmethod
     def _get_nick_for_received_message(account: str, message: Message) -> str:

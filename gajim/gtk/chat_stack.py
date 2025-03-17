@@ -868,10 +868,10 @@ class ChatPlaceholderBox(Gtk.Box):
         image.set_opacity(0.2)
         self.append(image)
 
-        button = Gtk.Button(label=_("Start Chatting…"))
-        button.set_halign(Gtk.Align.CENTER)
-        button.connect("clicked", self._on_start_chatting)
+        button = Gtk.Button(
+            label=_("Start Chatting…"),
+            halign=Gtk.Align.CENTER,
+            action_name="app.start-chat",
+            action_target=GLib.Variant("as", ["", ""]),
+        )
         self.append(button)
-
-    def _on_start_chatting(self, _button: Gtk.Button) -> None:
-        app.app.activate_action("start-chat", GLib.Variant("as", ["", ""]))
