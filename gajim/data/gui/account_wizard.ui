@@ -173,12 +173,12 @@
     </child>
     <child>
       <object class="GtkComboBoxText" id="con_type_combo">
-        <property name="active">0</property>
         <items>
           <item>START TLS</item>
           <item>DIRECT TLS</item>
           <item>PLAIN</item>
         </items>
+        <property name="active">0</property>
         <layout>
           <property name="column">1</property>
           <property name="row">4</property>
