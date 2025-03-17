@@ -150,6 +150,7 @@ exclude = [
   "test/common/test_uri_util.py",
   "test/gui/test_menus.py",
   "typings/windows_toasts/*",
+  "win/misc/depcheck.py",
 ]
 
 [tool.ruff]

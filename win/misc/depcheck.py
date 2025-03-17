@@ -11,13 +11,13 @@ import sys
 
 import gi
 
-gi.require_version("GIRepository", "2.0")
+gi.require_version("GIRepository", "3.0")
 from gi.repository import GIRepository  # noqa: E402
 
 logging.basicConfig(level="INFO", format="%(levelname)s: %(message)s")
 log = logging.getLogger()
 
-IGNORED_LIBS = [("Soup", "2.4"), ("Gtk", "4.0")]
+IGNORED_LIBS = [("Soup", "2.4"), ("Gtk", "3.0")]
 
 
 def get_required_by_typelibs() -> set[str]:
@@ -32,9 +32,9 @@ def get_required_by_typelibs() -> set[str]:
         except Exception as error:
             log.warning("Unable to load %s %s: %s", namespace, version, error)
             continue
-        lib = repo.get_shared_library(namespace)
+        lib = repo.get_shared_libraries(namespace)
         if lib:
-            deps.update(lib.split(","))
+            deps.update(lib)
     return deps
 
 
