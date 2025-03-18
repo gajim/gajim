@@ -543,7 +543,6 @@ class GroupchatStateBuilder(Builder):
 class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
-    account_combo: Gtk.ComboBox
 
 class MainBuilder(Builder):
     main_grid: Gtk.Grid
@@ -584,6 +583,8 @@ class ManageRosterBuilder(Builder):
     main: Gtk.Box
     top_box: Gtk.Box
     search_entry: Gtk.SearchEntry
+    import_button: Gtk.MenuButton
+    export_button: Gtk.Button
     scrolled_box: Gtk.Box
     scrolled: Gtk.ScrolledWindow
     column_view: Gtk.ColumnView
@@ -591,8 +592,6 @@ class ManageRosterBuilder(Builder):
     name_col: Gtk.ColumnViewColumn
     subscription_col: Gtk.ColumnViewColumn
     ask_col: Gtk.ColumnViewColumn
-    import_button: Gtk.MenuButton
-    export_button: Gtk.Button
 
 class ManageSoundsBuilder(Builder):
     manage_sounds: Gtk.Box
@@ -900,6 +899,7 @@ class StartChatDialogBuilder(Builder):
     controls_box: Gtk.Box
     search_entry: Gtk.SearchEntry
     global_search_toggle: Gtk.ToggleButton
+    settings_menu: Gtk.MenuButton
     search_error_box: Gtk.Box
     search_error_label: Gtk.Label
     list_stack: Gtk.Stack

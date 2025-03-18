@@ -35,6 +35,7 @@ from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import MUC_DISCO_ERRORS
+from gajim.common.const import PresenceShowExt
 from gajim.common.const import URIType
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
@@ -44,6 +45,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_group_chat_nick
+from gajim.common.util.status import compare_show
 from gajim.common.util.text import get_country_flag_from_code
 from gajim.common.util.text import to_one_line
 from gajim.common.util.uri import parse_uri
@@ -54,6 +56,7 @@ from gajim.gtk.chat_filter import ChatFilters
 from gajim.gtk.chat_filter import ChatTypeFilter
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_nick import NickChooser
+from gajim.gtk.menus import get_start_chat_menu
 from gajim.gtk.menus import get_start_chat_row_menu
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.icons import get_icon_theme
@@ -110,6 +113,8 @@ class StartChatDialog(GajimAppWindow):
         self._contact_view = ContactListView()
         self._connect(self._contact_view, "activate", self._on_contact_item_activated)
         self._ui.contact_scrolled.set_child(self._contact_view)
+
+        self._ui.settings_menu.set_menu_model(get_start_chat_menu())
 
         scale = self.get_scale_factor()
         self._add_accounts()
@@ -189,6 +194,14 @@ class StartChatDialog(GajimAppWindow):
             self._ui.search_entry.set_text(initial_jid)
 
         self._contact_view.set_loading_finished()
+
+        action = Gio.SimpleAction.new_stateful(
+            "sort-by-show",
+            None,
+            GLib.Variant.new_boolean(app.settings.get("sort_by_show_in_start_chat")),
+        )
+        self._connect(action, "change-state", self._on_sort_by_show_changed)
+        self.window.add_action(action)
 
         log.debug("Loading dialog finished")
         self.show()
@@ -292,6 +305,16 @@ class StartChatDialog(GajimAppWindow):
             item = ContactListItem(account, None, None, None, scale, show_account)
             self._new_contact_items[account] = item
             self._contact_view.add(item)
+
+    def _on_sort_by_show_changed(
+        self, action: Gio.SimpleAction, param: GLib.Variant
+    ) -> None:
+        action_state = action.get_state()
+        assert action_state is not None
+        new_state = not action_state.get_boolean()
+        app.settings.set("sort_by_show_in_start_chat", new_state)
+        action.set_state(GLib.Variant.new_boolean(new_state))
+        self._contact_view.invalidate_sort()
 
     def _on_page_changed(self, stack: Gtk.Stack, _param: Any) -> None:
         if stack.get_visible_child_name() == "account":
@@ -830,8 +853,8 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._scroll_id = None
         self._search_string_list: list[str] = []
 
-        sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
-        self._sort_model = Gtk.SortListModel(sorter=sorter)
+        self._sorter = Gtk.CustomSorter.new(sort_func=self._sort_func)
+        self._sort_model = Gtk.SortListModel(sorter=self._sorter)
 
         self._custom_filter = Gtk.CustomFilter.new(self._filter_func)
 
@@ -849,6 +872,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
     def do_unroot(self) -> None:
         # The filter func needs to be unset before calling do_unroot (see #12213)
         self._custom_filter.set_filter_func(None)
+        self._sorter.set_sort_func(None)
         Gtk.ListView.do_unroot(self)
         self._disconnect_all()
         app.check_finalize(self._model)
@@ -861,6 +885,7 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         del self._sort_model
         del self._selection_model
         del self._custom_filter
+        del self._sorter
         app.check_finalize(self)
 
     def set_loading_finished(self) -> None:
@@ -868,6 +893,9 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
 
     def get_count(self) -> int:
         return self._model.get_n_items()
+
+    def invalidate_sort(self) -> None:
+        self._sorter.changed(Gtk.SorterChange.DIFFERENT)
 
     def _on_filter_items_changed(
         self, filter_model: Gtk.FilterListModel, _pos: int, _removed: int, _added: int
@@ -893,16 +921,16 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         self._scroll_id = GLib.timeout_add(50, _scroll_to)
 
     def _filter_func(self, item: ContactListItem) -> bool:
+        account = self._chat_filters.account
+        if account is not None and account != item.account:
+            return False
+
         if item.is_new:
             return True
 
         for search_string in self._search_string_list:
             if search_string not in item.search_string:
                 return False
-
-        account = self._chat_filters.account
-        if account is not None and account != item.account:
-            return False
 
         group = self._chat_filters.group
         if group is not None and group not in item.groups:
@@ -924,10 +952,21 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
         obj2: Any,
         _user_data: object | None,
     ) -> int:
-        if obj1.is_new:
-            return 1
 
-        return locale.strcoll(obj1.name, obj2.name)
+        if obj1.is_new != obj2.is_new:
+            return 1 if obj1.is_new else -1
+
+        if obj1.is_groupchat != obj2.is_groupchat:
+            return 1 if obj1.is_groupchat else -1
+
+        if obj1.is_self != obj2.is_self:
+            return 1 if obj1.is_self else -1
+
+        if app.settings.get("sort_by_show_in_start_chat"):
+            if obj1.show != obj2.show:
+                return compare_show(obj1.show, obj2.show)
+
+        return locale.strcoll(obj1.name.lower(), obj2.name.lower())
 
     def add(self, item: ContactViewItem) -> None:
         self._model.append(item)
@@ -962,8 +1001,10 @@ class ContactListItem(GObject.Object):
     groups = GObject.Property(type=object)
     is_groupchat = GObject.Property(type=bool, default=False)
     is_new = GObject.Property(type=bool, default=False)
+    is_self = GObject.Property(type=bool, default=False)
     avatar_paintable = GObject.Property(type=Gdk.Paintable)
     idle = GObject.Property(type=object)
+    show = GObject.Property(type=object)
     status = GObject.Property(type=str)
     status_visible = GObject.Property(type=bool, default=False)
     search_string = GObject.Property(type=str)
@@ -985,10 +1026,14 @@ class ContactListItem(GObject.Object):
         idle = None
         status = ""
         groups = []
+        show = PresenceShowExt.OFFLINE
+        is_self = False
         if contact is not None and not groupchat:
             groups = sorted(contact.groups)
             status = to_one_line(contact.status)
             idle = contact.idle_datetime
+            show = contact.show
+            is_self = contact.is_self
 
         menu = None
         if groupchat:
@@ -1021,6 +1066,8 @@ class ContactListItem(GObject.Object):
             idle=idle,
             is_groupchat=groupchat,
             is_new=jid is None,
+            is_self=is_self,
+            show=show,
             status=status,
             status_visible=bool(status),
             groups=groups,

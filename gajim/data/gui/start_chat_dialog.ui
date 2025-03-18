@@ -77,6 +77,18 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkMenuButton" id="settings_menu">
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="halign">end</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">view-more-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>

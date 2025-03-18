@@ -940,6 +940,14 @@ def get_manage_roster_import_menu(accounts: list[tuple[str, str]]) -> GajimMenu:
     return menu
 
 
+def get_start_chat_menu():
+    menuitems: MenuItemListT = [
+        (_("Sort by Status"), "win.sort-by-show", None),
+    ]
+
+    return GajimMenu.from_list(menuitems)
+
+
 def escape_mnemonic(label: str | None) -> str | None:
     if label is None:
         return None

@@ -4,10 +4,22 @@
 
 from typing import Literal
 
+from nbxmpp.const import PresenceShow
+
 from gajim.common import app
+from gajim.common.const import PresenceShowExt
 from gajim.common.const import SHOW_LIST
 from gajim.common.const import SHOW_STRING
 from gajim.common.const import SHOW_STRING_MNEMONIC
+
+ShowSortOrder = {
+    PresenceShow.CHAT: 0,
+    PresenceShow.ONLINE: 1,
+    PresenceShow.DND: 2,
+    PresenceShow.AWAY: 3,
+    PresenceShow.XA: 4,
+    PresenceShowExt.OFFLINE: 5,
+}
 
 
 def get_client_status(account: str) -> str:
@@ -95,3 +107,15 @@ def get_idle_status_message(
     message = message.replace('$T', '%(time)s')
 
     return message % {'status': status_message, 'time': idle_time}
+
+
+def compare_show(
+    show1:  PresenceShow | PresenceShowExt,
+    show2: PresenceShow | PresenceShowExt,
+) -> int:
+
+    val1 = ShowSortOrder[show1]
+    val2 = ShowSortOrder[show2]
+    if val1 == val2:
+        return 0
+    return -1 if val1 < val2 else 1
