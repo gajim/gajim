@@ -14,6 +14,7 @@ from pathlib import Path
 import css_parser
 from css_parser.css import CSSStyleRule
 from css_parser.css import CSSStyleSheet
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -32,7 +33,6 @@ else:
 from gajim.gtk.const import Theme
 
 log = logging.getLogger("gajim.gtk.css")
-settings = Gtk.Settings.get_default()
 
 
 class CSSConfig:
@@ -43,7 +43,7 @@ class CSSConfig:
         The order in which CSSConfig loads the styles
 
         1. gajim.css
-        2. gajim-dark.css (Only if gtk-application-prefer-dark-theme = True)
+        2. gajim-dark.css (Only if Adw.StyleManager.get_dark() = True)
         3. default.css or default-dark.css (from gajim/data/style)
         4. user-theme.css (from ~/.config/Gajim/theme)
 
@@ -58,7 +58,7 @@ class CSSConfig:
         # default.css or default-dark.css
 
         Has all the values that are changeable via UI (see themes.py).
-        Depending on `gtk-application-prefer-dark-theme` either default.css or
+        Depending on `Adw.StyleManager.get_dark()` either default.css or
         default-dark.css gets loaded
 
         # user-theme.css
@@ -131,9 +131,10 @@ class CSSConfig:
         if setting == Theme.SYSTEM:
             if self._system_style.prefer_dark is not None:
                 return self._system_style.prefer_dark
-            if settings is None:
-                return False
-            return settings.get_property("gtk-application-prefer-dark-theme")
+
+            adw_style_manager = Adw.StyleManager.get_default()
+            return adw_style_manager.get_dark()
+
         return setting == Theme.DARK
 
     def set_dark_theme(self, value: int | None = None) -> None:
@@ -142,14 +143,18 @@ class CSSConfig:
         else:
             app.settings.set("dark_theme", value)
 
-        if settings is None:
-            return
+        adw_style_manager = Adw.StyleManager.get_default()
         if value == Theme.SYSTEM:
             if self._system_style.prefer_dark is None:
-                settings.reset_property("gtk-application-prefer-dark-theme")
+                adw_style_manager.set_color_scheme(Adw.ColorScheme.DEFAULT)
                 return
+
             value = self._system_style.prefer_dark
-        settings.set_property("gtk-application-prefer-dark-theme", bool(value))
+
+        if value:
+            adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_DARK)
+        else:
+            adw_style_manager.set_color_scheme(Adw.ColorScheme.FORCE_LIGHT)
 
     def reload_css(self) -> None:
         self._load_css()
