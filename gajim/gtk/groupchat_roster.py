@@ -26,6 +26,7 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import p_
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.util.status import compare_show
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
@@ -376,22 +377,14 @@ class GroupchatContactListView(Gtk.ListView):
         _user_data: object | None,
     ) -> int:
 
-        nick1 = obj1.nick.lower()
-        nick2 = obj2.nick.lower()
-
         if obj1.contact.is_self or obj2.contact.is_self:
-            return -1
+            return -1 if obj1.contact.is_self else 1
 
-        if not app.settings.get("sort_by_show_in_muc"):
-            return locale.strcoll(nick1, nick2)
+        if app.settings.get("sort_by_show_in_muc"):
+            if obj1.contact.show != obj2.contact.show:
+                return compare_show(obj1.contact.show, obj2.contact.show)
 
-        show1 = obj1.contact.show
-        show2 = obj2.contact.show
-
-        if show1 != show2:
-            return -1 if show1 > show2 else 1
-
-        return locale.strcoll(nick1, nick2)
+        return locale.strcoll(obj1.nick.lower(), obj2.nick.lower())
 
     def add(self, item: GroupchatContactListItem) -> None:
         self._model.append(item)
