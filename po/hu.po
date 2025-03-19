@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2025-03-11 05:55+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -4339,6 +4339,9 @@ msgstr "Elnézést, ennek nem kellett volna előfordulni"
 msgid "Sort Participant List by Status"
 msgstr "A résztvevők rendezése a jelenléti állapotuk alapján"
 
+msgid "Sort by Status"
+msgstr "Állapot szerinti rendezés"
+
 msgid "Sounds"
 msgstr "Hangok"
 
@@ -6659,9 +6662,6 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A küldött és fogadott fájlok megjelenítése"
-
-#~ msgid "Sort by Status"
-#~ msgstr "Állapot szerinti rendezés"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Jelenléti állapo_t"

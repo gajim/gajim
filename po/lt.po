@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -4948,6 +4948,10 @@ msgid "Sort Participant List by Status"
 msgstr "Rūšiuoti kontaktus pagal būklę"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Rūšiuoti kontaktus pagal būklę"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Wav Sounds"
 
@@ -7295,10 +7299,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Rodyti failų siuntimų sąrašą tarp jūsų ir kitų"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Rūšiuoti kontaktus pagal būklę"
 
 #~ msgid "Sta_tus"
 #~ msgstr "_Būklė"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -4989,6 +4989,10 @@ msgid "Sort Participant List by Status"
 msgstr "_Paradkuj kantakty pa statusie"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "_Paradkuj kantakty pa statusie"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Fajły ŭ Wav"
 
@@ -7385,10 +7389,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Pakažy śpis pieradačaŭ fajłaŭ"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "_Paradkuj kantakty pa statusie"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"

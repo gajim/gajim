@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -4465,6 +4465,9 @@ msgstr "Promiňte, toto se nemělo stát"
 msgid "Sort Participant List by Status"
 msgstr "Seřadit účastníky podle stavu"
 
+msgid "Sort by Status"
+msgstr "Seřadit podle stavu"
+
 msgid "Sounds"
 msgstr "Zvuky"
 
@@ -6822,9 +6825,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobrazí výpis přenosů souborů mezi vámi a vašimi kontakty"
-
-#~ msgid "Sort by Status"
-#~ msgstr "Seřadit podle stavu"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"

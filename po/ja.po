@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2025-03-01 07:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -4367,6 +4367,9 @@ msgstr "想定外のことが起きました"
 msgid "Sort Participant List by Status"
 msgstr "参加者一覧を在席状況順に並べる"
 
+msgid "Sort by Status"
+msgstr "在席状況順に並べる"
+
 msgid "Sounds"
 msgstr "サウンド"
 
@@ -6665,9 +6668,6 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "ファイル転送の一覧を表示します"
-
-#~ msgid "Sort by Status"
-#~ msgstr "在席状況順に並べる"
 
 #~ msgid "Sta_tus"
 #~ msgstr "状態 (_T)"

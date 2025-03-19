@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -4982,6 +4982,10 @@ msgid "Sort Participant List by Status"
 msgstr "_Ordigi kontaktojn per stato"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "_Ordigi kontaktojn per stato"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Wav-sonoj"
 
@@ -7399,10 +7403,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Montras liston de dosiertransmetojn inter vi kaj aliaj"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "_Ordigi kontaktojn per stato"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_to"

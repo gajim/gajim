@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -4990,6 +4990,10 @@ msgid "Sort Participant List by Status"
 msgstr "Usporiadať kontakty podľa stavu"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Usporiadať kontakty podľa stavu"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Wav zvuky"
 
@@ -7405,10 +7409,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobraziť zoznam prenosov súborov medzi vami a ostatnými"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Usporiadať kontakty podľa stavu"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"

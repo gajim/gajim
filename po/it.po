@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-08-13 11:17+0000\n"
 "Last-Translator: Robert oResoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -4614,6 +4614,10 @@ msgstr "Spiacente, non sarebbe dovuto capitare"
 msgid "Sort Participant List by Status"
 msgstr "Ordina Contatti per Stato"
 
+#, fuzzy
+msgid "Sort by Status"
+msgstr "Ordina Contatti per Stato"
+
 msgid "Sounds"
 msgstr "Suoni"
 
@@ -7049,10 +7053,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Mostra la lista dei file trasferiti tra te e i tuoi contatti"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Ordina Contatti per Stato"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tato"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -4990,6 +4990,10 @@ msgid "Sort Participant List by Status"
 msgstr "Τα_ξινόμηση επαφών βάσει κατάστασης"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Τα_ξινόμηση επαφών βάσει κατάστασης"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Ήχος"
 
@@ -7408,10 +7412,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Δείχνει τη λίστα μεταφορών αρχείων μεταξύ εσάς και άλλων"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Τα_ξινόμηση επαφών βάσει κατάστασης"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Κατάσ_ταση"

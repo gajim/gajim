@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2025-01-03 23:12+0000\n"
 "Last-Translator: soneca <acenos@danwin1210.me>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -4722,6 +4722,10 @@ msgstr "Desculpe, isso não deveria ter acontecido"
 msgid "Sort Participant List by Status"
 msgstr "Ordena contatos pelo status"
 
+#, fuzzy
+msgid "Sort by Status"
+msgstr "Ordena contatos pelo status"
+
 msgid "Sounds"
 msgstr "Sons"
 
@@ -7221,10 +7225,6 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr ""
 #~ "Exibe uma lista de transferências de arquivos entre você e os outros"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Ordena contatos pelo status"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -4996,6 +4996,10 @@ msgid "Sort Participant List by Status"
 msgstr "Ordenar os contacto_s polo estado"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Ordenar os contacto_s polo estado"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Sons Wav"
 
@@ -7412,10 +7416,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Amosa unha listaxe de transferencias entre vostede e outra persoa"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Ordenar os contacto_s polo estado"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Es_tado"

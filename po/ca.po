@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -4780,6 +4780,10 @@ msgid "Sort Participant List by Status"
 msgstr ""
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Estat"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Neteja"
 
@@ -6832,10 +6836,6 @@ msgstr ""
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr ""
 #~ "Mostra una llista de transferències de fitxers entre tu i els altres"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Estat"
 
 #, fuzzy
 #~ msgctxt "File transfer state"

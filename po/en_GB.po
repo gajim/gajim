@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -4997,6 +4997,10 @@ msgid "Sort Participant List by Status"
 msgstr "Sort contacts by status"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Sort contacts by status"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Wav Sounds"
 
@@ -7417,10 +7421,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Shows a list of file transfers between you and others"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Sort contacts by status"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"

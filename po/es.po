@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
-"PO-Revision-Date: 2025-03-11 10:12+0000\n"
-"Last-Translator: El gran Pirujo <boina@disroot.org>\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"PO-Revision-Date: 2025-03-16 06:15+0000\n"
+"Last-Translator: Juan M Sevilla <jumase@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
 "Language: es\n"
@@ -1145,7 +1145,7 @@ msgid "Clear File"
 msgstr "Vaciar fichero"
 
 msgid "Clear Sound"
-msgstr "Sonido claro"
+msgstr "Quitar Sonido"
 
 msgid "Clear message entry"
 msgstr "Limpiar entrada de mensaje"
@@ -1308,7 +1308,7 @@ msgid "Contact Addresses"
 msgstr "Direcciones de contactos"
 
 msgid "Contact Connected"
-msgstr "Nombre de contacto"
+msgstr "Contacto conectado"
 
 msgid "Contact Disconnected"
 msgstr "Contacto desconectado"
@@ -3858,11 +3858,11 @@ msgid "Rewind 10 seconds"
 msgstr "Retroceder 10 segundos"
 
 msgid "Role"
-msgstr "Puesto"
+msgstr "Rol"
 
 msgctxt "Profile"
 msgid "Role"
-msgstr "Puesto"
+msgstr "Rol"
 
 #, python-format
 msgid "Roles of %s have been removed in this group chat"
@@ -4365,6 +4365,9 @@ msgstr "Lo siento, eso no debería haber pasado"
 
 msgid "Sort Participant List by Status"
 msgstr "Ordenar Lista de Participantes por Estado"
+
+msgid "Sort by Status"
+msgstr "Ordenar por estado"
 
 msgid "Sounds"
 msgstr "Sonidos"
@@ -5466,7 +5469,7 @@ msgid "Your account has has been removed successfully."
 msgstr "Tu cuenta ha sido eliminada con éxito."
 
 msgid "Your affiliations to this group chat have been removed"
-msgstr ""
+msgstr "Se han quitado tus afiliaciones en este grupo de charla"
 
 msgid "Your archiving preferences have successfully been saved."
 msgstr "Tus preferencias de archivado han sido guardadas con éxito."
@@ -5496,9 +5499,8 @@ msgstr "Tu contraseña ha sido cambiado."
 msgid "Your public key or authentication certificate"
 msgstr "Tu clave pública o certificado de autenticación"
 
-#, fuzzy
 msgid "Your roles in this group chat have been removed"
-msgstr "Se ha creado un nuevo salón"
+msgstr "Se han quitado tus roles en este grupo de charla"
 
 msgid ""
 "Your server does not offer a group chat service. Please specify the address "
@@ -6695,9 +6697,6 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Muestra una lista de transferencias entre tú y tus contactos"
-
-#~ msgid "Sort by Status"
-#~ msgstr "Ordenar por estado"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Es_tado"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-10-18 03:11+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -4378,6 +4378,10 @@ msgstr ""
 
 msgid "Sort Participant List by Status"
 msgstr ""
+
+#, fuzzy
+msgid "Sort by Status"
+msgstr "أوقف %s مشاركة الحالة"
 
 msgid "Sounds"
 msgstr ""

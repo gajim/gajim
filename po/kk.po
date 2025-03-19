@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -4449,6 +4449,9 @@ msgstr "Кешіріңіз, олай болмауы керек еді"
 msgid "Sort Participant List by Status"
 msgstr "Қатысушылар тізімін күйі бойынша сұрыптау"
 
+msgid "Sort by Status"
+msgstr "Қалып-күй бойынша сұрыптау"
+
 msgid "Sounds"
 msgstr "Дыбыстар"
 
@@ -6748,9 +6751,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Сіз бен сіздің контакттарыңыз арасындағы файл алмасуларды көрсетеді"
-
-#~ msgid "Sort by Status"
-#~ msgstr "Қалып-күй бойынша сұрыптау"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Қалы_п-күй"

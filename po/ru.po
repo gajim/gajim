@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: 2025-03-15 12:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -4470,6 +4470,9 @@ msgstr "Произошла непредвиденная ошибка"
 msgid "Sort Participant List by Status"
 msgstr "Сортировать список участников по статусу"
 
+msgid "Sort by Status"
+msgstr "Сортировать по статусу"
+
 msgid "Sounds"
 msgstr "Звуки"
 
@@ -6808,9 +6811,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Показывает список переданных файлов между вами и вашими контактами"
-
-#~ msgid "Sort by Status"
-#~ msgstr "Сортировать по статусу"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Ста_тус"

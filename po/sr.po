@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:02+0000\n"
+"POT-Creation-Date: 2025-03-18 21:05+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -5002,6 +5002,10 @@ msgid "Sort Participant List by Status"
 msgstr "Сортирај контакте по статусу"
 
 #, fuzzy
+msgid "Sort by Status"
+msgstr "Сортирај контакте по статусу"
+
+#, fuzzy
 msgid "Sounds"
 msgstr "Wav Звукови"
 
@@ -7423,10 +7427,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Приказује листу преноса датотека између Вас и осталих"
-
-#, fuzzy
-#~ msgid "Sort by Status"
-#~ msgstr "Сортирај контакте по статусу"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Ста_тус"
