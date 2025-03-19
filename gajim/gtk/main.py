@@ -102,6 +102,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._main_menu = get_main_menu()
         self._ui.main_menu_bar.set_menu_model(self._main_menu)
+        self._ui.main_menu_bar.set_visible(
+            app.settings.get_app_setting("show_main_menu")
+        )
         build_accounts_menu()
 
         self._emoji_chooser: EmojiChooser | None = None
