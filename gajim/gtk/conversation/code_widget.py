@@ -132,3 +132,8 @@ class CodeTextview(GtkSource.View):
     def print_code(self, code: str) -> None:
         buffer_ = self.get_buffer()
         buffer_.insert(buffer_.get_start_iter(), code)
+
+        if buffer_.get_line_count() == 1:
+            # Add some space at the bottom so that scrollbar
+            # does not overlap content, which makes text hard to select
+            self.set_pixels_below_lines(10)
