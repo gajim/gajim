@@ -100,9 +100,11 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         self._ui.paned.set_position(self._ui.paned.get_property("max-position"))
 
-        self._account_dropdown = GajimDropDown(
-            fixed_width=15, data=self._get_accounts()
-        )
+        accounts = self._get_accounts()
+        self._account_dropdown = GajimDropDown(fixed_width=15, data=accounts)
+        if accounts:
+            self._selected_send_account = next(iter(accounts))
+
         self._connect(
             self._account_dropdown, "notify::selected", self._on_account_change
         )
