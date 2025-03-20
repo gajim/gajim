@@ -1,3 +1,20 @@
+Gajim 2.0.4 (19 Mar 2025)
+
+  Improvements
+
+  * Code widget: Improve handling for single line entries
+  * GroupchatRoster: Improve participant sorting
+  * StartChat: Add Sort by Status option
+  * Assistants: Improve button order and color-coding
+
+  Bug Fixes
+
+  * Storage: Fix error on big queries (#12148)
+  * Disable start chat buttons if no accounts are active
+  * Account wizard: Fix selecting default connection type in advanced settings (#12236)
+  * MUC: Ignore invites sent by other devices of ours
+  * MUC: Don’t fail on presence from bare jids (#12232)
+
 Gajim 2.0.3 (15 Mar 2025)
 
   New

@@ -80,6 +80,9 @@
     <control>pointing</control>
   </recommends>
   <releases>
+    <release version="2.0.4" date="2025-03-20">
+      <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.4/ChangeLog</url>
+    </release>
     <release version="2.0.3" date="2025-03-15">
       <url type="details">https://dev.gajim.org/gajim/gajim/-/blob/2.0.3/ChangeLog</url>
     </release>
