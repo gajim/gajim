@@ -249,11 +249,11 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.22.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.23.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.22.0-py2.py3-none-any.whl
-        sha256: 3d791d631a6c97aad4da7074081a57073126c69487560c6f8bffcf586461de66
+        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.23.1-py2.py3-none-any.whl
+        sha256: 42ef3a6cc1db3d22cb2ab24163d75b23f291ad9892b1a8c44075ce809a32b191
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -276,11 +276,11 @@ modules:
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.38-py3-none-any.whl
+      - pip3 install SQLAlchemy-2.0.39-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.38-py3-none-any.whl
-        sha256: 63178c675d4c80def39f1febd625a6333f44c0ba269edd8a468b156394b27753
+        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.39-py3-none-any.whl
+        sha256: a1c6b0a5e3e326a466d809b651c63f278b1256146a377a528b6938a279da334f
 
   - name: python3-emoji
     buildsystem: simple
@@ -324,11 +324,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.30.0-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.30.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-6.30.0-py3-none-any.whl
-        sha256: e5ef216ea061b262b8994cb6b7d6637a4fb27b3fb4d8e216a6040c0b93bd10d7
+        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-6.30.1-py3-none-any.whl
+        sha256: 3c25e51e1359f1f5fa3b298faa6016e650d148f214db2e47671131b9063c53be
 
   - name: python3-omemo-dr
     buildsystem: simple
@@ -352,11 +352,11 @@ modules:
   - name: python3-nbxmpp
     buildsystem: simple
     build-commands:
-      - pip3 install nbxmpp-6.0.1-py3-none-any.whl
+      - pip3 install nbxmpp-6.0.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.1-py3-none-any.whl
-        sha256: b0bb5e1e352f6fb93c17d47bfc55703f6cd77c5f5022fbb3dd5d392d658828e3
+        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.2-py3-none-any.whl
+        sha256: 9e906804663d6628d7acb71335c0b4c85700f91abcf0506c140fad81f85b382d
 
   - name: gajim
     buildsystem: simple
