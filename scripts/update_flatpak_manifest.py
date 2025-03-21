@@ -42,7 +42,8 @@ def get_current_version(
 
 def get_latest_version(
     package_name: str, package_type: str, py_version: str | None
-) -> tuple[str, str | None]:
+) -> tuple[str, str, str, str]:
+
     with urlopen(f"{PYPI_INDEX}/{package_name}/json") as f:
         data = f.read()
         d = json.loads(data)
@@ -51,12 +52,19 @@ def get_latest_version(
         for entry in d["releases"][version]:
             if entry["packagetype"] != package_type:
                 continue
+
             if py_version is not None and entry["python_version"] != py_version:
                 continue
+
             if sha is not None:
-                return version, None
+                raise ValueError("No sha found")
+
             sha = entry["digests"]["sha256"]
-        return version, sha
+            url = entry["url"]
+            filename = entry["filename"]
+            return version, sha, url, filename
+
+    raise ValueError("Package not found")
 
 
 def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
@@ -64,31 +72,29 @@ def update_module(module: ruamel.yaml.comments.CommentedMap) -> None:
         logging.warning("Check %s manually", module["name"])
         return
 
-    package_type = get_package_type(module)
-    current_version, py_version = get_current_version(module)
-    if current_version is None:
-        return
-
-    name = module["name"].replace("python3-", "")
-    latest_version, sha = get_latest_version(name, package_type, py_version)
-
-    if current_version == latest_version:
-        return
-
     if "only-arches" in module:
         logging.warning("Update %s manually", module["name"])
         return
 
-    if sha is None:
-        logging.warning("Could not get a unique SHA sum for %s", module["name"])
+    package_type = get_package_type(module)
+    current_version, py_version = get_current_version(module)
+    if current_version is None:
+        print("Current version None")
         return
 
-    module["build-commands"][0] = module["build-commands"][0].replace(
-        current_version, latest_version
+    name = module["name"].replace("python3-", "")
+    latest_version, sha, url, filename = get_latest_version(
+        name, package_type, py_version
     )
-    module["sources"][0]["url"] = module["sources"][0]["url"].replace(
-        current_version, latest_version
-    )
+
+    logging.info("Update %s", name)
+    "".rsplit(" ", maxsplit=1)
+    if module["sources"][0]["type"] == "file":
+        command = module["build-commands"][0]
+        current_filename = command.rsplit(" ", maxsplit=1)[1]
+        module["build-commands"][0] = command.replace(current_filename, filename)
+
+    module["sources"][0]["url"] = url
     module["sources"][0]["sha256"] = sha
 
 
