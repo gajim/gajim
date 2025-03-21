@@ -324,3 +324,7 @@ class GajimPopover(Gtk.PopoverMenu):
     def set_pointing_to_coord(self, x: float, y: float) -> None:
         rectangle = GdkRectangle(x=int(x), y=int(y))
         self.set_pointing_to(rectangle)
+
+    def do_unroot(self) -> None:
+        Gtk.PopoverMenu.do_unroot(self)
+        app.check_finalize(self)

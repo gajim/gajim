@@ -70,7 +70,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self._rows_need_sort = False
         self._context_menu_visible = False
         self._mouseover = False
-        self._pinned_order_change = False
 
         hover_controller = Gtk.EventControllerMotion()
         self._connect(hover_controller, "enter", self._on_cursor_enter)
@@ -189,7 +188,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             row.position = self._chat_order.index(row)
 
         row.toggle_pinned()
-        self.invalidate_sort()
+        self.invalidate_sort(force=True)
 
     def add_chat(
         self,
@@ -414,9 +413,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
             row.position = self._chat_order.index(row)
 
         self.emit("chat-order-changed")
-        self._pinned_order_change = True
-        self.invalidate_sort()
-        self._pinned_order_change = False
+        self.invalidate_sort(force=True)
 
     def _update_row_state(self) -> bool:
         for row in self._chats.values():
@@ -488,8 +485,8 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         # Sort by timestamp
         return -1 if row1.timestamp > row2.timestamp else 1
 
-    def invalidate_sort(self) -> None:
-        if self._is_sort_inhibited():
+    def invalidate_sort(self, *, force: bool = False) -> None:
+        if not force and self._is_sort_inhibited():
             return
 
         self._rows_need_sort = False
@@ -497,8 +494,6 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         Gtk.ListBox.invalidate_sort(self)
 
     def _is_sort_inhibited(self) -> bool:
-        if self._pinned_order_change:
-            return False
         return self._mouseover or self._context_menu_visible
 
     def _schedule_check_sort_inhibit(self) -> None:

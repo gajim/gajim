@@ -101,6 +101,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._connect(self._ui.close_button, "clicked", self._on_close_button_clicked)
 
         self._menu_popover = GajimPopover(None)
+        self._connect(self._menu_popover, "closed", self._on_context_popover_closed)
         self._ui.mainbox.append(self._menu_popover)
 
         self._connect(self, "state-flags-changed", self._on_state_flags_changed)
@@ -448,6 +449,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if isinstance(self.contact, GroupchatParticipant):
             self.contact.room.disconnect_all_from_obj(self)
 
+        del self._menu_popover
         Gtk.ListBoxRow.do_unroot(self)
         app.check_finalize(self)
 
@@ -480,7 +482,6 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._menu_popover.set_menu_model(menu)
         self._menu_popover.set_pointing_to_coord(x=x, y=y)
-        self._connect(self._menu_popover, "closed", self._on_context_popover_closed)
         self.emit("context-menu-state-changed", True)
         self._menu_popover.popup()
 
