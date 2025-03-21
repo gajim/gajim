@@ -60,7 +60,7 @@ modules:
       - pip3 install pycparser-2.22-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/pycparser/pycparser-2.22-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/13/a3/a812df4e2dd5696d1f351d58b8fe16a405b234ad2886a0dab9183fb78109/pycparser-2.22-py3-none-any.whl
         sha256: c3702b6d3dd8c7abc1afa565d7e63d53a1d0bd86cdc24edd75470f4de499cfcc
 
   - name: python3-cffi
@@ -69,7 +69,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/c/cffi/cffi-1.17.1.tar.gz
+        url: https://files.pythonhosted.org/packages/fc/97/c783634659c2920c3fc70419e3af40972dbaf758daa229a7d6ea6135c90d/cffi-1.17.1.tar.gz
         sha256: 1c39c6016c32bc48dd54561950ebd6836e1670f2ae46128f67cf49e789c52824
 
   - name: python3-idna
@@ -78,7 +78,7 @@ modules:
       - pip3 install idna-3.10-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/i/idna/idna-3.10-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl
         sha256: 946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3
 
   - name: python3-cryptography
@@ -109,7 +109,7 @@ modules:
       - pip3 install jeepney-0.9.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jeepney/jeepney-0.9.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/b2/a3/e137168c9c44d18eff0376253da9f1e9234d0239e0ee230d2fee6cea8e55/jeepney-0.9.0-py3-none-any.whl
         sha256: 97e5714520c16fc0a45695e5365a2e11b81ea79bba796e26f9f1d178cb182683
 
   - name: python3-secretstorage
@@ -118,7 +118,7 @@ modules:
       - pip3 install SecretStorage-3.3.3-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SecretStorage/SecretStorage-3.3.3-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/54/24/b4293291fa1dd830f353d2cb163295742fa87f179fcc8a20a306a81978b7/SecretStorage-3.3.3-py3-none-any.whl
         sha256: f356e6628222568e3af06f2eba8df495efa13b3b63081dafd4f7d9a7b7bc9f99
 
   # jaraco.classes dependency
@@ -130,7 +130,7 @@ modules:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/m/more_itertools/more_itertools-10.6.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/23/62/0fe302c6d1be1c777cab0616e6302478251dfbf9055ad426f5d0def75c89/more_itertools-10.6.0-py3-none-any.whl
         sha256: 6eb054cb4b6db1473f6e15fcc676a08e4732548acd47c708f0e179c2c7c01e89
 
   # keyring dependency
@@ -140,7 +140,7 @@ modules:
       - pip3 install jaraco.classes-3.4.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.classes/jaraco.classes-3.4.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/7f/66/b15ce62552d84bbfcec9a4873ab79d993a1dd4edb922cbfccae192bd5b5f/jaraco.classes-3.4.0-py3-none-any.whl
         sha256: f662826b6bed8cace05e7ff873ce0f9283b5c924470fe664fff1c2f00f581790
 
   - name: python3-jaraco.context
@@ -149,7 +149,7 @@ modules:
       - pip3 install jaraco.context-6.0.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.context/jaraco.context-6.0.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/ff/db/0c52c4cf5e4bd9f5d7135ec7669a3a767af21b3a308e1ed3674881e52b62/jaraco.context-6.0.1-py3-none-any.whl
         sha256: f797fc481b490edb305122c9181830a3a5b76d84ef6d1aef2fb9b47ab956f9e4
 
   - name: python3-jaraco.functools
@@ -158,7 +158,7 @@ modules:
       - pip3 install jaraco.functools-4.1.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/j/jaraco.functools/jaraco.functools-4.1.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/9f/4f/24b319316142c44283d7540e76c7b5a6dbd5db623abd86bb7b3491c21018/jaraco.functools-4.1.0-py3-none-any.whl
         sha256: ad159f13428bc4acbf5541ad6dec511f91573b90fba04df61dafa2a1231cf649
 
   - name: python3-keyring
@@ -169,7 +169,7 @@ modules:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/k/keyring/keyring-25.6.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/d3/32/da7f44bcb1105d3e88a0b74ebdca50c59121d2ddf71c9e34ba47df7f3a56/keyring-25.6.0-py3-none-any.whl
         sha256: 552a3f7af126ece7ed5c89753650eec89c7eaae8617d0aa4d9ad2b75111266bd
 
   - name: python3-css-parser
@@ -178,7 +178,7 @@ modules:
       - pip3 install css_parser-1.0.10-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/c/css_parser/css_parser-1.0.10-py2.py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/7c/01/4a633580393fa23e17c22f5782886e898c0fdbdb9e77736552a7a12637b5/css_parser-1.0.10-py2.py3-none-any.whl
         sha256: d2e955a114829f0a327cc5535c2e65fe2e40b883b892881017d419a3b6dd05b7
 
   - name: python3-precis_i18n
@@ -187,7 +187,7 @@ modules:
       - pip3 install precis_i18n-1.1.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/precis_i18n/precis_i18n-1.1.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/26/e3/fe4c56b96b3af0990ecfd03f7d6e5c05b75067574da71527d21778ac8a54/precis_i18n-1.1.1-py3-none-any.whl
         sha256: eabb3a3a8c01dededbc36cb0173f143c7bdfaa3f4fcd9b4ca215c9fd6aed865f
 
   # GSound dependency
@@ -224,7 +224,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/p/pillow/pillow-11.1.0.tar.gz
+        url: https://files.pythonhosted.org/packages/f3/af/c097e544e7bd278333db77933e535098c259609c4eb3b85381109602fb5b/pillow-11.1.0.tar.gz
         sha256: 368da70808b36d73b4b390a8ffac11069f8a5c85f29eff1f1b01bcf3ef5b2a20
 
   # sentry-sdk dependency
@@ -234,7 +234,7 @@ modules:
       - pip3 install urllib3-2.3.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/u/urllib3/urllib3-2.3.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/c8/19/4ec628951a74043532ca2cf5d97b7b14863931476d117c471e8e2b1eb39f/urllib3-2.3.0-py3-none-any.whl
         sha256: 1cee9ad369867bfdbbb48b7dd50374c0967a0bb7710050facf0dd6911440e3df
 
   - name: python3-certifi
@@ -243,17 +243,17 @@ modules:
       - pip3 install certifi-2025.1.31-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/c/certifi/certifi-2025.1.31-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/38/fc/bce832fd4fd99766c04d1ee0eead6b0ec6486fb100ae5e74c1d91292b982/certifi-2025.1.31-py3-none-any.whl
         sha256: ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.23.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.24.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py2.py3/s/sentry_sdk/sentry_sdk-2.23.1-py2.py3-none-any.whl
-        sha256: 42ef3a6cc1db3d22cb2ab24163d75b23f291ad9892b1a8c44075ce809a32b191
+        url: https://files.pythonhosted.org/packages/c4/5d/dbfbda95daa8fdb22276513f930269149b338b67efb9ebf24ebf6d62ca9a/sentry_sdk-2.24.0-py2.py3-none-any.whl
+        sha256: 7150cfe61dfd37d30b33d8d6b153d25e14c69bbcf6f4a98ffc97e92de88be215
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -261,7 +261,7 @@ modules:
       - pip3 install typing_extensions-4.12.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/t/typing_extensions/typing_extensions-4.12.2-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/26/9f/ad63fc0248c5379346306f8668cda6e2e2e9c95e01216d2b8ffd9ff037d0/typing_extensions-4.12.2-py3-none-any.whl
         sha256: 04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d
 
   - name: python3-greenlet
@@ -270,16 +270,16 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/greenlet/greenlet-3.1.1.tar.gz
+        url: https://files.pythonhosted.org/packages/2f/ff/df5fede753cc10f6a5be0931204ea30c35fa2f2ea7a35b25bdaf4fe40e46/greenlet-3.1.1.tar.gz
         sha256: 4ce3ac6cdb6adf7946475d7ef31777c26d94bccc377e070a7986bd2d5c515467
 
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install SQLAlchemy-2.0.39-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.39-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/S/SQLAlchemy/SQLAlchemy-2.0.39-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/7b/0f/d69904cb7d17e65c65713303a244ec91fd3c96677baf1d6331457fd47e16/sqlalchemy-2.0.39-py3-none-any.whl
         sha256: a1c6b0a5e3e326a466d809b651c63f278b1256146a377a528b6938a279da334f
 
   - name: python3-emoji
@@ -288,7 +288,7 @@ modules:
       - pip3 install emoji-2.14.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/e/emoji/emoji-2.14.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/91/db/a0335710caaa6d0aebdaa65ad4df789c15d89b7babd9a30277838a7d9aac/emoji-2.14.1-py3-none-any.whl
         sha256: 35a8a486c1460addb1499e3bf7929d3889b2e2841a57401903699fef595e942b
 
   # gssapi dependency
@@ -298,7 +298,7 @@ modules:
       - pip3 install decorator-5.2.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/d/decorator/decorator-5.2.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/4e/8c/f3147f5c4b73e7550fe5f9352eaa956ae838d5c51eb58e7a25b9f3e2643b/decorator-5.2.1-py3-none-any.whl
         sha256: d316bb415a2d9e2d2b3abcc4084c6502fc09240e292cd76a76afc106a1c8e04a
 
   # qrcode dependencies
@@ -308,7 +308,7 @@ modules:
       - pip3 install pypng-0.20220715.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/pypng/pypng-0.20220715.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/3e/b9/3766cc361d93edb2ce81e2e1f87dd98f314d7d513877a342d31b30741680/pypng-0.20220715.0-py3-none-any.whl
         sha256: 4a43e969b8f5aaafb2a415536c1a8ec7e341cd6a3f957fd5b5f32a4cfeed902c
 
   # OMEMO dependencies
@@ -318,7 +318,7 @@ modules:
       - pip3 install qrcode-8.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/q/qrcode/qrcode-8.0-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/74/ab/df8d889fd01139db68ae9e5cb5c8f0ea016823559a6ecb427582d52b07dc/qrcode-8.0-py3-none-any.whl
         sha256: 9fc05f03305ad27a709eb742cf3097fa19e6f6f93bb9e2f039c0979190f6f1b1
 
   - name: python3-protobuf
@@ -327,7 +327,7 @@ modules:
       - pip3 install --no-deps protobuf-6.30.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/p/protobuf/protobuf-6.30.1-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/a1/d6/683a3d470398e45b4ad9b6c95b7cbabc32f9a8daf454754f0e3df1edffa6/protobuf-6.30.1-py3-none-any.whl
         sha256: 3c25e51e1359f1f5fa3b298faa6016e650d148f214db2e47671131b9063c53be
 
   - name: python3-omemo-dr
@@ -336,7 +336,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/o/omemo-dr/omemo-dr-1.0.1.tar.gz
+        url: https://files.pythonhosted.org/packages/9b/f1/c1f9a04a5eec3dc9aa766391d1bb7e45cba50e27ce80e051ab95edd6b880/omemo-dr-1.0.1.tar.gz
         sha256: 2a8a8c77231d73949bdd375278d4d5a261252bdaee52cb6241acb251c202d361
 
   # nbxmpp dependency (optional)
@@ -346,7 +346,7 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/source/g/gssapi/gssapi-1.9.0.tar.gz
+        url: https://files.pythonhosted.org/packages/04/2f/fcffb772a00e658f608e657791484e3111a19a722b464e893fef35f35097/gssapi-1.9.0.tar.gz
         sha256: f468fac8f3f5fca8f4d1ca19e3cd4d2e10bd91074e7285464b22715d13548afe
 
   - name: python3-nbxmpp
@@ -355,7 +355,7 @@ modules:
       - pip3 install nbxmpp-6.0.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/py3/n/nbxmpp/nbxmpp-6.0.2-py3-none-any.whl
+        url: https://files.pythonhosted.org/packages/55/c2/3fd3fc9c6a00ad332fd71dd6189a909b35d43a773b17b9f1fa483ae452ec/nbxmpp-6.0.2-py3-none-any.whl
         sha256: 9e906804663d6628d7acb71335c0b4c85700f91abcf0506c140fad81f85b382d
 
   - name: gajim
