@@ -774,9 +774,9 @@ class ChatControl(EventHelper):
             return f"{message} {reason}"
 
         if affiliation.value in ("owner", "admin", "member"):
-            message = (
-                _("You are now %(affiliation)s of this group chat") % uf_affiliation
-            )
+            message = _("You are now %(affiliation)s of this group chat") % {
+                "affiliation": uf_affiliation
+            }
         else:
             # "none"
             message = _("Your affiliations to this group chat have been removed")
