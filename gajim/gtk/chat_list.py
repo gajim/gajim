@@ -67,9 +67,11 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         self.set_sort_func(self._sort_func)
         self._set_placeholder()
 
+        self._force_sort = False
         self._rows_need_sort = False
         self._context_menu_visible = False
         self._mouseover = False
+        self._scheduled_sort_id = None
 
         hover_controller = Gtk.EventControllerMotion()
         self._connect(hover_controller, "enter", self._on_cursor_enter)
@@ -99,6 +101,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         Gtk.ListBox.do_unroot(self)
         self._disconnect_all()
         self.unregister_events()
+        self._abort_scheduled_sort("unroot")
         self.set_filter_func(None)
         self.set_header_func(None)
         self.set_sort_func(None)
@@ -380,7 +383,7 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
     ) -> None:
 
         self._context_menu_visible = menu_is_visible
-        self._schedule_check_sort_inhibit()
+        self._schedule_sort()
 
     def _on_drop(
         self, _drop_target: Gtk.DropTarget, value: GObject.Value, _x: float, y: float
@@ -465,9 +468,9 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
                     row.set_header_type(None)
 
     def _sort_func(self, row1: ChatListRow, row2: ChatListRow) -> int:
-        if self._is_sort_inhibited():
+        if not self._force_sort and self._is_sort_inhibited():
             self._rows_need_sort = True
-            log.debug("Sort inhibited")
+            log.debug("Delay sorting because it is inhibited")
             return 0
 
         # Sort pinned rows according to stored order
@@ -485,30 +488,46 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         # Sort by timestamp
         return -1 if row1.timestamp > row2.timestamp else 1
 
-    def invalidate_sort(self, *, force: bool = False) -> None:
+    def invalidate_sort(self, *, force: bool = False) -> bool:  # pyright: ignore
+        log.debug("Try sorting chatlist")
         if not force and self._is_sort_inhibited():
-            return
+            log.debug("Abort sorting because it is inhibited")
+            return False
 
         self._rows_need_sort = False
-        log.debug("Sort Chatlist")
+        self._force_sort = force
         Gtk.ListBox.invalidate_sort(self)
+        self._force_sort = False
+        log.debug("Sorting successful")
+        return True
 
     def _is_sort_inhibited(self) -> bool:
         return self._mouseover or self._context_menu_visible
 
-    def _schedule_check_sort_inhibit(self) -> None:
-        if self._is_sort_inhibited():
-            return
-        GLib.timeout_add(100, self._check_sort_inhibit)
+    def _schedule_sort(self) -> None:
+        self._abort_scheduled_sort("schedule is renewed")
+        log.debug("Schedule sort")
+        self._scheduled_sort_id = GLib.timeout_add(100, self._execute_scheduled_sort)
 
-    def _check_sort_inhibit(self) -> None:
-        if self._is_sort_inhibited():
-            return
+    def _abort_scheduled_sort(self, reason: str) -> None:
+        if self._scheduled_sort_id is not None:
+            log.debug("Abort scheduled sort, reason: %s", reason)
+            GLib.source_remove(self._scheduled_sort_id)
+        self._scheduled_sort_id = None
 
+    def _execute_scheduled_sort(self) -> int:
+        log.debug("Execute scheduled sort")
         if not self._rows_need_sort:
-            return
+            log.debug("Abort scheduled sort, reason: no rows changed")
+            self._scheduled_sort_id = None
+            return GLib.SOURCE_REMOVE
 
-        self.invalidate_sort()
+        sort_executed = self.invalidate_sort()
+        if sort_executed:
+            self._scheduled_sort_id = None
+            return GLib.SOURCE_REMOVE
+
+        return GLib.SOURCE_CONTINUE
 
     def _on_cursor_enter(
         self,
@@ -517,11 +536,11 @@ class ChatList(Gtk.ListBox, EventHelper, SignalManager):
         _y: int,
     ) -> None:
         self._mouseover = True
-        self._schedule_check_sort_inhibit()
+        self._abort_scheduled_sort("mouse over list")
 
     def _on_cursor_leave(self, _controller: Gtk.EventControllerMotion) -> None:
         self._mouseover = False
-        self._schedule_check_sort_inhibit()
+        self._schedule_sort()
 
     @staticmethod
     def _get_nick_for_received_message(account: str, message: Message) -> str:
