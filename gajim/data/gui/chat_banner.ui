@@ -175,7 +175,7 @@
             <property name="action-name">win.show-contact-info</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">feather-user-symbolic</property>
+                <property name="icon-name">lucide-user-cog-symbolic</property>
               </object>
             </child>
           </object>
