@@ -1035,9 +1035,7 @@ class ContactListItem(GObject.Object):
             show = contact.show
             is_self = contact.is_self
 
-        menu = None
-        if groupchat:
-            menu = get_start_chat_row_menu(account, jid)
+        menu = get_start_chat_row_menu(account, jid)
 
         is_new = jid is None
 

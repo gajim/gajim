@@ -501,11 +501,25 @@ def get_start_chat_button_menu() -> GajimMenu:
     return GajimMenu.from_list(menuitems)
 
 
-def get_start_chat_row_menu(account: str, jid: JID) -> GajimMenu:
-    params = AccountJidParam(account=account, jid=jid)
-    menuitems: MenuItemListT = [
-        (_("Forget this Group Chat"), "app.forget-groupchat", params),
-    ]
+def get_start_chat_row_menu(account: str, jid: JID | None) -> GajimMenu | None:
+    if jid is None:
+        return None
+
+    client = app.get_client(account)
+    contact = client.get_module("Contacts").get_contact(jid)
+
+    menuitems: MenuItemListT = []
+
+    command_params = GLib.Variant("(sas)", (account, [str(jid)]))
+    menuitems.append(
+        (_("Execute Command…"), f"app.{account}-execute-command", command_params)
+    )
+
+    if isinstance(contact, GroupchatContact):
+        account_jid_params = AccountJidParam(account=account, jid=jid)
+        menuitems.append(
+            (_("Forget this Group Chat"), "app.forget-groupchat", account_jid_params)
+        )
 
     return GajimMenu.from_list(menuitems)
 
