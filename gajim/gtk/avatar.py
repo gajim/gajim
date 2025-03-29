@@ -24,10 +24,13 @@ from gajim.common import configpaths
 from gajim.common import types
 from gajim.common.const import AvatarSize
 from gajim.common.const import StyleAttr
+from gajim.common.modules.contacts import BareContact
 from gajim.common.util.classes import Singleton
 from gajim.common.util.image import get_pixbuf_from_file
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.muc import get_groupchat_name
+from gajim.common.util.status import get_client_status
+from gajim.common.util.status import get_global_show
 
 from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util.icons import load_icon_surface
@@ -554,6 +557,66 @@ class AvatarStorage(metaclass=Singleton):
 
         self._cache[workspace_id][(size, scale, None, None)] = texture
         return texture
+
+    @staticmethod
+    def get_account_button_texture(
+        account: str | None,
+        size: int,
+        scale: int,
+    ) -> Gdk.Texture:
+        if account is not None:
+            jid = app.get_jid_from_account(account)
+            client = app.get_client(account)
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(contact, BareContact)
+            return app.app.avatar_storage.get_texture(
+                contact, size, scale, get_client_status(account)
+            )
+
+        # Paint default avatar on grey background (incl. show)
+        size = size * scale
+        width = size
+        height = size
+
+        surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+        context = cairo.Context(surface)
+
+        context.set_source_rgb(0.75, 0.75, 0.75)
+        context.rectangle(0, 0, width, height)
+        context.fill()
+
+        icon_surface = load_icon_surface("feather-user", int(size * 0.7), scale)
+        if icon_surface is not None:
+            pos = (size - size * 0.7) / 2
+            context.set_source_surface(icon_surface, pos, pos)
+            context.paint_with_alpha(0.6)
+
+        surface = clip_circle(context.get_target())
+        surface = add_status_to_avatar(surface, get_global_show())
+        return convert_surface_to_texture(surface)
+
+    @staticmethod
+    def get_gajim_circle_icon(size: int, scale: int) -> Gdk.Texture:
+        # Paint activity icon on grey background
+        size = size * scale
+        width = size
+        height = size
+
+        surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
+        context = cairo.Context(surface)
+
+        context.set_source_rgb(1, 1, 1)
+        context.rectangle(0, 0, width, height)
+        context.fill()
+
+        icon_surface = load_icon_surface("gajim", int(size * 0.6), scale)
+        if icon_surface is not None:
+            pos = (size - size * 0.6) / 2
+            context.set_source_surface(icon_surface, pos, pos)
+            context.paint()
+
+        surface = clip_circle(context.get_target())
+        return convert_surface_to_texture(surface)
 
     @staticmethod
     def _load_for_publish(path: str) -> tuple[bool, bytes] | None:

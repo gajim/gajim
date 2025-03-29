@@ -70,6 +70,7 @@ class AvatarSize(IntEnum):
     GROUP_INFO = 100
     TOOLTIP = 100
     ACCOUNT_PAGE = 150
+    ACTIVITY_PAGE = 100
     VCARD = 200
     PUBLISH = 200
 

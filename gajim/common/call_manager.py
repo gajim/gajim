@@ -94,11 +94,14 @@ class CallManager(EventHelper):
             contact = client.get_module('Contacts').get_contact(event.jid)
             assert isinstance(contact, BareContact)
             app.ged.raise_event(
-                events.Notification(account=event.account,
-                                    jid=event.jid,
-                                    type='incoming-call',
-                                    title=_('Incoming Call'),
-                                    text=_('%s is calling') % contact.name))
+                events.Notification(
+                    context_id="",
+                    account=event.account,
+                    jid=event.jid,
+                    type='incoming-call',
+                    title=_('Incoming Call'),
+                    text=_('%s is calling') % contact.name)
+                )
 
     def _on_jingle_connected(self,
                              event: events.JingleConnectedReceived

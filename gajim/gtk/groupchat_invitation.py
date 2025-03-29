@@ -125,16 +125,16 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         join_box.append(self._nick_chooser)
         join_box.append(join_button)
 
-        button_box = Gtk.Box(
+        self._button_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL,
             margin_top=6,
             vexpand=True,
             valign=Gtk.Align.END,
         )
-        button_box.prepend(decline_button)
-        button_box.append(join_box)
+        self._button_box.prepend(decline_button)
+        self._button_box.append(join_box)
 
-        main_box.append(button_box)
+        main_box.append(self._button_box)
         self.append(main_box)
 
         join_button.grab_focus()
@@ -154,3 +154,6 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
     def _on_decline(self, _button: Gtk.Button) -> None:
         self._client.get_module("MUC").decline(self._room_jid, self._from)
         self.emit("declined")
+
+    def disable_buttons(self) -> None:
+        self._button_box.set_sensitive(False)

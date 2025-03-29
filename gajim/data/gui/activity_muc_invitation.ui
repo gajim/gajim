@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="muc_invitation_page">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">6</property>
+        <property name="label" translatable="yes">Invitation</property>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="muc_invitation_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="halign">center</property>
+        <property name="valign">start</property>
+        <property name="margin-top">18</property>
+        <property name="spacing">12</property>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="muc_invitation_declined_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="margin-top">18</property>
+        <child>
+          <object class="GtkImage" id="invitation_image">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">18</property>
+            <property name="pixel-size">100</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="invitation_title_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="invitation_text_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

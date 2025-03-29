@@ -37,6 +37,7 @@ from gajim.common.util.preview import guess_simple_file_type
 from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.text import remove_invalid_xml_chars
 
+from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
@@ -61,6 +62,9 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._last_quoted_id: int | None = None
 
         self.add_named(ChatPlaceholderBox(), "empty")
+
+        self._activity_page = ActivityPage()
+        self.add_named(self._activity_page, "activity")
 
         self._chat_function_page = ChatFunctionPage()
         self._chat_function_page.connect("finish", self._on_function_finished)
@@ -252,6 +256,11 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         # Reset primary clipboard to what it was before switching chats,
         # otherwise it gets overridden.
         clipboard.set(text)
+
+    def show_activity_page(self, context_id: str | None = None) -> None:
+        if not context_id:
+            self._activity_page.show_default_page()
+        self.set_visible_child_name("activity")
 
     def _on_room_password_required(
         self, _contact: GroupchatContact, _signal_name: str
@@ -460,6 +469,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.ged.raise_event(
             events.Notification(
+                context_id="",
                 account=contact.account,
                 jid=contact.jid,
                 type="incoming-message",
@@ -476,10 +486,10 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             "send-file",
             "send-file-httpupload",
             # 'send-file-jingle',
-            "show-contact-info",
             "start-video-call",
             "start-voice-call",
             "send-message",
+            "show-contact-info",
             "muc-change-nickname",
             "muc-invite",
             "muc-contact-info",

@@ -466,7 +466,7 @@ def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu | None:
 def get_account_notifications_menu(account: str) -> GajimMenu:
     menuitems: MenuItemListT = [
         (
-            _("Deny all subscription requests"),
+            _("Deny all contact requests"),
             f"win.subscription-deny-all-{account}",
             None,
         ),
@@ -475,14 +475,14 @@ def get_account_notifications_menu(account: str) -> GajimMenu:
 
 
 def get_subscription_menu(account: str, jid: JID) -> GajimMenu:
-    params = AddChatActionParams(account=account, jid=jid, type="chat", select=True)
-    value = str(jid)
+    add_chat_params = AddChatActionParams(
+        account=account, jid=jid, type="chat", select=True
+    )
+    account_jid_params = AccountJidParam(account=account, jid=jid)
     menuitems: MenuItemListT = [
-        (_("Start Chat"), "win.add-chat", params),
-        (_("Details"), f"win.contact-info-{account}", value),
-        (_("Block"), f"win.subscription-block-{account}", value),
-        (_("Report"), f"win.subscription-report-{account}", value),
-        (_("Deny"), f"win.subscription-deny-{account}", value),
+        (_("Start Chat"), "win.add-chat", add_chat_params),
+        (_("Details"), "win.chat-contact-info", account_jid_params),
+        (_("Block"), f"app.{account}-block-contact", account_jid_params),
     ]
 
     return GajimMenu.from_list(menuitems)

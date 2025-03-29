@@ -69,9 +69,9 @@ log = logging.getLogger("gajim.gtk.notification")
 
 NOTIFICATION_ICONS: dict[str, str] = {
     "incoming-message": "gajim-chat-msg-recv",
-    "group-chat-invitation": "gajim-group-chat-invitation",
+    "muc-invitation": "gajim-group-chat-invitation",
     "incoming-call": "call-start-symbolic",
-    "subscription_request": "gajim-subscription-request",
+    "subscription-request": "gajim-subscription-request",
     "unsubscribed": "gajim-unsubscribed",
     "file-request-received": "document-send",
     "file-send-error": "dialog-error",
@@ -88,6 +88,7 @@ class NotificationBackend(EventHelper):
         self.register_events(
             [
                 ("notification", ged.GUI2, self._on_notification),
+                ("notification-withdrawn", ged.GUI2, self._on_notification_withdrawn),
                 ("account-enabled", ged.GUI2, self._on_account_enabled),
                 ("chat-read", ged.GUI2, self._on_chat_read),
             ]
@@ -112,6 +113,9 @@ class NotificationBackend(EventHelper):
             return
 
         self._send(event)
+
+    def _on_notification_withdrawn(self, event: events.NotificationWithdrawn) -> None:
+        self._withdraw([event.context_id])
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
         client = app.get_client(event.account)
@@ -276,6 +280,7 @@ class WindowsToastNotification(NotificationBackend):
             sub_type=event.sub_type or "",
             account=event.account,
             jid=jid,
+            context_id=event.context_id,
         )
 
         button = ToastButton(
@@ -301,7 +306,7 @@ class Linux(NotificationBackend):
     _action_types = [
         "connection-failed",
         "server-shutdown",
-        "group-chat-invitation",
+        "muc-invitation",
         "incoming-call",
         "incoming-message",
         "subscription-request",
@@ -393,6 +398,7 @@ class Linux(NotificationBackend):
             sub_type=event.sub_type or "",
             account=event.account,
             jid=jid,
+            context_id=event.context_id,
         )
 
         action = f"app.{event.account}-open-event"
@@ -407,6 +413,9 @@ class Linux(NotificationBackend):
             )
 
     def _make_notification_id(self, event: events.Notification) -> str | None:
+        if event.context_id:
+            return event.context_id
+
         if event.type in ("connection-failed", "server-shutdown"):
             return self._make_id([event.type, event.account])
 

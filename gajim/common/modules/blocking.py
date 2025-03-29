@@ -19,9 +19,11 @@ from nbxmpp.protocol import JID
 from nbxmpp.structs import BlockingProperties
 from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import StanzaHandler
+from nbxmpp.types import BlockingReportValues
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.events import ContactBlocked
 from gajim.common.events import FeatureDiscovered
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
@@ -65,6 +67,11 @@ class Blocking(BaseModule):
     def is_blocked(self, jid: JID) -> bool:
         return jid in self.blocked
 
+    def block(self, jids: list[JID], report: BlockingReportValues | None) -> None:
+        self._nbxmpp("Blocking").block(jids, report)
+        for jid in jids:
+            app.ged.raise_event(ContactBlocked(account=self._account, jid=jid))
+
     @as_task
     def get_blocking_list(
         self
@@ -89,7 +96,7 @@ class Blocking(BaseModule):
         _task = yield  # noqa: F841
 
         if block:
-            result = yield self.block(block)
+            result = yield self._nbxmpp("Blocking").block(list(block))
             raise_if_error(result)
 
         if unblock:

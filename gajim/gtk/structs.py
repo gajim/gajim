@@ -29,6 +29,7 @@ class OpenEventActionParams(VariantMixin):
     sub_type: str
     account: str
     jid: str
+    context_id: str
 
 
 @dataclass
@@ -88,6 +89,13 @@ class DeleteMessageParam(VariantMixin):
     account: str
     jid: JID
     pk: int
+
+
+@dataclass
+class SubscriptionAcceptParam(VariantMixin):
+    account: str
+    jid: JID
+    nickname: Optional[str]  # noqa: UP007
 
 
 def get_params_class(func: Callable[..., Any]) -> Any:

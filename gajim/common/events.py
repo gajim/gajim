@@ -31,6 +31,7 @@ from gajim.common import app
 from gajim.common.const import EncryptionInfoMsg
 from gajim.common.const import JingleState
 from gajim.common.file_props import FileProp
+from gajim.common.helpers import get_uuid
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import Encoder
@@ -38,6 +39,7 @@ from gajim.common.storage.base import Encoder
 if typing.TYPE_CHECKING:
     from gajim.common.client import Client
     from gajim.common.modules.httpupload import HTTPFileTransfer
+    from gajim.plugins.manifest import PluginManifest
 
 ChatListEventT = Union[
     'MessageReceived',
@@ -54,6 +56,7 @@ ChatListEventT = Union[
 @dataclass
 class ApplicationEvent:
     name: str
+    context_id: str = field(init=False, default_factory=get_uuid)
 
     def serialize(self) -> str:
         '''Convert to a json formatted string for database storage'''
@@ -111,6 +114,7 @@ class PasswordRequired(ApplicationEvent):
 @dataclass
 class Notification(ApplicationEvent):
     name: str = field(init=False, default='notification')
+    context_id: str
     account: str
     type: str
     title: str
@@ -120,6 +124,12 @@ class Notification(ApplicationEvent):
     sound: str | None = None
     icon_name: str | None = None
     resource: str | None = None
+
+
+@dataclass
+class NotificationWithdrawn(ApplicationEvent):
+    name: str = field(init=False, default='notification-withdrawn')
+    context_id: str
 
 
 @dataclass
@@ -643,7 +653,7 @@ class PresenceReceived(ApplicationEvent):
 
 @dataclass
 class SubscribePresenceReceived(ApplicationEvent):
-    name: str = field(init=False, default='subscribe-presence-received')
+    name: str = field(init=False, default='subscription-request')
     conn: 'Client'
     account: str
     jid: str
@@ -683,6 +693,12 @@ class FileRequestReceivedEvent(ApplicationEvent):
 @dataclass
 class AllowGajimUpdateCheck(ApplicationEvent):
     name: str = field(init=False, default='allow-gajim-update-check')
+
+
+@dataclass
+class PluginUpdatesAvailable(ApplicationEvent):
+    name: str = field(init=False, default='plugin-updates-available')
+    manifests: list[PluginManifest]
 
 
 @dataclass
@@ -838,7 +854,15 @@ class DBMigrationProgress(ApplicationEvent):
 class DBMigrationFinished(ApplicationEvent):
     name: str = field(init=False, default='db-migration-finished')
 
+
 @dataclass
 class DBMigrationError(ApplicationEvent):
     name: str = field(init=False, default='db-migration-error')
     exception: Exception
+
+
+@dataclass
+class ContactBlocked(ApplicationEvent):
+    name: str = field(init=False, default='contact-blocked')
+    account: str
+    jid: JID

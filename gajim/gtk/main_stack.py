@@ -10,11 +10,12 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 
 from gajim.gtk.account_page import AccountPage
-from gajim.gtk.app_page import AppPage
+from gajim.gtk.activity_list import ActivityListView
+from gajim.gtk.activity_page import ActivityPage
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_page import ChatPage
 
-PageT = ChatPage | AccountPage | AppPage
+PageT = ChatPage | AccountPage
 
 
 class MainStack(Gtk.Stack):
@@ -23,12 +24,13 @@ class MainStack(Gtk.Stack):
 
         self.add_named(Gtk.Box(), "empty")
 
-        self._app_page = AppPage()
-        self.add_named(self._app_page, "app")
-
         self._chat_page = ChatPage()
         self._chat_page.connect("chat-selected", self._on_chat_selected)
         self.add_named(self._chat_page, "chats")
+
+        activity_list = self._chat_page.get_activity_list()
+        activity_list.connect("activate", self._on_activity_item_activate)
+        activity_list.connect("unselected", self._on_activity_item_unselected)
 
         for account in app.settings.get_active_accounts():
             self.add_account_page(account)
@@ -49,13 +51,15 @@ class MainStack(Gtk.Stack):
     def get_visible_page_name(self) -> str | None:
         return self.get_visible_child_name()
 
-    def show_app_page(self) -> None:
-        self.set_visible_child_name("app")
+    def show_activity_page(self, context_id: str | None = None) -> None:
+        self.set_visible_child_name("chats")
+        self._chat_page.show_activity_page(context_id)
 
-    def get_app_page(self) -> AppPage:
-        app_page = self.get_child_by_name("app")
-        assert isinstance(app_page, AppPage)
-        return app_page
+    def get_activity_page(self) -> ActivityPage:
+        chat_stack = self._chat_page.get_chat_stack()
+        activity_page = chat_stack.get_child_by_name("activity")
+        assert isinstance(activity_page, ActivityPage)
+        return activity_page
 
     def show_chats(self, workspace_id: str) -> None:
         self._chat_page.show_workspace_chats(workspace_id)
@@ -76,6 +80,15 @@ class MainStack(Gtk.Stack):
         chat_page = self.get_child_by_name("chats")
         assert isinstance(chat_page, ChatPage)
         return chat_page
+
+    def _on_activity_item_activate(
+        self, listview: ActivityListView, position: int
+    ) -> None:
+        item = listview.get_listitem(position)
+        self.get_activity_page().process_row_activated(item)
+
+    def _on_activity_item_unselected(self, _listview: ActivityListView) -> None:
+        self.get_activity_page().show_default_page()
 
     def _on_chat_selected(
         self, _chat_list: ChatList, _workspace_id: str, _account: str, _jid: JID

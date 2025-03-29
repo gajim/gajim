@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="subscription_page">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">18</property>
+        <property name="label" translatable="yes">Contact</property>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImage" id="subscription_image">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">18</property>
+        <property name="pixel-size">100</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="subscription_title_label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="justify">center</property>
+        <property name="wrap">True</property>
+        <property name="max-width-chars">52</property>
+        <style>
+          <class name="bold16"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkLabel" id="subscription_text_label">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="wrap">True</property>
+        <property name="max-width-chars">52</property>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="subscribe_box">
+      <property name="visible">0</property>
+      <property name="can-focus">False</property>
+      <property name="halign">center</property>
+      <property name="margin-top">18</property>
+      <property name="spacing">12</property>
+      <child>
+        <object class="GtkButton" id="subscribe_deny_button">
+          <property name="label" translatable="yes">Deny</property>
+        </object>
+      </child>
+      <child>
+        <object class="GtkButton" id="subscribe_accept_button">
+          <property name="label" translatable="yes">Accept</property>
+          <style>
+            <class name="suggested-action"/>
+          </style>
+        </object>
+      </child>
+      <child>
+        <object class="GtkMenuButton" id="subscribe_menu_button">
+          <child>
+            <object class="GtkImage">
+              <property name="icon-name">view-more-symbolic</property>
+            </object>
+          </child>
+        </object>
+      </child>
+    </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="unsubscribed_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="halign">center</property>
+        <property name="margin-top">18</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkButton" id="unsubscribed_remove_button">
+            <property name="label" translatable="yes">Remove Contact</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

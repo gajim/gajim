@@ -19,6 +19,7 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
+from nbxmpp.types import BlockingReportValues
 
 from gajim.common import app
 from gajim.common import events
@@ -38,11 +39,9 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
-from gajim.plugins.manifest import PluginManifest
-from gajim.plugins.repository import PluginRepository
 
 from gajim.gtk.account_side_bar import AccountSideBar
-from gajim.gtk.app_side_bar import AppSideBar
+from gajim.gtk.activity_side_bar import ActivitySideBar
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
@@ -55,6 +54,7 @@ from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
+from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.structs import ChatListEntryParam
@@ -104,9 +104,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._ui.left_grid.attach(MainMenuButton(), 0, 0, 1, 1)
 
-        self._app_page = self._main_stack.get_app_page()
-        self._app_side_bar = AppSideBar(self._app_page)
-        self._ui.app_box.prepend(self._app_side_bar)
+        self._activity_side_bar = ActivitySideBar(self._chat_page)
+        self._ui.activity_box.prepend(self._activity_side_bar)
 
         self._workspace_side_bar = WorkspaceSideBar(self._chat_page)
         self._ui.workspace_scrolled.set_child(self._workspace_side_bar)
@@ -138,8 +137,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ("file-request-received", ged.GUI1, self._on_file_request),
                 ("account-enabled", ged.GUI1, self._on_account_enabled),
                 ("account-disabled", ged.GUI1, self._on_account_disabled),
-                ("allow-gajim-update-check", ged.GUI1, self._on_allow_gajim_update),
-                ("gajim-update-available", ged.GUI1, self._on_gajim_update_available),
                 ("roster-item-exchange", ged.GUI1, self._on_roster_item_exchange),
                 ("plain-connection", ged.GUI1, self._on_plain_connection),
                 ("password-required", ged.GUI1, self._on_password_required),
@@ -148,13 +145,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 ("message-sent", ged.GUI1, self._on_message_sent),
                 ("signed-in", ged.GUI1, self._on_signed_in),
             ]
-        )
-
-        app.plugin_repository.connect(
-            "plugin-updates-available", self._on_plugin_updates_available
-        )
-        app.plugin_repository.connect(
-            "auto-update-finished", self._on_plugin_auto_update_finished
         )
 
         self._check_for_account()
@@ -241,7 +231,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.hide_window()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
-        self._account_side_bar.add_account(event.account)
         self._main_stack.add_account_page(event.account)
         client = app.get_client(event.account)
         client.connect_signal("state-changed", self._on_client_state_changed)
@@ -250,12 +239,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
         workspace_id = self._workspace_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
-        self._account_side_bar.remove_account(event.account)
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
-
-    def update_account_unread_count(self, account: str, count: int) -> None:
-        self._account_side_bar.update_unread_count(account, count)
 
     def _on_key_pressed(
         self,
@@ -281,15 +266,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_client_resume_successful(self, client: Client, _signal_name: str) -> None:
 
         app.app.update_feature_actions_state(client.account)
-
-    def _on_allow_gajim_update(self, event: events.AllowGajimUpdateCheck) -> None:
-        self.add_app_message(event.name)
-
-    def _on_gajim_update_available(self, event: events.GajimUpdateAvailable) -> None:
-
-        self.add_app_message(
-            event.name, new_version=event.version, new_setup_url=event.setup_url
-        )
 
     @staticmethod
     def _on_roster_item_exchange(event: events.RosterItemExchangeEvent) -> None:
@@ -446,6 +422,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ("mark-workspace-as-read", self._mark_workspace_as_read),
             ("add-chat", self._add_chat),
             ("add-group-chat", self._add_group_chat),
+            ("chat-contact-info", self._on_chat_contact_info),
         ]
 
         for action, func in actions:
@@ -693,6 +670,17 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self.get_clipboard().set(param.get_string())
 
     @actionmethod
+    def _on_chat_contact_info(
+        self, _action: Gio.SimpleAction, params: AccountJidParam
+    ) -> None:
+        client = app.get_client(params.account)
+        contact = client.get_module("Contacts").get_contact(params.jid)
+        if isinstance(contact, GroupchatContact):
+            open_window("GroupchatDetails", contact=contact)
+        else:
+            open_window("ContactInfo", account=contact.account, contact=contact)
+
+    @actionmethod
     def _on_moderate_message(
         self, _action: Gio.SimpleAction, params: ModerateMessageParam
     ) -> None:
@@ -835,9 +823,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             chat_list_stack.set_chat_unread_count(chat.account, chat.jid, chat.count)
 
     def show_account_page(self, account: str) -> None:
-        self._app_side_bar.unselect_all()
+        self._activity_side_bar.unselect()
         self._workspace_side_bar.unselect_all()
-        self._account_side_bar.activate_account_page(account)
+        self._account_side_bar.select()
         self._main_stack.show_account(account)
 
     def get_active_workspace(self) -> str | None:
@@ -969,8 +957,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id: str) -> None:
-        self._app_side_bar.unselect_all()
-        self._account_side_bar.unselect_all()
+        self._activity_side_bar.unselect()
+        self._account_side_bar.unselect()
         self._main_stack.show_chats(workspace_id)
         self._workspace_side_bar.activate_workspace(workspace_id)
 
@@ -1055,8 +1043,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             chat_list.clear_chat_list_row(account, jid)
 
     def select_chat(self, account: str, jid: JID) -> None:
-        self._app_side_bar.unselect_all()
-        self._account_side_bar.unselect_all()
+        self._activity_side_bar.unselect()
+        self._account_side_bar.unselect()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
@@ -1074,19 +1062,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if chat_list is not None:
             chat_list.select_chat_number(number)
 
-    def show_app_page(self) -> None:
-        self._account_side_bar.unselect_all()
+    def show_activity_page(self, context_id: str | None = None) -> None:
+        self._account_side_bar.unselect()
         self._workspace_side_bar.unselect_all()
-        self._main_stack.show_app_page()
-
-    def add_app_message(
-        self,
-        category: str,
-        new_version: str | None = None,
-        new_setup_url: str | None = None,
-    ) -> None:
-
-        self._app_page.add_app_message(category, new_version, new_setup_url)
+        self._activity_side_bar.select()
+        self._main_stack.show_activity_page(context_id)
 
     def get_control(self) -> ChatControl:
         return self._chat_page.get_control()
@@ -1231,7 +1211,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             return
 
         # TODO: Keep "confirm_block" setting?
-        def _block_contact(report: str | None = None) -> None:
+        def _block_contact(report: BlockingReportValues | None = None) -> None:
             client.get_module("Blocking").block([contact.jid], report)
             self._chat_page.remove_chat(account, contact.jid)
 
@@ -1380,16 +1360,3 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             on_continue2(message)
 
         on_continue("")
-
-    def _on_plugin_updates_available(
-        self,
-        _repository: PluginRepository,
-        _signal_name: str,
-        manifests: list[PluginManifest],
-    ) -> None:
-        self._app_page.add_plugin_update_message(manifests)
-
-    def _on_plugin_auto_update_finished(
-        self, _repository: PluginRepository, _signal_name: str
-    ) -> None:
-        self.add_app_message("plugin-updates-finished")

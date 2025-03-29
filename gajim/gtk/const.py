@@ -230,6 +230,7 @@ MAIN_WIN_ACTIONS = [
     ("start-voice-call", None, False),
     ("start-video-call", None, False),
     ("show-contact-info", None, True),
+    ("chat-contact-info", "a{sv}", True),
     ("send-message", None, False),
     ("muc-change-nickname", None, False),
     ("muc-invite", None, False),
@@ -305,6 +306,9 @@ ACCOUNT_ACTIONS = [
     ("server-info", "s"),
     ("services", "s"),
     ("sync-history", "s"),
+    ("subscription-accept", "a{sv}"),
+    ("subscription-deny", "a{sv}"),
+    ("subscription-deny-all", None),
 ]
 
 
@@ -324,6 +328,9 @@ ONLINE_ACCOUNT_ACTIONS = {
     "services",
     "sync-history",
     "mark-as-read",
+    "subscription-accept",
+    "subscription-deny",
+    "subscription-deny-all",
 }
 
 

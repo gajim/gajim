@@ -278,7 +278,8 @@ class Client(Observable, ClientModules):
                                                  'gajim.$rand')
             if error == 'system-shutdown':
                 app.ged.raise_event(
-                    Notification(account=self._account,
+                    Notification(context_id="",
+                                 account=self._account,
                                  type='server-shutdown',
                                  title=_('Server Shutdown'),
                                  text=text or _('The server was shut down.')))
@@ -295,7 +296,8 @@ class Client(Observable, ClientModules):
                                                      on_password=_on_password))
 
             app.ged.raise_event(
-                Notification(account=self._account,
+                Notification(context_id="",
+                             account=self._account,
                              type='connection-failed',
                              title=_('Authentication failed'),
                              text=text or error))

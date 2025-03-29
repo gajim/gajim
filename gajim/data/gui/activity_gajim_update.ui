@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="gajim_update_page">
+    <property name="visible">True</property>
+    <property name="can-focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkLabel">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="margin-bottom">18</property>
+        <property name="label" translatable="yes">Updates</property>
+        <style>
+          <class name="large-header"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="update_permission_box">
+        <property name="visible">False</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">18</property>
+            <property name="pixel-size">36</property>
+            <property name="icon-name">dialog-question-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_permission_title_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <property name="label" translatable="yes">Search for Gajim updates periodically?</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="update_permission_enable_button">
+            <property name="label" translatable="yes">Activate</property>
+            <property name="halign">center</property>
+            <property name="margin-top">12</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="update_gajim_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">18</property>
+            <property name="pixel-size">36</property>
+            <property name="icon-name">feather-info-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_gajim_title_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_gajim_text_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="update_gajim_button">
+            <property name="label" translatable="yes">Download</property>
+            <property name="halign">center</property>
+            <property name="margin-top">12</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="update_plugins_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">18</property>
+            <property name="pixel-size">36</property>
+            <property name="icon-name">feather-info-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_plugins_title_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_plugins_text_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="update_plugins_automatically_checkbox">
+            <property name="halign">center</property>
+            <property name="active">1</property>
+            <property name="label" translatable="yes">Update plugins automatically</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <property name="margin-top">12</property>
+            <property name="halign">center</property>
+            <child>
+              <object class="GtkButton" id="update_plugins_show_button">
+                <property name="label" translatable="yes">Show Plugins</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="update_plugins_button">
+                <property name="label" translatable="yes">Update</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="update_plugins_success_box">
+        <property name="visible">0</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="margin-bottom">18</property>
+            <property name="pixel-size">36</property>
+            <property name="icon-name">feather-check-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_plugins_success_title_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="justify">center</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="bold16"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="update_plugins_success_text_label">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="wrap">True</property>
+            <property name="max-width-chars">52</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="update_plugins_success_button">
+            <property name="label" translatable="yes">Show Plugins</property>
+            <property name="halign">center</property>
+            <property name="margin-top">12</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

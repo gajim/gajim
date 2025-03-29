@@ -26,7 +26,6 @@ class AccountPageBuilder(Builder):
     account_settings_button: Gtk.Button
     account_page_menu_button: Gtk.MenuButton
     status_box: Gtk.Box
-    notifications_menu_button: Gtk.MenuButton
 
 class AccountWizardBuilder(Builder):
     account_label_box: Gtk.Box
@@ -64,6 +63,62 @@ class AccountWizardBuilder(Builder):
     server_comboboxtext_sign_up: Gtk.ComboBoxText
     update_provider_list_icon: Gtk.Image
 
+class ActivityDefaultBuilder(Builder):
+    default_page: Gtk.Box
+
+class ActivityGajimUpdateBuilder(Builder):
+    gajim_update_page: Gtk.Box
+    update_permission_box: Gtk.Box
+    update_permission_title_label: Gtk.Label
+    update_permission_enable_button: Gtk.Button
+    update_gajim_box: Gtk.Box
+    update_gajim_title_label: Gtk.Label
+    update_gajim_text_label: Gtk.Label
+    update_gajim_button: Gtk.Button
+    update_plugins_box: Gtk.Box
+    update_plugins_title_label: Gtk.Label
+    update_plugins_text_label: Gtk.Label
+    update_plugins_automatically_checkbox: Gtk.CheckButton
+    update_plugins_show_button: Gtk.Button
+    update_plugins_button: Gtk.Button
+    update_plugins_success_box: Gtk.Box
+    update_plugins_success_title_label: Gtk.Label
+    update_plugins_success_text_label: Gtk.Label
+    update_plugins_success_button: Gtk.Button
+
+class ActivityListRowBuilder(Builder):
+    activity_list_row: Gtk.Box
+    account_identifier: Gtk.Box
+    avatar_image: Gtk.Image
+    activity_type_indicator: Gtk.Image
+    activity_title_label: Gtk.Label
+    timestamp_label: Gtk.Label
+    activity_subject_label: Gtk.Label
+    activity_message_label: Gtk.Label
+    revealer: Gtk.Revealer
+    close_button: Gtk.Button
+
+class ActivityMucInvitationBuilder(Builder):
+    muc_invitation_page: Gtk.Box
+    muc_invitation_box: Gtk.Box
+    muc_invitation_declined_box: Gtk.Box
+    invitation_image: Gtk.Image
+    invitation_title_label: Gtk.Label
+    invitation_text_label: Gtk.Label
+
+class ActivitySubscriptionBuilder(Builder):
+    subscription_page: Gtk.Box
+    subscription_image: Gtk.Image
+    subscription_title_label: Gtk.Label
+    subscription_text_label: Gtk.Label
+    subscribe_box: Gtk.Box
+    subscribe_deny_button: Gtk.Button
+    subscribe_accept_button: Gtk.Button
+    subscribe_menu_button: Gtk.MenuButton
+    unsubscribed_box: Gtk.Box
+    unsubscribed_dismiss_button: Gtk.Button
+    unsubscribed_remove_button: Gtk.Button
+
 class AddContactBuilder(Builder):
     address_box: Gtk.Box
     account_box: Gtk.Box
@@ -88,23 +143,6 @@ class AdvancedConfigurationBuilder(Builder):
     treeview_selection: Gtk.TreeSelection
     description: Gtk.Label
     reset_button: Gtk.Button
-
-class AppPageBuilder(Builder):
-    gajim_update: Gtk.Box
-    update_message: Gtk.Label
-    download_update: Gtk.Button
-    dismiss_gajim_update: Gtk.Button
-    gajim_update_check: Gtk.Box
-    activate_update_check: Gtk.Button
-    dismiss_update_check: Gtk.Button
-    plugin_updates: Gtk.Box
-    auto_update_plugins: Gtk.CheckButton
-    update_plugins: Gtk.Button
-    open_plugins: Gtk.Button
-    dismiss_plugin_updates: Gtk.Button
-    plugin_updates_finished: Gtk.Box
-    notify_after_plugin_updates: Gtk.CheckButton
-    dismiss_update_notification: Gtk.Button
 
 class AssistantBuilder(Builder):
     main_grid: Gtk.Grid
@@ -221,14 +259,8 @@ class ChatListRowBuilder(Builder):
 class ChatPanedBuilder(Builder):
     paned: Gtk.Paned
     middle_grid: Gtk.Grid
-    header_bar: Gtk.Grid
-    controls_box: Gtk.Box
-    search_entry: Gtk.SearchEntry
-    start_chat_menu_button: Gtk.MenuButton
-    section_label_eventbox: Gtk.Box
-    section_label: Gtk.Label
-    workspace_settings_button: Gtk.Button
-    chat_list_scrolled: Gtk.ScrolledWindow
+    list_scrolled: Gtk.ScrolledWindow
+    list_stack: Gtk.Stack
     right_grid: Gtk.Grid
 
 class ContactInfoBuilder(Builder):
@@ -547,8 +579,8 @@ class HistoryExportBuilder(Builder):
 class MainBuilder(Builder):
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
+    activity_box: Gtk.Box
     workspace_scrolled: Gtk.ScrolledWindow
-    app_box: Gtk.Box
     toggle_chat_list_button: Gtk.Button
     toggle_chat_list_icon: Gtk.Image
     account_box: Gtk.Box
@@ -981,6 +1013,36 @@ def get_builder(
 ) -> AccountWizardBuilder: ...  # noqa
 @overload
 def get_builder(
+    file_name: Literal["activity_default.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityDefaultBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["activity_gajim_update.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityGajimUpdateBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["activity_list_row.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityListRowBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["activity_muc_invitation.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivityMucInvitationBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["activity_subscription.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> ActivitySubscriptionBuilder: ...  # noqa
+@overload
+def get_builder(
     file_name: Literal["add_contact.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> AddContactBuilder: ...  # noqa
 @overload
@@ -989,10 +1051,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> AdvancedConfigurationBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["app_page.ui"], instance: Any = None, widgets: list[str] = ...
-) -> AppPageBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["assistant.ui"], instance: Any = None, widgets: list[str] = ...

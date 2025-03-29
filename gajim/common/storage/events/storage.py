@@ -114,7 +114,9 @@ class EventStorage(AlchemyStorage):
         for event_row in session.scalars(stmt).all():
             event_class = EVENT_CLASSES[event_row.event]
             data = json.loads(event_row.data, object_hook=json_decoder)
+            context_id = data.pop("context_id")
             event_ = event_class(**data, timestamp=event_row.timestamp)
+            event_.context_id = context_id
             event_list.append(event_)
 
         return event_list

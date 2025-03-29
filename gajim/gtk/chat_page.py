@@ -21,12 +21,12 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 
+from gajim.gtk.activity_list import ActivityListView
 from gajim.gtk.builder import get_builder
-from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_stack import ChatListStack
+from gajim.gtk.chat_page_header import ChatPageHeader
 from gajim.gtk.chat_stack import ChatStack
-from gajim.gtk.menus import get_start_chat_button_menu
 from gajim.gtk.search_view import SearchView
 from gajim.gtk.util.classes import SignalManager
 
@@ -67,15 +67,13 @@ class ChatPage(Gtk.Box, SignalManager):
 
         self._restore_occupants_list = False
 
-        section_hover_controller = Gtk.EventControllerMotion()
-        self._connect(section_hover_controller, "enter", self._on_section_label_enter)
-        self._connect(section_hover_controller, "leave", self._on_section_label_leave)
-        self._ui.section_label_eventbox.add_controller(section_hover_controller)
+        self._chat_page_header = ChatPageHeader()
+        self._ui.middle_grid.attach(self._chat_page_header, 0, 0, 1, 1)
 
-        self._chat_filter = ChatFilter()
-        self._chat_filter.insert_after(self._ui.controls_box, self._ui.search_entry)
-
-        self._chat_list_stack = ChatListStack(self._chat_filter, self._ui.search_entry)
+        self._chat_list_stack = ChatListStack(
+            self._chat_page_header.get_chat_filter(),
+            self._chat_page_header.get_search_entry(),
+        )
         self._connect(self._chat_list_stack, "chat-selected", self._on_chat_selected)
         self._connect(
             self._chat_list_stack, "chat-unselected", self._on_chat_unselected
@@ -86,15 +84,12 @@ class ChatPage(Gtk.Box, SignalManager):
             "notify::visible-child-name",
             self._on_chat_list_changed,
         )
-        self._ui.chat_list_scrolled.set_child(self._chat_list_stack)
+        self._ui.list_stack.add_named(self._chat_list_stack, "chat-list-stack")
 
-        self._ui.start_chat_menu_button.set_menu_model(get_start_chat_button_menu())
-
-        self._connect(
-            self._ui.workspace_settings_button,
-            "clicked",
-            self._on_edit_workspace_clicked,
-        )
+        search_entry = self._chat_page_header.get_search_entry()
+        self._activity_list = ActivityListView()
+        self._activity_list.set_search_entry(search_entry)
+        self._ui.list_stack.add_named(self._activity_list, "activity-list")
 
         self._ui.paned.set_position(app.settings.get("chat_handle_position"))
         self._ui.paned.connect("notify::position", self._on_handle_position_notify)
@@ -132,29 +127,19 @@ class ChatPage(Gtk.Box, SignalManager):
     def get_chat_stack(self) -> ChatStack:
         return self._chat_stack
 
+    def get_activity_list(self) -> ActivityListView:
+        return self._activity_list
+
     @staticmethod
     def _on_handle_position_notify(paned: Gtk.Paned, *args: Any) -> None:
         position = paned.get_position()
         app.settings.set("chat_handle_position", position)
 
-    def _on_section_label_enter(
-        self,
-        controller: Gtk.EventControllerMotion,
-        _x: int,
-        _y: int,
-    ) -> None:
-        self._ui.workspace_settings_button.set_visible(True)
-
-    def _on_section_label_leave(self, controller: Gtk.EventControllerMotion) -> None:
-        self._ui.workspace_settings_button.set_visible(False)
-
-    def _on_edit_workspace_clicked(self, _button: Gtk.Button) -> None:
-        app.window.activate_action("win.edit-workspace", GLib.Variant("s", ""))
-
     def _on_chat_selected(
         self, _chat_list_stack: ChatListStack, workspace_id: str, account: str, jid: JID
     ) -> None:
 
+        self._ui.list_stack.set_visible_child_name("chat-list-stack")
         self._chat_stack.show_chat(account, jid)
 
         if (
@@ -199,24 +184,40 @@ class ChatPage(Gtk.Box, SignalManager):
         self.hide_search()
 
     def _on_chat_list_changed(self, chat_list_stack: ChatListStack, *args: Any) -> None:
+        self._update_list_stack_header()
 
-        chat_list = chat_list_stack.get_current_chat_list()
+    def _update_list_stack_header(self) -> None:
+        self._ui.list_scrolled.get_vadjustment().set_value(0)
+
+        chat_list = self._chat_list_stack.get_current_chat_list()
         assert chat_list is not None
-        name = app.settings.get_workspace_setting(chat_list.workspace_id, "name")
-        self._ui.section_label.set_text(name)
-        self._ui.search_entry.set_text("")
-        self._ui.chat_list_scrolled.get_vadjustment().set_value(0)
+        self._chat_page_header.set_mode("chat")
+        self._chat_page_header.set_header_text(
+            app.settings.get_workspace_setting(chat_list.workspace_id, "name")
+        )
 
     def add_chat_list(self, workspace_id: str) -> None:
         self._chat_list_stack.add_chat_list(workspace_id)
 
     def show_workspace_chats(self, workspace_id: str) -> None:
+        self._ui.list_stack.set_visible_child_name("chat-list-stack")
         self._chat_list_stack.show_chat_list(workspace_id)
-        self._chat_filter.reset()
+        self._chat_stack.clear()
+        self._update_list_stack_header()
+
+    def show_activity_page(self, context_id: str | None = None) -> None:
+        if context_id:
+            self._activity_list.select_with_context_id(context_id)
+        else:
+            self._activity_list.unselect()
+
+        self._chat_page_header.set_mode("activity")
+        self._ui.list_stack.set_visible_child_name("activity-list")
+        self._chat_stack.show_activity_page(context_id)
 
     def update_workspace(self, workspace_id: str) -> None:
         name = app.settings.get_workspace_setting(workspace_id, "name")
-        self._ui.section_label.set_text(name)
+        self._chat_page_header.set_header_text(name)
 
     def remove_chat_list(self, workspace_id: str) -> None:
         self._chat_list_stack.remove_chat_list(workspace_id)
@@ -225,6 +226,7 @@ class ChatPage(Gtk.Box, SignalManager):
         return self._chat_list_stack.contains_chat(account, jid)
 
     def select_chat(self, account: str, jid: JID) -> None:
+        self._ui.list_stack.set_visible_child_name("chat-list-stack")
         self._chat_list_stack.select_chat(account, jid)
 
     def chat_exists_for_workspace(
@@ -268,6 +270,7 @@ class ChatPage(Gtk.Box, SignalManager):
         )
 
         if self._startup_finished:
+            self._ui.list_stack.set_visible_child_name("chat-list-stack")
             if select:
                 self._chat_list_stack.select_chat(account, jid)
             self._chat_list_stack.store_open_chats(workspace_id)
