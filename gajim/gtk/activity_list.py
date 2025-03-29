@@ -112,6 +112,7 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
                 ("unsubscribed-presence-received", ged.GUI1, self._on_event),
                 ("gajim-update-available", ged.GUI1, self._on_event),
                 ("allow-gajim-update-check", ged.GUI1, self._on_event),
+                ("account-disabled", ged.GUI1, self._on_account_disabled),
             ]
         )
 
@@ -292,6 +293,13 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
 
         item = GajimPluginUpdateFinished.from_event()
         self._add(item)
+
+    def _on_account_disabled(self, event: events.AccountDisabled) -> None:
+        count = self._model.get_n_items()
+        for pos in range(count - 1, -1, -1):
+            item = cast(ActivityListItem[Any], self._model.get_item(pos))
+            if item.account == event.account:
+                self._model.remove(pos)
 
 
 class ActivityListItem(Generic[E], GObject.Object):
