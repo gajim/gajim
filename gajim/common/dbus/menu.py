@@ -22,6 +22,10 @@ MENU_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
 <?xml version="1.0" encoding="UTF-8"?>
 <node>
     <interface name="com.canonical.dbusmenu">
+        <property name="Version" type="u" access="read" />
+        <property name="TextDirection" type="s" access="read" />
+        <property name="Status" type="s" access="read" />
+        <property name="IconThemePath" type="as" access="read" />
         <method name="GetLayout">
             <arg type="i" name="parentId" direction="in" />
             <arg type="i" name="recursionDepth" direction="in" />
@@ -72,12 +76,13 @@ MENU_NODE_INFO = Gio.DBusNodeInfo.new_for_xml(
 
 
 PROPERTY_NAMES = [
-    'children_display',
+    'children-display',
+    'disposition',
     'enabled',
-    'icon_name',
+    'icon-name',
     'label',
-    'toggle_state',
-    'toggle_type',
+    'toggle-state',
+    'toggle-type',
     'type',
     'visible',
 ]
@@ -101,6 +106,10 @@ def get_children_from_parent(
     return None
 
 
+def remove_invalid_properties(properties: list[str]) -> list[str]:
+    return [p for p in properties if p in PROPERTY_NAMES]
+
+
 @dataclasses.dataclass
 class DBusMenu:
     items: list[DBusMenuItem]
@@ -113,9 +122,11 @@ class DBusMenu:
             return []
         return children
 
-    def serialize(self, parent_id: int, recursion_depth: int) -> list[GLib.Variant]:
+    def serialize(
+        self, parent_id: int, recursion_depth: int, property_names: list[str]
+    ) -> list[GLib.Variant]:
         children = self.get_children(parent_id)
-        return [item.serialize(recursion_depth) for item in children]
+        return [item.serialize(recursion_depth, property_names) for item in children]
 
 
 @dataclasses.dataclass
@@ -123,7 +134,8 @@ class DBusMenuItem:
     id: int
     label: str = ''
     callback: Any = None
-    type: str = ''
+    type: str = 'standard'
+    disposition = 'normal'
     enabled: bool = True
     visible: bool = True
     toggle_type: str = ''
@@ -152,12 +164,8 @@ class DBusMenuItem:
 
         raise ValueError
 
-    def serialize_props(
-        self, property_names: list[str] = PROPERTY_NAMES
-    ) -> dict[str, GLib.Variant]:
+    def serialize_props(self, property_names: list[str]) -> dict[str, GLib.Variant]:
         result: dict[str, GLib.Variant] = {}
-
-        property_names = [prop.replace('-', '_') for prop in property_names]
 
         if not property_names:
             property_names = PROPERTY_NAMES
@@ -165,16 +173,19 @@ class DBusMenuItem:
         for prop in property_names:
             variant = self.serialize_prop(prop)
             result[prop.replace('_', '-')] = variant
+
         return result
 
-    def serialize(self, recursion_depth: int) -> GLib.Variant:
-        props = self.serialize_props()
+    def serialize(
+        self, recursion_depth: int, property_names: list[str]
+    ) -> GLib.Variant:
+        props = self.serialize_props(property_names)
 
         children = []
         if recursion_depth > 1 or recursion_depth == -1:
             if self.children:
                 children = [
-                    item.serialize(recursion_depth - 1)
+                    item.serialize(recursion_depth - 1, property_names)
                     for item in self.children
                 ]
 
@@ -182,6 +193,12 @@ class DBusMenuItem:
 
 
 class DBusMenuService(DBusService):
+
+    Status = 'normal'
+    IconThemePath = ''
+    Version = 3
+    TextDirection = 'ltr'
+
     def __init__(
         self, object_path: str, session_bus: Gio.DBusConnection, menu: DBusMenu
     ) -> None:
@@ -218,10 +235,12 @@ class DBusMenuService(DBusService):
         return flat_items
 
     def GetLayout(
-        self, parent_id: int, recursion_depth: int, property_names: str
+        self, parent_id: int, recursion_depth: int, property_names: list[str]
     ) -> tuple[int, tuple[int, dict[str, GLib.Variant], list[GLib.Variant]]]:
 
-        children = self._menu.serialize(parent_id, recursion_depth)
+        property_names = remove_invalid_properties(property_names)
+
+        children = self._menu.serialize(parent_id, recursion_depth, property_names)
 
         ret = (
             self._revision,
@@ -235,9 +254,7 @@ class DBusMenuService(DBusService):
     ) -> tuple[GetGroupPropertiesT]:
         ret: GetGroupPropertiesT = []
 
-        if not property_names:
-            # Empty means all properties
-            property_names = PROPERTY_NAMES
+        property_names = remove_invalid_properties(property_names)
 
         if not item_ids:
             # Empty means all items
@@ -258,6 +275,10 @@ class DBusMenuService(DBusService):
         return (ret,)
 
     def GetProperty(self, item_id: int, name: str) -> GLib.Variant | None:
+        if name not in PROPERTY_NAMES:
+            log.warning('Unsupported property: %s', name)
+            return None
+
         item = self._flat_items.get(item_id)
         if item is None:
             log.warning('Unknown item id: %s', item_id)
@@ -281,7 +302,9 @@ class DBusMenuService(DBusService):
             item.flip_toggle_state()
             self.ItemsPropertiesUpdated(item, 'toggle-state')
 
-    def EventGroup(self, events: list[tuple[int, str, GLib.Variant, int]]) -> list[int]:
+    def EventGroup(
+        self, events: list[tuple[int, str, GLib.Variant, int]]
+    ) -> tuple[list[int]]:
         not_found: list[int] = []
 
         for item_id, event_id, _data, _timestamp in events:
@@ -300,7 +323,7 @@ class DBusMenuService(DBusService):
                 item.flip_toggle_state()
                 self.ItemsPropertiesUpdated(item, 'toggle-state')
 
-        return not_found
+        return (not_found,)
 
     def AboutToShow(self, item_id: int) -> tuple[bool]:
         return (False,)
