@@ -59,7 +59,7 @@ class AccountPage(Gtk.Box, SignalManager):
             "account_label", self._on_account_label_changed, account
         )
 
-        self.update()
+        self._update()
 
     def do_unroot(self) -> None:
         self._disconnect_all()
@@ -67,13 +67,18 @@ class AccountPage(Gtk.Box, SignalManager):
         self._client.disconnect_all_from_obj(self)
         app.settings.disconnect_signals(self)
         Gtk.Box.do_unroot(self)
+        del self._client
+        del self._ui
         app.check_finalize(self)
 
+    def get_account(self) -> str:
+        return self._account
+
     def _on_account_label_changed(self, _value: str, *args: Any) -> None:
-        self.update()
+        self._update()
 
     def _on_avatar_update(self, *args: Any) -> None:
-        self.update()
+        self._update()
 
     def _on_account_settings(self, _button: Gtk.Button) -> None:
         window = open_window("AccountsWindow")
@@ -86,7 +91,7 @@ class AccountPage(Gtk.Box, SignalManager):
         jid = client.get_own_jid().bare
         self._ui.our_jid_label.set_text(jid)
 
-    def update(self) -> None:
+    def _update(self) -> None:
         account_label = app.settings.get_account_setting(self._account, "account_label")
         self._ui.account_label.set_text(account_label)
 

@@ -4,10 +4,10 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from gi.repository import Gtk
 from nbxmpp.protocol import JID
-
-from gajim.common import app
 
 from gajim.gtk.account_page import AccountPage
 from gajim.gtk.activity_list import ActivityListView
@@ -32,17 +32,18 @@ class MainStack(Gtk.Stack):
         activity_list.connect("activate", self._on_activity_item_activate)
         activity_list.connect("unselected", self._on_activity_item_unselected)
 
-        for account in app.settings.get_active_accounts():
-            self.add_account_page(account)
-
-    def add_account_page(self, account: str) -> None:
-        account_page = AccountPage(account)
-        self.add_named(account_page, account)
+    def _get_current_account_page(self) -> AccountPage | None:
+        return cast(AccountPage | None, self.get_child_by_name("account"))
 
     def remove_account_page(self, account: str) -> None:
-        account_page = self.get_child_by_name(account)
-        assert account_page is not None
-        app.check_finalize(account_page)
+        account_page = self._get_current_account_page()
+        if account_page is None:
+            return
+
+        if account_page.get_account() != account:
+            return
+
+        self.set_visible_child_name("empty")
         self.remove(account_page)
 
     def remove_chats_for_account(self, account: str) -> None:
@@ -69,12 +70,17 @@ class MainStack(Gtk.Stack):
         self.set_visible_child_name("chats")
 
     def show_account(self, account: str) -> None:
-        self.set_visible_child_name(account)
+        account_page = self._get_current_account_page()
+        if account_page is not None:
+            if account_page.get_account() == account:
+                self.set_visible_child_name("account")
+                return
 
-    def get_account_page(self, account: str) -> AccountPage:
-        account_page = self.get_child_by_name(account)
-        assert isinstance(account_page, AccountPage)
-        return account_page
+            self.remove(account_page)
+
+        account_page = AccountPage(account)
+        self.add_named(account_page, "account")
+        self.set_visible_child_name("account")
 
     def get_chat_page(self) -> ChatPage:
         chat_page = self.get_child_by_name("chats")

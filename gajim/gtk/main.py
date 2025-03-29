@@ -231,7 +231,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             self.hide_window()
 
     def _on_account_enabled(self, event: events.AccountEnabled) -> None:
-        self._main_stack.add_account_page(event.account)
         client = app.get_client(event.account)
         client.connect_signal("state-changed", self._on_client_state_changed)
         client.connect_signal("resume-successful", self._on_client_resume_successful)
