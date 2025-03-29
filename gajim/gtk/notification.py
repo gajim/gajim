@@ -44,11 +44,9 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import ResourceContact
 
-from gajim.gtk.avatar import convert_surface_to_texture
 from gajim.gtk.avatar import merge_avatars
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import OpenEventActionParams
-from gajim.gtk.util.icons import load_icon_surface
 
 MIN_WINDOWS_TOASTS_WIN_VERSION = 10240
 
@@ -68,13 +66,8 @@ if (
 log = logging.getLogger("gajim.gtk.notification")
 
 NOTIFICATION_ICONS: dict[str, str] = {
-    "incoming-message": "gajim-chat-msg-recv",
     "muc-invitation": "gajim-group-chat-invitation",
-    "incoming-call": "call-start-symbolic",
     "subscription-request": "gajim-subscription-request",
-    "unsubscribed": "gajim-unsubscribed",
-    "file-request-received": "document-send",
-    "file-send-error": "dialog-error",
 }
 
 
@@ -198,11 +191,12 @@ class WindowsToastNotification(NotificationBackend):
         toast.text_fields = [event.title, event.text]
 
         toast_image = self._get_toast_image(event)
-        toast_display_image = ToastDisplayImage(
-            image=toast_image,
-            position=ToastImagePosition.AppLogo,
-        )
-        toast.AddImage(toast_display_image)
+        if toast_image is not None:
+            toast_display_image = ToastDisplayImage(
+                image=toast_image,
+                position=ToastImagePosition.AppLogo,
+            )
+            toast.AddImage(toast_display_image)
 
         for button in self._get_toast_buttons(event):
             toast.AddAction(button)
@@ -249,26 +243,20 @@ class WindowsToastNotification(NotificationBackend):
 
         GLib.idle_add(app.window.present)
 
-    def _get_toast_image(self, event: events.Notification) -> ToastImage:
+    def _get_toast_image(self, event: events.Notification) -> ToastImage | None:
         if event.type == "incoming-message":
             assert event.jid is not None
-            texture = _get_texture_for_notification(
+            texture = _get_avatar_texture_for_notification(
                 event.account, event.jid, event.resource
             )
-            return ToastImage(_get_path_for_texture(texture))
-
-        if event.icon_name is not None:
-            surface = load_icon_surface(event.icon_name, 32)
-            assert surface is not None
-            texture = convert_surface_to_texture(surface)
-            return ToastImage(_get_path_for_texture(texture))
+            return ToastImage(_get_path_for_avatar_texture(texture))
 
         icon_name = event.sub_type or event.type
-        icon_name = NOTIFICATION_ICONS.get(icon_name, "mail-unread")
-        surface = load_icon_surface(icon_name, 32)
-        assert surface is not None
-        texture = convert_surface_to_texture(surface)
-        return ToastImage(_get_path_for_texture(texture))
+        icon_name = NOTIFICATION_ICONS.get(icon_name)
+        if icon_name is None:
+            return None
+
+        return ToastImage(_get_icon_path(icon_name, 32))
 
     def _get_toast_buttons(self, event: events.Notification) -> list[ToastButton]:
         toast_buttons: list[ToastButton] = []
@@ -310,7 +298,6 @@ class Linux(NotificationBackend):
         "incoming-call",
         "incoming-message",
         "subscription-request",
-        "unsubscribed",
     ]
 
     def __init__(self):
@@ -371,7 +358,8 @@ class Linux(NotificationBackend):
         notification.set_priority(Gio.NotificationPriority.NORMAL)
 
         icon = self._make_icon(event)
-        notification.set_icon(icon)
+        if icon is not None:
+            notification.set_icon(icon)
 
         self._add_actions(event, notification)
         notification_id = self._make_notification_id(event)
@@ -424,21 +412,21 @@ class Linux(NotificationBackend):
 
         return None
 
-    def _make_icon(self, event: events.Notification) -> Gio.Icon:
+    def _make_icon(self, event: events.Notification) -> Gio.Icon | None:
         if event.type == "incoming-message":
             assert event.jid is not None
 
             if app.is_flatpak():
-                return _get_bytes_icon(event.account, event.jid, event.resource)
+                return _get_avatar_bytes_icon(event.account, event.jid, event.resource)
 
-            return _get_file_icon(event.account, event.jid, event.resource)
-
-        if event.icon_name is not None:
-            return Gio.ThemedIcon.new(event.icon_name)
+            return _get_avatar_file_icon(event.account, event.jid, event.resource)
 
         icon_name = event.sub_type or event.type
-        icon_name = NOTIFICATION_ICONS.get(icon_name, "mail-unread")
-        return Gio.ThemedIcon.new(icon_name)
+        icon_name = NOTIFICATION_ICONS.get(icon_name)
+        if icon_name is None:
+            return None
+
+        return _get_file_icon(icon_name, 96)
 
     def _withdraw(self, details: list[Any]) -> None:
         if not self._notifications_supported:
@@ -465,7 +453,7 @@ def _get_participant_texture(
     return merge_avatars(muc_avatar, participant_avatar)
 
 
-def _get_texture_for_notification(
+def _get_avatar_texture_for_notification(
     account: str, jid: JID | str, resource: str | None
 ) -> Gdk.Texture:
     size = AvatarSize.NOTIFICATION
@@ -481,21 +469,38 @@ def _get_texture_for_notification(
     return contact.get_avatar(size, 1, add_show=False)
 
 
-def _get_bytes_icon(
+def _get_file_icon(name: str, size: int) -> Gio.FileIcon:
+    path = _get_icon_path(name, size)
+    return Gio.FileIcon(file=Gio.File.new_for_path(str(path)))
+
+
+def _get_icon_path(name: str, size: int) -> Path:
+    return (
+        configpaths.get("ICONS")
+        / "hicolor"
+        / f"{size}x{size}"
+        / "status"
+        / f"{name}.png"
+    )
+
+
+def _get_avatar_bytes_icon(
     account: str, jid: JID | str, resource: str | None
 ) -> Gio.BytesIcon:
-    texture = _get_texture_for_notification(account, jid, resource)
+    texture = _get_avatar_texture_for_notification(account, jid, resource)
     png_bytes = texture.save_to_png_bytes()
     return Gio.BytesIcon(bytes=png_bytes)
 
 
-def _get_file_icon(account: str, jid: JID | str, resource: str | None) -> Gio.FileIcon:
-    texture = _get_texture_for_notification(account, jid, resource)
-    path = _get_path_for_texture(texture)
+def _get_avatar_file_icon(
+    account: str, jid: JID | str, resource: str | None
+) -> Gio.FileIcon:
+    texture = _get_avatar_texture_for_notification(account, jid, resource)
+    path = _get_path_for_avatar_texture(texture)
     return Gio.FileIcon(file=Gio.File.new_for_path(str(path)))
 
 
-def _get_path_for_texture(texture: Gdk.Texture) -> Path:
+def _get_path_for_avatar_texture(texture: Gdk.Texture) -> Path:
     png_bytes = texture.save_to_png_bytes()
     png_bytes_data = png_bytes.get_data()
     assert png_bytes_data is not None

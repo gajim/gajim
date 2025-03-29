@@ -122,7 +122,6 @@ class Notification(ApplicationEvent):
     jid: JID | str | None = None
     sub_type: str | None = None
     sound: str | None = None
-    icon_name: str | None = None
     resource: str | None = None
 
 
