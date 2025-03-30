@@ -574,9 +574,8 @@ class AvatarStorage(metaclass=Singleton):
             )
 
         # Paint default avatar on grey background (incl. show)
-        size = size * scale
-        width = size
-        height = size
+        width = size * scale
+        height = width
 
         surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
         context = cairo.Context(surface)
@@ -587,10 +586,11 @@ class AvatarStorage(metaclass=Singleton):
 
         icon_surface = load_icon_surface("feather-user", int(size * 0.7), scale)
         if icon_surface is not None:
-            pos = (size - size * 0.7) / 2
+            pos = (width - width * 0.7) / 2
             context.set_source_surface(icon_surface, pos, pos)
             context.paint_with_alpha(0.6)
 
+        surface.set_device_scale(scale, scale)
         surface = clip_circle(context.get_target())
         surface = add_status_to_avatar(surface, get_global_show())
         return convert_surface_to_texture(surface)
@@ -598,9 +598,8 @@ class AvatarStorage(metaclass=Singleton):
     @staticmethod
     def get_gajim_circle_icon(size: int, scale: int) -> Gdk.Texture:
         # Paint activity icon on grey background
-        size = size * scale
-        width = size
-        height = size
+        width = size * scale
+        height = width
 
         surface = cairo.ImageSurface(cairo.Format.ARGB32, width, height)
         context = cairo.Context(surface)
@@ -611,10 +610,11 @@ class AvatarStorage(metaclass=Singleton):
 
         icon_surface = load_icon_surface("gajim", int(size * 0.6), scale)
         if icon_surface is not None:
-            pos = (size - size * 0.6) / 2
+            pos = (width - width * 0.6) / 2
             context.set_source_surface(icon_surface, pos, pos)
             context.paint()
 
+        surface.set_device_scale(scale, scale)
         surface = clip_circle(context.get_target())
         return convert_surface_to_texture(surface)
 
