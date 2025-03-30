@@ -72,8 +72,8 @@ from gajim.common.modules.util import event_node
 from gajim.common.modules.util import prepare_stanza
 from gajim.common.storage.omemo import OMEMOStorage
 from gajim.common.structs import OutgoingMessage
+from gajim.common.util.decorators import cache_with_ttl
 from gajim.common.util.decorators import event_filter
-from gajim.common.util.decorators import lru_cache_with_ttl
 
 ALLOWED_TAGS = [
     ('request', Namespace.RECEIPTS),
@@ -546,7 +546,7 @@ class OMEMO(BaseModule):
         self._nbxmpp('OMEMO').set_bundle(bundle,
                                          self.backend.get_our_device())
 
-    @lru_cache_with_ttl(maxsize=512, ttl=7200)
+    @cache_with_ttl(ttl=7200)
     def _request_bundle_ttl(self, jid: str, device_id: int) -> None:
         self.request_bundle(jid, device_id)
 
@@ -592,7 +592,7 @@ class OMEMO(BaseModule):
             self._own_jid, [self.backend.get_our_device()])
         self.set_devicelist()
 
-    @lru_cache_with_ttl(maxsize=512, ttl=7200)
+    @cache_with_ttl(ttl=7200)
     def _request_device_list_ttl(self, jid: str) -> None:
         self.request_devicelist(jid)
 

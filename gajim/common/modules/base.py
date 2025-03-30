@@ -98,11 +98,15 @@ class BaseModule(EventHelper):
         self._log = self._set_logger(plugin)
         self._nbxmpp_callbacks: dict[str, Any] = {}
         self._stored_publish: types.AnyCallableT | None = None
+        self._ttl_cache: dict[Any, Any] = {}
         self.handlers: list[StanzaHandler] = []
 
     @classmethod
     def get_instance(cls, client: types.Client) -> BaseModule:
         return cls(client)
+
+    def get_ttl_cache(self) -> dict[Any, Any]:
+        return self._ttl_cache
 
     def _set_logger(self, plugin: bool) -> LogAdapter:
         logger_name = 'gajim.c.m.%s'
@@ -159,6 +163,7 @@ class BaseModule(EventHelper):
         return self._client.get_own_jid().new_as_bare()
 
     def cleanup(self) -> None:
+        self._ttl_cache.clear()
         self.handlers.clear()
         self.unregister_events()
         self._client.disconnect_all_from_obj(self)

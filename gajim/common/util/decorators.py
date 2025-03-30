@@ -5,7 +5,6 @@
 from typing import Any
 
 import logging
-from functools import lru_cache
 from functools import wraps
 from time import monotonic
 
@@ -14,8 +13,7 @@ from gi.repository import GLib
 log = logging.getLogger('gajim.c.util.decorators')
 
 
-def lru_cache_with_ttl(maxsize: int, typed: bool = False, ttl: int = 2) -> Any:
-    '''LRU-Cache with TTL'''
+def cache_with_ttl(ttl: int = 2) -> Any:
 
     class Result:
         __slots__ = ('timeout', 'value')
@@ -25,18 +23,24 @@ def lru_cache_with_ttl(maxsize: int, typed: bool = False, ttl: int = 2) -> Any:
             self.timeout = timeout
 
     def decorator(func: Any) -> Any:
-        @lru_cache(maxsize=maxsize, typed=typed)
-        def cached_func(*args: Any, **kwargs: Any) -> Result:
-            value = func(*args, **kwargs)
+        def cached_func(*args: Any) -> Result:
+            value = func(*args)
             timeout = monotonic() + ttl
             return Result(value, timeout)
 
         @wraps(func)
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            result = cached_func(*args, **kwargs)
-            if result.timeout < monotonic():
-                result.value = func(*args, **kwargs)
-                result.timeout = monotonic() + ttl
+        def wrapper(module: Any, *args: Any) -> Any:
+            ttl_cache = module.get_ttl_cache()
+            result = ttl_cache.get((module, *args))
+            if result is not None:
+                if result.timeout < monotonic():
+                    result.value = func(module, *args)
+                    result.timeout = monotonic() + ttl
+
+                return result.value
+
+            result = cached_func(module, *args)
+            ttl_cache[(module, *args)] = result
             return result.value
 
         return wrapper
