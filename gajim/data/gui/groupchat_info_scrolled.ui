@@ -190,7 +190,7 @@
         <property name="tooltip-text" translatable="yes">Group Chat Language</property>
         <property name="halign">end</property>
         <property name="valign">center</property>
-        <property name="icon-name">preferences-desktop-locale-symbolic</property>
+        <property name="icon-name">lucide-languages-symbolic</property>
         <style>
           <class name="dim-label"/>
         </style>
