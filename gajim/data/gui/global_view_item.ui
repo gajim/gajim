@@ -33,7 +33,24 @@
       </object>
     </child>
     <child>
-      <object class="GtkLabel" id="_language_label" />
+      <object class="GtkBox" id="_language_box">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">lucide-languages-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_language_label">
+            <style>
+              <class name="small-label"/>
+            </style>
+          </object>
+        </child>
+        <style>
+          <class name="dim-label"/>
+        </style>
+      </object>
     </child>
     <child>
       <object class="GtkBox">
@@ -45,7 +62,11 @@
           </object>
         </child>
         <child>
-          <object class="GtkLabel" id="_users_count_label" />
+          <object class="GtkLabel" id="_users_count_label">
+            <style>
+              <class name="small-label"/>
+            </style>
+          </object>
         </child>
         <style>
           <class name="dim-label"/>

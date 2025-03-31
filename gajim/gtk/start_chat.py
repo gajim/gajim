@@ -36,6 +36,7 @@ from gajim.common.const import AvatarSize
 from gajim.common.const import Direction
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.const import PresenceShowExt
+from gajim.common.const import RFC5646_LANGUAGE_TAGS
 from gajim.common.const import URIType
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
@@ -46,7 +47,6 @@ from gajim.common.modules.util import as_task
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.status import compare_show
-from gajim.common.util.text import get_country_flag_from_code
 from gajim.common.util.text import to_one_line
 from gajim.common.util.uri import parse_uri
 
@@ -1210,27 +1210,23 @@ class GlobalListItem(GObject.Object):
     name = GObject.Property(type=str)
     nusers = GObject.Property(type=str)
     description = GObject.Property(type=str)
+    language_visible = GObject.Property(type=bool, default=False)
     language = GObject.Property(type=str)
     language_code = GObject.Property(type=str)
 
     def __init__(self, item: MuclumbusItem) -> None:
         jid = JID.from_string(item.jid)
         name = item.name or jid.localpart or str(jid)
-
-        language_code = item.language.upper()[:2]
-        if language_code == "EN":
-            # Fix for most used languages/countries
-            language_code = "GB"
-
-        language_code = get_country_flag_from_code(language_code)
+        language = RFC5646_LANGUAGE_TAGS.get(item.language, item.language) or None
 
         super().__init__(
             jid=item.jid,
             name=name,
             nusers=item.nusers,
             description=item.description,
-            language=_("Language: %s") % item.language,
-            language_code=language_code,
+            language_visible=bool(language is not None),
+            language=_("Language: %s") % language,
+            language_code=item.language.upper()[:2],
         )
 
     def __repr__(self) -> str:
@@ -1244,6 +1240,7 @@ class GlobalViewItem(Gtk.Box):
     _name_box: Gtk.Box = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
     _description_label: Gtk.Label = Gtk.Template.Child()
+    _language_box: Gtk.Box = Gtk.Template.Child()
     _language_label: Gtk.Label = Gtk.Template.Child()
     _users_count_label: Gtk.Label = Gtk.Template.Child()
 
@@ -1256,8 +1253,9 @@ class GlobalViewItem(Gtk.Box):
             ("name", self._name_label, "label"),
             ("description", self._description_label, "label"),
             ("jid", self._name_box, "tooltip_text"),
+            ("language_visible", self._language_box, "visible"),
+            ("language", self._language_box, "tooltip_text"),
             ("language_code", self._language_label, "label"),
-            ("language", self._language_label, "tooltip_text"),
             ("nusers", self._users_count_label, "label"),
         ]
 
