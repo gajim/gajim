@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -142,10 +142,6 @@ msgid "%s and %s are typing…"
 msgstr ""
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s chce znát váš stav"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
 
@@ -212,6 +208,10 @@ msgstr "%s přestal sdílet svůj stav"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s zastavil přenos"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vám chce poslat soubor"
 
 #, python-format
 msgctxt "positive longitude"
@@ -476,6 +476,14 @@ msgid "Activated"
 msgstr "Aktivní"
 
 msgid "Active"
+msgstr "Aktivní"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Aktivovat"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Aktivní"
 
 msgid "Add"
@@ -1347,8 +1355,13 @@ msgstr "Seznam kontaktů: písmo skupinových konverzací"
 msgid "Contact List: Group Foreground Color"
 msgstr "Seznam kontaktů: Barva popředí skupiny"
 
-msgid "Contact Unsubscribed"
-msgstr "Kontakt odstraněn"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "Účet byl odebrán"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Seznam kontaktů"
 
 msgid "Contact information"
 msgstr "Informace o kontaktu"
@@ -1500,9 +1513,6 @@ msgstr "Logging ladění"
 msgid "Decline"
 msgstr "Odmítnout"
 
-msgid "Decline Invitation"
-msgstr "Odmítnout pozvánku"
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1569,8 +1579,9 @@ msgstr "Smazat motiv vzhledu"
 msgid "Deny"
 msgstr "Odmítnout"
 
-msgid "Deny all subscription requests"
-msgstr "Odmítnout všechny žádosti o sledování"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "Žádost o hlasový rozhovor"
 
 msgid "Description"
 msgstr "Popis"
@@ -1656,9 +1667,6 @@ msgstr "Objevit služby…"
 msgid "Discussion Logs"
 msgstr "Záznamy konverzací"
 
-msgid "Dismiss"
-msgstr "Zrušit"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Chcete přijmout tuto žádost (účet: %s)?"
@@ -1707,9 +1715,6 @@ msgstr "Chcete také zrušit registraci svého účtu <b>%s</b>?"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-msgid "Don’t show this again"
-msgstr "Příště nezobrazovat"
 
 msgid "Download"
 msgstr "Stáhnout"
@@ -2177,6 +2182,10 @@ msgstr "Motivy vzhledu"
 msgid "Gajim Update"
 msgstr "Aktualizace Gajimu"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Aktualizace Gajimu"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2213,16 +2222,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim se nyní ukončí"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: Kontrola aktualizací je vypnuta"
 
 msgid "Gathering information…"
 msgstr "Získávám informace…"
@@ -2262,12 +2261,6 @@ msgid "Group Chat Details"
 msgstr "Detaily skupinové konverzace"
 
 msgid "Group Chat Invitation"
-msgstr "Pozvánka do skupinové konverzace"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Pozvánka do skupinové konverzace byla odmítnuta"
-
-msgid "Group Chat Invitation Received"
 msgstr "Pozvánka do skupinové konverzace"
 
 msgid "Group Chat Language"
@@ -2534,6 +2527,14 @@ msgstr "Neplatná adresa: %s"
 
 msgid "Invalid domain name"
 msgstr "Neplatná doména"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Zobrazit pozvánku"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Pozvánka do skupinové konverzace byla odmítnuta"
 
 msgid "Invite"
 msgstr "Pozvat"
@@ -2856,13 +2857,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Zprávy jsou archivovány na serveru"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Zprávy bude možné číst později, pokud je povolen záznam historie a kontakt "
-"je v seznamu kontaktů."
-
 msgid "Minimize"
 msgstr "Minimalizovat"
 
@@ -3011,9 +3005,6 @@ msgstr "Žádný přenos souborů není dostupný"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Nebyl nalezen žádný výsledek"
-
-msgid "No Notifications"
-msgstr "Žádná upozornění"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3225,9 +3216,6 @@ msgstr "Otevřít odkaz v prohlížeči"
 
 msgid "Open Link in _Browser"
 msgstr "Otevřít odkaz v prohlížeči"
-
-msgid "Open Plugins…"
-msgstr "Otevřít zásuvné moduly…"
 
 msgid "Open _Folder"
 msgstr "Otevřít složku"
@@ -3483,7 +3471,8 @@ msgstr "Zásuvný modul selhal"
 msgid "Plugin Settings"
 msgstr "Nastavení zásuvných modulů"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "Aktualizace zásuvných modulů"
 
 msgid "Plugin already exists"
@@ -3497,12 +3486,6 @@ msgstr "Zásuvné moduly"
 
 msgid "Plugins Updated Successfully"
 msgstr "Zásuvné moduly byly úspěšně aktualizovány"
-
-msgid "Plugins: No updates available"
-msgstr "Zásuvné moduly: Nejsou dostupné žádné aktualizace"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Zásuvné moduly: Kontrola aktualizací je vypnuta"
 
 msgid "Port"
 msgstr "Port"
@@ -3748,6 +3731,10 @@ msgid "Remove Chat History?"
 msgstr "Smazat historii konverzace?"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Odstranit kontakt"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Odstranit kontakt"
 
@@ -3769,9 +3756,6 @@ msgstr "Odstranit skupinu"
 
 msgid "Remove History…"
 msgstr "Smazat historii…"
-
-msgid "Remove Notification"
-msgstr "Odstranit upozornění"
 
 msgid "Remove Proxy"
 msgstr "Odstranit proxy"
@@ -3797,9 +3781,6 @@ msgstr "Odstranit ze seznamu kontaktů"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Odstranit skupinu"
-
-msgid "Remove from contact list"
-msgstr "Odstranit ze seznamu kontaktů"
 
 msgid "Remove this workspace"
 msgstr "Odstranit tuto pracovní plochu"
@@ -3839,9 +3820,6 @@ msgstr "Opravy"
 
 msgid "Reply…"
 msgstr ""
-
-msgid "Report"
-msgstr "Nahlásit"
 
 #, fuzzy
 msgid "Request"
@@ -4121,6 +4099,9 @@ msgstr "Vyberte zprávy…"
 msgid "Select a security label for your message…"
 msgstr "Vyberte bezpečnostní štítek pro svou zprávu…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "Vyberte emotikon"
 
@@ -4291,9 +4272,6 @@ msgstr "Sdílet video"
 msgid "Share my online status"
 msgstr "Sdílet stav připojení"
 
-msgid "Show"
-msgstr "Ukázat"
-
 msgid "Show Commands"
 msgstr "Zobrazit příkazy"
 
@@ -4311,9 +4289,6 @@ msgstr "Detaily"
 msgid "Show Inactive Devices"
 msgstr "Vstupní zařízení audio"
 
-msgid "Show Invitation"
-msgstr "Zobrazit pozvánku"
-
 msgid "Show Join/Leave"
 msgstr "Ukázat příchody/odchody"
 
@@ -4325,6 +4300,10 @@ msgstr "Zobrazit videostream"
 
 msgid "Show Notifications"
 msgstr "Zobrazit upozornění"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Zásuvné moduly"
 
 msgid "Show Send Message Button"
 msgstr "Zobrazit tlačítko pro odesílání zpráv"
@@ -4549,9 +4528,6 @@ msgstr "Zpráva o stavu: písmo"
 msgid "Status Messages in Participants List"
 msgstr "Zprávy o stavu v seznamu účastníků"
 
-msgid "Status and status message for all accounts"
-msgstr "Stav a zprávy o stavu u všech účtů"
-
 #, fuzzy
 msgid "Status is not shared"
 msgstr "Text stavu"
@@ -4583,9 +4559,6 @@ msgstr "Stav: Online"
 msgid "Stop Sharing Online Status?"
 msgstr "Přestat sdílet stav připojení?"
 
-msgid "Stopped sharing their status with you"
-msgstr "Přestal/a s Vámi sdílet svůj stav"
-
 msgid "Street"
 msgstr "Ulice"
 
@@ -4614,9 +4587,6 @@ msgstr "Autorizován"
 #, fuzzy
 msgid "Subscription"
 msgstr "Odběr:"
-
-msgid "Subscription Request"
-msgstr "Žádost o autorizaci"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5157,9 +5127,6 @@ msgstr "Aktualizovat"
 msgid "Update Avatar"
 msgstr "Aktualizovat profilový obrázek"
 
-msgid "Update Check"
-msgstr "Zkontrolovat aktualizace"
-
 msgid "Update automatically"
 msgstr "Aktualizovat automaticky"
 
@@ -5417,10 +5384,6 @@ msgstr "Vy"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s připojili jste se do skupinové konverzace"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Máte nepřečtené zprávy"
 
 msgid "You are a visitor"
 msgstr "Jste návštěvník"
@@ -6103,6 +6066,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr " od {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s chce znát váš stav"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s skupinové konverzace nalezeny"
 
@@ -6113,10 +6080,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr ""
 #~ "%s je připojen na více zařízení.\n"
 #~ "Vyberte zařízení, na které chcete soubor zaslat."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vám chce poslat soubor"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6483,6 +6446,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Connection not available"
 #~ msgstr "Spojení není dostupné"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Kontakt odstraněn"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Konverzace: barva URL"
 
@@ -6509,11 +6475,17 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Debug Console"
 #~ msgstr "XML Konzole"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Odmítnout pozvánku"
+
 #~ msgid "Delete Message"
 #~ msgstr "Odstranit zprávu"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Odstranit zprávy uložené místně?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Odmítnout všechny žádosti o sledování"
 
 #~ msgid "Description: "
 #~ msgstr "Popis: "
@@ -6523,6 +6495,12 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Přímý přenos souborů (nešifrováno)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Zrušit"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Příště nezobrazovat"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6608,6 +6586,19 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Tento soubor nelze otevřít"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim: Nejsou dostupné žádné aktualizace (poslední kontrola: nikdy)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: Kontrola aktualizací je vypnuta"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Pozvánka do skupinové konverzace"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6663,6 +6654,13 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Oprava zpráv: barva pozadí"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Zprávy bude možné číst později, pokud je povolen záznam historie a "
+#~ "kontakt je v seznamu kontaktů."
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Odvolat zprávu?"
@@ -6677,6 +6675,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "No Connection Available"
 #~ msgstr "Není dostupné žádné připojení"
 
+#~ msgid "No Notifications"
+#~ msgstr "Žádná upozornění"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Není spuštěno"
@@ -6689,6 +6690,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Open Path"
 #~ msgstr "Otevřít cestu k souboru"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Otevřít zásuvné moduly…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organizační jednotka (OJ)"
@@ -6711,6 +6715,12 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Použijte prosím formát rrrr-mm-dd"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Zásuvné moduly: Nejsou dostupné žádné aktualizace"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Zásuvné moduly: Kontrola aktualizací je vypnuta"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6740,6 +6750,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Remove Group..."
 #~ msgstr "Odstranit skupinu..."
 
+#~ msgid "Remove Notification"
+#~ msgstr "Odstranit upozornění"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Odstranit přenosy"
 
@@ -6751,8 +6764,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Odstranit kontakt ze seznamu"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "Odstranit ze seznamu kontaktů"
+
 #~ msgid "Remove…"
 #~ msgstr "Odstranit…"
+
+#~ msgid "Report"
+#~ msgstr "Nahlásit"
 
 #, fuzzy
 #~ msgid ""
@@ -6811,6 +6830,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Sender: "
 #~ msgstr "Odesílatel: "
 
+#~ msgid "Show"
+#~ msgstr "Ukázat"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Zobrazit Gajim"
 
@@ -6839,6 +6861,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Začít hlasový hovor…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Stav a zprávy o stavu u všech účtů"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Stav: "
@@ -6846,8 +6871,14 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Zastavit přenosy souborů"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Přestal/a s Vámi sdílet svůj stav"
+
 #~ msgid "Submit"
 #~ msgstr "Předložit"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Žádost o autorizaci"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Přepnout na první až devátou pracovní plochu"
@@ -6904,6 +6935,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Unread Messages"
 #~ msgstr "Nepřečtené zprávy"
 
+#~ msgid "Update Check"
+#~ msgstr "Zkontrolovat aktualizace"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Nahrát soubory"
@@ -6934,6 +6968,10 @@ msgstr "...nebo přetáhněte sem"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Proč si přejete stáhnout tuto zprávu?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Máte nepřečtené zprávy"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Chystáte se ukončit Gajim"

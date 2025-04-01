@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,10 +130,6 @@ msgstr "десинхронизован"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Сада ће контакт \"%s\" знати Ваш статус."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -201,6 +197,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Удаљени контакт је прекинуо пренос"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s Вам жели послати датотеку."
 
 #, python-format
 msgctxt "positive longitude"
@@ -500,6 +500,14 @@ msgstr "Активирано"
 
 msgid "Active"
 msgstr "Активно"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Активирано"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Активирано"
 
 msgid "Add"
 msgstr "Додате"
@@ -1496,8 +1504,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Укинута претплата"
+msgid "Contact Removed"
+msgstr "Налог"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Контакт"
 
 #, fuzzy
 msgid "Contact information"
@@ -1680,9 +1692,6 @@ msgstr "Џогира"
 msgid "Decline"
 msgstr "_Није на вези"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1758,8 +1767,8 @@ msgid "Deny"
 msgstr "Одбиј"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Захтев за претплатом"
+msgid "Deny all contact requests"
+msgstr "Захтев за преносом датотеке"
 
 msgid "Description"
 msgstr "Опис"
@@ -1855,9 +1864,6 @@ msgstr "_Откривање сервиса"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Прихватате ли овај захтев на налогу %s?"
@@ -1905,10 +1911,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "_Не питај ме више"
 
 #, fuzzy
 msgid "Download"
@@ -2437,6 +2439,10 @@ msgstr "Гајим - %s"
 msgid "Gajim Update"
 msgstr "Освежи поруку дана..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Освежи поруку дана..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2463,18 +2469,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Гајим ће се сада завршити"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Нема доступних налога"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Нема доступних налога"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Подешавања"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2524,14 +2518,6 @@ msgstr "Регистрација неуспела"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Позив на групни разговор"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Позив на групни разговор"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Позив на групни разговор"
 
 #, fuzzy
@@ -2826,6 +2812,14 @@ msgstr "Неисправна датотека"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Неисправно име налога"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Обавештење"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Позив на групни разговор"
 
 #, fuzzy
 msgid "Invite"
@@ -3186,14 +3180,6 @@ msgid "Messages are archived on the server"
 msgstr "Сесија НЕЋЕ бити памћена"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Поруке ће бити доступне за читање и касније ако имате омогућен историјат и "
-"тај контакт у листи."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Гајим"
 
@@ -3355,10 +3341,6 @@ msgstr "Преноси датотека"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Нема резултата"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Обавештења"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3593,10 +3575,6 @@ msgstr "_Отвори везу у интернет прегледачу"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Отвори везу у интернет прегледачу"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Регистрација неуспела"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3877,7 +3855,7 @@ msgid "Plugin Settings"
 msgstr "Регистрација неуспела"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Регистрација неуспела"
 
 #, fuzzy
@@ -3894,14 +3872,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Регистрација неуспела"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Нема доступних налога"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Подешавања"
 
 #, fuzzy
 msgid "Port"
@@ -4181,6 +4151,10 @@ msgid "Remove Chat History?"
 msgstr "Недавно:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Преименуј контакт"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Преименуј контакт"
 
@@ -4203,10 +4177,6 @@ msgstr "Уклони групу"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Синхронизуј"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Обавештење"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4235,10 +4205,6 @@ msgstr "Уклања контакт са листе"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Уклони групу"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Уклања контакт са листе"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4280,10 +4246,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "Извези"
 
 #, fuzzy
 msgid "Request"
@@ -4603,6 +4565,9 @@ msgstr "Подразумевана порука"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4800,9 +4765,6 @@ msgstr "Започни разговор"
 msgid "Share my online status"
 msgstr "Измени статус"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "наредба"
@@ -4823,10 +4785,6 @@ msgstr "Гајим"
 msgid "Show Inactive Devices"
 msgstr "Подразумевана порука"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Обавештење"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4839,6 +4797,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Обавештења"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Регистрација неуспела"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5098,10 +5060,6 @@ msgid "Status Messages in Participants List"
 msgstr "Статусна порука"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Мења статус једног или више налога"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Статусна порука"
 
@@ -5137,9 +5095,6 @@ msgstr "Статусна порука"
 msgid "Stop Sharing Online Status?"
 msgstr "да ми пошаље статус"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Под стресом"
@@ -5170,9 +5125,6 @@ msgstr "Претплаћен"
 #, fuzzy
 msgid "Subscription"
 msgstr "Претплата: "
-
-msgid "Subscription Request"
-msgstr "Захтев за претплатом"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5755,10 +5707,6 @@ msgid "Update Avatar"
 msgstr "Одаберите слику"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Провера правописа"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Одаберите слику"
 
@@ -6042,10 +5990,6 @@ msgstr "Ви"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s се придружио групном разговору"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Имате непрочитаних порука"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6796,12 +6740,12 @@ msgstr ""
 #~ msgstr "Промени _надимак..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s није пронађен"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Сада ће контакт \"%s\" знати Ваш статус."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s Вам жели послати датотеку."
+#~ msgid "%s group chats found"
+#~ msgstr "%s није пронађен"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7130,6 +7074,10 @@ msgstr ""
 #~ msgstr "Веза није доступна"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Укинута претплата"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Разговор са "
 
@@ -7164,6 +7112,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Подразумевана порука"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Захтев за претплатом"
+
 #~ msgid "Description: "
 #~ msgstr "Опис:"
 
@@ -7174,6 +7126,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Пренос датотеке заустављен"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Не питај ме више"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7253,6 +7209,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Гајим не може приступити овој датотеци"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Нема доступних налога"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Нема доступних налога"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Подешавања"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Позив на групни разговор"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Сакриј овај мени"
 
@@ -7286,6 +7258,14 @@ msgstr ""
 #~ msgstr "Поруке"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Поруке ће бити доступне за читање и касније ако имате омогућен историјат "
+#~ "и тај контакт у листи."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "статусна порука"
 
@@ -7300,6 +7280,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Веза није доступна"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Обавештења"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7319,12 +7303,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Регистрација неуспела"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Прекини пренос датотеке"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Прикажи св_е догађаје на чекању"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Нема доступних налога"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Подешавања"
 
 #~ msgid "Progress"
 #~ msgstr "Напредак"
@@ -7353,6 +7349,10 @@ msgstr ""
 #~ msgstr "Уклони групу"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Обавештење"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Прикажи транс_порте"
 
@@ -7365,8 +7365,16 @@ msgstr ""
 #~ msgstr "Уклања контакт са листе"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Уклања контакт са листе"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Уклони"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Извези"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7441,6 +7449,10 @@ msgstr ""
 #~ msgstr "Започни разговор"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Мења статус једног или више налога"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Статус: "
@@ -7448,6 +7460,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Преноси датотека"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Захтев за претплатом"
 
 #~ msgid "Synchronise"
 #~ msgstr "Синхронизуј"
@@ -7493,6 +7508,10 @@ msgstr ""
 #~ msgstr "Непрочитани догађаји"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Провера правописа"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Сними датотеку као..."
@@ -7512,6 +7531,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Да ли заиста желите да избришете означену поруку?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Имате непрочитаних порука"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

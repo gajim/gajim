@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -130,10 +130,6 @@ msgstr "Адмысловы"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Цяпер \"%s\" можа бачыць Ваш стан."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -201,6 +197,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Выдаліць чалавека з спіса"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s хоча адправіць Вам файл."
 
 #, python-format
 msgctxt "positive longitude"
@@ -494,6 +494,14 @@ msgstr "Актывізаваны"
 
 msgid "Active"
 msgstr "Актыўны"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Актывізаваны"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Актывізаваны"
 
 #, fuzzy
 msgid "Add"
@@ -1481,8 +1489,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "_Адпісацца"
+msgid "Contact Removed"
+msgstr "Рахунак"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Людзі"
 
 #, fuzzy
 msgid "Contact information"
@@ -1664,9 +1676,6 @@ msgstr "_Далучыцца"
 msgid "Decline"
 msgstr "_Адключаны"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1742,8 +1751,8 @@ msgid "Deny"
 msgstr "Адмовіць"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Запыт падпіскі"
+msgid "Deny all contact requests"
+msgstr "Запыт на перадачу файла"
 
 msgid "Description"
 msgstr "Апісанне"
@@ -1839,9 +1848,6 @@ msgstr "_Пошук сервісаў"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Хочаце задаволіць гэты запыт?"
@@ -1889,10 +1895,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "_Больш не пытацца"
 
 #, fuzzy
 msgid "Download"
@@ -2420,6 +2422,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "Абнавіць MOTD"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Абнавіць MOTD"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2446,18 +2452,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim сканчвае работу"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Рахункаў няма"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Рахункаў няма"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Настаўленні"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2507,14 +2501,6 @@ msgstr "Памылка злучэння"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Запрашэнне ў групавую размову"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Запрашэнне ў групавую размову"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Запрашэнне ў групавую размову"
 
 #, fuzzy
@@ -2811,6 +2797,14 @@ msgstr "Няправільны файл"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Няправільная назва рахунка"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Змяненне рахунка"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Запрашэнне ў групавую размову"
 
 #, fuzzy
 msgid "Invite"
@@ -3172,14 +3166,6 @@ msgid "Messages are archived on the server"
 msgstr "Вы не злучаны з серверам"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Вы зможаце прачытаць нечытаныя паведамленні толькі з уключаным вядзеннем "
-"журналаў размоў."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3342,10 +3328,6 @@ msgstr "Перадача файлаў"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "%s не знойдзены"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Змяненне рахунка"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3582,10 +3564,6 @@ msgstr "_Адкрыць у праглядальніку"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Адкрыць у праглядальніку"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Памылка злучэння"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3864,7 +3842,7 @@ msgid "Plugin Settings"
 msgstr "Памылка злучэння"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Памылка злучэння"
 
 #, fuzzy
@@ -3881,14 +3859,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Памылка злучэння"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Рахункаў няма"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Настаўленні"
 
 #, fuzzy
 msgid "Port"
@@ -4168,6 +4138,10 @@ msgid "Remove Chat History?"
 msgstr "Нядаўна:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Змяніць імя чалавека"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Змяніць імя чалавека"
 
@@ -4190,10 +4164,6 @@ msgstr "Выдаліць групу"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Паказаць _адлучаных людзей"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Змяненне рахунка"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4222,10 +4192,6 @@ msgstr "Выдаліць чалавека з спіса"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Выдаліць групу"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Выдаліць чалавека з спіса"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4267,10 +4233,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Паведаміць пра памылку"
 
 #, fuzzy
 msgid "Request"
@@ -4588,6 +4550,9 @@ msgstr "Стандартныя паведамленні стану"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4786,9 +4751,6 @@ msgstr "Пачаць размову"
 msgid "Share my online status"
 msgstr "Змяніць стан"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Загады: %s"
@@ -4809,10 +4771,6 @@ msgstr "Падрабязнасці"
 msgid "Show Inactive Devices"
 msgstr "Стандартныя паведамленні стану"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Змяненне рахунка"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4825,6 +4783,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Змяненне рахунка"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Памылка злучэння"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5083,10 +5045,6 @@ msgid "Status Messages in Participants List"
 msgstr "Паведамленне аб змене стану"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Змяніць стан рахунка(ў)"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Паведамленне аб змене стану"
 
@@ -5122,9 +5080,6 @@ msgstr "Паведамленне аб змене стану"
 msgid "Stop Sharing Online Status?"
 msgstr "адпраўляць мне паведамленні аб змене стану"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Вуліца:"
@@ -5156,9 +5111,6 @@ msgstr "Падпісаны"
 #, fuzzy
 msgid "Subscription"
 msgstr "Падпіска:"
-
-msgid "Subscription Request"
-msgstr "Запыт падпіскі"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5734,10 +5686,6 @@ msgid "Update Avatar"
 msgstr "Выберыце малюнак"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Абнавіць MOTD"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Выберыце малюнак"
 
@@ -6020,10 +5968,6 @@ msgstr "Вы"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s далучыўся да групавой размовы"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Ёсць нечытаныя паведамленні"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6776,12 +6720,12 @@ msgstr ""
 #~ msgstr "Змяніць м_янушку"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s не знойдзены"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Цяпер \"%s\" можа бачыць Ваш стан."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s хоча адправіць Вам файл."
+#~ msgid "%s group chats found"
+#~ msgstr "%s не знойдзены"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7096,6 +7040,10 @@ msgstr ""
 #~ msgstr "Няма злучэння"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "_Адпісацца"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Журнал размоў"
 
@@ -7131,6 +7079,10 @@ msgstr ""
 #~ msgstr "Стандартныя паведамленні стану"
 
 #, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Запыт падпіскі"
+
+#, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Апісанне: %s"
 
@@ -7141,6 +7093,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Перадача файла спыненая"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Больш не пытацца"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7221,6 +7177,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim не можа даступіцца да гэтага файла"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Рахункаў няма"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Рахункаў няма"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Настаўленні"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Запрашэнне ў групавую размову"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Схаваць гэтае меню"
 
@@ -7254,6 +7226,14 @@ msgstr ""
 #~ msgstr "Паведамленні"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Вы зможаце прачытаць нечытаныя паведамленні толькі з уключаным вядзеннем "
+#~ "журналаў размоў."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "паведамленне стану"
 
@@ -7268,6 +7248,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Няма злучэння"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Змяненне рахунка"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7287,12 +7271,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Памылка злучэння"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Скасаваць перадачу файла"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Паказаць нягледжаныя _падзеі"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Рахункаў няма"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Настаўленні"
 
 #~ msgid "Progress"
 #~ msgstr "Ступень выкананасці"
@@ -7321,6 +7317,10 @@ msgstr ""
 #~ msgstr "Выдаліць групу"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Змяненне рахунка"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Паказаць _транспарты"
 
@@ -7334,8 +7334,16 @@ msgstr ""
 #~ msgstr "Выдаліць чалавека з спіса"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Выдаліць чалавека з спіса"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "Вы_даліць"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Паведаміць пра памылку"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7405,6 +7413,10 @@ msgstr ""
 #~ msgstr "Пачаць размову"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Змяніць стан рахунка(ў)"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Стан: "
@@ -7412,6 +7424,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Перадача файлаў"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Запыт падпіскі"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7451,6 +7466,10 @@ msgstr ""
 #~ msgstr "Нягледжаныя падзеі"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Абнавіць MOTD"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Захаваць файл як..."
@@ -7470,6 +7489,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Ёсць нечытаныя паведамленні"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

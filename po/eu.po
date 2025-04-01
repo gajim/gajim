@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -131,10 +131,6 @@ msgstr "Aurreratua"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Orain \"%s\"-ak jakingo du zure egoera."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -202,6 +198,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Zerrendatik kontaktua ezabatu"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s fitxero bat bidali nahi dizu"
 
 #, python-format
 msgctxt "positive longitude"
@@ -496,6 +496,14 @@ msgid "Activated"
 msgstr "Aktibatuta"
 
 msgid "Active"
+msgstr "Aktibatuta"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Aktibatuta"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Aktibatuta"
 
 msgid "Add"
@@ -1483,8 +1491,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Harpidetza ezabat_u"
+msgid "Contact Removed"
+msgstr "Kontua"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kontaktua"
 
 #, fuzzy
 msgid "Contact information"
@@ -1667,9 +1679,6 @@ msgstr "_Sartu"
 msgid "Decline"
 msgstr "_Deskonektatuta"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1745,8 +1754,8 @@ msgid "Deny"
 msgstr "Ukatu"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Harpidetza Eskaria"
+msgid "Deny all contact requests"
+msgstr "Fitxeroa Transferitzeko Baimena"
 
 msgid "Description"
 msgstr "Deskribapena"
@@ -1838,9 +1847,6 @@ msgstr "_Zerbitzuak Aurkitu"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Baimen hau onartzen al duzu?"
@@ -1888,10 +1894,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "E_z galdetu berriro  "
 
 #, fuzzy
 msgid "Download"
@@ -2419,6 +2421,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "MOTD Gaurkotu"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "MOTD Gaurkotu"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2445,18 +2451,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim orain badago"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Hobespenak"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2506,14 +2500,6 @@ msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Txat Taldeko Gonbidapena"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Txat Taldeko Gonbidapena"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Txat Taldeko Gonbidapena"
 
 #, fuzzy
@@ -2810,6 +2796,14 @@ msgstr "Fitxero Baliogabea"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Kontu izen baliogabea"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Kontu Eraldaketa"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Txat Taldeko Gonbidapena"
 
 #, fuzzy
 msgid "Invite"
@@ -3171,12 +3165,6 @@ msgid "Messages are archived on the server"
 msgstr "Ez zaude zerbitzarira konektatuta"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3339,10 +3327,6 @@ msgstr "Fitxero Transferentzia"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "%s ez da aurkitu"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3579,10 +3563,6 @@ msgstr "Web-ean _Ireki Lotura"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "Web-ean _Ireki Lotura"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3861,7 +3841,7 @@ msgid "Plugin Settings"
 msgstr "Konexioak huts egin du"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Konexioak huts egin du"
 
 #, fuzzy
@@ -3878,14 +3858,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Konexioak huts egin du"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Hobespenak"
 
 #, fuzzy
 msgid "Port"
@@ -4164,6 +4136,10 @@ msgid "Remove Chat History?"
 msgstr "Berriki:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Berridatzi Kontaktua"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Berridatzi Kontaktua"
 
@@ -4186,10 +4162,6 @@ msgstr "Ezabatu Taldea"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Ikusi _Deskonektatutako Kontaktuak"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4218,10 +4190,6 @@ msgstr "Zerrendatik kontaktua ezabatu"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Ezabatu Taldea"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Zerrendatik kontaktua ezabatu"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4262,10 +4230,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Report Bug"
 
 #, fuzzy
 msgid "Request"
@@ -4585,6 +4549,9 @@ msgstr "Berezko Egoera Mezuak"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4783,9 +4750,6 @@ msgstr "Elkarrizketa Hasi"
 msgid "Share my online status"
 msgstr "Kontaktu Egoera Aldaketa"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Azalpenak: %s"
@@ -4806,10 +4770,6 @@ msgstr "Zehaztapenak"
 msgid "Show Inactive Devices"
 msgstr "Berezko Egoera Mezuak"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Kontu Eraldaketa"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4822,6 +4782,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Kontu Eraldaketa"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5080,10 +5044,6 @@ msgid "Status Messages in Participants List"
 msgstr "Egoera Mezua"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Egoera Mezua"
 
@@ -5119,9 +5079,6 @@ msgstr "Egoera Mezua"
 msgid "Stop Sharing Online Status?"
 msgstr "niri egoera bidaltzeko"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Kalea:"
@@ -5153,9 +5110,6 @@ msgstr "Harpidetu"
 #, fuzzy
 msgid "Subscription"
 msgstr "Harpidetza:"
-
-msgid "Subscription Request"
-msgstr "Harpidetza Eskaria"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5734,10 +5688,6 @@ msgid "Update Avatar"
 msgstr "Aukeratu Irudia"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "MOTD Gaurkotu"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Aukeratu Irudia"
 
@@ -6020,10 +5970,6 @@ msgstr "Zu"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s gelan sartu da"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Irakurri gabeko mezu bat duzu"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6775,12 +6721,12 @@ msgstr ""
 #~ msgstr "Aldatu _Izengoitia"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s ez da aurkitu"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Orain \"%s\"-ak jakingo du zure egoera."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s fitxero bat bidali nahi dizu"
+#~ msgid "%s group chats found"
+#~ msgstr "%s ez da aurkitu"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7099,6 +7045,10 @@ msgstr ""
 #~ msgstr "Konexioa ez erablgarri"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Harpidetza ezabat_u"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Elkarrizketaren Historiala"
 
@@ -7134,6 +7084,10 @@ msgstr ""
 #~ msgstr "Berezko Egoera Mezuak"
 
 #, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Harpidetza Eskaria"
+
+#, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Deskribapena: %s"
 
@@ -7144,6 +7098,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Fitxero Transferentzia Gelditua"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "E_z galdetu berriro  "
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7224,6 +7182,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim-ek ezin du fitxero honetan sartu."
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Hobespenak"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Txat Taldeko Gonbidapena"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Ezkutatu Menua"
 
@@ -7257,6 +7231,12 @@ msgstr ""
 #~ msgstr "Mezuak"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr "Mezuak gero irakurri ahalko dira historiala aktibatua baduzu."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "egoera mezua"
 
@@ -7271,6 +7251,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Konexioa ez erablgarri"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7290,12 +7274,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Konexioak huts egin du"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Fitxategi transferentzia kantzelatu"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Ikusi Gabeko _Gertaerak"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Ez dago konturik erabilgarri"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Hobespenak"
 
 #~ msgid "Progress"
 #~ msgstr "Prozesua"
@@ -7324,6 +7320,10 @@ msgstr ""
 #~ msgstr "Ezabatu Taldea"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Kontu Eraldaketa"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Trans_porteak Erakutsi"
 
@@ -7338,8 +7338,16 @@ msgstr ""
 #~ msgstr "Zerrendatik kontaktua ezabatu"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Zerrendatik kontaktua ezabatu"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Ezabatu"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Report Bug"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7409,6 +7417,10 @@ msgstr ""
 #~ msgstr "Elkarrizketa Hasi"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Aldatu kontaktuaren edo kontaktuen egoera"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Egoera: "
@@ -7416,6 +7428,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Fitxero Transferentzia"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Harpidetza Eskaria"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7455,6 +7470,10 @@ msgstr ""
 #~ msgstr "Irakurri gabeko gertaerak"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "MOTD Gaurkotu"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Gorde Bezala..."
@@ -7474,6 +7493,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Irakurri gabeko mezu bat duzu"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

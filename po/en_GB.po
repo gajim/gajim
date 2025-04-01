@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -131,10 +131,6 @@ msgstr "desync'ed"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Now \"%s\" will know your status."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -202,6 +198,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Remote contact stopped transfer"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s wants to send you a file."
 
 #, python-format
 msgctxt "positive longitude"
@@ -499,6 +499,14 @@ msgstr "Activated"
 
 msgid "Active"
 msgstr "Active"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Activated"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Activated"
 
 msgid "Add"
 msgstr "Add"
@@ -1495,8 +1503,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Unsubscribed"
+msgid "Contact Removed"
+msgstr "Account"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Contacts"
 
 #, fuzzy
 msgid "Contact information"
@@ -1678,9 +1690,6 @@ msgstr "Jogging"
 msgid "Decline"
 msgstr "_Offline"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1756,8 +1765,8 @@ msgid "Deny"
 msgstr "Deny"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Subscription Request"
+msgid "Deny all contact requests"
+msgstr "File Transfer Request"
 
 msgid "Description"
 msgstr "Description"
@@ -1853,9 +1862,6 @@ msgstr "_Discover Services"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request on account %s?"
@@ -1903,10 +1909,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "Do _not ask me again"
 
 #, fuzzy
 msgid "Download"
@@ -2432,6 +2434,10 @@ msgstr "gajim-remote"
 msgid "Gajim Update"
 msgstr "Update MOTD..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Update MOTD..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2458,18 +2464,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "No account available"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "No account available"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Preferences"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2519,14 +2513,6 @@ msgstr "Registration failed"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Groupchat Invitation"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Groupchat Invitation"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Groupchat Invitation"
 
 #, fuzzy
@@ -2820,6 +2806,14 @@ msgstr "Invalid File"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Invalid account name"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Notification"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Groupchat Invitation"
 
 #, fuzzy
 msgid "Invite"
@@ -3181,14 +3175,6 @@ msgid "Messages are archived on the server"
 msgstr "Session WILL NOT be logged"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Messages will only be available for reading them later if you have history "
-"enabled and contact is in your roster."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3350,10 +3336,6 @@ msgstr "File Transfers"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "No result"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Notifications"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3588,10 +3570,6 @@ msgstr "_Open Link in Browser"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Open Link in Browser"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Registration failed"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3872,7 +3850,7 @@ msgid "Plugin Settings"
 msgstr "Registration failed"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Registration failed"
 
 #, fuzzy
@@ -3889,14 +3867,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registration failed"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "No account available"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Preferences"
 
 #, fuzzy
 msgid "Port"
@@ -4177,6 +4147,10 @@ msgid "Remove Chat History?"
 msgstr "Recently:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Rename Contact"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Rename Contact"
 
@@ -4199,10 +4173,6 @@ msgstr "Remove Group"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Synchronise"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Notification"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4231,10 +4201,6 @@ msgstr "Removes contact from roster"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Remove Group"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Removes contact from roster"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4275,10 +4241,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Report Bug"
 
 #, fuzzy
 msgid "Request"
@@ -4597,6 +4559,9 @@ msgstr "Default Message"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4794,9 +4759,6 @@ msgstr "Start Chat"
 msgid "Share my online status"
 msgstr "Change status"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Commands: %s"
@@ -4817,10 +4779,6 @@ msgstr "Details"
 msgid "Show Inactive Devices"
 msgstr "Default Message"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Notification"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4833,6 +4791,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Notifications"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Registration failed"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5093,10 +5055,6 @@ msgid "Status Messages in Participants List"
 msgstr "Status Message"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Changes the status of account or accounts"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Status Message"
 
@@ -5132,9 +5090,6 @@ msgstr "Status Message"
 msgid "Stop Sharing Online Status?"
 msgstr "to send me status"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Stressed"
@@ -5165,9 +5120,6 @@ msgstr "Subscribed"
 #, fuzzy
 msgid "Subscription"
 msgstr "Subscription:"
-
-msgid "Subscription Request"
-msgstr "Subscription Request"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5750,10 +5702,6 @@ msgid "Update Avatar"
 msgstr "Choose Image"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Spell Checker"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Choose Image"
 
@@ -6037,10 +5985,6 @@ msgstr "You"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s has joined the group chat"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "You have unread messages"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6790,12 +6734,12 @@ msgstr ""
 #~ msgstr "Change _Nickname..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s not found"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Now \"%s\" will know your status."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s wants to send you a file."
+#~ msgid "%s group chats found"
+#~ msgstr "%s not found"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7124,6 +7068,10 @@ msgstr ""
 #~ msgstr "Connection not available"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Unsubscribed"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversation with "
 
@@ -7158,6 +7106,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Default Message"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Subscription Request"
+
 #~ msgid "Description: "
 #~ msgstr "Description: "
 
@@ -7168,6 +7120,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "File transfer stopped"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Do _not ask me again"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7247,6 +7203,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim cannot access this file"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "No account available"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "No account available"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Preferences"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Groupchat Invitation"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Hide this menu"
 
@@ -7280,6 +7252,14 @@ msgstr ""
 #~ msgstr "Messages"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Messages will only be available for reading them later if you have "
+#~ "history enabled and contact is in your roster."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "status message"
 
@@ -7294,6 +7274,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Connection not available"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Notifications"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7313,12 +7297,24 @@ msgstr ""
 #~ msgstr "OpenGPG"
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Registration failed"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Cancel file transfer"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Show All Pending _Events"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "No account available"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Preferences"
 
 #~ msgid "Progress"
 #~ msgstr "Progress"
@@ -7347,6 +7343,10 @@ msgstr ""
 #~ msgstr "Remove Group"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Notification"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Show Trans_ports"
 
@@ -7360,8 +7360,16 @@ msgstr ""
 #~ msgstr "Removes contact from roster"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Removes contact from roster"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Remove"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Report Bug"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7435,6 +7443,10 @@ msgstr ""
 #~ msgstr "Start Chat"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Changes the status of account or accounts"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -7442,6 +7454,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "File Transfers"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Subscription Request"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synchronise"
@@ -7487,6 +7502,10 @@ msgstr ""
 #~ msgstr "Unread events"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Spell Checker"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Save File as..."
@@ -7506,6 +7525,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Do you really want to delete the selected message?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "You have unread messages"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

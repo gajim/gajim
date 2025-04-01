@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -130,10 +130,6 @@ msgstr "Pašyranyja"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Ciapier \"%s\" budzie viedać tvoj status."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -201,6 +197,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Vydalaje kantakt sa śpisu"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s choča dasłać tabie fajł."
 
 #, python-format
 msgctxt "positive longitude"
@@ -493,6 +493,14 @@ msgid "Activated"
 msgstr "Dziejny"
 
 msgid "Active"
+msgstr "Dziejny"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Dziejny"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Dziejny"
 
 #, fuzzy
@@ -1482,8 +1490,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "_Anuluj aŭtaryzacyju"
+msgid "Contact Removed"
+msgstr "Kont"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kantakty"
 
 #, fuzzy
 msgid "Contact information"
@@ -1665,9 +1677,6 @@ msgstr "_Dałučysia"
 msgid "Decline"
 msgstr "Adł_učany"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1743,8 +1752,8 @@ msgid "Deny"
 msgstr "Admoŭ"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Zapyt aŭtaryzacyi"
+msgid "Deny all contact requests"
+msgstr "Zapyt na pieradaču fajłu"
 
 msgid "Description"
 msgstr "Apisańnie"
@@ -1840,9 +1849,6 @@ msgstr "_Šukaj servisy"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prymaješ hety zapyt?"
@@ -1890,10 +1896,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "_Bolš nie pytajsia"
 
 #, fuzzy
 msgid "Download"
@@ -2421,6 +2423,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "Aktualizuj MOTD"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Aktualizuj MOTD"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2447,18 +2453,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim zaviaršaje vykanańnie"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Nałady"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2508,14 +2502,6 @@ msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Zaprašeńnie ŭ pakoj"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Zaprašeńnie ŭ pakoj"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Zaprašeńnie ŭ pakoj"
 
 #, fuzzy
@@ -2812,6 +2798,14 @@ msgstr "Niapravilny fajł"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Niapravilnaja nazva kontu"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Madyfikacyja kontu"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Zaprašeńnie ŭ pakoj"
 
 #, fuzzy
 msgid "Invite"
@@ -3173,14 +3167,6 @@ msgid "Messages are archived on the server"
 msgstr "Niama złučeńnia z serveram"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Paviedamleńni možna budzie pračytać paźniej, kali ŭklučana viadzieńnie "
-"žurnałaŭ razmoŭ."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3343,10 +3329,6 @@ msgstr "Pieradačy fajłaŭ"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "%s nia znojdzieny"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3583,10 +3565,6 @@ msgstr "_Adčyni spasyłku ŭ hartačy"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Adčyni spasyłku ŭ hartačy"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3865,7 +3843,7 @@ msgid "Plugin Settings"
 msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
@@ -3882,14 +3860,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Niemahvyma dałučycca"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Nałady"
 
 #, fuzzy
 msgid "Port"
@@ -4169,6 +4139,10 @@ msgid "Remove Chat History?"
 msgstr "Niadaŭna:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Źmiani nazvu kantaktu"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Źmiani nazvu kantaktu"
 
@@ -4191,10 +4165,6 @@ msgstr "Vydal hrupu"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Pakažy _adłučanyja kantakty"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4223,10 +4193,6 @@ msgstr "Vydalaje kantakt sa śpisu"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Vydal hrupu"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Vydalaje kantakt sa śpisu"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4268,10 +4234,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Paviedam pra pamyłku"
 
 #, fuzzy
 msgid "Request"
@@ -4589,6 +4551,9 @@ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4787,9 +4752,6 @@ msgstr "Pačni razmovu"
 msgid "Share my online status"
 msgstr "Źmiani status"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Zahady: %s"
@@ -4810,10 +4772,6 @@ msgstr "Padrabiaznaści"
 msgid "Show Inactive Devices"
 msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Madyfikacyja kontu"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4826,6 +4784,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Madyfikacyja kontu"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5084,10 +5046,6 @@ msgid "Status Messages in Participants List"
 msgstr "Paviedamleńnie statusu"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Źmianiaje status kontu albo kontaŭ"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Paviedamleńnie statusu"
 
@@ -5123,9 +5081,6 @@ msgstr "Paviedamleńnie statusu"
 msgid "Stop Sharing Online Status?"
 msgstr "dasyłać mnie paviedamleńni statusu"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Vulica:"
@@ -5157,9 +5112,6 @@ msgstr "Aŭtaryzavany"
 #, fuzzy
 msgid "Subscription"
 msgstr "Aŭtaryzacyja:"
-
-msgid "Subscription Request"
-msgstr "Zapyt aŭtaryzacyi"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5735,10 +5687,6 @@ msgid "Update Avatar"
 msgstr "Abiary vyjavu"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Aktualizuj MOTD"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Abiary vyjavu"
 
@@ -6021,10 +5969,6 @@ msgstr "Ty"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s dałučyŭsia da pakoju"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Jość niečytanyja paviedamleńni"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6774,12 +6718,12 @@ msgstr ""
 #~ msgstr "Źmiani _mianušku"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s nia znojdzieny"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Ciapier \"%s\" budzie viedać tvoj status."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s choča dasłać tabie fajł."
+#~ msgid "%s group chats found"
+#~ msgstr "%s nia znojdzieny"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7095,6 +7039,10 @@ msgstr ""
 #~ msgstr "Złučeńnia niama"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "_Anuluj aŭtaryzacyju"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Žurnał razmoŭ"
 
@@ -7130,6 +7078,10 @@ msgstr ""
 #~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
 
 #, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Zapyt aŭtaryzacyi"
+
+#, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Apisańnie: %s"
 
@@ -7140,6 +7092,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Pieradača fajłu spyniena"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Bolš nie pytajsia"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7220,6 +7176,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim nia moža dastupicca da hetaha fajłu"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Konty niedastupnyja"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Konty niedastupnyja"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Nałady"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Zaprašeńnie ŭ pakoj"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Schavaj hetaje menu"
 
@@ -7253,6 +7225,14 @@ msgstr ""
 #~ msgstr "Paviedamleńni"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Paviedamleńni možna budzie pračytać paźniej, kali ŭklučana viadzieńnie "
+#~ "žurnałaŭ razmoŭ."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "paviedamlennie statusu"
 
@@ -7267,6 +7247,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Złučeńnia niama"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7286,12 +7270,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Anuluj pieradaču fajła"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Konty niedastupnyja"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Nałady"
 
 #~ msgid "Progress"
 #~ msgstr "Prahres"
@@ -7320,6 +7316,10 @@ msgstr ""
 #~ msgstr "Vydal hrupu"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Madyfikacyja kontu"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Pakažy _transparty"
 
@@ -7332,8 +7332,16 @@ msgstr ""
 #~ msgstr "Vydalaje kantakt sa śpisu"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Vydalaje kantakt sa śpisu"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Vydal"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Paviedam pra pamyłku"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7403,6 +7411,10 @@ msgstr ""
 #~ msgstr "Pačni razmovu"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Źmianiaje status kontu albo kontaŭ"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -7410,6 +7422,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Pieradačy fajłaŭ"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Zapyt aŭtaryzacyi"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7449,6 +7464,10 @@ msgstr ""
 #~ msgstr "Niepračytanyja paviedamleńni"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Aktualizuj MOTD"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Zapišy fajł jak..."
@@ -7468,6 +7487,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Sapraŭdy chočaš vydalić zaznačanaje paviedamleńnie?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Jość niečytanyja paviedamleńni"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

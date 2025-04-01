@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -131,10 +131,6 @@ msgstr "Krome"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Ekde nun \"%s\" konos vian staton."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -202,6 +198,10 @@ msgstr "%s haltis partumantan ilian statuson"
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Forigas kontakton el kontaktlisto"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s volas sendi dosieron al vi."
 
 #, python-format
 msgctxt "positive longitude"
@@ -495,6 +495,14 @@ msgstr "Ŝaltita"
 
 msgid "Active"
 msgstr "Aktiva"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Ŝaltita"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Ŝaltita"
 
 msgid "Add"
 msgstr "Aldoni"
@@ -1480,8 +1488,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "_Malaboni"
+msgid "Contact Removed"
+msgstr "Konto"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kontaktoj"
 
 #, fuzzy
 msgid "Contact information"
@@ -1663,9 +1675,6 @@ msgstr "_Aliĝi"
 msgid "Decline"
 msgstr "_Senkonekta"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1742,8 +1751,8 @@ msgid "Deny"
 msgstr "Rifuzi"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Mendo de abono"
+msgid "Deny all contact requests"
+msgstr "Mendo de dosiera transmeto"
 
 msgid "Description"
 msgstr "Priskribo"
@@ -1835,9 +1844,6 @@ msgstr "_Serĉi servojn"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ĉu vi akceptas tiun peton?"
@@ -1885,10 +1891,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "_Ne plu demandi"
 
 #, fuzzy
 msgid "Download"
@@ -2416,6 +2418,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "Nedisponebla"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Nedisponebla"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2442,18 +2448,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim fermos tuj"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Nedisponebla"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Nedisponebla"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Agordo"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2503,14 +2497,6 @@ msgstr "Konektado malsukcesis"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Babileja invitilo"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Babileja invitilo"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Babileja invitilo"
 
 #, fuzzy
@@ -2807,6 +2793,14 @@ msgstr "Malkorekta dosiero"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Malkorekta kontnomo"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Konta korektado"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Babileja invitilo"
 
 #, fuzzy
 msgid "Invite"
@@ -3168,12 +3162,6 @@ msgid "Messages are archived on the server"
 msgstr "Vi nekonektitas al la servilo"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3336,10 +3324,6 @@ msgstr "Dosieraj transmetoj"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "%s ne trovitas"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Konta korektado"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3576,10 +3560,6 @@ msgstr "_Malfermi ligilon per retrigardilo"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Malfermi ligilon per retrigardilo"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Konektado malsukcesis"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3858,7 +3838,7 @@ msgid "Plugin Settings"
 msgstr "Konektado malsukcesis"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Konektado malsukcesis"
 
 #, fuzzy
@@ -3875,14 +3855,6 @@ msgstr "Kromaĵoj"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Konektado malsukcesis"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Nedisponebla"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Agordo"
 
 #, fuzzy
 msgid "Port"
@@ -4162,6 +4134,10 @@ msgid "Remove Chat History?"
 msgstr "Antaŭ nelonge:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Renomigado de kontakto"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Renomigado de kontakto"
 
@@ -4184,10 +4160,6 @@ msgstr "Forigi grupon"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Montri _senkonektajn kontaktojn"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Konta korektado"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4216,10 +4188,6 @@ msgstr "Forigas kontakton el kontaktlisto"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Forigi grupon"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Forigas kontakton el kontaktlisto"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4260,10 +4228,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Raporti pri eraro"
 
 #, fuzzy
 msgid "Request"
@@ -4582,6 +4546,9 @@ msgstr "Defaŭlta statmesaĝo"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4780,9 +4747,6 @@ msgstr "Video"
 msgid "Share my online status"
 msgstr "Kontakto ŝanĝis sian staton"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Komandoj: %s"
@@ -4803,10 +4767,6 @@ msgstr "Detalaĵoj"
 msgid "Show Inactive Devices"
 msgstr "Defaŭlta statmesaĝo"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Konta korektado"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4819,6 +4779,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Konta korektado"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Kromaĵoj"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5077,10 +5041,6 @@ msgid "Status Messages in Participants List"
 msgstr "Statmesaĝo"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Ŝanĝas staton de konto aŭ kontoj"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Statmesaĝo"
 
@@ -5116,9 +5076,6 @@ msgstr "Statmesaĝo"
 msgid "Stop Sharing Online Status?"
 msgstr "sendi staton al mi"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Strato:"
@@ -5150,9 +5107,6 @@ msgstr "Abonita"
 #, fuzzy
 msgid "Subscription"
 msgstr "Abono:"
-
-msgid "Subscription Request"
-msgstr "Mendo de abono"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5729,10 +5683,6 @@ msgid "Update Avatar"
 msgstr "Nedisponebla"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Renovigi tagmesaĝon"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Nedisponebla"
 
@@ -6015,10 +5965,6 @@ msgstr "Vi"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s aliĝis al la babilejo"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Vi havas nelegitajn mesaĝojn"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6769,12 +6715,12 @@ msgstr ""
 #~ msgstr " per {actor}"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s ne trovitas"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Ekde nun \"%s\" konos vian staton."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s volas sendi dosieron al vi."
+#~ msgid "%s group chats found"
+#~ msgstr "%s ne trovitas"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7099,6 +7045,10 @@ msgstr ""
 #~ msgstr "Konekto mankas"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "_Malaboni"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Historio de interparoloj"
 
@@ -7135,6 +7085,10 @@ msgstr ""
 #~ msgstr "Defaŭlta statmesaĝo"
 
 #, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Mendo de abono"
+
+#, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Priskribo: %s"
 
@@ -7145,6 +7099,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Dosiera transmeto haltitas"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Ne plu demandi"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7224,6 +7182,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim ne povas atingi tiun dosieron"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Nedisponebla"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Nedisponebla"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Agordo"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Babileja invitilo"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -7261,6 +7235,12 @@ msgstr ""
 #~ msgstr "Mesaĝoj"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr "Mesaĝoj disponeblos por legi ĝin poste nur se vi ŝaltis historion."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "statmesaĝo"
 
@@ -7275,6 +7255,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Konekto mankas"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Konta korektado"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7294,12 +7278,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Konektado malsukcesis"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Nuligi dosiertransmeton"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Montri ĉiujn nelegitajn _eventojn"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Nedisponebla"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Agordo"
 
 #~ msgid "Progress"
 #~ msgstr "Progreso"
@@ -7328,6 +7324,10 @@ msgstr ""
 #~ msgstr "Forigi grupon"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Konta korektado"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Montri Trans_portilojn"
 
@@ -7342,8 +7342,16 @@ msgstr ""
 #~ msgstr "Forigas kontakton el kontaktlisto"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Forigas kontakton el kontaktlisto"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Forigi"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Raporti pri eraro"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7421,6 +7429,10 @@ msgstr ""
 #~ msgstr "Babili"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Ŝanĝas staton de konto aŭ kontoj"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Stato: "
@@ -7431,6 +7443,9 @@ msgstr ""
 
 #~ msgid "Submit"
 #~ msgstr "Submeti"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Mendo de abono"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7473,6 +7488,10 @@ msgstr ""
 #~ msgstr "Nelegitaj eventoj"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Renovigi tagmesaĝon"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Konservi dosieron kiel..."
@@ -7492,6 +7511,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Ĉu vi efektive volas forigi la elektitan mesaĝon?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Vi havas nelegitajn mesaĝojn"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -133,10 +133,6 @@ msgid "%s and %s are typing…"
 msgstr "%s och %s skriver…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s ber dig att dela din status"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s kan endast gås med i via en inbjudan."
 
@@ -203,6 +199,10 @@ msgstr "%s slutade dela sin status"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s avbröt överföringen"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vill skicka en fil till dig"
 
 #, python-format
 msgctxt "positive longitude"
@@ -466,6 +466,14 @@ msgstr "Aktiverad"
 
 msgid "Active"
 msgstr "Aktiv"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Aktivera"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Aktiverad"
 
 msgid "Add"
 msgstr "Lägg till"
@@ -1402,8 +1410,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Säg _upp prenumeration"
+msgid "Contact Removed"
+msgstr "Konto borttaget"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kontakter"
 
 #, fuzzy
 msgid "Contact information"
@@ -1564,9 +1576,6 @@ msgstr "Felsökningsloggning"
 msgid "Decline"
 msgstr "Avvisa"
 
-msgid "Decline Invitation"
-msgstr "Avvisa inbjudan"
-
 msgid "Decrease User Interface Font Size"
 msgstr "Minska teckensnittsstorleken för användargränssnittet"
 
@@ -1634,8 +1643,8 @@ msgid "Deny"
 msgstr "Neka"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Prenumerationsbegäran"
+msgid "Deny all contact requests"
+msgstr "Acceptera alla kontaktförfrågningar"
 
 msgid "Description"
 msgstr "Beskrivning"
@@ -1731,9 +1740,6 @@ msgstr "_Upptäck tjänster"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accepterar du den här begäran på kontot %s?"
@@ -1781,9 +1787,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-msgid "Don’t show this again"
-msgstr "Visa inte det här igen"
 
 msgid "Download"
 msgstr "Hämta hem"
@@ -2262,6 +2265,10 @@ msgstr "gajim-remote"
 msgid "Gajim Update"
 msgstr "Uppdatera MOTD..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Uppdatera MOTD..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2288,18 +2295,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim kommer nu att avslutas"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Inget konto tillgängligt"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Inget konto tillgängligt"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Inställningar"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2349,14 +2344,6 @@ msgstr "Registreringen misslyckades"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Inbjudan till Gruppchatt"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Inbjudan till Gruppchatt"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Inbjudan till Gruppchatt"
 
 #, fuzzy
@@ -2643,6 +2630,14 @@ msgstr "Ogiltig Fil"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Ogiltigt kontonamn"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Notifiering"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Inbjudan till Gruppchatt"
 
 #, fuzzy
 msgid "Invite"
@@ -2967,14 +2962,6 @@ msgid "Messages are archived on the server"
 msgstr "Sessionen KOMMER INTE att loggas"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Meddelanden kommer endast vara tillgängliga för läsning senare om du har "
-"historik aktiverat och kontakten finns i din kontaktlista."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3137,10 +3124,6 @@ msgstr "Filöverföringar"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Inga resultat"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Notifieringar"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3363,9 +3346,6 @@ msgstr "Öppna länk i webbläsaren"
 
 msgid "Open Link in _Browser"
 msgstr "Öppna länk i _Webbläsaren"
-
-msgid "Open Plugins…"
-msgstr "Öppna plugins…"
 
 msgid "Open _Folder"
 msgstr "Öppna _Mapp"
@@ -3620,7 +3600,8 @@ msgstr "Registreringen misslyckades"
 msgid "Plugin Settings"
 msgstr "Inställningar för tillägg"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "Uppdateringar för tillägg"
 
 msgid "Plugin already exists"
@@ -3636,14 +3617,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registreringen misslyckades"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Inget konto tillgängligt"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Inställningar"
 
 #, fuzzy
 msgid "Port"
@@ -3923,6 +3896,10 @@ msgid "Remove Chat History?"
 msgstr "Logghistorik"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Byt namn på kontakt"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Byt namn på kontakt"
 
@@ -3944,9 +3921,6 @@ msgstr "Ta bort grupp"
 
 msgid "Remove History…"
 msgstr "Ta bort historik…"
-
-msgid "Remove Notification"
-msgstr "Ta bort notis"
 
 msgid "Remove Proxy"
 msgstr "Ta bort proxy"
@@ -3972,10 +3946,6 @@ msgstr "Ta bort en kontakt från kontaktlista"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Ta bort grupp"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Ta bort en kontakt från kontaktlista"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4015,9 +3985,6 @@ msgstr "Reparationer"
 
 msgid "Reply…"
 msgstr "Svara…"
-
-msgid "Report"
-msgstr "Rapportera"
 
 #, fuzzy
 msgid "Request"
@@ -4323,6 +4290,9 @@ msgstr "Standardmeddelande"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 #, fuzzy
 msgid "Select an emoji"
 msgstr "Använd _känsloikoner"
@@ -4523,9 +4493,6 @@ msgstr "Starta Chatt"
 msgid "Share my online status"
 msgstr "Ändra status"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Kommandon: %s"
@@ -4546,10 +4513,6 @@ msgstr "Detaljer"
 msgid "Show Inactive Devices"
 msgstr "Standardmeddelande"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Notifiering"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4562,6 +4525,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Notifieringar"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Ti_llägg"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -4816,10 +4783,6 @@ msgid "Status Messages in Participants List"
 msgstr "Statusmeddelande"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Ändrar status för konto eller konton"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Statusmeddelande"
 
@@ -4855,9 +4818,6 @@ msgstr "Statusmeddelande"
 msgid "Stop Sharing Online Status?"
 msgstr "att skicka mig status"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Stressad"
@@ -4888,9 +4848,6 @@ msgstr "Prenumererar"
 #, fuzzy
 msgid "Subscription"
 msgstr "Prenumeration:"
-
-msgid "Subscription Request"
-msgstr "Prenumerationsbegäran"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5472,10 +5429,6 @@ msgid "Update Avatar"
 msgstr "Välj Bild"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Stavningskontroll"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Välj Bild"
 
@@ -5759,10 +5712,6 @@ msgstr "Du"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s har gått in i gruppchatten"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Du har olästa meddelanden"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6525,6 +6474,10 @@ msgstr ""
 #~ msgstr " av {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s ber dig att dela din status"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s gruppchattar hittades"
 
@@ -6535,10 +6488,6 @@ msgstr ""
 #~ msgstr ""
 #~ "%s är online med flera enheter.\n"
 #~ "Välj den enhet du vill skicka filerna till."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vill skicka en fil till dig"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6864,6 +6813,10 @@ msgstr ""
 #~ msgstr "Anslutningen är inte tillgänglig"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Säg _upp prenumeration"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Konversation med "
 
@@ -6890,9 +6843,16 @@ msgstr ""
 #~ msgid "Debug Console"
 #~ msgstr "Felsökningskonsol"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Avvisa inbjudan"
+
 #, fuzzy
 #~ msgid "Delete Message"
 #~ msgstr "Standardmeddelande"
+
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Prenumerationsbegäran"
 
 #~ msgid "Description: "
 #~ msgstr "Beskrivning: "
@@ -6904,6 +6864,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Filöverföringen stoppad"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Visa inte det här igen"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6978,6 +6941,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim kan inte komma åt denna fil"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Inställningar"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Inbjudan till Gruppchatt"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Dölj denna meny"
 
@@ -7011,6 +6990,14 @@ msgstr ""
 #~ msgstr "Meddelanden"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Meddelanden kommer endast vara tillgängliga för läsning senare om du har "
+#~ "historik aktiverat och kontakten finns i din kontaktlista."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "statusmeddelande"
 
@@ -7026,6 +7013,10 @@ msgstr ""
 #~ msgid "No Connection Available"
 #~ msgstr "Anslutningen är inte tillgänglig"
 
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Notifieringar"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Ej startad"
@@ -7039,6 +7030,9 @@ msgstr ""
 #~ msgid "Open Path"
 #~ msgstr "Öppna sökvägen"
 
+#~ msgid "Open Plugins…"
+#~ msgstr "Öppna plugins…"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
 
@@ -7051,6 +7045,14 @@ msgstr ""
 
 #~ msgid "Pending Event"
 #~ msgstr "Väntande händelse"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Inget konto tillgängligt"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Inställningar"
 
 #~ msgid "Progress"
 #~ msgstr "Förlopp"
@@ -7078,6 +7080,9 @@ msgstr ""
 #~ msgid "Remove Group..."
 #~ msgstr "Ta bort grupp"
 
+#~ msgid "Remove Notification"
+#~ msgstr "Ta bort notis"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Ta bort transport"
 
@@ -7091,8 +7096,15 @@ msgstr ""
 #~ msgstr "Ta bort en kontakt från kontaktlista"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Ta bort en kontakt från kontaktlista"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "Ta bort…"
+
+#~ msgid "Report"
+#~ msgstr "Rapportera"
 
 #, fuzzy
 #~ msgid ""
@@ -7172,6 +7184,10 @@ msgstr ""
 #~ msgstr "Starta Chatt"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Ändrar status för konto eller konton"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -7179,6 +7195,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Filöverföringar"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Prenumerationsbegäran"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synkronisera"
@@ -7224,6 +7243,10 @@ msgstr ""
 #~ msgstr "Olästa händelser"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Stavningskontroll"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Spara fil som..."
@@ -7243,6 +7266,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Vill du verkligen ta bort det valda meddelandet?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Du har olästa meddelanden"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

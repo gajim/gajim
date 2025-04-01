@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
-"PO-Revision-Date: 2025-03-15 12:12+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"PO-Revision-Date: 2025-03-28 09:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -148,10 +148,6 @@ msgid "%s and %s are typing…"
 msgstr "%s и %s печатают…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s запрашивает доступ к просмотру вашего статуса"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s может присоединиться только по приглашению."
 
@@ -218,6 +214,10 @@ msgstr "%s запретил доступ к просмотру своего ст
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s остановил передачу"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s хочет отправить Вам файл"
 
 #, python-format
 msgctxt "positive longitude"
@@ -482,6 +482,14 @@ msgstr "Активно"
 
 msgid "Active"
 msgstr "Активен"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Включить"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Активно"
 
 msgid "Add"
 msgstr "Добавить"
@@ -1359,8 +1367,13 @@ msgstr "Список контактов: Шрифт группы"
 msgid "Contact List: Group Foreground Color"
 msgstr "Список контактов: Основной цвет группы"
 
-msgid "Contact Unsubscribed"
-msgstr "Контакт отменил подписку"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "Учётная запись удалена"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Список контактов"
 
 msgid "Contact information"
 msgstr "Информация о контакте"
@@ -1509,9 +1522,6 @@ msgstr "Журнал отладки"
 msgid "Decline"
 msgstr "Отклонить"
 
-msgid "Decline Invitation"
-msgstr "Отклонить приглашение"
-
 msgid "Decrease User Interface Font Size"
 msgstr "Уменьшить размер шрифта пользовательского интерфейса"
 
@@ -1577,8 +1587,9 @@ msgstr "Удалить тему"
 msgid "Deny"
 msgstr "Отклонить"
 
-msgid "Deny all subscription requests"
-msgstr "Отклонить все запросы подписки"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "Принять все запросы на добавление в контакты"
 
 msgid "Description"
 msgstr "Описание"
@@ -1663,9 +1674,6 @@ msgstr "Обзор сервисов…"
 msgid "Discussion Logs"
 msgstr "Журналы обсуждений"
 
-msgid "Dismiss"
-msgstr "Отклонить"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Вы принимаете этот запрос (учётная запись: %s)?"
@@ -1716,9 +1724,6 @@ msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 "В результате этого действия отпечаток будет удалён без возможности "
 "восстановления"
-
-msgid "Don’t show this again"
-msgstr "Не показывать снова"
 
 msgid "Download"
 msgstr "Скачать"
@@ -2187,6 +2192,10 @@ msgstr "Темы Gajim"
 msgid "Gajim Update"
 msgstr "Обновление Gajim"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Обновление Gajim"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2224,16 +2233,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Закончить работу"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: Нет доступных обновлений (последняя проверка: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: Нет доступных обновлений (последняя проверка: никогда)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: Проверка обновлений отключена в настройках"
 
 msgid "Gathering information…"
 msgstr "Получение информации…"
@@ -2274,12 +2273,6 @@ msgstr "Детали группового чата"
 
 msgid "Group Chat Invitation"
 msgstr "Приглашение в групповой чат"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Приглашение в групповой чат было отклонено"
-
-msgid "Group Chat Invitation Received"
-msgstr "Получено приглашение в групповой чат"
 
 msgid "Group Chat Language"
 msgstr "Язык группового чата"
@@ -2549,6 +2542,14 @@ msgstr "Недопустимый адрес: %s"
 
 msgid "Invalid domain name"
 msgstr "Недопустимое доменное имя"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Показать приглашение"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Приглашение в групповой чат было отклонено"
 
 msgid "Invite"
 msgstr "Пригласить"
@@ -2867,13 +2868,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Сообщения архивируются на сервере"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Сообщения будут доступны для чтения только в том случае, если включена "
-"история чата и если контакт присутствует в вашем списке контактов."
-
 msgid "Minimize"
 msgstr "Свернуть"
 
@@ -3019,9 +3013,6 @@ msgstr "Передача файлов недоступна"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Ничего не найдено"
-
-msgid "No Notifications"
-msgstr "Уведомления отсутствуют"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3233,9 +3224,6 @@ msgstr "Открыть ссылку в браузере"
 
 msgid "Open Link in _Browser"
 msgstr "Открыть ссылку в _браузере"
-
-msgid "Open Plugins…"
-msgstr "Открыть модули…"
 
 msgid "Open _Folder"
 msgstr "Открыть _папку"
@@ -3491,7 +3479,8 @@ msgstr "Сбой в подключаемом модуле"
 msgid "Plugin Settings"
 msgstr "Настройки модуля"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "Обновления подключаемых модулей"
 
 msgid "Plugin already exists"
@@ -3505,13 +3494,6 @@ msgstr "Модули"
 
 msgid "Plugins Updated Successfully"
 msgstr "Подключаемые модули успешно обновлены"
-
-msgid "Plugins: No updates available"
-msgstr "Подключаемые модули: Обновления отсутствуют"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr ""
-"Подключаемые модули: Проверка обновлений отключена в настройках параметров"
 
 msgid "Port"
 msgstr "Порт"
@@ -3753,6 +3735,10 @@ msgid "Remove Chat History?"
 msgstr "Удалить историю чата?"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Удаление контакта"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Удаление контакта"
 
@@ -3774,9 +3760,6 @@ msgstr "Удаление группы"
 
 msgid "Remove History…"
 msgstr "Удалить историю…"
-
-msgid "Remove Notification"
-msgstr "Удалить уведомление"
 
 msgid "Remove Proxy"
 msgstr "Удалить прокси"
@@ -3802,9 +3785,6 @@ msgstr "Удалить из списка контактов"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Удаление группы"
-
-msgid "Remove from contact list"
-msgstr "Удалить из списка контактов"
 
 msgid "Remove this workspace"
 msgstr "Удалить эту вкладку"
@@ -3843,9 +3823,6 @@ msgstr "Ремонт"
 
 msgid "Reply…"
 msgstr "Ответить…"
-
-msgid "Report"
-msgstr "Сообщить о проблеме"
 
 #, fuzzy
 msgid "Request"
@@ -4122,6 +4099,9 @@ msgstr "Выбрать сообщения…"
 msgid "Select a security label for your message…"
 msgstr "Выберите метку конфиденциальности для данного сообщения…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "Выберите эмодзи"
 
@@ -4291,9 +4271,6 @@ msgstr "Поделиться видео"
 msgid "Share my online status"
 msgstr "Показывать мой сетевой статус"
 
-msgid "Show"
-msgstr "Показать"
-
 msgid "Show Commands"
 msgstr "Показать команды"
 
@@ -4309,9 +4286,6 @@ msgstr "Показать подробную информацию"
 msgid "Show Inactive Devices"
 msgstr "Показать неактивные устройства"
 
-msgid "Show Invitation"
-msgstr "Показать приглашение"
-
 msgid "Show Join/Leave"
 msgstr "Показывать присоединение/выход"
 
@@ -4323,6 +4297,10 @@ msgstr "Транслировать свой видеопоток"
 
 msgid "Show Notifications"
 msgstr "Показывать уведомления"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Модули"
 
 msgid "Show Send Message Button"
 msgstr "Отображать кнопку отправки сообщения"
@@ -4554,9 +4532,6 @@ msgstr "Сообщение о статусе: Шрифт текста"
 msgid "Status Messages in Participants List"
 msgstr "Отображать сообщение о статусе в списке участников"
 
-msgid "Status and status message for all accounts"
-msgstr "Статус и сообщение о статусе для всех учётных записей"
-
 #, fuzzy
 msgid "Status is not shared"
 msgstr "Сообщение о статусе"
@@ -4588,9 +4563,6 @@ msgstr "Статус: Цвет для статуса «В сети»"
 msgid "Stop Sharing Online Status?"
 msgstr "Прекратить отправку сетевого статуса?"
 
-msgid "Stopped sharing their status with you"
-msgstr "Прекратил отправку своего сетевого статуса"
-
 msgid "Street"
 msgstr "Улица"
 
@@ -4619,9 +4591,6 @@ msgstr "Подписан"
 #, fuzzy
 msgid "Subscription"
 msgstr "Подписка:"
-
-msgid "Subscription Request"
-msgstr "Запрос подписки"
 
 #, fuzzy
 msgid "Subscription:"
@@ -4684,7 +4653,6 @@ msgstr "Синхронизировать"
 msgid "Synchronize Chat History"
 msgstr "Синхронизировать историю чата"
 
-#, fuzzy
 msgid "Synchronize History…"
 msgstr "Синхронизировать историю…"
 
@@ -5168,9 +5136,6 @@ msgstr "Обновить"
 msgid "Update Avatar"
 msgstr "Обновить аватар"
 
-msgid "Update Check"
-msgstr "Проверка обновлений"
-
 msgid "Update automatically"
 msgstr "Обновлять автоматически"
 
@@ -5425,10 +5390,6 @@ msgstr "Вы"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Вы (%s) присоединились к групповому чату"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "У вас есть непрочитанные сообщения"
 
 msgid "You are a visitor"
 msgstr "Вы посетитель"
@@ -6116,6 +6077,10 @@ msgstr "…или перетащите его сюда"
 #~ msgstr " от {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s запрашивает доступ к просмотру вашего статуса"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "Найдено %s групповых чатов"
 
@@ -6126,10 +6091,6 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "%s в сети на нескольких устройствах.\n"
 #~ "Выберите устройство, на которое будут отправлены файлы."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s хочет отправить Вам файл"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6465,6 +6426,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Connection not available"
 #~ msgstr "Соединение недоступно"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Контакт отменил подписку"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Беседа: Цвет ссылок"
 
@@ -6489,11 +6453,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Debug Console"
 #~ msgstr "Консоль отладки"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Отклонить приглашение"
+
 #~ msgid "Delete Message"
 #~ msgstr "Удалить сообщение"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Удалить сообщение локально?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Отклонить все запросы подписки"
 
 #~ msgid "Description: "
 #~ msgstr "Описание: "
@@ -6503,6 +6473,12 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Прямая передача (без шифрования)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Отклонить"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Не показывать снова"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6588,6 +6564,19 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim не может прочитать этот файл"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim: Нет доступных обновлений (последняя проверка: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim: Нет доступных обновлений (последняя проверка: никогда)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: Проверка обновлений отключена в настройках"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Получено приглашение в групповой чат"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6647,6 +6636,13 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Измененное сообщение: Цвет фона"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Сообщения будут доступны для чтения только в том случае, если включена "
+#~ "история чата и если контакт присутствует в вашем списке контактов."
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "Модерировать %(count)s сообщений для %(participant)s?"
@@ -6664,6 +6660,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "No Connection Available"
 #~ msgstr "Нет подключения"
 
+#~ msgid "No Notifications"
+#~ msgstr "Уведомления отсутствуют"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Не началось"
@@ -6676,6 +6675,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Open Path"
 #~ msgstr "Открыть путь"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Открыть модули…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Подразделение организации (OU)"
@@ -6698,6 +6700,13 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Используйте формат гггг-мм-дд"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Подключаемые модули: Обновления отсутствуют"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr ""
+#~ "Подключаемые модули: Проверка обновлений отключена в настройках параметров"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6726,6 +6735,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Remove Group..."
 #~ msgstr "Удалить группу..."
 
+#~ msgid "Remove Notification"
+#~ msgstr "Удалить уведомление"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Удалить транспорт"
 
@@ -6736,8 +6748,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Удаление контакта из списка контактов"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "Удалить из списка контактов"
+
 #~ msgid "Remove…"
 #~ msgstr "Удалить…"
+
+#~ msgid "Report"
+#~ msgstr "Сообщить о проблеме"
 
 #, fuzzy
 #~ msgid ""
@@ -6795,6 +6813,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Sender: "
 #~ msgstr "Отправитель: "
 
+#~ msgid "Show"
+#~ msgstr "Показать"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -6825,6 +6846,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Начать голосовой звонок…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Статус и сообщение о статусе для всех учётных записей"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Статус: "
@@ -6832,8 +6856,14 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Остановить передачу файлов"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Прекратил отправку своего сетевого статуса"
+
 #~ msgid "Submit"
 #~ msgstr "Отправить"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Запрос подписки"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Переключиться на первую-девятую вкладку"
@@ -6890,6 +6920,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Unread Messages"
 #~ msgstr "Непрочитанные сообщения"
 
+#~ msgid "Update Check"
+#~ msgstr "Проверка обновлений"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Загрузить"
@@ -6920,6 +6953,10 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Зачем модерировать это сообщение?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "У вас есть непрочитанные сообщения"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Выполняется попытка выхода из Gajim"

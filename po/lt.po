@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -128,10 +128,6 @@ msgstr "Išplėstinis"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Dabar \"%s\" žinos apie jūsų būklę."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -199,6 +195,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Failų siuntimai"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s wants to send you a file."
 
 #, python-format
 msgctxt "positive longitude"
@@ -486,6 +486,14 @@ msgstr "Activated"
 
 msgid "Active"
 msgstr "Active"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Activated"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Activated"
 
 msgid "Add"
 msgstr "Įtraukti"
@@ -1467,8 +1475,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Contact Connected"
+msgid "Contact Removed"
+msgstr "Prieiga"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Asmuo"
 
 #, fuzzy
 msgid "Contact information"
@@ -1650,9 +1662,6 @@ msgstr ""
 msgid "Decline"
 msgstr "A_tsijungęs"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1727,8 +1736,8 @@ msgid "Deny"
 msgstr "Atmesti"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Sutikimo užklausimas"
+msgid "Deny all contact requests"
+msgstr "File Transfer Request"
 
 msgid "Description"
 msgstr "Description"
@@ -1822,9 +1831,6 @@ msgstr "_Ieškoti Paslaugų"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Do you accept this request?"
@@ -1871,10 +1877,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "Do _not ask me again"
 
 #, fuzzy
 msgid "Download"
@@ -2398,6 +2400,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "Atnaujinti MOTD..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Atnaujinti MOTD..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2424,18 +2430,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim will now exit"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "No such account available"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "No such account available"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Nustatymai"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2485,14 +2479,6 @@ msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Groupchat Invitation"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Groupchat Invitation"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Groupchat Invitation"
 
 #, fuzzy
@@ -2785,6 +2771,14 @@ msgstr "Invalid File"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Invalid account name"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Padėtis:"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Groupchat Invitation"
 
 #, fuzzy
 msgid "Invite"
@@ -3143,11 +3137,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "You are not connected to the server"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-
 #, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
@@ -3311,10 +3300,6 @@ msgstr "Failų siuntimai"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "%s not found"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Pranešimai"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3549,10 +3534,6 @@ msgstr "_Atverti nuorodą naršyklėje"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Atverti nuorodą naršyklėje"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3829,7 +3810,7 @@ msgid "Plugin Settings"
 msgstr "Registracija nesėkminga"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Registracija nesėkminga"
 
 #, fuzzy
@@ -3846,14 +3827,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registracija nesėkminga"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "No such account available"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Nustatymai"
 
 #, fuzzy
 msgid "Port"
@@ -4131,6 +4104,10 @@ msgid "Remove Chat History?"
 msgstr "Nesenai:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Removes contact from roster"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Removes contact from roster"
 
@@ -4153,10 +4130,6 @@ msgstr "_Trinti"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Sinchronizuoti kontaktus"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Pranešimai"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4185,10 +4158,6 @@ msgstr "Removes contact from roster"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "_Trinti"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Removes contact from roster"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4228,10 +4197,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "Eksportuoti"
 
 #, fuzzy
 msgid "Request"
@@ -4549,6 +4514,9 @@ msgstr "Žinutė pagal nutylėjimą"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4746,9 +4714,6 @@ msgstr "Start Chat"
 msgid "Share my online status"
 msgstr "Change status"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Commands: %s"
@@ -4769,10 +4734,6 @@ msgstr "Gajim"
 msgid "Show Inactive Devices"
 msgstr "Žinutė pagal nutylėjimą"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Padėtis:"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4785,6 +4746,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Pranešimai"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5043,10 +5008,6 @@ msgid "Status Messages in Participants List"
 msgstr "Status Message"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Changes the status of account or accounts"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Status Message"
 
@@ -5082,9 +5043,6 @@ msgstr "Status Message"
 msgid "Stop Sharing Online Status?"
 msgstr "informavimui mane, apie būklę"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "<b>Gatvė:</b>"
@@ -5115,9 +5073,6 @@ msgstr "Subscribed"
 #, fuzzy
 msgid "Subscription"
 msgstr "Sutikimas:"
-
-msgid "Subscription Request"
-msgstr "Sutikimo užklausimas"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5687,10 +5642,6 @@ msgid "Update Avatar"
 msgstr "Choose Image"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Atnaujinti MOTD..."
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Choose Image"
 
@@ -5972,10 +5923,6 @@ msgstr "You"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "You have not joined a groupchat."
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "You have unread messages"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6721,12 +6668,12 @@ msgstr ""
 #~ msgstr "Keisti _Slapyvardį..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s not found"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Dabar \"%s\" žinos apie jūsų būklę."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s wants to send you a file."
+#~ msgid "%s group chats found"
+#~ msgstr "%s not found"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7018,6 +6965,10 @@ msgstr ""
 #~ msgstr "Connection not available"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Contact Connected"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Pokalbis su "
 
@@ -7052,6 +7003,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Žinutė pagal nutylėjimą"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Sutikimo užklausimas"
+
 #~ msgid "Description: "
 #~ msgstr "Aprašymas: "
 
@@ -7062,6 +7017,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Failo siuntimas sustabdytas"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Do _not ask me again"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7137,6 +7096,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim cannot access this file"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "No such account available"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "No such account available"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Nustatymai"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Groupchat Invitation"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Hide this menu"
 
@@ -7186,6 +7161,10 @@ msgstr ""
 #~ msgstr "Connection not available"
 
 #, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Pranešimai"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Not in roster"
@@ -7203,12 +7182,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Atšaukti failo siuntimą"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Rodyti Visus Laukiančius Į_vykius"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "No such account available"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Nustatymai"
 
 #~ msgid "Progress"
 #~ msgstr "Progress"
@@ -7233,6 +7224,10 @@ msgstr ""
 #~ msgstr "Nesenai:"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Pranešimai"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Rodyti _Pernašas"
 
@@ -7246,8 +7241,16 @@ msgstr ""
 #~ msgstr "Removes contact from roster"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Removes contact from roster"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Trinti"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Eksportuoti"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7308,6 +7311,10 @@ msgstr ""
 #~ msgstr "Start Chat"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Changes the status of account or accounts"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -7315,6 +7322,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Failų siuntimai"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Sutikimo užklausimas"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7346,6 +7356,10 @@ msgstr ""
 #~ msgstr "Unread events"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Atnaujinti MOTD..."
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Save File as..."
@@ -7365,6 +7379,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Do you accept this request?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "You have unread messages"
 
 #~ msgid "You are not connected to the server"
 #~ msgstr "You are not connected to the server"

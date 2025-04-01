@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -136,10 +136,6 @@ msgid "%s and %s are typing…"
 msgstr "%s және %s теруде…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s қалып-күйіңізді бөлісуіңізді сұрайды"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s тек шақыру бойынша қосыла алады."
 
@@ -206,6 +202,10 @@ msgstr "%s қалып-күйін бөлісуді тоқтатты"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s файлдармен алмасуды тоқтатқан"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s сізге файлды жібергісі келеді"
 
 #, python-format
 msgctxt "positive longitude"
@@ -468,6 +468,14 @@ msgid "Activated"
 msgstr "Белсенді"
 
 msgid "Active"
+msgstr "Белсенді"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Белсендіру"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Белсенді"
 
 msgid "Add"
@@ -1338,8 +1346,13 @@ msgstr "Контакттар тізімі: Топ қарібі"
 msgid "Contact List: Group Foreground Color"
 msgstr "Контакттар тізімі: Топ алдыңғы көрінісінің түсі"
 
-msgid "Contact Unsubscribed"
-msgstr "Контакт жазылуды тоқтатты"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "Тіркелгі өшірілді"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Контакттар тізімі"
 
 msgid "Contact information"
 msgstr "Контакт ақпараты"
@@ -1488,9 +1501,6 @@ msgstr "Жөндеу журналы"
 msgid "Decline"
 msgstr "Тайдыру"
 
-msgid "Decline Invitation"
-msgstr "Шақыруды тайдыру"
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1557,8 +1567,9 @@ msgstr "Теманы өшіру"
 msgid "Deny"
 msgstr "Тайдыру"
 
-msgid "Deny all subscription requests"
-msgstr "Барлық жазылуға сұранымдарды тайдыру"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "Барлық байланыс сұрауларын қабылдау"
 
 msgid "Description"
 msgstr "Сипаттамасы"
@@ -1641,9 +1652,6 @@ msgstr "Қызметтерді қарап шығу…"
 msgid "Discussion Logs"
 msgstr "Талқылау журналдары"
 
-msgid "Dismiss"
-msgstr "Тайдыру"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Бұл сұранымды қабылдайсыз ба (тіркелгі: %s)?"
@@ -1692,9 +1700,6 @@ msgstr "<b>%s</b> жүйесінде тіркелгіңізді тіркеуде
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-msgid "Don’t show this again"
-msgstr "Бұны келесіде көрсетпеу"
 
 msgid "Download"
 msgstr "Жүктеп алу"
@@ -2169,6 +2174,10 @@ msgstr "Gajim темалары"
 msgid "Gajim Update"
 msgstr "Gajim жаңартуы"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Gajim жаңартуы"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2205,16 +2214,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim қазір өз жұмысын аяқтайды"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: Жаңартулар жоқ (соңғы тексеру: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: Жаңартулар жоқ (соңғы тексеру: ешқашан)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: Жаңартуларға тексеру мүмкіндігі баптауларда сөндірілген"
 
 msgid "Gathering information…"
 msgstr "Ақпарат жиналуда…"
@@ -2255,12 +2254,6 @@ msgstr "Топтық чат мәліметтері"
 
 msgid "Group Chat Invitation"
 msgstr "Топ чатына шақыру"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Топтық чатқа шақыру тайдырылды"
-
-msgid "Group Chat Invitation Received"
-msgstr "Топтық чатқа шақыру алынды"
 
 msgid "Group Chat Language"
 msgstr "Топтық чат тілі"
@@ -2526,6 +2519,14 @@ msgstr "Жарамсыз адрес: %s"
 
 msgid "Invalid domain name"
 msgstr "Жарамсыз домен атауы"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Шақыруды көрсету"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Топтық чатқа шақыру тайдырылды"
 
 msgid "Invite"
 msgstr "Шақыру"
@@ -2844,13 +2845,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Хабарламалар серверде архивтелген"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Хабарламаларды кейінірек оқу үшін тек чат тарихын сақтау іске қосулы және "
-"контакт сіздің контакттар тізімінде болса ғана қолжетімді болады."
-
 msgid "Minimize"
 msgstr "Қайыру"
 
@@ -2999,9 +2993,6 @@ msgstr "Қолжетімді файлдармен алмасу жоқ"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Ешнәрсе табылмады"
-
-msgid "No Notifications"
-msgstr "Хабарламалар жоқ"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3212,9 +3203,6 @@ msgstr "Сілтемені браузерде ашу"
 
 msgid "Open Link in _Browser"
 msgstr "Сілтемені _браузерде ашу"
-
-msgid "Open Plugins…"
-msgstr "Плагиндерді ашу…"
 
 msgid "Open _Folder"
 msgstr "_Буманы ашу"
@@ -3471,7 +3459,8 @@ msgstr "Плагин сәтсіз"
 msgid "Plugin Settings"
 msgstr "Плагин баптаулары"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "Плагиндер жаңартулары"
 
 msgid "Plugin already exists"
@@ -3485,12 +3474,6 @@ msgstr "Плагиндер"
 
 msgid "Plugins Updated Successfully"
 msgstr "Плагиндер сәтті жаңартылды"
-
-msgid "Plugins: No updates available"
-msgstr "Плагиндер: Жаңартулар жоқ"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Плагиндер: Жаңартуларға тексеру мүмкіндігі баптауларда сөндірілген"
 
 msgid "Port"
 msgstr "Порт"
@@ -3732,6 +3715,10 @@ msgid "Remove Chat History?"
 msgstr "Чат тарихын өшіру керек пе?"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Контактты өшіру"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Контактты өшіру"
 
@@ -3753,9 +3740,6 @@ msgstr "Топты өшіру"
 
 msgid "Remove History…"
 msgstr "Тарихты өшіру…"
-
-msgid "Remove Notification"
-msgstr "Хабарландыруды өшіру"
 
 msgid "Remove Proxy"
 msgstr "Проксиді өшіру"
@@ -3781,9 +3765,6 @@ msgstr "Контакттар тізімінен өшіру"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Топты өшіру"
-
-msgid "Remove from contact list"
-msgstr "Контакттар тізімінен өшіру"
 
 msgid "Remove this workspace"
 msgstr "Бұл жұмыс кеңістігін өшіру"
@@ -3822,9 +3803,6 @@ msgstr "Жөндеулер"
 
 msgid "Reply…"
 msgstr ""
-
-msgid "Report"
-msgstr "Есеп жіберу"
 
 #, fuzzy
 msgid "Request"
@@ -4104,6 +4082,9 @@ msgstr "Хабарламаларды таңдау…"
 msgid "Select a security label for your message…"
 msgstr "Хабарламаңыз үшін қауіпсіздік белгісін таңдау…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "Эмодзи таңдаңыз"
 
@@ -4272,9 +4253,6 @@ msgstr "Видеомен бөлісу"
 msgid "Share my online status"
 msgstr "Менің қалып-күйіммен бөлісу"
 
-msgid "Show"
-msgstr "Көрсету"
-
 msgid "Show Commands"
 msgstr "Командаларды көрсету"
 
@@ -4290,9 +4268,6 @@ msgstr "Ақпаратын көрсету"
 msgid "Show Inactive Devices"
 msgstr "Белсенді емес құрылғыларды көрсету"
 
-msgid "Show Invitation"
-msgstr "Шақыруды көрсету"
-
 msgid "Show Join/Leave"
 msgstr "Кіру/шығуды көрсету"
 
@@ -4304,6 +4279,10 @@ msgstr "Менің видео ағынымды көрсету"
 
 msgid "Show Notifications"
 msgstr "Хабарламаларды көрсету"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Плагиндер"
 
 msgid "Show Send Message Button"
 msgstr "Хабарламаны жіберу батырмасын көрсету"
@@ -4533,9 +4512,6 @@ msgstr "Қалып-күй хабарламасы: Мәтін қарібі"
 msgid "Status Messages in Participants List"
 msgstr "Қатысушылар тізіміндегі қалып-күй хабарламалары"
 
-msgid "Status and status message for all accounts"
-msgstr "Барлық тіркелгілеріңізге арналған қалып-күй және қалып-күй хабарламасы"
-
 #, fuzzy
 msgid "Status is not shared"
 msgstr "Күй хабарламасы"
@@ -4567,9 +4543,6 @@ msgstr "Қалып-күй: \"Желіде\" үшін түс"
 msgid "Stop Sharing Online Status?"
 msgstr "Желідегі онлайн қалып-күймен бөлісуді тоқтату керек пе?"
 
-msgid "Stopped sharing their status with you"
-msgstr "Өздерінің қалып-күйіңізбен сізбен бөлісуді тоқтатқан"
-
 msgid "Street"
 msgstr "Көше"
 
@@ -4598,9 +4571,6 @@ msgstr "Жазылған"
 #, fuzzy
 msgid "Subscription"
 msgstr "Жазылу:"
-
-msgid "Subscription Request"
-msgstr "Жазылуға сұраным"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5141,9 +5111,6 @@ msgstr "Жаңарту"
 msgid "Update Avatar"
 msgstr "Аватарды жаңарту"
 
-msgid "Update Check"
-msgstr "Жаңартуды тексеру"
-
 msgid "Update automatically"
 msgstr "Автоматты түрде жаңарту"
 
@@ -5401,10 +5368,6 @@ msgstr "Сіз"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Сіз (%s) чат бөлмесіне кірдіңіз"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Сізде әлі оқылмаған хабарламалар бар"
 
 msgid "You are a visitor"
 msgstr "Сіз келушісіз"
@@ -6084,6 +6047,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr " {actor} шығарған"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s қалып-күйіңізді бөлісуіңізді сұрайды"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s топтық чат табылды"
 
@@ -6094,10 +6061,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr ""
 #~ "%s бірнеше құрылғылармен желіде.\n"
 #~ "Файлдарды жібергіңіз келетін құрылғыны таңдаңыз."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s сізге файлды жібергісі келеді"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6412,6 +6375,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Connection not available"
 #~ msgstr "Байланыс қолжетерсіз"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Контакт жазылуды тоқтатты"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Сөйлесу: Сілтемелер түсі"
 
@@ -6436,11 +6402,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Debug Console"
 #~ msgstr "Жөндеу консолі"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Шақыруды тайдыру"
+
 #~ msgid "Delete Message"
 #~ msgstr "Хабарламаны өшіру"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Хабарламаны жергілікті түрде өшіру керек пе?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Барлық жазылуға сұранымдарды тайдыру"
 
 #~ msgid "Description: "
 #~ msgstr "Анықтамасы: "
@@ -6450,6 +6422,12 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Тікелей тасымалдау (шифрленбеген)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Тайдыру"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Бұны келесіде көрсетпеу"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6536,6 +6514,19 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim файлды оқи алмайды"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim: Жаңартулар жоқ (соңғы тексеру: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim: Жаңартулар жоқ (соңғы тексеру: ешқашан)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: Жаңартуларға тексеру мүмкіндігі баптауларда сөндірілген"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Топтық чатқа шақыру алынды"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6591,6 +6582,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Түзетілген хабарлама: Фон түсі"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Хабарламаларды кейінірек оқу үшін тек чат тарихын сақтау іске қосулы және "
+#~ "контакт сіздің контакттар тізімінде болса ғана қолжетімді болады."
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Хабарламаны қайтарып алу керек пе?"
@@ -6605,6 +6603,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "No Connection Available"
 #~ msgstr "Байланыс қолжетімді емес"
 
+#~ msgid "No Notifications"
+#~ msgstr "Хабарламалар жоқ"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Басталмаған"
@@ -6617,6 +6618,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Open Path"
 #~ msgstr "Жолды ашу"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Плагиндерді ашу…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Ұйым бөлімі (OU)"
@@ -6639,6 +6643,12 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "yyyy-mm-dd пішімін қолданыңыз"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Плагиндер: Жаңартулар жоқ"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Плагиндер: Жаңартуларға тексеру мүмкіндігі баптауларда сөндірілген"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6668,6 +6678,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Remove Group..."
 #~ msgstr "Топты өшіру..."
 
+#~ msgid "Remove Notification"
+#~ msgstr "Хабарландыруды өшіру"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Көлікті өшіру"
 
@@ -6678,8 +6691,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Контактты контакттар тізімінен өшіру"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "Контакттар тізімінен өшіру"
+
 #~ msgid "Remove…"
 #~ msgstr "Өшіру…"
+
+#~ msgid "Report"
+#~ msgstr "Есеп жіберу"
 
 #, fuzzy
 #~ msgid ""
@@ -6737,6 +6756,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Sender: "
 #~ msgstr "Жіберуші: "
 
+#~ msgid "Show"
+#~ msgstr "Көрсету"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim-ді көрсету"
 
@@ -6765,6 +6787,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Дыбыс қоңырауын бастау…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr ""
+#~ "Барлық тіркелгілеріңізге арналған қалып-күй және қалып-күй хабарламасы"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Қалып-күй: "
@@ -6772,8 +6798,14 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Файлдармен алмасуды тоқтату"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Өздерінің қалып-күйіңізбен сізбен бөлісуді тоқтатқан"
+
 #~ msgid "Submit"
 #~ msgstr "Жіберу"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Жазылуға сұраным"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
@@ -6830,6 +6862,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Unread Messages"
 #~ msgstr "Оқылмаған хабарламалар"
 
+#~ msgid "Update Check"
+#~ msgstr "Жаңартуды тексеру"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Жүктеп салу"
@@ -6860,6 +6895,10 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Бұл хабарламаны неліктен қайтарып алғыңыз келеді?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Сізде әлі оқылмаған хабарламалар бар"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Gajim-нан шығуды қаладыңыз"

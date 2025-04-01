@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2025-03-09 12:48+0000\n"
 "Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -135,10 +135,6 @@ msgid "%s and %s are typing…"
 msgstr "%s與%s正在鍵入…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s 要求您分享您的狀態"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s 只能通過邀請加入。"
 
@@ -205,6 +201,10 @@ msgstr "%s 已停止共享其狀態"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s 停止了傳輸"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s 想傳送給您一個檔案。"
 
 #, python-format
 msgctxt "positive longitude"
@@ -474,6 +474,14 @@ msgstr "啟用的"
 
 msgid "Active"
 msgstr "活動"
+
+#, fuzzy
+msgid "Activity"
+msgstr "啟用的"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "啟用的"
 
 msgid "Add"
 msgstr "加入"
@@ -1404,8 +1412,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "已取消認證的"
+msgid "Contact Removed"
+msgstr "帳戶已刪除"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "聯絡人"
 
 #, fuzzy
 msgid "Contact information"
@@ -1587,9 +1599,6 @@ msgstr "慢跑"
 msgid "Decline"
 msgstr "離線(_O)"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1665,8 +1674,8 @@ msgid "Deny"
 msgstr "拒絕"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "認證請求"
+msgid "Deny all contact requests"
+msgstr "接受所有聯絡請求"
 
 msgid "Description"
 msgstr "描述"
@@ -1758,9 +1767,6 @@ msgstr "探索服務(_D)"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受這個對帳號 %s 的請求?"
@@ -1808,10 +1814,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "不要再問我了(_D)"
 
 #, fuzzy
 msgid "Download"
@@ -2341,6 +2343,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "更新 MOTD…"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "更新 MOTD…"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2367,18 +2373,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim 即將離開"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "沒有有效帳號"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "沒有有效帳號"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "編輯存檔偏好設定(_V)"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2428,14 +2422,6 @@ msgstr "外掛程式"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "多人聊天邀請"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "多人聊天邀請"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "多人聊天邀請"
 
 #, fuzzy
@@ -2732,6 +2718,14 @@ msgstr "無效檔案"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "無效的帳號名稱"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "位置: %s"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "多人聊天邀請"
 
 #, fuzzy
 msgid "Invite"
@@ -3093,14 +3087,6 @@ msgid "Messages are archived on the server"
 msgstr "本次作業階段將在伺服器上被存檔"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"除非您啟用了命令歷程記錄而且向您傳送訊息的聯絡人在您的聯絡人清單中，您才能\n"
-"在以後讀到這些訊息。"
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3260,10 +3246,6 @@ msgstr "檔案傳輸完成"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "無結果"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "通知"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3497,10 +3479,6 @@ msgstr "在瀏覽器中開啟連結(_O)"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "在瀏覽器中開啟連結(_O)"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "外掛程式"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3781,7 +3759,7 @@ msgid "Plugin Settings"
 msgstr "外掛程式"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "外掛程式失敗"
 
 msgid "Plugin already exists"
@@ -3797,14 +3775,6 @@ msgstr "外掛程式"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "外掛程式失敗"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "沒有有效帳號"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "編輯存檔偏好設定(_V)"
 
 #, fuzzy
 msgid "Port"
@@ -4085,6 +4055,10 @@ msgid "Remove Chat History?"
 msgstr "最近:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "重新命名聯絡人"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "重新命名聯絡人"
 
@@ -4107,10 +4081,6 @@ msgstr "移除群組"
 #, fuzzy
 msgid "Remove History…"
 msgstr "同步"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "通知"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4139,10 +4109,6 @@ msgstr "從聯絡人清單移除聯絡人"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "移除群組"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "從聯絡人清單移除聯絡人"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4182,10 +4148,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "報告錯誤(_R)"
 
 #, fuzzy
 msgid "Request"
@@ -4505,6 +4467,9 @@ msgstr "預設訊息"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4700,9 +4665,6 @@ msgstr "一個視訊"
 msgid "Share my online status"
 msgstr "變更狀態"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "命令"
@@ -4723,10 +4685,6 @@ msgstr "細節"
 msgid "Show Inactive Devices"
 msgstr "音訊輸入裝置"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "位置: %s"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4739,6 +4697,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "通知"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "外掛程式"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -4994,10 +4956,6 @@ msgid "Status Messages in Participants List"
 msgstr "狀態訊息"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "變更一個或多個帳號狀態"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "狀態訊息"
 
@@ -5033,9 +4991,6 @@ msgstr "狀態訊息"
 msgid "Stop Sharing Online Status?"
 msgstr "向我傳送狀態"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "stream"
@@ -5066,9 +5021,6 @@ msgstr "訂閱"
 #, fuzzy
 msgid "Subscription"
 msgstr "認證: "
-
-msgid "Subscription Request"
-msgstr "認證請求"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5648,10 +5600,6 @@ msgid "Update Avatar"
 msgstr "選擇歸檔檔案"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "拼寫檢查工具"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "選擇歸檔檔案"
 
@@ -5936,10 +5884,6 @@ msgstr "您"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s 加入聊天室"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "您有未讀訊息"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6696,13 +6640,13 @@ msgstr ""
 #~ msgid " by {actor}"
 #~ msgstr " 由{actor}"
 
+#, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s 要求您分享您的狀態"
+
 #, fuzzy, python-format
 #~ msgid "%s group chats found"
 #~ msgstr " %s 找不到"
-
-#, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s 想傳送給您一個檔案。"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7042,6 +6986,10 @@ msgstr ""
 #~ msgstr "連線無法使用"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "已取消認證的"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "對話，與"
 
@@ -7076,6 +7024,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "預設訊息"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "認證請求"
+
 #~ msgid "Description: "
 #~ msgstr "描述: "
 
@@ -7086,6 +7038,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "檔案傳輸已停止"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "不要再問我了(_D)"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7178,6 +7134,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim 無法存取此檔案"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "沒有有效帳號"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "沒有有效帳號"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "編輯存檔偏好設定(_V)"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "多人聊天邀請"
+
 #~ msgid "Hide this menu"
 #~ msgstr "隱藏本選單"
 
@@ -7223,6 +7195,15 @@ msgstr ""
 #~ msgstr "訊息"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "除非您啟用了命令歷程記錄而且向您傳送訊息的聯絡人在您的聯絡人清單中，您才"
+#~ "能\n"
+#~ "在以後讀到這些訊息。"
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "狀態訊息"
 
@@ -7237,6 +7218,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "連線無法使用"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "通知"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7256,6 +7241,10 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "外掛程式"
+
+#, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "再續(_R)"
 
@@ -7266,6 +7255,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "顯示所有未處理事件(_E)"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "沒有有效帳號"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "編輯存檔偏好設定(_V)"
 
 #~ msgid "Progress"
 #~ msgstr "處理序"
@@ -7294,6 +7291,10 @@ msgstr ""
 #~ msgstr "移除群組"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "通知"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "顯示代理(_P)"
 
@@ -7306,8 +7307,16 @@ msgstr ""
 #~ msgstr "從聯絡人清單移除聯絡人"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "從聯絡人清單移除聯絡人"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "移除(_R)"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "報告錯誤(_R)"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7390,6 +7399,10 @@ msgstr ""
 #~ msgstr "開始聊天"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "變更一個或多個帳號狀態"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "狀態: "
@@ -7397,6 +7410,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "檔案傳輸"
+
+#~ msgid "Subscription Request"
+#~ msgstr "認證請求"
 
 #~ msgid "Synchronise"
 #~ msgstr "同步"
@@ -7442,6 +7458,10 @@ msgstr ""
 #~ msgstr "未讀取的事件"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "拼寫檢查工具"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "另存為…"
@@ -7461,6 +7481,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "您確定要刪除所選取的訊息?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "您有未讀訊息"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

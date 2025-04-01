@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -131,10 +131,6 @@ msgstr "-e  --ed  Bir ed betiği çıktılar."
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "%(nick)s durumu şimdi %(status)s"
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -202,6 +198,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Dosya Aktarımları"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s size bir dosya göndermek istiyor."
 
 #, python-format
 msgctxt "positive longitude"
@@ -487,6 +487,14 @@ msgstr "Etkin çıkışta"
 
 msgid "Active"
 msgstr "Aktif"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Etkin çıkışta"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Etkin çıkışta"
 
 msgid "Add"
 msgstr "Ekle"
@@ -1490,8 +1498,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Üyelikten çıkarıldı"
+msgid "Contact Removed"
+msgstr "Hesap sırası"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kişiler"
 
 #, fuzzy
 msgid "Contact information"
@@ -1671,9 +1683,6 @@ msgstr "Koşuda"
 msgid "Decline"
 msgstr "Bağlı _değil"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1749,8 +1758,8 @@ msgid "Deny"
 msgstr "Reddet"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Üyelik İsteği"
+msgid "Deny all contact requests"
+msgstr "Dosya Gönderme Soru"
 
 msgid "Description"
 msgstr "Açıklama"
@@ -1840,9 +1849,6 @@ msgstr "Çevrimiçi Servisler"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Ricayı kabul ediyor musunuz?"
@@ -1890,10 +1896,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy
 msgid "Download"
@@ -2418,6 +2420,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "MOTD'yi yenileştir"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "MOTD'yi yenileştir"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2445,18 +2451,6 @@ msgstr ""
 #, fuzzy
 msgid "Gajim will now exit"
 msgstr "Gajim'den gerçekten çıkılsın mı?"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Tercihler"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2506,14 +2500,6 @@ msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Grup Sohbeti Daveti"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Grup Sohbeti Daveti"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Grup Sohbeti Daveti"
 
 #, fuzzy
@@ -2801,6 +2787,14 @@ msgstr "Geçersiz Dosya"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Geçersiz Liste İsmi"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Yer:"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Grup Sohbeti Daveti"
 
 #, fuzzy
 msgid "Invite"
@@ -3157,11 +3151,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "%s: OID (-o) 0 olamaz\n"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-
 #, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
@@ -3323,10 +3312,6 @@ msgstr "Dosya Gönderme Tamamlandı"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "<b>Telefon numara:</b>"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Bildirimler"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3561,10 +3546,6 @@ msgstr "Gmail Gelen Kutusunu _Aç"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "Gmail Gelen Kutusunu _Aç"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3848,7 +3829,7 @@ msgid "Plugin Settings"
 msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
@@ -3865,14 +3846,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Bağlantı Kurulamıyor"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Tercihler"
 
 #, fuzzy
 msgid "Port"
@@ -4153,6 +4126,10 @@ msgid "Remove Chat History?"
 msgstr "Son Kullanılan:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Kişiyi yeniden adlandır"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Kişiyi yeniden adlandır"
 
@@ -4175,10 +4152,6 @@ msgstr "Grubu Sil"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Kişileri eşzamana getir"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Bildirim"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4207,10 +4180,6 @@ msgstr "Kişiyi listeden sil"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Grubu Sil"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Kişiyi listeden sil"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4249,10 +4218,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Hata Bildir"
 
 #, fuzzy
 msgid "Request"
@@ -4570,6 +4535,9 @@ msgstr "Öntanımlı İlet"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4768,9 +4736,6 @@ msgstr "bir video"
 msgid "Share my online status"
 msgstr "Durumu Değiştir"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "komut"
@@ -4791,10 +4756,6 @@ msgstr "Ayrıntılar"
 msgid "Show Inactive Devices"
 msgstr "Ses giriş aygıtı"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Yer:"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4807,6 +4768,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Bildirimler"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5063,10 +5028,6 @@ msgid "Status Messages in Participants List"
 msgstr "durum ileti"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Durum satırı okunamadı"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "durum ileti"
 
@@ -5102,9 +5063,6 @@ msgstr "durum ileti"
 msgid "Stop Sharing Online Status?"
 msgstr "bana mesaj göndermek için"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Vurgulu"
@@ -5136,9 +5094,6 @@ msgstr "Üyeldi"
 #, fuzzy
 msgid "Subscription"
 msgstr "Üyelik:"
-
-msgid "Subscription Request"
-msgstr "Üyelik İsteği"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5714,10 +5669,6 @@ msgid "Update Avatar"
 msgstr "Resim seç"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Tamamlanmamış yazım denetimi kaydı"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Resim seç"
 
@@ -6002,10 +5953,6 @@ msgstr "Sen"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s grup sohbete katıldı"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Okunmamış iletler var"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6749,12 +6696,12 @@ msgstr ""
 #~ msgstr "Takma Ad Ayarla"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s bulunamadı"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%(nick)s durumu şimdi %(status)s"
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s size bir dosya göndermek istiyor."
+#~ msgid "%s group chats found"
+#~ msgstr "%s bulunamadı"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7081,6 +7028,10 @@ msgstr ""
 #~ msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Üyelikten çıkarıldı"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Sohbet"
 
@@ -7103,6 +7054,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Öntanımlı İlet"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Üyelik İsteği"
+
 #~ msgid "Description: "
 #~ msgstr "Açıklama: "
 
@@ -7113,6 +7068,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Dosya Gönderme Tamamlandı"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7193,6 +7152,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "%s sunucu konfigurasyon dosyasına \"%s\" erişilemiyor: %s\n"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Tercihler"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Grup Sohbeti Daveti"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Menüyi gizle"
 
@@ -7239,6 +7214,10 @@ msgstr ""
 #~ msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Bildirimler"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Başlatılmadı"
@@ -7256,12 +7235,24 @@ msgstr ""
 #~ msgstr "OpenPGP:"
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Dosya transferi iptal et"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Bütün Bekleyen _Olayları Göster"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Tercihler"
 
 #~ msgid "Progress"
 #~ msgstr "İlerleme"
@@ -7290,6 +7281,10 @@ msgstr ""
 #~ msgstr "Grubu Sil"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Bildirim"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "_XML Konsolu Göster"
 
@@ -7302,8 +7297,16 @@ msgstr ""
 #~ msgstr "Kişiyi listeden sil"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Kişiyi listeden sil"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Kaldır"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Hata Bildir"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7379,6 +7382,10 @@ msgstr ""
 #~ msgstr "Sohbet _Başla"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Durum satırı okunamadı"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Durum:"
@@ -7386,6 +7393,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Dosya Aktarımları"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Üyelik İsteği"
 
 #, fuzzy
 #~ msgid "Synchronise"
@@ -7429,6 +7439,10 @@ msgstr ""
 #~ msgstr "Okunmamış iletler var"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Tamamlanmamış yazım denetimi kaydı"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Dosya Farklı Kaydet..."
@@ -7448,6 +7462,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Okunmamış iletler var"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

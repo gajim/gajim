@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2025-03-01 07:12+0000\n"
 "Last-Translator: Mako N <mako@pasero.net>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -141,10 +141,6 @@ msgid "%s and %s are typing…"
 msgstr "%s と %sが入力中…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "\"%s\" さんはあなたの在席状況を知ることを求めています"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s は招待のみ参加できます。"
 
@@ -211,6 +207,10 @@ msgstr "%s さんは在席状況を知らせることをやめました"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s さんは転送を中止しました"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s さんがファイルを転送したがっています"
 
 #, python-format
 msgctxt "positive longitude"
@@ -472,6 +472,14 @@ msgid "Activated"
 msgstr "有効"
 
 msgid "Active"
+msgstr "有効"
+
+#, fuzzy
+msgid "Activity"
+msgstr "有効"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "有効"
 
 msgid "Add"
@@ -1334,8 +1342,13 @@ msgstr "相手先一覧: グループのフォント"
 msgid "Contact List: Group Foreground Color"
 msgstr "相手先一覧: グループの文字色"
 
-msgid "Contact Unsubscribed"
-msgstr "在席通知の取り消し"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "アカウントを除去しました"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "相手先一覧"
 
 msgid "Contact information"
 msgstr "相手先の情報"
@@ -1483,9 +1496,6 @@ msgstr "デバッグ記録"
 msgid "Decline"
 msgstr "拒否"
 
-msgid "Decline Invitation"
-msgstr "招待を辞退"
-
 msgid "Decrease User Interface Font Size"
 msgstr "ユーザーインターフェースのフォントサイズを小さく"
 
@@ -1547,8 +1557,9 @@ msgstr "テーマを削除しますか ?"
 msgid "Deny"
 msgstr "拒否する"
 
-msgid "Deny all subscription requests"
-msgstr "すべての在席通知の申し込みを拒否"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "すべての相手先要求を承諾"
 
 msgid "Description"
 msgstr "説明"
@@ -1629,9 +1640,6 @@ msgstr "サービスを探索…"
 msgid "Discussion Logs"
 msgstr "議論の記録"
 
-msgid "Dismiss"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "この申し込み(アカウント %s)を承諾しますか ?"
@@ -1680,9 +1688,6 @@ msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "この指紋を完全に削除します"
-
-msgid "Don’t show this again"
-msgstr "次回からこのメッセージを表示しない"
 
 msgid "Download"
 msgstr "ダウンロード"
@@ -2144,6 +2149,10 @@ msgstr "Gajim テーマ"
 msgid "Gajim Update"
 msgstr "Gajim の更新"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Gajim の更新"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2177,16 +2186,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim は終了します"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "有効な更新はありません (最後の確認: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "有効な更新はありません (最後の確認: なし)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: 更新の確認は設定で無効化されています"
 
 msgid "Gathering information…"
 msgstr "情報を収集しています…"
@@ -2227,12 +2226,6 @@ msgstr "談話室の詳細"
 
 msgid "Group Chat Invitation"
 msgstr "談話室への招待"
-
-msgid "Group Chat Invitation Declined"
-msgstr "談話室への招待を辞退"
-
-msgid "Group Chat Invitation Received"
-msgstr "談話室への招待を受諾"
 
 msgid "Group Chat Language"
 msgstr "談話室の言語"
@@ -2492,6 +2485,14 @@ msgstr "アドレスが正しくありません: %s"
 
 msgid "Invalid domain name"
 msgstr "ドメイン名が正しくありません"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "招待を表示"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "談話室への招待を辞退"
 
 msgid "Invite"
 msgstr "招待"
@@ -2807,13 +2808,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "メッセージはサーバーに記録されます"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読め"
-"ます。"
-
 msgid "Minimize"
 msgstr "最小化"
 
@@ -2950,9 +2944,6 @@ msgstr "ファイル転送は利用できません"
 
 msgid "No Messages Found"
 msgstr "メッセージは見つかりませんでした"
-
-msgid "No Notifications"
-msgstr "通知はありません"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3165,9 +3156,6 @@ msgstr "リンク先をブラウザで開く"
 
 msgid "Open Link in _Browser"
 msgstr "リンク先をブラウザで開く (_B)"
-
-msgid "Open Plugins…"
-msgstr "プラグインを開く…"
 
 # #(Mako)Containing をどうする
 msgid "Open _Folder"
@@ -3420,7 +3408,8 @@ msgstr "プラグインに失敗しました"
 msgid "Plugin Settings"
 msgstr "プラグインの設定"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "プラグインの更新"
 
 msgid "Plugin already exists"
@@ -3434,12 +3423,6 @@ msgstr "プラグイン"
 
 msgid "Plugins Updated Successfully"
 msgstr "プラグインは無事更新されました"
-
-msgid "Plugins: No updates available"
-msgstr "プラグイン: 利用可能な更新はありません"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "プラグイン: 更新確認は設定で無効化されています"
 
 msgid "Port"
 msgstr "ポート番号"
@@ -3675,6 +3658,10 @@ msgstr "アカウントを除去"
 msgid "Remove Chat History?"
 msgstr "会話の履歴を除去しますか ?"
 
+#, fuzzy
+msgid "Remove Contact"
+msgstr "相手先を除去しますか ?"
+
 msgid "Remove Contacts?"
 msgstr "相手先を除去しますか ?"
 
@@ -3692,9 +3679,6 @@ msgstr "グループを除去…"
 
 msgid "Remove History…"
 msgstr "履歴を除去…"
-
-msgid "Remove Notification"
-msgstr "通知を除去"
 
 msgid "Remove Proxy"
 msgstr "プロキシの除去"
@@ -3716,9 +3700,6 @@ msgstr "相手先一覧から除去…"
 
 msgid "Remove from Group"
 msgstr "グループから除去"
-
-msgid "Remove from contact list"
-msgstr "相手先一覧から除去"
 
 msgid "Remove this workspace"
 msgstr "この作業空間を除去"
@@ -3752,9 +3733,6 @@ msgstr "修理"
 
 msgid "Reply…"
 msgstr "返信…"
-
-msgid "Report"
-msgstr "報告"
 
 #, fuzzy
 msgid "Request"
@@ -4031,6 +4009,9 @@ msgstr "メッセージを選択…"
 msgid "Select a security label for your message…"
 msgstr "メッセージの安全性ラベルを選択…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "絵文字を選択"
 
@@ -4193,9 +4174,6 @@ msgstr "動画を共有"
 msgid "Share my online status"
 msgstr "在席状況を知らせる"
 
-msgid "Show"
-msgstr "表示"
-
 msgid "Show Commands"
 msgstr "コマンドを表示する"
 
@@ -4211,9 +4189,6 @@ msgstr "詳細を表示"
 msgid "Show Inactive Devices"
 msgstr "休止中のデバイスを表示する"
 
-msgid "Show Invitation"
-msgstr "招待を表示"
-
 msgid "Show Join/Leave"
 msgstr "入室/退出を表示する"
 
@@ -4225,6 +4200,10 @@ msgstr "自分のビデオストリームを表示する"
 
 msgid "Show Notifications"
 msgstr "通知を表示する"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "プラグイン"
 
 msgid "Show Send Message Button"
 msgstr "メッセージ送信ボタンを表示する"
@@ -4451,9 +4430,6 @@ msgstr "状況メッセージ: フォント"
 msgid "Status Messages in Participants List"
 msgstr "参加者一覧での状況メッセージ"
 
-msgid "Status and status message for all accounts"
-msgstr "すべてのアカウントの在席状況と状況メッセージ"
-
 msgid "Status is not shared"
 msgstr "状況は共有されていません"
 
@@ -4481,9 +4457,6 @@ msgstr "在席状況: 「在席」の色"
 
 msgid "Stop Sharing Online Status?"
 msgstr "在席状況を知らせるのをやめますか ?"
-
-msgid "Stopped sharing their status with you"
-msgstr "在席状況を知らせることをやめました"
 
 msgid "Street"
 msgstr "町丁名・番地"
@@ -4513,9 +4486,6 @@ msgstr "継読中"
 #, fuzzy
 msgid "Subscription"
 msgstr "在席通知の承認"
-
-msgid "Subscription Request"
-msgstr "在席通知の申し込み"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5051,9 +5021,6 @@ msgstr "更新"
 msgid "Update Avatar"
 msgstr "アバターを更新"
 
-msgid "Update Check"
-msgstr "更新のチェック"
-
 msgid "Update automatically"
 msgstr "自動で更新する"
 
@@ -5303,9 +5270,6 @@ msgstr "あなた"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "あなた (%s) が談話室に参加しました"
-
-msgid "You Have Unread Messages"
-msgstr "未読のメッセージがあります"
 
 msgid "You are a visitor"
 msgstr "あなたは傍聴者です"
@@ -5982,6 +5946,10 @@ msgstr "…またはここにドロップ"
 #~ msgstr " {actor} によって"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "\"%s\" さんはあなたの在席状況を知ることを求めています"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s の談話室が見つかりました"
 
@@ -5992,10 +5960,6 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "%s さんは複数のデバイスでオンライン状態です。\n"
 #~ "ファイルを送りたいデバイスを選んでください。"
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s さんがファイルを転送したがっています"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6331,6 +6295,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Connection not available"
 #~ msgstr "接続していません"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "在席通知の取り消し"
+
 # (Mako) 語順が問題。コロンでごまかしてみる
 #~ msgid "Conversation: URL Color"
 #~ msgstr "会話: URL の文字色"
@@ -6356,11 +6323,17 @@ msgstr "…またはここにドロップ"
 #~ msgid "Debug Console"
 #~ msgstr "デバッグコンソール"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "招待を辞退"
+
 #~ msgid "Delete Message"
 #~ msgstr "メッセージを削除"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "メッセージをローカルで削除しますか ?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "すべての在席通知の申し込みを拒否"
 
 #~ msgid "Description: "
 #~ msgstr "説明: "
@@ -6370,6 +6343,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "直接転送 (暗号化なし)"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "次回からこのメッセージを表示しない"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6451,6 +6427,19 @@ msgstr "…またはここにドロップ"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim はこのファイルを読むことができません"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "有効な更新はありません (最後の確認: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "有効な更新はありません (最後の確認: なし)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: 更新の確認は設定で無効化されています"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "談話室への招待を受諾"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6509,6 +6498,13 @@ msgstr "…またはここにドロップ"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "修正: 背景色"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "履歴が有効になっていて、かつ相手先が相手先一覧にあれば、メッセージは後で読"
+#~ "めます。"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s からの %(count)s 件のメッセージを抑制しますか ?"
@@ -6525,6 +6521,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "No Connection Available"
 #~ msgstr "接続していません"
 
+#~ msgid "No Notifications"
+#~ msgstr "通知はありません"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "開始していません"
@@ -6537,6 +6536,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Open Path"
 #~ msgstr "パスを開く"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "プラグインを開く…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "部門 (OU)"
@@ -6559,6 +6561,12 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "yyyy-mm-dd を使用してください"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "プラグイン: 利用可能な更新はありません"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "プラグイン: 更新確認は設定で無効化されています"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6588,6 +6596,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Remove Group..."
 #~ msgstr "グループを除去…"
 
+#~ msgid "Remove Notification"
+#~ msgstr "通知を除去"
+
 #~ msgid "Remove Transport"
 #~ msgstr "中継先を除去"
 
@@ -6597,8 +6608,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "相手先を相手先一覧から除去します"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "相手先一覧から除去"
+
 #~ msgid "Remove…"
 #~ msgstr "除去…"
+
+#~ msgid "Report"
+#~ msgstr "報告"
 
 #~ msgid ""
 #~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
@@ -6654,6 +6671,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Sender: "
 #~ msgstr "送信者: "
 
+#~ msgid "Show"
+#~ msgstr "表示"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim を表示"
 
@@ -6682,6 +6702,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Start Voice Call…"
 #~ msgstr "音声通話を開始…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "すべてのアカウントの在席状況と状況メッセージ"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "状態: "
@@ -6689,8 +6712,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Stop File Transfers"
 #~ msgstr "ファイル転送を中止"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "在席状況を知らせることをやめました"
+
 #~ msgid "Submit"
 #~ msgstr "送信"
+
+#~ msgid "Subscription Request"
+#~ msgstr "在席通知の申し込み"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "1--9番目の作業空間へ切替"
@@ -6747,6 +6776,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Unread Messages"
 #~ msgstr "未読メッセージ"
 
+#~ msgid "Update Check"
+#~ msgstr "更新のチェック"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "アップロード"
@@ -6775,6 +6807,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "なぜこれらのメッセージを抑制したいのですか ?"
+
+#~ msgid "You Have Unread Messages"
+#~ msgstr "未読のメッセージがあります"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Gajim を終了しようとしています"

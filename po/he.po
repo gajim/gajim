@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -149,10 +149,6 @@ msgstr "לא מסונכרן"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "מעתה המצב שלך יהיה גלוי בפני \"%s\"."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -222,6 +218,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "איש קשר מרוחק הפסיק העברה"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "‏%s רוצה לשלוח לך קובץ."
 
 #, python-format
 msgctxt "positive longitude"
@@ -525,6 +525,14 @@ msgstr "מופעלת"
 
 msgid "Active"
 msgstr "פעיל"
+
+#, fuzzy
+msgid "Activity"
+msgstr "מופעלת"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "מופעלת"
 
 msgid "Add"
 msgstr "הוסף"
@@ -1534,8 +1542,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "הרשמה בוטלה"
+msgid "Contact Removed"
+msgstr "שורת חשבון"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "איש קשר"
 
 #, fuzzy
 msgid "Contact information"
@@ -1720,9 +1732,6 @@ msgstr "ג׳וגינג"
 msgid "Decline"
 msgstr "לא מ_קוון"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1801,8 +1810,8 @@ msgid "Deny"
 msgstr "לאסור"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "בקשת הרשמה"
+msgid "Deny all contact requests"
+msgstr "בקשה לשיחה קולית"
 
 msgid "Description"
 msgstr "תיאור"
@@ -1896,9 +1905,6 @@ msgstr "מצא _שירותים"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "האם לקבל את בקשה זו בחשבון %s?"
@@ -1946,10 +1952,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
 msgid "Download"
@@ -2498,6 +2500,10 @@ msgstr "‏Gajim מרחוק"
 msgid "Gajim Update"
 msgstr "עדכן MOTD..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "עדכן MOTD..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2525,18 +2531,6 @@ msgstr ""
 #, fuzzy
 msgid "Gajim will now exit"
 msgstr "cli"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "אין חשבון זמין"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "אין חשבון זמין"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "ערוך העדפות _ארכיונאות"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2587,14 +2581,6 @@ msgstr "קיצורי מקש"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "הזמנת שיחת קבוצה"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "הזמנת שיחת קבוצה"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "הזמנת שיחת קבוצה"
 
 #, fuzzy
@@ -2901,6 +2887,14 @@ msgstr "קובץ שגוי"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "שם חשבון שגוי"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "מיקום: "
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "הזמנת שיחת קבוצה"
 
 #, fuzzy
 msgid "Invite"
@@ -3267,17 +3261,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "סשן זה יושם בארכיון על שרת"
 
-# BUG: and (A or THE) contact
-# קיימת לרשותך
-# היסטוריה מאופשרת
-#, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש הקשר מצוי "
-"ברשימה שלך."
-
 # In Hebrew: גאג'ים
 #, fuzzy
 msgid "Minimize"
@@ -3440,10 +3423,6 @@ msgstr "העברת קובץ נכשלה"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "אין תנובה"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "התראות"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3677,10 +3656,6 @@ msgstr "_פתח קישור בתוך דפדפן"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_פתח קישור בתוך דפדפן"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "תוספים"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3962,7 +3937,7 @@ msgid "Plugin Settings"
 msgstr "תוספים"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "כשל תוסף"
 
 msgid "Plugin already exists"
@@ -3978,14 +3953,6 @@ msgstr "תוספים"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "כשל תוסף"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "אין חשבון זמין"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "ערוך העדפות _ארכיונאות"
 
 #, fuzzy
 msgid "Port"
@@ -4282,6 +4249,10 @@ msgid "Remove Chat History?"
 msgstr "אחרונים:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "שינוי שם איש קשר"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "שינוי שם איש קשר"
 
@@ -4304,10 +4275,6 @@ msgstr "הסרת קבוצה"
 #, fuzzy
 msgid "Remove History…"
 msgstr "סנכרון"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "התראה"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4336,10 +4303,6 @@ msgstr "cli"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "הסרת קבוצה"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "cli"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4380,10 +4343,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_דווחו על בעיה"
 
 #, fuzzy
 msgid "Request"
@@ -4708,6 +4667,9 @@ msgstr "הודעה שגרתית"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4910,9 +4872,6 @@ msgstr "וידאו"
 msgid "Share my online status"
 msgstr "שנה מצב"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "cli"
@@ -4933,10 +4892,6 @@ msgstr "פרטים"
 msgid "Show Inactive Devices"
 msgstr "התקן קלט שמע"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "מיקום: "
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4949,6 +4904,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "התראות"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "תוספים"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5210,10 +5169,6 @@ msgid "Status Messages in Participants List"
 msgstr "הודעת מצב"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "cli"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "הודעת מצב"
 
@@ -5249,9 +5204,6 @@ msgstr "הודעת מצב"
 msgid "Stop Sharing Online Status?"
 msgstr "לשלוח אלי מצב"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "רחוב"
@@ -5285,9 +5237,6 @@ msgstr "רשום"
 #, fuzzy
 msgid "Subscription"
 msgstr "הרשמה: "
-
-msgid "Subscription Request"
-msgstr "בקשת הרשמה"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5877,10 +5826,6 @@ msgid "Update Avatar"
 msgstr "בחירת ארכיון"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "בדיקת איות"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "בחירת ארכיון"
 
@@ -6171,10 +6116,6 @@ msgstr "עצמך"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s נכנס/ה לשיחת קבוצה"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "נותרו הודעות אשר לא נקראו"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6950,12 +6891,12 @@ msgstr ""
 #~ msgstr "שנה שם _כינוי..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "cli"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "מעתה המצב שלך יהיה גלוי בפני \"%s\"."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "‏%s רוצה לשלוח לך קובץ."
+#~ msgid "%s group chats found"
+#~ msgstr "cli"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7286,6 +7227,10 @@ msgstr ""
 #~ msgid "Connection not available"
 #~ msgstr "חיבור לא זמין"
 
+#, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "הרשמה בוטלה"
+
 # direction_mark needed
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7322,6 +7267,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "הודעה שגרתית"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "בקשת הרשמה"
+
 #~ msgid "Description: "
 #~ msgstr "תיאור: "
 
@@ -7332,6 +7281,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "העברת קובץ נעצרה"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "אל ת_שאל אותי שוב"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7427,6 +7380,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "‏Gajim לא מסוגל לגשת לקובץ זה"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "אין חשבון זמין"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "אין חשבון זמין"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "ערוך העדפות _ארכיונאות"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "הזמנת שיחת קבוצה"
+
 #~ msgid "Hide this menu"
 #~ msgstr "הסתר תפריט זה"
 
@@ -7475,6 +7444,17 @@ msgstr ""
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "הודעות"
 
+# BUG: and (A or THE) contact
+# קיימת לרשותך
+# היסטוריה מאופשרת
+#, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "הודעות יהיו זמינות לקריאה מאוחרת רק אם אפשרת רישום היסטוריה ואיש הקשר "
+#~ "מצוי ברשימה שלך."
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "cli"
@@ -7490,6 +7470,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "חיבור לא זמין"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "התראות"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7509,6 +7493,10 @@ msgstr ""
 #~ msgstr "‏OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "תוספים"
+
+#, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "_חזור"
 
@@ -7519,6 +7507,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "הצג _אירועים ממתינים"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "אין חשבון זמין"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "ערוך העדפות _ארכיונאות"
 
 #~ msgid "Progress"
 #~ msgstr "התקדמות"
@@ -7550,6 +7546,10 @@ msgstr ""
 #~ msgstr "הסרת קבוצה"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "התראה"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "הצג מו_בילים"
 
@@ -7562,8 +7562,16 @@ msgstr ""
 #~ msgstr "cli"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "cli"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "הס_ר"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_דווחו על בעיה"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7642,6 +7650,10 @@ msgstr ""
 #~ msgstr "התחלת שיחה"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "cli"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "מצב: "
@@ -7649,6 +7661,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "העברות קבצים"
+
+#~ msgid "Subscription Request"
+#~ msgstr "בקשת הרשמה"
 
 #~ msgid "Synchronise"
 #~ msgstr "סנכרון"
@@ -7709,6 +7724,10 @@ msgstr ""
 #~ msgstr "אירועים אשר לא נקראו"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "בדיקת איות"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "שמור קובץ בשם..."
@@ -7728,6 +7747,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "נותרו הודעות אשר לא נקראו"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

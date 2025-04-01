@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-08-13 11:17+0000\n"
 "Last-Translator: Robert oResoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -147,10 +147,6 @@ msgid "%s and %s are typing…"
 msgstr "%s e %s stanno scrivendo…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s chiede di condividere il tuo stato"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "Si può partecipare a %s solo su invito."
 
@@ -217,6 +213,10 @@ msgstr "%s ha smesso di condividere il proprio stato"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s ha fermato il trasferimento"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vuole inviarti un file"
 
 #, python-format
 msgctxt "positive longitude"
@@ -480,6 +480,14 @@ msgid "Activated"
 msgstr "Attivo"
 
 msgid "Active"
+msgstr "Attivo"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Attiva"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Attivo"
 
 msgid "Add"
@@ -1357,8 +1365,13 @@ msgstr "Lista contatti: Font del gruppo"
 msgid "Contact List: Group Foreground Color"
 msgstr "Lista contatti: Colore primo piano"
 
-msgid "Contact Unsubscribed"
-msgstr "Contatto non iscritto"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "Account Rimosso"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Lista Contatti"
 
 msgid "Contact information"
 msgstr "Informazioni contatto"
@@ -1506,9 +1519,6 @@ msgstr "Log di Debug"
 msgid "Decline"
 msgstr "Rifiuta"
 
-msgid "Decline Invitation"
-msgstr "Rifiuta invito"
-
 msgid "Decrease User Interface Font Size"
 msgstr "Riduci dimensione caratteri interfaccia utente"
 
@@ -1574,8 +1584,9 @@ msgstr "Elimina Tema"
 msgid "Deny"
 msgstr "Nega"
 
-msgid "Deny all subscription requests"
-msgstr "Nega tutte le richieste iscrizione"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "Accetta Tutte le Richieste dei Contatti"
 
 msgid "Description"
 msgstr "Descrizione"
@@ -1660,9 +1671,6 @@ msgstr "Ricerca Servizi…"
 msgid "Discussion Logs"
 msgstr "Cronologia Discussioni"
 
-msgid "Dismiss"
-msgstr "Chiudi"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Accettare questa richiesta (account: %s)?"
@@ -1711,9 +1719,6 @@ msgstr "Vuoi anche disiscriverti da <b>%s</b>?"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "L'Impronta verrà eliminata permanentemente"
-
-msgid "Don’t show this again"
-msgstr "Non mostrare più"
 
 msgid "Download"
 msgstr "Scarica"
@@ -2189,6 +2194,10 @@ msgstr "Temi di Gajim"
 msgid "Gajim Update"
 msgstr "Aggiornamenti Gajim"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Aggiornamenti Gajim"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2225,16 +2234,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim sta per uscire"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Nessun aggiornamento disponibile (ultimo controllo: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: Nessun aggiornamento disponibile (ultimo controllo: mai)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: Controllo aggiornamenti disattivato nelle preferenze"
 
 msgid "Gathering information…"
 msgstr "Raccolta informazioni…"
@@ -2275,12 +2274,6 @@ msgstr "Dettagli delle chat di gruppo"
 
 msgid "Group Chat Invitation"
 msgstr "Invito a Conversazione di Gruppo"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Invito alla conversazione di gruppo rifiutato"
-
-msgid "Group Chat Invitation Received"
-msgstr "Invito alla conversazione di gruppo ricevuto"
 
 msgid "Group Chat Language"
 msgstr "Lingua Conversazione di Gruppo"
@@ -2547,6 +2540,14 @@ msgstr "Indirizzo non valido: %s"
 
 msgid "Invalid domain name"
 msgstr "Nome dominio non valido"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Mostra Posizione"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Invito alla conversazione di gruppo rifiutato"
 
 msgid "Invite"
 msgstr "Invita"
@@ -2882,13 +2883,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "I messaggi sono archiviati sul server"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"I messaggi saranno disponibili per una lettura successiva solo se la "
-"cronologia è abilitata e il contatto è nella tua lista."
-
 #, fuzzy
 msgid "Minimize"
 msgstr "Esci alla Chiusura"
@@ -3047,10 +3041,6 @@ msgstr "Trasferimento File non disponibile"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Nessun Risultato Trovato"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Notifiche"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3279,9 +3269,6 @@ msgstr "Apri Collegamento nel Browser"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "Apri Collegamento nel Browser"
-
-msgid "Open Plugins…"
-msgstr "Apri estensioni…"
 
 msgid "Open _Folder"
 msgstr "Apri _Cartella"
@@ -3557,7 +3544,7 @@ msgid "Plugin Settings"
 msgstr "Impostazioni Estensioni"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Plugin fallito"
 
 msgid "Plugin already exists"
@@ -3572,14 +3559,6 @@ msgstr "Estensioni"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Plugin fallito"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Aggiornamento disponibile"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Funzione Disattivata nelle Preferenze"
 
 msgid "Port"
 msgstr "Porta"
@@ -3834,6 +3813,10 @@ msgid "Remove Chat History?"
 msgstr "Rimuovere la cronologia delle chat?"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Rimuovi Contatto"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Rimuovi Contatto"
 
@@ -3856,10 +3839,6 @@ msgstr "Elimina Gruppo"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Sincronizzazione Cronologia…"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Notifiche"
 
 msgid "Remove Proxy"
 msgstr "Rimuovi Proxy"
@@ -3885,10 +3864,6 @@ msgstr "Rimuovi il contatto dalla lista contatti"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Elimina Gruppo"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Rimuovi il contatto dalla lista contatti"
 
 msgid "Remove this workspace"
 msgstr "Rimuovi questo spazio di lavoro"
@@ -3928,10 +3903,6 @@ msgstr "Riparazioni"
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Segnala Bug"
 
 #, fuzzy
 msgid "Request"
@@ -4232,6 +4203,9 @@ msgstr "Seleziona messaggi…"
 msgid "Select a security label for your message…"
 msgstr "Seleziona un'etichetta di sicurezza per il messaggio…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "Seleziona emoji"
 
@@ -4418,10 +4392,6 @@ msgid "Share my online status"
 msgstr "Modifica stato"
 
 #, fuzzy
-msgid "Show"
-msgstr "Mostra Umore"
-
-#, fuzzy
 msgid "Show Commands"
 msgstr "Comandi"
 
@@ -4441,10 +4411,6 @@ msgstr "Dettagli"
 msgid "Show Inactive Devices"
 msgstr "Dispositivo Ingresso Audio"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Mostra Posizione"
-
 msgid "Show Join/Leave"
 msgstr "Mostra chi si Unisce/Abbandona"
 
@@ -4456,6 +4422,10 @@ msgstr "Mostra il Mio Flusso Video"
 
 msgid "Show Notifications"
 msgstr "Mostra Notifiche"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Estensioni"
 
 msgid "Show Send Message Button"
 msgstr "Mostra Pulsante Invio Messaggio"
@@ -4705,12 +4675,6 @@ msgid "Status Messages in Participants List"
 msgstr "Messaggio di Stato - Carattere"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr ""
-"Verranno ripristinati lo stato e il messaggio di stato della sessione "
-"precedente"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Messaggio di Stato"
 
@@ -4745,9 +4709,6 @@ msgstr "Stato - In Linea - Colore"
 msgid "Stop Sharing Online Status?"
 msgstr "Smettere di condividere lo status online?"
 
-msgid "Stopped sharing their status with you"
-msgstr "Ha smesso di condividere il suo stato con te"
-
 msgid "Street"
 msgstr "Via"
 
@@ -4777,9 +4738,6 @@ msgstr "Iscritti"
 #, fuzzy
 msgid "Subscription"
 msgstr "Iscrizione:"
-
-msgid "Subscription Request"
-msgstr "Richiesta Iscrizione"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5362,9 +5320,6 @@ msgstr "_Aggiorna ora"
 msgid "Update Avatar"
 msgstr "Aggiornamento disponibile"
 
-msgid "Update Check"
-msgstr "Controllo per la presenza di aggiornamenti"
-
 #, fuzzy
 msgid "Update automatically"
 msgstr "Unisciti Automaticamente"
@@ -5636,10 +5591,6 @@ msgstr "Tu"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Tu (%s) ti sei unito alla conversazione di gruppo"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Hai ancora dei messaggi non letti"
 
 msgid "You are a visitor"
 msgstr "Sei un visitatore"
@@ -6345,6 +6296,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr " da {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s chiede di condividere il tuo stato"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s chat di gruppo trovate"
 
@@ -6355,10 +6310,6 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr ""
 #~ "%s è online con più dispositivi.\n"
 #~ "Scegliere il dispositivo a cui inviare il file."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vuole inviarti un file"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6694,6 +6645,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Connection not available"
 #~ msgstr "Connessione non disponibile"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Contatto non iscritto"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversazione: Colore URL"
 
@@ -6718,11 +6672,17 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Debug Console"
 #~ msgstr "Console di Debug"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Rifiuta invito"
+
 #~ msgid "Delete Message"
 #~ msgstr "Elimina messaggio"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Eliminare il messaggio localmente?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Nega tutte le richieste iscrizione"
 
 #~ msgid "Description: "
 #~ msgstr "Descrizione: "
@@ -6732,6 +6692,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Trasferimento diretto (non crittografato)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Chiudi"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Non mostrare più"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -6822,6 +6788,19 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Impossibile leggere questo file"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Nessun aggiornamento disponibile (ultimo controllo: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim: Nessun aggiornamento disponibile (ultimo controllo: mai)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: Controllo aggiornamenti disattivato nelle preferenze"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Invito alla conversazione di gruppo ricevuto"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6878,6 +6857,13 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Riga Contatto - Colore Sfondo"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "I messaggi saranno disponibili per una lettura successiva solo se la "
+#~ "cronologia è abilitata e il contatto è nella tua lista."
+
 #, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "Ritirare il messaggio?"
@@ -6892,6 +6878,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Nessuna Connessione Disponibile"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Notifiche"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -6909,6 +6899,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #, fuzzy
 #~ msgid "Open Path"
 #~ msgstr "Apri"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Apri estensioni…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Unità Organizzativa (OU)"
@@ -6932,6 +6925,14 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Usare il formato aaaa-mm-gg"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Aggiornamento disponibile"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Funzione Disattivata nelle Preferenze"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6962,6 +6963,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Remove Group..."
 #~ msgstr "Elimina gruppo…"
 
+#, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Notifiche"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Rimuovi Transport"
 
@@ -6972,8 +6977,16 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Rimuovi il contatto dalla lista contatti"
 
+#, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Rimuovi il contatto dalla lista contatti"
+
 #~ msgid "Remove…"
 #~ msgstr "Rimuovi…"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Segnala Bug"
 
 #, fuzzy
 #~ msgid ""
@@ -7036,6 +7049,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgstr "Mittente: "
 
 #, fuzzy
+#~ msgid "Show"
+#~ msgstr "Mostra Umore"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7070,6 +7087,12 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Avvia Chiamata…"
 
+#, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr ""
+#~ "Verranno ripristinati lo stato e il messaggio di stato della sessione "
+#~ "precedente"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Stato: "
@@ -7077,8 +7100,14 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Interrompi Trasferimenti File"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Ha smesso di condividere il suo stato con te"
+
 #~ msgid "Submit"
 #~ msgstr "Invia"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Richiesta Iscrizione"
 
 #, fuzzy
 #~ msgid "Switch to the first - ninth workspace"
@@ -7138,6 +7167,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #~ msgid "Unread Messages"
 #~ msgstr "Messaggi Non Letti"
 
+#~ msgid "Update Check"
+#~ msgstr "Controllo per la presenza di aggiornamenti"
+
 #, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
@@ -7169,6 +7201,10 @@ msgstr "Seleziona un'immagine o trascinala qui"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Eliminare definitivamente questo messaggio?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Hai ancora dei messaggi non letti"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Stai per uscire da Gajim"

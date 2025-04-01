@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -137,10 +137,6 @@ msgstr "Προχωρημένοι"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Τώρα ο/η \"%s\" θα γνωρίζει την κατάσταση σας."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -208,6 +204,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "O/Η %s επιθυμεί να σας στείλει ένα αρχείο."
 
 #, python-format
 msgctxt "positive longitude"
@@ -501,6 +501,14 @@ msgid "Activated"
 msgstr "Ενεργό"
 
 msgid "Active"
+msgstr "Ενεργό"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Ενεργό"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Ενεργό"
 
 msgid "Add"
@@ -1488,8 +1496,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "_Εγγραφή"
+msgid "Contact Removed"
+msgstr "Λογαριασμός"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Επαφές"
 
 #, fuzzy
 msgid "Contact information"
@@ -1671,9 +1683,6 @@ msgstr "_Συμμετοχή"
 msgid "Decline"
 msgstr "Απ_οσυνδεδεμένος"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1749,8 +1758,8 @@ msgid "Deny"
 msgstr "Άρνηση"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Αίτηση εγγραφής"
+msgid "Deny all contact requests"
+msgstr "Αίτηση μεταφοράς αρχείου"
 
 msgid "Description"
 msgstr "Περιγραφή"
@@ -1846,9 +1855,6 @@ msgstr "Εύρεση _υπηρεσιών"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Δέχεστε αυτό το αίτημα;"
@@ -1896,10 +1902,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "Μη_ν με ξαναρωτήσεις"
 
 #, fuzzy
 msgid "Download"
@@ -2429,6 +2431,10 @@ msgstr "Gajim - %s"
 msgid "Gajim Update"
 msgstr "Ενημέρωση MOTD"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Ενημέρωση MOTD"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2455,18 +2461,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Το Gajim τώρα θα κλείσει"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Προτιμήσεις"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2516,14 +2510,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Πρόσκληση ομαδικής κουβέντας"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Πρόσκληση ομαδικής κουβέντας"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Πρόσκληση ομαδικής κουβέντας"
 
 #, fuzzy
@@ -2816,6 +2802,14 @@ msgstr "Μη έγκυρο αρχείο"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Μη έγκυρο όνομα λογαριασμού"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Τροποποίηση λογαριασμού"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Πρόσκληση ομαδικής κουβέντας"
 
 #, fuzzy
 msgid "Invite"
@@ -3177,14 +3171,6 @@ msgid "Messages are archived on the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
-"ενεργοποιημένο το ιστορικό."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3347,10 +3333,6 @@ msgstr "Μεταφορές αρχείων"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "μη υπαρκτό %s"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3585,10 +3567,6 @@ msgstr "_Άνοιγμα δεσμού στον περιηγητή"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Άνοιγμα δεσμού στον περιηγητή"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3868,7 +3846,7 @@ msgid "Plugin Settings"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
@@ -3885,14 +3863,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Η δημοσιοποίηση της vCard απέτυχε"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Προτιμήσεις"
 
 #, fuzzy
 msgid "Port"
@@ -4173,6 +4143,10 @@ msgid "Remove Chat History?"
 msgstr "Καταγραφή ιστορικού"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "_Μετονομασία αρχείων"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "_Μετονομασία αρχείων"
 
@@ -4195,10 +4169,6 @@ msgstr "Διαγραφή ομάδας"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4227,10 +4197,6 @@ msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Διαγραφή ομάδας"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4271,10 +4237,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Αναφορά σφάλματος"
 
 #, fuzzy
 msgid "Request"
@@ -4596,6 +4558,9 @@ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 #, fuzzy
 msgid "Select an emoji"
 msgstr "_Χρήση συμβόλων"
@@ -4795,9 +4760,6 @@ msgstr "Έναρξη κουβέντας"
 msgid "Share my online status"
 msgstr "Αλλαγή κατάστασης"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Εντολές: %s"
@@ -4818,10 +4780,6 @@ msgstr "<b>Λεπτομέρειες</b>"
 msgid "Show Inactive Devices"
 msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Τροποποίηση λογαριασμού"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4834,6 +4792,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Τροποποίηση λογαριασμού"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5085,10 +5047,6 @@ msgid "Status Messages in Participants List"
 msgstr "Μήνυμα κατάστασης"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Μήνυμα κατάστασης"
 
@@ -5124,9 +5082,6 @@ msgstr "Μήνυμα κατάστασης"
 msgid "Stop Sharing Online Status?"
 msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Οδός:"
@@ -5158,9 +5113,6 @@ msgstr "Εγγεγραμμένος"
 #, fuzzy
 msgid "Subscription"
 msgstr "Εγγραφή:"
-
-msgid "Subscription Request"
-msgstr "Αίτηση εγγραφής"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5741,10 +5693,6 @@ msgid "Update Avatar"
 msgstr "Επιλογή εικόνας"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Ενημέρωση MOTD"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Επιλογή εικόνας"
 
@@ -6026,10 +5974,6 @@ msgstr "You"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "Ο/Η %s μπήκε στο δωμάτιο"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6791,12 +6735,12 @@ msgstr ""
 #~ msgstr "Αλλαγή _ψευδώνυμου"
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "μη υπαρκτό %s"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Τώρα ο/η \"%s\" θα γνωρίζει την κατάσταση σας."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "O/Η %s επιθυμεί να σας στείλει ένα αρχείο."
+#~ msgid "%s group chats found"
+#~ msgstr "μη υπαρκτό %s"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7115,6 +7059,10 @@ msgstr ""
 #~ msgstr "Σύνδεση μη διαθέσιμη"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "_Εγγραφή"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Ιστορικό συζητήσεων"
 
@@ -7151,6 +7099,10 @@ msgstr ""
 #~ msgstr "Προεπιλεγμένα μηνύματα κατάστασης"
 
 #, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Αίτηση εγγραφής"
+
+#, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Περιγραφή: %s"
 
@@ -7161,6 +7113,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Η μεταφορά αρχείου διακόπηκε"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Μη_ν με ξαναρωτήσεις"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7241,6 +7197,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Το Gajim δεν έχει πρόσβαση σε αυτό το αρχείο"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Προτιμήσεις"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Πρόσκληση ομαδικής κουβέντας"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Απόκρυψη αυτού του μενού"
 
@@ -7274,6 +7246,14 @@ msgstr ""
 #~ msgstr "Μηνύματα"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Τα μηνύματα θα είναι διαθέσιμα για ανάγνωση αργότερα μόνο αν έχετε "
+#~ "ενεργοποιημένο το ιστορικό."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "μήνυμα κατάστασης"
 
@@ -7288,6 +7268,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Σύνδεση μη διαθέσιμη"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Τροποποίηση λογαριασμού"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7307,12 +7291,24 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Ακύρωση μεταφοράς αρχείου"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Εμφάνιση όλων των γεγονότων που εκκρεμούν"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Κανένας λογαριασμός δεν είναι διαθέσιμος"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Προτιμήσεις"
 
 #~ msgid "Progress"
 #~ msgstr "Πρόοδος"
@@ -7341,6 +7337,10 @@ msgstr ""
 #~ msgstr "Διαγραφή ομάδας"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Τροποποίηση λογαριασμού"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 
@@ -7355,8 +7355,16 @@ msgstr ""
 #~ msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Αφαιρεί μια επαφή από τη λίστα επαφών"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Αφαίρεση"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Αναφορά σφάλματος"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7426,6 +7434,10 @@ msgstr ""
 #~ msgstr "Έναρξη κουβέντας"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Αλλάζει την κατάσταση ενός ή πολλών λογαριασμών"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Κατάσταση: "
@@ -7433,6 +7445,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Μεταφορές αρχείων"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Αίτηση εγγραφής"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
@@ -7472,6 +7487,10 @@ msgstr ""
 #~ msgstr "Αδιάβαστα γεγονότα"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Ενημέρωση MOTD"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Αποθήκευση αρχείου ως..."
@@ -7491,6 +7510,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Έχετε μη-αναγνωσμένα μηνύματα"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

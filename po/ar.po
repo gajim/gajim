@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-10-18 03:11+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -136,10 +136,6 @@ msgid "%s and %s are typing…"
 msgstr "%s و%s يكتبان…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "يرغب %s منك مشاركة حالتك"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "يمكن الانضمام إلى %s من خلال الدعوة فقط."
 
@@ -206,6 +202,10 @@ msgstr "أوقف %s مشاركة الحالة"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "أوقف %s عملية النقل"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "يرغب %s بأن يرسل لك ملفًا"
 
 #, python-format
 msgctxt "positive longitude"
@@ -467,6 +467,14 @@ msgstr "مُنَشَّط"
 
 msgid "Active"
 msgstr "نَشِط"
+
+#, fuzzy
+msgid "Activity"
+msgstr "نَشِّط"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "مُنَشَّط"
 
 msgid "Add"
 msgstr "أضِف"
@@ -1342,8 +1350,13 @@ msgstr "قائمة المتراسلين: خط المجموعة"
 msgid "Contact List: Group Foreground Color"
 msgstr "قائمة المتراسلين: لون مقدمة المجموعة"
 
-msgid "Contact Unsubscribed"
-msgstr "ألغى المتراسل الاشتراك"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "أُزيل الحساب"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "قائمة المتراسلين"
 
 msgid "Contact information"
 msgstr "معلومات المتراسل"
@@ -1492,9 +1505,6 @@ msgstr "تسجيل التنقيح"
 msgid "Decline"
 msgstr "ارفض"
 
-msgid "Decline Invitation"
-msgstr "ارفض الدعوة"
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1558,8 +1568,9 @@ msgstr "السمة الداكنة"
 msgid "Deny"
 msgstr ""
 
-msgid "Deny all subscription requests"
-msgstr ""
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "اقبل كل طلبات المتراسلين"
 
 msgid "Description"
 msgstr ""
@@ -1643,9 +1654,6 @@ msgstr ""
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1691,10 +1699,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "لا تسألني مج_ددًا"
 
 #, fuzzy
 msgid "Download"
@@ -2151,6 +2155,9 @@ msgstr ""
 msgid "Gajim Update"
 msgstr ""
 
+msgid "Gajim Update Check"
+msgstr ""
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2176,16 +2183,6 @@ msgid ""
 msgstr ""
 
 msgid "Gajim will now exit"
-msgstr ""
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr ""
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr ""
-
-msgid "Gajim: Update check disabled in preferences"
 msgstr ""
 
 msgid "Gathering information…"
@@ -2226,12 +2223,6 @@ msgid "Group Chat Details"
 msgstr ""
 
 msgid "Group Chat Invitation"
-msgstr ""
-
-msgid "Group Chat Invitation Declined"
-msgstr ""
-
-msgid "Group Chat Invitation Received"
 msgstr ""
 
 msgid "Group Chat Language"
@@ -2480,6 +2471,13 @@ msgid "Invalid address: %s"
 msgstr ""
 
 msgid "Invalid domain name"
+msgstr ""
+
+#, fuzzy
+msgid "Invitation"
+msgstr "ارفض الدعوة"
+
+msgid "Invitation Declined"
 msgstr ""
 
 msgid "Invite"
@@ -2797,11 +2795,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr ""
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-
 msgid "Minimize"
 msgstr ""
 
@@ -2941,9 +2934,6 @@ msgid "No File Transfer available"
 msgstr ""
 
 msgid "No Messages Found"
-msgstr ""
-
-msgid "No Notifications"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -3149,9 +3139,6 @@ msgid "Open Link in Browser"
 msgstr ""
 
 msgid "Open Link in _Browser"
-msgstr ""
-
-msgid "Open Plugins…"
 msgstr ""
 
 msgid "Open _Folder"
@@ -3400,7 +3387,7 @@ msgid "Plugin Settings"
 msgstr "إعدادات الاتّصال"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "<اسم الملحق>"
 
 msgid "Plugin already exists"
@@ -3415,12 +3402,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "أُضيف الحساب بنجاح"
-
-msgid "Plugins: No updates available"
-msgstr ""
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr ""
 
 msgid "Port"
 msgstr ""
@@ -3666,6 +3647,10 @@ msgid "Remove Chat History?"
 msgstr ""
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "المتراسلين"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "المتراسلين"
 
@@ -3686,9 +3671,6 @@ msgid "Remove Group…"
 msgstr "أ_زِل"
 
 msgid "Remove History…"
-msgstr ""
-
-msgid "Remove Notification"
 msgstr ""
 
 #, fuzzy
@@ -3717,9 +3699,6 @@ msgstr "أضِف لقائمة المُتراسلين…"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "أ_زِل"
-
-msgid "Remove from contact list"
-msgstr ""
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -3761,9 +3740,6 @@ msgid "Repairs"
 msgstr ""
 
 msgid "Reply…"
-msgstr ""
-
-msgid "Report"
 msgstr ""
 
 #, fuzzy
@@ -4043,6 +4019,9 @@ msgstr ""
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4209,9 +4188,6 @@ msgstr ""
 msgid "Share my online status"
 msgstr "أوقف %s مشاركة الحالة"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "الأوامر"
@@ -4231,9 +4207,6 @@ msgstr "اعرض كل التفاعلات"
 msgid "Show Inactive Devices"
 msgstr "جهاز الإدخال الصوتي"
 
-msgid "Show Invitation"
-msgstr ""
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4245,6 +4218,10 @@ msgstr ""
 
 msgid "Show Notifications"
 msgstr ""
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "اعرض كل التفاعلات"
 
 msgid "Show Send Message Button"
 msgstr ""
@@ -4463,9 +4440,6 @@ msgstr ""
 msgid "Status Messages in Participants List"
 msgstr ""
 
-msgid "Status and status message for all accounts"
-msgstr ""
-
 msgid "Status is not shared"
 msgstr ""
 
@@ -4495,9 +4469,6 @@ msgstr ""
 msgid "Stop Sharing Online Status?"
 msgstr "أوقف %s مشاركة الحالة"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 msgid "Street"
 msgstr ""
 
@@ -4526,9 +4497,6 @@ msgstr ""
 #, fuzzy
 msgid "Subscription"
 msgstr "ال_وَصف"
-
-msgid "Subscription Request"
-msgstr ""
 
 #, fuzzy
 msgid "Subscription:"
@@ -5038,9 +5006,6 @@ msgstr ""
 msgid "Update Avatar"
 msgstr ""
 
-msgid "Update Check"
-msgstr ""
-
 msgid "Update automatically"
 msgstr ""
 
@@ -5293,10 +5258,6 @@ msgstr ""
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr ""
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "لا تزال لديك رسائل غير مقروءة"
 
 msgid "You are a visitor"
 msgstr ""
@@ -5968,6 +5929,10 @@ msgstr "…أو ألقِها هنا"
 #~ msgstr " بواسطة {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "يرغب %s منك مشاركة حالتك"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "عُثِر على %s مجموعات دردشة"
 
@@ -5978,10 +5943,6 @@ msgstr "…أو ألقِها هنا"
 #~ msgstr ""
 #~ "%s نشط بعدة أجهزة.\n"
 #~ "اختر الجهاز الذي ترغب بإرسال الملفات إليه."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "يرغب %s بأن يرسل لك ملفًا"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6106,6 +6067,9 @@ msgstr "…أو ألقِها هنا"
 #~ msgid "Connection not available"
 #~ msgstr "الاتصال غير متوفر"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "ألغى المتراسل الاشتراك"
+
 #~ msgid "Copy Email Address"
 #~ msgstr "انسخ البريد الإلكتروني"
 
@@ -6119,8 +6083,16 @@ msgstr "…أو ألقِها هنا"
 #~ msgstr "أنشِئ منشورًا جديدًا"
 
 #, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "لا تسألني مج_ددًا"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "غَيِّر اللقب…"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "لا تزال لديك رسائل غير مقروءة"
 
 #~ msgid "_Clear"
 #~ msgstr "ام_ح"

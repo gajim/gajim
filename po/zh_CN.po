@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
-"PO-Revision-Date: 2025-03-19 08:31+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"PO-Revision-Date: 2025-03-29 16:12+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -141,10 +141,6 @@ msgid "%s and %s are typing…"
 msgstr "%s 和 %s 正在输入…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s 请求您分享状态"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s 只能通过邀请加入。"
 
@@ -211,6 +207,10 @@ msgstr "%s 已停止分享状态"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s 停止了传输"
+
+#, python-format
+msgid "%s wants to add you."
+msgstr "%s 想要添加您。"
 
 #, python-format
 msgctxt "positive longitude"
@@ -470,6 +470,12 @@ msgstr "已启用"
 
 msgid "Active"
 msgstr "活动"
+
+msgid "Activity"
+msgstr "活动"
+
+msgid "Activity Feed"
+msgstr "活动动态"
 
 msgid "Add"
 msgstr "添加"
@@ -982,7 +988,7 @@ msgid "Certificate is not yet valid"
 msgstr "证书尚未生效"
 
 msgid "Certificate not trusted"
-msgstr "证书未受信任"
+msgstr "证书不受信任"
 
 msgid "Certificate rejected"
 msgstr "证书被拒绝"
@@ -1317,8 +1323,11 @@ msgstr "联系人列表：分组字体"
 msgid "Contact List: Group Foreground Color"
 msgstr "联系人列表：分组前景颜色"
 
-msgid "Contact Unsubscribed"
-msgstr "联系人已取消订阅"
+msgid "Contact Removed"
+msgstr "联系人已移除"
+
+msgid "Contact Request"
+msgstr "联系请求"
 
 msgid "Contact information"
 msgstr "联系人信息"
@@ -1464,9 +1473,6 @@ msgstr "调试日志"
 msgid "Decline"
 msgstr "拒绝"
 
-msgid "Decline Invitation"
-msgstr "拒绝邀请"
-
 msgid "Decrease User Interface Font Size"
 msgstr "减小用户界面字体大小"
 
@@ -1528,8 +1534,8 @@ msgstr "删除主题？"
 msgid "Deny"
 msgstr "拒绝"
 
-msgid "Deny all subscription requests"
-msgstr "拒绝所有订阅请求"
+msgid "Deny all contact requests"
+msgstr "拒绝所有联系请求"
 
 msgid "Description"
 msgstr "描述"
@@ -1608,9 +1614,6 @@ msgstr "发现服务…"
 msgid "Discussion Logs"
 msgstr "讨论日志"
 
-msgid "Dismiss"
-msgstr "关闭"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "是否接受此请求（账号：%s）？"
@@ -1655,9 +1658,6 @@ msgstr "是否也要注销 <b>%s</b> 上的账号？"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "执行操作后会永久删除此指纹"
-
-msgid "Don’t show this again"
-msgstr "不再显示此消息"
 
 msgid "Download"
 msgstr "下载"
@@ -2071,7 +2071,7 @@ msgstr "来自"
 
 msgctxt "Contact subscription"
 msgid "From"
-msgstr "发出"
+msgstr "接收"
 
 msgid "Full Message View"
 msgstr "完整消息视图"
@@ -2110,6 +2110,9 @@ msgstr "Gajim 主题"
 msgid "Gajim Update"
 msgstr "Gajim 更新"
 
+msgid "Gajim Update Check"
+msgstr "Gajim 更新检查"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2140,16 +2143,6 @@ msgstr "Gajim 无法访问服务器。请确保您的 XMPP 地址正确。"
 
 msgid "Gajim will now exit"
 msgstr "Gajim 即将退出"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim：无可用更新（上次检查：%s）"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim：无可用更新（上次检查：从未）"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim：在首选项中已禁用更新检查"
 
 msgid "Gathering information…"
 msgstr "正在收集信息…"
@@ -2190,12 +2183,6 @@ msgstr "群聊详情"
 
 msgid "Group Chat Invitation"
 msgstr "群聊邀请"
-
-msgid "Group Chat Invitation Declined"
-msgstr "拒绝的群聊邀请"
-
-msgid "Group Chat Invitation Received"
-msgstr "收到的群聊邀请"
 
 msgid "Group Chat Language"
 msgstr "群聊语言"
@@ -2447,6 +2434,12 @@ msgstr "无效的地址：%s"
 
 msgid "Invalid domain name"
 msgstr "域名无效"
+
+msgid "Invitation"
+msgstr "邀请"
+
+msgid "Invitation Declined"
+msgstr "邀请被拒绝"
 
 msgid "Invite"
 msgstr "邀请"
@@ -2756,11 +2749,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "消息在服务器上归档"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr "仅当启用了存储聊天记录并且对方在您的联系人列表时，消息才可供稍后阅读。"
-
 msgid "Minimize"
 msgstr "最小化"
 
@@ -2896,9 +2884,6 @@ msgstr "没有可用的文件传输"
 msgid "No Messages Found"
 msgstr "未找到消息"
 
-msgid "No Notifications"
-msgstr "没有通知"
-
 msgctxt "Group chat feature"
 msgid "No Password Required"
 msgstr "无需密码"
@@ -2982,11 +2967,11 @@ msgstr "无"
 
 msgctxt "Group chat contact affiliation"
 msgid "None"
-msgstr "无"
+msgstr "访客"
 
 msgctxt "Group chat contact role"
 msgid "None"
-msgstr "无"
+msgstr "没有"
 
 msgctxt "Group chat feature"
 msgid "Not Anonymous"
@@ -3105,9 +3090,6 @@ msgstr "在浏览器中打开链接"
 
 msgid "Open Link in _Browser"
 msgstr "在浏览器中打开链接(_B)"
-
-msgid "Open Plugins…"
-msgstr "打开插件…"
 
 msgid "Open _Folder"
 msgstr "打开文件夹(_F)"
@@ -3355,7 +3337,7 @@ msgstr "插件失败"
 msgid "Plugin Settings"
 msgstr "插件设置"
 
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "插件更新"
 
 msgid "Plugin already exists"
@@ -3369,12 +3351,6 @@ msgstr "插件"
 
 msgid "Plugins Updated Successfully"
 msgstr "插件更新成功"
-
-msgid "Plugins: No updates available"
-msgstr "插件：无可用更新"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "插件：在首选项中已禁用更新检查"
 
 msgid "Port"
 msgstr "端口"
@@ -3609,6 +3585,9 @@ msgstr "移除账号"
 msgid "Remove Chat History?"
 msgstr "移除聊天记录？"
 
+msgid "Remove Contact"
+msgstr "移除联系人"
+
 msgid "Remove Contacts?"
 msgstr "移除联系人？"
 
@@ -3626,9 +3605,6 @@ msgstr "移除分组…"
 
 msgid "Remove History…"
 msgstr "移除历史…"
-
-msgid "Remove Notification"
-msgstr "移除通知"
 
 msgid "Remove Proxy"
 msgstr "移除代理"
@@ -3650,9 +3626,6 @@ msgstr "从联系人列表移除…"
 
 msgid "Remove from Group"
 msgstr "从分组移除"
-
-msgid "Remove from contact list"
-msgstr "从联系人列表移除"
 
 msgid "Remove this workspace"
 msgstr "移除此工作区"
@@ -3686,9 +3659,6 @@ msgstr "修理"
 
 msgid "Reply…"
 msgstr "回复…"
-
-msgid "Report"
-msgstr "报告"
 
 msgid "Request"
 msgstr "请求"
@@ -3960,6 +3930,9 @@ msgstr "选择消息…"
 msgid "Select a security label for your message…"
 msgstr "为您的消息选择安全标签…"
 
+msgid "Select an activity to see details."
+msgstr "选择活动以查看详情。"
+
 msgid "Select an emoji"
 msgstr "选择表情符号"
 
@@ -4121,9 +4094,6 @@ msgstr "分享视频"
 msgid "Share my online status"
 msgstr "分享我的在线状态"
 
-msgid "Show"
-msgstr "显示"
-
 msgid "Show Commands"
 msgstr "显示命令"
 
@@ -4139,9 +4109,6 @@ msgstr "显示详情"
 msgid "Show Inactive Devices"
 msgstr "显示非活动设备"
 
-msgid "Show Invitation"
-msgstr "显示邀请"
-
 msgid "Show Join/Leave"
 msgstr "显示加入/离开"
 
@@ -4153,6 +4120,9 @@ msgstr "显示我的视频流"
 
 msgid "Show Notifications"
 msgstr "显示通知"
+
+msgid "Show Plugins"
+msgstr "显示插件"
 
 msgid "Show Send Message Button"
 msgstr "显示发送消息按钮"
@@ -4368,9 +4338,6 @@ msgstr "状态消息：文本字体"
 msgid "Status Messages in Participants List"
 msgstr "参与者列表中的状态消息"
 
-msgid "Status and status message for all accounts"
-msgstr "所有账号的状态和状态消息"
-
 msgid "Status is not shared"
 msgstr "未共享状态"
 
@@ -4399,9 +4366,6 @@ msgstr "状态：在线颜色"
 msgid "Stop Sharing Online Status?"
 msgstr "停止分享在线状态？"
 
-msgid "Stopped sharing their status with you"
-msgstr "已停止与您分享状态"
-
 msgid "Street"
 msgstr "街道"
 
@@ -4429,9 +4393,6 @@ msgstr "已订阅"
 
 msgid "Subscription"
 msgstr "订阅"
-
-msgid "Subscription Request"
-msgstr "订阅请求"
 
 msgid "Subscription:"
 msgstr "订阅："
@@ -4776,7 +4737,7 @@ msgstr "职称"
 
 msgctxt "Contact subscription"
 msgid "To"
-msgstr "接收"
+msgstr "发送"
 
 msgid "To apply all changes instantly, you have to re-login."
 msgstr "要使所有更改立即生效，您必须重新登录。"
@@ -4812,7 +4773,7 @@ msgid "Trust Management"
 msgstr "信任管理"
 
 msgid "Trust Not Decided"
-msgstr "信任未定"
+msgstr "信任未决"
 
 msgid "Try Again"
 msgstr "重试"
@@ -4948,9 +4909,6 @@ msgstr "更新"
 msgid "Update Avatar"
 msgstr "更新头像"
 
-msgid "Update Check"
-msgstr "检查更新"
-
 msgid "Update automatically"
 msgstr "自动更新"
 
@@ -5053,7 +5011,7 @@ msgid "Value"
 msgstr "值"
 
 msgid "Verified"
-msgstr "已经验证"
+msgstr "已验证"
 
 msgid "Version"
 msgstr "版本"
@@ -5196,9 +5154,6 @@ msgstr "您"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "您（%s）加入了群聊"
-
-msgid "You Have Unread Messages"
-msgstr "您有未读消息"
 
 msgid "You are a visitor"
 msgstr "您是参观者"
@@ -5868,6 +5823,10 @@ msgstr "…或将其拖放到此处"
 #~ msgstr " {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s 请求您分享状态"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s 个群聊已找到"
 
@@ -5878,10 +5837,6 @@ msgstr "…或将其拖放到此处"
 #~ msgstr ""
 #~ "%s 有多台设备在线。\n"
 #~ "选择您想发送文件的设备。"
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s 想发送给您一个文件"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6228,6 +6183,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Connection not available"
 #~ msgstr "连接不可用"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "联系人已取消订阅"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "对话：URL 颜色"
 
@@ -6252,11 +6210,17 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Debug Console"
 #~ msgstr "调试控制台"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "拒绝邀请"
+
 #~ msgid "Delete Message"
 #~ msgstr "删除消息"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "在本地删除消息？"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "拒绝所有订阅请求"
 
 #~ msgid "Description: "
 #~ msgstr "描述： "
@@ -6266,6 +6230,12 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "直接传输（未加密）"
+
+#~ msgid "Dismiss"
+#~ msgstr "关闭"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "不再显示此消息"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6354,6 +6324,19 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim 无法读取此文件"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim：无可用更新（上次检查：%s）"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim：无可用更新（上次检查：从未）"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim：在首选项中已禁用更新检查"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "收到的群聊邀请"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6409,6 +6392,12 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "消息更正: 背景颜色"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "仅当启用了存储聊天记录并且对方在您的联系人列表时，消息才可供稍后阅读。"
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "撤回来自 %(participant)s 的 %(count)s 条消息？"
@@ -6425,6 +6414,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "No Connection Available"
 #~ msgstr "无可用连接"
 
+#~ msgid "No Notifications"
+#~ msgstr "没有通知"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "未开始"
@@ -6437,6 +6429,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Open Path"
 #~ msgstr "打开路径"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "打开插件…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "组织单元 (OU)"
@@ -6459,6 +6454,12 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "请使用 yyyy-mm-dd 格式"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "插件：无可用更新"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "插件：在首选项中已禁用更新检查"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6486,6 +6487,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Remove Group..."
 #~ msgstr "移除分组…"
 
+#~ msgid "Remove Notification"
+#~ msgstr "移除通知"
+
 #~ msgid "Remove Transport"
 #~ msgstr "移除传输"
 
@@ -6495,8 +6499,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "从联系人列表移除联系人"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "从联系人列表移除"
+
 #~ msgid "Remove…"
 #~ msgstr "移除…"
+
+#~ msgid "Report"
+#~ msgstr "报告"
 
 #~ msgid ""
 #~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
@@ -6551,6 +6561,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Sender: "
 #~ msgstr "发送者： "
 
+#~ msgid "Show"
+#~ msgstr "显示"
+
 #~ msgid "Show Gajim"
 #~ msgstr "显示 Gajim"
 
@@ -6579,6 +6592,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Start Voice Call…"
 #~ msgstr "开始语音通话…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "所有账号的状态和状态消息"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "状态： "
@@ -6586,8 +6602,14 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Stop File Transfers"
 #~ msgstr "停止文件传输"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "已停止与您分享状态"
+
 #~ msgid "Submit"
 #~ msgstr "提交"
+
+#~ msgid "Subscription Request"
+#~ msgstr "订阅请求"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "切换至第一至第九工作区"
@@ -6644,6 +6666,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Unread Messages"
 #~ msgstr "未读消息"
 
+#~ msgid "Update Check"
+#~ msgstr "检查更新"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "上传"
@@ -6671,6 +6696,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "为什么要撤回这些消息？"
+
+#~ msgid "You Have Unread Messages"
+#~ msgstr "您有未读消息"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "您即将退出 Gajim"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -131,10 +131,6 @@ msgid "%s and %s are typing…"
 msgstr ""
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr ""
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
 
@@ -201,6 +197,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Transferències de fitxers"
+
+#, python-format
+msgid "%s wants to add you."
+msgstr ""
 
 #, python-format
 msgctxt "positive longitude"
@@ -467,6 +467,14 @@ msgid "Activated"
 msgstr ""
 
 msgid "Active"
+msgstr "Activa"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Activa"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Activa"
 
 msgid "Add"
@@ -1426,7 +1434,11 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
+msgid "Contact Removed"
+msgstr "Fila del compte "
+
+#, fuzzy
+msgid "Contact Request"
 msgstr "El Contacte ha entrat"
 
 #, fuzzy
@@ -1600,9 +1612,6 @@ msgstr ""
 msgid "Decline"
 msgstr "Desconnectat"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1675,7 +1684,7 @@ msgstr "Activa"
 msgid "Deny"
 msgstr ""
 
-msgid "Deny all subscription requests"
+msgid "Deny all contact requests"
 msgstr ""
 
 msgid "Description"
@@ -1765,9 +1774,6 @@ msgstr "_Descobreix Serveis"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1808,9 +1814,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
-msgstr ""
-
-msgid "Don’t show this again"
 msgstr ""
 
 #, fuzzy
@@ -2315,6 +2318,10 @@ msgstr "Personalització Temes Gajim"
 msgid "Gajim Update"
 msgstr "Personalització Temes Gajim"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Personalització Temes Gajim"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2341,18 +2348,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Transferència de Fitxers"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Transferència de Fitxers"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Preferències"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2401,14 +2396,6 @@ msgstr "Connectors"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Configuració de Sala"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Configuració de Sala"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Configuració de Sala"
 
 #, fuzzy
@@ -2689,6 +2676,14 @@ msgstr "Gestiona Sala"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Gestiona Sala"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Configuració de Sala"
 
 #, fuzzy
 msgid "Invite"
@@ -3029,11 +3024,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr ""
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-
 #, fuzzy
 msgid "Minimize"
 msgstr "_Minimitza en tancar"
@@ -3193,10 +3183,6 @@ msgstr "Transferència de Fitxers"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Grups de xat"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3427,10 +3413,6 @@ msgstr "_Obri l'enllaç al navegador"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Obri l'enllaç al navegador"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Connectors"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3701,7 +3683,7 @@ msgid "Plugin Settings"
 msgstr "Connectors"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Connectors"
 
 msgid "Plugin already exists"
@@ -3716,14 +3698,6 @@ msgstr "Connectors"
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Connectors"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Transferència de Fitxers"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Preferències"
 
 #, fuzzy
 msgid "Port"
@@ -3992,6 +3966,10 @@ msgid "Remove Chat History?"
 msgstr "Historial"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Afegeix un contacte nou"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Afegeix un contacte nou"
 
@@ -4014,10 +3992,6 @@ msgstr "Esborra"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Sincronitza els contactes"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4046,10 +4020,6 @@ msgstr "Esborra transferència de fitxer de la llista."
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Esborra"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Esborra transferència de fitxer de la llista."
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4090,10 +4060,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "Informa de l'error"
 
 #, fuzzy
 msgid "Request"
@@ -4404,6 +4370,9 @@ msgstr "Missatges preconfigurats:"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4594,9 +4563,6 @@ msgstr "Comença Xat"
 msgid "Share my online status"
 msgstr "Mostra els contactes desconnectats"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "_Copia la ubicació de l'enllaç"
@@ -4617,10 +4583,6 @@ msgstr "Gajim"
 msgid "Show Inactive Devices"
 msgstr "Disponible per parlar"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "_Copia la ubicació de l'enllaç"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4633,6 +4595,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Connectors"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -4872,10 +4838,6 @@ msgstr "_Canvia Missatge d'Estat"
 msgid "Status Messages in Participants List"
 msgstr "_Canvia Missatge d'Estat"
 
-#, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Sincronit_za l'estat del compte amb l'estat global"
-
 msgid "Status is not shared"
 msgstr ""
 
@@ -4911,9 +4873,6 @@ msgstr "_Canvia Missatge d'Estat"
 msgid "Stop Sharing Online Status?"
 msgstr "Mostra els contactes desconnectats"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 msgid "Street"
 msgstr ""
 
@@ -4942,9 +4901,6 @@ msgstr ""
 #, fuzzy
 msgid "Subscription"
 msgstr "Descripció:"
-
-msgid "Subscription Request"
-msgstr ""
 
 #, fuzzy
 msgid "Subscription:"
@@ -5489,9 +5445,6 @@ msgstr "Esborra"
 msgid "Update Avatar"
 msgstr "Esborra"
 
-msgid "Update Check"
-msgstr ""
-
 #, fuzzy
 msgid "Update automatically"
 msgstr "Esborra"
@@ -5758,10 +5711,6 @@ msgstr ""
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr ""
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "_Canvia Missatge d'Estat"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6674,6 +6623,10 @@ msgstr ""
 #~ "Cancel.la la transferència seleccionada i esborra els fitxers incomplets."
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Històric de converses"
 
@@ -6728,6 +6681,22 @@ msgstr ""
 #~ msgid "Filter Chats…"
 #~ msgstr "Grups de xat"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Configuració de Sala"
+
 #, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Activa"
@@ -6761,6 +6730,10 @@ msgstr ""
 #~ msgstr "_No Disponible"
 
 #, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Afegeix _Notificació Especial..."
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Entrada següent"
@@ -6774,6 +6747,10 @@ msgstr ""
 #~ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Connectors"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Cancel.la la transferència de fitxer."
 
@@ -6782,8 +6759,20 @@ msgstr ""
 #~ msgstr "Events _Personals"
 
 #, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
 #~ msgid "Remove Chat History"
 #~ msgstr "Historial"
+
+#, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
 #~ msgid "Remove Transport"
@@ -6800,8 +6789,16 @@ msgstr ""
 #~ msgstr "Esborra transferència de fitxer de la llista."
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Esborra transferència de fitxer de la llista."
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "Esborra"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Informa de l'error"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -6845,6 +6842,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Start Voice Call…"
 #~ msgstr "Comença Xat"
+
+#, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Sincronit_za l'estat del compte amb l'estat global"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -6898,6 +6899,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Video calls are not supported"
 #~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "_Canvia Missatge d'Estat"
 
 #, fuzzy
 #~ msgid "_File Transfer"

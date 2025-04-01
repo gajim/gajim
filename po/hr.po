@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -136,10 +136,6 @@ msgstr "desinkroniziran"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Sada će \"%s\" znati vaš status."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -207,6 +203,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Druga strana je prekinula prijenos"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vam želi poslati datoteku."
 
 #, python-format
 msgctxt "positive longitude"
@@ -507,6 +507,14 @@ msgid "Activated"
 msgstr "Aktivno"
 
 msgid "Active"
+msgstr "Aktivno"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Aktivno"
+
+#, fuzzy
+msgid "Activity Feed"
 msgstr "Aktivno"
 
 msgid "Add"
@@ -1505,8 +1513,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Pretplata uklonjena"
+msgid "Contact Removed"
+msgstr "Korisnički račun"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kontakti"
 
 #, fuzzy
 msgid "Contact information"
@@ -1688,9 +1700,6 @@ msgstr "Trčim"
 msgid "Decline"
 msgstr "_Odspojen"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1766,8 +1775,8 @@ msgid "Deny"
 msgstr "Odbij"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Zahtjev za Pretplatom"
+msgid "Deny all contact requests"
+msgstr "Zahtjev Razmjene Datoteka"
 
 msgid "Description"
 msgstr "Opis"
@@ -1863,9 +1872,6 @@ msgstr "_Otkrivanje Usluga"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prihvaćate li ovaj zahtjev na računu %s?"
@@ -1913,10 +1919,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "_Ne pitaj me više"
 
 #, fuzzy
 msgid "Download"
@@ -2443,6 +2445,10 @@ msgstr "gajim-remote"
 msgid "Gajim Update"
 msgstr "Osvježi MOTD..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Osvježi MOTD..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2469,18 +2475,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim će se sad isključiti"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Nema dostupnih računa"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Nema dostupnih računa"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Postavke"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2530,14 +2524,6 @@ msgstr "Registracija nije uspijela"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Poziv na Grupni Razgovor"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Poziv na Grupni Razgovor"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Poziv na Grupni Razgovor"
 
 #, fuzzy
@@ -2833,6 +2819,14 @@ msgstr "Neispravna Datoteka"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Neispravno ime računa"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Obavijest"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Poziv na Grupni Razgovor"
 
 #, fuzzy
 msgid "Invite"
@@ -3194,14 +3188,6 @@ msgid "Messages are archived on the server"
 msgstr "Sesija NEĆE biti sačuvana"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Poruke će biti dostupne za čitanje i kasnije ukoliko imate omogućenu "
-"povijest i kontakt je na vašoj listi."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3363,10 +3349,6 @@ msgstr "Prijenosi Datoteka"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Nema rezultata"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Obavijesti"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3601,10 +3583,6 @@ msgstr "_Otvori Link u Pregledniku"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Otvori Link u Pregledniku"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Registracija nije uspijela"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3885,7 +3863,7 @@ msgid "Plugin Settings"
 msgstr "Registracija nije uspijela"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Registracija nije uspijela"
 
 #, fuzzy
@@ -3902,14 +3880,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registracija nije uspijela"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Nema dostupnih računa"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Postavke"
 
 #, fuzzy
 msgid "Port"
@@ -4190,6 +4160,10 @@ msgid "Remove Chat History?"
 msgstr "Nedavno:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Preimenuj Kontakt"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Preimenuj Kontakt"
 
@@ -4212,10 +4186,6 @@ msgstr "Ukloni Grupu"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Sinkroniziraj"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Obavijest"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4244,10 +4214,6 @@ msgstr "Uklanja kontakt sa liste"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Ukloni Grupu"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Uklanja kontakt sa liste"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4289,10 +4255,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "_Prijavi Grešku"
 
 #, fuzzy
 msgid "Request"
@@ -4613,6 +4575,9 @@ msgstr "Predefinirana Poruka"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4810,9 +4775,6 @@ msgstr "Započeti Razgovor"
 msgid "Share my online status"
 msgstr "Promjeni status"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "Komanda: %s"
@@ -4833,10 +4795,6 @@ msgstr "Detalji"
 msgid "Show Inactive Devices"
 msgstr "Predefinirana Poruka"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Obavijest"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4849,6 +4807,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Obavijesti"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Registracija nije uspijela"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5109,10 +5071,6 @@ msgid "Status Messages in Participants List"
 msgstr "Statusna Poruka"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Mjenja status jednog računa ili više njih"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Statusna Poruka"
 
@@ -5148,9 +5106,6 @@ msgstr "Statusna Poruka"
 msgid "Stop Sharing Online Status?"
 msgstr "da mi prikaže status"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Pod stresom"
@@ -5181,9 +5136,6 @@ msgstr "Pretplaćeno"
 #, fuzzy
 msgid "Subscription"
 msgstr "Pretplata:"
-
-msgid "Subscription Request"
-msgstr "Zahtjev za Pretplatom"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5766,10 +5718,6 @@ msgid "Update Avatar"
 msgstr "Odabir Slike"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Provjera Pravopisa"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Odabir Slike"
 
@@ -6053,10 +6001,6 @@ msgstr "Vi"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s se pridružio grupnom razgovoru"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Imte nepročitane poruke"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6810,12 +6754,12 @@ msgstr ""
 #~ msgstr "Promijeni _Nadimak..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s nije pronađen"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Sada će \"%s\" znati vaš status."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vam želi poslati datoteku."
+#~ msgid "%s group chats found"
+#~ msgstr "%s nije pronađen"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7143,6 +7087,10 @@ msgstr ""
 #~ msgstr "Veza nije dostupna"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Pretplata uklonjena"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Razgovor sa"
 
@@ -7177,6 +7125,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Predefinirana Poruka"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Zahtjev za Pretplatom"
+
 #~ msgid "Description: "
 #~ msgstr "Opis: "
 
@@ -7187,6 +7139,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Razmjena datoteka zaustavljena"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "_Ne pitaj me više"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7266,6 +7222,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim ne može pristupiti ovoj datoteci"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Nema dostupnih računa"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Nema dostupnih računa"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Postavke"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Poziv na Grupni Razgovor"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Sakrij ovaj izbornik"
 
@@ -7299,6 +7271,14 @@ msgstr ""
 #~ msgstr "Poruke"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Poruke će biti dostupne za čitanje i kasnije ukoliko imate omogućenu "
+#~ "povijest i kontakt je na vašoj listi."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "statusna poruka"
 
@@ -7313,6 +7293,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Veza nije dostupna"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Obavijesti"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7332,12 +7316,24 @@ msgstr ""
 #~ msgstr "OpenGPG"
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Registracija nije uspijela"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Prekini transfer datoteke"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Prikaži Sve _Događaje na Čekanju"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Nema dostupnih računa"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Postavke"
 
 #~ msgid "Progress"
 #~ msgstr "Napredak"
@@ -7366,6 +7362,10 @@ msgstr ""
 #~ msgstr "Ukloni Grupu"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Obavijest"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Prikaži _Prijenose"
 
@@ -7379,8 +7379,16 @@ msgstr ""
 #~ msgstr "Uklanja kontakt sa liste"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Uklanja kontakt sa liste"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "_Ukloni"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "_Prijavi Grešku"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7454,6 +7462,10 @@ msgstr ""
 #~ msgstr "Započeti Razgovor"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Mjenja status jednog računa ili više njih"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Status: "
@@ -7461,6 +7473,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Prijenosi Datoteka"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Zahtjev za Pretplatom"
 
 #~ msgid "Synchronise"
 #~ msgstr "Sinkroniziraj"
@@ -7506,6 +7521,10 @@ msgstr ""
 #~ msgstr "Nepročitani događaji"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Provjera Pravopisa"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Snimiti Datoteku kao..."
@@ -7525,6 +7544,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Da li zaista želite ukloniti odabranu poruku?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Imte nepročitane poruke"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

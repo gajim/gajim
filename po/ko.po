@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -126,10 +126,6 @@ msgid "%s and %s are typing…"
 msgstr ""
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr ""
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
 
@@ -195,6 +191,10 @@ msgstr ""
 
 #, python-format
 msgid "%s stopped the transfer"
+msgstr ""
+
+#, python-format
+msgid "%s wants to add you."
 msgstr ""
 
 #, python-format
@@ -445,6 +445,12 @@ msgid "Activated"
 msgstr ""
 
 msgid "Active"
+msgstr ""
+
+msgid "Activity"
+msgstr ""
+
+msgid "Activity Feed"
 msgstr ""
 
 msgid "Add"
@@ -1284,7 +1290,10 @@ msgstr ""
 msgid "Contact List: Group Foreground Color"
 msgstr ""
 
-msgid "Contact Unsubscribed"
+msgid "Contact Removed"
+msgstr ""
+
+msgid "Contact Request"
 msgstr ""
 
 msgid "Contact information"
@@ -1431,9 +1440,6 @@ msgstr ""
 msgid "Decline"
 msgstr ""
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1495,7 +1501,7 @@ msgstr ""
 msgid "Deny"
 msgstr ""
 
-msgid "Deny all subscription requests"
+msgid "Deny all contact requests"
 msgstr ""
 
 msgid "Description"
@@ -1575,9 +1581,6 @@ msgstr ""
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr ""
@@ -1618,9 +1621,6 @@ msgid "Do you want to unregister your account on <b>%s</b> as well?"
 msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
-msgstr ""
-
-msgid "Don’t show this again"
 msgstr ""
 
 msgid "Download"
@@ -2070,6 +2070,9 @@ msgstr ""
 msgid "Gajim Update"
 msgstr ""
 
+msgid "Gajim Update Check"
+msgstr ""
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2095,16 +2098,6 @@ msgid ""
 msgstr ""
 
 msgid "Gajim will now exit"
-msgstr ""
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr ""
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr ""
-
-msgid "Gajim: Update check disabled in preferences"
 msgstr ""
 
 msgid "Gathering information…"
@@ -2145,12 +2138,6 @@ msgid "Group Chat Details"
 msgstr ""
 
 msgid "Group Chat Invitation"
-msgstr ""
-
-msgid "Group Chat Invitation Declined"
-msgstr ""
-
-msgid "Group Chat Invitation Received"
 msgstr ""
 
 msgid "Group Chat Language"
@@ -2395,6 +2382,12 @@ msgid "Invalid address: %s"
 msgstr ""
 
 msgid "Invalid domain name"
+msgstr ""
+
+msgid "Invitation"
+msgstr ""
+
+msgid "Invitation Declined"
 msgstr ""
 
 msgid "Invite"
@@ -2701,11 +2694,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr ""
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-
 msgid "Minimize"
 msgstr ""
 
@@ -2839,9 +2827,6 @@ msgid "No File Transfer available"
 msgstr ""
 
 msgid "No Messages Found"
-msgstr ""
-
-msgid "No Notifications"
 msgstr ""
 
 msgctxt "Group chat feature"
@@ -3045,9 +3030,6 @@ msgid "Open Link in Browser"
 msgstr ""
 
 msgid "Open Link in _Browser"
-msgstr ""
-
-msgid "Open Plugins…"
 msgstr ""
 
 msgid "Open _Folder"
@@ -3289,7 +3271,7 @@ msgstr ""
 msgid "Plugin Settings"
 msgstr ""
 
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr ""
 
 msgid "Plugin already exists"
@@ -3302,12 +3284,6 @@ msgid "Plugins"
 msgstr ""
 
 msgid "Plugins Updated Successfully"
-msgstr ""
-
-msgid "Plugins: No updates available"
-msgstr ""
-
-msgid "Plugins: Update check disabled in preferences"
 msgstr ""
 
 msgid "Port"
@@ -3543,6 +3519,9 @@ msgstr ""
 msgid "Remove Chat History?"
 msgstr ""
 
+msgid "Remove Contact"
+msgstr ""
+
 msgid "Remove Contacts?"
 msgstr ""
 
@@ -3559,9 +3538,6 @@ msgid "Remove Group…"
 msgstr ""
 
 msgid "Remove History…"
-msgstr ""
-
-msgid "Remove Notification"
 msgstr ""
 
 msgid "Remove Proxy"
@@ -3583,9 +3559,6 @@ msgid "Remove from Contact List…"
 msgstr ""
 
 msgid "Remove from Group"
-msgstr ""
-
-msgid "Remove from contact list"
 msgstr ""
 
 msgid "Remove this workspace"
@@ -3619,9 +3592,6 @@ msgid "Repairs"
 msgstr ""
 
 msgid "Reply…"
-msgstr ""
-
-msgid "Report"
 msgstr ""
 
 msgid "Request"
@@ -3890,6 +3860,9 @@ msgstr ""
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4051,9 +4024,6 @@ msgstr ""
 msgid "Share my online status"
 msgstr ""
 
-msgid "Show"
-msgstr ""
-
 msgid "Show Commands"
 msgstr ""
 
@@ -4069,9 +4039,6 @@ msgstr ""
 msgid "Show Inactive Devices"
 msgstr ""
 
-msgid "Show Invitation"
-msgstr ""
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4082,6 +4049,9 @@ msgid "Show My Video Stream"
 msgstr ""
 
 msgid "Show Notifications"
+msgstr ""
+
+msgid "Show Plugins"
 msgstr ""
 
 msgid "Show Send Message Button"
@@ -4296,9 +4266,6 @@ msgstr ""
 msgid "Status Messages in Participants List"
 msgstr ""
 
-msgid "Status and status message for all accounts"
-msgstr ""
-
 msgid "Status is not shared"
 msgstr ""
 
@@ -4327,9 +4294,6 @@ msgstr ""
 msgid "Stop Sharing Online Status?"
 msgstr ""
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 msgid "Street"
 msgstr ""
 
@@ -4356,9 +4320,6 @@ msgid "Subscribed"
 msgstr ""
 
 msgid "Subscription"
-msgstr ""
-
-msgid "Subscription Request"
 msgstr ""
 
 msgid "Subscription:"
@@ -4860,9 +4821,6 @@ msgstr ""
 msgid "Update Avatar"
 msgstr ""
 
-msgid "Update Check"
-msgstr ""
-
 msgid "Update automatically"
 msgstr ""
 
@@ -5107,9 +5065,6 @@ msgstr ""
 
 #, python-format
 msgid "You (%s) joined the group chat"
-msgstr ""
-
-msgid "You Have Unread Messages"
 msgstr ""
 
 msgid "You are a visitor"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -131,10 +131,6 @@ msgstr "Pokročilé"
 msgid "%s and %s are typing…"
 msgstr ""
 
-#, fuzzy, python-format
-msgid "%s asks you to share your status"
-msgstr "Od teraz bude \"%s\" vidieť váš stav."
-
 #, python-format
 msgid "%s can be joined by invite only."
 msgstr ""
@@ -202,6 +198,10 @@ msgstr ""
 #, fuzzy, python-format
 msgid "%s stopped the transfer"
 msgstr "Vzdialený kontakt zastavil prenos"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vám chce poslať súbor."
 
 #, python-format
 msgctxt "positive longitude"
@@ -499,6 +499,14 @@ msgstr "Aktivovaná"
 
 msgid "Active"
 msgstr "Aktívne"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Aktivovaná"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Aktivovaná"
 
 msgid "Add"
 msgstr "Pridať"
@@ -1492,8 +1500,12 @@ msgid "Contact List: Group Foreground Color"
 msgstr ""
 
 #, fuzzy
-msgid "Contact Unsubscribed"
-msgstr "Nezapísaný"
+msgid "Contact Removed"
+msgstr "Účet"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Kontakty"
 
 #, fuzzy
 msgid "Contact information"
@@ -1675,9 +1687,6 @@ msgstr "Klusám"
 msgid "Decline"
 msgstr "_Odhlásený"
 
-msgid "Decline Invitation"
-msgstr ""
-
 msgid "Decrease User Interface Font Size"
 msgstr ""
 
@@ -1753,8 +1762,8 @@ msgid "Deny"
 msgstr "Zakázať"
 
 #, fuzzy
-msgid "Deny all subscription requests"
-msgstr "Požiadavka o zapísanie"
+msgid "Deny all contact requests"
+msgstr "Požiadavka na hlasový rozhovor"
 
 msgid "Description"
 msgstr "Popis"
@@ -1850,9 +1859,6 @@ msgstr "_Preskúmať služby"
 msgid "Discussion Logs"
 msgstr ""
 
-msgid "Dismiss"
-msgstr ""
-
 #, fuzzy, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Prijať túto požiadavku?"
@@ -1900,10 +1906,6 @@ msgstr ""
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
-
-#, fuzzy
-msgid "Don’t show this again"
-msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
 msgid "Download"
@@ -2430,6 +2432,10 @@ msgstr "gajim-remote"
 msgid "Gajim Update"
 msgstr "Aktualizovať správu dňa..."
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Aktualizovať správu dňa..."
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2456,18 +2462,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim bude ukončený"
-
-#, fuzzy, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
-msgid "Gajim: Update check disabled in preferences"
-msgstr "_Predvoľby"
 
 #, fuzzy
 msgid "Gathering information…"
@@ -2517,14 +2511,6 @@ msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Group Chat Invitation"
-msgstr "Pozvánka do diskusnej skupiny"
-
-#, fuzzy
-msgid "Group Chat Invitation Declined"
-msgstr "Pozvánka do diskusnej skupiny"
-
-#, fuzzy
-msgid "Group Chat Invitation Received"
 msgstr "Pozvánka do diskusnej skupiny"
 
 #, fuzzy
@@ -2819,6 +2805,14 @@ msgstr "Nesprávny súbor"
 #, fuzzy
 msgid "Invalid domain name"
 msgstr "Nesprávny názov účtu"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Umiestnenie:"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Pozvánka do diskusnej skupiny"
 
 #, fuzzy
 msgid "Invite"
@@ -3176,14 +3170,6 @@ msgid "Messages are archived on the server"
 msgstr "Relácia NEBUDE zaznamenaná"
 
 #, fuzzy
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Správu bude možné prečítať neskôr len vtedy, ak máte povolenú históriu a "
-"kontakt je vo vašom zozname kontaktov."
-
-#, fuzzy
 msgid "Minimize"
 msgstr "Gajim"
 
@@ -3345,10 +3331,6 @@ msgstr "Prenos súborov"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Žiadny výsledok"
-
-#, fuzzy
-msgid "No Notifications"
-msgstr "Oznámenia"
 
 #, fuzzy
 msgctxt "Group chat feature"
@@ -3583,10 +3565,6 @@ msgstr "_Otvoriť odkaz v prehliadači"
 #, fuzzy
 msgid "Open Link in _Browser"
 msgstr "_Otvoriť odkaz v prehliadači"
-
-#, fuzzy
-msgid "Open Plugins…"
-msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Open _Folder"
@@ -3866,7 +3844,7 @@ msgid "Plugin Settings"
 msgstr "Registrácia zlyhala"
 
 #, fuzzy
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Registrácia zlyhala"
 
 #, fuzzy
@@ -3883,14 +3861,6 @@ msgstr ""
 #, fuzzy
 msgid "Plugins Updated Successfully"
 msgstr "Registrácia zlyhala"
-
-#, fuzzy
-msgid "Plugins: No updates available"
-msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
-msgid "Plugins: Update check disabled in preferences"
-msgstr "_Predvoľby"
 
 #, fuzzy
 msgid "Port"
@@ -4169,6 +4139,10 @@ msgid "Remove Chat History?"
 msgstr "Posledné:"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Premenovať kontakt"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Premenovať kontakt"
 
@@ -4191,10 +4165,6 @@ msgstr "Odstrániť skupinu"
 #, fuzzy
 msgid "Remove History…"
 msgstr "Synchronizovať"
-
-#, fuzzy
-msgid "Remove Notification"
-msgstr "Oznámenie"
 
 #, fuzzy
 msgid "Remove Proxy"
@@ -4223,10 +4193,6 @@ msgstr "Odstráni kontakt zo zoznamu"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Odstrániť skupinu"
-
-#, fuzzy
-msgid "Remove from contact list"
-msgstr "Odstráni kontakt zo zoznamu"
 
 #, fuzzy
 msgid "Remove this workspace"
@@ -4268,10 +4234,6 @@ msgstr ""
 
 msgid "Reply…"
 msgstr ""
-
-#, fuzzy
-msgid "Report"
-msgstr "Sp_ráva o chybe"
 
 #, fuzzy
 msgid "Request"
@@ -4590,6 +4552,9 @@ msgstr "Predvolená správa"
 msgid "Select a security label for your message…"
 msgstr ""
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr ""
 
@@ -4787,9 +4752,6 @@ msgstr "video"
 msgid "Share my online status"
 msgstr "Zmeniť stav"
 
-msgid "Show"
-msgstr ""
-
 #, fuzzy
 msgid "Show Commands"
 msgstr "príkaz"
@@ -4810,10 +4772,6 @@ msgstr "Podrobnosti"
 msgid "Show Inactive Devices"
 msgstr "Vstupné zariadenie zvuku"
 
-#, fuzzy
-msgid "Show Invitation"
-msgstr "Umiestnenie:"
-
 msgid "Show Join/Leave"
 msgstr ""
 
@@ -4826,6 +4784,10 @@ msgstr ""
 #, fuzzy
 msgid "Show Notifications"
 msgstr "Oznámenia"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Show Send Message Button"
@@ -5086,10 +5048,6 @@ msgid "Status Messages in Participants List"
 msgstr "Správa o stave"
 
 #, fuzzy
-msgid "Status and status message for all accounts"
-msgstr "Zmeniť stav účtu alebo účtov"
-
-#, fuzzy
 msgid "Status is not shared"
 msgstr "Správa o stave"
 
@@ -5125,9 +5083,6 @@ msgstr "Správa o stave"
 msgid "Stop Sharing Online Status?"
 msgstr "poslať mi stav"
 
-msgid "Stopped sharing their status with you"
-msgstr ""
-
 #, fuzzy
 msgid "Street"
 msgstr "Vystresovaný"
@@ -5158,9 +5113,6 @@ msgstr "Prihlásiť"
 #, fuzzy
 msgid "Subscription"
 msgstr "Zápis: "
-
-msgid "Subscription Request"
-msgstr "Požiadavka o zapísanie"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5744,10 +5696,6 @@ msgid "Update Avatar"
 msgstr "Vybrať obrázok"
 
 #, fuzzy
-msgid "Update Check"
-msgstr "Kontrola pravopisu"
-
-#, fuzzy
 msgid "Update automatically"
 msgstr "Vybrať obrázok"
 
@@ -6032,10 +5980,6 @@ msgstr "Vy"
 #, fuzzy, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s sa pripojil do diskusnej skupiny"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Máte neprečítané správy"
 
 msgid "You are a visitor"
 msgstr ""
@@ -6785,12 +6729,12 @@ msgstr ""
 #~ msgstr "Zmeniť p_rezývku..."
 
 #, fuzzy, python-format
-#~ msgid "%s group chats found"
-#~ msgstr "%s nenájdený"
+#~ msgid "%s asks you to share your status"
+#~ msgstr "Od teraz bude \"%s\" vidieť váš stav."
 
 #, fuzzy, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vám chce poslať súbor."
+#~ msgid "%s group chats found"
+#~ msgstr "%s nenájdený"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -7113,6 +7057,10 @@ msgstr ""
 #~ msgstr "Pripojenie nie je dostupné"
 
 #, fuzzy
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Nezapísaný"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Rozhovor s "
 
@@ -7147,6 +7095,10 @@ msgstr ""
 #~ msgid "Delete Message"
 #~ msgstr "Predvolená správa"
 
+#, fuzzy
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Požiadavka o zapísanie"
+
 #~ msgid "Description: "
 #~ msgstr "Popis:"
 
@@ -7157,6 +7109,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Prenos súboru bol zastavený"
+
+#, fuzzy
+#~ msgid "Don’t show this again"
+#~ msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
 #~ msgctxt "Noun"
@@ -7236,6 +7192,22 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim nemôže pristupovať k tomuto súboru"
 
+#, fuzzy, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "_Predvoľby"
+
+#, fuzzy
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Pozvánka do diskusnej skupiny"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Skryť toto menu"
 
@@ -7269,6 +7241,14 @@ msgstr ""
 #~ msgstr "Správy"
 
 #, fuzzy
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Správu bude možné prečítať neskôr len vtedy, ak máte povolenú históriu a "
+#~ "kontakt je vo vašom zozname kontaktov."
+
+#, fuzzy
 #~ msgid "Moderate message?"
 #~ msgstr "správa o stave"
 
@@ -7283,6 +7263,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "No Connection Available"
 #~ msgstr "Pripojenie nie je dostupné"
+
+#, fuzzy
+#~ msgid "No Notifications"
+#~ msgstr "Oznámenia"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7302,12 +7286,24 @@ msgstr ""
 #~ msgstr "OpenGPG"
 
 #, fuzzy
+#~ msgid "Open Plugins…"
+#~ msgstr "Registrácia zlyhala"
+
+#, fuzzy
 #~ msgid "Pause or resume file transfer"
 #~ msgstr "Zrušiť prenos vybraných súborov"
 
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Zobraziť všetky čakajúce _udalosti"
+
+#, fuzzy
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Žiadne účty nie sú dostupné"
+
+#, fuzzy
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "_Predvoľby"
 
 #~ msgid "Progress"
 #~ msgstr "Stav"
@@ -7336,6 +7332,10 @@ msgstr ""
 #~ msgstr "Odstrániť skupinu"
 
 #, fuzzy
+#~ msgid "Remove Notification"
+#~ msgstr "Oznámenie"
+
+#, fuzzy
 #~ msgid "Remove Transport"
 #~ msgstr "Zobraziť trans_porty"
 
@@ -7348,8 +7348,16 @@ msgstr ""
 #~ msgstr "Odstráni kontakt zo zoznamu"
 
 #, fuzzy
+#~ msgid "Remove from contact list"
+#~ msgstr "Odstráni kontakt zo zoznamu"
+
+#, fuzzy
 #~ msgid "Remove…"
 #~ msgstr "O_dstrániť"
+
+#, fuzzy
+#~ msgid "Report"
+#~ msgstr "Sp_ráva o chybe"
 
 #, fuzzy
 #~ msgid "Requires: gupnpigd-1.0"
@@ -7422,6 +7430,10 @@ msgstr ""
 #~ msgstr "Začať rozhovor"
 
 #, fuzzy
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Zmeniť stav účtu alebo účtov"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Stav: "
@@ -7429,6 +7441,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Stop File Transfers"
 #~ msgstr "Prenos súborov"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Požiadavka o zapísanie"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synchronizovať"
@@ -7474,6 +7489,10 @@ msgstr ""
 #~ msgstr "Neprečítané udalosti"
 
 #, fuzzy
+#~ msgid "Update Check"
+#~ msgstr "Kontrola pravopisu"
+
+#, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Uložiť súbor ako..."
@@ -7493,6 +7512,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Skutočne si želáte zmazať vybraných správ?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Máte neprečítané správy"
 
 #, fuzzy
 #~ msgid "You are about to quit Gajim"

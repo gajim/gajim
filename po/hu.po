@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
-"PO-Revision-Date: 2025-03-11 05:55+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"PO-Revision-Date: 2025-03-30 10:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -132,10 +132,6 @@ msgid "%s and %s are typing…"
 msgstr "%s és %s éppen ír…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s a jelenléti állapot megosztására kér"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s csak meghívóval léphet be."
 
@@ -202,6 +198,10 @@ msgstr "%s már nem osztja meg a jelenléti állapotát"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s leállította a fájlátvitelt"
+
+#, python-format
+msgid "%s wants to add you."
+msgstr "%s hozzáadna a névjegyeihez."
 
 #, python-format
 msgctxt "positive longitude"
@@ -463,6 +463,12 @@ msgstr "Bekapcsolva"
 
 msgid "Active"
 msgstr "Aktív"
+
+msgid "Activity"
+msgstr "Tevékenységek"
+
+msgid "Activity Feed"
+msgstr "Tevékenységek"
 
 msgid "Add"
 msgstr "Hozzáadás"
@@ -1333,8 +1339,11 @@ msgstr "Névjegyek: csoport betűkészlete"
 msgid "Contact List: Group Foreground Color"
 msgstr "Névjegyek: csoport előtérszíne"
 
-msgid "Contact Unsubscribed"
-msgstr "Ismerős leiratkozott"
+msgid "Contact Removed"
+msgstr "Névjegy törlése"
+
+msgid "Contact Request"
+msgstr "Névjegyfelvételi kérelem"
 
 msgid "Contact information"
 msgstr "Információk megjelenítése"
@@ -1480,9 +1489,6 @@ msgstr "Hibakeresési naplózás"
 msgid "Decline"
 msgstr "Elutasítás"
 
-msgid "Decline Invitation"
-msgstr "A meghívás elutasítása"
-
 msgid "Decrease User Interface Font Size"
 msgstr "A betűméret csökkentése"
 
@@ -1545,8 +1551,8 @@ msgstr "Téma törlése"
 msgid "Deny"
 msgstr "Elutasítás"
 
-msgid "Deny all subscription requests"
-msgstr "Minden feliratkozási kérelem elutasítása"
+msgid "Deny all contact requests"
+msgstr "Minden kérés elutasítása"
 
 msgid "Description"
 msgstr "Leírás"
@@ -1627,9 +1633,6 @@ msgstr "Szolgáltatások felderítése…"
 msgid "Discussion Logs"
 msgstr "Vitanapló"
 
-msgid "Dismiss"
-msgstr "Elutasítás"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "El legyen fogadva a kérés (fiók: %s)?"
@@ -1674,9 +1677,6 @@ msgstr "A kiszolgálóról (<b>%s</b>) is törölhető a fiók?"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Az ujjlenyomat végelegesen törlődni fog"
-
-msgid "Don’t show this again"
-msgstr "Ne jelenjen meg újra"
 
 msgid "Download"
 msgstr "Letöltés"
@@ -2134,6 +2134,9 @@ msgstr "A Gajim témái"
 msgid "Gajim Update"
 msgstr "A Gajim frissítése"
 
+msgid "Gajim Update Check"
+msgstr "Frissítések keresése"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2169,16 +2172,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "A Gajim most kilép"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: soha)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: a frissítések keresése ki van kapcsolva"
 
 msgid "Gathering information…"
 msgstr "Információk lekérése…"
@@ -2219,12 +2212,6 @@ msgstr "A társalgó adatai"
 
 msgid "Group Chat Invitation"
 msgstr "Meghívás társalgóba"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Meghívó visszautasítva"
-
-msgid "Group Chat Invitation Received"
-msgstr "Egy társalgóba szóló meghívó érkezett"
 
 msgid "Group Chat Language"
 msgstr "A társalgó nyelve"
@@ -2480,6 +2467,12 @@ msgstr "Érvénytelen cím: %s"
 
 msgid "Invalid domain name"
 msgstr "Érvénytelen kiszolgálónév"
+
+msgid "Invitation"
+msgstr "Meghívás"
+
+msgid "Invitation Declined"
+msgstr "Meghívás elutasítása"
 
 msgid "Invite"
 msgstr "Meghívás"
@@ -2792,13 +2785,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Az üzeneteket a kiszolgáló tárolja"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Az üzenetek később már csak akkor olvashatók el, ha a beszélgetések mentése "
-"be van kapcsolva és a másik fél szerepel a névjegyek között."
-
 msgid "Minimize"
 msgstr "Minimalizálás"
 
@@ -2933,9 +2919,6 @@ msgstr "Nem lehet fájlt küldeni"
 
 msgid "No Messages Found"
 msgstr "Nincsenek üzenetek"
-
-msgid "No Notifications"
-msgstr "Nincs értesítés"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3145,9 +3128,6 @@ msgstr "Hivatkozás megnyitása böngészőben"
 
 msgid "Open Link in _Browser"
 msgstr "_Hivatkozás megnyitása böngészőben"
-
-msgid "Open Plugins…"
-msgstr "Bővítmények megnyitása…"
 
 msgid "Open _Folder"
 msgstr "M_appa megnyitása"
@@ -3395,7 +3375,7 @@ msgstr "Bővítményhiba"
 msgid "Plugin Settings"
 msgstr "Bővítménybeállítások"
 
-msgid "Plugin Updates"
+msgid "Plugin Update"
 msgstr "Bővítmények frissítése"
 
 msgid "Plugin already exists"
@@ -3409,12 +3389,6 @@ msgstr "Bővítmények"
 
 msgid "Plugins Updated Successfully"
 msgstr "A bővítmények frissítése sikerült"
-
-msgid "Plugins: No updates available"
-msgstr "Bővítmények: nincsenek frissítések"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Bővítmények: a frissítések keresése ki van kapcsolva"
 
 msgid "Port"
 msgstr "Port"
@@ -3650,6 +3624,9 @@ msgstr "Fiók törlése"
 msgid "Remove Chat History?"
 msgstr "Törölhetők az előzmények?"
 
+msgid "Remove Contact"
+msgstr "Névjegy törlése"
+
 msgid "Remove Contacts?"
 msgstr "Névjegyek törlése"
 
@@ -3667,9 +3644,6 @@ msgstr "Csoport törlése…"
 
 msgid "Remove History…"
 msgstr "Előzmények törlése…"
-
-msgid "Remove Notification"
-msgstr "Értesítés törlése"
 
 msgid "Remove Proxy"
 msgstr "Proxy törlése"
@@ -3691,9 +3665,6 @@ msgstr "Törlés a névjegyekből…"
 
 msgid "Remove from Group"
 msgstr "Eltávolítás csoportból"
-
-msgid "Remove from contact list"
-msgstr "Törlés a névjegyekből"
 
 msgid "Remove this workspace"
 msgstr "A munkaterület törlése"
@@ -3728,9 +3699,6 @@ msgstr "Javítások"
 
 msgid "Reply…"
 msgstr "Válasz…"
-
-msgid "Report"
-msgstr "Jelentés"
 
 msgid "Request"
 msgstr "Kérelem"
@@ -4004,6 +3972,9 @@ msgstr "Üzenetek kijelölése…"
 msgid "Select a security label for your message…"
 msgstr "Az üzenet biztonsági címkéjének kiválasztása…"
 
+msgid "Select an activity to see details."
+msgstr "Részletes információ a tevékenység kiválasztásával."
+
 msgid "Select an emoji"
 msgstr "Hangulatjel beszúrása"
 
@@ -4167,9 +4138,6 @@ msgstr "Videó megosztása"
 msgid "Share my online status"
 msgstr "Láthatja a jelenléti állapotomat"
 
-msgid "Show"
-msgstr "Megjelenítés"
-
 msgid "Show Commands"
 msgstr "Parancsok megjelenítése"
 
@@ -4185,9 +4153,6 @@ msgstr "Részletes információ"
 msgid "Show Inactive Devices"
 msgstr "Inaktív eszközök megjelenítése"
 
-msgid "Show Invitation"
-msgstr "A meghívás részletei"
-
 msgid "Show Join/Leave"
 msgstr "Be- és kilépések jelzése"
 
@@ -4199,6 +4164,9 @@ msgstr "A saját képem megjelenítése"
 
 msgid "Show Notifications"
 msgstr "Értesítések megjelenítése"
+
+msgid "Show Plugins"
+msgstr "Bővítmények"
 
 msgid "Show Send Message Button"
 msgstr "Küldés gomb megjelenítése"
@@ -4423,9 +4391,6 @@ msgstr "Állapotüzenet: betűkészlet"
 msgid "Status Messages in Participants List"
 msgstr "Állapotüzenetek a résztvevők listájában"
 
-msgid "Status and status message for all accounts"
-msgstr "Jelenléti állapot és állapotüzenet az összes fiókhoz"
-
 msgid "Status is not shared"
 msgstr "A jelenléti állapot nincs megosztva"
 
@@ -4454,9 +4419,6 @@ msgstr "Jelenléti állapot: „elérhető” színe"
 msgid "Stop Sharing Online Status?"
 msgstr "Jelenléti állapot közlésének tiltása"
 
-msgid "Stopped sharing their status with you"
-msgstr "Már nem osztja meg a jelenléti állapotát"
-
 msgid "Street"
 msgstr "Utca"
 
@@ -4484,9 +4446,6 @@ msgstr "Feliratkozva"
 
 msgid "Subscription"
 msgstr "Feliratkozás"
-
-msgid "Subscription Request"
-msgstr "Feliratkozási kérelem"
 
 msgid "Subscription:"
 msgstr "Feliratkozás:"
@@ -5020,9 +4979,6 @@ msgstr "Frissítés"
 msgid "Update Avatar"
 msgstr "Profilkép cseréje"
 
-msgid "Update Check"
-msgstr "Frissítés keresése"
-
 msgid "Update automatically"
 msgstr "Automatikus frissítés"
 
@@ -5270,9 +5226,6 @@ msgstr "Én"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "%s néven beléptem a társalgóba"
-
-msgid "You Have Unread Messages"
-msgstr "Olvasatlan üzenetek"
 
 msgid "You are a visitor"
 msgstr "Szerepkör: vendég"
@@ -5954,6 +5907,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr " {actor} döntése alapján"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s a jelenléti állapot megosztására kér"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s társalgó található"
 
@@ -5964,10 +5921,6 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "%s több eszközön is elérhető.\n"
 #~ "Ki kell választani, hogy melyik eszköz legyen a fájlküldés célja."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s egy fájlt szeretne küldeni"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6315,6 +6268,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Connection not available"
 #~ msgstr "Nincs kapcsolat"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Ismerős leiratkozott"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Beszélgetés: hivatkozás színe"
 
@@ -6339,11 +6295,17 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Debug Console"
 #~ msgstr "Hibakereső"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "A meghívás elutasítása"
+
 #~ msgid "Delete Message"
 #~ msgstr "Üzenet törlése"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Törölhető a helyi üzenet?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Minden feliratkozási kérelem elutasítása"
 
 #~ msgid "Description: "
 #~ msgstr "Leírás: "
@@ -6353,6 +6315,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Közvetlen fájlátvitel (titkosítás nélkül)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Elutasítás"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Ne jelenjen meg újra"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6446,6 +6414,19 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "A fájl nem olvasható"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: soha)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: a frissítések keresése ki van kapcsolva"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Egy társalgóba szóló meghívó érkezett"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6503,6 +6484,13 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Üzenet helyesbítése: háttérszín"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Az üzenetek később már csak akkor olvashatók el, ha a beszélgetések "
+#~ "mentése be van kapcsolva és a másik fél szerepel a névjegyek között."
+
 #, python-format
 #~ msgid "Moderate %(count)s messages from %(participant)s?"
 #~ msgstr "%(participant)s %(count)s üzenetének moderálása?"
@@ -6519,6 +6507,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "No Connection Available"
 #~ msgstr "Nincs kapcsolat"
 
+#~ msgid "No Notifications"
+#~ msgstr "Nincs értesítés"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Kezdésre vár"
@@ -6531,6 +6522,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Open Path"
 #~ msgstr "Elérési út megnyitása"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Bővítmények megnyitása…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Szervezeti egység (OU)"
@@ -6553,6 +6547,12 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Dátumformátum: ÉÉÉÉ-HH-NN"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Bővítmények: nincsenek frissítések"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Bővítmények: a frissítések keresése ki van kapcsolva"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6580,6 +6580,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Remove Group..."
 #~ msgstr "Csoport törlése…"
 
+#~ msgid "Remove Notification"
+#~ msgstr "Értesítés törlése"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Közvetített kapcsolat törlése"
 
@@ -6591,8 +6594,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Egy ismerős törlése a névjegyek közül"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "Törlés a névjegyekből"
+
 #~ msgid "Remove…"
 #~ msgstr "Eltávolítás…"
+
+#~ msgid "Report"
+#~ msgstr "Jelentés"
 
 #~ msgid ""
 #~ "Requires: farstream-0.2, gstreamer-1.0, gst-plugins-base-1.0, gst-plugins-"
@@ -6647,6 +6656,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Sender: "
 #~ msgstr "Feladó: "
 
+#~ msgid "Show"
+#~ msgstr "Megjelenítés"
+
 #~ msgid "Show Gajim"
 #~ msgstr "A főablak megnyitása"
 
@@ -6676,6 +6688,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Hanghívás…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Jelenléti állapot és állapotüzenet az összes fiókhoz"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Állapot: "
@@ -6683,8 +6698,14 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Fájlátvitel leállítása"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Már nem osztja meg a jelenléti állapotát"
+
 #~ msgid "Submit"
 #~ msgstr "Alkalmaz"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Feliratkozási kérelem"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Váltás az első … kilencedik munkaterületre"
@@ -6741,6 +6762,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Unread Messages"
 #~ msgstr "Olvasatlan üzenetek"
 
+#~ msgid "Update Check"
+#~ msgstr "Frissítés keresése"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Fájlfeltöltés"
@@ -6768,6 +6792,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Mi az oka az üzenetek moderálásának?"
+
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Olvasatlan üzenetek"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Kilépés a programból"

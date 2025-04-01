@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-18 21:05+0000\n"
+"POT-Creation-Date: 2025-04-01 21:24+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -138,10 +138,6 @@ msgid "%s and %s are typing…"
 msgstr "%s și %s tastează…"
 
 #, python-format
-msgid "%s asks you to share your status"
-msgstr "%s vă cere să vă împărtășiți statutul"
-
-#, python-format
 msgid "%s can be joined by invite only."
 msgstr "%s se poate alătura doar pe bază de invitație."
 
@@ -208,6 +204,10 @@ msgstr "%s a încetat să-și mai împărtășească statutul"
 #, python-format
 msgid "%s stopped the transfer"
 msgstr "%s a oprit transferul"
+
+#, fuzzy, python-format
+msgid "%s wants to add you."
+msgstr "%s vrea să vă trimită un fișier"
 
 #, python-format
 msgctxt "positive longitude"
@@ -474,6 +474,14 @@ msgstr "Activat"
 
 msgid "Active"
 msgstr "Activ"
+
+#, fuzzy
+msgid "Activity"
+msgstr "Activați"
+
+#, fuzzy
+msgid "Activity Feed"
+msgstr "Activat"
 
 msgid "Add"
 msgstr "Adăugați"
@@ -1356,8 +1364,13 @@ msgstr "Lista de contacte: Font de grup"
 msgid "Contact List: Group Foreground Color"
 msgstr "Lista de contacte: Culoare prim-plan grup"
 
-msgid "Contact Unsubscribed"
-msgstr "Contact Dezabonat"
+#, fuzzy
+msgid "Contact Removed"
+msgstr "Cont eliminat"
+
+#, fuzzy
+msgid "Contact Request"
+msgstr "Lista de contacte"
 
 msgid "Contact information"
 msgstr "Informații de contact"
@@ -1506,9 +1519,6 @@ msgstr "Jurnalizare de depanare"
 msgid "Decline"
 msgstr "Declin"
 
-msgid "Decline Invitation"
-msgstr "Declinarea invitației"
-
 msgid "Decrease User Interface Font Size"
 msgstr "Reducerea Dimensiunii Fontului Interfeței Utilizatorului"
 
@@ -1574,8 +1584,9 @@ msgstr "Ștergeți tema"
 msgid "Deny"
 msgstr "Refuzați"
 
-msgid "Deny all subscription requests"
-msgstr "Refuzați toate cererile de abonament"
+#, fuzzy
+msgid "Deny all contact requests"
+msgstr "Acceptați toate cererile de contact"
 
 msgid "Description"
 msgstr "Descriere"
@@ -1664,9 +1675,6 @@ msgstr "Descoperă serviciile…"
 msgid "Discussion Logs"
 msgstr "Jurnalele de discuții"
 
-msgid "Dismiss"
-msgstr "Respingeți"
-
 #, python-format
 msgid "Do you accept this request (account: %s)?"
 msgstr "Acceptați această cerere (cont: %s)?"
@@ -1715,9 +1723,6 @@ msgstr "Doriți să vă dezînregistrați contul și pe <b>%s</b>?"
 
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "În acest fel, această amprentă digitală va fi ștearsă definitiv"
-
-msgid "Don’t show this again"
-msgstr "Nu mai aratați asta din nou"
 
 msgid "Download"
 msgstr "Descărcați"
@@ -2193,6 +2198,10 @@ msgstr "Gajim Teme"
 msgid "Gajim Update"
 msgstr "Actualizare Gajim"
 
+#, fuzzy
+msgid "Gajim Update Check"
+msgstr "Actualizare Gajim"
+
 msgid ""
 "Gajim aims to be an easy to use and fully-featured XMPP client. Just chat "
 "with your friends or family, easily share pictures and thoughts or discuss "
@@ -2229,17 +2238,6 @@ msgstr ""
 
 msgid "Gajim will now exit"
 msgstr "Gajim va ieși acum"
-
-#, python-format
-msgid "Gajim: No updates available (last check: %s)"
-msgstr "Gajim: Nu există actualizări disponibile (ultima verificare: %s)"
-
-msgid "Gajim: No updates available (last check: never)"
-msgstr ""
-"Gajim: Nu există actualizări disponibile (ultima verificare: niciodată)"
-
-msgid "Gajim: Update check disabled in preferences"
-msgstr "Gajim: Verificarea actualizărilor este dezactivată în preferințe"
 
 msgid "Gathering information…"
 msgstr "Culegerea de informații…"
@@ -2280,12 +2278,6 @@ msgstr "Detalii despre Grupul de chat"
 
 msgid "Group Chat Invitation"
 msgstr "Invitație la chat în grup"
-
-msgid "Group Chat Invitation Declined"
-msgstr "Invitație de grup pe chat refuzată"
-
-msgid "Group Chat Invitation Received"
-msgstr "Invitație de grup pe chat primită"
 
 msgid "Group Chat Language"
 msgstr "Limba de chat în grup"
@@ -2555,6 +2547,14 @@ msgstr "Adresă invalidă: %s"
 
 msgid "Invalid domain name"
 msgstr "Nume de domeniu invalid"
+
+#, fuzzy
+msgid "Invitation"
+msgstr "Invitație la spectacol"
+
+#, fuzzy
+msgid "Invitation Declined"
+msgstr "Invitație de grup pe chat refuzată"
 
 msgid "Invite"
 msgstr "Invitați"
@@ -2873,14 +2873,6 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Mesajele sunt arhivate pe server"
 
-msgid ""
-"Messages will only be available for reading them later if storing chat "
-"history is enabled and if the contact is in your contact list."
-msgstr ""
-"Mesajele vor fi disponibile pentru a fi citite mai târziu numai dacă este "
-"activată stocarea istoricului conversațiilor și dacă persoana de contact se "
-"află în lista dumneavoastră de contacte."
-
 msgid "Minimize"
 msgstr "Minimalizați"
 
@@ -3027,9 +3019,6 @@ msgstr "Nu este disponibil transferul de fișiere"
 #, fuzzy
 msgid "No Messages Found"
 msgstr "Nu s-au găsit rezultate"
-
-msgid "No Notifications"
-msgstr "Nu există notificări"
 
 msgctxt "Group chat feature"
 msgid "No Password Required"
@@ -3241,9 +3230,6 @@ msgstr "Deschideți link-ul în browser"
 
 msgid "Open Link in _Browser"
 msgstr "Deschide link-ul în _Browser"
-
-msgid "Open Plugins…"
-msgstr "Deschideți Plugin-uri…"
 
 msgid "Open _Folder"
 msgstr "Deschideți _Folder"
@@ -3500,7 +3486,8 @@ msgstr "Plugin eșuat"
 msgid "Plugin Settings"
 msgstr "Setări Plugin"
 
-msgid "Plugin Updates"
+#, fuzzy
+msgid "Plugin Update"
 msgstr "Actualizări Plugin"
 
 msgid "Plugin already exists"
@@ -3514,12 +3501,6 @@ msgstr "Plugin-uri"
 
 msgid "Plugins Updated Successfully"
 msgstr "Plugin-uri actualizate cu succes"
-
-msgid "Plugins: No updates available"
-msgstr "Plugin-uri: Nu există actualizări disponibile"
-
-msgid "Plugins: Update check disabled in preferences"
-msgstr "Plugin-uri: Verificarea actualizării este dezactivată în preferințe"
 
 msgid "Port"
 msgstr "Portul"
@@ -3762,6 +3743,10 @@ msgid "Remove Chat History?"
 msgstr "Eliminați istoricul conversațiilor?"
 
 #, fuzzy
+msgid "Remove Contact"
+msgstr "Eliminați contactul"
+
+#, fuzzy
 msgid "Remove Contacts?"
 msgstr "Eliminați contactul"
 
@@ -3783,9 +3768,6 @@ msgstr "Eliminați grupul"
 
 msgid "Remove History…"
 msgstr "Eliminați istoria…"
-
-msgid "Remove Notification"
-msgstr "Eliminarea notificării"
 
 msgid "Remove Proxy"
 msgstr "Eliminați Proxy"
@@ -3811,9 +3793,6 @@ msgstr "Eliminarea din lista de contacte"
 #, fuzzy
 msgid "Remove from Group"
 msgstr "Eliminați grupul"
-
-msgid "Remove from contact list"
-msgstr "Eliminarea din lista de contacte"
 
 msgid "Remove this workspace"
 msgstr "Eliminați acest spațiu de lucru"
@@ -3852,9 +3831,6 @@ msgstr "Reparații"
 
 msgid "Reply…"
 msgstr "Răspundeți…"
-
-msgid "Report"
-msgstr "Raport"
 
 #, fuzzy
 msgid "Request"
@@ -4131,6 +4107,9 @@ msgstr "Selectați Mesaje…"
 msgid "Select a security label for your message…"
 msgstr "Selectați o etichetă de securitate pentru mesajul dumneavoastră…"
 
+msgid "Select an activity to see details."
+msgstr ""
+
 msgid "Select an emoji"
 msgstr "Selectați un emoji"
 
@@ -4303,9 +4282,6 @@ msgstr "Distribuie Video"
 msgid "Share my online status"
 msgstr "Împărtășește statutul meu online"
 
-msgid "Show"
-msgstr "Afișați"
-
 msgid "Show Commands"
 msgstr "Afișați Comenzile"
 
@@ -4321,9 +4297,6 @@ msgstr "Afișați detaliile"
 msgid "Show Inactive Devices"
 msgstr "Afișarea Dispozitivelor Inactive"
 
-msgid "Show Invitation"
-msgstr "Invitație la spectacol"
-
 msgid "Show Join/Leave"
 msgstr "Afișați Join/Leave"
 
@@ -4335,6 +4308,10 @@ msgstr "Afișați fluxul meu video"
 
 msgid "Show Notifications"
 msgstr "Afișați notificările"
+
+#, fuzzy
+msgid "Show Plugins"
+msgstr "Plugin-uri"
 
 msgid "Show Send Message Button"
 msgstr "Afișați butonul Trimite mesaj"
@@ -4562,9 +4539,6 @@ msgstr "Mesaj de stare: Font de text"
 msgid "Status Messages in Participants List"
 msgstr "Mesaje de stare în lista participanților"
 
-msgid "Status and status message for all accounts"
-msgstr "Stare și mesaj de stare pentru toate conturile"
-
 #, fuzzy
 msgid "Status is not shared"
 msgstr "Mesaj de stare"
@@ -4596,9 +4570,6 @@ msgstr "Stare: Culoare online"
 msgid "Stop Sharing Online Status?"
 msgstr "Nu mai împărtășiți statutul online?"
 
-msgid "Stopped sharing their status with you"
-msgstr "Nu-și mai împărtășesc starea cu tine"
-
 msgid "Street"
 msgstr "Stradă"
 
@@ -4627,9 +4598,6 @@ msgstr "Abonat"
 #, fuzzy
 msgid "Subscription"
 msgstr "Abonament:"
-
-msgid "Subscription Request"
-msgstr "Cerere de abonament"
 
 #, fuzzy
 msgid "Subscription:"
@@ -5179,9 +5147,6 @@ msgstr "Actualizare"
 msgid "Update Avatar"
 msgstr "Actualizare Avatar"
 
-msgid "Update Check"
-msgstr "Verificarea actualizării"
-
 msgid "Update automatically"
 msgstr "Actualizare automată"
 
@@ -5434,10 +5399,6 @@ msgstr "Tu"
 #, python-format
 msgid "You (%s) joined the group chat"
 msgstr "V-ați alăturat (%s) grupului de chat"
-
-#, fuzzy
-msgid "You Have Unread Messages"
-msgstr "Aveți încă mesaje necitite"
 
 msgid "You are a visitor"
 msgstr "Sunteți vizitator"
@@ -6119,6 +6080,10 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr " de {actor}"
 
 #, python-format
+#~ msgid "%s asks you to share your status"
+#~ msgstr "%s vă cere să vă împărtășiți statutul"
+
+#, python-format
 #~ msgid "%s group chats found"
 #~ msgstr "%s grupuri de chat găsite"
 
@@ -6129,10 +6094,6 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "%s este online cu mai multe dispozitive.\n"
 #~ "Alegeți dispozitivul la care doriți să trimiteți fișierul."
-
-#, python-format
-#~ msgid "%s wants to send you a file"
-#~ msgstr "%s vrea să vă trimită un fișier"
 
 #, python-format
 #~ msgid "(%(filesize_unit)s/s)"
@@ -6472,6 +6433,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Connection not available"
 #~ msgstr "Conexiunea nu este disponibilă"
 
+#~ msgid "Contact Unsubscribed"
+#~ msgstr "Contact Dezabonat"
+
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversație: Culoare URL"
 
@@ -6496,11 +6460,17 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Debug Console"
 #~ msgstr "Consola Debug"
 
+#~ msgid "Decline Invitation"
+#~ msgstr "Declinarea invitației"
+
 #~ msgid "Delete Message"
 #~ msgstr "Ștergeți mesajul"
 
 #~ msgid "Delete message locally?"
 #~ msgstr "Ștergeți mesajul local?"
+
+#~ msgid "Deny all subscription requests"
+#~ msgstr "Refuzați toate cererile de abonament"
 
 #~ msgid "Description: "
 #~ msgstr "Descriere: "
@@ -6510,6 +6480,12 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Transfer direct (necriptat)"
+
+#~ msgid "Dismiss"
+#~ msgstr "Respingeți"
+
+#~ msgid "Don’t show this again"
+#~ msgstr "Nu mai aratați asta din nou"
 
 #~ msgctxt "Noun"
 #~ msgid "Download"
@@ -6595,6 +6571,20 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim nu poate citi acest fișier"
 
+#, python-format
+#~ msgid "Gajim: No updates available (last check: %s)"
+#~ msgstr "Gajim: Nu există actualizări disponibile (ultima verificare: %s)"
+
+#~ msgid "Gajim: No updates available (last check: never)"
+#~ msgstr ""
+#~ "Gajim: Nu există actualizări disponibile (ultima verificare: niciodată)"
+
+#~ msgid "Gajim: Update check disabled in preferences"
+#~ msgstr "Gajim: Verificarea actualizărilor este dezactivată în preferințe"
+
+#~ msgid "Group Chat Invitation Received"
+#~ msgstr "Invitație de grup pe chat primită"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
@@ -6653,6 +6643,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Corectarea mesajului: Culoarea de fundal"
 
+#~ msgid ""
+#~ "Messages will only be available for reading them later if storing chat "
+#~ "history is enabled and if the contact is in your contact list."
+#~ msgstr ""
+#~ "Mesajele vor fi disponibile pentru a fi citite mai târziu numai dacă este "
+#~ "activată stocarea istoricului conversațiilor și dacă persoana de contact "
+#~ "se află în lista dumneavoastră de contacte."
+
 #~ msgid "Moderate message?"
 #~ msgstr "Moderați mesajul?"
 
@@ -6666,6 +6664,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "No Connection Available"
 #~ msgstr "Nici o conexiune disponibilă"
 
+#~ msgid "No Notifications"
+#~ msgstr "Nu există notificări"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Nu a început"
@@ -6678,6 +6679,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Open Path"
 #~ msgstr "Deschideți"
+
+#~ msgid "Open Plugins…"
+#~ msgstr "Deschideți Plugin-uri…"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Unitatea organizațională (OU)"
@@ -6700,6 +6704,12 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Vă rugăm să folosiți aaaa-ll-zz"
+
+#~ msgid "Plugins: No updates available"
+#~ msgstr "Plugin-uri: Nu există actualizări disponibile"
+
+#~ msgid "Plugins: Update check disabled in preferences"
+#~ msgstr "Plugin-uri: Verificarea actualizării este dezactivată în preferințe"
 
 #~ msgid ""
 #~ "Preferred file transfer mechanism for file drag&drop on a chat window"
@@ -6729,6 +6739,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Remove Group..."
 #~ msgstr "Eliminați grupul..."
 
+#~ msgid "Remove Notification"
+#~ msgstr "Eliminarea notificării"
+
 #~ msgid "Remove Transport"
 #~ msgstr "Îndepărtarea transportului"
 
@@ -6740,8 +6753,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Remove contact from contact list"
 #~ msgstr "Eliminarea contactului din lista de contacte"
 
+#~ msgid "Remove from contact list"
+#~ msgstr "Eliminarea din lista de contacte"
+
 #~ msgid "Remove…"
 #~ msgstr "Eliminați…"
+
+#~ msgid "Report"
+#~ msgstr "Raport"
 
 #, fuzzy
 #~ msgid ""
@@ -6799,6 +6818,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Sender: "
 #~ msgstr "Expeditor: "
 
+#~ msgid "Show"
+#~ msgstr "Afișați"
+
 #~ msgid "Show Gajim"
 #~ msgstr "Afișați Gajim"
 
@@ -6831,6 +6853,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Start Voice Call…"
 #~ msgstr "Începeți apelul vocal…"
 
+#~ msgid "Status and status message for all accounts"
+#~ msgstr "Stare și mesaj de stare pentru toate conturile"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
 #~ msgstr "Stare: "
@@ -6838,8 +6863,14 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Stop File Transfers"
 #~ msgstr "Opriți transferurile de fișiere"
 
+#~ msgid "Stopped sharing their status with you"
+#~ msgstr "Nu-și mai împărtășesc starea cu tine"
+
 #~ msgid "Submit"
 #~ msgstr "Trimiteți"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Cerere de abonament"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Treceți la primul - al nouălea spațiu de lucru"
@@ -6896,6 +6927,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Unread Messages"
 #~ msgstr "Mesaje necitite"
 
+#~ msgid "Update Check"
+#~ msgstr "Verificarea actualizării"
+
 #~ msgctxt "Noun"
 #~ msgid "Upload"
 #~ msgstr "Încărcați"
@@ -6926,6 +6960,10 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "De ce doriți să moderați acest mesaj?"
+
+#, fuzzy
+#~ msgid "You Have Unread Messages"
+#~ msgstr "Aveți încă mesaje necitite"
 
 #~ msgid "You are about to quit Gajim"
 #~ msgstr "Ești pe cale să renunți la Gajim"
