@@ -2,7 +2,6 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
-from typing import Any
 from typing import TextIO
 
 import cProfile
@@ -215,7 +214,7 @@ class CoreApplication(ged.EventHelper):
         ps = ps.sort_stats(SortKey.TIME)
         ps.print_stats()
 
-    def start_shutdown(self, *args: Any, **kwargs: Any) -> None:
+    def start_shutdown(self) -> None:
         app.app.systray.shutdown()
 
         accounts_to_disconnect: dict[str, Client] = {}
@@ -237,9 +236,6 @@ class CoreApplication(ged.EventHelper):
         app.ged.register_event_handler('account-disconnected',
                                        ged.CORE,
                                        _on_disconnect)
-
-        for client in accounts_to_disconnect.values():
-            client.change_status('offline', kwargs.get('message', ''))
 
     def _shutdown_core(self) -> None:
         # Commit any outstanding SQL transactions

@@ -1326,36 +1326,4 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             app.settings.set("mainwin_height", window_height)
 
         app.settings.save()
-
-        def on_continue2(message: str | None) -> None:
-            app.app.start_shutdown(message=message)
-
-        def on_continue(message: str | None) -> None:
-            if message is None:
-                # user pressed Cancel to change status message dialog
-                return
-
-            # Check for unread messages
-            if self.get_total_unread_count():
-                ConfirmationDialog(
-                    _("You Have Unread Messages"),
-                    _(
-                        "Messages will only be available for reading them later "
-                        "if storing chat history is enabled and if the contact "
-                        "is in your contact list."
-                    ),
-                    [
-                        DialogButton.make("Cancel"),
-                        DialogButton.make(
-                            "Remove",
-                            text=_("_Quit"),
-                            callback=on_continue2,
-                            args=[message],
-                        ),
-                    ],
-                )
-                return
-
-            on_continue2(message)
-
-        on_continue("")
+        app.app.start_shutdown()
