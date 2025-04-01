@@ -45,7 +45,7 @@
                 <property name="focusable">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon_name">emblem-ok-symbolic</property>
+                    <property name="icon_name">feather-check-symbolic</property>
                   </object>
                 </child>
                 <style>

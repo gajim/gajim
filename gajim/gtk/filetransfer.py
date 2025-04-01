@@ -143,7 +143,7 @@
 #             'waiting': 'emblem-synchronizing-symbolic',
 #             'pause': 'media-playback-pause-symbolic',
 #             'continue': 'media-playback-start-symbolic',
-#             'ok': 'emblem-ok-symbolic',
+#             'ok': 'feather-check-symbolic',
 #             'computing': 'system-run-symbolic',
 #             'hash_error': 'network-error-symbolic',
 #         }

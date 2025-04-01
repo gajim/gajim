@@ -202,5 +202,5 @@ class FeatureItem(Gtk.Grid):
             self._box.append(self._label_disabled)
             self._icon.add_css_class("warning-color")
         else:
-            self._icon.set_from_icon_name("emblem-ok-symbolic")
+            self._icon.set_from_icon_name("feather-check-symbolic")
             self._icon.add_css_class("success-color")

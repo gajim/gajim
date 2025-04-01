@@ -380,7 +380,7 @@ class FeatureItem(Gtk.ListBoxRow):
         self._icon.remove_css_class("success-color")
 
         if self._feature.available:
-            self._icon.set_from_icon_name("emblem-ok-symbolic")
+            self._icon.set_from_icon_name("feather-check-symbolic")
             self._icon.add_css_class("success-color")
         else:
             self._icon.set_from_icon_name("window-close-symbolic")
