@@ -999,9 +999,7 @@ list.settings > row > box {
 
 /* Settings Window */
 list.settings-menu row {
-    border-bottom: 1px solid;
-    border-color: @theme_unfocused_bg_color;
-    padding: 14px;
+    padding: 6px;
     min-width: 170px;
 }
 list.settings-menu row label {
