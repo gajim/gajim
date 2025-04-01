@@ -140,7 +140,7 @@
 #             'upload': 'go-up-symbolic',
 #             'download': 'go-down-symbolic',
 #             'stop': 'process-stop-symbolic',
-#             'waiting': 'emblem-synchronizing-symbolic',
+#             'waiting': 'feather-refresh-cw-symbolic',
 #             'pause': 'media-playback-pause-symbolic',
 #             'continue': 'media-playback-start-symbolic',
 #             'ok': 'feather-check-symbolic',

@@ -147,7 +147,7 @@
             <property name="popover">share_popover</property>
             <child>
               <object class="GtkImage">
-                <property name="icon-name">emblem-shared-symbolic</property>
+                <property name="icon-name">feaher-share-2-symbolic</property>
               </object>
             </child>
           </object>
