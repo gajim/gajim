@@ -237,6 +237,9 @@ class CoreApplication(ged.EventHelper):
                                        ged.CORE,
                                        _on_disconnect)
 
+        for client in accounts_to_disconnect.values():
+            client.change_status('offline', '')
+
     def _shutdown_core(self) -> None:
         # Commit any outstanding SQL transactions
         app.process_pool.shutdown(cancel_futures=True)
