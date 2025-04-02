@@ -13,6 +13,7 @@ from typing import NamedTuple
 
 import sys
 
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -35,17 +36,20 @@ class Features(GajimAppWindow):
     def __init__(self) -> None:
         GajimAppWindow.__init__(self, name="Features", title=_("Features"))
 
-        grid = Gtk.Grid(name="FeaturesInfoGrid", row_spacing=10, width_request=400)
-
         self.feature_listbox = Gtk.ListBox(
-            hexpand=True, vexpand=True, selection_mode=Gtk.SelectionMode.NONE
+            selection_mode=Gtk.SelectionMode.NONE, hexpand=True
         )
+        self.feature_listbox.add_css_class("boxed-list")
 
-        grid.attach(self.feature_listbox, 0, 0, 1, 1)
+        preferences_group = Adw.PreferencesGroup(
+            title=_("Available Features"),
+            description=_("Check which features are available"),
+        )
+        preferences_group.add(self.feature_listbox)
 
-        box = Gtk.Box(spacing=18)
-        box.append(grid)
-        self.set_child(box)
+        clamp = Adw.Clamp()
+        clamp.set_child(preferences_group)
+        self.set_child(clamp)
 
         for feature in self._get_features():
             self._add_feature(feature)
@@ -147,44 +151,28 @@ class Features(GajimAppWindow):
         return idle.Monitor.is_available()
 
 
-class FeatureItem(Gtk.Grid):
+class FeatureItem(Adw.ActionRow):
     def __init__(self, feature: Feature) -> None:
-        Gtk.Grid.__init__(self)
-        self.set_column_spacing(12)
-
-        feature_label = Gtk.Label(label=feature.name)
-        feature_label.set_halign(Gtk.Align.START)
-        self._box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
-        self._box.append(feature_label)
-        self._box.set_tooltip_text(feature.tooltip)
-
-        feature_dependency = Gtk.Label(label=feature.dependency_u)
-        feature_dependency.add_css_class("dim-label")
-
-        if sys.platform == "win32":
-            feature_dependency.set_label(feature.dependency_w)
-        else:
-            feature_dependency.set_label(feature.dependency_u)
-
-        if not feature.available:
-            feature_dependency.set_halign(Gtk.Align.START)
-            feature_dependency.set_xalign(0.0)
-            feature_dependency.set_yalign(0.0)
-            feature_dependency.set_wrap(True)
-            feature_dependency.set_max_width_chars(50)
-            feature_dependency.set_selectable(True)
-            self._box.append(feature_dependency)
+        Adw.ActionRow.__init__(
+            self,
+            title=feature.name,
+            tooltip_text=feature.tooltip,
+            subtitle_selectable=True,
+        )
 
         self._icon = Gtk.Image()
-        self._label_disabled = Gtk.Label(label=_("Disabled in Preferences"))
-        self._label_disabled.add_css_class("dim-label")
+        self.add_prefix(self._icon)
+
+        if not feature.available:
+            if sys.platform == "win32":
+                self.set_subtitle(feature.dependency_w)
+            else:
+                self.set_subtitle(feature.dependency_u)
+
         self._set_feature(feature.available, feature.enabled)
 
-        self.attach(self._icon, 0, 0, 1, 1)
-        self.attach(self._box, 1, 0, 1, 1)
-
     def do_unroot(self) -> None:
-        Gtk.Grid.do_unroot(self)
+        Adw.ActionRow.do_unroot(self)
         app.check_finalize(self)
 
     def _set_feature(self, available: bool, enabled: bool | None) -> None:
@@ -199,8 +187,8 @@ class FeatureItem(Gtk.Grid):
 
         if enabled is not None and not enabled:
             self._icon.set_from_icon_name("dialog-warning-symbolic")
-            self._box.append(self._label_disabled)
             self._icon.add_css_class("warning-color")
+            self.set_subtitle(_("Disabled in Preferences"))
         else:
             self._icon.set_from_icon_name("feather-check-symbolic")
             self._icon.add_css_class("success-color")

@@ -1124,14 +1124,6 @@ popover.combo scrollbar.vertical {
 #ServerInfo #Features > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
 #ServerInfo #Features > row.activatable:active { box-shadow: none; }
 
-/* Features */
-#FeaturesInfoGrid { padding: 6px; }
-#FeaturesInfoGrid > list { border: 1px solid; border-color: @borders; }
-#FeaturesInfoGrid > list > row:first-child { border-top: 1px solid; border-color: @borders; }
-#FeaturesInfoGrid > list > row { padding: 10px 20px 10px 10px; }
-#FeaturesInfoGrid > list > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
-#FeaturesInfoGrid > list > row.activatable:active { box-shadow: none; }
-
 /* AccountsWindow */
 .accounts-menu {
     border-right: 1px solid @borders;
