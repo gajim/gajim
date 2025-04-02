@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -25,9 +24,9 @@ class EmojiChooser(Gtk.EmojiChooser):
 
     def _on_closed(self, _popover: Gtk.EmojiChooser) -> None:
         def _cleanup() -> None:
-            parent = cast(Gtk.MenuButton, self.get_parent())
-            parent.set_popover(None)
             self.disconnect_by_func(self._emoji_picked_func)
             self._emoji_picked_func = None
 
+        # We don't want to assume the 'emoji-picked' signal
+        # is raised before 'closed'
         GLib.idle_add(_cleanup)
