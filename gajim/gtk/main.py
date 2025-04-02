@@ -176,6 +176,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def get_emoji_chooser(self) -> EmojiChooser:
         if self._emoji_chooser is None:
             self._emoji_chooser = EmojiChooser()
+
+        parent = cast(Gtk.MenuButton | None, self._emoji_chooser.get_parent())
+        if parent is not None:
+            parent.set_popover(None)
+
         return self._emoji_chooser
 
     def show(self) -> None:
