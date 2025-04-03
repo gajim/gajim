@@ -17,9 +17,11 @@
   </object>
   <object class="GtkBox" id="plugins_box">
     <property name="spacing">18</property>
+    <property name="valign">start</property>
     <child>
       <object class="GtkBox">
         <property name="width-request">200</property>
+        <property name="height-request">400</property>
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkScrolledWindow">
@@ -31,7 +33,6 @@
                 <property name="focusable">1</property>
                 <property name="model">liststore</property>
                 <property name="search-column">1</property>
-                <property name="enable-grid-lines">horizontal</property>
                 <child internal-child="selection">
                   <object class="GtkTreeSelection" id="treeview_selection">
                   </object>
@@ -138,36 +139,27 @@
         </child>
         <child>
           <object class="GtkBox" id="toolbar">
-            <property name="css-classes">toolbar</property>
-            <property name="can-focus">0</property>
             <child>
               <object class="GtkButton" id="download_button">
-                <property name="can-focus">0</property>
                 <property name="halign">end</property>
-                <property name="use-underline">1</property>
                 <property name="icon-name">folder-download-symbolic</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="uninstall_plugin_button">
-                <property name="can-focus">0</property>
                 <property name="tooltip-text" translatable="yes">Uninstall Plugin</property>
-                <property name="use-underline">1</property>
                 <property name="icon-name">edit-delete-symbolic</property>
               </object>
             </child>
             <child>
               <object class="GtkButton" id="help_button">
-                <property name="can-focus">0</property>
                 <property name="tooltip-text" translatable="yes">Click to view Gajim&apos;s wiki page on how to install plugins in Flatpak.</property>
-                <property name="label" translatable="yes">help</property>
-                <property name="use-underline">1</property>
                 <property name="visible">0</property>
                 <property name="icon-name">help-about-symbolic</property>
               </object>
             </child>
             <style>
-              <class name="inline-toolbar"/>
+              <class name="toolbar"/>
             </style>
           </object>
         </child>
