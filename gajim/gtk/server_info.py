@@ -9,6 +9,7 @@ from typing import NamedTuple
 import logging
 from datetime import timedelta
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -62,7 +63,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
             self._units = GLib.FormatSizeFlags.DEFAULT
 
         self._ui = get_builder("server_info.ui")
-        self.set_child(self._ui.server_info_notebook)
+        self.set_child(self._ui.box)
 
         self._connect(
             self._ui.clipboard_button, "clicked", self._on_clipboard_button_clicked
@@ -76,7 +77,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
         self._version = ""
         self._hostname = app.get_hostname_from_account(account, prefer_custom=True)
-        self._ui.server_hostname.set_text(self._hostname)
+        self._ui.server_hostname_row.set_subtitle(self._hostname)
 
         domain = self._client.get_own_jid().domain
         self._client.get_module("SoftwareVersion").request_software_version(
@@ -96,8 +97,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
             self._ui.no_certificate_label.set_visible(True)
         else:
             cert_box = CertificateBox(account, self._client.certificate)
-            self._ui.cert_scrolled.set_child(cert_box)
-            self._ui.cert_scrolled.set_visible(True)
+            self._ui.cert_box.append(cert_box)
 
         for feature in self._get_features():
             self._add_feature(feature)
@@ -111,38 +111,37 @@ class ServerInfo(GajimAppWindow, EventHelper):
         address = nbxmpp_client.current_address
 
         assert address is not None
-        self._ui.connection_type.set_text(address.type.value)
+        self._ui.domain_row.set_subtitle(address.domain)
+
+        visible = address.service is not None
+        self._ui.dns_row.set_visible(visible)
+        self._ui.dns_row.set_subtitle(address.service or "")
+
+        visible = nbxmpp_client.remote_address is not None
+        self._ui.ip_port_row.set_visible(visible)
+        self._ui.ip_port_row.set_subtitle(nbxmpp_client.remote_address or "")
+
+        visible = address.uri is not None
+        self._ui.websocket_row.set_visible(visible)
+        self._ui.websocket_row.set_subtitle(address.uri or "")
+
+        self._ui.connection_type_row.set_subtitle(address.type.value)
         if address.type.is_plain:
-            self._ui.connection_type.add_css_class("error-color")
+            self._ui.connection_type_row.add_css_class("error-color")
+
+        assert nbxmpp_client is not None
+        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
+        self._ui.tls_version_row.set_subtitle(tls_version or _("Not available"))
+
+        self._ui.cipher_suite_row.set_subtitle(
+            nbxmpp_client.ciphersuite or _("Not available")
+        )
 
         # Connection proxy
         proxy = address.proxy
         if proxy is not None:
-            self._ui.proxy_type.set_text(proxy.type)
-            self._ui.proxy_host.set_text(proxy.host)
-
-        self._ui.domain.set_text(address.domain)
-
-        visible = address.service is not None
-        self._ui.dns_label.set_visible(visible)
-        self._ui.dns.set_visible(visible)
-        self._ui.dns.set_text(address.service or "")
-
-        visible = nbxmpp_client.remote_address is not None
-        self._ui.ip_port_label.set_visible(visible)
-        self._ui.ip_port.set_visible(visible)
-        self._ui.ip_port.set_text(nbxmpp_client.remote_address or "")
-
-        visible = address.uri is not None
-        self._ui.websocket_label.set_visible(visible)
-        self._ui.websocket.set_visible(visible)
-        self._ui.websocket.set_text(address.uri or "")
-
-        assert nbxmpp_client is not None
-        tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
-        self._ui.tls_version.set_text(tls_version or _("Not available"))
-
-        self._ui.cipher_suite.set_text(nbxmpp_client.ciphersuite or _("Not available"))
+            self._ui.proxy_type_row.set_subtitle(proxy.type)
+            self._ui.proxy_host_row.set_subtitle(proxy.host or "-")
 
     def _add_contact_addresses(self, dataforms: list[DataForm]) -> None:
         fields = {
@@ -157,18 +156,23 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
         addresses = self._get_addresses(fields, dataforms)
         if addresses is None:
-            self._ui.no_addresses_label.set_visible(True)
             return
 
-        row_count = 4
         for address_type, values in addresses.items():
-            label = self._get_address_type_label(fields[address_type])
-            self._ui.server.attach(label, 0, row_count, 1, 1)
-            for index, value in enumerate(values):
-                last = index == len(values) - 1
-                label = self._get_address_label(value, last=last)
-                self._ui.server.attach(label, 1, row_count, 1, 1)
-                row_count += 1
+            contact_address_row = Adw.ActionRow(title=fields[address_type])
+            contact_address_row.add_css_class("property")
+
+            addresses_box = Gtk.Box(
+                orientation=Gtk.Orientation.VERTICAL, valign=Gtk.Align.CENTER, spacing=2
+            )
+            addresses_box.add_css_class("p-6")
+            for value in values:
+                label = self._get_address_label(value)
+                addresses_box.append(label)
+
+            contact_address_row.add_suffix(addresses_box)
+
+            self._ui.contact_addresses_listbox.append(contact_address_row)
 
     @staticmethod
     def _get_addresses(
@@ -195,24 +199,15 @@ class ServerInfo(GajimAppWindow, EventHelper):
             return addresses or None
         return None
 
-    @staticmethod
-    def _get_address_type_label(text: str) -> Gtk.Label:
-        label = Gtk.Label(label=text)
-        label.set_halign(Gtk.Align.END)
-        label.set_valign(Gtk.Align.START)
-        label.add_css_class("dim-label")
-        return label
-
-    def _get_address_label(self, address: str, last: bool = False) -> Gtk.Label:
+    def _get_address_label(self, address: str) -> Gtk.Label:
         label = Gtk.Label()
         label.set_markup(f'<a href="{address}">{address}</a>')
         label.set_ellipsize(Pango.EllipsizeMode.END)
-        label.set_xalign(0)
-        label.set_halign(Gtk.Align.START)
+        label.set_xalign(1)
+        label.set_halign(Gtk.Align.END)
         label.add_css_class("link-button")
+        label.add_css_class("small-label")
         self._connect(label, "activate-link", self._on_activate_link)
-        if last:
-            label.set_margin_bottom(6)
         return label
 
     def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
@@ -234,7 +229,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
             "days": delta.days,
             "hours": hours,
         }
-        self._ui.server_uptime.set_text(uptime)
+        self._ui.server_uptime_row.set_subtitle(uptime)
 
     def _software_version_received(self, task: Task) -> None:
         try:
@@ -244,7 +239,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         else:
             self._version = f"{result.name} {result.version}"
 
-        self._ui.server_software.set_text(self._version)
+        self._ui.server_software_row.set_subtitle(self._version)
 
     def _server_disco_received(self, _event: ServerDiscoReceived) -> None:
         features = self._get_features()
@@ -348,33 +343,18 @@ class ServerInfo(GajimAppWindow, EventHelper):
         self.window.get_clipboard().set(server_software + server_features)
 
 
-class FeatureItem(Gtk.ListBoxRow):
+class FeatureItem(Adw.ActionRow):
     def __init__(self, feature: Feature) -> None:
-        Gtk.ListBoxRow.__init__(self)
+        Adw.ActionRow.__init__(self)
         self._feature = feature
 
-        grid = Gtk.Grid(row_spacing=3, column_spacing=12)
-
         self._icon = Gtk.Image()
-        self._feature_label = Gtk.Label()
-        self._feature_label.set_halign(Gtk.Align.START)
-        self._additional_label = Gtk.Label()
-        self._additional_label.set_halign(Gtk.Align.START)
-        self._additional_label.set_visible(False)
-        self._additional_label.add_css_class("dim-label")
+        self.add_prefix(self._icon)
+        self._update()
 
-        grid.attach(self._icon, 0, 0, 1, 1)
-        grid.attach(self._feature_label, 1, 0, 1, 1)
-        grid.attach(self._additional_label, 1, 1, 1, 1)
-
-        self._set_feature()
-        self.set_child(grid)
-
-    def _set_feature(self) -> None:
-        self._feature_label.set_text(self._feature.name)
-        if self._feature.additional is not None:
-            self._additional_label.set_text(self._feature.additional)
-            self._additional_label.set_visible(True)
+    def _update(self) -> None:
+        self.set_title(self._feature.name)
+        self.set_subtitle(self._feature.additional or "")
 
         self._icon.remove_css_class("error-color")
         self._icon.remove_css_class("success-color")
@@ -388,4 +368,4 @@ class FeatureItem(Gtk.ListBoxRow):
 
     def update(self, feature: Feature) -> None:
         self._feature = feature
-        self._set_feature()
+        self._update()
