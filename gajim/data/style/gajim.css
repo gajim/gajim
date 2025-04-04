@@ -1114,16 +1114,6 @@ popover.combo scrollbar.vertical {
 #HistorySyncAssistant list > row.activatable:selected > label { color: @theme_selected_fg_color; }
 #FinishedLabel { font-size: 1.2rem; font-weight: bold; }
 
-/* ServerInfo */
-#ServerInfo notebook { border: none; }
-#ServerInfo notebook > stack { padding: 18px; }
-#ServerInfo > box { padding: 0px; }
-#ServerInfo #Features { border: 1px solid; border-color: @borders; }
-#ServerInfo #Features > row:first-child { border-top: 1px solid; border-color: @borders; }
-#ServerInfo #Features > row { padding: 10px 20px 10px 10px; }
-#ServerInfo #Features > label { padding:10px; color: @insensitive_fg_color; font-weight: bold; }
-#ServerInfo #Features > row.activatable:active { box-shadow: none; }
-
 /* AccountsWindow */
 .accounts-menu {
     border-right: 1px solid @borders;

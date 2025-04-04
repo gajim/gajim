@@ -41,6 +41,8 @@ class CertificateDialog(GajimAppWindow):
             self,
             name="CertificateDialog",
             title=_("Certificate"),
+            default_width=600,
+            default_height=800,
             transient_for=transient_for,
         )
 
@@ -58,15 +60,18 @@ class CertificateBox(Gtk.Box, SignalManager):
         SignalManager.__init__(self)
 
         self._ui = get_builder("certificate.ui")
-        self._headline = _("Certificate for \n%s") % account
-        self.set_size_request(500, -1)
+        self.append(self._ui.certificate_scrolled)
+        self._connect(
+            self._ui.clipboard_button, "clicked", self._on_copy_button_clicked
+        )
 
-        self._connect(self._ui.copy_button, "clicked", self._on_copy_button_clicked)
+        self._account_label = app.settings.get_account_setting(account, "account_label")
+        self._account_address = app.settings.get_account_setting(account, "address")
 
         cert = get_x509_cert_from_gio_cert(certificate)
 
-        self._it_common_name = ""
-        self._it_organization = ""
+        self._it_common_name = "-"
+        self._it_organization = "-"
         for attribute in cert.subject:
             # See https://datatracker.ietf.org/doc/html/rfc4514.html
             dotted_string = attribute.oid.dotted_string
@@ -88,13 +93,13 @@ class CertificateBox(Gtk.Box, SignalManager):
             self._it_subject_alt_names = "\n".join(alt_names)
         except ExtensionNotFound as err:
             log.info("Certificate does not have extension: %s", err)
-            self._it_subject_alt_names = ""
+            self._it_subject_alt_names = "-"
 
         serial_bytes = format_bytes_as_hex(int_to_bytes(cert.serial_number), 2)
         self._it_serial_number = serial_bytes
 
-        self._ib_common_name = ""
-        self._ib_organization = ""
+        self._ib_common_name = "-"
+        self._ib_organization = "-"
         for attribute in cert.issuer:
             # See https://datatracker.ietf.org/doc/html/rfc4514.html
             dotted_string = attribute.oid.dotted_string
@@ -117,7 +122,7 @@ class CertificateBox(Gtk.Box, SignalManager):
         self._sha256 = format_bytes_as_hex(sha256_bytes, 4)
 
         public_key = cert.public_key()
-        self._pk_algorithm = ""
+        self._pk_algorithm = "-"
         if isinstance(public_key, RSAPublicKey):
             self._pk_algorithm = "RSA"
         elif isinstance(public_key, DSAPublicKey):
@@ -133,22 +138,27 @@ class CertificateBox(Gtk.Box, SignalManager):
         if isinstance(public_key, RSAPublicKey | DSAPublicKey | EllipticCurvePublicKey):
             self._pk_size = f"{public_key.key_size} Bit"
 
-        self._ui.public_key_algorithm.set_text(self._pk_algorithm)
-        self._ui.public_key_size.set_text(self._pk_size)
+        self._ui.account_label_row.set_subtitle(self._account_label)
+        self._ui.account_address_row.set_subtitle(self._account_address)
 
-        self._ui.label_cert_for_account.set_text(self._headline)
-        self._ui.data_it_common_name.set_text(self._it_common_name)
-        self._ui.data_it_organization.set_text(self._it_organization)
-        self._ui.data_it_subject_alt_names.set_text(self._it_subject_alt_names)
-        self._ui.data_it_serial_number.set_text(self._it_serial_number)
-        self._ui.data_ib_common_name.set_text(self._ib_common_name)
-        self._ui.data_ib_organization.set_text(self._ib_organization)
-        self._ui.data_issued_on.set_text(self._issued)
-        self._ui.data_expires_on.set_text(self._expires)
-        self._ui.data_sha1.set_text(self._sha1)
-        self._ui.data_sha256.set_text(self._sha256)
+        self._ui.issued_to_common_name_row.set_subtitle(self._it_common_name)
+        self._ui.issued_to_organization_row.set_subtitle(self._it_organization)
+        self._ui.issued_to_subject_alt_names_row.set_subtitle(
+            self._it_subject_alt_names
+        )
+        self._ui.issued_to_serial_number_row.set_subtitle(self._it_serial_number)
 
-        self.append(self._ui.certificate_box)
+        self._ui.issued_by_common_name_row.set_subtitle(self._ib_common_name)
+        self._ui.issued_by_organization_row.set_subtitle(self._ib_organization)
+
+        self._ui.issue_date_row.set_subtitle(self._issued)
+        self._ui.expiry_date_row.set_subtitle(self._expires)
+
+        self._ui.fingerprint_sha1_row.set_subtitle(self._sha1)
+        self._ui.fingerprint_sha256_row.set_subtitle(self._sha256)
+
+        self._ui.algorithm_row.set_subtitle(self._pk_algorithm)
+        self._ui.key_size_row.set_subtitle(self._pk_size)
 
     def do_unroot(self) -> None:
         self._disconnect_all()
@@ -157,8 +167,14 @@ class CertificateBox(Gtk.Box, SignalManager):
 
     def _on_copy_button_clicked(self, _widget: Gtk.Button) -> None:
         clipboard_text = (
-            self._headline
-            + "\n\n"
+            _("Certificate")
+            + "\n"
+            + _("Account name: ")
+            + self._account_label
+            + "\n"
+            + _("Account address: ")
+            + self._account_address
+            + "\n"
             + _("Issued to\n")
             + _("Common Name (CN): ")
             + self._it_common_name

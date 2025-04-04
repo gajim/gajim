@@ -186,22 +186,22 @@ class CallWindowBuilder(Builder):
     dtmf_button: Gtk.MenuButton
 
 class CertificateBuilder(Builder):
-    certificate_box: Gtk.Box
-    label_cert_for_account: Gtk.Label
-    data_it_common_name: Gtk.Label
-    data_it_organization: Gtk.Label
-    data_it_subject_alt_names: Gtk.Label
-    data_it_serial_number: Gtk.Label
-    data_ib_common_name: Gtk.Label
-    data_ib_organization: Gtk.Label
-    data_issued_on: Gtk.Label
-    data_expires_on: Gtk.Label
-    data_sha1: Gtk.Label
-    data_sha256: Gtk.Label
-    copy_button: Gtk.Button
-    image1: Gtk.Image
-    public_key_algorithm: Gtk.Label
-    public_key_size: Gtk.Label
+    certificate_scrolled: Gtk.ScrolledWindow
+    clipboard_button: Gtk.Button
+    account_label_row: Adw.ActionRow
+    account_address_row: Adw.ActionRow
+    issued_to_common_name_row: Adw.ActionRow
+    issued_to_organization_row: Adw.ActionRow
+    issued_to_subject_alt_names_row: Adw.ActionRow
+    issued_to_serial_number_row: Adw.ActionRow
+    issued_by_common_name_row: Adw.ActionRow
+    issued_by_organization_row: Adw.ActionRow
+    issue_date_row: Adw.ActionRow
+    expiry_date_row: Adw.ActionRow
+    fingerprint_sha1_row: Adw.ActionRow
+    fingerprint_sha256_row: Adw.ActionRow
+    algorithm_row: Adw.ActionRow
+    key_size_row: Adw.ActionRow
 
 class ChatBannerBuilder(Builder):
     share_popover: Gtk.Popover
@@ -875,30 +875,26 @@ class SearchViewBuilder(Builder):
     row_name_label: Gtk.Label
 
 class ServerInfoBuilder(Builder):
-    server_info_notebook: Gtk.Notebook
-    server: Gtk.Grid
-    server_hostname: Gtk.Label
-    server_software: Gtk.Label
-    server_uptime: Gtk.Label
-    no_addresses_label: Gtk.Label
-    connection_type: Gtk.Label
-    proxy_type: Gtk.Label
-    proxy_host: Gtk.Label
-    domain_label: Gtk.Label
-    dns_label: Gtk.Label
-    ip_port_label: Gtk.Label
-    websocket_label: Gtk.Label
-    domain: Gtk.Label
-    dns: Gtk.Label
-    ip_port: Gtk.Label
-    websocket: Gtk.Label
-    tls_version: Gtk.Label
-    cipher_suite: Gtk.Label
-    cert_scrolled: Gtk.ScrolledWindow
+    box: Gtk.Box
+    server_info_stack: Adw.ViewStack
+    server_hostname_row: Adw.ActionRow
+    server_software_row: Adw.ActionRow
+    server_uptime_row: Adw.ActionRow
+    contact_addresses_listbox: Gtk.ListBox
+    domain_row: Adw.ActionRow
+    dns_row: Adw.ActionRow
+    ip_port_row: Adw.ActionRow
+    websocket_row: Adw.ActionRow
+    connection_type_row: Adw.ActionRow
+    tls_version_row: Adw.ActionRow
+    cipher_suite_row: Adw.ActionRow
+    proxy_type_row: Adw.ActionRow
+    proxy_host_row: Adw.ActionRow
+    cert_box: Gtk.Box
     no_certificate_label: Gtk.Label
-    features: Gtk.Box
-    features_listbox: Gtk.ListBox
+    features_group: Adw.PreferencesGroup
     clipboard_button: Gtk.Button
+    features_listbox: Gtk.ListBox
 
 class ServiceDiscoveryWindowBuilder(Builder):
     service_discovery: Gtk.Box
