@@ -15,7 +15,7 @@
         <property name="spacing">12</property>
         <child>
           <object class="GtkImage">
-            <property name="icon-name">application-certificate-symbolic</property>
+            <property name="icon-name">feather-lock-symbolic</property>
             <property name="pixel-size">64</property>
           </object>
         </child>
