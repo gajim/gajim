@@ -4,6 +4,8 @@
 
 from gi.repository import Gio
 
+from gajim.common import app
+
 from gajim.gtk.certificate_dialog import CertificateDialog
 
 from . import util
@@ -45,6 +47,9 @@ ejsJoYkpvcaiaLAyVymTY/n/oM2oQpv5Mqjit+18RB9c2P+ifH5iDKC/jTKn4NNz
 gio_cert = Gio.TlsCertificate.new_from_pem(cert, -1)
 
 util.init_settings()
+app.settings.add_account("testacc")
+app.settings.set_account_setting("testacc", "account_label", "Main Account")
+app.settings.set_account_setting("testacc", "address", "test@example.org")
 
 window = CertificateDialog(None, "testacc", gio_cert)
 window.show()
