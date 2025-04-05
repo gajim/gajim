@@ -187,21 +187,21 @@ class CallWindowBuilder(Builder):
 
 class CertificateBuilder(Builder):
     certificate_box: Gtk.Box
-    label_cert_for_account: Gtk.Label
-    data_it_common_name: Gtk.Label
-    data_it_organization: Gtk.Label
-    data_it_subject_alt_names: Gtk.Label
-    data_it_serial_number: Gtk.Label
-    data_ib_common_name: Gtk.Label
-    data_ib_organization: Gtk.Label
-    data_issued_on: Gtk.Label
-    data_expires_on: Gtk.Label
-    data_sha1: Gtk.Label
-    data_sha256: Gtk.Label
-    copy_button: Gtk.Button
-    image1: Gtk.Image
-    public_key_algorithm: Gtk.Label
-    public_key_size: Gtk.Label
+    clipboard_button: Gtk.Button
+    account_label_row: Adw.ActionRow
+    account_address_row: Adw.ActionRow
+    issued_to_common_name_row: Adw.ActionRow
+    issued_to_organization_row: Adw.ActionRow
+    issued_to_subject_alt_names_row: Adw.ActionRow
+    issued_to_serial_number_row: Adw.ActionRow
+    issued_by_common_name_row: Adw.ActionRow
+    issued_by_organization_row: Adw.ActionRow
+    issue_date_row: Adw.ActionRow
+    expiry_date_row: Adw.ActionRow
+    fingerprint_sha1_row: Adw.ActionRow
+    fingerprint_sha256_row: Adw.ActionRow
+    algorithm_row: Adw.ActionRow
+    key_size_row: Adw.ActionRow
 
 class ChatBannerBuilder(Builder):
     share_popover: Gtk.Popover
@@ -868,7 +868,6 @@ class ServerInfoBuilder(Builder):
     server_hostname_row: Adw.ActionRow
     server_software_row: Adw.ActionRow
     server_uptime_row: Adw.ActionRow
-    features_group: Adw.PreferencesGroup
     contact_addresses_listbox: Gtk.ListBox
     domain_row: Adw.ActionRow
     dns_row: Adw.ActionRow
