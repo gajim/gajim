@@ -286,7 +286,7 @@ class ContactInfoBuilder(Builder):
     to_subscription_stack: Gtk.Stack
     request_stack: Gtk.Stack
     to_subscription_button: Gtk.Button
-    contact_settings_box: Gtk.Box
+    contact_settings_box: Adw.PreferencesGroup
     remove_history_button: Gtk.Button
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Gtk.Box

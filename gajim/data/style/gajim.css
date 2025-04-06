@@ -1044,6 +1044,7 @@ popover.combo scrollbar.vertical {
     padding: 9px 9px;
 }
 #ContactNameEntry:disabled {
+    filter: none;
     border: none;
     background-color: transparent;
     padding: 0px 0px 0px 0px;
