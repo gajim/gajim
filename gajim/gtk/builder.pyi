@@ -725,31 +725,6 @@ class PluginsBuilder(Builder):
     plugin_authors_label: Gtk.Label
     plugin_homepage_linkbutton: Gtk.Label
 
-class PreferencesBuilder(Builder):
-    grid: Gtk.Grid
-    stack: Gtk.Stack
-    window_behaviour: Gtk.Grid
-    plugins: Gtk.Grid
-    general: Gtk.Grid
-    chats: Gtk.Grid
-    group_chats: Gtk.Grid
-    file_preview: Gtk.Grid
-    visual_notifications: Gtk.Grid
-    sounds: Gtk.Grid
-    status_message: Gtk.Grid
-    automatic_status: Gtk.Grid
-    themes: Gtk.Grid
-    av_info_bar: Gtk.Revealer
-    av_info_bar_label: Gtk.Label
-    server: Gtk.Grid
-    audio: Gtk.Grid
-    video: Gtk.Grid
-    miscellaneous: Gtk.Grid
-    reset_button: Gtk.Button
-    purge_history_button: Gtk.Button
-    advanced: Gtk.Grid
-    ace_button: Gtk.Button
-
 class PreviewBuilder(Builder):
     preview_stack: Gtk.Stack
     preview_box: Gtk.Box
@@ -1267,10 +1242,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["plugins.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> PluginsBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["preferences.ui"], instance: Any = None, widgets: list[str] = ...
-) -> PreferencesBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["preview.ui"], instance: Any = None, widgets: list[str] = ...

@@ -9,7 +9,9 @@ from typing import cast
 
 import logging
 import sys
+from dataclasses import dataclass
 
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -23,11 +25,11 @@ from gajim.common.setting_values import BoolSettings
 
 # from gajim.common.util.av import AudioOutputManager
 from gajim.common.util.av import AudioInputManager
-from gajim.common.util.av import VideoInputManager
+
+# from gajim.common.util.av import VideoInputManager
 from gajim.common.util.uri import open_directory
 from gajim.common.util.version import package_version
 
-from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
@@ -40,10 +42,35 @@ from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
-from gajim.gtk.video_preview import VideoPreview
+
+# from gajim.gtk.video_preview import VideoPreview
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.preferences")
+
+
+@dataclass
+class PreferencesPageData:
+    name: str
+    title: str
+    icon_name: str
+    groups: list[PreferencesGroupData]
+    banner: PreferencesPageBannerData | None = None
+
+
+@dataclass
+class PreferencesPageBannerData:
+    revealed: bool
+    title: str
+    button_label: str | None
+    action_name: str | None
+
+
+@dataclass
+class PreferencesGroupData:
+    name: str
+    title: str
+    widget: Any
 
 
 class Preferences(GajimAppWindow):
@@ -57,74 +84,188 @@ class Preferences(GajimAppWindow):
             add_window_padding=False,
         )
 
-        self._ui = get_builder("preferences.ui")
-
-        self._video_preview: VideoPreview | None = None
+        # self._video_preview: VideoPreview | None = None
         self._prefs: dict[str, PreferenceBox] = {}
 
-        side_bar_switcher = SideBarSwitcher()
-        side_bar_switcher.set_stack(self._ui.stack)
-        self._ui.grid.attach(side_bar_switcher, 0, 0, 1, 1)
-
-        self.set_child(self._ui.grid)
-
-        prefs: list[tuple[str, type[PreferenceBox]]] = [
-            ("window_behaviour", WindowBehaviour),
-            ("plugins", Plugins),
-            ("general", General),
-            ("chats", Chats),
-            ("group_chats", GroupChats),
-            ("file_preview", FilePreview),
-            ("visual_notifications", VisualNotifications),
-            ("sounds", Sounds),
-            ("status_message", StatusMessage),
-            ("automatic_status", AutomaticStatus),
-            ("themes", Themes),
-            # ("server", Server),
-            ("audio", Audio),
-            # ("video", Video),
-            ("miscellaneous", Miscellaneous),
-            ("advanced", Advanced),
+        preferences = [
+            PreferencesPageData(
+                name="general",
+                title=_("General"),
+                icon_name="computer-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="window_behaviour",
+                        title=_("Behaviour of Application Window"),
+                        widget=WindowBehaviour,
+                    ),
+                    PreferencesGroupData(
+                        name="plugins", title=_("Plugins"), widget=Plugins
+                    ),
+                ],
+            ),
+            PreferencesPageData(
+                name="chats",
+                title=_("Chats"),
+                icon_name="user-available-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="general", title=_("General"), widget=General
+                    ),
+                    PreferencesGroupData(name="chats", title=_("Chats"), widget=Chats),
+                    PreferencesGroupData(
+                        name="group_chats",
+                        title=_("Group Chats"),
+                        widget=GroupChats,
+                    ),
+                    PreferencesGroupData(
+                        name="file_preview",
+                        title=_("File Preview"),
+                        widget=FilePreview,
+                    ),
+                ],
+            ),
+            PreferencesPageData(
+                name="notifications",
+                title=_("Notifications"),
+                icon_name="mail-unread-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="visual_notifications",
+                        title=_("Visual Notifications"),
+                        widget=VisualNotifications,
+                    ),
+                    PreferencesGroupData(
+                        name="sounds", title=_("Sounds"), widget=Sounds
+                    ),
+                ],
+            ),
+            PreferencesPageData(
+                name="status",
+                title=_("Status"),
+                icon_name="user-status-pending-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="status_message",
+                        title=_("Ask For Status Message on…"),
+                        widget=StatusMessage,
+                    ),
+                    PreferencesGroupData(
+                        name="automatic_status",
+                        title=_("Automatic Status Change"),
+                        widget=AutomaticStatus,
+                    ),
+                ],
+            ),
+            PreferencesPageData(
+                name="style",
+                title=_("Style"),
+                icon_name="applications-graphics-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="themes", title=_("Themes"), widget=Themes
+                    ),
+                ],
+            ),
+            PreferencesPageData(
+                name="audio_video",
+                title=_("Audio"),
+                icon_name="audio-input-microphone-symbolic",
+                banner=PreferencesPageBannerData(
+                    revealed=bool(not app.is_installed("GST")),
+                    title=_("Missing dependencies for audio support"),
+                    button_label=_("Features"),
+                    action_name="app.features",
+                ),
+                groups=[
+                    # PreferencesGroupData(
+                    #     name="server",
+                    #     title=_("Server"),
+                    #     widget=Server
+                    # ),
+                    PreferencesGroupData(name="audio", title=_("Audio"), widget=Audio),
+                    # PreferencesGroupData(
+                    #     name="video",
+                    #     title=_("Video"),
+                    #     widget=Video
+                    # ),
+                ],
+            ),
+            PreferencesPageData(
+                name="advanced",
+                title=_("Advanced"),
+                icon_name="preferences-system-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="miscellaneous",
+                        title=_("Miscellaneous"),
+                        widget=Miscellaneous,
+                    ),
+                    PreferencesGroupData(
+                        name="advanced",
+                        title=_("Advanced Settings"),
+                        widget=Advanced,
+                    ),
+                ],
+            ),
         ]
 
-        self._add_prefs(prefs)
+        box = Gtk.Box()
+        self.set_child(box)
+        stack = Gtk.Stack()
+        box.append(stack)
+
+        for page in preferences:
+            preferences_page = Adw.PreferencesPage()
+            if page.banner is not None:
+                page_banner = Adw.Banner(
+                    revealed=page.banner.revealed,
+                    title=page.banner.title,
+                    button_label=page.banner.button_label,
+                    action_name=page.banner.action_name,
+                )
+                # Workaround for preferences_page.set_banner(page_banner)
+                # which is only available from Adw 1.7
+                scrolled = preferences_page.get_first_child()
+                page_banner.insert_before(preferences_page, scrolled)
+
+            stack_page = stack.add_named(preferences_page, page.name)
+            stack_page.set_title(page.title)
+            stack_page.set_icon_name(page.icon_name)
+
+            for group in page.groups:
+                preferences_group = Adw.PreferencesGroup(
+                    name=group.name, title=group.title
+                )
+                pref = group.widget(self)
+                self._prefs[group.name] = pref
+                preferences_group.add(pref)
+                preferences_page.add(preferences_group)
+
+        side_bar_switcher = SideBarSwitcher()
+        side_bar_switcher.set_stack(stack)
+        box.prepend(side_bar_switcher)
+
         # self._add_video_preview()
 
-        # self._ui.av_info_bar.set_reveal_child(
-        #     not app.is_installed("AV") or sys.platform == "win32"
-        # )
-        # self._ui.av_info_bar_label.set_text(_("Video calls are not supported"))
+    # def _add_video_preview(self) -> None:
+    #     self._video_preview = VideoPreview()
+    #     self._ui.video.attach(self._video_preview, 0, 1, 1, 1)
 
-    def get_ui(self):
-        return self._ui
-
-    def _add_prefs(self, prefs: list[tuple[str, type[PreferenceBox]]]):
-        for ui_name, klass in prefs:
-            pref_box = cast(Gtk.Grid, getattr(self._ui, ui_name))
-            pref = klass(self)  # pyright: ignore
-            pref_box.attach(pref, 0, 1, 1, 1)
-            self._prefs[ui_name] = pref
-
-    def _add_video_preview(self) -> None:
-        self._video_preview = VideoPreview()
-        self._ui.video.attach(self._video_preview, 0, 1, 1, 1)
-
-    def get_video_preview(self) -> VideoPreview | None:
-        return self._video_preview
+    # def get_video_preview(self) -> VideoPreview | None:
+    #     return self._video_preview
 
     def update_proxy_list(self) -> None:
         miscellaneous = cast(Miscellaneous, self._prefs["miscellaneous"])
         miscellaneous.update_proxy_list()
 
     def _cleanup(self) -> None:
-        del self._video_preview
+        # del self._video_preview
         self._prefs.clear()
 
 
 class PreferenceBox(SettingsBox):
     def __init__(self, settings: list[Setting]) -> None:
         SettingsBox.__init__(self, None)
-        self.add_css_class("border")
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_hexpand(True)
         self.set_vexpand(False)
@@ -764,51 +905,51 @@ class Themes(PreferenceBox):
         app.ged.raise_event(StyleChanged())
 
 
-class Server(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+# class Server(PreferenceBox):
+#     def __init__(self, *args: Any) -> None:
 
-        settings = [
-            Setting(
-                SettingKind.USE_STUN_SERVER,
-                _("Use STUN Server"),
-                SettingType.DIALOG,
-                desc=_("Helps to establish calls through firewalls"),
-                props={"dialog": StunServerDialog},
-            ),
-        ]
+#         settings = [
+#             Setting(
+#                 SettingKind.USE_STUN_SERVER,
+#                 _("Use STUN Server"),
+#                 SettingType.DIALOG,
+#                 desc=_("Helps to establish calls through firewalls"),
+#                 props={"dialog": StunServerDialog},
+#             ),
+#         ]
 
-        PreferenceBox.__init__(self, settings)
+#         PreferenceBox.__init__(self, settings)
 
-        self.set_sensitive(app.is_installed("AV"))
+#         self.set_sensitive(app.is_installed("AV"))
 
 
-class StunServerDialog(SettingsDialog):
-    def __init__(self, account: str, parent: Gtk.Window) -> None:
+# class StunServerDialog(SettingsDialog):
+#     def __init__(self, account: str, parent: Gtk.Window) -> None:
 
-        settings = [
-            Setting(
-                SettingKind.SWITCH,
-                _("Use STUN Server"),
-                SettingType.CONFIG,
-                "use_stun_server",
-            ),
-            Setting(
-                SettingKind.ENTRY,
-                _("STUN Server"),
-                SettingType.CONFIG,
-                "stun_server",
-                bind="use_stun_server",
-            ),
-        ]
+#         settings = [
+#             Setting(
+#                 SettingKind.SWITCH,
+#                 _("Use STUN Server"),
+#                 SettingType.CONFIG,
+#                 "use_stun_server",
+#             ),
+#             Setting(
+#                 SettingKind.ENTRY,
+#                 _("STUN Server"),
+#                 SettingType.CONFIG,
+#                 "stun_server",
+#                 bind="use_stun_server",
+#             ),
+#         ]
 
-        SettingsDialog.__init__(
-            self,
-            parent,
-            _("STUN Server Settings"),
-            Gtk.DialogFlags.MODAL,
-            settings,
-            account,
-        )
+#         SettingsDialog.__init__(
+#             self,
+#             parent,
+#             _("STUN Server Settings"),
+#             Gtk.DialogFlags.MODAL,
+#             settings,
+#             account,
+#         )
 
 
 class Audio(PreferenceBox):
@@ -862,106 +1003,106 @@ class Audio(PreferenceBox):
         return combo_items
 
 
-class Video(PreferenceBox):
-    def __init__(self, *args: Any) -> None:
+# class Video(PreferenceBox):
+#     def __init__(self, *args: Any) -> None:
 
-        deps_installed = app.is_installed("AV")
+#         deps_installed = app.is_installed("AV")
 
-        video_input_devices = {}
-        if deps_installed:
-            video_input_devices = VideoInputManager().get_devices()
+#         video_input_devices = {}
+#         if deps_installed:
+#             video_input_devices = VideoInputManager().get_devices()
 
-        video_input_items = self._create_av_combo_items(video_input_devices)
+#         video_input_items = self._create_av_combo_items(video_input_devices)
 
-        video_framerates = {
-            "": _("Default"),
-            "15/1": "15 fps",
-            "10/1": "10 fps",
-            "5/1": "5 fps",
-            "5/2": "2.5 fps",
-        }
+#         video_framerates = {
+#             "": _("Default"),
+#             "15/1": "15 fps",
+#             "10/1": "10 fps",
+#             "5/1": "5 fps",
+#             "5/2": "2.5 fps",
+#         }
 
-        video_sizes = {
-            "": _("Default"),
-            "800x600": "800x600",
-            "640x480": "640x480",
-            "320x240": "320x240",
-        }
+#         video_sizes = {
+#             "": _("Default"),
+#             "800x600": "800x600",
+#             "640x480": "640x480",
+#             "320x240": "320x240",
+#         }
 
-        settings = [
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Video Input Device"),
-                SettingType.CONFIG,
-                "video_input_device",
-                props={"data": video_input_items},
-                desc=_("Select your video input device (e.g. webcam, screen capture)"),
-                callback=self._on_video_input_changed,
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Video Framerate"),
-                SettingType.CONFIG,
-                "video_framerate",
-                props={"data": video_framerates},
-            ),
-            Setting(
-                SettingKind.DROPDOWN,
-                _("Video Resolution"),
-                SettingType.CONFIG,
-                "video_size",
-                props={"data": video_sizes},
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Show My Video Stream"),
-                SettingType.CONFIG,
-                "video_see_self",
-                desc=_("Show your own video stream in calls"),
-            ),
-            Setting(
-                SettingKind.SWITCH,
-                _("Live Preview"),
-                SettingType.VALUE,
-                desc=_("Show a live preview to test your video source"),
-                callback=self._toggle_live_preview,
-            ),
-        ]
+#         settings = [
+#             Setting(
+#                 SettingKind.DROPDOWN,
+#                 _("Video Input Device"),
+#                 SettingType.CONFIG,
+#                 "video_input_device",
+#                 props={"data": video_input_items},
+#                 desc=_("Select your video input device (e.g. webcam, screen capture)"),  # noqa: E501
+#                 callback=self._on_video_input_changed,
+#             ),
+#             Setting(
+#                 SettingKind.DROPDOWN,
+#                 _("Video Framerate"),
+#                 SettingType.CONFIG,
+#                 "video_framerate",
+#                 props={"data": video_framerates},
+#             ),
+#             Setting(
+#                 SettingKind.DROPDOWN,
+#                 _("Video Resolution"),
+#                 SettingType.CONFIG,
+#                 "video_size",
+#                 props={"data": video_sizes},
+#             ),
+#             Setting(
+#                 SettingKind.SWITCH,
+#                 _("Show My Video Stream"),
+#                 SettingType.CONFIG,
+#                 "video_see_self",
+#                 desc=_("Show your own video stream in calls"),
+#             ),
+#             Setting(
+#                 SettingKind.SWITCH,
+#                 _("Live Preview"),
+#                 SettingType.VALUE,
+#                 desc=_("Show a live preview to test your video source"),
+#                 callback=self._toggle_live_preview,
+#             ),
+#         ]
 
-        PreferenceBox.__init__(self, settings)
+#         PreferenceBox.__init__(self, settings)
 
-        self.set_sensitive(deps_installed)
+#         self.set_sensitive(deps_installed)
 
-    @staticmethod
-    def _on_video_input_changed(_value: str, *args: Any) -> None:
-        window = get_app_window("Preferences")
-        assert window is not None
-        preview = window.get_video_preview()
-        if preview is None or not preview.is_active:
-            # changed signal gets triggered when we fill the combobox
-            return
-        preview.refresh()
+#     @staticmethod
+#     def _on_video_input_changed(_value: str, *args: Any) -> None:
+#         window = get_app_window("Preferences")
+#         assert window is not None
+#         preview = window.get_video_preview()
+#         if preview is None or not preview.is_active:
+#             # changed signal gets triggered when we fill the combobox
+#             return
+#         preview.refresh()
 
-    @staticmethod
-    def _toggle_live_preview(value: bool, *args: Any) -> None:
-        window = get_app_window("Preferences")
-        assert window is not None
-        preview = window.get_video_preview()
-        if preview is not None:
-            preview.toggle_preview(value)
+#     @staticmethod
+#     def _toggle_live_preview(value: bool, *args: Any) -> None:
+#         window = get_app_window("Preferences")
+#         assert window is not None
+#         preview = window.get_video_preview()
+#         if preview is not None:
+#             preview.toggle_preview(value)
 
-    @staticmethod
-    def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
-        items = enumerate(
-            sorted(
-                items_dict.items(),
-                key=lambda x: "" if x[1].startswith("auto") else x[0].lower(),
-            )
-        )
-        combo_items: dict[str, str] = {}
-        for _index, (name, value) in items:
-            combo_items[value] = name
-        return combo_items
+#     @staticmethod
+#     def _create_av_combo_items(items_dict: dict[str, str]) -> dict[str, str]:
+#         items = enumerate(
+#             sorted(
+#                 items_dict.items(),
+#                 key=lambda x: "" if x[1].startswith("auto") else x[0].lower(),
+#             )
+#         )
+#         combo_items: dict[str, str] = {}
+#         for _index, (name, value) in items:
+#             combo_items[value] = name
+#         return combo_items
 
 
 class Miscellaneous(PreferenceBox):
@@ -1015,14 +1156,38 @@ class Miscellaneous(PreferenceBox):
                 )
             )
 
+        settings.append(
+            Setting(
+                SettingKind.GENERIC,
+                _("Reset Hints"),
+                SettingType.VALUE,
+                None,
+                desc=_("This will reset all introduction hints"),
+                props={
+                    "button-text": _("Reset"),
+                    "button-style": "destructive-action",
+                    "button-callback": self._on_reset_hints,
+                    "button-sensitive": self._check_hints_reset(),
+                },
+            ),
+        )
+
+        settings.append(
+            Setting(
+                SettingKind.GENERIC,
+                _("Purge Chat History"),
+                SettingType.VALUE,
+                None,
+                desc=_("This will purge all locally stored chat history"),
+                props={
+                    "button-text": _("Purge"),
+                    "button-style": "destructive-action",
+                    "button-callback": self._on_purge_history_clicked,
+                },
+            ),
+        )
+
         PreferenceBox.__init__(self, settings)
-
-        reset_button = pref_window.get_ui().reset_button
-        self._connect(reset_button, "clicked", self._on_reset_hints)
-        reset_button.set_sensitive(self._check_hints_reset())
-
-        purge_history_button = pref_window.get_ui().purge_history_button
-        self._connect(purge_history_button, "clicked", self._on_purge_history_clicked)
 
     @staticmethod
     def _get_proxies() -> dict[str, str]:
@@ -1096,13 +1261,20 @@ class Advanced(PreferenceBox):
                     "control Gajim remotely."
                 ),
             ),
+            Setting(
+                SettingKind.GENERIC,
+                _("Advanced Configuration Editor"),
+                SettingType.VALUE,
+                None,
+                desc=_("Please use these settings with caution!"),
+                props={
+                    "button-text": _("Open"),
+                    "button-callback": self._on_advanced_config_editor,
+                },
+            ),
         ]
 
         PreferenceBox.__init__(self, settings)
-
-        pref_window.get_ui().ace_button.connect(
-            "clicked", self._on_advanced_config_editor
-        )
 
     @staticmethod
     def _on_debug_logging(value: bool, *args: Any) -> None:
