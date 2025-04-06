@@ -98,6 +98,7 @@ class SettingKind(IntEnum):
     USE_STUN_SERVER = 17
     NOTIFICATIONS = 18
     DROPDOWN = 19
+    GENERIC = 20
 
 
 @unique
