@@ -615,14 +615,13 @@ class GenericSettingPage(Gtk.Box):
     name = ""
 
     def __init__(self, account: str, settings: list[Setting]) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_valign(Gtk.Align.START)
         self.set_vexpand(True)
-        self.add_css_class("settings-page")
         self.account = account
 
         self.listbox = SettingsBox(account)
-        self.listbox.add_css_class("border")
+        self.listbox.add_css_class("m-18")
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.listbox.set_vexpand(False)
         self.listbox.set_valign(Gtk.Align.END)
@@ -954,15 +953,18 @@ class EncryptionOMEMOPage(GenericSettingPage):
         link_text = _("Read more about blind trust")
         markup = f'<a href="{wiki_url}">{link_text}</a>'
         btbv_label.set_markup(markup)
+        btbv_label.add_css_class("mx-18")
         self.prepend(btbv_label)
 
         heading = Gtk.Label(label=_("Trust Management"))
         heading.add_css_class("bold")
+        heading.add_css_class("mt-18")
+        heading.add_css_class("mx-18")
         heading.set_xalign(0)
         self.prepend(heading)
 
         omemo_trust_manager = OMEMOTrustManager(account)
-        omemo_trust_manager.set_margin_top(18)
+        omemo_trust_manager.add_css_class("m-18")
         self.append(omemo_trust_manager)
 
 
