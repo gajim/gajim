@@ -82,39 +82,18 @@
             <child>
               <object class="GtkListBox">
                 <property name="selection-mode">none</property>
+                <style>
+                  <class name="boxed-list"/>
+                </style>
                 <child>
-                  <object class="GtkListBoxRow">
-                    <property name="focusable">1</property>
-                    <property name="selectable">0</property>
-                    <property name="child">
+                  <object class="AdwActionRow" id="our_fingerprint_row">
+                    <property name="title" translatable="yes">Fingerprint for this Device</property>
+                    <style>
+                      <class name="property"/>
+                    </style>
+                    <child type="suffix">
                       <object class="GtkBox">
                         <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">3</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Fingerprint for this Device</property>
-                                <property name="xalign">0</property>
-                                <style>
-                                  <class name="bold"/>
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="our_fingerprint_1">
-                                <property name="focusable">1</property>
-                                <property name="selectable">1</property>
-                                <property name="xalign">0</property>
-                                <style>
-                                  <class name="monospace"/>
-                                  <class name="small-label"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
                         <child>
                           <object class="GtkMenuButton" id="qr_menu_button">
                             <property name="focusable">1</property>
@@ -153,12 +132,9 @@
                           </object>
                         </child>
                       </object>
-                    </property>
+                    </child>
                   </object>
                 </child>
-                <style>
-                  <class name="settings-box"/>
-                </style>
               </object>
             </child>
             <child>
@@ -179,7 +155,6 @@
                   <object class="GtkSwitch" id="show_inactive_switch">
                     <property name="focusable">1</property>
                     <property name="valign">center</property>
-
                   </object>
                 </child>
                 <child>
@@ -203,30 +178,29 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkButton" id="clear_devices_button">
+                    <property name="visible">0</property>
+                    <property name="label" translatable="yes">Clear Devices…</property>
+                    <property name="focusable">1</property>
+                    <property name="halign">end</property>
+                    <property name="hexpand">1</property>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkListBox" id="list">
                 <property name="vexpand">1</property>
                 <property name="selection-mode">none</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="clear_devices_button">
-                <property name="visible">0</property>
-                <property name="label" translatable="yes">Clear Devices…</property>
-                <property name="focusable">1</property>
-                <property name="receives-default">1</property>
-                <property name="halign">start</property>
-
                 <style>
-                  <class name="destructive-action"/>
+                  <class name="boxed-list"/>
                 </style>
               </object>
             </child>
-            <style>
-              <class name="omemo-trust-manager"/>
-            </style>
           </object>
         </property>
       </object>
