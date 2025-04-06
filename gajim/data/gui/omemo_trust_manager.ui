@@ -67,166 +67,144 @@
       <object class="GtkStackPage">
         <property name="name">manage-keys</property>
         <property name="child">
-          <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+          <object class="AdwClamp">
             <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">This Device</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="bold"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBox">
-                <property name="selection-mode">none</property>
-                <child>
-                  <object class="GtkListBoxRow">
-                    <property name="focusable">1</property>
-                    <property name="selectable">0</property>
-                    <property name="child">
-                      <object class="GtkBox">
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="orientation">vertical</property>
-                            <property name="spacing">3</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="label" translatable="yes">Fingerprint for this Device</property>
-                                <property name="xalign">0</property>
-                                <style>
-                                  <class name="bold"/>
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="our_fingerprint_1">
-                                <property name="focusable">1</property>
-                                <property name="selectable">1</property>
-                                <property name="xalign">0</property>
-                                <style>
-                                  <class name="monospace"/>
-                                  <class name="small-label"/>
-                                </style>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkMenuButton" id="qr_menu_button">
-                            <property name="focusable">1</property>
-                            <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="yes">Scan QR Code</property>
-                            <property name="hexpand">1</property>
-                            <property name="halign">end</property>
-                            <property name="valign">center</property>
-                            <property name="direction">up</property>
-                            <property name="popover">qr_code_popover</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">qr-code-scan-symbolic</property>
-                              </object>
-                            </child>
-                            <style>
-                              <class name="image-button"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="manage_trust_button">
-                            <property name="visible">0</property>
-                            <property name="focusable">1</property>
-                            <property name="receives-default">1</property>
-                            <property name="tooltip-text" translatable="yes">Manage your Devices…</property>
-                            <property name="valign">center</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">preferences-system-symbolic</property>
-                              </object>
-                            </child>
-                            <style>
-                              <class name="image-button"/>
-                            </style>
-                          </object>
-                        </child>
-                      </object>
-                    </property>
-                  </object>
-                </child>
-                <style>
-                  <class name="settings-box"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel" id="list_heading">
-                <property name="margin-top">12</property>
-                <property name="wrap">1</property>
-                <property name="max-width-chars">42</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="bold"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox" id="list_heading_box">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
                 <property name="spacing">12</property>
                 <child>
-                  <object class="GtkSwitch" id="show_inactive_switch">
-                    <property name="focusable">1</property>
-                    <property name="valign">center</property>
-
-                  </object>
-                </child>
-                <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Show Inactive Devices</property>
+                    <property name="label" translatable="yes">This Device</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="bold"/>
+                    </style>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkMenuButton" id="search_button">
-                    <property name="visible">0</property>
-                    <property name="focusable">1</property>
-                    <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="yes">Search…</property>
-                    <property name="halign">start</property>
-                    <property name="valign">center</property>
-                    <property name="popover">search_popover</property>
+                  <object class="GtkListBox">
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
                     <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">edit-find-symbolic</property>
+                      <object class="AdwActionRow" id="our_fingerprint_row">
+                        <property name="title" translatable="yes">Fingerprint for this Device</property>
+                        <style>
+                          <class name="property"/>
+                        </style>
+                        <child type="suffix">
+                          <object class="GtkBox">
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkMenuButton" id="qr_menu_button">
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="tooltip-text" translatable="yes">Scan QR Code</property>
+                                <property name="hexpand">1</property>
+                                <property name="halign">end</property>
+                                <property name="valign">center</property>
+                                <property name="direction">up</property>
+                                <property name="popover">qr_code_popover</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon-name">qr-code-scan-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="manage_trust_button">
+                                <property name="visible">0</property>
+                                <property name="focusable">1</property>
+                                <property name="receives-default">1</property>
+                                <property name="tooltip-text" translatable="yes">Manage your Devices…</property>
+                                <property name="valign">center</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="icon-name">preferences-system-symbolic</property>
+                                  </object>
+                                </child>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkLabel" id="list_heading">
+                    <property name="margin-top">12</property>
+                    <property name="wrap">1</property>
+                    <property name="max-width-chars">42</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="bold"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="list_heading_box">
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkSwitch" id="show_inactive_switch">
+                        <property name="focusable">1</property>
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Show Inactive Devices</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuButton" id="search_button">
+                        <property name="visible">0</property>
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="tooltip-text" translatable="yes">Search…</property>
+                        <property name="halign">start</property>
+                        <property name="valign">center</property>
+                        <property name="popover">search_popover</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">edit-find-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="clear_devices_button">
+                        <property name="visible">0</property>
+                        <property name="label" translatable="yes">Clear Devices…</property>
+                        <property name="focusable">1</property>
+                        <property name="halign">end</property>
+                        <property name="hexpand">1</property>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="list">
+                    <property name="vexpand">1</property>
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
-            <child>
-              <object class="GtkListBox" id="list">
-                <property name="vexpand">1</property>
-                <property name="selection-mode">none</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="clear_devices_button">
-                <property name="visible">0</property>
-                <property name="label" translatable="yes">Clear Devices…</property>
-                <property name="focusable">1</property>
-                <property name="receives-default">1</property>
-                <property name="halign">start</property>
-
-                <style>
-                  <class name="destructive-action"/>
-                </style>
-              </object>
-            </child>
-            <style>
-              <class name="omemo-trust-manager"/>
-            </style>
           </object>
         </property>
       </object>

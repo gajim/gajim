@@ -13,6 +13,7 @@ import locale
 import logging
 import time
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from omemo_dr.const import OMEMOTrust
 from omemo_dr.structs import IdentityInfo
@@ -65,7 +66,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
             self._ui.manage_trust_button, "clicked", self._on_manage_trust_clicked
         )
         self._connect(
-            self._ui.show_inactive_switch, "notify::active", self._on_show_inactive
+            self._ui.show_inactive_switch, "state-set", self._on_show_inactive
         )
         self._connect(
             self._ui.clear_devices_button, "clicked", self._on_clear_devices_clicked
@@ -131,7 +132,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         our_fpr_formatted = client.get_module("OMEMO").backend.get_our_fingerprint(
             formatted=True
         )
-        self._ui.our_fingerprint_1.set_text(our_fpr_formatted)
+        self._ui.our_fingerprint_row.set_subtitle(our_fpr_formatted)
         self._ui.our_fingerprint_2.set_text(our_fpr_formatted)
 
         self.update()
@@ -143,13 +144,10 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
 
         if isinstance(self._contact, BareContact) and self._contact.is_self:
             self._ui.clear_devices_button.set_visible(True)
-            self._ui.list_heading_box.set_halign(Gtk.Align.START)
         else:
             self._ui.manage_trust_button.set_visible(True)
             if self._contact.is_groupchat:
                 self._ui.search_button.set_visible(True)
-            else:
-                self._ui.list_heading_box.set_halign(Gtk.Align.START)
 
         assert isinstance(
             self._contact, BareContact | GroupchatContact | GroupchatParticipant
@@ -207,7 +205,7 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         log.debug("Trust URI: %s", uri)
         self._ui.qr_code_image.set_from_paintable(generate_qr_code(uri))
 
-    def _on_show_inactive(self, switch: Gtk.Switch, _param: Any) -> None:
+    def _on_show_inactive(self, _switch: Gtk.Switch, _state: bool) -> None:
         self._ui.list.invalidate_filter()
 
     def _on_clear_devices_clicked(self, _button: Gtk.Button) -> None:
@@ -230,13 +228,12 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         window.select_account(self._contact.account, "encryption-omemo")
 
 
-class KeyRow(Gtk.ListBoxRow):
+class KeyRow(Adw.ActionRow):
     def __init__(
         self, contact: types.ChatContactT, identity_info: IdentityInfo
     ) -> None:
-
-        Gtk.ListBoxRow.__init__(self)
-        self.set_activatable(False)
+        Adw.ActionRow.__init__(self)
+        self.add_css_class("property")
 
         self._contact = contact
         self._client = app.get_client(contact.account)
@@ -245,48 +242,29 @@ class KeyRow(Gtk.ListBoxRow):
         self._identity_info = identity_info
         self._trust = identity_info.trust
 
-        grid = Gtk.Grid()
-        grid.set_column_spacing(12)
-
         self._trust_button = TrustButton(self)
-        grid.attach(self._trust_button, 1, 1, 1, 3)
+        self.add_suffix(self._trust_button)
 
+        title = _("Fingerprint")
         if contact.is_groupchat:
-            jid_label = Gtk.Label(label=self._address)
-            jid_label.set_selectable(False)
-            jid_label.set_halign(Gtk.Align.START)
-            jid_label.set_valign(Gtk.Align.START)
-            jid_label.set_hexpand(True)
-            jid_label.add_css_class("bold")
-            grid.attach(jid_label, 2, 1, 1, 1)
+            title = f"{title} ({self._address})"
 
-        self.fingerprint = Gtk.Label(
-            label=self._identity_info.public_key.get_fingerprint(formatted=True)
+        self.set_title(title)
+
+        formatted_fingerprint = self._identity_info.public_key.get_fingerprint(
+            formatted=True
         )
-        self.fingerprint.add_css_class("monospace")
-        self.fingerprint.add_css_class("small-label")
-        self.fingerprint.set_selectable(True)
-        self.fingerprint.set_halign(Gtk.Align.START)
-        self.fingerprint.set_valign(Gtk.Align.START)
-        self.fingerprint.set_hexpand(True)
-        grid.attach(self.fingerprint, 2, 2, 1, 1)
 
         if self._identity_info.last_seen is not None:
-            last_seen_str = time.strftime(
+            last_seen_data = time.strftime(
                 app.settings.get("date_time_format"),
                 time.localtime(self._identity_info.last_seen),
             )
         else:
-            last_seen_str = _("Never")
-        last_seen_label = Gtk.Label(label=_("Last seen: %s") % last_seen_str)
-        last_seen_label.set_halign(Gtk.Align.START)
-        last_seen_label.set_valign(Gtk.Align.START)
-        last_seen_label.set_hexpand(True)
-        last_seen_label.add_css_class("small-label")
-        last_seen_label.add_css_class("dim-label")
-        grid.attach(last_seen_label, 2, 3, 1, 1)
+            last_seen_data = _("Never")
+        last_seen = "\n" + _("Last seen: %s") % last_seen_data
 
-        self.set_child(grid)
+        self.set_subtitle(formatted_fingerprint + last_seen)
 
     def do_unroot(self) -> None:
         del self._trust_button
@@ -315,11 +293,7 @@ class KeyRow(Gtk.ListBoxRow):
 
     def set_trust(self, trust: OMEMOTrust) -> None:
         self._trust = trust
-        icon_name, tooltip, css_class = TRUST_DATA[trust]
-        image = cast(Gtk.Image, self._trust_button.get_child())
-        image.set_from_icon_name(icon_name)
-        image.add_css_class(css_class)
-        image.set_tooltip_text(tooltip)
+        self._trust_button.update()
 
         self._client.get_module("OMEMO").backend.set_trust(
             self._address, self._identity_info.public_key, trust
@@ -358,13 +332,19 @@ class TrustButton(Gtk.MenuButton):
     def update(self) -> None:
         icon_name, tooltip, css_class = TRUST_DATA[self._row.trust]
         image = Gtk.Image.new_from_icon_name(icon_name)
-        self.set_child(image)
+        label = Gtk.Label(label=_("Set Trust"))
 
         if not self._row.active:
             css_class = "omemo-inactive-color"
             tooltip = f'{_("Inactive")} - {tooltip}'
 
         image.add_css_class(css_class)
+
+        box = Gtk.Box(spacing=12)
+        box.append(image)
+        box.append(label)
+        self.set_child(box)
+
         self._css_class = css_class
         self.set_tooltip_text(tooltip)
 
@@ -401,7 +381,7 @@ class TrustPopver(Gtk.Popover, SignalManager):
             self.update()
 
     def update(self) -> None:
-        clear_listbox(self._listbox)
+        self._listbox.remove_all()
 
         if self._row.trust != OMEMOTrust.VERIFIED:
             self._listbox.append(VerifiedOption())

@@ -11,6 +11,7 @@ import locale
 import logging
 from collections import defaultdict
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GObject
 from gi.repository import Gtk
@@ -615,14 +616,13 @@ class GenericSettingPage(Gtk.Box):
     name = ""
 
     def __init__(self, account: str, settings: list[Setting]) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL)
         self.set_valign(Gtk.Align.START)
         self.set_vexpand(True)
-        self.add_css_class("settings-page")
         self.account = account
 
         self.listbox = SettingsBox(account)
-        self.listbox.add_css_class("border")
+        self.listbox.add_css_class("mt-18")
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
         self.listbox.set_vexpand(False)
         self.listbox.set_valign(Gtk.Align.END)
@@ -631,7 +631,8 @@ class GenericSettingPage(Gtk.Box):
             self.listbox.add_setting(setting)
         self.listbox.update_states()
 
-        self.append(self.listbox)
+        clamp = Adw.Clamp(child=self.listbox)
+        self.append(clamp)
 
     def connect_signal(self, stack: Gtk.Stack) -> int:
         return stack.connect("notify::visible-child", self._on_visible_child_changed)
@@ -970,21 +971,20 @@ class EncryptionOMEMOPage(GenericSettingPage):
         ]
         GenericSettingPage.__init__(self, account, settings)
 
-        btbv_label = Gtk.Label()
-        btbv_label.set_xalign(0)
+        title_heading = _("Trust Management")
         wiki_url = "https://dev.gajim.org/gajim/gajim/-/wikis/help/OMEMO"
         link_text = _("Read more about blind trust")
-        markup = f'<a href="{wiki_url}">{link_text}</a>'
-        btbv_label.set_markup(markup)
-        self.prepend(btbv_label)
+        link_markup = f'<a href="{wiki_url}">{link_text}</a>'
 
-        heading = Gtk.Label(label=_("Trust Management"))
-        heading.add_css_class("bold")
-        heading.set_xalign(0)
-        self.prepend(heading)
+        preferences_group = Adw.PreferencesGroup(
+            title=f"{title_heading}\n{link_markup}"
+        )
+        preferences_group.add_css_class("mt-18")
+        clamp = Adw.Clamp(child=preferences_group)
+        self.prepend(clamp)
 
         omemo_trust_manager = OMEMOTrustManager(account)
-        omemo_trust_manager.set_margin_top(18)
+        omemo_trust_manager.add_css_class("mt-18")
         self.append(omemo_trust_manager)
 
 
