@@ -267,7 +267,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
 
         self._switcher.set_row_visible("settings", True)
         contact_settings = ContactSettings(self.account, contact.jid)
-        self._ui.contact_settings_box.append(contact_settings)
+        self._ui.contact_settings_box.add(contact_settings)
 
         params = AccountJidParam(account=self.account, jid=self.contact.jid)
         self._ui.remove_history_button.set_action_name("app.remove-history")
