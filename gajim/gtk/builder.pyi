@@ -670,15 +670,15 @@ class OmemoTrustManagerBuilder(Builder):
     our_fingerprint_2: Gtk.Label
     qr_code_image: Gtk.Image
     stack: Gtk.Stack
-    our_fingerprint_1: Gtk.Label
+    our_fingerprint_row: Adw.ActionRow
     qr_menu_button: Gtk.MenuButton
     manage_trust_button: Gtk.Button
     list_heading: Gtk.Label
     list_heading_box: Gtk.Box
     show_inactive_switch: Gtk.Switch
     search_button: Gtk.MenuButton
-    list: Gtk.ListBox
     clear_devices_button: Gtk.Button
+    list: Gtk.ListBox
 
 class PasswordDialogBuilder(Builder):
     pass_box: Gtk.Box
