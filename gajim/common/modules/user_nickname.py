@@ -29,7 +29,6 @@ class UserNickname(BaseModule):
 
     def __init__(self, con: types.Client):
         BaseModule.__init__(self, con)
-        self._register_pubsub_handler(self._nickname_received)
 
         self.handlers = [
             StanzaHandler(name='message',
@@ -37,6 +36,8 @@ class UserNickname(BaseModule):
                           typ='chat',
                           priority=51),
         ]
+
+        self._register_pubsub_handler(self._nickname_received)
 
     def _message_nickname_received(
         self,
