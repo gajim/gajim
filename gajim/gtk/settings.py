@@ -14,6 +14,7 @@ import logging
 from collections.abc import Callable
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -59,8 +60,6 @@ class SettingsDialog(GajimAppWindow):
             add_window_padding=False,
         )
 
-        self.window.add_css_class("settings-dialog")
-
         self.account = account
         if flags == Gtk.DialogFlags.MODAL:
             self.window.set_modal(True)
@@ -70,6 +69,7 @@ class SettingsDialog(GajimAppWindow):
         self.listbox = SettingsBox(account, extend=extend)
         self.listbox.set_hexpand(True)
         self.listbox.set_selection_mode(Gtk.SelectionMode.NONE)
+        self.listbox.add_css_class("m-18")
 
         for setting in settings:
             self.listbox.add_setting(setting)
@@ -92,9 +92,9 @@ class SettingsBox(Gtk.ListBox, SignalManager):
         jid: str | None = None,
         extend: dict[SettingKind, GenericSetting] | None = None,
     ) -> None:
-        Gtk.ListBox.__init__(self)
+        Gtk.ListBox.__init__(self, valign=Gtk.Align.START)
         SignalManager.__init__(self)
-        self.add_css_class("settings-box")
+        self.add_css_class("boxed-list")
         self.account = account
         self.jid = jid
         self.named_settings: dict[str, GenericSetting] = {}
@@ -117,6 +117,7 @@ class SettingsBox(Gtk.ListBox, SignalManager):
             SettingKind.USE_STUN_SERVER: CustomStunServerSetting,
             SettingKind.NOTIFICATIONS: NotificationsSetting,
             SettingKind.DROPDOWN: DropDownSetting,
+            SettingKind.GENERIC: GenericSetting,
         }
 
         if extend is not None:
@@ -160,7 +161,7 @@ class SettingsBox(Gtk.ListBox, SignalManager):
             row.update_activatable()
 
 
-class GenericSetting(Gtk.ListBoxRow, SignalManager):
+class GenericSetting(Adw.ActionRow, SignalManager):
     def __init__(
         self,
         account: str,
@@ -175,14 +176,11 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         bind: str | None = None,
         inverted: bool = False,
         enabled_func: Callable[..., bool] | None = None,
+        **kwargs: Any,
     ) -> None:
 
-        Gtk.ListBoxRow.__init__(self)
+        Adw.ActionRow.__init__(self, activatable=True, title=label, subtitle=desc or "")
         SignalManager.__init__(self)
-
-        self._grid = Gtk.Grid()
-        self._grid.set_size_request(-1, 30)
-        self._grid.set_column_spacing(12)
 
         self.callback = callback
         self.type_ = type_
@@ -197,48 +195,22 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         self.enabled_func = enabled_func
         self.setting_value = self.get_value()
 
+        self.setting_box = Gtk.Box(spacing=12, valign=Gtk.Align.CENTER)
+
         self._locked_icon = Gtk.Image.new_from_icon_name(
             "feather-lock-symbolic",
         )
         self._locked_icon.set_visible(False)
-        self._locked_icon.set_halign(Gtk.Align.END)
         self._locked_icon.set_tooltip_text(_("Setting is locked by the system"))
+        self._locked_icon.add_css_class("background")
+        self._action_overlay = Gtk.Overlay(child=self.setting_box)
+        self._action_overlay.add_overlay(self._locked_icon)
 
-        self._grid.attach(self._locked_icon, 2, 0, 1, 2)
-
-        description_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        description_box.set_valign(Gtk.Align.CENTER)
-
-        settingtext = Gtk.Label(label=label)
-        settingtext.set_hexpand(True)
-        settingtext.set_halign(Gtk.Align.START)
-        settingtext.set_valign(Gtk.Align.CENTER)
-        settingtext.set_vexpand(True)
-        description_box.append(settingtext)
-
-        if desc is not None:
-            description = Gtk.Label(
-                label=desc,
-                name="SubDescription",
-                hexpand=True,
-                halign=Gtk.Align.START,
-                valign=Gtk.Align.CENTER,
-                xalign=0,
-                wrap=True,
-                max_width_chars=50,
-            )
-            description_box.append(description)
-
-        self._grid.attach(description_box, 0, 1, 1, 1)
-
-        self.setting_box = Gtk.Box(spacing=12)
-        self.setting_box.set_size_request(200, -1)
-        self.setting_box.set_valign(Gtk.Align.CENTER)
-        self.setting_box.set_name("GenericSettingBox")
-        self._grid.attach(self.setting_box, 1, 0, 1, 2)
-        self.set_child(self._grid)
+        self.add_suffix(self._action_overlay)
 
         self._bind_sensitive_state()
+
+        self._add_action_button(kwargs)
 
     def do_unroot(self) -> None:
         self._disconnect_all()
@@ -359,7 +331,7 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
             self.callback(state, self.data)
 
     def on_row_activated(self) -> None:
-        raise NotImplementedError
+        pass
 
     def update_activatable(self) -> None:
         if self.type_ == SettingType.CONFIG:
@@ -405,12 +377,16 @@ class GenericSetting(Gtk.ListBoxRow, SignalManager):
         assert isinstance(callback, Callable)
         self._connect(button, "clicked", callback)
         button.set_tooltip_text(tooltip_text)
+
+        sensitive = bool(kwargs.get("button-sensitive", True))
+        button.set_sensitive(sensitive)
+
         self.setting_box.append(button)
 
 
 class SwitchSetting(GenericSetting):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        GenericSetting.__init__(self, *args)
+        GenericSetting.__init__(self, *args, **kwargs)
 
         self.switch = Gtk.Switch()
         if self.type_ == SettingType.ACTION:
@@ -437,9 +413,7 @@ class SwitchSetting(GenericSetting):
         box.set_halign(Gtk.Align.END)
         box.append(self._switch_state_label)
         box.append(self.switch)
-        self.setting_box.append(box)
-
-        self._add_action_button(kwargs)
+        self.setting_box.prepend(box)
 
     def on_row_activated(self) -> None:
         state = self.switch.get_active()
@@ -456,8 +430,8 @@ class SwitchSetting(GenericSetting):
 
 
 class EntrySetting(GenericSetting):
-    def __init__(self, *args: Any) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
 
         self.entry = Gtk.Entry()
         self.entry.set_text(str(self.setting_value))
@@ -470,7 +444,7 @@ class EntrySetting(GenericSetting):
         if self.value == "password":
             self.entry.set_visibility(False)
 
-        self.setting_box.append(self.entry)
+        self.setting_box.prepend(self.entry)
 
         assert isinstance(self.value, str)
         app.settings.connect_signal(
@@ -493,8 +467,8 @@ class EntrySetting(GenericSetting):
 
 
 class ColorSetting(GenericSetting):
-    def __init__(self, *args: Any) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
 
         rgba = Gdk.RGBA()
         assert isinstance(self.setting_value, str)
@@ -507,7 +481,7 @@ class ColorSetting(GenericSetting):
         self.color_button.set_halign(Gtk.Align.END)
         self.color_button.set_hexpand(True)
 
-        self.setting_box.append(self.color_button)
+        self.setting_box.prepend(self.color_button)
 
         assert isinstance(self.value, str)
         app.settings.connect_signal(
@@ -528,36 +502,11 @@ class ColorSetting(GenericSetting):
         self.color_button.grab_focus()
 
 
-class DialogSetting(GenericSetting):
-    def __init__(self, *args: Any, dialog: Any) -> None:
-        GenericSetting.__init__(self, *args)
-        self._dialog_cls = dialog
-
-        self.setting_value = Gtk.Label()
-        self.setting_value.set_text(self.get_setting_value())
-        self.setting_value.set_halign(Gtk.Align.END)
-        self.setting_value.set_hexpand(True)
-        self.setting_box.append(self.setting_value)
-
-    def show_dialog(self) -> None:
-        window = self.get_root()
-        assert isinstance(window, Gtk.Root)
-        self._dialog_cls(self.account, window)
-
-    def on_destroy(self, *args: Any) -> None:
-        self.setting_value.set_text(self.get_setting_value())
-
-    def get_setting_value(self) -> str:
-        self.setting_value.set_visible(False)
-        return ""
-
-    def on_row_activated(self) -> None:
-        self.show_dialog()
-
-
 class SpinSetting(GenericSetting):
-    def __init__(self, *args: Any, range_: tuple[float, float, float]) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(
+        self, *args: Any, range_: tuple[float, float, float], **kwargs: Any
+    ) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
 
         lower, upper, step = range_
         adjustment = Gtk.Adjustment(
@@ -587,7 +536,7 @@ class SpinSetting(GenericSetting):
 
         self._connect(self.spin, "notify::value", self.on_value_change)
 
-        self.setting_box.append(self.spin)
+        self.setting_box.prepend(self.spin)
 
         assert isinstance(self.value, str)
         app.settings.connect_signal(
@@ -609,8 +558,8 @@ class SpinSetting(GenericSetting):
 
 
 class FileChooserSetting(GenericSetting):
-    def __init__(self, *args: Any, filefilters: list[Filter]) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(self, *args: Any, filefilters: list[Filter], **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
         button = FileChooserButton(filters=filefilters, label=self.label)
         button.set_halign(Gtk.Align.END)
 
@@ -624,8 +573,8 @@ class FileChooserSetting(GenericSetting):
             icon_name="edit-clear-all-symbolic", tooltip_text=_("Clear File")
         )
         self._connect(clear_button, "clicked", lambda *args: button.reset())  # type: ignore
-        self.setting_box.append(button)
-        self.setting_box.append(clear_button)
+        self.setting_box.prepend(clear_button)
+        self.setting_box.prepend(button)
 
     def on_select(
         self, _file_chooser_button: FileChooserButton, file_paths: list[Path]
@@ -640,8 +589,8 @@ class FileChooserSetting(GenericSetting):
 
 
 class CallbackSetting(GenericSetting):
-    def __init__(self, *args: Any, callback: Callable[..., Any]) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(self, *args: Any, callback: Callable[..., Any], **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
         self.callback = callback
 
     def do_unroot(self) -> None:
@@ -654,8 +603,8 @@ class CallbackSetting(GenericSetting):
 
 
 class ActionSetting(GenericSetting):
-    def __init__(self, *args: Any, variant: GLib.Variant) -> None:
-        GenericSetting.__init__(self, *args)
+    def __init__(self, *args: Any, variant: GLib.Variant, **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
         assert isinstance(self.value, str)
         if self.value.startswith("app."):
             self.action = app.app.lookup_action(self.value[4:])
@@ -680,20 +629,11 @@ class ActionSetting(GenericSetting):
             self.action.activate(self.variant)
 
 
-class LoginSetting(DialogSetting):
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        DialogSetting.__init__(self, *args, **kwargs)
-
-    def get_setting_value(self) -> str:
-        jid = app.get_jid_from_account(self.account)
-        return jid
-
-
 class DropDownSetting(GenericSetting):
     def __init__(
         self, *args: Any, data: list[str] | dict[str, Any], **kwargs: Any
     ) -> None:
-        GenericSetting.__init__(self, *args)
+        GenericSetting.__init__(self, *args, **kwargs)
 
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         box.set_halign(Gtk.Align.END)
@@ -704,9 +644,7 @@ class DropDownSetting(GenericSetting):
         self._dropdown.connect("notify::selected", self._on_selected)
         box.append(self._dropdown)
 
-        self.setting_box.append(box)
-
-        self._add_action_button(kwargs)
+        self.setting_box.prepend(box)
 
     def do_unroot(self) -> None:
         self._dropdown.disconnect_by_func(self._on_selected)
@@ -731,6 +669,42 @@ class DropDownSetting(GenericSetting):
 
     def on_row_activated(self) -> None:
         pass
+
+
+class DialogSetting(GenericSetting):
+    def __init__(self, *args: Any, dialog: Any, **kwargs: Any) -> None:
+        GenericSetting.__init__(self, *args, **kwargs)
+        self._dialog_cls = dialog
+
+        self.setting_value = Gtk.Label()
+        self.setting_value.set_text(self.get_setting_value())
+        self.setting_value.set_halign(Gtk.Align.END)
+        self.setting_value.set_hexpand(True)
+        self.setting_box.prepend(self.setting_value)
+
+    def show_dialog(self) -> None:
+        window = self.get_root()
+        assert isinstance(window, Gtk.Root)
+        self._dialog_cls(self.account, window)
+
+    def on_destroy(self, *args: Any) -> None:
+        self.setting_value.set_text(self.get_setting_value())
+
+    def get_setting_value(self) -> str:
+        self.setting_value.set_visible(False)
+        return ""
+
+    def on_row_activated(self) -> None:
+        self.show_dialog()
+
+
+class LoginSetting(DialogSetting):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        DialogSetting.__init__(self, *args, **kwargs)
+
+    def get_setting_value(self) -> str:
+        jid = app.get_jid_from_account(self.account)
+        return jid
 
 
 class PrioritySetting(DialogSetting):

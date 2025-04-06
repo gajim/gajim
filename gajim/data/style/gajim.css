@@ -1,7 +1,7 @@
 /* Gajim Application CSS File */
 
 /* GTK named colors
-Taken from: https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+Taken from: https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/theme/Default/_colors-public.scss
 @theme_fg_color
 @theme_text_color
 @theme_bg_color
@@ -952,54 +952,18 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Settings widgets ======================================================== */
 
-/* SettingsBox */
-.settings-box > row {
-    border-bottom: 1px solid @theme_unfocused_bg_color;
-}
-.settings-box > row:last-child { border-bottom: 0px; }
-.settings-box > row.activatable:active { box-shadow: none; }
-.settings-box > row { padding: 10px 20px 10px 10px; }
-.settings-box > row:not(.activatable) label { color: @insensitive_fg_color; }
-
-.settings-stack > box,
-.settings-stack viewport > box {
-    margin: 30px 25px;
-}
-
-window.settings-dialog row {
-    border-bottom: 0px;
-}
-window.settings-dialog list { 
-    background: transparent;
-    margin: 12px;
-}
-
-/* GenericSetting */
-#SubDescription { color: @insensitive_fg_color; font-size: 90%; }
-#GenericSettingBox { margin-left: 30px; }
-#GenericSettingBox > label { padding-right: 3px; }
-
 /* Generic Popover Menu with Buttons */
 .PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }
 .PopoverButtonListbox > list { margin-top: 10px; margin-bottom: 10px; }
 .PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color; }
 
-/* Settings ListBox */
-list.settings {
-    border: 1px solid @borders;
-}
-list.settings > row:not(:last-child) {
-	border-bottom: 1px solid @theme_unfocused_bg_color;
-}
-list.settings row { min-height: 52px; }
-list.settings > row > box {
-    margin: 10px 20px 10px 10px;
-}
-
 /* Settings Window */
+list.settings-menu {
+    background-color: mix(@theme_base_color, @theme_fg_color, 0.08);
+}
 list.settings-menu row {
-    padding: 6px;
+    padding: 6px 12px;
     min-width: 170px;
 }
 list.settings-menu row label {
@@ -1070,13 +1034,12 @@ popover.combo scrollbar.vertical {
 
 /* ContactInfo / GroupchatDetails */
 .stack-border {
-    border: 1px solid;
-    border-color: @borders;
+    border-left: 1px solid @borders;
 }
 .stack-header {
     background-color: @insensitive_bg_color;
-    border-width: 0 1px 0 1px;
-    border-style: none solid none solid;
+    border-width: 0 1px 1px 1px;
+    border-style: none solid solid solid;
     border-color: @borders;
     padding: 9px 9px;
 }
