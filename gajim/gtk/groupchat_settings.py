@@ -17,7 +17,6 @@ from gajim.gtk.settings import SettingsBox
 class GroupChatSettings(SettingsBox):
     def __init__(self, account: str, jid: JID) -> None:
         SettingsBox.__init__(self, account, str(jid))
-        self.add_css_class("border")
         self.set_selection_mode(Gtk.SelectionMode.NONE)
         self.set_size_request(700, -1)
         self.set_valign(Gtk.Align.START)
