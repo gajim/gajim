@@ -23,7 +23,6 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import modules
 from gajim.common import passwords
-from gajim.common.client_modules import ClientModules
 from gajim.common.const import ClientState
 from gajim.common.const import SimpleClientState
 from gajim.common.events import AccountConnected
@@ -65,10 +64,9 @@ def call_counter(func: Any):
     return helper
 
 
-class Client(Observable, ClientModules):
+class Client(Observable):
     def __init__(self, account: str) -> None:
         Observable.__init__(self, log)
-        ClientModules.__init__(self, account)
         self._client = None
         self._account = account
         self.name = account
@@ -108,6 +106,9 @@ class Client(Observable, ClientModules):
                                                     self._idle_state_changed)
             self._screensaver_handler_id = app.app.connect(
                 'notify::screensaver-active', self._screensaver_state_changed)
+
+    def get_module(self, name: modules.ModulesLiteralT) -> modules.ModulesT:
+        return modules.get_module(self._account, name)
 
     def _set_state(self, state: ClientState) -> None:
         log.info('State: %s', state)

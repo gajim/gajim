@@ -28,8 +28,8 @@ from nbxmpp.structs import MucSubject
 from nbxmpp.structs import TuneData
 
 from gajim.common import app
+from gajim.common import modules
 from gajim.common import types
-from gajim.common.client_modules import ClientModules
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import SimpleClientState
 from gajim.common.helpers import Observable
@@ -253,7 +253,7 @@ class Contacts(BaseModule):
             contact.force_chatstate_update()
 
 
-class CommonContact(Observable, ClientModules):
+class CommonContact(Observable):
     def __init__(self,
                  logger: LogAdapter,
                  jid: JID,
@@ -261,7 +261,6 @@ class CommonContact(Observable, ClientModules):
                  ) -> None:
 
         Observable.__init__(self, logger)
-        ClientModules.__init__(self, account)
         self._jid = jid
         self._account = account
         self._gateway_type: str | None = None
@@ -283,6 +282,9 @@ class CommonContact(Observable, ClientModules):
     @property
     def account(self) -> str:
         return self._account
+
+    def get_module(self, name: modules.ModulesLiteralT) -> modules.ModulesT:
+        return modules.get_module(self._account, name)
 
     def _on_signal(
         self,
