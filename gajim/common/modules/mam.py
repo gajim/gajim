@@ -38,6 +38,8 @@ from gajim.common.events import ArchivingIntervalFinished
 from gajim.common.events import FeatureDiscovered
 from gajim.common.events import RawMamMessageReceived
 from gajim.common.modules.base import BaseModule
+from gajim.common.modules.contacts import BareContact
+from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.util import as_task
 from gajim.common.storage.archive import models as mod
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
@@ -111,8 +113,21 @@ class MAM(BaseModule):
                 del self._mam_query_ids[jid]
                 return
 
-    def is_catch_up_finished(self, jid: JID) -> bool:
+    def _is_catch_up_finished(self, jid: JID) -> bool:
         return jid in self._catch_up_finished
+
+    def is_catch_up_finished(self, contact: types.ChatContactT) -> bool:
+        if isinstance(contact, BareContact):
+            archive_jid = self._get_own_bare_jid()
+
+        elif isinstance(contact, GroupchatContact):
+            archive_jid = contact.jid
+
+        else:
+            # GroupChatParticipant
+            archive_jid = contact.room.jid
+
+        return self._is_catch_up_finished(archive_jid)
 
     def _from_valid_archive(self,
                             _stanza: Message,
@@ -175,7 +190,7 @@ class MAM(BaseModule):
         if stanza_id is None:
             return
 
-        if not self.is_catch_up_finished(archive_jid):
+        if not self._is_catch_up_finished(archive_jid):
             return
 
         if timestamp is not None:

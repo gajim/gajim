@@ -35,6 +35,7 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
@@ -1098,7 +1099,13 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         count = chat_list_stack.get_chat_unread_count(account, jid, include_silent)
         return count or 0
 
-    def mark_as_read(self, account: str, jid: JID, send_marker: bool = True) -> None:
+    def mark_as_read(
+        self,
+        account: str,
+        jid: JID,
+        *,
+        is_sync: bool = False,
+    ) -> None:
 
         unread_count = self.get_chat_unread_count(account, jid, include_silent=True)
 
@@ -1112,23 +1119,28 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list_stack.mark_as_read(account, jid)
 
-        if not send_marker or not unread_count:
+        if not unread_count or is_sync:
             # Read marker must be sent only once
+            return
+
+        client = app.get_client(account)
+        contact = client.get_module("Contacts").get_contact(jid)
+        assert not isinstance(contact, ResourceContact)
+
+        if not client.get_module("MAM").is_catch_up_finished(contact):
+            # Dont set read state before we have all messages
             return
 
         last_message = app.storage.archive.get_last_conversation_row(account, jid)
         if last_message is None or last_message.id is None:
             return
 
-        client = app.get_client(account)
-        contact = client.get_module("Contacts").get_contact(jid)
-        assert isinstance(
-            contact, BareContact | GroupchatContact | GroupchatParticipant
-        )
-
-        client.get_module("ChatMarkers").send_displayed_marker(
+        mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
             contact, last_message.id, last_message.stanza_id
         )
+
+        if not mds_assist_sent and last_message.stanza_id is not None:
+            client.get_module("MDS").set_mds(contact.jid, last_message.stanza_id)
 
     def _on_window_active(self, window: Gtk.ApplicationWindow, _param: Any) -> None:
         if not window.is_active():
@@ -1296,7 +1308,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if event.marker_id not in (last_message.id, last_message.stanza_id):
             return
 
-        self.mark_as_read(event.account, event.jid, send_marker=False)
+        self.mark_as_read(event.account, event.jid, is_sync=True)
 
     def _on_call_started(self, event: events.CallStarted) -> None:
         # Make sure there is only one window

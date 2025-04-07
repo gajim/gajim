@@ -372,13 +372,18 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 return
 
             client = app.get_client(event.account)
+            stanza_id = event.message.stanza_id
             contact = client.get_module("Contacts").get_contact(event.jid)
             assert isinstance(
                 contact, BareContact | GroupchatContact | GroupchatParticipant
             )
-            client.get_module("ChatMarkers").send_displayed_marker(
-                contact, event.message.id, event.message.stanza_id
+            mds_assist_sent = client.get_module("ChatMarkers").send_displayed_marker(
+                contact, event.message.id, stanza_id
             )
+
+            if not mds_assist_sent and stanza_id is not None:
+                client.get_module("MDS").set_mds(contact.jid, stanza_id)
+
             return
 
         message = event.message

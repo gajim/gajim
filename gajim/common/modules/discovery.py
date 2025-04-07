@@ -125,6 +125,7 @@ class Discovery(BaseModule):
         self._con.get_module('PubSub').pass_disco(result)
         self._con.get_module('Bookmarks').pass_disco(result)
         self._con.get_module('VCardAvatars').pass_disco(result)
+        self._con.get_module('ChatMarkers').pass_disco(result)
 
         self._con.get_module('Caps').update_caps()
 

@@ -13,6 +13,7 @@ import datetime as dt
 import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
+from nbxmpp.structs import DiscoInfo
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 
@@ -23,6 +24,7 @@ from gajim.common.events import ReadStateSync
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
+from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive import models as mod
 from gajim.common.structs import OutgoingMessage
 
@@ -40,6 +42,9 @@ class ChatMarkers(BaseModule):
                           ns=Namespace.CHATMARKERS,
                           priority=47),
         ]
+
+    def pass_disco(self, info: DiscoInfo) -> None:
+        self.mds_assist_supported = Namespace.MDS_ASSIST in info.features
 
     def _process_chat_marker(self,
                              _client: types.NBXMPPClient,
@@ -127,29 +132,35 @@ class ChatMarkers(BaseModule):
                               is_muc_pm=properties.is_muc_pm,
                               marker_id=properties.marker.id))
 
-    def _send_marker(self,
-                     contact: types.ChatContactT,
-                     marker: str,
-                     id_: str) -> None:
-
-        message = OutgoingMessage(account=self._account,
-                                  contact=contact,
-                                  marker=(marker, id_),
-                                  play_sound=False)
-
-        self._client.send_message(message)
-        self._log.info('Send %s: %s', marker, contact.jid)
-
     def send_displayed_marker(self,
                               contact: types.ChatContactT,
                               message_id: str,
-                              stanza_id: str | None) -> None:
+                              stanza_id: str | None) -> bool:
+
+        # Return value is True if displayed marker was sent and
+        # mds assist was added
 
         if not self._is_sending_marker_allowed(contact):
-            return
+            return False
 
         marker_id = self._determine_marker_id(contact, message_id, stanza_id)
-        self._send_marker(contact, 'displayed', marker_id)
+
+        if not self.mds_assist_supported or isinstance(contact, ResourceContact):
+            # Assist is not added for private groupchat messages see
+            # https://xmpp.org/extensions/xep-0490.html#rules-client
+            stanza_id = None
+
+        message = OutgoingMessage(account=self._account,
+                                  contact=contact,
+                                  marker=('displayed', marker_id),
+                                  mds_id=stanza_id,
+                                  play_sound=False)
+
+        self._client.send_message(message)
+        self._log.info('Send displayed to %s, marker id: %s, mds id: %s',
+                        contact.jid, marker_id, stanza_id)
+
+        return stanza_id is not None
 
     @staticmethod
     def _determine_marker_id(contact: types.ChatContactT,

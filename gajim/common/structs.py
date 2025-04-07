@@ -93,6 +93,7 @@ class OutgoingMessage:
     text: dataclasses.InitVar[str | None] = None
     chatstate: str | None = None
     marker: tuple[str, str] | None = None
+    mds_id: str | None = None
     sec_label: SecurityLabel | None = None
     control: Any | None = None
     correct_id: str | None = None

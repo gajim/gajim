@@ -34,6 +34,7 @@ from gajim.common.modules.iq import Iq
 from gajim.common.modules.jingle import Jingle
 from gajim.common.modules.last_activity import LastActivity
 from gajim.common.modules.mam import MAM
+from gajim.common.modules.mds import MDS
 from gajim.common.modules.message import Message
 from gajim.common.modules.moderations import Moderations
 from gajim.common.modules.muc import MUC
@@ -83,6 +84,7 @@ ModulesT = (
     | Jingle
     | LastActivity
     | MAM
+    | MDS
     | Message
     | Moderations
     | MUC
@@ -130,6 +132,7 @@ ModulesLiteralT = Literal[
     'Jingle',
     'LastActivity',
     'MAM',
+    'MDS',
     'Message',
     'Moderations',
     'MUC',
@@ -177,6 +180,7 @@ class ModuleDict(TypedDict):
     Jingle: Jingle
     LastActivity: LastActivity
     MAM: MAM
+    MDS: MDS
     Message: Message
     Moderations: Moderations
     MUC: MUC

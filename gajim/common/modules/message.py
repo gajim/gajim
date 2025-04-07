@@ -408,6 +408,10 @@ class Message(BaseModule):
             marker, id_ = message.marker
             stanza.setMarker(marker, id_)
 
+        # XEP-0490
+        if message.mds_id is not None:
+            message.setMdsAssist(message.mds_id, own_jid.new_as_bare())
+
         return stanza
 
     def store_message(self, message: OutgoingMessage) -> None:
