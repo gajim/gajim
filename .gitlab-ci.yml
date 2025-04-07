@@ -81,6 +81,7 @@ test-unittest:
   stage: test
   script:
     - pip install git+https://dev.gajim.org/gajim/python-nbxmpp.git
+    - pip install git+https://dev.gajim.org/gajim/omemo-dr.git
     - coverage run --source=gajim -m unittest discover -s test -v
     - coverage report -mi
     - coverage xml -i
