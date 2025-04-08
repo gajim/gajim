@@ -236,7 +236,7 @@ class Migration:
                 sa.select(mod.Moderation.fk_occupant_pk),
                 sa.select(mod.DisplayedMarker.fk_occupant_pk),
             )
-            occupant_pks = set(conn.scalars(stmt))
+            occupant_pks: set[int | None] = set(conn.scalars(stmt))
             occupant_pks.discard(None)
 
             conn.execute(sa.delete(mod.Occupant).where(mod.Occupant.pk.not_in(occupant_pks)))
@@ -255,7 +255,7 @@ class Migration:
                 sa.select(mod.Message.fk_remote_pk),
             )
 
-            occupant_pks = set(conn.scalars(stmt))
+            occupant_pks: set[int | None] = set(conn.scalars(stmt))
             occupant_pks.discard(None)
 
             conn.execute(sa.delete(mod.Remote).where(mod.Remote.pk.not_in(occupant_pks)))
