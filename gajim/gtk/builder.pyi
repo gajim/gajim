@@ -86,18 +86,6 @@ class ActivityGajimUpdateBuilder(Builder):
     update_plugins_success_text_label: Gtk.Label
     update_plugins_success_button: Gtk.Button
 
-class ActivityListRowBuilder(Builder):
-    activity_list_row: Gtk.Box
-    account_identifier: Gtk.Box
-    avatar_image: Gtk.Image
-    activity_type_indicator: Gtk.Image
-    activity_title_label: Gtk.Label
-    timestamp_label: Gtk.Label
-    activity_subject_label: Gtk.Label
-    activity_message_label: Gtk.Label
-    revealer: Gtk.Revealer
-    close_button: Gtk.Button
-
 class ActivityMucInvitationBuilder(Builder):
     muc_invitation_page: Gtk.Box
     muc_invitation_box: Gtk.Box
@@ -116,7 +104,6 @@ class ActivitySubscriptionBuilder(Builder):
     subscribe_accept_button: Gtk.Button
     subscribe_menu_button: Gtk.MenuButton
     unsubscribed_box: Gtk.Box
-    unsubscribed_dismiss_button: Gtk.Button
     unsubscribed_remove_button: Gtk.Button
 
 class AddContactBuilder(Builder):
@@ -1023,12 +1010,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ActivityGajimUpdateBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["activity_list_row.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> ActivityListRowBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["activity_muc_invitation.ui"],
