@@ -1,3 +1,31 @@
+Gajim 2.1.0 (08 Apr 2025)
+
+  New
+
+  * Support XEP-0490: Message Displayed Synchronization
+  * Add activity feed
+
+  Improvements
+
+  * Start Chat: Use language symbol and code instead of flag (#12249)
+  * Group chat info: Use better fitting language icon
+  * Start chat: Add 'Execute Command…' menu item (#12246)
+  * Chat banner: Use better icon for chat details/settings
+
+  Change
+
+  * Raise nbxmpp version
+  * Remove unread message confirmation dialog at shutdown (#12248)
+
+  Bug Fixes
+
+  * EmojiChooser: Fix segfault after choosing emoji
+  * Nickname: Display published nickname correctly
+  * StatusIcon: Correctly show menu (#12165)
+  * MUC: Don’t fail on affiliation change
+  * ChatList: Make sure chatlist sorts always after pin/unpin
+  * Debug console: Fix initial send button state
+
 Gajim 2.0.4 (19 Mar 2025)
 
   Improvements
