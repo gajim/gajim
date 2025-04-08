@@ -68,6 +68,8 @@ class ActivityListView(Gtk.ListView, SignalManager, EventHelper):
         SignalManager.__init__(self)
         EventHelper.__init__(self)
 
+        self.add_css_class("activity-list-view")
+
         self._model = Gio.ListStore(item_type=ActivityListItem)
 
         factory = Gtk.SignalListItemFactory()

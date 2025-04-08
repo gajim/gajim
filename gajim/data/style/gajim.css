@@ -473,35 +473,35 @@ button.flat.link { padding: 0; border: 0; }
     padding: 18px;
 }
 
-/* ActivityList */
-.activitylist-row {
+/* ActivityListView */
+.activity-list-view row {
     transition: none;
     padding: 4px 0px 4px 6px;
     margin: 0 10px 3px 10px;
     border: 2px solid transparent;
     border-radius: 6px;
 }
-.activitylist-row:active,
-.activitylist-row:selected:active {
+.activity-list-view row:active,
+.activity-list-view row:selected:active {
     box-shadow: none;
 }
-.activitylist-row:selected {
+.activity-list-view row:selected {
     background-color: mix(@theme_base_color, @theme_fg_color, 0.1);
     outline: none;
 }
-.activitylist-row:selected label {
+.activity-list-view row:selected label {
     color: @theme_text_color;
 }
-.activitylist-row button {
+.activity-list-view row button {
     min-width: 25px;
     min-height: 25px;
     padding: 0px;
 }
-.activitylist-row:selected button {
+.activity-list-view row:selected button {
 	color: @theme_fg_color;
     border-color: @borders;
 }
-.activitylist-row:selected image {
+.activity-list-view row:selected image {
 	color: @theme_fg_color;
 }
 

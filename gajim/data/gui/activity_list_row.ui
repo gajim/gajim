@@ -102,8 +102,5 @@
         </child>
       </object>
     </child>
-    <style>
-      <class name="activitylist-row"/>
-    </style>
   </template>
 </interface>
