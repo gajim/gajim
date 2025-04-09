@@ -724,6 +724,7 @@
         <xmpp:xep rdf:resource="https://xmpp.org/extensions/xep-0490.html"/>
         <xmpp:status>complete</xmpp:status>
         <xmpp:version>0.1.0</xmpp:version>
+        <xmpp:since>2.1.0</xmpp:since>
       </xmpp:SupportedXep>
     </implements>
   </Project>
