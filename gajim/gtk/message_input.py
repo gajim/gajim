@@ -396,7 +396,13 @@ class MessageInputTextView(GtkSource.View):
     def _on_clipboard_read_text_finished(
         self, clipboard: Gdk.Clipboard, result: Gio.AsyncResult, action_name: str
     ) -> None:
-        text = clipboard.read_text_finish(result)
+        text = None
+
+        try:
+            text = clipboard.read_text_finish(result)
+        except Exception as e:
+            log.exception("Error while trying to paste text: %s", e)
+
         if text is None:
             log.info("No text pasted")
             return

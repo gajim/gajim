@@ -249,8 +249,15 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
     ) -> None:
-        text = clipboard.read_text_finish(result)
+        text = None
+
+        try:
+            text = clipboard.read_text_finish(result)
+        except Exception as e:
+            log.exception("Error while trying to paste text: %s", e)
+
         if text is None:
+            log.info("No text pasted")
             return
 
         # Reset primary clipboard to what it was before switching chats,
