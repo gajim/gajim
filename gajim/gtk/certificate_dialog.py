@@ -167,7 +167,7 @@ class CertificateBox(Gtk.Box, SignalManager):
         clipboard_text = (
             _("Certificate")
             + "\n"
-            + _("Account label: ")
+            + _("Account name: ")
             + self._account_label
             + "\n"
             + _("Account address: ")
