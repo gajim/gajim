@@ -218,7 +218,7 @@ class AccountSideBar(Gtk.Box, SignalManager):
         self._status_popover.popdown()
 
         accounts = app.get_connected_accounts()
-        account = accounts[0] if len(accounts) > 1 else None
+        account = accounts[0] if len(accounts) == 1 else None
         app.app.change_status(status=new_status, account=account)
 
 
