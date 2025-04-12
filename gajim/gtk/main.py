@@ -1145,7 +1145,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         )
 
         if not mds_assist_sent and last_message.stanza_id is not None:
-            client.get_module("MDS").set_mds(contact.jid, last_message.stanza_id)
+            by = contact.jid if isinstance(contact, GroupchatContact) else None
+            client.get_module("MDS").set_mds(contact.jid, last_message.stanza_id, by)
 
     def _on_window_active(self, window: Gtk.ApplicationWindow, _param: Any) -> None:
         if not window.is_active():

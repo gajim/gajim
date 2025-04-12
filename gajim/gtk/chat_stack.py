@@ -389,7 +389,8 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
             )
 
             if not mds_assist_sent and stanza_id is not None:
-                client.get_module("MDS").set_mds(contact.jid, stanza_id)
+                by = contact.jid if isinstance(contact, GroupchatContact) else None
+                client.get_module("MDS").set_mds(contact.jid, stanza_id, by)
 
             return
 
