@@ -8,7 +8,7 @@
     </style>
     <child>
       <object class="GtkImage" id="_avatar">
-        <property name="pixel-size">40</property>
+        <property name="pixel-size">32</property>
         <layout>
           <property name="column">0</property>
           <property name="row">0</property>
