@@ -80,7 +80,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
             ChatTypeFilter.CHAT: _("Chats"),
             ChatTypeFilter.GROUPCHAT: _("Group Chats"),
         }
-        self._chat_type_drop_down = GajimDropDown(fixed_width=12, data=chat_type_data)
+        self._chat_type_drop_down = GajimDropDown(fixed_width=20, data=chat_type_data)
         self._connect(
             self._chat_type_drop_down, "notify::selected", self._on_chat_type_selected
         )
@@ -90,7 +90,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         roster_groups_label.add_css_class("dim-label")
         popover_content.attach(roster_groups_label, 0, 2, 1, 1)
 
-        self._roster_groups_drop_down = GajimDropDown(fixed_width=12)
+        self._roster_groups_drop_down = GajimDropDown(fixed_width=20)
         self._connect(
             self._roster_groups_drop_down,
             "notify::selected",
@@ -102,7 +102,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         self._account_label.add_css_class("dim-label")
         popover_content.attach(self._account_label, 0, 3, 1, 1)
 
-        self._account_drop_down = GajimDropDown(fixed_width=12)
+        self._account_drop_down = GajimDropDown(fixed_width=20)
         self._connect(
             self._account_drop_down,
             "notify::selected",
