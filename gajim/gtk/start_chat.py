@@ -1084,6 +1084,7 @@ class ContactViewItem(Gtk.Grid, SignalManager):
 
     _avatar: Gtk.Label = Gtk.Template.Child()
     _name_label: Gtk.Label = Gtk.Template.Child()
+    _address_label: Gtk.Label = Gtk.Template.Child()
     _status_label: Gtk.Label = Gtk.Template.Child()
     _idle_badge: IdleBadge = Gtk.Template.Child()
     _account_badge: AccountBadge = Gtk.Template.Child()
@@ -1110,6 +1111,7 @@ class ContactViewItem(Gtk.Grid, SignalManager):
     def bind(self, obj: GlobalListItem) -> None:
         bind_spec = [
             ("name", self._name_label, "label"),
+            ("jid", self._address_label, "label"),
             ("status", self._status_label, "label"),
             ("status_visible", self._status_label, "visible"),
             ("avatar_paintable", self._avatar, "paintable"),
