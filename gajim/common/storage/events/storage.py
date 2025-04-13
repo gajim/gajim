@@ -28,6 +28,7 @@ EventStorageEventT = (
     | events.MUCRoomPresenceError
     | events.MUCRoomKicked
     | events.MUCRoomDestroyed
+    | events.MUCRoomVoiceRequestError
     | events.MUCUserJoined
     | events.MUCUserLeft
     | events.MUCUserRoleChanged
@@ -44,6 +45,7 @@ EVENT_CLASSES: dict[str, Any] = {
     'muc-room-presence-error': events.MUCRoomPresenceError,
     'muc-room-kicked': events.MUCRoomKicked,
     'muc-room-destroyed': events.MUCRoomDestroyed,
+    'muc-room-voice-request-error': events.MUCRoomVoiceRequestError,
     'muc-user-joined': events.MUCUserJoined,
     'muc-user-left': events.MUCUserLeft,
     'muc-user-role-changed': events.MUCUserRoleChanged,

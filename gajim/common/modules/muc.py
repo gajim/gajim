@@ -127,7 +127,11 @@ class MUC(BaseModule):
             StanzaHandler(name='message',
                           callback=self._on_voice_request,
                           ns=Namespace.DATA,
-                          priority=49)
+                          priority=49),
+            StanzaHandler(name='message',
+                          typ='error',
+                          callback=self._message_error_received,
+                          priority=49),
         ]
 
         self._con.connect_signal('state-changed',
@@ -144,6 +148,8 @@ class MUC(BaseModule):
         self._muc_nicknames = {}
         self._voice_requests: dict[
             GroupchatContact, list[VoiceRequest]] = defaultdict(list)
+        self._sent_voice_requests: dict[
+            JID, list[str]] = defaultdict(list)
 
     def _on_resume_failed(self,
                           _client: types.Client,
@@ -964,6 +970,10 @@ class MUC(BaseModule):
             self._con.get_module('MAM').request_archive_on_muc_join(
                 muc_data.jid)
 
+    def request_voice(self, jid: JID) -> None:
+        message_id = self._nbxmpp("MUC").request_voice(jid)
+        self._sent_voice_requests[jid].append(message_id)
+
     def _on_voice_request(self,
                           _con: types.NBXMPPClient,
                           _stanza: Message,
@@ -1002,6 +1012,41 @@ class MUC(BaseModule):
                               ) -> None:
 
         self._voice_requests[contact].remove(voice_request)
+
+    def _message_error_received(self,
+                                _con: types.NBXMPPClient,
+                                stanza: nbxmpp.Message,
+                                properties: MessageProperties
+                                ) -> None:
+
+        remote_jid = properties.remote_jid
+        assert remote_jid is not None
+        message_id = properties.id
+        if message_id is None:
+            self._log.warning('Received error without message id')
+            self._log.warning(stanza)
+            return
+
+        # We handle only voice request errors for now
+        requests = self._sent_voice_requests.get(remote_jid, [])
+        if message_id not in requests:
+            return
+
+        room = self._get_contact(remote_jid, groupchat=True)
+        assert isinstance(room, GroupchatContact)
+
+        assert properties.error is not None
+        error = helpers.to_user_string(properties.error)
+        event = events.MUCRoomVoiceRequestError(
+            timestamp=utc_now(),
+            message_id=message_id,
+            error=error
+        )
+
+        app.storage.events.store(room, event)
+
+        room.notify('room-voice-request-error', event)
+        raise nbxmpp.NodeProcessed
 
     def _on_captcha_challenge(self,
                               _con: types.NBXMPPClient,

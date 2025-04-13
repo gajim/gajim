@@ -245,6 +245,7 @@ class ChatControl(EventHelper):
                     "user-nickname-changed": self._on_user_nickname_changed,
                     "room-kicked": self._on_room_kicked,
                     "room-destroyed": self._on_room_destroyed,
+                    "room-voice-request-error": self._on_room_voice_request_error,
                     "room-config-finished": self._on_room_config_finished,
                     "room-config-changed": self._on_room_config_changed,
                     "room-presence-error": self._on_room_presence_error,
@@ -609,6 +610,9 @@ class ChatControl(EventHelper):
 
             elif isinstance(row, events.MUCRoomDestroyed):
                 self._process_muc_room_destroyed(row)
+
+            elif isinstance(row, events.MUCRoomVoiceRequestError):
+                self._process_muc_room_voice_request_error(row)
 
             else:
                 raise ValueError("Unknown event: %s" % type(row))
@@ -1027,6 +1031,20 @@ class ChatControl(EventHelper):
             )
 
         self.add_info_message(message, event.timestamp)
+
+    def _on_room_voice_request_error(
+        self,
+        _contact: GroupchatContact,
+        _signal_name: str,
+        event: events.MUCRoomVoiceRequestError,
+    ) -> None:
+
+        self._process_muc_room_voice_request_error(event)
+
+    def _process_muc_room_voice_request_error(
+        self, event: events.MUCRoomVoiceRequestError
+    ) -> None:
+        self.add_info_message(event.error, event.timestamp)
 
     def _on_user_joined(
         self,

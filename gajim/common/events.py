@@ -754,6 +754,14 @@ class MUCRoomDestroyed(ApplicationEvent):
 
 
 @dataclass
+class MUCRoomVoiceRequestError(ApplicationEvent):
+    name: str = field(init=False, default='muc-room-voice-request-error')
+    timestamp: datetime.datetime
+    message_id: str
+    error: Any
+
+
+@dataclass
 class MUCUserHatsChanged(ApplicationEvent):
     name: str = field(init=False, default='muc-user-hats-changed')
     timestamp: datetime.datetime
