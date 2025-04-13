@@ -25,17 +25,19 @@
             <property name="orientation">0</property>
             <child>
               <object class="GtkLabel" id="_name_label">
-                <property name="halign">1</property>
+                <property name="halign">start</property>
+                <property name="valign">end</property>
                 <property name="xalign">0</property>
                 <property name="ellipsize">3</property>
                 <style>
-                  <class name="bold14"/>
+                  <class name="bold"/>
                 </style>
               </object>
             </child>
             <child>
               <object class="GtkLabel" id="_address_label">
-                <property name="halign">1</property>
+                <property name="halign">start</property>
+                <property name="valign">end</property>
                 <property name="xalign">0</property>
                 <property name="ellipsize">3</property>
                 <property name="margin-start">6</property>
@@ -49,7 +51,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="_status_label">
-            <property name="halign">1</property>
+            <property name="halign">start</property>
             <property name="xalign">0</property>
             <property name="width-chars">22</property>
             <property name="ellipsize">3</property>
