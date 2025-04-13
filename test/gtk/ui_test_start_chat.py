@@ -13,6 +13,7 @@ from unittest.mock import MagicMock
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
+from nbxmpp.const import PresenceShow
 from nbxmpp.protocol import JID
 from nbxmpp.structs import BookmarkData
 from nbxmpp.structs import RosterItem
@@ -119,6 +120,7 @@ class TestContactsModule:
         contact.is_groupchat = groupchat
 
         if not groupchat:
+            contact.show = PresenceShow.ONLINE
             contact.status = random.choice(STATUS_MESSAGES)
             contact.idle_datetime = dt.datetime.now()
             contact.groups = set(random.sample(sorted(CONTACT_GROUPS), 1))
