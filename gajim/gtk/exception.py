@@ -81,8 +81,6 @@ def _hook(type_: type[BaseException], value: BaseException, tb: TracebackType) -
 
     ExceptionDialog(type_, value, tb)
 
-    _exception_in_progress.release()
-
 
 class ExceptionDialog(GajimAppWindow, SignalManager):
     def __init__(
@@ -259,6 +257,7 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
 
     def _cleanup(self) -> None:
         self._disconnect_all()
+        _exception_in_progress.release()
 
 
 def init() -> None:
