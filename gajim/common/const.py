@@ -1046,7 +1046,7 @@ TRUST_SYMBOL_DATA = {
                       _('Trust Not Decided'),
                       'warning-color'),
     Trust.BLIND: ('security-medium-symbolic',
-                  _('Unverified'),
+                  _('Blind Trust'),
                   'encrypted-color'),
     Trust.VERIFIED: ('security-high-symbolic',
                      _('Verified'),
