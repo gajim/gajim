@@ -13,7 +13,7 @@ from gajim.common.const import SHOW_STRING
 from gajim.common.const import SHOW_STRING_MNEMONIC
 
 ShowSortOrder = {
-    PresenceShow.CHAT: 0,
+    PresenceShow.CHAT: 1,
     PresenceShow.ONLINE: 1,
     PresenceShow.DND: 2,
     PresenceShow.AWAY: 3,

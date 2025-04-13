@@ -381,8 +381,9 @@ class GroupchatContactListView(Gtk.ListView):
             return -1 if obj1.contact.is_self else 1
 
         if app.settings.get("sort_by_show_in_muc"):
-            if obj1.contact.show != obj2.contact.show:
-                return compare_show(obj1.contact.show, obj2.contact.show)
+            res = compare_show(obj1.contact.show, obj2.contact.show)
+            if res != 0:
+                return res
 
         return locale.strcoll(obj1.nick.lower(), obj2.nick.lower())
 

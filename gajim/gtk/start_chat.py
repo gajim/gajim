@@ -963,8 +963,9 @@ class ContactListView(BaseListView[type["ContactListItem"], type["ContactViewIte
             return 1 if obj1.is_self else -1
 
         if app.settings.get("sort_by_show_in_start_chat"):
-            if obj1.show != obj2.show:
-                return compare_show(obj1.show, obj2.show)
+            res = compare_show(obj1.show, obj2.show)
+            if res != 0:
+                return res
 
         return locale.strcoll(obj1.name.lower(), obj2.name.lower())
 
