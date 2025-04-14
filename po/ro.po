@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -5138,9 +5138,6 @@ msgstr "Până când Gajim va fi închis"
 msgid "Untrusted"
 msgstr "Neîncredere"
 
-msgid "Unverified"
-msgstr "Nedeclarat"
-
 msgid "Update"
 msgstr "Actualizare"
 
@@ -6926,6 +6923,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Mesaje necitite"
+
+#~ msgid "Unverified"
+#~ msgstr "Nedeclarat"
 
 #~ msgid "Update Check"
 #~ msgstr "Verificarea actualizării"

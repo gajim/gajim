@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -5432,9 +5432,6 @@ msgid "Until Gajim is Closed"
 msgstr "_Minimitza en tancar"
 
 msgid "Untrusted"
-msgstr ""
-
-msgid "Unverified"
 msgstr ""
 
 #, fuzzy

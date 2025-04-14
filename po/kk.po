@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -5102,9 +5102,6 @@ msgstr "Gajim жабылғанша дейін"
 msgid "Untrusted"
 msgstr "Сенімсіз"
 
-msgid "Unverified"
-msgstr "Тексерілмеген"
-
 msgid "Update"
 msgstr "Жаңарту"
 
@@ -6861,6 +6858,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Оқылмаған хабарламалар"
+
+#~ msgid "Unverified"
+#~ msgstr "Тексерілмеген"
 
 #~ msgid "Update Check"
 #~ msgstr "Жаңартуды тексеру"

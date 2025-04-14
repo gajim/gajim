@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -5118,9 +5118,6 @@ msgstr "Dokud není Gajim zavřený"
 msgid "Untrusted"
 msgstr "Nedůvěryhodný"
 
-msgid "Unverified"
-msgstr "Neověřeno"
-
 msgid "Update"
 msgstr "Aktualizovat"
 
@@ -6934,6 +6931,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Nepřečtené zprávy"
+
+#~ msgid "Unverified"
+#~ msgstr "Neověřeno"
 
 #~ msgid "Update Check"
 #~ msgstr "Zkontrolovat aktualizace"

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
-"PO-Revision-Date: 2025-03-29 13:44+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"PO-Revision-Date: 2025-04-14 13:12+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -480,9 +480,8 @@ msgstr "Activo"
 msgid "Activity"
 msgstr "Actividad"
 
-#, fuzzy
 msgid "Activity Feed"
-msgstr "Activado"
+msgstr "Recolección de actividad"
 
 msgid "Add"
 msgstr "Dirección"
@@ -4997,9 +4996,6 @@ msgstr "Hasta que Gajim esté cerrado"
 msgid "Untrusted"
 msgstr "No fiable"
 
-msgid "Unverified"
-msgstr "No verificado"
-
 msgid "Update"
 msgstr "Actualizar"
 
@@ -6801,6 +6797,9 @@ msgstr "…o soltarla aqui"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Mensajes sin leer"
+
+#~ msgid "Unverified"
+#~ msgstr "No verificado"
 
 #~ msgid "Update Check"
 #~ msgstr "Comprobar actualización"

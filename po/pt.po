@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2025-01-03 23:12+0000\n"
 "Last-Translator: soneca <acenos@danwin1210.me>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -5258,9 +5258,6 @@ msgstr "Até que o Gajim seja Fechado"
 msgid "Untrusted"
 msgstr "Não Confiável"
 
-msgid "Unverified"
-msgstr "Não Verificado"
-
 msgid "Update"
 msgstr "Atualização"
 
@@ -7069,6 +7066,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Mensagens Não Lidas"
+
+#~ msgid "Unverified"
+#~ msgstr "Não Verificado"
 
 #~ msgid "Update Check"
 #~ msgstr "Atualizar Verificação"

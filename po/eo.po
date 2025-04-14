@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -5670,9 +5670,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Untrusted"
 msgstr "Elektu vian OpenPGP-ĉifrŝlosilon"
-
-msgid "Unverified"
-msgstr ""
 
 #, fuzzy
 msgid "Update"

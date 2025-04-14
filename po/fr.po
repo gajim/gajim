@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2025-03-29 16:12+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
@@ -5050,9 +5050,6 @@ msgstr "Jusqu'à la fermeture de Gajim"
 msgid "Untrusted"
 msgstr "Non approuvé"
 
-msgid "Unverified"
-msgstr "Non vérifié"
-
 msgid "Update"
 msgstr "_Mettre à jour"
 
@@ -6872,6 +6869,9 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Messages non lus"
+
+#~ msgid "Unverified"
+#~ msgstr "Non vérifié"
 
 #~ msgid "Update Check"
 #~ msgstr "Vérification des mises à jour"

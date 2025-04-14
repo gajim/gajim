@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2025-03-28 09:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -5127,9 +5127,6 @@ msgstr "Пока открыт Gajim"
 msgid "Untrusted"
 msgstr "Ненадёжный"
 
-msgid "Unverified"
-msgstr "Непроверенный"
-
 msgid "Update"
 msgstr "Обновить"
 
@@ -6919,6 +6916,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Непрочитанные сообщения"
+
+#~ msgid "Unverified"
+#~ msgstr "Непроверенный"
 
 #~ msgid "Update Check"
 #~ msgstr "Проверка обновлений"

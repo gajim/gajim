@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
-"PO-Revision-Date: 2025-03-29 16:12+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"PO-Revision-Date: 2025-04-14 05:12+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -113,7 +113,7 @@ msgstr "%(progress)s %%（还剩 %(time)s）"
 
 #, python-format
 msgid "%(received)s of %(max)s"
-msgstr "%(received)s（共 %(max)s）"
+msgstr "%(received)s / %(max)s"
 
 #, python-format
 msgid "%(type)s encryption is active %(authenticated)s."
@@ -393,7 +393,7 @@ msgid "Accept"
 msgstr "接受"
 
 msgid "Accept all Contact Requests"
-msgstr "接受所有联系请求"
+msgstr "接受所有联系人请求"
 
 msgid "Account"
 msgstr "账号"
@@ -607,7 +607,7 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr "%(nick)s 在此群聊中的从属关系已被移除"
 
 msgid "After"
-msgstr "后"
+msgstr "之后"
 
 msgid "Algorithm"
 msgstr "算法"
@@ -829,7 +829,7 @@ msgid "Automatic spell-checking for your messages"
 msgstr "自动拼写检查您的消息"
 
 msgid "Automatically accept all contact requests"
-msgstr "自动接受所有联系请求"
+msgstr "自动接受所有联系人请求"
 
 msgid "Available"
 msgstr "在线"
@@ -865,7 +865,7 @@ msgid "Ban…"
 msgstr "封禁…"
 
 msgid "Before"
-msgstr "前"
+msgstr "之前"
 
 msgid "Behaviour of Application Window"
 msgstr "应用程序窗口的行为"
@@ -1000,7 +1000,7 @@ msgid "Certificate signature failure"
 msgstr "证书签名失败"
 
 msgid "Ch_ange Subject"
-msgstr "更改话题(_A)"
+msgstr "更改主题(_A)"
 
 msgid "Change"
 msgstr "更改"
@@ -1015,7 +1015,7 @@ msgid "Change Password"
 msgstr "更改密码"
 
 msgid "Change Subject"
-msgstr "更改话题"
+msgstr "更改主题"
 
 msgid "Change your account’s password, etc."
 msgstr "更改您的账号密码等"
@@ -1157,8 +1157,7 @@ msgid ""
 "Clickable schemes in addition to the hard-coded list of IANA-registered "
 "ones. Space-separated, lower-case, no colons."
 msgstr ""
-"可点击的 URI 方案列表，除了硬编码的已在 IANA 注册的方案。用空格分隔，小写，无"
-"冒号。"
+"除了硬编码的 IANA 注册方案列表外，还可点击的方案。空格分隔，小写，无冒号。"
 
 msgid "Client Certificate"
 msgstr "客户端证书"
@@ -1242,7 +1241,7 @@ msgid "Configure logging system"
 msgstr "配置日志系统"
 
 msgid "Confirm Unencrypted Connection"
-msgstr "确认未加密连接"
+msgstr "确认非加密连接"
 
 msgid "Confirm new password..."
 msgstr "确认新密码…"
@@ -1327,7 +1326,7 @@ msgid "Contact Removed"
 msgstr "联系人已移除"
 
 msgid "Contact Request"
-msgstr "联系请求"
+msgstr "联系人请求"
 
 msgid "Contact information"
 msgstr "联系人信息"
@@ -1535,7 +1534,7 @@ msgid "Deny"
 msgstr "拒绝"
 
 msgid "Deny all contact requests"
-msgstr "拒绝所有联系请求"
+msgstr "拒绝所有联系人请求"
 
 msgid "Description"
 msgstr "描述"
@@ -1719,7 +1718,7 @@ msgid "Email"
 msgstr "电子邮件"
 
 msgid "Emoji Shortcodes"
-msgstr "表情符号快捷代码"
+msgstr "表情符号短代码"
 
 msgid "Emojis"
 msgstr "表情符号"
@@ -2383,7 +2382,7 @@ msgid "Information"
 msgstr "信息"
 
 msgid "Insecure Connection"
-msgstr "不安全的连接"
+msgstr "非安全连接"
 
 msgid "Insert Emoji"
 msgstr "插入表情符号"
@@ -3470,10 +3469,10 @@ msgid "Pulse: %s"
 msgstr "脉冲：%s"
 
 msgid "Purge Chat History…"
-msgstr "清除聊天记录…"
+msgstr "清空聊天记录…"
 
 msgid "Purge all Chat History?"
-msgstr "清除所有聊天记录？"
+msgstr "清空所有聊天记录？"
 
 #, python-format
 msgid "PyGObject Version: %s"
@@ -3688,10 +3687,10 @@ msgid "Requesting Register Form"
 msgstr "正在请求注册表"
 
 msgid "Requesting register form from server…"
-msgstr "正在从服务器请求注册表…"
+msgstr "正在向服务器请求注册表…"
 
 msgid "Requesting search form from server"
-msgstr "正在从服务器请求搜索表"
+msgstr "正在向服务器请求搜索表"
 
 msgid "Required"
 msgstr "必填"
@@ -4131,7 +4130,7 @@ msgid "Show Status Changes"
 msgstr "显示状态更改"
 
 msgid "Show Subject"
-msgstr "显示话题"
+msgstr "显示主题"
 
 msgid "Show Transfers"
 msgstr "显示传输"
@@ -4143,7 +4142,7 @@ msgid "Show _Features"
 msgstr "显示功能(_F)"
 
 msgid "Show a confirmation dialog before connecting unencrypted"
-msgstr "在建立未加密连接前显示确认对话框"
+msgstr "在建立非加密连接前显示确认对话框"
 
 msgid ""
 "Show a confirmation dialog to block a contact? Empty string means never show "
@@ -4197,13 +4196,13 @@ msgid ""
 msgstr "在公开群聊中自动显示预览（可能会泄露您的数据）"
 
 msgid "Show previews for any URLs containing images (may be unsafe)"
-msgstr "显示任何包含图片的 URL 的预览（可能不安全）"
+msgstr "显示任何包含图片的 URL 的预览（可能存在安全风险）"
 
 msgid "Show previews for files"
 msgstr "显示文件预览"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
-msgstr "显示快捷代码建议，例如 :+1:"
+msgstr "显示短代码建议，例如 :+1:"
 
 msgid "Show the application's version"
 msgstr "显示应用程序的版本"
@@ -4373,7 +4372,7 @@ msgid "Style"
 msgstr "样式"
 
 msgid "Subject"
-msgstr "话题"
+msgstr "主题"
 
 msgid "Subject Alt Names"
 msgstr "主题备用名称"
@@ -4514,7 +4513,7 @@ msgid "The certificate’s activation time is in the future"
 msgstr "证书的生效时间在未来"
 
 msgid "The certificate’s algorithm is insecure"
-msgstr "证书的算法不安全"
+msgstr "证书的算法是非安全的"
 
 msgid ""
 "The contact will be informed that you stopped sharing your status. Please "
@@ -4554,7 +4553,7 @@ msgid "Themes"
 msgstr "主题"
 
 msgid "There are devices for which you have not made a trust decision yet."
-msgstr "存在一些您尚未做出信任决定的设备。"
+msgstr "存在您尚未做出信任决定的设备。"
 
 msgid ""
 "There are plenty of providers to choose from.\n"
@@ -4843,7 +4842,7 @@ msgid "Unable to verify the first certificate"
 msgstr "无法验证首个证书"
 
 msgid "Unencrypted"
-msgstr "未加密"
+msgstr "非加密的"
 
 msgid "Uninstall Plugin"
 msgstr "卸载插件"
@@ -4899,9 +4898,6 @@ msgstr "直到 Gajim 关闭"
 
 msgid "Untrusted"
 msgstr "未受信任"
-
-msgid "Unverified"
-msgstr "未经验证"
 
 msgid "Update"
 msgstr "更新"
@@ -4959,10 +4955,10 @@ msgid "Use System Keyring"
 msgstr "使用系统密钥环"
 
 msgid "Use Unencrypted Connection"
-msgstr "使用未加密连接"
+msgstr "使用非加密连接"
 
 msgid "Use an unencrypted connection to the server"
-msgstr "使用未加密连接来连接到服务器"
+msgstr "使用非加密连接来连接到服务器"
 
 msgid "Use defined profile in configuration directory"
 msgstr "使用配置目录中定义的配置文件"
@@ -5167,8 +5163,9 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
-"您即将使用不安全的连接方式连接到账号 %(account)s（%(server)s）。这意味着对话"
-"未经加密。强烈建议不要使用 PLAIN 方式连接。"
+"您即将通过非安全的连接方式连接到账号 "
+"%(account)s（%(server)s）。这意味着对话将不会加密。强烈不建议使用 PLAIN "
+"方式连接。"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
@@ -5536,7 +5533,7 @@ msgid "_Privacy Policy (Online)"
 msgstr "隐私政策(在线)(_P)"
 
 msgid "_Purge"
-msgstr "清除(_P)"
+msgstr "清空(_P)"
 
 msgid "_Quit"
 msgstr "退出(_Q)"
@@ -6665,6 +6662,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Unread Messages"
 #~ msgstr "未读消息"
+
+#~ msgid "Unverified"
+#~ msgstr "未经验证"
 
 #~ msgid "Update Check"
 #~ msgstr "检查更新"

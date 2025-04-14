@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -5674,9 +5674,6 @@ msgstr "Gajim"
 #, fuzzy
 msgid "Untrusted"
 msgstr "Abiary svoj kluč OpenPGP"
-
-msgid "Unverified"
-msgstr ""
 
 #, fuzzy
 msgid "Update"

@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2024-08-13 11:17+0000\n"
 "Last-Translator: Robert oResoli <roberto@resolutions.it>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -5309,9 +5309,6 @@ msgstr "Esci alla Chiusura"
 msgid "Untrusted"
 msgstr "Non Affidabile"
 
-msgid "Unverified"
-msgstr "Non Verificata"
-
 #, fuzzy
 msgid "Update"
 msgstr "_Aggiorna ora"
@@ -7166,6 +7163,9 @@ msgstr "Seleziona un'immagine o trascinala qui"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Messaggi Non Letti"
+
+#~ msgid "Unverified"
+#~ msgstr "Non Verificata"
 
 #~ msgid "Update Check"
 #~ msgstr "Controllo per la presenza di aggiornamenti"

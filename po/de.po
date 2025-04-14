@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2025-03-31 18:12+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
@@ -5043,9 +5043,6 @@ msgstr "Bis Gajim beendet wird"
 msgid "Untrusted"
 msgstr "Nicht vertraut"
 
-msgid "Unverified"
-msgstr "Nicht überprüft"
-
 msgid "Update"
 msgstr "Update"
 
@@ -6864,6 +6861,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Ungelesene Nachrichten"
+
+#~ msgid "Unverified"
+#~ msgstr "Nicht überprüft"
 
 #~ msgid "Update Check"
 #~ msgstr "Überprüfung auf Updates"

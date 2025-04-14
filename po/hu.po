@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 21:24+0000\n"
+"POT-Creation-Date: 2025-04-13 20:52+0000\n"
 "PO-Revision-Date: 2025-03-30 10:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -4970,9 +4970,6 @@ msgstr "A Gajim bezárásáig"
 msgid "Untrusted"
 msgstr "Nem megbízható"
 
-msgid "Unverified"
-msgstr "Nem ellenőrzött"
-
 msgid "Update"
 msgstr "Frissítés"
 
@@ -6761,6 +6758,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Olvasatlan üzenetek"
+
+#~ msgid "Unverified"
+#~ msgstr "Nem ellenőrzött"
 
 #~ msgid "Update Check"
 #~ msgstr "Frissítés keresése"
