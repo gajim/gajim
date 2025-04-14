@@ -738,14 +738,14 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         self._ui.sendfile_button.set_tooltip_text(tooltip_text)
 
     def _on_buffer_changed(self, _message_input: MessageInputTextView) -> None:
-        assert self._contact
+        if self._contact is None:
+            return
 
         has_text = self.msg_textview.has_text
         app.window.get_action("send-message").set_enabled(
             allow_send_message(has_text, self._contact)
         )
 
-        assert self._contact is not None
         encryption_name = self._contact.settings.get("encryption")
 
         if has_text and encryption_name:
