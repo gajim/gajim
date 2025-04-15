@@ -226,10 +226,13 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def _add_results(self) -> None:
         assert self._results_iterator is not None
         has_results = False
-        for db_row in itertools.islice(self._results_iterator, 25):
-            has_results = True
-            result_row = ResultRow(db_row)
+        for message in itertools.islice(self._results_iterator, 25):
+            if message.moderation is not None:
+                continue
+
+            result_row = ResultRow(message)
             self._ui.results_listbox.append(result_row)
+            has_results = True
 
         if not has_results:
             self._set_placeholder_mode(PlaceholderMode.NO_RESULTS)
