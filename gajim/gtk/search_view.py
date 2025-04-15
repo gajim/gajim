@@ -227,6 +227,30 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         assert self._results_iterator is not None
         has_results = False
         for message in itertools.islice(self._results_iterator, 25):
+
+            # With the current database design for corrections, we found
+            # no way of only searching within the last correction of a
+            # message so the search can return the original message, the
+            # last correction or any in between correction.
+
+            if message.corrections:
+                # This is only true for original messages, dont show them
+                # because they are obsolete
+                continue
+
+            if message.correction_id:
+                # This is only true for the correction of a message.
+                # We need to find out if this correction is obsolete by
+                # checking if this correction is the last correction
+
+                original_message = app.storage.archive.get_corrected_message(message)
+                if original_message is None:
+                    continue
+
+                last_correction = original_message.get_last_correction()
+                if message.pk != last_correction.pk:
+                    continue
+
             result_row = ResultRow(message)
             self._ui.results_listbox.append(result_row)
             has_results = True
@@ -466,9 +490,6 @@ class ResultRow(Gtk.ListBoxRow):
         self._ui.row_time_label.set_text(self.local_timestamp.strftime(format_string))
 
         text = db_row.text
-        if db_row.corrections:
-            text = db_row.get_last_correction().text
-
         assert text is not None
 
         message_widget = MessageWidget(self.account, selectable=False)
