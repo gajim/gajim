@@ -227,9 +227,6 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         assert self._results_iterator is not None
         has_results = False
         for message in itertools.islice(self._results_iterator, 25):
-            if message.moderation is not None:
-                continue
-
             result_row = ResultRow(message)
             self._ui.results_listbox.append(result_row)
             has_results = True

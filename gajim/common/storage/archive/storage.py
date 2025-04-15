@@ -809,6 +809,7 @@ class MessageArchiveStorage(AlchemyStorage):
             stmt.where(
                 Message.text.ilike(f'%{query}%'),
                 Message.timestamp.between(after, before),
+                ~Message.moderation.has(),
             )
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .execution_options(yield_per=25)
