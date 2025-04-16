@@ -11,7 +11,6 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.client import Client
 from gajim.common.const import AvatarSize
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
@@ -90,6 +89,9 @@ class AccountSideBar(Gtk.Box, SignalManager):
         y: float,
     ) -> int:
         accounts = app.settings.get_active_accounts()
+        if not accounts:
+            return Gdk.EVENT_STOP
+
         current_button = gesture_click.get_current_button()
 
         if current_button == Gdk.BUTTON_PRIMARY:
@@ -227,62 +229,60 @@ class AccountAvatar(Gtk.Image, EventHelper):
         Gtk.Image.__init__(self, pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
         EventHelper.__init__(self)
 
-        self._client: Client | None = None
-        self._contact: BareContact | None = None
-
-        self.register_event("account-enabled", ged.GUI1, self._on_account_changed)
-        self.register_event("account-disabled", ged.GUI1, self._on_account_changed)
+        self.register_event("account-enabled", ged.GUI1, self._on_account_state)
+        self.register_event("account-disabled", ged.GUI1, self._on_account_state)
         self.register_event("our-show", ged.GUI1, self._on_our_show)
 
+        for account in app.settings.get_active_accounts():
+            self._set_account_state(account, enabled=True)
+
         self._update_image()
+        self._update_tooltip()
 
-    def _on_account_changed(self, _event: AccountEnabled | AccountDisabled) -> None:
+    def do_unroot(self) -> None:
+        raise NotImplementedError
 
-        if self._client is not None:
-            self._client.disconnect_all_from_obj(self)
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
+    def _on_account_state(self, event: AccountEnabled | AccountDisabled) -> None:
+        self._set_account_state(
+            event.account, enabled=isinstance(event, AccountEnabled)
+        )
+        self._update_image()
+        self._update_tooltip()
 
-        accounts = app.settings.get_active_accounts()
+    def _set_account_state(self, account: str, *, enabled: bool) -> None:
+        client = app.get_client(account)
+        jid = app.get_jid_from_account(account)
+        contact = client.get_module("Contacts").get_contact(jid)
+        assert isinstance(contact, BareContact)
 
-        if len(accounts) == 1:
-            account = accounts[0]
-            self._client = app.get_client(account)
-            self._client.connect_signal("state-changed", self._on_event)
+        if enabled:
+            client.connect_signal("state-changed", self._on_client_state_changed)
+            contact.connect("avatar-update", self._on_avatar_update)
+        else:
+            client.disconnect_all_from_obj(self)
+            contact.disconnect_all_from_obj(self)
 
-            jid = app.get_jid_from_account(account)
-            contact = self._client.get_module("Contacts").get_contact(jid)
-            assert isinstance(contact, BareContact)
-            self._contact = contact
-            self._contact.connect("avatar-update", self._on_event)
-            self._contact.connect("presence-update", self._on_event)
-
+    def _on_avatar_update(self, *args: Any) -> None:
         self._update_image()
 
     def _on_our_show(self, _event: ShowChanged) -> None:
         self._update_image()
 
-    def do_unroot(self) -> None:
-        if self._client is not None:
-            self._client.disconnect_all_from_obj(self)
-        if self._contact is not None:
-            self._contact.disconnect_all_from_obj(self)
-
-        Gtk.Image.do_unroot(self)
-        app.check_finalize(self)
-
-    def _on_event(self, *args: Any) -> None:
+    def _on_client_state_changed(self, *args: Any) -> None:
         self._update_image()
 
-    def _update_image(self) -> None:
+    def _update_tooltip(self) -> None:
         accounts = app.settings.get_active_accounts()
         if len(accounts) == 1:
             account = accounts[0]
             account_label = app.settings.get_account_setting(account, "account_label")
             self.set_tooltip_text(_("Account: %s") % account_label)
         else:
-            account = None
             self.set_tooltip_text(_("Accounts"))
+
+    def _update_image(self) -> None:
+        accounts = app.settings.get_active_accounts()
+        account = accounts[0] if len(accounts) else None
 
         texture = app.app.avatar_storage.get_account_button_texture(
             account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
