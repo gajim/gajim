@@ -113,7 +113,8 @@ class Presence(BaseModule):
         assert isinstance(contact, BareContact | ResourceContact)
         contact.update_presence(presence_data)
 
-        if properties.is_self_presence:
+        assert properties.type is not None
+        if properties.is_self_presence and not properties.type.is_unavailable:
             app.ged.raise_event(ShowChanged(account=self._account,
                                             show=properties.show.value))
             return
