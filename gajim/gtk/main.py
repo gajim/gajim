@@ -1128,6 +1128,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             # Read marker must be sent only once
             return
 
+        if not app.account_is_connected(account):
+            return
+
         client = app.get_client(account)
         contact = client.get_module("Contacts").get_contact(jid)
         assert not isinstance(contact, ResourceContact)
