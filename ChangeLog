@@ -1,3 +1,30 @@
+Gajim 2.1.1 (16 Apr 2025)
+
+  Improvements
+
+  * OMEMO: Unify terminology regarding blind trust
+  * ExceptionDialog: Don’t open multiple dialogs (#8370)
+  * GroupChat: Show voice request errors (#12225)
+  * ChatFilters: Increase width of dropdowns
+  * StartChat: Improve row layout
+  * StartChat: Show contact addresses (#12261)
+  * StartChat: Make contact list more compact
+
+  Change
+
+  * Raise nbxmpp version
+
+  Bug Fixes
+
+  * MDS: Check if account is connected (#12271)
+  * Search: Ignore obsolete corrected messages (#11804)
+  * Search: Don’t show moderated messages (#12163)
+  * Message actions box: Fix pressing space to focus input; prevent error with no contact (#12267)
+  * StartChat: Consider show value "chat" the same as "online"
+  * MDS: Set by attribute correctly
+  * Catch exceptions when pasting text from clipboard (#12258)
+  * Account sidebar: Fix setting status for multiple accounts (#12257)
+
 Gajim 2.1.0 (08 Apr 2025)
 
   New
