@@ -111,7 +111,7 @@ class Client(Observable):
         return modules.get_module(self._account, name)
 
     def _set_state(self, state: ClientState) -> None:
-        log.info('State: %s', state)
+        log.info('State: %s', repr(state))
         self._state = state
 
     @property
