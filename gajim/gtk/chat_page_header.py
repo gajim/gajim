@@ -57,7 +57,7 @@ class ChatPageHeader(Gtk.Grid, SignalManager):
         section_name_box.append(self._workspace_settings_button)
 
         separator = Gtk.Separator(margin_start=6, margin_end=6, margin_top=6)
-        self.attach(separator, 0, 1, 0, 0)
+        self.attach(separator, 0, 1, 1, 1)
 
         constrols_box = Gtk.Box(margin_top=6, spacing=12)
         self.attach(constrols_box, 0, 2, 1, 1)
