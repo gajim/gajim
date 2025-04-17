@@ -130,7 +130,6 @@ exclude = [
   "gajim/common/modules/search.py",
   "gajim/common/modules/user_avatar.py",
   "gajim/common/modules/util.py",
-  "gajim/common/modules/vcard_avatars.py",
   "gajim/common/settings.py",
   "gajim/common/socks5.py",
   "gajim/common/structs.py",

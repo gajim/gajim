@@ -76,7 +76,7 @@ class VCardAvatars(BaseModule):
 
         assert isinstance(vcard, VCard)
         avatar, avatar_sha = vcard.get_avatar()
-        if avatar is None:
+        if avatar is None or avatar_sha is None:
             self._log.info('Avatar missing: %s %s', contact.jid, expected_sha)
             return
 
@@ -149,7 +149,7 @@ class VCardAvatars(BaseModule):
     def _process_update(self,
                         jid: JID,
                         state: AvatarState,
-                        avatar_sha: str,
+                        avatar_sha: str | None,
                         groupchat: bool
                         ) -> None:
         contact = self._con.get_module('Contacts').get_contact(
@@ -158,11 +158,13 @@ class VCardAvatars(BaseModule):
 
         if state == AvatarState.EMPTY:
             # Empty <photo/> tag, means no avatar is advertised
+            assert avatar_sha is None
             self._log.info('%s has no avatar published', jid)
             contact.set_avatar_sha(None)
             contact.update_avatar(avatar_sha)
 
         else:
+            assert avatar_sha
             self._log.info('Update: %s %s', jid, avatar_sha)
 
             if avatar_sha == contact.avatar_sha:
@@ -210,6 +212,7 @@ class VCardAvatars(BaseModule):
             contact.update_avatar()
 
         else:
+            assert properties.avatar_sha
             self._log.info('Update: %s %s', nick, properties.avatar_sha)
             if not app.app.avatar_storage.avatar_exists(properties.avatar_sha):
                 if properties.avatar_sha not in self._requested_shas:
