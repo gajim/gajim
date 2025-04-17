@@ -31,6 +31,9 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.util import as_task
 from gajim.common.task_manager import Task
 
+NS_AVATAR_HASH = 'muc#roominfo_avatarhash'
+NS_AVATAR_HASH_TEMP = '{http://modules.prosody.im/mod_vcard_muc}avatar#sha1'
+
 
 class VCardAvatars(BaseModule):
     def __init__(self, con: types.Client) -> None:
@@ -124,15 +127,23 @@ class VCardAvatars(BaseModule):
         if not disco_info.supports(Namespace.VCARD):
             return
 
-        field_var = '{http://modules.prosody.im/mod_vcard_muc}avatar#sha1'
-        if not disco_info.has_field(Namespace.MUC_INFO, field_var):
+        ns_avatar_hash = None
+        if disco_info.has_field(Namespace.MUC_INFO, NS_AVATAR_HASH):
+            ns_avatar_hash = NS_AVATAR_HASH
+
+        elif disco_info.has_field(Namespace.MUC_INFO, NS_AVATAR_HASH_TEMP):
+            ns_avatar_hash = NS_AVATAR_HASH_TEMP
+
+        if ns_avatar_hash is None:
             # Workaround so we don’t delete the avatar for servers that don’t
-            # support sha in disco info. Once there is a accepted XEP this
-            # can be removed
+            # support sha in disco info.
             return
 
-        avatar_sha = disco_info.get_field_value(Namespace.MUC_INFO, field_var)
+        avatar_sha = disco_info.get_field_value(
+            Namespace.MUC_INFO, ns_avatar_hash) or None
         state = AvatarState.EMPTY if not avatar_sha else AvatarState.ADVERTISED
+
+        assert disco_info.jid is not None
         self._process_update(disco_info.jid, state, avatar_sha, True)
 
     def _process_update(self,
