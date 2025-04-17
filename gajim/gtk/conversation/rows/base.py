@@ -34,7 +34,12 @@ class BaseRow(Gtk.ListBoxRow, SignalManager):
 
         self.add_css_class("conversation-row")
 
-        self.grid = Gtk.Grid(row_spacing=3, column_spacing=12)
+        self.grid = Gtk.Grid(
+            row_spacing=3,
+            column_spacing=12,
+            halign=Gtk.Align.START,
+            valign=Gtk.Align.START,
+        )
         self.set_child(self.grid)
 
         if widget == "label":
