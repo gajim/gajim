@@ -200,6 +200,7 @@ class XmppUriQuery(Enum):
 class MUCJoinedState(Enum):
     JOINED = 'joined'
     NOT_JOINED = 'not joined'
+    BEFORE_JOINING = 'before joining'
     JOINING = 'joining'
     CREATING = 'creating'
     CAPTCHA_REQUEST = 'captcha in progress'
@@ -220,6 +221,10 @@ class MUCJoinedState(Enum):
     @property
     def is_joining(self):
         return self == MUCJoinedState.JOINING
+
+    @property
+    def is_before_joining(self):
+        return self == MUCJoinedState.BEFORE_JOINING
 
     @property
     def is_creating(self):

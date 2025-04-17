@@ -911,7 +911,7 @@ class GroupchatContact(CommonContact):
         muc_data = self.get_module('MUC').get_muc_data(self._jid)
         if muc_data is None:
             return False
-        return muc_data.state.is_joining
+        return muc_data.state.is_joining or muc_data.state.is_before_joining
 
     @property
     def is_not_joined(self) -> bool:
