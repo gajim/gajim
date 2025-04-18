@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+from typing import Literal
+
 from datetime import datetime
 from datetime import UTC
 
@@ -133,7 +135,7 @@ def get_message_timestamp(
     return datetime.fromtimestamp(timestamp, tz=UTC)
 
 
-def convert_message_type(type_: MessageType) -> str:
+def convert_message_type(type_: MessageType) -> Literal['chat', 'groupchat']:
     if type_ in (MessageType.CHAT, MessageType.PM):
         return 'chat'
     return 'groupchat'

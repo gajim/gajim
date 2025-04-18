@@ -113,7 +113,9 @@ class Message(BaseModule):
             # Ugly, we treat the from attr as the remote jid,
             # to make that work with sent carbons we have to do this.
             # TODO: Check where in Gajim and plugins we depend on that behavior
-            stanza.setFrom(stanza.getTo())
+            to = stanza.getTo()
+            assert to is not None
+            stanza.setFrom(to)
 
         timestamp = get_message_timestamp(properties)
         remote_jid = properties.remote_jid
@@ -293,6 +295,8 @@ class Message(BaseModule):
 
         timestamp = get_message_timestamp(properties)
 
+        assert properties.error is not None
+
         error_data = mod.MessageError(
             account_=self._account,
             remote_jid_=remote_jid,
@@ -323,6 +327,7 @@ class Message(BaseModule):
                        ) -> str | None:
 
         if properties.is_mam_message:
+            assert properties.mam is not None
             return properties.mam.id
 
         if not properties.stanza_ids:
@@ -330,7 +335,9 @@ class Message(BaseModule):
 
         if properties.type.is_groupchat:
             archive = properties.remote_jid
+            assert archive is not None
             disco_info = app.storage.cache.get_last_disco_info(archive)
+            assert disco_info is not None
             if not disco_info.supports(Namespace.SID):
                 return None
 
@@ -351,7 +358,7 @@ class Message(BaseModule):
         remote_jid = message.contact.jid
 
         stanza = nbxmpp.Message(
-            to=remote_jid,
+            to=str(remote_jid),
             body=message.get_text(),
             typ=convert_message_type(message.type)
         )
@@ -410,7 +417,7 @@ class Message(BaseModule):
 
         # XEP-0490
         if message.mds_id is not None:
-            message.setMdsAssist(message.mds_id, own_jid.new_as_bare())
+            stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
 
         return stanza
 
