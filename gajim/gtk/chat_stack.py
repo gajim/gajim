@@ -249,12 +249,11 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
     ) -> None:
-        text = None
-
         try:
             text = clipboard.read_text_finish(result)
         except Exception as e:
-            log.exception("Error while trying to paste text: %s", e)
+            SimpleDialog(_("Pasting Content Failed"), _("Error: %s") % e)
+            return
 
         if text is None:
             log.info("No text pasted")

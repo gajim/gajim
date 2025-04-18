@@ -881,7 +881,17 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         clipboard: Gdk.Clipboard,
         result: Gio.AsyncResult,
     ) -> None:
-        file_list = clipboard.read_value_finish(result)
+        try:
+            file_list = clipboard.read_value_finish(result)
+        except Exception as e:
+            formats = clipboard.get_formats()
+            mime_types = formats.get_mime_types()
+            SimpleDialog(
+                _("Pasting Content Failed"),
+                _("Error: %s (mime types: %s)") % (e, mime_types),
+            )
+            return
+
         if file_list is None or not isinstance(file_list, Gdk.FileList):
             log.info("No URIs pasted")
             return
@@ -897,7 +907,8 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         try:
             texture = clipboard.read_texture_finish(result)
         except GLib.Error as e:
-            log.error("Could not read clipboard content: %s", e)
+            self._ui.input_overlay.set_visible(False)
+            SimpleDialog(_("Pasting Content Failed"), _("Error: %s") % e)
             return
 
         if texture is None:
