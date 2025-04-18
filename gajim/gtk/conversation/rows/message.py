@@ -264,6 +264,7 @@ class MessageRow(BaseRow):
             state=self.state,
             is_moderated=self._is_moderated,
             occupant_id=occupant_id,
+            message=self._message,
         )
 
     def _on_more_menu_popover_closed(

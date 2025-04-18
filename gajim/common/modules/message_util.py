@@ -17,12 +17,15 @@ from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
 
 from gajim.common.const import EME_MESSAGES
+from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
+
+UNKNOWN_MESSAGE = _('Message content unknown')
 
 
 def get_eme_message(eme_data: EMEData) -> str:

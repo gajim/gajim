@@ -46,6 +46,7 @@ from gajim.common.modules.pubsub import PubSub
 from gajim.common.modules.reactions import Reactions
 from gajim.common.modules.receipts import Receipts
 from gajim.common.modules.register import Register
+from gajim.common.modules.retraction import Retraction
 from gajim.common.modules.roster import Roster
 from gajim.common.modules.roster_item_exchange import RosterItemExchange
 from gajim.common.modules.search import Search
@@ -96,6 +97,7 @@ ModulesT = (
     | Reactions
     | Receipts
     | Register
+    | Retraction
     | Roster
     | RosterItemExchange
     | Search
@@ -144,6 +146,7 @@ ModulesLiteralT = Literal[
     'Reactions',
     'Receipts',
     'Register',
+    'Retraction',
     'Roster',
     'RosterItemExchange',
     'Search',
@@ -192,6 +195,7 @@ class ModuleDict(TypedDict):
     Reactions: Reactions
     Receipts: Receipts
     Register: Register
+    Retraction: Retraction
     Roster: Roster
     RosterItemExchange: RosterItemExchange
     Search: Search
