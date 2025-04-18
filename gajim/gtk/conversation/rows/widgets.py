@@ -445,13 +445,13 @@ class MessageIcons(Gtk.Box):
         self._correction_image.set_visible(visible)
 
     def set_correction_tooltip(self, text: str) -> None:
-        self._correction_image.set_tooltip_markup(text)
+        self._correction_image.set_tooltip_text(text)
 
     def set_error_icon_visible(self, visible: bool) -> None:
         self._error_image.set_visible(visible)
 
     def set_error_tooltip(self, text: str) -> None:
-        self._error_image.set_tooltip_markup(text)
+        self._error_image.set_tooltip_text(text)
 
 
 class AvatarBox(Gtk.Box, SignalManager):
