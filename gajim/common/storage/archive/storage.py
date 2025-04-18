@@ -48,6 +48,7 @@ from gajim.common.storage.archive.models import Moderation
 from gajim.common.storage.archive.models import Occupant
 from gajim.common.storage.archive.models import Reaction
 from gajim.common.storage.archive.models import Remote
+from gajim.common.storage.archive.models import Retraction
 from gajim.common.storage.archive.models import Thread
 from gajim.common.storage.base import AlchemyStorage
 from gajim.common.storage.base import timeit
@@ -57,7 +58,7 @@ from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 11
+CURRENT_USER_VERSION = 12
 
 
 log = logging.getLogger('gajim.c.storage.archive')
@@ -413,6 +414,9 @@ class MessageArchiveStorage(AlchemyStorage):
 
         if message.moderation is not None:
             session.delete(message.moderation)
+
+        if message.retraction is not None:
+            session.delete(message.retraction)
 
         session.delete(message)
 
@@ -810,6 +814,7 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.text.ilike(f'%{query}%'),
                 Message.timestamp.between(after, before),
                 ~Message.moderation.has(),
+                ~Message.retraction.has(),
             )
             .order_by(sa.desc(Message.timestamp), sa.desc(Message.pk))
             .execution_options(yield_per=25)
@@ -1049,6 +1054,8 @@ class MessageArchiveStorage(AlchemyStorage):
         fk_account_pk = self._get_account_pk(session, account)
         fk_remote_pk = self._get_jid_pk(session, jid)
 
+        # Errors
+
         stmt = delete(MessageError).where(
             MessageError.fk_account_pk == fk_account_pk,
             MessageError.fk_remote_pk == fk_remote_pk,
@@ -1056,12 +1063,25 @@ class MessageArchiveStorage(AlchemyStorage):
 
         session.execute(stmt)
 
+        # Moderation
+
         stmt = delete(Moderation).where(
             Moderation.fk_account_pk == fk_account_pk,
             Moderation.fk_remote_pk == fk_remote_pk,
         )
 
         session.execute(stmt)
+
+        # Retraction
+
+        stmt = delete(Retraction).where(
+            Retraction.fk_account_pk == fk_account_pk,
+            Retraction.fk_remote_pk == fk_remote_pk,
+        )
+
+        session.execute(stmt)
+
+        # Messages
 
         stmt = delete(Message).where(
             Message.fk_account_pk == fk_account_pk, Message.fk_remote_pk == fk_remote_pk
@@ -1080,6 +1100,7 @@ class MessageArchiveStorage(AlchemyStorage):
 
         session.execute(delete(MessageError))
         session.execute(delete(Moderation))
+        session.execute(delete(Retraction))
         session.execute(delete(Message))
 
         log.info('Removed all chat history')

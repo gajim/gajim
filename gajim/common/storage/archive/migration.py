@@ -116,8 +116,8 @@ class Migration:
             self._v9()
         if user_version < 10:
             self._v10()
-        if user_version < 11:
-            self._v11()
+        if user_version < 12:
+            self._v11_and_v12()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -265,9 +265,9 @@ class Migration:
             'PRAGMA user_version=10'
         ])
 
-    def _v11(self) -> None:
+    def _v11_and_v12(self) -> None:
         mod.Base.metadata.create_all(self._engine)
-        self._execute_multiple(['PRAGMA user_version=11'])
+        self._execute_multiple(['PRAGMA user_version=12'])
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

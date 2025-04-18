@@ -28,15 +28,14 @@ from gajim.common import app
 from gajim.common import types
 from gajim.common.events import MessageModerated
 from gajim.common.events import MessageReceived
-from gajim.common.i18n import _
 from gajim.common.modules.base import BaseModule
 from gajim.common.modules.message_util import get_chat_type_and_direction
+from gajim.common.modules.message_util import UNKNOWN_MESSAGE
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import MessageState
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.structs import MUCData
 
-UNKNOWN_MESSAGE = _('Message content unknown')
 
 class Moderations(BaseModule):
     def __init__(self, client: types.Client) -> None:
@@ -47,22 +46,22 @@ class Moderations(BaseModule):
                           callback=self._process_moderation_message,
                           typ='groupchat',
                           ns=Namespace.FASTEN,
-                          priority=48),
+                          priority=45),
             StanzaHandler(name='message',
                           callback=self._process_moderation_message,
                           typ='groupchat',
                           ns=Namespace.MESSAGE_RETRACT_1,
-                          priority=48),
+                          priority=45),
             StanzaHandler(name='message',
                           callback=self._process_message_moderated_tombstone,
                           typ='groupchat',
                           ns=Namespace.MESSAGE_MODERATE,
-                          priority=48),
+                          priority=45),
             StanzaHandler(name='message',
                           callback=self._process_message_moderated_tombstone,
                           typ='groupchat',
                           ns=Namespace.MESSAGE_RETRACT_1,
-                          priority=48),
+                          priority=45),
         ]
 
     def _process_message_moderated_tombstone(

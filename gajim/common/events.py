@@ -425,6 +425,14 @@ class MessageModerated(ApplicationEvent):
 
 
 @dataclass
+class MessageRetracted(ApplicationEvent):
+    name: str = field(init=False, default='message-retracted')
+    account: str
+    jid: JID
+    retraction: mod.Retraction
+
+
+@dataclass
 class MessageReceived(ApplicationEvent):
     name: str = field(init=False, default='message-received')
     account: str

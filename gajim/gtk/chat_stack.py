@@ -540,6 +540,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         )
 
         app.window.get_action("correct-message").set_enabled(online)
+        app.window.get_action("retract-message").set_enabled(online)
 
     def _update_chat_actions(self, contact: BareContact) -> None:
         online = app.account_is_connected(contact.account)
