@@ -795,8 +795,13 @@ def get_chat_row_menu(
             (p_("Message row action", "Correct…"), "win.correct-message", None)
         )
 
+    param = None
     if not is_retracted:
-        append_retract_menu_item(menu_items, contact, message, stanza_id, state)
+        param = get_retract_param(menu_items, contact, message, stanza_id, state)
+
+    menu_items.append(
+        (p_("Message row action", "Retract…"), "win.retract-message", param)
+    )
 
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
@@ -865,17 +870,14 @@ def get_chat_row_menu(
     return GajimMenu.from_list(menu_items)
 
 
-def append_retract_menu_item(
+def get_retract_param(
     menu_items: MenuItemListT,
     contact: types.ChatContactT,
     message: Message,
     stanza_id: str | None,
     state: MessageState,
-) -> None:
+) -> RetractMessageParam | None:
     if message.direction != ChatDirection.OUTGOING:
-        return
-
-    if message.retraction is not None:
         return
 
     retraction_id = message.id
@@ -894,11 +896,7 @@ def append_retract_menu_item(
     if isinstance(contact, GroupchatParticipant) and not contact.room.is_joined:
         return
 
-    params = RetractMessageParam(contact.account, contact.jid, retraction_id)
-
-    menu_items.append(
-        (p_("Message row action", "Retract…"), "win.retract-message", params)
-    )
+    return RetractMessageParam(contact.account, contact.jid, retraction_id)
 
 
 def get_preview_menu(preview: Preview) -> GajimMenu:
