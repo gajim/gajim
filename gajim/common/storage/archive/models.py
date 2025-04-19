@@ -601,7 +601,7 @@ class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     id: Mapped[str] = mapped_column()
     direction: Mapped[int] = mapped_column()
     timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
-    removed: Mapped[bool] = mapped_column(default=False)
+    state: Mapped[int] = mapped_column(default=0)
 
     __table_args__ = (
         Index(
@@ -624,8 +624,8 @@ class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             sqlite_where=fk_occupant_pk.isnot(None),
         ),
         Index(
-            'idx_retraction_removed',
-            'removed',
+            'idx_retraction_state',
+            'state',
         ),
     )
 
