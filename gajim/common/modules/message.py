@@ -16,6 +16,7 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import RETRACTION_FALLBACK
 from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
 from gajim.common.events import MessageError
@@ -418,7 +419,8 @@ class Message(BaseModule):
 
         # XEP-0424
         if message.retraction_id is not None:
-            stanza.setRetracted(message.retraction_id)
+            stanza.setRetracted(
+                message.retraction_id, fallback_text=RETRACTION_FALLBACK)
 
         # XEP-0490
         if message.mds_id is not None:
