@@ -1153,6 +1153,8 @@ class MessageArchiveStorage(AlchemyStorage):
                 Message.fk_account_pk == fk_account_pk,
                 Message.fk_remote_pk == fk_remote_pk,
                 Message.correction_id.is_(None),
+                ~Message.moderation.has(),
+                ~Message.retraction.has(),
             )
             .order_by(Message.timestamp, Message.pk)
             .execution_options(yield_per=25)

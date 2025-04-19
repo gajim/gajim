@@ -247,6 +247,9 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
                 if original_message is None:
                     continue
 
+                if original_message.moderation or original_message.retraction:
+                    continue
+
                 last_correction = original_message.get_last_correction()
                 if message.pk != last_correction.pk:
                     continue
