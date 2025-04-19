@@ -796,10 +796,14 @@ class ConversationView(Gtk.ScrolledWindow):
                 message_row.timestamp - timedelta(microseconds=1), force=True
             )
 
-    def show_message_moderation(self, stanza_id: str, text: str) -> None:
-        message_row = self._get_row_by_stanza_id(stanza_id)
+    def set_retracted(self, retraction_id: str) -> None:
+        if isinstance(self._contact, GroupchatContact):
+            message_row = self._get_row_by_stanza_id(retraction_id)
+        else:
+            message_row = self._get_row_by_message_id(retraction_id)
+
         if message_row is not None:
-            message_row.set_moderated(text)
+            message_row.refresh()
 
     def update_message_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):

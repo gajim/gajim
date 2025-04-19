@@ -64,6 +64,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
                 ("message-received", ged.GUI2, self._on_event),
                 ("message-corrected", ged.GUI2, self._on_event),
                 ("message-moderated", ged.GUI2, self._on_event),
+                ("message-retracted", ged.GUI2, self._on_event),
                 ("presence-received", ged.GUI2, self._on_event),
                 ("message-sent", ged.GUI2, self._on_event),
                 ("message-deleted", ged.GUI2, self._on_event),

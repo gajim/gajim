@@ -45,6 +45,7 @@ ChatListEventT = Union[
     'MessageReceived',
     'MessageCorrected',
     'MessageModerated',
+    'MessageRetracted',
     'PresenceReceived',
     'MessageSent',
     'MessageDeleted',

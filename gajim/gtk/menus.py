@@ -742,7 +742,7 @@ def get_chat_row_menu(
     pk: int | None,
     corrected_pk: int | None,
     state: MessageState,
-    is_moderated: bool,
+    is_retracted: bool,
     occupant_id: str | None,
     message: Message,
 ) -> GajimMenu:
@@ -789,12 +789,14 @@ def get_chat_row_menu(
     show_correction = False
     if message_id is not None:
         show_correction = app.window.is_message_correctable(contact, message_id)
-    if show_correction:
+
+    if show_correction and not is_retracted:
         menu_items.append(
             (p_("Message row action", "Correct…"), "win.correct-message", None)
         )
 
-    append_retract_menu_item(menu_items, contact, message, stanza_id, state)
+    if not is_retracted:
+        append_retract_menu_item(menu_items, contact, message, stanza_id, state)
 
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
@@ -809,7 +811,7 @@ def get_chat_row_menu(
             disco_info.has_message_moderation
             and stanza_id is not None
             and state == MessageState.ACKNOWLEDGED
-            and not is_moderated
+            and not is_retracted
             and is_allowed
         ):
 

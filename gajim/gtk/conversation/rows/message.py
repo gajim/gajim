@@ -28,6 +28,7 @@ from gajim.common.types import ChatContactT
 from gajim.common.util.muc import message_needs_highlight
 from gajim.common.util.text import format_fingerprint
 from gajim.common.util.user_strings import get_moderation_text
+from gajim.common.util.user_strings import get_retraction_text
 
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.reactions_bar import ReactionsBar
@@ -68,12 +69,16 @@ class MessageRow(BaseRow):
         self._is_outgoing = self.direction == ChatDirection.OUTGOING
 
         self.orig_pk = message.pk
+        self.pk = self.orig_pk
+
+        self.encryption = None
+        self.securitylabel = None
 
         assert message.text is not None
         self._original_text = message.text
         self._original_message = message
 
-        self._is_moderated = message.moderation is not None
+        self._is_retracted = bool(message.moderation or message.retraction)
         self._has_receipt = False
 
         self._avatar_box = AvatarBox(contact)
@@ -129,27 +134,11 @@ class MessageRow(BaseRow):
 
     def _set_content(self, message: Message) -> None:
         self.set_merged(False)
-        self.remove_css_class("moderated-message")
+        self.remove_css_class("retracted-message")
         self.remove_css_class("gajim-mention-highlight")
 
         container_remove_all(self._meta_box)
         container_remove_all(self._bottom_box)
-
-        self._corr_message = None
-
-        # From here on, if this is a correction all data must
-        # be taken from the correction
-        if message.corrections:
-            message = message.get_last_correction()
-            self._corr_message = message
-
-        self.pk = message.pk
-
-        self.encryption = message.encryption
-        self.securitylabel = message.security_label
-
-        assert message.text is not None
-        self.text = message.text
 
         self.name = get_contact_name_for_message(message, self._contact)
 
@@ -164,6 +153,32 @@ class MessageRow(BaseRow):
 
         self._message_icons = MessageIcons()
         self._meta_box.append(self._message_icons)
+
+        self._corr_message = None
+
+        if message.moderation is not None:
+            self._set_retracted(
+                get_moderation_text(message.moderation.by, message.moderation.reason)
+            )
+            return
+
+        if message.retraction is not None:
+            self._set_retracted(get_retraction_text(message.retraction.timestamp))
+            return
+
+        # From here on, if this is a correction all data must
+        # be taken from the correction
+        if message.corrections:
+            message = message.get_last_correction()
+            self._corr_message = message
+
+        self.pk = message.pk
+
+        self.encryption = message.encryption
+        self.securitylabel = message.security_label
+
+        assert message.text is not None
+        self.text = message.text
 
         if app.preview_manager.is_previewable(self.text, message.oob):
             self._message_widget = PreviewWidget(self._contact.account)
@@ -197,11 +212,6 @@ class MessageRow(BaseRow):
 
         if self._original_message.corrections:
             self._set_correction()
-
-        if message.moderation is not None:
-            self.set_moderated(
-                get_moderation_text(message.moderation.by, message.moderation.reason)
-            )
 
         reactions = self._original_message.reactions
         if reactions:
@@ -262,7 +272,7 @@ class MessageRow(BaseRow):
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
-            is_moderated=self._is_moderated,
+            is_retracted=self._is_retracted,
             occupant_id=occupant_id,
             message=self._message,
         )
@@ -441,20 +451,19 @@ class MessageRow(BaseRow):
             contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
         )
 
-    def set_moderated(self, text: str) -> None:
+    def _set_retracted(self, text: str) -> None:
         self.text = text
 
-        if isinstance(self._message_widget, PreviewWidget):
-            self._bottom_box.remove(self._message_widget)
+        self.state = MessageState.ACKNOWLEDGED
 
-            self._message_widget = MessageWidget(self._account)
-            self._bottom_box.append(self._message_widget)
-            self._set_text_direction(text)
-
+        self._message_widget = MessageWidget(self._account)
         self._message_widget.add_with_styling(text)
-        self.add_css_class("moderated-message")
+        self._set_text_direction(text)
+        self._bottom_box.append(self._message_widget)
 
-        self._is_moderated = True
+        self.add_css_class("retracted-message")
+
+        self._is_retracted = True
 
     def _set_correction(self) -> None:
         original_text = textwrap.fill(

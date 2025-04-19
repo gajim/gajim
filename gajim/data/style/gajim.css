@@ -741,7 +741,7 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Conversation row styles */
 .merged { padding-top: 1px; }
-.moderated-message { opacity: 0.4; }
+.retracted-message { opacity: 0.4; }
 .transparent-selection > selection {
     background-color: transparent;
     color: @theme_fg_color;

@@ -59,6 +59,14 @@ def get_moderation_text(by: str | JID | None, reason: str | None) -> str:
     return f'{text} {reason_text}'
 
 
+def get_retraction_text(timestamp: dt.datetime) -> str:
+    dt_format = app.settings.get('date_time_format')
+    timestamp = timestamp.astimezone()
+    timestamp_formatted = timestamp.strftime(dt_format)
+    return _('This message has been retracted on {date}').format(
+        date=timestamp_formatted)
+
+
 def get_uf_sub(sub: str) -> str:
     if sub == 'none':
         return p_('Contact subscription', 'None')
