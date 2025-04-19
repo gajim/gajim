@@ -248,10 +248,15 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
                     continue
 
                 if original_message.moderation or original_message.retraction:
+                    # Retractions always reference only the original message
+                    # If the original was retracted, ignore search hits in the
+                    # correction
                     continue
 
                 last_correction = original_message.get_last_correction()
                 if message.pk != last_correction.pk:
+                    # This was a search hit on a correction which is not
+                    # the last correction available, so ignore it
                     continue
 
             result_row = ResultRow(message)
