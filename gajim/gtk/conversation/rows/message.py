@@ -461,6 +461,8 @@ class MessageRow(BaseRow):
         self._set_text_direction(text)
         self._bottom_box.append(self._message_widget)
 
+        self._reactions_bar.update_from_reactions([])
+
         self.add_css_class("retracted-message")
 
         self._is_retracted = True
