@@ -1098,3 +1098,7 @@ TLS_VERSION_STRINGS = {
     4: '1.2',
     5: '1.3',
 }
+
+
+RETRACTION_FALLBACK = (
+    "/me retracted a previous message, but it's unsupported by your client.")
