@@ -115,6 +115,9 @@ class Retraction(BaseModule):
         if properties.retraction.is_tombstone:
             assert properties.mam is not None
 
+            self._log.info('Received retraction tombstone from %s for %s',
+                           remote_jid, properties.mam.id)
+
             message_data = mod.Message(
                 account_=self._account,
                 remote_jid_=remote_jid,
@@ -143,6 +146,8 @@ class Retraction(BaseModule):
 
         else:
 
+            self._log.info('Received retraction from %s for %s',
+                           remote_jid, properties.retraction.id)
             retraction = mod.Retraction(
                 account_=self._account,
                 remote_jid_=remote_jid,

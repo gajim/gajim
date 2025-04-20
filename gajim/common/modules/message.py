@@ -168,7 +168,6 @@ class Message(BaseModule):
 
             # Use origin-id because some group chats change the message id
             # on the reflection.
-
             pk = app.storage.archive.update_pending_message(
                 self._account, remote_jid, origin_id, stanza_id)
 
@@ -434,10 +433,11 @@ class Message(BaseModule):
                 message.retraction_id is None):
             return
 
-        if (message.type == MessageType.GROUPCHAT and
-                message.reaction_data is not None):
-            # Store reaction when the MUC reflects it
-            return
+        if message.type == MessageType.GROUPCHAT:
+            if (message.reaction_data is not None or
+                    message.retraction_id is not None):
+                # Store reaction when the MUC reflects it
+                return
 
         direction = ChatDirection.OUTGOING
         remote_jid = message.contact.jid

@@ -797,7 +797,9 @@ def get_chat_row_menu(
 
     param = None
     if not is_retracted:
-        param = get_retract_param(menu_items, contact, message, stanza_id, state)
+        param = get_retract_param(
+            menu_items, contact, message, message_id, stanza_id, state
+        )
 
     menu_items.append(
         (p_("Message row action", "Retract…"), "win.retract-message", param)
@@ -874,13 +876,14 @@ def get_retract_param(
     menu_items: MenuItemListT,
     contact: types.ChatContactT,
     message: Message,
+    message_id: str | None,
     stanza_id: str | None,
     state: MessageState,
 ) -> RetractMessageParam | None:
     if message.direction != ChatDirection.OUTGOING:
         return
 
-    retraction_id = message.id
+    retraction_id = message_id
     if message.type == MessageType.GROUPCHAT:
         retraction_id = stanza_id
 

@@ -12,7 +12,6 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import Gtk
 from gi.repository import Pango
-from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -143,7 +142,7 @@ class MessageRowActions(Gtk.Box):
         self.set_margin_top(int(adjusted_y_coord))
 
         message_row_width = self._message_row.get_width()
-        reactions_visible = self._get_reactions_visible()
+        reactions_visible = self._message_row.can_react()
 
         for button in self._reaction_buttons:
             if (
@@ -157,54 +156,12 @@ class MessageRowActions(Gtk.Box):
 
             button.set_visible(reactions_visible)
 
-        self._reply_button.set_visible(self._get_reply_visible())
+        self._reply_button.set_visible(self._message_row.can_reply())
         self.set_visible(True)
 
     def switch_contact(self, contact: ChatContactT) -> None:
         self._message_row = None
         self._contact = contact
-
-    def _get_reply_visible(self) -> bool:
-        assert self._message_row is not None
-
-        if isinstance(self._contact, GroupchatContact):
-            if self._message_row.stanza_id is None:
-                return False
-
-            if not self._contact.is_joined:
-                return False
-
-            self_contact = self._contact.get_self()
-            assert self_contact is not None
-            return not self_contact.role.is_visitor
-
-        return self._message_row.message_id is not None
-
-    def _get_reactions_visible(self) -> bool:
-        assert self._message_row is not None
-        assert self._contact is not None
-
-        if not app.account_is_connected(self._contact.account):
-            return False
-
-        if isinstance(self._contact, GroupchatContact):
-            if not self._contact.is_joined:
-                return False
-
-            self_contact = self._contact.get_self()
-            assert self_contact is not None
-            if self_contact.role.is_visitor:
-                return False
-
-            if self._message_row.stanza_id is None:
-                return False
-
-            if self._contact.muc_context == "public":
-                return self._contact.supports(Namespace.OCCUPANT_ID)
-
-            return True
-
-        return self._message_row.message_id is not None
 
     def _hide_with_timeout(self) -> None:
         if self._timeout_id is not None:

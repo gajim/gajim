@@ -10,6 +10,7 @@ from datetime import timedelta
 
 from gi.repository import GLib
 from gi.repository import Gtk
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -268,7 +269,7 @@ class MessageRow(BaseRow):
             text=self.get_text(),
             timestamp=self.timestamp,
             message_id=self._original_message.id,
-            stanza_id=self.stanza_id,
+            stanza_id=self._original_message.stanza_id,
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
@@ -404,20 +405,32 @@ class MessageRow(BaseRow):
         return icon, color, tooltip
 
     def set_acknowledged(self, stanza_id: str | None) -> None:
+        if self._is_retracted:
+            return
+
         self.state = MessageState.ACKNOWLEDGED
         self.stanza_id = stanza_id
         self._message_icons.set_message_state_icon(self.state)
 
     def set_receipt(self, value: bool) -> None:
+        if self._is_retracted:
+            return
+
         self._has_receipt = value
         self._message_icons.set_receipt_icon_visible(value)
 
     def show_error(self, tooltip: str) -> None:
+        if self._is_retracted:
+            return
+
         self._message_icons.hide_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
     def update_reactions(self) -> None:
+        if self._is_retracted:
+            return
+
         self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
@@ -461,7 +474,7 @@ class MessageRow(BaseRow):
         self._set_text_direction(text)
         self._bottom_box.append(self._message_widget)
 
-        self._reactions_bar.update_from_reactions([])
+        self._reactions_bar.set_visible(False)
 
         self.add_css_class("retracted-message")
 
@@ -493,3 +506,46 @@ class MessageRow(BaseRow):
             self._meta_box.set_visible(True)
 
         self._avatar_box.set_merged(merged)
+
+    def can_reply(self) -> bool:
+        if self._is_retracted:
+            return False
+
+        if isinstance(self._contact, GroupchatContact):
+            if self._original_message.stanza_id is None:
+                return False
+
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            return not self_contact.role.is_visitor
+
+        return self._original_message.id is not None
+
+    def can_react(self) -> bool:
+        if self._is_retracted:
+            return False
+
+        if not app.account_is_connected(self._contact.account):
+            return False
+
+        if isinstance(self._contact, GroupchatContact):
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            if self_contact.role.is_visitor:
+                return False
+
+            if self._original_message.stanza_id is None:
+                return False
+
+            if self._contact.muc_context == "public":
+                return self._contact.supports(Namespace.OCCUPANT_ID)
+
+            return True
+
+        return self._original_message.id is not None
