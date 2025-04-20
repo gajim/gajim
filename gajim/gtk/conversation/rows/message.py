@@ -269,7 +269,7 @@ class MessageRow(BaseRow):
             text=self.get_text(),
             timestamp=self.timestamp,
             message_id=self._original_message.id,
-            stanza_id=self._original_message.stanza_id,
+            stanza_id=self.stanza_id,
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
@@ -408,8 +408,10 @@ class MessageRow(BaseRow):
         if self._is_retracted:
             return
 
+        if not self._original_message.corrections:
+            self.stanza_id = stanza_id
+
         self.state = MessageState.ACKNOWLEDGED
-        self.stanza_id = stanza_id
         self._message_icons.set_message_state_icon(self.state)
 
     def set_receipt(self, value: bool) -> None:
@@ -512,7 +514,7 @@ class MessageRow(BaseRow):
             return False
 
         if isinstance(self._contact, GroupchatContact):
-            if self._original_message.stanza_id is None:
+            if self.stanza_id is None:
                 return False
 
             if not self._contact.is_joined:
@@ -540,7 +542,7 @@ class MessageRow(BaseRow):
             if self_contact.role.is_visitor:
                 return False
 
-            if self._original_message.stanza_id is None:
+            if self.stanza_id is None:
                 return False
 
             if self._contact.muc_context == "public":

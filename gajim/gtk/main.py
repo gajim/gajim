@@ -702,7 +702,11 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         ConfirmationDialog(
             _("Retract Message?"),
-            _("Do you want to retract this message?"),
+            _(
+                "Do you want to retract this message?\n"
+                "Note that Gajim can not guarantee that the server or the "
+                "contacts device will remove this message."
+            ),
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("_Retract"), callback=_on_retract),
