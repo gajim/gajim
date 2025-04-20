@@ -139,8 +139,9 @@ options:
 - [Arch Linux](https://www.archlinux.org/packages/extra/any/gajim/)
 - [Debian](https://packages.debian.org/stable/gajim)
 - [Fedora](https://packages.fedoraproject.org/pkgs/gajim/)
-- [Ubuntu](https://packages.ubuntu.com/gajim)
 - [FreeBSD](https://www.freshports.org/net-im/gajim/)
+- [openSUSE](https://software.opensuse.org/package/gajim)
+- [Ubuntu](https://packages.ubuntu.com/gajim)
 
 ### Flatpak
 
