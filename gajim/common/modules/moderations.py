@@ -94,7 +94,6 @@ class Moderations(BaseModule):
         is_occupant_id_supported = self._is_occupant_id_supported(properties)
 
         self._insert_tombstone(muc_data, properties, is_occupant_id_supported)
-        self._insert_moderation_message(properties, is_occupant_id_supported)
 
         raise NodeProcessed
 
