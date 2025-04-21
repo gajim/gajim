@@ -13,6 +13,7 @@ from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
 from gi.repository import Gtk
+from gi.repository import Pango
 from nbxmpp.modules.vcard4 import AdrProperty
 from nbxmpp.modules.vcard4 import BDayProperty
 from nbxmpp.modules.vcard4 import CaladruriProperty
@@ -295,17 +296,21 @@ class DescriptionLabel(Gtk.Label):
 
 class ValueLabel(Gtk.Label, SignalManager):
     def __init__(self, prop: PropertyT, account: str) -> None:
-        Gtk.Label.__init__(self)
+        Gtk.Label.__init__(
+            self,
+            selectable=True,
+            xalign=0,
+            max_width_chars=50,
+            wrap=True,
+            wrap_mode=Pango.WrapMode.WORD_CHAR,
+            valign=Gtk.Align.CENTER,
+            halign=Gtk.Align.START,
+        )
         SignalManager.__init__(self)
 
         self._prop = prop
         self._uri: URI | None = None
         self._account = account
-        self.set_selectable(True)
-        self.set_xalign(0)
-        self.set_max_width_chars(50)
-        self.set_valign(Gtk.Align.CENTER)
-        self.set_halign(Gtk.Align.START)
 
         self._connect(self, "activate-link", self._on_activate_link)
         if prop.name == "org":
