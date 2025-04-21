@@ -39,6 +39,7 @@ from gajim.common.util.preview import format_geo_coords
 from gajim.common.util.preview import guess_simple_file_type
 from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.user_strings import get_moderation_text
+from gajim.common.util.user_strings import get_retraction_text
 from gajim.common.util.user_strings import get_uf_relative_time
 
 from gajim.gtk.builder import get_builder
@@ -157,14 +158,17 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if message.text is not None:
             message_text = message.text
 
-            if message.corrections:
-                message_text = message.get_last_correction().text
-                assert message_text is not None
-
             if message.moderation is not None:
                 message_text = get_moderation_text(
                     message.moderation.by, message.moderation.reason
                 )
+
+            elif message.retraction is not None:
+                message_text = get_retraction_text(message.retraction.timestamp)
+
+            elif message.corrections:
+                message_text = message.get_last_correction().text
+                assert message_text is not None
 
             # Nickname
             nickname = None

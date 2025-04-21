@@ -10,6 +10,7 @@ from datetime import timedelta
 
 from gi.repository import GLib
 from gi.repository import Gtk
+from nbxmpp.namespaces import Namespace
 
 from gajim.common import app
 from gajim.common.const import AvatarSize
@@ -28,6 +29,7 @@ from gajim.common.types import ChatContactT
 from gajim.common.util.muc import message_needs_highlight
 from gajim.common.util.text import format_fingerprint
 from gajim.common.util.user_strings import get_moderation_text
+from gajim.common.util.user_strings import get_retraction_text
 
 from gajim.gtk.conversation.message_widget import MessageWidget
 from gajim.gtk.conversation.reactions_bar import ReactionsBar
@@ -68,12 +70,16 @@ class MessageRow(BaseRow):
         self._is_outgoing = self.direction == ChatDirection.OUTGOING
 
         self.orig_pk = message.pk
+        self.pk = self.orig_pk
+
+        self.encryption = None
+        self.securitylabel = None
 
         assert message.text is not None
         self._original_text = message.text
         self._original_message = message
 
-        self._is_moderated = message.moderation is not None
+        self._is_retracted = bool(message.moderation or message.retraction)
         self._has_receipt = False
 
         self._avatar_box = AvatarBox(contact)
@@ -129,27 +135,11 @@ class MessageRow(BaseRow):
 
     def _set_content(self, message: Message) -> None:
         self.set_merged(False)
-        self.remove_css_class("moderated-message")
+        self.remove_css_class("retracted-message")
         self.remove_css_class("gajim-mention-highlight")
 
         container_remove_all(self._meta_box)
         container_remove_all(self._bottom_box)
-
-        self._corr_message = None
-
-        # From here on, if this is a correction all data must
-        # be taken from the correction
-        if message.corrections:
-            message = message.get_last_correction()
-            self._corr_message = message
-
-        self.pk = message.pk
-
-        self.encryption = message.encryption
-        self.securitylabel = message.security_label
-
-        assert message.text is not None
-        self.text = message.text
 
         self.name = get_contact_name_for_message(message, self._contact)
 
@@ -164,6 +154,32 @@ class MessageRow(BaseRow):
 
         self._message_icons = MessageIcons()
         self._meta_box.append(self._message_icons)
+
+        self._corr_message = None
+
+        if message.moderation is not None:
+            self._set_retracted(
+                get_moderation_text(message.moderation.by, message.moderation.reason)
+            )
+            return
+
+        if message.retraction is not None:
+            self._set_retracted(get_retraction_text(message.retraction.timestamp))
+            return
+
+        # From here on, if this is a correction all data must
+        # be taken from the correction
+        if message.corrections:
+            message = message.get_last_correction()
+            self._corr_message = message
+
+        self.pk = message.pk
+
+        self.encryption = message.encryption
+        self.securitylabel = message.security_label
+
+        assert message.text is not None
+        self.text = message.text
 
         if app.preview_manager.is_previewable(self.text, message.oob):
             self._message_widget = PreviewWidget(self._contact.account)
@@ -197,11 +213,6 @@ class MessageRow(BaseRow):
 
         if self._original_message.corrections:
             self._set_correction()
-
-        if message.moderation is not None:
-            self.set_moderated(
-                get_moderation_text(message.moderation.by, message.moderation.reason)
-            )
 
         reactions = self._original_message.reactions
         if reactions:
@@ -262,8 +273,9 @@ class MessageRow(BaseRow):
             pk=self.orig_pk,
             corrected_pk=self.pk,
             state=self.state,
-            is_moderated=self._is_moderated,
+            is_retracted=self._is_retracted,
             occupant_id=occupant_id,
+            message=self._message,
         )
 
     def _on_more_menu_popover_closed(
@@ -393,20 +405,34 @@ class MessageRow(BaseRow):
         return icon, color, tooltip
 
     def set_acknowledged(self, stanza_id: str | None) -> None:
+        if self._is_retracted:
+            return
+
+        if not self._original_message.corrections:
+            self.stanza_id = stanza_id
+
         self.state = MessageState.ACKNOWLEDGED
-        self.stanza_id = stanza_id
         self._message_icons.set_message_state_icon(self.state)
 
     def set_receipt(self, value: bool) -> None:
+        if self._is_retracted:
+            return
+
         self._has_receipt = value
         self._message_icons.set_receipt_icon_visible(value)
 
     def show_error(self, tooltip: str) -> None:
+        if self._is_retracted:
+            return
+
         self._message_icons.hide_message_state_icon()
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
     def update_reactions(self) -> None:
+        if self._is_retracted:
+            return
+
         self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
@@ -440,20 +466,21 @@ class MessageRow(BaseRow):
             contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
         )
 
-    def set_moderated(self, text: str) -> None:
+    def _set_retracted(self, text: str) -> None:
         self.text = text
 
-        if isinstance(self._message_widget, PreviewWidget):
-            self._bottom_box.remove(self._message_widget)
+        self.state = MessageState.ACKNOWLEDGED
 
-            self._message_widget = MessageWidget(self._account)
-            self._bottom_box.append(self._message_widget)
-            self._set_text_direction(text)
-
+        self._message_widget = MessageWidget(self._account)
         self._message_widget.add_with_styling(text)
-        self.add_css_class("moderated-message")
+        self._set_text_direction(text)
+        self._bottom_box.append(self._message_widget)
 
-        self._is_moderated = True
+        self._reactions_bar.set_visible(False)
+
+        self.add_css_class("retracted-message")
+
+        self._is_retracted = True
 
     def _set_correction(self) -> None:
         original_text = textwrap.fill(
@@ -481,3 +508,46 @@ class MessageRow(BaseRow):
             self._meta_box.set_visible(True)
 
         self._avatar_box.set_merged(merged)
+
+    def can_reply(self) -> bool:
+        if self._is_retracted:
+            return False
+
+        if isinstance(self._contact, GroupchatContact):
+            if self.stanza_id is None:
+                return False
+
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            return not self_contact.role.is_visitor
+
+        return self._original_message.id is not None
+
+    def can_react(self) -> bool:
+        if self._is_retracted:
+            return False
+
+        if not app.account_is_connected(self._contact.account):
+            return False
+
+        if isinstance(self._contact, GroupchatContact):
+            if not self._contact.is_joined:
+                return False
+
+            self_contact = self._contact.get_self()
+            assert self_contact is not None
+            if self_contact.role.is_visitor:
+                return False
+
+            if self.stanza_id is None:
+                return False
+
+            if self._contact.muc_context == "public":
+                return self._contact.supports(Namespace.OCCUPANT_ID)
+
+            return True
+
+        return self._original_message.id is not None

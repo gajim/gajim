@@ -213,6 +213,7 @@ MAIN_WIN_ACTIONS = [
     ("activate-message-selection", "u", True),
     ("delete-message-locally", "a{sv}", True),
     ("correct-message", None, False),
+    ("retract-message", "a{sv}", False),
     ("copy-message", "s", True),
     ("moderate-message", "a{sv}", False),
     ("moderate-all-messages", "a{sv}", False),

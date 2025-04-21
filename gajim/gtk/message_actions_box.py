@@ -474,6 +474,9 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         if message is None or message.text is None:
             return
 
+        if message.moderation or message.retraction:
+            return
+
         self._set_correcting(last_message_id)
 
         if message.corrections:

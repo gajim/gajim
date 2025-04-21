@@ -27,7 +27,10 @@ from gajim.common.modules.contacts import can_add_to_roster
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
+from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageState
+from gajim.common.storage.archive.const import MessageType
+from gajim.common.storage.archive.models import Message
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
 from gajim.common.util.muc import is_affiliation_change_allowed
@@ -44,6 +47,7 @@ from gajim.gtk.structs import ExportHistoryParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
+from gajim.gtk.structs import RetractMessageParam
 
 MenuValueT = None | str | GLib.Variant | VariantMixin
 MenuItemListT = list[tuple[str, str, MenuValueT]]
@@ -738,8 +742,9 @@ def get_chat_row_menu(
     pk: int | None,
     corrected_pk: int | None,
     state: MessageState,
-    is_moderated: bool,
+    is_retracted: bool,
     occupant_id: str | None,
+    message: Message,
 ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
@@ -784,10 +789,21 @@ def get_chat_row_menu(
     show_correction = False
     if message_id is not None:
         show_correction = app.window.is_message_correctable(contact, message_id)
-    if show_correction:
+
+    if show_correction and not is_retracted:
         menu_items.append(
             (p_("Message row action", "Correct…"), "win.correct-message", None)
         )
+
+    param = None
+    if not is_retracted:
+        param = get_retract_param(
+            menu_items, contact, message, message_id, stanza_id, state
+        )
+
+    menu_items.append(
+        (p_("Message row action", "Retract…"), "win.retract-message", param)
+    )
 
     if isinstance(contact, GroupchatContact) and contact.is_joined:
         resource_contact = contact.get_resource(name)
@@ -802,7 +818,7 @@ def get_chat_row_menu(
             disco_info.has_message_moderation
             and stanza_id is not None
             and state == MessageState.ACKNOWLEDGED
-            and not is_moderated
+            and not is_retracted
             and is_allowed
         ):
 
@@ -854,6 +870,36 @@ def get_chat_row_menu(
         )
 
     return GajimMenu.from_list(menu_items)
+
+
+def get_retract_param(
+    menu_items: MenuItemListT,
+    contact: types.ChatContactT,
+    message: Message,
+    message_id: str | None,
+    stanza_id: str | None,
+    state: MessageState,
+) -> RetractMessageParam | None:
+    if message.direction != ChatDirection.OUTGOING:
+        return
+
+    retraction_id = message_id
+    if message.type == MessageType.GROUPCHAT:
+        retraction_id = stanza_id
+
+    if not retraction_id:
+        return
+
+    if isinstance(contact, GroupchatContact):
+        if not contact.is_joined:
+            return
+        if state != MessageState.ACKNOWLEDGED:
+            return
+
+    if isinstance(contact, GroupchatParticipant) and not contact.room.is_joined:
+        return
+
+    return RetractMessageParam(contact.account, contact.jid, retraction_id)
 
 
 def get_preview_menu(preview: Preview) -> GajimMenu:

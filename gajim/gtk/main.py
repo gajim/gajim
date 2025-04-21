@@ -62,6 +62,7 @@ from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
+from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 from gajim.gtk.util.window import resize_window
@@ -417,6 +418,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ("preview-copy-link", self._on_preview_action),
             ("preview-open-link", self._on_preview_action),
             ("copy-message", self._on_copy_message),
+            ("retract-message", self._on_retract_message),
             ("moderate-message", self._on_moderate_message),
             ("moderate-all-messages", self._on_moderate_all_messages),
             ("delete-message-locally", self._on_delete_message_locally),
@@ -684,6 +686,33 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             open_window("GroupchatDetails", contact=contact)
         else:
             open_window("ContactInfo", account=contact.account, contact=contact)
+
+    @actionmethod
+    def _on_retract_message(
+        self, _action: Gio.SimpleAction, params: RetractMessageParam
+    ) -> None:
+
+        def _on_retract() -> None:
+            client = app.get_client(params.account)
+            contact = client.get_module("Contacts").get_contact(params.jid)
+            assert not isinstance(contact, ResourceContact)
+            client.get_module("Retraction").send_retraction(
+                contact, params.retraction_id
+            )
+
+        ConfirmationDialog(
+            _("Retract Message?"),
+            _(
+                "Do you want to retract this message?\n"
+                "Please note that retracting a message does not guarantee that your "
+                "provider or your contact’s device will remove it."
+            ),
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("Remove", text=_("_Retract"), callback=_on_retract),
+            ],
+            transient_for=app.window,
+        )
 
     @actionmethod
     def _on_moderate_message(

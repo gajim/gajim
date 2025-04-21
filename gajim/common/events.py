@@ -45,6 +45,7 @@ ChatListEventT = Union[
     'MessageReceived',
     'MessageCorrected',
     'MessageModerated',
+    'MessageRetracted',
     'PresenceReceived',
     'MessageSent',
     'MessageDeleted',
@@ -422,6 +423,14 @@ class MessageModerated(ApplicationEvent):
     account: str
     jid: JID
     moderation: mod.Moderation
+
+
+@dataclass
+class MessageRetracted(ApplicationEvent):
+    name: str = field(init=False, default='message-retracted')
+    account: str
+    jid: JID
+    retraction: mod.Retraction
 
 
 @dataclass

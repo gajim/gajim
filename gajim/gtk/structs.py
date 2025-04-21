@@ -76,6 +76,13 @@ class ModerateMessageParam(VariantMixin):
 
 
 @dataclass
+class RetractMessageParam(VariantMixin):
+    account: str
+    jid: JID
+    retraction_id: str
+
+
+@dataclass
 class ModerateAllMessagesParam(VariantMixin):
     account: str
     jid: JID

@@ -33,7 +33,6 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
 from gajim.common.util.status import get_uf_show
-from gajim.common.util.user_strings import get_moderation_text
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
@@ -286,6 +285,7 @@ class ChatControl(EventHelper):
                 ("message-received", ged.GUI2, self._on_message_received),
                 ("message-corrected", ged.GUI2, self._on_message_corrected),
                 ("message-moderated", ged.GUI2, self._on_message_moderated),
+                ("message-retracted", ged.GUI2, self._on_message_retracted),
                 ("receipt-received", ged.GUI2, self._on_receipt_received),
                 ("displayed-received", ged.GUI2, self._on_displayed_received),
                 ("reaction-updated", ged.GUI2, self._on_reaction_updated),
@@ -359,8 +359,13 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        text = get_moderation_text(event.moderation.by, event.moderation.reason)
-        self._scrolled_view.show_message_moderation(event.moderation.stanza_id, text)
+        self._scrolled_view.set_retracted(event.moderation.stanza_id)
+
+    def _on_message_retracted(self, event: events.MessageRetracted) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self._scrolled_view.set_retracted(event.retraction.id)
 
     def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
         if not self._is_event_processable(event):

@@ -576,6 +576,60 @@ class Reaction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     )
 
 
+class Retraction(MappedAsDataclass, Base, UtilMixin, kw_only=True):
+    __tablename__ = 'retraction'
+    __no_table_cols__ = ['account_', 'remote_jid_', 'occupant', 'occupant_']
+
+    pk: Mapped[int] = mapped_column(primary_key=True, init=False)
+
+    account_: str = dataclasses.field(repr=False)
+    fk_account_pk: Mapped[int] = mapped_column(
+        ForeignKey('account.pk', ondelete='CASCADE'), init=False
+    )
+
+    remote_jid_: JID = dataclasses.field(repr=False)
+    fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+
+    occupant_: Occupant | None = dataclasses.field(repr=False)
+    occupant: Mapped[Occupant | None] = relationship(
+        lazy='joined', viewonly=True, init=False
+    )
+    fk_occupant_pk: Mapped[int | None] = mapped_column(
+        ForeignKey('occupant.pk'), default=None, init=False
+    )
+
+    id: Mapped[str] = mapped_column()
+    direction: Mapped[int] = mapped_column()
+    timestamp: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
+    state: Mapped[int] = mapped_column(default=0)
+
+    __table_args__ = (
+        Index(
+            'idx_retraction_id',
+            'id',
+            'fk_remote_pk',
+            'fk_account_pk',
+            'direction',
+            unique=True,
+            sqlite_where=fk_occupant_pk.is_(None),
+        ),
+        Index(
+            'idx_retraction_id_gc',
+            'id',
+            'fk_remote_pk',
+            'fk_occupant_pk',
+            'fk_account_pk',
+            'direction',
+            unique=True,
+            sqlite_where=fk_occupant_pk.isnot(None),
+        ),
+        Index(
+            'idx_retraction_state',
+            'state',
+        ),
+    )
+
+
 class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'message'
 
@@ -710,6 +764,26 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ),
         viewonly=True,
         uselist=True,
+    )
+
+    retraction: Mapped[Retraction | None] = relationship(
+        lazy='joined',
+        default=None,
+        init=False,
+        primaryjoin=sa.and_(
+            expr.case(
+                (
+                    type == 2,  # Groupchat
+                    sa.orm.foreign(stanza_id) == Retraction.id,
+                ),
+                else_=sa.orm.foreign(id) == Retraction.id,
+            ),
+            fk_remote_pk == Retraction.fk_remote_pk,
+            fk_account_pk == Retraction.fk_account_pk,
+            fk_occupant_pk.is_(Retraction.fk_occupant_pk),
+            direction == Retraction.direction,
+        ),
+        viewonly=True,
     )
 
     moderation: Mapped[Moderation | None] = relationship(

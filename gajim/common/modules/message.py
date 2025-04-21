@@ -16,10 +16,12 @@ from nbxmpp.util import generate_id
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.const import RETRACTION_FALLBACK
 from gajim.common.events import MessageAcknowledged
 from gajim.common.events import MessageCorrected
 from gajim.common.events import MessageError
 from gajim.common.events import MessageReceived
+from gajim.common.events import MessageRetracted
 from gajim.common.events import MessageSent
 from gajim.common.events import RawMessageReceived
 from gajim.common.events import ReactionUpdated
@@ -166,7 +168,6 @@ class Message(BaseModule):
 
             # Use origin-id because some group chats change the message id
             # on the reflection.
-
             pk = app.storage.archive.update_pending_message(
                 self._account, remote_jid, origin_id, stanza_id)
 
@@ -415,6 +416,11 @@ class Message(BaseModule):
             marker, id_ = message.marker
             stanza.setMarker(marker, id_)
 
+        # XEP-0424
+        if message.retraction_id is not None:
+            stanza.setRetracted(
+                message.retraction_id, fallback_text=RETRACTION_FALLBACK)
+
         # XEP-0490
         if message.mds_id is not None:
             stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
@@ -423,13 +429,15 @@ class Message(BaseModule):
 
     def store_message(self, message: OutgoingMessage) -> None:
         if (not message.has_text() and
-                message.reaction_data is None):
+                message.reaction_data is None and
+                message.retraction_id is None):
             return
 
-        if (message.type == MessageType.GROUPCHAT and
-                message.reaction_data is not None):
-            # Store reaction when the MUC reflects it
-            return
+        if message.type == MessageType.GROUPCHAT:
+            if (message.reaction_data is not None or
+                    message.retraction_id is not None):
+                # Store reaction when the MUC reflects it
+                return
 
         direction = ChatDirection.OUTGOING
         remote_jid = message.contact.jid
@@ -484,6 +492,25 @@ class Message(BaseModule):
                     account=self._account,
                     jid=remote_jid,
                     reaction_id=reactions_id,
+                )
+            )
+            return
+
+        if message.retraction_id is not None:
+            retraction = mod.Retraction(
+                account_=self._account,
+                remote_jid_=remote_jid,
+                occupant_=occupant,
+                id=message.retraction_id,
+                direction=direction,
+                timestamp=message.timestamp,
+            )
+
+            app.storage.archive.insert_row(retraction, ignore_on_conflict=True)
+
+            app.ged.raise_event(
+                MessageRetracted(
+                    account=self._account, jid=remote_jid, retraction=retraction
                 )
             )
             return
