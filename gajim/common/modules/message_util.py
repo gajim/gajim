@@ -11,9 +11,10 @@ from typing import Literal
 from datetime import datetime
 from datetime import UTC
 
+import nbxmpp.structs
+from nbxmpp.modules.security_labels import SecurityLabel
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import JID
-from nbxmpp.structs import EMEData
 from nbxmpp.structs import MessageProperties
 
 from gajim.common.const import EME_MESSAGES
@@ -24,11 +25,12 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import VALUE_MISSING
 from gajim.common.structs import MUCData
+from gajim.common.structs import ReplyData
 
 UNKNOWN_MESSAGE = _('Message content unknown')
 
 
-def get_eme_message(eme_data: EMEData) -> str:
+def get_eme_message(eme_data: nbxmpp.structs.EMEData) -> str:
     try:
         return EME_MESSAGES[eme_data.namespace]
     except KeyError:
@@ -87,7 +89,7 @@ def get_occupant_info(
     direction: ChatDirection,
     timestamp: datetime,
     contact: GroupchatParticipant,
-    properties: MessageProperties
+    properties: MessageProperties,
 ) -> mod.Occupant | None:
 
     assert properties.jid is not None
@@ -117,8 +119,7 @@ def get_occupant_info(
 
 
 def get_occupant_id(
-    contact: GroupchatParticipant,
-    properties: MessageProperties
+    contact: GroupchatParticipant, properties: MessageProperties
 ) -> str | None:
 
     if not properties.occupant_id:
@@ -129,9 +130,7 @@ def get_occupant_id(
     return None
 
 
-def get_message_timestamp(
-    properties: MessageProperties
-) -> datetime:
+def get_message_timestamp(properties: MessageProperties) -> datetime:
     timestamp = properties.timestamp
     if properties.mam is not None:
         timestamp = properties.mam.timestamp
@@ -158,3 +157,31 @@ def get_nickname_from_message(message: mod.Message) -> str:
     nickname = message.resource
     assert nickname is not None
     return nickname
+
+
+def get_security_label(
+    account: str, remote_jid: JID, timestamp: datetime, label: SecurityLabel | None
+) -> mod.SecurityLabel | None:
+    if label is None:
+        return None
+
+    displaymarking = label.displaymarking
+    if displaymarking is None:
+        return None
+
+    return mod.SecurityLabel(
+        account_=account,
+        remote_jid_=remote_jid,
+        label_hash=label.get_label_hash(),
+        displaymarking=displaymarking.name,
+        fgcolor=displaymarking.fgcolor,
+        bgcolor=displaymarking.bgcolor,
+        updated_at=timestamp,
+    )
+
+
+def get_reply(data: nbxmpp.structs.ReplyData | ReplyData | None) -> mod.Reply | None:
+    if data is None:
+        return None
+
+    return mod.Reply(id=data.id, to=data.to)

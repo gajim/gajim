@@ -42,6 +42,7 @@ from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.i18n import _
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
+from gajim.common.modules.message import build_message_stanza
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
 from gajim.common.util.status import get_idle_status_message
@@ -492,7 +493,7 @@ class Client(Observable):
             log.warning('Trying to send message while offline')
             return
 
-        stanza = self.get_module('Message').build_message_stanza(message)
+        stanza = build_message_stanza(message, self.get_own_jid())
         message.set_stanza(stanza)
 
         method = message.contact.settings.get('encryption')

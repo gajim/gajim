@@ -10,6 +10,7 @@ import datetime as dt
 import nbxmpp
 import sqlalchemy.exc
 from nbxmpp.namespaces import Namespace
+from nbxmpp.protocol import JID
 from nbxmpp.structs import MessageProperties
 from nbxmpp.structs import StanzaHandler
 from nbxmpp.util import generate_id
@@ -32,6 +33,8 @@ from gajim.common.modules.message_util import get_chat_type_and_direction
 from gajim.common.modules.message_util import get_eme_message
 from gajim.common.modules.message_util import get_message_timestamp
 from gajim.common.modules.message_util import get_occupant_info
+from gajim.common.modules.message_util import get_reply
+from gajim.common.modules.message_util import get_security_label
 from gajim.common.modules.misc import parse_oob
 from gajim.common.storage.archive import models as mod
 from gajim.common.storage.archive.const import ChatDirection
@@ -213,26 +216,9 @@ class Message(BaseModule):
             self._log.debug('Received message without text')
             return
 
-        securitylabel_data = None
-        if properties.security_label is not None:
-            displaymarking = properties.security_label.displaymarking
-            if displaymarking is not None:
-                securitylabel_data = mod.SecurityLabel(
-                    account_=self._account,
-                    remote_jid_=remote_jid,
-                    label_hash=properties.security_label.get_label_hash(),
-                    displaymarking=displaymarking.name,
-                    fgcolor=displaymarking.fgcolor,
-                    bgcolor=displaymarking.bgcolor,
-                    updated_at=timestamp,
-                )
-
-        reply = None
-        if properties.reply_data is not None:
-            reply = mod.Reply(
-                id=properties.reply_data.id,
-                to=properties.reply_data.to
-            )
+        securitylabel_data = get_security_label(
+            self._account, remote_jid, timestamp, properties.security_label)
+        reply = get_reply(properties.reply_data)
 
         correction_id = None
         if properties.correction is not None:
@@ -354,79 +340,6 @@ class Message(BaseModule):
                 return stanza_id.id
         return None
 
-    def build_message_stanza(self, message: OutgoingMessage) -> nbxmpp.Message:
-        own_jid = self._con.get_own_jid()
-        remote_jid = message.contact.jid
-
-        stanza = nbxmpp.Message(
-            to=str(remote_jid),
-            body=message.get_text(),
-            typ=convert_message_type(message.type)
-        )
-
-        # XEP-0359
-        stanza.setID(message.message_id)
-        stanza.setOriginID(message.message_id)
-
-        # Mark Message as MUC PM
-        if message.is_pm:
-            stanza.setTag('x', namespace=Namespace.MUC_USER)
-
-        # XEP-0444
-        if message.reaction_data is not None:
-            stanza.setReactions(*message.reaction_data)
-            stanza.setTag('store', namespace=Namespace.MSG_HINTS)
-            return stanza
-
-        if message.correct_id:
-            stanza.setTag('replace', attrs={'id': message.correct_id},
-                          namespace=Namespace.CORRECT)
-
-        # XEP-0461
-        if message.reply_data is not None:
-            stanza.setReply(str(message.reply_data.to),
-                            message.reply_data.id,
-                            message.reply_data.fallback_start,
-                            message.reply_data.fallback_end)
-
-        if message.sec_label:
-            stanza.addChild(node=message.sec_label.to_node())
-
-        # XEP-0066
-        if message.oob_url is not None:
-            oob = stanza.addChild('x', namespace=Namespace.X_OOB)
-            oob.addChild('url').setData(message.oob_url)
-
-        # XEP-0184
-        if not own_jid.bare_match(message.contact.jid):
-            if message.has_text() and not message.is_groupchat:
-                stanza.setReceiptRequest()
-
-        # XEP-0085
-        if message.chatstate is not None:
-            stanza.setTag(message.chatstate, namespace=Namespace.CHATSTATES)
-            if not message.has_text():
-                stanza.setTag('no-store',
-                              namespace=Namespace.MSG_HINTS)
-
-        # XEP-0333
-        if message.has_text():
-            stanza.setMarkable()
-        if message.marker:
-            marker, id_ = message.marker
-            stanza.setMarker(marker, id_)
-
-        # XEP-0424
-        if message.retraction_id is not None:
-            stanza.setRetracted(
-                message.retraction_id, fallback_text=RETRACTION_FALLBACK)
-
-        # XEP-0490
-        if message.mds_id is not None:
-            stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
-
-        return stanza
-
     def store_message(self, message: OutgoingMessage) -> None:
         if (not message.has_text() and
                 message.reaction_data is None and
@@ -520,26 +433,9 @@ class Message(BaseModule):
         if encryption is not None:
             encryption_data = mod.Encryption(**dataclasses.asdict(encryption))
 
-        securitylabel_data = None
-        if message.sec_label is not None:
-            displaymarking = message.sec_label.displaymarking
-            if displaymarking is not None:
-                securitylabel_data = mod.SecurityLabel(
-                    account_=self._account,
-                    remote_jid_=remote_jid,
-                    label_hash=message.sec_label.get_label_hash(),
-                    displaymarking=displaymarking.name,
-                    fgcolor=displaymarking.fgcolor,
-                    bgcolor=displaymarking.bgcolor,
-                    updated_at=message.timestamp,
-                )
-
-        reply = None
-        if message.reply_data is not None:
-            reply = mod.Reply(
-                id=message.reply_data.id,
-                to=message.reply_data.to
-            )
+        securitylabel_data = get_security_label(
+            self._account, remote_jid, message.timestamp, message.sec_label)
+        reply = get_reply(message.reply_data)
 
         oob_data: list[mod.OOB] = []
         if message.oob_url is not None:
@@ -582,3 +478,76 @@ class Message(BaseModule):
                         account=message.account,
                         pk=pk,
                         play_sound=message.play_sound))
+
+
+def build_message_stanza(message: OutgoingMessage, own_jid: JID) -> nbxmpp.Message:
+    remote_jid = message.contact.jid
+
+    stanza = nbxmpp.Message(
+        to=str(remote_jid),
+        body=message.get_text(),
+        typ=convert_message_type(message.type)
+    )
+
+    # XEP-0359
+    stanza.setID(message.message_id)
+    stanza.setOriginID(message.message_id)
+
+    # Mark Message as MUC PM
+    if message.is_pm:
+        stanza.setTag('x', namespace=Namespace.MUC_USER)
+
+    # XEP-0444
+    if message.reaction_data is not None:
+        stanza.setReactions(*message.reaction_data)
+        stanza.setTag('store', namespace=Namespace.MSG_HINTS)
+        return stanza
+
+    if message.correct_id:
+        stanza.setTag('replace', attrs={'id': message.correct_id},
+                      namespace=Namespace.CORRECT)
+
+    # XEP-0461
+    if message.reply_data is not None:
+        stanza.setReply(str(message.reply_data.to),
+                        message.reply_data.id,
+                        message.reply_data.fallback_start,
+                        message.reply_data.fallback_end)
+
+    if message.sec_label:
+        stanza.addChild(node=message.sec_label.to_node())
+
+    # XEP-0066
+    if message.oob_url is not None:
+        oob = stanza.addChild('x', namespace=Namespace.X_OOB)
+        oob.addChild('url').setData(message.oob_url)
+
+    # XEP-0184
+    if not own_jid.bare_match(message.contact.jid):
+        if message.has_text() and not message.is_groupchat:
+            stanza.setReceiptRequest()
+
+    # XEP-0085
+    if message.chatstate is not None:
+        stanza.setTag(message.chatstate, namespace=Namespace.CHATSTATES)
+        if not message.has_text():
+            stanza.setTag('no-store',
+                          namespace=Namespace.MSG_HINTS)
+
+    # XEP-0333
+    if message.has_text():
+        stanza.setMarkable()
+    if message.marker:
+        marker, id_ = message.marker
+        stanza.setMarker(marker, id_)
+
+    # XEP-0424
+    if message.retraction_id is not None:
+        stanza.setRetracted(
+            message.retraction_id, fallback_text=RETRACTION_FALLBACK)
+
+    # XEP-0490
+    if message.mds_id is not None:
+        stanza.setMdsAssist(message.mds_id, own_jid.new_as_bare())
+
+    return stanza
