@@ -749,42 +749,8 @@ def get_chat_row_menu(
 
     menu_items: MenuItemListT = []
 
-    # Text can be an empty string,
-    # e.g. if a preview has not been loaded yet
-    if text:
-        timestamp_formatted = timestamp.strftime(app.settings.get("date_time_format"))
-
-        copy_text = f"{timestamp_formatted} - {name}: "
-        if text.startswith(("```", "> ")):
-            # Prepend a line break in order to keep code block/quotes rendering
-            copy_text += "\n"
-        copy_text += text
-
-        menu_items.append(
-            (p_("Message row action", "Copy"), "win.copy-message", copy_text)
-        )
-
-        show_quote = True
-        if isinstance(contact, GroupchatContact):
-            if contact.is_joined and state == MessageState.ACKNOWLEDGED:
-                self_contact = contact.get_self()
-                assert self_contact is not None
-                show_quote = not self_contact.role.is_visitor
-            else:
-                show_quote = False
-
-        show_reply = True
-        if isinstance(contact, GroupchatContact):
-            if contact.is_joined and stanza_id is not None:
-                self_contact = contact.get_self()
-                assert self_contact is not None
-                show_reply = not self_contact.role.is_visitor
-            else:
-                show_reply = False
-
-        if not show_reply and show_quote:
-            # Use XEP-0393 quotes if XEP-0461 message reply is not available
-            menu_items.append((p_("Message row action", "Quote…"), "win.quote", text))
+    copy_text = _get_copy_text(text, name, timestamp)
+    menu_items.append((p_("Message row action", "Copy"), "win.copy-message", copy_text))
 
     show_correction = False
     if message_id is not None:
@@ -797,7 +763,7 @@ def get_chat_row_menu(
 
     param = None
     if not is_retracted:
-        param = get_retract_param(
+        param = _get_retract_param(
             menu_items, contact, message, message_id, stanza_id, state
         )
 
@@ -805,51 +771,22 @@ def get_chat_row_menu(
         (p_("Message row action", "Retract…"), "win.retract-message", param)
     )
 
-    if isinstance(contact, GroupchatContact) and contact.is_joined:
-        resource_contact = contact.get_resource(name)
-        self_contact = contact.get_self()
-        assert self_contact is not None
-        is_allowed = is_moderation_allowed(self_contact, resource_contact)
+    single_param, multiple_param = None, None
+    if not is_retracted:
+        single_param, multiple_param = _get_moderate_params(
+            contact, name, stanza_id, state, occupant_id
+        )
 
-        disco_info = app.storage.cache.get_last_disco_info(contact.jid)
-        assert disco_info is not None
-
-        if (
-            disco_info.has_message_moderation
-            and stanza_id is not None
-            and state == MessageState.ACKNOWLEDGED
-            and not is_retracted
-            and is_allowed
-        ):
-
-            ns = disco_info.moderation_namespace
-            assert ns is not None
-            param = ModerateMessageParam(
-                account=contact.account,
-                jid=contact.jid,
-                stanza_id=stanza_id,
-                namespace=ns,
-            )
-            menu_items.append(
-                (p_("Message row action", "Moderate…"), "win.moderate-message", param)
-            )
-
-            if occupant_id is not None:
-                param = ModerateAllMessagesParam(
-                    account=contact.account,
-                    jid=contact.jid,
-                    occupant_id=occupant_id,
-                    nickname=resource_contact.name,
-                    namespace=ns,
-                )
-                menu_items.append(
-                    (
-                        p_("Message row action", "Moderate all messages…"),
-                        "win.moderate-all-messages",
-                        param,
-                    )
-                )
-
+    menu_items.append(
+        (p_("Message row action", "Moderate…"), "win.moderate-message", single_param)
+    )
+    menu_items.append(
+        (
+            p_("Message row action", "Moderate all messages…"),
+            "win.moderate-all-messages",
+            multiple_param,
+        )
+    )
     menu_items.append(
         (
             p_("Message row action", "Select Messages…"),
@@ -872,7 +809,7 @@ def get_chat_row_menu(
     return GajimMenu.from_list(menu_items)
 
 
-def get_retract_param(
+def _get_retract_param(
     menu_items: MenuItemListT,
     contact: types.ChatContactT,
     message: Message,
@@ -900,6 +837,71 @@ def get_retract_param(
         return
 
     return RetractMessageParam(contact.account, contact.jid, retraction_id)
+
+
+def _get_moderate_params(
+    contact: types.ChatContactT,
+    name: str,
+    stanza_id: str | None,
+    state: MessageState,
+    occupant_id: str | None,
+) -> tuple[ModerateMessageParam | None, ModerateAllMessagesParam | None]:
+    if not isinstance(contact, GroupchatContact):
+        return None, None
+
+    if not (contact.is_joined and stanza_id and state == MessageState.ACKNOWLEDGED):
+        return None, None
+
+    resource_contact = contact.get_resource(name)
+    self_contact = contact.get_self()
+    assert self_contact is not None
+    is_allowed = is_moderation_allowed(self_contact, resource_contact)
+
+    if not is_allowed:
+        return None, None
+
+    disco_info = app.storage.cache.get_last_disco_info(contact.jid)
+    assert disco_info is not None
+
+    if not disco_info.has_message_moderation:
+        return None, None
+
+    ns = disco_info.moderation_namespace
+    assert ns is not None
+    single_param = ModerateMessageParam(
+        account=contact.account,
+        jid=contact.jid,
+        stanza_id=stanza_id,
+        namespace=ns,
+    )
+
+    multiple_param = None
+    if occupant_id is not None:
+        multiple_param = ModerateAllMessagesParam(
+            account=contact.account,
+            jid=contact.jid,
+            occupant_id=occupant_id,
+            nickname=resource_contact.name,
+            namespace=ns,
+        )
+
+    return single_param, multiple_param
+
+
+def _get_copy_text(text: str, name: str, timestamp: datetime) -> str | None:
+    # Text can be an empty string
+    # e.g. if a preview has not been loaded yet
+    if not text:
+        return None
+
+    timestamp_formatted = timestamp.strftime(app.settings.get("date_time_format"))
+
+    copy_text = f"{timestamp_formatted} - {name}: "
+    if text.startswith(("```", "> ")):
+        # Prepend a line break in order to keep code block/quotes rendering
+        copy_text += "\n"
+    copy_text += text
+    return copy_text
 
 
 def get_preview_menu(preview: Preview) -> GajimMenu:
