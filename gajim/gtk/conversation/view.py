@@ -507,12 +507,11 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_id is not None:
             self._message_id_row_map[message_id] = message_row
 
-        if message.corrections:
+        if corrected_message := message.get_last_correction():
             # Store the same MessageRow object also with the message id
             # of the last correction, because we need it for XEP-0184 Receipts
             # which does not reference the original message id.
-            corr_message_id = message.get_last_correction().id
-            if corr_message_id is not None:
+            if corr_message_id := corrected_message.id:
                 self._message_id_row_map[corr_message_id] = message_row
 
         if message.direction == ChatDirection.INCOMING:

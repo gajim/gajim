@@ -162,8 +162,8 @@ class HistoryExport(Assistant):
         timestamp = message.timestamp.astimezone().strftime("%Y-%m-%d %H:%M:%S")
 
         text = message.text
-        if message.corrections:
-            text = message.get_last_correction().text
+        if corrected_message := message.get_last_correction():
+            text = corrected_message.text
 
         return f'{timestamp} {name}: {text or ""}\n'
 

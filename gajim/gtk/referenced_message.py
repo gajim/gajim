@@ -48,11 +48,8 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
 
         self._contact = contact
         self._original_message = original_message
-        self._message = original_message
+        self._message = original_message.get_last_correction() or original_message
         self._show_reply_icon = show_reply_icon
-
-        if original_message.corrections:
-            self._message = original_message.get_last_correction()
 
         self.set_cursor(Gdk.Cursor.new_from_name("pointer"))
 

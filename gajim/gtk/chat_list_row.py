@@ -166,8 +166,8 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             elif message.retraction is not None:
                 message_text = get_retraction_text(message.retraction.timestamp)
 
-            elif message.corrections:
-                message_text = message.get_last_correction().text
+            elif corrected_message := message.get_last_correction():
+                message_text = corrected_message.text
                 assert message_text is not None
 
             # Nickname

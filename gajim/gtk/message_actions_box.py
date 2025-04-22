@@ -479,8 +479,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         self._set_correcting(last_message_id)
 
-        if message.corrections:
-            message = message.get_last_correction()
+        message = message.get_last_correction() or message
 
         self.msg_textview.start_correction(message)
         self._ui.edit_box.set_visible(True)

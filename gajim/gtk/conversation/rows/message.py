@@ -157,21 +157,15 @@ class MessageRow(BaseRow):
 
         self._corr_message = None
 
-        if message.moderation is not None:
-            self._set_retracted(
-                get_moderation_text(message.moderation.by, message.moderation.reason)
-            )
-            return
-
-        if message.retraction is not None:
-            self._set_retracted(get_retraction_text(message.retraction.timestamp))
+        if message.is_retracted():
+            self._set_retracted(message)
             return
 
         # From here on, if this is a correction all data must
         # be taken from the correction
-        if message.corrections:
-            message = message.get_last_correction()
-            self._corr_message = message
+        if corrected_message := message.get_last_correction():
+            message = corrected_message
+            self._corr_message = corrected_message
 
         self.pk = message.pk
 
@@ -211,7 +205,7 @@ class MessageRow(BaseRow):
 
         self._set_text_direction(self.text)
 
-        if self._original_message.corrections:
+        if corrected_message:
             self._set_correction()
 
         reactions = self._original_message.reactions
@@ -366,7 +360,7 @@ class MessageRow(BaseRow):
             return False
         if message.direction != self.direction:
             return False
-        if self._original_message.corrections:
+        if self._corr_message:
             return False
         if not self.is_same_sender(message):
             return False
@@ -408,7 +402,9 @@ class MessageRow(BaseRow):
         if self._is_retracted:
             return
 
-        if not self._original_message.corrections:
+        if self._corr_message is None:
+            # We want to preserve the stanza id of the original message
+            # as we need it later e.g. to send a reaction
             self.stanza_id = stanza_id
 
         self.state = MessageState.ACKNOWLEDGED
@@ -466,7 +462,16 @@ class MessageRow(BaseRow):
             contact=self._contact, reaction_id=reaction_id, reactions=our_reactions
         )
 
-    def _set_retracted(self, text: str) -> None:
+    def _set_retracted(self, message: Message) -> None:
+        if message.moderation is not None:
+            text = get_moderation_text(message.moderation.by, message.moderation.reason)
+
+        elif message.retraction is not None:
+            text = get_retraction_text(message.retraction.timestamp)
+
+        else:
+            raise ValueError("Unable to determine retraction text")
+
         self.text = text
 
         self.state = MessageState.ACKNOWLEDGED

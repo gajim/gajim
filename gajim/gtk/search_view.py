@@ -233,9 +233,9 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
             # message so the search can return the original message, the
             # last correction or any in between correction.
 
-            if message.corrections:
-                # This is only true for original messages, dont show them
-                # because they are obsolete
+            if message.get_last_correction() is not None:
+                # This is only true for original messages which have
+                # corrections, dont show them because they are obsolete
                 continue
 
             if message.correction_id:
@@ -247,13 +247,8 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
                 if original_message is None:
                     continue
 
-                if original_message.moderation or original_message.retraction:
-                    # Retractions always reference only the original message
-                    # If the original was retracted, ignore search hits in the
-                    # correction
-                    continue
-
                 last_correction = original_message.get_last_correction()
+                assert last_correction is not None
                 if message.pk != last_correction.pk:
                     # This was a search hit on a correction which is not
                     # the last correction available, so ignore it

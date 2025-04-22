@@ -860,8 +860,20 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         ),
     )
 
-    def get_last_correction(self) -> Message:
-        return self.corrections[-1]
+    def is_retracted(self) -> bool:
+        if self.retraction is None and self.moderation is None:
+            return False
+
+        message = self.get_last_correction()
+        return message is None
+
+    def get_last_correction(self) -> Message | None:
+        for message in reversed(self.corrections):
+            if (message.retraction is None and
+                    message.moderation is None):
+                return message
+
+        return None
 
     def get_referenced_message(self) -> Message | None:
         if self.reply is None:
