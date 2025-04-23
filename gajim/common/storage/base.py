@@ -67,11 +67,30 @@ def timeit(func: Callable[P, R]) -> Callable[P, R]:
         start = time.time()
         result = func(*args, **kwargs)
         exec_time = (time.time() - start) * 1e3
-        log.debug('Execution time for %s: %s ms',
-                  func.__name__, math.ceil(exec_time))
+        log.debug('Execution time for %s: %s ms', func.__name__, math.ceil(exec_time))
         return result
 
     return func_wrapper
+
+
+def with_session(
+    func: Callable[Concatenate[Any, Session, P], R]
+) -> Callable[Concatenate[Any, P], R]:
+    def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> R:
+        with self._create_session() as session, session.begin():
+            return func(self, session, *args, **kwargs)
+
+    return wrapper
+
+
+def with_session_yield_from(
+    func: Callable[Concatenate[Any, Session, P], Iterator[R]]
+) -> Callable[Concatenate[Any, P], Iterator[Any]]:
+    def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> Iterator[R]:
+        with self._create_session() as session, session.begin():
+            yield from func(self, session, *args, **kwargs)
+
+    return wrapper
 
 
 def _convert_common_error(common_error: bytes) -> CommonError:
@@ -440,29 +459,17 @@ class AlchemyStorage:
         explanation = pprint.pformat(res)
         log.debug('\n%s\n%s', stmt, explanation)
 
+    @with_session
+    @timeit
+    def refresh(self, session: Session, obj: Any, attrs: list[str]) -> None:
+        session.add(obj)
+        session.refresh(obj, attribute_names=attrs)
+
     def shutdown(self) -> None:
         self._run_analyze()
         self._engine.dispose()
         del self._session
         del self._engine
-
-def with_session(
-    func: Callable[Concatenate[Any, Session, P], R]
-) -> Callable[Concatenate[Any, P], R]:
-    def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> R:
-        with self._create_session() as session, session.begin():
-            return func(self, session, *args, **kwargs)
-
-    return wrapper
-
-def with_session_yield_from(
-    func: Callable[Concatenate[Any, Session, P], Iterator[R]]
-) -> Callable[Concatenate[Any, P], Iterator[Any]]:
-    def wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> Iterator[R]:
-        with self._create_session() as session, session.begin():
-            yield from func(self, session, *args, **kwargs)
-
-    return wrapper
 
 
 class JIDType(sa.types.TypeDecorator[JID]):
@@ -536,5 +543,6 @@ def is_unique_constraint_error(error: sqlalchemy.exc.DatabaseError) -> bool:
     if python_version('<3.11'):
         return 'UNIQUE constraint failed' in error.args[0]
     return (
-        error.orig.sqlite_errorcode == sqlite3.SQLITE_CONSTRAINT_UNIQUE  # pyright: ignore
+        error.orig.sqlite_errorcode  # pyright: ignore
+        == sqlite3.SQLITE_CONSTRAINT_UNIQUE
     )
