@@ -231,6 +231,18 @@ UNKNOWN_MUC_PRESENCE = MUCPresenceData(show=PresenceShowExt.OFFLINE,
                                        hats=None)
 
 
+ANNOTATION_TO_VARIANT = {
+    'str': (str, 's'),
+    'list[str]': (list, 'as'),
+    'Optional[str]': (str, 'ms'),
+    'bool': (bool, 'b'),
+    'int': (int, 'i'),
+    'JID': (JID, 's'),
+    'Optional[JID]': (JID, 'ms'),
+    "Literal['chat', 'groupchat', 'pm']": (str, 's'),
+}
+
+
 class VariantMixin:
 
     _type_to_variant_funcs = {
@@ -241,32 +253,12 @@ class VariantMixin:
         'JID': JID.from_string,
     }
 
-    def _get_type_and_variant_string(self,
-                                     field_type: str) -> tuple[type[Any], str]:
-        variant_str = ''
-        if 'Optional' in field_type:
-            variant_str = 'm'
-
-        if 'str' in field_type or 'Literal' in field_type:
-            return str, f'{variant_str}s'
-
-        if 'int' in field_type:
-            return int, f'{variant_str}i'
-
-        if 'bool' in field_type:
-            return bool, f'{variant_str}b'
-
-        if 'JID' in field_type:
-            return JID, f'{variant_str}s'
-
-        raise ValueError(f'unknown type: {field_type}')
-
     def to_variant(self) -> GLib.Variant:
         __types = {}
         vdict = {}
         for field in fields(self):
             value = getattr(self, field.name)
-            field_t, variant_str = self._get_type_and_variant_string(field.type)
+            field_t, variant_str = ANNOTATION_TO_VARIANT[field.type]
             if value is None:
                 vdict[field.name] = GLib.Variant(variant_str, value)
                 continue
