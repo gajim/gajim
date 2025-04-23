@@ -40,6 +40,7 @@ from nbxmpp.structs import RosterItem
 from sqlalchemy import event
 from sqlalchemy.engine import Engine
 from sqlalchemy.engine.interfaces import DBAPIConnection
+from sqlalchemy.orm import ORMExecuteState
 from sqlalchemy.orm import Session
 from sqlalchemy.orm import sessionmaker
 
@@ -379,7 +380,12 @@ class AlchemyStorage:
             con_str, connect_args={'check_same_thread': False}, echo=False
         )
         event.listen(engine, 'connect', self._set_sqlite_pragma)
+        if os.environ.get('GAJIM_DEBUG_SQL'):
+            event.listen(Session, 'do_orm_execute', self._do_orm_execute)
         return engine
+
+    def _do_orm_execute(self, orm_execute_state: ORMExecuteState) -> None:
+        log.debug(orm_execute_state.statement)
 
     def _create_session(self) -> Session:
         return sessionmaker(
@@ -423,7 +429,7 @@ class AlchemyStorage:
         raise NotImplementedError
 
     def _explain(self, session: Session, stmt: Any) -> None:
-        if not os.environ.get('GAJIM_EXPLAIN'):
+        if not os.environ.get('GAJIM_DEBUG_SQL'):
             return
 
         stmt = stmt.compile(
