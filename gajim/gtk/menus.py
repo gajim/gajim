@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import textwrap
 from collections.abc import Iterator
-from datetime import datetime
 from urllib.parse import quote
 
 from gi.repository import Gio
@@ -28,8 +27,6 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import ChatDirection
-from gajim.common.storage.archive.const import MessageState
-from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.archive.models import Message
 from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
@@ -734,27 +731,21 @@ def get_component_search_menu(jid: str | None, copy_text: str) -> GajimMenu:
 
 def get_chat_row_menu(
     contact: types.ChatContactT,
-    name: str,
-    text: str,
-    timestamp: datetime,
-    message_id: str | None,
-    stanza_id: str | None,
-    pk: int | None,
-    corrected_pk: int | None,
-    state: MessageState,
-    is_retracted: bool,
-    occupant_id: str | None,
+    copy_text: str | None,
     message: Message,
+    original_message: Message,
 ) -> GajimMenu:
 
     menu_items: MenuItemListT = []
+    is_retracted = original_message.is_retracted()
 
-    copy_text = _get_copy_text(text, name, timestamp)
     menu_items.append((p_("Message row action", "Copy"), "win.copy-message", copy_text))
 
     show_correction = False
-    if message_id is not None:
-        show_correction = app.window.is_message_correctable(contact, message_id)
+    if original_message.id is not None:
+        show_correction = app.window.is_message_correctable(
+            contact, original_message.id
+        )
 
     if show_correction and not is_retracted:
         menu_items.append(
@@ -763,9 +754,7 @@ def get_chat_row_menu(
 
     param = None
     if not is_retracted:
-        param = _get_retract_param(
-            menu_items, contact, message, message_id, stanza_id, state
-        )
+        param = _get_retract_param(contact, original_message)
 
     menu_items.append(
         (p_("Message row action", "Retract…"), "win.retract-message", param)
@@ -773,9 +762,7 @@ def get_chat_row_menu(
 
     single_param, multiple_param = None, None
     if not is_retracted:
-        single_param, multiple_param = _get_moderate_params(
-            contact, name, stanza_id, state, occupant_id
-        )
+        single_param, multiple_param = _get_moderate_params(contact, original_message)
 
     menu_items.append(
         (p_("Message row action", "Moderate…"), "win.moderate-message", single_param)
@@ -791,73 +778,63 @@ def get_chat_row_menu(
         (
             p_("Message row action", "Select Messages…"),
             "win.activate-message-selection",
-            GLib.Variant("u", corrected_pk or 0),
+            GLib.Variant("u", message.pk),
         )
     )
 
-    if pk is not None and state == MessageState.ACKNOWLEDGED:
-        param = DeleteMessageParam(account=contact.account, jid=contact.jid, pk=pk)
+    param = DeleteMessageParam(
+        account=contact.account, jid=contact.jid, pk=original_message.pk
+    )
 
-        menu_items.append(
-            (
-                p_("Message row action", "Delete Message Locally…"),
-                "win.delete-message-locally",
-                param,
-            )
+    menu_items.append(
+        (
+            p_("Message row action", "Delete Message Locally…"),
+            "win.delete-message-locally",
+            param,
         )
+    )
 
     return GajimMenu.from_list(menu_items)
 
 
 def _get_retract_param(
-    menu_items: MenuItemListT,
     contact: types.ChatContactT,
-    message: Message,
-    message_id: str | None,
-    stanza_id: str | None,
-    state: MessageState,
+    original_message: Message,
 ) -> RetractMessageParam | None:
-    if message.direction != ChatDirection.OUTGOING:
-        return
 
-    retraction_id = message_id
-    if message.type == MessageType.GROUPCHAT:
-        retraction_id = stanza_id
-
-    if not retraction_id:
+    if original_message.direction == ChatDirection.INCOMING:
         return
 
     if isinstance(contact, GroupchatContact):
         if not contact.is_joined:
             return
-        if state != MessageState.ACKNOWLEDGED:
-            return
 
     if isinstance(contact, GroupchatParticipant) and not contact.room.is_joined:
         return
 
-    return RetractMessageParam(contact.account, contact.jid, retraction_id)
+    if not (retract_ids := original_message.get_ids_for_retract()):
+        return
+
+    return RetractMessageParam(contact.account, contact.jid, retract_ids)
 
 
 def _get_moderate_params(
     contact: types.ChatContactT,
-    name: str,
-    stanza_id: str | None,
-    state: MessageState,
-    occupant_id: str | None,
+    original_message: Message,
 ) -> tuple[ModerateMessageParam | None, ModerateAllMessagesParam | None]:
     if not isinstance(contact, GroupchatContact):
         return None, None
 
-    if not (contact.is_joined and stanza_id and state == MessageState.ACKNOWLEDGED):
+    if not contact.is_joined:
         return None, None
 
-    resource_contact = contact.get_resource(name)
+    if (resource := original_message.resource) is None:
+        # Message from a MUC
+        return None, None
+
     self_contact = contact.get_self()
     assert self_contact is not None
-    is_allowed = is_moderation_allowed(self_contact, resource_contact)
-
-    if not is_allowed:
+    if not is_moderation_allowed(self_contact):
         return None, None
 
     disco_info = app.storage.cache.get_last_disco_info(contact.jid)
@@ -866,42 +843,30 @@ def _get_moderate_params(
     if not disco_info.has_message_moderation:
         return None, None
 
+    stanza_ids = original_message.get_ids_for_moderate()
+    if not stanza_ids:
+        return None, None
+
     ns = disco_info.moderation_namespace
     assert ns is not None
     single_param = ModerateMessageParam(
         account=contact.account,
         jid=contact.jid,
-        stanza_id=stanza_id,
+        stanza_ids=stanza_ids,
         namespace=ns,
     )
 
     multiple_param = None
-    if occupant_id is not None:
+    if original_message.occupant is not None:
         multiple_param = ModerateAllMessagesParam(
             account=contact.account,
             jid=contact.jid,
-            occupant_id=occupant_id,
-            nickname=resource_contact.name,
+            occupant_id=original_message.occupant.id,
+            nickname=resource,
             namespace=ns,
         )
 
     return single_param, multiple_param
-
-
-def _get_copy_text(text: str, name: str, timestamp: datetime) -> str | None:
-    # Text can be an empty string
-    # e.g. if a preview has not been loaded yet
-    if not text:
-        return None
-
-    timestamp_formatted = timestamp.strftime(app.settings.get("date_time_format"))
-
-    copy_text = f"{timestamp_formatted} - {name}: "
-    if text.startswith(("```", "> ")):
-        # Prepend a line break in order to keep code block/quotes rendering
-        copy_text += "\n"
-    copy_text += text
-    return copy_text
 
 
 def get_preview_menu(preview: Preview) -> GajimMenu:

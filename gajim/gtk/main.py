@@ -696,9 +696,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             client = app.get_client(params.account)
             contact = client.get_module("Contacts").get_contact(params.jid)
             assert not isinstance(contact, ResourceContact)
-            client.get_module("Retraction").send_retraction(
-                contact, params.retraction_id
-            )
+            client.get_module("Retraction").send_retraction(contact, params.retract_ids)
 
         ConfirmationDialog(
             _("Retract Message?"),
@@ -721,8 +719,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         def _on_moderate(reason: str) -> None:
             client = app.get_client(params.account)
-            client.get_module("MUC").moderate_message(
-                params.namespace, params.jid, params.stanza_id, reason or None
+            client.get_module("MUC").moderate_messages(
+                params.namespace, params.jid, params.stanza_ids, reason or None
             )
 
         InputDialog(
@@ -740,10 +738,10 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
     def _on_moderate_all_messages(
         self, _action: Gio.SimpleAction, params: ModerateAllMessagesParam
     ) -> None:
-        messages = app.storage.archive.get_message_stanza_ids_from_occupant(
+        stanza_ids = app.storage.archive.get_message_stanza_ids_from_occupant(
             params.account, params.jid, params.occupant_id
         )
-        if messages is None:
+        if stanza_ids is None:
             SimpleDialog(
                 _("No Messages Found"),
                 _("Could not find any messages for this participant."),
@@ -761,10 +759,9 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 return
 
             muc_module = client.get_module("MUC")
-            for stanza_id in messages:
-                muc_module.moderate_message(
-                    params.namespace, params.jid, stanza_id, reason or None
-                )
+            muc_module.moderate_messages(
+                params.namespace, params.jid, stanza_ids, reason or None
+            )
 
         InputDialog(
             _("Moderate Messages?"),
@@ -772,7 +769,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 "%(count)s messages from %(participant)s will be moderated.\n"
                 "Why do you want to moderate these messages?"
             )
-            % {"count": len(messages), "participant": params.nickname},
+            % {"count": len(stanza_ids), "participant": params.nickname},
             [
                 DialogButton.make("Cancel"),
                 DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),

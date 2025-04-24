@@ -47,18 +47,19 @@ class Retraction(BaseModule):
     def send_retraction(
         self,
         contact: types.ChatContactT,
-        retraction_id: str,
+        retract_ids: list[str],
     ) -> None:
 
-        message = OutgoingMessage(
-            account=self._account,
-            contact=contact,
-            retraction_id=retraction_id,
-            play_sound=False,
-        )
+        for retraction_id in retract_ids:
+            message = OutgoingMessage(
+                account=self._account,
+                contact=contact,
+                retraction_id=retraction_id,
+                play_sound=False,
+            )
 
-        self._client.send_message(message)
-        self._log.info('Send retraction for %s to %s', retraction_id, contact.jid)
+            self._client.send_message(message)
+            self._log.info('Send retraction for %s to %s', retraction_id, contact.jid)
 
     def _process_retraction_message(
         self,

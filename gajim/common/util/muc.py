@@ -51,12 +51,10 @@ def is_role_change_allowed(
 
 
 def is_moderation_allowed(
-    self_contact: types.GroupchatParticipant, contact: types.GroupchatParticipant
+    self_contact: types.GroupchatParticipant
 ) -> bool:
 
-    if self_contact.role < Role.MODERATOR:
-        return False
-    return self_contact.affiliation >= contact.affiliation
+    return self_contact.role >= Role.MODERATOR
 
 
 def get_default_muc_config() -> dict[str, bool | str]:

@@ -744,7 +744,8 @@ class MessageArchiveStorage(AlchemyStorage):
             Message.fk_remote_pk == fk_remote_pk,
             Message.fk_account_pk == fk_account_pk,
             Message.fk_occupant_pk == fk_occupant_pk,
-            Message.stanza_id.isnot(None)
+            Message.stanza_id.isnot(None),
+            ~Message.moderation.has(),
         )
         result = cast(Sequence[str] | None, session.scalars(stmt).all())
         return result

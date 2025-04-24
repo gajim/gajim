@@ -784,7 +784,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if event.message.id is not None:
             self._message_id_row_map[event.message.id] = message_row
 
-        message_row.refresh()
+        message_row.update_corrections()
 
         assert self._read_marker_row is not None
         timestamp = message_row.timestamp + timedelta(microseconds=1)
@@ -802,7 +802,7 @@ class ConversationView(Gtk.ScrolledWindow):
             message_row = self._get_row_by_message_id(retraction_id)
 
         if message_row is not None:
-            message_row.refresh()
+            message_row.update_retractions()
 
     def update_message_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):

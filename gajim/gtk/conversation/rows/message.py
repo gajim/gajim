@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 import textwrap
+from datetime import datetime
 from datetime import timedelta
 
 from gi.repository import GLib
@@ -65,7 +66,6 @@ class MessageRow(BaseRow):
 
         self.timestamp = message.timestamp.astimezone()
         self.db_timestamp = message.timestamp.timestamp()
-        self.stanza_id = message.stanza_id
         self.direction = ChatDirection(message.direction)
         self._is_outgoing = self.direction == ChatDirection.OUTGOING
 
@@ -98,22 +98,23 @@ class MessageRow(BaseRow):
         self._reactions_bar = ReactionsBar(self, self._contact)
         self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
-        self._set_content(message)
+        self._set_content()
 
     @classmethod
     def from_db_row(cls, contact: ChatContactT, message: Message) -> MessageRow:
-
         return cls(contact, message)
 
     @property
     def last_message_id(self) -> str | None:
-        if self._corr_message is None:
-            return self._original_message.id
-        return self._corr_message.id
+        return self._message.id
 
     @property
     def message_id(self) -> str | None:
         return self._original_message.id
+
+    @property
+    def state(self) -> int:
+        return self._message.state
 
     @property
     def has_receipt(self) -> bool:
@@ -126,20 +127,20 @@ class MessageRow(BaseRow):
     def do_unroot(self) -> None:
         BaseRow.do_unroot(self)
 
-    def refresh(self, *, complete: bool = True) -> None:
-        original_message = app.storage.archive.get_message_with_pk(self.orig_pk)
-        assert original_message is not None
-        self._original_message = original_message
+    def refresh(self, attrs: list[str], *, complete: bool = True) -> None:
+        app.storage.archive.refresh(self._original_message, attrs)
         if complete:
-            self._set_content(original_message)
+            self._set_content()
 
-    def _set_content(self, message: Message) -> None:
+    def _set_content(self) -> None:
         self.set_merged(False)
         self.remove_css_class("retracted-message")
         self.remove_css_class("gajim-mention-highlight")
 
         container_remove_all(self._meta_box)
         container_remove_all(self._bottom_box)
+
+        message = self._original_message
 
         self.name = get_contact_name_for_message(message, self._contact)
 
@@ -155,8 +156,6 @@ class MessageRow(BaseRow):
         self._message_icons = MessageIcons()
         self._meta_box.append(self._message_icons)
 
-        self._corr_message = None
-
         if message.is_retracted():
             self._set_retracted(message)
             return
@@ -165,7 +164,7 @@ class MessageRow(BaseRow):
         # be taken from the correction
         if corrected_message := message.get_last_correction():
             message = corrected_message
-            self._corr_message = corrected_message
+            self._message = corrected_message
 
         self.pk = message.pk
 
@@ -224,10 +223,8 @@ class MessageRow(BaseRow):
 
         self.set_receipt(message.receipt is not None)
 
-        self.state = MessageState(message.state)
-
         if self._contact.is_groupchat and self.direction == ChatDirection.OUTGOING:
-            self._message_icons.set_message_state_icon(self.state)
+            self._message_icons.set_message_state_icon(MessageState(message.state))
 
         if message.error is not None:
             if message.error.text is not None:
@@ -253,24 +250,31 @@ class MessageRow(BaseRow):
     def get_chat_row_menu(
         self,
     ) -> GajimMenu:
-        occupant_id = None
-        if self._message.occupant is not None:
-            occupant_id = self._message.occupant.id
+
+        copy_text = self._get_copy_text(self.get_text(), self.name, self.timestamp)
 
         return get_chat_row_menu(
             contact=self._contact,
-            name=self.name,
-            text=self.get_text(),
-            timestamp=self.timestamp,
-            message_id=self._original_message.id,
-            stanza_id=self.stanza_id,
-            pk=self.orig_pk,
-            corrected_pk=self.pk,
-            state=self.state,
-            is_retracted=self._is_retracted,
-            occupant_id=occupant_id,
+            copy_text=copy_text,
             message=self._message,
+            original_message=self._original_message,
         )
+
+    @staticmethod
+    def _get_copy_text(text: str, name: str, timestamp: datetime) -> str | None:
+        # Text can be an empty string
+        # e.g. if a preview has not been loaded yet
+        if not text:
+            return None
+
+        timestamp_formatted = timestamp.strftime(app.settings.get("date_time_format"))
+
+        copy_text = f"{timestamp_formatted} - {name}: "
+        if text.startswith(("```", "> ")):
+            # Prepend a line break in order to keep code block/quotes rendering
+            copy_text += "\n"
+        copy_text += text
+        return copy_text
 
     def _on_more_menu_popover_closed(
         self, _popover: GajimPopover, message_row_actions: MessageRowActions
@@ -346,7 +350,7 @@ class MessageRow(BaseRow):
         return sec1.label_hash == sec2.label_hash
 
     def is_same_state(self, message: MessageRow) -> bool:
-        return message.state == self.state
+        return message.state == self._message.state
 
     def has_same_receipt_status(self, message: MessageRow) -> bool:
         if not app.settings.get("positive_184_ack"):
@@ -360,7 +364,7 @@ class MessageRow(BaseRow):
             return False
         if message.direction != self.direction:
             return False
-        if self._corr_message:
+        if self._message.correction_id is not None:
             return False
         if not self.is_same_sender(message):
             return False
@@ -399,16 +403,14 @@ class MessageRow(BaseRow):
         return icon, color, tooltip
 
     def set_acknowledged(self, stanza_id: str | None) -> None:
+        self.refresh(["stanza_id", "state"], complete=False)
         if self._is_retracted:
             return
 
-        if self._corr_message is None:
-            # We want to preserve the stanza id of the original message
-            # as we need it later e.g. to send a reaction
-            self.stanza_id = stanza_id
+        if self._message.stanza_id != stanza_id:
+            return
 
-        self.state = MessageState.ACKNOWLEDGED
-        self._message_icons.set_message_state_icon(self.state)
+        self._message_icons.set_message_state_icon(MessageState(self._message.state))
 
     def set_receipt(self, value: bool) -> None:
         if self._is_retracted:
@@ -426,11 +428,18 @@ class MessageRow(BaseRow):
         self._message_icons.set_error_tooltip(tooltip)
 
     def update_reactions(self) -> None:
+        self.refresh(["reactions"], complete=False)
+
         if self._is_retracted:
             return
 
-        self.refresh(complete=False)
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
+
+    def update_retractions(self) -> None:
+        self.refresh(["retraction", "moderation"], complete=True)
+
+    def update_corrections(self) -> None:
+        self.refresh(["corrections"], complete=True)
 
     def send_reaction(self, emoji: str, toggle: bool = True) -> None:
         """Adds or removes 'emoji' from this message's reactions and sends the result.
@@ -439,9 +448,9 @@ class MessageRow(BaseRow):
           emoji: Reaction emoji to add or remove
           toggle: Whether an existing emoji should be removed from the set
         """
-        reaction_id = self.message_id
+        reaction_id = self._original_message.id
         if self._original_message.type == MessageType.GROUPCHAT:
-            reaction_id = self.stanza_id
+            reaction_id = self._original_message.stanza_id
 
         if reaction_id is None:
             log.warning("No reaction id")
@@ -474,8 +483,6 @@ class MessageRow(BaseRow):
 
         self.text = text
 
-        self.state = MessageState.ACKNOWLEDGED
-
         self._message_widget = MessageWidget(self._account)
         self._message_widget.add_with_styling(text)
         self._set_text_direction(text)
@@ -498,7 +505,10 @@ class MessageRow(BaseRow):
 
     def update_avatar(self) -> None:
         avatar = get_avatar_for_message(
-            self._message, self._contact, self.get_scale_factor(), AvatarSize.ROSTER
+            self._original_message,
+            self._contact,
+            self.get_scale_factor(),
+            AvatarSize.ROSTER,
         )
         self._avatar_box.set_from_paintable(avatar)
 
@@ -519,7 +529,7 @@ class MessageRow(BaseRow):
             return False
 
         if isinstance(self._contact, GroupchatContact):
-            if self.stanza_id is None:
+            if self._message.stanza_id is None:
                 return False
 
             if not self._contact.is_joined:
@@ -547,7 +557,7 @@ class MessageRow(BaseRow):
             if self_contact.role.is_visitor:
                 return False
 
-            if self.stanza_id is None:
+            if self._message.stanza_id is None:
                 return False
 
             if self._contact.muc_context == "public":

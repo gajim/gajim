@@ -71,7 +71,7 @@ class ExportHistoryParam(VariantMixin):
 class ModerateMessageParam(VariantMixin):
     account: str
     jid: JID
-    stanza_id: str
+    stanza_ids: list[str]
     namespace: str
 
 
@@ -79,7 +79,7 @@ class ModerateMessageParam(VariantMixin):
 class RetractMessageParam(VariantMixin):
     account: str
     jid: JID
-    retraction_id: str
+    retract_ids: list[str]
 
 
 @dataclass

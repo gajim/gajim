@@ -12,6 +12,7 @@ from typing import Any
 import logging
 import time
 from collections import defaultdict
+from collections.abc import Sequence
 
 import nbxmpp
 from gi.repository import GLib
@@ -77,7 +78,6 @@ class MUC(BaseModule):
         'approve_voice_request',
         'destroy',
         'request_disco_info',
-        'moderate_message'
     ]
 
     def __init__(self, con: types.Client) -> None:
@@ -1234,6 +1234,17 @@ class MUC(BaseModule):
         self._log.info('Invite %s to %s', jid, room)
         return self._nbxmpp('MUC').invite(
             room, jid, password, reason, continue_, type_)
+
+    def moderate_messages(
+        self,
+        namespace: str,
+        jid: JID,
+        moderate_ids: Sequence[str],
+        reason: str | None
+    ) -> None:
+
+        for moderation_id in moderate_ids:
+            self._nbxmpp('MUC').moderate_message(namespace, jid, moderation_id, reason)
 
     def _on_client_state_changed(self,
                                  _client: types.Client,

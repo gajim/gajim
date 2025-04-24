@@ -8,6 +8,7 @@ from typing import Any
 
 import dataclasses
 import datetime
+import itertools
 
 import sqlalchemy as sa
 from nbxmpp import JID
@@ -25,6 +26,7 @@ from sqlalchemy.sql import expression as expr
 from sqlalchemy.types import TypeEngine
 
 from gajim.common import app
+from gajim.common.storage.archive.const import MessageType
 from gajim.common.storage.base import EpochTimestampType
 from gajim.common.storage.base import JIDType
 from gajim.common.storage.base import JSONType
@@ -885,3 +887,24 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
             self.type,
             self.reply.id
         )
+
+    def get_ids_for_moderate(self) -> list[str]:
+        stanza_ids: list[str] = []
+        for message in itertools.chain([self], self.corrections):
+            if message.moderation is None and message.stanza_id is not None:
+                stanza_ids.append(message.stanza_id)
+
+        return stanza_ids
+
+    def get_ids_for_retract(self) -> list[str]:
+        ids: list[str] = []
+        if self.type == MessageType.GROUPCHAT:
+            for message in itertools.chain([self], self.corrections):
+                if message.retraction is None and message.stanza_id is not None:
+                    ids.append(message.stanza_id)
+        else:
+            for message in itertools.chain([self], self.corrections):
+                if message.retraction is None and message.id is not None:
+                    ids.append(message.id)
+
+        return ids
