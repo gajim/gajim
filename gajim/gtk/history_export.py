@@ -155,7 +155,7 @@ class HistoryExport(Assistant):
             if message.resource is not None:
                 return message.resource
 
-            return _("Room")
+            return _("Group Chat")
 
         return str(message.remote.jid)
 
