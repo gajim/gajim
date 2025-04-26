@@ -98,19 +98,14 @@ class MessageRow(BaseRow):
         self._reactions_bar = ReactionsBar(self, self._contact)
         self.grid.attach(self._reactions_bar, 1, 2, 1, 1)
 
-        self._set_content()
+        self._redraw_content()
+
+    def do_unroot(self) -> None:
+        BaseRow.do_unroot(self)
 
     @classmethod
     def from_db_row(cls, contact: ChatContactT, message: Message) -> MessageRow:
         return cls(contact, message)
-
-    @property
-    def last_message_id(self) -> str | None:
-        return self._message.id
-
-    @property
-    def message_id(self) -> str | None:
-        return self._original_message.id
 
     @property
     def state(self) -> int:
@@ -124,15 +119,7 @@ class MessageRow(BaseRow):
     def is_merged(self) -> bool:
         return self._merged
 
-    def do_unroot(self) -> None:
-        BaseRow.do_unroot(self)
-
-    def refresh(self, attrs: list[str], *, complete: bool = True) -> None:
-        app.storage.archive.refresh(self._original_message, attrs)
-        if complete:
-            self._set_content()
-
-    def _set_content(self) -> None:
+    def _redraw_content(self) -> None:
         self.set_merged(False)
         self.remove_css_class("retracted-message")
         self.remove_css_class("gajim-mention-highlight")
@@ -221,7 +208,7 @@ class MessageRow(BaseRow):
             self._message_icons.set_security_label_data(*sec_label_data)
             self._message_icons.set_security_label_visible(True)
 
-        self.set_receipt(message.receipt is not None)
+        self._set_receipt(message.receipt is not None)
 
         if self._contact.is_groupchat and self.direction == ChatDirection.OUTGOING:
             self._message_icons.set_message_state_icon(MessageState(message.state))
@@ -231,7 +218,7 @@ class MessageRow(BaseRow):
                 error_text = f"{message.error.text} ({message.error.condition})"
             else:
                 error_text = message.error.condition
-            self.show_error(error_text)
+            self._set_error(error_text)
 
     def _set_text_direction(self, text: str) -> None:
         if is_rtl_text(text):
@@ -402,24 +389,33 @@ class MessageRow(BaseRow):
 
         return icon, color, tooltip
 
-    def set_acknowledged(self, stanza_id: str | None) -> None:
-        self.refresh(["stanza_id", "state"], complete=False)
+    def set_acknowledged(self, pk: int) -> None:
+        if self._original_message.pk == pk:
+            message = self._original_message
+        elif self._message.pk == pk:
+            message = self._message
+        else:
+            raise ValueError("Acknowledged unknown message")
+
+        app.storage.archive.refresh(message, ["stanza_id", "state"])
+
         if self._is_retracted:
             return
 
-        if self._message.stanza_id != stanza_id:
-            return
+        self._message_icons.set_message_state_icon(MessageState(message.state))
 
-        self._message_icons.set_message_state_icon(MessageState(self._message.state))
-
-    def set_receipt(self, value: bool) -> None:
+    def _set_receipt(self, value: bool) -> None:
         if self._is_retracted:
             return
 
         self._has_receipt = value
         self._message_icons.set_receipt_icon_visible(value)
 
-    def show_error(self, tooltip: str) -> None:
+    def set_receipt(self, receipt_id: str) -> None:
+        if self._message.id == receipt_id:
+            self._set_receipt(True)
+
+    def _set_error(self, tooltip: str) -> None:
         if self._is_retracted:
             return
 
@@ -427,19 +423,29 @@ class MessageRow(BaseRow):
         self._message_icons.set_error_icon_visible(True)
         self._message_icons.set_error_tooltip(tooltip)
 
-    def update_reactions(self) -> None:
-        self.refresh(["reactions"], complete=False)
+    def set_error(self, error_id: str, text: str) -> None:
+        if self._message.id == error_id:
+            self._set_error(text)
+            self.set_merged(False)
 
+    def update_reactions(self) -> None:
+        app.storage.archive.refresh(
+            self._original_message, ["corrections", "reactions"]
+        )
         if self._is_retracted:
             return
 
         self._reactions_bar.update_from_reactions(self._original_message.reactions)
 
     def update_retractions(self) -> None:
-        self.refresh(["retraction", "moderation"], complete=True)
+        app.storage.archive.refresh(
+            self._original_message, ["corrections", "retraction", "moderation"]
+        )
+        self._redraw_content()
 
     def update_corrections(self) -> None:
-        self.refresh(["corrections"], complete=True)
+        app.storage.archive.refresh(self._original_message, ["corrections"])
+        self._redraw_content()
 
     def send_reaction(self, emoji: str, toggle: bool = True) -> None:
         """Adds or removes 'emoji' from this message's reactions and sends the result.

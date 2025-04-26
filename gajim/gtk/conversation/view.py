@@ -498,29 +498,21 @@ class ConversationView(Gtk.ScrolledWindow):
         message_row.connect(
             "state-flags-changed", self._on_message_row_state_flags_changed
         )
-        message_id = message.id
-        stanza_id = message.stanza_id
 
-        if stanza_id is not None:
+        # Add all message ids and stanza ids of all message revisions
+        for stanza_id in message.iter_stanza_ids():
             self._stanza_id_row_map[stanza_id] = message_row
 
-        if message_id is not None:
+        for message_id in message.iter_message_ids():
             self._message_id_row_map[message_id] = message_row
-
-        if corrected_message := message.get_last_correction():
-            # Store the same MessageRow object also with the message id
-            # of the last correction, because we need it for XEP-0184 Receipts
-            # which does not reference the original message id.
-            if corr_message_id := corrected_message.id:
-                self._message_id_row_map[corr_message_id] = message_row
 
         if message.direction == ChatDirection.INCOMING:
             assert self._read_marker_row is not None
             self._read_marker_row.set_last_incoming_timestamp(message_row.timestamp)
 
         if message.markers:
-            assert message_id is not None
-            self.set_read_marker(message_id)
+            assert message.id is not None
+            self.set_read_marker(message.id)
 
         self._insert_message(message_row)
 
@@ -662,7 +654,7 @@ class ConversationView(Gtk.ScrolledWindow):
 
         if event.stanza_id is not None:
             self._stanza_id_row_map[event.stanza_id] = row
-        row.set_acknowledged(event.stanza_id)
+        row.set_acknowledged(event.pk)
         self._check_for_merge(row)
 
     def scroll_to_message_and_highlight(self, pk: int) -> None:
@@ -779,10 +771,11 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is None:
             return
 
-        # Store the message row also with the correction message id
-        # because e.g. message receipts reference this id.
         if event.message.id is not None:
             self._message_id_row_map[event.message.id] = message_row
+
+        if event.message.stanza_id is not None:
+            self._stanza_id_row_map[event.message.stanza_id] = message_row
 
         message_row.update_corrections()
 
@@ -795,7 +788,7 @@ class ConversationView(Gtk.ScrolledWindow):
                 message_row.timestamp - timedelta(microseconds=1), force=True
             )
 
-    def set_retracted(self, retraction_id: str) -> None:
+    def update_retractions(self, retraction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):
             message_row = self._get_row_by_stanza_id(retraction_id)
         else:
@@ -804,7 +797,7 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is not None:
             message_row.update_retractions()
 
-    def update_message_reactions(self, reaction_id: str) -> None:
+    def update_reactions(self, reaction_id: str) -> None:
         if isinstance(self._contact, GroupchatContact):
             message_row = self._get_row_by_stanza_id(reaction_id)
         else:
@@ -818,15 +811,13 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is None:
             return
 
-        if message_row.last_message_id == id_:
-            message_row.set_receipt(True)
-            self._check_for_merge(message_row)
+        message_row.set_receipt(id_)
+        self._check_for_merge(message_row)
 
     def show_error(self, id_: str, error: StanzaError) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is not None:
-            message_row.show_error(to_user_string(error))
-            message_row.set_merged(False)
+            message_row.set_error(id_, to_user_string(error))
 
     def _on_contact_setting_changed(
         self, value: Any, setting: str, _account: str | None, _jid: JID | None

@@ -359,13 +359,13 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.set_retracted(event.moderation.stanza_id)
+        self._scrolled_view.update_retractions(event.moderation.stanza_id)
 
     def _on_message_retracted(self, event: events.MessageRetracted) -> None:
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.set_retracted(event.retraction.id)
+        self._scrolled_view.update_retractions(event.retraction.id)
 
     def _on_receipt_received(self, event: events.ReceiptReceived) -> None:
         if not self._is_event_processable(event):
@@ -383,7 +383,7 @@ class ChatControl(EventHelper):
         if not self._is_event_processable(event):
             return
 
-        self._scrolled_view.update_message_reactions(event.reaction_id)
+        self._scrolled_view.update_reactions(event.reaction_id)
 
     def _on_message_error(self, event: events.MessageError) -> None:
         if not self._is_event_processable(event):

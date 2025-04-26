@@ -9,6 +9,7 @@ from typing import Any
 import dataclasses
 import datetime
 import itertools
+from collections.abc import Iterator
 
 import sqlalchemy as sa
 from nbxmpp import JID
@@ -908,3 +909,13 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
                     ids.append(message.id)
 
         return ids
+
+    def iter_message_ids(self) -> Iterator[str]:
+        for message in itertools.chain([self], self.corrections):
+            if message.id is not None:
+                yield message.id
+
+    def iter_stanza_ids(self) -> Iterator[str]:
+        for message in itertools.chain([self], self.corrections):
+            if message.stanza_id is not None:
+                yield message.stanza_id
