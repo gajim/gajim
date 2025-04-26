@@ -194,9 +194,9 @@ class MessageRow(BaseRow):
         if corrected_message:
             self._set_correction()
 
-        reactions = self._original_message.reactions
-        if reactions:
-            self._reactions_bar.update_from_reactions(reactions)
+        self._reactions_bar.update_from_reactions(
+            self._original_message.get_reactions()
+        )
 
         encryption_data = self._get_encryption_data(message.encryption)
         if encryption_data is not None:
@@ -435,7 +435,9 @@ class MessageRow(BaseRow):
         if self._is_retracted:
             return
 
-        self._reactions_bar.update_from_reactions(self._original_message.reactions)
+        self._reactions_bar.update_from_reactions(
+            self._original_message.get_reactions()
+        )
 
     def update_retractions(self) -> None:
         app.storage.archive.refresh(

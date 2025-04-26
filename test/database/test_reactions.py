@@ -204,6 +204,126 @@ class ReactionsTest(unittest.TestCase):
         self.assertEqual(r2.timestamp, mk_utc_dt(2))
         self.assertEqual(r2.emojis, "😘️")
 
+    def test_combine_revisions(self):
+        # Reactions can land on multiple revisions (corrections) of the
+        # message. Check that get_reactions() only returns the reactions
+        # on the latest revision.
+
+        occupant_data1 = Occupant(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            id="occupantid1",
+            nickname="nickname1",
+            updated_at=mk_utc_dt(0),
+        )
+
+        occupant_data2 = Occupant(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            id="occupantid2",
+            nickname="nickname2",
+            updated_at=mk_utc_dt(0),
+        )
+
+        occupant_data3 = Occupant(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            id="occupantid3",
+            nickname="nickname3",
+            updated_at=mk_utc_dt(0),
+        )
+
+        uuid1 = get_uuid()
+        uuid2 = get_uuid()
+
+        r_data1 = Reaction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=occupant_data2,
+            id=uuid1,
+            direction=ChatDirection.INCOMING,
+            emojis="😁️",
+            timestamp=mk_utc_dt(1),
+        )
+
+        r_data2 = Reaction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=occupant_data2,
+            id=uuid2,
+            direction=ChatDirection.INCOMING,
+            emojis="😘️",
+            timestamp=mk_utc_dt(2),
+        )
+
+        r_data3 = Reaction(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            occupant_=occupant_data3,
+            id=uuid2,
+            direction=ChatDirection.INCOMING,
+            emojis="😇️;😁️",
+            timestamp=mk_utc_dt(3),
+        )
+
+        pk = self._archive.upsert_row2(r_data1)
+        self.assertIsNotNone(pk)
+        pk = self._archive.upsert_row2(r_data2)
+        self.assertIsNotNone(pk)
+        pk = self._archive.upsert_row2(r_data3)
+        self.assertIsNotNone(pk)
+
+        message_data = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=mk_utc_dt(0),
+            state=MessageState.ACKNOWLEDGED,
+            resource="res",
+            text="Some Message",
+            id="messageid99",
+            stanza_id=uuid1,
+            occupant_=occupant_data1,
+        )
+
+        orig_pk = self._archive.insert_object(message_data)
+
+        message_data = Message(
+            account_=self._account,
+            remote_jid_=self._remote_jid,
+            type=MessageType.GROUPCHAT,
+            direction=ChatDirection.INCOMING,
+            timestamp=mk_utc_dt(0),
+            state=MessageState.ACKNOWLEDGED,
+            resource="res",
+            text="Some Message",
+            id="messageid100",
+            correction_id="messageid99",
+            stanza_id=uuid2,
+            occupant_=occupant_data1,
+        )
+
+        self._archive.insert_object(message_data)
+
+        message = self._archive.get_message_with_pk(orig_pk)
+        assert message is not None
+
+        reactions = message.get_reactions()
+        self.assertTrue(len(reactions), 2)
+
+        r1, r2 = reactions
+
+        assert r1.occupant is not None
+        assert r2.occupant is not None
+
+        self.assertEqual(r1.occupant.id, "occupantid2")
+        self.assertEqual(r1.timestamp, mk_utc_dt(2))
+        self.assertEqual(r1.emojis, "😘️")
+        self.assertEqual(r2.occupant.id, "occupantid3")
+        self.assertEqual(r2.timestamp, mk_utc_dt(3))
+        self.assertEqual(r2.emojis, "😇️;😁️")
+
 
 if __name__ == "__main__":
     unittest.main()

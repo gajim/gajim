@@ -910,6 +910,21 @@ class Message(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
         return ids
 
+    def get_reactions(self) -> list[Reaction]:
+        # Search in all revisions for reactions but return only the latest
+        reactions: dict[int, Reaction] = {}
+        if self.type == MessageType.GROUPCHAT:
+            for message in itertools.chain([self], self.corrections):
+                for reaction in message.reactions:
+                    assert reaction.occupant is not None
+                    reactions[reaction.occupant.pk] = reaction
+        else:
+            for message in itertools.chain([self], self.corrections):
+                for reaction in message.reactions:
+                    reactions[message.direction] = reaction
+
+        return list(reactions.values())
+
     def iter_message_ids(self) -> Iterator[str]:
         for message in itertools.chain([self], self.corrections):
             if message.id is not None:
