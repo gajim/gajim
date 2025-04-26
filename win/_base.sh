@@ -112,11 +112,11 @@ qrcode
 css_parser
 sentry-sdk
 emoji
-winrt-Windows.ApplicationModel==2.3.0
-winrt-Windows.Foundation==2.3.0
-winrt-Windows.UI==2.3.0
-winrt-Windows.UI.ViewManagement==2.3.0
-windows-toasts
+winrt-Windows.ApplicationModel~=3.0
+winrt-Windows.Foundation~=3.0
+winrt-Windows.UI~=3.0
+winrt-Windows.UI.ViewManagement~=3.0
+git+https://github.com/DatGuy1/Windows-Toasts.git
 "
     build_pip install precis-i18n
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
