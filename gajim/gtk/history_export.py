@@ -152,8 +152,10 @@ class HistoryExport(Assistant):
                 if message.occupant.nickname is not None:
                     return message.occupant.nickname
 
-            assert message.resource is not None
-            return message.resource
+            if message.resource is not None:
+                return message.resource
+
+            return _("Room")
 
         return str(message.remote.jid)
 
