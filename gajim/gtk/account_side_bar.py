@@ -224,10 +224,24 @@ class AccountSideBar(Gtk.Box, SignalManager):
         app.app.change_status(status=new_status, account=account)
 
 
-class AccountAvatar(Gtk.Image, EventHelper):
+class AccountAvatar(Gtk.Widget, EventHelper):
     def __init__(self) -> None:
-        Gtk.Image.__init__(self, pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
+        Gtk.Widget.__init__(self, layout_manager=Gtk.BinLayout())
         EventHelper.__init__(self)
+        self.add_css_class("account-sidebar-image")
+
+        self._avatar_image = Gtk.Image(pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
+        self._avatar_image.set_parent(self)
+
+        self._connectivity_image = Gtk.Image(
+            icon_name="dialog-warning-symbolic",
+            pixel_size=AvatarSize.ACCOUNT_SIDE_BAR_WARNING,
+            halign=Gtk.Align.END,
+            valign=Gtk.Align.END,
+            visible=False,
+        )
+        self._connectivity_image.set_parent(self)
+        self._connectivity_image.add_css_class("warning-color")
 
         self.register_event("account-enabled", ged.GUI1, self._on_account_state)
         self.register_event("account-disabled", ged.GUI1, self._on_account_state)
@@ -270,21 +284,36 @@ class AccountAvatar(Gtk.Image, EventHelper):
 
     def _on_client_state_changed(self, *args: Any) -> None:
         self._update_image()
+        self._update_tooltip()
 
     def _update_tooltip(self) -> None:
         accounts = app.settings.get_active_accounts()
         if len(accounts) == 1:
             account = accounts[0]
             account_label = app.settings.get_account_setting(account, "account_label")
-            self.set_tooltip_text(_("Account: %s") % account_label)
+            tooltip_text = _("Account: %s") % account_label
         else:
-            self.set_tooltip_text(_("Accounts"))
+            tooltip_text = _("Accounts")
+
+        if self._has_connectivity_issues():
+            tooltip_text += "\n" + _("There are connectivity issues")
+
+        self.set_tooltip_text(tooltip_text)
 
     def _update_image(self) -> None:
         accounts = app.settings.get_active_accounts()
-        account = accounts[0] if len(accounts) == 1 else None
 
+        self._connectivity_image.set_visible(self._has_connectivity_issues())
+
+        account = accounts[0] if len(accounts) == 1 else None
         texture = app.app.avatar_storage.get_account_button_texture(
             account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
         )
-        self.set_from_paintable(texture)
+        self._avatar_image.set_from_paintable(texture)
+
+    def _has_connectivity_issues(self) -> bool:
+        for account in app.settings.get_active_accounts():
+            client = app.get_client(account)
+            if client.state.is_disconnected or client.state.is_reconnect_scheduled:
+                return True
+        return False

@@ -60,6 +60,7 @@ class AvatarSize(IntEnum):
     START_CHAT = 32
     VCARD_HEADER = 40
     ACCOUNT_SIDE_BAR = 40
+    ACCOUNT_SIDE_BAR_WARNING = 20
     WORKSPACE = 40
     WORKSPACE_EDIT = 100
     CHAT = 48

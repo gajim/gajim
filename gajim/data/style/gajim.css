@@ -454,7 +454,7 @@ button.flat.link { padding: 0; border: 0; }
     margin-top: 6px;
     margin-bottom: 12px;
 }
-.account-sidebar > box > image {
+.account-sidebar .account-sidebar-image {
     padding: 6px 6px 12px 6px;
 }
 
