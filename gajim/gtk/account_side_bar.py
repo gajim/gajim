@@ -282,7 +282,7 @@ class AccountAvatar(Gtk.Image, EventHelper):
 
     def _update_image(self) -> None:
         accounts = app.settings.get_active_accounts()
-        account = accounts[0] if len(accounts) else None
+        account = accounts[0] if len(accounts) == 1 else None
 
         texture = app.app.avatar_storage.get_account_button_texture(
             account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
