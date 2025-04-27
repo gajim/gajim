@@ -2,10 +2,13 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 import logging
 import os
 import sys
 import webbrowser
+from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import unquote
 from urllib.parse import urlparse
@@ -25,6 +28,29 @@ from gajim.common.util.decorators import catch_exceptions
 from gajim.common.util.jid import validate_jid
 
 log = logging.getLogger('gajim.c.util.uri')
+
+
+@dataclass
+class XmppIri:
+    jid: JID
+    action: str
+    params: dict[str, str]
+
+    @classmethod
+    def from_string(cls, iri: str) -> XmppIri:
+        urlparts = urlparse(iri)
+        if urlparts.scheme != 'xmpp':
+            raise ValueError('Invalid scheme: %s' % urlparts.scheme)
+
+        if urlparts.path.startswith('/'):
+            raise ValueError('Authority component not supported: %s' % iri)
+
+        if not urlparts.path:
+            raise ValueError('No path component found: %s' % iri)
+
+        jid = JID.from_iri(f'xmpp:{urlparts.path}')
+        qtype, qparams = parse_xmpp_uri_query(urlparts.query)
+        return XmppIri(jid=jid, action=qtype, params=qparams)
 
 
 def is_known_uri_scheme(scheme: str) -> bool:

@@ -33,7 +33,6 @@ from collections.abc import Callable
 from datetime import datetime
 from datetime import timedelta
 from datetime import UTC
-from urllib.parse import unquote
 
 from gi.repository import Gio
 from gi.repository import GLib
@@ -41,7 +40,6 @@ from gi.repository import Gtk
 from nbxmpp import JID
 from nbxmpp.const import ConnectionProtocol
 from nbxmpp.const import ConnectionType
-from nbxmpp.protocol import InvalidJid
 
 import gajim
 from gajim.common import app
@@ -260,58 +258,6 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         GLib.timeout_add(100, self._auto_connect)
 
-    def _open_uris(self, uris: list[str]) -> None:
-        accounts = app.settings.get_active_accounts()
-        if not accounts:
-            return
-
-        for uri in uris:
-            app.log("uri_handler").info("open %s", uri)
-            if not uri.startswith("xmpp:"):
-                continue
-
-            try:
-                iri, cmd = uri.split("?")
-            except ValueError:
-                # No query argument
-                iri, cmd = uri, "message"
-
-            try:
-                jid = JID.from_iri(iri)
-            except InvalidJid as error:
-                app.log("uri_handler").warning("Invalid JID %s: %s", uri, error)
-                continue
-
-            if cmd == "join" and jid.resource:
-                app.log("uri_handler").warning("Invalid MUC JID %s", uri)
-                continue
-
-            jid = str(jid)
-
-            if cmd == "join":
-                if len(accounts) == 1:
-                    self.activate_action(
-                        "open-chat", GLib.Variant("as", [accounts[0], jid])
-                    )
-                else:
-                    self.activate_action("start-chat", GLib.Variant("as", [jid, ""]))
-
-            elif cmd == "roster":
-                self.activate_action("add-contact", GLib.Variant("s", jid))
-
-            elif cmd.startswith("message"):
-                attributes = cmd.split(";")
-                message = None
-                for key in attributes:
-                    if not key.startswith("body"):
-                        continue
-                    try:
-                        message = unquote(key.split("=")[1])
-                    except Exception:
-                        app.log("uri_handler").error("Invalid URI: %s", cmd)
-
-                app.window.start_chat_from_jid(accounts[0], jid, message)
-
     def _shutdown(self, _application: GajimApplication) -> None:
         self._shutdown_core()
 
@@ -339,7 +285,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
         )
 
         if remaining is not None:
-            self._open_uris(remaining.unpack())
+            self.activate_action("handle-uri", remaining)
             return 0
 
         if not options.contains("is-first-startup"):

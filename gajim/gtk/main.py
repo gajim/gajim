@@ -40,6 +40,7 @@ from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
+from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.account_side_bar import AccountSideBar
 from gajim.gtk.activity_side_bar import ActivitySideBar
@@ -436,6 +437,15 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             act = self.get_action(action)
             act.connect("activate", func)
 
+        app_actions = [
+            ("handle-uri", self._on_handle_uri),
+        ]
+
+        for action, func in app_actions:
+            act = app.app.lookup_action(action)
+            assert act is not None
+            act.connect("activate", func)
+
     def _on_action(
         self, action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> int | None:
@@ -800,6 +810,45 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ],
             transient_for=app.window,
         )
+
+    def _on_handle_uri(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
+        uris = param.unpack()
+        if not uris:
+            return
+
+        accounts = app.settings.get_active_accounts()
+        if not accounts:
+            log.warning("No accounts active, unable to handle uri")
+            return
+
+        try:
+            xmpp_iri = XmppIri.from_string(uris[0])
+        except Exception as error:
+            log.warning("Failed to parse url: %s, %s", uris[0], error)
+            return
+
+        jid_str = str(xmpp_iri.jid)
+
+        match xmpp_iri.action:
+            case "join":
+                if len(accounts) == 1:
+                    self.activate_action(
+                        "app.open-chat", GLib.Variant("as", [accounts[0], jid_str])
+                    )
+                else:
+                    self.activate_action(
+                        "app.start-chat", GLib.Variant("as", [jid_str, ""])
+                    )
+
+            case "roster":
+                self.activate_action("app.add-contact", GLib.Variant("s", jid_str))
+
+            case "message" | "":
+                body = xmpp_iri.params.get("body")
+                app.window.start_chat_from_jid(accounts[0], jid_str, body or None)
+
+            case _:
+                log.warning("No handler action: %s", xmpp_iri)
 
     def _on_window_motion_notify(
         self,

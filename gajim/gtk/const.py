@@ -199,6 +199,7 @@ APP_ACTIONS = [
     ("open-chat", "as"),
     ("mute-chat", "a{sv}"),
     ("xml-console", None),
+    ("handle-uri", "as"),
 ]
 
 
