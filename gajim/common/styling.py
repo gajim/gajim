@@ -15,10 +15,12 @@ from re import Match
 from gi.repository import GLib
 
 from gajim.common import regex
-from gajim.common.const import URIType
 from gajim.common.util.jid import validate_jid
 from gajim.common.util.text import escape_iri_query
+from gajim.common.util.uri import InvalidUri
+from gajim.common.util.uri import MailUri
 from gajim.common.util.uri import parse_uri as analyze_uri
+from gajim.common.util.uri import XmppIri
 
 PRE = '`'
 STRONG = '*'
@@ -409,14 +411,15 @@ def _make_hyperlink(line: str,
     else:
         uri = text
         auri = analyze_uri(uri)
-        if auri.type == URIType.XMPP:
-            cls_ = XMPPAddress
-        elif auri.type == URIType.MAIL:
-            cls_ = MailAddress
-        elif auri.type == URIType.INVALID:
-            return None
-        else:
-            cls_ = Hyperlink
+        match auri:
+            case XmppIri():
+                cls_ = XMPPAddress
+            case MailUri():
+                cls_ = MailAddress
+            case InvalidUri():
+                return None
+            case _:
+                cls_ = Hyperlink
 
     return cls_(start=start,
                 start_byte=start_byte,

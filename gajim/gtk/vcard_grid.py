@@ -50,13 +50,13 @@ from nbxmpp.modules.vcard4 import UrlProperty
 from nbxmpp.modules.vcard4 import VCard
 
 from gajim.common import app
-from gajim.common.const import URIType
 from gajim.common.i18n import _
 from gajim.common.i18n import p_
-from gajim.common.structs import URI
 from gajim.common.util.text import escape_iri_path_segment
+from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import parse_uri
+from gajim.common.util.uri import Uri
 
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_py_to_glib_datetime
@@ -309,7 +309,7 @@ class ValueLabel(Gtk.Label, SignalManager):
         SignalManager.__init__(self)
 
         self._prop = prop
-        self._uri: URI | None = None
+        self._uri: Uri | None = None
         self._account = account
 
         self._connect(self, "activate-link", self._on_activate_link)
@@ -372,9 +372,10 @@ class ValueLabel(Gtk.Label, SignalManager):
 
     def set_value_with_uri(self, value: str, uri: str) -> None:
         puri = parse_uri(uri)
-        if puri.type == URIType.INVALID:
+        if isinstance(uri, InvalidUri):
             self.set_text(value)
             return
+
         self._uri = puri
         super().set_markup(
             '<a href="{}">{}</a>'.format(  # noqa: UP032

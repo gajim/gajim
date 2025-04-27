@@ -165,18 +165,6 @@ class Display(Enum):
     QUARTZ = 'GdkQuartzDisplay'
 
 
-class URIType(Enum):
-    INVALID = 'invalid'
-    XMPP = 'xmpp'
-    MAIL = 'mail'
-    GEO = 'geo'
-    WEB = 'web'
-    FILE = 'file'
-    AT = 'at'
-    TEL = 'tel'
-    OTHER = 'other'
-
-
 # https://xmpp.org/registrar/querytypes.html
 class XmppUriQuery(Enum):
     NONE = ''

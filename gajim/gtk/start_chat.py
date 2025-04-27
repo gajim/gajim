@@ -37,7 +37,6 @@ from gajim.common.const import Direction
 from gajim.common.const import MUC_DISCO_ERRORS
 from gajim.common.const import PresenceShowExt
 from gajim.common.const import RFC5646_LANGUAGE_TAGS
-from gajim.common.const import URIType
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 from gajim.common.i18n import get_rfc5646_lang
@@ -49,6 +48,7 @@ from gajim.common.util.muc import get_group_chat_nick
 from gajim.common.util.status import compare_show
 from gajim.common.util.text import to_one_line
 from gajim.common.util.uri import parse_uri
+from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_filter import ChatFilter
@@ -403,8 +403,8 @@ class StartChatDialog(GajimAppWindow):
 
         search_text = search_entry.get_text()
         uri = parse_uri(search_text)
-        if uri.type == URIType.XMPP:
-            search_entry.set_text(uri.data["jid"])
+        if isinstance(uri, XmppIri):
+            search_entry.set_text(str(uri.jid))
             return
 
         if search_text:

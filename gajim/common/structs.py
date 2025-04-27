@@ -5,7 +5,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import NamedTuple
 from typing import TypeVar
 
 import base64
@@ -32,7 +31,6 @@ from nbxmpp.util import generate_id
 from gajim.common import types
 from gajim.common.const import MUCJoinedState
 from gajim.common.const import PresenceShowExt
-from gajim.common.const import URIType
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.datetime import convert_epoch_to_local_datetime
 from gajim.common.util.datetime import utc_now
@@ -40,14 +38,6 @@ from gajim.common.util.datetime import utc_now
 log = logging.getLogger('gajim.c.structs')
 
 _T = TypeVar('_T')
-
-
-class URI(NamedTuple):
-    type: URIType
-    source: str
-    query_type: str = ''
-    query_params: dict[str, str] = {}
-    data: dict[str, str] = {}
 
 
 class MUCData:

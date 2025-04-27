@@ -16,7 +16,6 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.const import URIType
 from gajim.common.const import XmppUriQuery
 from gajim.common.i18n import _
 from gajim.common.i18n import get_short_lang_code
@@ -28,12 +27,14 @@ from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.preview import Preview
 from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.models import Message
-from gajim.common.structs import URI
 from gajim.common.structs import VariantMixin
 from gajim.common.util.muc import is_affiliation_change_allowed
 from gajim.common.util.muc import is_moderation_allowed
 from gajim.common.util.muc import is_role_change_allowed
 from gajim.common.util.text import escape_iri_path_segment
+from gajim.common.util.uri import MailUri
+from gajim.common.util.uri import UriT
+from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.const import MuteState
 from gajim.gtk.structs import AccountJidParam
@@ -390,16 +391,16 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
     return extra_menu
 
 
-def _xmpp_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
+def _xmpp_uri_context_menu(uri: XmppIri, account: str) -> UriMenuItemsT:
     menu_items: UriMenuItemsT = [
-        ("copy-text", [uri.data["jid"]], _("Copy XMPP Address")),
+        ("copy-text", [str(uri.jid)], _("Copy XMPP Address")),
     ]
-    query_type = XmppUriQuery.from_str_or_none(uri.query_type)
+    query_type = XmppUriQuery.from_str_or_none(uri.action)
     if query_type in (XmppUriQuery.NONE, XmppUriQuery.MESSAGE):
-        params = AccountJidParam(account=account, jid=JID.from_string(uri.data["jid"]))
+        params = AccountJidParam(account=account, jid=uri.jid)
         menu_items.extend(
             [
-                ("open-chat", [account, uri.data["jid"]], _("Start Chat…")),
+                ("open-chat", [account, str(uri.jid)], _("Start Chat…")),
                 (f"{account}-add-contact", params, _("Add Contact…")),
             ]
         )
@@ -409,7 +410,7 @@ def _xmpp_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
         menu_items.append(
             (
                 "open-chat",
-                [account, uri.data["jid"]],
+                [account, str(uri.jid)],
                 _("Join Groupchat…"),
             )
         )
@@ -417,20 +418,19 @@ def _xmpp_uri_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return menu_items
 
 
-def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
-    addr = uri.data["addr"]
-    mailto = "mailto:" + escape_iri_path_segment(addr)
+def _ambiguous_addr_context_menu(uri: MailUri, account: str) -> UriMenuItemsT:
+    mailto = "mailto:" + escape_iri_path_segment(uri.addr)
 
     # addr could be a non valid jid
     try:
-        params = AccountJidParam(account=account, jid=JID.from_string(addr))
+        params = AccountJidParam(account=account, jid=JID.from_string(uri.addr))
     except Exception:
         params = None
 
     items: UriMenuItemsT = [
-        ("copy-text", [addr], _("Copy XMPP Address/Email")),
+        ("copy-text", [uri.addr], _("Copy XMPP Address/Email")),
         ("open-link", ["", mailto], _("Open Email Composer")),
-        ("open-chat", [account, addr], _("Start Chat…")),
+        ("open-chat", [account, uri.addr], _("Start Chat…")),
     ]
 
     if params is not None:
@@ -439,13 +439,14 @@ def _ambiguous_addr_context_menu(uri: URI, account: str) -> UriMenuItemsT:
     return items
 
 
-def get_uri_context_menu(account: str, uri: URI) -> Gio.Menu | None:
-    if uri.type == URIType.XMPP:
-        menu_data = _xmpp_uri_context_menu(uri, account)
-    elif uri.type == URIType.AT:
-        menu_data = _ambiguous_addr_context_menu(uri, account)
-    else:
-        return None
+def get_uri_context_menu(account: str, uri: UriT) -> Gio.Menu | None:
+    match uri:
+        case XmppIri():
+            menu_data = _xmpp_uri_context_menu(uri, account)
+        case MailUri():
+            menu_data = _ambiguous_addr_context_menu(uri, account)
+        case _:
+            return None
 
     menuitems: MenuItemListT = []
 

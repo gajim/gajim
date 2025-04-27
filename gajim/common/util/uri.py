@@ -10,6 +10,7 @@ import sys
 import webbrowser
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import ParseResult
 from urllib.parse import unquote
 from urllib.parse import urlparse
 
@@ -20,43 +21,121 @@ from nbxmpp.protocol import JID
 from gajim.common import app
 from gajim.common import iana
 from gajim.common.const import NONREGISTERED_URI_SCHEMES
-from gajim.common.const import URIType
-from gajim.common.const import XmppUriQuery
 from gajim.common.dbus.file_manager import DBusFileManager
-from gajim.common.structs import URI
 from gajim.common.util.decorators import catch_exceptions
-from gajim.common.util.jid import validate_jid
 
 log = logging.getLogger('gajim.c.util.uri')
 
 
 @dataclass
-class XmppIri:
+class Uri:
+    scheme: str
+    uri: str
+
+    @classmethod
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> Uri:
+        if urlparts.scheme in ('http', 'https'):
+            if not urlparts.netloc:
+                raise ValueError(f'No host or empty host in an {urlparts.scheme} URI')
+        return cls(scheme=urlparts.scheme, uri=uri)
+
+
+@dataclass
+class InvalidUri(Uri):
+    error: str
+
+
+@dataclass
+class XmppIri(Uri):
     jid: JID
     action: str
     params: dict[str, str]
 
     @classmethod
-    def from_string(cls, iri: str) -> XmppIri:
-        urlparts = urlparse(iri)
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> XmppIri:
+        urlparts = urlparse(uri)
         if urlparts.scheme != 'xmpp':
             raise ValueError('Invalid scheme: %s' % urlparts.scheme)
 
         if urlparts.path.startswith('/'):
-            raise ValueError('Authority component not supported: %s' % iri)
+            raise ValueError('Authority component not supported: %s' % uri)
 
         if not urlparts.path:
-            raise ValueError('No path component found: %s' % iri)
+            raise ValueError('No path component found: %s' % uri)
 
         jid = JID.from_iri(f'xmpp:{urlparts.path}')
         qtype, qparams = parse_xmpp_uri_query(urlparts.query)
-        return XmppIri(jid=jid, action=qtype, params=qparams)
+        return cls(scheme='xmpp', uri=uri, jid=jid, action=qtype, params=qparams)
+
+    @classmethod
+    def from_string(cls, uri: str) -> XmppIri:
+        urlparts = urlparse(uri)
+        return XmppIri.from_urlparts(urlparts, uri)
+
+
+@dataclass
+class MailUri(Uri):
+    addr: str
+
+    @classmethod
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> MailUri:
+        if urlparts.path.startswith('/'):
+            raise ValueError('Authority component not supported: %s' % uri)
+
+        if not urlparts.path:
+            raise ValueError('No path component found: %s' % uri)
+
+        return cls(scheme=urlparts.scheme, uri=uri, addr=urlparts.path)
+
+
+@dataclass
+class GeoUri(Uri):
+    lat: str
+    lon: str
+    alt: str
+
+    @classmethod
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> GeoUri:
+        lat, _, lon_alt = urlparts.path.partition(',')
+        if not lat or not lon_alt:
+            raise ValueError('No latitude or longitude')
+
+        lon, _, alt = lon_alt.partition(',')
+        if not lon:
+            raise ValueError('No longitude')
+
+        return cls(scheme=urlparts.scheme, uri=uri, lat=lat, lon=lon, alt=alt)
+
+
+@dataclass
+class FileUri(Uri):
+    netloc: str
+    path: str
+
+    @classmethod
+    def from_urlparts(cls, urlparts: ParseResult, uri: str) -> FileUri:
+        path = Gio.File.new_for_uri(uri).get_path()
+        assert path is not None
+        return cls(scheme=urlparts.scheme, uri=uri, netloc=urlparts.netloc, path=path)
+
+
+UriT = Uri | InvalidUri | XmppIri | MailUri | GeoUri | FileUri
+
+
+SCHEME_CLASS_MAP = {
+    'xmpp': XmppIri,
+    'mailto': MailUri,
+    'geo': GeoUri,
+    'file': FileUri
+}
 
 
 def is_known_uri_scheme(scheme: str) -> bool:
     '''
     `scheme` is lower-case
     '''
+    if not scheme:
+        return False
     if scheme in iana.URI_SCHEMES:
         return True
     if scheme in NONREGISTERED_URI_SCHEMES:
@@ -88,141 +167,50 @@ def parse_xmpp_uri_query(pct_iquerycomp: str) -> tuple[str, dict[str, str]]:
     return iquerytype, pairs
 
 
-def parse_uri(uri: str) -> URI:
+def parse_uri(uri: str) -> UriT:
     try:
         urlparts = urlparse(uri)
-    except Exception as err:
-        return URI(URIType.INVALID, uri, data={'error': str(err)})
+    except Exception as error:
+        return InvalidUri(scheme='', uri=uri, error=str(error))
 
-    if not urlparts.scheme:
-        return URI(URIType.INVALID, uri, data={'error': 'Relative URI'})
-
-    scheme = urlparts.scheme  # urlparse is expected to return it in lower case
+    scheme = urlparts.scheme
 
     if not is_known_uri_scheme(scheme):
-        return URI(URIType.INVALID, uri, data={'error': 'Unknown scheme'})
+        return InvalidUri(scheme='', uri=uri, error='Unknown scheme')
 
-    if scheme in ('https', 'http'):
-        if not urlparts.netloc:
-            err = f'No host or empty host in an {scheme} URI'
-            return URI(URIType.INVALID, uri, data={'error': err})
-        return URI(URIType.WEB, uri)
-
-    if scheme == 'xmpp':
-        if not urlparts.path.startswith('/'):
-            pct_jid = urlparts.path
-        else:
-            pct_jid = urlparts.path[1:]
-
-        data: dict[str, str] = {}
-        try:
-            data['jid'] = unquote(pct_jid, errors='strict')
-            validate_jid(data['jid'])
-            qtype, qparams = parse_xmpp_uri_query(urlparts.query)
-        except ValueError as err:
-            data['error'] = str(err)
-            return URI(URIType.INVALID, uri, data=data)
-
-        return URI(URIType.XMPP, uri, query_type=qtype, query_params=qparams, data=data)
-
-    if scheme == 'mailto':
-        data: dict[str, str] = {}
-        try:
-            data['addr'] = unquote(urlparts.path, errors='strict')
-            validate_jid(data['addr'], 'bare')  # meh, good enough
-        except ValueError as err:
-            data['error'] = str(err)
-            return URI(URIType.INVALID, uri, data=data)
-        return URI(URIType.MAIL, uri, data=data)
-
-    if scheme == 'tel':
-        # https://rfc-editor.org/rfc/rfc3966#section-3
-        # TODO: extract number
-        return URI(URIType.TEL, uri)
-
-    if scheme == 'geo':
-        # TODO: unify with .util.preview.split_geo_uri
-        # https://rfc-editor.org/rfc/rfc5870#section-3.3
-        lat, _, lon_alt = urlparts.path.partition(',')
-        if not lat or not lon_alt:
-            return URI(URIType.INVALID, uri, data={'error': 'No latitude or longitude'})
-        lon, _, alt = lon_alt.partition(',')
-        if not lon:
-            return URI(URIType.INVALID, uri, data={'error': 'No longitude'})
-
-        data = {'lat': lat, 'lon': lon, 'alt': alt}
-        return URI(URIType.GEO, uri, data=data)
-
-    if scheme == 'file':
-        # https://rfc-editor.org/rfc/rfc8089.html#section-2
-        data: dict[str, str] = {}
-        try:
-            data['netloc'] = urlparts.netloc
-            path = Gio.File.new_for_uri(uri).get_path()
-            assert path is not None
-            data['path'] = path
-        except Exception as err:
-            data['error'] = str(err)
-            return URI(URIType.INVALID, uri, data=data)
-        return URI(URIType.FILE, uri, data=data)
-
-    return URI(URIType.OTHER, uri)
-
-
-def _handle_message_qtype(jid: str, params: dict[str, str], account: str) -> None:
-    body = params.get('body')
-    # ^ For JOIN, this is a non-standard, but nice extension
-    app.window.start_chat_from_jid(account, jid, message=body)
+    uri_class = SCHEME_CLASS_MAP.get(scheme, Uri)
+    try:
+        return uri_class.from_urlparts(urlparts, uri)
+    except Exception as error:
+        return InvalidUri(scheme='', uri=uri, error=str(error))
 
 
 @catch_exceptions
-def open_uri(uri: URI | str, account: str | None = None) -> None:
-    if not isinstance(uri, URI):
+def open_uri(uri: UriT | str, account: str | None = None) -> None:
+    if isinstance(uri, str):
         uri = parse_uri(uri)
 
-    if uri.type in (URIType.MAIL, URIType.TEL, URIType.WEB, URIType.OTHER):
-        open_uri_externally(uri.source)
+    match uri:
 
-    elif uri.type == URIType.GEO:
-        if Gio.AppInfo.get_default_for_uri_scheme('geo'):
-            open_uri_externally(uri.source)
-        else:
-            open_uri(geo_provider_from_location(uri.data['lat'], uri.data['lon']))
+        case InvalidUri():
+            log.warning('open_uri: Invalid %s', uri)
 
-    elif uri.type in (URIType.XMPP, URIType.AT):
-        if account is None:
-            log.warning('Account must be specified to open XMPP uri')
-            return
+        case XmppIri():
+            if account is None:
+                log.warning('Account must be specified to open XMPP uri')
+                return
 
-        if uri.type == URIType.XMPP:
-            jid = uri.data['jid']
-        else:
-            jid = uri.data['addr']
+            body = uri.params.get('body')
+            app.window.start_chat_from_jid(account, str(uri.jid), message=body)
 
-        qtype, qparams = XmppUriQuery.from_str(uri.query_type), uri.query_params
-        if not qtype:
-            log.info(
-                'open_uri: can\'t "%s": ' 'unsupported query type in %s',
-                uri.query_type,
-                uri,
-            )
-            # From <rfc5122#section-2.5>:
-            # > If the processing application does not understand [...] the
-            # > specified query type, it MUST ignore the query component and
-            # > treat the IRI/URI as consisting of, for example,
-            # > <xmpp:example-node@example.com> rather than
-            # > <xmpp:example-node@example.com?query>."
-            qtype, qparams = XmppUriQuery.NONE, {}
+        case GeoUri():
+            if Gio.AppInfo.get_default_for_uri_scheme('geo'):
+                open_uri_externally(uri.uri)
+            else:
+                open_uri(geo_provider_from_location(uri.lat, uri.lon))
 
-        _handle_message_qtype(jid, qparams, account)
-
-    elif uri.type == URIType.INVALID:
-        log.warning('open_uri: Invalid %s', uri)
-        # TODO: UI error instead
-
-    else:
-        log.error('open_uri: No handler for %s', uri)
-        # TODO: this is a bug, so, `raise` maybe?
+        case Uri():
+            open_uri_externally(uri.uri)
 
 
 def open_uri_externally(uri: str) -> None:
@@ -268,13 +256,12 @@ def show_in_folder(path: Path) -> None:
 
 def filesystem_path_from_uri(uri: str) -> Path | None:
     puri = parse_uri(uri)
-    if puri.type != URIType.FILE:
+    if not isinstance(puri, FileUri):
         return None
 
-    netloc = puri.data['netloc']
-    if netloc and netloc.lower() != 'localhost' and sys.platform != 'win32':
+    if puri.netloc and puri.netloc.lower() != 'localhost' and sys.platform != 'win32':
         return None
-    return Path(puri.data['path'])
+    return Path(puri.path)
 
 
 def get_file_path_from_dnd_dropped_uri(text: str) -> Path | None:
