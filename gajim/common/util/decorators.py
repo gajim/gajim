@@ -2,13 +2,22 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 from typing import Any
+from typing import ParamSpec
+from typing import TypeVar
 
 import logging
+from collections.abc import Callable
 from functools import wraps
 from time import monotonic
 
 from gi.repository import GLib
+
+P = ParamSpec('P')
+R = TypeVar('R')
+
 
 log = logging.getLogger('gajim.c.util.decorators')
 
@@ -48,9 +57,9 @@ def cache_with_ttl(ttl: int = 2) -> Any:
     return decorator
 
 
-def catch_exceptions(func: Any) -> Any:
+def catch_exceptions(func: Callable[P, R]) -> Callable[P, R | None]:
     @wraps(func)
-    def func_wrapper(*args: Any, **kwargs: Any) -> Any:
+    def func_wrapper(*args: P.args, **kwargs: P.kwargs) -> R | None:
         try:
             result = func(*args, **kwargs)
         except Exception as error:

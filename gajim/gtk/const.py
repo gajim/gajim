@@ -187,7 +187,7 @@ APP_ACTIONS = [
     ("forget-groupchat", "a{sv}"),
     ("join-support-chat", None),
     ("manage-proxies", None),
-    ("open-link", "as"),
+    ("open-link", "s"),
     ("plugins", None),
     ("preferences", None),
     ("quit", None),

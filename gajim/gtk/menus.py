@@ -342,8 +342,10 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
             f"https://{get_short_lang_code()}.wikipedia.org/"
             f"wiki/Special:Search?search={uri_text}"
         )
-    variant = GLib.Variant.new_strv([account, uri])
-    menuitems.append((_("Read _Wikipedia Article"), "app.open-link", variant))
+
+    menuitems.append(
+        (_("Read _Wikipedia Article"), "app.open-link", GLib.Variant("s", uri))
+    )
 
     # Dictionary search
     dictionary_title = _("Look it up in _Dictionary")
@@ -364,8 +366,7 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
         else:
             uri = dict_link % uri_text
 
-    variant = GLib.Variant.new_strv([account, uri])
-    menuitems.append((dictionary_title, "app.open-link", variant))
+    menuitems.append((dictionary_title, "app.open-link", GLib.Variant("s", uri)))
 
     # Generic search
     search_link = app.settings.get("search_engine")
@@ -376,11 +377,10 @@ def get_conv_action_context_menu(account: str, selected_text: str) -> Gio.Menu:
         search_title = _("Web _Search for it")
         uri = search_link % uri_text
 
-    variant = GLib.Variant.new_strv([account, uri])
-    menuitems.append((search_title, "app.open-link", variant))
+    menuitems.append((search_title, "app.open-link", GLib.Variant("s", uri)))
 
     # Open as URI
-    variant = GLib.Variant.new_strv([account, f"https://{uri_text}"])
+    variant = GLib.Variant("s", f"https://{uri_text}")
     menuitems.append((_("Open as _Link"), "app.open-link", variant))
 
     menu = GajimMenu.from_list(menuitems)
@@ -429,7 +429,7 @@ def _ambiguous_addr_context_menu(uri: MailUri, account: str) -> UriMenuItemsT:
 
     items: UriMenuItemsT = [
         ("copy-text", [uri.addr], _("Copy XMPP Address/Email")),
-        ("open-link", ["", mailto], _("Open Email Composer")),
+        ("open-link", [mailto], _("Open Email Composer")),
         ("open-chat", [account, uri.addr], _("Start Chat…")),
     ]
 

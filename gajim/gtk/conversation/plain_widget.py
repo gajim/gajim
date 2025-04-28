@@ -154,7 +154,7 @@ class MessageLabel(Gtk.Label, SignalManager):
 
     def _on_activate_link(self, _label: Gtk.Label, uri: str) -> int:
         puri = parse_uri(uri)
-        open_uri(puri, self._account)
+        open_uri(puri)
         return Gdk.EVENT_STOP
 
     def _on_focus_enter(self, _focus_controller: Gtk.EventControllerFocus) -> None:

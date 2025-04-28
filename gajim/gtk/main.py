@@ -37,6 +37,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.storage.archive.const import MessageType
+from gajim.common.util.uri import InvalidUri
 from gajim.common.util.uri import open_file
 from gajim.common.util.uri import open_uri
 from gajim.common.util.uri import show_in_folder
@@ -56,6 +57,7 @@ from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
+from gajim.gtk.start_chat import parse_uri
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
 from gajim.gtk.structs import AddChatActionParams
@@ -816,15 +818,19 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         if not uris:
             return
 
+        uri = parse_uri(uris[0])
+        match uri:
+            case XmppIri():
+                self.open_xmpp_iri(uri)
+            case InvalidUri():
+                log.error("Failed to handle uri: %s", uri.error)
+            case _:
+                log.warning("Can only handle xmpp iris: %s", uris[0])
+
+    def open_xmpp_iri(self, xmpp_iri: XmppIri) -> None:
         accounts = app.settings.get_active_accounts()
         if not accounts:
             log.warning("No accounts active, unable to handle uri")
-            return
-
-        try:
-            xmpp_iri = XmppIri.from_string(uris[0])
-        except Exception as error:
-            log.warning("Failed to parse url: %s, %s", uris[0], error)
             return
 
         jid_str = str(xmpp_iri.jid)
@@ -848,7 +854,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 app.window.start_chat_from_jid(accounts[0], jid_str, body or None)
 
             case _:
-                log.warning("No handler action: %s", xmpp_iri)
+                log.warning("No handler for action: %s", xmpp_iri)
 
     def _on_window_motion_notify(
         self,

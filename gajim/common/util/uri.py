@@ -186,22 +186,16 @@ def parse_uri(uri: str) -> UriT:
 
 
 @catch_exceptions
-def open_uri(uri: UriT | str, account: str | None = None) -> None:
+def open_uri(uri: UriT | str) -> None:
     if isinstance(uri, str):
         uri = parse_uri(uri)
 
     match uri:
-
         case InvalidUri():
-            log.warning('open_uri: Invalid %s', uri)
+            log.warning('Failed to open uri: %s', uri.error)
 
         case XmppIri():
-            if account is None:
-                log.warning('Account must be specified to open XMPP uri')
-                return
-
-            body = uri.params.get('body')
-            app.window.start_chat_from_jid(account, str(uri.jid), message=body)
+            app.window.open_xmpp_iri(uri)
 
         case GeoUri():
             if Gio.AppInfo.get_default_for_uri_scheme('geo'):

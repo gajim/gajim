@@ -216,7 +216,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
         return label
 
     def _on_activate_link(self, label: Gtk.Label, *args: Any) -> int:
-        open_uri(label.get_text(), account=self.account)
+        open_uri(label.get_text())
         return Gdk.EVENT_STOP
 
     def _on_last_activity(self, task: Task) -> None:

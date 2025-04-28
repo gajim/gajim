@@ -780,8 +780,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
     @staticmethod
     def _on_open_link_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:
-        account, uri = param.get_strv()
-        open_uri(uri, account=account)
+        open_uri(param.get_string())
 
     @staticmethod
     def _on_copy_text_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

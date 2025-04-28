@@ -323,7 +323,7 @@ class GroupChatInfoScrolled(Gtk.ScrolledWindow, SignalManager):
         return Gdk.EVENT_STOP
 
     def _on_activate_contact_link(self, button: Gtk.LinkButton) -> int:
-        open_uri(button.get_uri(), account=self._account)
+        open_uri(button.get_uri())
         return Gdk.EVENT_STOP
 
     @staticmethod

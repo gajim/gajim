@@ -384,7 +384,7 @@ class ValueLabel(Gtk.Label, SignalManager):
         )
 
     def _on_activate_link(self, _label: Gtk.Label, _value: str) -> int:
-        open_uri(self._uri, self._account)
+        open_uri(self._uri)
         return Gdk.EVENT_STOP
 
 
