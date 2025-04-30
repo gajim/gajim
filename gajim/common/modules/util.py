@@ -10,10 +10,10 @@ from typing import Any
 from typing import ParamSpec
 from typing import TypeVar
 
+import logging
 from collections.abc import Callable
 from functools import partial
 from functools import wraps
-from logging import LoggerAdapter
 
 from nbxmpp.namespaces import Namespace
 from nbxmpp.protocol import Message
@@ -55,14 +55,14 @@ def to_xs_boolean(value: bool | None) -> str:
     raise ValueError(f'Cant convert {value} to xs:boolean')
 
 
-def event_node(node: str) -> Any:
-    def event_node_decorator(func: Any):
+def event_node(node: str) -> Callable[[Callable[P, object]], Callable[P, None]]:
+    def event_node_decorator(func: Callable[P, object]) -> Callable[P, None]:
         @wraps(func)
         def func_wrapper(self: Any,
                          _con: types.NBXMPPClient,
                          _stanza: Message,
                          properties: MessageProperties
-                         ) -> Any:
+                         ) -> None:
             if not properties.is_pubsub_event:
                 return
 
@@ -75,10 +75,9 @@ def event_node(node: str) -> Any:
     return event_node_decorator
 
 
-def store_publish(func: Any):
+def store_publish(func: Callable[P, T]) -> Callable[P, T | None]:
     @wraps(func)
-    def func_wrapper(self: Any, *args: Any, **kwargs: Any):
-        # pylint: disable=protected-access
+    def func_wrapper(self: Any, *args: P.args, **kwargs: P.kwargs) -> T | None:
         if not app.account_is_connected(self._account):
             self._stored_publish = partial(func, self, *args, **kwargs)
             return None
@@ -86,8 +85,9 @@ def store_publish(func: Any):
     return func_wrapper
 
 
-class LogAdapter(LoggerAdapter):
+class LogAdapter(logging.LoggerAdapter[logging.Logger]):
     def process(self, msg: str, kwargs: Any) -> tuple[str, Any]:
+        assert self.extra is not None
         return f'({self.extra["account"]}) {msg}', kwargs
 
 
