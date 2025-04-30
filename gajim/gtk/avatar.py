@@ -436,6 +436,15 @@ class AvatarStorage(metaclass=Singleton):
     def invalidate_cache(self, jid: JID | str) -> None:
         self._cache.pop(jid, None)
 
+    def remove_avatar(self, contact: types.ChatContactT) -> None:
+        if not contact.avatar_sha:
+            return
+        path = self.get_avatar_path(contact.avatar_sha)
+        if path is None:
+            return
+        path.unlink(missing_ok=True)
+        self._cache.pop(contact.jid, None)
+
     def get_texture(
         self,
         contact: (

@@ -295,6 +295,7 @@ class ChatControl(EventHelper):
                 ("http-upload-started", ged.GUI2, self._on_http_upload_started),
                 ("http-upload-error", ged.GUI2, self._on_http_upload_error),
                 ("encryption-check", ged.GUI2, self._on_encryption_info),
+                ("muc-user-block-changed", ged.GUI2, self._on_muc_user_block_changed),
                 # TODO Jingle FT
                 # ('file-request-received', ged.GUI2, self._on_file_request_event),
                 # ('file-request-sent', ged.GUI2, self._on_file_request_event),
@@ -307,6 +308,9 @@ class ChatControl(EventHelper):
 
         if event.account != self._contact.account:
             return False
+
+        if event.jid is None:
+            return True
 
         return event.jid == self._contact.jid
 
@@ -432,6 +436,12 @@ class ChatControl(EventHelper):
 
         if self._allow_add_message():
             self._scrolled_view.add_encryption_info(event)
+
+    def _on_muc_user_block_changed(self, event: events.MucUserBlockChanged) -> None:
+        if not self._is_event_processable(event):
+            return
+
+        self._scrolled_view.update_blocked_muc_users()
 
     def _on_autoscroll_changed(
         self, _widget: ConversationView, autoscroll: bool

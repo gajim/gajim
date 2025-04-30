@@ -24,6 +24,7 @@ from gajim.common.storage.archive.models import MAMArchiveState
 from gajim.common.storage.archive.models import Message
 from gajim.common.storage.archive.models import MessageError
 from gajim.common.storage.archive.models import Moderation
+from gajim.common.storage.archive.models import Occupant
 from gajim.common.storage.archive.storage import MessageArchiveStorage
 from gajim.common.util.datetime import utc_now
 
@@ -431,6 +432,70 @@ class MethodsTest(unittest.TestCase):
 
         result = self._archive.check_if_message_id_exists("testacc1", remote_jid, "xxx")
         self.assertFalse(result)
+
+    def test_block_occupants(self) -> None:
+        remote_jid = JID.from_string("remote1@jid.org")
+        pks: list[int] = []
+
+        for i in range(10):
+            occupant = Occupant(
+                account_="testacc1",
+                remote_jid_=remote_jid,
+                id=f"occupant{i}",
+                nickname=f"nickname{i}",
+                avatar_sha="sha1",
+                blocked=i > 4,
+                updated_at=utc_now(),
+            )
+            pk = self._archive.upsert_row(occupant)
+            if i > 4:
+                pks.append(pk)
+
+        occupant = Occupant(
+            account_="testacc2",
+            remote_jid_=remote_jid,
+            id="occupant11",
+            nickname="nickname11",
+            avatar_sha="sha1",
+            blocked=True,
+            updated_at=utc_now(),
+        )
+        self._archive.upsert_row(occupant)
+
+        occupants = self._archive.get_blocked_occupants("testacc1")
+        res = [o.pk for o in occupants]
+        self.assertEqual(res, pks)
+        self.assertEqual(len(res), 5)
+
+        # This should not raise an exception because the remote table
+        # is joined when queried via get_blocked_occupants()
+        for o in occupants:
+            o.remote.jid  # noqa: B018
+
+        occupants = self._archive.get_blocked_occupants("testacc2")
+        self.assertEqual(len(occupants), 1)
+
+        affected = self._archive.set_block_occupant("testacc1", None, [], True)
+        occupants = self._archive.get_blocked_occupants(self._account)
+        self.assertEqual(len(occupants), 10)
+        self.assertEqual(affected, 5)
+
+        occupant_ids = ["occupant1", "occupant2", "occupant3"]
+
+        affected = self._archive.set_block_occupant(
+            "testacc1", None, occupant_ids, False
+        )
+        occupants = self._archive.get_blocked_occupants(self._account)
+        self.assertEqual(len(occupants), 7)
+        self.assertEqual(affected, 3)
+
+        affected = self._archive.set_block_occupant("testacc1", remote_jid, [], True)
+        occupants = self._archive.get_blocked_occupants(self._account)
+        self.assertEqual(len(occupants), 10)
+        self.assertEqual(affected, 3)
+
+        occupants = self._archive.get_blocked_occupants("testacc2")
+        self.assertEqual(len(occupants), 1)
 
 
 if __name__ == "__main__":

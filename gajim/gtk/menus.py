@@ -45,6 +45,7 @@ from gajim.gtk.structs import ExportHistoryParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import MuteContactParam
+from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 
 MenuValueT = None | str | GLib.Variant | VariantMixin
@@ -201,6 +202,17 @@ def get_private_chat_menu(contact: types.GroupchatParticipant) -> GajimMenu:
 
     params = AccountJidParam(account=contact.account, jid=contact.jid)
     menu.add_item(_("Remove History…"), "app.remove-history", params)
+
+    occupant_param = None
+    if contact.occupant_id is not None:
+        occupant_param = OccupantParam(
+            contact.account, contact.room.jid, contact.resource, contact.occupant_id
+        )
+
+    if contact.is_blocked:
+        menu.add_item(_("Unblock"), "win.muc-user-unblock", occupant_param)
+    else:
+        menu.add_item(_("Block…"), "win.muc-user-block", occupant_param)
 
     real_contact = contact.get_real_contact()
     if real_contact is not None and can_add_to_roster(real_contact):
@@ -703,6 +715,17 @@ def get_groupchat_participant_menu(
         (_("Details"), "win.muc-contact-info", value),
         (_("Execute Command…"), "win.muc-execute-command", value),
     ]
+
+    occupant_param = None
+    if contact.occupant_id is not None:
+        occupant_param = OccupantParam(
+            account, contact.room.jid, contact.resource, contact.occupant_id
+        )
+
+    if contact.is_blocked:
+        general_items.append((_("Unblock"), "win.muc-user-unblock", occupant_param))
+    else:
+        general_items.append((_("Block…"), "win.muc-user-block", occupant_param))
 
     real_contact = contact.get_real_contact()
     if real_contact is not None and can_add_to_roster(real_contact):

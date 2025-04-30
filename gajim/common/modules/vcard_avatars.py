@@ -60,6 +60,9 @@ class VCardAvatars(BaseModule):
     def get_avatar_sha(self, jid: JID) -> str | None:
         return self._muc_avatar_cache.get(jid)
 
+    def invalidate_cache(self, jid: JID) -> None:
+        self._muc_avatar_cache.pop(jid, None)
+
     @as_task
     def _request_vcard(self,
                        contact: types.ChatContactT,
@@ -191,6 +194,10 @@ class VCardAvatars(BaseModule):
         contact = self._con.get_module('Contacts').get_contact(properties.jid,
                                                                groupchat=True)
         assert isinstance(contact, GroupchatParticipant)
+
+        if contact.is_blocked:
+            self._log.info("Ignore avatar because contact is blocked: %s", contact.jid)
+            return
 
         # Custom ejabberd room config option
         if contact.room.get_disco() is not None:

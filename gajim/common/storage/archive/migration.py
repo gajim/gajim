@@ -118,6 +118,8 @@ class Migration:
             self._v10()
         if user_version < 12:
             self._v11_and_v12()
+        if user_version < 13:
+            self._v13()
 
         app.ged.raise_event(DBMigrationFinished())
 
@@ -268,6 +270,13 @@ class Migration:
     def _v11_and_v12(self) -> None:
         mod.Base.metadata.create_all(self._engine)
         self._execute_multiple(['PRAGMA user_version=12'])
+
+    def _v13(self) -> None:
+        statements = [
+            'ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
+            'PRAGMA user_version=13',
+        ]
+        self._execute_multiple(statements)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []

@@ -29,6 +29,7 @@ from sqlalchemy import update
 from sqlalchemy.dialects.sqlite import insert
 from sqlalchemy.engine import Engine
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 from sqlalchemy.orm import Session
 
 from gajim.common import app
@@ -58,7 +59,7 @@ from gajim.common.storage.base import with_session_yield_from
 from gajim.common.util.datetime import FIRST_UTC_DATETIME
 from gajim.common.util.text import get_random_string
 
-CURRENT_USER_VERSION = 12
+CURRENT_USER_VERSION = 13
 
 
 log = logging.getLogger('gajim.c.storage.archive')
@@ -1171,3 +1172,53 @@ class MessageArchiveStorage(AlchemyStorage):
 
         self._explain(session, stmt)
         yield from session.scalars(stmt)
+
+    @with_session
+    @timeit
+    def get_blocked_occupants(
+        self, session: Session, account: str, jid: JID | None = None,
+    ) -> Sequence[Occupant]:
+        fk_account_pk = self._get_account_pk(session, account)
+
+        stmt = select(Occupant)
+
+        if jid is not None:
+            fk_remote_pk = self._get_jid_pk(session, jid)
+            stmt = stmt.where(Occupant.fk_remote_pk == fk_remote_pk)
+
+        stmt = stmt.where(
+            Occupant.fk_account_pk == fk_account_pk,
+            Occupant.blocked == True,  # noqa: E712
+        ).options(joinedload(Occupant.remote))
+
+        self._explain(session, stmt)
+        return session.scalars(stmt).all()
+
+    @with_session
+    @timeit
+    def set_block_occupant(
+        self,
+        session: Session,
+        account: str,
+        jid: JID | None,
+        occupant_ids: Sequence[str],
+        value: bool,
+    ) -> int:
+        fk_account_pk = self._get_account_pk(session, account)
+
+        stmt = update(Occupant)
+        if occupant_ids:
+            stmt = stmt.where(Occupant.id.in_(occupant_ids))
+
+        if jid is not None:
+            fk_remote_pk = self._get_jid_pk(session, jid)
+            stmt = stmt.where(Occupant.fk_remote_pk == fk_remote_pk)
+
+        stmt = stmt.where(
+            Occupant.fk_account_pk == fk_account_pk,
+            Occupant.blocked != value,
+
+        ).values(blocked=value)
+
+        self._explain(session, stmt)
+        return session.execute(stmt).rowcount

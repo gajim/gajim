@@ -876,6 +876,15 @@ class PrivacyPage(GenericSettingPage):
                 },
             ),
             Setting(
+                SettingKind.SWITCH,
+                _("Sync Group Chat Blocklist"),
+                SettingType.ACCOUNT_CONFIG,
+                "sync_muc_blocks",
+                callback=self._sync_blocks,
+                enabled_func=self._get_sync_blocks_enabled,
+                desc=_("Sync group chat blocklist with other devices"),
+            ),
+            Setting(
                 SettingKind.DROPDOWN,
                 _("Keep Chat History"),
                 SettingType.ACCOUNT_CONFIG,
@@ -930,6 +939,19 @@ class PrivacyPage(GenericSettingPage):
         button.set_sensitive(False)
         app.settings.set_contact_settings("send_marker", None)
         app.settings.set_group_chat_settings("send_marker", None, context="private")
+
+    def _get_sync_blocks_enabled(self) -> bool:
+        if self._client is None:
+            return False
+
+        if not self._client.state.is_available:
+            return False
+
+        return self._client.get_module("Bookmarks").nativ_bookmarks_used
+
+    def _sync_blocks(self, state: bool, _data: Any) -> None:
+        if self._client is not None and state:
+            self._client.get_module("MucBlocking").merge_blocks()
 
 
 class EncryptionOMEMOPage(GenericSettingPage):

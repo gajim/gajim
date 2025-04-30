@@ -38,6 +38,7 @@ from gajim.common.modules.mds import MDS
 from gajim.common.modules.message import Message
 from gajim.common.modules.moderations import Moderations
 from gajim.common.modules.muc import MUC
+from gajim.common.modules.muc_blocking import MucBlocking
 from gajim.common.modules.omemo import OMEMO
 from gajim.common.modules.pep import PEP
 from gajim.common.modules.ping import Ping
@@ -89,6 +90,7 @@ ModulesT = (
     | Message
     | Moderations
     | MUC
+    | MucBlocking
     | OMEMO
     | PEP
     | Ping
@@ -138,6 +140,7 @@ ModulesLiteralT = Literal[
     'Message',
     'Moderations',
     'MUC',
+    'MucBlocking',
     'OMEMO',
     'PEP',
     'Ping',
@@ -187,6 +190,7 @@ class ModuleDict(TypedDict):
     Message: Message
     Moderations: Moderations
     MUC: MUC
+    MucBlocking: MucBlocking
     OMEMO: OMEMO
     PEP: PEP
     Ping: Ping

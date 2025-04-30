@@ -31,6 +31,7 @@ GUI2 = 90
 POSTGUI2 = 100
 POSTGUI = 110
 
+STOP_PROPAGATION = True
 
 HandlerFuncT = Callable[[Any], Any]
 EventHandlerT = tuple[str, int, HandlerFuncT]

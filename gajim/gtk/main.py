@@ -65,6 +65,7 @@ from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.structs import DeleteMessageParam
 from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
+from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
@@ -433,6 +434,8 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             ("add-chat", self._add_chat),
             ("add-group-chat", self._add_group_chat),
             ("chat-contact-info", self._on_chat_contact_info),
+            ("muc-user-block", self._on_muc_user_block),
+            ("muc-user-unblock", self._on_muc_user_unblock),
         ]
 
         for action, func in actions:
@@ -698,6 +701,62 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
             open_window("GroupchatDetails", contact=contact)
         else:
             open_window("ContactInfo", account=contact.account, contact=contact)
+
+    @actionmethod
+    def _on_muc_user_block(
+        self, _action: Gio.SimpleAction, params: OccupantParam
+    ) -> None:
+
+        def _on_confirmation() -> None:
+            client = app.get_client(params.account)
+            client.get_module("MucBlocking").set_block_occupants(
+                params.jid, [params.occupant_id], True
+            )
+
+            # Close PM chats
+            contact = client.get_module("Contacts").get_contact(
+                params.jid, groupchat=True
+            )
+            assert isinstance(contact, GroupchatContact)
+            participant = contact.get_occupant(params.occupant_id)
+            if participant is None:
+                return
+
+            self._chat_page.remove_chat(params.account, participant.jid)
+            app.app.avatar_storage.remove_avatar(participant)
+            client.get_module("VCardAvatars").invalidate_cache(participant.jid)
+            participant.update_avatar()
+
+        ConfirmationDialog(
+            _("Block Participant?"),
+            _("Do you want to block %(name)s?") % {"name": params.resource},
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("OK", text=_("_Block"), callback=_on_confirmation),
+            ],
+            transient_for=app.window,
+        )
+
+    @actionmethod
+    def _on_muc_user_unblock(
+        self, _action: Gio.SimpleAction, params: OccupantParam
+    ) -> None:
+
+        def _on_confirmation() -> None:
+            client = app.get_client(params.account)
+            client.get_module("MucBlocking").set_block_occupants(
+                params.jid, [params.occupant_id], False
+            )
+
+        ConfirmationDialog(
+            _("Unblock Participant?"),
+            _("Do you want to unblock %(name)s?") % {"name": params.resource},
+            [
+                DialogButton.make("Cancel"),
+                DialogButton.make("OK", text=_("_Unblock"), callback=_on_confirmation),
+            ],
+            transient_for=app.window,
+        )
 
     @actionmethod
     def _on_retract_message(
@@ -1377,11 +1436,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         self._set_startup_finished()
 
-    def _on_message_received(self, event: events.MessageReceived) -> None:
+    def _on_message_received(self, event: events.MessageReceived) -> bool | None:
         if self.chat_exists(event.account, event.jid):
             return
 
         if event.m_type == MessageType.PM:
+            if event.message.occupant is not None:
+                client = app.get_client(event.account)
+                jid = event.message.remote.jid.new_as_bare()
+                if client.get_module("MucBlocking").is_blocked(
+                    jid, event.message.occupant.id
+                ):
+                    log.info("PM blocked from %s", jid)
+                    return ged.STOP_PROPAGATION
+
             self.add_private_chat(event.account, event.jid)
 
         else:

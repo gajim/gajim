@@ -420,6 +420,17 @@ class GroupchatAffiliationBuilder(Builder):
     add_button: Gtk.Button
     remove_button: Gtk.Button
 
+class GroupchatBlocksBuilder(Builder):
+    main: Gtk.Box
+    top_box: Gtk.Box
+    search_entry: Gtk.SearchEntry
+    remove_button: Gtk.Button
+    scrolled_box: Gtk.Box
+    scrolled: Gtk.ScrolledWindow
+    column_view: Gtk.ColumnView
+    nickname_col: Gtk.ColumnViewColumn
+    id_col: Gtk.ColumnViewColumn
+
 class GroupchatConfigBuilder(Builder):
     stack: Gtk.Stack
     loading_box: Gtk.Box
@@ -458,6 +469,7 @@ class GroupchatDetailsBuilder(Builder):
     settings_box: Gtk.Box
     encryption_scrolled: Gtk.ScrolledWindow
     encryption_box: Gtk.Box
+    blocks_box: Gtk.Box
     manage_box: Gtk.Box
     affiliation_box: Gtk.Box
     outcasts_box: Gtk.Box
@@ -1124,6 +1136,12 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> GroupchatAffiliationBuilder: ...  # noqa
+@overload
+def get_builder(
+    file_name: Literal["groupchat_blocks.ui"],
+    instance: Any = None,
+    widgets: list[str] = ...,
+) -> GroupchatBlocksBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["groupchat_config.ui"],
