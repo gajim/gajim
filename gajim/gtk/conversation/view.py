@@ -806,6 +806,20 @@ class ConversationView(Gtk.ScrolledWindow):
         if message_row is not None:
             message_row.update_reactions()
 
+    def update_blocked_muc_users(self) -> None:
+        assert self._client is not None
+        assert self._contact is not None
+        blocking_list = self._client.get_module("MucBlocking").get_blocking_list(
+            self._contact.jid
+        )
+
+        for row in self.iter_rows():
+            if not isinstance(row, MessageRow):
+                continue
+            if row.occupant_id is None:
+                continue
+            row.set_blocked(row.occupant_id in blocking_list)
+
     def set_receipt(self, id_: str) -> None:
         message_row = self._get_row_by_message_id(id_)
         if message_row is None:

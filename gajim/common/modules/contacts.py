@@ -824,6 +824,12 @@ class GroupchatContact(CommonContact):
             if contact.is_available:
                 yield contact
 
+    def get_occupant(self, occupant_id: str) -> GroupchatParticipant | None:
+        for contact in self._resources.values():
+            if contact.occupant_id == occupant_id:
+                return contact
+        return None
+
     @property
     def name(self) -> str:
         client = app.get_client(self._account)
@@ -1086,6 +1092,12 @@ class GroupchatParticipant(CommonContact):
     @property
     def hats(self) -> HatData | None:
         return self._presence.hats
+
+    @property
+    def is_blocked(self) -> bool:
+        client = app.get_client(self._account)
+        return client.get_module('MucBlocking').is_blocked(
+            self.room.jid, self.occupant_id)
 
 
 def can_add_to_roster(contact: BareContact) -> bool:

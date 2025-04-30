@@ -62,6 +62,14 @@ class AccountJidParam(VariantMixin):
 
 
 @dataclass
+class OccupantParam(VariantMixin):
+    account: str
+    jid: JID
+    resource: str
+    occupant_id: str
+
+
+@dataclass
 class ExportHistoryParam(VariantMixin):
     account: str
     jid: Optional[JID]  # noqa: UP007

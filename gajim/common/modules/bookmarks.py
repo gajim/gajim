@@ -226,6 +226,8 @@ class Bookmarks(BaseModule):
 
         self._request_in_progress = False
 
+        self._client.get_module('MucBlocking').pass_bookmarks(bookmarks)
+
         self._cleanup_bookmarks(bookmarks)
         self._bookmarks = self._convert_to_dict(bookmarks)
         if app.settings.get_account_setting(self._account, 'autojoin_sync'):

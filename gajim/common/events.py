@@ -312,6 +312,13 @@ class BookmarksReceived(ApplicationEvent):
 
 
 @dataclass
+class MucUserBlockChanged(ApplicationEvent):
+    name: str = field(init=False, default='muc-user-block-changed')
+    account: str
+    jid: JID | None = None
+
+
+@dataclass
 class ReadStateSync(ApplicationEvent):
     name: str = field(init=False, default='read-state-sync')
     account: str

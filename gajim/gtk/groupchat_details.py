@@ -15,6 +15,7 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.groupchat_affiliation import GroupchatAffiliation
+from gajim.gtk.groupchat_blocks import GroupchatBlocks
 from gajim.gtk.groupchat_config import GroupchatConfig
 from gajim.gtk.groupchat_info import GroupChatInfoScrolled
 from gajim.gtk.groupchat_manage import GroupchatManage
@@ -62,6 +63,7 @@ class GroupchatDetails(GajimAppWindow):
         self._add_groupchat_info()
         self._add_groupchat_settings()
         self._add_groupchat_encryption()
+        self._add_blocks()
 
         if self._client.state.is_available and self._contact.is_joined:
             self._add_groupchat_manage()
@@ -158,6 +160,11 @@ class GroupchatDetails(GajimAppWindow):
             OMEMOTrustManager(self._contact.account, self._contact)
         )
         self._switcher.set_row_visible("encryption-omemo", True)
+
+    def _add_blocks(self) -> None:
+        blocks = GroupchatBlocks(self._client, self._contact)
+        self._ui.blocks_box.append(blocks)
+        self._switcher.set_row_visible("blocks", True)
 
     def _add_affiliations(self) -> None:
         affiliations = GroupchatAffiliation(self._client, self._contact)

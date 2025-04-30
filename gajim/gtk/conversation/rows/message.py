@@ -80,6 +80,7 @@ class MessageRow(BaseRow):
         self._original_message = message
 
         self._is_retracted = bool(message.moderation or message.retraction)
+        self._is_blocked = False
         self._has_receipt = False
 
         self._avatar_box = AvatarBox(contact)
@@ -119,6 +120,12 @@ class MessageRow(BaseRow):
     def is_merged(self) -> bool:
         return self._merged
 
+    @property
+    def occupant_id(self) -> str | None:
+        if self._message.occupant is None:
+            return None
+        return self._message.occupant.id
+
     def _redraw_content(self) -> None:
         self.set_merged(False)
         self.remove_css_class("retracted-message")
@@ -142,6 +149,11 @@ class MessageRow(BaseRow):
 
         self._message_icons = MessageIcons()
         self._meta_box.append(self._message_icons)
+
+        self._is_blocked = False
+        if message.occupant is not None and message.occupant.blocked:
+            self._set_blocked()
+            return
 
         if message.is_retracted():
             self._set_retracted(message)
@@ -404,6 +416,11 @@ class MessageRow(BaseRow):
 
         self._message_icons.set_message_state_icon(MessageState(message.state))
 
+    def set_blocked(self, blocked: bool) -> None:
+        if blocked != self._is_blocked:
+            app.storage.archive.refresh(self._original_message, ["occupant"])
+            self._redraw_content()
+
     def _set_receipt(self, value: bool) -> None:
         if self._is_retracted:
             return
@@ -489,6 +506,14 @@ class MessageRow(BaseRow):
         else:
             raise ValueError("Unable to determine retraction text")
 
+        self._set_disabled(text)
+        self._is_retracted = True
+
+    def _set_blocked(self) -> None:
+        self._set_disabled(_("Messages from this users are blocked"))
+        self._is_blocked = True
+
+    def _set_disabled(self, text: str) -> None:
         self.text = text
 
         self._message_widget = MessageWidget(self._account)
@@ -499,8 +524,6 @@ class MessageRow(BaseRow):
         self._reactions_bar.set_visible(False)
 
         self.add_css_class("retracted-message")
-
-        self._is_retracted = True
 
     def _set_correction(self) -> None:
         original_text = textwrap.fill(

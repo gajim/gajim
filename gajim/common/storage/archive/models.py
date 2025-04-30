@@ -116,7 +116,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     __tablename__ = 'occupant'
     __index_cols__ = ['id', 'fk_remote_pk', 'fk_account_pk']
     __upsert_cols__ = ['fk_real_remote_pk', 'nickname', 'avatar_sha', 'updated_at']
-    __no_table_cols__ = ['account_', 'remote_jid_', 'real_remote_jid_', 'real_remote']
+    __no_table_cols__ = ['account_', 'remote_jid_', 'remote', 'real_remote_jid_', 'real_remote']
     __table_args__ = (Index('idx_occupant', *__index_cols__, unique=True),)
 
     pk: Mapped[int] = mapped_column(primary_key=True, init=False)
@@ -128,6 +128,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
 
     remote_jid_: JID = dataclasses.field(repr=False)
     fk_remote_pk: Mapped[int] = mapped_column(ForeignKey('remote.pk'), init=False)
+    remote: Mapped[Remote] = relationship(lazy='raise', foreign_keys=fk_remote_pk, viewonly=True, init=False)
 
     id: Mapped[str]
 
@@ -150,6 +151,7 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
     avatar_sha: Mapped[str | None] = mapped_column(
         StrValueMissingType, default=VALUE_MISSING
     )
+    blocked: Mapped[bool] = mapped_column(default=False)
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
 
     def needs_update(self, existing: Occupant) -> bool:
