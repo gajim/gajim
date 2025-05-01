@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="PluginRow" parent="AdwExpanderRow">
+    <child type="suffix">
+      <object class="GtkBox">
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="_warning_icon">
+            <property name="icon-name">dialog-warning-symbolic</property>
+            <property name="valign">3</property>
+            <style>
+              <class name="warning-color"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_update_badge">
+            <property name="valign">3</property>
+            <property name="visible">false</property>
+            <property name="label" translatable="yes">Update</property>
+            <property name="tooltip-text" translatable="yes">There is an update available for this plugin</property>
+            <style>
+              <class name="badge"/>
+              <class name="update-badge"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_requires_restart_badge">
+            <property name="valign">3</property>
+            <property name="visible">false</property>
+            <property name="label" translatable="yes">Restart Pending</property>
+            <property name="tooltip-text" translatable="yes">Restart Gajim to finish this update</property>
+            <style>
+              <class name="badge"/>
+              <class name="restart-badge"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwSpinner" id="_downloading_spinner">
+            <property name="valign">3</property>
+            <property name="visible">false</property>
+            <property name="tooltip-text" translatable="yes">Updating Plugin…</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_config_button">
+            <property name="valign">3</property>
+            <property name="icon-name">preferences-system-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSwitch" id="_enable_switch">
+            <property name="valign">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="_install_button">
+            <property name="valign">3</property>
+            <property name="label" translatable="yes">Install</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_authors_row">
+        <property name="title" translatable="yes">Authors</property>
+        <property name="subtitle-selectable">true</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_url_row">
+        <property name="title" translatable="yes">Website</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_version_row">
+        <property name="title" translatable="yes">Version</property>
+        <property name="subtitle-selectable">true</property>
+        <style>
+          <class name="property"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_warning_row">
+        <property name="title" translatable="yes">Issues detected</property>
+        <style>
+          <class name="property"/>
+        </style>
+        <child type="suffix">
+          <object class="GtkImage">
+            <property name="icon-name">dialog-warning-symbolic</property>
+            <style>
+              <class name="warning-color"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwActionRow" id="_management_row">
+        <property name="title" translatable="yes">Manage</property>
+        <style>
+          <class name="property"/>
+        </style>
+        <child type="suffix">
+          <object class="GtkBox">
+            <property name="spacing">12</property>
+            <child>
+              <object class="GtkButton" id="_update_button">
+                <property name="valign">3</property>
+                <property name="label" translatable="yes">Update</property>
+                <property name="visible">false</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_uninstall_button">
+                <property name="valign">3</property>
+                <property name="label" translatable="yes">Uninstall</property>
+                <style>
+                  <class name="destructive-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

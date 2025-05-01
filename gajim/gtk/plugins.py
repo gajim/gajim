@@ -4,30 +4,30 @@
 
 from __future__ import annotations
 
-from typing import Literal
-
+import locale
 import logging
-from enum import IntEnum
-from enum import unique
 from pathlib import Path
 
-from gi.repository import Gdk
+from gi.repository import Adw
 from gi.repository import GdkPixbuf
 from gi.repository import Gio
+from gi.repository import GLib
 from gi.repository import Gtk
+from packaging.version import Version
 
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
+from gajim.common.configpaths import get_ui_path
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.types import PluginRepositoryT
-from gajim.common.util.uri import open_uri
 from gajim.plugins.events import PluginAdded
 from gajim.plugins.events import PluginRemoved
 from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.manifest import PluginManifest
+from gajim.plugins.repository import PluginRepository
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dialogs import ConfirmationDialog
@@ -35,370 +35,119 @@ from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
+from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.window import get_app_window
 from gajim.gtk.widgets import GajimAppWindow
 
-log = logging.getLogger('gajim.gtk.plugins')
-
-
-@unique
-class Column(IntEnum):
-    ICON = 0
-    NAME = 1
-    VERSION = 2
-    INSTALLED = 3
-    DOWNLOAD = 4
-    UPDATE_AVAILABLE = 5
-    RESTART = 6
-    HAS_ERROR = 7
-    ERROR_TEXT = 8
-    MANIFEST = 9
+log = logging.getLogger("gajim.gtk.plugins")
 
 
 class PluginsWindow(GajimAppWindow, EventHelper):
     def __init__(self) -> None:
         GajimAppWindow.__init__(
-            self,
-            name='PluginsWindow',
-            title=_('Plugins'),
-            default_height=500
+            self, name="PluginsWindow", title=_("Plugins"), default_height=600
         )
-
         EventHelper.__init__(self)
 
-        self._ui = get_builder('plugins.ui')
+        self._plugin_rows: dict[str, PluginRow] = {}
+
+        self._ui = get_builder("plugins.ui")
         self.set_child(self._ui.plugins_box)
 
         self._file_chooser_button = FileChooserButton(
             filters=[
-                Filter(name=_('All files'), patterns=['*']),
-                Filter(name=_('ZIP files'), patterns=['*.zip'], default=True)
+                Filter(name=_("All files"), patterns=["*"]),
+                Filter(name=_("ZIP files"), patterns=["*.zip"], default=True),
             ],
-            tooltip=_('Install Plugin from ZIP-File'),
-            icon_name='system-software-install-symbolic',
+            label=_("Install from Archive"),
+            tooltip=_("Install Plugin from ZIP-File"),
+            icon_name="lucide-box-symbolic",
         )
+        self._file_chooser_button.set_visible(not app.is_flatpak())
+        self._file_chooser_button.set_valign(Gtk.Align.CENTER)
         self._connect(
-            self._file_chooser_button, 'path-picked', self._on_install_plugin_from_zip
+            self._file_chooser_button, "path-picked", self._on_install_plugin_from_zip
         )
-        self._ui.toolbar.prepend(self._file_chooser_button)
-        self._ui.toolbar.reorder_child_after(self._ui.download_button)
 
+        description_text = _("Manage and configure Gajim plugins")
         if app.is_flatpak():
-            self._ui.help_button.set_visible(True)
-            self._ui.download_button.set_visible(False)
-            self._ui.uninstall_plugin_button.set_visible(False)
-            self._file_chooser_button.set_visible(False)
+            flatpak_howto_text = _("How to install plugins with Flatpak")
+            flatpak_howto_url = "https://dev.gajim.org/gajim/gajim/wikis/help/flathub"
+            description_text += (
+                f"\n<a href='{flatpak_howto_url}'>{flatpak_howto_text}</a>"
+            )
 
-        self._ui.liststore.set_sort_column_id(Column.NAME,
-                                              Gtk.SortType.ASCENDING)
+        self._ui.preferences_group.set_description(description_text)
+        self._ui.preferences_group.set_header_suffix(self._file_chooser_button)
 
-        self._ui.plugins_treeview.set_has_tooltip(True)
-        self._ui.enabled_column.set_cell_data_func(self._ui.enabled_renderer,
-                                                   self._on_render_enabled_cell)
+        self._ui.plugins_listbox.set_sort_func(self._sort_func)
 
-        self._manifests: dict[str, Gtk.TreeIter] = {}
-
-        self._clear_plugin_info()
         self._load_installed_manifests()
         self._load_repository_manifests()
 
-        self._connect(
-            self._ui.configure_plugin_button, 'clicked', self._on_configure_plugin
+        self.register_events(
+            [
+                ("plugin-removed", ged.GUI1, self._on_plugin_removed),
+                ("plugin-added", ged.GUI1, self._on_plugin_added),
+            ]
         )
-        self._connect(
-            self._ui.plugins_treeview, 'query-tooltip', self._on_query_tooltip
-        )
-        self._connect(self._ui.treeview_selection, 'changed', self._selection_changed)
-        self._connect(self._ui.enabled_renderer, 'toggled', self._on_enabled_toggled)
-        self._connect(self._ui.help_button, 'clicked', self._on_help_clicked)
-        self._connect(
-            self._ui.uninstall_plugin_button, 'clicked', self._on_uninstall_plugin
-        )
-        self._connect(self._ui.download_button, 'clicked', self._on_download_clicked)
 
-        self.register_events([
-            ('plugin-removed', ged.GUI1, self._on_plugin_removed),
-            ('plugin-added', ged.GUI1, self._on_plugin_added),
-        ])
-
-        app.plugin_repository.connect('download-started',
-                                      self._on_download_started)
-        app.plugin_repository.connect('download-finished',
-                                      self._on_download_finished)
-        app.plugin_repository.connect('download-failed',
-                                      self._on_download_failed)
+        app.plugin_repository.connect("download-started", self._on_download_started)
+        app.plugin_repository.connect("download-finished", self._on_download_finished)
+        app.plugin_repository.connect("download-failed", self._on_download_failed)
+        app.plugin_repository.connect(
+            "plugin-updates-available", self._on_plugin_updates_available
+        )
 
     def _cleanup(self) -> None:
         app.plugin_repository.disconnect(self)
         self.unregister_events()
 
-    def _on_render_enabled_cell(self,
-                                _tree_column: Gtk.TreeViewColumn,
-                                cell: Gtk.CellRendererToggle,
-                                tree_model: Gtk.TreeModel,
-                                iter_: Gtk.TreeIter,
-                                _user_data: Literal[None]) -> None:
-
-        row = tree_model[iter_]
-        manifest = row[Column.MANIFEST]
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-
-        if plugin is None:
-            cell.set_visible(False)
-        else:
-            cell.set_active(plugin.active)
-            cell.set_activatable(plugin.activatable)
-            cell.set_visible(True)
-
-    def _on_query_tooltip(self,
-                          treeview: Gtk.TreeView,
-                          x_coord: int,
-                          y_coord: int,
-                          keyboard_mode: bool,
-                          tooltip: Gtk.Tooltip) -> bool:
-
-        context = treeview.get_tooltip_context(x_coord, y_coord, keyboard_mode)
-        has_row, model, _path, iter_ = context
-        if not has_row:
-            return False
-
-        row = model[iter_]
-        if row[Column.UPDATE_AVAILABLE]:
-            tooltip.set_text(_('Update available'))
-            return True
-
-        if row[Column.RESTART]:
-            tooltip.set_text(_('Restart Gajim for changes to take effect'))
-            return True
-
-        if row[Column.HAS_ERROR]:
-            manifest = row[Column.MANIFEST]
-            plugin = app.plugin_manager.get_plugin(manifest.short_name)
-            if plugin is not None and not plugin.activatable:
-                tooltip.set_text(plugin.available_text)
-            else:
-                tooltip.set_text(row[Column.ERROR_TEXT])
-            return Gdk.EVENT_STOP
-
-        return Gdk.EVENT_PROPAGATE
-
-    def _selection_changed(self,
-                           treeview_selection: Gtk.TreeSelection
-                           ) -> None:
-        model, iter_ = treeview_selection.get_selected()
-        if iter_:
-            row = model[iter_]
-            self._load_plugin_info(row)
-            self._set_button_states(row)
-        else:
-            self._clear_plugin_info()
-
-    def _update_selected_plugin(self):
-        self._ui.treeview_selection.emit('changed')
-
-    def _load_plugin_info(self, row: Gtk.TreeModelRow) -> None:
-        manifest = row[Column.MANIFEST]
-        installed = row[Column.INSTALLED]
-        has_error = row[Column.HAS_ERROR]
-
-        self._ui.plugin_name_label.set_text(manifest.name)
-        self._ui.plugin_version_label.set_text(str(manifest.version))
-        self._ui.plugin_authors_label.set_text('\n'.join(manifest.authors))
-        markup = f'<a href="{manifest.homepage}">{manifest.homepage}</a>'
-        self._ui.plugin_homepage_linkbutton.set_markup(markup)
-        self._ui.description.set_text(manifest.description)
-        self._ui.uninstall_plugin_button.set_sensitive(installed)
-
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        enabled = plugin.active if plugin is not None else False
-
-        has_config_dialog = has_error or manifest.config_dialog
-        self._ui.configure_plugin_button.set_sensitive(
-            enabled and has_config_dialog)
-
-    def _set_button_states(self, row: Gtk.TreeModelRow) -> None:
-        installed = row[Column.INSTALLED]
-        update_available = row[Column.UPDATE_AVAILABLE]
-        download = not installed and app.plugin_repository.available
-
-        self._ui.uninstall_plugin_button.set_sensitive(installed)
-        self._ui.download_button.set_sensitive(download or update_available)
-        if update_available:
-            self._ui.download_button.set_tooltip_text(_('Download Update'))
-        else:
-            self._ui.download_button.set_tooltip_text(_('Download and Install'))
-
-    def _clear_plugin_info(self) -> None:
-        self._ui.plugin_name_label.set_text('')
-        self._ui.plugin_version_label.set_text('')
-        self._ui.plugin_authors_label.set_text('')
-        self._ui.plugin_homepage_linkbutton.set_markup('')
-
-        self._ui.description.set_text('')
-        self._ui.uninstall_plugin_button.set_sensitive(False)
-        self._ui.configure_plugin_button.set_sensitive(False)
+    @staticmethod
+    def _sort_func(row1: PluginRow, row2: PluginRow) -> int:
+        return locale.strcoll(row1.name, row2.name)
 
     def _load_installed_manifests(self) -> None:
         for plugin in app.plugin_manager.plugins:
-            icon = self._get_plugin_icon(plugin.manifest)
-            self._add_manifest(plugin.manifest, True, icon=icon)
+            self._add_manifest(plugin.manifest, True)
 
     def _load_repository_manifests(self) -> None:
         for manifest in app.plugin_repository.get_manifests():
-            icon = self._get_plugin_icon(manifest)
-            self._add_manifest(manifest, False, icon=icon)
+            self._add_manifest(manifest, False)
 
     def _get_restart(self, manifest: PluginManifest) -> bool:
-        path = configpaths.get('PLUGINS_DOWNLOAD') / manifest.short_name
+        path = configpaths.get("PLUGINS_DOWNLOAD") / manifest.short_name
         return path.exists()
 
-    def _get_error(self,
-                   manifest: PluginManifest,
-                   installed: bool) -> tuple[bool, str]:
-
-        if not installed:
-            return False, ''
-
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        assert plugin is not None
-        if not plugin.activatable:
-            return True, plugin.available_text
-        return False, ''
-
-    def _get_plugin_row(self, short_name: str) -> Gtk.TreeModelRow | None:
-        iter_ = self._manifests.get(short_name)
-        if iter_ is None:
-            return None
-        return self._ui.liststore[iter_]
-
-    def _add_manifest(self,
-                      manifest: PluginManifest,
-                      installed: bool,
-                      icon: Gio.Icon | None = None) -> None:
-
+    def _add_manifest(self, manifest: PluginManifest, installed: bool) -> None:
         restart = self._get_restart(manifest)
-        has_error, error = self._get_error(manifest, installed)
 
-        row = self._get_plugin_row(manifest.short_name)
-        if row is None:
-            iter_ = self._ui.liststore.append([icon,
-                                               manifest.name,
-                                               str(manifest.version),
-                                               installed,
-                                               False,
-                                               False,
-                                               restart,
-                                               has_error,
-                                               error or None,
-                                               manifest])
-
-            self._manifests[manifest.short_name] = iter_
+        plugin_row = self._plugin_rows.get(manifest.short_name)
+        if plugin_row is None:
+            plugin_row = PluginRow(manifest, installed)
+            self._plugin_rows[manifest.short_name] = plugin_row
+            self._ui.plugins_listbox.append(plugin_row)
 
         elif restart:
-            row[Column.RESTART] = True
+            plugin_row.set_requires_restart(True)
 
         else:
-            current_manifest = row[Column.MANIFEST]
-            if manifest.version > current_manifest.version:
-                row[Column.UPDATE_AVAILABLE] = True
-
-    def _get_plugin_icon(self,
-                         manifest: PluginManifest
-                         ) -> Gio.Icon | None:
-
-        image_name = f'{manifest.short_name}.png'
-        path = configpaths.get('PLUGINS_IMAGES') / image_name
-        if path.exists():
-            return GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
-
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        if plugin is None:
-            return
-
-        path = Path(plugin.__path__) / image_name
-        if path.exists():
-            return GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
-
-        return Gio.ThemedIcon(name='applications-utilities')
-
-    def _on_enabled_toggled(self,
-                            _cell: Gtk.CellRendererToggle,
-                            path: str
-                            ) -> None:
-
-        manifest = self._ui.liststore[path][Column.MANIFEST]
-
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        assert plugin is not None
-
-        if plugin.active:
-            app.plugin_manager.deactivate_plugin(plugin)
-        else:
-            try:
-                app.plugin_manager.activate_plugin(plugin)
-            except GajimPluginActivateException as e:
-                SimpleDialog(_('Plugin Failed'), str(e))
-                return
-
-        self._update_selected_plugin()
-
-    def _on_configure_plugin(self, _button: Gtk.Button) -> None:
-        selection = self._ui.plugins_treeview.get_selection()
-        model, iter_ = selection.get_selected()
-        if iter_:
-            manifest = model.get_value(iter_, Column.MANIFEST)
-            plugin = app.plugin_manager.get_plugin(manifest.short_name)
-            assert plugin is not None
-            plugin.config_dialog(self.window)  # pyright: ignore
-
-    def _on_uninstall_plugin(self, _button: Gtk.Button) -> None:
-        selection = self._ui.plugins_treeview.get_selection()
-        model, iter_ = selection.get_selected()
-        if not iter_:
-            return
-
-        manifest = model.get_value(iter_, Column.MANIFEST)
-        plugin = app.plugin_manager.get_plugin(manifest.short_name)
-        error_text = _('Unable to properly remove the plugin')
-        if plugin is None:
-            SimpleDialog(_('Warning'), error_text)
-            return
-
-        try:
-            app.plugin_manager.uninstall_plugin(plugin)
-        except PluginsystemError as error:
-            SimpleDialog(_('Warning'), f"{error_text}\n{error}")
-            return
-
-    def _on_plugin_removed(self, event: PluginRemoved) -> None:
-        row = self._get_plugin_row(event.manifest.short_name)
-        assert row is not None
-
-        if not app.plugin_repository.contains(event.manifest.short_name):
-            self._ui.liststore.remove(row.iter)
-            return
-
-        row[Column.INSTALLED] = False
-        row[Column.UPDATE_AVAILABLE] = False
-        row[Column.HAS_ERROR] = False
-        row[Column.RESTART] = False
-
-        self._update_selected_plugin()
+            if manifest.version > plugin_row.version:
+                plugin_row.set_update_available(True, manifest.version)
 
     def _on_plugin_added(self, event: PluginAdded) -> None:
-        icon = self._get_plugin_icon(event.manifest)
-        self._add_manifest(event.manifest, True, icon=icon)
+        self._add_manifest(event.manifest, True)
 
-    def _on_help_clicked(self, _button: Gtk.Button) -> None:
-        open_uri('https://dev.gajim.org/gajim/gajim/wikis/help/flathub')
+    def _on_plugin_removed(self, event: PluginRemoved) -> None:
+        row = self._plugin_rows[event.manifest.short_name]
 
-    def _on_download_clicked(self, _button: Gtk.Button) -> None:
-        self._ui.download_button.set_sensitive(False)
-        selection = self._ui.plugins_treeview.get_selection()
-        model, iter_ = selection.get_selected()
-        if iter_:
-            row = model[iter_]
-            manifest = row[Column.MANIFEST]
-            app.plugin_repository.download_plugins([manifest])
+        if not app.plugin_repository.contains(event.manifest.short_name):
+            self._ui.plugins_listbox.remove(row)
+            return
+
+        row.set_requires_restart(False)
+        row.set_update_available(False)
+        row.set_installed(False)
 
     def _on_install_plugin_from_zip(
         self, _button: FileChooserButton, paths: list[Path]
@@ -409,24 +158,25 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         zip_filename = str(paths[0])
 
         def _on_overwrite():
-            plugin = app.plugin_manager.install_from_zip(zip_filename,
-                                                         overwrite=True)
+            plugin = app.plugin_manager.install_from_zip(zip_filename, overwrite=True)
             if not plugin:
-                SimpleDialog(_('Archive Malformed'), _('Archive is malformed'))
+                SimpleDialog(_("Archive Malformed"), _("Archive is malformed"))
                 return
 
         try:
             plugin = app.plugin_manager.install_from_zip(zip_filename)
         except PluginsystemError as er_type:
             error_text = str(er_type)
-            if error_text == _('Plugin already exists'):
+            if error_text == _("Plugin already exists"):
                 ConfirmationDialog(
-                    _('Overwrite Plugin?'),
-                    _('Do you want to overwrite the currently installed version?'),
-                    [DialogButton.make('Cancel'),
-                     DialogButton.make('Remove',
-                                       text=_('_Overwrite'),
-                                       callback=_on_overwrite)],
+                    _("Overwrite Plugin?"),
+                    _("Do you want to overwrite the currently installed version?"),
+                    [
+                        DialogButton.make("Cancel"),
+                        DialogButton.make(
+                            "Remove", text=_("_Overwrite"), callback=_on_overwrite
+                        ),
+                    ],
                 )
                 return
 
@@ -434,53 +184,254 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             return
 
         if not plugin:
-            SimpleDialog(_('Archive Malformed'), _('Archive is malformed'))
+            SimpleDialog(_("Archive Malformed"), _("Archive is malformed"))
 
-    def _on_download_started(self,
-                             _repository: PluginRepositoryT,
-                             _signal_name: str,
-                             manifests: set[PluginManifest]) -> None:
-
+    def _on_download_started(
+        self,
+        _repository: PluginRepositoryT,
+        _signal_name: str,
+        manifests: set[PluginManifest],
+    ) -> None:
         for manifest in manifests:
-            row = self._get_plugin_row(manifest.short_name)
-            assert row is not None
-            row[Column.UPDATE_AVAILABLE] = False
-            row[Column.HAS_ERROR] = False
-            row[Column.DOWNLOAD] = True
+            row = self._plugin_rows[manifest.short_name]
+            row.set_update_available(False)
+            row.set_error(False)
+            row.set_downloading(True)
 
-    def _on_download_finished(self,
-                              _repository: PluginRepositoryT,
-                              _signal_name: str,
-                              manifest: PluginManifest) -> None:
-
-        row = self._get_plugin_row(manifest.short_name)
+    def _on_download_failed(
+        self,
+        _repository: PluginRepositoryT,
+        _signal_name: str,
+        manifest: PluginManifest,
+        error: str,
+    ) -> None:
+        row = self._plugin_rows[manifest.short_name]
         assert row is not None
-        row[Column.DOWNLOAD] = False
-        row[Column.UPDATE_AVAILABLE] = False
-        row[Column.HAS_ERROR] = False
+        row.set_downloading(False)
+        row.set_error(True, error)
+
+    def _on_download_finished(
+        self,
+        _repository: PluginRepositoryT,
+        _signal_name: str,
+        manifest: PluginManifest,
+    ) -> None:
+        row = self._plugin_rows[manifest.short_name]
+        assert row is not None
+        row.set_downloading(False)
+        row.update_manifest(manifest)
 
         activated = app.plugin_manager.update_plugins(
-            replace=False, activate=True, plugin_name=manifest.short_name)
+            replace=False, activate=True, plugin_name=manifest.short_name
+        )
         if activated:
-            row[Column.INSTALLED] = True
-
+            row.set_installed(True)
         else:
-            row[Column.RESTART] = True
-            log.info('Plugin %s needs restart', manifest.short_name)
+            row.set_requires_restart(True)
+            log.info("Plugin %s needs restart", manifest.short_name)
 
-        self._update_selected_plugin()
+    def _on_plugin_updates_available(
+        self,
+        _repository: PluginRepository,
+        _signal_name: str,
+        manifests: list[PluginManifest],
+    ) -> None:
+        for manifest in manifests:
+            row = self._plugin_rows[manifest.short_name]
+            row.set_update_available(True, new_version=manifest.version)
 
-    def _on_download_failed(self,
-                            _repository: PluginRepositoryT,
-                            _signal_name: str,
-                            manifest: PluginManifest,
-                            error: str) -> None:
 
-        row = self._get_plugin_row(manifest.short_name)
-        assert row is not None
-        row[Column.DOWNLOAD] = False
-        row[Column.UPDATE_AVAILABLE] = False
-        row[Column.HAS_ERROR] = True
-        row[Column.ERROR_TEXT] = error
+@Gtk.Template(filename=get_ui_path("plugin_row.ui"))
+class PluginRow(Adw.ExpanderRow, SignalManager):
+    __gtype_name__ = "PluginRow"
 
-        self._update_selected_plugin()
+    _warning_icon: Gtk.Image = Gtk.Template.Child()
+    _update_badge: Gtk.Label = Gtk.Template.Child()
+    _requires_restart_badge: Gtk.Label = Gtk.Template.Child()
+    _downloading_spinner: Adw.Spinner = Gtk.Template.Child()
+    _config_button: Gtk.Button = Gtk.Template.Child()
+    _enable_switch: Gtk.Switch = Gtk.Template.Child()
+    _install_button: Gtk.Button = Gtk.Template.Child()
+    _authors_row: Adw.ActionRow = Gtk.Template.Child()
+    _url_row: Adw.ActionRow = Gtk.Template.Child()
+    _version_row: Adw.ActionRow = Gtk.Template.Child()
+    _warning_row: Adw.ActionRow = Gtk.Template.Child()
+    _management_row: Adw.ActionRow = Gtk.Template.Child()
+    _update_button: Gtk.Button = Gtk.Template.Child()
+    _uninstall_button: Gtk.Button = Gtk.Template.Child()
+
+    def __init__(self, manifest: PluginManifest, installed: bool) -> None:
+        Adw.ExpanderRow.__init__(
+            self, title=manifest.name, subtitle=manifest.description
+        )
+        SignalManager.__init__(self)
+
+        self._manifest = manifest
+        self._installed = installed
+
+        self.add_prefix(self._get_plugin_icon())
+
+        plugin = app.plugin_manager.get_plugin(manifest.short_name)
+        plugin_active = plugin.active if plugin is not None else False
+
+        self._connect(self._config_button, "clicked", self._on_config_clicked)
+        self._enable_switch.set_active(plugin_active)
+        self._connect(self._enable_switch, "state-set", self._on_enable_switch_toggled)
+        self._connect(self._install_button, "clicked", self._on_install_clicked)
+        self._connect(self._update_button, "clicked", self._on_install_clicked)
+        self._connect(self._uninstall_button, "clicked", self._on_uninstall_clicked)
+
+        self._update()
+
+    def do_unroot(self) -> None:
+        self._disconnect_all()
+        Adw.ExpanderRow.do_unroot(self)
+
+    @property
+    def name(self) -> str:
+        return self._manifest.name
+
+    @property
+    def version(self) -> Version:
+        return self._manifest.version
+
+    def set_installed(self, installed: bool) -> None:
+        self._installed = installed
+        self._update()
+
+    def set_error(self, has_error: bool, error: str | None = None) -> None:
+        self._warning_icon.set_visible(has_error)
+        self._warning_icon.set_tooltip_text(error or "")
+
+        self._warning_row.set_visible(has_error)
+        self._warning_row.set_subtitle(error or "")
+
+    def set_downloading(self, downloading: bool) -> None:
+        self._downloading_spinner.set_visible(downloading)
+
+    def set_requires_restart(self, requires_restart: bool) -> None:
+        self._requires_restart_badge.set_visible(requires_restart)
+        self._install_button.set_sensitive(not requires_restart)
+
+    def set_update_available(
+        self, update_available: bool, new_version: Version | None = None
+    ) -> None:
+        self._update_badge.set_visible(update_available)
+        self._update_button.set_visible(update_available)
+        self._update_button.set_sensitive(True)
+
+        if update_available:
+            self._management_row.set_subtitle(
+                _("Update available: Version %s") % str(new_version)
+            )
+        else:
+            self._management_row.set_subtitle("")
+
+    def update_manifest(self, manifest: PluginManifest) -> None:
+        self._manifest = manifest
+        self._update()
+
+    def _update(self) -> None:
+        authors = [GLib.markup_escape_text(author) for author in self._manifest.authors]
+        self._authors_row.set_subtitle("\n".join(authors))
+        self._url_row.set_subtitle(
+            f"<a href='{self._manifest.homepage}'>{self._manifest.homepage}</a>"
+        )
+        self._version_row.set_subtitle(str(self._manifest.version))
+
+        has_error, error_text = self._get_error()
+        self._warning_icon.set_visible(has_error)
+        self._warning_icon.set_tooltip_text(error_text)
+
+        self._warning_row.set_visible(has_error)
+        self._warning_row.set_subtitle(error_text)
+
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        plugin_active = plugin.active if plugin is not None else False
+        plugin_activatable = plugin.activatable if plugin is not None else False
+
+        self._config_button.set_visible(
+            self._installed and self._manifest.config_dialog and not has_error
+        )
+        self._config_button.set_sensitive(plugin_active)
+
+        self._enable_switch.set_visible(self._installed and not has_error)
+        self._enable_switch.set_sensitive(plugin_activatable)
+        self._enable_switch.set_active(plugin_active)
+
+        self._install_button.set_visible(not self._installed and not app.is_flatpak())
+        self._install_button.set_sensitive(not self._installed)
+
+        self._management_row.set_visible(self._installed and not app.is_flatpak())
+
+    def _get_plugin_icon(self) -> Gtk.Image:
+        image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="lucide-box-symbolic"))
+
+        image_name = f"{self._manifest.short_name}.png"
+        path = configpaths.get("PLUGINS_IMAGES") / image_name
+        if path.exists():
+            image.set_from_pixbuf(
+                GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
+            )
+            return image
+
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        if plugin is None:
+            return image
+
+        path = Path(plugin.__path__) / image_name
+        if path.exists():
+            image.set_from_pixbuf(
+                GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
+            )
+            return image
+
+        image.add_css_class("dim-label")
+        return image
+
+    def _get_error(self) -> tuple[bool, str]:
+        if not self._installed:
+            return False, ""
+
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        assert plugin is not None
+        if not plugin.activatable:
+            return True, plugin.available_text
+        return False, ""
+
+    def _on_enable_switch_toggled(self, _switch: Gtk.Switch, state: bool) -> None:
+        self._config_button.set_sensitive(state)
+
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        assert plugin is not None
+
+        if plugin.active:
+            app.plugin_manager.deactivate_plugin(plugin)
+        else:
+            try:
+                app.plugin_manager.activate_plugin(plugin)
+            except GajimPluginActivateException as e:
+                SimpleDialog(_("Plugin Failed"), str(e))
+                return
+
+    def _on_config_clicked(self, _button: Gtk.Button) -> None:
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        assert plugin is not None
+        plugin.config_dialog(get_app_window("Plugins"))  # pyright: ignore
+
+    def _on_install_clicked(self, button: Gtk.Button) -> None:
+        button.set_sensitive(False)
+        app.plugin_repository.download_plugins([self._manifest])
+
+    def _on_uninstall_clicked(self, _button: Gtk.Button) -> None:
+        plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
+        error_text = _("Unable to properly remove the plugin")
+        if plugin is None:
+            SimpleDialog(_("Warning"), error_text)
+            return
+
+        try:
+            app.plugin_manager.uninstall_plugin(plugin)
+        except PluginsystemError as error:
+            SimpleDialog(_("Warning"), f"{error_text}\n{error}")
+            return
