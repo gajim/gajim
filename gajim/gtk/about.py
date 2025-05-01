@@ -6,79 +6,69 @@ from __future__ import annotations
 
 import cairo
 import nbxmpp
-from gi.repository import Gdk
+from gi.repository import Adw
 from gi.repository import Gtk
 from gi.repository import Pango
 
-from gajim.common import app
 from gajim.common.const import ARTISTS
 from gajim.common.const import DEVELOPERS
 from gajim.common.const import MAINTAINERS
 from gajim.common.const import THANKS
 from gajim.common.i18n import _
 from gajim.common.util.app import get_extended_app_version
-from gajim.common.util.uri import open_uri
 from gajim.common.util.version import get_glib_version
 from gajim.common.util.version import get_gobject_version
 from gajim.common.util.version import get_soup_version
 
-from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_adw_version
 from gajim.gtk.util.misc import get_gtk_version
 
 
-class AboutDialog(Gtk.AboutDialog, SignalManager):
-    def __init__(self):
-        Gtk.AboutDialog.__init__(
-            self,
-            transient_for=app.window,
-            name="Gajim",
+class AboutDialog:
+    def __init__(self) -> None:
+        self._dialog = None
+
+    def present(self) -> None:
+        if self._dialog is None:
+            self._dialog = self._get_dialog()
+        self._dialog.present()
+
+    def _get_dialog(self) -> Adw.AboutDialog:
+        dialog = Adw.AboutDialog(
+            application_name="Gajim",
+            application_icon="gajim",
             version=get_extended_app_version(),
             copyright="Copyright © 2003-2025 Gajim Team",
             license_type=Gtk.License.GPL_3_0_ONLY,
             website="https://gajim.org/",
-            logo_icon_name="gajim",
+            issue_url="https://dev.gajim.org/gajim/gajim/-/issues/",
+            developer_name="\n".join(MAINTAINERS),
+            developers=MAINTAINERS + DEVELOPERS,
+            designers=ARTISTS,
+            debug_info=self._get_debug_info(),
+            debug_info_filename="gajim_version_info.txt",
             translator_credits=_("translator-credits"),
         )
-        SignalManager.__init__(self)
+        dialog.add_acknowledgement_section(_("Thanks"), THANKS)
+        dialog.add_acknowledgement_section(
+            _("Packages"), [_("Thanks to all the package maintainers.")]
+        )
+        dialog.connect("closed", self._on_dialog_closed)
+        return dialog
 
-        cairo_ver = cairo.cairo_version_string()
-        python_cairo_ver = cairo.version
+    def _get_debug_info(self) -> str:
+        debug_info = [
+            _("GTK Version: %s") % get_gtk_version(),
+            _("Adw Version: %s") % get_adw_version(),
+            _("GLib Version: %s") % get_glib_version(),
+            _("Pango Version: %s") % Pango.version_string(),
+            _("PyGObject Version: %s") % get_gobject_version(),
+            _("cairo Version: %s") % cairo.cairo_version_string(),
+            _("pycairo Version: %s") % cairo.version,
+            _("python-nbxmpp Version: %s") % nbxmpp.__version__,
+            _("libsoup Version: %s") % get_soup_version(),
+        ]
+        return "\n".join(debug_info)
 
-        comments: list[str] = []
-        comments.append(_("A fully-featured XMPP chat client"))
-        comments.append("")
-        comments.append(_("GTK Version: %s") % get_gtk_version())
-        comments.append(_("GLib Version: %s") % get_glib_version())
-        comments.append(_("Pango Version: %s") % Pango.version_string())
-        comments.append(_("PyGObject Version: %s") % get_gobject_version())
-        comments.append(_("cairo Version: %s") % cairo_ver)
-        comments.append(_("pycairo Version: %s") % python_cairo_ver)
-        comments.append(_("python-nbxmpp Version: %s") % nbxmpp.__version__)
-        comments.append(_("libsoup Version: %s") % get_soup_version())
-
-        self.set_comments("\n".join(comments))
-
-        self.add_credit_section(_("Maintainers"), MAINTAINERS)
-        self.add_credit_section(_("Developers"), DEVELOPERS)
-        self.add_credit_section(_("Artists"), ARTISTS)
-
-        thanks = list(THANKS)
-        thanks.append("")
-        thanks.append(_("Last but not least"))
-        thanks.append(_("we would like to thank all the package maintainers."))
-        self.add_credit_section(_("Thanks"), thanks)
-
-        self._connect(self, "activate-link", self._on_activate_link)
-        self._connect(self, "close-request", self._on_close_request)
-        self.set_visible(True)
-
-    def _on_close_request(self, window: AboutDialog) -> None:
-        self._disconnect_all()
-        app.check_finalize(self)
-
-    @staticmethod
-    def _on_activate_link(_label: Gtk.Label, uri: str) -> int:
-        # We have to use this, because the default GTK handler
-        # is not cross-platform compatible
-        open_uri(uri)
-        return Gdk.EVENT_STOP
+    def _on_dialog_closed(self, _dialog: AboutDialog) -> None:
+        self._dialog = None
