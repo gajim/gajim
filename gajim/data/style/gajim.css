@@ -312,6 +312,16 @@ button.flat.link { padding: 0; border: 0; }
   background-color:#295a72;
   font-size: 100%;
 }
+.update-badge {
+    background-color:#798084;
+    font-size: 0.8rem;
+    border-radius: 0.375rem;
+}
+.restart-badge {
+    background-color:#e69722;
+    font-size: 0.8rem;
+    border-radius: 0.375rem;
+}
 
 .group {
     color: rgb(242, 242, 242);
