@@ -61,7 +61,6 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk import menus
 from gajim.gtk import structs
-from gajim.gtk.about import AboutDialog
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
@@ -731,7 +730,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_about_action(
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        AboutDialog()
+        app.window.about_dialog.present()
 
     # @staticmethod
     # TODO Jingle FT
