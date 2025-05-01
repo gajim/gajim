@@ -708,22 +708,9 @@ class PepConfigBuilder(Builder):
     save_button: Gtk.Button
 
 class PluginsBuilder(Builder):
-    liststore: Gtk.ListStore
     plugins_box: Gtk.Box
-    plugins_treeview: Gtk.TreeView
-    treeview_selection: Gtk.TreeSelection
-    enabled_column: Gtk.TreeViewColumn
-    enabled_renderer: Gtk.CellRendererToggle
-    toolbar: Gtk.Box
-    download_button: Gtk.Button
-    uninstall_plugin_button: Gtk.Button
-    help_button: Gtk.Button
-    plugin_name_label: Gtk.Label
-    configure_plugin_button: Gtk.Button
-    description: Gtk.Label
-    plugin_version_label: Gtk.Label
-    plugin_authors_label: Gtk.Label
-    plugin_homepage_linkbutton: Gtk.Label
+    preferences_group: Adw.PreferencesGroup
+    plugins_listbox: Gtk.ListBox
 
 class PreviewBuilder(Builder):
     preview_stack: Gtk.Stack
