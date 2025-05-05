@@ -94,6 +94,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         enabled_accounts = app.get_enabled_accounts_with_labels()
         if len(enabled_accounts) > 1:
             account_badge = AccountBadge(account)
+            account_badge.set_valign(Gtk.Align.CENTER)
             contact_box.append(account_badge)
 
         invitation_label = Gtk.Label(
