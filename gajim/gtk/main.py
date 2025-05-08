@@ -606,7 +606,7 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
                 dirname = target_path.parent
                 if not os.access(dirname, os.W_OK):
                     SimpleDialog(
-                        _("Directory Not Writable") % dirname,
+                        _("Directory Not Writable"),
                         _(
                             'Directory "%s" is not writable. '
                             "You do not have the proper permissions to "
