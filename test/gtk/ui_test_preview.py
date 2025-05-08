@@ -64,6 +64,7 @@ class TestPreview(GajimAppWindow):
 
         drop_down = GajimDropDown(list(PREVIEW_TYPES.keys()))
         drop_down.connect("notify::selected", self._on_preview_type_selected)
+        drop_down.select_key(list(PREVIEW_TYPES.keys())[1])
         self._box.append(drop_down)
 
     def _on_preview_type_selected(self, drop_down: GajimDropDown, *args: Any) -> None:
@@ -89,8 +90,8 @@ class TestPreview(GajimAppWindow):
 
 Gst.init()
 
-app.get_client = MagicMock()
-app.window = MagicMock()
+app.init_process_pool()
+app.window = Gtk.Window()
 app.is_installed = MagicMock(return_value=True)
 
 logging_helpers.set_loglevels("gajim=DEBUG")
