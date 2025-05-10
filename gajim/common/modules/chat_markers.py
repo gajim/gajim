@@ -178,6 +178,9 @@ class ChatMarkers(BaseModule):
     @staticmethod
     def _is_sending_marker_allowed(contact: types.ChatContactT) -> bool:
         if isinstance(contact, BareContact):
+            if not contact.is_subscribed:
+                return False
+
             return app.settings.get_contact_setting(
                 contact.account, contact.jid, 'send_marker')
 
