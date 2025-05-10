@@ -28,6 +28,7 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
         self._rows: dict[str, Row] = {}
 
     def do_unroot(self) -> None:
+        self.set_header_func(None)
         Gtk.ListBox.do_unroot(self)
         self._disconnect_all()
         del self._stack
@@ -93,3 +94,11 @@ class Row(Gtk.ListBoxRow):
         box.append(label)
         self.set_child(box)
         self.set_visible(visible)
+
+
+class RowHeader(Gtk.Box):
+    def __init__(self, label_text: str) -> None:
+        Gtk.Box.__init__(self, hexpand=True)
+        self.add_css_class("sidebar-row-header")
+        label = Gtk.Label(label=label_text)
+        self.append(label)

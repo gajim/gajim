@@ -1007,6 +1007,10 @@ list.settings-menu row {
 list.settings-menu row label {
     padding-left: 12px;
 }
+list.settings-menu .sidebar-row-header {
+    padding: 12px 18px;
+    font-weight: bold;
+}
 
 popover.combo list {
     min-width: 200px;

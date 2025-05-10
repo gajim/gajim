@@ -22,6 +22,8 @@ from gajim.gtk.groupchat_manage import GroupchatManage
 from gajim.gtk.groupchat_outcasts import GroupchatOutcasts
 from gajim.gtk.groupchat_settings import GroupChatSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
+from gajim.gtk.sidebar_switcher import Row
+from gajim.gtk.sidebar_switcher import RowHeader
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.widgets import GajimAppWindow
@@ -47,6 +49,7 @@ class GroupchatDetails(GajimAppWindow):
         self._ui = get_builder("groupchat_details.ui")
 
         self._switcher = SideBarSwitcher(width=250)
+        self._switcher.set_header_func(self._sidebar_header_func)
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
         self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
         self.set_child(self._ui.main_grid)
@@ -80,6 +83,16 @@ class GroupchatDetails(GajimAppWindow):
         del self._switcher
         del self._groupchat_manage
         del self._groupchat_info
+
+    @staticmethod
+    def _sidebar_header_func(row: Row, before: Row | None) -> None:
+        if before is None:
+            row.set_header(None)
+        else:
+            if row.name == "manage":
+                row.set_header(RowHeader(label_text=_("Administration")))
+            else:
+                row.set_header(None)
 
     def _on_disco_info_update(
         self, _contact: GroupchatContact, _signal_name: str
