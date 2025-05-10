@@ -209,6 +209,8 @@ class MessageArchiveStorage(AlchemyStorage):
     def insert_object(
         self, session: Session, obj: Any, ignore_on_conflict: bool = True
     ) -> int:
+
+        obj.validate()
         self._set_foreign_keys(session, obj)
         self._log_row(obj)
         session.add(obj)
@@ -248,6 +250,8 @@ class MessageArchiveStorage(AlchemyStorage):
         return_pk_on_conflict: bool = False,
         ignore_on_conflict: bool = False,
     ) -> int:
+
+        row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
         table = row.__class__
@@ -278,6 +282,8 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         row: Any,
     ) -> int:
+
+        row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
         table = row.__class__
@@ -313,6 +319,8 @@ class MessageArchiveStorage(AlchemyStorage):
         session: Session,
         row: Any,
     ) -> int | None:
+
+        row.validate()
         self._set_foreign_keys(session, row)
         self._log_row(row)
         table = row.__class__

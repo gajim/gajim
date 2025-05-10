@@ -134,7 +134,7 @@ class Moderations(BaseModule):
         if moderator_occupant_id is not None:
             occupant_data = mod.Occupant(
                 account_=self._account,
-                remote_jid_=remote_jid,
+                remote_jid_=remote_jid.new_as_bare(),
                 id=moderator_occupant_id,
                 nickname=moderator_nickname,
                 updated_at=properties.moderation.stamp,
@@ -185,7 +185,7 @@ class Moderations(BaseModule):
         if message_occupant_id is not None:
             occupant_data = mod.Occupant(
                 account_=self._account,
-                remote_jid_=remote_jid,
+                remote_jid_=remote_jid.new_as_bare(),
                 id=message_occupant_id,
                 nickname=properties.jid.resource,
                 updated_at=timestamp,

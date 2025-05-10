@@ -43,6 +43,9 @@ class Base(DeclarativeBase):
         int: types.INTEGER(),
     }
 
+    def validate(self) -> None:
+        pass
+
 
 class UtilMixin:
     def get_upsert_values(self) -> dict[str, str]:
@@ -151,6 +154,12 @@ class Occupant(MappedAsDataclass, Base, UtilMixin, kw_only=True):
         StrValueMissingType, default=VALUE_MISSING
     )
     updated_at: Mapped[datetime.datetime] = mapped_column(EpochTimestampType)
+
+    def validate(self) -> None:
+        if self.remote_jid_ is None:
+            return
+        if not self.remote_jid_.is_bare:
+            raise ValueError("Remote JID must be a bare jid")
 
     def needs_update(self, existing: Occupant) -> bool:
         return existing.updated_at < self.updated_at

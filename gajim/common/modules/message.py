@@ -376,7 +376,7 @@ class Message(BaseModule):
 
             occupant = mod.Occupant(
                 account_=self._account,
-                remote_jid_=remote_jid,
+                remote_jid_=muc_jid,
                 id=str(occupant_id),
                 real_remote_jid_=real_jid,
                 nickname=resource,

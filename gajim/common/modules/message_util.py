@@ -110,7 +110,7 @@ def get_occupant_info(
 
     return mod.Occupant(
         account_=account,
-        remote_jid_=remote_jid,
+        remote_jid_=remote_jid.new_as_bare(),
         id=str(occupant_id),
         real_remote_jid_=real_jid or VALUE_MISSING,
         nickname=resource,
