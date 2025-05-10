@@ -412,6 +412,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
     def set_context(self, account: str | None, jid: JID | None) -> None:
         self._account = account
         self._jid = jid
+        self._last_search_string = ""
 
         self._search_filters.set_context(account, jid)
 
