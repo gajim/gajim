@@ -41,14 +41,15 @@ def gi_require_versions() -> None:
 
     gi.require_versions(
         {
-            "GLib": "2.0",
-            "Gio": "2.0",
+            "Farstream": "0.2",
             "Gdk": "4.0",
+            "Gio": "2.0",
+            "GLib": "2.0",
+            "GObject": "2.0",
+            "Graphene": "1.0",
             "Gsk": "4.0",
             "Gtk": "4.0",
             "GtkSource": "5",
-            "GObject": "2.0",
-            "Graphene": "1.0",
             "Pango": "1.0",
             "PangoCairo": "1.0",
         }
