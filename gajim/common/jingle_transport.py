@@ -20,11 +20,6 @@ import nbxmpp
 from nbxmpp.namespaces import Namespace
 from nbxmpp.util import generate_id
 
-try:
-    from gi.repository import Farstream
-except ImportError:
-    pass
-
 from gajim.common import app
 from gajim.common.client import Client
 from gajim.common.file_props import FileProp
@@ -33,6 +28,9 @@ from gajim.common.jingle_content import JingleContent
 log = logging.getLogger('gajim.c.jingle_transport')
 
 transports: dict[str, Any] = {}
+
+if app.is_installed("FARSTREAM"):
+    from gi.repository import Farstream
 
 
 def get_jingle_transport(node: nbxmpp.Node):

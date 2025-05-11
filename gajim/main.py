@@ -41,7 +41,6 @@ def gi_require_versions() -> None:
 
     gi.require_versions(
         {
-            "Farstream": "0.2",
             "Gdk": "4.0",
             "Gio": "2.0",
             "GLib": "2.0",

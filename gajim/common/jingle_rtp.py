@@ -20,12 +20,6 @@ import nbxmpp
 from gi.repository import GLib
 from nbxmpp.namespaces import Namespace
 
-try:
-    from gi.repository import Farstream
-    from gi.repository import Gst
-except Exception:
-    pass
-
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common.i18n import _
@@ -36,6 +30,10 @@ from gajim.common.jingle_session import FailedApplication
 from gajim.common.jingle_session import JingleSession
 from gajim.common.jingle_transport import JingleTransport
 from gajim.common.jingle_transport import JingleTransportICEUDP
+
+if app.is_installed("AV"):
+    from gi.repository import Farstream
+    from gi.repository import Gst
 
 log = logging.getLogger('gajim.c.jingle_rtp')
 
