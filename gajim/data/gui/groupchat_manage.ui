@@ -40,6 +40,15 @@
               </object>
             </child>
             <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Public Information</property>
+                <style>
+                  <class name="bold16"/>
+                  <class name="mt-12"/>
+                </style>
+              </object>
+            </child>
+            <child>
               <object class="GtkGrid">
                 <property name="halign">center</property>
                 <property name="row-spacing">6</property>
