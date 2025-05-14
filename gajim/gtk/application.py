@@ -222,6 +222,10 @@ class GajimApplication(Adw.Application, CoreApplication):
         icon_theme = get_icon_theme()
         icon_theme.add_search_path(str(configpaths.get("ICONS")))
 
+        from gajim.gtk.main import MainWindow
+
+        main_window = MainWindow()
+
         from gajim.gtk import notification
 
         notification.init()
@@ -248,9 +252,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
 
-        from gajim.gtk.main import MainWindow
-
-        MainWindow()
+        main_window.init()
 
         GLib.timeout_add(100, self._auto_connect)
 
