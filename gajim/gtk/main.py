@@ -105,6 +105,18 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self.set_title(GLib.get_application_name())
         self.set_default_icon_name("gajim")
 
+        self._startup_finished: bool = False
+
+        self._emoji_chooser: EmojiChooser | None = None
+        self._about_dialog = None
+        self._chat_page = self._main_stack.get_chat_page()
+
+        self._prepare_window()
+
+    def init(self) -> None:
+        """Init is called at a later point, so that the (empty) window can be
+        displayed early, indicating a progressing Gajim startup.
+        """
         self._about_dialog = AboutDialog()
 
         self._add_actions()
@@ -112,11 +124,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._add_stateful_actions()
         self._connect_actions()
 
-        self._startup_finished: bool = False
-
-        self._emoji_chooser: EmojiChooser | None = None
-
-        self._chat_page = self._main_stack.get_chat_page()
         self._app_side_bar.set_chat_page(self._chat_page)
 
         self.connect("notify::is-active", self._on_window_active)
@@ -159,8 +166,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         app.ged.raise_event(events.RegisterActions())
 
-        self._prepare_window()
-
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack, "unread-count-changed")
         chat_list_stack.connect("chat-selected", self._on_chat_selected)
@@ -173,6 +178,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     @property
     def about_dialog(self) -> AboutDialog:
+        assert self._about_dialog is not None
         return self._about_dialog
 
     def get_action(self, name: str) -> Gio.SimpleAction:

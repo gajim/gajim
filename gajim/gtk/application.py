@@ -230,13 +230,17 @@ class GajimApplication(Adw.Application, CoreApplication):
         icon_theme = get_icon_theme()
         icon_theme.add_search_path(str(configpaths.get("ICONS")))
 
-        from gajim.gtk import notification
-
-        notification.init()
-
         self.avatar_storage = AvatarStorage()
 
         app.load_css_config()
+
+        from gajim.gtk.main import MainWindow
+
+        main_window = MainWindow()
+
+        from gajim.gtk import notification
+
+        notification.init()
 
         idle.Monitor.set_interval(
             app.settings.get("autoawaytime") * 60, app.settings.get("autoxatime") * 60
@@ -256,9 +260,7 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
 
-        from gajim.gtk.main import MainWindow
-
-        MainWindow()
+        main_window.init()
 
         if self._deprecated_options_used:
             migration_url = (
