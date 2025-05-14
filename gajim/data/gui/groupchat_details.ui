@@ -35,7 +35,7 @@
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="valign">center</property>
-                    
+                    <property name="tooltip-text" translatable="yes">Edit display name…</property>
                     <child>
                       <object class="GtkImage">
                         <property name="icon-name">document-edit-symbolic</property>

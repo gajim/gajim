@@ -190,7 +190,7 @@
                   <object class="GtkButton" id="edit_contact_name_header_button">
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
-                    <property name="tooltip-text" translatable="yes">Edit Name…</property>
+                    <property name="tooltip-text" translatable="yes">Edit display name…</property>
                     <property name="valign">center</property>
                     <child>
                       <object class="GtkImage">
