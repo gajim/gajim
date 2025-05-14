@@ -91,15 +91,20 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
 
         app.window = self
 
+        self._ui = get_builder("main.ui")
+        self.set_child(self._ui.main_grid)
+
+        self._prepare_window()
+
+    def init(self) -> None:
+        """Init is called at a later point, so that the (empty) window can be
+        displayed early, indicating a progressing Gajim startup.
+        """
         self._add_actions()
         self._add_stateful_actions()
         self._connect_actions()
 
         self._startup_finished: bool = False
-
-        self._ui = get_builder("main.ui")
-
-        self.set_child(self._ui.main_grid)
 
         self._emoji_chooser: EmojiChooser | None = None
 
@@ -156,8 +161,6 @@ class MainWindow(Gtk.ApplicationWindow, EventHelper):
         self._check_for_account()
         self._load_chats()
         self._load_unread_counts()
-
-        self._prepare_window()
 
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack, "unread-count-changed")

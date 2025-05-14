@@ -225,6 +225,10 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.set_menubar(get_main_menu())
 
+        from gajim.gtk.main import MainWindow
+
+        main_window = MainWindow()
+
         from gajim.gtk import notification
 
         notification.init()
@@ -252,9 +256,7 @@ class GajimApplication(Gtk.Application, CoreApplication):
 
         self.register_event("feature-discovered", ged.CORE, self._on_feature_discovered)
 
-        from gajim.gtk.main import MainWindow
-
-        MainWindow()
+        main_window.init()
 
         GLib.timeout_add(100, self._auto_connect)
 
