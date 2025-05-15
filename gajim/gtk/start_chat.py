@@ -545,7 +545,7 @@ class StartChatDialog(GajimAppWindow):
                 return
 
             # Handle other possible errors
-            self._show_error_page(error.get_text())
+            self._show_error_page(to_user_string(error))
             return
         except TimeoutStanzaError:
             # We reached the 10s timeout and we cannot
