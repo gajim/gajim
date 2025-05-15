@@ -129,13 +129,13 @@ modules:
   - name: python3-more-itertools
     buildsystem: simple
     build-commands:
-      - pip3 install more_itertools-10.6.0-py3-none-any.whl
+      - pip3 install more_itertools-10.7.0-py3-none-any.whl
     cleanup:
       - /bin
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/23/62/0fe302c6d1be1c777cab0616e6302478251dfbf9055ad426f5d0def75c89/more_itertools-10.6.0-py3-none-any.whl
-        sha256: 6eb054cb4b6db1473f6e15fcc676a08e4732548acd47c708f0e179c2c7c01e89
+        url: https://files.pythonhosted.org/packages/2b/9f/7ba6f94fc1e9ac3d2b853fdff3035fb2fa5afbed898c4a72b8a020610594/more_itertools-10.7.0-py3-none-any.whl
+        sha256: d43980384673cb07d2f7d2d918c616b30c659c089ee23953f601d6609c67510e
 
   # keyring dependency
   - name: python3-jaraco.classes
@@ -244,20 +244,20 @@ modules:
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2025.1.31-py3-none-any.whl
+      - pip3 install certifi-2025.4.26-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/38/fc/bce832fd4fd99766c04d1ee0eead6b0ec6486fb100ae5e74c1d91292b982/certifi-2025.1.31-py3-none-any.whl
-        sha256: ca78db4565a652026a4db2bcdf68f2fb589ea80d0be70e03929ed730746b84fe
+        url: https://files.pythonhosted.org/packages/4a/7e/3db2bd1b1f9e95f7cddca6d6e75e2f2bd9f51b1246e546d88addca0106bd/certifi-2025.4.26-py3-none-any.whl
+        sha256: 30350364dfe371162649852c63336a15c70c6510c2ad5015b21c2345311805f3
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.26.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.28.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/23/32/0a30b4fafdb3d26d133f99bb566aaa6000004ee7f2c4b72aafea9237ab7e/sentry_sdk-2.26.1-py2.py3-none-any.whl
-        sha256: e99390e3f217d13ddcbaeaed08789f1ca614d663b345b9da42e35ad6b60d696a
+        url: https://files.pythonhosted.org/packages/9b/4e/b1575833094c088dfdef63fbca794518860fcbc8002aadf51ebe8b6a387f/sentry_sdk-2.28.0-py2.py3-none-any.whl
+        sha256: 51496e6cb3cb625b99c8e08907c67a9112360259b0ef08470e532c3ab184a232
 
   - name: python3-typing-extensions
     buildsystem: simple
@@ -274,17 +274,17 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/b0/9c/666d8c71b18d0189cf801c0e0b31c4bfc609ac823883286045b1f3ae8994/greenlet-3.2.0.tar.gz
-        sha256: 1d2d43bd711a43db8d9b9187500e6432ddb4fafe112d082ffabca8660a9e01a7
+        url: https://files.pythonhosted.org/packages/34/c1/a82edae11d46c0d83481aacaa1e578fea21d94a1ef400afd734d47ad95ad/greenlet-3.2.2.tar.gz
+        sha256: ad053d34421a2debba45aa3cc39acf454acbcd025b3fc1a9f8a0dee237abd485
 
   - name: python3-SQLAlchemy
     buildsystem: simple
     build-commands:
-      - pip3 install sqlalchemy-2.0.40-py3-none-any.whl
+      - pip3 install sqlalchemy-2.0.41-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/d1/7c/5fc8e802e7506fe8b55a03a2e1dab156eae205c91bee46305755e086d2e2/sqlalchemy-2.0.40-py3-none-any.whl
-        sha256: 32587e2e1e359276957e6fe5dad089758bc042a971a8a09ae8ecf7a8fe23d07a
+        url: https://files.pythonhosted.org/packages/1c/fc/9ba22f01b5cdacc8f5ed0d22304718d2c758fce3fd49a5372b886a86f37c/sqlalchemy-2.0.41-py3-none-any.whl
+        sha256: 57df5dc6fdb5ed1a88a1ed2195fd31927e705cad62dedd86b46972752a80f576
 
   - name: python3-emoji
     buildsystem: simple
@@ -319,20 +319,20 @@ modules:
   - name: python3-qrcode
     buildsystem: simple
     build-commands:
-      - pip3 install qrcode-8.1-py3-none-any.whl
+      - pip3 install qrcode-8.2-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/29/e6/273de1f5cda537b00bc2947082be747f1d76358db8b945f3a60837bcd0f6/qrcode-8.1-py3-none-any.whl
-        sha256: 9beba317d793ab8b3838c52af72e603b8ad2599c4e9bbd5c3da37c7dcc13c5cf
+        url: https://files.pythonhosted.org/packages/dd/b8/d2d6d731733f51684bbf76bf34dab3b70a9148e8f2cef2bb544fccec681a/qrcode-8.2-py3-none-any.whl
+        sha256: 16e64e0716c14960108e85d853062c9e8bba5ca8252c0b4d0231b9df4060ff4f
 
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.30.2-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.31.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/e5/a1/93c2acf4ade3c5b557d02d500b06798f4ed2c176fa03e3c34973ca92df7f/protobuf-6.30.2-py3-none-any.whl
-        sha256: ae86b030e69a98e08c77beab574cbcb9fff6d031d57209f574a5aea1445f4b51
+        url: https://files.pythonhosted.org/packages/ee/01/1ed1d482960a5718fd99c82f6d79120181947cfd4667ec3944d448ed44a3/protobuf-6.31.0-py3-none-any.whl
+        sha256: 6ac2e82556e822c17a8d23aa1190bbc1d06efb9c261981da95c71c9da09e9e23
 
   - name: python3-omemo-dr
     buildsystem: simple
