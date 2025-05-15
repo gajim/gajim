@@ -1,3 +1,37 @@
+Gajim 2.2.0 (15 May 2025)
+
+  New
+
+  * Add MUC blocking (#10178)
+  * Add retractions XEP-0424
+  * Add XEP-0486 (#12273)
+
+  Improvements
+
+  * Group chat details: Add label clarifying public information
+  * Groupchat details: Add sidebar row header for administration
+  * Account sidebar: Indicate connectivity issues (#12262)
+  * Reactions: Consider reations on all revisions of a message
+  * Moderate/Retract all revisions of a message
+  * Improve handling of retraction/moderation for corrections
+
+  Change
+
+  * Raise nbxmpp version
+
+  Bug Fixes
+
+  * StartChat: On disco error show always an error text
+  * DisplayMarkers: Send displayed only if contact is subscribed
+  * Search: Fix searching for the same text after switching contacts (#12297)
+  * Preview: Fix error dialog for missing write access (#12294)
+  * HistoryExport: Don’t fail when exporting messages from the room itself
+  * VCardGrid: Fix wrapping long strings in labels
+  * Chat: Don’t fail in some cases to show correction/error tooltip
+  * Clipboard: Guard for errors and show error dialog
+  * GroupChat: Do not move chat text when participant menu opens
+  * MUC: Fix failed join after reconnect
+
 Gajim 2.1.1 (16 Apr 2025)
 
   Improvements
