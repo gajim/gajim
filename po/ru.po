@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
-"PO-Revision-Date: 2025-03-28 09:12+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"PO-Revision-Date: 2025-05-03 21:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
 ">\n"
@@ -918,12 +918,23 @@ msgstr "Блокировка контакта"
 msgid "Block Contact…"
 msgstr "Заблокировать контакт…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Участник"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Участники"
+
 msgid "Blocking List"
 msgstr "Чёрный список"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Список блокировки для %s"
+
+msgid "Block…"
+msgstr "Заблокировать…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1690,6 +1701,10 @@ msgstr ""
 "Внимание: Данное действие не может быть отменено!\n"
 "После выполнения очистки Gajim закроется."
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Удалить группу «%s»?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Удалить данный узел PEP?"
@@ -1714,6 +1729,19 @@ msgstr "Удалить Вашу историю этого чата?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Удалить группу «%s»?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+"Вы хотите удалить это сообщение?\n"
+"Пожалуйста, обратите внимание, что удаление сообщения не гарантирует, что "
+"ваш провайдер или устройство вашего собеседника удалят его."
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Удалить группу «%s»?"
 
 #, python-format
@@ -1760,9 +1788,6 @@ msgstr "Простая отправка изображений, видео и д
 
 msgid "Eating"
 msgstr "Принимаю пищу"
-
-msgid "Edit Name…"
-msgstr "Редактировать имя…"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1912,6 +1937,10 @@ msgstr "Ошибка загрузки аватара"
 #, python-format
 msgid "Error: %s"
 msgstr "Ошибка: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Сообщение об ошибке: %s"
 
 msgid "Even more features via plugins"
 msgstr "Ещё больше возможностей при использовании подключаемых модулей"
@@ -2375,6 +2404,10 @@ msgstr "Я хочу добавить вас в свой список конта�
 
 msgid "I would like to add you to my roster."
 msgstr "Я хочу добавить вас в свой список."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Согласно стандарту IEC, КиБ = 1024 байт, Кбайт = 1000 байт."
@@ -2867,6 +2900,9 @@ msgstr ""
 
 msgid "Messages are archived on the server"
 msgstr "Сообщения архивируются на сервере"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 msgid "Minimize"
 msgstr "Свернуть"
@@ -3380,6 +3416,10 @@ msgstr "Вставить как блок кода"
 msgid "Paste as Quote"
 msgstr "Вставить как цитату"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Не удалось изменить пароль"
+
 msgid "Path length constraint exceeded"
 msgstr "Превышено ограничение по длине пути"
 
@@ -3606,6 +3646,10 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Публичный ключ шифрования"
 
+#, fuzzy
+msgid "Public Information"
+msgstr "Данные открытого ключа"
+
 msgid "Public Key Information"
 msgstr "Данные открытого ключа"
 
@@ -3638,10 +3682,6 @@ msgstr "Цитировать следующее сообщение"
 
 msgid "Quote previous message"
 msgstr "Цитировать предыдущее сообщение"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "Цитировать…"
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -3922,6 +3962,14 @@ msgstr "Восстановить последнее состояние"
 msgid "Restore status and status message of your last session"
 msgstr "Восстановить статус и статусное сообщение последнего сеанса"
 
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Модерация сообщения"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Отзыв…"
+
 msgid "Revoke Member"
 msgstr "Отозвать участника"
 
@@ -4100,7 +4148,7 @@ msgid "Select a security label for your message…"
 msgstr "Выберите метку конфиденциальности для данного сообщения…"
 
 msgid "Select an activity to see details."
-msgstr ""
+msgstr "Выберите действие, чтобы просмотреть подробности."
 
 msgid "Select an emoji"
 msgstr "Выберите эмодзи"
@@ -4644,8 +4692,16 @@ msgstr "Перейти к предыдущему чату"
 msgid "Switch to the previous unread chat"
 msgstr "Перейти к предыдущему непрочитанному чату"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Синхронизировать историю чата"
+
 msgid "Sync Threshold"
 msgstr "Порог синхронизации"
+
+#, fuzzy
+msgid "Sync group chat blocklist with other devices"
+msgstr "Синхронизировать с другими устройствами присоединённые групповые чаты."
 
 msgid "Synchronize"
 msgstr "Синхронизировать"
@@ -4762,6 +4818,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Темы"
 
+msgid "There are connectivity issues"
+msgstr "Имеются проблемы с подключением"
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 "Имеются устройства, в отношении которых ещё не было принято решение о "
@@ -4876,6 +4935,10 @@ msgstr "Это сообщение модерировал%s."
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "Это сообщение модерировал%s."
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "Это сообщение модерировал%s."
 
 #, python-format
@@ -5068,6 +5131,13 @@ msgstr "Не удалось сохранить профиль"
 
 msgid "Unable to verify the first certificate"
 msgstr "Не удалось подтвердить первый сертификат"
+
+msgid "Unblock"
+msgstr "Разблокировать"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Участник"
 
 msgid "Unencrypted"
 msgstr "Не зашифровано"
@@ -5810,6 +5880,9 @@ msgstr "_Запрос"
 msgid "_Reset Value"
 msgstr "_Сбросить значение"
 
+msgid "_Retract"
+msgstr "_Отозвать"
+
 msgid "_Save"
 msgstr "_Сохранить"
 
@@ -5846,6 +5919,10 @@ msgstr "_Показать панель меню"
 
 msgid "_Type"
 msgstr "_Тип"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "Разблокировать"
 
 msgid "_Unregister account from service"
 msgstr "_Отменить регистрацию учётной записи на этот сервис"
@@ -6384,9 +6461,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Autojoin"
 #~ msgstr "Автоприсоединение"
 
-#~ msgid "Block…"
-#~ msgstr "Заблокировать…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Закладки"
 
@@ -6484,6 +6558,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Перетащите файлы или контакты"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Редактировать имя…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Редактировать профиль…"
 
@@ -6504,10 +6581,6 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Включает libappindicator — альтернативную библиотеку отображения значков "
 #~ "в системном лотке"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Сообщение об ошибке: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Ошибка!"
@@ -6713,6 +6786,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Progress"
 #~ msgstr "Прогресс"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "Цитировать…"
+
 #~ msgid "Re-Login"
 #~ msgstr "Переавторизация"
 
@@ -6767,10 +6844,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Требуется: libappindicator3"
-
-#~ msgctxt "Message row action"
-#~ msgid "Retract…"
-#~ msgstr "Отзыв…"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -6911,9 +6984,6 @@ msgstr "…или перетащите его сюда"
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "Перенаправление портов UPnP-IGD"
 
-#~ msgid "Unblock"
-#~ msgstr "Разблокировать"
-
 #~ msgid "Unread Messages"
 #~ msgstr "Непрочитанные сообщения"
 
@@ -7003,9 +7073,6 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "_Open Folder"
 #~ msgstr "_Открыть папку"
-
-#~ msgid "_Retract"
-#~ msgstr "_Отозвать"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Показывать уведомление при успешной передаче файла"

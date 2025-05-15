@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -994,12 +994,24 @@ msgid "Block Contact…"
 msgstr "Darempredoù"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Perzhiad-ez"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Perzhidi"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Roll argas"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr ""
+
+#, fuzzy
+msgid "Block…"
+msgstr "Darempredoù"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1855,6 +1867,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
@@ -1881,6 +1897,16 @@ msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Ha fellout a ra deoc'h da vat diverkañ ar gemennadenn ziuzet?"
 
 #, python-format
@@ -1931,10 +1957,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "O tebriñ"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Anv:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2096,6 +2118,10 @@ msgstr "fazi en ur gas %s ( %s )"
 
 #, fuzzy, python-format
 msgid "Error: %s"
+msgstr "Fazi en ur lenn ar restr:"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr "Fazi en ur lenn ar restr:"
 
 msgid "Even more features via plugins"
@@ -2615,6 +2641,10 @@ msgstr "Me blijfe din ouzhpennañ ac'hanoc'h em roll-darempredoù."
 
 msgid "I would like to add you to my roster."
 msgstr "Laouen 'vefen d'ho ouzhpennañ em roll-darempredoù."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Hervez ar standard IEC, KiB = 1024 byte, KB = 1000 byte."
@@ -3148,6 +3178,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "N'oc'h ket luget d'ar servijer"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3721,6 +3754,10 @@ msgstr "Kod postel:"
 msgid "Paste as Quote"
 msgstr "Pegañ ar skeudenn"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Ger-kuzh ret"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3973,6 +4010,10 @@ msgid "Public Encryption Key"
 msgstr "War enaou emañ ar sifrañ"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Titouroù"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Titouroù"
 
@@ -4011,10 +4052,6 @@ msgstr "Kas ur gemennadenn"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Gajim - %d gemennadenn nevez"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4329,6 +4366,15 @@ msgstr "Stad diwezhañ: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Titour-stad"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Darempredoù"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5140,7 +5186,14 @@ msgstr "Kregiñ da flapiñ"
 msgid "Switch to the previous unread chat"
 msgstr "Kregiñ da flapiñ"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Diskouez an darempredoù _ezlinenn"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5267,6 +5320,9 @@ msgstr "Gwiskadur"
 msgid "Themes"
 msgstr "Gwiskadur"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5383,6 +5439,10 @@ msgstr "[Sifret eo ar gemennadenn-mañ]"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "[Sifret eo ar gemennadenn-mañ]"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5579,6 +5639,13 @@ msgstr "Dibosupl eo kargañ ar skeudenn"
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Perzhiad-ez"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6410,6 +6477,9 @@ msgstr "Goulenn treuzkas"
 msgid "_Reset Value"
 msgstr "_Distreiñ gant al livioù dre-ziouer"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Enrollet e-barzh: %s"
@@ -6452,6 +6522,9 @@ msgstr "Dorioù"
 #, fuzzy
 msgid "_Type"
 msgstr "Doare:"
+
+msgid "_Unblock"
+msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7061,16 +7134,16 @@ msgstr ""
 #~ msgstr "Kas ur restr d'un darempred"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Anv:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Kas ur restr"
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Kemmañ ar _strolladoù"
-
-#, fuzzy, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Fazi en ur lenn ar restr:"
 
 #, fuzzy
 #~ msgid "Error!"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -1002,12 +1002,24 @@ msgid "Block Contact…"
 msgstr "Επαφές"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Συμμετέχων"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Συμμετέχοντες"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Λίστα Ban"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Σύνταξη συντόμευσης για :"
+
+#, fuzzy
+msgid "Block…"
+msgstr "Επαφές"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1868,6 +1880,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
@@ -1894,6 +1910,16 @@ msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγ�
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Θέλετε σίγουρα να διαγράψετε το επιλεγμένο μήνυμα;"
 
 #, python-format
@@ -1944,10 +1970,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Τρώω"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Όνομα:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2111,6 +2133,10 @@ msgstr "Σφάλμα κατά την προσθήκη της υπηρεσίας.
 
 #, fuzzy, python-format
 msgid "Error: %s"
+msgstr "Μήνυμα σφάλματος: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr "Μήνυμα σφάλματος: %s"
 
 msgid "Even more features via plugins"
@@ -2630,6 +2656,10 @@ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφ�
 
 msgid "I would like to add you to my roster."
 msgstr "Επιθυμώ να σε προσθέσω στη λίστα επαφών μου."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Το IEC standard υπαγορεύει ότι ΚιΒ = 1024 bytes, KB = 1000 bytes."
@@ -3169,6 +3199,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Δεν είστε συνδεδεμένος στο διακομιστή"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3740,6 +3773,10 @@ msgstr "Τ.Κ.:"
 msgid "Paste as Quote"
 msgstr "Επιλογή εικόνας"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Απαιτείται κωδικός"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3994,6 +4031,10 @@ msgid "Public Encryption Key"
 msgstr "Ενεργοποιήθηκε η κρυπτογράφηση"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Πληροφορίες επαφής"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Πληροφορίες επαφής"
 
@@ -4032,10 +4073,6 @@ msgstr "Αποστολή μηνύματος"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "%d μη αναγνωσμένο μήνυμα"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4353,6 +4390,15 @@ msgstr "Τελευταία κατάσταση: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Μήνυμα κατάστασης"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "_Μετονομασία αρχείων"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5168,7 +5214,14 @@ msgstr "Έναρξη κουβέντας"
 msgid "Switch to the previous unread chat"
 msgstr "Έναρξη κουβέντας"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Εμφάνιση _αποσυνδεδεμένων χρηστών"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5295,6 +5348,9 @@ msgstr "Θέμα"
 msgid "Themes"
 msgstr "Θέμα"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5411,6 +5467,10 @@ msgstr "Η κατάσταση άλλαξε."
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Η κατάσταση άλλαξε."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5608,6 +5668,13 @@ msgstr "Δεν ήταν δυνατό το φόρτωμα της εικόνας"
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Συμμετέχων"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6448,6 +6515,9 @@ msgstr "_Φωνή"
 msgid "_Reset Value"
 msgstr "Επανα_φορά προεπιλεγμένων χρωμάτων"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Έχει"
@@ -6490,6 +6560,9 @@ msgstr "Προβολή ιδιοτήτων εκτυπωτή"
 #, fuzzy
 msgid "_Type"
 msgstr "Τύπος:"
+
+msgid "_Unblock"
+msgstr ""
 
 #, fuzzy
 msgid "_Unregister account from service"
@@ -7125,16 +7198,16 @@ msgstr ""
 #~ msgstr "Αποστολή αρχείου σε μία επαφή"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Όνομα:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Όνομα προφίλ:"
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Επεξεργασία _ομάδων"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Μήνυμα σφάλματος: %s"
 
 #, fuzzy
 #~ msgid "Error!"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -955,12 +955,24 @@ msgstr "Contactes blocats"
 msgid "Block Contact…"
 msgstr "Contactes blocats"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Accions Ocupant"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Accions Ocupant"
+
 msgid "Blocking List"
 msgstr ""
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr ""
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Bloca"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1787,6 +1799,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, python-format
+msgid "Do you want to block %(name)s?"
+msgstr ""
+
 msgid "Do you want to delete this PEP node?"
 msgstr ""
 
@@ -1807,6 +1823,16 @@ msgid "Do you want to remove this chat including its chat history?"
 msgstr ""
 
 msgid "Do you want to remove this proxy?"
+msgstr ""
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr ""
 
 #, python-format
@@ -1854,10 +1880,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr ""
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Nom:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2006,6 +2028,10 @@ msgstr ""
 
 #, python-format
 msgid "Error: %s"
+msgstr ""
+
+#, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr ""
 
 msgid "Even more features via plugins"
@@ -2512,6 +2538,9 @@ msgid "I would like to add you to my contact list."
 msgstr "Voldria afegir-te a la meva llista de contactes."
 
 msgid "I would like to add you to my roster."
+msgstr ""
+
+msgid "ID"
 msgstr ""
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3022,6 +3051,9 @@ msgid ""
 msgstr ""
 
 msgid "Messages are archived on the server"
+msgstr ""
+
+msgid "Messages from this users are blocked"
 msgstr ""
 
 #, fuzzy
@@ -3579,6 +3611,10 @@ msgstr ""
 msgid "Paste as Quote"
 msgstr ""
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Contrasenya:"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3823,6 +3859,10 @@ msgid "Public Encryption Key"
 msgstr "Connexió"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Informació personal"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Informació personal"
 
@@ -3860,10 +3900,6 @@ msgstr "Missatges preconfigurats:"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "missatge"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 msgid "Re-Login Now?"
 msgstr ""
@@ -4172,6 +4208,15 @@ msgstr ""
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "_Canvia Missatge d'Estat"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Afegeix un contacte nou"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4952,7 +4997,14 @@ msgstr "Convida _Contactes"
 msgid "Switch to the previous unread chat"
 msgstr ""
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Sincronitza els contactes"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5074,6 +5126,9 @@ msgstr "Personalització Temes Gajim"
 msgid "Themes"
 msgstr "Personalització Temes Gajim"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5179,6 +5234,10 @@ msgstr ""
 
 #, python-format
 msgid "This message has been moderated by %s"
+msgstr ""
+
+#, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr ""
 
 #, python-format
@@ -5367,6 +5426,14 @@ msgstr ""
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_Desbloquejar"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Accions Ocupant"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6166,6 +6233,9 @@ msgstr "Sol.licita Veu"
 msgid "_Reset Value"
 msgstr "_Reinicia a configuració per defecte"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Desa la contrasenya"
@@ -6208,6 +6278,10 @@ msgstr "Mostra Transports"
 #, fuzzy
 msgid "_Type"
 msgstr "_Tipus:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_Desbloquejar"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6603,10 +6677,6 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Entra automàticament"
 
-#, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Bloca"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Adreces d'interès"
 
@@ -6653,6 +6723,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Drop files or contacts"
 #~ msgstr "Mostra els contactes desconnectats"
+
+#, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Nom:"
 
 #, fuzzy
 #~ msgid "Edit Profile…"
@@ -6871,10 +6945,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "_Tipus:"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_Desbloquejar"
 
 #, fuzzy
 #~ msgid "Unread Messages"

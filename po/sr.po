@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1008,12 +1008,24 @@ msgid "Block Contact…"
 msgstr "Блокирани контакти"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Учесник"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Учесници"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Листа забрана"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Листа приватности за %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Блокирај"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1877,6 +1889,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Да ли заиста желите да их све затворите?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Да ли заиста желите да избришете означену поруку?"
@@ -1903,6 +1919,16 @@ msgstr "Да ли заиста желите да их све затворите?
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Да ли заиста желите да их све затворите?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Да ли заиста желите да их све затворите?"
 
 #, python-format
@@ -1953,10 +1979,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Једем"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Име:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2123,6 +2145,10 @@ msgstr "Грешка приликом додавања сервиса. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "Грешка: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Порука грешке: %s"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -2638,6 +2664,10 @@ msgstr "Желио бих да Вас додам на листу мојих ко
 
 msgid "I would like to add you to my roster."
 msgstr "Желео бих да те додам на моју листу контаката."
+
+#, fuzzy
+msgid "ID"
+msgstr "ЏИД"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC стандард дефинише КiБ = 1024 бајтова, КБ = 1000 бајтова"
@@ -3178,6 +3208,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Сесија НЕЋЕ бити памћена"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3748,6 +3781,10 @@ msgstr "<b>Поштански број:</b>"
 msgid "Paste as Quote"
 msgstr "Одаберите слику"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Лозинка захтевана"
+
 msgid "Path length constraint exceeded"
 msgstr "Прекорачена дужина путање"
 
@@ -4002,6 +4039,10 @@ msgid "Public Encryption Key"
 msgstr "Захтев за претплатом"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Информације"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Информације"
 
@@ -4039,10 +4080,6 @@ msgstr "Пошаљи поруку"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Проследи непрочитане поруке"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4361,6 +4398,15 @@ msgstr "Последњи статус: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Статусна порука"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Преименуј контакт"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5180,7 +5226,14 @@ msgstr "Започни разговор"
 msgid "Switch to the previous unread chat"
 msgstr "Започни разговор"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Синхронизуј"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5309,6 +5362,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Тема"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5427,6 +5483,10 @@ msgstr "Сертификат повучен"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Сертификат повучен"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5625,6 +5685,14 @@ msgstr "Не могу учитати слику"
 
 msgid "Unable to verify the first certificate"
 msgstr "У немогућности да верификујем први сертификат"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_Одблокирај"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Учесник"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6461,6 +6529,9 @@ msgstr "_Глас"
 msgid "_Reset Value"
 msgstr "_Поново учитај подразумеване боје"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Имам "
@@ -6503,6 +6574,10 @@ msgstr "Прикажи транс_порте"
 #, fuzzy
 msgid "_Type"
 msgstr "Врс_та:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_Одблокирај"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7027,10 +7102,6 @@ msgstr ""
 #~ msgstr "Аутоматско повезивање"
 
 #, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Блокирај"
-
-#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Маркирај ову со_бу"
 
@@ -7138,16 +7209,16 @@ msgstr ""
 #~ msgstr "Шаље датотеку контакту"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Име:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Слање профила..."
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Измени групе"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Порука грешке: %s"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7495,10 +7566,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Тип"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_Одблокирај"
 
 #, fuzzy
 #~ msgid "Unread Messages"

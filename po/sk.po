@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -1004,12 +1004,24 @@ msgid "Block Contact…"
 msgstr "Blokované kontakty"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Účastník"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Účastníci"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Čierna listina"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Súkromný zoznam pre %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Blokovať"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1872,6 +1884,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Naozaj chcete zavrieť všetky?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Skutočne si želáte zmazať vybraných správ?"
@@ -1898,6 +1914,16 @@ msgstr "Naozaj chcete zavrieť všetky?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Naozaj chcete zavrieť všetky?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Naozaj chcete zavrieť všetky?"
 
 #, python-format
@@ -1948,10 +1974,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Jem"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Prvé meno:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2116,6 +2138,10 @@ msgstr "Chyba pri pridávaní služby. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "Chyba: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Chybová správa: %s"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -2631,6 +2657,10 @@ msgstr "Chcem si vás pridať do môjho zoznamu kontaktov."
 
 msgid "I would like to add you to my roster."
 msgstr "Chcem si vás pridať do môjho zoznamu."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC štandard znamená KiB = 1024 bajtov, KB = 1000 bajtov."
@@ -3168,6 +3198,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Relácia NEBUDE zaznamenaná"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3737,6 +3770,10 @@ msgstr "<b>PSČ:</b>"
 msgid "Paste as Quote"
 msgstr "Vybrať obrázok"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Heslo je požadované"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3991,6 +4028,10 @@ msgid "Public Encryption Key"
 msgstr "E2E šifrovanie povolené"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "_Informácie"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "_Informácie"
 
@@ -4029,10 +4070,6 @@ msgstr "Poslať správu"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Preposlať neprečítané správy"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4348,6 +4385,15 @@ msgstr "Posledný stav: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Správa o stave"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Premenovať kontakt"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5168,7 +5214,14 @@ msgstr "Začať rozhovor"
 msgid "Switch to the previous unread chat"
 msgstr "Začať rozhovor"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Synchronizovať"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5297,6 +5350,9 @@ msgstr "Téma"
 msgid "Themes"
 msgstr "Téma"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5416,6 +5472,10 @@ msgstr "[Táto správa je šifrovaná]"
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "[Táto správa je šifrovaná]"
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "[Táto správa je šifrovaná]"
 
 #, python-format
@@ -5615,6 +5675,14 @@ msgstr "Nie je možné načítať obrázok"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nepodarilo sa overiť prvý certifikát"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_Odblokovať"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Účastník"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6450,6 +6518,9 @@ msgstr "_Hlas"
 msgid "_Reset Value"
 msgstr "Náv_rat k pôvodnému nastaveniu farieb"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Má"
@@ -6492,6 +6563,10 @@ msgstr "Zobraziť trans_porty"
 #, fuzzy
 msgid "_Type"
 msgstr "_Typ:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_Odblokovať"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7010,10 +7085,6 @@ msgstr ""
 #~ msgstr "Automaticky pripojiť"
 
 #, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Blokovať"
-
-#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "Zálož_ky"
 
@@ -7121,16 +7192,16 @@ msgstr ""
 #~ msgstr "Poslať súbor kontaktu"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Prvé meno:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Odosielanie profilu..."
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Upraviť _skupiny"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Chybová správa: %s"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7476,10 +7547,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Typ"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_Odblokovať"
 
 #, fuzzy
 #~ msgid "Unread Messages"

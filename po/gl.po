@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -1005,12 +1005,24 @@ msgid "Block Contact…"
 msgstr "Contactos"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Participante"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Participantes"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Listaxe de expulsión"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Listaxe de privacidade para %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "Contactos"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1870,6 +1882,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
@@ -1896,6 +1912,16 @@ msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Está seguro de que quere eliminar a mensaxe que seleccionou?"
 
 #, python-format
@@ -1946,10 +1972,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "A comer"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Nome:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2112,6 +2134,10 @@ msgstr "Erro ao engadir o servizo. %s"
 
 #, fuzzy, python-format
 msgid "Error: %s"
+msgstr "Mensaxe de erro: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr "Mensaxe de erro: %s"
 
 msgid "Even more features via plugins"
@@ -2630,6 +2656,10 @@ msgstr "Gustaríame engadilo á miña lista de contactos."
 
 msgid "I would like to add you to my roster."
 msgstr "Gustaríame engadilo aos meus contactos."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Segundo o estándar IEC, KiB = 1024 bytes, KB = 1000 bytes."
@@ -3173,6 +3203,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Non está conectado ao servidor"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3745,6 +3778,10 @@ msgstr "Código postal:"
 msgid "Paste as Quote"
 msgstr "Elixir unha imaxe"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "É necesario o contrasinal"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3997,6 +4034,10 @@ msgid "Public Encryption Key"
 msgstr "Cifrado activado"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Información"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Información"
 
@@ -4035,10 +4076,6 @@ msgstr "Enviar a mensaxe"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "%d mensaxe sen ler"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4354,6 +4391,15 @@ msgstr "Último estado: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Mensaxe de estado"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Renomear o contacto"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5174,7 +5220,14 @@ msgstr "Iniciar a charla"
 msgid "Switch to the previous unread chat"
 msgstr "Iniciar a charla"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Amosar os contactos desconectados"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5301,6 +5354,9 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Tema"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5417,6 +5473,10 @@ msgstr "[Esta mensaxe está cifrada]"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "[Esta mensaxe está cifrada]"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5616,6 +5676,13 @@ msgstr "Non foi posíbel cargar a imaxe"
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Participante"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6449,6 +6516,9 @@ msgstr "_Voz"
 msgid "_Reset Value"
 msgstr "_Restabelecer as cores predeterminadas"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Ten "
@@ -6491,6 +6561,9 @@ msgstr "Amosar os trans_portes"
 #, fuzzy
 msgid "_Type"
 msgstr "Tipo:"
+
+msgid "_Unblock"
+msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7130,16 +7203,16 @@ msgstr ""
 #~ msgstr "Enviarlle un ficheiro a un contacto"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Nome:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "A enviar o perfil..."
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Editar os grupos"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Mensaxe de erro: %s"
 
 #, fuzzy
 #~ msgid "Error!"

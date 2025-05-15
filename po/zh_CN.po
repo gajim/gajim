@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
-"PO-Revision-Date: 2025-04-14 05:12+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"PO-Revision-Date: 2025-05-15 04:12+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -48,8 +48,8 @@ msgid ""
 "%(count)s messages from %(participant)s will be moderated.\n"
 "Why do you want to moderate these messages?"
 msgstr ""
-"将会撤回 %(participant)s 的 %(count)s 条消息。\n"
-"为什么要撤回这些消息？"
+"将会审核撤回 %(participant)s 的 %(count)s 条消息。\n"
+"为什么要审核撤回这些消息？"
 
 #, python-format
 msgid "%(days)s days, %(hours)s hours"
@@ -888,12 +888,21 @@ msgstr "屏蔽联系人？"
 msgid "Block Contact…"
 msgstr "屏蔽联系人…"
 
+msgid "Block Participant?"
+msgstr "屏蔽参与者？"
+
+msgid "Blocked Participants"
+msgstr "已屏蔽参与者"
+
 msgid "Blocking List"
 msgstr "屏蔽列表"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "%s 的屏蔽列表"
+
+msgid "Block…"
+msgstr "屏蔽…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1629,6 +1638,10 @@ msgstr ""
 "警告：此操作无法撤销！\n"
 "Gajim 之后会退出。"
 
+#, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "是否要屏蔽 %(name)s？"
+
 msgid "Do you want to delete this PEP node?"
 msgstr "是否要删除此 PEP 节点？"
 
@@ -1650,6 +1663,18 @@ msgstr "是否要移除此聊天及其聊天记录？"
 
 msgid "Do you want to remove this proxy?"
 msgstr "是否要移除此代理？"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+"是否要撤回此消息？\n"
+"请注意，撤回消息并不保证您的提供者或联系人的设备会将其移除。"
+
+#, python-format
+msgid "Do you want to unblock %(name)s?"
+msgstr "是否要取消屏蔽 %(name)s？"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -1693,9 +1718,6 @@ msgstr "轻松向朋友和群组发送图片、视频或其他文件"
 
 msgid "Eating"
 msgstr "用餐中"
-
-msgid "Edit Name…"
-msgstr "编辑名称…"
 
 msgid "Edit display name…"
 msgstr "编辑显示名称…"
@@ -1837,6 +1859,10 @@ msgstr "上传头像时出错"
 #, python-format
 msgid "Error: %s"
 msgstr "错误：%s"
+
+#, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "错误：%s（MIME 类型：%s）"
 
 msgid "Even more features via plugins"
 msgstr "通过插件实现更多功能"
@@ -2282,6 +2308,9 @@ msgstr "我想将您添加到我的联系人列表。"
 msgid "I would like to add you to my roster."
 msgstr "我想将您添加到我的联系人列表。"
 
+msgid "ID"
+msgstr "ID"
+
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 标准规定 KiB 表示 1024 字节，KB 表示 1000 字节。"
 
@@ -2489,7 +2518,7 @@ msgid "I’m working."
 msgstr "我正在工作。"
 
 msgid "JID"
-msgstr "XMPP 地址"
+msgstr "JID"
 
 msgid "JPEG files"
 msgstr "JPEG 文件"
@@ -2748,6 +2777,9 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "消息在服务器上归档"
 
+msgid "Messages from this users are blocked"
+msgstr "来自此用户的消息已屏蔽"
+
 msgid "Minimize"
 msgstr "最小化"
 
@@ -2764,14 +2796,14 @@ msgid "Missing necessary encryption plugin"
 msgstr "缺少必要的加密插件"
 
 msgid "Moderate Message?"
-msgstr "撤回消息？"
+msgstr "审核消息？"
 
 msgid "Moderate Messages?"
-msgstr "撤回消息？"
+msgstr "审核消息？"
 
 msgctxt "Message row action"
 msgid "Moderate all messages…"
-msgstr "撤回所有消息…"
+msgstr "审核所有消息…"
 
 msgctxt "Group chat feature"
 msgid "Moderated"
@@ -2779,7 +2811,7 @@ msgstr "有审核"
 
 msgctxt "Message row action"
 msgid "Moderate…"
-msgstr "撤回…"
+msgstr "审核…"
 
 msgid "Moderation"
 msgstr "审核权"
@@ -3241,6 +3273,9 @@ msgstr "粘贴为代码块"
 msgid "Paste as Quote"
 msgstr "粘贴为引用"
 
+msgid "Pasting Content Failed"
+msgstr "粘贴内容失败"
+
 msgid "Path length constraint exceeded"
 msgstr "超出路径长度限制"
 
@@ -3458,6 +3493,9 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "公钥"
 
+msgid "Public Information"
+msgstr "公开信息"
+
 msgid "Public Key Information"
 msgstr "公钥信息"
 
@@ -3489,10 +3527,6 @@ msgstr "引用下一条消息"
 
 msgid "Quote previous message"
 msgstr "引用上一条消息"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "引用…"
 
 msgid "Re-Login Now?"
 msgstr "现在重新登录？"
@@ -3751,6 +3785,13 @@ msgstr "恢复上次状态"
 
 msgid "Restore status and status message of your last session"
 msgstr "恢复您上次会话的状态和状态消息"
+
+msgid "Retract Message?"
+msgstr "撤回消息？"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "撤回…"
 
 msgid "Revoke Member"
 msgstr "撤销成员"
@@ -4442,8 +4483,14 @@ msgstr "切换至上个聊天"
 msgid "Switch to the previous unread chat"
 msgstr "切换至上个未读聊天"
 
+msgid "Sync Group Chat Blocklist"
+msgstr "同步群聊屏蔽列表"
+
 msgid "Sync Threshold"
 msgstr "同步阈值"
+
+msgid "Sync group chat blocklist with other devices"
+msgstr "与其他设备同步群聊屏蔽列表"
 
 msgid "Synchronize"
 msgstr "同步"
@@ -4552,6 +4599,9 @@ msgstr "主题"
 msgid "Themes"
 msgstr "主题"
 
+msgid "There are connectivity issues"
+msgstr "存在连接问题"
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "存在您尚未做出信任决定的设备。"
 
@@ -4653,11 +4703,15 @@ msgid "This is your XMPP address"
 msgstr "这是您的 XMPP 地址"
 
 msgid "This message has been moderated"
-msgstr "此消息已撤回"
+msgstr "此消息已审核撤回"
 
 #, python-format
 msgid "This message has been moderated by %s"
-msgstr "%s 撤回了此消息"
+msgstr "%s 审核撤回了此消息"
+
+#, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "此消息已于 {date} 撤回"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4841,8 +4895,14 @@ msgstr "无法保存个人资料"
 msgid "Unable to verify the first certificate"
 msgstr "无法验证首个证书"
 
+msgid "Unblock"
+msgstr "取消屏蔽"
+
+msgid "Unblock Participant?"
+msgstr "取消屏蔽参与者？"
+
 msgid "Unencrypted"
-msgstr "非加密的"
+msgstr "非加密"
 
 msgid "Uninstall Plugin"
 msgstr "卸载插件"
@@ -5093,7 +5153,7 @@ msgid "Which provider should I choose?"
 msgstr "我应该选择哪个提供者？"
 
 msgid "Why do you want to moderate this message?"
-msgstr "为什么要撤回此消息？"
+msgstr "为什么要审核撤回此消息？"
 
 msgid "Width of group chat roster in pixel"
 msgstr "群聊联系人列表的宽度（像素）"
@@ -5163,9 +5223,8 @@ msgid ""
 "insecure connection method. This means conversations will not be encrypted. "
 "Connecting PLAIN is strongly discouraged."
 msgstr ""
-"您即将通过非安全的连接方式连接到账号 "
-"%(account)s（%(server)s）。这意味着对话将不会加密。强烈不建议使用 PLAIN "
-"方式连接。"
+"您即将通过非安全的连接方式连接到账号 %(account)s（%(server)s）。这意味着对话"
+"将不会加密。强烈不建议使用 PLAIN 方式连接。"
 
 #, python-format
 msgid "You are about to remove %(name)s (%(jid)s) from your contact list."
@@ -5496,7 +5555,7 @@ msgid "_Minimize"
 msgstr "最小化(_M)"
 
 msgid "_Moderate"
-msgstr "撤回(_M)"
+msgstr "审核(_M)"
 
 msgid "_Name"
 msgstr "名称(_N)"
@@ -5556,6 +5615,9 @@ msgstr "请求(_R)"
 msgid "_Reset Value"
 msgstr "重置值(_R)"
 
+msgid "_Retract"
+msgstr "撤回(_R)"
+
 msgid "_Save"
 msgstr "保存(_S)"
 
@@ -5591,6 +5653,9 @@ msgstr "切换菜单栏(_T)"
 
 msgid "_Type"
 msgstr "类型(_T)"
+
+msgid "_Unblock"
+msgstr "取消屏蔽(_U)"
 
 msgid "_Unregister account from service"
 msgstr "从服务中注销账号(_U)"
@@ -6141,9 +6206,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Autojoin"
 #~ msgstr "自动加入"
 
-#~ msgid "Block…"
-#~ msgstr "屏蔽…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "书签"
 
@@ -6241,6 +6303,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Drop files or contacts"
 #~ msgstr "拖放文件或联系人"
 
+#~ msgid "Edit Name…"
+#~ msgstr "编辑名称…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "编辑简介…"
 
@@ -6259,10 +6324,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Enables libappindicator, an alternative tray icon provider"
 #~ msgstr "启用 libappindicator，托盘图标替代提供方案"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "错误消息：%s"
 
 #~ msgid "Error while merging recordings, please try again."
 #~ msgstr "合并录音时出错，请重试。"
@@ -6465,6 +6526,10 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Progress"
 #~ msgstr "进度"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "引用…"
+
 #~ msgid "Re-Login"
 #~ msgstr "重新登录"
 
@@ -6517,10 +6582,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "需要：libappindicator3"
-
-#~ msgctxt "Message row action"
-#~ msgid "Retract…"
-#~ msgstr "撤回…"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -6657,9 +6718,6 @@ msgstr "…或将其拖放到此处"
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "UPnP-IGD 端口转发"
 
-#~ msgid "Unblock"
-#~ msgstr "取消屏蔽"
-
 #~ msgid "Unread Messages"
 #~ msgstr "未读消息"
 
@@ -6746,9 +6804,6 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "_Open Folder"
 #~ msgstr "打开文件夹(_O)"
-
-#~ msgid "_Retract"
-#~ msgstr "撤回(_R)"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "文件传输完成时显示通知(_S)"

@@ -3,13 +3,14 @@
 #
 # Stian B. Barmen <stian@jabber.no>, 2005.
 # Daniel Brötzmann <mailtrash@posteo.de>, 2024.
+# lovetox <philipp@hoerist.com>, 2025.
 msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
-"PO-Revision-Date: 2024-11-19 21:11+0000\n"
-"Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"PO-Revision-Date: 2025-04-18 08:12+0000\n"
+"Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
 "master/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -994,12 +995,24 @@ msgid "Block Contact…"
 msgstr "Blokkerte kontakter"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Deltaker"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Deltakere"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Liste over bannlyste"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Personvernsliste for %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Blokker"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1847,6 +1860,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Ønsker du å lukke alle sammen?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Ønsker du å slette valgt melding?"
@@ -1873,6 +1890,16 @@ msgstr "Ønsker du å lukke alle sammen?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Ønsker du å lukke alle sammen?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Ønsker du å lukke alle sammen?"
 
 #, python-format
@@ -1923,10 +1950,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Spiser"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Fornavn"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2089,6 +2112,10 @@ msgstr "Feil ved tilføying av transportkontakt"
 #, python-format
 msgid "Error: %s"
 msgstr "Feil: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Feilmelding: %s"
 
 #, fuzzy
 msgid "Even more features via plugins"
@@ -2608,6 +2635,10 @@ msgstr "Jeg vil legge deg til i kontaktlisten min."
 
 msgid "I would like to add you to my roster."
 msgstr "Jeg vil legge deg til min kontaktliste."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC-standarden tilsier at KiB = 1024 bytes, KB = 1000 bytes."
@@ -3153,6 +3184,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Denne økta VIL bli arkivert på tjeneren"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3716,6 +3750,10 @@ msgstr "postnummer"
 msgid "Paste as Quote"
 msgstr "Velg bilde"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Passord påkrevd"
+
 msgid "Path length constraint exceeded"
 msgstr "Stilengde-begrensning overskredet"
 
@@ -3964,6 +4002,10 @@ msgid "Public Encryption Key"
 msgstr "Krypteringsfeil"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Informasjon"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Informasjon"
 
@@ -4001,10 +4043,6 @@ msgstr "Send meldingen"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Videresend uleste meldinger"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4323,6 +4361,15 @@ msgstr "Siste tilstand"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Statusmelding"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Gi kontakt nytt navn"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5135,7 +5182,14 @@ msgstr "Bytt til forrige fane"
 msgid "Switch to the previous unread chat"
 msgstr "Bytt til forrige uleste fane"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Synkroniser historikk"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5263,6 +5317,9 @@ msgstr "Drakt"
 msgid "Themes"
 msgstr "Drakt"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5382,6 +5439,10 @@ msgstr "[Denne meldingen er kryptert]"
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "[Denne meldingen er kryptert]"
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "[Denne meldingen er kryptert]"
 
 #, python-format
@@ -5590,6 +5651,14 @@ msgstr "Kunne ikke åpne fil"
 
 msgid "Unable to verify the first certificate"
 msgstr "Ute av stand til å bekrefte det første sertifikatet"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_Frigi"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Deltaker"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6428,6 +6497,9 @@ msgstr "_Forespør stemmegratiale"
 msgid "_Reset Value"
 msgstr "_Tilbakestill til forvalg"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Lagre _som"
@@ -6471,6 +6543,10 @@ msgstr "Vis transporter"
 #, fuzzy
 msgid "_Type"
 msgstr "_Skriv:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_Frigi"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6575,8 +6651,7 @@ msgid "help"
 msgstr ""
 
 msgid "is composing a message…"
-msgstr ""
-"tilkjennegir blodets hvisken og benpipernes bøn fra det ubevisste sjeleliv…"
+msgstr "skriver en melding…"
 
 msgid "is doing something else"
 msgstr "gjør noe annet"
@@ -6989,10 +7064,6 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Bli med automatisk"
 
-#, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Blokker"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Bokmerker"
 
@@ -7096,6 +7167,10 @@ msgstr ""
 #~ msgstr "Sender fil til en kontakt"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Fornavn"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Sender profil…"
 
@@ -7116,10 +7191,6 @@ msgstr ""
 #~ "Enables Gajim to request your router to forward ports for file transfers"
 #~ msgstr ""
 #~ "Evnen til å forespørre din ruter etter åpning av port for filoverføring."
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Feilmelding: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Feil!"
@@ -7511,10 +7582,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Skriv"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_Frigi"
 
 #, fuzzy
 #~ msgid "Unread Messages"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -913,12 +913,23 @@ msgstr "Blokovat kontakt"
 msgid "Block Contact…"
 msgstr "Blokovat kontakt…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Účastník"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Účastníci"
+
 msgid "Blocking List"
 msgstr "Seznam blokovaných kontaktů"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Seznam blokovaných kontaktů pro %s"
+
+msgid "Block…"
+msgstr "Blokovat…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1683,6 +1694,10 @@ msgstr ""
 "Varování: Tuto akci nelze vrátit zpět!\n"
 "Gajim bude poté ukončen."
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Opravdu si přejete odebrat \"%s\"?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Opravdu chcete smazat tento uzel PEP?"
@@ -1707,6 +1722,16 @@ msgstr "Opravdu si přejete smazat historii této konverzace?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Opravdu si přejete odebrat \"%s\"?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Opravdu si přejete odebrat \"%s\"?"
 
 #, python-format
@@ -1751,9 +1776,6 @@ msgstr "Snadno posílejte obrázky, videa nebo jiné soubory přátelům a skupi
 
 msgid "Eating"
 msgstr "Jím"
-
-msgid "Edit Name…"
-msgstr "Upravit jméno…"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1901,6 +1923,10 @@ msgstr "Chyba při nahrávání profilového obrázku"
 #, python-format
 msgid "Error: %s"
 msgstr "Chyba: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Chybová zpráva: %s"
 
 msgid "Even more features via plugins"
 msgstr "Více možností skrze zásuvné moduly"
@@ -2363,6 +2389,10 @@ msgstr "Chtěl(a) bych si vás přidat do mého Seznamu."
 
 msgid "I would like to add you to my roster."
 msgstr "Rád(a) bych si tě přidal(a) do seznamu."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC standard říká KiB = 1024 bytů, KB = 1000 bytů."
@@ -2856,6 +2886,9 @@ msgstr ""
 
 msgid "Messages are archived on the server"
 msgstr "Zprávy jsou archivovány na serveru"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 msgid "Minimize"
 msgstr "Minimalizovat"
@@ -3373,6 +3406,10 @@ msgstr "Vložit jako útržek kódu"
 msgid "Paste as Quote"
 msgstr "Vložit jako citát"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Změna hesla selhala"
+
 msgid "Path length constraint exceeded"
 msgstr "Překročena delká cesty"
 
@@ -3598,6 +3635,10 @@ msgid "Public Encryption Key"
 msgstr "Veřejný šifrovací klíč"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Informace"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Informace"
 
@@ -3633,10 +3674,6 @@ msgstr "Odeslat zprávu"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Formátovat zprávu"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "Citovat…"
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -3919,6 +3956,14 @@ msgstr "Obnovit poslední stav"
 
 msgid "Restore status and status message of your last session"
 msgstr "Obnovit stav a zprávu o stavu Vaší poslední relace"
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Odvolat zprávu"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Odvolat…"
 
 msgid "Revoke Member"
 msgstr "Odebrat člena"
@@ -4635,8 +4680,15 @@ msgstr "Přepnout na předchozí konverzaci"
 msgid "Switch to the previous unread chat"
 msgstr "Přepnout na předchozí nepřečtenou konverzaci"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Synchronizovat historii konverzace"
+
 msgid "Sync Threshold"
 msgstr "Práh synchronizace"
+
+msgid "Sync group chat blocklist with other devices"
+msgstr ""
 
 msgid "Synchronize"
 msgstr "Synchronizovat"
@@ -4753,6 +4805,9 @@ msgstr "Motiv vzhledu"
 msgid "Themes"
 msgstr "Motivy vzhledu"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -4865,6 +4920,10 @@ msgstr "Tato zpráva byla stažena uživatelem %s."
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "Tato zpráva byla stažena uživatelem %s."
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "Tato zpráva byla stažena uživatelem %s."
 
 #, python-format
@@ -5056,6 +5115,13 @@ msgstr "Nezda"
 
 msgid "Unable to verify the first certificate"
 msgstr "Nepodařilo se ověřit první certifikát"
+
+msgid "Unblock"
+msgstr "Odblokovat"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Účastník"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -5802,6 +5868,9 @@ msgstr "Žádost"
 msgid "_Reset Value"
 msgstr "Obnovit výchozí hodnotu"
 
+msgid "_Retract"
+msgstr "Odvolat"
+
 msgid "_Save"
 msgstr "Uložit"
 
@@ -5838,6 +5907,10 @@ msgstr "Zobrazit na hlavním panelu"
 
 msgid "_Type"
 msgstr "Typ"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "Odblokovat"
 
 msgid "_Unregister account from service"
 msgstr "Zrušit účet u služby"
@@ -6407,9 +6480,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Autojoin"
 #~ msgstr "Automaticky vstoupit"
 
-#~ msgid "Block…"
-#~ msgstr "Blokovat…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Záložky"
 
@@ -6506,6 +6576,9 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Přetáhnout soubory nebo kontakty"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Upravit jméno…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Upravit profil…"
 
@@ -6527,10 +6600,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgstr ""
 #~ "Povoluje libappindicator, alternativního poskytovatele ikon na hlavním "
 #~ "panelu"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Chybová zpráva: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Chyba!"
@@ -6728,6 +6797,10 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "Progress"
 #~ msgstr "Průběh"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "Citovat…"
+
 #~ msgid "Re-Login"
 #~ msgstr "Znovu se přihlásit"
 
@@ -6784,10 +6857,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Vyžaduje: libappindicator3"
-
-#~ msgctxt "Message row action"
-#~ msgid "Retract…"
-#~ msgstr "Odvolat…"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -6926,9 +6995,6 @@ msgstr "...nebo přetáhněte sem"
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "Přesměrování portů UPnP-IGD"
 
-#~ msgid "Unblock"
-#~ msgstr "Odblokovat"
-
 #~ msgid "Unread Messages"
 #~ msgstr "Nepřečtené zprávy"
 
@@ -7019,9 +7085,6 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "_Open Folder"
 #~ msgstr "Otevřít složku"
-
-#~ msgid "_Retract"
-#~ msgstr "Odvolat"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "Upozornit při dokončení přenosu souboru"

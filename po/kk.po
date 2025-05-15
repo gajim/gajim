@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -904,12 +904,23 @@ msgstr "Контактіні блоктау"
 msgid "Block Contact…"
 msgstr "Контактты блоктау…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Қатысушы"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Қатысушылар"
+
 msgid "Blocking List"
 msgstr "Блоктізім"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "%s үшін блоктау тізімі"
+
+msgid "Block…"
+msgstr "Блоктау…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1668,6 +1679,10 @@ msgstr ""
 "Ескерту: мұны болдырмау мүмкін емес!\n"
 "Gajim одан кейін жабылады."
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Бұл PEP торабын шынымен өшіргіңіз келе ме?"
@@ -1692,6 +1707,16 @@ msgstr "Осы чат үшін чат тарихын шынымен өшіргі
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "\"%s\" өшіруді шынымен қалайсыз ба?"
 
 #, python-format
@@ -1738,9 +1763,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Тамақ ішуде"
-
-msgid "Edit Name…"
-msgstr "Атын түзету…"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1893,6 +1915,10 @@ msgstr "Аватарды жүктеп салу кезіндегі қате"
 #, python-format
 msgid "Error: %s"
 msgstr "Қате: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Қате хабарламасы: %s"
 
 msgid "Even more features via plugins"
 msgstr "Плагиндер арқылы одан да көп мүмкіндіктер"
@@ -2355,6 +2381,10 @@ msgstr "Мен сізді өзімнің контакттар тізіміне �
 
 msgid "I would like to add you to my roster."
 msgstr "Мен сізді өзімнің контакттар тізіміме қосқым келеді."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC стандарты КиБ = 1024 байт, ал КБ = 1000 байтқа тең деп айтады."
@@ -2844,6 +2874,9 @@ msgstr ""
 
 msgid "Messages are archived on the server"
 msgstr "Хабарламалар серверде архивтелген"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 msgid "Minimize"
 msgstr "Қайыру"
@@ -3359,6 +3392,10 @@ msgstr "Код блогы ретінде кірістіру"
 msgid "Paste as Quote"
 msgstr "Дәйексөз ретінде кірістіру"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Парольді өзгерту сәтсіз аяқталды"
+
 msgid "Path length constraint exceeded"
 msgstr "Жол ұзындық шектеуі асырылған"
 
@@ -3585,6 +3622,10 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Жария шифрлеу кілті"
 
+#, fuzzy
+msgid "Public Information"
+msgstr "Ашық кілт ақпараты"
+
 msgid "Public Key Information"
 msgstr "Ашық кілт ақпараты"
 
@@ -3617,10 +3658,6 @@ msgstr "Келесі хабарламаны дәйексөз қылу"
 
 msgid "Quote previous message"
 msgstr "Алдыңғы хабарламаны дәйексөз қылу"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "Дәйексөз…"
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -3902,6 +3939,14 @@ msgstr "Соңғы қалып-күйді қалпына келтіру"
 
 msgid "Restore status and status message of your last session"
 msgstr "Соңғы сеанстың күйін мен күй хабарын қалпына келтіру"
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Хабарламаны кері қайтарып алу"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Кері қайтарып алу…"
 
 msgid "Revoke Member"
 msgstr "Мүше құқығын алып тастау"
@@ -4621,8 +4666,15 @@ msgstr "Алдыңғы чатқа ауысу"
 msgid "Switch to the previous unread chat"
 msgstr "Алдыңғы оқылмаған чатқа ауысу"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Чат тарихын синхрондау"
+
 msgid "Sync Threshold"
 msgstr "Синхрондау табалдырық мәні"
+
+msgid "Sync group chat blocklist with other devices"
+msgstr ""
 
 msgid "Synchronize"
 msgstr "Синхрондау"
@@ -4738,6 +4790,9 @@ msgstr "Тема"
 msgid "Themes"
 msgstr "Темалар"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -4850,6 +4905,10 @@ msgstr "Бұл хабарламаны %s кері қайтарып алды."
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "Бұл хабарламаны %s кері қайтарып алды."
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "Бұл хабарламаны %s кері қайтарып алды."
 
 #, python-format
@@ -5040,6 +5099,13 @@ msgstr "Файлға қатынау мүмкін емес"
 
 msgid "Unable to verify the first certificate"
 msgstr "Бірінші сертификатты тексеру мүмкін емес"
+
+msgid "Unblock"
+msgstr "Блоктаудан босату"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Қатысушы"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -5787,6 +5853,9 @@ msgstr "_Сұрау"
 msgid "_Reset Value"
 msgstr "Мәнді та_стау"
 
+msgid "_Retract"
+msgstr "Ке_рі қайтарып алу"
+
 msgid "_Save"
 msgstr "_Сақтау"
 
@@ -5823,6 +5892,10 @@ msgstr "Тапсырмалар панелінде көрсету"
 
 msgid "_Type"
 msgstr "_Түрі"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "Блоктаудан босату"
 
 msgid "_Unregister account from service"
 msgstr "Қызметтен тіркелгі _тіркелуін алып тастау"
@@ -6333,9 +6406,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Autojoin"
 #~ msgstr "Автокіру"
 
-#~ msgid "Block…"
-#~ msgstr "Блоктау…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Бетбелгілер"
 
@@ -6433,6 +6503,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Файлдар немесе контакттарды тартып әкеліңіз"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Атын түзету…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Профильді түзету…"
 
@@ -6455,10 +6528,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Enables libappindicator, an alternative tray icon provider"
 #~ msgstr ""
 #~ "libappindicator, баламалы жүйелік сөре белгішесі ұсынушысын іске қосады"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Қате хабарламасы: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Қате!"
@@ -6656,6 +6725,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Progress"
 #~ msgstr "Барысы"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "Дәйексөз…"
+
 #~ msgid "Re-Login"
 #~ msgstr "Қайта кіру"
 
@@ -6710,10 +6783,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Талап етеді: libappindicator3"
-
-#~ msgctxt "Message row action"
-#~ msgid "Retract…"
-#~ msgstr "Кері қайтарып алу…"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -6853,9 +6922,6 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "UPNP-IGD порттарды қайта бағдарлау"
 
-#~ msgid "Unblock"
-#~ msgstr "Блоктаудан босату"
-
 #~ msgid "Unread Messages"
 #~ msgstr "Оқылмаған хабарламалар"
 
@@ -6945,9 +7011,6 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "_Open Folder"
 #~ msgstr "_Буманы ашу"
-
-#~ msgid "_Retract"
-#~ msgstr "Ке_рі қайтарып алу"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "Файлдармен алмасу аяқталғанда е_скерту"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -995,12 +995,24 @@ msgid "Block Contact…"
 msgstr "Kontaktua"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Partaidea"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Partaideak"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Debekatutako Zerrenda"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Debekatze Zerrenda %s-entzat"
+
+#, fuzzy
+msgid "Block…"
+msgstr "Kontaktua"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1860,6 +1872,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
@@ -1886,6 +1902,16 @@ msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Ziur al zaude hautaturiko mezua ezabatu nahi duzula?"
 
 #, python-format
@@ -1936,10 +1962,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Jaten"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Lehen Izena:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2102,6 +2124,10 @@ msgstr "Errorea zerbitzarian sartzean.%s"
 
 #, fuzzy, python-format
 msgid "Error: %s"
+msgstr "Errore mezua: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr "Errore mezua: %s"
 
 msgid "Even more features via plugins"
@@ -2620,6 +2646,10 @@ msgstr "Nire kontaktu zerrendara nahi zaitut sartu."
 
 msgid "I would like to add you to my roster."
 msgstr "Nire zerrendara gehitu nahi zaitut."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC estandarrak esaten du KiB = 1024 bytes, KB = 1000 bytes."
@@ -3163,6 +3193,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Ez zaude zerbitzarira konektatuta"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3735,6 +3768,10 @@ msgstr "Posta Kodea:"
 msgid "Paste as Quote"
 msgstr "Aukeratu Irudia"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Pasahitza behar da"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3987,6 +4024,10 @@ msgid "Public Encryption Key"
 msgstr "Enkriptazioa aktibatuta"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Kontaktuaren Informazioa"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Kontaktuaren Informazioa"
 
@@ -4025,10 +4066,6 @@ msgstr "Bidali mezua"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "%d mezu irakurri gabe"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4345,6 +4382,15 @@ msgstr "Azken egoera: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Egoera Mezua"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Berridatzi Kontaktua"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5165,7 +5211,14 @@ msgstr "Elkarrizketa Hasi"
 msgid "Switch to the previous unread chat"
 msgstr "Elkarrizketa Hasi"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Ikusi _Deskonektatutako Kontaktuak"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5292,6 +5345,9 @@ msgstr "Gaia"
 msgid "Themes"
 msgstr "Gaia"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5408,6 +5464,10 @@ msgstr "[Mezu hau enkriptatua dago]"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "[Mezu hau enkriptatua dago]"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5606,6 +5666,13 @@ msgstr "Ezin izan da irudia kargatu"
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Partaidea"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6439,6 +6506,9 @@ msgstr "_Ahotsa"
 msgid "_Reset Value"
 msgstr "Be_rezko Koloreak Ezarri"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "daukadanean"
@@ -6481,6 +6551,9 @@ msgstr "Trans_porteak Erakutsi"
 #, fuzzy
 msgid "_Type"
 msgstr "Mota:"
+
+msgid "_Unblock"
+msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7110,16 +7183,16 @@ msgstr ""
 #~ msgstr "Fitxero bat bidali kontaktu bati"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Lehen Izena:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profila bidaltzen..."
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Editatu _Taldeak"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Errore mezua: %s"
 
 #, fuzzy
 #~ msgid "Error!"

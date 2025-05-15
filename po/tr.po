@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -995,12 +995,24 @@ msgid "Block Contact…"
 msgstr "Engellenmiş Kişiler"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Katılan"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Katılanlar"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Geçersiz Liste İsmi"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Sohbet için Hazır"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Engelle"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1862,6 +1874,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Seçilen anahtarları gerçekten silmek istiyor musunuz? "
@@ -1888,6 +1904,16 @@ msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Tüm yer imlerini kaldırmak istediğinizden emin misiniz?"
 
 #, python-format
@@ -1938,10 +1964,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Yemelik"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "İlk Ad:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2103,6 +2125,10 @@ msgstr "Eklentilerin etkinleştirilmesinde hata #%d."
 #, python-format
 msgid "Error: %s"
 msgstr "Hata: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Ileti alınıyor"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -2621,6 +2647,10 @@ msgstr "Seni kişi listeme eklemek isterdim"
 
 msgid "I would like to add you to my roster."
 msgstr "Seni benim kişi listeye eklemek isterdim"
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr ""
@@ -3150,6 +3180,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "%s: OID (-o) 0 olamaz\n"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3722,6 +3755,10 @@ msgid "Paste as Quote"
 msgstr "Resim seç"
 
 #, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Şifre gerekli"
+
+#, fuzzy
 msgid "Path length constraint exceeded"
 msgstr "Kağıt Uçağın Gideceği Yol Uzunluğu"
 
@@ -3977,6 +4014,10 @@ msgid "Public Encryption Key"
 msgstr "Üyelik isteği"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "_Bilgi"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "_Bilgi"
 
@@ -4014,10 +4055,6 @@ msgstr "Mesajı gönder"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Okunmamış iletler var"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4331,6 +4368,15 @@ msgstr "Son durum: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "durum ileti"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Kişiyi yeniden adlandır"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5148,7 +5194,14 @@ msgstr "Sohbet _Başla"
 msgid "Switch to the previous unread chat"
 msgstr "Sohbet _Başla"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Kişileri eşzamana getir"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5277,6 +5330,9 @@ msgstr "Temalar"
 msgid "Themes"
 msgstr "Temalar"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5388,6 +5444,10 @@ msgstr "sertifika hükümsüz kılınmış"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "sertifika hükümsüz kılınmış"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5586,6 +5646,14 @@ msgstr "Resim acılamadı"
 #, fuzzy
 msgid "Unable to verify the first certificate"
 msgstr "başlangıç dizini belirlenemedi"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "Engellemeyi _Kaldır"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Katılan"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6419,6 +6487,9 @@ msgstr "_Ses"
 msgid "_Reset Value"
 msgstr "Öntanımlı değerlerine geri al"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Sahip"
@@ -6461,6 +6532,10 @@ msgstr "_XML Konsolu Göster"
 #, fuzzy
 msgid "_Type"
 msgstr "_Türü:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "Engellemeyi _Kaldır"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6980,10 +7055,6 @@ msgstr ""
 #~ msgstr "Kendiliğinden Katıl"
 
 #, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Engelle"
-
-#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Yer imi"
 
@@ -7080,16 +7151,16 @@ msgstr ""
 #~ msgstr "Dosyayı bir kişiye gönderir"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "İlk Ad:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profil gönderiliyor…"
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Kişisel ilanlar sayfayı yazımla"
-
-#, fuzzy, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Ileti alınıyor"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7426,10 +7497,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Tip"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "Engellemeyi _Kaldır"
 
 #, fuzzy
 #~ msgid "Unread Messages"

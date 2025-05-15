@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -1039,12 +1039,24 @@ msgid "Block Contact…"
 msgstr "אנשי קשר חסומים"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "משתתף"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "משתתפים"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "רשימת אסירה"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "רשימת פרטיות עבור ‫%s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_חסום"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1918,6 +1930,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "האם אתה בטוח כי ברצונך למחוק את ההודעה הנבחרת?"
@@ -1944,6 +1960,16 @@ msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "האם אתה בטוח כי ברצונך לסגור את כולן?"
 
 #, python-format
@@ -1994,10 +2020,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "אוכל"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "שם פרטי:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2172,6 +2194,10 @@ msgstr "שגיאה בעת הוספת שירות. %s"
 #, python-format
 msgid "Error: %s"
 msgstr "שגיאה: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "הודעת שגיאה: %s"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -2703,6 +2729,10 @@ msgstr "ברצוני להוסיף אותך לרשימת הקשר שלי."
 
 msgid "I would like to add you to my roster."
 msgstr "ברצוני להוסיף אותך לרשימה שלי."
+
+#, fuzzy
+msgid "ID"
+msgstr "‏JID"
 
 # לפי תקן IEC
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
@@ -3260,6 +3290,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "סשן זה יושם בארכיון על שרת"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 # In Hebrew: גאג'ים
 #, fuzzy
@@ -3830,6 +3863,10 @@ msgstr "מיקוד דואר"
 msgid "Paste as Quote"
 msgstr "בחירת תמונה"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "נדרשת מילת מעבר"
+
 msgid "Path length constraint exceeded"
 msgstr "מגבלת אורך נתיב מוצתה"
 
@@ -4086,6 +4123,10 @@ msgid "Public Encryption Key"
 msgstr "בקשת הרשמה"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "_מידע"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "_מידע"
 
@@ -4127,10 +4168,6 @@ msgstr "מסירת הודעה"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "קדם הודעות אשר לא נקראו"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4459,6 +4496,15 @@ msgstr "לפי מצב אחרון"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "הודעת מצב"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "שינוי שם איש קשר"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5292,7 +5338,14 @@ msgstr "התחלת שיחה"
 msgid "Switch to the previous unread chat"
 msgstr "התחלת שיחה"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "סנכרון"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5425,6 +5478,9 @@ msgstr "ערכת נושא"
 msgid "Themes"
 msgstr "ערכת נושא"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5541,6 +5597,10 @@ msgstr "התעודה בוטלה"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "התעודה בוטלה"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5742,6 +5802,14 @@ msgstr "לא היתה אפשרות להטעין תמונה"
 
 msgid "Unable to verify the first certificate"
 msgstr "אין אפשרות לאמת את התעודה הראשונה"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_בטל חסימה"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "משתתף"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6607,6 +6675,9 @@ msgstr "_בקש ביטוי"
 msgid "_Reset Value"
 msgstr "_אפס לברירת מחדל"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "נשמר בתוך: ‎%s"
@@ -6650,6 +6721,10 @@ msgstr "הצג מו_בילים"
 #, fuzzy
 msgid "_Type"
 msgstr "_טיפוס:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_בטל חסימה"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7181,10 +7256,6 @@ msgstr ""
 #~ msgstr "ה_צטרף אוטומטית"
 
 #, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_חסום"
-
-#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_סמן"
 
@@ -7293,6 +7364,10 @@ msgstr ""
 #~ msgstr "cli"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "שם פרטי:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "כעת שולח דיוקן..."
 
@@ -7315,10 +7390,6 @@ msgstr ""
 #~ msgstr ""
 #~ "יכולת לבקש מנתב הרשת שלך (ראוטר) לעשות שימוש בתיעול שערים (Port "
 #~ "forwarding) לשם העברת קובץ."
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "הודעת שגיאה: %s"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7711,10 +7782,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "טיפוס"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_בטל חסימה"
 
 #, fuzzy
 #~ msgid "Unread Messages"

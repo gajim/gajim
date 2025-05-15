@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
-"PO-Revision-Date: 2025-04-09 19:36+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
 "gajim/master/pt_BR/>\n"
@@ -910,12 +910,23 @@ msgstr "Bloquear Contato?"
 msgid "Block Contact…"
 msgstr "Bloquear Contato…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Participante"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Participantes"
+
 msgid "Blocking List"
 msgstr "Bloqueando Lista"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Bloqueando Lista de %s"
+
+msgid "Block…"
+msgstr "Bloquear…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1669,6 +1680,10 @@ msgstr ""
 "Aviso: esta operacao nao pode ser desfeita!\n"
 "Gajim ira fechar apos."
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Você deseja remover \"%(group)s\"?"
+
 msgid "Do you want to delete this PEP node?"
 msgstr "Você quer excluir este nó PEP?"
 
@@ -1690,6 +1705,19 @@ msgstr "Você quer remover esta conversa, incluindo seu histórico?"
 
 msgid "Do you want to remove this proxy?"
 msgstr "Você quer remover este proxy?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+"Você deseja retirar esta mensagem?\n"
+"Por favor note que retirar uma mensagem não garante que seu provedor ou o "
+"dispositivo do seu contato irá removê-la."
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
+msgstr "Você deseja remover \"%(group)s\"?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -1733,9 +1761,6 @@ msgstr "Envie facilmente fotos, vídeos ou outros arquivos para amigos e grupos"
 
 msgid "Eating"
 msgstr "Comendo"
-
-msgid "Edit Name…"
-msgstr "Editar Nome…"
 
 msgid "Edit display name…"
 msgstr "Editar nome de exibição…"
@@ -1882,6 +1907,10 @@ msgstr "Erro ao enviar avatar"
 #, python-format
 msgid "Error: %s"
 msgstr "Erro: %s"
+
+#, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Erro: %s (tipos MIME: %s)"
 
 msgid "Even more features via plugins"
 msgstr "Ainda mais recursos através de plugins"
@@ -2330,6 +2359,10 @@ msgstr "Por favor, eu gostaria de adicioná-lo à minha lista."
 
 msgid "I would like to add you to my roster."
 msgstr "Eu gostaria de adiciona-lo à minha lista."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Padrão da IEC diz que KiB = 1024 bytes e KB = 1000 bytes."
@@ -2803,6 +2836,9 @@ msgstr ""
 
 msgid "Messages are archived on the server"
 msgstr "As mensagens são arquivadas no servidor"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 msgid "Minimize"
 msgstr "Minimizar"
@@ -3305,6 +3341,9 @@ msgstr "Colar como Bloco de Código"
 msgid "Paste as Quote"
 msgstr "Colar como Citação"
 
+msgid "Pasting Content Failed"
+msgstr "Falha ao Colar Conteúdo"
+
 msgid "Path length constraint exceeded"
 msgstr "Limite de comprimento do caminho excedido"
 
@@ -3523,6 +3562,10 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Chave de Criptografia Pública"
 
+#, fuzzy
+msgid "Public Information"
+msgstr "Informação da Chave Pública"
+
 msgid "Public Key Information"
 msgstr "Informação da Chave Pública"
 
@@ -3554,10 +3597,6 @@ msgstr "Mencionar próxima mensagem"
 
 msgid "Quote previous message"
 msgstr "Mencionar mensagem anterior"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "Mencionar…"
 
 msgid "Re-Login Now?"
 msgstr "Re-autenticar agora?"
@@ -3817,6 +3856,13 @@ msgstr "Restaurar último estado"
 
 msgid "Restore status and status message of your last session"
 msgstr "Restaurar status e mensagem de status da sua última sessão"
+
+msgid "Retract Message?"
+msgstr "Retirar Mensagem?"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Retirar…"
 
 msgid "Revoke Member"
 msgstr "Revogar Membro"
@@ -4524,8 +4570,16 @@ msgstr "Mudar para a conversa anterior"
 msgid "Switch to the previous unread chat"
 msgstr "Mudar para a conversa não lida anterior"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Sincronizar Histórico"
+
 msgid "Sync Threshold"
 msgstr "Limite de sincronização"
+
+#, fuzzy
+msgid "Sync group chat blocklist with other devices"
+msgstr "Sincronizar grupos que participo com outros dispositivos."
 
 msgid "Synchronize"
 msgstr "Sincronizar"
@@ -4636,6 +4690,9 @@ msgstr "Tema"
 
 msgid "Themes"
 msgstr "Temas"
+
+msgid "There are connectivity issues"
+msgstr "Há algum problema de conexão"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -4754,6 +4811,10 @@ msgstr "Esta mensagem foi moderada"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr "Esta mensagem foi moderada por %s"
+
+#, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Esta mensagem foi retirada em {date}"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4946,6 +5007,13 @@ msgstr "Não foi possível salvar o perfil"
 
 msgid "Unable to verify the first certificate"
 msgstr "Não foi possível verificar o primeiro certificado"
+
+msgid "Unblock"
+msgstr "Desbloquear"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Participante"
 
 msgid "Unencrypted"
 msgstr "Não criptografado"
@@ -5677,6 +5745,9 @@ msgstr "_Solicitar"
 msgid "_Reset Value"
 msgstr "_Redefinir Valor"
 
+msgid "_Retract"
+msgstr "_Retirar"
+
 msgid "_Save"
 msgstr "_Salvar"
 
@@ -5712,6 +5783,10 @@ msgstr "_Alternar Barra de Menu"
 
 msgid "_Type"
 msgstr "_Tipo"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "Desbloquear"
 
 msgid "_Unregister account from service"
 msgstr "_Cancelar o registro da conta do serviço"
@@ -6260,9 +6335,6 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Autojoin"
 #~ msgstr "Entrar Automático"
 
-#~ msgid "Block…"
-#~ msgstr "Bloquear…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Favoritos"
 
@@ -6362,6 +6434,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Enviar arquivo para um contato"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Editar Nome…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Editar Perfil…"
 
@@ -6380,10 +6455,6 @@ msgstr "...ou solte-o aqui"
 #~ msgstr ""
 #~ "Permite que Gajim solicite ao roteador para abrir portas para "
 #~ "transferências de arquivos"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Mensagem de erro: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Erro!"
@@ -6589,6 +6660,10 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Progress"
 #~ msgstr "Progresso"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "Mencionar…"
+
 #~ msgid "Re-Login"
 #~ msgstr "Conectar Novamente"
 
@@ -6789,9 +6864,6 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "UPnP-IGD Porto Forwarding"
-
-#~ msgid "Unblock"
-#~ msgstr "Desbloquear"
 
 #~ msgid "Unread Messages"
 #~ msgstr "Mensagens não lidas"

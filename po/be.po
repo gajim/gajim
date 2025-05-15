@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -995,12 +995,24 @@ msgid "Block Contact…"
 msgstr "Людзі"
 
 #, fuzzy
+msgid "Block Participant?"
+msgstr "Удзельнік"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Удзельнікі"
+
+#, fuzzy
 msgid "Blocking List"
 msgstr "Чорны спіс"
 
 #, fuzzy, python-format
 msgid "Blocking List for %s"
 msgstr "Спіс прыватнасці для %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "Людзі"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1861,6 +1873,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
@@ -1887,6 +1903,16 @@ msgstr "Вы сапраўды хочаце выдаліць выбранае п�
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Вы сапраўды хочаце выдаліць выбранае паведамленне?"
 
 #, python-format
@@ -1937,10 +1963,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Ежа"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Імя:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2103,6 +2125,10 @@ msgstr "Памылка дадання сервіса. %s"
 
 #, fuzzy, python-format
 msgid "Error: %s"
+msgstr "Памылка: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
 msgstr "Памылка: %s"
 
 msgid "Even more features via plugins"
@@ -2621,6 +2647,10 @@ msgstr "Я хачу дадаць Вас у свой кантактны ліст.
 
 msgid "I would like to add you to my roster."
 msgstr "Я хачу дадаць Вас у мой кантактны ліст."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "У стандарце IEC вызначана, што КіБ = 1024 байтаў, КБ = 1000 байтаў."
@@ -3164,6 +3194,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Вы не злучаны з серверам"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3736,6 +3769,10 @@ msgstr "Паштовы індэкс:"
 msgid "Paste as Quote"
 msgstr "Выберыце малюнак"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Патрабуецца пароль"
+
 msgid "Path length constraint exceeded"
 msgstr ""
 
@@ -3989,6 +4026,10 @@ msgid "Public Encryption Key"
 msgstr "Шыфраванне дзейнічае"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Асабістыя звесткі"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Асабістыя звесткі"
 
@@ -4027,10 +4068,6 @@ msgstr "Адправіць паведамленне"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "%d нечытанае паведамленне"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4346,6 +4383,15 @@ msgstr "Апошняе паведамленне: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Паведамленне аб змене стану"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Змяніць імя чалавека"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5166,7 +5212,14 @@ msgstr "Пачаць размову"
 msgid "Switch to the previous unread chat"
 msgstr "Пачаць размову"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Паказаць _адлучаных людзей"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5293,6 +5346,9 @@ msgstr "Тэма"
 msgid "Themes"
 msgstr "Тэма"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5407,6 +5463,10 @@ msgstr "Стан змяніўся."
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Стан змяніўся."
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5604,6 +5664,13 @@ msgstr "Немагчыма загрузіць малюнак"
 
 msgid "Unable to verify the first certificate"
 msgstr ""
+
+msgid "Unblock"
+msgstr ""
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Удзельнік"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6439,6 +6506,9 @@ msgstr "_Голас"
 msgid "_Reset Value"
 msgstr "_Вярнуць звычайныя колеры"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Мае "
@@ -6481,6 +6551,9 @@ msgstr "Паказаць _транспарты"
 #, fuzzy
 msgid "_Type"
 msgstr "Тып:"
+
+msgid "_Unblock"
+msgstr ""
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7105,16 +7178,16 @@ msgstr ""
 #~ msgstr "Адправіць файл чалавеку"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Імя:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Адпраўленне профіля..."
 
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Змяніць _групы"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Памылка: %s"
 
 #, fuzzy
 #~ msgid "Error!"

@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
-"PO-Revision-Date: 2025-03-29 16:12+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"PO-Revision-Date: 2025-05-14 14:12+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
 "Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
 ">\n"
@@ -916,12 +916,21 @@ msgstr "Bloquer le contact ?"
 msgid "Block Contact…"
 msgstr "Bloquer le contact…"
 
+msgid "Block Participant?"
+msgstr "Bloquer læ participant·e ?"
+
+msgid "Blocked Participants"
+msgstr "Participant·es bloqué·es"
+
 msgid "Blocking List"
 msgstr "Liste des bannis"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Liste de blocage pour %s"
+
+msgid "Block…"
+msgstr "Bloquer…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1680,6 +1689,10 @@ msgstr ""
 "Avertissement : pas de retour en arrière possible !\n"
 "Gajim se fermera immédiatement après."
 
+#, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Voulez-vous bloquer %(name)s ?"
+
 msgid "Do you want to delete this PEP node?"
 msgstr "Souhaitez-vous vraiment supprimer ce nœud PEP ?"
 
@@ -1702,6 +1715,19 @@ msgstr ""
 
 msgid "Do you want to remove this proxy?"
 msgstr "Voulez-vous vraiment supprimer ce serveur mandataire ?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+"Voulez-vous retirer ce message ?\n"
+"Notez que retirer un message ne pgaranti pas que votre hébergeur ou "
+"l'appareil de votre contact vont le retirer."
+
+#, python-format
+msgid "Do you want to unblock %(name)s?"
+msgstr "Voulez-vous débloquer %(name)s ?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -1747,9 +1773,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Mange"
-
-msgid "Edit Name…"
-msgstr "Éditer le nom…"
 
 msgid "Edit display name…"
 msgstr "Éditer le nom…"
@@ -1900,6 +1923,10 @@ msgstr "Erreur durant l'envois de l'image de profil"
 #, python-format
 msgid "Error: %s"
 msgstr "Erreur : %s"
+
+#, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Erreur : %s (types mime : %s)"
 
 msgid "Even more features via plugins"
 msgstr "Encore plus de fonctionnalités avec des extensions"
@@ -2351,6 +2378,9 @@ msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
 
 msgid "I would like to add you to my roster."
 msgstr "Je souhaiterais vous ajouter à ma liste de contacts."
+
+msgid "ID"
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "D'après le standard IEC, KiB = 1024 bytes, KB = 1000 bytes."
@@ -2833,6 +2863,9 @@ msgstr ""
 msgid "Messages are archived on the server"
 msgstr "Les messages sont archivés sur le serveur"
 
+msgid "Messages from this users are blocked"
+msgstr "Les messages de cet·te utilisateur·ice sont bloqués"
+
 msgid "Minimize"
 msgstr "Minimiser"
 
@@ -3203,7 +3236,7 @@ msgstr "Système d’exploitation"
 
 msgctxt "Profile"
 msgid "Organisation"
-msgstr "Organisation"
+msgstr "Association"
 
 msgid "Organization (O)"
 msgstr "Organisation (O)"
@@ -3216,7 +3249,7 @@ msgstr "Organisez vos discussions avec des espaces de travail"
 
 msgctxt "Gender"
 msgid "Other"
-msgstr "Autres"
+msgstr "Autre"
 
 msgid "Other devices connected with your account"
 msgstr "Autres appareils connectés à votre compte"
@@ -3337,6 +3370,9 @@ msgstr "Coller en tant que bloc de code"
 
 msgid "Paste as Quote"
 msgstr "Coller en tant que citation"
+
+msgid "Pasting Content Failed"
+msgstr "Coller le contenu a échoué"
 
 msgid "Path length constraint exceeded"
 msgstr "Longueur du chemin dépassée"
@@ -3556,6 +3592,10 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "Clef publique de chiffrement"
 
+#, fuzzy
+msgid "Public Information"
+msgstr "Informations sur la clé publique"
+
 msgid "Public Key Information"
 msgstr "Informations sur la clé publique"
 
@@ -3587,10 +3627,6 @@ msgstr "Citer le message suivant"
 
 msgid "Quote previous message"
 msgstr "Citer le message précédent"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr "Citer…"
 
 msgid "Re-Login Now?"
 msgstr "Se reconnecter maintenant ?"
@@ -3853,6 +3889,13 @@ msgstr "Rétablir le dernier statut"
 
 msgid "Restore status and status message of your last session"
 msgstr "Rétablit l'état et le message d'état de votre dernière session"
+
+msgid "Retract Message?"
+msgstr "Retirer le message ?"
+
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Rétracter…"
 
 msgid "Revoke Member"
 msgstr "Révoquer membre"
@@ -4323,7 +4366,7 @@ msgid "Show previews for files"
 msgstr "Afficher des perçus pour les fichiers"
 
 msgid "Show suggestions for shortcodes, e.g. :+1:"
-msgstr "Afficher des suggestions pour les codes courts, par ex. :+1:"
+msgstr "Afficher des suggestions pour les codes courts, par ex. :+1:"
 
 msgid "Show the application's version"
 msgstr "Afficher la version de l’application"
@@ -4569,8 +4612,16 @@ msgstr "Basculer vers la discussion précédente"
 msgid "Switch to the previous unread chat"
 msgstr "Basculer vers la précédente discussion non-lue"
 
+msgid "Sync Group Chat Blocklist"
+msgstr "Synchroniser la liste de blocage des groupes de discussion"
+
 msgid "Sync Threshold"
 msgstr "Seuil de synchronisation"
+
+msgid "Sync group chat blocklist with other devices"
+msgstr ""
+"Synchronise la liste de blocage des groupes de discussion avec les autres "
+"appareils"
 
 msgid "Synchronize"
 msgstr "Synchroniser"
@@ -4683,6 +4734,9 @@ msgstr "Thème"
 
 msgid "Themes"
 msgstr "Thèmes"
+
+msgid "There are connectivity issues"
+msgstr "Il y a des problèmes de connexion"
 
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
@@ -4801,6 +4855,10 @@ msgstr "Ce message a été modéré"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr "Ce message a été modéré par %s"
+
+#, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Ce message a été retiré le {date}"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -4991,6 +5049,12 @@ msgstr "Impossible d’enregistrer le profil"
 
 msgid "Unable to verify the first certificate"
 msgstr "Impossible de vérifier le premier certificat"
+
+msgid "Unblock"
+msgstr "Débloquer"
+
+msgid "Unblock Participant?"
+msgstr "Débloquer læ participant·e ?"
 
 msgid "Unencrypted"
 msgstr "Non chiffré"
@@ -5732,6 +5796,9 @@ msgstr "_Demande"
 msgid "_Reset Value"
 msgstr "_Rétablir la valeur"
 
+msgid "_Retract"
+msgstr "_Rétracter"
+
 msgid "_Save"
 msgstr "_Enregistrer"
 
@@ -5767,6 +5834,9 @@ msgstr "_Afficher/cacher la barre de menu"
 
 msgid "_Type"
 msgstr "_Type"
+
+msgid "_Unblock"
+msgstr "_Débloquer"
 
 msgid "_Unregister account from service"
 msgstr "_Désinscrire le compte auprès du service"
@@ -6326,9 +6396,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Autojoin"
 #~ msgstr "Rejoindre automatiquement"
 
-#~ msgid "Block…"
-#~ msgstr "Bloquer…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Marques-pages"
 
@@ -6428,6 +6495,9 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Déposer les fichiers ou les contacts"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Éditer le nom…"
+
 #~ msgid "Edit Profile…"
 #~ msgstr "Éditer le profil…"
 
@@ -6451,10 +6521,6 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Active libappindicator, une alternative de fournisseur d'icône de barre "
 #~ "d'outils"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Message d'erreur : %s"
 
 #~ msgid "Error while merging recordings, please try again."
 #~ msgstr "Erreur lors de la fusion des enregistrements, merci de réessayer."
@@ -6664,6 +6730,10 @@ msgstr "... ou bien déposez ici"
 #~ msgid "Progress"
 #~ msgstr "Progression"
 
+#~ msgctxt "Message row action"
+#~ msgid "Quote…"
+#~ msgstr "Citer…"
+
 #~ msgid "Re-Login"
 #~ msgstr "Reconnexion"
 
@@ -6718,10 +6788,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Nécessite : libappindicator3"
-
-#~ msgctxt "Message row action"
-#~ msgid "Retract…"
-#~ msgstr "Rétracter…"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
@@ -6864,9 +6930,6 @@ msgstr "... ou bien déposez ici"
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "Redirection de port UPnP-IGD"
 
-#~ msgid "Unblock"
-#~ msgstr "Débloquer"
-
 #~ msgid "Unread Messages"
 #~ msgstr "Messages non lus"
 
@@ -6955,9 +7018,6 @@ msgstr "... ou bien déposez ici"
 
 #~ msgid "_Open Folder"
 #~ msgstr "_Ouvrir le répertoire de destination"
-
-#~ msgid "_Retract"
-#~ msgstr "_Rétracter"
 
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr ""

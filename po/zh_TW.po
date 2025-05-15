@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2025-03-09 12:48+0000\n"
 "Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -924,12 +924,23 @@ msgstr "封鎖聯絡人"
 msgid "Block Contact…"
 msgstr "封鎖聯絡人…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "參與者"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "參與者"
+
 msgid "Blocking List"
 msgstr "封鎖名單"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "%s的封鎖名單"
+
+msgid "Block…"
+msgstr "封鎖…"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1780,6 +1791,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "您確定要關閉所有這些嗎"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "您確定要刪除所選取的訊息?"
@@ -1806,6 +1821,16 @@ msgstr "您確定要關閉所有這些嗎"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "您確定要關閉所有這些嗎"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "您確定要關閉所有這些嗎"
 
 #, python-format
@@ -1856,10 +1881,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "吃東西"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "名稱:"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2025,6 +2046,10 @@ msgstr "加入服務錯誤。 %s"
 #, python-format
 msgid "Error: %s"
 msgstr "錯誤: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "錯誤訊息: %s"
 
 msgid "Even more features via plugins"
 msgstr ""
@@ -2542,6 +2567,10 @@ msgstr "我想加入您到我的聯絡人清單"
 
 msgid "I would like to add you to my roster."
 msgstr "我想將您加入到我的聯絡人清單。"
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 標準規定 1 KiB = 1024 bytes(位元組)，1 KB = 1000 bytes。"
@@ -3085,6 +3114,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "本次作業階段將在伺服器上被存檔"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3652,6 +3684,10 @@ msgstr "<b>郵遞區號:</b>"
 msgid "Paste as Quote"
 msgstr "選擇圖像"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "需要密碼"
+
 msgid "Path length constraint exceeded"
 msgstr "超過了路徑長度限制"
 
@@ -3906,6 +3942,10 @@ msgid "Public Encryption Key"
 msgstr "認證請求"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "資訊(_I)"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "資訊(_I)"
 
@@ -3943,10 +3983,6 @@ msgstr "傳送訊息"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "轉發未讀訊息"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4262,6 +4298,15 @@ msgstr "最後狀態"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "狀態訊息"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "重新命名聯絡人"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5076,7 +5121,14 @@ msgstr "開始聊天"
 msgid "Switch to the previous unread chat"
 msgstr "開始聊天"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "同步"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5205,6 +5257,9 @@ msgstr "主題"
 msgid "Themes"
 msgstr "主題"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5321,6 +5376,10 @@ msgstr "證書已被吊銷"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "證書已被吊銷"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5518,6 +5577,14 @@ msgstr "無法讀取圖片"
 
 msgid "Unable to verify the first certificate"
 msgstr "無法驗證第一個證書"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "解除阻斷(_U)"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "參與者"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6353,6 +6420,9 @@ msgstr "要求語音(_R)"
 msgid "_Reset Value"
 msgstr "恢復為預設顏色設定(_R)"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "儲存在: %s"
@@ -6396,6 +6466,10 @@ msgstr "顯示代理(_P)"
 #, fuzzy
 msgid "_Type"
 msgstr "類型(_T):"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "解除阻斷(_U)"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -6941,9 +7015,6 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "自動聯結(_U)"
 
-#~ msgid "Block…"
-#~ msgstr "封鎖…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "書籤"
 
@@ -7050,6 +7121,10 @@ msgstr ""
 #~ msgstr "向聯絡人傳送檔案"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "名稱:"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "傳送側寫…"
 
@@ -7069,10 +7144,6 @@ msgstr ""
 #~ msgid ""
 #~ "Enables Gajim to request your router to forward ports for file transfers"
 #~ msgstr "要求您的路由器於檔案傳送時轉用通訊埠的能力。"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "錯誤訊息: %s"
 
 #, fuzzy
 #~ msgid "Error!"
@@ -7445,10 +7516,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "類型"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "解除阻斷(_U)"
 
 #, fuzzy
 #~ msgid "Unread Messages"

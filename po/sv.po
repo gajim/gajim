@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -932,12 +932,23 @@ msgstr "Blockera kontakt"
 msgid "Block Contact…"
 msgstr "Blockera kontakt…"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Deltagare"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Deltagare"
+
 msgid "Blocking List"
 msgstr "Blockeringslista"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Blockeringslista för %s"
+
+msgid "Block…"
+msgstr "Blockera…"
 
 #, fuzzy
 msgctxt "Configuration type"
@@ -1753,6 +1764,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Vill du verkligen stänga alla dem?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Vill du verkligen ta bort det valda meddelandet?"
@@ -1779,6 +1794,16 @@ msgstr "Vill du verkligen stänga alla dem?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Vill du verkligen stänga alla dem?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Vill du verkligen stänga alla dem?"
 
 #, python-format
@@ -1824,9 +1849,6 @@ msgstr ""
 
 msgid "Eating"
 msgstr "Äter"
-
-msgid "Edit Name…"
-msgstr "Redigera namn…"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -1978,6 +2000,10 @@ msgstr "Fel vid uppladdning av visningsbild"
 #, python-format
 msgid "Error: %s"
 msgstr "Fel: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Felmeddelande: %s"
 
 msgid "Even more features via plugins"
 msgstr "Ännu fler funktioner via plugins"
@@ -2464,6 +2490,10 @@ msgstr "Jag vill lägga till dig i min kontaktlista."
 
 msgid "I would like to add you to my roster."
 msgstr "Jag skulle vilja lägga till dig i min kontaktlista."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC-standarden säger: KiB = 1024 byte, KB = 1000 byte."
@@ -2960,6 +2990,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Sessionen KOMMER INTE att loggas"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3502,6 +3535,10 @@ msgstr "Klistra in som kodblock"
 msgid "Paste as Quote"
 msgstr "Klistra in som citat"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Lösenordsändringen misslyckades"
+
 msgid "Path length constraint exceeded"
 msgstr "Begränsningen för sökvägslängd har överskridits"
 
@@ -3748,6 +3785,10 @@ msgid "Public Encryption Key"
 msgstr "Kryptering aktiverad"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "_Information"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "_Information"
 
@@ -3786,10 +3827,6 @@ msgstr "Skicka meddelande"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Vidarebefordra olästa meddelanden"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4085,6 +4122,15 @@ msgstr "Senaste status: %s"
 
 msgid "Restore status and status message of your last session"
 msgstr ""
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Statusmeddelande"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Byt namn på kontakt"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -4903,7 +4949,14 @@ msgstr "Starta Chatt"
 msgid "Switch to the previous unread chat"
 msgstr "Starta Chatt"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Synkronisera"
+
 msgid "Sync Threshold"
+msgstr ""
+
+msgid "Sync group chat blocklist with other devices"
 msgstr ""
 
 #, fuzzy
@@ -5032,6 +5085,9 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Tema"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5149,6 +5205,10 @@ msgstr "[Det här meddelandet är krypterat]"
 
 #, fuzzy, python-format
 msgid "This message has been moderated by %s"
+msgstr "[Det här meddelandet är krypterat]"
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
 msgstr "[Det här meddelandet är krypterat]"
 
 #, python-format
@@ -5347,6 +5407,14 @@ msgstr "Kunde inte läsa in bild"
 
 msgid "Unable to verify the first certificate"
 msgstr "Kunde inte verifiera det första certifikatet"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "A_vblockera"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Deltagare"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6186,6 +6254,9 @@ msgstr "_Röst"
 msgid "_Reset Value"
 msgstr "_Återställ till standardfärger"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Har "
@@ -6228,6 +6299,10 @@ msgstr "Visa _transporter"
 #, fuzzy
 msgid "_Type"
 msgstr "_Typ:"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "A_vblockera"
 
 #, fuzzy
 msgid "_Unregister account from service"
@@ -6772,9 +6847,6 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Anslut automatiskt"
 
-#~ msgid "Block…"
-#~ msgstr "Blockera…"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Bokmärken"
 
@@ -6872,6 +6944,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Släpp filer eller kontakter"
 
+#~ msgid "Edit Name…"
+#~ msgstr "Redigera namn…"
+
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Skickar profil..."
@@ -6879,10 +6954,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit workspace…"
 #~ msgstr "Redigera _grupper"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Felmeddelande: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Fel!"
@@ -7230,10 +7301,6 @@ msgstr ""
 #~ msgctxt "File transfer type"
 #~ msgid "Type: "
 #~ msgstr "Typ"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "A_vblockera"
 
 #, fuzzy
 #~ msgid "Unread Messages"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-13 20:52+0000\n"
+"POT-Creation-Date: 2025-05-14 18:34+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -988,12 +988,24 @@ msgstr "Geblokkeerde contacten"
 msgid "Block Contact…"
 msgstr "Geblokkeerde contacten"
 
+#, fuzzy
+msgid "Block Participant?"
+msgstr "Deelnemer"
+
+#, fuzzy
+msgid "Blocked Participants"
+msgstr "Deelnemers"
+
 msgid "Blocking List"
 msgstr "Blokkeringslijst"
 
 #, python-format
 msgid "Blocking List for %s"
 msgstr "Blokkeringslijst voor %s"
+
+#, fuzzy
+msgid "Block…"
+msgstr "_Blokkeren"
 
 msgctxt "Configuration type"
 msgid "Boolean"
@@ -1846,6 +1858,10 @@ msgid ""
 "Gajim will quit afterwards."
 msgstr ""
 
+#, fuzzy, python-format
+msgid "Do you want to block %(name)s?"
+msgstr "Wil je ze echt allemaal sluiten?"
+
 #, fuzzy
 msgid "Do you want to delete this PEP node?"
 msgstr "Wil je dit thema voorgoed verwijderen?"
@@ -1872,6 +1888,16 @@ msgstr "Wil je ze echt allemaal sluiten?"
 
 #, fuzzy
 msgid "Do you want to remove this proxy?"
+msgstr "Wil je ze echt allemaal sluiten?"
+
+msgid ""
+"Do you want to retract this message?\n"
+"Please note that retracting a message does not guarantee that your provider "
+"or your contact’s device will remove it."
+msgstr ""
+
+#, fuzzy, python-format
+msgid "Do you want to unblock %(name)s?"
 msgstr "Wil je ze echt allemaal sluiten?"
 
 #, python-format
@@ -1922,10 +1948,6 @@ msgstr "Stuur foto’s, video’s of andere bestanden naar vrienden en groepen"
 
 msgid "Eating"
 msgstr "Eten"
-
-#, fuzzy
-msgid "Edit Name…"
-msgstr "Voornaam"
 
 #, fuzzy
 msgid "Edit display name…"
@@ -2092,6 +2114,10 @@ msgstr "Fout bij toevoegen van transportcontact"
 #, python-format
 msgid "Error: %s"
 msgstr "Fout: %s"
+
+#, fuzzy, python-format
+msgid "Error: %s (mime types: %s)"
+msgstr "Foutbericht: %s"
 
 msgid "Even more features via plugins"
 msgstr "Nog meer functies via plug-ins"
@@ -2613,6 +2639,10 @@ msgstr "Ik wil je graag toevoegen aan mijn contacten."
 
 msgid "I would like to add you to my roster."
 msgstr "Ik zou je graag aan mijn rooster willen toevoegen."
+
+#, fuzzy
+msgid "ID"
+msgstr "JID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "Volgens de IEC standaard is 1 KiB = 1024 bytes, 1 KB = 1000 bytes."
@@ -3160,6 +3190,9 @@ msgstr ""
 #, fuzzy
 msgid "Messages are archived on the server"
 msgstr "Deze sessie ZAL gearchiveerd worden op de server"
+
+msgid "Messages from this users are blocked"
+msgstr ""
 
 #, fuzzy
 msgid "Minimize"
@@ -3721,6 +3754,10 @@ msgstr "Postcode"
 msgid "Paste as Quote"
 msgstr "Kies afbeelding"
 
+#, fuzzy
+msgid "Pasting Content Failed"
+msgstr "Wachtwoord vereist"
+
 msgid "Path length constraint exceeded"
 msgstr "Padlengtelimiet overschreden"
 
@@ -3964,6 +4001,10 @@ msgid "Public Encryption Key"
 msgstr "Versleutelingsfout"
 
 #, fuzzy
+msgid "Public Information"
+msgstr "Informatie"
+
+#, fuzzy
 msgid "Public Key Information"
 msgstr "Informatie"
 
@@ -4001,10 +4042,6 @@ msgstr "Bericht verzenden"
 #, fuzzy
 msgid "Quote previous message"
 msgstr "Ongelezen berichten doorsturen"
-
-msgctxt "Message row action"
-msgid "Quote…"
-msgstr ""
 
 #, fuzzy
 msgid "Re-Login Now?"
@@ -4321,6 +4358,15 @@ msgid "Restore status and status message of your last session"
 msgstr ""
 "Indien aangevinkt zullen de status en het statusbericht gebruikt in de "
 "vorige sessie worden hersteld"
+
+#, fuzzy
+msgid "Retract Message?"
+msgstr "Statusbericht"
+
+#, fuzzy
+msgctxt "Message row action"
+msgid "Retract…"
+msgstr "Contact hernoemen"
 
 #, fuzzy
 msgid "Revoke Member"
@@ -5133,8 +5179,15 @@ msgstr "Wisselen naar het vorig tabblad"
 msgid "Switch to the previous unread chat"
 msgstr "Wisselen naar het vorige ongelezen tabblad"
 
+#, fuzzy
+msgid "Sync Group Chat Blocklist"
+msgstr "Geschiedenis synchroniseren"
+
 msgid "Sync Threshold"
 msgstr "Drempelwaarde voor synchronisatie"
+
+msgid "Sync group chat blocklist with other devices"
+msgstr ""
 
 #, fuzzy
 msgid "Synchronize"
@@ -5259,6 +5312,9 @@ msgstr "Thema’s"
 msgid "Themes"
 msgstr "Thema’s"
 
+msgid "There are connectivity issues"
+msgstr ""
+
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5381,6 +5437,10 @@ msgstr "Certificaat ingetrokken"
 #, python-format
 msgid "This message has been moderated by %s"
 msgstr ""
+
+#, fuzzy, python-brace-format
+msgid "This message has been retracted on {date}"
+msgstr "Certificaat ingetrokken"
 
 #, python-format
 msgid "This message was encrypted with %s and could not be decrypted."
@@ -5585,6 +5645,14 @@ msgstr "Kon bestand niet openen"
 
 msgid "Unable to verify the first certificate"
 msgstr "Kan het eerste certificaat niet verifiëren"
+
+#, fuzzy
+msgid "Unblock"
+msgstr "_Deblokkeren"
+
+#, fuzzy
+msgid "Unblock Participant?"
+msgstr "Deelnemer"
 
 #, fuzzy
 msgid "Unencrypted"
@@ -6422,6 +6490,9 @@ msgstr "Stem aanv_ragen"
 msgid "_Reset Value"
 msgstr "He_rstellen naar standaardwaarden"
 
+msgid "_Retract"
+msgstr ""
+
 #, fuzzy
 msgid "_Save"
 msgstr "Opslaan _als"
@@ -6464,6 +6535,10 @@ msgstr "Transporten weergeven"
 
 msgid "_Type"
 msgstr "_Type"
+
+#, fuzzy
+msgid "_Unblock"
+msgstr "_Deblokkeren"
 
 msgid "_Unregister account from service"
 msgstr ""
@@ -7000,10 +7075,6 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Automatisch deelnemen"
 
-#, fuzzy
-#~ msgid "Block…"
-#~ msgstr "_Blokkeren"
-
 #~ msgid "Bookmarks"
 #~ msgstr "Bladwijzers"
 
@@ -7105,6 +7176,10 @@ msgstr ""
 #~ msgstr "Stuurt een bestand naar een contact"
 
 #, fuzzy
+#~ msgid "Edit Name…"
+#~ msgstr "Voornaam"
+
+#, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Profiel wordt verzonden…"
 
@@ -7126,10 +7201,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Geeft Gajim de mogelijkheid om je router te vragen een poort door te "
 #~ "sturen voor bestandsoverdrachten"
-
-#, python-format
-#~ msgid "Error message: %s"
-#~ msgstr "Foutbericht: %s"
 
 #~ msgid "Error!"
 #~ msgstr "Fout!"
@@ -7532,10 +7603,6 @@ msgstr ""
 
 #~ msgid "UPnP-IGD Port Forwarding"
 #~ msgstr "UPnP-IGD-poortdoorsturen"
-
-#, fuzzy
-#~ msgid "Unblock"
-#~ msgstr "_Deblokkeren"
 
 #, fuzzy
 #~ msgid "Unread Messages"
