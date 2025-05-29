@@ -25,7 +25,7 @@ from gajim.common.multiprocess.thumbnail import create_thumbnail
 from gajim.common.preview import PREVIEWABLE_MIME_TYPES
 from gajim.common.util.preview import get_icon_for_mime_type
 from gajim.common.util.preview import guess_mime_type
-from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
+from gajim.common.util.uri import get_file_path_from_uri
 
 from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
@@ -164,11 +164,9 @@ class FileTransferSelector(Gtk.Box, SignalManager):
 
     def add_files(self, uris: list[str]) -> None:
         for uri in uris:
-            path = get_file_path_from_dnd_dropped_uri(uri)
-            if path is None or not path.is_file():
-                self._add_warning_message(
-                    "Could not add %s" % (str(path) if path else uri)
-                )
+            path = get_file_path_from_uri(uri)
+            if path is None:
+                self._add_warning_message("Could not add %s" % uri)
                 continue
 
             size_warning = bool(
@@ -207,10 +205,6 @@ class FileTransferSelector(Gtk.Box, SignalManager):
     ) -> bool:
         files = value.get_files()
         if not files:
-            return False
-
-        path = get_file_path_from_dnd_dropped_uri(files[0].get_uri())
-        if not path or not path.is_file():
             return False
 
         self.add_files([file.get_uri() for file in files])

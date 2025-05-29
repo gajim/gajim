@@ -263,6 +263,29 @@ def get_file_path_from_dnd_dropped_uri(text: str) -> Path | None:
     return filesystem_path_from_uri(uri)
 
 
+def get_file_path_from_uri(uri: str) -> Path | None:
+    """Prepare URI by:
+    - removing invalid characters
+    - parsing and checking the URI for validity
+    - checking if the path is a file
+    - checking if the file is accessible (path.is_file() calls Path.stat())
+    """
+    path = get_file_path_from_dnd_dropped_uri(uri)
+    if path is None:
+        return None
+
+    try:
+        is_file = path.is_file()
+    except OSError:
+        log.exception("Could not access file: %s", path)
+        return None
+
+    if not is_file:
+        return None
+
+    return path
+
+
 def make_path_from_jid(base_path: Path, jid: JID) -> Path:
     assert jid.domain is not None
     domain = jid.domain[:50]

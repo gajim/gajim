@@ -25,7 +25,7 @@ from gajim.common import app
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.util.image import scale_with_ratio
-from gajim.common.util.uri import get_file_path_from_dnd_dropped_uri
+from gajim.common.util.uri import get_file_path_from_uri
 
 from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
@@ -127,8 +127,8 @@ class AvatarSelector(Gtk.Box, SignalManager):
         if not files:
             return False
 
-        path = get_file_path_from_dnd_dropped_uri(files[0].get_uri())
-        if not path or not path.is_file():
+        path = get_file_path_from_uri(files[0].get_uri())
+        if path is None:
             return False
 
         self.prepare_crop_area(str(path))
