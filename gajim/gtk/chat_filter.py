@@ -91,6 +91,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         popover_content.attach(roster_groups_label, 0, 2, 1, 1)
 
         self._roster_groups_drop_down = GajimDropDown(fixed_width=20)
+        self._roster_groups_drop_down.set_enable_search(True)
         self._connect(
             self._roster_groups_drop_down,
             "notify::selected",
