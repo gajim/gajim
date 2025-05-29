@@ -244,7 +244,13 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.icon_button.set_child(image)
 
     def _display_image_preview(self, preview: Preview, data: bytes) -> None:
-        texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+        try:
+            texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+        except GLib.Error:
+            log.exception("Could not load image %s", preview.filename)
+            # Fallback to simple mime type icon
+            self._display_mime_type_icon(preview)
+            return
 
         max_preview_size = app.settings.get("preview_size")
 
