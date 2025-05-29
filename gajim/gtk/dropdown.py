@@ -119,7 +119,9 @@ class KeyValueItem(GObject.Object):
 
 class KeyValueViewItem(Gtk.Label):
     def __init__(self, **kwargs: Any):
-        Gtk.Label.__init__(self, ellipsize=Pango.EllipsizeMode.END, xalign=0, **kwargs)
+        Gtk.Label.__init__(
+            self, ellipsize=Pango.EllipsizeMode.MIDDLE, xalign=0, **kwargs
+        )
 
     def bind(self, item: KeyValueItem) -> None:
         self.set_label(item.value)
@@ -127,7 +129,9 @@ class KeyValueViewItem(Gtk.Label):
 
 class KeyValueViewListItem(Gtk.Label):
     def __init__(self, **kwargs: Any):
-        Gtk.Label.__init__(self, ellipsize=Pango.EllipsizeMode.END, xalign=0, **kwargs)
+        Gtk.Label.__init__(
+            self, ellipsize=Pango.EllipsizeMode.MIDDLE, xalign=0, **kwargs
+        )
 
     def bind(self, item: KeyValueItem) -> None:
         self.set_label(item.value)

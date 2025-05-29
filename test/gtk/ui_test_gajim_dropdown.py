@@ -37,7 +37,7 @@ class TestGajimDropDown(GajimAppWindow):
         gajim_drop_down1.set_data(
             {
                 "key1": "Test 10000",
-                "key2": "Test 2 Very Very Long Key",
+                "key2": "Test 2 Very Very Very Very Long Key",
                 "key3": "Test 3",
                 "Key": "Value",
                 "Another Key": "Another Value",
