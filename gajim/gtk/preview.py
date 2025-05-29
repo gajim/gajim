@@ -134,75 +134,15 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.info_message.set_visible(False)
 
         if preview.is_geo_uri:
-            image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
-            image.set_pixel_size(preview.size)
-            self._ui.image_button.set_child(image)
-
-            self._ui.icon_event_box.set_visible(False)
-            self._ui.file_name.set_text(_("Click to view location"))
-            self._ui.file_name.set_selectable(False)
-            self._ui.save_as_button.set_visible(False)
-            self._ui.open_folder_button.set_visible(False)
-            self._ui.download_button.set_visible(False)
-
-            location = split_geo_uri(preview.uri)
-            text = format_geo_coords(float(location.lat), float(location.lon))
-            self._ui.file_size.set_text(text)
-            self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
-            self._ui.preview_box.set_size_request(160, -1)
+            self._display_geo_uri(preview)
             return
 
         self._ui.image_button.set_tooltip_text(preview.filename)
 
-        if data is not None:
-            self._ui.image_button.set_tooltip_text(None)
-
-            texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
-
-            max_preview_size = app.settings.get("preview_size")
-
-            texture_width = texture.get_width()
-            texture_height = texture.get_height()
-
-            if texture_width > max_preview_size or texture_height > max_preview_size:
-                # Scale down with or height to max_preview_size
-                if texture_width > texture_height:
-                    width = max_preview_size
-                    height = int(max_preview_size / texture_width * texture_height)
-                else:
-                    width = int(max_preview_size / texture_height * texture_width)
-                    height = max_preview_size
-            else:
-                width = texture_width
-                height = texture_height
-
-            # Set minimum height of 100 to avoid button overlay covering entire image
-            self._ui.content_overlay.set_size_request(width, max(height, 100))
-
-            image = Gtk.Picture.new_for_paintable(texture)
-            image.add_css_class("preview-image")
-            image.set_can_target(False)
-            self._ui.content_overlay.add_overlay(image)
-
-            self._ui.button_box.unparent()
-            self._ui.content_overlay.add_overlay(self._ui.button_box)
-            self._ui.button_box.set_visible(False)
-
-            self._ui.button_box.set_valign(Gtk.Align.END)
-            self._ui.button_box.set_halign(Gtk.Align.FILL)
-            self._ui.button_box.set_can_target(True)
-
-            self._ui.preview_stack.remove_css_class("preview-stack")
-            self._ui.preview_stack.add_css_class("preview-stack-image")
-            self._ui.button_box.add_css_class("preview-image-overlay")
-            self._ui.open_folder_button.add_css_class("preview-image-overlay-button")
-            self._ui.save_as_button.add_css_class("preview-image-overlay-button")
-
+        if data is None:
+            self._display_mime_type_icon(preview)
         else:
-            icon = get_icon_for_mime_type(preview.mime_type)
-            image = Gtk.Image.new_from_gicon(icon)
-            image.set_pixel_size(64)
-            self._ui.icon_button.set_child(image)
+            self._display_image_preview(preview, data)
 
         preview_enabled = app.settings.get("enable_file_preview")
 
@@ -278,6 +218,74 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.file_size.set_text(file_size_string)
         self._ui.file_name.set_text(preview.filename)
         self._ui.file_name.set_tooltip_text(preview.filename)
+
+    def _display_geo_uri(self, preview: Preview) -> None:
+        image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="map"))
+        image.set_pixel_size(preview.size)
+        self._ui.image_button.set_child(image)
+
+        self._ui.icon_event_box.set_visible(False)
+        self._ui.file_name.set_text(_("Click to view location"))
+        self._ui.file_name.set_selectable(False)
+        self._ui.save_as_button.set_visible(False)
+        self._ui.open_folder_button.set_visible(False)
+        self._ui.download_button.set_visible(False)
+
+        location = split_geo_uri(preview.uri)
+        text = format_geo_coords(float(location.lat), float(location.lon))
+        self._ui.file_size.set_text(text)
+        self._ui.image_button.set_tooltip_text(_("Location at %s") % text)
+        self._ui.preview_box.set_size_request(160, -1)
+
+    def _display_mime_type_icon(self, preview: Preview) -> None:
+        icon = get_icon_for_mime_type(preview.mime_type)
+        image = Gtk.Image.new_from_gicon(icon)
+        image.set_pixel_size(64)
+        self._ui.icon_button.set_child(image)
+
+    def _display_image_preview(self, preview: Preview, data: bytes) -> None:
+        texture = Gdk.Texture.new_from_bytes(GLib.Bytes.new(data))
+
+        max_preview_size = app.settings.get("preview_size")
+
+        texture_width = texture.get_width()
+        texture_height = texture.get_height()
+
+        if texture_width > max_preview_size or texture_height > max_preview_size:
+            # Scale down with or height to max_preview_size
+            if texture_width > texture_height:
+                width = max_preview_size
+                height = int(max_preview_size / texture_width * texture_height)
+            else:
+                width = int(max_preview_size / texture_height * texture_width)
+                height = max_preview_size
+        else:
+            width = texture_width
+            height = texture_height
+
+        # Set minimum height of 100 to avoid button overlay covering entire image
+        self._ui.content_overlay.set_size_request(width, max(height, 100))
+
+        self._ui.image_button.set_tooltip_text(None)
+
+        image = Gtk.Picture.new_for_paintable(texture)
+        image.add_css_class("preview-image")
+        image.set_can_target(False)
+        self._ui.content_overlay.add_overlay(image)
+
+        self._ui.button_box.unparent()
+        self._ui.content_overlay.add_overlay(self._ui.button_box)
+        self._ui.button_box.set_visible(False)
+
+        self._ui.button_box.set_valign(Gtk.Align.END)
+        self._ui.button_box.set_halign(Gtk.Align.FILL)
+        self._ui.button_box.set_can_target(True)
+
+        self._ui.preview_stack.remove_css_class("preview-stack")
+        self._ui.preview_stack.add_css_class("preview-stack-image")
+        self._ui.button_box.add_css_class("preview-image-overlay")
+        self._ui.open_folder_button.add_css_class("preview-image-overlay-button")
+        self._ui.save_as_button.add_css_class("preview-image-overlay-button")
 
     def _on_download(self, _button: Gtk.Button) -> None:
         if self._preview is None:
