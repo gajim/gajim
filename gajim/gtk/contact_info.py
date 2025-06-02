@@ -9,8 +9,8 @@ from typing import cast
 import logging
 from enum import IntEnum
 
+from gi.repository import Adw
 from gi.repository import Gdk
-from gi.repository import GObject
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.vcard4 import VCard
@@ -69,6 +69,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             default_width=700,
             default_height=600,
             add_window_padding=False,
+            header_bar=False,
         )
 
         EventHelper.__init__(self)
@@ -84,14 +85,25 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._tasks: list[Task] = []
         self._devices: dict[str, DeviceGrid] = {}
 
-        self._switcher = SideBarSwitcher(width=250)
-        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
-        self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
-        self._connect(
-            self._ui.main_stack,
-            "notify::visible-child-name",
-            self._on_stack_child_changed,
+        self._switcher = SideBarSwitcher()
+
+        toolbar = Adw.ToolbarView(content=self._switcher)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        self._sidebar_page = Adw.NavigationPage(
+            title=self.contact.name, tag="sidebar", child=toolbar
         )
+
+        toolbar = Adw.ToolbarView(content=self._ui.main_stack)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        content_page = Adw.NavigationPage(title=" ", tag="content", child=toolbar)
+
+        nav = Adw.NavigationSplitView(sidebar=self._sidebar_page, content=content_page)
+
+        self.set_child(nav)
+
+        self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
 
         self._load_avatar()
 
@@ -103,7 +115,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._contact_name_widget, "name-updated", self._on_contact_name_updated
         )
         self._ui.contact_name_controls_box.append(self._contact_name_widget)
-        self._ui.contact_name_header_label.set_text(self.contact.name)
 
         self._fill_information_page(self.contact)
 
@@ -123,11 +134,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._connect(self._ui.toggle_renderer, "toggled", self._on_group_toggled)
         self._connect(self._ui.text_renderer, "edited", self._on_group_name_edited)
 
-        self._connect(
-            self._ui.edit_contact_name_header_button,
-            "clicked",
-            self._on_edit_contact_name_header_clicked,
-        )
         self._connect(
             self._ui.from_subscription_switch,
             "state-set",
@@ -162,8 +168,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
             ]
         )
 
-        self.set_child(self._ui.main_grid)
-
     def _cleanup(self) -> None:
         for task in self._tasks:
             task.cancel()
@@ -195,15 +199,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._ui.groups_page_stack.set_visible_child_name("offline")
             self._ui.notes_page_stack.set_visible_child_name("offline")
 
-    def _on_stack_child_changed(
-        self, _widget: Gtk.Stack, _pspec: GObject.ParamSpec
-    ) -> None:
-
-        name = self._ui.main_stack.get_visible_child_name()
-        self._ui.header_revealer.set_reveal_child(name != "information")
-
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
-        self._ui.contact_name_header_label.set_text(name)
+        self._sidebar_page.set_title(name)
 
     def _fill_information_page(self, contact: ContactT) -> None:
         self._vcard_grid = VCardGrid(self.account)
@@ -332,12 +329,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.avatar_image.set_pixel_size(AvatarSize.VCARD)
         self._ui.avatar_image.set_from_paintable(texture1)
 
-        texture2 = self.contact.get_avatar(
-            AvatarSize.VCARD_HEADER, scale, add_show=False
-        )
-        self._ui.avatar_image_header.set_pixel_size(AvatarSize.VCARD_HEADER)
-        self._ui.avatar_image_header.set_from_paintable(texture2)
-
     def _set_os_info(self, task: Task) -> None:
         self._tasks.remove(task)
 
@@ -372,10 +363,6 @@ class ContactInfo(GajimAppWindow, EventHelper):
         if note is None or new_annotation != note.data:
             new_note = AnnotationNote(jid=self.contact.jid, data=new_annotation)
             self._client.get_module("Annotations").set_note(new_note)
-
-    def _on_edit_contact_name_header_clicked(self, _widget: Gtk.Button) -> None:
-        self._switcher.set_row("information")
-        self._contact_name_widget.enable_edit_mode()
 
     def _on_from_subscription_switch_toggled(
         self, switch: Gtk.Switch, state: bool

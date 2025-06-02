@@ -265,11 +265,6 @@ class ContactInfoBuilder(Builder):
     resource_box: Gtk.Box
     resource_label: Gtk.Label
     groups_model: Gtk.ListStore
-    main_grid: Gtk.Grid
-    header_revealer: Gtk.Revealer
-    avatar_image_header: Gtk.Image
-    contact_name_header_label: Gtk.Label
-    edit_contact_name_header_button: Gtk.Button
     main_stack: Gtk.Stack
     vcard_scrolled: Gtk.ScrolledWindow
     vcard_box: Gtk.Box
