@@ -94,6 +94,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
 
         self._ui = get_builder("debug_console.ui")
         header_bar = self.get_header_bar()
+        assert header_bar is not None
         header_bar.set_title_widget(self._ui.header_box)
         self._set_title()
 

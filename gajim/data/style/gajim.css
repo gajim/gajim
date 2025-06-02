@@ -969,17 +969,15 @@ button.flat.link { padding: 0; border: 0; }
 .PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color; }
 
 /* Settings Window */
-list.settings-menu {
-    background-color: mix(@theme_base_color, @theme_fg_color, 0.08);
-}
-list.settings-menu row {
-    padding: 6px 12px;
+list.sidebar-switcher row {
+    padding: 2px 12px 2px 12px;
+    margin-left: 6px;
+    margin-right: 6px;
     min-width: 170px;
+    min-height: 36px;
 }
-list.settings-menu row label {
-    padding-left: 12px;
-}
-list.settings-menu .sidebar-row-header {
+
+list.sidebar-switcher .sidebar-row-header {
     padding: 12px 18px;
     font-weight: bold;
 }

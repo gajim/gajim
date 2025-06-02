@@ -82,6 +82,7 @@ class Preferences(GajimAppWindow):
             default_width=900,
             default_height=650,
             add_window_padding=False,
+            header_bar=False,
         )
 
         # self._video_preview: VideoPreview | None = None
@@ -209,10 +210,7 @@ class Preferences(GajimAppWindow):
             ),
         ]
 
-        box = Gtk.Box()
-        self.set_child(box)
         stack = Gtk.Stack()
-        box.append(stack)
 
         for page in preferences:
             preferences_page = Adw.PreferencesPage()
@@ -242,8 +240,24 @@ class Preferences(GajimAppWindow):
                 preferences_page.add(preferences_group)
 
         side_bar_switcher = SideBarSwitcher()
+
+        toolbar = Adw.ToolbarView(content=side_bar_switcher)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        sidebar_page = Adw.NavigationPage(
+            title=_("Preferences"), tag="sidebar", child=toolbar
+        )
+
+        toolbar = Adw.ToolbarView(content=stack)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        content_page = Adw.NavigationPage(title=" ", tag="content", child=toolbar)
+
+        nav = Adw.NavigationSplitView(sidebar=sidebar_page, content=content_page)
+
+        self.set_child(nav)
+
         side_bar_switcher.set_stack(stack)
-        box.prepend(side_bar_switcher)
 
         # self._add_video_preview()
 

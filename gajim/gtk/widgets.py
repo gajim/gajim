@@ -39,6 +39,7 @@ class GajimAppWindow(SignalManager):
         transient_for: Gtk.Window | None = None,
         modal: bool = False,
         add_window_padding: bool = True,
+        header_bar: bool = True,
     ) -> None:
 
         SignalManager.__init__(self)
@@ -62,7 +63,9 @@ class GajimAppWindow(SignalManager):
         # Hack to get the instance in get_app_window
         self.window.wrapper = self  # pyright: ignore
 
-        self._header_bar = Adw.HeaderBar()
+        self._header_bar = None
+        if header_bar:
+            self._header_bar = Adw.HeaderBar()
 
         log.debug("Load Window: %s", name)
 
@@ -99,11 +102,14 @@ class GajimAppWindow(SignalManager):
         if child is not None and self._add_window_padding:
             child.add_css_class("window-padding")
 
-        toolbar_view = Adw.ToolbarView(content=child)
-        toolbar_view.add_top_bar(self._header_bar)
-        self.window.set_content(toolbar_view)
+        if self._header_bar is not None:
+            toolbar_view = Adw.ToolbarView(content=child)
+            toolbar_view.add_top_bar(self._header_bar)
+            self.window.set_content(toolbar_view)
+        else:
+            self.window.set_content(child)
 
-    def get_header_bar(self) -> Adw.HeaderBar:
+    def get_header_bar(self) -> Adw.HeaderBar | None:
         return self._header_bar
 
     def get_default_controller(self) -> Gtk.EventController:

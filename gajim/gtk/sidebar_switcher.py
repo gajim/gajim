@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import cast
 
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -19,7 +20,7 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
         SignalManager.__init__(self)
 
         self.set_vexpand(True)
-        self.add_css_class("settings-menu")
+        self.add_css_class("sidebar-switcher")
         self.add_css_class("navigation-sidebar")
         if width is not None:
             self.set_size_request(width, -1)
@@ -70,9 +71,20 @@ class SideBarSwitcher(Gtk.ListBox, SignalManager):
 
     def _on_row_activated(self, _listbox: SideBarSwitcher, row: Row):
         self._stack.set_visible_child_name(row.name)
+        toolbar_view = self._stack.get_parent()
+        if not isinstance(toolbar_view, Adw.ToolbarView):
+            return
+
+        navigation_page = toolbar_view.get_parent()
+        if not isinstance(navigation_page, Adw.NavigationPage):
+            return
+
+        navigation_page.set_title(row.title)
 
     def _select_first_row(self):
-        self.select_row(self.get_row_at_index(0))
+        row = self.get_row_at_index(0)
+        assert isinstance(row, Row)
+        self._on_row_activated(self, row)
 
 
 class Row(Gtk.ListBoxRow):
@@ -83,11 +95,11 @@ class Row(Gtk.ListBoxRow):
         Gtk.ListBoxRow.__init__(self)
 
         self.name = name
+        self.title = title
 
-        box = Gtk.Box()
+        box = Gtk.Box(spacing=12)
         if icon_name is not None:
             image = Gtk.Image.new_from_icon_name(icon_name)
-            image.add_css_class("dim-label")
             box.append(image)
 
         label = Gtk.Label(label=title)
