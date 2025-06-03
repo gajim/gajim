@@ -455,11 +455,6 @@ class GroupchatCreationBuilder(Builder):
     create_button: Gtk.Button
 
 class GroupchatDetailsBuilder(Builder):
-    main_grid: Gtk.Grid
-    header_revealer: Gtk.Revealer
-    header_image: Gtk.Image
-    contact_name_header_label: Gtk.Label
-    edit_name_button: Gtk.Button
     main_stack: Gtk.Stack
     info_box: Gtk.Box
     settings_box: Gtk.Box

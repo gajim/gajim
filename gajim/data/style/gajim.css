@@ -1041,16 +1041,6 @@ popover.combo scrollbar.vertical {
 }
 
 /* ContactInfo / GroupchatDetails */
-.stack-border {
-    border-left: 1px solid @borders;
-}
-.stack-header {
-    background-color: @insensitive_bg_color;
-    border-width: 0 1px 1px 1px;
-    border-style: none solid solid solid;
-    border-color: @borders;
-    padding: 9px 9px;
-}
 #ContactNameEntry:disabled {
     filter: none;
     border: none;

@@ -4,11 +4,10 @@
 
 from __future__ import annotations
 
-from gi.repository import GObject
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
@@ -37,6 +36,7 @@ class GroupchatDetails(GajimAppWindow):
             title=_("Group Chat Details"),
             default_height=600,
             add_window_padding=False,
+            header_bar=False,
         )
 
         self.account = contact.account
@@ -50,18 +50,26 @@ class GroupchatDetails(GajimAppWindow):
 
         self._switcher = SideBarSwitcher(width=250)
         self._switcher.set_header_func(self._sidebar_header_func)
+
+        toolbar = Adw.ToolbarView(content=self._switcher)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        self._sidebar_page = Adw.NavigationPage(
+            title=self._contact.name, tag="sidebar", child=toolbar
+        )
+
+        toolbar = Adw.ToolbarView(content=self._ui.main_stack)
+        toolbar.add_top_bar(Adw.HeaderBar())
+
+        content_page = Adw.NavigationPage(title=" ", tag="content", child=toolbar)
+
+        nav = Adw.NavigationSplitView(sidebar=self._sidebar_page, content=content_page)
+
+        self.set_child(nav)
+
         self._switcher.set_stack(self._ui.main_stack, rows_visible=False)
-        self._ui.main_grid.attach(self._switcher, 0, 0, 1, 1)
-        self.set_child(self._ui.main_grid)
 
         self._groupchat_manage: GroupchatManage | None = None
-
-        self._connect(
-            self._ui.main_stack,
-            "notify::visible-child-name",
-            self._on_stack_child_changed,
-        )
-        self._connect(self._ui.edit_name_button, "clicked", self._on_edit_name_clicked)
 
         self._add_groupchat_info()
         self._add_groupchat_settings()
@@ -73,8 +81,6 @@ class GroupchatDetails(GajimAppWindow):
             self._add_affiliations()
             self._add_outcasts()
             self._add_configuration()
-
-        self._load_avatar()
 
         if page is not None:
             self._switcher.set_row(page)
@@ -100,25 +106,7 @@ class GroupchatDetails(GajimAppWindow):
 
         self._groupchat_info.set_info_from_contact(self._contact)
 
-    def _on_stack_child_changed(
-        self, _widget: Gtk.Stack, _pspec: GObject.ParamSpec
-    ) -> None:
-
-        name = self._ui.main_stack.get_visible_child_name()
-        self._ui.header_revealer.set_reveal_child(name != "information")
-
-    def _on_edit_name_clicked(self, widget: Gtk.Button) -> None:
-        self._switcher.set_row("information")
-        self._groupchat_info.enable_edit_mode()
-
-    def _load_avatar(self) -> None:
-        scale = self.get_scale_factor()
-        texture = self._contact.get_avatar(AvatarSize.VCARD_HEADER, scale)
-        self._ui.header_image.set_pixel_size(AvatarSize.VCARD_HEADER)
-        self._ui.header_image.set_from_paintable(texture)
-
     def _on_avatar_update(self, _contact: GroupchatContact, _signal_name: str) -> None:
-        self._load_avatar()
         assert self._groupchat_manage
         self._groupchat_manage.update_avatar()
 
@@ -195,4 +183,4 @@ class GroupchatDetails(GajimAppWindow):
         self._switcher.set_row_visible("config", True)
 
     def _on_contact_name_updated(self, _widget: ContactNameWidget, name: str) -> None:
-        self._ui.contact_name_header_label.set_text(name)
+        self._sidebar_page.set_title(name)
