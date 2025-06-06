@@ -82,6 +82,7 @@ function install_mingw_deps {
         "${MINGW_PACKAGE_PREFIX}"-python-six \
         "${MINGW_PACKAGE_PREFIX}"-python-sqlalchemy \
         "${MINGW_PACKAGE_PREFIX}"-gtk4 \
+        "${MINGW_PACKAGE_PREFIX}"-libadwaita \
         "${MINGW_PACKAGE_PREFIX}"-gtksourceview5 \
         "${MINGW_PACKAGE_PREFIX}"-gstreamer \
         "${MINGW_PACKAGE_PREFIX}"-gst-plugins-base \

@@ -12,12 +12,13 @@ thoughts or discuss the news with your groups.
 
 ### Runtime Requirements
 
+- [libadwaita](https://gitlab.gnome.org/GNOME/libadwaita) (>=1.7.0)
 - [cairo](https://gitlab.freedesktop.org/cairo/cairo) (>=1.16.0)
 - [cryptography](https://pypi.org/project/cryptography/) (>=3.4.8)
 - [css-parser](https://pypi.org/project/css-parser/)
 - [emoji](https://pypi.org/project/emoji/) (>=2.6.0)
-- [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.66.0)
-- [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.14.0)
+- [GLib](https://gitlab.gnome.org/GNOME/glib) (>=2.80.0)
+- [Gtk4](https://gitlab.gnome.org/GNOME/gtk) (>=4.17.5)
 - [GtkSourceView5](https://gitlab.gnome.org/GNOME/gtksourceview)
 - [keyring](https://pypi.org/project/keyring/)
 - [nbxmpp](https://pypi.org/project/nbxmpp/) (>=6.2.0)

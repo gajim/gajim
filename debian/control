@@ -42,6 +42,7 @@ Depends:
     gir1.2-pango-1.0 (>= 1.50.0),
     gir1.2-gtk-4.0,
     gir1.2-gtksource-5,
+    gir1.2-adw-1,
 Recommends:
     ca-certificates,
     fonts-noto-color-emoji,

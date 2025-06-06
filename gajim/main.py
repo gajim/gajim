@@ -20,10 +20,10 @@ from types import FrameType
 from packaging.version import Version as V
 
 _MIN_NBXMPP_VER = "6.2.0"
-_MIN_GTK_VER = "4.14.0"
+_MIN_GTK_VER = "4.17.5"
 _MIN_CAIRO_VER = "1.16.0"
 _MIN_PYGOBJECT_VER = "3.42.0"
-_MIN_GLIB_VER = "2.66.0"
+_MIN_GLIB_VER = "2.80.0"
 _MIN_PANGO_VER = "1.50.0"
 _MIN_SQLITE_VER = "3.35.0"
 
