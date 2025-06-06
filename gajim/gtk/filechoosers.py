@@ -52,11 +52,13 @@ class FileChooserButton(Gtk.Button, SignalManager):
         label: str = "",
         tooltip: str = "",
         icon_name: str | None = None,
+        initial_path: Path | None = None,
     ) -> None:
 
         Gtk.Button.__init__(self)
         SignalManager.__init__(self)
         self._path = path
+        self._initial_path = initial_path
         self._mode = mode
         self._multiple = multiple
         self._filters = filters or self._cls_filters
@@ -105,6 +107,9 @@ class FileChooserButton(Gtk.Button, SignalManager):
             case _:
                 pass
 
+    def set_inital_path(self, path: Path | None) -> None:
+        self._initial_path = path
+
     def reset(self) -> None:
         self._path = None
         self._label.set_text(self._label_text or "")
@@ -120,12 +125,17 @@ class FileChooserButton(Gtk.Button, SignalManager):
             if f.default:
                 dialog.set_default_filter(file_filter)
 
-        if self._path is not None:
-            file = Gio.File.new_for_path(str(self._path))
-            if self._mode == "file":
-                dialog.set_initial_file(file)
-            else:
+        if self._path is None:
+            initial_path = self._initial_path
+        else:
+            initial_path = self._path
+
+        if initial_path is not None:
+            file = Gio.File.new_for_path(str(initial_path))
+            if initial_path.is_dir():
                 dialog.set_initial_folder(file)
+            else:
+                dialog.set_initial_file(file)
 
         if self._filters:
             dialog.set_filters(file_filter_model)
@@ -156,8 +166,6 @@ class FileChooserButton(Gtk.Button, SignalManager):
     def _on_file_picked(
         self, file_dialog: Gtk.FileDialog, result: Gio.AsyncResult
     ) -> None:
-        self._path = None
-
         try:
 
             match (self._mode, self._multiple):
