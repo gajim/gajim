@@ -179,39 +179,6 @@ def check_soundfile_path(file_: str,
     return None
 
 
-def strip_soundfile_path(file_: Path | str,
-                         dirs: list[Path] | None = None,
-                         abs_: bool = True):
-    '''
-    Remove knowns paths from a sound file
-
-    Filechooser returns an absolute path.
-    If path is a known fallback path, we remove it.
-    So config has no hardcoded path to DATA_DIR and text in textfield is
-    shorther.
-    param: file_: the filename to strip
-    param: dirs: list of knowns paths from which the filename should be stripped
-    param: abs_: force absolute path on dirs
-    '''
-
-    if not file_:
-        return None
-
-    if dirs is None:
-        dirs = [configpaths.get('MY_DATA'),
-                configpaths.get('DATA')]
-
-    file_ = Path(file_)
-    name = file_.name
-    for dir_ in dirs:
-        dir_ = dir_ / 'sounds' / name
-        if abs_:
-            dir_ = dir_.absolute()
-        if file_ == dir_:
-            return name
-    return file_
-
-
 def play_sound_file(str_path_to_soundfile: str, loop: bool = False) -> None:
     path_to_soundfile = check_soundfile_path(str_path_to_soundfile)
     if path_to_soundfile is None:

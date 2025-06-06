@@ -7,13 +7,13 @@ from __future__ import annotations
 from typing import cast
 
 from enum import IntEnum
+from pathlib import Path
 
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common.helpers import check_soundfile_path
 from gajim.common.helpers import play_sound
-from gajim.common.helpers import strip_soundfile_path
 from gajim.common.i18n import _
 
 from gajim.gtk.builder import get_builder
@@ -59,12 +59,16 @@ class ManageSounds(GajimAppWindow):
         liststore = Gtk.ListStore(bool, str, str, str)
         self._ui.sounds_treeview.set_model(liststore)
 
+        last_path = app.settings.get("last_sounds_dir")
+        last_path = Path(last_path) if last_path else None
+
         self._file_chooser_button = FileChooserButton(
             filters=[
                 Filter(name=_("All files"), patterns=["*"]),
                 Filter(name=_("WAV Sounds"), patterns=["*.wav"], default=True),
             ],
             label=_("Choose Sound"),
+            initial_path=last_path,
         )
         self._file_chooser_button.set_hexpand(True)
         self._ui.sound_buttons_box.prepend(self._file_chooser_button)
@@ -76,6 +80,7 @@ class ManageSounds(GajimAppWindow):
         self._connect(self._ui.toggle_cell_renderer, "toggled", self._on_toggle)
         self._connect(self._ui.clear_sound_button, "clicked", self._on_clear)
         self._connect(self._ui.play_sound_button, "clicked", self._on_play)
+        self._connect(self._file_chooser_button, "path-picked", self._on_path_picked)
 
         self._fill_sound_treeview()
 
@@ -93,7 +98,6 @@ class ManageSounds(GajimAppWindow):
         )
 
     def _on_toggle(self, _cell: Gtk.CellRendererToggle, path: Gtk.TreePath) -> None:
-
         if self._file_chooser_button.get_path() is None:
             return
 
@@ -119,10 +123,13 @@ class ManageSounds(GajimAppWindow):
         path_to_snd_file = check_soundfile_path(model[iter_][Column.PATH])
         if path_to_snd_file is None:
             self._file_chooser_button.reset()
+            last_path = app.settings.get("last_sounds_dir")
+            if last_path:
+                self._file_chooser_button.set_inital_path(Path(last_path))
         else:
             self._file_chooser_button.set_path(path_to_snd_file)
 
-    def _on_file_set(self, button: FileChooserButton, file_paths: list[str]) -> None:
+    def _on_path_picked(self, button: FileChooserButton, file_paths: list[str]) -> None:
         if not file_paths:
             return
 
@@ -131,10 +138,9 @@ class ManageSounds(GajimAppWindow):
         model, iter_ = self._ui.sounds_treeview.get_selection().get_selected()
         assert iter_ is not None
 
-        app.settings.set("last_sounds_dir", path)
-        path_to_snd_file = strip_soundfile_path(path)
+        app.settings.set("last_sounds_dir", str(Path(path).parent))
 
-        model[iter_][Column.PATH] = str(path_to_snd_file)
+        model[iter_][Column.PATH] = str(path)
         model[iter_][Column.ENABLED] = True
 
     def _on_clear(self, _button: Gtk.Button) -> None:
