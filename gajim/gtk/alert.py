@@ -4,6 +4,7 @@
 
 from __future__ import annotations
 
+from typing import Any
 from typing import cast
 from typing import Literal
 from typing import overload
@@ -136,10 +137,15 @@ class _BaseAlertDialog(Adw.AlertDialog):
 
         widget = cast(ExtraWidgetT, self.get_extra_child())
 
+        args: list[Any] = []
+        # Add the response_id as callback arg only if we emit more than one response
+        if self._emit_responses is None or len(self._emit_responses) != 1:
+            args.append(response_id)
+
         if widget is not None:
-            self._callback(response_id, widget.get_value())
-        else:
-            self._callback(response_id)
+            args.append(widget.get_value())
+
+        self._callback(*args)
 
     def _on_response(self, _dialog: Adw.AlertDialog, response_id: str) -> None:
         self._emit_response(response_id)
@@ -168,6 +174,12 @@ class InformationAlertDialog(_BaseAlertDialog):
             callback=callback,
             parent=parent,
         )
+
+    def _emit_response(self, response_id: str) -> None:
+        if self._callback is None:
+            return
+
+        self._callback()
 
 
 class ConfirmationAlertDialog(_BaseAlertDialog):
