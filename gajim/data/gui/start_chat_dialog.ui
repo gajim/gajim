@@ -261,8 +261,8 @@ You can also type an XMPP address</property>
                                           </object>
                                         </child>
                                         <style>
-                                          <class name="p-18"/>
-                                          <class name="floating-overlay-box"/>
+                                          <class name="toolbar"/>
+                                          <class name="osd"/>
                                         </style>
                                       </object>
                                     </property>

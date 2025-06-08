@@ -23,7 +23,8 @@ class MessageSelection(Gtk.Grid):
         self.set_halign(Gtk.Align.CENTER)
         self.set_valign(Gtk.Align.END)
 
-        self.add_css_class("floating-overlay-box")
+        self.add_css_class("toolbar")
+        self.add_css_class("osd")
 
         label = Gtk.Label(
             label=_("Click messages to select them\n(Ctrl + Double Click to deselect)")

@@ -116,7 +116,8 @@ class TestActivityFeed(GajimAppWindow):
             hexpand=True,
             margin_bottom=12,
         )
-        button_box.add_css_class("floating-overlay-box")
+        button_box.add_css_class("toolbar")
+        button_box.add_css_class("osd")
         button_box.append(update_button)
         button_box.append(subscription_button)
         button_box.append(invitation_button)

@@ -337,16 +337,6 @@ button.flat.link { padding: 0; border: 0; }
 
 .link-button { min-height: 0px; }
 
-.floating-overlay-box {
-    background-color: alpha(shade(@theme_bg_color, 0.3), 0.8);
-    padding: 12px;
-    border-radius: 6px;
-}
-.floating-overlay-box > label,
-.floating-overlay-box > spinner {
-    color: shade(@theme_bg_color, 4.0);
-}
-
 /* Main Window ============================================================= */
 .mainwindow-grid {
     background: @theme_base_color;

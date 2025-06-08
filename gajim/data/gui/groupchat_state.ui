@@ -28,7 +28,8 @@
               </object>
             </child>
             <style>
-              <class name="floating-overlay-box"/>
+              <class name="toolbar"/>
+              <class name="osd"/>
             </style>
           </object>
         </property>
@@ -59,7 +60,8 @@
               </object>
             </child>
             <style>
-              <class name="floating-overlay-box"/>
+              <class name="toolbar"/>
+              <class name="osd"/>
             </style>
           </object>
         </property>
@@ -82,7 +84,8 @@
               </object>
             </child>
             <style>
-              <class name="floating-overlay-box"/>
+              <class name="toolbar"/>
+              <class name="osd"/>
             </style>
           </object>
         </property>
@@ -123,7 +126,8 @@
               </object>
             </child>
             <style>
-              <class name="floating-overlay-box"/>
+              <class name="toolbar"/>
+              <class name="osd"/>
             </style>
           </object>
         </property>
