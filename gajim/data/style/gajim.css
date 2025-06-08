@@ -854,7 +854,6 @@ button.flat.link { padding: 0; border: 0; }
     font-size: 90%;
 }
 .conversation-read-marker {
-    color: @insensitive_fg_color;
     font-size: 90%;
     font-style: italic;
 }
