@@ -1392,7 +1392,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         def _on_response(response_id: str) -> None:
             if response_id not in ("report", "block"):
                 return
-            report = None if response_id == "report" else "spam"
+            report = "spam" if response_id == "report" else None
             client.get_module("Blocking").block([contact.jid], report)
             self._chat_page.remove_chat(account, contact.jid)
 
