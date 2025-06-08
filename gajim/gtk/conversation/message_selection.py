@@ -31,14 +31,14 @@ class MessageSelection(Gtk.Grid):
         )
         self.attach(label, 0, 0, 2, 1)
 
+        cancel_button = Gtk.Button(label=_("Cancel"))
+        cancel_button.connect("clicked", self._on_cancel_clicked)
+        self.attach(cancel_button, 0, 1, 1, 1)
+
         copy_button = Gtk.Button(label=_("Copy Text"))
         copy_button.add_css_class("suggested-action")
         copy_button.connect("clicked", self._on_copy_clicked)
-        self.attach(copy_button, 0, 1, 1, 1)
-
-        cancel_button = Gtk.Button(label=_("Cancel"))
-        cancel_button.connect("clicked", self._on_cancel_clicked)
-        self.attach(cancel_button, 1, 1, 1, 1)
+        self.attach(copy_button, 1, 1, 1, 1)
 
     def _on_copy_clicked(self, _button: Gtk.Button) -> None:
         self.set_visible(False)
