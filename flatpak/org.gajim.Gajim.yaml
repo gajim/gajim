@@ -86,22 +86,22 @@ modules:
     only-arches:
       - aarch64
     build-commands:
-      - pip3 install cryptography-44.0.2-cp39-abi3-manylinux_2_28_aarch64.whl
+      - pip3 install cryptography-45.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.2-cp39-abi3-manylinux_2_28_aarch64.whl
-        sha256: 6210c05941994290f3f7f175a4a57dbbb2afd9273657614c506d5976db061181
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.3-cp311-abi3-manylinux_2_34_aarch64.whl
+        sha256: 9cc80ce69032ffa528b5e16d217fa4d8d4bb7d6ba8659c1b4d74a1b0f4235fca
 
   - name: python3-cryptography
     buildsystem: simple
     only-arches:
       - x86_64
     build-commands:
-      - pip3 install cryptography-44.0.2-cp39-abi3-manylinux_2_28_x86_64.whl
+      - pip3 install cryptography-45.0.3-cp311-abi3-manylinux_2_34_x86_64.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/cp39/c/cryptography/cryptography-44.0.2-cp39-abi3-manylinux_2_28_x86_64.whl
-        sha256: b042d2a275c8cee83a4b7ae30c45a15e6a4baa65a179a0ec2d78ebb90e4f6699
+        url: https://files.pythonhosted.org/packages/cp311/c/cryptography/cryptography-45.0.3-cp311-abi3-manylinux_2_34_x86_64.whl
+        sha256: c824c9281cb628015bfc3c59335163d4ca0540d49de4582d6c2637312907e4b1
 
   - name: python3-jeepney
     buildsystem: simple
@@ -206,8 +206,8 @@ modules:
       - /bin
     sources:
       - type: archive
-        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.7.tar.xz
-        sha256: 42f130f295f5addb6e9e8e74ccfbb709794bd2dfd021293e2875b9481bbd4e88
+        url: https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.8.tar.xz
+        sha256: 277646285818da7b295ef007b2c5ebd815d0930b3ad097505b3ced96965af517
 
   - name: farstream
     rm-configure: true
@@ -249,20 +249,20 @@ modules:
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.28.0-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.29.1-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9b/4e/b1575833094c088dfdef63fbca794518860fcbc8002aadf51ebe8b6a387f/sentry_sdk-2.28.0-py2.py3-none-any.whl
-        sha256: 51496e6cb3cb625b99c8e08907c67a9112360259b0ef08470e532c3ab184a232
+        url: https://files.pythonhosted.org/packages/f0/e5/da07b0bd832cefd52d16f2b9bbbe31624d57552602c06631686b93ccb1bd/sentry_sdk-2.29.1-py2.py3-none-any.whl
+        sha256: 90862fe0616ded4572da6c9dadb363121a1ae49a49e21c418f0634e9d10b4c19
 
   - name: python3-typing-extensions
     buildsystem: simple
     build-commands:
-      - pip3 install typing_extensions-4.13.2-py3-none-any.whl
+      - pip3 install typing_extensions-4.14.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/8b/54/b1ae86c0973cc6f0210b53d508ca3641fb6d0c56823f288d108bc7ab3cc8/typing_extensions-4.13.2-py3-none-any.whl
-        sha256: a439e7c04b49fec3e5d3e2beaa21755cadbbdc391694e28ccdd36ca4a1408f8c
+        url: https://files.pythonhosted.org/packages/69/e0/552843e0d356fbb5256d21449fa957fa4eff3bbc135a74a691ee70c7c5da/typing_extensions-4.14.0-py3-none-any.whl
+        sha256: a1514509136dd0b477638fc68d6a91497af5076466ad0fa6c338e44e359944af
 
   - name: python3-greenlet
     buildsystem: simple
@@ -270,8 +270,8 @@ modules:
       - pip3 install --no-build-isolation .
     sources:
       - type: archive
-        url: https://files.pythonhosted.org/packages/34/c1/a82edae11d46c0d83481aacaa1e578fea21d94a1ef400afd734d47ad95ad/greenlet-3.2.2.tar.gz
-        sha256: ad053d34421a2debba45aa3cc39acf454acbcd025b3fc1a9f8a0dee237abd485
+        url: https://files.pythonhosted.org/packages/c9/92/bb85bd6e80148a4d2e0c59f7c0c2891029f8fd510183afc7d8d2feeed9b6/greenlet-3.2.3.tar.gz
+        sha256: 8b0dd8ae4c0d6f5e54ee55ba935eeb3d735a9b58a8a1e5b5cbab64e01a39f365
 
   - name: python3-SQLAlchemy
     buildsystem: simple
@@ -324,11 +324,11 @@ modules:
   - name: python3-protobuf
     buildsystem: simple
     build-commands:
-      - pip3 install --no-deps protobuf-6.31.0-py3-none-any.whl
+      - pip3 install --no-deps protobuf-6.31.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/ee/01/1ed1d482960a5718fd99c82f6d79120181947cfd4667ec3944d448ed44a3/protobuf-6.31.0-py3-none-any.whl
-        sha256: 6ac2e82556e822c17a8d23aa1190bbc1d06efb9c261981da95c71c9da09e9e23
+        url: https://files.pythonhosted.org/packages/f7/af/ab3c51ab7507a7325e98ffe691d9495ee3d3aa5f589afad65ec920d39821/protobuf-6.31.1-py3-none-any.whl
+        sha256: 720a6c7e6b77288b85063569baae8536671b39f15cc22037ec7045658d80489e
 
   - name: python3-omemo-dr
     buildsystem: simple
