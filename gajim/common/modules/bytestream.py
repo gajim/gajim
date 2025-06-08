@@ -131,7 +131,7 @@ class Bytestream(BaseModule):
         '''
         Send iq, confirming that we want to download the file
         '''
-        # user response to ConfirmationDialog may come after we've disconnected
+        # user response to ConfirmationAlertDialog may come after we've disconnected
         if not app.account_is_available(self._account):
             return
 
@@ -164,7 +164,7 @@ class Bytestream(BaseModule):
         typ is used when code = '400', in this case typ can be 'stream' for
         invalid stream or 'profile' for invalid profile
         '''
-        # user response to ConfirmationDialog may come after we've disconnected
+        # user response to ConfirmationAlertDialog may come after we've disconnected
         if not app.account_is_available(self._account):
             return
 

@@ -21,11 +21,10 @@ from gajim.common.ged import EventHelper
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.dataform import DataFormWidget
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util.styling import get_source_view_style_scheme
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -117,7 +116,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
         try:
             result = task.finish()
         except StanzaError as error:
-            SimpleDialog(_("Error"), to_user_string(error))
+            InformationAlertDialog(_("Error"), to_user_string(error))
             return
 
         jid = result.jid.bare
@@ -135,19 +134,18 @@ class PEPConfig(GajimAppWindow, EventHelper):
         assert iter_
         node = model[iter_][0]
 
-        def _delete():
+        def _on_response() -> None:
             self._client.get_module("PubSub").delete(
                 node, callback=self._on_node_delete, user_data=node
             )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Delete Node?"),
             _("Do you want to delete this PEP node?"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Delete", callback=_delete),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Delete"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _on_node_delete(self, task: Task) -> None:
@@ -156,7 +154,7 @@ class PEPConfig(GajimAppWindow, EventHelper):
         try:
             task.finish()
         except StanzaError as error:
-            SimpleDialog(
+            InformationAlertDialog(
                 _("PEP Node Not Removed"),
                 _("PEP node %(node)s was not removed:\n%(message)s")
                 % {"node": node, "message": error},

@@ -33,7 +33,6 @@ if TYPE_CHECKING:
     from gajim.gtk.contact_info import ContactInfo
     from gajim.gtk.db_migration import DBMigration
     from gajim.gtk.debug_console import DebugConsoleWindow
-    from gajim.gtk.dialogs import QuitDialog
     from gajim.gtk.discovery import ServiceDiscoveryWindow
     from gajim.gtk.features import Features
     from gajim.gtk.groupchat_creation import CreateGroupchatWindow
@@ -51,6 +50,7 @@ if TYPE_CHECKING:
     from gajim.gtk.preferences import Preferences
     from gajim.gtk.profile import ProfileWindow
     from gajim.gtk.proxies import ManageProxies
+    from gajim.gtk.quit import QuitDialog
     from gajim.gtk.remove_account import RemoveAccount
     from gajim.gtk.roster_item_exchange import RosterItemExchange
     from gajim.gtk.server_info import ServerInfo

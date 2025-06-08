@@ -26,11 +26,11 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.logging_helpers import get_log_console_handler
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.dropdown import GajimDropDown
 from gajim.gtk.settings import SettingsDialog
 from gajim.gtk.util.misc import at_the_end
@@ -315,7 +315,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             return
         if not app.account_is_available(self._selected_send_account):
             # If offline or connecting
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Not Connected"),
                 _('Please make sure you are connected with "%s".')
                 % self._selected_send_account,
@@ -328,7 +328,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
             try:
                 node = nbxmpp.Node(node=stanza)
             except Exception as error:
-                SimpleDialog(_("Invalid Node"), str(error))
+                InformationAlertDialog(_("Invalid Node"), str(error))
                 return
 
             if node.getName() in ("message", "presence", "iq"):
@@ -341,7 +341,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
                         node=stanza, attrs={"xmlns": "jabber:client"}
                     )
                 except Exception as error:
-                    SimpleDialog(_("Invalid Stanza"), str(error))
+                    InformationAlertDialog(_("Invalid Stanza"), str(error))
                     return
 
             client = app.get_client(self._selected_send_account)

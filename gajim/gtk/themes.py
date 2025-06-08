@@ -22,10 +22,9 @@ from gajim.common.events import StyleChanged
 from gajim.common.events import ThemeUpdate
 from gajim.common.i18n import _
 
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import get_app_window
@@ -147,14 +146,14 @@ class Themes(GajimAppWindow):
         old_name = self._ui.theme_store[iter_][Column.THEME]
 
         if new_name == "default":
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Invalid Name"),
                 _("Name <b>default</b> is not allowed"),
             )
             return
 
         if " " in new_name:
-            SimpleDialog(_("Invalid Name"), _("Spaces are not allowed"))
+            InformationAlertDialog(_("Invalid Name"), _("Spaces are not allowed"))
             return
 
         if new_name == "":
@@ -260,7 +259,7 @@ class Themes(GajimAppWindow):
 
         theme = store[iter_][Column.THEME]
 
-        def _remove_theme():
+        def _on_response() -> None:
             if theme == app.settings.get("roster_theme"):
                 self._apply_theme("default")
 
@@ -283,14 +282,13 @@ class Themes(GajimAppWindow):
                 "Do you want to delete this theme?"
             )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Delete Theme?"),
             text,
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Delete", callback=_remove_theme),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Delete"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _cleanup(self) -> None:

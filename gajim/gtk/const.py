@@ -161,7 +161,7 @@ WINDOW_MODULES = {
     "PluginsWindow": "gajim.gtk.plugins",
     "Preferences": "gajim.gtk.preferences",
     "ProfileWindow": "gajim.gtk.profile",
-    "QuitDialog": "gajim.gtk.dialogs",
+    "QuitDialog": "gajim.gtk.quit",
     "RemoveAccount": "gajim.gtk.remove_account",
     "RosterItemExchange": "gajim.gtk.roster_item_exchange",
     "ServerInfo": "gajim.gtk.server_info",

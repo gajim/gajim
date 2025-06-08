@@ -31,9 +31,8 @@ from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.modules.contacts import GroupchatParticipant
 from gajim.common.modules.omemo import compose_trust_uri
 
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import clear_listbox
 from gajim.gtk.util.window import open_window
@@ -209,17 +208,15 @@ class OMEMOTrustManager(Gtk.Box, EventHelper, SignalManager):
         self._ui.list.invalidate_filter()
 
     def _on_clear_devices_clicked(self, _button: Gtk.Button) -> None:
-        def _clear():
+        def _on_response() -> None:
             client = app.get_client(self._account)
             client.get_module("OMEMO").clear_devicelist()
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Clear Devices?"),
             _("This will clear the devices store for your account."),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("_Clear Devices"), callback=_clear),
-            ],
+            confirm_label=_("_Clear Devices"),
+            callback=_on_response,
         )
 
     def _on_manage_trust_clicked(self, _button: Gtk.Button) -> None:
@@ -274,7 +271,7 @@ class KeyRow(Adw.ActionRow):
 
     def delete_fingerprint(self, *args: Any) -> None:
 
-        def _remove():
+        def _on_response() -> None:
             self._client.get_module("OMEMO").backend.delete_session(
                 self._address, self._identity_info.device_id, delete_identity=True
             )
@@ -282,13 +279,12 @@ class KeyRow(Adw.ActionRow):
             listbox = cast(Gtk.ListBox, self.get_parent())
             listbox.remove(self)
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Delete Fingerprint?"),
             _("Doing so will permanently delete this Fingerprint"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", text=_("Delete"), callback=_remove),
-            ],
+            confirm_label=_("_Delete"),
+            appearance="destructive",
+            callback=_on_response,
         )
 
     def set_trust(self, trust: OMEMOTrust) -> None:

@@ -17,10 +17,10 @@ from gajim.common.modules.httpupload import HTTPFileTransfer
 from gajim.common.util.datetime import utc_now
 from gajim.common.util.text import format_eta
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.conversation.rows.base import BaseRow
 from gajim.gtk.conversation.rows.widgets import DateTimeLabel
-from gajim.gtk.dialogs import SimpleDialog
 
 
 class FileTransferRow(BaseRow):
@@ -86,7 +86,7 @@ class FileTransferRow(BaseRow):
             return
 
         if state.is_error:
-            SimpleDialog(_("Error"), transfer.error_text, transient_for=app.window)
+            InformationAlertDialog(_("Error"), transfer.error_text, parent=app.window)
             cast(Gtk.ListBox, self.get_parent()).remove(self)
 
         if state.is_finished or state.is_cancelled:

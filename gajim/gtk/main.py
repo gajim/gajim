@@ -20,7 +20,6 @@ from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
 from nbxmpp import JID
-from nbxmpp.types import BlockingReportValues
 
 from gajim.common import app
 from gajim.common import events
@@ -47,15 +46,17 @@ from gajim.common.util.uri import XmppIri
 from gajim.gtk.about import AboutDialog
 from gajim.gtk.account_side_bar import AccountSideBar
 from gajim.gtk.activity_side_bar import ActivitySideBar
+from gajim.gtk.alert import AlertDialog
+from gajim.gtk.alert import CancelDialogResponse
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import DialogEntry
+from gajim.gtk.alert import DialogResponse
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
@@ -308,7 +309,14 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _on_plain_connection(event: events.PlainConnection) -> None:
-        ConfirmationDialog(
+
+        def _on_response(response_id: str) -> None:
+            if response_id == "connect":
+                event.connect()
+            else:
+                event.abort()
+
+        AlertDialog(
             _("Insecure Connection"),
             _(
                 "You are about to connect to the account %(account)s "
@@ -323,11 +331,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 ),
             },
             [
-                DialogButton.make("Cancel", text=_("_Abort"), callback=event.abort),
-                DialogButton.make(
-                    "Remove", text=_("_Connect Anyway"), callback=event.connect
+                CancelDialogResponse(label=_("_Abort")),
+                DialogResponse(
+                    "connect", _("_Connect Anyway"), appearance="destructive"
                 ),
             ],
+            callback=_on_response,
         )
 
     @staticmethod
@@ -336,9 +345,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     @staticmethod
     def _on_http_auth(event: events.HttpAuth) -> None:
-        def _response(answer: str) -> None:
+        def _on_response(response_id: str) -> None:
             event.client.get_module("HTTPAuth").build_http_auth_answer(
-                event.stanza, answer
+                event.stanza, "yes" if response_id == "accept" else "no"
             )
 
         account = event.client.account
@@ -354,15 +363,14 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             sec_msg = event.data.body + "\n" + sec_msg
         message = message + "\n" + sec_msg
 
-        ConfirmationDialog(
+        AlertDialog(
             _("HTTP Authorization Request"),
             message,
             [
-                DialogButton.make(
-                    "Cancel", text=_("_No"), callback=_response, args=["no"]
-                ),
-                DialogButton.make("Accept", callback=_response, args=["yes"]),
+                CancelDialogResponse(label=_("_No")),
+                DialogResponse("accept", _("_Accept")),
             ],
+            callback=_on_response,
         )
 
     def _on_muc_added(self, event: events.MucAdded) -> None:
@@ -605,10 +613,10 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                         return
 
                     log.exception(e)
-                    SimpleDialog(
+                    InformationAlertDialog(
                         _("Could Not Save File"),
                         _("Could not save file to selected directory."),
-                        transient_for=self,
+                        parent=self,
                     )
                     return
 
@@ -627,7 +635,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     target_path = target_path.with_suffix(orig_ext)
                 dirname = target_path.parent
                 if not os.access(dirname, os.W_OK):
-                    SimpleDialog(
+                    InformationAlertDialog(
                         _("Directory Not Writable"),
                         _(
                             'Directory "%s" is not writable. '
@@ -635,21 +643,21 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                             "create files in this directory."
                         )
                         % dirname,
-                        transient_for=self,
+                        parent=self,
                     )
                     return
 
                 try:
                     shutil.copyfile(preview.orig_path, target_path)
                 except PermissionError as e:
-                    SimpleDialog(
+                    InformationAlertDialog(
                         _("Could Not Save File"),
                         _(
                             "You do not have permissions for this directory.\n"
                             "Error: %s."
                         )
                         % e,
-                        transient_for=self,
+                        parent=self,
                     )
                     return
 
@@ -726,7 +734,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self, _action: Gio.SimpleAction, params: OccupantParam
     ) -> None:
 
-        def _on_confirmation() -> None:
+        def _on_response() -> None:
             client = app.get_client(params.account)
             client.get_module("MucBlocking").set_block_occupants(
                 params.jid, [params.occupant_id], True
@@ -746,14 +754,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             client.get_module("VCardAvatars").invalidate_cache(participant.jid)
             participant.update_avatar()
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Block Participant?"),
             _("Do you want to block %(name)s?") % {"name": params.resource},
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("OK", text=_("_Block"), callback=_on_confirmation),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Block"),
+            callback=_on_response,
+            parent=app.window,
         )
 
     @actionmethod
@@ -761,20 +767,18 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self, _action: Gio.SimpleAction, params: OccupantParam
     ) -> None:
 
-        def _on_confirmation() -> None:
+        def _on_response() -> None:
             client = app.get_client(params.account)
             client.get_module("MucBlocking").set_block_occupants(
                 params.jid, [params.occupant_id], False
             )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Unblock Participant?"),
             _("Do you want to unblock %(name)s?") % {"name": params.resource},
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("OK", text=_("_Unblock"), callback=_on_confirmation),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Unblock"),
+            callback=_on_response,
+            parent=app.window,
         )
 
     @actionmethod
@@ -782,24 +786,23 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self, _action: Gio.SimpleAction, params: RetractMessageParam
     ) -> None:
 
-        def _on_retract() -> None:
+        def _on_response() -> None:
             client = app.get_client(params.account)
             contact = client.get_module("Contacts").get_contact(params.jid)
             assert not isinstance(contact, ResourceContact)
             client.get_module("Retraction").send_retraction(contact, params.retract_ids)
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Retract Message?"),
             _(
                 "Do you want to retract this message?\n"
                 "Please note that retracting a message does not guarantee that your "
                 "provider or your contact’s device will remove it."
             ),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", text=_("_Retract"), callback=_on_retract),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Retract"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=app.window,
         )
 
     @actionmethod
@@ -807,21 +810,20 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self, _action: Gio.SimpleAction, params: ModerateMessageParam
     ) -> None:
 
-        def _on_moderate(reason: str) -> None:
+        def _on_response(reason: str) -> None:
             client = app.get_client(params.account)
             client.get_module("MUC").moderate_messages(
                 params.namespace, params.jid, params.stanza_ids, reason or None
             )
 
-        InputDialog(
+        ConfirmationAlertDialog(
             _("Moderate Message?"),
             _("Why do you want to moderate this message?"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),
-            ],
-            input_str=_("Spam"),
-            transient_for=app.window,
+            confirm_label=_("_Moderate"),
+            appearance="destructive",
+            extra_widget=DialogEntry(text=_("Spam")),
+            callback=_on_response,
+            parent=app.window,
         )
 
     @actionmethod
@@ -832,18 +834,18 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             params.account, params.jid, params.occupant_id
         )
         if stanza_ids is None:
-            SimpleDialog(
+            InformationAlertDialog(
                 _("No Messages Found"),
                 _("Could not find any messages for this participant."),
             )
             return
 
-        def _on_moderate(reason: str) -> None:
+        def _on_response(reason: str) -> None:
             client = app.get_client(params.account)
             groupchat_contact = client.get_module("Contacts").get_contact(params.jid)
             assert isinstance(groupchat_contact, GroupchatContact)
             if not groupchat_contact.is_joined:
-                SimpleDialog(
+                InformationAlertDialog(
                     _("Not Joined"), _("You are currently not joined this group chat")
                 )
                 return
@@ -853,19 +855,18 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 params.namespace, params.jid, stanza_ids, reason or None
             )
 
-        InputDialog(
+        ConfirmationAlertDialog(
             _("Moderate Messages?"),
             _(
                 "%(count)s messages from %(participant)s will be moderated.\n"
                 "Why do you want to moderate these messages?"
             )
             % {"count": len(stanza_ids), "participant": params.nickname},
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", text=_("_Moderate"), callback=_on_moderate),
-            ],
-            input_str=_("Spam"),
-            transient_for=app.window,
+            confirm_label=_("_Moderate"),
+            appearance="destructive",
+            extra_widget=DialogEntry(text=_("Spam")),
+            callback=_on_response,
+            parent=app.window,
         )
 
     @actionmethod
@@ -873,7 +874,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self, _action: Gio.SimpleAction, params: DeleteMessageParam
     ) -> None:
 
-        def _on_delete() -> None:
+        def _on_response() -> None:
             app.storage.archive.delete_message(params.pk)
             app.ged.raise_event(
                 events.MessageDeleted(
@@ -881,14 +882,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 )
             )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Delete Message Locally?"),
             _("This message will be deleted from your local chat history"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Delete", callback=_on_delete),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Delete"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=app.window,
         )
 
     def _on_handle_uri(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
@@ -1096,16 +1096,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             app.settings.remove_workspace(workspace_id)
 
         if open_chats:
-            ConfirmationDialog(
+            ConfirmationAlertDialog(
                 _("Remove Workspace?"),
                 _(
                     "This workspace contains chats. All chats will be moved to "
                     "the next workspace. Remove anyway?"
                 ),
-                [
-                    DialogButton.make("Cancel", text=_("_No")),
-                    DialogButton.make("Remove", callback=_continue_removing_workspace),
-                ],
+                confirm_label=_("_Remove"),
+                appearance="destructive",
+                callback=_continue_removing_workspace,
             )
             return
 
@@ -1390,32 +1389,31 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             return
 
         # TODO: Keep "confirm_block" setting?
-        def _block_contact(report: BlockingReportValues | None = None) -> None:
+        def _on_response(response_id: str) -> None:
+            if response_id not in ("report", "block"):
+                return
+            report = None if response_id == "report" else "spam"
             client.get_module("Blocking").block([contact.jid], report)
             self._chat_page.remove_chat(account, contact.jid)
 
-        ConfirmationDialog(
+        AlertDialog(
             _("Block Contact?"),
             _(
                 "You will appear offline for this contact and you "
                 "will not receive further messages."
             ),
             [
-                DialogButton.make("Cancel"),
-                DialogButton.make(
-                    "OK",
-                    text=_("_Report Spam"),
-                    callback=_block_contact,
-                    kwargs={"report": "spam"},
-                ),
-                DialogButton.make("Remove", text=_("_Block"), callback=_block_contact),
+                CancelDialogResponse(),
+                DialogResponse("report", _("_Report Spam")),
+                DialogResponse("block", _("_Block")),
             ],
+            callback=_on_response,
         )
 
     def remove_contact(self, account: str, jid: JID) -> None:
         client = app.get_client(account)
 
-        def _remove_contact():
+        def _on_response() -> None:
             client.get_module("Roster").delete_item(jid)
 
         contact = client.get_module("Contacts").get_contact(jid)
@@ -1426,13 +1424,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             "You are about to remove %(name)s (%(jid)s) from your contact list."
         ) % {"name": contact.name, "jid": jid}
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Remove From Contact List?"),
             sec_text,
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_remove_contact),
-            ],
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
         )
 
     @staticmethod

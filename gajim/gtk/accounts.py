@@ -26,11 +26,12 @@ from gajim.common.i18n import _
 from gajim.common.i18n import p_
 from gajim.common.setting_values import AllSettingsT
 
+from gajim.gtk.alert import AlertDialog
+from gajim.gtk.alert import CancelDialogResponse
+from gajim.gtk.alert import DialogResponse
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.menus import build_accounts_menu
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
@@ -110,18 +111,23 @@ class AccountsWindow(GajimAppWindow):
 
     def _relog(self, account: str) -> None:
 
-        def relog():
-            client = app.get_client(account)
-            client.disconnect(gracefully=True, reconnect=True, destroy_client=True)
+        def _on_response(response_id: str) -> None:
+            if response_id == "accept":
+                client = app.get_client(account)
+                client.disconnect(gracefully=True, reconnect=True, destroy_client=True)
+
             self.close()
 
-        ConfirmationDialog(
+        AlertDialog(
             _("Re-Login Now?"),
             _("To apply all changes instantly, you have to re-login."),
             [
-                DialogButton.make("Cancel", text=_("_Later"), callback=self.close),
-                DialogButton.make("Accept", text=_("_Re-Login"), callback=relog),
+                DialogResponse("cancel", _("_Later")),
+                DialogResponse(
+                    "accept", _("_Re-Login"), is_default=True, appearance="suggested"
+                ),
             ],
+            callback=_on_response,
         )
 
     @staticmethod
@@ -542,12 +548,15 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
 
     def _on_enable_switch(self, switch: Gtk.Switch, state: bool, account: str) -> int:
 
-        def _disable() -> None:
-            client = app.get_client(account)
-            client.connect_signal("state-changed", self._on_state_changed)
-            client.change_status("offline", "offline")
-            switch.set_state(state)
-            self._set_label(state)
+        def _on_response(response_id: str) -> None:
+            if response_id == "disable":
+                client = app.get_client(account)
+                client.connect_signal("state-changed", self._on_state_changed)
+                client.change_status("offline", "offline")
+                switch.set_state(state)
+                self._set_label(state)
+            else:
+                switch.set_active(True)
 
         account_is_active = app.settings.get_account_setting(account, "active")
         if account_is_active == state:
@@ -559,7 +568,7 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
             assert window is not None
 
             account_label = app.get_account_label(account)
-            ConfirmationDialog(
+            AlertDialog(
                 _("Disable Account?"),
                 _(
                     "Account %(name)s is still connected\n"
@@ -567,14 +576,13 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
                 )
                 % {"name": account_label},
                 [
-                    DialogButton.make(
-                        "Cancel", callback=lambda: switch.set_active(True)
-                    ),
-                    DialogButton.make(
-                        "Remove", text=_("_Disable Account"), callback=_disable
+                    CancelDialogResponse(),
+                    DialogResponse(
+                        "disable", _("_Disable Account"), appearance="destructive"
                     ),
                 ],
-                transient_for=window.window,
+                callback=_on_response,
+                parent=window.window,
             )
             return Gdk.EVENT_STOP
 

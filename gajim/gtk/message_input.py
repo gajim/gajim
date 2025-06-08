@@ -30,12 +30,12 @@ from gajim.common.styling import PlainBlock
 from gajim.common.styling import process
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.completion.commands import CommandsCompletionProvider
 from gajim.gtk.completion.emoji import EmojiCompletionProvider
 from gajim.gtk.completion.nickname import NicknameCompletionProvider
 from gajim.gtk.completion.popover import CompletionPopover
 from gajim.gtk.const import MAX_MESSAGE_LENGTH
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.menus import get_message_input_extra_context_menu
 from gajim.gtk.util.misc import scroll_to_end
 from gajim.gtk.widgets import GdkRectangle
@@ -400,7 +400,7 @@ class MessageInputTextView(GtkSource.View):
         try:
             text = clipboard.read_text_finish(result)
         except Exception as e:
-            SimpleDialog(_("Pasting Content Failed"), _("Error: %s") % e)
+            InformationAlertDialog(_("Pasting Content Failed"), _("Error: %s") % e)
             return
 
         if text is None:

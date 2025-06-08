@@ -27,7 +27,7 @@ from gajim.common.i18n import _
 from gajim.common.util.image import scale_with_ratio
 from gajim.common.util.uri import get_file_path_from_uri
 
-from gajim.gtk.dialogs import SimpleDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util.classes import SignalManager
 
@@ -293,7 +293,7 @@ class CropArea(Gtk.DrawingArea, SignalManager):
         if self._pixbuf is None:
             avatar_selector = cast(AvatarSelector, self.get_parent())
             avatar_selector.reset()
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Error Loading Image"), _("Selected image could not be loaded.")
             )
             return

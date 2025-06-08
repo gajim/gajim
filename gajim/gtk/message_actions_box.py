@@ -39,9 +39,9 @@ from gajim.common.storage.archive import models as mod
 from gajim.common.structs import ReplyData
 from gajim.common.types import ChatContactT
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.chat_state_indicator import ChatStateIndicator
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.menus import get_encryption_menu
 from gajim.gtk.menus import get_format_menu
@@ -826,7 +826,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
             if not app.account_is_available(self._contact.account):
                 # we are not connected
-                SimpleDialog(
+                InformationAlertDialog(
                     _("Not Connected"),
                     _("Your message can not be sent until you are connected."),
                 )
@@ -888,7 +888,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
         except Exception as e:
             formats = clipboard.get_formats()
             mime_types = formats.get_mime_types()
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Pasting Content Failed"),
                 _("Error: %s (mime types: %s)") % (e, mime_types),
             )
@@ -910,7 +910,7 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             texture = clipboard.read_texture_finish(result)
         except GLib.Error as e:
             self._ui.input_overlay.set_visible(False)
-            SimpleDialog(_("Pasting Content Failed"), _("Error: %s") % e)
+            InformationAlertDialog(_("Pasting Content Failed"), _("Error: %s") % e)
             return
 
         if texture is None:

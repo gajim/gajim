@@ -29,10 +29,9 @@ from gajim.plugins.helpers import GajimPluginActivateException
 from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.util.classes import SignalManager
@@ -157,10 +156,10 @@ class PluginsWindow(GajimAppWindow, EventHelper):
 
         zip_filename = str(paths[0])
 
-        def _on_overwrite():
+        def _on_response() -> None:
             plugin = app.plugin_manager.install_from_zip(zip_filename, overwrite=True)
             if not plugin:
-                SimpleDialog(_("Archive Malformed"), _("Archive is malformed"))
+                InformationAlertDialog(_("Archive Malformed"), _("Archive is malformed"))
                 return
 
         try:
@@ -168,23 +167,20 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         except PluginsystemError as er_type:
             error_text = str(er_type)
             if error_text == _("Plugin already exists"):
-                ConfirmationDialog(
+                ConfirmationAlertDialog(
                     _("Overwrite Plugin?"),
                     _("Do you want to overwrite the currently installed version?"),
-                    [
-                        DialogButton.make("Cancel"),
-                        DialogButton.make(
-                            "Remove", text=_("_Overwrite"), callback=_on_overwrite
-                        ),
-                    ],
+                    confirm_label=_("_Overwrite"),
+                    appearance="destructive",
+                    callback=_on_response,
                 )
                 return
 
-            SimpleDialog(error_text, f'"{zip_filename}"')
+            InformationAlertDialog(error_text, f'"{zip_filename}"')
             return
 
         if not plugin:
-            SimpleDialog(_("Archive Malformed"), _("Archive is malformed"))
+            InformationAlertDialog(_("Archive Malformed"), _("Archive is malformed"))
 
     def _on_download_started(
         self,
@@ -411,7 +407,7 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
             try:
                 app.plugin_manager.activate_plugin(plugin)
             except GajimPluginActivateException as e:
-                SimpleDialog(_("Plugin Failed"), str(e))
+                InformationAlertDialog(_("Plugin Failed"), str(e))
                 return
 
     def _on_config_clicked(self, _button: Gtk.Button) -> None:
@@ -427,11 +423,11 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
         error_text = _("Unable to properly remove the plugin")
         if plugin is None:
-            SimpleDialog(_("Warning"), error_text)
+            InformationAlertDialog(_("Warning"), error_text)
             return
 
         try:
             app.plugin_manager.uninstall_plugin(plugin)
         except PluginsystemError as error:
-            SimpleDialog(_("Warning"), f"{error_text}\n{error}")
+            InformationAlertDialog(_("Warning"), f"{error_text}\n{error}")
             return

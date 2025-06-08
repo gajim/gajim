@@ -35,11 +35,13 @@ from gajim.common.util.status import get_uf_show
 from gajim.common.util.user_strings import get_uf_affiliation
 from gajim.common.util.user_strings import get_uf_role
 
+from gajim.gtk.alert import AlertDialog
+from gajim.gtk.alert import CancelDialogResponse
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import DialogResponse
 from gajim.gtk.builder import get_builder
 from gajim.gtk.contact_name_widget import ContactNameWidget
 from gajim.gtk.contact_settings import ContactSettings
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
@@ -367,29 +369,31 @@ class ContactInfo(GajimAppWindow, EventHelper):
     def _on_from_subscription_switch_toggled(
         self, switch: Gtk.Switch, state: bool
     ) -> int:
-        def _stop_sharing():
-            self._client.get_module("Presence").unsubscribed(self.contact.jid)
-            switch.set_state(state)
+        def _on_response(response_id: str) -> None:
+            if response_id == "stop":
+                self._client.get_module("Presence").unsubscribed(self.contact.jid)
+                switch.set_state(state)
+            else:
+                switch.set_active(True)
 
         if state:
             self._client.get_module("Presence").subscribed(self.contact.jid)
             switch.set_state(state)
         else:
-            ConfirmationDialog(
+            AlertDialog(
                 _("Stop Sharing Online Status?"),
                 _(
                     "The contact will be informed that you stopped sharing your "
                     "status. Please note that this can have other side effects."
                 ),
                 [
-                    DialogButton.make(
-                        "Cancel", callback=lambda: switch.set_active(True)
-                    ),
-                    DialogButton.make(
-                        "Remove", text=_("_Stop Sharing"), callback=_stop_sharing
+                    CancelDialogResponse(),
+                    DialogResponse(
+                        "stop", _("_Stop Sharing"), appearance="destructive"
                     ),
                 ],
-                transient_for=self.window,
+                callback=_on_response,
+                parent=self.window,
             )
         return Gdk.EVENT_STOP
 
@@ -447,18 +451,17 @@ class ContactInfo(GajimAppWindow, EventHelper):
         assert iter_ is not None
         group = model[iter_][Column.GROUP_NAME]
 
-        def _remove_group():
+        def _on_response() -> None:
             self._client.get_module("Roster").remove_group(group)
             del model[iter_]
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Remove Group?"),
             _('Do you want to remove "%(group)s"?') % {"group": group},
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_remove_group),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=self.window,
         )
         return Gdk.EVENT_STOP
 

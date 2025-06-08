@@ -38,11 +38,11 @@ from gajim.common.util.preview import split_geo_uri
 from gajim.common.util.text import remove_invalid_xml_chars
 
 from gajim.gtk.activity_page import ActivityPage
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.chat_banner import ChatBanner
 from gajim.gtk.chat_function_page import ChatFunctionPage
 from gajim.gtk.chat_function_page import FunctionMode
 from gajim.gtk.control import ChatControl
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.message_actions_box import MessageActionsBox
 from gajim.gtk.message_input import MessageInputTextView
 from gajim.gtk.util.classes import SignalManager
@@ -252,7 +252,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         try:
             text = clipboard.read_text_finish(result)
         except Exception as e:
-            SimpleDialog(_("Pasting Content Failed"), _("Error: %s") % e)
+            InformationAlertDialog(_("Pasting Content Failed"), _("Error: %s") % e)
             return
 
         if text is None:
@@ -720,7 +720,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                         group=muc.name,
                     ),
                 )
-                SimpleDialog(_("Error"), f"{error_message}\n{error}")
+                InformationAlertDialog(_("Error"), f"{error_message}\n{error}")
         else:
             log.debug("Affiliation/role change success: %s", result)
 
@@ -811,7 +811,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         elif encryption:
             if encryption not in app.plugin_manager.encryption_plugins:
-                SimpleDialog(
+                InformationAlertDialog(
                     _("Encryption Error"), _("Missing necessary encryption plugin")
                 )
                 return

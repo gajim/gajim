@@ -61,9 +61,9 @@ from gajim.common.i18n import _
 from gajim.common.util.jid import InvalidFormat
 from gajim.common.util.jid import parse_jid
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
 from gajim.gtk.component_search import ComponentSearch
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util.icons import icon_exists
 from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import GajimAppWindow
@@ -601,7 +601,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         # Check connection
         if not app.account_is_available(account):
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Not Connected"),
                 _(
                     "You are not connected to the server. "
@@ -778,13 +778,13 @@ class ServiceDiscoveryWindow(GajimAppWindow):
                 self._destroy()
 
             if self.parent is not None:
-                SimpleDialog(
+                InformationAlertDialog(
                     _("Service Not Found"),
                     _(
                         "There is no service at the address you entered, or it is "
                         "not responding. Check the address and try again."
                     ),
-                    transient_for=self.parent.window,
+                    parent=self.parent.window,
                 )
                 return
 
@@ -793,10 +793,10 @@ class ServiceDiscoveryWindow(GajimAppWindow):
 
         klass = self.cache.get_browser(identities, features)
         if not klass:
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Service Not Browsable"),
                 _("This type of service does not contain any items to browse."),
-                transient_for=self.window,
+                parent=self.window,
             )
             return
 
@@ -830,7 +830,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
             try:
                 jid = parse_jid(jid)
             except InvalidFormat as s:
-                SimpleDialog(_("Invalid Server Name"), str(s))
+                InformationAlertDialog(_("Invalid Server Name"), str(s))
                 return
             self.travel(jid, "")
 
@@ -841,7 +841,7 @@ class ServiceDiscoveryWindow(GajimAppWindow):
         try:
             jid = parse_jid(jid)
         except InvalidFormat as s:
-            SimpleDialog(_("Invalid Server Name"), str(s), transient_for=self.window)
+            InformationAlertDialog(_("Invalid Server Name"), str(s), parent=self.window)
             return
         if jid == self.jid:  # jid has not changed
             return
@@ -1176,10 +1176,10 @@ class AgentBrowser:
         # The server returned an error
         if not items:
             if self.window.parent is not None:
-                SimpleDialog(
+                InformationAlertDialog(
                     _("Service Not Browsable"),
                     _("This service does not contain any items to browse."),
-                    transient_for=self.window.parent.window,
+                    parent=self.window.parent.window,
                 )
             if not self.window.address_comboboxtext:
                 # We can't travel anywhere else.

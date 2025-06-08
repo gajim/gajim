@@ -17,8 +17,8 @@ from gajim.common import app
 from gajim.common.helpers import to_user_string
 from gajim.common.i18n import _
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.blocking_list")
@@ -60,7 +60,7 @@ class BlockingList(GajimAppWindow):
         )
 
     def _show_error(self, error: str) -> None:
-        SimpleDialog(_("Error"), error)
+        InformationAlertDialog(_("Error"), error)
 
     def _on_blocking_list_received(self, task: Task) -> None:
         try:

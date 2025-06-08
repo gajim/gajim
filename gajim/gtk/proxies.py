@@ -8,9 +8,8 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -126,7 +125,7 @@ class ManageProxies(GajimAppWindow):
         self._remove_selected_proxy()
 
     def _remove_selected_proxy(self) -> None:
-        def _remove():
+        def _on_response() -> None:
             sel = self._ui.proxies_treeview.get_selection()
             if not sel:
                 return
@@ -143,14 +142,13 @@ class ManageProxies(GajimAppWindow):
             self._on_proxies_treeview_cursor_changed(self._ui.proxies_treeview)
             self._block_signal = False
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Remove Proxy?"),
             _("Do you want to remove this proxy?"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_remove),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _on_useauth_toggled(self, checkbutton: Gtk.CheckButton) -> None:

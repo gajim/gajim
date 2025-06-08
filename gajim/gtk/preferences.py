@@ -30,11 +30,10 @@ from gajim.common.util.av import AudioInputManager
 from gajim.common.util.uri import open_directory
 from gajim.common.util.version import package_version
 
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
 from gajim.gtk.preview import PREVIEW_ACTIONS
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
@@ -1230,22 +1229,21 @@ class Miscellaneous(PreferenceBox):
 
     @staticmethod
     def _on_purge_history_clicked(button: Gtk.Button) -> None:
-        def _purge() -> None:
+        def _on_response() -> None:
             button.set_sensitive(False)
             app.storage.archive.remove_all_history()
             app.window.quit()
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Purge all Chat History?"),
             _(
                 "Do you really want to remove all chat messages from Gajim?\n"
                 "Warning: This can’t be undone!\n"
                 "Gajim will quit afterwards."
             ),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", text=_("_Purge"), callback=_purge),
-            ],
+            confirm_label=_("_Purge"),
+            appearance="destructive",
+            callback=_on_response,
         )
 
 

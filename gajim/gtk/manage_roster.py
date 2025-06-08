@@ -32,11 +32,10 @@ from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 from gajim.common.util.decorators import event_filter
 
+from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import DialogEntry
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import InputDialog
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.menus import get_manage_roster_import_menu
 from gajim.gtk.menus import get_manage_roster_menu
 from gajim.gtk.widgets import GajimAppWindow
@@ -261,15 +260,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._add_to_group(param.get_string())
 
     def _on_add_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
-        InputDialog(
+        ConfirmationAlertDialog(
             _("Add Contact to New Group?"),
             _("Enter group name"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("Add"), callback=self._add_to_group),
-            ],
-            input_str=_("New Group"),
-            transient_for=self.window,
+            confirm_label=_("Add"),
+            extra_widget=DialogEntry(text=_("New Group")),
+            callback=self._add_to_group,
+            parent=self.window,
         )
 
     def _add_to_group(self, group: str) -> None:
@@ -284,17 +281,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
         self._move_to_group(param.get_string())
 
     def _on_move_to_new_group(self, _action: Gio.SimpleAction, param: None) -> None:
-        InputDialog(
+        ConfirmationAlertDialog(
             _("Move Contact to New Group?"),
             _("Enter group name"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make(
-                    "Accept", text=_("Move"), callback=self._move_to_group
-                ),
-            ],
-            input_str=_("New Group"),
-            transient_for=self.window,
+            confirm_label=_("Move"),
+            extra_widget=DialogEntry(text=_("New Group")),
+            callback=self._move_to_group,
+            parent=self.window,
         )
 
     def _move_to_group(self, group: str) -> None:
@@ -316,43 +309,40 @@ class ManageRoster(GajimAppWindow, EventHelper):
     def _on_remove_from_roster(self, _action: Gio.SimpleAction, param: None) -> None:
         items = self._get_selected_items()
 
-        def _on_remove():
+        def _on_response() -> None:
             if not self._client.state.is_available:
                 return
 
             for item in items:
                 self._client.get_module("Roster").delete_item(JID.from_string(item.jid))
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Remove Contacts?"),
             _("Remove %s contacts from your contact list?") % len(items),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_on_remove),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _on_change_name(self, _action: Gio.SimpleAction, param: None) -> None:
 
         item = self._get_selected_items()[0]
 
-        def _on_change_name(name: str) -> None:
+        def _on_response(name: str) -> None:
             if not self._client.state.is_available:
                 return
             self._client.get_module("Roster").change_name(
                 JID.from_string(item.jid), name
             )
 
-        InputDialog(
+        ConfirmationAlertDialog(
             _("Rename Contact?"),
             _("Enter new contact name"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("Rename"), callback=_on_change_name),
-            ],
-            input_str=item.name,
-            transient_for=self.window,
+            confirm_label=_("Rename"),
+            extra_widget=DialogEntry(text=item.name),
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _on_import_from_account(
@@ -365,10 +355,10 @@ class ManageRoster(GajimAppWindow, EventHelper):
         ]
 
         if not remote_items:
-            SimpleDialog(_("Import Error"), _("No contacts found to import"))
+            InformationAlertDialog(_("Import Error"), _("No contacts found to import"))
             return
 
-        def _on_import():
+        def _on_response() -> None:
             if not self._client.state.is_available:
                 return
 
@@ -377,14 +367,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     item.jid, name=item.name, groups=item.groups, auto_auth=True
                 )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Import Contacts?"),
             _("Found %s contacts to import") % len(remote_items),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("Import"), callback=_on_import),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Import"),
+            appearance="suggested",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _on_import_from_file(self, _action: Gio.SimpleAction, param: None) -> None:
@@ -466,10 +455,10 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     items.append(item)
 
         if not items:
-            SimpleDialog(_("Import Error"), _("No contacts found to import"))
+            InformationAlertDialog(_("Import Error"), _("No contacts found to import"))
             return
 
-        def _on_import():
+        def _on_response() -> None:
             if not self._client.state.is_available:
                 return
 
@@ -478,14 +467,13 @@ class ManageRoster(GajimAppWindow, EventHelper):
                     item.jid, name=item.name, groups=item.groups, auto_auth=True
                 )
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Import Contacts?"),
             _("Found %s contacts to import") % len(items),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Accept", text=_("Import"), callback=_on_import),
-            ],
-            transient_for=self.window,
+            confirm_label=_("_Import"),
+            appearance="suggested",
+            callback=_on_response,
+            parent=self.window,
         )
 
     def _validate_imported_item(self, row: list[str]) -> ImportedItem | None:

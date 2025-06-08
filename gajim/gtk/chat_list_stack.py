@@ -7,8 +7,6 @@ from __future__ import annotations
 from typing import cast
 from typing import Literal
 
-from functools import partial
-
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import GObject
@@ -24,11 +22,13 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 
 from gajim.gtk import structs
+from gajim.gtk.alert import AlertDialog
+from gajim.gtk.alert import CancelDialogResponse
+from gajim.gtk.alert import DialogCheckButton
+from gajim.gtk.alert import DialogResponse
 from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
-from gajim.gtk.dialogs import ConfirmationCheckDialog
-from gajim.gtk.dialogs import DialogButton
 
 
 class ChatListStack(Gtk.Stack, EventHelper):
@@ -238,10 +238,10 @@ class ChatListStack(Gtk.Stack, EventHelper):
         chat_list = self._chat_lists[workspace_id]
         type_ = chat_list.get_chat_type(account, jid)
 
-        def _leave(not_ask_again: bool, unregister: bool = False) -> None:
+        def _leave(response_id: str, not_ask_again: bool) -> None:
             if not_ask_again:
                 app.settings.set("confirm_close_muc", False)
-            _remove(unregister)
+            _remove(unregister=response_id == "leave_perm")
 
         def _remove(unregister: bool = False) -> None:
             chat_list.remove_chat(account, jid, emit_unread=False)
@@ -267,19 +267,17 @@ class ChatListStack(Gtk.Stack, EventHelper):
             _remove()
             return
 
-        buttons = [
-            DialogButton.make("Cancel"),
-            DialogButton.make("Accept", text=_("_Leave"), callback=_leave),
+        responses = [
+            CancelDialogResponse(),
+            DialogResponse("leave", _("_Leave")),
         ]
 
         affiliation = us.affiliation
         text = _('By closing this chat, you will leave "%s".') % contact.name
         if Namespace.REGISTER in muc_disco.features and not affiliation.is_none:
-            buttons.append(
-                DialogButton.make(
-                    "Delete",
-                    text=_("Leave _Permanently"),
-                    callback=partial(_leave, unregister=True),
+            responses.append(
+                DialogResponse(
+                    "leave_perm", _("Leave _Permanently"), appearance="destructive"
                 )
             )
 
@@ -295,12 +293,14 @@ class ChatListStack(Gtk.Stack, EventHelper):
                 text += "\n"
                 text += _("Additionally, you will lose your owner affiliation.")
 
-        ConfirmationCheckDialog(
+        AlertDialog(
             _("Leave Group Chat?"),
             text,
-            _("_Do not ask me again"),
-            buttons,
-            transient_for=app.window,
+            responses=responses,
+            emit_responses=["leave", "leave_perm"],
+            extra_widget=DialogCheckButton(_("_Do not ask me again")),
+            callback=_leave,
+            parent=app.window,
         )
 
     def remove_chats_for_account(self, account: str) -> None:

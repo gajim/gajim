@@ -15,10 +15,8 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common.i18n import _
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.util.misc import ensure_not_destroyed
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -98,19 +96,16 @@ class MamPreferences(GajimAppWindow):
 
         self._disable_spinner()
 
-        def _on_ok():
-            self.close()
-
-        ConfirmationDialog(
+        InformationAlertDialog(
             _("Archiving Preferences Saved"),
             _("Your archiving preferences have successfully been saved."),
-            [DialogButton.make("OK", callback=_on_ok)],
+            callback=self.close,
         )
 
     def _on_error(self, error: str) -> None:
         self._disable_spinner()
 
-        SimpleDialog(
+        InformationAlertDialog(
             _("Archiving Preferences Error"), _("Error received: {}").format(error)
         )
 

@@ -61,6 +61,7 @@ from gajim.common.util.uri import open_uri
 
 from gajim.gtk import menus
 from gajim.gtk import structs
+from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
@@ -68,9 +69,7 @@ from gajim.gtk.const import APP_ACTIONS
 from gajim.gtk.const import FEATURE_ACCOUNT_ACTIONS
 from gajim.gtk.const import MuteState
 from gajim.gtk.const import ONLINE_ACCOUNT_ACTIONS
-from gajim.gtk.dialogs import ConfirmationDialog
-from gajim.gtk.dialogs import DialogButton
-from gajim.gtk.dialogs import ShortcutsWindow
+from gajim.gtk.shortcuts import ShortcutsWindow
 from gajim.gtk.util.icons import get_icon_theme
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import get_app_windows
@@ -816,7 +815,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_remove_history_action(
         _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
-        def _remove() -> None:
+        def _on_response() -> None:
             app.storage.archive.remove_history_for_jid(params.account, params.jid)
 
             app.window.clear_chat_list_row(params.account, params.jid)
@@ -826,14 +825,13 @@ class GajimApplication(Adw.Application, CoreApplication):
 
             control.reset_view()
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Remove Chat History?"),
             _("Do you want to remove all chat history for this chat?"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_remove),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=app.window,
         )
 
     @staticmethod
@@ -842,7 +840,7 @@ class GajimApplication(Adw.Application, CoreApplication):
         _action: Gio.SimpleAction, params: structs.AccountJidParam
     ) -> None:
 
-        def _forget():
+        def _on_response() -> None:
             window = get_app_window("StartChatDialog")
             if window is not None:
                 window.remove_row(params.account, str(params.jid))
@@ -853,12 +851,11 @@ class GajimApplication(Adw.Application, CoreApplication):
 
             app.storage.archive.remove_history_for_jid(params.account, params.jid)
 
-        ConfirmationDialog(
+        ConfirmationAlertDialog(
             _("Forget this Group Chat?"),
             _("Do you want to remove this chat including its chat history?"),
-            [
-                DialogButton.make("Cancel"),
-                DialogButton.make("Remove", callback=_forget),
-            ],
-            transient_for=app.window,
+            confirm_label=_("_Remove"),
+            appearance="destructive",
+            callback=_on_response,
+            parent=app.window,
         )

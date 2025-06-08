@@ -18,9 +18,9 @@ from gajim.common.i18n import _
 from gajim.common.modules.contacts import GroupchatContact
 from gajim.common.util.jid import validate_jid
 
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.avatar_selector import AvatarSelector
 from gajim.gtk.builder import get_builder
-from gajim.gtk.dialogs import SimpleDialog
 from gajim.gtk.filechoosers import AvatarFileChooserButton
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.window import get_app_window
@@ -249,7 +249,7 @@ class GroupchatManage(Gtk.Box, SignalManager):
         try:
             task.finish()
         except Exception as error:
-            SimpleDialog(
+            InformationAlertDialog(
                 _("Uploading Avatar Failed"),
                 _("Uploading avatar image failed: %s") % error,
             )
@@ -257,13 +257,17 @@ class GroupchatManage(Gtk.Box, SignalManager):
     def _on_avatar_update_clicked(self, _button: Gtk.Button) -> None:
         success, data, _w, _h = self._avatar_selector.get_avatar_bytes()
         if not success:
-            SimpleDialog(_("Loading Avatar Failed"), _("Loading avatar image failed"))
+            InformationAlertDialog(
+                _("Loading Avatar Failed"), _("Loading avatar image failed")
+            )
             return
 
         assert data
         sha = app.app.avatar_storage.save_avatar(data)
         if sha is None:
-            SimpleDialog(_("Saving Avatar Failed"), _("Saving avatar image failed"))
+            InformationAlertDialog(
+                _("Saving Avatar Failed"), _("Saving avatar image failed")
+            )
             return
 
         vcard = VCard()

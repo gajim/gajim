@@ -48,9 +48,9 @@
 # from gajim.common.util.uri import show_in_folder
 
 # from gajim.gtk.builder import get_builder
-# from gajim.gtk.dialogs import ConfirmationDialog
-# from gajim.gtk.dialogs import DialogButton
-# from gajim.gtk.dialogs import SimpleDialog
+# from gajim.gtk.alert import ConfirmationAlertDialog
+# from gajim.gtk.alert import DialogButton
+# from gajim.gtk.alert import InformationAlertDialog
 # from gajim.gtk.filechoosers import FileSaveDialog
 # from gajim.common.util.text import format_eta
 
@@ -348,7 +348,7 @@
 #         sectext += '\n\t' + _('Recipient: %s') % jid
 #         if error_msg:
 #             sectext += '\n\t' + _('Error message: %s') % error_msg
-#         SimpleDialog(_('File Transfer Stopped'), sectext)
+#         InformationAlertDialog(_('File Transfer Stopped'), sectext)
 #         self._ui.transfers_list.get_selection().unselect_all()
 
 #     def show_hash_error(self,
@@ -383,7 +383,7 @@
 #             file_name = os.path.basename(file_props.file_name)
 #         else:
 #             file_name = file_props.name
-#         ConfirmationDialog(
+#         ConfirmationAlertDialog(
 #             _('File Transfer Error'),
 #             _('The file %s has been received, but it seems to have '
 #               'been damaged along the way.\n'
@@ -407,7 +407,7 @@
 #         if file_is_locked(file_path):
 #             pritext = _('File Not Readable')
 #             sextext = _('Another process is using this file.')
-#             SimpleDialog(pritext, sextext)
+#             InformationAlertDialog(pritext, sextext)
 #             return False
 
 #         file_name = os.path.split(file_path)[1]
@@ -474,7 +474,7 @@
 #                 if not os.access(file_path, os.W_OK):
 #                     file_name = GLib.markup_escape_text(
 #                         os.path.basename(file_path))
-#                     SimpleDialog(
+#                     InformationAlertDialog(
 #                         _('File Already Exists'),
 #                         _('Cannot overwrite existing file "%s". '
 #                           'A file with this name already exists and you do '
@@ -488,7 +488,7 @@
 #                 # read-only bit is used to mark special folder under
 #                 # windows, not to mark that a folder is read-only.
 #                 # See ticket #3587
-#                 SimpleDialog(
+#                 InformationAlertDialog(
 #                     _('Directory Not Writable'),
 #                     _('Directory "%s" is not writable. '
 #                       'You do not have permissions to create files '
@@ -725,13 +725,13 @@
 #         if os.path.isfile(file_path):
 #             stat = os.stat(file_path)
 #         else:
-#             SimpleDialog(
+#             InformationAlertDialog(
 #                 _('Invalid File'),
 #                 _('File: %s') % file_path)
 #             return None
 
 #         if stat[6] == 0:
-#             SimpleDialog(
+#             InformationAlertDialog(
 #                 _('Invalid File'),
 #                 _('It is not possible to send empty files'))
 #             return None
