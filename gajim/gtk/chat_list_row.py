@@ -573,7 +573,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if self.contact.is_joining:
             self._ui.connection_icon.set_from_icon_name("feather-refresh-cw-symbolic")
             self._ui.connection_icon.add_css_class("spin")
-            self._ui.connection_icon.add_css_class("dim-label")
+            self._ui.connection_icon.add_css_class("dimmed")
             self._ui.connection_icon.set_tooltip_text(_("Joining Group Chat…"))
             self._ui.connection_icon.set_visible(True)
         elif self.contact.is_not_joined or not self._client.state.is_available:
@@ -610,7 +610,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
     def _reset_connection_icon(self) -> None:
         self._ui.connection_icon.set_visible(False)
         self._ui.connection_icon.remove_css_class("spin")
-        self._ui.connection_icon.remove_css_class("dim-label")
+        self._ui.connection_icon.remove_css_class("dimmed")
         self._ui.connection_icon.remove_css_class("info-color")
         self._ui.connection_icon.remove_css_class("warning-color")
         self._ui.connection_icon.remove_css_class("error-color")

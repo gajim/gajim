@@ -42,7 +42,7 @@
                 <property name="ellipsize">3</property>
                 <property name="margin-start">6</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                   <class name="small-label"/>
                 </style>
               </object>
@@ -56,7 +56,7 @@
             <property name="width-chars">22</property>
             <property name="ellipsize">3</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
               <class name="small-label"/>
             </style>
           </object>

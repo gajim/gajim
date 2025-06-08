@@ -75,7 +75,7 @@
                                 <property name="wrap">1</property>
                                 <property name="max-width-chars">50</property>
                                 <style>
-                                  <class name="dim-label"/>
+                                  <class name="dimmed"/>
                                   <class name="p-18"/>
                                 </style>
                               </object>
@@ -207,7 +207,7 @@
                     <property name="valign">center</property>
                     <property name="label" translatable="yes">No certificate</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>

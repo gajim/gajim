@@ -80,7 +80,7 @@ class AvatarSelector(Gtk.Box, SignalManager):
 
         self._helper_label = Gtk.Label(label=_("…or drop it here"))
         self._helper_label.add_css_class("bold")
-        self._helper_label.add_css_class("dim-label")
+        self._helper_label.add_css_class("dimmed")
         self._helper_label.set_vexpand(True)
         self.append(self._helper_label)
 

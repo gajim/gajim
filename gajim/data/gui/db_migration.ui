@@ -39,7 +39,7 @@
 This may take a while…</property>
                     <property name="justify">center</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>

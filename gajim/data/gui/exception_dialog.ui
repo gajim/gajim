@@ -70,7 +70,7 @@ Please help us fixing this issue by sending this report.</property>
                 <property name="max-width-chars">60</property>
                 <property name="lines">3</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>
@@ -107,7 +107,7 @@ Please help us fixing this issue by sending this report.</property>
                     <property name="label" translatable="yes">What happened</property>
                     <property name="wrap">1</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>

@@ -26,7 +26,7 @@
             <property name="ellipsize">3</property>
             <property name="max-width-chars">40</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -48,7 +48,7 @@
           </object>
         </child>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -69,7 +69,7 @@
           </object>
         </child>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>

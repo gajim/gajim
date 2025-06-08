@@ -33,7 +33,7 @@
             <property name="single-line-mode">1</property>
             <property name="ellipsize">3</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
               <class name="small-label"/>
             </style>
           </object>
@@ -54,7 +54,7 @@
           <property name="row">0</property>
         </layout>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>

@@ -150,7 +150,7 @@ class CallRow(BaseRow):
         icon = Gtk.Image.new_from_icon_name("call-start-symbolic")
 
         label = SimpleLabel()
-        label.add_css_class("dim-label")
+        label.add_css_class("dimmed")
         label.set_text(_("Call"))
 
         content_box = Gtk.Box(spacing=12)

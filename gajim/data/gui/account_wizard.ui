@@ -11,7 +11,7 @@
         <property name="wrap">1</property>
         <property name="max-width-chars">50</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -63,7 +63,7 @@
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">custom_port_entry</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -90,7 +90,7 @@
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">custom_host_entry</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -116,7 +116,7 @@
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">proxies_combobox</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -192,7 +192,7 @@
         <property name="use-underline">1</property>
         <property name="mnemonic-widget">con_type_combo</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -237,7 +237,7 @@
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -493,7 +493,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <property name="use-markup">1</property>
         <property name="use-underline">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>

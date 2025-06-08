@@ -386,7 +386,7 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
             )
             return image
 
-        image.add_css_class("dim-label")
+        image.add_css_class("dimmed")
         return image
 
     def _get_error(self) -> tuple[bool, str]:

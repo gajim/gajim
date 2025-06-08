@@ -37,7 +37,7 @@
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">name_entry</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -52,7 +52,7 @@
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">description_entry</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -110,7 +110,7 @@
                     <property name="use-underline">1</property>
                     <property name="mnemonic-widget">account_combo</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -179,7 +179,7 @@
                     <property name="label" translatable="yes">_Address</property>
                     <property name="use-underline">1</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -226,7 +226,7 @@
                             <property name="wrap">1</property>
                             <property name="xalign">0</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                             </style>
                           </object>
                         </child>
@@ -267,7 +267,7 @@
                             <property name="wrap">1</property>
                             <property name="xalign">0</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                             </style>
                           </object>
                         </child>

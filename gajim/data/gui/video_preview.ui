@@ -21,7 +21,7 @@
           <object class="GtkImage">
             <property name="icon-name">camera-web-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -29,7 +29,7 @@
           <object class="GtkLabel">
             <property name="label" translatable="yes">Live Preview</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>

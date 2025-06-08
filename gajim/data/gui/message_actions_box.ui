@@ -65,7 +65,7 @@
           <object class="GtkImage" id="edit_box_image">
             <property name="icon-name">document-edit-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -163,7 +163,7 @@
                   </object>
                 </child>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

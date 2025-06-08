@@ -90,7 +90,7 @@
                                 <child>
                                   <object class="GtkLabel" id="search_results_label">
                                     <style>
-                                      <class name="dim-label"/>
+                                      <class name="dimmed"/>
                                     </style>
                                   </object>
                                 </child>
@@ -240,7 +240,7 @@
                     <property name="hexpand">1</property>
                     <property name="halign">end</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>

@@ -80,7 +80,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Name</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -93,7 +93,7 @@
                     <property name="halign">end</property>
                     <property name="label" translatable="yes">Description</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -271,7 +271,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Reason for destruction</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>
@@ -293,7 +293,7 @@
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Where participants should go</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>

@@ -44,7 +44,7 @@
         <property name="wrap">True</property>
         <property name="max-width-chars">52</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>

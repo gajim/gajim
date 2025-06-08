@@ -92,7 +92,7 @@ class VoiceRequestsButton(Gtk.Button, SignalManager):
             wrap=True,
             margin_bottom=6,
         )
-        desc_label.add_css_class("dim-label")
+        desc_label.add_css_class("dimmed")
         menu_box.append(desc_label)
 
         scrolled = Gtk.ScrolledWindow(

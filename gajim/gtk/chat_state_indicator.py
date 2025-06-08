@@ -33,7 +33,7 @@ class ChatStateIndicator(Gtk.Box):
             max_width_chars=52,
             ellipsize=Pango.EllipsizeMode.END,
         )
-        self._label.add_css_class("dim-label")
+        self._label.add_css_class("dimmed")
         self._label.add_css_class("small-label")
         self.append(self._label)
 

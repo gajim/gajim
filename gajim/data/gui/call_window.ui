@@ -267,7 +267,7 @@
             <property name="pixel-size">50</property>
             <property name="icon-name">audio-input-microphone-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
               <class name="pulse-transform"/>
             </style>
           </object>
@@ -279,7 +279,7 @@
             <property name="max-width-chars">20</property>
             <style>
               <class name="bold"/>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>

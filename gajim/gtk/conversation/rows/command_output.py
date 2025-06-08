@@ -29,7 +29,7 @@ class CommandOutputRow(BaseRow):
         avatar_placeholder.set_size_request(AvatarSize.ROSTER, -1)
         icon = Gtk.Image.new_from_icon_name("utilities-terminal-symbolic")
         icon.set_pixel_size(32)
-        icon.add_css_class("dim-label")
+        icon.add_css_class("dimmed")
         avatar_placeholder.append(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 

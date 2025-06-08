@@ -70,7 +70,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxypass_entry</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -107,7 +107,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyuser_entry</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -133,7 +133,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyport_entry</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -160,7 +160,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyhost_entry</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -205,7 +205,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxytype_combobox</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -220,7 +220,7 @@
             <property name="use_underline">1</property>
             <property name="mnemonic_widget">proxyname_entry</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>

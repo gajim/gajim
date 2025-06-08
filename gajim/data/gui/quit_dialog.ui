@@ -23,7 +23,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
         <property name="width-chars">48</property>
         <property name="max-width-chars">48</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -46,7 +46,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
           <object class="GtkImage">
             <property name="icon-name">feather-eye-off-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">1</property>
@@ -58,7 +58,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
           <object class="GtkImage">
             <property name="icon-name">feather-minimize-2-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -112,7 +112,7 @@ Alternatively, you can either minimize Gajim’s window, or hide it completely. 
           <object class="GtkImage">
             <property name="icon-name">feather-log-out-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">3</property>

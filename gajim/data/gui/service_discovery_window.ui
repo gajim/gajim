@@ -49,7 +49,7 @@
             <property name="label" translatable="yes">_Address</property>
             <property name="use_underline">1</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>

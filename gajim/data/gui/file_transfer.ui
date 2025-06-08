@@ -11,7 +11,7 @@
           <object class="GtkImage">
             <property name="icon-name">document-send-symbolic</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -32,7 +32,7 @@
                 <property name="ellipsize">middle</property>
                 <property name="max-width-chars">30</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>
@@ -41,7 +41,7 @@
                 <property name="halign">start</property>
                 <property name="label">&lt;file size&gt;</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>
@@ -63,7 +63,7 @@
             <property name="ellipsize">end</property>
             <property name="max-width-chars">30</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>

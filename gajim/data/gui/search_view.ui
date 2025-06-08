@@ -163,7 +163,7 @@
                         <property name="icon-name">system-search-symbolic</property>
                         <property name="pixel-size">64</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -171,7 +171,7 @@
                       <object class="GtkLabel" id="placeholder_label">
                         <property name="label" translatable="yes">No results</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -245,7 +245,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">From</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -258,7 +258,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">Before</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -271,7 +271,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">After</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -400,7 +400,7 @@
         <property name="halign">end</property>
         <property name="single-line-mode">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">2</property>

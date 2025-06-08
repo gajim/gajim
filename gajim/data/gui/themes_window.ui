@@ -31,7 +31,7 @@
         <property name="wrap">1</property>
         <property name="label" translatable="yes">Add a setting you would like to change</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>

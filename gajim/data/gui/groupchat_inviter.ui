@@ -26,7 +26,7 @@
         <property name="wrap">1</property>
         <property name="max-width-chars">42</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -63,7 +63,7 @@
                         <property name="icon-name">avatar-default-symbolic</property>
                         <property name="pixel-size">48</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -75,7 +75,7 @@ You can also type an XMPP address.</property>
                         <property name="wrap">1</property>
                         <property name="max-width-chars">35</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>

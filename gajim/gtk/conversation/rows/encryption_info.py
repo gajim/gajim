@@ -31,7 +31,7 @@ class EncryptionInfoRow(BaseRow):
 
         icon = Gtk.Image.new_from_icon_name("channel-secure-symbolic")
         icon.set_pixel_size(AvatarSize.ROSTER)
-        icon.add_css_class("dim-label")
+        icon.add_css_class("dimmed")
         avatar_placeholder.append(icon)
         self.grid.attach(avatar_placeholder, 0, 0, 1, 1)
 

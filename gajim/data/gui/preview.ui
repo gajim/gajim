@@ -28,7 +28,7 @@
                 <property name="valign">start</property>
                 <property name="label" translatable="yes">Loading Preview…</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>
@@ -78,7 +78,7 @@
                         <property name="width-chars">4</property>
                         <property name="single-line-mode">1</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                           <class name="small-label"/>
                         </style>
                       </object>
@@ -162,7 +162,7 @@
                             <property name="max-width-chars">30</property>
                             <property name="xalign">0</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                               <class name="small-label"/>
                             </style>
                           </object>
@@ -175,7 +175,7 @@
                             <property name="max-width-chars">30</property>
                             <property name="xalign">0</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                               <class name="small-label"/>
                             </style>
                           </object>
@@ -189,7 +189,7 @@
                             <property name="max-width-chars">30</property>
                             <property name="xalign">0</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                               <class name="small-label"/>
                             </style>
                           </object>

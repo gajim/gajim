@@ -17,7 +17,7 @@
                 <property name="label" translatable="yes">Loading…</property>
                 <style>
                   <class name="bold24"/>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>
@@ -65,7 +65,7 @@
                 <property name="justify">center</property>
                 <property name="wrap">1</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

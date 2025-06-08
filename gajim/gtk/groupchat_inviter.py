@@ -84,7 +84,7 @@ class ContactRow(Gtk.ListBoxRow):
         self._jid_label.set_xalign(0)
         self._jid_label.set_width_chars(22)
         self._jid_label.set_halign(Gtk.Align.START)
-        self._jid_label.add_css_class("dim-label")
+        self._jid_label.add_css_class("dimmed")
         box.append(self._jid_label)
 
         grid.attach(box, 1, 0, 1, 1)

@@ -137,7 +137,7 @@
                                     <property name="icon-name">avatar-default-symbolic</property>
                                     <property name="pixel-size">44</property>
                                     <style>
-                                      <class name="dim-label"/>
+                                      <class name="dimmed"/>
                                     </style>
                                   </object>
                                 </child>
@@ -149,7 +149,7 @@ You can also type an XMPP address</property>
                                     <property name="wrap">1</property>
                                     <property name="max-width-chars">35</property>
                                     <style>
-                                      <class name="dim-label"/>
+                                      <class name="dimmed"/>
                                     </style>
                                   </object>
                                 </child>
@@ -189,7 +189,7 @@ You can also type an XMPP address</property>
                                             <property name="icon-name">system-search-symbolic</property>
                                             <property name="pixel-size">44</property>
                                             <style>
-                                              <class name="dim-label"/>
+                                              <class name="dimmed"/>
                                             </style>
                                           </object>
                                         </child>
@@ -201,7 +201,7 @@ You can also type an XMPP address</property>
                                             <property name="wrap">1</property>
                                             <property name="max-width-chars">35</property>
                                             <style>
-                                              <class name="dim-label"/>
+                                              <class name="dimmed"/>
                                             </style>
                                           </object>
                                         </child>
@@ -223,7 +223,7 @@ You can also type an XMPP address</property>
                                             <property name="icon-name">system-search-symbolic</property>
                                             <property name="pixel-size">44</property>
                                             <style>
-                                              <class name="dim-label"/>
+                                              <class name="dimmed"/>
                                             </style>
                                           </object>
                                         </child>
@@ -231,7 +231,7 @@ You can also type an XMPP address</property>
                                           <object class="GtkLabel">
                                             <property name="label" translatable="yes">No results</property>
                                             <style>
-                                              <class name="dim-label"/>
+                                              <class name="dimmed"/>
                                             </style>
                                           </object>
                                         </child>

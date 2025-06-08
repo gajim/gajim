@@ -341,15 +341,15 @@ class MessageIcons(Gtk.Box):
 
         self._correction_image = Gtk.Image.new_from_icon_name("document-edit-symbolic")
         self._correction_image.set_visible(False)
-        self._correction_image.add_css_class("dim-label")
+        self._correction_image.add_css_class("dimmed")
 
         self._message_state_image = Gtk.Image()
         self._message_state_image.set_visible(False)
-        self._message_state_image.add_css_class("dim-label")
+        self._message_state_image.add_css_class("dimmed")
 
         self._marker_image = Gtk.Image.new_from_icon_name("feather-check-symbolic")
         self._marker_image.set_visible(False)
-        self._marker_image.add_css_class("dim-label")
+        self._marker_image.add_css_class("dimmed")
         self._marker_image.set_tooltip_text(p_("Message state", "Received"))
 
         self._error_image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")

@@ -68,7 +68,7 @@ class CompletionPopover(Gtk.Popover):
         self._view.set_factory(factory)
 
         self._header_label = Gtk.Label(halign=Gtk.Align.START, xalign=0)
-        self._header_label.add_css_class("dim-label")
+        self._header_label.add_css_class("dimmed")
         box.append(self._header_label)
         box.append(self._view)
 

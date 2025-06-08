@@ -77,7 +77,7 @@ class ResourceSelector(Gtk.ScrolledWindow, SignalManager):
         box = Gtk.Box(
             orientation=Gtk.Orientation.VERTICAL, spacing=6, valign=Gtk.Align.CENTER
         )
-        box.add_css_class("dim-label")
+        box.add_css_class("dimmed")
         box.append(image)
         box.append(label)
         self._listbox.set_placeholder(box)

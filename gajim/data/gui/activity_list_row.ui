@@ -55,7 +55,7 @@
                         <property name="icon-name">feather-users-symbolic</property>
                         <property name="icon_size">1</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -78,7 +78,7 @@
                     <property name="valign">end</property>
                     <style>
                       <class name="small-label"/>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </child>
@@ -94,7 +94,7 @@
                 <property name="xalign">0</property>
                 <style>
                   <class name="small-label"/>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

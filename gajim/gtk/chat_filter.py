@@ -72,7 +72,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         popover_content.attach(popover_title, 0, 0, 2, 1)
 
         chat_type_label = Gtk.Label(label=_("Chat Type"), halign=Gtk.Align.END)
-        chat_type_label.add_css_class("dim-label")
+        chat_type_label.add_css_class("dimmed")
         popover_content.attach(chat_type_label, 0, 1, 1, 1)
 
         chat_type_data = {
@@ -87,7 +87,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         popover_content.attach(self._chat_type_drop_down, 1, 1, 1, 1)
 
         roster_groups_label = Gtk.Label(label=_("Group"), halign=Gtk.Align.END)
-        roster_groups_label.add_css_class("dim-label")
+        roster_groups_label.add_css_class("dimmed")
         popover_content.attach(roster_groups_label, 0, 2, 1, 1)
 
         self._roster_groups_drop_down = GajimDropDown(fixed_width=20)
@@ -100,7 +100,7 @@ class ChatFilter(Gtk.Overlay, SignalManager):
         popover_content.attach(self._roster_groups_drop_down, 1, 2, 1, 1)
 
         self._account_label = Gtk.Label(label=_("Account"), halign=Gtk.Align.END)
-        self._account_label.add_css_class("dim-label")
+        self._account_label.add_css_class("dimmed")
         popover_content.attach(self._account_label, 0, 3, 1, 1)
 
         self._account_drop_down = GajimDropDown(fixed_width=20)

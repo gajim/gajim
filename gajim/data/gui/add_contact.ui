@@ -25,7 +25,7 @@
           <object class="GtkLabel">
             <property name="label" translatable="yes">Please choose an account</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -46,7 +46,7 @@
       <object class="GtkLabel">
         <property name="label" translatable="yes">Please enter an XMPP address</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -82,7 +82,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">Share Status</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -106,7 +106,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">Group</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -128,7 +128,7 @@
         <property name="halign">end</property>
         <property name="label" translatable="yes">Message</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>

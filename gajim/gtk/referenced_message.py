@@ -88,7 +88,7 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
 
         name = get_contact_name_for_message(message, self._contact)
         name_label = Gtk.Label(label=name)
-        name_label.add_css_class("dim-label")
+        name_label.add_css_class("dimmed")
         name_label.add_css_class("small-label")
         name_label.add_css_class("bold")
 
@@ -103,7 +103,7 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
             label=timestamp.strftime(format_string),
             margin_start=6,
         )
-        timestamp_label.add_css_class("dim-label")
+        timestamp_label.add_css_class("dimmed")
         timestamp_label.add_css_class("small-label")
 
         meta_box = Gtk.Box(spacing=6, valign=Gtk.Align.CENTER)
@@ -144,7 +144,7 @@ class ReferencedMessageWidget(Gtk.Box, SignalManager):
             max_width_chars=100,
             ellipsize=Pango.EllipsizeMode.END,
         )
-        message_label.add_css_class("dim-label")
+        message_label.add_css_class("dimmed")
 
         message_box.append(message_label)
         content_box.append(message_box)
@@ -218,7 +218,7 @@ class ReferencedMessageNotFoundWidget(Gtk.Box):
             max_width_chars=100,
             ellipsize=Pango.EllipsizeMode.END,
         )
-        message_label.add_css_class("dim-label")
+        message_label.add_css_class("dimmed")
 
         message_box.append(message_label)
         content_box.append(message_box)
@@ -232,7 +232,7 @@ class ReplyBox(Gtk.Box, SignalManager):
         reply_image = Gtk.Image.new_from_icon_name("lucide-reply-symbolic")
         reply_image.set_size_request(AvatarSize.CHAT, -1)
         reply_image.set_pixel_size(24)
-        reply_image.add_css_class("dim-label")
+        reply_image.add_css_class("dimmed")
         self.append(reply_image)
 
         self._close_button = Gtk.Button.new_from_icon_name("window-close-symbolic")

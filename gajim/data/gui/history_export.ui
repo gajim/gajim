@@ -22,7 +22,7 @@ Gajim will export all messages from the selected account and chats to a director
         <property name="wrap">1</property>
         <property name="max-width-chars">40</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
@@ -36,7 +36,7 @@ Gajim will export all messages from the selected account and chats to a director
             <property name="halign">end</property>
             <property name="label" translatable="yes">Account</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -49,7 +49,7 @@ Gajim will export all messages from the selected account and chats to a director
             <property name="halign">end</property>
             <property name="label" translatable="yes">Chat</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -62,7 +62,7 @@ Gajim will export all messages from the selected account and chats to a director
             <property name="halign">end</property>
             <property name="label" translatable="yes">Directory</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
             <layout>
               <property name="column">0</property>

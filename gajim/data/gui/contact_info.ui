@@ -10,7 +10,7 @@
         <property name="label" translatable="yes">Status</property>
         <property name="xalign">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -24,7 +24,7 @@
         <property name="label" translatable="yes">Priority</property>
         <property name="xalign">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -38,7 +38,7 @@
         <property name="label" translatable="yes">Software</property>
         <property name="xalign">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -52,7 +52,7 @@
         <property name="label" translatable="yes">Operating System</property>
         <property name="xalign">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -66,7 +66,7 @@
         <property name="label" translatable="yes">Local Time</property>
         <property name="xalign">1</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -198,7 +198,7 @@
                         <property name="single-line-mode">1</property>
                         <property name="max-width-chars">50</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -214,7 +214,7 @@
                             <property name="margin-end">18</property>
                             <property name="label" translatable="yes">Role</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                             </style>
                             <layout>
                               <property name="column">0</property>
@@ -237,7 +237,7 @@
                             <property name="margin-end">18</property>
                             <property name="label" translatable="yes">Affiliation</property>
                             <style>
-                              <class name="dim-label"/>
+                              <class name="dimmed"/>
                             </style>
                             <layout>
                               <property name="column">0</property>
@@ -475,7 +475,7 @@
                         <property name="label" translatable="yes">Choose the contact&apos;s groups</property>
                         <property name="wrap">1</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -571,7 +571,7 @@
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">You are offline.</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </property>
@@ -606,7 +606,7 @@
                         <property name="wrap">1</property>
                         <property name="max-width-chars">42</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>
@@ -638,7 +638,7 @@
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">You are offline.</property>
                     <style>
-                      <class name="dim-label"/>
+                      <class name="dimmed"/>
                     </style>
                   </object>
                 </property>
@@ -670,7 +670,7 @@
                         <property name="margin-bottom">36</property>
                         <property name="label" translatable="yes">No devices online</property>
                         <style>
-                          <class name="dim-label"/>
+                          <class name="dimmed"/>
                         </style>
                       </object>
                     </child>

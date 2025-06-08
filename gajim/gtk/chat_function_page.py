@@ -395,7 +395,7 @@ class InputWidget(Gtk.Box, SignalManager):
 
         sub_label = Gtk.Label()
         sub_label.set_xalign(0)
-        sub_label.add_css_class("dim-label")
+        sub_label.add_css_class("dimmed")
         self.append(sub_label)
 
         self._entry = Gtk.Entry()

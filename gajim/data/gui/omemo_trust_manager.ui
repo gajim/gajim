@@ -28,7 +28,7 @@
             <property name="max-width-chars">42</property>
             <property name="xalign">0</property>
             <style>
-              <class name="dim-label"/>
+              <class name="dimmed"/>
             </style>
           </object>
         </child>
@@ -223,7 +223,7 @@
                 <property name="wrap">1</property>
                 <property name="max-width-chars">42</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                 </style>
               </object>
             </child>

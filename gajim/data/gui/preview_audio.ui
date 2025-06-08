@@ -67,7 +67,7 @@
                 <property name="justify">fill</property>
                 <property name="single-line-mode">1</property>
                 <style>
-                  <class name="dim-label"/>
+                  <class name="dimmed"/>
                   <class name="small-label"/>
                   <class name="tabular-digits"/>
                 </style>

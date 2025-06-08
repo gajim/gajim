@@ -287,7 +287,7 @@ class DescriptionLabel(Gtk.Label):
             self.set_valign(Gtk.Align.START)
         else:
             self.set_valign(Gtk.Align.CENTER)
-        self.add_css_class("dim-label")
+        self.add_css_class("dimmed")
         self.add_css_class("me-18")
         self.set_visible(True)
         self.set_xalign(1)

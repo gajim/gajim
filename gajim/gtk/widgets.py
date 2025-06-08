@@ -218,7 +218,7 @@ class IdleBadge(Gtk.Label):
             visible=False,
         )
         self.set_size_request(50, -1)
-        self.add_css_class("dim-label")
+        self.add_css_class("dimmed")
         self.add_css_class("small-label")
 
     @GObject.Property(type=object)

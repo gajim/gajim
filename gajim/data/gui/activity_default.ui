@@ -24,7 +24,7 @@
         <property name="label" translatable="yes">Select an activity to see details.</property>
         <property name="wrap">True</property>
         <style>
-          <class name="dim-label"/>
+          <class name="dimmed"/>
         </style>
       </object>
     </child>
