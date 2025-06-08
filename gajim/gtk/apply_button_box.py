@@ -8,6 +8,7 @@ from typing import Any
 
 from collections.abc import Callable
 
+from gi.repository import Adw
 from gi.repository import Gtk
 
 from gajim.common import app
@@ -24,7 +25,7 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         SignalManager.__init__(self)
 
         self._status_image = Gtk.Image(visible=False)
-        self._spinner = Gtk.Spinner(visible=False)
+        self._spinner = Adw.Spinner(visible=False)
         self._button = Gtk.Button(label=button_text, sensitive=False)
         self._button.add_css_class("suggested-action")
         self._connect(self._button, "clicked", self._on_clicked)
@@ -42,7 +43,6 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
     def _on_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)
         self._spinner.set_visible(True)
-        self._spinner.start()
 
     def set_button_state(self, state: bool) -> None:
         if state:
@@ -50,12 +50,10 @@ class ApplyButtonBox(Gtk.Box, SignalManager):
         self._button.set_sensitive(state)
 
     def set_success(self) -> None:
-        self._spinner.stop()
         self._spinner.set_visible(False)
         self._set_status_image("success")
 
     def set_error(self, tooltip_text: str):
-        self._spinner.stop()
         self._spinner.set_visible(False)
         self._set_status_image("error", tooltip_text)
         self._button.set_sensitive(True)

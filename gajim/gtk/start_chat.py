@@ -522,7 +522,6 @@ class StartChatDialog(GajimAppWindow):
             return
 
         self._ui.stack.set_visible_child_name("progress")
-        self._ui.spinner.start()
         client = app.get_client(item.account)
         client.get_module("Discovery").disco_info(
             item.jid, callback=self._disco_info_received, user_data=item, timeout=10
@@ -564,7 +563,6 @@ class StartChatDialog(GajimAppWindow):
 
     def _disco_muc(self, account: str, jid: JID, request_vcard: bool) -> None:
         self._ui.stack.set_visible_child_name("progress")
-        self._ui.spinner.start()
         client = app.get_client(account)
         client.get_module("Discovery").disco_muc(
             jid,

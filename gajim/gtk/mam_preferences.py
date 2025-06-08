@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from nbxmpp.errors import MalformedStanzaError
 from nbxmpp.errors import StanzaError
@@ -54,7 +55,7 @@ class MamPreferences(GajimAppWindow):
         self._connect(self._ui.remove, "clicked", self._on_remove)
         self._connect(self._ui.save_button, "clicked", self._on_save)
 
-        self._spinner = Gtk.Spinner()
+        self._spinner = Adw.Spinner()
         self._ui.overlay.add_overlay(self._spinner)
 
         self._set_mam_box_state(False)
@@ -160,8 +161,6 @@ class MamPreferences(GajimAppWindow):
 
     def _activate_spinner(self) -> None:
         self._spinner.set_visible(True)
-        self._spinner.start()
 
     def _disable_spinner(self) -> None:
         self._spinner.set_visible(False)
-        self._spinner.stop()

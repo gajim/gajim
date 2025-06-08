@@ -7,6 +7,7 @@ from typing import cast
 
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.protocol import JID
@@ -42,7 +43,7 @@ class BlockingList(GajimAppWindow):
         self._blocking_store = Gtk.ListStore(str)
         self._ui.block_view.set_model(self._blocking_store)
 
-        self._spinner = Gtk.Spinner(valign=Gtk.Align.CENTER)
+        self._spinner = Adw.Spinner(valign=Gtk.Align.CENTER)
         self._ui.overlay.add_overlay(self._spinner)
 
         self._set_grid_state(False)
@@ -131,11 +132,9 @@ class BlockingList(GajimAppWindow):
 
     def _activate_spinner(self) -> None:
         self._spinner.set_visible(True)
-        self._spinner.start()
 
     def _disable_spinner(self) -> None:
         self._spinner.set_visible(False)
-        self._spinner.stop()
 
     def _cleanup(self) -> None:
         pass

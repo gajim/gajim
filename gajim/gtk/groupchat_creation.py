@@ -178,10 +178,8 @@ class CreateGroupchatWindow(GajimAppWindow, EventHelper):
 
     def _set_processing_state(self, enabled: bool) -> None:
         if enabled:
-            self._ui.spinner.start()
             self._ui.create_button.set_sensitive(False)
-        else:
-            self._ui.spinner.stop()
+
         self._ui.grid.set_sensitive(not enabled)
 
     def _unset_info(self) -> None:

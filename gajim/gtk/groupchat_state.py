@@ -82,12 +82,8 @@ class GroupchatState(Gtk.Box, SignalManager):
         self._update_state(contact)
 
     def _update_state(self, contact: GroupchatContact) -> None:
-        self._ui.joining_spinner.stop()
-        self._ui.mam_sync_spinner.stop()
-
         if contact.is_joining:
             self._ui.groupchat_state.set_visible_child_name("joining")
-            self._ui.joining_spinner.start()
 
         elif contact.is_not_joined:
             self._ui.groupchat_state.set_visible_child_name("not-joined")
@@ -104,7 +100,6 @@ class GroupchatState(Gtk.Box, SignalManager):
         if signal_name == "mam-sync-started":
             self.set_visible(True)
             self._ui.groupchat_state.set_visible_child_name(signal_name)
-            self._ui.mam_sync_spinner.start()
             return
 
         self.set_visible(False)
@@ -118,7 +113,6 @@ class GroupchatState(Gtk.Box, SignalManager):
         self._ui.mam_error_label.set_text(
             _("There has been an error while trying to fetch messages: %s") % error_text
         )
-        self._ui.mam_sync_spinner.stop()
 
     def _on_close_clicked(self, _button: Gtk.Button) -> None:
         self.set_visible(False)

@@ -42,7 +42,7 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
-              <object class="GtkSpinner" id="joining_spinner"/>
+              <object class="AdwSpinner" id="joining_spinner"/>
             </child>
             <child>
               <object class="GtkLabel">
@@ -74,7 +74,7 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
-              <object class="GtkSpinner" id="mam_sync_spinner"/>
+              <object class="AdwSpinner" id="mam_sync_spinner"/>
             </child>
             <child>
               <object class="GtkLabel">

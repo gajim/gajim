@@ -249,8 +249,7 @@ You can also type an XMPP address</property>
                                         <property name="orientation">vertical</property>
                                         <property name="spacing">12</property>
                                         <child>
-                                          <object class="GtkSpinner">
-                                            <property name="spinning">1</property>
+                                          <object class="AdwSpinner">
                                             <property name="width-request">200</property>
                                             <property name="height-request">32</property>
                                           </object>
@@ -289,11 +288,10 @@ You can also type an XMPP address</property>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkSpinner" id="spinner">
+              <object class="AdwSpinner" id="spinner">
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <property name="vexpand">1</property>
-                <property name="spinning">1</property>
               </object>
             </child>
           </object>

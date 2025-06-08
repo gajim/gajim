@@ -137,7 +137,7 @@ Please help us fixing this issue by sending this report.</property>
               </object>
             </child>
             <child>
-              <object class="GtkSpinner" id="report_spinner">
+              <object class="AdwSpinner" id="report_spinner">
                 <property name="visible">0</property>
               </object>
             </child>

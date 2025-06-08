@@ -171,7 +171,7 @@ class CallWindowBuilder(Builder):
     avatar_image: Gtk.Image
     jingle_audio_state: Gtk.Image
     jingle_connection_state: Gtk.Label
-    jingle_connection_spinner: Gtk.Spinner
+    jingle_connection_spinner: Adw.Spinner
     answer_video_button: Gtk.Button
     av_cam_button: Gtk.Button
     av_cam_image: Gtk.Image
@@ -355,7 +355,7 @@ class ExceptionDialogBuilder(Builder):
     user_feedback_box: Gtk.Box
     user_feedback_entry: Gtk.Entry
     close_button: Gtk.Button
-    report_spinner: Gtk.Spinner
+    report_spinner: Adw.Spinner
     report_button: Gtk.Button
 
 class FileTransferBuilder(Builder):
@@ -451,7 +451,7 @@ class GroupchatCreationBuilder(Builder):
     address_entry: Gtk.Entry
     public_radio: Gtk.CheckButton
     private_radio: Gtk.CheckButton
-    spinner: Gtk.Spinner
+    spinner: Adw.Spinner
     create_button: Gtk.Button
 
 class GroupchatDetailsBuilder(Builder):
@@ -556,9 +556,9 @@ class GroupchatRosterTooltipBuilder(Builder):
 class GroupchatStateBuilder(Builder):
     groupchat_state: Gtk.Stack
     join_button: Gtk.Button
-    joining_spinner: Gtk.Spinner
+    joining_spinner: Adw.Spinner
     abort_join_button: Gtk.Button
-    mam_sync_spinner: Gtk.Spinner
+    mam_sync_spinner: Adw.Spinner
     mam_error_label: Gtk.Label
     close_button: Gtk.Button
 
@@ -751,7 +751,7 @@ class ProfileBuilder(Builder):
     avatar_nick_access_label: Gtk.Label
     vcard_access_label: Gtk.Label
     profile_stack: Gtk.Stack
-    spinner: Gtk.Spinner
+    spinner: Adw.Spinner
     scrolled: Gtk.ScrolledWindow
     profile_box: Gtk.Box
     avatar_overlay: Gtk.Overlay
@@ -891,7 +891,7 @@ class StartChatDialogBuilder(Builder):
     global_search_placeholder_stack: Gtk.Stack
     global_search_placeholder_hints: Gtk.Box
     global_search_results_label: Gtk.Label
-    spinner: Gtk.Spinner
+    spinner: Adw.Spinner
     error_label: Gtk.Label
     error_back_button: Gtk.Button
     info_box: Gtk.Box

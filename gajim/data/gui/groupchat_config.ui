@@ -22,9 +22,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkSpinner">
-                <property name="spinning">1</property>
-              </object>
+              <object class="AdwSpinner"></object>
             </child>
           </object>
         </property>

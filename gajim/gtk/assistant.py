@@ -11,6 +11,7 @@ from typing import overload
 
 from collections.abc import Callable
 
+from gi.repository import Adw
 from gi.repository import GObject
 from gi.repository import Gtk
 
@@ -301,9 +302,7 @@ class ProgressPage(Page):
             justify=Gtk.Justification.CENTER,
         )
 
-        spinner = Gtk.Spinner()
-        spinner.start()
-
+        spinner = Adw.Spinner()
         self.append(spinner)
         self.append(self._label)
 

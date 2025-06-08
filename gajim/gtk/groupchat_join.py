@@ -7,6 +7,7 @@ from typing import cast
 
 import logging
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from nbxmpp.errors import StanzaError
 from nbxmpp.modules.muc.util import MucInfoResult
@@ -54,8 +55,6 @@ class GroupchatJoin(GajimAppWindow):
         self._stack.add_named(ErrorPage(), "error")
 
         self._stack.set_visible_child_name("progress")
-        progress_page = cast(ProgressPage, self._stack.get_visible_child())
-        progress_page.start()
 
         self._connect(self._stack, "notify::visible-child-name", self._on_page_changed)
         self._main_box.append(self._stack)
@@ -165,16 +164,12 @@ class ErrorPage(Gtk.Box):
 
 class ProgressPage(Gtk.Box):
     def __init__(self) -> None:
-        Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=18)
-        self.set_vexpand(True)
-        self.set_homogeneous(True)
-        self._spinner = Gtk.Spinner()
-        self._spinner.set_halign(Gtk.Align.CENTER)
-
-        self.append(self._spinner)
-
-    def start(self) -> None:
-        self._spinner.start()
-
-    def stop(self) -> None:
-        self._spinner.stop()
+        Gtk.Box.__init__(
+            self,
+            orientation=Gtk.Orientation.VERTICAL,
+            spacing=18,
+            vexpand=True,
+            homogeneous=True,
+        )
+        spinner = Adw.Spinner(halign=Gtk.Align.CENTER)
+        self.append(spinner)

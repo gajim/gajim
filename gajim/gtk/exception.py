@@ -172,7 +172,6 @@ class ExceptionDialog(GajimAppWindow, SignalManager):
         self._ui.report_button.set_sensitive(False)
         self._ui.close_button.set_sensitive(False)
         self._ui.report_spinner.set_visible(True)
-        self._ui.report_spinner.start()
 
         request = create_http_request()
         request.send(

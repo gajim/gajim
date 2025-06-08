@@ -502,8 +502,7 @@ class DeviceGrid:
     def __init__(self, contact: ResourceContact) -> None:
         self._contact = contact
         self._ui = get_builder("contact_info.ui", ["devices_grid"])
-        self._spinner = Gtk.Spinner()
-        self._spinner.start()
+        self._spinner = Adw.Spinner()
 
         self._ui.resource_label.set_text(_('Device "%s"') % contact.resource)
         self._ui.status_value.set_text(get_uf_show(contact.show.value))
@@ -544,10 +543,9 @@ class DeviceGrid:
     def _check_complete(self) -> None:
         self._waiting_for_info -= 1
         if not self._waiting_for_info:
-            self._spinner.stop()
+            self._spinner.set_visible(False)
 
     def destroy(self) -> None:
-        self._spinner.stop()
         del self._spinner
         del self._ui
         del self._contact

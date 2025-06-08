@@ -272,7 +272,6 @@ class ProfileWindow(GajimAppWindow):
 
         # Switch page after setting other widget's visibility
         # This avoids a leak caused by switching stack pages
-        self._ui.spinner.start()
         self._ui.profile_stack.set_visible_child_name("spinner")
 
         self._vcard_grid.validate()
@@ -441,4 +440,3 @@ class ProfileWindow(GajimAppWindow):
     def _show_profile_page(self) -> None:
         self._running_tasks.clear()
         self._ui.profile_stack.set_visible_child_name("profile")
-        self._ui.spinner.stop()
