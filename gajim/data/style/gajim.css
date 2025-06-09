@@ -951,12 +951,6 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Settings widgets ======================================================== */
 
-/* Generic Popover Menu with Buttons */
-.PopoverButtonListbox { padding-left: 0px; padding-right: 0px; }
-.PopoverButtonListbox > list { margin-top: 10px; margin-bottom: 10px; }
-.PopoverButtonListbox > list > row { padding: 10px 20px 10px 20px; }
-.PopoverButtonListbox > list > row.activatable:active { box-shadow: none; background-color: @theme_selected_bg_color; }
-
 /* Settings Window */
 list.sidebar-switcher row {
     padding: 2px 12px 2px 12px;

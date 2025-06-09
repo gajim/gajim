@@ -10,7 +10,7 @@
       </object>
     </property>
     <style>
-      <class name="PopoverButtonListbox"/>
+      <class name="menu"/>
     </style>
   </object>
   <object class="GtkStack" id="stack">
