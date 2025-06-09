@@ -26,20 +26,24 @@ function main {
         ${MINGW_PACKAGE_PREFIX}-python-six \
         ${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
         ${MINGW_PACKAGE_PREFIX}-gtk4 \
+        ${MINGW_PACKAGE_PREFIX}-libadwaita \
         ${MINGW_PACKAGE_PREFIX}-gtksourceview5 \
         ${MINGW_PACKAGE_PREFIX}-gstreamer \
         ${MINGW_PACKAGE_PREFIX}-gst-plugins-base \
         ${MINGW_PACKAGE_PREFIX}-gst-plugins-good \
+        ${MINGW_PACKAGE_PREFIX}-gst-plugins-bad \
         ${MINGW_PACKAGE_PREFIX}-gst-libav \
         ${MINGW_PACKAGE_PREFIX}-gst-python \
         ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
         ${MINGW_PACKAGE_PREFIX}-farstream \
         ${MINGW_PACKAGE_PREFIX}-libspelling \
         ${MINGW_PACKAGE_PREFIX}-hunspell \
+        ${MINGW_PACKAGE_PREFIX}-libavif \
         ${MINGW_PACKAGE_PREFIX}-libheif \
         ${MINGW_PACKAGE_PREFIX}-libnice \
         ${MINGW_PACKAGE_PREFIX}-libsoup3 \
         ${MINGW_PACKAGE_PREFIX}-libwebp \
+        ${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
         ${MINGW_PACKAGE_PREFIX}-sqlite3
 
     PIP_REQUIREMENTS="\
@@ -51,10 +55,10 @@ qrcode
 css_parser
 sentry-sdk
 emoji
-winrt-Windows.ApplicationModel
-winrt-Windows.Foundation
-winrt-Windows.UI
-winrt-Windows.UI.ViewManagement
+winrt-Windows.ApplicationModel~=3.0
+winrt-Windows.Foundation~=3.0
+winrt-Windows.UI~=3.0
+winrt-Windows.UI.ViewManagement~=3.0
 windows-toasts
 "
 pip3 install --upgrade precis-i18n

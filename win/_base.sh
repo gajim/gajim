@@ -117,7 +117,7 @@ winrt-Windows.ApplicationModel~=3.0
 winrt-Windows.Foundation~=3.0
 winrt-Windows.UI~=3.0
 winrt-Windows.UI.ViewManagement~=3.0
-git+https://github.com/DatGuy1/Windows-Toasts.git
+windows-toasts
 "
     build_pip install precis-i18n
     build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
