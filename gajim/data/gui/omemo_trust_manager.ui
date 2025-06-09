@@ -46,9 +46,6 @@
           <object class="GtkImage" id="qr_code_image">
             <property name="halign">center</property>
             <property name="pixel-size">200</property>
-            <style>
-              <class name="border"/>
-            </style>
           </object>
         </child>
         <style>
