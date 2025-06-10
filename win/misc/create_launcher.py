@@ -6,7 +6,7 @@
 
 # Creates simple Python .exe launchers for gui and cli apps
 #
-# ./create-launcher.py "1.4.0" <target-dir>
+# ./create_launcher.py "1.4.0" <target-dir>
 
 
 import os

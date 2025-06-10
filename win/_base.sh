@@ -154,7 +154,7 @@ function install_gajim {
         "import gajim; import sys; sys.stdout.write(gajim.__version__)")
 
     # Create launchers
-    build_python "${MISC}"/create-launcher.py \
+    build_python "${MISC}"/create_launcher.py \
         "${QL_VERSION}" "${MINGW_ROOT}"/bin
 
     # Install language dicts
