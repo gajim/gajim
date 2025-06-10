@@ -220,10 +220,7 @@ class Preferences(GajimAppWindow):
                     button_label=page.banner.button_label,
                     action_name=page.banner.action_name,
                 )
-                # Workaround for preferences_page.set_banner(page_banner)
-                # which is only available from Adw 1.7
-                scrolled = preferences_page.get_first_child()
-                page_banner.insert_before(preferences_page, scrolled)
+                preferences_page.set_banner(page_banner)
 
             stack_page = stack.add_named(preferences_page, page.name)
             stack_page.set_title(page.title)
