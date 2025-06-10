@@ -19,6 +19,59 @@ PYTHON_ID="python${MAJOR_PY_VERSION}"
 QL_VERSION="0.0.0"
 QL_VERSION_DESC="UNKNOWN"
 
+MINGW_DEPS="\
+${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
+${MINGW_PACKAGE_PREFIX}-farstream \
+${MINGW_PACKAGE_PREFIX}-gst-plugins-base \
+${MINGW_PACKAGE_PREFIX}-gst-plugins-good \
+${MINGW_PACKAGE_PREFIX}-gst-plugins-bad \
+${MINGW_PACKAGE_PREFIX}-gst-libav \
+${MINGW_PACKAGE_PREFIX}-gst-python \
+${MINGW_PACKAGE_PREFIX}-gstreamer \
+${MINGW_PACKAGE_PREFIX}-gtk4 \
+${MINGW_PACKAGE_PREFIX}-gtksourceview5 \
+${MINGW_PACKAGE_PREFIX}-hunspell \
+${MINGW_PACKAGE_PREFIX}-libadwaita \
+${MINGW_PACKAGE_PREFIX}-libavif \
+${MINGW_PACKAGE_PREFIX}-libheif \
+${MINGW_PACKAGE_PREFIX}-libnice \
+${MINGW_PACKAGE_PREFIX}-libspelling \
+${MINGW_PACKAGE_PREFIX}-libsoup3 \
+${MINGW_PACKAGE_PREFIX}-libwebp \
+${MINGW_PACKAGE_PREFIX}-python-certifi \
+${MINGW_PACKAGE_PREFIX}-python-cryptography \
+${MINGW_PACKAGE_PREFIX}-python-gobject \
+${MINGW_PACKAGE_PREFIX}-python-gssapi \
+${MINGW_PACKAGE_PREFIX}-python-idna \
+${MINGW_PACKAGE_PREFIX}-python-keyring \
+${MINGW_PACKAGE_PREFIX}-python-packaging \
+${MINGW_PACKAGE_PREFIX}-python-pillow \
+${MINGW_PACKAGE_PREFIX}-python-pip \
+${MINGW_PACKAGE_PREFIX}-python-protobuf \
+${MINGW_PACKAGE_PREFIX}-python-pygments \
+${MINGW_PACKAGE_PREFIX}-python-setuptools \
+${MINGW_PACKAGE_PREFIX}-python-setuptools-scm \
+${MINGW_PACKAGE_PREFIX}-python-six \
+${MINGW_PACKAGE_PREFIX}-python-sqlalchemy \
+${MINGW_PACKAGE_PREFIX}-sqlite3 \
+${MINGW_PACKAGE_PREFIX}-webp-pixbuf-loader \
+"
+
+PYTHON_REQUIREMENTS="\
+git+https://dev.gajim.org/gajim/omemo-dr.git
+git+https://dev.gajim.org/gajim/python-nbxmpp.git
+css_parser
+emoji
+python-gnupg
+qrcode
+sentry-sdk
+windows-toasts
+winrt-Windows.ApplicationModel~=3.0
+winrt-Windows.Foundation~=3.0
+winrt-Windows.UI~=3.0
+winrt-Windows.UI.ViewManagement~=3.0
+"
+
 function set_build_root {
     BUILD_ROOT="${DIR}/_build_root"
     REPO_CLONE="${BUILD_ROOT}/${MSYSTEM_PREFIX:1}"/gajim
@@ -64,64 +117,12 @@ function create_root {
 }
 
 function install_mingw_deps {
-    build_pacman --noconfirm -S \
-        "${MINGW_PACKAGE_PREFIX}"-python \
-        "${MINGW_PACKAGE_PREFIX}"-python-pip \
-        "${MINGW_PACKAGE_PREFIX}"-python-gobject \
-        "${MINGW_PACKAGE_PREFIX}"-python-certifi \
-        "${MINGW_PACKAGE_PREFIX}"-python-cryptography \
-        "${MINGW_PACKAGE_PREFIX}"-python-gssapi \
-        "${MINGW_PACKAGE_PREFIX}"-python-idna \
-        "${MINGW_PACKAGE_PREFIX}"-python-keyring \
-        "${MINGW_PACKAGE_PREFIX}"-python-packaging \
-        "${MINGW_PACKAGE_PREFIX}"-python-pillow \
-        "${MINGW_PACKAGE_PREFIX}"-python-protobuf \
-        "${MINGW_PACKAGE_PREFIX}"-python-pygments \
-        "${MINGW_PACKAGE_PREFIX}"-python-setuptools \
-        "${MINGW_PACKAGE_PREFIX}"-python-setuptools-scm \
-        "${MINGW_PACKAGE_PREFIX}"-python-six \
-        "${MINGW_PACKAGE_PREFIX}"-python-sqlalchemy \
-        "${MINGW_PACKAGE_PREFIX}"-gtk4 \
-        "${MINGW_PACKAGE_PREFIX}"-libadwaita \
-        "${MINGW_PACKAGE_PREFIX}"-gtksourceview5 \
-        "${MINGW_PACKAGE_PREFIX}"-gstreamer \
-        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-base \
-        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-good \
-        "${MINGW_PACKAGE_PREFIX}"-gst-plugins-bad \
-        "${MINGW_PACKAGE_PREFIX}"-gst-libav \
-        "${MINGW_PACKAGE_PREFIX}"-gst-python \
-        "${MINGW_PACKAGE_PREFIX}"-adwaita-icon-theme \
-        "${MINGW_PACKAGE_PREFIX}"-farstream \
-        "${MINGW_PACKAGE_PREFIX}"-libspelling \
-        "${MINGW_PACKAGE_PREFIX}"-hunspell \
-        "${MINGW_PACKAGE_PREFIX}"-libavif \
-        "${MINGW_PACKAGE_PREFIX}"-libheif \
-        "${MINGW_PACKAGE_PREFIX}"-libnice \
-        "${MINGW_PACKAGE_PREFIX}"-libsoup3 \
-        "${MINGW_PACKAGE_PREFIX}"-libwebp \
-        "${MINGW_PACKAGE_PREFIX}"-webp-pixbuf-loader \
-        "${MINGW_PACKAGE_PREFIX}"-sqlite3
-
+    build_pacman --noconfirm -S ${MINGW_DEPS}
 }
 
 function install_python_deps {
-    PIP_REQUIREMENTS="\
-git+https://dev.gajim.org/gajim/python-nbxmpp.git
-git+https://dev.gajim.org/gajim/omemo-dr.git
-python-gnupg
-qrcode
-css_parser
-sentry-sdk
-emoji
-winrt-Windows.ApplicationModel~=3.0
-winrt-Windows.Foundation~=3.0
-winrt-Windows.UI~=3.0
-winrt-Windows.UI.ViewManagement~=3.0
-windows-toasts
-"
     build_pip install precis-i18n
-    build_pip install $(echo "$PIP_REQUIREMENTS" | tr ["\\n"] [" "])
-
+    build_pip install $(echo "$PYTHON_REQUIREMENTS" | tr ["\\n"] [" "])
 }
 
 function post_install_deps {
