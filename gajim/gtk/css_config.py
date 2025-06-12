@@ -101,7 +101,7 @@ class CSSConfig:
         # Font size provider for GUI font size
         self._app_font_size_provider = Gtk.CssProvider()
         Gtk.StyleContext.add_provider_for_display(
-            display, self._app_font_size_provider, CSSPriority.PRE_APPLICATION
+            display, self._app_font_size_provider, CSSPriority.PRE_THEME
         )
 
         # Cache of recently requested values

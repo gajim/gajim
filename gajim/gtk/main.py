@@ -105,13 +105,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._startup_finished: bool = False
 
         self._ui = get_builder("main.ui")
-        self.set_content(self._ui.main_view)
+        self.set_content(self._ui.main_grid)
 
         self._main_menu = get_main_menu()
-        self._ui.main_menu_bar.set_menu_model(self._main_menu)
-        self._ui.main_menu_bar.set_visible(
-            app.settings.get_app_setting("show_main_menu")
-        )
+        # self._ui.main_menu_bar.set_menu_model(self._main_menu)
+        # self._ui.main_menu_bar.set_visible(
+        #     app.settings.get_app_setting("show_main_menu")
+        # )
         build_accounts_menu()
 
         self._emoji_chooser: EmojiChooser | None = None
@@ -547,7 +547,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         elif action_name == "toggle-menu-bar":
             show_menu_bar = not app.settings.get_app_setting("show_main_menu")
             app.settings.set_app_setting("show_main_menu", show_menu_bar)
-            self._ui.main_menu_bar.set_visible(show_menu_bar)
+            # self._ui.main_menu_bar.set_visible(show_menu_bar)
 
         return None
 

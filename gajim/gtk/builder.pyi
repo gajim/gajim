@@ -246,9 +246,14 @@ class ChatListRowBuilder(Builder):
 
 class ChatPanedBuilder(Builder):
     paned: Gtk.Paned
-    middle_grid: Gtk.Grid
+    header_bar_label: Gtk.Label
+    chat_page_header: Gtk.Box
+    search_entry: Gtk.SearchEntry
+    chat_filter: Gtk.ChatFilter
+    start_chat_menu_button: Gtk.MenuButton
     list_scrolled: Gtk.ScrolledWindow
     list_stack: Gtk.Stack
+    right_toolbar_view: Adw.ToolbarView
     right_grid: Gtk.Grid
 
 class ContactInfoBuilder(Builder):
@@ -567,8 +572,6 @@ class HistoryExportBuilder(Builder):
     settings_grid: Gtk.Grid
 
 class MainBuilder(Builder):
-    main_view: Adw.ToolbarView
-    main_menu_bar: Gtk.PopoverMenuBar
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
     activity_box: Gtk.Box
