@@ -532,7 +532,7 @@ def get_start_chat_row_menu(account: str, jid: JID | None) -> GajimMenu | None:
     if isinstance(contact, GroupchatContact):
         account_jid_params = AccountJidParam(account=account, jid=jid)
         menuitems.append(
-            (_("Forget this Group Chat"), "app.forget-groupchat", account_jid_params)
+            (_("Forget this Group Chat…"), "app.forget-groupchat", account_jid_params)
         )
 
     return GajimMenu.from_list(menuitems)
