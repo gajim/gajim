@@ -21,6 +21,7 @@ from packaging.version import Version as V
 
 _MIN_NBXMPP_VER = "6.2.0"
 _MIN_GTK_VER = "4.17.5"
+_MIN_ADW_VER = "1.7.0"
 _MIN_CAIRO_VER = "1.16.0"
 _MIN_PYGOBJECT_VER = "3.42.0"
 _MIN_GLIB_VER = "2.80.0"
@@ -81,18 +82,19 @@ def _check_required_deps() -> None:
 
     from gi.repository import Gtk
 
-    gtk_ver = ".".join(
-        map(
-            str,
-            [Gtk.get_major_version(), Gtk.get_minor_version(), Gtk.get_micro_version()],
-        )
+    gtk_ver = (
+        f"{Gtk.get_major_version()}.{Gtk.get_minor_version()}.{Gtk.get_micro_version()}"
+    )
+
+    from gi.repository import Adw
+
+    adw_ver = (
+        f"{Adw.get_major_version()}.{Adw.get_minor_version()}.{Adw.get_micro_version()}"
     )
 
     from gi.repository import GLib
 
-    glib_ver = ".".join(
-        map(str, [GLib.MAJOR_VERSION, GLib.MINOR_VERSION, GLib.MICRO_VERSION])
-    )
+    glib_ver = f"{GLib.MAJOR_VERSION}.{GLib.MINOR_VERSION}.{GLib.MICRO_VERSION}"
 
     from gi.repository import Pango
 
@@ -101,6 +103,7 @@ def _check_required_deps() -> None:
     check_version("libcairo", cairo.cairo_version_string(), _MIN_CAIRO_VER)
     check_version("pycairo", cairo.version, _MIN_CAIRO_VER)
     check_version("gtk4", gtk_ver, _MIN_GTK_VER)
+    check_version("adw", adw_ver, _MIN_ADW_VER)
     check_version("glib", glib_ver, _MIN_GLIB_VER)
     check_version("pango", Pango.version_string(), _MIN_PANGO_VER)
     check_version("sqlite", sqlite3.sqlite_version, _MIN_SQLITE_VER)
