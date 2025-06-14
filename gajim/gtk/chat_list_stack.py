@@ -33,6 +33,7 @@ from gajim.gtk.chat_list_row import ChatListRow
 
 class ChatListStack(Gtk.Stack, EventHelper):
 
+    __gtype_name__ = "ChatListStack"
     __gsignals__ = {
         "unread-count-changed": (GObject.SignalFlags.RUN_LAST, None, (str, int)),
         "chat-selected": (GObject.SignalFlags.RUN_LAST, None, (str, str, object)),
@@ -40,7 +41,7 @@ class ChatListStack(Gtk.Stack, EventHelper):
         "chat-removed": (GObject.SignalFlags.RUN_LAST, None, (str, object, str, bool)),
     }
 
-    def __init__(self, chat_filter: ChatFilter, search_entry: Gtk.SearchEntry) -> None:
+    def __init__(self) -> None:
         Gtk.Stack.__init__(self)
         EventHelper.__init__(self)
         self.set_hexpand(True)
@@ -54,8 +55,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
         self.add_named(Gtk.Box(), "default")
 
         self.connect("notify::visible-child-name", self._on_visible_child_name)
-        search_entry.connect("search-changed", self._on_search_changed)
-        chat_filter.connect("filter-changed", self._on_filter_changed)
 
         self._add_actions()
 
@@ -72,6 +71,12 @@ class ChatListStack(Gtk.Stack, EventHelper):
                 ("jingle-request-received", ged.GUI2, self._on_event),
             ]
         )
+
+    def set_search_entry(self, search_entry: Gtk.SearchEntry) -> None:
+        search_entry.connect("search-changed", self._on_search_changed)
+
+    def set_chat_filter(self, chat_filter: ChatFilter) -> None:
+        chat_filter.connect("filter-changed", self._on_filter_changed)
 
     def _add_actions(self) -> None:
         actions = [

@@ -203,25 +203,6 @@ class CertificateBuilder(Builder):
     algorithm_row: Adw.ActionRow
     key_size_row: Adw.ActionRow
 
-class ChatBannerBuilder(Builder):
-    share_popover: Gtk.Popover
-    share_instructions: Gtk.Label
-    qr_code_image: Gtk.Image
-    jid_label: Gtk.Label
-    copy_jid_button: Gtk.Button
-    banner_box: Gtk.Box
-    avatar_image: Gtk.Image
-    name_label: Gtk.Label
-    phone_image: Gtk.Image
-    robot_image: Gtk.Image
-    description_label: Gtk.Label
-    additional_items_box: Gtk.Box
-    share_menu_button: Gtk.MenuButton
-    contact_info_button: Gtk.Button
-    toggle_roster_button: Gtk.Button
-    toggle_roster_image: Gtk.Image
-    chat_menu_button: Gtk.MenuButton
-
 class ChatControlBuilder(Builder):
     control_box: Gtk.Box
     conv_view_paned: Gtk.Paned
@@ -243,18 +224,6 @@ class ChatListRowBuilder(Builder):
     unread_label: Gtk.Label
     revealer: Gtk.Revealer
     close_button: Gtk.Button
-
-class ChatPanedBuilder(Builder):
-    paned: Gtk.Paned
-    header_bar_label: Gtk.Label
-    chat_page_header: Gtk.Box
-    search_entry: Gtk.SearchEntry
-    chat_filter: Gtk.ChatFilter
-    start_chat_menu_button: Gtk.MenuButton
-    list_scrolled: Gtk.ScrolledWindow
-    list_stack: Gtk.Stack
-    right_toolbar_view: Adw.ToolbarView
-    right_grid: Gtk.Grid
 
 class ContactInfoBuilder(Builder):
     devices_grid: Gtk.Grid
@@ -1018,10 +987,6 @@ def get_builder(
 ) -> CertificateBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["chat_banner.ui"], instance: Any = None, widgets: list[str] = ...
-) -> ChatBannerBuilder: ...  # noqa
-@overload
-def get_builder(
     file_name: Literal["chat_control.ui"],
     instance: Any = None,
     widgets: list[str] = ...,
@@ -1032,10 +997,6 @@ def get_builder(
     instance: Any = None,
     widgets: list[str] = ...,
 ) -> ChatListRowBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["chat_paned.ui"], instance: Any = None, widgets: list[str] = ...
-) -> ChatPanedBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["contact_info.ui"],
