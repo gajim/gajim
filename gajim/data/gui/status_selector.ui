@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="StatusSelector" parent="GtkMenuButton">
+    <property name="direction">up</property>
+    <property name="popover">
+      <object class="StatusSelectorPopover">
+        <signal name="clicked" handler="_on_clicked"/>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage" id="_image">
+            <property name="pixel-size">24</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_label">
+            <property name="ellipsize">end</property>
+            <property name="halign">start</property>
+            <property name="label" translatable="yes">Offline</property>
+            <property name="xalign">0</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
