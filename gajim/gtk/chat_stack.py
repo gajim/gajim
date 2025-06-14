@@ -72,7 +72,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._chat_function_page.connect("message", self._on_function_message)
         self.add_named(self._chat_function_page, "function")
 
-        # self._chat_banner = ChatBanner()
         self._chat_control = ChatControl()
         self._message_action_box = MessageActionsBox()
 
@@ -81,7 +80,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         app.commands.connect("command-result", self._on_command_signal)
 
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        # box.append(self._chat_banner)
         box.append(Gtk.Separator(margin_start=6, margin_end=6))
         box.append(self._chat_control.widget)
         box.append(self._message_action_box)
@@ -181,7 +179,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         app.preview_manager.clear_previews()
 
-        # self._chat_banner.switch_contact(self._current_contact)
         self._chat_control.switch_contact(self._current_contact)
         self._message_action_box.switch_contact(self._current_contact)
 
@@ -871,7 +868,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         self._last_quoted_id = None
         self.set_visible_child_name("empty")
-        # self._chat_banner.clear()
         self._message_action_box.clear()
         self._chat_control.clear()
 
