@@ -111,11 +111,6 @@ def get_main_menu() -> GajimMenu:
 
     main_menu.add_submenu(_("_Accounts"))
 
-    view_menu_items: MenuItemListT = [
-        (_("_Debug Console"), "app.xml-console", None),
-    ]
-    main_menu.append_submenu(_("_View"), GajimMenu.from_list(view_menu_items))
-
     help_menu_items: MenuItemListT = [
         (_("_Wiki (Online)"), "app.content", None),
         (_("FA_Q (Online)"), "app.faq", None),
