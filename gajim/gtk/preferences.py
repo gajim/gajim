@@ -1260,6 +1260,16 @@ class Advanced(PreferenceBox):
                 callback=self._on_debug_logging,
             ),
             Setting(
+                SettingKind.GENERIC,
+                _("Debug Console"),
+                SettingType.VALUE,
+                None,
+                props={
+                    "button-text": _("Open"),
+                    "button-callback": self._on_debug,
+                },
+            ),
+            Setting(
                 SettingKind.SWITCH,
                 _("D-Bus Interface"),
                 SettingType.CONFIG,
@@ -1298,3 +1308,7 @@ class Advanced(PreferenceBox):
         window = get_app_window("Preferences")
         assert window is not None
         open_window("AdvancedConfig", transient_for=window.window)
+
+    @staticmethod
+    def _on_debug(*args: Any) -> None:
+        open_window("DebugConsoleWindow")
