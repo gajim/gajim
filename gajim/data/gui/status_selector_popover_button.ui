@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="StatusSelectorPopoverButton" parent="GtkButton">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage" id="_image">
+            <property name="pixel-size">24</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_label">
+            <property name="halign">start</property>
+            <property name="use-underline">true</property>
+          </object>
+        </child>
+      </object>
+    </property>
+    <style>
+      <class name="flat"/>
+    </style>
+  </template>
+</interface>

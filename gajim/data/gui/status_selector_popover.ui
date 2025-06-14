@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="StatusSelectorPopover" parent="GtkPopover">
+    <property name="child">
+      <object class="GtkBox" id="_box">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="StatusSelectorPopoverButton">
+            <property name="status">online</property>
+            <signal name="clicked" handler="_on_clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="StatusSelectorPopoverButton">
+            <property name="status">away</property>
+            <signal name="clicked" handler="_on_clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="StatusSelectorPopoverButton">
+            <property name="status">xa</property>
+            <signal name="clicked" handler="_on_clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="StatusSelectorPopoverButton">
+            <property name="status">dnd</property>
+            <signal name="clicked" handler="_on_clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator" />
+        </child>
+        <child>
+          <object class="StatusSelectorPopoverButton">
+            <property name="status">offline</property>
+            <signal name="clicked" handler="_on_clicked"/>
+          </object>
+        </child>
+        <style>
+          <class name="m-3"/>
+        </style>
+      </object>
+    </property>
+  </template>
+</interface>

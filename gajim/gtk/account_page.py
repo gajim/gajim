@@ -43,7 +43,8 @@ class AccountPage(Gtk.Box, SignalManager):
 
         self._ui.our_jid_label.set_text(jid)
 
-        self._status_selector = StatusSelector(account=account)
+        self._status_selector = StatusSelector()
+        self._status_selector.set_account(account)
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.status_box.append(self._status_selector)
 
@@ -101,5 +102,3 @@ class AccountPage(Gtk.Box, SignalManager):
         )
         self._ui.avatar_image.set_pixel_size(AvatarSize.ACCOUNT_PAGE)
         self._ui.avatar_image.set_from_paintable(texture)
-
-        self._status_selector.update()

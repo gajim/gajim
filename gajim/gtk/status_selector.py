@@ -4,150 +4,140 @@
 
 from __future__ import annotations
 
+from gi.repository import GObject
 from gi.repository import Gtk
-from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.i18n import _
 from gajim.common.util.status import get_client_status
-from gajim.common.util.status import get_global_show
 from gajim.common.util.status import get_uf_show
-from gajim.common.util.status import statuses_unified
 
 from gajim.gtk.avatar import get_show_circle
-from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.misc import convert_surface_to_texture
 
 
-class StatusSelector(Gtk.MenuButton, EventHelper, SignalManager):
-    def __init__(self, account: str | None = None, compact: bool = False):
-        Gtk.MenuButton.__init__(self, direction=Gtk.ArrowType.UP)
+@Gtk.Template(filename=get_ui_path("status_selector.ui"))
+class StatusSelector(Gtk.MenuButton, EventHelper):
+    __gtype_name__ = "StatusSelector"
+
+    _image: Gtk.Image = Gtk.Template.Child()
+    _label: Gtk.Label = Gtk.Template.Child()
+
+    def __init__(self):
+        self._account: str | None = None
+
+        Gtk.MenuButton.__init__(self)
         EventHelper.__init__(self)
-        SignalManager.__init__(self)
 
-        self._account = account
-        self._compact = compact
-        self._status_popover = self._create_popover()
-        self.set_popover(self._status_popover)
-
-        self._current_show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
         surface = get_show_circle(
             "offline", AvatarSize.SHOW_CIRCLE, self.get_scale_factor()
         )
-        self._current_show_icon.set_from_paintable(convert_surface_to_texture(surface))
-
-        box = Gtk.Box(spacing=6)
-        box.append(self._current_show_icon)
-        if not self._compact:
-            self._current_show_label = Gtk.Label(label=get_uf_show("offline"))
-            self._current_show_label.set_ellipsize(Pango.EllipsizeMode.END)
-            self._current_show_label.set_halign(Gtk.Align.START)
-            self._current_show_label.set_xalign(0)
-            box.append(self._current_show_label)
-
-        self.set_child(box)
+        self._image.set_from_paintable(convert_surface_to_texture(surface))
 
         self.register_events(
             [
                 ("our-show", ged.GUI1, self._on_our_show),
-                ("account-enabled", ged.GUI1, self._on_account_enabled),
             ]
         )
 
-        for client in app.get_clients():
-            client.connect_signal("state-changed", self._on_client_state_changed)
+    @GObject.Property(type=str)
+    def account(self) -> str | None:  # pyright: ignore
+        return self._account
 
-    def do_unroot(self) -> None:
-        Gtk.MenuButton.do_unroot(self)
-        self.unregister_events()
-        self._disconnect_all()
-        for client in app.get_clients():
-            client.disconnect_all_from_obj(self)
+    @account.setter
+    def account(self, account: str | None) -> None:
+        if self._account == account:
+            return
 
-        del self._status_popover
-        app.check_finalize(self)
+        self._disconnect_signals(self._account)
+        self._connect_signals(account)
 
-    def _on_our_show(self, _event: events.ShowChanged) -> None:
-        self.update()
+        self._account = account
+        self._update_status()
 
-    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
-        client = app.get_client(event.account)
+    def _connect_signals(self, account: str | None) -> None:
+        if account is None:
+            return
+        client = app.get_client(account)
         client.connect_signal("state-changed", self._on_client_state_changed)
+
+    def _disconnect_signals(self, account: str | None) -> None:
+        if account is None:
+            return
+        client = app.get_client(account)
+        client.disconnect_all_from_obj(self)
+
+    def set_account(self, account: str | None) -> None:
+        self.account = account
+
+    @Gtk.Template.Callback()
+    def _on_clicked(self, _button: Gtk.Button, status: str) -> None:
+        app.app.change_status(status=status, account=self._account)
+
+    def _on_our_show(self, event: events.ShowChanged) -> None:
+        if event.account != self._account:
+            return
+        self._update_status()
 
     def _on_client_state_changed(
         self, _client: Client, _signal_name: str, _state: SimpleClientState
     ) -> None:
-        self.update()
+        self._update_status()
 
-    def _create_popover(self) -> Gtk.Popover:
-        popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        popover_box.add_css_class("m-3")
-        popover_items = [
-            "online",
-            "away",
-            "xa",
-            "dnd",
-            "separator",
-            "offline",
-        ]
-
-        for item in popover_items:
-            if item == "separator":
-                popover_box.append(Gtk.Separator())
-                continue
-
-            show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
-            show_label = Gtk.Label()
-            show_label.set_halign(Gtk.Align.START)
-
-            surface = get_show_circle(
-                item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor()
-            )
-            show_icon.set_from_paintable(convert_surface_to_texture(surface))
-            show_label.set_text_with_mnemonic(get_uf_show(item, use_mnemonic=True))
-
-            show_box = Gtk.Box(spacing=6)
-            show_box.append(show_icon)
-            show_box.append(show_label)
-
-            button = Gtk.Button()
-            button.add_css_class("flat")
-            button.set_name(item)
-            button.set_child(show_box)
-            self._connect(button, "clicked", self._on_change_status)
-            popover_box.append(button)
-
-        status_popover = Gtk.Popover()
-        status_popover.set_child(popover_box)
-        return status_popover
-
-    def _on_change_status(self, button: Gtk.Button) -> None:
-        self._status_popover.popdown()
-        new_status = button.get_name()
-        app.app.change_status(status=new_status, account=self._account)
-
-    def update(self) -> None:
+    def _update_status(self) -> None:
         if self._account is None:
-            show = get_global_show()
-        else:
-            show = get_client_status(self._account)
+            self._image.set_from_paintable(None)
+            self._label.set_text("")
+            return
 
+        show = get_client_status(self._account)
         surface = get_show_circle(show, AvatarSize.SHOW_CIRCLE, self.get_scale_factor())
-        self._current_show_icon.set_from_paintable(convert_surface_to_texture(surface))
+        self._image.set_from_paintable(convert_surface_to_texture(surface))
+        self._label.set_text(get_uf_show(show))
 
-        uf_show = get_uf_show(show)
-        if statuses_unified():
-            self._current_show_icon.set_tooltip_text(_("Status: %s") % uf_show)
-            if not self._compact:
-                self._current_show_label.set_text(uf_show)
-        else:
-            show_label = _("%s (desynced)") % uf_show
-            self._current_show_icon.set_tooltip_text(_("Status: %s") % show_label)
-            if not self._compact:
-                self._current_show_label.set_text(show_label)
+
+@Gtk.Template(filename=get_ui_path("status_selector_popover.ui"))
+class StatusSelectorPopover(Gtk.Popover):
+    __gtype_name__ = "StatusSelectorPopover"
+
+    __gsignals__ = {
+        "clicked": (
+            GObject.SignalFlags.RUN_LAST | GObject.SignalFlags.ACTION,
+            None,
+            (str,),
+        )
+    }
+
+    _box: Gtk.Box = Gtk.Template.Child()
+
+    @Gtk.Template.Callback()
+    def _on_clicked(self, button: StatusSelectorPopoverButton) -> None:
+        self.emit("clicked", button.status)
+        self.popdown()
+
+
+@Gtk.Template(filename=get_ui_path("status_selector_popover_button.ui"))
+class StatusSelectorPopoverButton(Gtk.Button):
+    __gtype_name__ = "StatusSelectorPopoverButton"
+
+    _image: Gtk.Image = Gtk.Template.Child()
+    _label: Gtk.Label = Gtk.Template.Child()
+
+    @GObject.Property(type=str)
+    def status(self) -> str:  # pyright: ignore
+        return self._status
+
+    @status.setter
+    def status(self, status: str) -> None:
+        self._status = status
+        self._label.set_text_with_mnemonic(get_uf_show(status, use_mnemonic=True))
+        surface = get_show_circle(
+            status, AvatarSize.SHOW_CIRCLE, self.get_scale_factor()
+        )
+        self._image.set_from_paintable(convert_surface_to_texture(surface))
