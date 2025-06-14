@@ -279,7 +279,6 @@ MAIN_WIN_ACTIONS = [
     ("decrease-app-font-size", None, True),
     ("reset-app-font-size", None, True),
     ("toggle-chat-list", None, True),
-    ("toggle-menu-bar", None, True),
     ("add-workspace", "s", True),
     ("edit-workspace", "s", True),
     ("remove-workspace", "s", True),

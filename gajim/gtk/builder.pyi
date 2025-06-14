@@ -543,6 +543,7 @@ class HistoryExportBuilder(Builder):
 class MainBuilder(Builder):
     main_grid: Gtk.Grid
     left_grid: Gtk.Grid
+    main_popover_menu: Gtk.PopoverMenu
     activity_box: Gtk.Box
     workspace_scrolled: Gtk.ScrolledWindow
     toggle_chat_list_button: Gtk.Button
