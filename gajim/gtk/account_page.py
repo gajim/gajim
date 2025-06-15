@@ -48,7 +48,8 @@ class AccountPage(Gtk.Box, SignalManager):
         self._status_selector.set_halign(Gtk.Align.CENTER)
         self._ui.status_box.append(self._status_selector)
 
-        self._status_message_selector = StatusMessageSelector(account=account)
+        self._status_message_selector = StatusMessageSelector()
+        self._status_message_selector.set_account(account)
         self._status_message_selector.set_halign(Gtk.Align.CENTER)
         self._ui.status_box.append(self._status_message_selector)
 
