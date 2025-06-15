@@ -18,16 +18,6 @@ class GajimBuilder:
 
 class Builder(Gtk.Builder): ...
 
-class AccountPageBuilder(Builder):
-    scrolled: Gtk.ScrolledWindow
-    account_box: Gtk.Box
-    avatar_image: Gtk.Image
-    account_label: Gtk.Label
-    our_jid_label: Gtk.Label
-    account_settings_button: Gtk.Button
-    account_page_menu_button: Gtk.MenuButton
-    status_box: Gtk.Box
-
 class AccountWizardBuilder(Builder):
     account_label_box: Gtk.Box
     account_name_entry: Gtk.Entry
@@ -923,12 +913,6 @@ class WorkspaceDialogBuilder(Builder):
     cancel_button: Gtk.Button
     save_button: Gtk.Button
 
-@overload
-def get_builder(
-    file_name: Literal["account_page.ui"],
-    instance: Any = None,
-    widgets: list[str] = ...,
-) -> AccountPageBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["account_wizard.ui"],

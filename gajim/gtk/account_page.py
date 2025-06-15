@@ -6,100 +6,135 @@ from __future__ import annotations
 
 from typing import Any
 
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.client import Client
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
-from gajim.common.const import ClientState
 from gajim.common.modules.contacts import BareContact
 
-from gajim.gtk.builder import get_builder
 from gajim.gtk.menus import get_account_menu
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
-from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.window import open_window
 
 
-class AccountPage(Gtk.Box, SignalManager):
-    def __init__(self, account: str) -> None:
+@Gtk.Template(filename=get_ui_path("account_page.ui"))
+class AccountPage(Gtk.Box):
+    __gtype_name__ = "AccountPage"
+
+    _avatar_image: Gtk.Image = Gtk.Template.Child()
+    _account_label: Gtk.Label = Gtk.Template.Child()
+    _our_jid_label: Gtk.Label = Gtk.Template.Child()
+    _settings_button: Gtk.Button = Gtk.Template.Child()
+    _menu_button: Gtk.MenuButton = Gtk.Template.Child()
+    _status_selector: StatusSelector = Gtk.Template.Child()
+    _status_message_selector: StatusMessageSelector = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        self._account: str | None = None
+
         Gtk.Box.__init__(self)
-        SignalManager.__init__(self)
 
-        self._account = account
-        self._client = app.get_client(account)
+        self._contact: BareContact | None = None
 
-        jid = self._client.get_own_jid().bare
-        self._contact = self._client.get_module("Contacts").get_contact(jid)
-        self._contact.connect("avatar-update", self._on_avatar_update)
+        self._menu_button.set_create_popup_func(self._on_menu_popup)
 
-        self._ui = get_builder("account_page.ui")
-        self.append(self._ui.scrolled)
-
-        self._connect(
-            self._ui.account_settings_button, "clicked", self._on_account_settings
-        )
-
-        self._ui.our_jid_label.set_text(jid)
-
-        self._status_selector = StatusSelector()
-        self._status_selector.set_account(account)
-        self._status_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.status_box.append(self._status_selector)
-
-        self._status_message_selector = StatusMessageSelector()
-        self._status_message_selector.set_account(account)
-        self._status_message_selector.set_halign(Gtk.Align.CENTER)
-        self._ui.status_box.append(self._status_message_selector)
-
-        self._ui.account_page_menu_button.set_menu_model(get_account_menu(account))
-
-        self._client.connect_signal("state-changed", self._on_client_state_changed)
-
-        app.settings.connect_signal(
-            "account_label", self._on_account_label_changed, account
-        )
-
-        self._update()
-
-    def do_unroot(self) -> None:
-        self._disconnect_all()
-        self._contact.disconnect_all_from_obj(self)
-        self._client.disconnect_all_from_obj(self)
-        app.settings.disconnect_signals(self)
-        Gtk.Box.do_unroot(self)
-        del self._client
-        del self._ui
-        app.check_finalize(self)
-
-    def get_account(self) -> str:
+    @GObject.Property(type=str)
+    def account(self) -> str | None:  # pyright: ignore
         return self._account
 
-    def _on_account_label_changed(self, _value: str, *args: Any) -> None:
-        self._update()
+    @account.setter
+    def account(self, account: str | None) -> None:
+        if self._account == account:
+            return
+
+        self._disconnect_signals()
+
+        self._account = account
+        self._contact = None
+        if account is not None:
+            client = app.get_client(account)
+            jid = client.get_own_jid().bare
+            contact = client.get_module("Contacts").get_contact(jid)
+            assert isinstance(contact, BareContact)
+            self._contact = contact
+
+        self._connect_signals()
+
+        self._update_page()
+
+    def _connect_signals(self) -> None:
+        if self._account is None:
+            return
+
+        assert self._contact is not None
+
+        self._contact.connect("avatar-update", self._on_avatar_update)
+        app.settings.connect_signal(
+            "account_label", self._on_account_label_changed, self._account
+        )
+
+    def _disconnect_signals(self) -> None:
+        if self._account is None:
+            return
+
+        assert self._contact is not None
+
+        self._contact.disconnect_all_from_obj(self)
+        app.settings.disconnect_signals(self)
+
+    def set_account(self, account: str | None) -> None:
+        self.account = account
+
+    def get_account(self) -> str | None:
+        return self._account
+
+    def _on_menu_popup(self, menu_button: Gtk.MenuButton) -> None:
+        assert self._account is not None
+        menu_button.set_menu_model(get_account_menu(self._account))
+
+    def _on_account_label_changed(self, value: str, *args: Any) -> None:
+        self._update_account_label(value)
 
     def _on_avatar_update(self, *args: Any) -> None:
-        self._update()
+        self._update_avatar()
 
+    @Gtk.Template.Callback()
     def _on_account_settings(self, _button: Gtk.Button) -> None:
+        assert self._account is not None
         window = open_window("AccountsWindow")
         window.select_account(self._account)
 
-    def _on_client_state_changed(
-        self, client: Client, _signal_name: str, state: ClientState
-    ) -> None:
+    def _update_account_label(self, label: str) -> None:
+        self._account_label.set_text(label)
 
-        jid = client.get_own_jid().bare
-        self._ui.our_jid_label.set_text(jid)
-
-    def _update(self) -> None:
-        account_label = app.settings.get_account_setting(self._account, "account_label")
-        self._ui.account_label.set_text(account_label)
-
-        assert isinstance(self._contact, BareContact)
+    def _update_avatar(self) -> None:
+        assert self._contact is not None
         texture = self._contact.get_avatar(
             AvatarSize.ACCOUNT_PAGE, self.get_scale_factor(), add_show=False
         )
-        self._ui.avatar_image.set_pixel_size(AvatarSize.ACCOUNT_PAGE)
-        self._ui.avatar_image.set_from_paintable(texture)
+        self._avatar_image.set_from_paintable(texture)
+
+    def _update_page(self) -> None:
+        self._menu_button.set_sensitive(self._account is not None)
+        self._settings_button.set_sensitive(self._account is not None)
+
+        if self._account is None:
+            self._our_jid_label.set_text("")
+            self._account_label.set_text("")
+            self._avatar_image.set_from_paintable(None)
+            self._status_selector.set_account(None)
+            self._status_message_selector.set_account(None)
+            return
+
+        assert self._contact is not None
+
+        account_label = app.settings.get_account_setting(self._account, "account_label")
+
+        self._update_avatar()
+        self._update_account_label(account_label)
+        self._our_jid_label.set_text(str(self._contact.jid))
+        self._status_selector.set_account(self._account)
+        self._status_message_selector.set_account(self._account)
