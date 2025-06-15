@@ -27,24 +27,20 @@ class MainStack(Gtk.Stack):
         self._chat_page = ChatPage()
         self._chat_page.connect("chat-selected", self._on_chat_selected)
         self.add_named(self._chat_page, "chats")
+        self.add_named(AccountPage(), "account")
 
         activity_list = self._chat_page.get_activity_list()
         activity_list.connect("activate", self._on_activity_item_activate)
         activity_list.connect("unselected", self._on_activity_item_unselected)
 
-    def _get_current_account_page(self) -> AccountPage | None:
-        return cast(AccountPage | None, self.get_child_by_name("account"))
+    def _get_account_page(self) -> AccountPage:
+        return cast(AccountPage, self.get_child_by_name("account"))
 
     def remove_account_page(self, account: str) -> None:
-        account_page = self._get_current_account_page()
-        if account_page is None:
-            return
-
-        if account_page.get_account() != account:
-            return
-
-        self.set_visible_child_name("empty")
-        self.remove(account_page)
+        account_page = self._get_account_page()
+        if account_page.get_account() == account:
+            account_page.set_account(None)
+            self.set_visible_child_name("empty")
 
     def remove_chats_for_account(self, account: str) -> None:
         self._chat_page.remove_chats_for_account(account)
@@ -70,16 +66,8 @@ class MainStack(Gtk.Stack):
         self.set_visible_child_name("chats")
 
     def show_account(self, account: str) -> None:
-        account_page = self._get_current_account_page()
-        if account_page is not None:
-            if account_page.get_account() == account:
-                self.set_visible_child_name("account")
-                return
-
-            self.remove(account_page)
-
-        account_page = AccountPage(account)
-        self.add_named(account_page, "account")
+        account_page = self._get_account_page()
+        account_page.set_account(account)
         self.set_visible_child_name("account")
 
     def get_chat_page(self) -> ChatPage:
