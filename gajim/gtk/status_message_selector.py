@@ -6,101 +6,109 @@ from __future__ import annotations
 
 from typing import Any
 
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
-from gajim.common.i18n import _
-from gajim.common.util.status import get_global_status_message
 from gajim.common.util.text import to_one_line
 
-from gajim.gtk.util.classes import SignalManager
 
+@Gtk.Template(filename=get_ui_path("status_message_selector.ui"))
+class StatusMessageSelector(Gtk.Box, EventHelper):
+    __gtype_name__ = "StatusMessageSelector"
 
-class StatusMessageSelector(Gtk.Box, EventHelper, SignalManager):
-    def __init__(self, account: str | None = None) -> None:
+    _entry: Gtk.Entry = Gtk.Template.Child()
+    _button: Gtk.Button = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        self._account: str | None = None
+
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
-        SignalManager.__init__(self)
-
-        self.add_css_class("linked")
-        self._account = account
-
-        self._entry = Gtk.Entry()
-        self._entry.set_size_request(200, -1)
-        self._entry.set_property("show-emoji-icon", True)
-        self._entry.set_property("enable-emoji-completion", True)
-        self._entry.set_placeholder_text(_("Status message…"))
-        self._connect(self._entry, "activate", self._set_status_message)
-        self._connect(self._entry, "changed", self._on_changed)
-
-        self._button = Gtk.Button.new_from_icon_name("object-select-symbolic")
-        self._button.set_tooltip_text(_("Set status message"))
-        self._connect(self._button, "clicked", self._set_status_message)
-        self.append(self._entry)
-        self.append(self._button)
 
         self.register_events(
             [
                 ("our-show", ged.GUI1, self._on_our_show),
-                ("account-enabled", ged.GUI1, self._on_account_enabled),
             ]
         )
 
-        for client in app.get_clients():
-            client.connect_signal("state-changed", self._on_client_state_changed)
+    @GObject.Property(type=str)
+    def account(self) -> str | None:  # pyright: ignore
+        return self._account
 
-    def do_unroot(self) -> None:
-        Gtk.Box.do_unroot(self)
-        self.unregister_events()
-        self._disconnect_all()
-        for client in app.get_clients():
-            client.disconnect_all_from_obj(self)
+    @account.setter
+    def account(self, account: str | None) -> None:
+        if self._account == account:
+            return
 
-        app.check_finalize(self)
+        self._disconnect_signals(self._account)
+        self._connect_signals(account)
 
-    def _on_our_show(self, event: events.ShowChanged) -> None:
-        self.update()
+        self._button.set_sensitive(account is not None)
+        self._entry.set_sensitive(account is not None)
 
-    def _on_account_enabled(self, event: events.AccountEnabled) -> None:
-        client = app.get_client(event.account)
+        self._account = account
+        self._update_status_message()
+
+    def set_account(self, account: str | None) -> None:
+        self.account = account
+
+    def _connect_signals(self, account: str | None) -> None:
+        if account is None:
+            return
+        client = app.get_client(account)
         client.connect_signal("state-changed", self._on_client_state_changed)
 
-    def _on_client_state_changed(
-        self, client: Client, _signal_name: str, state: SimpleClientState
-    ) -> None:
-        self.update()
+    def _disconnect_signals(self, account: str | None) -> None:
+        if account is None:
+            return
+        client = app.get_client(account)
+        client.disconnect_all_from_obj(self)
 
+    def _on_our_show(self, event: events.ShowChanged) -> None:
+        if event.account != self._account:
+            return
+        self._update_status_message()
+
+    def _on_client_state_changed(
+        self, client: Client, _signal_name: str, _state: SimpleClientState
+    ) -> None:
+        self._update_status_message()
+
+    @Gtk.Template.Callback()
     def _on_changed(self, _entry: Gtk.Entry) -> None:
         self._button.set_sensitive(True)
 
+    @Gtk.Template.Callback()
     def _set_status_message(self, *args: Any) -> None:
         self._button.set_sensitive(False)
+
         message = self._entry.get_text()
         message = to_one_line(message)
-        if self._account is not None:
-            client = app.get_client(self._account)
-            client.change_status(client.status, message)
-        else:
-            for client in app.get_clients():
-                if not app.settings.get_account_setting(
-                    client.account, "sync_with_global_status"
-                ):
-                    continue
-                client.change_status(client.status, message)
 
-    def update(self) -> None:
+        assert self._account is not None
+
+        for client in app.get_clients():
+            sync = app.settings.get_account_setting(
+                client.account, "sync_with_global_status"
+            )
+            if client.account != self._account and not sync:
+                continue
+            client.change_status(client.status, message)
+
+    def _update_status_message(self) -> None:
         if self._account is None:
-            message = get_global_status_message()
-        else:
-            try:
-                client = app.get_client(self._account)
-            except KeyError:
-                return
-            message = client.status_message
+            self._entry.set_text("")
+            return
+
+        client = app.get_client(self._account)
+        message = client.status_message
 
         self._entry.set_text(message)
+        self._button.set_sensitive(False)

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="StatusMessageSelector" parent="GtkBox">
+    <child>
+      <object class="GtkEntry" id="_entry">
+        <property name="show-emoji-icon">true</property>
+        <property name="enable-emoji-completion">true</property>
+        <property name="placeholder-text" translatable="yes">Status message…</property>
+        <signal name="activate" handler="_set_status_message" />
+        <signal name="changed" handler="_on_changed" />
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="_button">
+        <property name="icon-name">object-select-symbolic</property>
+        <property name="tooltip-text" translatable="yes">Set status message</property>
+        <signal name="clicked" handler="_set_status_message" />
+      </object>
+    </child>
+    <style>
+      <class name="linked"/>
+    </style>
+  </template>
+</interface>
