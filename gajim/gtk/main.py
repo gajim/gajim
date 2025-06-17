@@ -58,7 +58,6 @@ from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.gtk.emoji_chooser import EmojiChooser
-from gajim.gtk.main_menu_button import MainMenuButton
 from gajim.gtk.main_stack import MainStack
 from gajim.gtk.menus import build_accounts_menu
 from gajim.gtk.menus import get_main_menu
@@ -108,10 +107,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self.set_content(self._ui.main_view)
 
         self._main_menu = get_main_menu()
-        self._ui.main_menu_bar.set_menu_model(self._main_menu)
-        self._ui.main_menu_bar.set_visible(
-            app.settings.get_app_setting("show_main_menu")
-        )
+        self._ui.main_popover_menu.set_menu_model(self._main_menu)
         build_accounts_menu()
 
         self._emoji_chooser: EmojiChooser | None = None
@@ -120,8 +116,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._ui.main_grid.attach(self._main_stack, 1, 0, 1, 1)
 
         self._chat_page = self._main_stack.get_chat_page()
-
-        self._ui.left_grid.attach(MainMenuButton(), 0, 0, 1, 1)
 
         self._activity_side_bar = ActivitySideBar(self._chat_page)
         self._ui.activity_box.prepend(self._activity_side_bar)
@@ -174,8 +168,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack, "unread-count-changed")
-
-        self.set_show_menubar(app.settings.get_app_setting("show_main_menu"))
 
         for client in app.get_clients():
             client.connect_signal("state-changed", self._on_client_state_changed)
@@ -441,7 +433,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             ("decrease-app-font-size", self._on_app_font_size_action),
             ("reset-app-font-size", self._on_app_font_size_action),
             ("toggle-chat-list", self._on_action),
-            ("toggle-menu-bar", self._on_action),
             ("preview-download", self._on_preview_action),
             ("preview-open", self._on_preview_action),
             ("preview-save-as", self._on_preview_action),
@@ -543,11 +534,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         elif action_name == "toggle-chat-list":
             self._toggle_chat_list()
-
-        elif action_name == "toggle-menu-bar":
-            show_menu_bar = not app.settings.get_app_setting("show_main_menu")
-            app.settings.set_app_setting("show_main_menu", show_menu_bar)
-            self._ui.main_menu_bar.set_visible(show_menu_bar)
 
         return None
 
