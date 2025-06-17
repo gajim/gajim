@@ -12,6 +12,7 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.const import XmppUriQuery
@@ -28,7 +29,6 @@ from gajim.common.storage.archive.const import ChatDirection
 from gajim.common.storage.archive.const import MessageType
 from gajim.common.util.text import make_href_markup
 
-from gajim.gtk.builder import get_builder
 from gajim.gtk.groupchat_voice_requests_button import VoiceRequestsButton
 from gajim.gtk.menus import get_groupchat_menu
 from gajim.gtk.menus import get_private_chat_menu
@@ -39,7 +39,27 @@ from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.widgets import AccountBadge
 
 
+@Gtk.Template(filename=get_ui_path("chat_banner.ui"))
 class ChatBanner(Gtk.Box, EventHelper, SignalManager):
+    __gtype_name__ = "ChatBanner"
+
+    _share_popover: Gtk.Popover = Gtk.Template.Child()
+    _share_instructions: Gtk.Label = Gtk.Template.Child()
+    _qr_code_image: Gtk.Image = Gtk.Template.Child()
+    _jid_label: Gtk.Label = Gtk.Template.Child()
+    _copy_jid_button: Gtk.Button = Gtk.Template.Child()
+    _avatar_image: Gtk.Image = Gtk.Template.Child()
+    _name_label: Gtk.Label = Gtk.Template.Child()
+    _phone_image: Gtk.Image = Gtk.Template.Child()
+    _robot_image: Gtk.Image = Gtk.Template.Child()
+    _description_label: Gtk.Label = Gtk.Template.Child()
+    _additional_items_box: Gtk.Box = Gtk.Template.Child()
+    _share_menu_button: Gtk.MenuButton = Gtk.Template.Child()
+    _contact_info_button: Gtk.Button = Gtk.Template.Child()
+    _toggle_roster_button: Gtk.Button = Gtk.Template.Child()
+    _toggle_roster_image: Gtk.Image = Gtk.Template.Child()
+    _chat_menu_button: Gtk.MenuButton = Gtk.Template.Child()
+
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
         EventHelper.__init__(self)
@@ -50,38 +70,28 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
         self._last_message_from_phone: set[BareContact] = set()
 
-        self._ui = get_builder("chat_banner.ui")
-        self.append(self._ui.banner_box)
-
         self._account_badge = AccountBadge(bind_setting=True)
         self._voice_requests_button = VoiceRequestsButton()
 
-        self._ui.additional_items_box.append(self._voice_requests_button)
-        self._ui.additional_items_box.append(self._account_badge)
+        self._additional_items_box.append(self._voice_requests_button)
+        self._additional_items_box.append(self._account_badge)
 
         hide_roster = app.settings.get("hide_groupchat_occupants_list")
         self._set_toggle_roster_button_icon(hide_roster)
 
-        self._connect(self._ui.copy_jid_button, "clicked", self._on_copy_jid_clicked)
-        self._connect(self._ui.avatar_image, "query-tooltip", self._on_query_tooltip)
+        self._connect(self._copy_jid_button, "clicked", self._on_copy_jid_clicked)
+        self._connect(self._avatar_image, "query-tooltip", self._on_query_tooltip)
         self._connect(
-            self._ui.toggle_roster_button, "clicked", self._on_toggle_roster_clicked
+            self._toggle_roster_button, "clicked", self._on_toggle_roster_clicked
         )
         self._connect(
-            self._ui.share_menu_button, "notify::active", self._on_share_activated
+            self._share_menu_button, "notify::active", self._on_share_activated
         )
-        self._ui.chat_menu_button.set_create_popup_func(self._set_chat_menu)
+        self._chat_menu_button.set_create_popup_func(self._set_chat_menu)
 
         app.settings.connect_signal(
             "hide_groupchat_occupants_list", self._set_toggle_roster_button_icon
         )
-
-    def do_unroot(self) -> None:
-        self.clear()
-        self._ui.chat_menu_button.set_create_popup_func(None)
-        Gtk.Box.do_unroot(self)
-        self._disconnect_all()
-        app.settings.disconnect_signals(self)
 
     def clear(self) -> None:
         self._disconnect_signals()
@@ -259,18 +269,18 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         menu_button.set_menu_model(menu)
 
     def _update_phone_image(self) -> None:
-        self._ui.phone_image.set_visible(self._contact in self._last_message_from_phone)
+        self._phone_image.set_visible(self._contact in self._last_message_from_phone)
 
     def _update_robot_image(self) -> None:
         if isinstance(self._contact, BareContact):
-            self._ui.robot_image.set_visible(
+            self._robot_image.set_visible(
                 self._contact.is_gateway or self._contact.is_bot
             )
         else:
-            self._ui.robot_image.set_visible(False)
+            self._robot_image.set_visible(False)
 
     def _update_roster_button(self) -> None:
-        self._ui.toggle_roster_button.set_visible(
+        self._toggle_roster_button.set_visible(
             isinstance(self._contact, GroupchatContact)
         )
 
@@ -278,8 +288,8 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         scale = app.window.get_scale_factor()
         assert self._contact
         texture = self._contact.get_avatar(AvatarSize.CHAT, scale)
-        self._ui.avatar_image.set_pixel_size(AvatarSize.CHAT)
-        self._ui.avatar_image.set_from_paintable(texture)
+        self._avatar_image.set_pixel_size(AvatarSize.CHAT)
+        self._avatar_image.set_from_paintable(texture)
 
         self._avatar_image_tooltip = ContactTooltip()
 
@@ -301,8 +311,8 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         assert self._contact is not None
 
         name = self._get_name_from_contact(self._contact)
-        self._ui.name_label.set_markup(f"<span>{GLib.markup_escape_text(name)}</span>")
-        self._ui.name_label.set_tooltip_text(name)
+        self._name_label.set_markup(f"<span>{GLib.markup_escape_text(name)}</span>")
+        self._name_label.set_tooltip_text(name)
 
     def _get_muc_description_text(self) -> str | None:
         contact = self._contact
@@ -323,8 +333,8 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         else:
             assert not isinstance(contact, GroupchatContact)
             text = contact.status or ""
-        self._ui.description_label.set_markup(make_href_markup(text))
-        self._ui.description_label.set_visible(bool(text))
+        self._description_label.set_markup(make_href_markup(text))
+        self._description_label.set_visible(bool(text))
 
     def _update_account_badge(self) -> None:
         if self._contact is None:
@@ -340,11 +350,11 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _update_share_box(self) -> None:
         assert self._contact is not None
         if self._contact.is_groupchat:
-            self._ui.share_menu_button.set_tooltip_text(_("Share Group Chat…"))
+            self._share_menu_button.set_tooltip_text(_("Share Group Chat…"))
         else:
-            self._ui.share_menu_button.set_tooltip_text(_("Share Contact…"))
-        self._ui.share_menu_button.set_sensitive(not self._contact.is_pm_contact)
-        self._ui.jid_label.set_text(str(self._contact.jid))
+            self._share_menu_button.set_tooltip_text(_("Share Contact…"))
+        self._share_menu_button.set_sensitive(not self._contact.is_pm_contact)
+        self._jid_label.set_text(str(self._contact.jid))
 
     def _get_share_uri(self) -> str:
         assert self._client is not None
@@ -363,25 +373,23 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
                 share_text = _("%s can be joined by invite only.")
         else:
             share_text = _("Scan this QR code to start a chat with %s.")
-        self._ui.share_instructions.set_text(share_text % self._contact.name)
+        self._share_instructions.set_text(share_text % self._contact.name)
 
         if (
             isinstance(self._contact, GroupchatContact)
             and self._contact.muc_context == "private"
         ):
             # Don't display QR code for private MUCs (they require an invite)
-            self._ui.qr_code_image.set_visible(False)
+            self._qr_code_image.set_visible(False)
             return
 
         # Generate QR code on demand (i.e. not when switching chats)
-        self._ui.qr_code_image.set_from_paintable(
-            generate_qr_code(self._get_share_uri())
-        )
-        self._ui.qr_code_image.set_visible(True)
+        self._qr_code_image.set_from_paintable(generate_qr_code(self._get_share_uri()))
+        self._qr_code_image.set_visible(True)
 
     def _on_copy_jid_clicked(self, _button: Gtk.Button) -> None:
         self.get_clipboard().set(self._get_share_uri())
-        self._ui.share_popover.popdown()
+        self._share_popover.popdown()
 
     def _on_toggle_roster_clicked(self, _button: Gtk.Button) -> None:
         state = app.settings.get("hide_groupchat_occupants_list")
@@ -390,7 +398,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _set_toggle_roster_button_icon(self, hide_roster: bool, *args: Any) -> None:
 
         icon = "go-next-symbolic" if not hide_roster else "go-previous-symbolic"
-        self._ui.toggle_roster_image.set_from_icon_name(icon)
+        self._toggle_roster_image.set_from_icon_name(icon)
 
     @staticmethod
     def _get_name_from_contact(contact: types.ChatContactT) -> str:

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkPopover" id="share_popover">
+  <object class="GtkPopover" id="_share_popover">
     <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="spacing">12</property>
         <child>
-          <object class="GtkLabel" id="share_instructions">
+          <object class="GtkLabel" id="_share_instructions">
             <property name="justify">center</property>
             <property name="wrap">1</property>
             <property name="max-width-chars">24</property>
@@ -17,7 +17,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkImage" id="qr_code_image">
+          <object class="GtkImage" id="_qr_code_image">
             <property name="halign">center</property>
             <property name="pixel-size">200</property>
           </object>
@@ -29,7 +29,7 @@
           <object class="GtkBox">
             <property name="spacing">12</property>
             <child>
-              <object class="GtkLabel" id="jid_label">
+              <object class="GtkLabel" id="_jid_label">
                 <property name="hexpand">1</property>
                 <property name="justify">center</property>
                 <property name="wrap">1</property>
@@ -38,7 +38,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton" id="copy_jid_button">
+              <object class="GtkButton" id="_copy_jid_button">
                 <property name="focusable">1</property>
                 <property name="receives-default">1</property>
                 <property name="tooltip-text" translatable="yes">Copy to clipboard</property>
@@ -58,174 +58,179 @@
       </object>
     </property>
   </object>
-  <object class="GtkBox" id="banner_box">
-    <property name="spacing">12</property>
-    <child>
-      <object class="GtkImage" id="avatar_image">
-        <property name="has-tooltip">1</property>
-      </object>
-    </child>
+  <template class="ChatBanner" parent="GtkBox">
+    <property name="hexpand">1</property>
     <child>
       <object class="GtkBox">
-        <property name="hexpand">1</property>
         <property name="spacing">12</property>
+        <child>
+          <object class="GtkImage" id="_avatar_image">
+            <property name="has-tooltip">1</property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
             <property name="hexpand">1</property>
-            <property name="valign">center</property>
-            <property name="orientation">vertical</property>
-            <child>
-              <object class="GtkLabel" id="name_label">
-                <property name="halign">start</property>
-                <property name="hexpand">1</property>
-                <property name="ellipsize">end</property>
-                <property name="single-line-mode">1</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="title-1"/>
-                </style>
-              </object>
-            </child>
+            <property name="spacing">12</property>
             <child>
               <object class="GtkBox">
-                <property name="spacing">12</property>
+                <property name="hexpand">1</property>
+                <property name="valign">center</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkImage" id="phone_image">
-                    <property name="visible">0</property>
-                    <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
+                  <object class="GtkLabel" id="_name_label">
                     <property name="halign">start</property>
-                    <property name="margin-end">4</property>
-                    <property name="icon-name">phone-symbolic</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="robot_image">
-                    <property name="visible">0</property>
-                    <property name="tooltip-text" translatable="yes">This contact is a bot</property>
-                    <property name="halign">start</property>
-                    <property name="margin-end">4</property>
-                    <property name="icon-name">lucide-bot-symbolic</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="description_label">
                     <property name="hexpand">1</property>
                     <property name="ellipsize">end</property>
                     <property name="single-line-mode">1</property>
-                    <property name="max-width-chars">30</property>
                     <property name="xalign">0</property>
                     <style>
-                      <class name="dimmed"/>
+                      <class name="title-1"/>
                     </style>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">12</property>
+                    <child>
+                      <object class="GtkImage" id="_phone_image">
+                        <property name="visible">0</property>
+                        <property name="tooltip-text" translatable="yes">The last message was written on a mobile client</property>
+                        <property name="halign">start</property>
+                        <property name="margin-end">4</property>
+                        <property name="icon-name">phone-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="_robot_image">
+                        <property name="visible">0</property>
+                        <property name="tooltip-text" translatable="yes">This contact is a bot</property>
+                        <property name="halign">start</property>
+                        <property name="margin-end">4</property>
+                        <property name="icon-name">lucide-bot-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="_description_label">
+                        <property name="hexpand">1</property>
+                        <property name="ellipsize">end</property>
+                        <property name="single-line-mode">1</property>
+                        <property name="max-width-chars">30</property>
+                        <property name="xalign">0</property>
+                        <style>
+                          <class name="dimmed"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox" id="additional_items_box">
-            <property name="halign">end</property>
-            <property name="valign">center</property>
-            <property name="margin-end">6</property>
-            <property name="orientation">vertical</property>
             <child>
-              <placeholder/>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="share_menu_button">
-            <property name="sensitive">0</property>
-            <property name="focusable">1</property>
-            <property name="focus-on-click">0</property>
-            <property name="receives-default">1</property>
-            <property name="valign">center</property>
-            <property name="popover">share_popover</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">feaher-share-2-symbolic</property>
+              <object class="GtkBox" id="_additional_items_box">
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="margin-end">6</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton">
-            <property name="focusable">1</property>
-            <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="yes">Search…</property>
-            <property name="valign">center</property>
-            <property name="action-name">win.search-history</property>
             <child>
-              <object class="GtkImage">
-                <property name="icon-name">system-search-symbolic</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="contact_info_button">
-            <property name="focusable">1</property>
-            <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="yes">Chat Details and Settings</property>
-            <property name="valign">center</property>
-            <property name="action-name">win.show-contact-info</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">lucide-user-cog-symbolic</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="toggle_roster_button">
-            <property name="visible">0</property>
-            <property name="focusable">1</property>
-            <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="yes">Toggle participants list</property>
-            <property name="valign">center</property>
-            <child>
-              <object class="GtkBox">
-                <property name="spacing">3</property>
+              <object class="GtkMenuButton" id="_share_menu_button">
+                <property name="sensitive">0</property>
+                <property name="focusable">1</property>
+                <property name="focus-on-click">0</property>
+                <property name="receives-default">1</property>
+                <property name="valign">center</property>
+                <property name="popover">_share_popover</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">system-users-symbolic</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkImage" id="toggle_roster_image">
-                    <property name="icon-name">go-previous-symbolic</property>
+                    <property name="icon-name">feaher-share-2-symbolic</property>
                   </object>
                 </child>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator">
-            <property name="margin-top">12</property>
-            <property name="margin-bottom">12</property>
-          </object>
-        </child>
-        <child>
-          <object class="GtkMenuButton" id="chat_menu_button">
-            <property name="focusable">1</property>
-            <property name="focus-on-click">0</property>
-            <property name="receives-default">1</property>
-            <property name="valign">center</property>
-            <property name="margin-end">6</property>
             <child>
-              <object class="GtkImage">
-                <property name="icon-name">view-more-symbolic</property>
+              <object class="GtkButton">
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="tooltip-text" translatable="yes">Search…</property>
+                <property name="valign">center</property>
+                <property name="action-name">win.search-history</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">system-search-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_contact_info_button">
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="tooltip-text" translatable="yes">Chat Details and Settings</property>
+                <property name="valign">center</property>
+                <property name="action-name">win.show-contact-info</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">lucide-user-cog-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_toggle_roster_button">
+                <property name="visible">0</property>
+                <property name="focusable">1</property>
+                <property name="receives-default">1</property>
+                <property name="tooltip-text" translatable="yes">Toggle participants list</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="spacing">3</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">system-users-symbolic</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="_toggle_roster_image">
+                        <property name="icon-name">go-previous-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuButton" id="_chat_menu_button">
+                <property name="focusable">1</property>
+                <property name="focus-on-click">0</property>
+                <property name="receives-default">1</property>
+                <property name="valign">center</property>
+                <property name="margin-end">6</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="icon-name">view-more-symbolic</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
+        <style>
+          <class name="gajim-banner"/>
+          <class name="p-6"/>
+        </style>
       </object>
     </child>
-    <style>
-      <class name="gajim-banner"/>
-      <class name="p-6"/>
-    </style>
-  </object>
+  </template>
 </interface>
