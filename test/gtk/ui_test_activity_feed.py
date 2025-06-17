@@ -33,7 +33,6 @@ from gajim.gtk.activity_side_bar import ActivitySideBar
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.chat_page import ChatPage
-from gajim.gtk.chat_page_header import ChatPageHeader
 from gajim.gtk.util.misc import convert_surface_to_texture
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -64,41 +63,17 @@ class TestActivityFeed(GajimAppWindow):
 
         chat_page = ChatPage()
 
-        chat_page_header = ChatPageHeader()
-        chat_page_header.set_mode("activity")
-
-        activity_list_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        activity_list_box.append(chat_page_header)
-
-        activity_list = ActivityListView()
-        activity_list.set_search_entry(chat_page_header.get_search_entry())
-        activity_list.connect("activate", self._on_activity_row_activate)
-        activity_list.connect("unselected", self._on_activity_item_unselected)
-        activity_list_scrolled = Gtk.ScrolledWindow(
-            child=activity_list, width_request=300, vexpand=True
-        )
-        activity_list_box.append(activity_list_scrolled)
+        # activity_list.connect("activate", self._on_activity_row_activate)
+        # activity_list.connect("unselected", self._on_activity_item_unselected)
 
         # Replace ChatPage's internal activity list with test object
         # to track unread count in sidebar
-        chat_page._activity_list = activity_list  # type: ignore
+        # chat_page._activity_list = activity_list
 
         self._activity_page = ActivityPage()
 
-        paned = Gtk.Paned(
-            shrink_start_child=False,
-            resize_start_child=False,
-            position=250,
-            start_child=activity_list_box,
-            end_child=self._activity_page,
-        )
-
         self._activity_sidebar = ActivitySideBar(chat_page)
         self._activity_sidebar.set_valign(Gtk.Align.START)
-
-        main_box = Gtk.Box()
-        main_box.append(self._activity_sidebar)
-        main_box.append(paned)
 
         update_button = Gtk.Button.new_with_label("Updates")
         update_button.connect("clicked", self._on_update_button_clicked)
@@ -123,7 +98,7 @@ class TestActivityFeed(GajimAppWindow):
         button_box.append(invitation_button)
 
         overlay = Gtk.Overlay(hexpand=True)
-        overlay.set_child(main_box)
+        overlay.set_child(chat_page)
         overlay.add_overlay(button_box)
         self.set_child(overlay)
 

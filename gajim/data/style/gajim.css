@@ -439,10 +439,6 @@ button.flat.link { padding: 0; border: 0; }
 /* Middle Grid (ChatList and widgets on top) */
 .middle-grid > scrolledwindow { background: transparent; }
 
-.chat-page-header {
-	padding: 12px;
-	background: transparent;
-}
 .chat-filter-active {
     background: var(--accent-bg-color);
     border-radius: 50%;

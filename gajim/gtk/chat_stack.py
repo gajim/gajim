@@ -53,6 +53,8 @@ log = logging.getLogger("gajim.gtk.chatstack")
 
 
 class ChatStack(Gtk.Stack, EventHelper, SignalManager):
+    __gtype_name__ = "ChatStack"
+
     def __init__(self):
         Gtk.Stack.__init__(self, hexpand=True, vexpand=True)
         EventHelper.__init__(self)

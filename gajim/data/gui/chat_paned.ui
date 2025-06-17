@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <object class="GtkPaned" id="paned">
+  <template class="ChatPage" parent="GtkPaned">
     <property name="shrink-start-child">0</property>
     <property name="resize-start-child">0</property>
     <property name="focusable">1</property>
     <property name="position">250</property>
     <property name="position-set">1</property>
     <property name="start-child">
-      <object class="GtkGrid" id="middle_grid">
+      <object class="GtkGrid">
         <property name="vexpand">1</property>
-        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkScrolledWindow" id="list_scrolled">
+          <object class="ChatListHeader" id="_chat_list_header">
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="_list_scrolled">
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <child>
@@ -20,14 +27,29 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <child>
-                  <object class="GtkStack" id="list_stack">
+                  <object class="GtkStack" id="_list_stack">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <child>
-                      <placeholder/>
+                      <object class="GtkStackPage">
+                        <property name="name">chat-list-stack</property>
+                        <property name="child">
+                          <object class="ChatListStack" id="_chat_list_stack">
+                            <signal name="chat-selected" handler="_on_chat_selected"/>
+                            <signal name="chat-unselected" handler="_on_chat_unselected"/>
+                            <signal name="chat-removed" handler="_on_chat_removed"/>
+                            <signal name="notify::visible-child-name" handler="_on_chat_list_changed"/>
+                          </object>
+                        </property>
+                      </object>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkStackPage">
+                        <property name="name">activity-list</property>
+                        <property name="child">
+                          <object class="ActivityListView" id="_activity_list"/>
+                        </property>
+                      </object>
                     </child>
                   </object>
                 </child>
@@ -38,7 +60,7 @@
             </style>
             <layout>
               <property name="column">0</property>
-              <property name="row">1</property>
+              <property name="row">3</property>
             </layout>
           </object>
         </child>
@@ -48,11 +70,32 @@
       </object>
     </property>
     <property name="end-child">
-      <object class="GtkGrid" id="right_grid">
+      <object class="GtkGrid">
         <child>
-          <placeholder/>
+          <object class="ChatStack" id="_chat_stack">
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkRevealer" id="_search_revealer">
+            <property name="hexpand-set">true</property>
+            <property name="transition-type">3</property>
+            <property name="child">
+              <object class="SearchView" id="_search_view">
+                <signal name="hide-search" handler="_on_search_hide"/>
+              </object>
+            </property>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
         </child>
       </object>
     </property>
-  </object>
+    <signal name="notify::position" handler="_on_handle_position_notify"/>
+  </template>
 </interface>

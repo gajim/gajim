@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="ChatListHeader" parent="GtkGrid">
+    <property name="row-spacing">3</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="spacing">12</property>
+        <property name="height-request">39</property>
+        <child>
+          <object class="GtkLabel" id="_header_bar_label">
+            <property name="ellipsize">end</property>
+            <property name="halign">start</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="title-4"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="tooltip-text" translatable="yes">Workspace settings…</property>
+            <property name="valign">center</property>
+            <property name="action-name">win.edit-workspace</property>
+            <property name="action-target">&apos;&apos;</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">preferences-system-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparator">
+        <property name="margin-top">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">1</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="_chat_page_header">
+        <property name="spacing">12</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkSearchEntry" id="_search_entry">
+            <property name="hexpand">true</property>
+            <property name="placeholder-text">Search…</property>
+          </object>
+        </child>
+        <child>
+          <object class="ChatFilter" id="_chat_filter" />
+        </child>
+        <child>
+          <object class="GtkMenuButton" id="_start_chat_menu_button">
+            <property name="tooltip-text">Start Chat…</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">feather-plus-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+        </child>
+        <layout>
+          <property name="column">0</property>
+          <property name="row">2</property>
+        </layout>
+      </object>
+    </child>
+    <style>
+      <class name="p-12"/>
+    </style>
+  </template>
+</interface>

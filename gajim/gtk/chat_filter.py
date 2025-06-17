@@ -33,6 +33,7 @@ class ChatFilters:
 
 
 class ChatFilter(Gtk.Overlay, SignalManager):
+    __gtype_name__ = "ChatFilter"
 
     __gsignals__ = {
         "filter-changed": (GObject.SignalFlags.RUN_LAST, None, ()),

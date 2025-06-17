@@ -49,6 +49,8 @@ class PlaceholderMode(Enum):
 
 
 class SearchView(Gtk.Box, SignalManager, EventHelper):
+    __gtype_name__ = "SearchView"
+
     __gsignals__ = {
         "hide-search": (GObject.SignalFlags.RUN_FIRST, None, ()),
     }
