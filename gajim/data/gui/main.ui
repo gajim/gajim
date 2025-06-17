@@ -131,6 +131,23 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkButton">
+                    <property name="focusable">true</property>
+                    <property name="tooltip-text" translatable="yes">Preferences</property>
+                    <property name="halign">3</property>
+                    <property name="action-name">app.preferences</property>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">preferences-system-symbolic</property>
+                        <property name="pixel-size">28</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="flat"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkBox" id="account_box">
                     <property name="valign">2</property>
                     <property name="orientation">1</property>
