@@ -111,17 +111,6 @@ def get_main_menu() -> GajimMenu:
 
     main_menu.add_submenu(_("_Accounts"))
 
-    help_menu_items: MenuItemListT = [
-        (_("_Wiki (Online)"), "app.content", None),
-        (_("FA_Q (Online)"), "app.faq", None),
-        (_("_Privacy Policy (Online)"), "app.privacy-policy", None),
-        (_("Join Support Chat"), "app.join-support-chat", None),
-        (_("_Keyboard Shortcuts"), "app.shortcuts", None),
-        (_("_Features"), "app.features", None),
-        (_("_About"), "app.about", None),
-    ]
-    main_menu.append_submenu(_("_Help"), GajimMenu.from_list(help_menu_items))
-
     return main_menu
 
 

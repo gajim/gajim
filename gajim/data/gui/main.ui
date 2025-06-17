@@ -1,9 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
+  <menu id='help-menu'>
+    <section>
+      <item>
+        <attribute name='label' translatable='yes'>_Wiki (Online)</attribute>
+        <attribute name='action'>app.content</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>FA_Q (Online)</attribute>
+        <attribute name='action'>app.faq</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_Privacy Policy (Online)</attribute>
+        <attribute name='action'>app.privacy-policy</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_Join Support Chat</attribute>
+        <attribute name='action'>app.join-support-chat</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_Keyboard Shortcuts</attribute>
+        <attribute name='action'>app.shortcuts</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_Features</attribute>
+        <attribute name='action'>app.features</attribute>
+      </item>
+      <item>
+        <attribute name='label' translatable='yes'>_About</attribute>
+        <attribute name='action'>app.about</attribute>
+      </item>
+    </section>
+  </menu>
   <object class="AdwToolbarView" id="main_view">
     <child type="top">
-      <object class="AdwHeaderBar" />
+      <object class="AdwHeaderBar">
+        <child type="end">
+          <object class="GtkMenuButton">
+            <property name="tooltip-text">Help</property>
+            <property name="icon-name">help-faq-symbolic</property>
+            <property name="popover">
+              <object class="GtkPopoverMenu">
+                <property name="menu-model">help-menu</property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
     </child>
     <property name="content">
       <object class="GtkGrid" id="main_grid">
