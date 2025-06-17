@@ -46,7 +46,6 @@ if TYPE_CHECKING:
     from gajim.gtk.manage_sounds import ManageSounds
     from gajim.gtk.password_dialog import PasswordDialog
     from gajim.gtk.pep_config import PEPConfig
-    from gajim.gtk.plugins import PluginsWindow
     from gajim.gtk.preferences import Preferences
     from gajim.gtk.profile import ProfileWindow
     from gajim.gtk.proxies import ManageProxies
@@ -86,7 +85,6 @@ if TYPE_CHECKING:
         | ManageSounds
         | PasswordDialog
         | PEPConfig
-        | PluginsWindow
         | Preferences
         | ProfileWindow
         | QuitDialog
@@ -126,7 +124,6 @@ if TYPE_CHECKING:
         | Literal["ManageSounds"]
         | Literal["PasswordDialog"]
         | Literal["PEPConfig"]
-        | Literal["PluginsWindow"]
         | Literal["Preferences"]
         | Literal["ProfileWindow"]
         | Literal["QuitDialog"]
@@ -380,14 +377,6 @@ def get_app_window(
 
 @overload
 def get_app_window(
-    name: Literal["PluginsWindow"],
-    account: str | None = None,
-    jid: str | JID | None = None,
-) -> PluginsWindow | None: ...
-
-
-@overload
-def get_app_window(
     name: Literal["Preferences"],
     account: str | None = None,
     jid: str | JID | None = None,
@@ -560,8 +549,6 @@ def open_window(name: Literal["ManageSounds"], **kwargs: Any) -> ManageSounds: .
 def open_window(name: Literal["PasswordDialog"], **kwargs: Any) -> PasswordDialog: ...
 @overload
 def open_window(name: Literal["PEPConfig"], **kwargs: Any) -> PEPConfig: ...
-@overload
-def open_window(name: Literal["PluginsWindow"], **kwargs: Any) -> PluginsWindow: ...
 @overload
 def open_window(name: Literal["Preferences"], **kwargs: Any) -> Preferences: ...
 @overload

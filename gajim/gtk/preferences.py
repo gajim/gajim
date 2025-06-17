@@ -34,6 +34,7 @@ from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
+from gajim.gtk.plugins import Plugins
 from gajim.gtk.preview import PREVIEW_ACTIONS
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
@@ -53,7 +54,7 @@ class PreferencesPageData:
     name: str
     title: str
     icon_name: str
-    groups: list[PreferencesGroupData]
+    groups: list[PreferencesGroupData | type[Adw.PreferencesGroup]]
     banner: PreferencesPageBannerData | None = None
 
 
@@ -97,9 +98,6 @@ class Preferences(GajimAppWindow):
                         name="window_behaviour",
                         title=_("Behaviour of Application Window"),
                         widget=WindowBehaviour,
-                    ),
-                    PreferencesGroupData(
-                        name="plugins", title=_("Plugins"), widget=Plugins
                     ),
                 ],
             ),
@@ -191,6 +189,19 @@ class Preferences(GajimAppWindow):
                 ],
             ),
             PreferencesPageData(
+                name="plugins",
+                title=_("Plugins"),
+                icon_name="lucide-package-symbolic",
+                groups=[
+                    PreferencesGroupData(
+                        name="plugin-settings",
+                        title=_("Plugin Settings"),
+                        widget=PluginSettings,
+                    ),
+                    Plugins,
+                ],
+            ),
+            PreferencesPageData(
                 name="advanced",
                 title=_("Advanced"),
                 icon_name="preferences-system-symbolic",
@@ -227,17 +238,20 @@ class Preferences(GajimAppWindow):
             stack_page.set_icon_name(page.icon_name)
 
             for group in page.groups:
-                preferences_group = Adw.PreferencesGroup(
-                    name=group.name, title=group.title
-                )
-                pref = group.widget(self)
-                self._prefs[group.name] = pref
-                preferences_group.add(pref)
-                preferences_page.add(preferences_group)
+                if isinstance(group, PreferencesGroupData):
+                    preferences_group = Adw.PreferencesGroup(
+                        name=group.name, title=group.title
+                    )
+                    pref = group.widget(self)
+                    self._prefs[group.name] = pref
+                    preferences_group.add(pref)
+                    preferences_page.add(preferences_group)
+                else:
+                    preferences_page.add(group())
 
-        side_bar_switcher = SideBarSwitcher()
+        self._side_bar_switcher = SideBarSwitcher()
 
-        toolbar = Adw.ToolbarView(content=side_bar_switcher)
+        toolbar = Adw.ToolbarView(content=self._side_bar_switcher)
         toolbar.add_top_bar(Adw.HeaderBar())
 
         sidebar_page = Adw.NavigationPage(
@@ -253,7 +267,7 @@ class Preferences(GajimAppWindow):
 
         self.set_child(nav)
 
-        side_bar_switcher.set_stack(stack)
+        self._side_bar_switcher.set_stack(stack)
 
         # self._add_video_preview()
 
@@ -271,6 +285,9 @@ class Preferences(GajimAppWindow):
     def _cleanup(self) -> None:
         # del self._video_preview
         self._prefs.clear()
+
+    def show_page(self, name: str) -> None:
+        self._side_bar_switcher.set_row("plugins")
 
 
 class PreferenceBox(SettingsBox):
@@ -335,7 +352,7 @@ class WindowBehaviour(PreferenceBox):
         app.window.set_skip_taskbar_hint(not value)
 
 
-class Plugins(PreferenceBox):
+class PluginSettings(PreferenceBox):
     def __init__(self, *args: Any) -> None:
 
         settings = [

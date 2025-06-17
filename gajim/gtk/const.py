@@ -158,7 +158,6 @@ WINDOW_MODULES = {
     "ManageSounds": "gajim.gtk.manage_sounds",
     "PasswordDialog": "gajim.gtk.password_dialog",
     "PEPConfig": "gajim.gtk.pep_config",
-    "PluginsWindow": "gajim.gtk.plugins",
     "Preferences": "gajim.gtk.preferences",
     "ProfileWindow": "gajim.gtk.profile",
     "QuitDialog": "gajim.gtk.quit",

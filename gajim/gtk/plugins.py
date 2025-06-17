@@ -31,27 +31,23 @@ from gajim.plugins.repository import PluginRepository
 
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import InformationAlertDialog
-from gajim.gtk.builder import get_builder
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.util.classes import SignalManager
 from gajim.gtk.util.window import get_app_window
-from gajim.gtk.widgets import GajimAppWindow
 
 log = logging.getLogger("gajim.gtk.plugins")
 
 
-class PluginsWindow(GajimAppWindow, EventHelper):
+class Plugins(Adw.PreferencesGroup, EventHelper, SignalManager):
+    __gtype_name__ = "Plugins"
+
     def __init__(self) -> None:
-        GajimAppWindow.__init__(
-            self, name="PluginsWindow", title=_("Plugins"), default_height=600
-        )
+        Adw.PreferencesGroup.__init__(self, title=_("Plugins"))
         EventHelper.__init__(self)
+        SignalManager.__init__(self)
 
         self._plugin_rows: dict[str, PluginRow] = {}
-
-        self._ui = get_builder("plugins.ui")
-        self.set_child(self._ui.plugins_box)
 
         self._file_chooser_button = FileChooserButton(
             filters=[
@@ -60,7 +56,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             ],
             label=_("Install from Archive"),
             tooltip=_("Install Plugin from ZIP-File"),
-            icon_name="lucide-box-symbolic",
+            icon_name="lucide-package-plus-symbolic",
         )
         self._file_chooser_button.set_visible(not app.is_flatpak())
         self._file_chooser_button.set_valign(Gtk.Align.CENTER)
@@ -76,10 +72,8 @@ class PluginsWindow(GajimAppWindow, EventHelper):
                 f"\n<a href='{flatpak_howto_url}'>{flatpak_howto_text}</a>"
             )
 
-        self._ui.preferences_group.set_description(description_text)
-        self._ui.preferences_group.set_header_suffix(self._file_chooser_button)
-
-        self._ui.plugins_listbox.set_sort_func(self._sort_func)
+        self.set_description(description_text)
+        self.set_header_suffix(self._file_chooser_button)
 
         self._load_installed_manifests()
         self._load_repository_manifests()
@@ -98,16 +92,17 @@ class PluginsWindow(GajimAppWindow, EventHelper):
             "plugin-updates-available", self._on_plugin_updates_available
         )
 
-    def _cleanup(self) -> None:
+    def do_unroot(self) -> None:
         app.plugin_repository.disconnect(self)
         self.unregister_events()
+        Adw.PreferencesGroup.do_unroot(self)
 
     @staticmethod
     def _sort_func(row1: PluginRow, row2: PluginRow) -> int:
         return locale.strcoll(row1.name, row2.name)
 
     def _load_installed_manifests(self) -> None:
-        for plugin in app.plugin_manager.plugins:
+        for plugin in sorted(app.plugin_manager.plugins, key=lambda p: p.manifest.name):
             self._add_manifest(plugin.manifest, True)
 
     def _load_repository_manifests(self) -> None:
@@ -125,7 +120,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         if plugin_row is None:
             plugin_row = PluginRow(manifest, installed)
             self._plugin_rows[manifest.short_name] = plugin_row
-            self._ui.plugins_listbox.append(plugin_row)
+            self.add(plugin_row)
 
         elif restart:
             plugin_row.set_requires_restart(True)
@@ -141,7 +136,7 @@ class PluginsWindow(GajimAppWindow, EventHelper):
         row = self._plugin_rows[event.manifest.short_name]
 
         if not app.plugin_repository.contains(event.manifest.short_name):
-            self._ui.plugins_listbox.remove(row)
+            self.remove(row)
             return
 
         row.set_requires_restart(False)
@@ -361,7 +356,7 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
         self._management_row.set_visible(self._installed and not app.is_flatpak())
 
     def _get_plugin_icon(self) -> Gtk.Image:
-        image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="lucide-box-symbolic"))
+        image = Gtk.Image.new_from_gicon(Gio.ThemedIcon(name="lucide-package-symbolic"))
 
         image_name = f"{self._manifest.short_name}.png"
         path = configpaths.get("PLUGINS_IMAGES") / image_name
@@ -413,7 +408,7 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
     def _on_config_clicked(self, _button: Gtk.Button) -> None:
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
         assert plugin is not None
-        plugin.config_dialog(get_app_window("Plugins"))  # pyright: ignore
+        plugin.config_dialog(get_app_window("Preferences").window)  # pyright: ignore
 
     def _on_install_clicked(self, button: Gtk.Button) -> None:
         button.set_sensitive(False)

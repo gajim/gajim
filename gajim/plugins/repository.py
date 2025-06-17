@@ -79,7 +79,7 @@ class PluginRepository(Observable):
         self.set_repository(repository_url)
 
     def get_manifests(self) -> list[PluginManifest]:
-        return list(self._manifests.values())
+        return sorted(self._manifests.values(), key=lambda m: m.name)
 
     def contains(self, short_name: str) -> bool:
         return self._manifests.get(short_name) is not None

@@ -595,7 +595,7 @@ class GajimApplication(Adw.Application, CoreApplication):
     def _on_plugins_action(
         _action: Gio.SimpleAction, _param: GLib.Variant | None
     ) -> None:
-        open_window("PluginsWindow")
+        open_window("Preferences").show_page("plugins")
 
     @staticmethod
     def _on_accounts_action(_action: Gio.SimpleAction, param: GLib.Variant) -> None:

@@ -4,11 +4,10 @@
 
 from __future__ import annotations
 
-from typing import cast
-
 from pathlib import Path
 from unittest.mock import MagicMock
 
+from gi.repository import Adw
 from gi.repository import GLib
 from gi.repository import Gtk
 
@@ -18,9 +17,11 @@ from gajim.common.helpers import Observable
 from gajim.plugins.events import PluginRemoved
 from gajim.plugins.manifest import PluginManifest
 
-from gajim.gtk.plugins import PluginsWindow
+from gajim.gtk.plugins import Plugins
 
 from . import util
+
+Adw.init()
 
 plugin_a_data = {
     "name": "Plugin A",
@@ -183,18 +184,21 @@ def _on_trigger_update_clicked(_button: Gtk.Button) -> None:
 
 configpaths.get = MagicMock(return_value=Path())
 
-window = PluginsWindow()
-window.window.set_default_size(600, 800)
-
-box = cast(Gtk.Box, util.get_content_widget(window))
-
-controls_box = Gtk.Box(spacing=12)
-box.prepend(controls_box)
 
 update_button = Gtk.Button(label="Trigger Update")
 update_button.connect("clicked", _on_trigger_update_clicked)
+controls_box = Gtk.Box(spacing=12)
 controls_box.append(update_button)
 
-window.show()
+control_group = Adw.PreferencesGroup()
+control_group.add(controls_box)
+
+page = Adw.PreferencesPage()
+page.add(Plugins())
+page.add(control_group)
+
+window = Adw.PreferencesDialog()
+window.add(page)
+window.present()
 
 util.run_app()

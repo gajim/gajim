@@ -103,7 +103,6 @@ def get_main_menu() -> GajimMenu:
     gajim_menu_items: MenuItemListT = [
         (_("_Start / Join Chat…"), "app.start-chat", GLib.Variant("as", ["", ""])),
         (_("Create _Group Chat…"), "app.create-groupchat", GLib.Variant("s", "")),
-        (_("Pl_ugins"), "app.plugins", None),
         (_("_Quit"), "app.quit", None),
     ]
     main_menu.append_submenu("_Gajim", GajimMenu.from_list(gajim_menu_items))
