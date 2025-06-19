@@ -168,7 +168,10 @@ Be sure all install requirements are available.
 Afterwards activate the virtual environment with
 
     source .venv/bin/activate
-    ./launch.py
+
+It is a good practice to run the development version with a user profile. This ensures that it does not interfere with other installations.
+
+    ./launch.py --user-profile dev
 
 ### Windows
 
