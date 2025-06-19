@@ -59,7 +59,6 @@ from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import ResourceContact
 from gajim.common.util.uri import open_uri
 
-from gajim.gtk import menus
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import InformationAlertDialog
@@ -541,7 +540,6 @@ class GajimApplication(Adw.Application, CoreApplication):
 
     def enable_account(self, account: str) -> None:
         CoreApplication.enable_account(self, account)
-        menus.build_accounts_menu()
         self.update_app_actions_state()
         window = get_app_window("AccountsWindow")
         if window is not None:
@@ -557,7 +555,6 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         CoreApplication.disable_account(self, account)
 
-        menus.build_accounts_menu()
         self.update_app_actions_state()
 
     def remove_account(self, account: str) -> None:

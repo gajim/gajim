@@ -118,30 +118,18 @@ class AccountSideBar(Gtk.Box, EventHelper, SignalManager):
         x: float,
         y: float,
     ) -> int:
-        accounts = app.settings.get_active_accounts()
-        if not accounts:
-            return Gdk.EVENT_STOP
 
         current_button = gesture_click.get_current_button()
-
         if current_button == Gdk.BUTTON_PRIMARY:
             # Left click
-            # Show current account's page if only one account is active
-            # If more than one account is active, a popover containing
-            # all accounts is shown (clicking one opens the account's page)
-            if len(accounts) == 1:
-                app.window.show_account_page(accounts[0])
-            else:
-                self._status_popover.popdown()
-                self._account_popover.popup()
+            self._status_popover.popdown()
+            self._account_popover.popup()
             return Gdk.EVENT_STOP
 
         if current_button == Gdk.BUTTON_SECONDARY:
             # Right click
-            # Show account context menu containing account status selector
-            # Global status selector if multiple accounts are active
-            self._account_popover.popdown()
             self._status_popover.popup()
+            self._account_popover.popdown()
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_STOP
@@ -186,6 +174,8 @@ class AccountAvatar(Gtk.Widget, EventHelper):
         self._connectivity_image.set_parent(self)
         self._connectivity_image.add_css_class("warning")
 
+        self.update()
+
     def do_unroot(self) -> None:
         raise NotImplementedError
 
@@ -202,13 +192,7 @@ class AccountAvatar(Gtk.Widget, EventHelper):
         self._update_tooltip()
 
     def _update_tooltip(self) -> None:
-        if len(self._accounts) == 1:
-            account = next(iter(self._accounts))
-            account_label = app.settings.get_account_setting(account, "account_label")
-            tooltip_text = _("Account: %s") % account_label
-        else:
-            tooltip_text = _("Accounts")
-
+        tooltip_text = _("Accounts")
         if self._has_connectivity_issues():
             tooltip_text += "\n" + _("There are connectivity issues")
 
@@ -254,6 +238,10 @@ class AccountPopover(Gtk.Popover):
 
     def _on_clicked(self, button: AccountPopoverButton) -> None:
         self.emit("clicked", button.get_account())
+        self.popdown()
+
+    @Gtk.Template.Callback()
+    def on_manage_clicked(self, button: Gtk.Button) -> None:
         self.popdown()
 
     def add_account(self, account: str) -> None:

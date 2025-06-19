@@ -97,21 +97,6 @@ def make_menu_item(
     return item
 
 
-def get_main_menu() -> GajimMenu:
-    main_menu = GajimMenu()
-
-    gajim_menu_items: MenuItemListT = [
-        (_("_Start / Join Chat…"), "app.start-chat", GLib.Variant("as", ["", ""])),
-        (_("Create _Group Chat…"), "app.create-groupchat", GLib.Variant("s", "")),
-        (_("_Quit"), "app.quit", None),
-    ]
-    main_menu.append_submenu("_Gajim", GajimMenu.from_list(gajim_menu_items))
-
-    main_menu.add_submenu(_("_Accounts"))
-
-    return main_menu
-
-
 def get_self_contact_menu(contact: types.BareContact) -> GajimMenu:
     account = contact.account
     jid = contact.jid
@@ -257,42 +242,6 @@ def get_account_menu(account: str) -> GajimMenu:
     menu.append_submenu(_("Advanced"), GajimMenu.from_list(advanced_menuitems))
 
     return menu
-
-
-def build_accounts_menu() -> None:
-    menubar = app.window.get_main_menu()
-
-    # Accounts Submenu
-    menu_position = 1
-
-    acc_menu = menubar.get_item_link(menu_position, "submenu")
-    assert isinstance(acc_menu, Gio.Menu)
-    acc_menu.remove_all()
-
-    accounts_list = sorted(app.settings.get_active_accounts())
-    if not accounts_list:
-        add_account_item = Gio.MenuItem.new(_("_Add Account…"), "app.accounts::")
-        acc_menu.append_item(add_account_item)
-        return
-
-    if len(accounts_list) > 1:
-        manage_accounts_item = Gio.MenuItem.new(
-            _("_Manage Accounts…"), "app.accounts::"
-        )
-        acc_menu.append_item(manage_accounts_item)
-        add_contact_item = Gio.MenuItem.new(_("Add _Contact…"), "app.add-contact::")
-        acc_menu.append_item(add_contact_item)
-        for acc in accounts_list:
-            label = escape_mnemonic(app.get_account_label(acc))
-            acc_menu.append_submenu(label, get_account_menu(acc))
-    else:
-        acc_menu = get_account_menu(accounts_list[0])
-        manage_account_item = Gio.MenuItem.new(_("_Manage Account…"), "app.accounts::")
-        acc_menu.insert_item(0, manage_account_item)
-        add_contact_item = Gio.MenuItem.new(_("Add _Contact…"), "app.add-contact::")
-        acc_menu.insert_item(1, add_contact_item)
-        menubar.remove(menu_position)
-        menubar.insert_submenu(menu_position, _("_Accounts"), acc_menu)
 
 
 def get_encryption_menu() -> GajimMenu:

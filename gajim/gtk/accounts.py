@@ -33,7 +33,6 @@ from gajim.gtk.const import Setting
 from gajim.gtk.const import SettingKind
 from gajim.gtk.const import SettingType
 from gajim.gtk.filechoosers import Filter
-from gajim.gtk.menus import build_accounts_menu
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.settings import DropDownSetting
 from gajim.gtk.settings import SettingsBox
@@ -734,7 +733,6 @@ class GeneralPage(GenericSettingPage):
         window = get_app_window("AccountsWindow")
         assert window is not None
         window.update_account_label(self.account)
-        build_accounts_menu()
 
 
 class PrivacyPage(GenericSettingPage):

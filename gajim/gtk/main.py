@@ -59,8 +59,6 @@ from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.const import MAIN_WIN_ACTIONS
 from gajim.gtk.emoji_chooser import EmojiChooser
 from gajim.gtk.main_stack import MainStack
-from gajim.gtk.menus import build_accounts_menu
-from gajim.gtk.menus import get_main_menu
 from gajim.gtk.start_chat import parse_uri
 from gajim.gtk.structs import AccountJidParam
 from gajim.gtk.structs import actionmethod
@@ -105,10 +103,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._ui = get_builder("main.ui")
         self.set_content(self._ui.main_view)
-
-        self._main_menu = get_main_menu()
-        self._ui.main_popover_menu.set_menu_model(self._main_menu)
-        build_accounts_menu()
 
         self._emoji_chooser: EmojiChooser | None = None
 
@@ -196,9 +190,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             parent.set_popover(None)
 
         return self._emoji_chooser
-
-    def get_main_menu(self) -> Gio.Menu:
-        return self._main_menu
 
     def show(self) -> None:
         self.present()
