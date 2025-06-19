@@ -62,6 +62,7 @@ from gajim.common.util.uri import open_uri
 from gajim.gtk import menus
 from gajim.gtk import structs
 from gajim.gtk.alert import ConfirmationAlertDialog
+from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.const import ACCOUNT_ACTIONS
 from gajim.gtk.const import ALWAYS_ACCOUNT_ACTIONS
@@ -135,6 +136,15 @@ class GajimApplication(Adw.Application, CoreApplication):
             GLib.OptionFlags.NONE,
             GLib.OptionArg.STRING,
             _("Use defined profile in configuration directory"),
+            "NAME",
+        )
+
+        self.add_main_option(
+            "user-profile",
+            ord("u"),
+            GLib.OptionFlags.NONE,
+            GLib.OptionArg.STRING,
+            _("Use a profile to run multiple Gajim instances"),
             "NAME",
         )
 
@@ -251,6 +261,20 @@ class GajimApplication(Adw.Application, CoreApplication):
 
         MainWindow()
 
+        if self._deprecated_options_used:
+            migration_url = (
+                "https://dev.gajim.org/gajim/gajim/-/wikis/Profile-Migration"
+            )
+            InformationAlertDialog(
+                "Deprecation Warning",
+                (
+                    "The options <b>--profile</b> and <b>--separate</b> are deprecated "
+                    "and will be removed in a future version of Gajim. Visit our "
+                    f"<a href='{migration_url}'>Wiki</a> "
+                    "to find the instructions on how to migrate."
+                ),
+            )
+
         GLib.timeout_add(100, self._auto_connect)
 
     def _shutdown(self, _application: GajimApplication) -> None:
@@ -298,17 +322,36 @@ class GajimApplication(Adw.Application, CoreApplication):
             print(gajim.__version__)
             return 0
 
+        application_name = "Gajim"
+
+        # --profile is deprecated with Gajim 2.3.0
         profile = options.lookup_value("profile")
-        if profile is None:
-            GLib.set_application_name("Gajim")
-        else:
-            # Incorporate profile name into application id
-            # to have a single app instance for each profile.
-            profile = profile.get_string()
-            GLib.set_application_name(f"Gajim ({profile})")
-            app_id = f"{self.get_application_id()}.{profile}"
+        user_profile = options.lookup_value("user-profile")
+        if user_profile is not None:
+            if options.contains("separate"):
+                print("--separate cannot be used with --user-profile")
+                return 0
+
+            if options.contains("profile"):
+                print("--profile cannot be used with --user-profile")
+                return 0
+
+            configpaths.set_user_profile(user_profile.get_string())
+
+        elif profile is not None:
+            user_profile = profile
+            configpaths.set_profile(user_profile.get_string())
+
+        if user_profile is not None:
+            # Incorporate user_profile name into application id
+            # to have a single app instance for each user_profile.
+            user_profile_str = user_profile.get_string()
+            application_name = f"Gajim ({user_profile_str})"
+            app_id = f"{self.get_application_id()}.{user_profile_str}"
             self.set_application_id(app_id)
-            configpaths.set_profile(profile)
+            configpaths.set_user_profile(user_profile_str)
+
+        GLib.set_application_name(application_name)
 
         self.register()
         if self.get_is_remote():
@@ -317,6 +360,10 @@ class GajimApplication(Adw.Application, CoreApplication):
                 "The primary instance will handle remote commands"
             )
             return -1
+
+        self._deprecated_options_used = options.contains("profile") or options.contains(
+            "separate"
+        )
 
         options.insert_value("is-first-startup", GLib.Variant("b", True))
         self._core_command_line(options)

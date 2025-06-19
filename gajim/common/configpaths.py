@@ -62,11 +62,17 @@ def get_paths(type_: PathType) -> Generator[Path, None, None]:
 
 
 def set_separation(active: bool) -> None:
+    # Deprecated in Gajim 2.3.0
     _paths.profile_separation = active
 
 
 def set_profile(profile: str) -> None:
+    # Deprecated in Gajim 2.3.0
     _paths.profile = profile
+
+
+def set_user_profile(user_profile: str) -> None:
+    _paths.user_profile = user_profile
 
 
 def set_config_root(config_root: str) -> None:
@@ -113,22 +119,10 @@ class ConfigPaths:
         self._temp_dir: Path | None = None
 
         self.profile = ''
+        self.user_profile = ''
         self.profile_separation = False
         self.custom_config_root: Path | None = None
 
-        if os.name == 'nt':
-            if gajim.IS_PORTABLE:
-                application_path = Path(sys.executable).parent
-                self.config_root = self.cache_root = self.data_root = \
-                    application_path.parent / 'UserData'
-            else:
-                # Documents and Settings\[User Name]\Application Data\Gajim
-                self.config_root = self.cache_root = self.data_root = \
-                    Path(os.environ['APPDATA']) / 'Gajim'
-        else:
-            self.config_root = Path(GLib.get_user_config_dir()) / 'gajim'
-            self.cache_root = Path(GLib.get_user_cache_dir()) / 'gajim'
-            self.data_root = Path(GLib.get_user_data_dir()) / 'gajim'
 
         basedir = cast(Path, importlib.resources.files('gajim'))
 
@@ -179,9 +173,31 @@ class ConfigPaths:
         self._paths[name] = (location, path, path_type)
 
     def init(self):
+
+        root_folder = "gajim"
+        if self.user_profile:
+            root_folder = f"gajim.{self.user_profile}"
+
+        if sys.platform == "win32":
+            root_folder = root_folder.capitalize()
+
+            if gajim.IS_PORTABLE:
+                application_path = Path(sys.executable).parent
+                self.config_root = self.cache_root = self.data_root = \
+                    application_path.parent / 'UserData'
+            else:
+                # Documents and Settings\[User Name]\Application Data\Gajim
+                self.config_root = self.cache_root = self.data_root = \
+                    Path(os.environ['APPDATA']) / root_folder
+        else:
+            self.config_root = Path(GLib.get_user_config_dir()) / root_folder
+            self.cache_root = Path(GLib.get_user_cache_dir()) / root_folder
+            self.data_root = Path(GLib.get_user_data_dir()) / root_folder
+
         if self.custom_config_root:
             self.config_root = self.custom_config_root
-            self.cache_root = self.data_root = self.custom_config_root
+            self.cache_root = self.custom_config_root
+            self.data_root = self.custom_config_root
 
         user_dir_paths = [
             ('MY_CONFIG', Path(), PathLocation.CONFIG, PathType.FOLDER),
