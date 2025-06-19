@@ -121,7 +121,7 @@ class AccountsWindow(GajimAppWindow):
         AlertDialog(
             _("Re-Login Now?"),
             _("To apply all changes instantly, you have to re-login."),
-            [
+            responses=[
                 DialogResponse("cancel", _("_Later")),
                 DialogResponse(
                     "accept", _("_Re-Login"), is_default=True, appearance="suggested"
@@ -575,7 +575,7 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
                     "All chat and group chat windows will be closed."
                 )
                 % {"name": account_label},
-                [
+                responses=[
                     CancelDialogResponse(),
                     DialogResponse(
                         "disable", _("_Disable Account"), appearance="destructive"

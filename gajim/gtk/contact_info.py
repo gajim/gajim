@@ -386,7 +386,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
                     "The contact will be informed that you stopped sharing your "
                     "status. Please note that this can have other side effects."
                 ),
-                [
+                responses=[
                     CancelDialogResponse(),
                     DialogResponse(
                         "stop", _("_Stop Sharing"), appearance="destructive"

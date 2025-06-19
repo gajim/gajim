@@ -330,7 +330,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     event.account, prefer_custom=True
                 ),
             },
-            [
+            responses=[
                 CancelDialogResponse(label=_("_Abort")),
                 DialogResponse(
                     "connect", _("_Connect Anyway"), appearance="destructive"
@@ -366,7 +366,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         AlertDialog(
             _("HTTP Authorization Request"),
             message,
-            [
+            responses=[
                 CancelDialogResponse(label=_("_No")),
                 DialogResponse("accept", _("_Accept")),
             ],
@@ -1402,7 +1402,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 "You will appear offline for this contact and you "
                 "will not receive further messages."
             ),
-            [
+            responses=[
                 CancelDialogResponse(),
                 DialogResponse("report", _("_Report Spam")),
                 DialogResponse("block", _("_Block")),

@@ -273,6 +273,7 @@ class GajimApplication(Adw.Application, CoreApplication):
                     f"<a href='{migration_url}'>Wiki</a> "
                     "to find the instructions on how to migrate."
                 ),
+                body_use_markup=True,
             )
 
         GLib.timeout_add(100, self._auto_connect)
