@@ -421,7 +421,7 @@ class PageMenuItem(MenuItem):
         elif name == "connection":
             icon = "feather-globe-symbolic"
         elif name == "advanced":
-            icon = "preferences-system-symbolic"
+            icon = "lucide-settings-symbolic"
         else:
             icon = "dialog-error-symbolic"
 
@@ -1006,7 +1006,7 @@ class ConnectionPage(GenericSettingPage):
                 name="proxy",
                 props={
                     "data": self._get_proxies(),
-                    "button-icon-name": "preferences-system-symbolic",
+                    "button-icon-name": "lucide-settings-symbolic",
                     "button-callback": self._on_proxy_edit,
                 },
             ),

@@ -48,7 +48,7 @@
         <child>
           <object class="GtkButton" id="_config_button">
             <property name="valign">3</property>
-            <property name="icon-name">preferences-system-symbolic</property>
+            <property name="icon-name">lucide-settings-symbolic</property>
           </object>
         </child>
         <child>

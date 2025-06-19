@@ -122,7 +122,7 @@
                                 <property name="valign">center</property>
                                 <child>
                                   <object class="GtkImage">
-                                    <property name="icon-name">preferences-system-symbolic</property>
+                                    <property name="icon-name">lucide-settings-symbolic</property>
                                   </object>
                                 </child>
                                 <style>

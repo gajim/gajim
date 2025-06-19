@@ -204,7 +204,7 @@ class Preferences(GajimAppWindow):
             PreferencesPageData(
                 name="advanced",
                 title=_("Advanced"),
-                icon_name="preferences-system-symbolic",
+                icon_name="lucide-wrench-symbolic",
                 groups=[
                     PreferencesGroupData(
                         name="miscellaneous",
@@ -703,7 +703,7 @@ class Sounds(PreferenceBox):
                 "sounds_on",
                 desc=_("Play sounds to notify about events"),
                 props={
-                    "button-icon-name": "preferences-system-symbolic",
+                    "button-icon-name": "lucide-settings-symbolic",
                     "button-callback": self._on_manage_sounds,
                 },
             ),
@@ -884,7 +884,7 @@ class Themes(PreferenceBox):
                 name="roster_theme",
                 props={
                     "data": theme_items,
-                    "button-icon-name": "preferences-system-symbolic",
+                    "button-icon-name": "lucide-settings-symbolic",
                     "button-callback": self._on_edit_themes,
                 },
                 callback=self._on_theme_changed,
@@ -1147,7 +1147,7 @@ class Miscellaneous(PreferenceBox):
                 name="global_proxy",
                 props={
                     "data": self._get_proxies(),
-                    "button-icon-name": "preferences-system-symbolic",
+                    "button-icon-name": "lucide-settings-symbolic",
                     "button-callback": self._on_proxy_edit,
                 },
             ),
