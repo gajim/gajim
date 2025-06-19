@@ -1,6 +1,6 @@
 % gajim(1) | Manual
 % Philipp Hörist, Daniel Brötzmann, Yann Leboulanger
-% August 2022
+% June 2025
 
 # NAME
 
@@ -9,9 +9,8 @@ gajim - a fully-featured XMPP chat client
 # SYNOPSIS
 
 gajim -h\
-gajim \--show\
 gajim \--start-chat\
-gajim [-q] [-v] [-w] [-l subsystem=level] [-p name] [-s] [-c directory] [\--gdebug] [\--cprofile]
+gajim [-q] [-v] [-w] [-l subsystem=level] [-u name] [-p name] [-s] [-c directory] [\--gdebug] [\--cprofile]
 
 # DESCRIPTION
 
@@ -38,13 +37,16 @@ protocol see https://xmpp.org/about/.
 : Show only critical errors
 
 `-s, --separate`
-: Separate profile files completely (even history database and plugins)
+: DEPRECATED: Separate profile files completely (even history database and plugins)
 
 `-v, --verbose`
 : Print XML stanzas and other debug information
 
+`-u, --user-profile=NAME`
+: Use a profile to run multiple Gajim instances
+
 `-p, --profile=NAME`
-: Use defined profile in configuration directory
+: DEPRECATED: Use defined profile in configuration directory
 
 `-c, --config-path=PATH`
 : Set configuration directory
