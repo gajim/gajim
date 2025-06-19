@@ -79,6 +79,7 @@ class _BaseAlertDialog(Adw.AlertDialog):
         self,
         heading: str,
         body: str,
+        body_use_markup: bool = False,
         responses: list[DialogResponse] | None = None,
         close_response: str = "close",
         emit_responses: list[str] | None = None,
@@ -99,6 +100,7 @@ class _BaseAlertDialog(Adw.AlertDialog):
             self,
             heading=heading,
             body=body,
+            body_use_markup=body_use_markup,
             prefer_wide_layout=True,
             close_response=close_response,
         )
@@ -160,6 +162,7 @@ class InformationAlertDialog(_BaseAlertDialog):
         self,
         heading: str,
         body: str,
+        body_use_markup: bool = False,
         callback: Callable[[], None] | None = None,
         parent: Gtk.Window | None = None,
     ) -> None:
@@ -168,6 +171,7 @@ class InformationAlertDialog(_BaseAlertDialog):
             self,
             heading,
             body,
+            body_use_markup=body_use_markup,
             responses=[
                 DialogResponse("ok", _("_OK"), is_default=True),
             ],
@@ -189,6 +193,7 @@ class ConfirmationAlertDialog(_BaseAlertDialog):
         heading: str,
         body: str,
         confirm_label: str,
+        body_use_markup: bool = ...,
         appearance: AppearanceT = ...,
         extra_widget: Literal[None] = ...,
         callback: Callable[[], None] | None = ...,
@@ -201,6 +206,7 @@ class ConfirmationAlertDialog(_BaseAlertDialog):
         heading: str,
         body: str,
         confirm_label: str,
+        body_use_markup: bool = ...,
         appearance: AppearanceT = ...,
         extra_widget: DialogEntry = ...,
         callback: Callable[[str], None] | None = ...,
@@ -212,6 +218,7 @@ class ConfirmationAlertDialog(_BaseAlertDialog):
         heading: str,
         body: str,
         confirm_label: str,
+        body_use_markup: bool = False,
         appearance: AppearanceT = "default",
         extra_widget: ExtraWidgetT = None,
         callback: Callable[..., None] | None = None,
@@ -222,6 +229,7 @@ class ConfirmationAlertDialog(_BaseAlertDialog):
             self,
             heading,
             body,
+            body_use_markup=body_use_markup,
             responses=[
                 CancelDialogResponse(),
                 DialogResponse("confirm", confirm_label, appearance=appearance),
