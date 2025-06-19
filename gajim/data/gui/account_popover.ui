@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AccountPopover" parent="GtkPopover">
+    <property name="child">
+      <object class="GtkScrolledWindow">
+        <property name="hscrollbar-policy">never</property>
+        <property name="propagate-natural-height">true</property>
+        <property name="child">
+          <object class="GtkBox" id="_box">
+            <property name="orientation">vertical</property>
+            <property name="spacing">3</property>
+            <style>
+              <class name="p-3"/>
+            </style>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>

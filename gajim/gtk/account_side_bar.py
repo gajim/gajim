@@ -7,32 +7,36 @@ from __future__ import annotations
 from typing import Any
 
 from gi.repository import Gdk
+from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
 from gajim.common.events import ShowChanged
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
-from gajim.common.modules.contacts import BareContact
-from gajim.common.util.status import get_uf_show
 
-from gajim.gtk.avatar import convert_surface_to_texture
-from gajim.gtk.avatar import get_show_circle
+from gajim.gtk.status_selector import StatusSelectorPopover
 from gajim.gtk.util.classes import SignalManager
 
 
-class AccountSideBar(Gtk.Box, SignalManager):
+@Gtk.Template(filename=get_ui_path("account_side_bar.ui"))
+class AccountSideBar(Gtk.Box, EventHelper, SignalManager):
     __gtype_name__ = "AccountSideBar"
+
+    _selection_bar: Gtk.Box = Gtk.Template.Child()
+    _avatar: AccountAvatar = Gtk.Template.Child()
+    _account_popover: AccountPopover = Gtk.Template.Child()
+    _status_popover: StatusSelectorPopover = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
         SignalManager.__init__(self)
-
-        self.add_css_class("account-sidebar")
+        EventHelper.__init__(self)
 
         gesture_primary_click = Gtk.GestureClick(button=0)
         self._connect(gesture_primary_click, "pressed", self._on_button_press)
@@ -43,32 +47,58 @@ class AccountSideBar(Gtk.Box, SignalManager):
         self._connect(hover_controller, "leave", self._on_cursor_leave)
         self.add_controller(hover_controller)
 
-        container = Gtk.Box()
-        self.append(container)
+        accounts = app.settings.get_active_accounts()
+        for account in accounts:
+            self._account_popover.add_account(account)
+            self._avatar.add_account(account)
 
-        self._selection_bar = Gtk.Box(width_request=6, margin_start=1)
-        self._selection_bar.add_css_class("selection-bar")
-        container.append(self._selection_bar)
+            client = app.get_client(account)
+            contact = client.get_own_contact()
 
-        self._account_avatar = AccountAvatar()
-        container.append(self._account_avatar)
+            client.connect_signal("state-changed", self._on_client_state_changed)
+            contact.connect("avatar-update", self._on_avatar_update)
 
-        self._accounts_popover = Gtk.Popover()
-        self.append(self._accounts_popover)
-
-        self._status_popover = self._create_status_popover()
-        self.append(self._status_popover)
+        self.register_event("account-enabled", ged.GUI1, self._on_account_enabled)
+        self.register_event("account-disabled", ged.GUI1, self._on_account_disabled)
+        self.register_event("our-show", ged.GUI1, self._on_our_show)
 
     def do_unroot(self, *args: Any) -> None:
-        self._disconnect_all()
-        Gtk.Box.do_unroot(self)
-        app.check_finalize(self)
+        raise NotImplementedError
 
     def select(self) -> None:
         self._selection_bar.add_css_class("selection-bar-selected")
 
     def unselect(self) -> None:
         self._selection_bar.remove_css_class("selection-bar-selected")
+
+    def _on_account_enabled(self, event: AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_own_contact()
+
+        client.connect_signal("state-changed", self._on_client_state_changed)
+        contact.connect("avatar-update", self._on_avatar_update)
+
+        self._account_popover.add_account(event.account)
+        self._avatar.add_account(event.account)
+
+    def _on_account_disabled(self, event: AccountDisabled) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_own_contact()
+
+        client.disconnect_all_from_obj(self)
+        contact.disconnect_all_from_obj(self)
+
+        self._account_popover.remove_account(event.account)
+        self._avatar.remove_account(event.account)
+
+    def _on_our_show(self, _event: ShowChanged) -> None:
+        self._avatar.update()
+
+    def _on_avatar_update(self, *args: Any) -> None:
+        self._avatar.update()
+
+    def _on_client_state_changed(self, *args: Any) -> None:
+        self._avatar.update()
 
     def _on_cursor_enter(
         self,
@@ -102,132 +132,45 @@ class AccountSideBar(Gtk.Box, SignalManager):
             if len(accounts) == 1:
                 app.window.show_account_page(accounts[0])
             else:
-                self._display_accounts_menu()
+                self._status_popover.popdown()
+                self._account_popover.popup()
             return Gdk.EVENT_STOP
 
         if current_button == Gdk.BUTTON_SECONDARY:
             # Right click
             # Show account context menu containing account status selector
             # Global status selector if multiple accounts are active
-            self._accounts_popover.popdown()
+            self._account_popover.popdown()
             self._status_popover.popup()
             return Gdk.EVENT_STOP
 
         return Gdk.EVENT_STOP
 
-    def _display_accounts_menu(self):
-        popover_scrolled = Gtk.ScrolledWindow(
-            hscrollbar_policy=Gtk.PolicyType.NEVER, propagate_natural_height=True
-        )
-
-        self._accounts_popover.set_child(popover_scrolled)
-
-        box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3)
-        box.add_css_class("p-3")
-        popover_scrolled.set_child(box)
-
-        for account in app.settings.get_active_accounts():
-            account_color_bar = Gtk.Box(width_request=6)
-            color_class = app.css_config.get_dynamic_class(account)
-            account_color_bar.add_css_class("account-identifier-bar")
-            account_color_bar.add_css_class(color_class)
-
-            avatar = Gtk.Image(pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
-            label = Gtk.Label(
-                halign=Gtk.Align.START,
-                label=app.settings.get_account_setting(account, "account_label"),
-            )
-
-            texture = app.app.avatar_storage.get_account_button_texture(
-                account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
-            )
-            avatar.set_from_paintable(texture)
-
-            account_box = Gtk.Box(spacing=6)
-            account_box.append(account_color_bar)
-            account_box.append(avatar)
-            account_box.append(label)
-
-            button = Gtk.Button()
-            button.add_css_class("flat")
-            button.set_child(account_box)
-            button.connect(
-                "clicked",
-                self._on_account_clicked,
-                account,
-            )
-            box.append(button)
-
-        self._status_popover.popdown()
-        self._accounts_popover.popup()
-
+    @Gtk.Template.Callback()
     def _on_account_clicked(
         self,
-        _button: Gtk.MenuButton,
+        _popover: AccountPopover,
         account: str,
     ) -> None:
-
-        self._accounts_popover.popdown()
         app.window.show_account_page(account)
 
-    def _create_status_popover(self) -> Gtk.Popover:
-        popover_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        popover_box.add_css_class("m-3")
-        popover_items = [
-            "online",
-            "away",
-            "xa",
-            "dnd",
-            "separator",
-            "offline",
-        ]
-
-        for item in popover_items:
-            if item == "separator":
-                popover_box.append(Gtk.Separator())
-                continue
-
-            show_icon = Gtk.Image(pixel_size=AvatarSize.SHOW_CIRCLE)
-            show_label = Gtk.Label()
-            show_label.set_halign(Gtk.Align.START)
-
-            surface = get_show_circle(
-                item, AvatarSize.SHOW_CIRCLE, self.get_scale_factor()
-            )
-            show_icon.set_from_paintable(convert_surface_to_texture(surface))
-            show_label.set_text_with_mnemonic(get_uf_show(item, use_mnemonic=True))
-
-            show_box = Gtk.Box(spacing=6)
-            show_box.append(show_icon)
-            show_box.append(show_label)
-
-            button = Gtk.Button()
-            button.add_css_class("flat")
-            button.set_child(show_box)
-            self._connect(button, "clicked", self._on_change_status, item)
-            popover_box.append(button)
-
-        status_popover = Gtk.Popover()
-        status_popover.set_child(popover_box)
-        return status_popover
-
-    def _on_change_status(
-        self,
-        _button: Gtk.Button,
-        new_status: str,
-    ) -> None:
-
-        self._status_popover.popdown()
-
+    @Gtk.Template.Callback()
+    def _on_status_clicked(self, _button: Gtk.Button, status: str) -> None:
         accounts = app.get_connected_accounts()
         account = accounts[0] if len(accounts) == 1 else None
-        app.app.change_status(status=new_status, account=account)
+        app.app.change_status(status=status, account=account)
 
 
 class AccountAvatar(Gtk.Widget, EventHelper):
+    __gtype_name__ = "AccountAvatar"
+
     def __init__(self) -> None:
-        Gtk.Widget.__init__(self, layout_manager=Gtk.BinLayout())
+        Gtk.Widget.__init__(self)
         EventHelper.__init__(self)
+
+        self._accounts: set[str] = set()
+
+        self.set_layout_manager(Gtk.BinLayout())
         self.add_css_class("account-sidebar-image")
 
         self._avatar_image = Gtk.Image(pixel_size=AvatarSize.ACCOUNT_SIDE_BAR)
@@ -243,53 +186,24 @@ class AccountAvatar(Gtk.Widget, EventHelper):
         self._connectivity_image.set_parent(self)
         self._connectivity_image.add_css_class("warning")
 
-        self.register_event("account-enabled", ged.GUI1, self._on_account_state)
-        self.register_event("account-disabled", ged.GUI1, self._on_account_state)
-        self.register_event("our-show", ged.GUI1, self._on_our_show)
-
-        for account in app.settings.get_active_accounts():
-            self._set_account_state(account, enabled=True)
-
-        self._update_image()
-        self._update_tooltip()
-
     def do_unroot(self) -> None:
         raise NotImplementedError
 
-    def _on_account_state(self, event: AccountEnabled | AccountDisabled) -> None:
-        self._set_account_state(
-            event.account, enabled=isinstance(event, AccountEnabled)
-        )
-        self._update_image()
-        self._update_tooltip()
+    def add_account(self, account: str) -> None:
+        self._accounts.add(account)
+        self.update()
 
-    def _set_account_state(self, account: str, *, enabled: bool) -> None:
-        client = app.get_client(account)
-        jid = app.get_jid_from_account(account)
-        contact = client.get_module("Contacts").get_contact(jid)
-        assert isinstance(contact, BareContact)
+    def remove_account(self, account: str) -> None:
+        self._accounts.discard(account)
+        self.update()
 
-        if enabled:
-            client.connect_signal("state-changed", self._on_client_state_changed)
-            contact.connect("avatar-update", self._on_avatar_update)
-        else:
-            client.disconnect_all_from_obj(self)
-            contact.disconnect_all_from_obj(self)
-
-    def _on_avatar_update(self, *args: Any) -> None:
-        self._update_image()
-
-    def _on_our_show(self, _event: ShowChanged) -> None:
-        self._update_image()
-
-    def _on_client_state_changed(self, *args: Any) -> None:
+    def update(self) -> None:
         self._update_image()
         self._update_tooltip()
 
     def _update_tooltip(self) -> None:
-        accounts = app.settings.get_active_accounts()
-        if len(accounts) == 1:
-            account = accounts[0]
+        if len(self._accounts) == 1:
+            account = next(iter(self._accounts))
             account_label = app.settings.get_account_setting(account, "account_label")
             tooltip_text = _("Account: %s") % account_label
         else:
@@ -301,19 +215,109 @@ class AccountAvatar(Gtk.Widget, EventHelper):
         self.set_tooltip_text(tooltip_text)
 
     def _update_image(self) -> None:
-        accounts = app.settings.get_active_accounts()
-
         self._connectivity_image.set_visible(self._has_connectivity_issues())
 
-        account = accounts[0] if len(accounts) == 1 else None
+        account = None
+        if len(self._accounts) == 1:
+            account = next(iter(self._accounts))
+
         texture = app.app.avatar_storage.get_account_button_texture(
             account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
         )
         self._avatar_image.set_from_paintable(texture)
 
     def _has_connectivity_issues(self) -> bool:
-        for account in app.settings.get_active_accounts():
+        for account in self._accounts:
             client = app.get_client(account)
             if client.state.is_disconnected or client.state.is_reconnect_scheduled:
                 return True
         return False
+
+
+@Gtk.Template(filename=get_ui_path("account_popover.ui"))
+class AccountPopover(Gtk.Popover):
+    __gtype_name__ = "AccountPopover"
+
+    __gsignals__ = {
+        "clicked": (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (str,),
+        )
+    }
+
+    _box: Gtk.Box = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Popover.__init__(self)
+        self._buttons: dict[str, AccountPopoverButton] = {}
+
+    def _on_clicked(self, button: AccountPopoverButton) -> None:
+        self.emit("clicked", button.get_account())
+        self.popdown()
+
+    def add_account(self, account: str) -> None:
+        if account in self._buttons:
+            raise ValueError("Account cannot be added multiple times")
+
+        button = AccountPopoverButton(account=account)
+        button.connect("clicked", self._on_clicked)
+        self._buttons[account] = button
+        self._box.append(button)
+
+    def remove_account(self, account: str) -> None:
+        button = self._buttons.get(account)
+        if button is None:
+            raise ValueError("Account button for %s not found" % account)
+
+        self._box.remove(button)
+        del self._buttons[account]
+
+
+@Gtk.Template(filename=get_ui_path("account_popover_button.ui"))
+class AccountPopoverButton(Gtk.Button):
+    __gtype_name__ = "AccountPopoverButton"
+
+    _color_bar: Gtk.Box = Gtk.Template.Child()
+    _avatar: Gtk.Image = Gtk.Template.Child()
+    _label: Gtk.Label = Gtk.Template.Child()
+
+    def __init__(self, account: str = "") -> None:
+        Gtk.Button.__init__(self)
+
+        self._account = ""
+        self.set_account(account)
+
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        app.check_finalize(self)
+
+    def get_account(self) -> str:
+        return self._account
+
+    def set_account(self, account: str) -> None:
+        if not account or self._account == account:
+            return
+
+        if self._account:
+            self._clear_widgets()
+
+        color_class = app.css_config.get_dynamic_class(account)
+        self._color_bar.add_css_class(color_class)
+
+        label = app.settings.get_account_setting(account, "account_label")
+        self._label.set_text(label)
+
+        texture = app.app.avatar_storage.get_account_button_texture(
+            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+        )
+        self._avatar.set_from_paintable(texture)
+
+        self._account = account
+
+    def _clear_widgets(self) -> None:
+        assert self._account is not None
+        color_class = app.css_config.get_dynamic_class(self._account)
+        self._color_bar.remove_css_class(color_class)
+        self._label.set_text("")
+        self._avatar.set_from_paintable(None)

@@ -43,6 +43,7 @@ from gajim.common.helpers import warn_about_plain_connection
 from gajim.common.i18n import _
 from gajim.common.idle import IdleMonitorManager
 from gajim.common.idle import Monitor
+from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.message import build_message_stanza
 from gajim.common.structs import OutgoingMessage
 from gajim.common.util.http import create_http_session
@@ -357,6 +358,12 @@ class Client(Observable, ClientModules):
     def is_own_jid(self, jid: JID | str) -> bool:
         own_jid = self.get_own_jid()
         return own_jid.bare_match(jid)
+
+    def get_own_contact(self) -> BareContact:
+        jid = self.get_own_jid()
+        contact = self.get_module("Contacts").get_contact(jid)
+        assert isinstance(contact, BareContact)
+        return contact
 
     def get_own_jid(self) -> JID:
         '''
