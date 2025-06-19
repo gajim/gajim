@@ -211,7 +211,6 @@ class ConfigPaths:
         # These paths are unique per profile
         unique_profile_paths: list[tuple[str, str | Path, PathLocation, PathType]] = [
             # Data paths
-            ('SECRETS_FILE', 'secrets', PathLocation.DATA, PathType.FILE),
             ('CERT_STORE', 'cert_store', PathLocation.DATA, PathType.FOLDER),
             ('DEBUG', 'debug', PathLocation.DATA, PathType.FOLDER),
             ('PLUGINS_DATA', 'plugins_data',
@@ -222,7 +221,6 @@ class ConfigPaths:
 
             # Config paths
             ('SETTINGS', 'settings.sqlite', PathLocation.CONFIG, PathType.FILE),
-            ('CONFIG_FILE', 'config', PathLocation.CONFIG, PathType.FILE),
             ('PLUGINS_CONFIG_DIR',
              'pluginsconfig', PathLocation.CONFIG, PathType.FOLDER),
             ('MY_SHORTCUTS', 'shortcuts.json',
