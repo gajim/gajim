@@ -34,7 +34,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">go-previous-symbolic</property>
+                    <property name="icon-name">lucide-chevron-left-symbolic</property>
                   </object>
                 </child>
               </object>
@@ -45,7 +45,7 @@
                 <property name="receives-default">1</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="icon-name">go-next-symbolic</property>
+                    <property name="icon-name">lucide-chevron-right-symbolic</property>
                   </object>
                 </child>
               </object>

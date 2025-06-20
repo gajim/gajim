@@ -402,7 +402,7 @@ class BackMenuItem(MenuItem):
 
         self._label.set_text(_("Back"))
 
-        image = Gtk.Image.new_from_icon_name("go-previous-symbolic")
+        image = Gtk.Image.new_from_icon_name("lucide-chevron-left-symbolic")
 
         self._box.append(image)
         self._box.append(self._label)
@@ -495,7 +495,7 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
         self._label.set_xalign(0)
         self._label.set_width_chars(18)
 
-        next_icon = Gtk.Image.new_from_icon_name("go-next-symbolic")
+        next_icon = Gtk.Image.new_from_icon_name("lucide-chevron-right-symbolic")
 
         account_enabled = app.settings.get_account_setting(self._account, "active")
         self._switch = Gtk.Switch()

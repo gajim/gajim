@@ -67,7 +67,7 @@
             <property name="use_underline">1</property>
             <child>
               <object class="GtkImage">
-                <property name="icon_name">go-next-symbolic</property>
+                <property name="icon_name">lucide-chevron-right-symbolic</property>
               </object>
             </child>
             <style>

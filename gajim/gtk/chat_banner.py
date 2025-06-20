@@ -397,7 +397,11 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
 
     def _set_toggle_roster_button_icon(self, hide_roster: bool, *args: Any) -> None:
 
-        icon = "go-next-symbolic" if not hide_roster else "go-previous-symbolic"
+        icon = (
+            "lucide-chevron-right-symbolic"
+            if not hide_roster
+            else "lucide-chevron-left-symbolic"
+        )
         self._toggle_roster_image.set_from_icon_name(icon)
 
     @staticmethod

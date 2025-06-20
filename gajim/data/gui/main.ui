@@ -106,7 +106,7 @@
                     <property name="action-name">win.toggle-chat-list</property>
                     <child>
                       <object class="GtkImage" id="toggle_chat_list_icon">
-                        <property name="icon-name">go-previous-symbolic</property>
+                        <property name="icon-name">lucide-chevron-left-symbolic</property>
                       </object>
                     </child>
                     <style>

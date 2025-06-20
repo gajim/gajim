@@ -197,7 +197,7 @@
                     </child>
                     <child>
                       <object class="GtkImage" id="_toggle_roster_image">
-                        <property name="icon-name">go-previous-symbolic</property>
+                        <property name="icon-name">lucide-chevron-left-symbolic</property>
                       </object>
                     </child>
                   </object>

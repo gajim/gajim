@@ -683,11 +683,13 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if chat_list is not None:
             if chat_list.is_visible():
                 self._ui.toggle_chat_list_button.set_tooltip_text(_("Show chat list"))
-                self._ui.toggle_chat_list_icon.set_from_icon_name("go-next-symbolic")
+                self._ui.toggle_chat_list_icon.set_from_icon_name(
+                    "lucide-chevron-right-symbolic"
+                )
             else:
                 self._ui.toggle_chat_list_button.set_tooltip_text(_("Hide chat list"))
                 self._ui.toggle_chat_list_icon.set_from_icon_name(
-                    "go-previous-symbolic"
+                    "lucide-chevron-left-symbolic"
                 )
         self._chat_page.toggle_chat_list()
 
