@@ -279,12 +279,21 @@ class Client(Observable, ClientModules):
                                                  'resource',
                                                  'gajim.$rand')
             if error == 'system-shutdown':
+                account_label = app.settings.get_account_setting(
+                    self._account, "account_label"
+                )
+                account_text = _("Account: %s") % account_label
+                shutdown_text = text or _("The server was shut down.")
+
                 app.ged.raise_event(
-                    Notification(context_id="",
-                                 account=self._account,
-                                 type='server-shutdown',
-                                 title=_('Server Shutdown'),
-                                 text=text or _('The server was shut down.')))
+                    Notification(
+                        context_id="",
+                        account=self._account,
+                        type="server-shutdown",
+                        title=_("Server Shutdown"),
+                        text=f"{shutdown_text}\n{account_text}",
+                    )
+                )
 
         elif domain == StreamError.SASL:
             self._reconnect = False
