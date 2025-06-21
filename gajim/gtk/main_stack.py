@@ -19,6 +19,8 @@ PageT = ChatPage | AccountPage
 
 
 class MainStack(Gtk.Stack):
+    __gtype_name__ = "MainStack"
+
     def __init__(self) -> None:
         Gtk.Stack.__init__(self)
 

@@ -26,6 +26,7 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.client import Client
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
@@ -44,15 +45,13 @@ from gajim.common.util.uri import show_in_folder
 from gajim.common.util.uri import XmppIri
 
 from gajim.gtk.about import AboutDialog
-from gajim.gtk.account_side_bar import AccountSideBar
-from gajim.gtk.activity_side_bar import ActivitySideBar
 from gajim.gtk.alert import AlertDialog
 from gajim.gtk.alert import CancelDialogResponse
 from gajim.gtk.alert import ConfirmationAlertDialog
 from gajim.gtk.alert import DialogEntry
 from gajim.gtk.alert import DialogResponse
 from gajim.gtk.alert import InformationAlertDialog
-from gajim.gtk.builder import get_builder
+from gajim.gtk.app_side_bar import AppSideBar
 from gajim.gtk.chat_list import ChatList
 from gajim.gtk.chat_list_row import ChatListRow
 from gajim.gtk.chat_stack import ChatStack
@@ -72,7 +71,6 @@ from gajim.gtk.structs import RetractMessageParam
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 from gajim.gtk.util.window import resize_window
-from gajim.gtk.workspace_side_bar import WorkspaceSideBar
 
 if TYPE_CHECKING:
     from gajim.gtk.control import ChatControl
@@ -83,15 +81,22 @@ if app.is_display(Display.X11):
 log = logging.getLogger("gajim.gtk.main")
 
 
+@Gtk.Template(filename=get_ui_path("main.ui"))
 class MainWindow(Adw.ApplicationWindow, EventHelper):
+    __gtype_name__ = "MainWindow"
+
+    _app_side_bar: AppSideBar = Gtk.Template.Child()
+    _main_stack: MainStack = Gtk.Template.Child()
+
     def __init__(self) -> None:
+        app.window = self
+
         Adw.ApplicationWindow.__init__(self)
         EventHelper.__init__(self)
+
         self.set_application(app.app)
         self.set_title(GLib.get_application_name())
         self.set_default_icon_name("gajim")
-
-        app.window = self
 
         self._about_dialog = AboutDialog()
 
@@ -101,24 +106,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self._startup_finished: bool = False
 
-        self._ui = get_builder("main.ui")
-        self.set_content(self._ui.main_view)
-
         self._emoji_chooser: EmojiChooser | None = None
 
-        self._main_stack = MainStack()
-        self._ui.main_grid.attach(self._main_stack, 1, 0, 1, 1)
-
         self._chat_page = self._main_stack.get_chat_page()
-
-        self._activity_side_bar = ActivitySideBar(self._chat_page)
-        self._ui.activity_box.prepend(self._activity_side_bar)
-
-        self._workspace_side_bar = WorkspaceSideBar(self._chat_page)
-        self._ui.workspace_scrolled.set_child(self._workspace_side_bar)
-
-        self._account_side_bar = AccountSideBar()
-        self._ui.account_box.append(self._account_side_bar)
 
         self.connect("notify::is-active", self._on_window_active)
         self.connect("close-request", self._on_close_request)
@@ -157,6 +147,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._check_for_account()
         self._load_chats()
         self._load_unread_counts()
+
+        app.ged.raise_event(events.RegisterActions())
 
         self._prepare_window()
 
@@ -250,7 +242,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         client.connect_signal("resume-successful", self._on_client_resume_successful)
 
     def _on_account_disabled(self, event: events.AccountDisabled) -> None:
-        workspace_id = self._workspace_side_bar.get_first_workspace()
+        workspace_id = self._app_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
         self._main_stack.remove_account_page(event.account)
         self._main_stack.remove_chats_for_account(event.account)
@@ -521,7 +513,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         elif action_name.startswith("switch-workspace-"):
             number = int(action_name[-1]) - 1
-            self._workspace_side_bar.activate_workspace_number(number)
+            self._app_side_bar.activate_workspace_number(number)
 
         elif action_name == "toggle-chat-list":
             self._toggle_chat_list()
@@ -681,16 +673,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         chat_list_stack = self._chat_page.get_chat_list_stack()
         chat_list = chat_list_stack.get_current_chat_list()
         if chat_list is not None:
-            if chat_list.is_visible():
-                self._ui.toggle_chat_list_button.set_tooltip_text(_("Show chat list"))
-                self._ui.toggle_chat_list_icon.set_from_icon_name(
-                    "lucide-chevron-right-symbolic"
-                )
-            else:
-                self._ui.toggle_chat_list_button.set_tooltip_text(_("Hide chat list"))
-                self._ui.toggle_chat_list_icon.set_from_icon_name(
-                    "lucide-chevron-left-symbolic"
-                )
+            self._app_side_bar.set_chat_list_toggle_state(chat_list.is_visible())
         self._chat_page.toggle_chat_list()
 
     def _on_copy_message(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
@@ -966,13 +949,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             chat_list_stack.set_chat_unread_count(chat.account, chat.jid, chat.count)
 
     def show_account_page(self, account: str) -> None:
-        self._activity_side_bar.unselect()
-        self._workspace_side_bar.unselect_all()
-        self._account_side_bar.select()
+        self._app_side_bar.show_account_page()
         self._main_stack.show_account(account)
 
     def get_active_workspace(self) -> str | None:
-        return self._workspace_side_bar.get_active_workspace()
+        return self._app_side_bar.get_active_workspace()
 
     def is_chat_active(self, account: str, jid: JID) -> bool:
         if not self.is_active():
@@ -999,10 +980,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                     else:
                         row.remove_css_class("dnd-target-chatlist")
 
-        if highlight:
-            self._workspace_side_bar.add_css_class("dnd-target")
-        else:
-            self._workspace_side_bar.remove_css_class("dnd-target")
+        self._app_side_bar.highlight_dnd_targets(highlight)
 
     def _add_workspace(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
 
@@ -1017,12 +995,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         if workspace_id is None:
             workspace_id = app.settings.add_workspace(_("My Workspace"))
 
-        self._workspace_side_bar.add_workspace(workspace_id)
+        self._app_side_bar.add_workspace(workspace_id)
         self._chat_page.add_chat_list(workspace_id)
 
         if self._startup_finished and switch:
             self.activate_workspace(workspace_id)
-            self._workspace_side_bar.store_workspace_order()
+            self._app_side_bar.store_workspace_order()
 
         return workspace_id
 
@@ -1051,9 +1029,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         open_chats = chat_list.get_open_chats()
 
         def _continue_removing_workspace():
-            new_workspace_id = self._workspace_side_bar.get_other_workspace(
-                workspace_id
-            )
+            new_workspace_id = self._app_side_bar.get_other_workspace(workspace_id)
             if new_workspace_id is None:
                 log.warning("No other workspaces found")
                 return
@@ -1070,7 +1046,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             if was_active:
                 self.activate_workspace(new_workspace_id)
 
-            self._workspace_side_bar.remove_workspace(workspace_id)
+            self._app_side_bar.remove_workspace(workspace_id)
             self._chat_page.remove_chat_list(workspace_id)
             app.settings.remove_workspace(workspace_id)
 
@@ -1099,10 +1075,8 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.activate_workspace(workspace_id)
 
     def activate_workspace(self, workspace_id: str) -> None:
-        self._activity_side_bar.unselect()
-        self._account_side_bar.unselect()
+        self._app_side_bar.activate_workspace(workspace_id)
         self._main_stack.show_chats(workspace_id)
-        self._workspace_side_bar.activate_workspace(workspace_id)
 
         # Show chatlist if it is hidden
         chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -1113,7 +1087,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
     def update_workspace(self, workspace_id: str) -> None:
         self._chat_page.update_workspace(workspace_id)
-        self._workspace_side_bar.update_avatar(workspace_id)
+        self._app_side_bar.update_workspace(workspace_id)
 
     def get_chat_list(self, workspace_id: str) -> ChatList:
         chat_list_stack = self._chat_page.get_chat_list_stack()
@@ -1138,7 +1112,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         workspace_id = self.get_active_workspace()
         if workspace_id is not None:
             return workspace_id
-        return self._workspace_side_bar.get_first_workspace()
+        return self._app_side_bar.get_first_workspace()
 
     def _add_group_chat(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
 
@@ -1185,8 +1159,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             chat_list.clear_chat_list_row(account, jid)
 
     def select_chat(self, account: str, jid: JID) -> None:
-        self._activity_side_bar.unselect()
-        self._account_side_bar.unselect()
+        self._app_side_bar.select_chat()
         self._main_stack.show_chat_page()
         self._chat_page.select_chat(account, jid)
 
@@ -1205,9 +1178,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             chat_list.select_chat_number(number)
 
     def show_activity_page(self, context_id: str | None = None) -> None:
-        self._account_side_bar.unselect()
-        self._workspace_side_bar.unselect_all()
-        self._activity_side_bar.select()
+        self._app_side_bar.show_activity_page()
         self._main_stack.show_activity_page(context_id)
 
     def get_control(self) -> ChatControl:
@@ -1426,7 +1397,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             self.add_workspace(workspace_id)
             self._chat_page.load_workspace_chats(workspace_id)
 
-        workspace_id = self._workspace_side_bar.get_first_workspace()
+        workspace_id = self._app_side_bar.get_first_workspace()
         self.activate_workspace(workspace_id)
 
         self._set_startup_finished()

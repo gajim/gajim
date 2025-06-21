@@ -24,6 +24,7 @@ from nbxmpp.structs import MucSubject
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common import ged
 from gajim.common import types
 from gajim.common.const import Direction
 from gajim.common.helpers import to_user_string
@@ -119,6 +120,11 @@ class ConversationView(Gtk.ScrolledWindow):
 
         self.set_child(self._list_box)
 
+        app.ged.register_event_handler(
+            "register-actions", ged.GUI1, self._on_register_actions
+        )
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("scroll-view-up").connect(
             "activate", self._on_scroll_view
         )

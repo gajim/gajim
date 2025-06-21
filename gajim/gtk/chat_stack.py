@@ -18,6 +18,7 @@ from nbxmpp.task import Task
 
 from gajim.common import app
 from gajim.common import events
+from gajim.common import ged
 from gajim.common.commands import ChatCommands
 from gajim.common.const import CallType
 from gajim.common.ged import EventHelper
@@ -120,14 +121,13 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
 
         self.add_named(overlay, "controls")
 
-        self._connect_actions()
-
         self.register_events(
             [
                 ("message-received", 85, self._on_message_received),
                 ("muc-disco-update", 85, self._on_muc_disco_update),
                 ("account-connected", 85, self._on_account_state),
                 ("account-disconnected", 85, self._on_account_state),
+                ("register-actions", ged.GUI1, self._on_register_actions),
             ]
         )
 
@@ -136,6 +136,33 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._disconnect_all()
         self.unregister_events()
         app.check_finalize(self)
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
+        actions = [
+            "send-file",
+            "send-file-httpupload",
+            # 'send-file-jingle',
+            "start-video-call",
+            "start-voice-call",
+            "send-message",
+            "show-contact-info",
+            "muc-change-nickname",
+            "muc-invite",
+            "muc-contact-info",
+            "muc-execute-command",
+            "muc-ban",
+            "muc-kick",
+            "muc-change-role",
+            "muc-change-affiliation",
+            "muc-request-voice",
+            "quote-next",
+            "quote-prev",
+        ]
+
+        for action in actions:
+            action = app.window.lookup_action(action)
+            assert action is not None
+            action.connect("activate", self._on_action)
 
     def _get_current_contact(self) -> ChatContactT:
         assert self._current_contact is not None
@@ -494,33 +521,6 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
                 resource=resource,
             )
         )
-
-    def _connect_actions(self) -> None:
-        actions = [
-            "send-file",
-            "send-file-httpupload",
-            # 'send-file-jingle',
-            "start-video-call",
-            "start-voice-call",
-            "send-message",
-            "show-contact-info",
-            "muc-change-nickname",
-            "muc-invite",
-            "muc-contact-info",
-            "muc-execute-command",
-            "muc-ban",
-            "muc-kick",
-            "muc-change-role",
-            "muc-change-affiliation",
-            "muc-request-voice",
-            "quote-next",
-            "quote-prev",
-        ]
-
-        for action in actions:
-            action = app.window.lookup_action(action)
-            assert action is not None
-            action.connect("activate", self._on_action)
 
     def _update_base_actions(self, contact: ChatContactT) -> None:
         client = app.get_client(contact.account)

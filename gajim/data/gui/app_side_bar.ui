@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="AppSideBar" parent="GtkBox">
+    <property name="vexpand">true</property>
+    <property name="orientation">1</property>
+    <property name="spacing">6</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">true</property>
+        <property name="can-focus">false</property>
+        <property name="orientation">1</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="ActivitySideBar" id="_activity_side_bar" />
+        </child>
+        <child>
+          <object class="GtkSeparator"></object>
+        </child>
+        <style>
+          <class name="activity-box"/>
+        </style>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="focusable">true</property>
+        <property name="vexpand">true</property>
+        <property name="hscrollbar-policy">2</property>
+        <property name="propagate-natural-height">true</property>
+        <style>
+          <class name="no-border"/>
+          <class name="workspace-scrolled"/>
+        </style>      
+        <property name="child">
+          <object class="WorkspaceListBox" id="_workspace_listbox">
+            <property name="vexpand">true</property>
+            <property name="valign">start</property>
+          </object>
+        </property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="valign">2</property>
+        <property name="orientation">1</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkButton" id="_toggle_chat_list_button">
+            <property name="focusable">true</property>
+            <property name="receives-default">true</property>
+            <property name="tooltip-text" translatable="yes">Hide chat list</property>
+            <property name="halign">3</property>
+            <property name="action-name">win.toggle-chat-list</property>
+            <child>
+              <object class="GtkImage" id="_toggle_chat_list_icon">
+                <property name="icon-name">lucide-chevron-left-symbolic</property>
+              </object>
+            </child>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton">
+            <property name="focusable">true</property>
+            <property name="tooltip-text" translatable="yes">Preferences</property>
+            <property name="halign">3</property>
+            <property name="action-name">app.preferences</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">lucide-settings-symbolic</property>
+                <property name="pixel-size">28</property>
+              </object>
+            </child>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="valign">2</property>
+            <property name="orientation">1</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkSeparator" />
+            </child>
+            <child>
+              <object class="AccountSideBar" id="_account_side_bar" />
+            </child>
+            <style>
+              <class name="account-box"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+    <style>
+      <class name="chatlist-left-grid"/>
+    </style>
+  </template>
+</interface>

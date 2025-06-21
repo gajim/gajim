@@ -15,6 +15,8 @@ from gi.repository import GLib
 from gi.repository import Gtk
 
 from gajim.common import app
+from gajim.common import events
+from gajim.common import ged
 from gajim.common.i18n import _
 from gajim.common.util.text import format_duration
 
@@ -55,12 +57,6 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         app.settings.connect_signal(
             "audio_input_device", self._on_audio_input_device_changed
         )
-
-        # action = app.window.get_action('send-file-jingle')
-        # action.connect('notify::enabled', self._on_send_file_action_changed)
-
-        action = app.window.get_action("send-file-httpupload")
-        self._connect(action, "notify::enabled", self._on_send_file_action_changed)
 
         gesture_direct_record_pressed = Gtk.GestureLongPress(button=Gdk.BUTTON_PRIMARY)
         gesture_direct_record_pressed.set_propagation_phase(
@@ -110,6 +106,9 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._update_button_state()
         self._update_icons()
         self._update_visualization(self._voice_message_recorder.recording_samples)
+        app.ged.register_event_handler(
+            "register-actions", ged.GUI1, self._on_register_actions
+        )
 
     def do_unroot(self) -> None:
         self._voice_message_recorder.cleanup()
@@ -117,6 +116,13 @@ class VoiceMessageRecorderButton(Gtk.MenuButton, SignalManager):
         self._disconnect_all()
         app.settings.disconnect_signals(self)
         Gtk.MenuButton.do_unroot(self)
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
+        # action = app.window.get_action('send-file-jingle')
+        # action.connect('notify::enabled', self._on_send_file_action_changed)
+
+        action = app.window.get_action("send-file-httpupload")
+        self._connect(action, "notify::enabled", self._on_send_file_action_changed)
 
     @property
     def audio_rec_file_path(self) -> str:

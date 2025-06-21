@@ -14,12 +14,12 @@ from gajim.gtk.const import DEFAULT_WORKSPACE_COLOR
 from gajim.gtk.util.styling import make_rgba
 from gajim.gtk.util.styling import rgba_to_float
 from gajim.gtk.widgets import GajimAppWindow
-from gajim.gtk.workspace_side_bar import WorkspaceSideBar
+from gajim.gtk.workspace_listbox import WorkspaceListBox
 
 from . import util
 
 
-class TestWorkspaceSideBar(GajimAppWindow):
+class TestWorkspaceListBox(GajimAppWindow):
     def __init__(self):
         GajimAppWindow.__init__(
             self,
@@ -39,7 +39,8 @@ class TestWorkspaceSideBar(GajimAppWindow):
         self.set_child(self._box)
 
         chat_page = MagicMock()
-        sidebar = WorkspaceSideBar(chat_page)
+        sidebar = WorkspaceListBox()
+        sidebar.set_chat_page(chat_page)
         self._box.append(sidebar)
 
         app.app = MagicMock()
@@ -66,7 +67,7 @@ for i in range(10):
     app.settings.add_workspace(str(i))
 
 
-window = TestWorkspaceSideBar()
+window = TestWorkspaceListBox()
 window.show()
 
 util.run_app()

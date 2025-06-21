@@ -87,14 +87,19 @@ class ChatControl(EventHelper):
         # Used with encryption plugins
         self.sendmessage = False
 
+        self.widget = self._ui.control_box
+
+        app.ged.register_event_handler(
+            "register-actions", ged.GUI1, self._on_register_actions
+        )
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
         app.window.get_action("activate-message-selection").connect(
             "activate", self._on_activate_message_selection
         )
         app.window.get_action("jump-to-message").connect(
             "activate", self._on_jump_to_message
         )
-
-        self.widget = self._ui.control_box
 
     @property
     def contact(self) -> types.ChatContactT:

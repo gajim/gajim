@@ -33,15 +33,17 @@ if TYPE_CHECKING:
     from gajim.gtk.chat_list_stack import ChatListStack
     from gajim.gtk.chat_page import ChatPage
 
-log = logging.getLogger("gajim.gtk.workspace_sidebar")
+log = logging.getLogger("gajim.gtk.workspace_list_box")
 
 
-class WorkspaceSideBar(Gtk.ListBox, SignalManager):
-    def __init__(self, chat_page: ChatPage) -> None:
-        Gtk.ListBox.__init__(self, vexpand=True, valign=Gtk.Align.START)
+class WorkspaceListBox(Gtk.ListBox, SignalManager):
+    __gtype_name__ = "WorkspaceListBox"
+
+    def __init__(self) -> None:
+        Gtk.ListBox.__init__(self)
         SignalManager.__init__(self)
 
-        self.add_css_class("workspace-sidebar")
+        self.add_css_class("workspace-listbox")
 
         formats_workspace = Gdk.ContentFormats.new_for_gtype(Workspace)
         formats_chat_list_row = Gdk.ContentFormats.new_for_gtype(ChatListRow)
@@ -57,17 +59,19 @@ class WorkspaceSideBar(Gtk.ListBox, SignalManager):
 
         self.set_sort_func(self._sort_func)
 
-        chat_list_stack = chat_page.get_chat_list_stack()
-        self._connect(
-            chat_list_stack, "unread-count-changed", self._on_unread_count_changed
-        )
-        self._connect(chat_list_stack, "chat-selected", self._on_chat_selected)
         self._workspaces: dict[str, Workspace] = {}
 
     def do_unroot(self) -> None:
         self._disconnect_all()
         Gtk.ListBox.do_unroot(self)
         app.check_finalize(self)
+
+    def set_chat_page(self, chat_page: ChatPage) -> None:
+        chat_list_stack = chat_page.get_chat_list_stack()
+        self._connect(
+            chat_list_stack, "unread-count-changed", self._on_unread_count_changed
+        )
+        self._connect(chat_list_stack, "chat-selected", self._on_chat_selected)
 
     def get_row_count(self) -> int:
         return get_listbox_row_count(self)
@@ -215,7 +219,7 @@ class CommonWorkspace(Gtk.ListBoxRow, SignalManager):
 class Workspace(CommonWorkspace):
     def __init__(self, workspace_id: str, index: int) -> None:
         CommonWorkspace.__init__(self, workspace_id)
-        self.add_css_class("workspace-sidebar-item")
+        self.add_css_class("workspace-listbox-row")
 
         self.index = index
 

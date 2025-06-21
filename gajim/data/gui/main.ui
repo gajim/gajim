@@ -33,136 +33,50 @@
       </item>
     </section>
   </menu>
-  <object class="AdwToolbarView" id="main_view">
-    <child type="top">
-      <object class="AdwHeaderBar">
-        <child type="end">
-          <object class="GtkMenuButton">
-            <property name="tooltip-text">Help</property>
-            <property name="icon-name">help-faq-symbolic</property>
-            <property name="popover">
-              <object class="GtkPopoverMenu">
-                <property name="menu-model">help-menu</property>
+  <template class="MainWindow" parent="AdwApplicationWindow">
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="tooltip-text">Help</property>
+                <property name="icon-name">help-faq-symbolic</property>
+                <property name="popover">
+                  <object class="GtkPopoverMenu">
+                    <property name="menu-model">help-menu</property>
+                  </object>
+                </property>
               </object>
-            </property>
+            </child>
           </object>
         </child>
-      </object>
-    </child>
-    <property name="content">
-      <object class="GtkGrid" id="main_grid">
-        <property name="hexpand">true</property>
-        <property name="vexpand">true</property>
-        <child>
-          <object class="GtkGrid" id="left_grid">
+        <property name="content">
+          <object class="GtkGrid">
+            <property name="hexpand">true</property>
             <property name="vexpand">true</property>
-            <property name="orientation">1</property>
-            <property name="row-spacing">6</property>
             <child>
-              <object class="GtkBox" id="activity_box">
-                <property name="visible">true</property>
-                <property name="can-focus">false</property>
-                <property name="orientation">1</property>
-                <property name="spacing">5</property>
-                <child>
-                  <object class="GtkSeparator"></object>
-                </child>
-                <style>
-                  <class name="activity-box"/>
-                </style>
+              <object class="AppSideBar" id="_app_side_bar">
                 <layout>
                   <property name="column">0</property>
-                  <property name="row">1</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="workspace_scrolled">
-                <property name="focusable">true</property>
-                <property name="vexpand">true</property>
-                <property name="hscrollbar-policy">2</property>
-                <property name="propagate-natural-height">true</property>
-                <style>
-                  <class name="no-border"/>
-                  <class name="workspace-scrolled"/>
-                </style>
+              <object class="MainStack" id="_main_stack">
                 <layout>
-                  <property name="column">0</property>
-                  <property name="row">2</property>
-                </layout>
-              </object>
-            </child>
-            <child>
-              <object class="GtkBox">
-                <property name="valign">2</property>
-                <property name="orientation">1</property>
-                <property name="spacing">12</property>
-                <child>
-                  <object class="GtkButton" id="toggle_chat_list_button">
-                    <property name="focusable">true</property>
-                    <property name="receives-default">true</property>
-                    <property name="tooltip-text" translatable="yes">Hide chat list</property>
-                    <property name="halign">3</property>
-                    <property name="action-name">win.toggle-chat-list</property>
-                    <child>
-                      <object class="GtkImage" id="toggle_chat_list_icon">
-                        <property name="icon-name">lucide-chevron-left-symbolic</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="focusable">true</property>
-                    <property name="tooltip-text" translatable="yes">Preferences</property>
-                    <property name="halign">3</property>
-                    <property name="action-name">app.preferences</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">lucide-settings-symbolic</property>
-                        <property name="pixel-size">28</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="account_box">
-                    <property name="valign">2</property>
-                    <property name="orientation">1</property>
-                    <property name="spacing">6</property>
-                    <child>
-                      <object class="GtkSeparator"></object>
-                    </child>
-                    <style>
-                      <class name="account-box"/>
-                    </style>
-                  </object>
-                </child>
-                <layout>
-                  <property name="column">0</property>
-                  <property name="row">3</property>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
                 </layout>
               </object>
             </child>
             <style>
-              <class name="chatlist-left-grid"/>
+              <class name="mainwindow-grid"/>
             </style>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">0</property>
-            </layout>
           </object>
-        </child>
-        <style>
-          <class name="mainwindow-grid"/>
-        </style>
+        </property>
       </object>
     </property>
-  </object>
+  </template>
 </interface>

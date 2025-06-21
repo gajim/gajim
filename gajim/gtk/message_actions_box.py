@@ -21,6 +21,7 @@ from nbxmpp.modules.security_labels import SecurityLabel
 
 from gajim.common import app
 from gajim.common import configpaths
+from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
 from gajim.common.commands import CommandFailed
@@ -140,13 +141,16 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
             self._ui.request_voice_button, "clicked", self._on_request_voice_clicked
         )
 
-        self._connect_actions()
-
         app.plugin_manager.gui_extension_point(
             "message_actions_box", self, self._ui.action_box
         )
 
-        self.register_events([("message-sent", ged.GUI2, self._on_message_sent)])
+        self.register_events(
+            [
+                ("message-sent", ged.GUI2, self._on_message_sent),
+                ("register-actions", ged.GUI2, self._on_register_actions),
+            ]
+        )
 
     def do_unroot(self) -> None:
         self._disconnect_all()
@@ -159,6 +163,34 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
         Gtk.Grid.do_unroot(self)
         app.check_finalize(self)
+
+    def _on_register_actions(self, _event: events.RegisterActions) -> None:
+        actions = [
+            "input-bold",
+            "input-italic",
+            "input-strike",
+            "input-clear",
+            "show-emoji-chooser",
+            "paste-as-quote",
+            "paste-as-code-block",
+            "quote",
+            "mention",
+            "reply",
+            "correct-message",
+        ]
+
+        for action in actions:
+            action = app.window.get_action(action)
+            self._connect(action, "activate", self._on_action)
+
+        action = app.window.get_action("set-encryption")
+        self._connect(action, "change-state", self._change_encryption)
+
+        # action = app.window.get_action('send-file-jingle')
+        # self._connect(action, 'notify::enabled', self._on_send_file_enabled_changed)
+
+        action = app.window.get_action("send-file-httpupload")
+        self._connect(action, "notify::enabled", self._on_send_file_enabled_changed)
 
     def get_current_contact(self) -> ChatContactT:
         assert self._contact is not None
@@ -225,34 +257,6 @@ class MessageActionsBox(Gtk.Grid, EventHelper, SignalManager):
 
     def _on_emoji_picked(self, _emoji_chooser: EmojiChooser, text: str) -> None:
         self.msg_textview.insert_text(text)
-
-    def _connect_actions(self) -> None:
-        actions = [
-            "input-bold",
-            "input-italic",
-            "input-strike",
-            "input-clear",
-            "show-emoji-chooser",
-            "paste-as-quote",
-            "paste-as-code-block",
-            "quote",
-            "mention",
-            "reply",
-            "correct-message",
-        ]
-
-        for action in actions:
-            action = app.window.get_action(action)
-            self._connect(action, "activate", self._on_action)
-
-        action = app.window.get_action("set-encryption")
-        self._connect(action, "change-state", self._change_encryption)
-
-        # action = app.window.get_action('send-file-jingle')
-        # self._connect(action, 'notify::enabled', self._on_send_file_enabled_changed)
-
-        action = app.window.get_action("send-file-httpupload")
-        self._connect(action, "notify::enabled", self._on_send_file_enabled_changed)
 
     def _on_action(
         self, action: Gio.SimpleAction, param: GLib.Variant | None

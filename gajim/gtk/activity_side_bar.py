@@ -20,21 +20,16 @@ from gajim.gtk.util.classes import SignalManager
 
 
 class ActivitySideBar(Gtk.Box, SignalManager):
-    def __init__(self, chat_page: ChatPage) -> None:
-        Gtk.Box.__init__(
-            self,
-            tooltip_text=_("Activity"),
-            height_request=AvatarSize.ACCOUNT_SIDE_BAR + 12,
-        )
+    __gtype_name__ = "ActivitySideBar"
+
+    def __init__(self) -> None:
+        Gtk.Box.__init__(self)
         SignalManager.__init__(self)
 
+        self.set_size_request(-1, AvatarSize.ACCOUNT_SIDE_BAR + 12)
+        self.set_tooltip_text(_("Activity"))
+
         self.add_css_class("activity-sidebar")
-
-        activity_list = chat_page.get_activity_list()
-        activity_list.connect("notify::unread-count", self._on_unread_count_changed)
-
-        chat_list_stack = chat_page.get_chat_list_stack()
-        self._connect(chat_list_stack, "chat-selected", self._on_chat_selected)
 
         gesture_primary_click = Gtk.GestureClick(button=Gdk.BUTTON_PRIMARY)
         self._connect(gesture_primary_click, "pressed", self._on_button_press)
@@ -64,6 +59,13 @@ class ActivitySideBar(Gtk.Box, SignalManager):
         overlay.add_overlay(self._unread_label)
 
         self.append(overlay)
+
+    def set_chat_page(self, chat_page: ChatPage) -> None:
+        activity_list = chat_page.get_activity_list()
+        activity_list.connect("notify::unread-count", self._on_unread_count_changed)
+
+        chat_list_stack = chat_page.get_chat_list_stack()
+        self._connect(chat_list_stack, "chat-selected", self._on_chat_selected)
 
     def select(self) -> None:
         self._selection_bar.add_css_class("selection-bar-selected")

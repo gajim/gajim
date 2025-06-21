@@ -86,6 +86,11 @@ class ShowChanged(ApplicationEvent):
 
 
 @dataclass
+class RegisterActions(ApplicationEvent):
+    name: str = field(init=False, default='register-actions')
+
+
+@dataclass
 class AccountConnected(ApplicationEvent):
     name: str = field(init=False, default='account-connected')
     account: str

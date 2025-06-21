@@ -72,7 +72,8 @@ class TestActivityFeed(GajimAppWindow):
 
         self._activity_page = ActivityPage()
 
-        self._activity_sidebar = ActivitySideBar(chat_page)
+        self._activity_sidebar = ActivitySideBar()
+        self._activity_sidebar.set_chat_page(chat_page)
         self._activity_sidebar.set_valign(Gtk.Align.START)
 
         update_button = Gtk.Button.new_with_label("Updates")
