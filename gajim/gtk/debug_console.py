@@ -97,10 +97,20 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         assert header_bar is not None
         header_bar.set_title_widget(self._ui.header_box)
         self._set_title()
-
         self.set_child(self._ui.stack)
 
         self._ui.paned.set_position(self._ui.paned.get_property("max-position"))
+
+        action = Gio.SimpleAction.new("clear-window")
+        self._connect(action, "activate", self._on_clear_window)
+        self.window.add_action(action)
+
+        shortcut_controller = Gtk.ShortcutController()
+        callback_action = Gtk.CallbackAction.new(self._on_clear_window)  # type: ignore
+        shortcut_trigger = Gtk.ShortcutTrigger.parse_string("<Control>l")
+        shortcut = Gtk.Shortcut.new(shortcut_trigger, callback_action)
+        shortcut_controller.add_shortcut(shortcut)
+        self.window.add_controller(shortcut_controller)
 
         accounts = self._get_accounts()
         self._account_dropdown = GajimDropDown(fixed_width=15, data=accounts)
@@ -122,7 +132,6 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
         self._connect(
             self._ui.filter_options_button, "clicked", self._on_filter_options
         )
-        self._connect(self._ui.clear_button, "clicked", self._on_clear)
         self._connect(self._ui.paste, "clicked", self._on_paste_previous)
         self._connect(
             self._ui.stanza_presets_listbox, "row-activated", self._on_row_activated
@@ -551,7 +560,7 @@ class DebugConsoleWindow(GajimAppWindow, EventHelper):
     def _on_filter_destroyed(self, _widget: Gtk.Widget) -> None:
         self._filter_dialog = None
 
-    def _on_clear(self, _button: Gtk.Button) -> None:
+    def _on_clear_window(self, *args: Any) -> None:
         self._ui.protocol_view.get_buffer().set_text("")
 
     def _apply_filters(self) -> None:

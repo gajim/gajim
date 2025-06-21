@@ -187,6 +187,7 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="clear_button">
+                    <property name="action-name">win.clear-window</property>
                     <property name="focusable">1</property>
                     <property name="receives-default">1</property>
                     <property name="tooltip-text" translatable="yes">Clear</property>
