@@ -41,7 +41,7 @@
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="tooltip-text">Help</property>
-                <property name="icon-name">help-faq-symbolic</property>
+                <property name="icon-name">lucide-circle-question-mark-symbolic</property>
                 <property name="popover">
                   <object class="GtkPopoverMenu">
                     <property name="menu-model">help-menu</property>
