@@ -2,21 +2,19 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="AccountPopoverButton" parent="GtkButton">
+    <property name="name">AccountPopoverButton</property>
     <property name="child">
       <object class="GtkBox">
         <property name="spacing">6</property>
         <child>
           <object class="GtkBox" id="_color_bar">
-            <property name="width-request">6</property>
             <style>
               <class name="account-identifier-bar"/>
             </style>
           </object>
         </child>
         <child>
-          <object class="GtkImage" id="_avatar">
-            <property name="pixel-size">40</property>
-          </object>
+          <object class="GtkImage" id="_avatar" />
         </child>
         <child>
           <object class="GtkLabel" id="_label">

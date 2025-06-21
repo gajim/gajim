@@ -154,6 +154,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         chat_list_stack = self._chat_page.get_chat_list_stack()
         app.app.systray.connect_unread_widget(chat_list_stack, "unread-count-changed")
+        chat_list_stack.connect("chat-selected", self._on_chat_selected)
 
         for client in app.get_clients():
             client.connect_signal("state-changed", self._on_client_state_changed)
@@ -169,6 +170,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         action = self.lookup_action(name)
         assert isinstance(action, Gio.SimpleAction)
         return action
+
+    def set_action_state(self, name: str, value: bool) -> None:
+        action = self.lookup_action(name)
+        assert action is not None
+        action.change_state(GLib.Variant("b", value))
 
     def get_chat_stack(self) -> ChatStack:
         return self._chat_page.get_chat_stack()
@@ -383,6 +389,12 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
 
         self.add_action(action)
 
+        action = Gio.SimpleAction.new_stateful(
+            "chat-list-visible", None, GLib.Variant("b", True)
+        )
+
+        self.add_action(action)
+
     def _connect_actions(self) -> None:
         actions = [
             ("change-nickname", self._on_action),
@@ -415,7 +427,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             ("increase-app-font-size", self._on_app_font_size_action),
             ("decrease-app-font-size", self._on_app_font_size_action),
             ("reset-app-font-size", self._on_app_font_size_action),
-            ("toggle-chat-list", self._on_action),
             ("preview-download", self._on_preview_action),
             ("preview-open", self._on_preview_action),
             ("preview-save-as", self._on_preview_action),
@@ -514,9 +525,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         elif action_name.startswith("switch-workspace-"):
             number = int(action_name[-1]) - 1
             self._app_side_bar.activate_workspace_number(number)
-
-        elif action_name == "toggle-chat-list":
-            self._toggle_chat_list()
 
         return None
 
@@ -668,13 +676,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 open_file(preview.orig_path)
             else:
                 open_uri(preview.uri)
-
-    def _toggle_chat_list(self) -> None:
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        chat_list = chat_list_stack.get_current_chat_list()
-        if chat_list is not None:
-            self._app_side_bar.set_chat_list_toggle_state(chat_list.is_visible())
-        self._chat_page.toggle_chat_list()
 
     def _on_copy_message(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:
 
@@ -914,6 +915,9 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
                 control.contact, msg_action_box.msg_textview.has_text
             )
 
+    def _on_chat_selected(self, *args: Any) -> None:
+        self._app_side_bar.select_chat()
+
     def _on_close_request(self, _widget: Gtk.ApplicationWindow) -> int:
         if app.settings.get("confirm_on_window_delete"):
             open_window("QuitDialog")
@@ -1078,12 +1082,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._app_side_bar.activate_workspace(workspace_id)
         self._main_stack.show_chats(workspace_id)
 
-        # Show chatlist if it is hidden
-        chat_list_stack = self._chat_page.get_chat_list_stack()
-        chat_list = chat_list_stack.get_current_chat_list()
-        if chat_list is not None:
-            if not chat_list.is_visible():
-                self._toggle_chat_list()
+        self.set_action_state("chat-list-visible", True)
 
     def update_workspace(self, workspace_id: str) -> None:
         self._chat_page.update_workspace(workspace_id)

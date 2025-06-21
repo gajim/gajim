@@ -4,51 +4,202 @@
 
 from __future__ import annotations
 
+from typing import Any
+
+from gi.repository import Gdk
+from gi.repository import GLib
+from gi.repository import GObject
 from gi.repository import Gtk
 
+from gajim.common import app
+from gajim.common import ged
 from gajim.common.configpaths import get_ui_path
+from gajim.common.const import AvatarSize
+from gajim.common.events import AccountDisabled
+from gajim.common.events import AccountEnabled
+from gajim.common.events import RegisterActions
+from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
 
-from gajim.gtk.account_side_bar import AccountSideBar
-from gajim.gtk.activity_side_bar import ActivitySideBar
 from gajim.gtk.chat_page import ChatPage
+from gajim.gtk.sidebar_listbox import SideBarListBox
+from gajim.gtk.sidebar_listbox import SideBarListBoxRow
+from gajim.gtk.status_selector import StatusSelectorPopover
 from gajim.gtk.workspace_listbox import WorkspaceListBox
 
 
 @Gtk.Template(filename=get_ui_path("app_side_bar.ui"))
-class AppSideBar(Gtk.Box):
+class AppSideBar(Gtk.Box, EventHelper):
     __gtype_name__ = "AppSideBar"
 
-    _activity_side_bar: ActivitySideBar = Gtk.Template.Child()
+    _top_listbox: SideBarListBox = Gtk.Template.Child()
+    _activity_row: SideBarListBoxRow = Gtk.Template.Child()
     _workspace_listbox: WorkspaceListBox = Gtk.Template.Child()
-    _toggle_chat_list_button: Gtk.Button = Gtk.Template.Child()
-    _toggle_chat_list_icon: Gtk.Image = Gtk.Template.Child()
-    _account_side_bar: AccountSideBar = Gtk.Template.Child()
+    _bottom_listbox: SideBarListBox = Gtk.Template.Child()
+    _toggle_row: SideBarListBoxRow = Gtk.Template.Child()
+    _account_row: SideBarListBoxRow = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Box.__init__(self)
+        EventHelper.__init__(self)
+
+        self._account_popover = AccountPopover()
+        self._account_popover.set_parent(self._account_row)
+        self._account_popover.connect("clicked", self._on_account_clicked)
+
+        self._status_popover = StatusSelectorPopover()
+        self._status_popover.set_parent(self._account_row)
+        self._status_popover.connect("clicked", self._on_status_clicked)
+
+        accounts = app.settings.get_active_accounts()
+        for account in reversed(accounts):
+            self._account_popover.add_account(account)
+
+            client = app.get_client(account)
+            contact = client.get_own_contact()
+
+            client.connect_signal("state-changed", self._update_account_row)
+            contact.connect("avatar-update", self._update_account_row)
+
+        self._update_account_row()
+
+        self.register_events(
+            [
+                ("account-enabled", ged.GUI1, self._on_account_enabled),
+                ("account-disabled", ged.GUI1, self._on_account_disabled),
+                ("our-show", ged.GUI1, self._update_account_row),
+                ("register-actions", ged.GUI1, self._on_register_actions),
+            ]
+        )
+
+    def _on_register_actions(self, _event: RegisterActions) -> None:
+        action = app.window.lookup_action("chat-list-visible")
+        assert action is not None
+        action.bind_property(
+            "state",
+            self._toggle_row,
+            "icon-name",
+            GObject.BindingFlags.SYNC_CREATE,
+            transform_to=self._transform_to_icon_name,
+        )
+        action.bind_property(
+            "state",
+            self._toggle_row,
+            "tooltip-text",
+            GObject.BindingFlags.SYNC_CREATE,
+            transform_to=self._transform_to_tooltip_text,
+        )
+
+    def _on_account_enabled(self, event: AccountEnabled) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_own_contact()
+
+        client.connect_signal("state-changed", self._update_account_row)
+        contact.connect("avatar-update", self._update_account_row)
+
+        self._account_popover.add_account(event.account)
+        self._update_account_row()
+
+    def _on_account_disabled(self, event: AccountDisabled) -> None:
+        client = app.get_client(event.account)
+        contact = client.get_own_contact()
+
+        client.disconnect_all_from_obj(self)
+        contact.disconnect_all_from_obj(self)
+
+        self._account_popover.remove_account(event.account)
+        self._update_account_row()
+
+    def _update_account_row(self, *args: Any) -> None:
+        accounts = app.settings.get_active_accounts()
+        if len(accounts) == 1:
+            account = accounts[0]
+        else:
+            account = None
+
+        texture = app.app.avatar_storage.get_account_button_texture(
+            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+        )
+        self._account_row.set_from_paintable(texture)
+
+    def _on_account_clicked(
+        self,
+        _popover: AccountPopover,
+        account: str,
+    ) -> None:
+        app.window.show_account_page(account)
+        self._bottom_listbox.select_row(self._account_row)
+
+    def _on_status_clicked(self, _button: Gtk.Button, status: str) -> None:
+        accounts = app.get_connected_accounts()
+        account = accounts[0] if len(accounts) == 1 else None
+        app.app.change_status(status=status, account=account)
+
+    @Gtk.Template.Callback()
+    def _on_account_button_press(
+        self,
+        gesture_click: Gtk.GestureClick,
+        _n_press: int,
+        x: float,
+        y: float,
+    ) -> int:
+
+        current_button = gesture_click.get_current_button()
+        if current_button == Gdk.BUTTON_PRIMARY:
+            # Left click
+            self._status_popover.popdown()
+            self._account_popover.popup()
+            return Gdk.EVENT_PROPAGATE
+
+        if current_button == Gdk.BUTTON_SECONDARY:
+            # Right click
+            self._status_popover.popup()
+            self._account_popover.popdown()
+            return Gdk.EVENT_PROPAGATE
+
+        return Gdk.EVENT_PROPAGATE
+
+    @Gtk.Template.Callback()
+    def _on_row_activated(
+        self, listbox: SideBarListBox, row: SideBarListBoxRow
+    ) -> None:
+        if row.item_id == "activity":
+            app.window.show_activity_page()
+
+    @staticmethod
+    def _transform_to_icon_name(
+        binding: GObject.Binding, is_visible: GLib.Variant
+    ) -> str:
+        direction = "left" if is_visible.unpack() else "right"
+        return f"lucide-chevron-{direction}-symbolic"
+
+    @staticmethod
+    def _transform_to_tooltip_text(
+        binding: GObject.Binding, is_visible: GLib.Variant
+    ) -> str:
+        if is_visible.unpack():
+            return _("Hide Chat List")
+        return _("Show Chat List")
 
     def set_chat_page(self, chat_page: ChatPage) -> None:
-        self._activity_side_bar.set_chat_page(chat_page)
+        self._activity_row.set_unread_notify(chat_page.get_activity_list())
         self._workspace_listbox.set_chat_page(chat_page)
 
     def select_chat(self) -> None:
-        self._activity_side_bar.unselect()
-        self._account_side_bar.unselect()
+        self._top_listbox.unselect_all()
+        self._bottom_listbox.unselect_all()
 
     def show_account_page(self) -> None:
-        self._activity_side_bar.unselect()
+        self._top_listbox.unselect_all()
         self._workspace_listbox.unselect_all()
-        self._account_side_bar.select()
 
     def show_activity_page(self) -> None:
-        self._account_side_bar.unselect()
+        self._bottom_listbox.unselect_all()
         self._workspace_listbox.unselect_all()
-        self._activity_side_bar.select()
 
     def activate_workspace(self, workspace_id: str) -> None:
-        self._activity_side_bar.unselect()
-        self._account_side_bar.unselect()
+        self._top_listbox.unselect_all()
+        self._bottom_listbox.unselect_all()
         self._workspace_listbox.activate_workspace(workspace_id)
 
     def get_active_workspace(self) -> str | None:
@@ -81,15 +232,95 @@ class AppSideBar(Gtk.Box):
     def activate_workspace_number(self, number: int) -> None:
         self._workspace_listbox.activate_workspace_number(number)
 
-    def set_chat_list_toggle_state(self, chat_list_visible: bool) -> None:
-        # chat_list_visible is the current state, which we want to change
-        if chat_list_visible:
-            self._toggle_chat_list_button.set_tooltip_text(_("Show chat list"))
-            self._toggle_chat_list_icon.set_from_icon_name(
-                "lucide-chevron-right-symbolic"
-            )
-        else:
-            self._toggle_chat_list_button.set_tooltip_text(_("Hide chat list"))
-            self._toggle_chat_list_icon.set_from_icon_name(
-                "lucide-chevron-left-symbolic"
-            )
+
+@Gtk.Template(filename=get_ui_path("account_popover.ui"))
+class AccountPopover(Gtk.Popover):
+    __gtype_name__ = "AccountPopover"
+
+    __gsignals__ = {
+        "clicked": (
+            GObject.SignalFlags.RUN_LAST,
+            None,
+            (str,),
+        )
+    }
+
+    _box: Gtk.Box = Gtk.Template.Child()
+
+    def __init__(self) -> None:
+        Gtk.Popover.__init__(self)
+        self._buttons: dict[str, AccountPopoverButton] = {}
+
+    def _on_clicked(self, button: AccountPopoverButton) -> None:
+        self.emit("clicked", button.get_account())
+        self.popdown()
+
+    @Gtk.Template.Callback()
+    def on_manage_clicked(self, button: Gtk.Button) -> None:
+        self.popdown()
+
+    def add_account(self, account: str) -> None:
+        if account in self._buttons:
+            raise ValueError("Account cannot be added multiple times")
+
+        button = AccountPopoverButton(account=account)
+        button.connect("clicked", self._on_clicked)
+        self._buttons[account] = button
+        self._box.prepend(button)
+
+    def remove_account(self, account: str) -> None:
+        button = self._buttons.get(account)
+        if button is None:
+            raise ValueError("Account button for %s not found" % account)
+
+        self._box.remove(button)
+        del self._buttons[account]
+
+
+@Gtk.Template(filename=get_ui_path("account_popover_button.ui"))
+class AccountPopoverButton(Gtk.Button):
+    __gtype_name__ = "AccountPopoverButton"
+
+    _color_bar: Gtk.Box = Gtk.Template.Child()
+    _avatar: Gtk.Image = Gtk.Template.Child()
+    _label: Gtk.Label = Gtk.Template.Child()
+
+    def __init__(self, account: str = "") -> None:
+        Gtk.Button.__init__(self)
+
+        self._account = ""
+        self.set_account(account)
+
+    def do_unroot(self) -> None:
+        Gtk.Button.do_unroot(self)
+        app.check_finalize(self)
+
+    def get_account(self) -> str:
+        return self._account
+
+    def set_account(self, account: str) -> None:
+        if not account or self._account == account:
+            return
+
+        if self._account:
+            self._clear_widgets()
+
+        color_class = app.css_config.get_dynamic_class(account)
+        self._color_bar.add_css_class(color_class)
+
+        label = app.settings.get_account_setting(account, "account_label")
+        self._label.set_text(label)
+
+        texture = app.app.avatar_storage.get_account_button_texture(
+            account, AvatarSize.ACCOUNT_SIDE_BAR, self.get_scale_factor()
+        )
+        self._avatar.set_from_paintable(texture)
+
+        self._account = account
+
+    def _clear_widgets(self) -> None:
+        assert self._account is not None
+        color_class = app.css_config.get_dynamic_class(self._account)
+        self._color_bar.remove_css_class(color_class)
+        self._label.set_text("")
+        self._avatar.set_from_paintable(None)

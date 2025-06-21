@@ -17,7 +17,9 @@ from gi.repository import Gtk
 from nbxmpp import JID
 
 from gajim.common import app
+from gajim.common import ged
 from gajim.common.configpaths import get_ui_path
+from gajim.common.events import RegisterActions
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
 from gajim.common.modules.contacts import GroupchatContact
@@ -73,7 +75,20 @@ class ChatPage(Gtk.Paned):
 
         self._add_actions()
 
-        self.toggle_chat_list()
+        app.ged.register_event_handler(
+            "register-actions", ged.GUI1, self._on_register_actions
+        )
+
+    def _on_register_actions(self, _event: RegisterActions) -> None:
+        def _transform_to_bool(binding: GObject.Binding, value: GLib.Variant) -> bool:
+            return value.unpack()
+
+        start_child = self.get_start_child()
+        assert start_child is not None
+        action = app.window.get_action("chat-list-visible")
+        action.bind_property(
+            "state", start_child, "visible", transform_to=_transform_to_bool
+        )
 
     def _add_actions(self):
         actions = [
@@ -351,8 +366,3 @@ class ChatPage(Gtk.Paned):
 
             return True
         return False
-
-    def toggle_chat_list(self) -> None:
-        chat_list = self.get_start_child()
-        assert chat_list is not None
-        chat_list.set_visible(not chat_list.get_visible())

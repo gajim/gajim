@@ -40,7 +40,7 @@
     "win.increase-app-font-size": ["<Primary>plus", "<Primary>KP_Add"],
     "win.decrease-app-font-size": ["<Primary>minus", "<Primary>KP_Subtract"],
     "win.reset-app-font-size": ["<Primary>0", "<Primary>KP_0"],
-    "win.toggle-chat-list": ["<Primary>R"],
+    "win.chat-list-visible": ["<Primary>R"],
     "win.scroll-view-up": ["<Shift>Page_Up"],
     "win.scroll-view-down": ["<Shift>Page_Down"],
     "win.quote-prev": ["<Primary><Shift>Up"],

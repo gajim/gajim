@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="WorkspaceListBox" parent="GtkListBox">
+    <property name="name">WorkspaceListBox</property>
+    <signal name="row-activated" handler="_on_row_activated" />
+    <child>
+      <object class="SideBarListBoxRow">
+        <property name="item-id">add-workspace</property>
+        <property name="index">999</property>
+        <property name="icon-name">feather-plus-symbolic</property>
+        <property name="tooltip-text" translatable="yes">Add Workspace</property>
+        <property name="selectable">false</property>
+      </object>
+    </child>
+  </template>
+</interface>

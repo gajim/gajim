@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="SideBarListBoxRow" parent="GtkListBoxRow">
+    <property name="name">SideBarListBoxRow</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">3</property>
+        <child>
+          <object class="GtkBox">
+            <style>
+              <class name="selection-bar" />
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkOverlay" id="_overlay">
+            <property name="child">
+              <object class="GtkImage" id="_image">
+                <style>
+                  <class name="sidebar-row-image" />
+                </style>
+              </object>
+            </property>
+            <child type="overlay">
+              <object class="GtkLabel" id="_label">
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <property name="visible">false</property>
+                <style>
+                  <class name="unread-counter" />
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+    <style>
+      <class name="sidebar-listbox-row" />
+    </style>
+  </template>
+</interface>

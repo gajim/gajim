@@ -2,24 +2,20 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <template class="AppSideBar" parent="GtkBox">
+    <property name="name">AppSideBar</property>
     <property name="vexpand">true</property>
     <property name="orientation">1</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkBox">
-        <property name="visible">true</property>
-        <property name="can-focus">false</property>
-        <property name="orientation">1</property>
-        <property name="spacing">5</property>
+      <object class="SideBarListBox" id="_top_listbox">
+        <signal name="row-activated" handler="_on_row_activated" />
         <child>
-          <object class="ActivitySideBar" id="_activity_side_bar" />
+          <object class="SideBarListBoxRow" id="_activity_row">
+            <property name="item-id">activity</property>
+            <property name="icon-name">feather-bell-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Activity Feed</property>
+          </object>
         </child>
-        <child>
-          <object class="GtkSeparator"></object>
-        </child>
-        <style>
-          <class name="activity-box"/>
-        </style>
       </object>
     </child>
     <child>
@@ -29,7 +25,6 @@
         <property name="hscrollbar-policy">2</property>
         <property name="propagate-natural-height">true</property>
         <style>
-          <class name="no-border"/>
           <class name="workspace-scrolled"/>
         </style>      
         <property name="child">
@@ -41,64 +36,37 @@
       </object>
     </child>
     <child>
-      <object class="GtkBox">
-        <property name="valign">2</property>
-        <property name="orientation">1</property>
-        <property name="spacing">12</property>
+      <object class="SideBarListBox" id="_bottom_listbox">
+        <signal name="row-activated" handler="_on_row_activated" />
         <child>
-          <object class="GtkButton" id="_toggle_chat_list_button">
-            <property name="focusable">true</property>
-            <property name="receives-default">true</property>
-            <property name="tooltip-text" translatable="yes">Hide chat list</property>
-            <property name="halign">3</property>
-            <property name="action-name">win.toggle-chat-list</property>
-            <child>
-              <object class="GtkImage" id="_toggle_chat_list_icon">
-                <property name="icon-name">lucide-chevron-left-symbolic</property>
-              </object>
-            </child>
-            <style>
-              <class name="flat"/>
-            </style>
+          <object class="SideBarListBoxRow" id="_toggle_row">
+            <property name="item-id">chat-list-toggle</property>
+            <property name="action-name">win.chat-list-visible</property>
+            <property name="selectable">false</property>
           </object>
         </child>
         <child>
-          <object class="GtkButton">
-            <property name="focusable">true</property>
+          <object class="SideBarListBoxRow">
+            <property name="item-id">preferences</property>
+            <property name="icon-name">lucide-settings-symbolic</property>
             <property name="tooltip-text" translatable="yes">Preferences</property>
-            <property name="halign">3</property>
             <property name="action-name">app.preferences</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">lucide-settings-symbolic</property>
-                <property name="pixel-size">28</property>
-              </object>
-            </child>
-            <style>
-              <class name="flat"/>
-            </style>
+            <property name="selectable">false</property>
           </object>
         </child>
         <child>
-          <object class="GtkBox">
-            <property name="valign">2</property>
-            <property name="orientation">1</property>
-            <property name="spacing">6</property>
+          <object class="SideBarListBoxRow" id="_account_row">
+            <property name="item-id">account</property>
+            <property name="tooltip-text" translatable="yes">Accounts</property>
             <child>
-              <object class="GtkSeparator" />
+              <object class='GtkGestureClick'>
+                <property name='button'>0</property>
+                <signal name="pressed" handler="_on_account_button_press" />
+              </object>
             </child>
-            <child>
-              <object class="AccountSideBar" id="_account_side_bar" />
-            </child>
-            <style>
-              <class name="account-box"/>
-            </style>
           </object>
         </child>
       </object>
     </child>
-    <style>
-      <class name="chatlist-left-grid"/>
-    </style>
   </template>
 </interface>

@@ -29,7 +29,7 @@ from gajim.common.modules.contacts import GroupChatSettings
 
 from gajim.gtk.activity_list import ActivityListView
 from gajim.gtk.activity_page import ActivityPage
-from gajim.gtk.activity_side_bar import ActivitySideBar
+from gajim.gtk.app_side_bar import AppSideBar
 from gajim.gtk.avatar import AvatarStorage
 from gajim.gtk.avatar import generate_default_avatar
 from gajim.gtk.chat_page import ChatPage
@@ -72,9 +72,9 @@ class TestActivityFeed(GajimAppWindow):
 
         self._activity_page = ActivityPage()
 
-        self._activity_sidebar = ActivitySideBar()
-        self._activity_sidebar.set_chat_page(chat_page)
-        self._activity_sidebar.set_valign(Gtk.Align.START)
+        self._app_sidebar = AppSideBar()
+        self._app_sidebar.set_chat_page(chat_page)
+        self._app_sidebar.set_valign(Gtk.Align.START)
 
         update_button = Gtk.Button.new_with_label("Updates")
         update_button.connect("clicked", self._on_update_button_clicked)
@@ -110,7 +110,7 @@ class TestActivityFeed(GajimAppWindow):
         return AvatarStorage.get_gajim_circle_icon(size, scale)
 
     def show_activity_page(self) -> None:
-        self._activity_sidebar.select()
+        self._app_sidebar.show_activity_page()
         self._activity_page.show_default_page()
 
     def _on_activity_row_activate(

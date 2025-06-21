@@ -243,119 +243,94 @@ button.flat.link { padding: 0; border: 0; }
 .account-identifier-bar {
 	border-radius: 6px;
 }
+
 .selection-bar {
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+    border-radius: 6px;
 }
-.selection-bar-selected {
+
+/* AppSideBar */
+#AppSideBar {
+    border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    background: var(--window-bg-color);
+    padding-bottom: 10px;
+}
+
+/* AccountPopover */
+#AccountPopoverButton image {
+    -gtk-icon-size: 24px;
+}
+
+#AccountPopoverButton .account-identifier-bar {
+    padding-left: 3px;
+}
+
+/* SideBarListBox */
+
+#SideBarListBox {
+    background: transparent;
+}
+
+.sidebar-listbox-row {
+  min-width: 63px;
+}
+
+.sidebar-listbox-row {
+    padding: 6px 0px 6px 0px;
+}
+
+.sidebar-listbox-row image {
+    -gtk-icon-size: 24px;
+    padding: 6px;
+}
+
+.sidebar-listbox-row .selection-bar {
+    margin-left: 6px;
+    padding-left: 3px;
+}
+
+.sidebar-listbox-row:selected .selection-bar {
     background-color: lighter(var(--accent-bg-color));
 }
-.selection-bar-hover {
+
+.sidebar-listbox-row:hover .selection-bar {
     background-color: var(--accent-bg-color);
 }
 
-/* ActivitySidebar, WorkspaceListBox, AccountSidebar */
-.chatlist-left-grid {
-    border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);
-    background: var(--window-bg-color);
+.sidebar-listbox-row:hover, .sidebar-listbox-row:selected {
+    background-color: transparent;
 }
 
-/* ActivitySidebar */
-.activity-sidebar {
+.sidebar-row-image {
+    border: 2px solid transparent;
+}
+
+.dnd-target .sidebar-row-image {
+    border: 2px dashed var(--accent-bg-color);
+}
+
+/* WorkspaceListBox */
+
+#WorkspaceListBox {
     background: transparent;
-    margin-top: 6px;
-    margin-bottom: 6px;
 }
 
-.activity-sidebar image {
-    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.2);
-    border-radius: 9px;
-    padding: 6px;
-    margin: 3px 6px 0px 7px;
+.workspace-scrolled {
+    background: transparent;
 }
 
-.activity-sidebar .selection-bar {
-    margin-top: 3px;
-    margin-bottom: 0px;
+.workspace-listbox-row {
+    padding: 4px 0px 4px 0px;
 }
 
-.activity-box > separator {
-    background-color: var(--border-color);
+.workspace-listbox-row image {
+    -gtk-icon-size: 36px;
+    padding: 0px 6px 0px 0px;
 }
 
 /* ActivityPage */
 .activity-page {
     padding: 18px;
     margin-top: 12px;
-}
-
-/* WorkspaceListBox */
-.workspace-scrolled {
-    background: transparent;
-}
-.workspace-listbox {
-	background: transparent;
-	margin-right: 6px;
-}
-.workspace-listbox-row {
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-.workspace-listbox-row:selected,
-.workspace-listbox-row:hover,
-.workspace-listbox-row:focus {
-	background: transparent;
-	box-shadow: none;
-	outline: none;
-}
-.workspace-listbox-row .selection-bar {
-    margin-top: 6px;
-    margin-bottom: 6px;
-}
-
-.workspace-listbox-row:selected .selection-bar {
-    background-color: lighter(var(--accent-bg-color));
-}
-.workspace-listbox-row:hover .selection-bar {
-    background-color: var(--accent-bg-color);
-}
-.workspace-listbox-row image {
-    border-radius: 9px;
-    margin: 4px 0 4px 4px;
-}
-.workspace-add:hover,
-.workspace-add:focus {
-    background: transparent;
-    box-shadow: none;
-    outline: none;
-}
-.workspace-add button {
-    margin: 6px 8px 6px 14px;
-}
-.workspace-avatar {
-    border: 2px solid transparent;
-}
-.dnd-target .workspace-avatar {
-    border: 2px dashed var(--accent-bg-color);
-}
-
-/* AccountSidebar */
-.account-sidebar {
-    background: transparent;
-}
-.account-sidebar .selection-bar {
-    margin-top: 6px;
-    margin-bottom: 12px;
-}
-.account-sidebar .account-sidebar-image {
-    padding: 6px 6px 12px 6px;
-}
-
-.account-box {
-    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.15);
-}
-.account-box > separator {
-    background-color: var(--border-color);
 }
 
 /* AccountPage */

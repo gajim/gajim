@@ -17,16 +17,13 @@
                 <property name="action-name">app.accounts</property>
                 <property name="action-target">""</property>
                 <property name="label" translatable="yes">Manage Accounts…</property>
-                <property name="height-request">50</property>
+                <property name="height-request">45</property>
                 <signal name="clicked" handler="on_manage_clicked" />
                 <style>
                   <class name="flat"/>
                 </style>
               </object>
             </child>
-            <style>
-              <class name="p-3"/>
-            </style>
           </object>
         </property>
       </object>
