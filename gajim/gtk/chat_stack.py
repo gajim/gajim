@@ -100,7 +100,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         self._drop_area.set_visible(False)
         self._drop_area.set_hexpand(True)
         self._drop_area.set_vexpand(True)
-        self._drop_area.add_css_class("solid-background")
+        self._drop_area.add_css_class("background")
         self._drop_area.append(dnd_icon)
         self._drop_area.append(dnd_label)
 

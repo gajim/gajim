@@ -73,7 +73,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         self._heading = Gtk.Label()
         self._heading.set_max_width_chars(30)
         self._heading.set_ellipsize(Pango.EllipsizeMode.END)
-        self._heading.add_css_class("large-header")
+        self._heading.add_css_class("title-1")
         self.append(self._heading)
 
         self._content_box = Gtk.Box()
@@ -460,7 +460,7 @@ class ErrorWidget(Gtk.Box):
         Gtk.Box.__init__(self, orientation=Gtk.Orientation.VERTICAL, spacing=12)
         image = Gtk.Image.new_from_icon_name("dialog-error-symbolic")
         image.set_pixel_size(32)
-        image.add_css_class("error-color")
+        image.add_css_class("error")
 
         heading = Gtk.Label()
         heading.add_css_class("bold16")

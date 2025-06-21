@@ -127,7 +127,7 @@ class ServerInfo(GajimAppWindow, EventHelper):
 
         self._ui.connection_type_row.set_subtitle(address.type.value)
         if address.type.is_plain:
-            self._ui.connection_type_row.add_css_class("error-color")
+            self._ui.connection_type_row.add_css_class("error")
 
         assert nbxmpp_client is not None
         tls_version = TLS_VERSION_STRINGS.get(nbxmpp_client.tls_version)
@@ -356,15 +356,15 @@ class FeatureItem(Adw.ActionRow):
         self.set_title(self._feature.name)
         self.set_subtitle(self._feature.additional or "")
 
-        self._icon.remove_css_class("error-color")
-        self._icon.remove_css_class("success-color")
+        self._icon.remove_css_class("error")
+        self._icon.remove_css_class("success")
 
         if self._feature.available:
             self._icon.set_from_icon_name("feather-check-symbolic")
-            self._icon.add_css_class("success-color")
+            self._icon.add_css_class("success")
         else:
             self._icon.set_from_icon_name("window-close-symbolic")
-            self._icon.add_css_class("error-color")
+            self._icon.add_css_class("error")
 
     def update(self, feature: Feature) -> None:
         self._feature = feature

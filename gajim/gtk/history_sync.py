@@ -40,7 +40,6 @@ class HistorySyncAssistant(Assistant, EventHelper):
     def __init__(self, account: str) -> None:
         Assistant.__init__(self, width=600, transient_for=app.window)
         EventHelper.__init__(self)
-        self.window.set_name("HistorySyncAssistant")
 
         self.account = account
         self._client = app.get_client(account)
@@ -206,7 +205,7 @@ class SelectTime(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        heading.add_css_class("large-header")
+        heading.add_css_class("title-1")
 
         label = Gtk.Label(
             label=_("How far back should the chat history be synchronized?"),
@@ -294,6 +293,7 @@ class Progress(Page):
 class TimeOption(Gtk.ListBoxRow):
     def __init__(self, text: str, months: timedelta | None = None) -> None:
         Gtk.ListBoxRow.__init__(self)
+        self.add_css_class("p-12")
         label = Gtk.Label(label=text)
         self.set_child(label)
 

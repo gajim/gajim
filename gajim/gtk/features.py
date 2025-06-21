@@ -176,19 +176,19 @@ class FeatureItem(Adw.ActionRow):
         app.check_finalize(self)
 
     def _set_feature(self, available: bool, enabled: bool | None) -> None:
-        self._icon.remove_css_class("error-color")
-        self._icon.remove_css_class("warning-color")
-        self._icon.remove_css_class("success-color")
+        self._icon.remove_css_class("error")
+        self._icon.remove_css_class("warning")
+        self._icon.remove_css_class("success")
 
         if not available:
             self._icon.set_from_icon_name("window-close-symbolic")
-            self._icon.add_css_class("error-color")
+            self._icon.add_css_class("error")
             return
 
         if enabled is not None and not enabled:
             self._icon.set_from_icon_name("dialog-warning-symbolic")
-            self._icon.add_css_class("warning-color")
+            self._icon.add_css_class("warning")
             self.set_subtitle(_("Disabled in Preferences"))
         else:
             self._icon.set_from_icon_name("feather-check-symbolic")
-            self._icon.add_css_class("success-color")
+            self._icon.add_css_class("success")

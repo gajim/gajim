@@ -14,7 +14,7 @@
               <object class="GtkListBox" id="choose_option_listbox">
                 <property name="selection_mode">none</property>
                 <style>
-                  <class name="theme_popover_listbox"/>
+                  <class name="menu"/>
                 </style>
               </object>
             </property>
@@ -91,7 +91,7 @@
                 <property name="selection_mode">none</property>
                 <property name="activate_on_single_click">0</property>
                 <style>
-                  <class name="theme_listbox"/>
+                  <class name="boxed-list"/>
                 </style>
               </object>
             </property>

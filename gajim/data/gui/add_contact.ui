@@ -10,7 +10,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Add Contact</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>
@@ -68,7 +68,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Add Contact</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -176,7 +176,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Service Gateway</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>

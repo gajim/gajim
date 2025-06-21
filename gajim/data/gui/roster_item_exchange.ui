@@ -26,7 +26,7 @@
             <property name="halign">start</property>
             <property name="label" translatable="yes">Contact List Exchange</property>
             <style>
-              <class name="large-header"/>
+              <class name="title-1"/>
             </style>
             <layout>
               <property name="column">1</property>

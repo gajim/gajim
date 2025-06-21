@@ -365,7 +365,7 @@ class RemoveMenuItem(MenuItem):
         image = Gtk.Image.new_from_icon_name("user-trash-symbolic")
 
         self.set_selectable(False)
-        image.add_css_class("error-color")
+        image.add_css_class("error")
 
         self._box.append(image)
         self._box.append(self._label)
@@ -381,7 +381,6 @@ class AccountLabelMenuItem(MenuItem):
         self.set_activatable(False)
 
         image = Gtk.Image.new_from_icon_name("avatar-default-symbolic")
-        image.add_css_class("insensitive-fg-color")
 
         self._label.add_css_class("accounts-label-row")
         self._label.set_ellipsize(Pango.EllipsizeMode.END)
@@ -405,7 +404,6 @@ class BackMenuItem(MenuItem):
         self._label.set_text(_("Back"))
 
         image = Gtk.Image.new_from_icon_name("go-previous-symbolic")
-        image.add_css_class("insensitive-fg-color")
 
         self._box.append(image)
         self._box.append(self._label)
@@ -499,7 +497,6 @@ class AccountRow(Gtk.ListBoxRow, SignalManager):
         self._label.set_width_chars(18)
 
         next_icon = Gtk.Image.new_from_icon_name("go-next-symbolic")
-        next_icon.add_css_class("insensitive-fg-color")
 
         account_enabled = app.settings.get_account_setting(self._account, "active")
         self._switch = Gtk.Switch()

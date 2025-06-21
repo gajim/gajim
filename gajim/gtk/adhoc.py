@@ -219,8 +219,8 @@ class Commands(Page):
             hscrollbar_policy=Gtk.PolicyType.NEVER,
             vscrollbar_policy=Gtk.PolicyType.AUTOMATIC,
             vexpand=True,
+            has_frame=True,
         )
-        self._scrolled.add_css_class("gajim-scrolled")
 
         self._treeview = Gtk.TreeView()
         self._treeview.add_css_class("gajim-treeview")
@@ -491,15 +491,15 @@ class SeverityIcon(Gtk.Image):
         self.set_severity(severity)
 
     def set_severity(self, severity: AdHocNoteType) -> None:
-        self.remove_css_class("success-color")
-        self.remove_css_class("warning-color")
-        self.remove_css_class("error-color")
+        self.remove_css_class("success")
+        self.remove_css_class("warning")
+        self.remove_css_class("error")
         if severity == AdHocNoteType.INFO:
             self.set_from_icon_name("object-select-symbolic")
-            self.add_css_class("success-color")
+            self.add_css_class("success")
         elif severity == AdHocNoteType.WARN:
             self.set_from_icon_name("dialog-warning-symbolic")
-            self.add_css_class("warning-color")
+            self.add_css_class("warning")
         elif severity == AdHocNoteType.ERROR:
             self.set_from_icon_name("dialog-error-symbolic")
-            self.add_css_class("error-color")
+            self.add_css_class("error")

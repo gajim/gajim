@@ -82,7 +82,7 @@
                 <property name="single-line-mode">1</property>
                 <property name="xalign">0</property>
                 <style>
-                  <class name="large-header"/>
+                  <class name="title-1"/>
                 </style>
               </object>
             </child>

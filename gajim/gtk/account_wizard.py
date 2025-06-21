@@ -1040,7 +1040,7 @@ class SecurityWarning(Page):
             error_text = GIO_TLS_ERRORS.get(error, unknown_error % error)
             box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
-            image.add_css_class("warning-color")
+            image.add_css_class("warning")
             label = Gtk.Label(
                 label=error_text,
                 wrap=True,
@@ -1091,7 +1091,7 @@ class Form(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        heading.add_css_class("large-header")
+        heading.add_css_class("title-1")
         self.append(heading)
 
     @property

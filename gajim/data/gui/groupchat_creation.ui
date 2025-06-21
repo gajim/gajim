@@ -21,7 +21,7 @@
                 <property name="label" translatable="yes">Create Group Chat</property>
                 <property name="wrap">1</property>
                 <style>
-                  <class name="large-header"/>
+                  <class name="title-1"/>
                 </style>
               </object>
             </child>
@@ -146,7 +146,7 @@
                     <property name="wrap">1</property>
                     <property name="max-width-chars">38</property>
                     <style>
-                      <class name="error-color"/>
+                      <class name="error"/>
                       <class name="p-12"/>
                     </style>
                     <layout>

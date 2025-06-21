@@ -72,7 +72,7 @@
         <property name="max-width-chars">25</property>
         <property name="yalign">0</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
         <layout>
           <property name="column">1</property>

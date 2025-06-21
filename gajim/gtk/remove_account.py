@@ -165,7 +165,7 @@ class RemoveChoice(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        heading.add_css_class("large-header")
+        heading.add_css_class("title-1")
 
         label = Gtk.Label(
             label=_("This will remove your account from Gajim."),

@@ -320,7 +320,6 @@ class Option(Gtk.ListBoxRow, SignalManager):
 
         remove_button = Gtk.Button.new_from_icon_name("feather-trash-symbolic")
         remove_button.set_tooltip_text(_("Remove Setting"))
-        remove_button.add_css_class("theme_remove_button")
         self._connect(remove_button, "clicked", self._on_remove)
         self._box.append(remove_button)
 

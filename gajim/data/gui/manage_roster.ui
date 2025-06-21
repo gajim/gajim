@@ -64,6 +64,7 @@
         <child>
           <object class="GtkScrolledWindow" id="scrolled">
             <property name="name">scrolled</property>
+            <property name="has-frame">1</property>
             <property name="vexpand">1</property>
             <property name="focusable">1</property>
             <property name="hscrollbar-policy">never</property>

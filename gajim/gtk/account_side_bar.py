@@ -241,7 +241,7 @@ class AccountAvatar(Gtk.Widget, EventHelper):
             visible=False,
         )
         self._connectivity_image.set_parent(self)
-        self._connectivity_image.add_css_class("warning-color")
+        self._connectivity_image.add_css_class("warning")
 
         self.register_event("account-enabled", ged.GUI1, self._on_account_state)
         self.register_event("account-disabled", ged.GUI1, self._on_account_state)

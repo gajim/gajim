@@ -69,7 +69,7 @@
                 <style>
                   <class name="dimmed"/>
                   <class name="small-label"/>
-                  <class name="tabular-digits"/>
+                  <class name="numeric"/>
                 </style>
               </object>
             </child>

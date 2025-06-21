@@ -96,7 +96,7 @@
                               </object>
                             </child>
                             <style>
-                              <class name="border"/>
+                              <class name="frame"/>
                               <class name="flat"/>
                             </style>
                           </object>
@@ -207,7 +207,7 @@
                           </object>
                         </child>
                         <style>
-                          <class name="border"/>
+                          <class name="frame"/>
                           <class name="flat"/>
                         </style>
                       </object>
@@ -224,7 +224,7 @@
                           </object>
                         </child>
                         <style>
-                          <class name="border"/>
+                          <class name="frame"/>
                           <class name="flat"/>
                         </style>
                       </object>
@@ -241,7 +241,7 @@
                           </object>
                         </child>
                         <style>
-                          <class name="border"/>
+                          <class name="frame"/>
                           <class name="flat"/>
                         </style>
                       </object>

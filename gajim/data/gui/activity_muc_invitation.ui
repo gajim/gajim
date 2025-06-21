@@ -12,7 +12,7 @@
         <property name="margin-bottom">6</property>
         <property name="label" translatable="yes">Invitation</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>

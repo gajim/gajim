@@ -250,7 +250,7 @@ class DefaultPage(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        self._heading.add_css_class("large-header")
+        self._heading.add_css_class("title-1")
 
         icon = Gtk.Image.new_from_icon_name(icon_name)
         icon.set_pixel_size(64)
@@ -280,14 +280,14 @@ class DefaultPage(Page):
 class ErrorPage(DefaultPage):
     def __init__(self) -> None:
         DefaultPage.__init__(
-            self, icon_name="dialog-error-symbolic", icon_css_class="error-color"
+            self, icon_name="dialog-error-symbolic", icon_css_class="error"
         )
 
 
 class SuccessPage(DefaultPage):
     def __init__(self) -> None:
         DefaultPage.__init__(
-            self, icon_name="object-select-symbolic", icon_css_class="success-color"
+            self, icon_name="object-select-symbolic", icon_css_class="success"
         )
 
 

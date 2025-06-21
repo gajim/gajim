@@ -162,7 +162,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Advanced Settings</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
         <layout>
           <property name="column">0</property>
@@ -226,7 +226,7 @@
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Welcome</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>
@@ -343,7 +343,7 @@
         <property name="justify">center</property>
         <property name="wrap">1</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>
@@ -478,7 +478,7 @@ Creating an account with one provider allows you to communicate with contacts fr
         <property name="margin-bottom">12</property>
         <property name="label" translatable="yes">Sign Up</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
         <layout>
           <property name="column">0</property>

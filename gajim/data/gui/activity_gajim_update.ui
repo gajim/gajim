@@ -13,7 +13,7 @@
         <property name="margin-bottom">18</property>
         <property name="label" translatable="yes">Updates</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>

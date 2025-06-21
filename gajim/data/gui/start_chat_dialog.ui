@@ -421,6 +421,7 @@ You can also type an XMPP address</property>
               <object class="GtkScrolledWindow">
                 <property name="focusable">1</property>
                 <property name="vexpand">1</property>
+                <property name="has-frame">1</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="child">
                   <object class="GtkTreeView" id="account_view">
@@ -456,9 +457,6 @@ You can also type an XMPP address</property>
                     </style>
                   </object>
                 </property>
-                <style>
-                  <class name="start-chat-scrolled"/>
-                </style>
               </object>
             </child>
             <child>

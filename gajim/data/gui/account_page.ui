@@ -33,7 +33,7 @@
                             <property name="label">&lt;name&gt;</property>
                             <property name="selectable">true</property>
                             <style>
-                              <class name="large-header"/>
+                              <class name="title-1"/>
                             </style>
                           </object>
                         </child>

@@ -1,86 +1,21 @@
-/* Gajim Application CSS File */
+/* Gajim Application CSS File
 
-/* GTK named colors
-Taken from: https://gitlab.gnome.org/GNOME/gtk/-/blob/main/gtk/theme/Default/_colors-public.scss
-@theme_fg_color
-@theme_text_color
-@theme_bg_color
-@theme_base_color
-@theme_selected_bg_color
-@theme_selected_fg_color
-@insensitive_bg_color
-@insensitive_fg_color
-@insensitive_base_color
-@theme_unfocused_fg_color
-@theme_unfocused_text_color
-@theme_unfocused_bg_color
-@theme_unfocused_base_color
-@theme_unfocused_selected_bg_color
-@theme_unfocused_selected_fg_color
-@unfocused_insensitive_color
-@borders
-@unfocused_borders
-@warning_color
-@error_color
-@success_color
+libadwaita colors:
+https://gnome.pages.gitlab.gnome.org/libadwaita/doc/main/css-variables.html
 */
 
 /* GTK specific changes =================================================== */
 /* Remove backdrop anomation */
 row:backdrop { transition: none; }
-/* Treeview */
-treeview.space { padding: 6px; }
+
 /* GtkLinkButton style */
 button.flat.link { padding: 0; border: 0; }
-
-.tabular-digits { font-feature-settings: "tnum"; }
-
-.confirmation-dialog .dialog-vbox { margin: 18px; }
-.confirmation-dialog .dialog-vbox > :first-child { margin-bottom: 12px; }
-.confirmation-dialog button {
-    border-radius: 9px;
-}
-
-/* InfoBar */
-.infobar > box {
-    padding: 12px 18px;
-    border-bottom: 1px solid @borders;
-}
-.infobar.info > box {
-    color: #3A87AD;
-    background-color: #D9EDF7;
-}
-.infobar.question > box {
-    color: #295A72;
-    background-color: #AFDAF0;
-}
-.infobar.warning > box {
-    color: #D06821;
-    background-color: #FFEBC0;
-}
-.infobar.error > box {
-    color: #B94A48;
-    background-color: #F2DEDE;
-}
 
 /* ========================================================================= */
 /* Text style */
 .bold { font-weight: bold; }
-.monospace { font-family: monospace; }
-.bold14 {
-    font-size: 1.125rem;
-    font-weight: bold;
-}
 .bold16 {
     font-size: 1.33rem;
-    font-weight: bold;
-}
-.bold24 {
-    font-size: 2.0rem;
-    font-weight: bold;
-}
-.large-header {
-    font-size: 1.75rem;
     font-weight: bold;
 }
 .small-label {
@@ -88,11 +23,10 @@ button.flat.link { padding: 0; border: 0; }
 }
 .draft {
     font-style: italic;
-    color: @warning_color;
+    color: var(--warning-color);
 }
 
 /* General Padding / Margin */
-
 .m-3 { margin: 3px; }
 .m-6 { margin: 6px; }
 .m-9 { margin: 9px; }
@@ -178,15 +112,8 @@ button.flat.link { padding: 0; border: 0; }
 .py-18 { padding-top: 18px; padding-bottom: 18px;}
 
 /* Colors */
-.success-color { color: @success_color; }
-.error-color { color: @error_color; }
-.warning-color { color: @warning_color; }
-.info-color { color: rgb(75, 150, 200); }
-.selected-color { color: @theme_selected_bg_color; }
-.insensitive-fg-color {color: @insensitive_fg_color;}
-.encrypted-color { color: rgb(75, 181, 67); }
-.unencrypted-color { color: @error_color; }
-.receipt-received-color { color: rgb(75, 181, 67); }
+.encrypted-color { color: var(--success-color); }
+.unencrypted-color { color: var(--error-color); }
 
 /* Generic animations */
 @keyframes pulse-opacity {
@@ -231,27 +158,22 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* General purpose classes ================================================= */
-.solid-background { background-color: @theme_base_color; }
-.border { border: 1px solid @borders; }
+/* use .frame to add regular borders */
 .no-border { border: none; }
 .scrolled-no-border { border: none; }
 .preview-image {
     border-radius: 4px;
-    box-shadow: 0px 0px 3px 0px alpha(@theme_text_color, 0.2);
+    box-shadow: 0px 0px 3px 0px alpha(var(--view-fg-color), 0.2);
 }
 
 /* Scrollbars */
 .no-scroll-indicator undershoot.top, undershoot.bottom { background-image: none; }
-.scrollbar-style scrollbar trough {background-color:@theme_base_color; }
+.scrollbar-style scrollbar trough {background-color:var(--view-bg-color); }
 .scrollbar-style scrollbar {border:none; }
 
 /* Treeview */
 .gajim-treeview { padding: 5px; }
 .gajim-treeview check { padding: 0px; }
-.gajim-scrolled {
-    border: 1px solid;
-    border-color:@unfocused_borders;
-}
 
 /* ListBox */
 .gajim-listbox {
@@ -259,12 +181,22 @@ button.flat.link { padding: 0; border: 0; }
 }
 .gajim-listbox row {
     padding: 12px;
-    border-bottom: 1px solid @borders;
+    border-bottom: 1px solid var(--border-color);
+}
+
+/* InfoBar */
+.infobar > box {
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+.infobar.info > box {
+    color: var(--accent-blue);
+    background-color: alpha(var(--accent-blue), 0.1);
 }
 
 /* Drag and drop */
 .dnd-area {
-    border: 2px dashed @theme_selected_bg_color;
+    border: 2px dashed var(--accent-bg-color);
     border-radius: 6px;
     padding: 18px;
 }
@@ -286,8 +218,8 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Unread counter */
 .unread-counter {
-    background-color: rgb(22, 100, 169);
-    color: rgb(242, 242, 242);
+    background-color: var(--accent-blue);
+    color: var(--light-2);
     font-weight: bold;
     font-size: 80%;
     padding-left: 6px;
@@ -295,11 +227,11 @@ button.flat.link { padding: 0; border: 0; }
     border-radius: 10px;
 }
 .unread-counter-silent {
-    background-color: rgb(95, 95, 95);
+    background-color: var(--light-5);
 }
 
 .badge {
-    color: rgb(242, 242, 242);
+    color: var(--light-2);
     padding-left: 6px;
     padding-right: 6px;
     padding-top: 2px;
@@ -309,22 +241,22 @@ button.flat.link { padding: 0; border: 0; }
     font-weight: bold;
 }
 .hat-badge {
-  background-color:#295a72;
+  background-color: var(--accent-teal);
   font-size: 100%;
 }
 .update-badge {
-    background-color:#798084;
+    background-color: var(--accent-slate);
     font-size: 0.8rem;
     border-radius: 0.375rem;
 }
 .restart-badge {
-    background-color:#e69722;
+    background-color: var(--warning-color);
     font-size: 0.8rem;
     border-radius: 0.375rem;
 }
 
 .group {
-    color: rgb(242, 242, 242);
+    color: var(--light-1);
     padding-left: 6px;
     padding-right: 6px;
     padding-top: 2px;
@@ -332,20 +264,19 @@ button.flat.link { padding: 0; border: 0; }
     border-radius: 4px;
     font-size: 80%;
     font-weight: bold;
-    background-color: rgb(128, 128, 128);
+    background-color: var(--light-5);
 }
 
 .link-button { min-height: 0px; }
 
 /* Main Window ============================================================= */
 .mainwindow-grid {
-    background: @theme_base_color;
+    background: var(--view-bg-color);
 }
 
 .gajim-app-window .window-padding {
     padding: 18px;
 }
-
 
 /* Generic sidebar / chatlist elements */
 .account-identifier-bar {
@@ -356,16 +287,16 @@ button.flat.link { padding: 0; border: 0; }
     border-bottom-right-radius: 6px;
 }
 .selection-bar-selected {
-    background-color: lighter(@theme_selected_bg_color);
+    background-color: lighter(var(--accent-bg-color));
 }
 .selection-bar-hover {
-    background-color: @theme_selected_bg_color;
+    background-color: var(--accent-bg-color);
 }
 
 /* ActivitySidebar, WorkspaceSidebar, AccountSidebar */
 .chatlist-left-grid {
-    border-right: 1px solid @unfocused_borders;
-    background: @theme_bg_color;
+    border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+    background: var(--window-bg-color);
 }
 
 /* ActivitySidebar */
@@ -376,7 +307,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .activity-sidebar image {
-    background-color: mix(@theme_base_color, @theme_fg_color, 0.2);
+    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.2);
     border-radius: 9px;
     padding: 6px;
     margin: 3px 6px 0px 7px;
@@ -388,7 +319,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .activity-box > separator {
-    background-color: @borders;
+    background-color: var(--border-color);
 }
 
 /* ActivityPage */
@@ -421,10 +352,10 @@ button.flat.link { padding: 0; border: 0; }
     margin-bottom: 6px;
 }
 .workspace-sidebar-item:selected .selection-bar {
-    background-color: lighter(@theme_selected_bg_color);
+    background-color: lighter(var(--accent-bg-color));
 }
 .workspace-sidebar-item:hover .selection-bar {
-    background-color: @theme_selected_bg_color;
+    background-color: var(--accent-bg-color);
 }
 .workspace-sidebar-item image {
     border-radius: 9px;
@@ -443,7 +374,7 @@ button.flat.link { padding: 0; border: 0; }
     border: 2px solid transparent;
 }
 .dnd-target .workspace-avatar {
-    border: 2px dashed @theme_selected_bg_color;
+    border: 2px dashed var(--accent-bg-color);
 }
 
 /* AccountSidebar */
@@ -459,10 +390,10 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 .account-box {
-    background-color: mix(@theme_base_color, @theme_fg_color, 0.15);
+    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.15);
 }
 .account-box > separator {
-    background-color: @borders;
+    background-color: var(--border-color);
 }
 
 /* AccountPage */
@@ -486,11 +417,11 @@ button.flat.link { padding: 0; border: 0; }
     box-shadow: none;
 }
 .activity-list-view row:selected {
-    background-color: mix(@theme_base_color, @theme_fg_color, 0.1);
+    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.1);
     outline: none;
 }
 .activity-list-view row:selected label {
-    color: @theme_text_color;
+    color: var(--view-fg-color);
 }
 .activity-list-view row button {
     min-width: 25px;
@@ -498,11 +429,11 @@ button.flat.link { padding: 0; border: 0; }
     padding: 0px;
 }
 .activity-list-view row:selected button {
-	color: @theme_fg_color;
-    border-color: @borders;
+	color: var(--window-fg-color);
+    border-color: var(--border-color);
 }
 .activity-list-view row:selected image {
-	color: @theme_fg_color;
+	color: var(--window-fg-color);
 }
 
 /* Middle Grid (ChatList and widgets on top) */
@@ -513,7 +444,7 @@ button.flat.link { padding: 0; border: 0; }
 	background: transparent;
 }
 .chat-filter-active {
-    background: @theme_selected_bg_color;
+    background: var(--accent-bg-color);
     border-radius: 50%;
 }
 
@@ -527,21 +458,21 @@ button.flat.link { padding: 0; border: 0; }
     margin: 0 10px 3px 10px;
     border: 2px solid transparent;
     border-radius: 6px;
-    background-color: @theme_base_color;
+    background-color: var(--view-bg-color);
 }
 .chatlist-row:hover{
-	background-color: @theme_bg_color;
+	background-color: var(--window-bg-color);
 }
 .chatlist-row:active,
 .chatlist-row:selected:active {
     box-shadow: none;
 }
 .chatlist-row:selected {
-    background-color: mix(@theme_base_color, @theme_fg_color, 0.1);
+    background-color: mix(var(--view-bg-color), var(--window-fg-color), 0.1);
     outline: none;
 }
 .chatlist-row:selected label:not(.unread-counter){
-    color: @theme_text_color;
+    color: var(--view-fg-color);
 }
 .chatlist-row button {
     min-width: 25px;
@@ -549,21 +480,21 @@ button.flat.link { padding: 0; border: 0; }
     padding: 0px;
 }
 .chatlist-row:selected button {
-	color: @theme_fg_color;
-    border-color: @borders;
+	color: var(--window-fg-color);
+    border-color: var(--border-color);
 }
 .chatlist-row:selected image {
-	color: @theme_fg_color;
+	color: var(--window-fg-color);
 }
 .chatlist-row:selected spinner {
-    color: @theme_fg_color;
+    color: var(--window-fg-color);
 }
 .dnd-target-chatlist {
     animation-name: pulse-opacity;
     animation-duration: 2.0s;
     animation-timing-function: ease-in-out;
     animation-iteration-count: infinite;
-    border: 2px dashed @theme_selected_bg_color;
+    border: 2px dashed var(--accent-bg-color);
 }
 
 @keyframes composing {
@@ -593,7 +524,7 @@ button.flat.link { padding: 0; border: 0; }
 .header-box label {
 	padding: 12px 18px 6px 18px;
 	font-weight: bold;
-	color: @insensitive_fg_color;
+	color: color-mix(in srgb, var(--window-fg-color) 50%, transparent);
 	font-size: 90%;
 }
 .header-box-first label {
@@ -603,8 +534,8 @@ button.flat.link { padding: 0; border: 0; }
 /* SearchView */
 .search-view {
     padding: 13px 12px 12px 12px;
-    border-left: 1px solid @borders;
-    background-color: @theme_base_color;
+    border-left: 1px solid var(--border-color);
+    background-color: var(--view-bg-color);
 }
 .search-view-row {
     padding: 4px 3px 4px 6px;
@@ -622,14 +553,14 @@ button.flat.link { padding: 0; border: 0; }
 }
 .search-view-counter label {
     font-style: italic;
-    color: @insensitive_fg_color;
+    color: color-mix(in srgb, var(--window-fg-color) 50%, transparent);
 }
 .search-view-header {
     padding: 12px 6px 6px 6px;
 }
 .search-view-header label {
     font-size: 90%;
-    color: @insensitive_fg_color;
+    color: var(--headerbar-shade-color);
 }
 
 /* MessageActionsBox */
@@ -652,11 +583,11 @@ button.flat.link { padding: 0; border: 0; }
     background-color: transparent;
 }
 .message-input-border {
-    border: 2px solid @theme_unfocused_bg_color;
+    border: 2px solid var(--view-bg-color);
     border-radius: 4px;
 }
 .message-input-focus {
-    border: 2px solid @theme_selected_bg_color;
+    border: 2px solid var(--accent-bg-color);
     border-radius: 4px;
 }
 
@@ -696,8 +627,8 @@ button.flat.link { padding: 0; border: 0; }
     opacity: 1;
 }
 .conversation-row:selected * {
-    background-color: @theme_selected_bg_color;
-    color: @theme_selected_fg_color;
+    background-color: var(--accent-bg-color);
+    color: var(--accent-fg-color);
 }
 .conversation-row grid textview:not(.sourceview),
 .conversation-row grid textview:not(.sourceview) text {
@@ -706,18 +637,18 @@ button.flat.link { padding: 0; border: 0; }
 
 /* Help class for emulating prelight state */
 .conversation-row-hover {
-    background-color: @theme_bg_color;
+    background-color: var(--window-bg-color);
 }
 .conversation-row:selected.conversation-row-hover {
-    background-color: @theme_selected_bg_color;
+    background-color: var(--accent-bg-color);
 }
 
 /* FileTransferJingleRow */
 .file-transfer {
     padding: 10px;
     margin: 5px;
-    background-color: @theme_unfocused_base_color;
-    border: 1px solid @borders;
+    background-color: var(--view-bg-color);
+    border: 1px solid var(--border-color);
     border-radius: 5px;
 }
 
@@ -744,12 +675,12 @@ button.flat.link { padding: 0; border: 0; }
 .retracted-message { opacity: 0.4; }
 .transparent-selection > selection {
     background-color: transparent;
-    color: @theme_fg_color;
+    color: var(--window-fg-color);
 }
 
 .conversation-row-highlight {
     transition: background-color 1s;
-    background-color: alpha(@theme_selected_bg_color, 0.8);
+    background-color: alpha(var(--accent-bg-color), 0.8);
 }
 
 /* Row widgets ============================================================ */
@@ -768,21 +699,21 @@ button.flat.link { padding: 0; border: 0; }
 }
 .conversation-quote textview text,
 .conversation-quote label {
-    color: alpha(@theme_text_color, 0.6);
+    color: alpha(var(--view-fg-color), 0.6);
 }
 .conversation-quote-bar {
-    background-color: alpha(@theme_text_color, 0.2);
+    background-color: alpha(var(--view-fg-color), 0.2);
 }
 
 /* CodeWidget */
 .code-widget {
-    border: 1px solid @borders;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     margin-top: 6px;
     margin-bottom: 6px;
 }
 .code-widget-header {
-    background-color: alpha(@insensitive_fg_color, 0.4);
+    background-color: var(--headerbar-shade-color);
     padding: 0 6px;
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
@@ -797,23 +728,23 @@ button.flat.link { padding: 0; border: 0; }
 /* ReferencedMessageWidget */
 .referenced-message {
     padding: 8px;
-    border: 1px solid @borders;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    background-color: alpha(@insensitive_fg_color, 0.06);
+    background-color: alpha(color-mix(in srgb, var(--window-fg-color) 50%, transparent), 0.06);
 }
 
 .referenced-message #quote-bar {
-    background-color: alpha(@insensitive_fg_color, 0.7);
+    background-color: alpha(color-mix(in srgb, var(--window-fg-color) 50%, transparent), 0.7);
     border-radius: 3px;
 }
 
 /* PreviewWidget */
 .preview-stack > box {
     border: 1px solid;
-    border-color: @borders;
+    border-color: var(--border-color);
     border-radius: 4px;
     padding: 10px;
-    background-color: @theme_unfocused_base_color;
+    background-color: var(--view-bg-color);
 }
 .preview-image-button,
 .preview-image-button:hover {
@@ -833,19 +764,19 @@ button.flat.link { padding: 0; border: 0; }
     border-radius: 4px;
 }
 .preview-content-box:hover {
-    background: alpha(@theme_fg_color, 0.1);
+    background: alpha(var(--window-fg-color), 0.1);
 }
 .preview-image-overlay {
-    background: alpha(@theme_bg_color, 0.9);
+    background: alpha(var(--window-bg-color), 0.9);
     padding: 4px 12px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
 .preview-image-overlay-button {
-    background: @theme_bg_color;
+    background: var(--window-bg-color);
 }
 .preview-image-overlay-button:hover {
-    background: shade(@theme_bg_color, 0.92);
+    background: shade(var(--window-bg-color), 0.92);
 }
 
 /* Conversation meta elements */
@@ -864,24 +795,24 @@ button.flat.link { padding: 0; border: 0; }
 
 /* ReactionsBar */
 .reaction {
-    border: 1px solid @borders;
+    border: 1px solid var(--border-color);
     border-radius: 18px;
     padding: 2px 6px;
     outline: none;
  }
  .reaction:hover {
-    border-color: @theme_selected_bg_color;
-    background: alpha(@theme_selected_bg_color, 0.3);
+    border-color: var(--accent-bg-color);
+    background: alpha(var(--accent-bg-color), 0.3);
  }
  .reaction-from-us {
-    border-color: alpha(@theme_selected_bg_color, 0.9);
-    background: alpha(@theme_selected_bg_color, 0.1);
+    border-color: alpha(var(--accent-bg-color), 0.9);
+    background: alpha(var(--accent-bg-color), 0.1);
 }
 .reaction label {
     font-size: 90%;
 }
 .reaction-add-show-all > button {
-    border: 1px solid @borders;
+    border: 1px solid var(--border-color);
     border-radius: 18px;
     padding: 2px;
 }
@@ -894,60 +825,37 @@ button.flat.link { padding: 0; border: 0; }
 
 /* ContactFlowBox */
 .contact-flowbox-item {
-    background-color: alpha(@borders, 0.4);
+    background-color: alpha(var(--border-color), 0.4);
     border-radius: 12px;
     padding: 6px;
 }
 .contact-flowbox-item button {
     background: none;
-    border: 1px solid alpha(@borders, 0.4);
+    border: 1px solid alpha(var(--border-color), 0.4);
 }
 .contact-flowbox-item button:hover {
-    border: 1px solid @borders;
+    border: 1px solid var(--border-color);
 }
 
 /* ResourceSelector */
 .resource-selector list row {
     padding: 6px;
-    border-bottom: 1px solid @borders;
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* AvatarSelector */
 .avatar-selector {
-    border: 2px dotted @theme_selected_bg_color;
+    border: 2px dotted var(--accent-bg-color);
     border-radius: 12px;
     padding: 18px;
 }
 
 /* DataFormWidget */
 .field-fixed { font-size: 1.33rem; font-weight: bold; padding-top:5px;}
-.data-form-title { font-size: 1.33rem; font-weight: bold; }
 .data-form-widget grid { margin: 0px 18px 18px 18px; }
 .data-form-widget treeview { padding: 5px; }
-.data-form-widget scrolledwindow { border: 1px solid; border-color:@unfocused_borders; }
+.data-form-widget scrolledwindow { border: 1px solid; border-color: color-mix(in srgb, currentColor 15%, transparent); }
 .data-form-widget textview { padding: 5px; }
-
-/* Miscellaneous widgets ================================================== */
-
-/* Notification (Windows) */
-#NotificationPopup {
-    background-color: #333333;
-    padding: 4px;
-}
-#NotificationPopup label {
-    color: #FFF;
-}
-#NotificationPopup button {
-    border-width: 0;
-    background-image: none;
-    background-color: inherit;
-    box-shadow: none;
-    text-shadow: none;
-    -gtk-icon-shadow: none;
-}
-#NotificationPopupTitle {
-    font-weight: bold;
-}
 
 /* Settings widgets ======================================================== */
 
@@ -965,40 +873,9 @@ list.sidebar-switcher .sidebar-row-header {
     font-weight: bold;
 }
 
-popover.combo list {
-    min-width: 200px;
-    margin: 12px;
-}
-popover.combo { padding: 0px; }
-popover.combo list {
-    border-style: none;
-    background-color: transparent;
-}
-popover.combo list > row {
-    padding: 0px 12px 0px 12px;
-    min-height: 40px;
-}
-popover.combo list > row:not(:last-child) { border-bottom: 1px solid alpha(#cdc7c2, 0.5); }
-popover.combo scrollbar.vertical { padding-top: 2px; padding-bottom: 2px; }
-popover.combo scrollbar.vertical {
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-
 /* Dialogs ================================================================= */
 
 /* ProfileWindow */
-#NicknameEntry:disabled {
-    border: none;
-    background-color: @theme_unfocused_bg_color;
-    padding: 0px 0px 0px 0px;
-}
-#NicknameEntry text:disabled {
-    font-size: 2.3rem;
-    font-weight: bold;
-    color: @theme_fg_color;
-}
-
 #ProfileWindow grid { padding: 18px; }
 #ProfileWindow grid > button {
     padding-left: 4px;
@@ -1011,16 +888,12 @@ popover.combo scrollbar.vertical {
 #ProfileWindow actionbar button {
    margin-top: 12px;
 }
-.profile-scrolled {
-    border: 1px solid @borders;
-    border-radius: 4px;
-}
 .profile-scrolled-read textview {
     background: transparent;
 }
 .profile-scrolled-read textview text {
     background: transparent;
-    color: @theme_text_color;
+    color: var(--view-fg-color);
 }
 
 /* ContactInfo / GroupchatDetails */
@@ -1033,38 +906,25 @@ popover.combo scrollbar.vertical {
 #ContactNameEntry text:disabled {
     font-size: 2.0rem;
     font-weight: bold;
-    color: @theme_fg_color;
+    color: var(--window-fg-color);
 }
 
 /* FullMessageWindow */
 #FullMessageWindow textview { padding: 10px; }
 
 /* ManageRoster */
-#ManageRoster #scrolled {
-    border: 1px solid @borders;
-}
 #ManageRoster listview header {
     font-weight: bold;
     padding: 6px;
-    background: alpha(@borders, 0.3);
+    background: alpha(var(--border-color), 0.3);
 }
-
-/* HistorySyncAssistant */
-#HistorySyncAssistant notebook { padding: 18px; }
-#HistorySyncAssistant progressbar text { font-size: 1.6rem; padding: 10px;}
-#HistorySyncAssistant list { border: 1px solid; border-color: @borders; }
-#HistorySyncAssistant list > row { padding: 10px 30px 10px 30px; }
-#HistorySyncAssistant list > row > label { color: @insensitive_fg_color; }
-#HistorySyncAssistant list > row.activatable > label { color: @theme_text_color; }
-#HistorySyncAssistant list > row.activatable:selected > label { color: @theme_selected_fg_color; }
-#FinishedLabel { font-size: 1.2rem; font-weight: bold; }
 
 /* AccountsWindow */
 .accounts-menu {
-    border-right: 1px solid @borders;
+    border-right: 1px solid var(--border-color);
 }
 .accounts-menu-listbox > row {
-    border-bottom: 1px solid @theme_unfocused_bg_color;
+    border-bottom: 1px solid var(--view-bg-color);
     padding: 10px 20px 10px 10px;
 }
 .accounts-label-row {
@@ -1072,15 +932,14 @@ popover.combo scrollbar.vertical {
     padding-bottom: 10px;
     font-size: 1.6rem;
     font-weight: bold;
-    color: @insensitive_fg_color;
 }
 
 /* AccountWizard */
 .tls-error-list {
-    border: 1px solid; border-color: @borders;
+    border: 1px solid var(--border-color);
 }
 .tls-error-list > row {
-    border-bottom: 1px solid; border-color: @theme_unfocused_bg_color;
+    border-bottom: 1px solid; border-color: var(--view-bg-color);
     padding: 6px;
 }
 .tls-error-list > row:last-child {
@@ -1088,44 +947,22 @@ popover.combo scrollbar.vertical {
 }
 
 /* OMEMO */
-.omemo-inactive-color { color: @insensitive_fg_color; }
-
-.omemo-trust-popover row { padding: 10px 15px 10px 10px; }
+.omemo-inactive-color { color: var(--light-5); }
 
 /* StartChatDialog */
 .start-chat-treeview { padding: 5px; }
 .start-chat-treeview:focus {outline: none; }
-.start-chat-scrolled { border: 1px solid; border-color:@unfocused_borders; }
-.start-chat-row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; }
+.start-chat-row { border-bottom: 1px solid; border-color: var(--view-bg-color); }
 .start-chat-row:last-child { border-bottom: 0px; }
 .start-chat-row.activatable:active { box-shadow: none; }
 .start-chat-row { padding: 5px 20px 5px 8px; }
 .start-chat-row:focus { outline: none; }
 
 /* GroupchatConfig */
-#GroupchatConfig stack { border-bottom: 1px solid; border-color: @borders;}
+#GroupchatConfig stack { border-bottom: 1px solid; border-color: var(--border-color);}
 #GroupchatConfig stacksidebar > scrolledwindow {
-    background-color: @theme_base_color;
+    background-color: var(--view-bg-color);
     border-bottom: 1px solid;
-    border-color: @borders;
+    border-color: var(--border-color);
 }
 #GroupchatConfig treeview { padding: 5px; }
-
-/* Themes */
-.theme_listbox row { border-bottom: 1px solid; border-color: @theme_unfocused_bg_color; padding: 5px 10px 5px 10px;}
-.theme_listbox row:last-child { border-bottom: 0px; }
-.theme_listbox row.activatable:active { box-shadow: none; }
-.theme_listbox row:not(.activatable) label { color: @insensitive_fg_color; }
-.theme_listbox row:focus { outline: none; }
-.theme_listbox row:hover { background-color: @theme_base_color; }
-
-.theme_remove_button {
-    background-color: @theme_base_color; 
-    border: none;
-    background-image: none;
-}
-.theme_remove_button:focus {outline: none;}
-
-.theme_popover_listbox { padding: 10px; }
-.theme_popover_listbox row { padding: 5px; }
-.theme_popover_listbox row:focus { outline: none; }

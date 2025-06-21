@@ -301,7 +301,7 @@ class Title:
             wrap=True,
             justify=Gtk.Justification.CENTER,
         )
-        self._label.add_css_class("data-form-title")
+        self._label.add_css_class("title-1")
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._label, 0, row_number, 2, 1)
@@ -339,7 +339,7 @@ class Field(GObject.GObject, SignalManager):
         )
 
         self._warning_image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
-        self._warning_image.add_css_class("warning-color")
+        self._warning_image.add_css_class("warning")
         self._warning_image.set_visible(False)
         self._warning_image.set_valign(Gtk.Align.CENTER)
         self._warning_image.set_tooltip_text(_("Required"))
@@ -381,12 +381,12 @@ class Field(GObject.GObject, SignalManager):
             return
 
         if error:
-            self._warning_image.remove_css_class("warning-color")
-            self._warning_image.add_css_class("error-color")
+            self._warning_image.remove_css_class("warning")
+            self._warning_image.add_css_class("error")
         else:
             error = _("Required")
-            self._warning_image.remove_css_class("error-color")
-            self._warning_image.add_css_class("warning-color")
+            self._warning_image.remove_css_class("error")
+            self._warning_image.add_css_class("warning")
         self._warning_image.set_tooltip_text(str(error))
         self._warning_image.set_visible(not is_valid)
 

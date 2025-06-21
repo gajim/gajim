@@ -353,7 +353,7 @@ class MessageIcons(Gtk.Box):
         self._marker_image.set_tooltip_text(p_("Message state", "Received"))
 
         self._error_image = Gtk.Image.new_from_icon_name("dialog-warning-symbolic")
-        self._error_image.add_css_class("warning-color")
+        self._error_image.add_css_class("warning")
         self._error_image.set_visible(False)
 
         self.append(self._encryption_image)

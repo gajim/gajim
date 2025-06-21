@@ -649,7 +649,7 @@ class StartChatDialog(GajimAppWindow):
         if button.get_active():
             self._chat_filter.reset()
             self._chat_filter.set_sensitive(False)
-            image.add_css_class("selected-color")
+            image.add_css_class("accent")
             self._ui.list_stack.set_visible_child_name("global")
 
             self._ui.global_search_placeholder_stack.set_visible_child_name(
@@ -663,7 +663,7 @@ class StartChatDialog(GajimAppWindow):
         else:
             self._chat_filter.set_sensitive(True)
             self._ui.search_entry.set_text("")
-            image.remove_css_class("selected-color")
+            image.remove_css_class("accent")
             self._ui.list_stack.set_visible_child_name("contacts")
             self._global_search_view.remove_all()
 

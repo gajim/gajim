@@ -10,7 +10,7 @@
             <property name="icon-name">dialog-warning-symbolic</property>
             <property name="valign">3</property>
             <style>
-              <class name="warning-color"/>
+              <class name="warning"/>
             </style>
           </object>
         </child>
@@ -100,7 +100,7 @@
           <object class="GtkImage">
             <property name="icon-name">dialog-warning-symbolic</property>
             <style>
-              <class name="warning-color"/>
+              <class name="warning"/>
             </style>
           </object>
         </child>

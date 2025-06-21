@@ -101,7 +101,7 @@ class Start(Page):
         self.complete = False
 
         heading = Gtk.Label(label="Test Assistant")
-        heading.add_css_class("large-header")
+        heading.add_css_class("title-1")
 
         label1 = Gtk.Label(
             label="This is label 1 with some text",

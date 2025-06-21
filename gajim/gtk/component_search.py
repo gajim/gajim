@@ -203,10 +203,11 @@ class Result(Page):
         self._label.set_visible(False)
         self._label.set_halign(Gtk.Align.CENTER)
 
-        self._scrolled = Gtk.ScrolledWindow()
-        self._scrolled.set_propagate_natural_height(True)
-        self._scrolled.add_css_class("gajim-scrolled")
-        self._scrolled.set_visible(False)
+        self._scrolled = Gtk.ScrolledWindow(
+            propagate_natural_height=True,
+            visible=False,
+            has_frame=True,
+        )
 
         self.append(self._label)
         self.append(self._scrolled)

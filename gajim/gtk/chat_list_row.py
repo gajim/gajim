@@ -578,7 +578,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
             self._ui.connection_icon.set_visible(True)
         elif self.contact.is_not_joined or not self._client.state.is_available:
             self._ui.connection_icon.set_from_icon_name("feather-zap-symbolic")
-            self._ui.connection_icon.add_css_class("warning-color")
+            self._ui.connection_icon.add_css_class("warning")
             self._ui.connection_icon.set_tooltip_text(_("Not connected"))
             self._ui.connection_icon.set_visible(True)
 
@@ -591,7 +591,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         if signal_name == "mam-sync-started":
             self._ui.connection_icon.set_from_icon_name("feather-refresh-cw-symbolic")
             self._ui.connection_icon.add_css_class("spin")
-            self._ui.connection_icon.add_css_class("info-color")
+            self._ui.connection_icon.add_css_class("accent")
             self._ui.connection_icon.set_tooltip_text(_("Fetching messages…"))
             self._ui.connection_icon.set_visible(True)
 
@@ -601,7 +601,7 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
 
         self._reset_connection_icon()
         self._ui.connection_icon.set_from_icon_name("feather-zap-symbolic")
-        self._ui.connection_icon.add_css_class("error-color")
+        self._ui.connection_icon.add_css_class("error")
         self._ui.connection_icon.set_tooltip_text(
             _("There has been an error while trying to fetch messages: %s") % error_text
         )
@@ -611,9 +611,9 @@ class ChatListRow(Gtk.ListBoxRow, SignalManager):
         self._ui.connection_icon.set_visible(False)
         self._ui.connection_icon.remove_css_class("spin")
         self._ui.connection_icon.remove_css_class("dimmed")
-        self._ui.connection_icon.remove_css_class("info-color")
-        self._ui.connection_icon.remove_css_class("warning-color")
-        self._ui.connection_icon.remove_css_class("error-color")
+        self._ui.connection_icon.remove_css_class("accent")
+        self._ui.connection_icon.remove_css_class("warning")
+        self._ui.connection_icon.remove_css_class("error")
 
     def _on_muc_user_update(
         self, _contact: GroupchatParticipant, _signal_name: str, *args: Any

@@ -41,7 +41,7 @@
           <attribute name="weight" value="bold"></attribute>
         </attributes>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
         <layout>
           <property name="column">1</property>

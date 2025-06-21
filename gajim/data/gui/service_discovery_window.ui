@@ -25,7 +25,7 @@
                 <property name="ellipsize">end</property>
                 <property name="xalign">0</property>
                 <style>
-                  <class name="large-header"/>
+                  <class name="title-1"/>
                 </style>
               </object>
             </child>

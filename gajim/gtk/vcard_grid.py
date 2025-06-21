@@ -754,7 +754,7 @@ class MultiLinePropertyGui(VCardPropertyGui):
         self._edit_scrolled.set_child(self._edit_text_view)
         self._edit_scrolled.set_valign(Gtk.Align.CENTER)
         self._edit_scrolled.set_size_request(-1, 100)
-        self._edit_scrolled.add_css_class("profile-scrolled")
+        self._edit_scrolled.set_has_frame(True)
 
         self._read_text_view = ValueTextView(prop)
         self._read_text_view.set_sensitive(False)
@@ -841,7 +841,7 @@ class KeyPropertyGui(VCardPropertyGui):
         self._scrolled_window.set_child(self._value_text_view)
         self._scrolled_window.set_valign(Gtk.Align.CENTER)
         self._scrolled_window.set_size_request(350, 200)
-        self._scrolled_window.add_css_class("profile-scrolled")
+        self._scrolled_window.set_has_frame(True)
 
         self._copy_button = Gtk.Button.new_from_icon_name("edit-copy-symbolic")
         self._connect(self._copy_button, "clicked", self._on_copy_clicked)

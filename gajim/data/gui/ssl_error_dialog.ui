@@ -9,7 +9,7 @@
         <property name="margin_bottom">6</property>
         <property name="label" translatable="yes">SSL Certificate Verification Error</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>

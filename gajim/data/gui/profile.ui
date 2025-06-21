@@ -155,7 +155,7 @@
                         </child>
                         <child>
                           <object class="GtkEntry" id="nickname_entry">
-                            <property name="name">NicknameEntry</property>
+                            <property name="name">ContactNameEntry</property>
                             <property name="width-request">250</property>
                             <property name="sensitive">0</property>
                             <property name="focusable">1</property>

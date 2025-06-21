@@ -512,7 +512,7 @@ class GroupChat(Page):
             halign=Gtk.Align.CENTER,
             justify=Gtk.Justification.CENTER,
         )
-        heading.add_css_class("large-header")
+        heading.add_css_class("title-1")
         self.append(heading)
 
         self._info_box = GroupChatInfoScrolled(minimal=True)

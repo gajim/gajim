@@ -41,8 +41,8 @@ log = logging.getLogger("gajim.gtk.omemo_trust_manager")
 
 
 TRUST_DATA = {
-    OMEMOTrust.UNTRUSTED: ("dialog-error-symbolic", _("Untrusted"), "error-color"),
-    OMEMOTrust.UNDECIDED: ("security-low-symbolic", _("Not Decided"), "warning-color"),
+    OMEMOTrust.UNTRUSTED: ("dialog-error-symbolic", _("Untrusted"), "error"),
+    OMEMOTrust.UNDECIDED: ("security-low-symbolic", _("Not Decided"), "warning"),
     OMEMOTrust.VERIFIED: ("security-high-symbolic", _("Verified"), "encrypted-color"),
     OMEMOTrust.BLIND: ("security-medium-symbolic", _("Blind Trust"), "encrypted-color"),
 }
@@ -357,7 +357,7 @@ class TrustPopver(Gtk.Popover, SignalManager):
         self.update()
         self.set_child(self._listbox)
         self._connect(self._listbox, "row-activated", self._activated)
-        self.add_css_class("omemo-trust-popover")
+        self.add_css_class("menu")
 
     def do_unroot(self) -> None:
         Gtk.Popover.do_unroot(self)
@@ -442,7 +442,7 @@ class NotTrustedOption(MenuOption):
             self,
             "dialog-error-symbolic",
             _("Untrusted"),
-            "error-color",
+            "error",
             OMEMOTrust.UNTRUSTED,
         )
 

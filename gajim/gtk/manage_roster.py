@@ -564,23 +564,23 @@ class RosterListItem(GObject.Object):
             case "both":
                 return (
                     "lucide-arrow-right-left-symbolic",
-                    "success-color",
+                    "success",
                     _("Status is shared"),
                 )
             case "to":
                 return (
                     "lucide-arrow-right-symbolic",
-                    "warning-color",
+                    "warning",
                     _("You don't share your status with this contact"),
                 )
             case "from":
                 return (
                     "lucide-arrow-left-symbolic",
-                    "info-color",
+                    "accent",
                     _("This contact does not share their status with you"),
                 )
             case "none":
-                return ("lucide-x-symbolic", "error-color", _("Status is not shared"))
+                return ("lucide-x-symbolic", "error", _("Status is not shared"))
             case _:
                 raise ValueError("Invalid value: %s" % subscription)
 
@@ -657,10 +657,10 @@ class RosterViewItemImage(Gtk.Image):
         self.set_from_icon_name(icon_name)
         self.set_tooltip_text(tooltip)
 
-        self.remove_css_class("success-color")
-        self.remove_css_class("warning-color")
-        self.remove_css_class("error-color")
-        self.remove_css_class("info-color")
+        self.remove_css_class("success")
+        self.remove_css_class("warning")
+        self.remove_css_class("error")
+        self.remove_css_class("accent")
         if css_class is not None:
             self.add_css_class(css_class)
 

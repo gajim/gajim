@@ -101,7 +101,7 @@
               <object class="GtkImage">
                 <property name="icon-name">dialog-error-symbolic</property>
                 <style>
-                  <class name="error-color"/>
+                  <class name="error"/>
                 </style>
               </object>
             </child>

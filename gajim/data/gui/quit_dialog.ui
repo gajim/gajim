@@ -8,7 +8,7 @@
       <object class="GtkLabel">
         <property name="label" translatable="yes">Quit Gajim</property>
         <style>
-          <class name="large-header"/>
+          <class name="title-1"/>
         </style>
       </object>
     </child>
