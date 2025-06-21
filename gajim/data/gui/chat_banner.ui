@@ -85,7 +85,7 @@
                     <property name="single-line-mode">1</property>
                     <property name="xalign">0</property>
                     <style>
-                      <class name="title-1"/>
+                      <class name="title-3"/>
                     </style>
                   </object>
                 </child>
