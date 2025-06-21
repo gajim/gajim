@@ -95,10 +95,6 @@
                                 <property name="icon-name">process-stop-symbolic</property>
                               </object>
                             </child>
-                            <style>
-                              <class name="frame"/>
-                              <class name="flat"/>
-                            </style>
                           </object>
                         </child>
                       </object>
@@ -206,10 +202,6 @@
                             <property name="icon-name">folder-symbolic</property>
                           </object>
                         </child>
-                        <style>
-                          <class name="frame"/>
-                          <class name="flat"/>
-                        </style>
                       </object>
                     </child>
                     <child>
@@ -223,10 +215,6 @@
                             <property name="icon-name">document-save-as-symbolic</property>
                           </object>
                         </child>
-                        <style>
-                          <class name="frame"/>
-                          <class name="flat"/>
-                        </style>
                       </object>
                     </child>
                     <child>
@@ -240,10 +228,6 @@
                             <property name="icon-name">folder-download-symbolic</property>
                           </object>
                         </child>
-                        <style>
-                          <class name="frame"/>
-                          <class name="flat"/>
-                        </style>
                       </object>
                     </child>
                   </object>

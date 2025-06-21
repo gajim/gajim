@@ -111,16 +111,12 @@
                             </style>
                           </object>
                         </child>
-                        <style>
-                          <class name="gajim-listbox"/>
-                        </style>
                       </object>
                     </property>
                   </object>
                 </property>
               </object>
             </child>
-
           </object>
         </property>
       </object>

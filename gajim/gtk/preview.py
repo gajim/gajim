@@ -290,8 +290,6 @@ class PreviewWidget(Gtk.Box, SignalManager):
         self._ui.preview_stack.remove_css_class("preview-stack")
         self._ui.preview_stack.add_css_class("preview-stack-image")
         self._ui.button_box.add_css_class("preview-image-overlay")
-        self._ui.open_folder_button.add_css_class("preview-image-overlay-button")
-        self._ui.save_as_button.add_css_class("preview-image-overlay-button")
 
     def _on_download(self, _button: Gtk.Button) -> None:
         if self._preview is None:

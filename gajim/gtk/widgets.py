@@ -175,7 +175,8 @@ class GroupBadge(Gtk.Label):
             max_width_chars=20,
         )
 
-        self.add_css_class("group")
+        self.add_css_class("badge")
+        self.add_css_class("badge-group")
 
 
 class GroupBadgeBox(Gtk.Box):

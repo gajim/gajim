@@ -22,7 +22,7 @@
             <property name="tooltip-text" translatable="yes">There is an update available for this plugin</property>
             <style>
               <class name="badge"/>
-              <class name="update-badge"/>
+              <class name="badge-update"/>
             </style>
           </object>
         </child>
@@ -34,7 +34,7 @@
             <property name="tooltip-text" translatable="yes">Restart Gajim to finish this update</property>
             <style>
               <class name="badge"/>
-              <class name="restart-badge"/>
+              <class name="badge-restart"/>
             </style>
           </object>
         </child>

@@ -106,7 +106,7 @@ class GCTooltip:
                 # Limit to 5 hats
                 hat_badge = Gtk.Box(spacing=6, halign=Gtk.Align.START)
                 hat_badge.add_css_class("badge")
-                hat_badge.add_css_class("hat-badge")
+                hat_badge.add_css_class("badge-hat")
 
                 hat_badge_icon = Gtk.Image.new_from_icon_name("feather-tag-symbolic")
                 hat_badge.append(hat_badge_icon)
