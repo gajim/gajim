@@ -13,6 +13,7 @@ from collections.abc import Iterator
 from dataclasses import dataclass
 from enum import Enum
 
+from gi.repository import Adw
 from gi.repository import Gdk
 from gi.repository import GLib
 from gi.repository import GObject
@@ -148,7 +149,7 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
 
         self._ui.results_listbox.remove_all()
         # Set placeholder again, otherwise it won't be shown
-        self._ui.results_listbox.set_placeholder(self._ui.placeholder)
+        self._ui.results_listbox.set_placeholder(self._ui.status_page)
 
         self._ui.results_listbox.set_header_func(self._header_func)
         self._ui.results_scrolled.get_vadjustment().set_value(0)
@@ -207,23 +208,25 @@ class SearchView(Gtk.Box, SignalManager, EventHelper):
         self._add_results()
 
     def _set_placeholder_mode(self, placeholder_mode: PlaceholderMode) -> None:
-        self._ui.placeholder_image.remove_css_class("spin")
-
         if placeholder_mode == PlaceholderMode.SEARCHING:
-            self._ui.placeholder_image.add_css_class("spin")
-            icon_name = "view-refresh-symbolic"
-            text = _("Searching…")
+            self._ui.status_page.set_title(_("Searching…"))
+            self._ui.status_page.set_description(None)
+            self._ui.status_page.set_paintable(
+                Adw.SpinnerPaintable(widget=self._ui.status_page)
+            )
+            return
 
-        elif placeholder_mode == PlaceholderMode.NO_RESULTS:
-            icon_name = "action-unavailable-symbolic"
-            text = _("No results")
+        if placeholder_mode == PlaceholderMode.NO_RESULTS:
+            text = _("No Results Found")
+            description = _("Try a different search")
         else:
             # PlaceholderMode.INITIAL
-            icon_name = "system-search-symbolic"
-            text = _("Search your conversation")
+            text = _("Search")
+            description = _("Search in chats…")
 
-        self._ui.placeholder_image.set_from_icon_name(icon_name)
-        self._ui.placeholder_label.set_text(text)
+        self._ui.status_page.set_icon_name("system-search-symbolic")
+        self._ui.status_page.set_title(text)
+        self._ui.status_page.set_description(description)
 
     def _add_results(self) -> None:
         assert self._results_iterator is not None

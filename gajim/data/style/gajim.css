@@ -518,7 +518,7 @@ button.flat.link { padding: 0; border: 0; }
 }
 .search-view-header label {
     font-size: 90%;
-    color: var(--headerbar-shade-color);
+    color: alpha(var(--view-fg-color), 0.7);
 }
 
 /* MessageActionsBox */

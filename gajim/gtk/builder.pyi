@@ -730,16 +730,14 @@ class SearchViewBuilder(Builder):
     next_day_button: Gtk.Button
     last_day_button: Gtk.Button
     search_box: Gtk.Box
-    close_button: Gtk.Button
-    calendar_button: Gtk.MenuButton
     search_entry: Gtk.SearchEntry
+    calendar_button: Gtk.MenuButton
+    close_button: Gtk.Button
     search_checkbutton: Gtk.CheckButton
     search_filters_box: Gtk.Box
     results_scrolled: Gtk.ScrolledWindow
     results_listbox: Gtk.ListBox
-    placeholder: Gtk.Box
-    placeholder_image: Gtk.Image
-    placeholder_label: Gtk.Label
+    status_page: Adw.StatusPage
     filter_date_before_popover: Gtk.Popover
     filter_date_before_calendar: Gtk.Calendar
     filter_date_before_reset_button: Gtk.Button

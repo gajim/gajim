@@ -77,34 +77,19 @@
     <property name="orientation">vertical</property>
     <property name="spacing">6</property>
     <child>
-      <object class="GtkCenterBox">
-        <property name="shrink-center-last">true</property>
-        <child type="start">
-          <object class="GtkButton" id="close_button">
+      <object class="GtkBox">
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
             <property name="focusable">1</property>
-            <property name="receives-default">1</property>
-            <property name="tooltip-text" translatable="yes">Close Search</property>
-            <child>
-              <object class="GtkImage">
-                <property name="icon-name">window-close-symbolic</property>
-              </object>
-            </child>
+            <property name="placeholder-text" translatable="yes">Search…</property>
           </object>
         </child>
-        <child type="center">
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">Search</property>
-            <style>
-              <class name="title-2"/>
-            </style>
-          </object>
-        </child>
-        <child type="end">
+        <child>
           <object class="GtkMenuButton" id="calendar_button">
             <property name="sensitive">0</property>
             <property name="focusable">1</property>
             <property name="focus-on-click">0</property>
-            <property name="receives-default">1</property>
             <property name="tooltip-text" translatable="yes">Browse history by date</property>
             <property name="popover">calendar_popover</property>
             <child>
@@ -114,21 +99,23 @@
             </child>
           </object>
         </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSearchEntry" id="search_entry">
-        <property name="width-request">200</property>
-        <property name="focusable">1</property>
-        <property name="halign">center</property>
-        <property name="placeholder-text" translatable="yes">Search…</property>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="focusable">1</property>
+            <property name="tooltip-text" translatable="yes">Close</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">window-close-symbolic</property>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
     <child>
       <object class="GtkCheckButton" id="search_checkbutton">
         <property name="label" translatable="yes">Search all Chats</property>
         <property name="focusable">1</property>
-        <property name="halign">center</property>
       </object>
     </child>
     <child>
@@ -154,27 +141,12 @@
               <object class="GtkListBox" id="results_listbox">
                 <property name="selection-mode">none</property>
                 <child type="placeholder">
-                  <object class="GtkBox" id="placeholder">
-                    <property name="valign">center</property>
-                    <property name="orientation">vertical</property>
-                    <property name="spacing">12</property>
-                    <child>
-                      <object class="GtkImage" id="placeholder_image">
-                        <property name="icon-name">system-search-symbolic</property>
-                        <property name="pixel-size">64</property>
-                        <style>
-                          <class name="dimmed"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="placeholder_label">
-                        <property name="label" translatable="yes">No results</property>
-                        <style>
-                          <class name="dimmed"/>
-                        </style>
-                      </object>
-                    </child>
+                  <object class="AdwStatusPage" id="status_page">
+                    <property name="icon-name">system-search-symbolic</property>
+                    <property name="title" translatable="yes"></property>
+                    <style>
+                      <class name="compact"/>
+                    </style>
                   </object>
                 </child>
               </object>
