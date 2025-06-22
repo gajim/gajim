@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="DeviceInfo" parent="AdwPreferencesGroup">
+    <property name="title" translatable="yes"></property>
+    <child type="header-suffix">
+      <object class="AdwSpinner" id="_spinner"/>
+    </child>
+    <child>
+      <object class="GtkListBox">
+        <property name="selection-mode">none</property>
+        <style>
+          <class name="boxed-list"/>
+        </style>
+        <child>
+          <object class="AdwActionRow" id="_status_row">
+            <property name="title">Status</property>
+            <property name="subtitle-selectable">True</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_priority_row">
+            <property name="title">Priority</property>
+            <property name="visible">0</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_software_row">
+            <property name="title">Software</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="visible">0</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_operating_system_row">
+            <property name="title">Operating System</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="visible">0</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_local_time_row">
+            <property name="title">Local Time</property>
+            <property name="subtitle-selectable">True</property>
+            <property name="visible">0</property>
+            <style>
+              <class name="property"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

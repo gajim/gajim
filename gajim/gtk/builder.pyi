@@ -29,7 +29,6 @@ class AccountWizardBuilder(Builder):
     proxies_combobox: Gtk.ComboBox
     manage_proxies_button: Gtk.Button
     con_type_combo: Gtk.ComboBoxText
-    entrycompletion1: Gtk.EntryCompletion
     login_box: Gtk.Box
     log_in_address_entry: Gtk.Entry
     log_in_password_entry: Gtk.Entry
@@ -216,18 +215,6 @@ class ChatListRowBuilder(Builder):
     close_button: Gtk.Button
 
 class ContactInfoBuilder(Builder):
-    devices_grid: Gtk.Grid
-    priority_label: Gtk.Label
-    software_label: Gtk.Label
-    system_label: Gtk.Label
-    time_label: Gtk.Label
-    status_value: Gtk.Label
-    priority_value: Gtk.Label
-    software_value: Gtk.Label
-    system_value: Gtk.Label
-    time_value: Gtk.Label
-    resource_box: Gtk.Box
-    resource_label: Gtk.Label
     groups_model: Gtk.ListStore
     main_stack: Gtk.Stack
     vcard_scrolled: Gtk.ScrolledWindow
@@ -260,7 +247,7 @@ class ContactInfoBuilder(Builder):
     scrolledwindow_annotation: Gtk.ScrolledWindow
     textview_annotation: Gtk.TextView
     devices_stack: Gtk.Stack
-    devices_box: Gtk.Box
+    devices_page: Adw.PreferencesPage
 
 class ContactTooltipBuilder(Builder):
     tooltip_grid: Gtk.Grid
@@ -530,16 +517,6 @@ class HistoryExportBuilder(Builder):
     select_account_box: Gtk.Box
     settings_grid: Gtk.Grid
 
-class MainBuilder(Builder):
-    main_view: Adw.ToolbarView
-    main_grid: Gtk.Grid
-    left_grid: Gtk.Grid
-    activity_box: Gtk.Box
-    workspace_scrolled: Gtk.ScrolledWindow
-    toggle_chat_list_button: Gtk.Button
-    toggle_chat_list_icon: Gtk.Image
-    account_box: Gtk.Box
-
 class MamPreferencesBuilder(Builder):
     mam_box: Gtk.Box
     default_combo: Gtk.ComboBox
@@ -659,11 +636,6 @@ class PepConfigBuilder(Builder):
     form_box: Gtk.Box
     config_back_button: Gtk.Button
     save_button: Gtk.Button
-
-class PluginsBuilder(Builder):
-    plugins_box: Gtk.Box
-    preferences_group: Adw.PreferencesGroup
-    plugins_listbox: Gtk.ListBox
 
 class PreviewBuilder(Builder):
     preview_stack: Gtk.Stack
@@ -1116,10 +1088,6 @@ def get_builder(
 ) -> HistoryExportBuilder: ...  # noqa
 @overload
 def get_builder(
-    file_name: Literal["main.ui"], instance: Any = None, widgets: list[str] = ...
-) -> MainBuilder: ...  # noqa
-@overload
-def get_builder(
     file_name: Literal["mam_preferences.ui"],
     instance: Any = None,
     widgets: list[str] = ...,
@@ -1164,10 +1132,6 @@ def get_builder(
 def get_builder(
     file_name: Literal["pep_config.ui"], instance: Any = None, widgets: list[str] = ...
 ) -> PepConfigBuilder: ...  # noqa
-@overload
-def get_builder(
-    file_name: Literal["plugins.ui"], instance: Any = None, widgets: list[str] = ...
-) -> PluginsBuilder: ...  # noqa
 @overload
 def get_builder(
     file_name: Literal["preview.ui"], instance: Any = None, widgets: list[str] = ...

@@ -22,6 +22,7 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.events import SubscribedPresenceReceived
@@ -85,7 +86,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui = get_builder("contact_info.ui")
 
         self._tasks: list[Task] = []
-        self._devices: dict[str, DeviceGrid] = {}
+        self._devices: dict[str, DeviceInfo] = {}
 
         self._switcher = SideBarSwitcher()
 
@@ -178,7 +179,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
             self._save_annotation()
 
         for device_grid in self._devices.values():
-            device_grid.destroy()
+            self._ui.devices_page.remove(device_grid)
         self._devices.clear()
 
         del self._switcher
@@ -292,9 +293,9 @@ class ContactInfo(GajimAppWindow, EventHelper):
             return
 
         for resource_contact in contacts:
-            device_grid = DeviceGrid(resource_contact)
+            device_grid = DeviceInfo(resource_contact)
             self._devices[resource_contact.resource] = device_grid
-            self._ui.devices_box.append(device_grid.widget)
+            self._ui.devices_page.add(device_grid)
             self._query_device(resource_contact)
 
         self._ui.devices_stack.set_visible_child_name("devices")
@@ -501,45 +502,51 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.groups_treeview.set_cursor(path, column, True)
 
 
-class DeviceGrid:
+@Gtk.Template(filename=get_ui_path("device_info.ui"))
+class DeviceInfo(Adw.PreferencesGroup):
+
+    __gtype_name__ = "DeviceInfo"
+
+    _spinner: Adw.Spinner = Gtk.Template.Child()
+    _status_row: Adw.ActionRow = Gtk.Template.Child()
+    _priority_row: Adw.ActionRow = Gtk.Template.Child()
+    _software_row: Adw.ActionRow = Gtk.Template.Child()
+    _operating_system_row: Adw.ActionRow = Gtk.Template.Child()
+    _local_time_row: Adw.ActionRow = Gtk.Template.Child()
+
     def __init__(self, contact: ResourceContact) -> None:
+        Adw.PreferencesGroup.__init__(self)
+
         self._contact = contact
-        self._ui = get_builder("contact_info.ui", ["devices_grid"])
-        self._spinner = Adw.Spinner()
 
-        self._ui.resource_label.set_text(_('Device "%s"') % contact.resource)
-        self._ui.status_value.set_text(get_uf_show(contact.show.value))
+        self.set_title(_('Device "%s"') % contact.resource)
 
-        self._ui.priority_value.set_text(str(self._contact.priority))
-        self._ui.priority_value.set_visible(True)
-        self._ui.priority_label.set_visible(True)
+        self._status_row.set_subtitle(get_uf_show(contact.show.value))
 
-        self._ui.resource_box.append(self._spinner)
+        self._priority_row.set_subtitle(str(self._contact.priority))
+        self._priority_row.set_visible(True)
 
         self._waiting_for_info = 2
 
-    @property
-    def widget(self) -> Gtk.Grid:
-        return self._ui.devices_grid
+    def do_unroot(self) -> None:
+        Adw.PreferencesGroup.do_unroot(self)
+        del self._contact
 
     def set_entity_time(self, entity_time: str | None) -> None:
         if entity_time is not None:
-            self._ui.time_value.set_text(entity_time)
-            self._ui.time_value.set_visible(True)
-            self._ui.time_label.set_visible(True)
+            self._local_time_row.set_subtitle(entity_time)
+            self._local_time_row.set_visible(True)
 
         self._check_complete()
 
     def set_software(self, software: SoftwareVersionResult | None) -> None:
         if software is not None:
             software_string = f"{software.name} {software.version}"
-            self._ui.software_value.set_text(software_string)
-            self._ui.software_value.set_visible(True)
-            self._ui.software_label.set_visible(True)
+            self._software_row.set_subtitle(software_string)
+            self._software_row.set_visible(True)
             if software.os is not None:
-                self._ui.system_value.set_text(software.os)
-                self._ui.system_value.set_visible(True)
-                self._ui.system_label.set_visible(True)
+                self._operating_system_row.set_subtitle(software.os)
+                self._operating_system_row.set_visible(True)
 
         self._check_complete()
 
@@ -547,8 +554,3 @@ class DeviceGrid:
         self._waiting_for_info -= 1
         if not self._waiting_for_info:
             self._spinner.set_visible(False)
-
-    def destroy(self) -> None:
-        del self._spinner
-        del self._ui
-        del self._contact
