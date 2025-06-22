@@ -194,7 +194,7 @@
             <property name="max-width-chars">50</property>
             <property name="xalign">0</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-2"/>
             </style>
           </object>
         </child>

@@ -97,7 +97,7 @@ class ChatStack(Gtk.Stack, EventHelper, SignalManager):
         dnd_label.set_max_width_chars(40)
         dnd_label.set_vexpand(True)
         dnd_label.set_valign(Gtk.Align.START)
-        dnd_label.add_css_class("bold16")
+        dnd_label.add_css_class("title-3")
 
         self._drop_area = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=18)
         self._drop_area.set_visible(False)

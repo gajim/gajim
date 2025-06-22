@@ -132,7 +132,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Choose Device</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-2"/>
                 </style>
               </object>
             </child>

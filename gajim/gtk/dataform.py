@@ -301,7 +301,7 @@ class Title:
             wrap=True,
             justify=Gtk.Justification.CENTER,
         )
-        self._label.add_css_class("title-1")
+        self._label.add_css_class("title-2")
 
     def add(self, form_grid: FormGrid, row_number: int) -> None:
         form_grid.attach(self._label, 0, row_number, 2, 1)

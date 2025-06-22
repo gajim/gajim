@@ -16,7 +16,7 @@
             <property name="ellipsize">3</property>
             <property name="max-width-chars">40</property>
             <style>
-              <class name="bold16"/>
+              <class name="heading"/>
             </style>
           </object>
         </child>
@@ -26,7 +26,7 @@
             <property name="ellipsize">3</property>
             <property name="max-width-chars">40</property>
             <style>
-              <class name="dimmed"/>
+              <class name="caption"/>
             </style>
           </object>
         </child>

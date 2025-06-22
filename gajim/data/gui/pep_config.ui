@@ -87,7 +87,7 @@
                 <property name="wrap-mode">word-char</property>
                 <property name="max-width-chars">40</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-3"/>
                 </style>
               </object>
             </child>
@@ -141,7 +141,7 @@
                 <property name="wrap-mode">word-char</property>
                 <property name="max-width-chars">30</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-3"/>
                 </style>
               </object>
             </child>

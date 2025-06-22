@@ -175,7 +175,7 @@
             <property name="label" translatable="yes">Settings</property>
             <property name="use_markup">1</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-3"/>
             </style>
             <layout>
               <property name="column">0</property>
@@ -245,7 +245,7 @@
             <property name="label" translatable="yes">Proxy</property>
             <property name="use_markup">1</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-3"/>
             </style>
             <layout>
               <property name="column">0</property>

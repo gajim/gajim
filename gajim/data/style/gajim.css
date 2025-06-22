@@ -14,10 +14,6 @@ button.flat.link { padding: 0; border: 0; }
 /* ========================================================================= */
 /* Text style */
 .bold { font-weight: bold; }
-.bold16 {
-    font-size: 1.33rem;
-    font-weight: bold;
-}
 .small-label {
     font-size: 90%;
 }

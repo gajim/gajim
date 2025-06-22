@@ -73,7 +73,7 @@ class ChatFunctionPage(Gtk.Box, SignalManager):
         self._heading = Gtk.Label()
         self._heading.set_max_width_chars(30)
         self._heading.set_ellipsize(Pango.EllipsizeMode.END)
-        self._heading.add_css_class("title-1")
+        self._heading.add_css_class("title-2")
         self.append(self._heading)
 
         self._content_box = Gtk.Box()
@@ -390,7 +390,7 @@ class InputWidget(Gtk.Box, SignalManager):
 
         heading_label = Gtk.Label()
         heading_label.set_xalign(0)
-        heading_label.add_css_class("bold16")
+        heading_label.add_css_class("title-3")
         self.append(heading_label)
 
         sub_label = Gtk.Label()
@@ -463,7 +463,7 @@ class ErrorWidget(Gtk.Box):
         image.add_css_class("error")
 
         heading = Gtk.Label()
-        heading.add_css_class("bold16")
+        heading.add_css_class("title-3")
         heading_text = _("An Error Occurred")
         if mode == FunctionMode.JOIN_FAILED:
             heading_text = _("Failed to Join Group Chat")

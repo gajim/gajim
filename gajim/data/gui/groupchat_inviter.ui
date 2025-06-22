@@ -15,7 +15,7 @@
       <object class="GtkLabel">
         <property name="label" translatable="yes">Invite Contacts</property>
         <style>
-          <class name="bold16"/>
+          <class name="title-2"/>
         </style>
       </object>
     </child>

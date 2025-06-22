@@ -135,7 +135,7 @@
           <object class="GtkLabel" id="resource_label">
             <property name="hexpand">1</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-2"/>
             </style>
           </object>
         </child>

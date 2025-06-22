@@ -199,7 +199,7 @@ class Result(Page):
         self._jid_col: int | None = None
 
         self._label = Gtk.Label(label=_("No results found"))
-        self._label.add_css_class("bold16")
+        self._label.add_css_class("title-3")
         self._label.set_visible(False)
         self._label.set_halign(Gtk.Align.CENTER)
 

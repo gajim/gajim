@@ -153,7 +153,7 @@ class ErrorPage(Gtk.Box):
             justify=Gtk.Justification.CENTER,
             valign=Gtk.Align.START,
         )
-        self._error_label.add_css_class("bold16")
+        self._error_label.add_css_class("title-3")
 
         self.append(error_icon)
         self.append(self._error_label)

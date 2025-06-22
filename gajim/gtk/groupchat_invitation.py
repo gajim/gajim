@@ -84,7 +84,7 @@ class GroupChatInvitation(Gtk.Box, SignalManager):
         contact = self._client.get_module("Contacts").get_contact(event.from_.bare)
         assert isinstance(contact, BareContact | GroupchatContact)
         contact_label = Gtk.Label(label=contact.name, wrap=True)
-        contact_label.add_css_class("bold16")
+        contact_label.add_css_class("title-3")
         contact_box = Gtk.Box(
             orientation=Gtk.Orientation.HORIZONTAL, spacing=6, halign=Gtk.Align.CENTER
         )

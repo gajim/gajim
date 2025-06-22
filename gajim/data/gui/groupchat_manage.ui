@@ -43,7 +43,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Public Information</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-2"/>
                   <class name="mt-12"/>
                 </style>
               </object>
@@ -138,7 +138,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Subject</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-2"/>
                 </style>
               </object>
             </child>
@@ -224,7 +224,7 @@
                     <property name="justify">center</property>
                     <property name="wrap">1</property>
                     <style>
-                      <class name="bold16"/>
+                      <class name="title-2"/>
                     </style>
                     <layout>
                       <property name="column">0</property>
@@ -262,7 +262,7 @@
                     <property name="wrap">1</property>
                     <property name="max-width-chars">22</property>
                     <style>
-                      <class name="bold16"/>
+                      <class name="title-2"/>
                     </style>
                   </object>
                 </child>

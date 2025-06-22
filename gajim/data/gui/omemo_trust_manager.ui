@@ -17,7 +17,7 @@
           <object class="GtkLabel">
             <property name="label" translatable="yes">This Device</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-3"/>
             </style>
           </object>
         </child>

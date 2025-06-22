@@ -66,7 +66,7 @@ class ContactRow(Gtk.ListBoxRow):
         self._name_label.set_xalign(0)
         self._name_label.set_width_chars(20)
         self._name_label.set_halign(Gtk.Align.START)
-        self._name_label.add_css_class("bold16")
+        self._name_label.add_css_class("title-3")
         name_box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         name_box.append(self._name_label)
 

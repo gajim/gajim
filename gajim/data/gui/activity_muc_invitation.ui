@@ -52,7 +52,7 @@
             <property name="wrap">True</property>
             <property name="max-width-chars">52</property>
             <style>
-              <class name="bold16"/>
+              <class name="title-2"/>
             </style>
           </object>
         </child>

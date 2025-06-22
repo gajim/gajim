@@ -323,7 +323,7 @@ You can also type an XMPP address</property>
                     <property name="justify">center</property>
                     <property name="wrap">1</property>
                     <style>
-                      <class name="bold16"/>
+                      <class name="title-3"/>
                     </style>
                   </object>
                 </child>
@@ -412,7 +412,7 @@ You can also type an XMPP address</property>
                 <property name="justify">center</property>
                 <property name="wrap">1</property>
                 <style>
-                  <class name="bold16"/>
+                  <class name="title-2"/>
                   <class name="m-12"/>
                 </style>
               </object>
