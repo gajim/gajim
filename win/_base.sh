@@ -63,6 +63,7 @@ git+https://dev.gajim.org/gajim/omemo-dr.git
 git+https://dev.gajim.org/gajim/python-nbxmpp.git
 css_parser
 emoji
+pystray
 python-gnupg
 qrcode
 sentry-sdk

@@ -39,13 +39,19 @@ from gajim.gtk.util.window import open_window
 
 log = logging.getLogger("gajim.gtk.statusicon")
 
+if sys.platform == "win32":
+    import pystray
+    from PIL import Image
+
 
 class StatusIcon:
     def __init__(self) -> None:
 
         app.settings.connect_signal("show_trayicon", self._on_setting_changed)
 
-        if sys.platform in ("darwin", "win32"):
+        if sys.platform == "win32":
+            self._backend = WindowsStatusIcon()
+        elif sys.platform == "darwin":
             self._backend = NoneBackend()
         else:
             self._backend = LinuxStatusIcon()
@@ -146,6 +152,117 @@ class StatusIconBackend(EventHelper):
 
     def _on_activate(self) -> None:
         self._on_show_hide()
+
+
+class WindowsStatusIcon(StatusIconBackend):
+    def __init__(self) -> None:
+        StatusIconBackend.__init__(self)
+        self._status_icon = self._create_status_icon()
+        self._status_icon.run_detached()
+
+    def update_state(self, init: bool = False) -> None:
+        if not init and app.window.get_total_unread_count():
+            self._status_icon.icon = self._get_icon("message-new")
+            return
+
+        show = get_global_show()
+        self._status_icon.icon = self._get_icon(show)
+
+    def set_enabled(self, enabled: bool) -> None:
+        self._status_icon.stop()
+
+        if enabled:
+            self._status_icon = self._create_status_icon()
+            self._status_icon.run_detached()
+
+    def is_visible(self) -> bool:
+        return self._status_icon.visible
+
+    def shutdown(self) -> None:
+        self._status_icon.stop()
+
+    def _create_status_icon(self) -> pystray.Icon:
+        assert pystray  # type: ignore
+        menu_items: tuple[pystray.MenuItem, ...] = (
+            pystray.MenuItem(
+                text=_("Show/Hide Window"),
+                action=lambda: GLib.idle_add(self._on_show_hide),
+                default=True,
+            ),
+            pystray.MenuItem(
+                _("Status"),
+                pystray.Menu(
+                    (
+                        pystray.MenuItem(
+                            text=get_uf_show("online"),
+                            action=lambda: GLib.idle_add(
+                                self._on_status_changed, "online"
+                            ),
+                        ),
+                        pystray.MenuItem(
+                            text=get_uf_show("away"),
+                            action=lambda: GLib.idle_add(
+                                self._on_status_changed, "away"
+                            ),
+                        ),
+                        pystray.MenuItem(
+                            text=get_uf_show("xa"),
+                            action=lambda: GLib.idle_add(self._on_status_changed, "xa"),
+                        ),
+                        pystray.MenuItem(
+                            text=get_uf_show("dnd"),
+                            action=lambda: GLib.idle_add(
+                                self._on_status_changed, "dnd"
+                            ),
+                        ),
+                        pystray.MenuItem(
+                            text=get_uf_show("offline"),
+                            action=lambda: GLib.idle_add(
+                                self._on_status_changed, "offline"
+                            ),
+                        ),
+                    )
+                ),
+            ),
+            pystray.MenuItem(
+                text=_("Start Chat…"),
+                action=lambda: GLib.idle_add(self._on_start_chat),
+            ),
+            pystray.MenuItem(
+                text=_("Mute Sounds"),
+                action=lambda: GLib.idle_add(self._on_sounds_mute),
+                checked=self._get_sound_toggle_state(""),
+            ),
+            pystray.MenuItem(
+                text=_("Preferences"),
+                action=lambda: GLib.idle_add(self._on_preferences),
+            ),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(
+                text=_("Quit"),
+                action=lambda: GLib.idle_add(self._on_quit),
+            ),
+        )
+
+        return pystray.Icon(
+            "Gajim", icon=self._get_icon("online"), menu=pystray.Menu(menu_items)
+        )
+
+    @staticmethod
+    def _get_sound_toggle_state(_item_name: str) -> bool:
+        return not app.settings.get("sounds_on")
+
+    @staticmethod
+    def _get_icon(icon_name: str) -> Image.Image:
+        status_icon_name = get_status_icon_name(icon_name)
+        path = (
+            configpaths.get("ICONS")
+            / "hicolor"
+            / "32x32"
+            / "status"
+            / f"{status_icon_name}.png"
+        )
+        return Image.open(path)  # type: ignore
 
 
 class LinuxStatusIcon(StatusIconBackend):

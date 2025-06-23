@@ -147,6 +147,7 @@ exclude = [
   "scripts/update_flatpak_manifest.py",
   "test/common/test_uri_util.py",
   "test/gui/test_menus.py",
+  "typings/pystray/*",
   "typings/windows_toasts/*",
   "win/misc/depcheck.py",
 ]
