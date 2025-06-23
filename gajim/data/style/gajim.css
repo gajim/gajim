@@ -256,11 +256,11 @@ button.flat.link { padding: 0; border: 0; }
 }
 
 /* AccountPopover */
-#AccountPopoverButton image {
+#AccountPopoverRow image {
     -gtk-icon-size: 24px;
 }
 
-#AccountPopoverButton .account-identifier-bar {
+#AccountPopoverRow .account-identifier-bar {
     padding-left: 3px;
 }
 

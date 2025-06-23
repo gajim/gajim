@@ -53,8 +53,6 @@ class AppSideBar(Gtk.Box, EventHelper):
 
         accounts = app.settings.get_active_accounts()
         for account in reversed(accounts):
-            self._account_popover.add_account(account)
-
             client = app.get_client(account)
             contact = client.get_own_contact()
 
@@ -97,7 +95,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         client.connect_signal("state-changed", self._update_account_row)
         contact.connect("avatar-update", self._update_account_row)
 
-        self._account_popover.add_account(event.account)
         self._update_account_row()
 
     def _on_account_disabled(self, event: AccountDisabled) -> None:
@@ -107,7 +104,6 @@ class AppSideBar(Gtk.Box, EventHelper):
         client.disconnect_all_from_obj(self)
         contact.disconnect_all_from_obj(self)
 
-        self._account_popover.remove_account(event.account)
         self._update_account_row()
 
     def _update_account_row(self, *args: Any) -> None:
@@ -127,6 +123,10 @@ class AppSideBar(Gtk.Box, EventHelper):
         _popover: AccountPopover,
         account: str,
     ) -> None:
+        if not account:
+            app.app.activate_action("accounts", GLib.Variant("s", ""))
+            return
+
         app.window.show_account_page(account)
         self._bottom_listbox.select_row(self._account_row)
 
@@ -245,65 +245,51 @@ class AccountPopover(Gtk.Popover):
         )
     }
 
-    _box: Gtk.Box = Gtk.Template.Child()
+    _listbox: Gtk.ListBox = Gtk.Template.Child()
 
     def __init__(self) -> None:
         Gtk.Popover.__init__(self)
-        self._buttons: dict[str, AccountPopoverButton] = {}
+        self._rows: list[AccountPopoverRow] = []
 
-    def _on_clicked(self, button: AccountPopoverButton) -> None:
-        self.emit("clicked", button.get_account())
-        self.popdown()
+        self.connect("closed", self._on_closed)
+
+    def popup(self) -> None:
+        for account in app.settings.get_active_accounts():
+            row = AccountPopoverRow(account=account)
+            self._listbox.append(row)
+            self._rows.append(row)
+
+        Gtk.Popover.popup(self)
+
+    def _on_closed(self, popover: Gtk.Popover) -> None:
+        for row in self._rows:
+            self._listbox.remove(row)
+        self._rows.clear()
 
     @Gtk.Template.Callback()
-    def on_manage_clicked(self, button: Gtk.Button) -> None:
+    def _on_row_activated(
+        self, _listbox: Gtk.ListBox, row: AccountPopoverRow | Gtk.ListBoxRow
+    ) -> None:
+        account = ""
+        if isinstance(row, AccountPopoverRow):
+            account = row.get_account()
+
+        self.emit("clicked", account)
         self.popdown()
 
-    def add_account(self, account: str) -> None:
-        if account in self._buttons:
-            raise ValueError("Account cannot be added multiple times")
 
-        button = AccountPopoverButton(account=account)
-        button.connect("clicked", self._on_clicked)
-        self._buttons[account] = button
-        self._box.prepend(button)
-
-    def remove_account(self, account: str) -> None:
-        button = self._buttons.get(account)
-        if button is None:
-            raise ValueError("Account button for %s not found" % account)
-
-        self._box.remove(button)
-        del self._buttons[account]
-
-
-@Gtk.Template(filename=get_ui_path("account_popover_button.ui"))
-class AccountPopoverButton(Gtk.Button):
-    __gtype_name__ = "AccountPopoverButton"
+@Gtk.Template(filename=get_ui_path("account_popover_row.ui"))
+class AccountPopoverRow(Gtk.ListBoxRow):
+    __gtype_name__ = "AccountPopoverRow"
 
     _color_bar: Gtk.Box = Gtk.Template.Child()
     _avatar: Gtk.Image = Gtk.Template.Child()
     _label: Gtk.Label = Gtk.Template.Child()
 
     def __init__(self, account: str = "") -> None:
-        Gtk.Button.__init__(self)
+        Gtk.ListBoxRow.__init__(self)
 
-        self._account = ""
-        self.set_account(account)
-
-    def do_unroot(self) -> None:
-        Gtk.Button.do_unroot(self)
-        app.check_finalize(self)
-
-    def get_account(self) -> str:
-        return self._account
-
-    def set_account(self, account: str) -> None:
-        if not account or self._account == account:
-            return
-
-        if self._account:
-            self._clear_widgets()
+        self._account = account
 
         color_class = app.css_config.get_dynamic_class(account)
         self._color_bar.add_css_class(color_class)
@@ -316,11 +302,9 @@ class AccountPopoverButton(Gtk.Button):
         )
         self._avatar.set_from_paintable(texture)
 
-        self._account = account
+    def do_unroot(self) -> None:
+        Gtk.ListBoxRow.do_unroot(self)
+        app.check_finalize(self)
 
-    def _clear_widgets(self) -> None:
-        assert self._account is not None
-        color_class = app.css_config.get_dynamic_class(self._account)
-        self._color_bar.remove_css_class(color_class)
-        self._label.set_text("")
-        self._avatar.set_from_paintable(None)
+    def get_account(self) -> str:
+        return self._account

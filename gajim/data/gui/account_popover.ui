@@ -3,30 +3,31 @@
   <requires lib="gtk" version="4.0"/>
   <template class="AccountPopover" parent="GtkPopover">
     <property name="position">top</property>
-    <property name="default-widget">manage_button</property>
+    <property name="default-widget">manage-accounts</property>
     <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
-        <property name="propagate-natural-height">true</property>
+        <property name="propagate-natural-height">1</property>
+        <property name="max-content-height">350</property>
         <property name="child">
-          <object class="GtkBox" id="_box">
-            <property name="orientation">vertical</property>
-            <property name="spacing">3</property>
+          <object class="GtkListBox" id="_listbox">
+            <signal name="row-activated" handler="_on_row_activated" />
             <child>
-              <object class="GtkButton" id="manage_button">
-                <property name="action-name">app.accounts</property>
-                <property name="action-target">""</property>
-                <property name="label" translatable="yes">Manage Accounts…</property>
-                <property name="height-request">45</property>
-                <signal name="clicked" handler="on_manage_clicked" />
-                <style>
-                  <class name="flat"/>
-                </style>
+              <object class="GtkListBoxRow" id="manage-accounts">
+                <property name="child">
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">Manage Accounts…</property>
+                    <property name="height-request">38</property>
+                  </object>
+                </property>
               </object>
             </child>
           </object>
         </property>
       </object>
     </property>
+    <style>
+      <class name="menu" />
+    </style>
   </template>
 </interface>

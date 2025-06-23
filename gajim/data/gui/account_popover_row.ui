@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="AccountPopoverButton" parent="GtkButton">
-    <property name="name">AccountPopoverButton</property>
+  <template class="AccountPopoverRow" parent="GtkListBoxRow">
+    <property name="name">AccountPopoverRow</property>
     <property name="child">
       <object class="GtkBox">
-        <property name="spacing">6</property>
         <child>
           <object class="GtkBox" id="_color_bar">
             <style>
@@ -23,8 +22,5 @@
         </child>
       </object>
     </property>
-    <style>
-      <class name="flat"/>
-    </style>
   </template>
 </interface>
