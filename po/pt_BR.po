@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2025-05-09 16:12+0000\n"
 "Last-Translator: Bernardo Krzysczak <bkrz@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.gajim.org/projects/"
@@ -137,10 +137,6 @@ msgstr "%(user)s agora tem os seguintes chapéus: %(hats)s"
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr "%s (Você)"
-
-#, python-format
-msgid "%s (desynced)"
-msgstr "%s (dessincronizado)"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -437,6 +433,10 @@ msgstr "Configurações de Conta…"
 msgid "Account Wizard"
 msgstr "Assistente de Conta"
 
+#, fuzzy
+msgid "Account address: "
+msgstr "Conta Adicionada"
+
 msgid "Account disabled"
 msgstr "Conta desativada"
 
@@ -454,6 +454,10 @@ msgstr "Conta está sendo criada"
 
 msgid "Account is not connected."
 msgstr "A conta não está conectada."
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Nome da Conta..."
 
 #, python-format
 msgid "Account: %s"
@@ -483,9 +487,6 @@ msgstr "Ativado"
 
 msgid "Active"
 msgstr "Ativo"
-
-msgid "Activity"
-msgstr "Atividade"
 
 msgid "Activity Feed"
 msgstr "Feed de Atividade"
@@ -525,9 +526,6 @@ msgstr "Adicionar Configuração"
 
 msgid "Add Workspace"
 msgstr "Adicionar Workspace"
-
-msgid "Add _Contact…"
-msgstr "Adicionar _Contato…"
 
 msgid "Add a checkmark to received messages"
 msgstr "Adicionar uma marca-de-seleção às mensagens recebidas"
@@ -598,17 +596,22 @@ msgstr "Administradores"
 msgid "Advanced"
 msgstr "Avançado"
 
+#, fuzzy
+msgid "Advanced Configuration Editor"
+msgstr "Editor Avançado de Configuração… "
+
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "Editor Avançado de Configuração (ACE)"
-
-msgid "Advanced Configuration Editor… "
-msgstr "Editor Avançado de Configuração… "
 
 msgid "Advanced Settings"
 msgstr "Configurações Avançadas"
 
 msgid "Advanced settings"
 msgstr "Configurações avançadas"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "Versão do GTK+: %s"
 
 msgid "Affiliation"
 msgstr "Afiliação"
@@ -622,9 +625,6 @@ msgstr "Filiações de %(nick)s para este bate-papo em grupo foram removidas"
 
 msgid "After"
 msgstr "Depois"
-
-msgid "Algorithm"
-msgstr "Algoritmo"
 
 msgid "All"
 msgstr "Todos(as)"
@@ -760,9 +760,6 @@ msgstr "Preferências de Arquivamento Salvas"
 msgid "Archiving Preferences for %s"
 msgstr "Preferências de Arquivamento para %s"
 
-msgid "Artists"
-msgstr "Artistas"
-
 msgid "Ask For Status Message on…"
 msgstr "Solicite Mensagem de Status em…"
 
@@ -858,6 +855,10 @@ msgstr "Disponível"
 
 msgctxt "User status"
 msgid "Available"
+msgstr "Disponível"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Disponível"
 
 msgid "Avatar file size too big"
@@ -1006,14 +1007,6 @@ msgstr "Falha na Verificação do Certificado"
 msgid "Certificate chain too long"
 msgstr "Cadeia de certificados muito longa"
 
-#, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr ""
-"Certificado para\n"
-"%s"
-
 msgid "Certificate has expired"
 msgstr "Certificado expirou"
 
@@ -1130,6 +1123,10 @@ msgstr "Verifique se há atualizações"
 msgid "Check for updates periodically"
 msgstr "Verifique se há atualizações periodicamente"
 
+#, fuzzy
+msgid "Check which features are available"
+msgstr "Mensagens de Voz não estão disponíveis"
+
 msgid "Choose Device"
 msgstr "Escolha o Dispositivo"
 
@@ -1190,11 +1187,6 @@ msgstr ""
 msgid "Click to change time display"
 msgstr "Clique para alterar o display de horário"
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-"Clique para ver a página wiki do Gajim sobre como instalar plugins no "
-"Flatpak."
-
 msgid "Click to view location"
 msgstr "Clique para ver a localização"
 
@@ -1210,9 +1202,6 @@ msgstr "Certificado Cliente"
 
 msgid "Close"
 msgstr "Fechar"
-
-msgid "Close Search"
-msgstr "Fechar Busca"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr "Feche uma conversa pressionando a tecla Esc"
@@ -1241,9 +1230,6 @@ msgstr "Comando foi executado com sucesso"
 
 msgid "Commands"
 msgstr "Comandos"
-
-msgid "Common Name (CN)"
-msgstr "Nome comum (CN)"
 
 msgid "Common Name (CN): "
 msgstr "Nome comum (CN): "
@@ -1415,9 +1401,6 @@ msgstr "Copiar"
 msgid "Copy Address"
 msgstr "Copiar Endereço"
 
-msgid "Copy Certificate Information"
-msgstr "Copiar Informações do Certificado"
-
 msgid "Copy Link"
 msgstr "Copiar Link"
 
@@ -1483,9 +1466,6 @@ msgstr "Criar Bate-Papo em Grupo…"
 msgid "Create New Account"
 msgstr "Criar Nova Conta"
 
-msgid "Create _Group Chat…"
-msgstr "Criar _Grupo de Chat…"
-
 msgid "Create new group chat"
 msgstr "Criar novo chat de grupo"
 
@@ -1501,6 +1481,9 @@ msgstr "As credenciais expiraram"
 msgid "D-Bus Interface"
 msgstr "Interface D-Bus"
 
+msgid "DNS"
+msgstr ""
+
 msgid "Dark Theme"
 msgstr "Tema Escuro"
 
@@ -1512,6 +1495,10 @@ msgstr "Migração de Base de Dados falhou"
 
 msgid "Deactivated"
 msgstr "Desativado"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "Console XML"
 
 msgid "Debug Logging"
 msgstr "Registro de Depuração"
@@ -1527,9 +1514,6 @@ msgstr "Diminuir velocidade de reprodução"
 
 msgid "Decryption failed"
 msgstr "Desencriptação falhou"
-
-msgid "Default"
-msgstr "Padrão"
 
 msgid "Default Encryption"
 msgstr "Criptografia Padrão"
@@ -1594,9 +1578,6 @@ msgstr "Destruir este Chat"
 
 msgid "Details"
 msgstr "Detalhes"
-
-msgid "Developers"
-msgstr "Desenvolvedores"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1726,17 +1707,14 @@ msgstr "Você deseja cancelar também o registro sua conta em <b>%s</b>?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "Fazer isso irá deletar esta Impressão Digital permanentemente"
 
+msgid "Domain"
+msgstr ""
+
 msgid "Download"
 msgstr "Baixar"
 
 msgid "Download File"
 msgstr "Baixar Arquivo"
-
-msgid "Download Update"
-msgstr "Baixar Atualização"
-
-msgid "Download and Install"
-msgstr "Baixar e Instalar"
 
 #, python-format
 msgid "Download failed (%s)"
@@ -1933,11 +1911,11 @@ msgstr "Executar Comando…"
 msgid "Executing…"
 msgstr "Executando…"
 
-msgid "Expires on"
-msgstr "Expira em"
-
 msgid "Expires on: "
 msgstr "Expira em: "
+
+msgid "Expiry date"
+msgstr ""
 
 msgid "Export"
 msgstr "Exportar"
@@ -2074,6 +2052,10 @@ msgstr "Filtros"
 msgid "Filters (active)"
 msgstr "Filtros (ativos)"
 
+#, fuzzy
+msgid "Fingerprint"
+msgstr "Impressões Digitais"
+
 msgid "Fingerprint for this Device"
 msgstr "Impressão Digital para este Dispositivo"
 
@@ -2107,11 +2089,12 @@ msgstr "Para Sempre"
 msgid "Forget Group Chat"
 msgstr "Esquecer Bate-Papo em Grupo"
 
-msgid "Forget this Group Chat"
-msgstr "Esquecer este Bate-Papo em Grupo"
-
 msgid "Forget this Group Chat?"
 msgstr "Esquecer este Bate-Papo em Grupo?"
+
+#, fuzzy
+msgid "Forget this Group Chat…"
+msgstr "Esquecer este Bate-Papo em Grupo"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "Erro de formato no campo lastUpdate do CRL"
@@ -2323,9 +2306,6 @@ msgstr "Verificação HTTPS"
 msgid "Hello, I am $name. %s"
 msgstr "Olá, estou $name. %s"
 
-msgid "Helps to establish calls through firewalls"
-msgstr "Ajuda a estabelecer ligações pelos firewalls"
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr "Oculto"
@@ -2333,14 +2313,12 @@ msgstr "Oculto"
 msgid "Hide"
 msgstr "Ocultar"
 
-msgid "Hide chat list"
+#, fuzzy
+msgid "Hide Chat List"
 msgstr "Ocultar lista de conversas"
 
 msgid "Home"
 msgstr "Início"
-
-msgid "Homepage"
-msgstr "Página Inicial"
 
 msgid "Hostname"
 msgstr "Hostname"
@@ -2350,6 +2328,9 @@ msgstr "O quão para trás o histórico de conversas deve sincronizar?"
 
 msgid "How long Gajim should keep your chat history"
 msgstr "Por quanto tempo o Gajim deve manter seu histórico de conversas"
+
+msgid "How to install plugins with Flatpak"
+msgstr ""
 
 msgid "I can see contact's online status"
 msgstr "Eu posso ver o status online do contato"
@@ -2370,6 +2351,10 @@ msgstr "Padrão da IEC diz que KiB = 1024 bytes e KB = 1000 bytes."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "Endereço IM"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "Porta"
 
 msgid "Id"
 msgstr "Id"
@@ -2473,6 +2458,10 @@ msgstr "Conexão Insegura"
 msgid "Insert Emoji"
 msgstr "Inserir Emoji"
 
+#, fuzzy
+msgid "Install"
+msgstr "Instalado"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr "Instale <tt>sentry-sdk</tt> para facilitar o reporte de problemas."
 
@@ -2482,11 +2471,12 @@ msgstr "Instalar plugin de um arquivo zip"
 msgid "Install a keyring to store passwords on your system."
 msgstr "Instale um chaveiro para armazenar senhas no seu sistema."
 
+#, fuzzy
+msgid "Install from Archive"
+msgstr "Instalar plugin de um arquivo zip"
+
 msgid "Installation failed"
 msgstr "Instalação falhou"
-
-msgid "Installed"
-msgstr "Instalado"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2544,14 +2534,15 @@ msgstr "Convidados"
 msgid "Is a microphone plugged in and accessible?"
 msgstr "Há algum microfone conectado e acessível?"
 
+#, fuzzy
+msgid "Issue date"
+msgstr "Emitido para"
+
 msgid "Issued by"
 msgstr "Emitido por"
 
 msgid "Issued by\n"
 msgstr "Emitido por\n"
-
-msgid "Issued on"
-msgstr "Emitido em"
 
 msgid "Issued on: "
 msgstr "Emitido em: "
@@ -2561,6 +2552,9 @@ msgstr "Emitido para"
 
 msgid "Issued to\n"
 msgstr "Emitido para\n"
+
+msgid "Issues detected"
+msgstr ""
 
 msgid "I’m eating."
 msgstr "Estou comendo."
@@ -2595,9 +2589,6 @@ msgstr "Participar de Grupo de Bate-papo?"
 msgid "Join Groupchat…"
 msgstr "Entrar em um grupo de bate-papo…"
 
-msgid "Join Support Chat"
-msgstr "Ingressar em um Chat de Suporte"
-
 msgid "Joining Group Chat…"
 msgstr "Entrando em Grupo de Bate-papo…"
 
@@ -2615,9 +2606,6 @@ msgstr "Manter Histórico de Conversa"
 
 msgid "Keep and manage all your chat history"
 msgstr "Mantenha e gerencie todo o seu histórico de bate-papo"
-
-msgid "Key Size"
-msgstr "Tamanho da Chave"
 
 msgid "Key usage does not include certificate signing"
 msgstr "O uso das chaves não inclui assinatura de certificado"
@@ -2638,9 +2626,6 @@ msgstr "Rótulo"
 #, python-format
 msgid "Language: %s"
 msgstr "Idioma: %s"
-
-msgid "Last but not least"
-msgstr "Por último, mas não menos importante"
 
 #, python-format
 msgid "Last seen: %s"
@@ -2690,9 +2675,6 @@ msgstr "Carregando…"
 msgid "Local System Time"
 msgstr "Tempo do sistema local"
 
-msgid "Local Time"
-msgstr "Hora Local"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "Grupo de ajuda local"
@@ -2733,9 +2715,6 @@ msgstr ""
 "Pesquise coisas na Wikipédia, dicionários ou outros mecanismos de busca "
 "diretamente da janela de bate-papo"
 
-msgid "Maintainers"
-msgstr "Mantenedores"
-
 msgid "Make Admin"
 msgstr "Criar Admin"
 
@@ -2754,6 +2733,10 @@ msgstr "Masculino"
 msgid "Manage"
 msgstr "Gerenciar"
 
+#, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Gerenciar Contas…"
+
 msgid "Manage Contact List"
 msgstr "Gerenciar Lista de Contatos"
 
@@ -2768,6 +2751,9 @@ msgstr "Gerenciar Sons"
 
 msgid "Manage Trust"
 msgstr "Gerenciar Confiança"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 msgid "Manage your Devices…"
 msgstr "Gerenciar seus Dispositivos…"
@@ -2849,7 +2835,8 @@ msgstr "Minutos até seu status mudar"
 msgid "Miscellaneous"
 msgstr "Diversos"
 
-msgid "Missing dependencies for Audio/Video"
+#, fuzzy
+msgid "Missing dependencies for audio support"
 msgstr "Faltando dependências para Áudio/Vídeo"
 
 msgid "Missing necessary encryption plugin"
@@ -2984,6 +2971,10 @@ msgstr "Nenhuma Senha é Necessária"
 msgid "No Proxy"
 msgstr "Sem Proxy"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "Nenhum resultado encontrado"
+
 msgid "No Sync"
 msgstr "Sem Sincronia"
 
@@ -3035,9 +3026,6 @@ msgstr "Nenhum grupo atribuído"
 
 msgid "No info available"
 msgstr "Nenhuma informação disponível"
-
-msgid "No proxy used"
-msgstr "Nenhum proxy usado"
 
 msgid "No results"
 msgstr "Sem resultados"
@@ -3208,9 +3196,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Organização"
 
-msgid "Organization (O)"
-msgstr "Organização (O)"
-
 msgid "Organization (O): "
 msgstr "Organização (O): "
 
@@ -3273,6 +3258,9 @@ msgstr "Arquivos PKCS12"
 
 msgid "PNG files"
 msgstr "Arquivos PNG"
+
+msgid "Packages"
+msgstr ""
 
 #, python-format
 msgid "Pango Version: %s"
@@ -3380,9 +3368,6 @@ msgstr "Fixado"
 
 msgid "Pipewire"
 msgstr "Pipewire"
-
-msgid "Pl_ugins"
-msgstr "Pl_ugins"
 
 msgid "Play Sound"
 msgstr "Reproduzir um som"
@@ -3576,7 +3561,12 @@ msgstr "Chave pública: "
 msgid "Pulse: %s"
 msgstr "Pulso: %s"
 
-msgid "Purge Chat History…"
+#, fuzzy
+msgid "Purge"
+msgstr "_Purgar"
+
+#, fuzzy
+msgid "Purge Chat History"
 msgstr "Limpar Histórico de Chat…"
 
 msgid "Purge all Chat History?"
@@ -3845,8 +3835,13 @@ msgstr "Redefine valor para padrão"
 msgid "Resource"
 msgstr "Adicional"
 
-msgid "Restart Gajim for changes to take effect"
+#, fuzzy
+msgid "Restart Gajim to finish this update"
 msgstr "Reinicie o Gajim para aplicar as alterações"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Solicitação pendente"
 
 msgid "Restore chat"
 msgstr "Restaurar conversa"
@@ -3884,14 +3879,8 @@ msgstr "Cargo"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Cargos de %s foram removidos neste bate-papo em grupo"
 
-msgid "SHA-1"
-msgstr "SHA-1"
-
 msgid "SHA-1:"
 msgstr "SHA-1:"
-
-msgid "SHA-256"
-msgstr "SHA-256"
 
 msgid "SHA-256:"
 msgstr "SHA-256:"
@@ -3901,12 +3890,6 @@ msgstr "Erro de verificação de certificado SSL"
 
 msgid "SSL certificate error"
 msgstr "Erro de Certificado SSL"
-
-msgid "STUN Server"
-msgstr "Servidor STUN"
-
-msgid "STUN Server Settings"
-msgstr "Configurações de Servidor STUN"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Servidor STUN para usar ao usar Jingle"
@@ -3999,8 +3982,9 @@ msgstr ""
 "Pesquisar grupos de chat globalmente.\n"
 "(pressione Enter para iniciar a pesquisa)"
 
-msgid "Search your conversation"
-msgstr "Buscar na sua conversa"
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Pesquisar Participantes…"
 
 msgid "Searching"
 msgstr "Buscando"
@@ -4052,10 +4036,6 @@ msgstr "Selecione velocidade de reprodução"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "Selecione sua entrada de áudio (ex.: microfone)"
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
-msgstr ""
-"Selecione seu dispositivo de entrada de vídeo (ex.: webcam, captura de tela)"
 
 msgid "Selected image could not be loaded."
 msgstr "A imagem selecionada não pôde ser carregada."
@@ -4128,9 +4108,6 @@ msgstr ""
 "Separar arquivos de perfil completamente (até mesmo banco de dados de "
 "histórico e plugins)"
 
-msgid "Serial Number"
-msgstr "Número de Série"
-
 msgid "Serial Number: "
 msgstr "Número do Ticket: "
 
@@ -4172,6 +4149,10 @@ msgstr "Serviço não navegável"
 msgid "Service Not Found"
 msgstr "Serviço Não Encontrado"
 
+#, fuzzy
+msgid "Set Trust"
+msgstr "Gerenciar Confiança"
+
 msgid "Set configuration directory"
 msgstr "Definir diretório de configuração"
 
@@ -4212,6 +4193,10 @@ msgstr "Compartilhar Vídeo"
 msgid "Share my online status"
 msgstr "Compartilhar meu status online"
 
+#, fuzzy
+msgid "Show Chat List"
+msgstr "Mostrar lista de conversas"
+
 msgid "Show Commands"
 msgstr "Mostrar Comandos"
 
@@ -4232,9 +4217,6 @@ msgstr "Mostrar entrar/sair"
 
 msgid "Show Joined / Left"
 msgstr "Mostrar Entrou / Saiu"
-
-msgid "Show My Video Stream"
-msgstr "Mostrar Minha Stream de Vídeo"
 
 msgid "Show Notifications"
 msgstr "Mostrar Notificações"
@@ -4257,9 +4239,6 @@ msgstr "Mostrar Transferências"
 msgid "Show Voice Message Button"
 msgstr "Mostrar Botão Mensagem de Voz"
 
-msgid "Show _Features"
-msgstr "Mostrar _Recursos"
-
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "Mostrar uma confirmação antes de conectar sem criptografia"
 
@@ -4273,17 +4252,11 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Mostrar uma lista de emojis"
 
-msgid "Show a live preview to test your video source"
-msgstr "Mostrar uma prévia ao vivo para testar sua fonte de vídeo"
-
 msgid "Show all reactions"
 msgstr "Mostrar todas as reações"
 
 msgid "Show all warnings"
 msgstr "Exibir todos alarmes"
-
-msgid "Show chat list"
-msgstr "Mostrar lista de conversas"
 
 msgid "Show debug console"
 msgstr "Mostrar console de depuração"
@@ -4338,9 +4311,6 @@ msgstr "Mostrar janela na barra de tarefas"
 msgid "Show window when starting Gajim"
 msgstr "Mostrar janela ao iniciar o Gajim"
 
-msgid "Show your own video stream in calls"
-msgstr "Mostrar sua própria stream de vídeo em chamadas"
-
 msgid "Show/Hide Window"
 msgstr "Mostrar/Ocultar Janela"
 
@@ -4367,9 +4337,6 @@ msgstr "Tamanho de prévia de imagens em pixels"
 
 msgid "Sleeping"
 msgstr "Dormindo"
-
-msgid "Software"
-msgstr "Software do Servidor"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "Algo deu errado. Recurso de vídeo desabilitado."
@@ -4473,10 +4440,6 @@ msgstr "O status está compartilhado"
 msgid "Status message…"
 msgstr "Mensagem de status…"
 
-#, python-format
-msgid "Status: %s"
-msgstr "Status: %s"
-
 msgid "Status: Away Color"
 msgstr "Status: Cor para Ausente"
 
@@ -4500,9 +4463,6 @@ msgstr "Estilo"
 
 msgid "Subject"
 msgstr "Assunto"
-
-msgid "Subject Alt Names"
-msgstr "Nomes Alternativos de Assunto"
 
 msgid "Subject Alt Names: "
 msgstr "Nomes Alternativos de Assunto: "
@@ -4636,6 +4596,10 @@ msgstr "Arquivo de Texto"
 msgid "Thanks"
 msgstr "Obrigado"
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "Nós gostaríamos de agradecer todos os mantedores dos pacotes."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr "O certificado não coincide com a identidade esperada do site"
 
@@ -4691,9 +4655,6 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Temas"
 
-msgid "There are connectivity issues"
-msgstr "Há algum problema de conexão"
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 "Existem dispositivos em que você não fez uma decisão de confiança ainda."
@@ -4713,6 +4674,10 @@ msgstr "Existem atualizações para os plugins do Gajim"
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
 msgstr "Ocorreu um erro ao tentar receber mensagens: %s"
+
+#, fuzzy
+msgid "There is an update available for this plugin"
+msgstr "Existem atualizações para os plugins do Gajim"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr ""
@@ -4873,6 +4838,10 @@ msgstr "Este tipo de serviço não contém nenhum item para navegar."
 msgid "This will clear the devices store for your account."
 msgstr "Isto irá limpar o armazenamento de dispositivos da sua conta."
 
+#, fuzzy
+msgid "This will purge all locally stored chat history"
+msgstr "Esta mensagem será excluída do seu histórico de conversas local"
+
 msgid "This will remove your account from Gajim."
 msgstr "Isto removerá sua conta do Gajim."
 
@@ -4943,6 +4912,9 @@ msgstr "Confiança Não Decidida"
 
 msgid "Try Again"
 msgstr "Tente Novamente"
+
+msgid "Try a different search"
+msgstr ""
 
 msgid "Trying to change password..."
 msgstr "Tentando alterar a senha..."
@@ -5018,7 +4990,8 @@ msgstr "Participante"
 msgid "Unencrypted"
 msgstr "Não criptografado"
 
-msgid "Uninstall Plugin"
+#, fuzzy
+msgid "Uninstall"
 msgstr "Desinstalar Plugin"
 
 msgid "Unknown"
@@ -5082,7 +5055,8 @@ msgstr "Atualizar Avatar"
 msgid "Update automatically"
 msgstr "Atualizar automaticamente"
 
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Atualização disponível"
 
 msgid "Update plugins automatically"
@@ -5093,6 +5067,10 @@ msgstr "Atualizações"
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr "Atualizações serão instaladas da próxima vez que o Gajim for iniciado"
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Plugins"
 
 msgid "Updating provider list…"
 msgstr "Atualizando lista de provedores…"
@@ -5122,14 +5100,14 @@ msgstr "Usar GSSAPI"
 msgid "Use Image"
 msgstr "Usar Imagem"
 
-msgid "Use STUN Server"
-msgstr "Usar Servidor STUN"
-
 msgid "Use System Keyring"
 msgstr "Usar Chaveiro do Sistema"
 
 msgid "Use Unencrypted Connection"
 msgstr "Usar Conexão Não Criptografada"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 msgid "Use an unencrypted connection to the server"
 msgstr "Usar uma conexão não criptografada ao servidor"
@@ -5189,15 +5167,6 @@ msgstr "Versão"
 msgid "Video"
 msgstr "Vídeo"
 
-msgid "Video Framerate"
-msgstr "Taxa de Quadros do Vídeo"
-
-msgid "Video Input Device"
-msgstr "Dispositivo de Entrada de Vídeo"
-
-msgid "Video Resolution"
-msgstr "Resolução de Vídeo"
-
 msgid "Video test"
 msgstr "Teste de vídeo"
 
@@ -5242,6 +5211,9 @@ msgstr "Faltando um \"%s\" na URL de procura na web"
 
 msgid "Web _Search for it"
 msgstr "_Procura na web por isto"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr "Site"
@@ -5512,6 +5484,9 @@ msgstr ""
 "Seu histórico de conversas está sendo migrado.\n"
 "Isso pode levar um tempo…"
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Sua mensagem não pode ser enviada até que esteja conectado."
 
@@ -5537,6 +5512,10 @@ msgstr ""
 "Seu provedor não oferece um serviço de bate-papo em grupo. Por favor, "
 "especifique o endereço de um provedor diferente."
 
+#, fuzzy
+msgid "Your server offers the following features"
+msgstr "Agora você tem os seguintes chapéus: %s"
+
 msgid "ZIP files"
 msgstr "Ficheiros ZIP"
 
@@ -5557,12 +5536,6 @@ msgstr "_Aceitar"
 
 msgid "_Account"
 msgstr "_Conta"
-
-msgid "_Accounts"
-msgstr "_Contas"
-
-msgid "_Add Account…"
-msgstr "_Adicionar Conta…"
 
 msgid "_Add to Trusted Certificates"
 msgstr "_Adicionar a Certificados Confiáveis"
@@ -5611,9 +5584,6 @@ msgstr "_Copiar Link"
 msgid "_Create"
 msgstr "_Criar"
 
-msgid "_Debug Console"
-msgstr "_Console de Depuração"
-
 msgid "_Decline"
 msgstr "_Recusar"
 
@@ -5648,9 +5618,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Livre para Conversa"
 
-msgid "_Help"
-msgstr "_Ajuda"
-
 msgid "_Hide (Tray Icon)"
 msgstr "_Esconder (Ícone de Bandeja)"
 
@@ -5660,8 +5627,16 @@ msgstr "_Computador"
 msgid "_Hostname"
 msgstr "_Nome do computador"
 
+#, fuzzy
+msgid "_Import"
+msgstr "Importar"
+
 msgid "_Join"
 msgstr "_Ingressar"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Ingressar em um Chat de Suporte"
 
 msgid "_Keyboard Shortcuts"
 msgstr "_Atalhos de Teclado"
@@ -5674,12 +5649,6 @@ msgstr "_Sair"
 
 msgid "_Log In"
 msgstr "_Entrar"
-
-msgid "_Manage Accounts…"
-msgstr "_Gerenciar Contas…"
-
-msgid "_Manage Account…"
-msgstr "_Gerenciar Conta…"
 
 msgid "_Minimize"
 msgstr "_Minimizar"
@@ -5714,9 +5683,6 @@ msgstr "_Por favor, escolha um provedor"
 
 msgid "_Port"
 msgstr "_Porta"
-
-msgid "_Preferences"
-msgstr "_Preferências"
 
 msgid "_Privacy Policy (Online)"
 msgstr "_Política de Privacidade (Online)"
@@ -5769,17 +5735,11 @@ msgstr "_Mostrar Certificado"
 msgid "_Sign Up"
 msgstr "_Registrar"
 
-msgid "_Start / Join Chat…"
-msgstr "_Iniciar/ Entrar no Chat…"
-
 msgid "_Stop Sharing"
 msgstr "_Parar Compartilhamento"
 
 msgid "_Subscribe"
 msgstr "_Inscrever"
-
-msgid "_Toggle Menu Bar"
-msgstr "_Alternar Barra de Menu"
 
 msgid "_Type"
 msgstr "_Tipo"
@@ -5796,9 +5756,6 @@ msgstr "_Desinscrever"
 
 msgid "_Username"
 msgstr "_Nome de Usuário"
-
-msgid "_View"
-msgstr "_Visualizar"
 
 msgid "_View Certificate"
 msgstr "_Ver Certificado"
@@ -5882,9 +5839,6 @@ msgid ""
 msgstr ""
 "convidou você para um grupo de bate-papo.\n"
 "Deseja participar?"
-
-msgid "help"
-msgstr "ajuda"
 
 msgid "is composing a message…"
 msgstr "está digitando…"
@@ -5979,9 +5933,6 @@ msgstr "férias"
 msgid "video input"
 msgstr "entrada de vídeo"
 
-msgid "we would like to thank all the package maintainers."
-msgstr "Nós gostaríamos de agradecer todos os mantedores dos pacotes."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "{nick} saiu devido a um erro{reason}"
@@ -6012,6 +5963,10 @@ msgstr "...ou solte-o aqui"
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " de {actor}"
+
+#, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "%s (dessincronizado)"
 
 #, python-format
 #~ msgid "%s asks you to share your status"
@@ -6296,6 +6251,12 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Account %s is still connected"
 #~ msgstr "A Conta %s ainda está conectada"
 
+#~ msgid "Activity"
+#~ msgstr "Atividade"
+
+#~ msgid "Add _Contact…"
+#~ msgstr "Adicionar _Contato…"
+
 #, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Adicionar Configuração"
@@ -6305,6 +6266,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Add to new Group"
 #~ msgstr "Adicionar a Novo Grupo"
+
+#~ msgid "Algorithm"
+#~ msgstr "Algoritmo"
 
 #, fuzzy
 #~ msgid "All Groups"
@@ -6318,6 +6282,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Você tem certeza que deseja sair do Gajim?"
+
+#~ msgid "Artists"
+#~ msgstr "Artistas"
 
 #, fuzzy
 #~ msgid "Audio / Video Calls"
@@ -6351,6 +6318,14 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Não é possível sobrescrever o arquivo '%s'"
 
+#, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Certificado para\n"
+#~ "%s"
+
 #~ msgid "Checking file…"
 #~ msgstr "Verificando arquivo…"
 
@@ -6362,6 +6337,18 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Escolha o Arquivo para Enviar…"
+
+#~ msgid ""
+#~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+#~ msgstr ""
+#~ "Clique para ver a página wiki do Gajim sobre como instalar plugins no "
+#~ "Flatpak."
+
+#~ msgid "Close Search"
+#~ msgstr "Fechar Busca"
+
+#~ msgid "Common Name (CN)"
+#~ msgstr "Nome comum (CN)"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -6377,6 +6364,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversa: Cor do URL"
 
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Copiar Informações do Certificado"
+
 #~ msgid "Copy Email Address"
 #~ msgstr "Copiar Endereço de E-mail"
 
@@ -6390,15 +6380,17 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Copy Path"
 #~ msgstr "Copiar"
 
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Criar _Grupo de Chat…"
+
 #~ msgid "Create new post"
 #~ msgstr "Criar nova postagem"
 
 #~ msgid "Current Developers"
 #~ msgstr "Desenvolvedores Atuais"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "Console XML"
+#~ msgid "Default"
+#~ msgstr "Padrão"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -6410,6 +6402,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "Description: "
 #~ msgstr "Descrição: "
+
+#~ msgid "Developers"
+#~ msgstr "Desenvolvedores"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -6429,6 +6424,12 @@ msgstr "...ou solte-o aqui"
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Baixar"
+
+#~ msgid "Download Update"
+#~ msgstr "Baixar Atualização"
+
+#~ msgid "Download and Install"
+#~ msgstr "Baixar e Instalar"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -6462,6 +6463,9 @@ msgstr "...ou solte-o aqui"
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Erro: impossível abrir %s para leitura"
+
+#~ msgid "Expires on"
+#~ msgstr "Expira em"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"
@@ -6529,8 +6533,14 @@ msgstr "...ou solte-o aqui"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
 
+#~ msgid "Helps to establish calls through firewalls"
+#~ msgstr "Ajuda a estabelecer ligações pelos firewalls"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Esconder este menu"
+
+#~ msgid "Homepage"
+#~ msgstr "Página Inicial"
 
 #, fuzzy
 #~ msgid ""
@@ -6565,12 +6575,27 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Invite New Contact"
 #~ msgstr "Convidar _contatos"
 
+#~ msgid "Issued on"
+#~ msgstr "Emitido em"
+
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Não é possível enviar arquivos vazios"
+
+#~ msgid "Key Size"
+#~ msgstr "Tamanho da Chave"
+
+#~ msgid "Last but not least"
+#~ msgstr "Por último, mas não menos importante"
 
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Razão"
+
+#~ msgid "Local Time"
+#~ msgstr "Hora Local"
+
+#~ msgid "Maintainers"
+#~ msgstr "Mantenedores"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -6601,6 +6626,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "No Notifications"
 #~ msgstr "Notificações"
 
+#~ msgid "No proxy used"
+#~ msgstr "Nenhum proxy usado"
+
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
@@ -6618,9 +6646,8 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Open Path"
 #~ msgstr "Abrir"
 
-#, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Plugins"
+#~ msgid "Organization (O)"
+#~ msgstr "Organização (O)"
 
 #, fuzzy
 #~ msgid "Organizational Unit (OU)"
@@ -6640,6 +6667,9 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Exibir todos _eventos pendentes"
+
+#~ msgid "Pl_ugins"
+#~ msgstr "Pl_ugins"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -6721,13 +6751,28 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Requer: libxss"
 
+#~ msgid "SHA-1"
+#~ msgstr "SHA-1"
+
+#~ msgid "SHA-256"
+#~ msgstr "SHA-256"
+
 #, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "MEIAS5"
 
+#~ msgid "STUN Server"
+#~ msgstr "Servidor STUN"
+
+#~ msgid "STUN Server Settings"
+#~ msgstr "Configurações de Servidor STUN"
+
 #~ msgid "Save File as…"
 #~ msgstr "Salvar Arquivo como…"
+
+#~ msgid "Search your conversation"
+#~ msgstr "Buscar na sua conversa"
 
 #, fuzzy
 #~ msgid "Select File…"
@@ -6740,6 +6785,11 @@ msgstr "...ou solte-o aqui"
 #, fuzzy
 #~ msgid "Select the contacts you want to synchronize"
 #~ msgstr "Selecione os contatos que você quer sincronizar"
+
+#~ msgid "Select your video input device (e.g. webcam, screen capture)"
+#~ msgstr ""
+#~ "Selecione seu dispositivo de entrada de vídeo (ex.: webcam, captura de "
+#~ "tela)"
 
 #, fuzzy, python-format
 #~ msgid "Selected security label: %s"
@@ -6759,6 +6809,9 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Sender: "
 #~ msgstr "Remetente: "
 
+#~ msgid "Serial Number"
+#~ msgstr "Número de Série"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -6766,14 +6819,29 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Show Location"
 #~ msgstr "Mostrar localização"
 
+#~ msgid "Show My Video Stream"
+#~ msgstr "Mostrar Minha Stream de Vídeo"
+
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Exibir desc_onectados"
+
+#~ msgid "Show _Features"
+#~ msgstr "Mostrar _Recursos"
+
+#~ msgid "Show a live preview to test your video source"
+#~ msgstr "Mostrar uma prévia ao vivo para testar sua fonte de vídeo"
+
+#~ msgid "Show your own video stream in calls"
+#~ msgstr "Mostrar sua própria stream de vídeo em chamadas"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr ""
 #~ "Exibe uma lista de transferências de arquivos entre você e os outros"
+
+#~ msgid "Software"
+#~ msgstr "Software do Servidor"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -6800,8 +6868,15 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Status: "
 #~ msgstr "Status: "
 
+#, python-format
+#~ msgid "Status: %s"
+#~ msgstr "Status: %s"
+
 #~ msgid "Stop File Transfers"
 #~ msgstr "Parar Transferências de Arquivos"
+
+#~ msgid "Subject Alt Names"
+#~ msgstr "Nomes Alternativos de Assunto"
 
 #~ msgid "Submit"
 #~ msgstr "Enviar"
@@ -6832,6 +6907,9 @@ msgstr "...ou solte-o aqui"
 
 #~ msgid "The service could not be found"
 #~ msgstr "O serviço não pode ser encontrado"
+
+#~ msgid "There are connectivity issues"
+#~ msgstr "Há algum problema de conexão"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "Esta conta não está conectada ao servidor"
@@ -6884,9 +6962,21 @@ msgstr "...ou solte-o aqui"
 #~ msgid "Upload Files"
 #~ msgstr "Enviar Arquivo…"
 
+#~ msgid "Use STUN Server"
+#~ msgstr "Usar Servidor STUN"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Nome de _Usuário"
+
+#~ msgid "Video Framerate"
+#~ msgstr "Taxa de Quadros do Vídeo"
+
+#~ msgid "Video Input Device"
+#~ msgstr "Dispositivo de Entrada de Vídeo"
+
+#~ msgid "Video Resolution"
+#~ msgstr "Resolução de Vídeo"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -6924,8 +7014,17 @@ msgstr "...ou solte-o aqui"
 #~ "Você não poderá mais enviar e receber mensagens dos contatos usando este "
 #~ "transporte."
 
+#~ msgid "_Accounts"
+#~ msgstr "_Contas"
+
+#~ msgid "_Add Account…"
+#~ msgstr "_Adicionar Conta…"
+
 #~ msgid "_Clear"
 #~ msgstr "_Limpar"
+
+#~ msgid "_Debug Console"
+#~ msgstr "_Console de Depuração"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -6939,9 +7038,15 @@ msgstr "...ou solte-o aqui"
 #~ msgid "_File Transfer"
 #~ msgstr "Transferência de Arquivos"
 
+#~ msgid "_Help"
+#~ msgstr "_Ajuda"
+
 #, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Entrar"
+
+#~ msgid "_Manage Account…"
+#~ msgstr "_Gerenciar Conta…"
 
 #~ msgid "_Modify Account…"
 #~ msgstr "_Modificar Conta…"
@@ -6954,18 +7059,33 @@ msgstr "...ou solte-o aqui"
 #~ msgid "_Open Folder"
 #~ msgstr "_Abrir pasta do arquivo"
 
+#~ msgid "_Preferences"
+#~ msgstr "_Preferências"
+
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Notificar-me quando a transmissão do arquivo terminar"
 
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "_Iniciar/ Entrar no Chat…"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "_Iniciar conversa..."
+
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "_Alternar Barra de Menu"
 
 #~ msgid "_Undo"
 #~ msgstr "_Desfazer"
 
+#~ msgid "_View"
+#~ msgstr "_Visualizar"
+
 #~ msgid "file transfers list"
 #~ msgstr "lista de transferência de arquivos"
+
+#~ msgid "help"
+#~ msgstr "ajuda"
 
 #, fuzzy
 #~ msgid "org.gajim.Gajim"

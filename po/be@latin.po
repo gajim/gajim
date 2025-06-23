@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -121,10 +121,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Pašyranyja"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -442,6 +438,10 @@ msgid "Account Wizard"
 msgstr "Šyfravańnie adklučanaje"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Kont"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Šyfravańnie adklučanaje"
 
@@ -463,6 +463,10 @@ msgstr "Kont \"%s\" dałučany da servera"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Kont \"%s\" dałučany da servera"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Kont"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -493,10 +497,6 @@ msgid "Activated"
 msgstr "Dziejny"
 
 msgid "Active"
-msgstr "Dziejny"
-
-#, fuzzy
-msgid "Activity"
 msgstr "Dziejny"
 
 #, fuzzy
@@ -549,10 +549,6 @@ msgstr "Niemahvyma dałučycca"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Dadaj kantakt..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -638,11 +634,11 @@ msgid "Advanced"
 msgstr "Pašyranyja"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Redaktar dadatkovych naładaŭ"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Redaktar dadatkovych naładaŭ"
 
 #, fuzzy
@@ -652,6 +648,10 @@ msgstr "Admysłovyja dziejańni"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Admysłovyja dziejańni"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "Versija GTK+:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -666,9 +666,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -817,9 +814,6 @@ msgstr "_Nałady"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Spytaj paviedamleńnia statusu, kali ja:"
@@ -936,6 +930,10 @@ msgstr "_Dastupny"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "_Dastupny"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "_Dastupny"
 
 msgid "Avatar file size too big"
@@ -1101,12 +1099,6 @@ msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
 msgid "Certificate chain too long"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "dla kontu %s"
-
 msgid "Certificate has expired"
 msgstr ""
 
@@ -1231,6 +1223,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Złučeńnia niama"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Abiary vyjavu"
 
@@ -1298,9 +1294,6 @@ msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klikni, kab vystavić svoj avatar"
@@ -1317,10 +1310,6 @@ msgstr "Niapravilnaje imia karystalnika"
 #, fuzzy
 msgid "Close"
 msgstr "_Dašli i začyni"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Šukaj"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1353,9 +1342,6 @@ msgstr "Kont paśpiachova dadany"
 #, fuzzy
 msgid "Commands"
 msgstr "Zahady: %s"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1560,10 +1546,6 @@ msgid "Copy Address"
 msgstr "S_kapijuj JID/Email"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Źviestki ab kantakcie"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "S_kapijuj adras spasyłki"
 
@@ -1646,10 +1628,6 @@ msgid "Create New Account"
 msgstr "Stvary novy zapis"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Pakiń pakoji"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Pakiń pakoji"
 
@@ -1667,6 +1645,9 @@ msgstr "Musiš vyznačyć parol"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
@@ -1680,6 +1661,10 @@ msgstr "Niemahvyma dałučycca"
 
 msgid "Deactivated"
 msgstr "Niadziejny"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "Kansol XML"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1698,9 +1683,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Niemahvyma dałučycca"
-
-msgid "Default"
-msgstr "Zmoŭčany"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1780,10 +1762,6 @@ msgstr "Novaja hrupavaja razmova"
 
 msgid "Details"
 msgstr "Padrabiaznaści"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Byłyja raspracoŭniki:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1923,6 +1901,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Ściahni"
@@ -1930,14 +1911,6 @@ msgstr "Ściahni"
 #, fuzzy
 msgid "Download File"
 msgstr "Ściahni"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Ściahni"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "_Bolš nie pytajsia"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2156,10 +2129,10 @@ msgstr "_Vykanaj zahad..."
 msgid "Executing…"
 msgstr "_Vykanaj zahad..."
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2327,6 +2300,9 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Atrymanaje pieršaje paviedamleńnie"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2363,11 +2339,11 @@ msgid "Forget Group Chat"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Pakiń pakoji"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Pakiń pakoji"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2606,9 +2582,6 @@ msgstr "Madyfikacyja kontu"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2617,15 +2590,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Udzielnik"
 
 #, fuzzy
 msgid "Home"
-msgstr "Chatniaja staronka:"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "Chatniaja staronka:"
 
 #, fuzzy
@@ -2637,6 +2606,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Što chočaš zrabić?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2660,6 +2632,10 @@ msgstr "Standart IEC vyznačaje, što KiB = 1024 bajtaŭ, KB = 1000 bajtaŭ."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adras:"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Port:"
 
 msgid "Id"
 msgstr "Identyfikatar"
@@ -2772,6 +2748,10 @@ msgstr "Złučeńnie"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr "Zatrymana"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2781,13 +2761,12 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
+msgid "Install from Archive"
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Niemahvyma dałučycca"
-
-#, fuzzy
-msgid "Installed"
-msgstr "Zatrymana"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2859,13 +2838,13 @@ msgstr "_Zaprasi"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2875,6 +2854,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2920,10 +2902,6 @@ msgid "Join Groupchat…"
 msgstr "Dałučysia da pakoju"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Dałučysia da pakoju"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Dałučysia da pakoju"
 
@@ -2943,9 +2921,6 @@ msgid "Keep Chat History"
 msgstr "Niadaŭna:"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2968,9 +2943,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3027,10 +2999,6 @@ msgstr "Uvod paviedamleńnia"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Lakalny JID:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3074,9 +3042,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Administratar"
@@ -3100,6 +3065,10 @@ msgid "Manage"
 msgstr "Kiruj..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "Madyfikuj kont"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Kantakty"
 
@@ -3118,6 +3087,9 @@ msgstr "Kiruj kontami"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Kiruj kontami"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3211,7 +3183,7 @@ msgstr "_Zachoŭvać u žurnale źmieny statusu kantaktaŭ"
 msgid "Miscellaneous"
 msgstr "<b>Roznaje</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3372,6 +3344,10 @@ msgstr "Vymahaje parolu"
 msgid "No Proxy"
 msgstr "Proxy:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "%s nia znojdzieny"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3420,10 +3396,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Konty niedastupnyja"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Proxy:"
 
 #, fuzzy
 msgid "No results"
@@ -3625,10 +3597,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Administratar"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Administratar"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3695,6 +3663,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "Usie fajły"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3816,10 +3787,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4042,8 +4009,11 @@ msgstr "Šyfravańnie ŭklučanaje"
 msgid "Pulse: %s"
 msgstr "Fajł: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Niadaŭna:"
 
 #, fuzzy
@@ -4371,8 +4341,12 @@ msgid "Resource"
 msgstr "Krynica:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr "<b>UVAHA:</b> Kab ubačyć niekatoryja źmieny, uruchom Gajim"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Vymahaje parolu"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4417,13 +4391,7 @@ msgstr "Funkcyja"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(who)s vypchnuŭ %(nick)s: %(reason)s"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4436,14 +4404,6 @@ msgstr "Dadajecca admysłovaje nahadvańnie dla %s"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Niapravilnaje imia karystalnika"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "Server:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Niemahvyma dałučycca"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4549,8 +4509,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Udzielniki"
 
 #, fuzzy
 msgid "Searching"
@@ -4607,9 +4568,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4700,10 +4658,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "Numer GG:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "Numer GG:"
 
@@ -4754,6 +4708,10 @@ msgid "Service Not Found"
 msgstr "Niemahčyma znajści servis"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Kiruj kontami"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Kanfihuracyja pakoju"
 
@@ -4799,6 +4757,10 @@ msgid "Share my online status"
 msgstr "Źmiani status"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Madyfikacyja kontu"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Zahady: %s"
 
@@ -4822,9 +4784,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4856,10 +4815,6 @@ msgid "Show Voice Message Button"
 msgstr "Dašli paviedamleńnie"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Zdolnaści serveraŭ"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Ci treba pakazvać akno paćvierdžańnia pry stvareńni metakantaktu? Pusty "
@@ -4877,9 +4832,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Klikni, kab ustavić smajlik (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
@@ -4887,10 +4839,6 @@ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Pakažy ŭsie niahledžanyja _padzieji"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Madyfikacyja kontu"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4947,9 +4895,6 @@ msgstr "Nie pakazvaj śpis kantaktaŭ na paneli zadańniaŭ."
 msgid "Show window when starting Gajim"
 msgstr ""
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Schavaj akno"
@@ -4981,10 +4926,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Splu"
-
-#, fuzzy
-msgid "Software"
-msgstr "Zdolnaści serveraŭ"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5103,10 +5044,6 @@ msgstr "Paviedamleńnie statusu"
 msgid "Status message…"
 msgstr "Pa_viedamleńnie statusu:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Status: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Paviedamleńnie statusu"
@@ -5137,9 +5074,6 @@ msgstr "Zatrymana"
 
 msgid "Subject"
 msgstr "Tema"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5288,6 +5222,10 @@ msgstr "Vyšli _fajł"
 msgid "Thanks"
 msgstr ""
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "I ŭrešcie, chočacca padziakavać usim apiekunam pakietaŭ."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5347,9 +5285,6 @@ msgstr "Tema"
 msgid "Themes"
 msgstr "Tema"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5364,6 +5299,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5521,6 +5459,9 @@ msgstr "Taki servis nia ŭtrymlivaje elementaŭ dla ahladańnia."
 msgid "This will clear the devices store for your account."
 msgstr "Vydal kont _tolki dla Gajim"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Vydal kont _tolki dla Gajim"
@@ -5594,6 +5535,9 @@ msgid "Trust Not Decided"
 msgstr ""
 
 msgid "Try Again"
+msgstr ""
+
+msgid "Try a different search"
 msgstr ""
 
 #, fuzzy
@@ -5678,7 +5622,7 @@ msgid "Unencrypted"
 msgstr "Nie pačata"
 
 #, fuzzy
-msgid "Uninstall Plugin"
+msgid "Uninstall"
 msgstr "Zatrymana"
 
 #, fuzzy
@@ -5754,8 +5698,8 @@ msgstr "Abiary vyjavu"
 msgid "Update automatically"
 msgstr "Abiary vyjavu"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Konty niedastupnyja"
 
 msgid "Update plugins automatically"
@@ -5766,6 +5710,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5800,16 +5748,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Abiary vyjavu"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "Server:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Złučeńnie"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5875,18 +5822,6 @@ msgstr "Versija GTK+:"
 msgid "Video"
 msgstr ""
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Прыватная размова"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Прыватная размова"
-
 msgid "Video test"
 msgstr ""
 
@@ -5940,6 +5875,9 @@ msgstr "U adrasie dla web-pošuku nie staje \"%s\""
 
 msgid "Web _Search for it"
 msgstr "_Šukaj u Web"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6221,6 +6159,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Ty nia možaš dasłać paviedamleńnie, pakul nia złučyśsia z serveram."
 
@@ -6248,6 +6189,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Usie fajły"
@@ -6272,14 +6216,6 @@ msgstr "Dazvol"
 #, fuzzy
 msgid "_Account"
 msgstr "Konty"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Konty"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Dadaj kantakt..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6342,10 +6278,6 @@ msgid "_Create"
 msgstr "Niadziejny"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "Kansol XML"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "Adł_učany"
 
@@ -6389,10 +6321,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Achvotna parazmaŭlaju"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Dapamoha"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6404,8 +6332,16 @@ msgstr "_Host:"
 msgid "_Hostname"
 msgstr "Nazva hosta: "
 
+#, fuzzy
+msgid "_Import"
+msgstr "Ekspartuj"
+
 msgid "_Join"
 msgstr "_Dałučysia"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Dałučysia da pakoju"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6419,14 +6355,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Dałučysia"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "Madyfikuj kont"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Dadaj kantakt..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6469,10 +6397,6 @@ msgstr "Stvary novy zapis"
 #, fuzzy
 msgid "_Port"
 msgstr "_Port:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Nałady"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6534,19 +6458,11 @@ msgstr "Niapravilnaje imia karystalnika"
 msgid "_Sign Up"
 msgstr "_Dałučajusia"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Pačni razmovu"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Aŭtaryzuj"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Pakažy _transparty"
 
 #, fuzzy
 msgid "_Type"
@@ -6564,10 +6480,6 @@ msgstr "_Anuluj aŭtaryzacyju"
 #, fuzzy
 msgid "_Username"
 msgstr "_Imia karystalnika:"
-
-#, fuzzy
-msgid "_View"
-msgstr "_Vyhlad"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6662,9 +6574,6 @@ msgid ""
 "Do you want to join?"
 msgstr "Zaznač pakoji, jakija chočaš pakinuć"
 
-msgid "help"
-msgstr ""
-
 #, fuzzy
 msgid "is composing a message…"
 msgstr "piša paviedamleńnie..."
@@ -6756,10 +6665,6 @@ msgstr "Madyfikacyja kontu"
 msgid "video input"
 msgstr ""
 
-#, fuzzy
-msgid "we would like to thank all the package maintainers."
-msgstr "I ŭrešcie, chočacca padziakavać usim apiekunam pakietaŭ."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6786,6 +6691,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Źmiani _mianušku"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Pašyranyja"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7029,6 +6938,14 @@ msgstr ""
 #~ msgstr "Kont \"%s\" dałučany da servera"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Dziejny"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Dadaj kantakt..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Niemahvyma dałučycca"
 
@@ -7084,6 +7001,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Niemahčyma nadpisać fajł \"%s\""
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "dla kontu %s"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Dasyłańnie profilu..."
@@ -7099,6 +7022,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Abiary fajł dla adsyłańnia..."
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Šukaj"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7117,6 +7044,10 @@ msgstr ""
 #~ msgstr "Žurnał razmoŭ"
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Źviestki ab kantakcie"
+
+#, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "S_kapijuj JID/Email"
 
@@ -7132,6 +7063,10 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "Pakoj:"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Pakiń pakoji"
+
 #~ msgid "Create new post"
 #~ msgstr "Stvary novy zapis"
 
@@ -7139,9 +7074,8 @@ msgstr ""
 #~ msgid "Current Developers"
 #~ msgstr "Dziejnyja raspracoŭniki:"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "Kansol XML"
+#~ msgid "Default"
+#~ msgstr "Zmoŭčany"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7154,6 +7088,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Apisańnie: %s"
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Byłyja raspracoŭniki:"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7171,6 +7109,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Ściahni"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Ściahni"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "_Bolš nie pytajsia"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7265,6 +7211,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Schavaj hetaje menu"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Chatniaja staronka:"
+
 #~ msgid "Images"
 #~ msgstr "Vyjavy"
 
@@ -7289,6 +7239,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Pryčyna"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Lakalny JID:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7323,6 +7277,10 @@ msgstr ""
 #~ msgstr "Madyfikacyja kontu"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Proxy:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Nie pačata"
@@ -7340,8 +7298,8 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Niemahvyma dałučycca"
+#~ msgid "Organization (O)"
+#~ msgstr "Administratar"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7350,6 +7308,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Pakažy ŭsie niahledžanyja _padzieji"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Niemahvyma dałučycca"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7418,6 +7380,14 @@ msgstr ""
 #~ msgstr "Vymahaje parolu"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Niemahvyma dałučycca"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Zapišy fajł jak..."
 
@@ -7453,6 +7423,10 @@ msgstr ""
 #~ msgstr "Adpraŭnik:"
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "Numer GG:"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7465,8 +7439,16 @@ msgstr ""
 #~ msgstr "Pakažy _adłučanyja kantakty"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Zdolnaści serveraŭ"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Pakažy śpis pieradačaŭ fajłaŭ"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Zdolnaści serveraŭ"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -7487,6 +7469,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Status: "
 
 #, fuzzy
@@ -7547,8 +7533,24 @@ msgstr ""
 #~ msgstr "Zapišy fajł jak..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Server:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Imia karystalnika:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Прыватная размова"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Standartnyja šablony paviedamleńniaŭ statusu"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Прыватная размова"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7591,6 +7593,18 @@ msgstr ""
 #~ "transpartam."
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Konty"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Dadaj kantakt..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "Kansol XML"
+
+#, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Bolš nie pytajsia"
 
@@ -7603,8 +7617,16 @@ msgstr ""
 #~ msgstr "Pieradačy fajłaŭ"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Dapamoha"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Dałučysia"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Dadaj kantakt..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7619,12 +7641,28 @@ msgstr ""
 #~ msgstr "_Adčyni kataloh z fajłam"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Nałady"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Nahadaj mnie ab zakančeńni pieradačy fajła"
 
 #, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Pačni razmovu"
+
+#, fuzzy
 #~ msgid "_Start Chat..."
 #~ msgstr "_Pačni razmovu"
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Pakažy _transparty"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Vyhlad"
 
 #~ msgid "file transfers list"
 #~ msgstr "śpis pieradačaŭ fajłaŭ"

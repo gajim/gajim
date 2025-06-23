@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -120,10 +120,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Dre ar munut"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -440,6 +436,10 @@ msgid "Account Wizard"
 msgstr "Lazhet eo ar sifrañ"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Kont"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Lazhet eo ar sifrañ"
 
@@ -461,6 +461,10 @@ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Luget eo ar gont \"%s\" d'ar servijer"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Kont"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -492,10 +496,6 @@ msgid "Activated"
 msgstr "Oberiant"
 
 msgid "Active"
-msgstr "Oberiant"
-
-#, fuzzy
-msgid "Activity"
 msgstr "Oberiant"
 
 #, fuzzy
@@ -548,10 +548,6 @@ msgstr "échec lors de la publication de votre vCard"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Ouzhpennañ un darempred..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -635,11 +631,11 @@ msgid "Advanced"
 msgstr "Dre ar munut"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Aozer kefluniañ dre ar munut"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Aozer kefluniañ dre ar munut"
 
 #, fuzzy
@@ -649,6 +645,10 @@ msgstr "Actions a_vancées"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Actions a_vancées"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "Taolennadur: %s"
 
 #, fuzzy
 msgid "Affiliation"
@@ -663,9 +663,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -815,9 +812,6 @@ msgstr "_Penndibaboù"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Goulenn an titour-stad pa:"
@@ -934,6 +928,10 @@ msgstr "Dihegerz"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Dihegerz"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Dihegerz"
 
 #, fuzzy
@@ -1099,12 +1097,6 @@ msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 msgid "Certificate chain too long"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "evit ar gont %s"
-
 msgid "Certificate has expired"
 msgstr ""
 
@@ -1227,6 +1219,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "N'eus ket tu en em lugañ"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Dibabit ur skeudenn"
 
@@ -1294,9 +1290,6 @@ msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Kopiañ chomlec'h an ere"
@@ -1313,10 +1306,6 @@ msgstr "Anv-arveriad-ez direizh"
 #, fuzzy
 msgid "Close"
 msgstr "_Kas & Serriñ"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Klask"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1349,9 +1338,6 @@ msgstr "Gant berzh eo bet ouzhpennet ar gont!"
 #, fuzzy
 msgid "Commands"
 msgstr "Urzhioù: %s"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1556,10 +1542,6 @@ msgid "Copy Address"
 msgstr "_Kopiañ ar JID/Chomlec'h postel"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Titouroù"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Kopiañ chomlec'h an ere"
 
@@ -1641,10 +1623,6 @@ msgid "Create New Account"
 msgstr "Darempredoù"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Flap a-stroll"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Flap a-stroll"
 
@@ -1660,6 +1638,9 @@ msgid "Credentials expired"
 msgstr "Ger-kuzh ret"
 
 msgid "D-Bus Interface"
+msgstr ""
+
+msgid "DNS"
 msgstr ""
 
 #, fuzzy
@@ -1678,6 +1659,10 @@ msgid "Deactivated"
 msgstr "Dizoberiant"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr "Diskouez ar gonsol _XML"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "E_barzhiñ"
 
@@ -1694,10 +1679,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Kevreadenn"
-
-#, fuzzy
-msgid "Default"
-msgstr "Dilemel"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1777,10 +1758,6 @@ msgstr "Flap a-stroll"
 
 msgid "Details"
 msgstr "Munudoù"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Diorroerien kent:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1916,6 +1893,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Pellgargañ"
@@ -1923,14 +1903,6 @@ msgstr "Pellgargañ"
 #, fuzzy
 msgid "Download File"
 msgstr "Pellgargañ"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Pellgargañ"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "_Chom hep goulenn ket"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2148,10 +2120,10 @@ msgstr "urzhiad"
 msgid "Executing…"
 msgstr "urzhiad"
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2320,6 +2292,9 @@ msgstr "Sil:"
 msgid "Filters (active)"
 msgstr "Kemennadenn gentañ"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2356,11 +2331,11 @@ msgid "Forget Group Chat"
 msgstr "Flap a-stroll"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Flap a-stroll"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Flap a-stroll"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2599,9 +2574,6 @@ msgstr "Kemmañ ar gont"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2610,15 +2582,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Perzhiad-ez"
 
 #, fuzzy
 msgid "Home"
-msgstr "Lec'hienn hiniennel:"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "Lec'hienn hiniennel:"
 
 #, fuzzy
@@ -2630,6 +2598,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Petra a fell deoc'h ober?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2653,6 +2624,10 @@ msgstr "Hervez ar standard IEC, KiB = 1024 byte, KB = 1000 byte."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "Chomlec'h"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Porzh:"
 
 msgid "Id"
 msgstr ""
@@ -2757,6 +2732,10 @@ msgstr "Kevreadenn"
 msgid "Insert Emoji"
 msgstr "Gérer les frimousses"
 
+#, fuzzy
+msgid "Install"
+msgstr "échec lors de la publication de votre vCard"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2766,12 +2745,11 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-#, fuzzy
-msgid "Installation failed"
-msgstr "échec lors de la publication de votre vCard"
+msgid "Install from Archive"
+msgstr ""
 
 #, fuzzy
-msgid "Installed"
+msgid "Installation failed"
 msgstr "échec lors de la publication de votre vCard"
 
 msgctxt "Configuration type"
@@ -2844,13 +2822,13 @@ msgstr "Diwelus"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2860,6 +2838,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2905,10 +2886,6 @@ msgid "Join Groupchat…"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Ebarzhiñ ur sal-flapiñ"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Ebarzhiñ ur sal-flapiñ"
 
@@ -2928,9 +2905,6 @@ msgid "Keep Chat History"
 msgstr "Nevez 'zo:"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2953,9 +2927,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3009,10 +2980,6 @@ msgstr "O skrivañ"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "dibaoe %s"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3056,9 +3023,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Merour-ez"
@@ -3082,6 +3046,10 @@ msgid "Manage"
 msgstr "Kemmañ..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Kemmañ ar gont..."
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Darempredoù"
 
@@ -3100,6 +3068,9 @@ msgstr "Merañ ar c'hontoù"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Merañ ar c'hontoù"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3194,7 +3165,7 @@ msgstr "_Menegiñ kemmoù stad an darempredoù e-barzh an istoradur"
 msgid "Miscellaneous"
 msgstr "<b>A bep seurt</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3356,6 +3327,10 @@ msgstr "Ger-kuzh ret"
 msgid "No Proxy"
 msgstr "Proksi:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "N'eo ket bet kavet %s"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3404,10 +3379,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Kont ebet hegerz"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Proksi:"
 
 #, fuzzy
 msgid "No results"
@@ -3608,10 +3579,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "_Merour-ez"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "_Merour-ez"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3679,6 +3646,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "An holl restroù"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3800,10 +3770,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4025,8 +3991,11 @@ msgstr "War enaou emañ ar sifrañ"
 msgid "Pulse: %s"
 msgstr "Restr: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Nevez 'zo:"
 
 #, fuzzy
@@ -4352,9 +4321,13 @@ msgid "Resource"
 msgstr "Une erreur de protocole s'est produite :"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "<b>NOTENN :</b> Dav eo deoc'h adloc'hañ Gajim evit ma vo efedus kemmoù 'zo"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Ger-kuzh ret"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4398,13 +4371,7 @@ msgstr "Perzh"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(nick)s a zo bet skarzhet gant %(who)s : %(reason)s"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4417,14 +4384,6 @@ msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Anv-arveriad-ez direizh"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "Servijer:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "échec lors de la publication de votre vCard"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4530,8 +4489,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Perzhidi"
 
 #, fuzzy
 msgid "Searching"
@@ -4589,9 +4549,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4681,9 +4638,6 @@ msgstr "Darempredoù"
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
-msgid "Serial Number"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4734,6 +4688,10 @@ msgid "Service Not Found"
 msgstr "N'eo ket bet kavet ar servij"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Merañ ar c'hontoù"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Kefluniañ ar webgaoz"
 
@@ -4779,6 +4737,10 @@ msgid "Share my online status"
 msgstr "Darempred diluget"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Kemmañ ar gont"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Urzhioù: %s"
 
@@ -4802,9 +4764,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4835,10 +4794,6 @@ msgstr "Dorioù"
 msgid "Show Voice Message Button"
 msgstr "Kas ur gemennadenn"
 
-#, fuzzy
-msgid "Show _Features"
-msgstr "Perzhioù ar servijerien"
-
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 
@@ -4851,9 +4806,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Klikit evit enlakaat ur boulomell (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
@@ -4861,10 +4813,6 @@ msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Kemmañ ar gont"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4920,9 +4868,6 @@ msgstr ""
 msgid "Show window when starting Gajim"
 msgstr ""
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "A guzha ar prenestr"
@@ -4954,10 +4899,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "O kousket"
-
-#, fuzzy
-msgid "Software"
-msgstr "Perzhioù ar servijerien"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5076,10 +5017,6 @@ msgstr "Titour-stad"
 msgid "Status message…"
 msgstr "_Titour-stad:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Stad:"
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Titour-stad"
@@ -5109,9 +5046,6 @@ msgstr ""
 
 msgid "Subject"
 msgstr "Titl"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5261,6 +5195,10 @@ msgstr "Kas ur _restr"
 msgid "Thanks"
 msgstr ""
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "Evit echuiñ, e fell deomp trugarekaat holl gempennerien ar pakad."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5320,9 +5258,6 @@ msgstr "Gwiskadur"
 msgid "Themes"
 msgstr "Gwiskadur"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5337,6 +5272,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5495,6 +5433,9 @@ msgstr "N'eus elfenn ebet da furchal e seurt servijoù."
 msgid "This will clear the devices store for your account."
 msgstr "Dilemel ar gont diwar Gajim _hepken"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Dilemel ar gont diwar Gajim _hepken"
@@ -5568,6 +5509,9 @@ msgid "Trust Not Decided"
 msgstr ""
 
 msgid "Try Again"
+msgstr ""
+
+msgid "Try a different search"
 msgstr ""
 
 #, fuzzy
@@ -5651,8 +5595,9 @@ msgstr "Perzhiad-ez"
 msgid "Unencrypted"
 msgstr "N'eo ket kroget"
 
-msgid "Uninstall Plugin"
-msgstr ""
+#, fuzzy
+msgid "Uninstall"
+msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Unknown"
@@ -5727,8 +5672,8 @@ msgstr "Dibabit ur skeudenn"
 msgid "Update automatically"
 msgstr "Dibabit ur skeudenn"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Kont ebet hegerz"
 
 msgid "Update plugins automatically"
@@ -5739,6 +5684,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5773,16 +5722,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Pegañ ar skeudenn"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "Servijer:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Kevreadenn"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5848,18 +5796,6 @@ msgstr "Taolennadur: %s"
 msgid "Video"
 msgstr ""
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Flap prevez"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Titour-stad"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Flap prevez"
-
 msgid "Video test"
 msgstr ""
 
@@ -5913,6 +5849,9 @@ msgstr "Mankout a ra un \"%s\" e-barzh URL ar webklask"
 
 msgid "Web _Search for it"
 msgstr "Web_klask"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6193,6 +6132,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "N'eus ket tu da gas ho kemennadenn keit ha ma n'oc'h ket luget."
 
@@ -6220,6 +6162,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "An holl restroù"
@@ -6244,14 +6189,6 @@ msgstr "Asantiñ"
 #, fuzzy
 msgid "_Account"
 msgstr "Kontoù"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Kontoù"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Ouzhpennañ un darempred..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6313,10 +6250,6 @@ msgid "_Create"
 msgstr "Dizoberiant"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "Diskouez ar gonsol _XML"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "_Ezlinenn"
 
@@ -6360,10 +6293,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Prest da flapiñ"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Skoazell"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6375,8 +6304,16 @@ msgstr "_Ostiz:"
 msgid "_Hostname"
 msgstr "Servijer:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "Ezporzhiañ"
+
 msgid "_Join"
 msgstr "E_barzhiñ"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Ebarzhiñ ur sal-flapiñ"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6390,14 +6327,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Lugañ"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "_Kemmañ ar gont..."
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Ouzhpennañ un darempred..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6440,10 +6369,6 @@ msgstr "Ebarzhiñ ur _webgaoz"
 #, fuzzy
 msgid "_Port"
 msgstr "_Porzh:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Penndibaboù"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6505,19 +6430,11 @@ msgstr "Anv-arveriad-ez direizh"
 msgid "_Sign Up"
 msgstr "_Lugañ"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Kregiñ da flapiñ"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Koumanantiñ"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Dorioù"
 
 #, fuzzy
 msgid "_Type"
@@ -6536,9 +6453,6 @@ msgstr "_Koumanantiñ"
 #, fuzzy
 msgid "_Username"
 msgstr "_Anv:"
-
-msgid "_View"
-msgstr ""
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6631,9 +6545,6 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Leuniit an titouroù diwar-benn an darempred da ouzhpennañ"
-
-msgid "help"
-msgstr ""
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6729,10 +6640,6 @@ msgstr "Kemmañ ar gont"
 msgid "video input"
 msgstr ""
 
-#, fuzzy
-msgid "we would like to thank all the package maintainers."
-msgstr "Evit echuiñ, e fell deomp trugarekaat holl gempennerien ar pakad."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6759,6 +6666,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Cheñch _lesanv"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Dre ar munut"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -6997,6 +6908,14 @@ msgstr ""
 #~ msgstr "Luget eo ar gont \"%s\" d'ar servijer"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Oberiant"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "échec lors de la publication de votre vCard"
 
@@ -7048,6 +6967,12 @@ msgstr ""
 #~ msgid "Cancel the selected file transfer and remove incomplete files"
 #~ msgstr "A nulla an treuzkas dibabet hag a zilam ar restr diglok"
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "evit ar gont %s"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Kas ur _restr"
@@ -7063,6 +6988,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Dibabit ur restr da gas..."
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Klask"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7081,6 +7010,10 @@ msgstr ""
 #~ msgstr "Istoradur ar gaoz"
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Titouroù"
+
+#, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopiañ ar JID/Chomlec'h postel"
 
@@ -7097,12 +7030,16 @@ msgstr ""
 #~ msgstr "Webgaoz:"
 
 #, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Flap a-stroll"
+
+#, fuzzy
 #~ msgid "Current Developers"
 #~ msgstr "Diorroerien kent:"
 
 #, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "Diskouez ar gonsol _XML"
+#~ msgid "Default"
+#~ msgstr "Dilemel"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7117,6 +7054,10 @@ msgstr ""
 #~ msgstr "Taolennadur: %s"
 
 #, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Diorroerien kent:"
+
+#, fuzzy
 #~ msgid "Direct transfer (not encrypted)"
 #~ msgstr "Sac'het an treuzkas"
 
@@ -7128,6 +7069,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Pellgargañ"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Pellgargañ"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "_Chom hep goulenn ket"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7222,6 +7171,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Kuzhat ar meuziad-mañ"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Lec'hienn hiniennel:"
+
 #~ msgid "Images"
 #~ msgstr "Skeudennoù"
 
@@ -7246,6 +7199,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Abeg"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "dibaoe %s"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7280,6 +7237,10 @@ msgstr ""
 #~ msgstr "Kemmañ ar gont"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Proksi:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "N'eo ket kroget"
@@ -7297,8 +7258,8 @@ msgstr ""
 #~ msgstr "OpenPGP : "
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "échec lors de la publication de votre vCard"
+#~ msgid "Organization (O)"
+#~ msgstr "_Merour-ez"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7307,6 +7268,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Diskouez an holl _zarvoudoù o c'hortoz"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7375,6 +7340,14 @@ msgstr ""
 #~ msgstr "Ger-kuzh ret"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Servijer:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "échec lors de la publication de votre vCard"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Enrollañ ar restr dindan..."
 
@@ -7422,8 +7395,16 @@ msgstr ""
 #~ msgstr "Diskouez an darempredoù _ezlinenn"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Perzhioù ar servijerien"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "A ziskouez ur roll eus an dreuzkasoù etrezoc'h hag ar re all"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Perzhioù ar servijerien"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tad"
@@ -7439,6 +7420,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Stad:"
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Stad:"
 
 #, fuzzy
@@ -7499,8 +7484,24 @@ msgstr ""
 #~ msgstr "Enrollañ ar restr dindan..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Servijer:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Anv:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Flap prevez"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Titour-stad"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Flap prevez"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7538,6 +7539,18 @@ msgstr ""
 #~ "gant an nor-mañ."
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Kontoù"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Ouzhpennañ un darempred..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "Diskouez ar gonsol _XML"
+
+#, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "_Chom hep goulenn ket"
 
@@ -7550,8 +7563,16 @@ msgstr ""
 #~ msgstr "Treuzkasoù"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Skoazell"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Lugañ"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Ouzhpennañ un darempred..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7566,12 +7587,24 @@ msgstr ""
 #~ msgstr "_Digeriñ ar renkell pal"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Penndibaboù"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Kelaouiñ ac'hanon p'eo echu un treuzkas"
 
 #, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Kregiñ da flapiñ"
+
+#, fuzzy
 #~ msgid "_Start Chat..."
 #~ msgstr "_Kregiñ da flapiñ"
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Dorioù"
 
 #~ msgid "file transfers list"
 #~ msgstr "roll an treuzkasadoù"

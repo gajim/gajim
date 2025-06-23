@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -119,10 +119,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Išplėstinis"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -434,6 +430,10 @@ msgid "Account Wizard"
 msgstr "Account name is in use"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Prieiga"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Account name is in use"
 
@@ -455,6 +455,10 @@ msgstr "Account \"%s\" is connected to the server"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Account \"%s\" is connected to the server"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Prieiga"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -486,10 +490,6 @@ msgstr "Activated"
 
 msgid "Active"
 msgstr "Active"
-
-#, fuzzy
-msgid "Activity"
-msgstr "Activated"
 
 #, fuzzy
 msgid "Activity Feed"
@@ -540,10 +540,6 @@ msgstr "Registracija nesėkminga"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Įtraukti asmenį..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -628,11 +624,11 @@ msgid "Advanced"
 msgstr "Išplėstinis"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Išplėstinis konfigūracijos redaktorius"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Išplėstinis konfigūracijos redaktorius"
 
 #, fuzzy
@@ -642,6 +638,10 @@ msgstr "Išplėstiniai veiksmai"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Išplėstiniai veiksmai"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK+ Version:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -656,9 +656,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -805,9 +802,6 @@ msgstr "_Nustatymai"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Prašyti įvesti būklės žinutę, kai aš:"
@@ -924,6 +918,10 @@ msgstr "Esu išėjęs"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Esu išėjęs"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Esu išėjęs"
 
 msgid "Avatar file size too big"
@@ -1089,12 +1087,6 @@ msgstr "Adding Special Notification for %s"
 msgid "Certificate chain too long"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "Įveskite naują prieigos %s pavadinimą"
-
 msgid "Certificate has expired"
 msgstr ""
 
@@ -1219,6 +1211,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Connection not available"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Choose Image"
 
@@ -1285,9 +1281,6 @@ msgstr "Įveskite naują prieigos %s pavadinimą"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Spauskia čia, kad įkeltum savo atvaizdą"
@@ -1304,10 +1297,6 @@ msgstr "Blogas CA sertifikatas"
 #, fuzzy
 msgid "Close"
 msgstr "_Išsiųsti "
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Ieškoti"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1340,9 +1329,6 @@ msgstr "Account has been added successfully"
 #, fuzzy
 msgid "Commands"
 msgstr "Commands: %s"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1546,10 +1532,6 @@ msgid "Copy Address"
 msgstr "_Kopijuoti JID/El. pašto adresą"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Asmens Informacija"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Kopijuoti nuorodos adresą"
 
@@ -1632,10 +1614,6 @@ msgid "Create New Account"
 msgstr "Kurti naują pranešimą"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Leave Groupchats"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Leave Groupchats"
 
@@ -1653,6 +1631,9 @@ msgstr "Passphrase Required"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
@@ -1666,6 +1647,10 @@ msgstr "Registracija nesėkminga"
 
 msgid "Deactivated"
 msgstr "Deactivated"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML Console"
 
 msgid "Debug Logging"
 msgstr ""
@@ -1683,9 +1668,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Nepavyko prisijungti prie proksi"
-
-msgid "Default"
-msgstr "Default"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1764,10 +1746,6 @@ msgstr "New Group Chat"
 
 msgid "Details"
 msgstr ""
-
-#, fuzzy
-msgid "Developers"
-msgstr "Past Developers:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1904,20 +1882,15 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Do _not ask me again"
 
 #, fuzzy
 msgid "Download File"
-msgstr "Do _not ask me again"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Do _not ask me again"
-
-#, fuzzy
-msgid "Download and Install"
 msgstr "Do _not ask me again"
 
 #, fuzzy, python-format
@@ -2135,10 +2108,10 @@ msgstr "_Vykdyti komandą"
 msgid "Executing…"
 msgstr "_Vykdyti komandą"
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2304,6 +2277,9 @@ msgstr "Filtras:"
 msgid "Filters (active)"
 msgstr "First Message Received"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2340,11 +2316,11 @@ msgid "Forget Group Chat"
 msgstr "Leave Groupchats"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Leave Groupchats"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Leave Groupchats"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2581,9 +2557,6 @@ msgstr ""
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2592,15 +2565,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Participant"
 
 #, fuzzy
 msgid "Home"
-msgstr "<b>Asmeninė svetainė:</b>"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "<b>Asmeninė svetainė:</b>"
 
 #, fuzzy
@@ -2612,6 +2581,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "What do you want to do?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2635,6 +2607,10 @@ msgstr "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adresas:"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Portas:"
 
 msgid "Id"
 msgstr "Id"
@@ -2747,6 +2723,10 @@ msgstr "Nesaugus ryšys"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr "Registracija nesėkminga"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2756,12 +2736,11 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-#, fuzzy
-msgid "Installation failed"
-msgstr "Registracija nesėkminga"
+msgid "Install from Archive"
+msgstr ""
 
 #, fuzzy
-msgid "Installed"
+msgid "Installation failed"
 msgstr "Registracija nesėkminga"
 
 msgctxt "Configuration type"
@@ -2832,13 +2811,13 @@ msgstr "Pak_viesti"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2848,6 +2827,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2893,10 +2875,6 @@ msgid "Join Groupchat…"
 msgstr "Prisijungti prie pokalbio grupėje"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Prisijungti prie pokalbio grupėje"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Prisijungti prie pokalbio grupėje"
 
@@ -2916,9 +2894,6 @@ msgid "Keep Chat History"
 msgstr "Nesenai:"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2941,9 +2916,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -2997,10 +2969,6 @@ msgstr "Banning..."
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Vietinis jid:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3044,9 +3012,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Adminas"
@@ -3070,6 +3035,10 @@ msgid "Manage"
 msgstr "Valdyti..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Keisti Prieigą"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Asmuo"
 
@@ -3088,6 +3057,9 @@ msgstr "Prieigų valdymas"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Prieigų valdymas"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3182,7 +3154,7 @@ msgstr "_Registruoti asmenų būklės pakitimus"
 msgid "Miscellaneous"
 msgstr "<b>Įvairūs</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3343,6 +3315,10 @@ msgstr "Password Required"
 msgid "No Proxy"
 msgstr "Proksis:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "%s not found"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3391,10 +3367,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Failų siuntimai"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Proksis:"
 
 #, fuzzy
 msgid "No results"
@@ -3594,10 +3566,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Administrator"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Administrator"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3663,6 +3631,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "All files"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3783,10 +3754,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4008,8 +3975,11 @@ msgstr "Encryption enabled"
 msgid "Pulse: %s"
 msgstr "File: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Nesenai:"
 
 #, fuzzy
@@ -4333,9 +4303,13 @@ msgid "Resource"
 msgstr "Šaltinis:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "<b>PASTABA:</b> Kad įsigaliotų tam tikri nustatymai turite perkrauti Gajim"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Password Required"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4380,13 +4354,7 @@ msgstr "Role"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Įveskite naują prieigos %s pavadinimą"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4399,14 +4367,6 @@ msgstr "Adding Special Notification for %s"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Blogas CA sertifikatas"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "Serveris:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Registracija nesėkminga"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4512,8 +4472,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Participants"
 
 #, fuzzy
 msgid "Searching"
@@ -4570,9 +4531,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4662,10 +4620,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "GG Number:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "GG Number:"
 
@@ -4716,6 +4670,10 @@ msgid "Service Not Found"
 msgstr "The service could not be found"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Prieigų valdymas"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Kambario nustatymai"
 
@@ -4761,6 +4719,10 @@ msgid "Share my online status"
 msgstr "Change status"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Padėtis:"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Commands: %s"
 
@@ -4784,9 +4746,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4818,10 +4777,6 @@ msgid "Show Voice Message Button"
 msgstr "Siųsti žinutę"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Savybės"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Should we show the confirm metacontacts creation dialogue or not? Empty "
@@ -4839,9 +4794,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Rodyti šypsenėlių sąrašą (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Rodyti Visus Laukiančius Į_vykius"
@@ -4849,10 +4801,6 @@ msgstr "Rodyti Visus Laukiančius Į_vykius"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Rodyti Visus Laukiančius Į_vykius"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Padėtis:"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4909,9 +4857,6 @@ msgstr "Don't show roster in the system taskbar."
 msgid "Show window when starting Gajim"
 msgstr ""
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Slėpti langą"
@@ -4943,10 +4888,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Sleeping"
-
-#, fuzzy
-msgid "Software"
-msgstr "Serverio teikiamos paslaugos"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5065,10 +5006,6 @@ msgstr "Status Message"
 msgid "Status message…"
 msgstr "_Būklės pranešimas:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Status: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Status Message"
@@ -5098,9 +5035,6 @@ msgstr "Stilius"
 
 msgid "Subject"
 msgstr "Tema"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5249,6 +5183,11 @@ msgstr "Siųsti _Failą"
 msgid "Thanks"
 msgstr ""
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr ""
+"Last but not least, we would like to thank all the package maintainers."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5308,9 +5247,6 @@ msgstr "Theme"
 msgid "Themes"
 msgstr "Theme"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5325,6 +5261,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5478,6 +5417,9 @@ msgstr "This type of service does not contain any items to browse."
 msgid "This will clear the devices store for your account."
 msgstr "Pašalinti prieigą, _tik iš Gajim"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Pašalinti prieigą, _tik iš Gajim"
@@ -5551,6 +5493,9 @@ msgid "Trust Not Decided"
 msgstr ""
 
 msgid "Try Again"
+msgstr ""
+
+msgid "Try a different search"
 msgstr ""
 
 #, fuzzy
@@ -5633,8 +5578,9 @@ msgstr "Participant"
 msgid "Unencrypted"
 msgstr "Not in roster"
 
-msgid "Uninstall Plugin"
-msgstr ""
+#, fuzzy
+msgid "Uninstall"
+msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Unknown"
@@ -5709,8 +5655,8 @@ msgstr "Choose Image"
 msgid "Update automatically"
 msgstr "Choose Image"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "No such account available"
 
 msgid "Update plugins automatically"
@@ -5721,6 +5667,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Registracija nesėkminga"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5755,16 +5705,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Choose Image"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "Serveris:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Nesaugus ryšys"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5829,18 +5778,6 @@ msgstr "GTK+ Version:"
 msgid "Video"
 msgstr ""
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Private Chat"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Žinutė pagal nutylėjimą"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Private Chat"
-
 msgid "Video test"
 msgstr ""
 
@@ -5894,6 +5831,9 @@ msgstr "Web Search URL is missing an \"%s\""
 
 msgid "Web _Search for it"
 msgstr "Web _Search for it"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6174,6 +6114,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 #, fuzzy
 msgid "Your message can not be sent until you are connected."
 msgstr "You can not join a group chat unless you are connected."
@@ -6202,6 +6145,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "All files"
@@ -6226,14 +6172,6 @@ msgstr "Priimti"
 #, fuzzy
 msgid "_Account"
 msgstr "_Prieigos"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Prieiga"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6295,10 +6233,6 @@ msgid "_Create"
 msgstr ""
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "XML Console"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "A_tsijungęs"
 
@@ -6342,10 +6276,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Laisvas Pokalbiams"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Pagalba"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6357,8 +6287,16 @@ msgstr "_Hostas:"
 msgid "_Hostname"
 msgstr "_Serverio adresas: "
 
+#, fuzzy
+msgid "_Import"
+msgstr "Eksportuoti"
+
 msgid "_Join"
 msgstr "_Jungtis"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Prisijungti prie pokalbio grupėje"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6372,14 +6310,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Prisijungti"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "_Keisti Prieigą"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6422,10 +6352,6 @@ msgstr "Kurti naują pranešimą"
 #, fuzzy
 msgid "_Port"
 msgstr "_Portas:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Parinktys"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6486,19 +6412,11 @@ msgstr "Blogas CA sertifikatas"
 msgid "_Sign Up"
 msgstr "Pr_isijungti"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Start Chat"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr ""
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Rodyti _Pernašas"
 
 #, fuzzy
 msgid "_Type"
@@ -6516,10 +6434,6 @@ msgstr ""
 #, fuzzy
 msgid "_Username"
 msgstr "_Naudotojo vardas:"
-
-#, fuzzy
-msgid "_View"
-msgstr "_Rodinys"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6610,9 +6524,6 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Choose the groupchats you want to leave"
-
-msgid "help"
-msgstr ""
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6705,11 +6616,6 @@ msgstr "Padėtis:"
 msgid "video input"
 msgstr ""
 
-#, fuzzy
-msgid "we would like to thank all the package maintainers."
-msgstr ""
-"Last but not least, we would like to thank all the package maintainers."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6736,6 +6642,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Keisti _Slapyvardį..."
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Išplėstinis"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -6968,6 +6878,14 @@ msgstr ""
 #~ msgstr "Account \"%s\" is connected to the server"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Activated"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Registracija nesėkminga"
 
@@ -7015,6 +6933,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Cannot overwrite existing file \"%s\""
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "Įveskite naują prieigos %s pavadinimą"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Sending profile..."
@@ -7031,6 +6955,10 @@ msgstr ""
 #~ msgid "Choose File to Send…"
 #~ msgstr "Choose File to Send..."
 
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Ieškoti"
+
 #~ msgid "Connection not available"
 #~ msgstr "Connection not available"
 
@@ -7041,6 +6969,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Pokalbis su "
+
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Asmens Informacija"
 
 #, fuzzy
 #~ msgid "Copy Email Address"
@@ -7058,6 +6990,10 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "Kambario JID"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Leave Groupchats"
+
 #~ msgid "Create new post"
 #~ msgstr "Kurti naują pranešimą"
 
@@ -7065,9 +7001,8 @@ msgstr ""
 #~ msgid "Current Developers"
 #~ msgstr "Current Developers:"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "XML Console"
+#~ msgid "Default"
+#~ msgstr "Default"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7079,6 +7014,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Aprašymas: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Past Developers:"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7095,6 +7034,14 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "Noun"
 #~ msgid "Download"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Do _not ask me again"
+
+#, fuzzy
+#~ msgid "Download and Install"
 #~ msgstr "Do _not ask me again"
 
 #, fuzzy
@@ -7185,6 +7132,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Hide this menu"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "<b>Asmeninė svetainė:</b>"
+
 #~ msgid "Images"
 #~ msgstr "Images"
 
@@ -7211,6 +7162,10 @@ msgstr ""
 #~ msgstr "Reason"
 
 #, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Vietinis jid:"
+
+#, fuzzy
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Messages"
 
@@ -7235,6 +7190,10 @@ msgstr ""
 #~ msgstr "Pranešimai"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Proksis:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Not in roster"
@@ -7252,8 +7211,8 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Registracija nesėkminga"
+#~ msgid "Organization (O)"
+#~ msgstr "Administrator"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7262,6 +7221,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Rodyti Visus Laukiančius Į_vykius"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Registracija nesėkminga"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7327,6 +7290,14 @@ msgstr ""
 #~ msgstr "Password Required"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Serveris:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Save File as..."
 
@@ -7362,6 +7333,10 @@ msgstr ""
 #~ msgstr "Sender: "
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG Number:"
+
+#, fuzzy
 #~ msgid "Show Location"
 #~ msgstr "Padėtis:"
 
@@ -7370,8 +7345,16 @@ msgstr ""
 #~ msgstr "Rodyti _Atsijungusius Asmenis"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Savybės"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Rodyti failų siuntimų sąrašą tarp jūsų ir kitų"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Serverio teikiamos paslaugos"
 
 #~ msgid "Sta_tus"
 #~ msgstr "_Būklė"
@@ -7387,6 +7370,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Status: "
 
 #, fuzzy
@@ -7439,8 +7426,24 @@ msgstr ""
 #~ msgstr "Save File as..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Serveris:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Naudotojo vardas:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Private Chat"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Žinutė pagal nutylėjimą"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Private Chat"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7466,6 +7469,18 @@ msgstr ""
 #~ msgstr "Atšaukti failo siuntimą"
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Prieiga"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Įtraukti asmenį..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "XML Console"
+
+#, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "Do _not ask me again"
 
@@ -7478,8 +7493,16 @@ msgstr ""
 #~ msgstr "Failų siuntimai"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Pagalba"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Prisijungti"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Įtraukti asmenį..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7494,11 +7517,27 @@ msgstr ""
 #~ msgstr "_Atidaryti katalogą, kuriame yra failas"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Parinktys"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Pranešti, kai failo siuntimas bus baigtas"
 
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Start Chat"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "_Pradėti pokalbį..."
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Rodyti _Pernašas"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Rodinys"
 
 #~ msgid "file transfers list"
 #~ msgstr "failų siuntimų sąrašas"

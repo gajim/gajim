@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -124,10 +124,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr "%s(Jij)"
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "gedesynchroniseerd"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -443,6 +439,10 @@ msgid "Account Wizard"
 msgstr "Account is uitgeschakeld"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Accountrijlettertype"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Account is uitgeschakeld"
 
@@ -464,6 +464,10 @@ msgstr "Account %s is nog verbonden"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Account %s is nog verbonden"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Accountrijlettertype"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -496,10 +500,6 @@ msgstr "Ingeschakeld"
 
 msgid "Active"
 msgstr "Actief"
-
-#, fuzzy
-msgid "Activity"
-msgstr "Ingeschakeld"
 
 #, fuzzy
 msgid "Activity Feed"
@@ -548,10 +548,6 @@ msgstr "Instellingen"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "Contact toevoegen…"
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -633,11 +629,11 @@ msgstr "Administrator"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-msgid "Advanced Configuration Editor (ACE)"
+#, fuzzy
+msgid "Advanced Configuration Editor"
 msgstr "Geavanceerde configuratie (ACE)"
 
-#, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Geavanceerde configuratie (ACE)"
 
 #, fuzzy
@@ -647,6 +643,10 @@ msgstr "Gea_vanceerde Acties"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Gea_vanceerde Acties"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK+-versie: %s"
 
 msgid "Affiliation"
 msgstr "Aansluiting"
@@ -659,9 +659,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -812,9 +809,6 @@ msgstr "Archiefvoorkeuren"
 msgid "Archiving Preferences for %s"
 msgstr "Archiefvoorkeuren voor %s"
 
-msgid "Artists"
-msgstr "Artiesten"
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Vraag om statusbericht wanneer ik"
@@ -928,6 +922,10 @@ msgstr "Beschikbaar"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Beschikbaar"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Beschikbaar"
 
 #, fuzzy
@@ -1092,14 +1090,6 @@ msgstr "SSL-certificaatverificatie voor %s"
 msgid "Certificate chain too long"
 msgstr "Certificaatketen te lang"
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr ""
-"Certificaat voor account\n"
-"%s"
-
 msgid "Certificate has expired"
 msgstr "Certificaat is verlopen"
 
@@ -1228,6 +1218,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Videosessies zijn niet beschikbaar"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Kies archief"
 
@@ -1289,11 +1283,6 @@ msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-"Klik voor meer informatie over het installeren van Gajim-plug-ins met "
-"Flatpak."
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klik om je avatar in te stellen"
@@ -1308,10 +1297,6 @@ msgstr "Cliëntcertificaat"
 
 msgid "Close"
 msgstr "Sluiten"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Zoeken"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1341,9 +1326,6 @@ msgstr "Account is toegevoegd"
 
 msgid "Commands"
 msgstr "Opdrachten"
-
-msgid "Common Name (CN)"
-msgstr "Algemene naam (CN)"
 
 #, fuzzy
 msgid "Common Name (CN): "
@@ -1546,10 +1528,6 @@ msgid "Copy Address"
 msgstr "E-mailadres kopiëren"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Contactinformatie"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "Verwijzingslocatie kopiëren"
 
@@ -1630,10 +1608,6 @@ msgid "Create New Account"
 msgstr "Nieuwe post maken"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Groepsgesprekken verlaten"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Groepsgesprekken verlaten"
 
@@ -1651,6 +1625,9 @@ msgstr "Gebruikersreferenties"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "_Donker thema"
@@ -1664,6 +1641,10 @@ msgstr "Registratie mislukt"
 
 msgid "Deactivated"
 msgstr "Uitgeschakeld"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML-console"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1682,9 +1663,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Verbinding mislukt"
-
-msgid "Default"
-msgstr "Standaard"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1764,10 +1742,6 @@ msgstr "Nieuw groepsgesprek"
 
 msgid "Details"
 msgstr "Details"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Vroegere ontwikkelaars"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1907,6 +1881,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "?Znw:Download"
@@ -1914,14 +1891,6 @@ msgstr "?Znw:Download"
 #, fuzzy
 msgid "Download File"
 msgstr "?Znw:Download"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "?Znw:Download"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2142,12 +2111,12 @@ msgstr "Opdra_cht uitvoeren…"
 msgid "Executing…"
 msgstr "Uitvoeren…"
 
-msgid "Expires on"
-msgstr "Verloopt op"
-
 #, fuzzy
 msgid "Expires on: "
 msgstr "Verloopt op"
+
+msgid "Expiry date"
+msgstr ""
 
 #, fuzzy
 msgid "Export"
@@ -2310,6 +2279,10 @@ msgid "Filters (active)"
 msgstr "Eerste ontvangen bericht"
 
 #, fuzzy
+msgid "Fingerprint"
+msgstr "Vingerafdrukken"
+
+#, fuzzy
 msgid "Fingerprint for this Device"
 msgstr "Vingerafdrukken"
 
@@ -2350,11 +2323,11 @@ msgid "Forget Group Chat"
 msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Groepsgesprekken verlaten"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Groepsgesprekken verlaten"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2599,9 +2572,6 @@ msgstr "Melding"
 msgid "Hello, I am $name. %s"
 msgstr "Hallo, ik ben $name."
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2610,14 +2580,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Videosessie in-/uitschakelen"
 
 #, fuzzy
 msgid "Home"
-msgstr "Website"
-
-msgid "Homepage"
 msgstr "Website"
 
 msgid "Hostname"
@@ -2628,6 +2595,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Hoe ver terug wil je gaan?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2651,6 +2621,10 @@ msgstr "Volgens de IEC standaard is 1 KiB = 1024 bytes, 1 KB = 1000 bytes."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "Adres"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "Poort"
 
 msgid "Id"
 msgstr "ID"
@@ -2767,6 +2741,10 @@ msgstr "Onveilige verbinding"
 msgid "Insert Emoji"
 msgstr "ASCII-emoji’s _converteren"
 
+#, fuzzy
+msgid "Install"
+msgstr "Geïnstalleerd"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2778,11 +2756,12 @@ msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
 #, fuzzy
+msgid "Install from Archive"
+msgstr "Plug-in installeren van bestand"
+
+#, fuzzy
 msgid "Installation failed"
 msgstr "Registratie mislukt"
-
-msgid "Installed"
-msgstr "Geïnstalleerd"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2850,15 +2829,16 @@ msgstr "Uit_nodigen"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+#, fuzzy
+msgid "Issue date"
+msgstr "Uitgegeven aan"
+
 msgid "Issued by"
 msgstr "Uitgegeven door"
 
 #, fuzzy
 msgid "Issued by\n"
 msgstr "Uitgegeven door"
-
-msgid "Issued on"
-msgstr "Uitgegeven op"
 
 #, fuzzy
 msgid "Issued on: "
@@ -2870,6 +2850,9 @@ msgstr "Uitgegeven aan"
 #, fuzzy
 msgid "Issued to\n"
 msgstr "Uitgegeven aan"
+
+msgid "Issues detected"
+msgstr ""
 
 #, fuzzy
 msgid "I’m eating."
@@ -2912,10 +2895,6 @@ msgid "Join Groupchat…"
 msgstr "Deelnemen aan groepsgesprek"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Deelnemen aan groepsgesprek"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Deelnemen aan groepsgesprek"
 
@@ -2936,9 +2915,6 @@ msgstr "Gespreksgeschiedenis"
 
 msgid "Keep and manage all your chat history"
 msgstr "Bewaar en beheer je gespreksgeschiedenis"
-
-msgid "Key Size"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "Sleutelgebruik bevat geen certificaatondertekening"
@@ -2961,9 +2937,6 @@ msgstr "Label"
 #, python-format
 msgid "Language: %s"
 msgstr ""
-
-msgid "Last but not least"
-msgstr "Tenslotte"
 
 #, fuzzy, python-format
 msgid "Last seen: %s"
@@ -3020,10 +2993,6 @@ msgstr "Bezig met laden"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Lokale JID:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3068,9 +3037,6 @@ msgstr ""
 "Zoek dingen op op Wikipedia, in woordenboeken of met andere zoekmachines, "
 "rechtstreeks vanuit het gespreksvenster"
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "Admin"
@@ -3094,6 +3060,10 @@ msgid "Manage"
 msgstr "Beheren…"
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "Account Be_werken..."
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Contacten"
 
@@ -3111,6 +3081,9 @@ msgstr "Beheer geluiden"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Beheer geluiden"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3205,7 +3178,7 @@ msgstr "Statusveranderingen tonen"
 msgid "Miscellaneous"
 msgstr "Overige"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3360,6 +3333,10 @@ msgstr "Wachtwoord vereist"
 msgid "No Proxy"
 msgstr "Geen proxy"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "Geen resultaten gevonden"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3409,10 +3386,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Geen account beschikbaar"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Geen proxy"
 
 #, fuzzy
 msgid "No results"
@@ -3610,9 +3583,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Organisatie (O)"
 
-msgid "Organization (O)"
-msgstr "Organisatie (O)"
-
 #, fuzzy
 msgid "Organization (O): "
 msgstr "Organisatie (O)"
@@ -3681,6 +3651,9 @@ msgstr "PKCS12-bestanden"
 
 msgid "PNG files"
 msgstr "PNG-bestanden"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3799,10 +3772,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Plug-ins"
 
 msgid "Play Sound"
 msgstr "Geluid afspelen"
@@ -4016,8 +3985,11 @@ msgstr "Versleutelingsfout"
 msgid "Pulse: %s"
 msgstr "Puls: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Gespreksgeschiedenis"
 
 #, fuzzy
@@ -4341,9 +4313,13 @@ msgid "Resource"
 msgstr "Bron"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "Je moet Gajim herstarten vooraleer sommige instellingen in werking treden"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Vereist: Gspell"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4391,15 +4367,9 @@ msgstr "Rol"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(jid)s is in dit groepsgesprek uitgenodigd"
 
-msgid "SHA-1"
-msgstr "SHA-1"
-
 #, fuzzy
 msgid "SHA-1:"
 msgstr "SHA-1"
-
-msgid "SHA-256"
-msgstr "SHA-256"
 
 #, fuzzy
 msgid "SHA-256:"
@@ -4412,14 +4382,6 @@ msgstr "SSL-certificaatverificatie voor %s"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "SSL-certificaatfout"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "STU_N-server"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Plug-in-instellingen"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Te gebruiken STUN-server bij gebruik van Jingle"
@@ -4524,8 +4486,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Deelnemers"
 
 #, fuzzy
 msgid "Searching"
@@ -4581,9 +4544,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4671,9 +4631,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 "Profielbestanden volledig scheiden (zelfs geschiedenisdatabase en plug-ins)"
 
-msgid "Serial Number"
-msgstr "Serienummer"
-
 #, fuzzy
 msgid "Serial Number: "
 msgstr "Serienummer"
@@ -4720,6 +4677,10 @@ msgstr "De dienst kan niet worden doorbladerd"
 #, fuzzy
 msgid "Service Not Found"
 msgstr "De dienst kon niet gevonden worden"
+
+#, fuzzy
+msgid "Set Trust"
+msgstr "Beheer geluiden"
 
 msgid "Set configuration directory"
 msgstr "Configuratiemap instellen"
@@ -4768,6 +4729,10 @@ msgid "Share my online status"
 msgstr "Status veranderen"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Locatie:"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Opdrachten"
 
@@ -4794,9 +4759,6 @@ msgstr "Berichten over deelnemen/verlaten tonen"
 #, fuzzy
 msgid "Show Joined / Left"
 msgstr "Berichten over deelnemen/verlaten tonen"
-
-msgid "Show My Video Stream"
-msgstr ""
 
 #, fuzzy
 msgid "Show Notifications"
@@ -4827,10 +4789,6 @@ msgid "Show Voice Message Button"
 msgstr "Bericht verzenden"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Functies"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Moet de dialoog voor het bevestigen van het blokkeren van een contact worden "
@@ -4848,19 +4806,12 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Een lijst van emoji’s weergeven (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Alle waarschuwingen weergeven"
 
 msgid "Show all warnings"
 msgstr "Alle waarschuwingen weergeven"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Locatie:"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4916,9 +4867,6 @@ msgstr "Rooster niet weergeven in systeemvak."
 msgid "Show window when starting Gajim"
 msgstr "Gajim altijd sluiten"
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Venster verbergen"
@@ -4950,10 +4898,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Slapen"
-
-#, fuzzy
-msgid "Software"
-msgstr "Serversoftware"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5069,10 +5013,6 @@ msgstr "Statusbericht"
 msgid "Status message…"
 msgstr "_Statusbericht"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Status: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Statusberichtkleur"
@@ -5101,9 +5041,6 @@ msgstr "Stijl"
 
 msgid "Subject"
 msgstr "Onderwerp"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5253,6 +5190,10 @@ msgstr "_Bestand Verzenden"
 msgid "Thanks"
 msgstr "Met dank aan"
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "willen we alle pakketonderhouders bedanken."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5312,9 +5253,6 @@ msgstr "Thema’s"
 msgid "Themes"
 msgstr "Thema’s"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5329,6 +5267,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5500,6 +5441,9 @@ msgstr "Dit soort dienst heeft geen items om te doorbladeren."
 msgid "This will clear the devices store for your account."
 msgstr "Verwijder account alleen van Gajim"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Verwijder account alleen van Gajim"
@@ -5576,6 +5520,9 @@ msgstr "Vertrouwen nog niet bepaald"
 #, fuzzy
 msgid "Try Again"
 msgstr "Opnieuw verifiëren…"
+
+msgid "Try a different search"
+msgstr ""
 
 #, fuzzy
 msgid "Trying to change password..."
@@ -5658,7 +5605,8 @@ msgstr "Deelnemer"
 msgid "Unencrypted"
 msgstr "Niet versleuteld"
 
-msgid "Uninstall Plugin"
+#, fuzzy
+msgid "Uninstall"
 msgstr "Plug-in verwijderen"
 
 msgid "Unknown"
@@ -5732,8 +5680,8 @@ msgstr "Avatar uploaden…"
 msgid "Update automatically"
 msgstr "Avatar uploaden…"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Geen account beschikbaar"
 
 msgid "Update plugins automatically"
@@ -5744,6 +5692,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Plug-ins"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5778,16 +5730,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Kies afbeelding"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "STU_N-server"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Onveilige verbinding"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5851,18 +5802,6 @@ msgstr "Versie"
 msgid "Video"
 msgstr "Video"
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Video_framerate"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "_Video-invoerapparaat"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Videosessie"
-
 msgid "Video test"
 msgstr "Videotest"
 
@@ -5915,6 +5854,9 @@ msgstr "‘%s’ ontbreekt in de URL van de zoekmachine"
 
 msgid "Web _Search for it"
 msgstr "_Zoeken op het internet"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6209,6 +6151,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Je bericht kan niet worden verzonden totdat je verbinding hebt."
 
@@ -6236,6 +6181,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 msgid "ZIP files"
 msgstr "ZIP-bestanden"
 
@@ -6259,14 +6207,6 @@ msgstr "_Accepteren"
 #, fuzzy
 msgid "_Account"
 msgstr "_Accounts"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Accounts"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "Account toevoegen…"
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6327,10 +6267,6 @@ msgstr "Verwijzingslocatie kopiëren"
 msgid "_Create"
 msgstr "Creatief"
 
-#, fuzzy
-msgid "_Debug Console"
-msgstr "XML-console"
-
 msgid "_Decline"
 msgstr "_Weigeren"
 
@@ -6373,10 +6309,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Open voor _gesprek"
 
-#, fuzzy
-msgid "_Help"
-msgstr "Hulp"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6388,8 +6320,16 @@ msgstr "_Host:"
 msgid "_Hostname"
 msgstr "_Hostnaam:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "_Exporteren"
+
 msgid "_Join"
 msgstr "_Binnengaan"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Deelnemen aan groepsgesprek"
 
 #, fuzzy
 msgid "_Keyboard Shortcuts"
@@ -6404,14 +6344,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Log in"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "Account Be_werken..."
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "Account toevoegen…"
 
 #, fuzzy
 msgid "_Minimize"
@@ -6454,9 +6386,6 @@ msgstr "Kies een bijnaam"
 #, fuzzy
 msgid "_Port"
 msgstr "_Poort:"
-
-msgid "_Preferences"
-msgstr "_Voorkeuren"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6519,19 +6448,11 @@ msgstr "Certificaat bekijken…"
 msgid "_Sign Up"
 msgstr "_inlog"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Gesprek beginnen"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Abonneer"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Transporten weergeven"
 
 msgid "_Type"
 msgstr "_Type"
@@ -6549,10 +6470,6 @@ msgstr "Abonnement _opzeggen"
 #, fuzzy
 msgid "_Username"
 msgstr "Gebr_uikersnaam"
-
-#, fuzzy
-msgid "_View"
-msgstr "Weergeven"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6639,9 +6556,6 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Nodig een gebruiker uit in een groepsgesprek voor een reden"
-
-msgid "help"
-msgstr ""
 
 msgid "is composing a message…"
 msgstr "is een bericht aan het typen…"
@@ -6734,9 +6648,6 @@ msgstr "Locatie:"
 msgid "video input"
 msgstr "video-invoer"
 
-msgid "we would like to thank all the package maintainers."
-msgstr "willen we alle pakketonderhouders bedanken."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "{nick} heeft het gesprek verlaten vanwege een fout{reason}"
@@ -6767,6 +6678,10 @@ msgstr ""
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " door {actor}"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "gedesynchroniseerd"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7032,6 +6947,14 @@ msgstr ""
 #~ msgstr "Account %s is nog verbonden"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Ingeschakeld"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "Contact toevoegen…"
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Instellingen"
 
@@ -7056,6 +6979,9 @@ msgstr ""
 
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Weet je zeker dat je Gajim wil afsluiten?"
+
+#~ msgid "Artists"
+#~ msgstr "Artiesten"
 
 #, fuzzy
 #~ msgid "Audio / Video Calls"
@@ -7091,6 +7017,14 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Kan bestaand bestand ‘%s’ niet overschrijven"
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr ""
+#~ "Certificaat voor account\n"
+#~ "%s"
+
 #~ msgid "Checking file…"
 #~ msgstr "Bestand wordt gecontroleerd…"
 
@@ -7102,6 +7036,19 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Kies het bestand om te verzenden…"
+
+#~ msgid ""
+#~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+#~ msgstr ""
+#~ "Klik voor meer informatie over het installeren van Gajim-plug-ins met "
+#~ "Flatpak."
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Zoeken"
+
+#~ msgid "Common Name (CN)"
+#~ msgstr "Algemene naam (CN)"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7119,6 +7066,10 @@ msgstr ""
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Gesprekslettertype"
 
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Contactinformatie"
+
 #~ msgid "Copy Email Address"
 #~ msgstr "E-mailadres kopiëren"
 
@@ -7133,15 +7084,18 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "JID kopiëren"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Groepsgesprekken verlaten"
+
 #~ msgid "Create new post"
 #~ msgstr "Nieuwe post maken"
 
 #~ msgid "Current Developers"
 #~ msgstr "Huidige ontwikkelaars"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "XML-console"
+#~ msgid "Default"
+#~ msgstr "Standaard"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7153,6 +7107,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Beschrijving: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Vroegere ontwikkelaars"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7170,6 +7128,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "?Znw:Download"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "?Znw:Download"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "Vraag mij _dit niet nogmaals"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7208,6 +7174,9 @@ msgstr ""
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Fout: kan %s niet voor lezen openen"
+
+#~ msgid "Expires on"
+#~ msgstr "Verloopt op"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"
@@ -7274,6 +7243,9 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Verberg dit menu"
 
+#~ msgid "Homepage"
+#~ msgstr "Website"
+
 #, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
@@ -7308,12 +7280,22 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Contacten uitnodigen"
 
+#~ msgid "Issued on"
+#~ msgstr "Uitgegeven op"
+
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Het is onmogelijk lege bestanden te sturen"
+
+#~ msgid "Last but not least"
+#~ msgstr "Tenslotte"
 
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Reden"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Lokale JID:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7348,6 +7330,10 @@ msgstr ""
 #~ msgstr "Meldingen"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Geen proxy"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Niet versleuteld"
@@ -7364,9 +7350,8 @@ msgstr ""
 #~ msgid "Open Path"
 #~ msgstr "Openen"
 
-#, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Plug-ins"
+#~ msgid "Organization (O)"
+#~ msgstr "Organisatie (O)"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "Organisatorische eenheid (OU)"
@@ -7386,6 +7371,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Toon alle wachtende gebeurt_enissen"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Plug-ins"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7466,10 +7455,24 @@ msgstr ""
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "Vereist: libxss"
 
+#~ msgid "SHA-1"
+#~ msgstr "SHA-1"
+
+#~ msgid "SHA-256"
+#~ msgstr "SHA-256"
+
 #, fuzzy
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
+
+#, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STU_N-server"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Plug-in-instellingen"
 
 #~ msgid "Save File as…"
 #~ msgstr "Bestand opslaan als…"
@@ -7504,6 +7507,9 @@ msgstr ""
 #~ msgid "Sender: "
 #~ msgstr "Afzender: "
 
+#~ msgid "Serial Number"
+#~ msgstr "Serienummer"
+
 #, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
@@ -7517,8 +7523,16 @@ msgstr ""
 #~ msgstr "Offline contacten weergeven"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Functies"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Laat een lijst met bestandsoverdrachten zien tussen jou en anderen"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Serversoftware"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -7543,6 +7557,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Status: "
 
 #, fuzzy
@@ -7625,8 +7643,24 @@ msgstr ""
 #~ msgstr "Bestand uploaden…"
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STU_N-server"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Gebr_uikersnaam"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Video_framerate"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "_Video-invoerapparaat"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Videosessie"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7668,8 +7702,20 @@ msgstr ""
 #~ "Het zal niet meer mogelijk zijn berichten te sturen en ontvangen van "
 #~ "contacten via dit transport."
 
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Accounts"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "Account toevoegen…"
+
 #~ msgid "_Clear"
 #~ msgstr "_Wissen"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "XML-console"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7684,8 +7730,16 @@ msgstr ""
 #~ msgstr "Bestandsoverdracht"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "Hulp"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Inloggen"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "Account toevoegen…"
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7699,15 +7753,30 @@ msgstr ""
 #~ msgid "_Open Folder"
 #~ msgstr "_Open bovenliggende map"
 
+#~ msgid "_Preferences"
+#~ msgstr "_Voorkeuren"
+
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Stel mij op de hoogte als een bestandsoverdracht voltooid is"
 
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Gesprek beginnen"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "Ge_sprek beginnen…"
 
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Transporten weergeven"
+
 #~ msgid "_Undo"
 #~ msgstr "_Ongedaan maken"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Weergeven"
 
 #~ msgid "file transfers list"
 #~ msgstr "bestandsoverdrachtlijst"

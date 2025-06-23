@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -122,10 +122,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Aurreratua"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -444,6 +440,10 @@ msgid "Account Wizard"
 msgstr "Enkriptazioa desaktibatuta"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Kontua"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Enkriptazioa desaktibatuta"
 
@@ -465,6 +465,10 @@ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "\"%s\"  kontua zerbitzarira konektatu da"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Kontua"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -496,10 +500,6 @@ msgid "Activated"
 msgstr "Aktibatuta"
 
 msgid "Active"
-msgstr "Aktibatuta"
-
-#, fuzzy
-msgid "Activity"
 msgstr "Aktibatuta"
 
 #, fuzzy
@@ -551,10 +551,6 @@ msgstr "Konexioak huts egin du"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Kontaktua Gehitu..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -638,11 +634,11 @@ msgid "Advanced"
 msgstr "Aurreratua"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Konfigurazio Aurreratuaren Editorea"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Konfigurazio Aurreratuaren Editorea"
 
 #, fuzzy
@@ -652,6 +648,10 @@ msgstr "Ekintza Aurreratuak"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Ekintza Aurreratuak"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK+ Bertsioa:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -666,9 +666,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -818,9 +815,6 @@ msgstr "_Hobespenak"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Eskatu egoera mezua, nagoenean:"
@@ -936,6 +930,10 @@ msgstr "_Libre"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "_Libre"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "_Libre"
 
 msgid "Avatar file size too big"
@@ -1101,12 +1099,6 @@ msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
 msgid "Certificate chain too long"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "%s konturako"
-
 msgid "Certificate has expired"
 msgstr ""
 
@@ -1232,6 +1224,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Konexioa ez erablgarri"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Aukeratu Irudia"
 
@@ -1299,9 +1295,6 @@ msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Sakatu abatarea ezartzeko"
@@ -1318,10 +1311,6 @@ msgstr "Baliogabeko izena"
 #, fuzzy
 msgid "Close"
 msgstr "_Bidali eta Itxi"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Bilatu"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1354,9 +1343,6 @@ msgstr "Kontua egoki sartua izan da"
 #, fuzzy
 msgid "Commands"
 msgstr "Azalpenak: %s"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1561,10 +1547,6 @@ msgid "Copy Address"
 msgstr "_Kopiatu JID/Email-a"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Kontaktuaren Informazioa"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Lotura kokapena kopiatu"
 
@@ -1647,10 +1629,6 @@ msgid "Create New Account"
 msgstr "Mezu berria sortu"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Txat Taldea Berria"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Txat Taldea Berria"
 
@@ -1666,6 +1644,9 @@ msgid "Credentials expired"
 msgstr "Pasa-esaldia Behar da"
 
 msgid "D-Bus Interface"
+msgstr ""
+
+msgid "DNS"
 msgstr ""
 
 #, fuzzy
@@ -1684,6 +1665,10 @@ msgid "Deactivated"
 msgstr "Inaktiboa"
 
 #, fuzzy
+msgid "Debug Console"
+msgstr " XML Konsola"
+
+#, fuzzy
 msgid "Debug Logging"
 msgstr "_Sartu"
 
@@ -1700,9 +1685,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Konexioak huts egin du"
-
-msgid "Default"
-msgstr "Berezkoa"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1782,10 +1764,6 @@ msgstr "Txat Taldea Berria"
 
 msgid "Details"
 msgstr "Zehaztapenak"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Aurre diseinatzaileak: "
 
 #, python-format
 msgid "Device \"%s\""
@@ -1921,6 +1899,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Deskargatu"
@@ -1928,14 +1909,6 @@ msgstr "Deskargatu"
 #, fuzzy
 msgid "Download File"
 msgstr "Deskargatu"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Deskargatu"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "E_z galdetu berriro  "
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2154,10 +2127,10 @@ msgstr "_Komandoa Exekutatu..."
 msgid "Executing…"
 msgstr "_Komandoa Exekutatu..."
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2325,6 +2298,9 @@ msgstr "Filtroa:"
 msgid "Filters (active)"
 msgstr "Lehen Mezu Jasoa"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2361,11 +2337,11 @@ msgid "Forget Group Chat"
 msgstr "Txat Taldea Berria"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Txat Taldea Berria"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Txat Taldea Berria"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2604,9 +2580,6 @@ msgstr "Kontu Eraldaketa"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2615,15 +2588,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Partaidea"
 
 #, fuzzy
 msgid "Home"
-msgstr "Web Pertsonala:"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "Web Pertsonala:"
 
 #, fuzzy
@@ -2635,6 +2604,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Zer nahi duzu egitea?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2658,6 +2630,10 @@ msgstr "IEC estandarrak esaten du KiB = 1024 bytes, KB = 1000 bytes."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "Helbidea"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Portua:"
 
 msgid "Id"
 msgstr "Id"
@@ -2770,6 +2746,10 @@ msgstr "Konektatu"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr "Stalled"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2779,13 +2759,12 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
+msgid "Install from Archive"
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Konexioak huts egin du"
-
-#, fuzzy
-msgid "Installed"
-msgstr "Stalled"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2857,13 +2836,13 @@ msgstr "Honera gonbidatu"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2873,6 +2852,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2918,10 +2900,6 @@ msgid "Join Groupchat…"
 msgstr "Txat Taldean Sartu"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Txat Taldean Sartu"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Txat Taldean Sartu"
 
@@ -2941,9 +2919,6 @@ msgid "Keep Chat History"
 msgstr "Berriki:"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2966,9 +2941,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3025,10 +2997,6 @@ msgstr "Sortzen"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Tokiko jid-a:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3072,9 +3040,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3098,6 +3063,10 @@ msgid "Manage"
 msgstr "Moldatu..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "Kontua E_raldatu"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Kontaktua"
 
@@ -3116,6 +3085,9 @@ msgstr "Kontuak moldatu"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Kontuak moldatu"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3209,7 +3181,7 @@ msgstr "Kontaktuen egoera aldaketak gorde"
 msgid "Miscellaneous"
 msgstr "<b>Denetatik</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3370,6 +3342,10 @@ msgstr "Pasahitza behar da"
 msgid "No Proxy"
 msgstr "Proxy:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "%s ez da aurkitu"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3418,10 +3394,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Ez dago konturik erabilgarri"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Proxy:"
 
 #, fuzzy
 msgid "No results"
@@ -3623,10 +3595,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Administratzailea"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Administratzailea"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3693,6 +3661,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "Fitxategi guztiak"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3814,10 +3785,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4039,8 +4006,11 @@ msgstr "Enkriptazioa aktibatuta"
 msgid "Pulse: %s"
 msgstr "Fitxeroa: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Berriki:"
 
 #, fuzzy
@@ -4367,10 +4337,14 @@ msgid "Resource"
 msgstr "Baliabidea:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "<b>OHARRA:</b> Gajim berriro abiarazi beharko duzu aldagai batzuek efektua "
 "sor dezaten"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Pasahitza behar da"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4415,13 +4389,7 @@ msgstr "Eginkizuna"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(nick)s botata izan da %(who)s -engatik: %(reason)s"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4434,14 +4402,6 @@ msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Baliogabeko izena"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "Zerbitzaria:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Konexioak huts egin du"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4547,8 +4507,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Partaideak"
 
 #, fuzzy
 msgid "Searching"
@@ -4605,9 +4566,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4698,10 +4656,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "GG zenbakia:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "GG zenbakia:"
 
@@ -4752,6 +4706,10 @@ msgid "Service Not Found"
 msgstr "Zerbitzua ezin izan da aurkitu"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Kontuak moldatu"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Gelaren Konfigurazioa"
 
@@ -4797,6 +4755,10 @@ msgid "Share my online status"
 msgstr "Kontaktu Egoera Aldaketa"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Kontu Eraldaketa"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Azalpenak: %s"
 
@@ -4820,9 +4782,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4854,10 +4813,6 @@ msgid "Show Voice Message Button"
 msgstr "Bidali mezua"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Zerbitzariaren Ezaugarriak:"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Ikusi beharko da metakontaktuen baieztatze leihoa?  Empty string means we "
@@ -4875,9 +4830,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Sakatu emoticon bat ezartzeko (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Ikusi Gabeko _Gertaerak"
@@ -4885,10 +4837,6 @@ msgstr "Ikusi Gabeko _Gertaerak"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Ikusi Gabeko _Gertaerak"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Kontu Eraldaketa"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4945,9 +4893,6 @@ msgstr "ez erakutsi zerrenda sistemako zeregin barran."
 msgid "Show window when starting Gajim"
 msgstr ""
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Leihoa ezkutatu"
@@ -4979,10 +4924,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Lotan"
-
-#, fuzzy
-msgid "Software"
-msgstr "Zerbitzariaren Ezaugarriak:"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5101,10 +5042,6 @@ msgstr "Egoera Mezua"
 msgid "Status message…"
 msgstr "Egoera mezua:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Egoera: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Egoera Mezua"
@@ -5135,9 +5072,6 @@ msgstr "Stalled"
 
 msgid "Subject"
 msgstr "Gaia"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5286,6 +5220,12 @@ msgstr "Bidali _Fitxeroa"
 msgid "Thanks"
 msgstr ""
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr ""
+"Azkenak baina ez gutxien merezitakoak,\n"
+"eskerrak eman nahi dzkiegu paketeak mantentzen dituztenei."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5345,9 +5285,6 @@ msgstr "Gaia"
 msgid "Themes"
 msgstr "Gaia"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5362,6 +5299,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5521,6 +5461,9 @@ msgstr "Zerbitzari honek ez du menurik begiratzeko."
 msgid "This will clear the devices store for your account."
 msgstr "Ezabatu k_ontua Gajim-etik bakarrik"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Ezabatu k_ontua Gajim-etik bakarrik"
@@ -5595,6 +5538,9 @@ msgid "Trust Not Decided"
 msgstr ""
 
 msgid "Try Again"
+msgstr ""
+
+msgid "Try a different search"
 msgstr ""
 
 #, fuzzy
@@ -5679,7 +5625,7 @@ msgid "Unencrypted"
 msgstr "Hasigabea"
 
 #, fuzzy
-msgid "Uninstall Plugin"
+msgid "Uninstall"
 msgstr "Stalled"
 
 #, fuzzy
@@ -5755,8 +5701,8 @@ msgstr "Aukeratu Irudia"
 msgid "Update automatically"
 msgstr "Aukeratu Irudia"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Ez dago konturik erabilgarri"
 
 msgid "Update plugins automatically"
@@ -5767,6 +5713,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Konexioak huts egin du"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5801,16 +5751,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Aukeratu Irudia"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "Zerbitzaria:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Konektatu"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5876,18 +5825,6 @@ msgstr "GTK+ Bertsioa:"
 msgid "Video"
 msgstr ""
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Txat Pribatua"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Berezko Egoera Mezuak"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Txat Pribatua"
-
 msgid "Video test"
 msgstr ""
 
@@ -5941,6 +5878,9 @@ msgstr "URL bilatzailea ez da aurkizten \"%s\" -an"
 
 msgid "Web _Search for it"
 msgstr "Web _Bilaketa "
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6221,6 +6161,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Zure mezua ezin da bidali konektatu harte"
 
@@ -6248,6 +6191,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Fitxategi guztiak"
@@ -6272,14 +6218,6 @@ msgstr "Onartu"
 #, fuzzy
 msgid "_Account"
 msgstr "Kontuak"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Kontuak"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Kontaktua Gehitu..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6342,10 +6280,6 @@ msgid "_Create"
 msgstr "Inaktiboa"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr " XML Konsola"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "_Deskonektatuta"
 
@@ -6389,10 +6323,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Libre _Hitz Egiteko"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Laguntza"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6404,8 +6334,16 @@ msgstr "_Host-a"
 msgid "_Hostname"
 msgstr "Hostname: "
 
+#, fuzzy
+msgid "_Import"
+msgstr "Esportatu"
+
 msgid "_Join"
 msgstr "_Sartu"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Txat Taldean Sartu"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6419,14 +6357,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Log aktibatua"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "Kontua E_raldatu"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Kontaktua Gehitu..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6469,10 +6399,6 @@ msgstr "Mezu berria sortu"
 #, fuzzy
 msgid "_Port"
 msgstr "_Portua:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Hobespenak"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6534,19 +6460,11 @@ msgstr "Baliogabeko izena"
 msgid "_Sign Up"
 msgstr "_Konektatuta"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Elkarrizketa Hasi"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Harpidetu"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Trans_porteak Erakutsi"
 
 #, fuzzy
 msgid "_Type"
@@ -6564,10 +6482,6 @@ msgstr "Harpidetza ezabat_u"
 #, fuzzy
 msgid "_Username"
 msgstr "_Izena"
-
-#, fuzzy
-msgid "_View"
-msgstr "_Ikusi"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6662,9 +6576,6 @@ msgid ""
 "Do you want to join?"
 msgstr "Mesedez bete sartu nahi duzun kontaktuaren informazioa"
 
-msgid "help"
-msgstr ""
-
 #, fuzzy
 msgid "is composing a message…"
 msgstr "mezu bat sortzen ari da..."
@@ -6757,12 +6668,6 @@ msgstr "Kontu Eraldaketa"
 msgid "video input"
 msgstr ""
 
-#, fuzzy
-msgid "we would like to thank all the package maintainers."
-msgstr ""
-"Azkenak baina ez gutxien merezitakoak,\n"
-"eskerrak eman nahi dzkiegu paketeak mantentzen dituztenei."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6789,6 +6694,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Aldatu _Izengoitia"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Aurreratua"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7033,6 +6942,14 @@ msgstr ""
 #~ msgstr "\"%s\"  kontua zerbitzarira konektatu da"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Aktibatuta"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Konexioak huts egin du"
 
@@ -7090,6 +7007,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Ezin izan da gainarazi \"%s\" fitxeroa"
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "%s konturako"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Profila bidaltzen..."
@@ -7105,6 +7028,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Aukeratu Bidaltzeko Fitxeroa..."
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Bilatu"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7123,6 +7050,10 @@ msgstr ""
 #~ msgstr "Elkarrizketaren Historiala"
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kontaktuaren Informazioa"
+
+#, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopiatu JID/Email-a"
 
@@ -7138,6 +7069,10 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "Gela:"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Txat Taldea Berria"
+
 #~ msgid "Create new post"
 #~ msgstr "Mezu berria sortu"
 
@@ -7145,9 +7080,8 @@ msgstr ""
 #~ msgid "Current Developers"
 #~ msgstr "Egungo diseinatzaileak: "
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr " XML Konsola"
+#~ msgid "Default"
+#~ msgstr "Berezkoa"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7160,6 +7094,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Description: "
 #~ msgstr "Deskribapena: %s"
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Aurre diseinatzaileak: "
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7177,6 +7115,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Deskargatu"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Deskargatu"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "E_z galdetu berriro  "
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7271,6 +7217,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Ezkutatu Menua"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Web Pertsonala:"
+
 #~ msgid "Images"
 #~ msgstr "Irudiak"
 
@@ -7295,6 +7245,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Arrazoia"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Tokiko jid-a:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7327,6 +7281,10 @@ msgstr ""
 #~ msgstr "Kontu Eraldaketa"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Proxy:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Hasigabea"
@@ -7344,8 +7302,8 @@ msgstr ""
 #~ msgstr "OpenPGP: "
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Konexioak huts egin du"
+#~ msgid "Organization (O)"
+#~ msgstr "Administratzailea"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7354,6 +7312,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Ikusi Gabeko _Gertaerak"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Konexioak huts egin du"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7424,6 +7386,14 @@ msgstr ""
 #~ msgstr "Pasahitza behar da"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Zerbitzaria:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Konexioak huts egin du"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Gorde Bezala..."
 
@@ -7459,6 +7429,10 @@ msgstr ""
 #~ msgstr "Bidaltzailea: "
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG zenbakia:"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7471,8 +7445,16 @@ msgstr ""
 #~ msgstr "Ikusi _Deskonektatutako Kontaktuak"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Zerbitzariaren Ezaugarriak:"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Erakutsi zu eta beste baten arteko fitxero transferentzia"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Zerbitzariaren Ezaugarriak:"
 
 #~ msgid "Sta_tus"
 #~ msgstr "E_goera"
@@ -7493,6 +7475,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Egoera: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Egoera: "
 
 #, fuzzy
@@ -7553,8 +7539,24 @@ msgstr ""
 #~ msgstr "Gorde Bezala..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Zerbitzaria:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Izena"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Txat Pribatua"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Berezko Egoera Mezuak"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Txat Pribatua"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7596,6 +7598,18 @@ msgstr ""
 #~ "this transport."
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Kontuak"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Kontaktua Gehitu..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr " XML Konsola"
+
+#, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "E_z galdetu berriro  "
 
@@ -7608,8 +7622,16 @@ msgstr ""
 #~ msgstr "Fitxero Transferentzia"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Laguntza"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "_Log aktibatua"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Kontaktua Gehitu..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7624,12 +7646,28 @@ msgstr ""
 #~ msgstr "_Ireki Fitxeroaren Edukia"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Hobespenak"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Jakinarazi  fitxeroa transferitu denean"
 
 #, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Elkarrizketa Hasi"
+
+#, fuzzy
 #~ msgid "_Start Chat..."
 #~ msgstr "Elkarrizketa  _Hasi"
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Trans_porteak Erakutsi"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Ikusi"
 
 #~ msgid "file transfers list"
 #~ msgstr "fitxeroen transferentziaren lista"

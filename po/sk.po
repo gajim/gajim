@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -122,10 +122,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Pokročilé"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -446,6 +442,10 @@ msgid "Account Wizard"
 msgstr "Emotikony zakázané"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Účet"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Emotikony zakázané"
 
@@ -467,6 +467,10 @@ msgstr "Účet \"%s\" je pripojený na server"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Účet \"%s\" je pripojený na server"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Účet"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -499,10 +503,6 @@ msgstr "Aktivovaná"
 
 msgid "Active"
 msgstr "Aktívne"
-
-#, fuzzy
-msgid "Activity"
-msgstr "Aktivovaná"
 
 #, fuzzy
 msgid "Activity Feed"
@@ -553,10 +553,6 @@ msgstr "Registrácia zlyhala"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Pridať kontakt..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -645,11 +641,11 @@ msgid "Advanced"
 msgstr "Pokročilé"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Editor rozšírenej konfigurácie"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Editor rozšírenej konfigurácie"
 
 #, fuzzy
@@ -659,6 +655,10 @@ msgstr "Pokročilé akcie"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Pokročilé akcie"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "Verzia GTK+:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -673,9 +673,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -824,9 +821,6 @@ msgstr "_Predvoľby"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Vyžiadať správu o stave, keď som:"
@@ -943,6 +937,10 @@ msgstr "_Prítomný"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "_Prítomný"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "_Prítomný"
 
 #, fuzzy
@@ -1110,12 +1108,6 @@ msgstr "Chyba SSL certifikátu"
 msgid "Certificate chain too long"
 msgstr "Reťazec certifikátu je príliš dlhý"
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "pre účet %s"
-
 msgid "Certificate has expired"
 msgstr "Certifikát vypršal"
 
@@ -1242,6 +1234,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Pripojenie nie je dostupné"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Vybrať obrázok"
 
@@ -1308,9 +1304,6 @@ msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Kliknite pre výber avataru"
@@ -1327,10 +1320,6 @@ msgstr "Certifikát podpísaný sám sebou"
 #, fuzzy
 msgid "Close"
 msgstr "_Poslať a zatvoriť"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Hľadať"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1363,9 +1352,6 @@ msgstr "Účet bol úspešne pridaný"
 #, fuzzy
 msgid "Commands"
 msgstr "príkaz"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1570,10 +1556,6 @@ msgid "Copy Address"
 msgstr "_Kopírovať JID/e-mailovú adresu"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Kontaktné informácie"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Kopírovať umiestnenie odkazu"
 
@@ -1656,10 +1638,6 @@ msgid "Create New Account"
 msgstr "Vytvoriť novú správu"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Opustiť diskusnú skupinu"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Opustiť diskusnú skupinu"
 
@@ -1677,6 +1655,9 @@ msgstr "Certifikát vypršal"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
@@ -1690,6 +1671,10 @@ msgstr "Registrácia zlyhala"
 
 msgid "Deactivated"
 msgstr "Deaktivovaná"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML konzola"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1708,9 +1693,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Spojenie zlyhalo"
-
-msgid "Default"
-msgstr "Predvolené"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1790,10 +1772,6 @@ msgstr "Nová diskusná skupina"
 
 msgid "Details"
 msgstr "Podrobnosti"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Bývalí vývojári:"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1933,6 +1911,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Stiahnuť"
@@ -1940,14 +1921,6 @@ msgstr "Stiahnuť"
 #, fuzzy
 msgid "Download File"
 msgstr "Stiahnuť"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Stiahnuť"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2167,10 +2140,10 @@ msgstr "_Vykonať príkaz"
 msgid "Executing…"
 msgstr "_Vykonať príkaz"
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2336,6 +2309,9 @@ msgstr "Filter:"
 msgid "Filters (active)"
 msgstr "Prvá prijatá správa"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2372,11 +2348,11 @@ msgid "Forget Group Chat"
 msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Opustiť diskusnú skupinu"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Opustiť diskusnú skupinu"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2615,9 +2591,6 @@ msgstr "Oznámenie"
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2626,15 +2599,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Prepnúť video reláciu"
 
 #, fuzzy
 msgid "Home"
-msgstr "<b>Domovská stránka:</b>"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "<b>Domovská stránka:</b>"
 
 #, fuzzy
@@ -2646,6 +2615,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Čo si prajete vykonať?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2669,6 +2641,10 @@ msgstr "IEC štandard znamená KiB = 1024 bajtov, KB = 1000 bajtov."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adresa:"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Port:"
 
 msgid "Id"
 msgstr "Id"
@@ -2781,6 +2757,10 @@ msgstr "Nezabezpečené spojenie"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr "Registrácia zlyhala"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2790,12 +2770,11 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
-#, fuzzy
-msgid "Installation failed"
-msgstr "Registrácia zlyhala"
+msgid "Install from Archive"
+msgstr ""
 
 #, fuzzy
-msgid "Installed"
+msgid "Installation failed"
 msgstr "Registrácia zlyhala"
 
 msgctxt "Configuration type"
@@ -2866,13 +2845,13 @@ msgstr "Poz_vať"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2882,6 +2861,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2927,10 +2909,6 @@ msgid "Join Groupchat…"
 msgstr "Pripojiť sa k diskusnej skupine"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Pripojiť sa k diskusnej skupine"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Pripojiť sa k diskusnej skupine"
 
@@ -2950,9 +2928,6 @@ msgid "Keep Chat History"
 msgstr "Posledné:"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2975,9 +2950,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3031,10 +3003,6 @@ msgstr "Kódim"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Miestne jid:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3077,9 +3045,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Admin"
@@ -3103,6 +3068,10 @@ msgid "Manage"
 msgstr "Spravovať..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Upraviť účet"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Kontakty"
 
@@ -3121,6 +3090,9 @@ msgstr "Spravovať účty"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Spravovať účty"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3214,7 +3186,7 @@ msgstr "_Zaznamenať zmenu stavu kontaktu"
 msgid "Miscellaneous"
 msgstr "<b>Rôzne</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3374,6 +3346,10 @@ msgstr "Heslo je požadované"
 msgid "No Proxy"
 msgstr "Proxy:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "Žiadny výsledok"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3422,10 +3398,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Žiadne účty nie sú dostupné"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Proxy:"
 
 #, fuzzy
 msgid "No results"
@@ -3625,10 +3597,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Na dovolenke"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Na dovolenke"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3695,6 +3663,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "Všetky súbory"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3816,10 +3787,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4043,8 +4010,11 @@ msgstr "E2E šifrovanie povolené"
 msgid "Pulse: %s"
 msgstr "Súbor: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Posledné:"
 
 #, fuzzy
@@ -4372,8 +4342,12 @@ msgid "Resource"
 msgstr "Zdroj:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr "<b>POZNÁMKA:</b> Musíte reštartovať Gajim, aby boli použité zmeny"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Vyžaduje libgtkspell."
 
 #, fuzzy
 msgid "Restore chat"
@@ -4418,13 +4392,7 @@ msgstr "Rola"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(nick)s bol odstránený z miestnosti (%(reason)s)"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4437,14 +4405,6 @@ msgstr "Chyba SSL certifikátu"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Chyba SSL certifikátu"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "STUN server:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Registrácia zlyhala"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4550,8 +4510,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Účastníci"
 
 #, fuzzy
 msgid "Searching"
@@ -4608,9 +4569,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4700,10 +4658,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "GG číslo:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "GG číslo:"
 
@@ -4754,6 +4708,10 @@ msgid "Service Not Found"
 msgstr "Služba nebola nájdená"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Spravovať účty"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "%s konfiguračná chyba"
 
@@ -4799,6 +4757,10 @@ msgid "Share my online status"
 msgstr "Zmeniť stav"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Umiestnenie:"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "príkaz"
 
@@ -4822,9 +4784,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4856,10 +4815,6 @@ msgid "Show Voice Message Button"
 msgstr "Poslať správu"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Funkcie"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Má byť zobrazovaný dialóg pri vytváraní metakontaktov? Prázdny reťazec "
@@ -4877,9 +4832,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Zobraziť zoznam emotikon (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Zobraziť všetky čakajúce _udalosti"
@@ -4887,10 +4839,6 @@ msgstr "Zobraziť všetky čakajúce _udalosti"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Zobraziť všetky čakajúce _udalosti"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Umiestnenie:"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4948,9 +4896,6 @@ msgstr "Nezobrazovať zoznam v paneli úloh."
 msgid "Show window when starting Gajim"
 msgstr "Vždy zavrieť Gajim"
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Skrývanie okien"
@@ -4982,10 +4927,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Spím"
-
-#, fuzzy
-msgid "Software"
-msgstr "Vlastnosti servera"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5105,10 +5046,6 @@ msgstr "Správa o stave"
 msgid "Status message…"
 msgstr "_Správa o stave:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Stav: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Správa o stave"
@@ -5138,9 +5075,6 @@ msgstr "Štýl"
 
 msgid "Subject"
 msgstr "Predmet"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5290,6 +5224,10 @@ msgstr "Poslať _súbor"
 msgid "Thanks"
 msgstr "Vďačný"
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "V neposlednom rade ďakujeme všetkým správcom balíkov."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5350,9 +5288,6 @@ msgstr "Téma"
 msgid "Themes"
 msgstr "Téma"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5367,6 +5302,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5530,6 +5468,9 @@ msgstr "Tento typ služby neobsahuje žiadne položky na prehľadávanie."
 msgid "This will clear the devices store for your account."
 msgstr "Odstrániť iba z programu Gajim"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Odstrániť iba z programu Gajim"
@@ -5606,6 +5547,9 @@ msgstr ""
 #, fuzzy
 msgid "Try Again"
 msgstr "Overiť znovu..."
+
+msgid "Try a different search"
+msgstr ""
 
 #, fuzzy
 msgid "Trying to change password..."
@@ -5688,8 +5632,9 @@ msgstr "Účastník"
 msgid "Unencrypted"
 msgstr "Nezačal"
 
-msgid "Uninstall Plugin"
-msgstr ""
+#, fuzzy
+msgid "Uninstall"
+msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Unknown"
@@ -5764,8 +5709,8 @@ msgstr "Vybrať obrázok"
 msgid "Update automatically"
 msgstr "Vybrať obrázok"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Žiadne účty nie sú dostupné"
 
 msgid "Update plugins automatically"
@@ -5776,6 +5721,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Registrácia zlyhala"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5810,16 +5759,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Vybrať obrázok"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "STUN server:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Nezabezpečené spojenie"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5886,18 +5834,6 @@ msgstr "Verzia GTK+:"
 msgid "Video"
 msgstr "Video test"
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Video test"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Vstupné zariadenie videa"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Video test"
-
 msgid "Video test"
 msgstr "Video test"
 
@@ -5951,6 +5887,9 @@ msgstr "URL pre web vyhľadávanie chýba \"%s\""
 
 msgid "Web _Search for it"
 msgstr "_Hľadať na webe"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6233,6 +6172,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Vašu správu nie je možné odoslať, pokiaľ nebudete pripojený."
 
@@ -6260,6 +6202,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Všetky súbory"
@@ -6284,14 +6229,6 @@ msgstr "Prijať"
 #, fuzzy
 msgid "_Account"
 msgstr "Úč_ty"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Účty"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Pridať kontakt..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6354,10 +6291,6 @@ msgid "_Create"
 msgstr "Tvorivý"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "XML konzola"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "_Odhlásený"
 
@@ -6401,10 +6334,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Mám čas na debatu"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Pomocník"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6416,8 +6345,16 @@ msgstr "_Hostiteľ:"
 msgid "_Hostname"
 msgstr "Názov _hostiteľa:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "Exportovať"
+
 msgid "_Join"
 msgstr "_Pripojiť"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Pripojiť sa k diskusnej skupine"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6431,14 +6368,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "Prihlásiť znovu?"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "_Upraviť účet"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Pridať kontakt..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6481,10 +6410,6 @@ msgstr "Vytvorte, prosím, čisto novú tému z vami požadovaným názvom."
 #, fuzzy
 msgid "_Port"
 msgstr "_Port:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Predvoľby"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6546,19 +6471,11 @@ msgstr "Certifikát podpísaný sám sebou"
 msgid "_Sign Up"
 msgstr "Prihlás_il sa"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Začať rozhovor"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Zapísať"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Zobraziť trans_porty"
 
 #, fuzzy
 msgid "_Type"
@@ -6577,10 +6494,6 @@ msgstr "_Odhlásiť"
 #, fuzzy
 msgid "_Username"
 msgstr "_Používateľské meno:"
-
-#, fuzzy
-msgid "_View"
-msgstr "_Zobraziť"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6672,9 +6585,6 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Zvolte diskusné skupiny, ktoré chcete opustiť"
-
-msgid "help"
-msgstr ""
 
 #, fuzzy
 msgid "is composing a message…"
@@ -6769,10 +6679,6 @@ msgstr "Umiestnenie:"
 msgid "video input"
 msgstr "video vstup"
 
-#, fuzzy
-msgid "we would like to thank all the package maintainers."
-msgstr "V neposlednom rade ďakujeme všetkým správcom balíkov."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6799,6 +6705,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Zmeniť p_rezývku..."
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Pokročilé"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7042,6 +6952,14 @@ msgstr ""
 #~ msgstr "Účet \"%s\" je pripojený na server"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Aktivovaná"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Pridať kontakt..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Registrácia zlyhala"
 
@@ -7100,6 +7018,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Nie je možné prepísať existujúci súbor \"%s\""
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "pre účet %s"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Odosielanie profilu..."
@@ -7115,6 +7039,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vyberte súbor na odoslanie..."
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Hľadať"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7133,6 +7061,10 @@ msgstr ""
 #~ msgstr "Rozhovor s "
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kontaktné informácie"
+
+#, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopírovať JID/e-mailovú adresu"
 
@@ -7148,6 +7080,10 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "JID miestnosti"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Opustiť diskusnú skupinu"
+
 #~ msgid "Create new post"
 #~ msgstr "Vytvoriť novú správu"
 
@@ -7155,9 +7091,8 @@ msgstr ""
 #~ msgid "Current Developers"
 #~ msgstr "Súčasní vývojári:"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "XML konzola"
+#~ msgid "Default"
+#~ msgstr "Predvolené"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7169,6 +7104,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Popis:"
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Bývalí vývojári:"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7186,6 +7125,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Stiahnuť"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Stiahnuť"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "Znovu sa už _nepýtať"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7279,6 +7226,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Skryť toto menu"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "<b>Domovská stránka:</b>"
+
 #~ msgid "Images"
 #~ msgstr "Obrázky"
 
@@ -7303,6 +7254,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Dôvod"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Miestne jid:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7337,6 +7292,10 @@ msgstr ""
 #~ msgstr "Oznámenia"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Proxy:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Nezačal"
@@ -7354,8 +7313,8 @@ msgstr ""
 #~ msgstr "OpenGPG"
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Registrácia zlyhala"
+#~ msgid "Organization (O)"
+#~ msgstr "Na dovolenke"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7364,6 +7323,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Zobraziť všetky čakajúce _udalosti"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Registrácia zlyhala"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7436,6 +7399,14 @@ msgstr ""
 #~ msgstr "Požaduje knižnicu libxss."
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STUN server:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Registrácia zlyhala"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Uložiť súbor ako..."
 
@@ -7471,6 +7442,10 @@ msgstr ""
 #~ msgstr "Odosielateľ: "
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG číslo:"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7483,8 +7458,16 @@ msgstr ""
 #~ msgstr "Zobraziť _odhlásené kontakty"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Funkcie"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Zobraziť zoznam prenosov súborov medzi vami a ostatnými"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Vlastnosti servera"
 
 #~ msgid "Sta_tus"
 #~ msgstr "S_tav"
@@ -7504,6 +7487,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Stav: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Stav: "
 
 #, fuzzy
@@ -7566,8 +7553,24 @@ msgstr ""
 #~ msgstr "Uložiť súbor ako..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN server:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Používateľské meno:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Video test"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Vstupné zariadenie videa"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Video test"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7608,6 +7611,18 @@ msgstr ""
 #~ "transport."
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Účty"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Pridať kontakt..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "XML konzola"
+
+#, fuzzy
 #~ msgid "_Don’t ask again"
 #~ msgstr "Znovu sa už _nepýtať"
 
@@ -7618,6 +7633,14 @@ msgstr ""
 #, fuzzy
 #~ msgid "_File Transfer"
 #~ msgstr "Prenos súborov"
+
+#, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Pomocník"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Pridať kontakt..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7632,11 +7655,27 @@ msgstr ""
 #~ msgstr "_Otvoriť priečinok s obsahom"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Predvoľby"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Upozorniť ma, keď sa dokončí prenos"
 
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Začať rozhovor"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "_Začať rozhovor..."
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Zobraziť trans_porty"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Zobraziť"
 
 #~ msgid "file transfers list"
 #~ msgstr "zoznam prenosu súborov"

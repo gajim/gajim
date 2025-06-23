@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -128,10 +128,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "usynkronisert"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -445,6 +441,10 @@ msgid "Account Wizard"
 msgstr "Konto avskrudd"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Konto-rad"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Konto avskrudd"
 
@@ -466,6 +466,10 @@ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Konto-rad"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -498,10 +502,6 @@ msgstr "Påskrudd"
 
 msgid "Active"
 msgstr "Påslått"
-
-#, fuzzy
-msgid "Activity"
-msgstr "Påskrudd"
 
 #, fuzzy
 msgid "Activity Feed"
@@ -552,10 +552,6 @@ msgstr "Sludresnarveier"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "Legg til kontakt…"
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -639,11 +635,11 @@ msgid "Advanced"
 msgstr "Avansert"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Avansert oppsettsbehandlder"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Avansert oppsettsbehandlder"
 
 #, fuzzy
@@ -653,6 +649,10 @@ msgstr "Avanserte Handlinger"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Avanserte Handlinger"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK+versjon: %s"
 
 #, fuzzy
 msgid "Affiliation"
@@ -667,9 +667,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -816,9 +813,6 @@ msgstr "Arkiveringsinnstillinger"
 msgid "Archiving Preferences for %s"
 msgstr "Arkiveringsinnstillinger for %s"
 
-msgid "Artists"
-msgstr "Artister"
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Spør etter statusmelding når jeg:"
@@ -935,6 +929,10 @@ msgstr "Tilgjengelig"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Tilgjengelig"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Tilgjengelig"
 
 #, fuzzy
@@ -1101,12 +1099,6 @@ msgstr "Bekreftelse av SSL-sertifikat for %s"
 msgid "Certificate chain too long"
 msgstr "Sertifikatskjeden er for lang"
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "Sertifikat for kontoen %s"
-
 msgid "Certificate has expired"
 msgstr "Sertifikatet har utløpt"
 
@@ -1232,6 +1224,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Videoøkter er ikke tilgjengelige"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Velg arkiv"
 
@@ -1296,9 +1292,6 @@ msgstr "%(jid)s har blitt invitert til dette rommet"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Klikk for å sette din avatar"
@@ -1314,10 +1307,6 @@ msgstr "Klientsertifikat"
 #, fuzzy
 msgid "Close"
 msgstr "_Lukk"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Søk"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1349,9 +1338,6 @@ msgstr "Kontoen har blitt lagt til uten feilmeldinger"
 #, fuzzy
 msgid "Commands"
 msgstr "Kommandoer: %s"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1551,10 +1537,6 @@ msgid "Copy Address"
 msgstr "_Kopier JID/E-postadresse"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Kontaktinformasjon"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Kopier lenke-plassering"
 
@@ -1637,10 +1619,6 @@ msgid "Create New Account"
 msgstr "Lag en ny post"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Forlat gruppesamtaler"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Forlat gruppesamtaler"
 
@@ -1658,6 +1636,9 @@ msgstr "Sertifikatet har utløpt"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "gajim-remote"
@@ -1671,6 +1652,10 @@ msgstr "Registrering feilet"
 
 msgid "Deactivated"
 msgstr "Avskrudd"
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "XML-konsoll"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1689,9 +1674,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Tilkobling mislyktes"
-
-msgid "Default"
-msgstr "Forvalg"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1770,10 +1752,6 @@ msgstr "Ny gruppesamtale"
 
 msgid "Details"
 msgstr "Detaljer"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Tidligere utviklere"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1909,6 +1887,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "?Noun:Nedlasting"
@@ -1916,14 +1897,6 @@ msgstr "?Noun:Nedlasting"
 #, fuzzy
 msgid "Download File"
 msgstr "?Noun:Nedlasting"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "?Noun:Nedlasting"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "_Ikke spør meg igjen"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2143,10 +2116,10 @@ msgstr "K_jør Kommando…"
 msgid "Executing…"
 msgstr "K_jør Kommando…"
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2309,6 +2282,9 @@ msgstr "Filter"
 msgid "Filters (active)"
 msgstr "Første melding motatt"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2349,11 +2325,11 @@ msgid "Forget Group Chat"
 msgstr "Forlat gruppesamtaler"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Forlat gruppesamtaler"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Forlat gruppesamtaler"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2594,9 +2570,6 @@ msgstr "Merknad"
 msgid "Hello, I am $name. %s"
 msgstr "Hei, jeg er $name."
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2605,15 +2578,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Veksle videoøkt"
 
 #, fuzzy
 msgid "Home"
-msgstr "Hjemmeside:"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "Hjemmeside:"
 
 msgid "Hostname"
@@ -2624,6 +2593,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Hvor langt tilbake ønsker du å gå?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2647,6 +2619,10 @@ msgstr "IEC-standarden tilsier at KiB = 1024 bytes, KB = 1000 bytes."
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "Adresse"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "Port"
 
 msgid "Id"
 msgstr "ID"
@@ -2764,6 +2740,10 @@ msgstr "Usikker tilkobling"
 msgid "Insert Emoji"
 msgstr "Skru på ASCII-smilefjes"
 
+#, fuzzy
+msgid "Install"
+msgstr "Innstallert"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2775,11 +2755,12 @@ msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
 #, fuzzy
+msgid "Install from Archive"
+msgstr "Installer fra zip-fil"
+
+#, fuzzy
 msgid "Installation failed"
 msgstr "Registrering feilet"
-
-msgid "Installed"
-msgstr "Innstallert"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2849,13 +2830,13 @@ msgstr "In_viter"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2865,6 +2846,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2909,10 +2893,6 @@ msgid "Join Groupchat…"
 msgstr "Ta del i gruppesludring"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Ta del i gruppesamtale"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Ta del i gruppesamtale"
 
@@ -2932,9 +2912,6 @@ msgid "Keep Chat History"
 msgstr "Sludrehistorikk"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2958,9 +2935,6 @@ msgstr ""
 #, python-format
 msgid "Language: %s"
 msgstr ""
-
-msgid "Last but not least"
-msgstr "Sist men ikke minst"
 
 #, fuzzy, python-format
 msgid "Last seen: %s"
@@ -3017,10 +2991,6 @@ msgstr "Laster"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Lokal JID:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3063,9 +3033,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "Admin"
@@ -3089,6 +3056,10 @@ msgid "Manage"
 msgstr "Behandle…"
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Rediger Konto"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Kontakter"
 
@@ -3106,6 +3077,9 @@ msgstr "Behandle lyder"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Behandle lyder"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3200,7 +3174,7 @@ msgstr "_Vis statusendringer"
 msgid "Miscellaneous"
 msgstr "<b>Diverse</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3356,6 +3330,10 @@ msgstr "Passord påkrevd"
 msgid "No Proxy"
 msgstr "Mellomtjener"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "Inget resultat"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3404,10 +3382,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Ingen konto tilgjengelig"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Mellomtjener"
 
 #, fuzzy
 msgid "No results"
@@ -3605,10 +3579,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "På ferie"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "På ferie"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3676,6 +3646,9 @@ msgstr "PCKS12-filer"
 #, fuzzy
 msgid "PNG files"
 msgstr "Alle filer"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3796,10 +3769,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Tillegg"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4017,8 +3986,11 @@ msgstr "Krypteringsfeil"
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Sludrehistorikk"
 
 #, fuzzy
@@ -4346,10 +4318,14 @@ msgid "Resource"
 msgstr "Ressurs"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "<b>MERK:</b> Du bør starte Gajim på nytt for at noen instillinger skal "
 "aktiveres"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "Krever Gspell"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4394,13 +4370,7 @@ msgstr "Rolle"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%(jid)s har blitt invitert til dette rommet"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4413,14 +4383,6 @@ msgstr "Bekreftelse av SSL-sertifikat for %s"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Feil med SSL-sertifikat"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "STUN-tjener:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Tillegg"
 
 msgid "STUN server to use when using Jingle"
 msgstr "STUN-tjener til bruk med Jingle"
@@ -4525,8 +4487,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Deltakere"
 
 #, fuzzy
 msgid "Searching"
@@ -4584,9 +4547,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4676,10 +4636,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr "Del profilene helt (selv historikkdatabase og programtillegg)"
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "GG-nummer:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "GG-nummer:"
 
@@ -4726,6 +4682,10 @@ msgstr "Ikke mulig å utforske tjeneste"
 msgid "Service Not Found"
 msgstr "Tjenesten ble ikke funnet"
 
+#, fuzzy
+msgid "Set Trust"
+msgstr "Behandle lyder"
+
 msgid "Set configuration directory"
 msgstr "Velg oppsettsmappe"
 
@@ -4771,6 +4731,10 @@ msgid "Share my online status"
 msgstr "Endre status"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Plassering:"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "Kommandoer: %s"
 
@@ -4794,9 +4758,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4828,10 +4789,6 @@ msgid "Show Voice Message Button"
 msgstr "Send melding"
 
 #, fuzzy
-msgid "Show _Features"
-msgstr "Funksjonalitet"
-
-#, fuzzy
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 "Skal bekreftelse av kontaktblokkering vises eller ei? Tomt innhold betyr at "
@@ -4849,19 +4806,12 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Vis en liste over smilefjes (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Vis alle advarsler"
 
 msgid "Show all warnings"
 msgstr "Vis alle advarsler"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Plassering:"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4917,9 +4867,6 @@ msgstr "Ikke vis kontaktlisten i systemstatus-feltet."
 msgid "Show window when starting Gajim"
 msgstr "Alltid lukk Gajim"
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Lukker vinduet"
@@ -4951,10 +4898,6 @@ msgstr ""
 
 msgid "Sleeping"
 msgstr "Sover"
-
-#, fuzzy
-msgid "Software"
-msgstr "Tjenerprogramvare"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5073,10 +5016,6 @@ msgstr "Statusmelding"
 msgid "Status message…"
 msgstr "_Statusmelding:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Status: "
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "Statusmelding"
@@ -5106,9 +5045,6 @@ msgstr "Stil"
 
 msgid "Subject"
 msgstr "Tema"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5257,6 +5193,10 @@ msgstr "Send _fil"
 msgid "Thanks"
 msgstr "Takknemlig"
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "vi vil rette en takk til alle dem som lager installasjonspakker."
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5317,9 +5257,6 @@ msgstr "Drakt"
 msgid "Themes"
 msgstr "Drakt"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5334,6 +5271,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5505,6 +5445,9 @@ msgstr "Denne typen tjeneste inneholder ingen elementer å utforske."
 msgid "This will clear the devices store for your account."
 msgstr "Fjern kontoen _bare fra Gajim"
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "Fjern kontoen _bare fra Gajim"
@@ -5582,6 +5525,9 @@ msgstr ""
 #, fuzzy
 msgid "Try Again"
 msgstr "Bekreft igjen…"
+
+msgid "Try a different search"
+msgstr ""
 
 #, fuzzy
 msgid "Trying to change password..."
@@ -5665,7 +5611,7 @@ msgid "Unencrypted"
 msgstr "Ikke startet"
 
 #, fuzzy
-msgid "Uninstall Plugin"
+msgid "Uninstall"
 msgstr "Avinstaller"
 
 #, fuzzy
@@ -5741,8 +5687,8 @@ msgstr "Velg arkiv"
 msgid "Update automatically"
 msgstr "Velg arkiv"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Ingen konto tilgjengelig"
 
 msgid "Update plugins automatically"
@@ -5753,6 +5699,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Tillegg"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5788,16 +5738,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Velg bilde"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "STUN-tjener:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Usikker tilkobling"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5863,18 +5812,6 @@ msgstr "Versjon:"
 msgid "Video"
 msgstr "Videotest"
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Bildetakt for video"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Videokamera-enhet"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Videoøkt"
-
 msgid "Video test"
 msgstr "Videotest"
 
@@ -5928,6 +5865,9 @@ msgstr "Nettsøks-URL-en mangler en \"%s\""
 
 msgid "Web _Search for it"
 msgstr "_Søk på nettet etter den"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6213,6 +6153,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr "Meldingen din kan ikke sendes før du er tilkoblet."
 
@@ -6240,6 +6183,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Zip-filer"
@@ -6264,14 +6210,6 @@ msgstr "_Godkjenn"
 #, fuzzy
 msgid "_Account"
 msgstr "_Kontoer"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Kontoer"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "Legg til kontakt…"
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6333,10 +6271,6 @@ msgid "_Create"
 msgstr "Kreativ"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "XML-konsoll"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "_Frakoblet"
 
@@ -6379,10 +6313,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "_Ledig for prat"
 
-#, fuzzy
-msgid "_Help"
-msgstr "Hjelp"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6394,8 +6324,16 @@ msgstr "_Maskin:"
 msgid "_Hostname"
 msgstr "_Maskinnavn:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "_Eksporter"
+
 msgid "_Join"
 msgstr "_Delta"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Ta del i gruppesamtale"
 
 #, fuzzy
 msgid "_Keyboard Shortcuts"
@@ -6410,14 +6348,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "_Logg på"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "_Rediger Konto"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "Legg til kontakt…"
 
 #, fuzzy
 msgid "_Minimize"
@@ -6461,9 +6391,6 @@ msgstr "Velg et kallenavn"
 #, fuzzy
 msgid "_Port"
 msgstr "_Port:"
-
-msgid "_Preferences"
-msgstr "_Innstillinger"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6526,19 +6453,11 @@ msgstr "Vis sertifikat…"
 msgid "_Sign Up"
 msgstr "Logg _inn"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Start samtale"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Abonner"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Vis transporter"
 
 #, fuzzy
 msgid "_Type"
@@ -6557,10 +6476,6 @@ msgstr "_Fjern abonnement"
 #, fuzzy
 msgid "_Username"
 msgstr "_Brukernavn:"
-
-#, fuzzy
-msgid "_View"
-msgstr "Vis"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6646,9 +6561,6 @@ msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
 msgstr "Inviter en bruker til et rom av en grunn"
-
-msgid "help"
-msgstr ""
 
 msgid "is composing a message…"
 msgstr "skriver en melding…"
@@ -6741,9 +6653,6 @@ msgstr "Plassering:"
 msgid "video input"
 msgstr "videoinndata"
 
-msgid "we would like to thank all the package maintainers."
-msgstr "vi vil rette en takk til alle dem som lager installasjonspakker."
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6770,6 +6679,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Endre kallenavn"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "usynkronisert"
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7020,6 +6933,14 @@ msgstr ""
 #~ msgstr "Kontoen \"%s\" er tilkoblet tjeneren"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Påskrudd"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "Legg til kontakt…"
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Sludresnarveier"
 
@@ -7044,6 +6965,9 @@ msgstr ""
 
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "Bekreft lukking av Gajim."
+
+#~ msgid "Artists"
+#~ msgstr "Artister"
 
 #, fuzzy
 #~ msgid "Audio / Video Calls"
@@ -7079,6 +7003,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "Kan ikke overskrive eksisterende fil \"%s\""
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "Sertifikat for kontoen %s"
+
 #~ msgid "Checking file…"
 #~ msgstr "Sjekker fil…"
 
@@ -7091,6 +7021,10 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Velg fil å sende…"
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Søk"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7109,6 +7043,10 @@ msgstr ""
 #~ msgstr "Samtale med "
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kontaktinformasjon"
+
+#, fuzzy
 #~ msgid "Copy Email Address"
 #~ msgstr "_Kopier JID/E-postadresse"
 
@@ -7124,15 +7062,18 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "Rom-JID"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Forlat gruppesamtaler"
+
 #~ msgid "Create new post"
 #~ msgstr "Lag en ny post"
 
 #~ msgid "Current Developers"
 #~ msgstr "Nåværende utviklere"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "XML-konsoll"
+#~ msgid "Default"
+#~ msgstr "Forvalg"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7144,6 +7085,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Beskrivelse: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Tidligere utviklere"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7161,6 +7106,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "?Noun:Nedlasting"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "_Ikke spør meg igjen"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7265,6 +7218,10 @@ msgstr ""
 #~ msgstr "Skjul denne menyen"
 
 #, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Hjemmeside:"
+
+#, fuzzy
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
 #~ "restore it when showing the window again."
@@ -7301,9 +7258,16 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Det er ikke mulig å sende tomme filer"
 
+#~ msgid "Last but not least"
+#~ msgstr "Sist men ikke minst"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Grunn"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Lokal JID:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7338,6 +7302,10 @@ msgstr ""
 #~ msgstr "Merknader"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Mellomtjener"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Ikke startet"
@@ -7355,8 +7323,8 @@ msgstr ""
 #~ msgstr "Åpne"
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Tillegg"
+#~ msgid "Organization (O)"
+#~ msgstr "På ferie"
 
 #, fuzzy
 #~ msgid "Pa_use/Resume"
@@ -7369,6 +7337,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Vis alle _handlinger på vent"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Tillegg"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7452,6 +7424,14 @@ msgstr ""
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
 
+#, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STUN-tjener:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Tillegg"
+
 #~ msgid "Save File as…"
 #~ msgstr "Lagre fil som…"
 
@@ -7487,6 +7467,10 @@ msgstr ""
 #~ msgstr "Avsender: "
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG-nummer:"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7499,8 +7483,16 @@ msgstr ""
 #~ msgstr "Vis _frakoblede kontakter"
 
 #, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Funksjonalitet"
+
+#, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "Viser en liste over filoverføringer mellom deg og andre"
+
+#, fuzzy
+#~ msgid "Software"
+#~ msgstr "Tjenerprogramvare"
 
 #~ msgid "Sta_tus"
 #~ msgstr "Sta_tus"
@@ -7525,6 +7517,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Status: "
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Status: "
 
 #, fuzzy
@@ -7601,8 +7597,24 @@ msgstr ""
 #~ msgstr "Lagre fil som…"
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN-tjener:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Brukernavn:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Bildetakt for video"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Videokamera-enhet"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Videoøkt"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7642,8 +7654,20 @@ msgstr ""
 #~ "Du vil ikke lenger kunne sende og motta meldinger fra kontakter som "
 #~ "bruker denne transporten."
 
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Kontoer"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "Legg til kontakt…"
+
 #~ msgid "_Clear"
 #~ msgstr "_Tøm"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "XML-konsoll"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7658,8 +7682,16 @@ msgstr ""
 #~ msgstr "Filoverføring"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "Hjelp"
+
+#, fuzzy
 #~ msgid "_Login"
 #~ msgstr "Innlogging"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "Legg til kontakt…"
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -7673,15 +7705,30 @@ msgstr ""
 #~ msgid "_Open Folder"
 #~ msgstr "_Åpne inneholdende katalog"
 
+#~ msgid "_Preferences"
+#~ msgstr "_Innstillinger"
+
 #, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Gi meg beskjed når ei filoverføring er fullført"
 
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Start samtale"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "_Start samtale…"
 
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Vis transporter"
+
 #~ msgid "_Undo"
 #~ msgstr "_Angre"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Vis"
 
 #~ msgid "file transfers list"
 #~ msgstr "filoverføringsliste"

@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
-"PO-Revision-Date: 2025-04-28 01:12+0000\n"
-"Last-Translator: Mako N <mako@pasero.net>\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"PO-Revision-Date: 2025-06-18 03:12+0000\n"
+"Last-Translator: 翻訳者X <tairanto2@wail.ch>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
 "ja/>\n"
 "Language: ja\n"
@@ -131,10 +131,6 @@ msgstr "%(user)s さんは次の係 (hat) となります: %(hats)s"
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr "%s (あなた)"
-
-#, python-format
-msgid "%s (desynced)"
-msgstr "%s (不揃い)"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -425,6 +421,9 @@ msgstr "アカウント設定…"
 msgid "Account Wizard"
 msgstr "アカウントウィザード"
 
+msgid "Account address: "
+msgstr "アカウントのアドレス: "
+
 msgid "Account disabled"
 msgstr "アカウントは無効です"
 
@@ -442,6 +441,9 @@ msgstr "アカウントを作成しています"
 
 msgid "Account is not connected."
 msgstr "アカウントは接続されていません。"
+
+msgid "Account name: "
+msgstr "アカウント名: "
 
 #, python-format
 msgid "Account: %s"
@@ -471,9 +473,6 @@ msgstr "有効"
 
 msgid "Active"
 msgstr "有効"
-
-msgid "Activity"
-msgstr "動向"
 
 msgid "Activity Feed"
 msgstr "動向のフィード"
@@ -513,9 +512,6 @@ msgstr "設定を追加"
 
 msgid "Add Workspace"
 msgstr "作業空間を追加"
-
-msgid "Add _Contact…"
-msgstr "相手先を追加…(_C)"
 
 msgid "Add a checkmark to received messages"
 msgstr "受信メッセージにチェックマークを付けます"
@@ -585,17 +581,21 @@ msgstr "管理人"
 msgid "Advanced"
 msgstr "拡張"
 
+msgid "Advanced Configuration Editor"
+msgstr "詳細設定エディタ"
+
 msgid "Advanced Configuration Editor (ACE)"
 msgstr "詳細設定エディタ (ACE)"
-
-msgid "Advanced Configuration Editor… "
-msgstr "詳細設定エディタ… "
 
 msgid "Advanced Settings"
 msgstr "詳細設定"
 
 msgid "Advanced settings"
 msgstr "詳細設定"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK バージョン: %s"
 
 msgid "Affiliation"
 msgstr "分掌"
@@ -609,9 +609,6 @@ msgstr "この談話室での %(nick)s の分掌は除去されました"
 
 msgid "After"
 msgstr "後"
-
-msgid "Algorithm"
-msgstr "アルゴリズム"
 
 msgid "All"
 msgstr "すべて"
@@ -745,9 +742,6 @@ msgstr "書庫の設定を保存しました"
 msgid "Archiving Preferences for %s"
 msgstr "%s の書庫の設定"
 
-msgid "Artists"
-msgstr "アーティスト"
-
 # (Mako)語順が難しい
 msgid "Ask For Status Message on…"
 msgstr "状況メッセージを求めるのは…"
@@ -847,6 +841,10 @@ msgctxt "User status"
 msgid "Available"
 msgstr "在席"
 
+#, fuzzy
+msgid "Available Features"
+msgstr "在席"
+
 msgid "Avatar file size too big"
 msgstr "アバター画像が大きすぎます"
 
@@ -897,13 +895,11 @@ msgstr "相手先を遮断しますか ?"
 msgid "Block Contact…"
 msgstr "相手先を遮断…"
 
-#, fuzzy
 msgid "Block Participant?"
-msgstr "参加者"
+msgstr "参加者を遮断しますか ?"
 
-#, fuzzy
 msgid "Blocked Participants"
-msgstr "参加者"
+msgstr "遮断された参加者"
 
 msgid "Blocking List"
 msgstr "追放者の一覧"
@@ -992,14 +988,6 @@ msgstr "SSL 証明書の検証に失敗しました"
 
 msgid "Certificate chain too long"
 msgstr "認証パスが長すぎます"
-
-#, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr ""
-"証明書 \n"
-"%s"
 
 msgid "Certificate has expired"
 msgstr "証明書は期限切れです"
@@ -1111,6 +1099,10 @@ msgstr "更新をチェックする"
 msgid "Check for updates periodically"
 msgstr "定期的に更新をチェックします"
 
+#, fuzzy
+msgid "Check which features are available"
+msgstr "音声メッセージは利用できません"
+
 msgid "Choose Device"
 msgstr "デバイスを選択"
 
@@ -1169,11 +1161,6 @@ msgstr "この談話室に招待したい相手先をクリックしてくださ
 msgid "Click to change time display"
 msgstr "時刻表示を変更するにはクリック"
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-"Flatpak でプラグインをインストールする方法は、クリックして Gajim の wiki ペー"
-"ジを見てください。"
-
 msgid "Click to view location"
 msgstr "クリックして位置情報を見る"
 
@@ -1189,9 +1176,6 @@ msgstr "クライアント証明書"
 
 msgid "Close"
 msgstr "閉じる"
-
-msgid "Close Search"
-msgstr "検索を閉じる"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr "エスケープキーを押して会話を閉じます"
@@ -1220,9 +1204,6 @@ msgstr "コマンドは無事実行されました"
 
 msgid "Commands"
 msgstr "コマンド"
-
-msgid "Common Name (CN)"
-msgstr "一般名 (CN)"
 
 msgid "Common Name (CN): "
 msgstr "一般名 (CN): "
@@ -1396,9 +1377,6 @@ msgstr "コピー"
 msgid "Copy Address"
 msgstr "アドレスをコピー"
 
-msgid "Copy Certificate Information"
-msgstr "証明書の情報をコピー"
-
 msgid "Copy Link"
 msgstr "リンクをコピー"
 
@@ -1464,9 +1442,6 @@ msgstr "談話室を作成…"
 msgid "Create New Account"
 msgstr "新しいアカウントを作成"
 
-msgid "Create _Group Chat…"
-msgstr "談話室を作成…(_G)"
-
 msgid "Create new group chat"
 msgstr "新しい談話室を作成"
 
@@ -1482,6 +1457,9 @@ msgstr "認証情報は期限切れです"
 msgid "D-Bus Interface"
 msgstr "D-Bus インターフェース"
 
+msgid "DNS"
+msgstr ""
+
 msgid "Dark Theme"
 msgstr "ダークテーマ"
 
@@ -1493,6 +1471,9 @@ msgstr "データベースの移行に失敗しました"
 
 msgid "Deactivated"
 msgstr "無効"
+
+msgid "Debug Console"
+msgstr "デバッグコンソール"
 
 msgid "Debug Logging"
 msgstr "デバッグ記録"
@@ -1508,9 +1489,6 @@ msgstr "再生速度を落とす"
 
 msgid "Decryption failed"
 msgstr "復号に失敗しました"
-
-msgid "Default"
-msgstr "デフォルト"
 
 msgid "Default Encryption"
 msgstr "デフォルトの暗号化"
@@ -1575,9 +1553,6 @@ msgstr "この談話室を閉鎖"
 
 msgid "Details"
 msgstr "詳細"
-
-msgid "Developers"
-msgstr "開発者"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1659,9 +1634,9 @@ msgstr ""
 "注意: これはやり直せません。\n"
 "Gajim はその後終了します。"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to block %(name)s?"
-msgstr "\"%(group)s\" を除去しますか ?"
+msgstr "%(name)s を遮断しますか ?"
 
 msgid "Do you want to delete this PEP node?"
 msgstr "この PEP ノードを削除しますか ?"
@@ -1694,9 +1669,9 @@ msgstr ""
 "メッセージの撤回は、プロバイダーまたは相手先のデバイスがそれを除去することを"
 "保証するものではないことに注意してください。"
 
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to unblock %(name)s?"
-msgstr "\"%(group)s\" を除去しますか ?"
+msgstr "%(name)s の遮断を解除しますか ?"
 
 #, python-format
 msgid "Do you want to unregister your account on <b>%s</b> as well?"
@@ -1705,17 +1680,14 @@ msgstr "<b>%s</b> でもアカウントを登録抹消しますか ?"
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr "この指紋を完全に削除します"
 
+msgid "Domain"
+msgstr "ドメイン"
+
 msgid "Download"
 msgstr "ダウンロード"
 
 msgid "Download File"
 msgstr "ファイルをダウンロード"
-
-msgid "Download Update"
-msgstr "更新をダウンロード"
-
-msgid "Download and Install"
-msgstr "ダウンロードしてインストール"
 
 #, python-format
 msgid "Download failed (%s)"
@@ -1908,11 +1880,11 @@ msgstr "コマンドを実行…"
 msgid "Executing…"
 msgstr "実行中…"
 
-msgid "Expires on"
-msgstr "至"
-
 msgid "Expires on: "
 msgstr "至: "
+
+msgid "Expiry date"
+msgstr ""
 
 msgid "Export"
 msgstr "書き出し"
@@ -2049,6 +2021,9 @@ msgstr "絞り込み"
 msgid "Filters (active)"
 msgstr "検索フィルター (適用)"
 
+msgid "Fingerprint"
+msgstr "指紋"
+
 msgid "Fingerprint for this Device"
 msgstr "このデバイスの指紋"
 
@@ -2083,11 +2058,11 @@ msgstr "無期限"
 msgid "Forget Group Chat"
 msgstr "談話室を忘れる"
 
-msgid "Forget this Group Chat"
-msgstr "この談話室を忘れる"
-
 msgid "Forget this Group Chat?"
 msgstr "この談話室を忘れますか ?"
+
+msgid "Forget this Group Chat…"
+msgstr "この談話室を忘れる…"
 
 msgid "Format error in CRL's lastUpdate field"
 msgstr "証明書失効リストの最終更新の書式のエラー"
@@ -2304,9 +2279,6 @@ msgstr "HTTPS の検証"
 msgid "Hello, I am $name. %s"
 msgstr "こんにちは。私は $name. %s です"
 
-msgid "Helps to establish calls through firewalls"
-msgstr "ファイアウォールを越える通話の確立を助けます"
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr "非公開"
@@ -2314,14 +2286,12 @@ msgstr "非公開"
 msgid "Hide"
 msgstr "隠す"
 
-msgid "Hide chat list"
+#, fuzzy
+msgid "Hide Chat List"
 msgstr "チャット一覧を隠す"
 
 msgid "Home"
 msgstr "自宅"
-
-msgid "Homepage"
-msgstr "ホームページ"
 
 msgid "Hostname"
 msgstr "ホスト名"
@@ -2332,6 +2302,9 @@ msgstr "会話履歴をどのくらい遡って同期する必要があります
 msgid "How long Gajim should keep your chat history"
 msgstr "Gajim が会話の履歴を保持する期間"
 
+msgid "How to install plugins with Flatpak"
+msgstr "Flatpak でプラグインをインストールする方法"
+
 msgid "I can see contact's online status"
 msgstr "相手先の在席状況を見ることができる"
 
@@ -2341,9 +2314,8 @@ msgstr "あなたを私の相手先リストに追加したいと思います。
 msgid "I would like to add you to my roster."
 msgstr "あなたを私の相手先一覧に追加したいと思っています。"
 
-#, fuzzy
 msgid "ID"
-msgstr "JID"
+msgstr "ID"
 
 msgid "IEC standard says KiB = 1024 bytes, KB = 1000 bytes."
 msgstr "IEC 標準規格で、KiB は 1024 バイト、KB は 1000 バイト。"
@@ -2351,6 +2323,9 @@ msgstr "IEC 標準規格で、KiB は 1024 バイト、KB は 1000 バイト。"
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "IM アドレス"
+
+msgid "IP / Port"
+msgstr "IP / ポート"
 
 msgid "Id"
 msgstr "Id"
@@ -2455,6 +2430,9 @@ msgstr "安全でない接続"
 msgid "Insert Emoji"
 msgstr "絵文字を挿入"
 
+msgid "Install"
+msgstr "インストール"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 "問題の報告をより簡単に作成するには <tt>sentry-sdk</tt> をインストールしてくだ"
@@ -2466,11 +2444,11 @@ msgstr "プラグインを ZIP ファイルからインストール"
 msgid "Install a keyring to store passwords on your system."
 msgstr "システムにパスワードを保存するには鍵束をインストールしてください。"
 
+msgid "Install from Archive"
+msgstr "アーカイブからインストール"
+
 msgid "Installation failed"
 msgstr "インストールに失敗しました"
-
-msgid "Installed"
-msgstr "インストール済"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2528,14 +2506,15 @@ msgstr "招待者"
 msgid "Is a microphone plugged in and accessible?"
 msgstr "マイクは接続されていてアクセス可能ですか ?"
 
+#, fuzzy
+msgid "Issue date"
+msgstr "証明対象"
+
 msgid "Issued by"
 msgstr "証明者"
 
 msgid "Issued by\n"
 msgstr "証明者\n"
-
-msgid "Issued on"
-msgstr "自"
 
 msgid "Issued on: "
 msgstr "自: "
@@ -2545,6 +2524,9 @@ msgstr "証明対象"
 
 msgid "Issued to\n"
 msgstr "証明対象\n"
+
+msgid "Issues detected"
+msgstr ""
 
 msgid "I’m eating."
 msgstr "食事中です。"
@@ -2579,9 +2561,6 @@ msgstr "談話室に参加しますか ?"
 msgid "Join Groupchat…"
 msgstr "談話室に参加…"
 
-msgid "Join Support Chat"
-msgstr "サポートチャットに参加"
-
 msgid "Joining Group Chat…"
 msgstr "談話室に参加中…"
 
@@ -2599,9 +2578,6 @@ msgstr "会話の履歴を保存"
 
 msgid "Keep and manage all your chat history"
 msgstr "すべての会話履歴の保存と管理"
-
-msgid "Key Size"
-msgstr "鍵のサイズ"
 
 msgid "Key usage does not include certificate signing"
 msgstr "証明書署名に鍵の使い方が含まれていません"
@@ -2622,9 +2598,6 @@ msgstr "ラベル"
 #, python-format
 msgid "Language: %s"
 msgstr "言語: %s"
-
-msgid "Last but not least"
-msgstr "最後に大切なことを付け加えますと、"
 
 #, python-format
 msgid "Last seen: %s"
@@ -2673,9 +2646,6 @@ msgstr "読み込み中…"
 msgid "Local System Time"
 msgstr "ローカルのシステム時刻"
 
-msgid "Local Time"
-msgstr "現地時間"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr "近くの自助グループ"
@@ -2714,9 +2684,6 @@ msgid ""
 "from the chat window"
 msgstr "チャットウィンドウから直接 Wikipedia や辞書その他の検索エンジンの利用"
 
-msgid "Maintainers"
-msgstr "メンテナ"
-
 msgid "Make Admin"
 msgstr "管理人にする"
 
@@ -2737,6 +2704,10 @@ msgstr "男性"
 msgid "Manage"
 msgstr "管理"
 
+#, fuzzy
+msgid "Manage Accounts…"
+msgstr "アカウントを管理…(_M)"
+
 msgid "Manage Contact List"
 msgstr "相手先一覧を管理"
 
@@ -2751,6 +2722,9 @@ msgstr "サウンドを管理"
 
 msgid "Manage Trust"
 msgstr "信頼を管理"
+
+msgid "Manage and configure Gajim plugins"
+msgstr "Gajim プラグインの管理と設定"
 
 msgid "Manage your Devices…"
 msgstr "デバイスを管理…"
@@ -2836,11 +2810,11 @@ msgstr "在籍状況を変更するまでの時間(分)"
 msgid "Miscellaneous"
 msgstr "その他の設定"
 
-msgid "Missing dependencies for Audio/Video"
-msgstr "音声/ビデオの依存関係がありません"
+msgid "Missing dependencies for audio support"
+msgstr "音声の依存関係に欠落があります"
 
 msgid "Missing necessary encryption plugin"
-msgstr "必要な暗号化プラグインが見当たりません"
+msgstr "必要な暗号化プラグインが欠落しています"
 
 msgid "Moderate Message?"
 msgstr "メッセージを抑制しますか ?"
@@ -2971,6 +2945,10 @@ msgstr "パスワード不要"
 msgid "No Proxy"
 msgstr "プロキシなし"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "見つかりません"
+
 msgid "No Sync"
 msgstr "非同期"
 
@@ -3022,9 +3000,6 @@ msgstr "割り当てられたグループはありません"
 
 msgid "No info available"
 msgstr "有効な情報はありません"
-
-msgid "No proxy used"
-msgstr "プロキシを使用しない"
 
 msgid "No results"
 msgstr "結果はありません"
@@ -3200,9 +3175,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "組織"
 
-msgid "Organization (O)"
-msgstr "組織 (O)"
-
 msgid "Organization (O): "
 msgstr "組織 (O): "
 
@@ -3266,6 +3238,9 @@ msgstr "PKCS12 形式のファイル"
 
 msgid "PNG files"
 msgstr "PNG ファイル"
+
+msgid "Packages"
+msgstr ""
 
 #, python-format
 msgid "Pango Version: %s"
@@ -3369,9 +3344,6 @@ msgstr "ピン止め済"
 
 msgid "Pipewire"
 msgstr "Pipewire"
-
-msgid "Pl_ugins"
-msgstr "プラグイン (_U)"
 
 msgid "Play Sound"
 msgstr "サウンドを鳴らす"
@@ -3552,7 +3524,6 @@ msgctxt "Profile"
 msgid "Public Encryption Key"
 msgstr "公開鍵"
 
-#, fuzzy
 msgid "Public Information"
 msgstr "公開鍵情報"
 
@@ -3566,8 +3537,11 @@ msgstr "公開鍵: "
 msgid "Pulse: %s"
 msgstr "Pulse: %s"
 
-msgid "Purge Chat History…"
-msgstr "会話の履歴を削除…"
+msgid "Purge"
+msgstr "削除"
+
+msgid "Purge Chat History"
+msgstr "会話の履歴を削除"
 
 msgid "Purge all Chat History?"
 msgstr "すべての会話の履歴を削除しますか ?"
@@ -3835,8 +3809,12 @@ msgstr "値をデフォルトに戻します"
 msgid "Resource"
 msgstr "リソース"
 
-msgid "Restart Gajim for changes to take effect"
-msgstr "設定を有効にするには Gajim を再起動してください"
+msgid "Restart Gajim to finish this update"
+msgstr "この更新を完了するには Gajim を再起動してください"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "保留中の申し込み"
 
 # 起動時に名簿を表示するか
 msgid "Restore chat"
@@ -3877,14 +3855,8 @@ msgstr "役"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s さんのこの談話室での役は既に除去されています"
 
-msgid "SHA-1"
-msgstr "SHA-1"
-
 msgid "SHA-1:"
 msgstr "SHA-1:"
-
-msgid "SHA-256"
-msgstr "SHA-256"
 
 msgid "SHA-256:"
 msgstr "SHA-256:"
@@ -3894,12 +3866,6 @@ msgstr "SSL 証明書の検証エラー"
 
 msgid "SSL certificate error"
 msgstr "SSL 証明書エラー"
-
-msgid "STUN Server"
-msgstr "STUN サーバー"
-
-msgid "STUN Server Settings"
-msgstr "STUN サーバー設定"
 
 msgid "STUN server to use when using Jingle"
 msgstr "Jingle を使う際に利用する STUN サーバー"
@@ -3992,8 +3958,9 @@ msgstr ""
 "談話室を全体的に検索します\n"
 "(リターンで検索開始)"
 
-msgid "Search your conversation"
-msgstr "会話を検索"
+#, fuzzy
+msgid "Search in chats…"
+msgstr "参加者を検索…"
 
 msgid "Searching"
 msgstr "検索"
@@ -4045,10 +4012,6 @@ msgstr "再生速度を選択"
 
 msgid "Select your audio input (e.g. microphone)"
 msgstr "音声入力を選択してください (例: マイクロフォン)"
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
-msgstr ""
-"ビデオ入力デバイスを選択してください (例: ウェブカメラ、画面キャプチャ)"
 
 msgid "Selected image could not be loaded."
 msgstr "選択された画像を読み込めませんでした。"
@@ -4119,9 +4082,6 @@ msgstr "送った相手先:"
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr "プロフィールのファイルを完全に分離する(履歴データベースやプラグインも)"
 
-msgid "Serial Number"
-msgstr "シリアル番号"
-
 msgid "Serial Number: "
 msgstr "シリアル番号: "
 
@@ -4163,6 +4123,9 @@ msgstr "このサービスを見ることはできません"
 msgid "Service Not Found"
 msgstr "サービスは見つかりませんでした"
 
+msgid "Set Trust"
+msgstr "信頼を設定"
+
 msgid "Set configuration directory"
 msgstr "設定ファイルのディレクトリを指定"
 
@@ -4199,6 +4162,10 @@ msgstr "動画を共有"
 msgid "Share my online status"
 msgstr "在席状況を知らせる"
 
+#, fuzzy
+msgid "Show Chat List"
+msgstr "チャット一覧を表示"
+
 msgid "Show Commands"
 msgstr "コマンドを表示する"
 
@@ -4219,9 +4186,6 @@ msgstr "入室/退出を表示する"
 
 msgid "Show Joined / Left"
 msgstr "入室/退出を表示する"
-
-msgid "Show My Video Stream"
-msgstr "自分のビデオストリームを表示する"
 
 msgid "Show Notifications"
 msgstr "通知を表示する"
@@ -4244,9 +4208,6 @@ msgstr "中継先を表示"
 msgid "Show Voice Message Button"
 msgstr "音声メッセージボタンを表示"
 
-msgid "Show _Features"
-msgstr "特徴を表示 (_U)"
-
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr "暗号化されていない接続の前に確認のダイアログを表示します"
 
@@ -4260,17 +4221,11 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "絵文字の一覧を表示"
 
-msgid "Show a live preview to test your video source"
-msgstr "ビデオ入力のテストのためにライブビューを表示します"
-
 msgid "Show all reactions"
 msgstr "すべてのリアクションを表示"
 
 msgid "Show all warnings"
 msgstr "すべての警告を表示"
-
-msgid "Show chat list"
-msgstr "チャット一覧を表示"
 
 msgid "Show debug console"
 msgstr "デバッグコンソールを表示"
@@ -4325,9 +4280,6 @@ msgstr "ウィンドウをタスクバーに表示します"
 msgid "Show window when starting Gajim"
 msgstr "Gajim の起動時にウィンドウを表示します"
 
-msgid "Show your own video stream in calls"
-msgstr "通話中、自分のビデオストリームを表示します"
-
 # (Mako)この場合は「閉じる」
 msgid "Show/Hide Window"
 msgstr "ウィンドウを表示/閉じる"
@@ -4357,9 +4309,6 @@ msgstr "プレビュー画像のサイズ (単位: ピクセル)"
 
 msgid "Sleeping"
 msgstr "睡眠中"
-
-msgid "Software"
-msgstr "ソフトウェア"
 
 msgid "Something went wrong. Video feature disabled."
 msgstr "何かがうまくいきませんでした。ビデオ機能は無効でした。"
@@ -4463,10 +4412,6 @@ msgstr "状況は共有されています"
 msgid "Status message…"
 msgstr "状況メッセージ…"
 
-#, python-format
-msgid "Status: %s"
-msgstr "在席状況: %s"
-
 msgid "Status: Away Color"
 msgstr "在席状況: 「離席中」の色"
 
@@ -4490,9 +4435,6 @@ msgstr "スタイル"
 
 msgid "Subject"
 msgstr "題"
-
-msgid "Subject Alt Names"
-msgstr "サブジェクト代替名"
 
 msgid "Subject Alt Names: "
 msgstr "サブジェクト代替名: "
@@ -4562,16 +4504,14 @@ msgstr "前のチャットへ切替"
 msgid "Switch to the previous unread chat"
 msgstr "前の未読チャットへ切替"
 
-#, fuzzy
 msgid "Sync Group Chat Blocklist"
-msgstr "会話履歴を同期"
+msgstr "談話室の遮断一覧を同期"
 
 msgid "Sync Threshold"
 msgstr "同期の制限"
 
-#, fuzzy
 msgid "Sync group chat blocklist with other devices"
-msgstr "参加している談話室を他のデバイスと同期します。"
+msgstr "談話室の遮断一覧を他のデバイスと同期します"
 
 msgid "Synchronize"
 msgstr "同期"
@@ -4628,6 +4568,10 @@ msgstr "テキストファイル"
 msgid "Thanks"
 msgstr "多謝"
 
+#, fuzzy
+msgid "Thanks to all the package maintainers."
+msgstr "すべてのパッケージのメンテナに感謝いたします。"
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr "証明書はサイトと一致しません"
 
@@ -4683,9 +4627,6 @@ msgstr "テーマ"
 msgid "Themes"
 msgstr "テーマ"
 
-msgid "There are connectivity issues"
-msgstr "接続性の問題があります"
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr "まだ信頼を決定していないデバイスがあります。"
 
@@ -4704,6 +4645,10 @@ msgstr "Gajim プラグインの更新があります"
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
 msgstr "メッセージを取得しようとした際にエラーが発生しました: %s"
+
+#, fuzzy
+msgid "There is an update available for this plugin"
+msgstr "Gajim プラグインの更新があります"
 
 msgid "There is no encryption method available for the chosen encryption."
 msgstr "選択した暗号化に適用できる暗号化方式がありません。"
@@ -4855,6 +4800,10 @@ msgstr "このサービスのタイプには表示する項目がありません
 msgid "This will clear the devices store for your account."
 msgstr "アカウントのデバイス一覧を消去します。"
 
+#, fuzzy
+msgid "This will purge all locally stored chat history"
+msgstr "このメッセージはローカルの会話履歴から削除されます"
+
 msgid "This will remove your account from Gajim."
 msgstr "アカウントを Gajim から除去します。"
 
@@ -4926,6 +4875,9 @@ msgstr "信頼は未定"
 
 msgid "Try Again"
 msgstr "再試行"
+
+msgid "Try a different search"
+msgstr ""
 
 msgid "Trying to change password..."
 msgstr "パスワードを変更しています…"
@@ -5002,7 +4954,8 @@ msgstr "参加者"
 msgid "Unencrypted"
 msgstr "暗号化しない"
 
-msgid "Uninstall Plugin"
+#, fuzzy
+msgid "Uninstall"
 msgstr "プラグインをアンインストール"
 
 msgid "Unknown"
@@ -5066,7 +5019,8 @@ msgstr "アバターを更新"
 msgid "Update automatically"
 msgstr "自動で更新する"
 
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "利用可能な更新があります"
 
 msgid "Update plugins automatically"
@@ -5077,6 +5031,10 @@ msgstr "更新"
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr "更新は次の Gajim の起動時にインストールされます"
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "プラグインを開く…"
 
 msgid "Updating provider list…"
 msgstr "プロバイダー一覧を更新中…"
@@ -5106,14 +5064,14 @@ msgstr "GSSAPI を使う"
 msgid "Use Image"
 msgstr "画像を使う"
 
-msgid "Use STUN Server"
-msgstr "STUN サーバーを使う"
-
 msgid "Use System Keyring"
 msgstr "システムの鍵束を使用する"
 
 msgid "Use Unencrypted Connection"
 msgstr "非暗号化接続を使用"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 msgid "Use an unencrypted connection to the server"
 msgstr "サーバーに暗号化されていない接続を用います"
@@ -5173,15 +5131,6 @@ msgstr "バージョン"
 msgid "Video"
 msgstr "ビデオ"
 
-msgid "Video Framerate"
-msgstr "ビデオのフレームレート"
-
-msgid "Video Input Device"
-msgstr "ビデオ入力デバイス"
-
-msgid "Video Resolution"
-msgstr "ビデオ解像度"
-
 msgid "Video test"
 msgstr "ビデオのテスト"
 
@@ -5227,6 +5176,9 @@ msgstr "ウェブ検索の URL に \"%s\" が含まれていません"
 
 msgid "Web _Search for it"
 msgstr "ウェブで検索する (_S)"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr "ウェブサイト"
@@ -5492,6 +5444,9 @@ msgstr ""
 "会話履歴を移行しています。\n"
 "しばらくお待ちください…"
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr "この証明書による安全なサーバー接続"
+
 msgid "Your message can not be sent until you are connected."
 msgstr "接続するまでメッセージは送信されません。"
 
@@ -5517,6 +5472,10 @@ msgstr ""
 "お使いのサーバーは談話室サービスを提供していません。別のサーバーのアドレスを"
 "指定してください。"
 
+#, fuzzy
+msgid "Your server offers the following features"
+msgstr "あなたは次の係 (hat) です: %s"
+
 msgid "ZIP files"
 msgstr "ZIP ファイル"
 
@@ -5537,12 +5496,6 @@ msgstr "承諾 (_A)"
 
 msgid "_Account"
 msgstr "アカウント (_A)"
-
-msgid "_Accounts"
-msgstr "アカウント (_A)"
-
-msgid "_Add Account…"
-msgstr "アカウントを追加…(_A)"
 
 msgid "_Add to Trusted Certificates"
 msgstr "信頼された証明書を追加 (_A)"
@@ -5591,9 +5544,6 @@ msgstr "リンクをコピー (_C)"
 msgid "_Create"
 msgstr "作成 (_C)"
 
-msgid "_Debug Console"
-msgstr "デバッグコンソール (_D)"
-
 msgid "_Decline"
 msgstr "拒否 (_D)"
 
@@ -5628,9 +5578,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "チャット可 (_F)"
 
-msgid "_Help"
-msgstr "ヘルプ (_H)"
-
 msgid "_Hide (Tray Icon)"
 msgstr "隠す (トレイアイコン) (_H)"
 
@@ -5640,8 +5587,16 @@ msgstr "ホスト名 (_H)"
 msgid "_Hostname"
 msgstr "ホスト名 (_H)"
 
+#, fuzzy
+msgid "_Import"
+msgstr "取り込み"
+
 msgid "_Join"
 msgstr "参加 (_J)"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "サポートチャットに参加"
 
 msgid "_Keyboard Shortcuts"
 msgstr "キーボードショートカット (_K)"
@@ -5654,12 +5609,6 @@ msgstr "退出 (_L)"
 
 msgid "_Log In"
 msgstr "ログイン (_L)"
-
-msgid "_Manage Accounts…"
-msgstr "アカウントを管理…(_M)"
-
-msgid "_Manage Account…"
-msgstr "アカウントを管理…(_M)"
 
 msgid "_Minimize"
 msgstr "最小化 (_M)"
@@ -5696,9 +5645,6 @@ msgstr "プロバイダーを選択してください (_P)"
 
 msgid "_Port"
 msgstr "ポート番号 (_P)"
-
-msgid "_Preferences"
-msgstr "設定 (_P)"
 
 msgid "_Privacy Policy (Online)"
 msgstr "プライバシーポリシー (オンライン) (_P)"
@@ -5752,17 +5698,11 @@ msgstr "証明書を表示 (_S)"
 msgid "_Sign Up"
 msgstr "登録 (_S)"
 
-msgid "_Start / Join Chat…"
-msgstr "チャットを開始…(_S)"
-
 msgid "_Stop Sharing"
 msgstr "通知をやめる (_S)"
 
 msgid "_Subscribe"
 msgstr "継読 (_S)"
-
-msgid "_Toggle Menu Bar"
-msgstr "メニューバーを表示/非表示 (_T)"
 
 msgid "_Type"
 msgstr "種類 (_T)"
@@ -5779,9 +5719,6 @@ msgstr "継読の取り消し (_U)"
 
 msgid "_Username"
 msgstr "ユーザー名 (_U)"
-
-msgid "_View"
-msgstr "表示 (_V)"
 
 msgid "_View Certificate"
 msgstr "証明書を表示 (_V)"
@@ -5865,9 +5802,6 @@ msgid ""
 msgstr ""
 "談話室に招待されました。\n"
 "参加したいですか ?"
-
-msgid "help"
-msgstr "ヘルプ"
 
 msgid "is composing a message…"
 msgstr "さんはメッセージを書いています…"
@@ -5955,9 +5889,6 @@ msgstr "休暇"
 msgid "video input"
 msgstr "ビデオ入力"
 
-msgid "we would like to thank all the package maintainers."
-msgstr "すべてのパッケージのメンテナに感謝いたします。"
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr "エラーのため、{nick} は退出しました{reason}"
@@ -5988,6 +5919,10 @@ msgstr "…またはここにドロップ"
 #, python-brace-format
 #~ msgid " by {actor}"
 #~ msgstr " {actor} によって"
+
+#, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "%s (不揃い)"
 
 #, python-format
 #~ msgid "%s asks you to share your status"
@@ -6260,6 +6195,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Account %s is still connected"
 #~ msgstr "アカウント %s はまだサーバーに接続中です"
 
+#~ msgid "Activity"
+#~ msgstr "動向"
+
+#~ msgid "Add _Contact…"
+#~ msgstr "相手先を追加…(_C)"
+
 #~ msgid "Add reaction"
 #~ msgstr "リアクションを追加"
 
@@ -6268,6 +6209,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Add to new Group"
 #~ msgstr "新しいグループに追加"
+
+#~ msgid "Algorithm"
+#~ msgstr "アルゴリズム"
 
 #, fuzzy
 #~ msgid "All Groups"
@@ -6284,6 +6228,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Are you sure you want to quit Gajim?"
 #~ msgstr "本当に Gajim を終了しますか ?"
+
+#~ msgid "Artists"
+#~ msgstr "アーティスト"
 
 #~ msgid "Audio / Video Calls"
 #~ msgstr "音声/ビデオ通話"
@@ -6314,6 +6261,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "既存のファイル \"%s\" に上書きできません"
 
+#, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr ""
+#~ "証明書 \n"
+#~ "%s"
+
 #~ msgid "Checking file…"
 #~ msgstr "ファイルをチェックしています…"
 
@@ -6329,6 +6284,18 @@ msgstr "…またはここにドロップ"
 #~ msgid "Clear Devices Now?"
 #~ msgstr "直ちにデバイスを消去しますか ?"
 
+#~ msgid ""
+#~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."
+#~ msgstr ""
+#~ "Flatpak でプラグインをインストールする方法は、クリックして Gajim の wiki "
+#~ "ページを見てください。"
+
+#~ msgid "Close Search"
+#~ msgstr "検索を閉じる"
+
+#~ msgid "Common Name (CN)"
+#~ msgstr "一般名 (CN)"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Completed"
 #~ msgstr "完了しました"
@@ -6343,6 +6310,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Conversation: URL Color"
 #~ msgstr "会話: URL の文字色"
 
+#~ msgid "Copy Certificate Information"
+#~ msgstr "証明書の情報をコピー"
+
 #~ msgid "Copy Email Address"
 #~ msgstr "Eメールアドレスをコピー"
 
@@ -6355,17 +6325,20 @@ msgstr "…またはここにドロップ"
 #~ msgid "Copy Path"
 #~ msgstr "パスをコピー"
 
+#~ msgid "Create _Group Chat…"
+#~ msgstr "談話室を作成…(_G)"
+
 #~ msgid "Create new post"
 #~ msgstr "新しい投稿を作成"
 
 #~ msgid "Current Developers"
 #~ msgstr "現在の開発者"
 
-#~ msgid "Debug Console"
-#~ msgstr "デバッグコンソール"
-
 #~ msgid "Decline Invitation"
 #~ msgstr "招待を辞退"
+
+#~ msgid "Default"
+#~ msgstr "デフォルト"
 
 #~ msgid "Delete Message"
 #~ msgstr "メッセージを削除"
@@ -6379,6 +6352,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Description: "
 #~ msgstr "説明: "
 
+#~ msgid "Developers"
+#~ msgstr "開発者"
+
 #~ msgid "Dial Number"
 #~ msgstr "電話番号"
 
@@ -6391,6 +6367,12 @@ msgstr "…またはここにドロップ"
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "ダウンロード"
+
+#~ msgid "Download Update"
+#~ msgstr "更新をダウンロード"
+
+#~ msgid "Download and Install"
+#~ msgstr "ダウンロードしてインストール"
 
 #~ msgid "Drop files or contacts"
 #~ msgstr "ファイルまたは相手先をドロップ"
@@ -6423,6 +6405,9 @@ msgstr "…またはここにドロップ"
 #, python-format
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "エラー: 読み込みモードで %s を開けません"
+
+#~ msgid "Expires on"
+#~ msgstr "至"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Windows ではこの機能は無効です"
@@ -6484,11 +6469,17 @@ msgstr "…またはここにドロップ"
 #~ msgid "HTTP"
 #~ msgstr "HTTP"
 
+#~ msgid "Helps to establish calls through firewalls"
+#~ msgstr "ファイアウォールを越える通話の確立を助けます"
+
 #~ msgid "Hide this menu"
 #~ msgstr "このメニューを表示しない"
 
 #~ msgid "Hide/show the main window menu"
 #~ msgstr "主ウィンドウのメニューを表示する/しない"
+
+#~ msgid "Homepage"
+#~ msgstr "ホームページ"
 
 #~ msgid ""
 #~ "If enabled, Gajim will save the main window position when hiding it, and "
@@ -6520,6 +6511,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Invite New Contact"
 #~ msgstr "新しい相手先を招待"
 
+#~ msgid "Issued on"
+#~ msgstr "自"
+
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "空のファイルを転送することはできません"
 
@@ -6531,9 +6525,21 @@ msgstr "…またはここにドロップ"
 #~ "私はアカウントの相手先を \"%s\" に同期しています。このアドレスをあなたの相"
 #~ "手先一覧に追加していただけますか ?"
 
+#~ msgid "Key Size"
+#~ msgstr "鍵のサイズ"
+
+#~ msgid "Last but not least"
+#~ msgstr "最後に大切なことを付け加えますと、"
+
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "理由: %s"
+
+#~ msgid "Local Time"
+#~ msgstr "現地時間"
+
+#~ msgid "Maintainers"
+#~ msgstr "メンテナ"
 
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "修正: 背景色"
@@ -6564,6 +6570,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "No Notifications"
 #~ msgstr "通知はありません"
 
+#~ msgid "No proxy used"
+#~ msgstr "プロキシを使用しない"
+
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "開始していません"
@@ -6577,8 +6586,8 @@ msgstr "…またはここにドロップ"
 #~ msgid "Open Path"
 #~ msgstr "パスを開く"
 
-#~ msgid "Open Plugins…"
-#~ msgstr "プラグインを開く…"
+#~ msgid "Organization (O)"
+#~ msgstr "組織 (O)"
 
 #~ msgid "Organizational Unit (OU)"
 #~ msgstr "部門 (OU)"
@@ -6598,6 +6607,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Pending Event"
 #~ msgstr "保留中のイベント"
+
+#~ msgid "Pl_ugins"
+#~ msgstr "プラグイン (_U)"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "yyyy-mm-dd を使用してください"
@@ -6675,12 +6687,27 @@ msgstr "…またはここにドロップ"
 #~ msgid "Requires: libappindicator3"
 #~ msgstr "libappindicator3 が必要です"
 
+#~ msgid "SHA-1"
+#~ msgstr "SHA-1"
+
+#~ msgid "SHA-256"
+#~ msgstr "SHA-256"
+
 #~ msgctxt "proxy configuration"
 #~ msgid "SOCKS5"
 #~ msgstr "SOCKS5"
 
+#~ msgid "STUN Server"
+#~ msgstr "STUN サーバー"
+
+#~ msgid "STUN Server Settings"
+#~ msgstr "STUN サーバー設定"
+
 #~ msgid "Save File as…"
 #~ msgstr "名前を付けてファイルを保存…"
+
+#~ msgid "Search your conversation"
+#~ msgstr "会話を検索"
 
 #~ msgid "Select File…"
 #~ msgstr "ファイルを選択…"
@@ -6693,6 +6720,10 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Select the contacts you want to synchronize"
 #~ msgstr "同期したい相手先を選択してください"
+
+#~ msgid "Select your video input device (e.g. webcam, screen capture)"
+#~ msgstr ""
+#~ "ビデオ入力デバイスを選択してください (例: ウェブカメラ、画面キャプチャ)"
 
 #, python-format
 #~ msgid "Selected security label: %s"
@@ -6711,6 +6742,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Sender: "
 #~ msgstr "送信者: "
 
+#~ msgid "Serial Number"
+#~ msgstr "シリアル番号"
+
 #~ msgid "Show"
 #~ msgstr "表示"
 
@@ -6720,14 +6754,29 @@ msgstr "…またはここにドロップ"
 #~ msgid "Show Location"
 #~ msgstr "位置を表示"
 
+#~ msgid "Show My Video Stream"
+#~ msgstr "自分のビデオストリームを表示する"
+
 #~ msgid "Show Offline Contacts"
 #~ msgstr "オフラインの相手先を表示"
+
+#~ msgid "Show _Features"
+#~ msgstr "特徴を表示 (_U)"
+
+#~ msgid "Show a live preview to test your video source"
+#~ msgstr "ビデオ入力のテストのためにライブビューを表示します"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "相手先の名前の次にチャット状態(入力中など)を表示します"
 
+#~ msgid "Show your own video stream in calls"
+#~ msgstr "通話中、自分のビデオストリームを表示します"
+
 #~ msgid "Shows a list of file transfers between you and your contacts"
 #~ msgstr "ファイル転送の一覧を表示します"
+
+#~ msgid "Software"
+#~ msgstr "ソフトウェア"
 
 #~ msgid "Sta_tus"
 #~ msgstr "状態 (_T)"
@@ -6749,11 +6798,18 @@ msgstr "…またはここにドロップ"
 #~ msgid "Status: "
 #~ msgstr "状態: "
 
+#, python-format
+#~ msgid "Status: %s"
+#~ msgstr "在席状況: %s"
+
 #~ msgid "Stop File Transfers"
 #~ msgstr "ファイル転送を中止"
 
 #~ msgid "Stopped sharing their status with you"
 #~ msgstr "在席状況を知らせることをやめました"
+
+#~ msgid "Subject Alt Names"
+#~ msgstr "サブジェクト代替名"
 
 #~ msgid "Submit"
 #~ msgstr "送信"
@@ -6781,6 +6837,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "The service could not be found"
 #~ msgstr "サービスが見つかりませんでした"
+
+#~ msgid "There are connectivity issues"
+#~ msgstr "接続性の問題があります"
 
 #~ msgid "This account is not connected to the server"
 #~ msgstr "このアカウントはサーバーに接続していません"
@@ -6826,6 +6885,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Upload Files"
 #~ msgstr "ファイルをアップロード"
 
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN サーバーを使う"
+
 #, fuzzy
 #~ msgid ""
 #~ "Use filters to narrow down your search:\n"
@@ -6841,6 +6903,15 @@ msgstr "…またはここにドロップ"
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "名前を変更…"
+
+#~ msgid "Video Framerate"
+#~ msgstr "ビデオのフレームレート"
+
+#~ msgid "Video Input Device"
+#~ msgstr "ビデオ入力デバイス"
+
+#~ msgid "Video Resolution"
+#~ msgstr "ビデオ解像度"
 
 #~ msgid "Video calls are not supported"
 #~ msgstr "ビデオ通話に対応していません"
@@ -6872,8 +6943,17 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "もうこの中継先をとおして相手先とメッセージを送受信することはできません。"
 
+#~ msgid "_Accounts"
+#~ msgstr "アカウント (_A)"
+
+#~ msgid "_Add Account…"
+#~ msgstr "アカウントを追加…(_A)"
+
 #~ msgid "_Clear"
 #~ msgstr "消去 (_C)"
+
+#~ msgid "_Debug Console"
+#~ msgstr "デバッグコンソール (_D)"
 
 #~ msgid "_Don’t ask again"
 #~ msgstr "次回から質問しない (_D)"
@@ -6884,8 +6964,14 @@ msgstr "…またはここにドロップ"
 #~ msgid "_File Transfer"
 #~ msgstr "ファイル転送 (_F)"
 
+#~ msgid "_Help"
+#~ msgstr "ヘルプ (_H)"
+
 #~ msgid "_Login"
 #~ msgstr "ログイン (_L)"
+
+#~ msgid "_Manage Account…"
+#~ msgstr "アカウントを管理…(_M)"
 
 #~ msgid "_Modify Account…"
 #~ msgstr "アカウントを修正…(_M)"
@@ -6898,20 +6984,35 @@ msgstr "…またはここにドロップ"
 #~ msgid "_Open Folder"
 #~ msgstr "フォルダを開く (_O)"
 
+#~ msgid "_Preferences"
+#~ msgstr "設定 (_P)"
+
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "ファイル転送が完了したら通知する (_S)"
+
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "チャットを開始…(_S)"
 
 #~ msgid "_Start Chat..."
 #~ msgstr "チャットを開始...(_S)"
 
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "メニューバーを表示/非表示 (_T)"
+
 #~ msgid "_Undo"
 #~ msgstr "元に戻す (_U)"
+
+#~ msgid "_View"
+#~ msgstr "表示 (_V)"
 
 #~ msgid "dark skin tone"
 #~ msgstr "濃い肌色"
 
 #~ msgid "file transfers list"
 #~ msgstr "ファイル転送の一覧"
+
+#~ msgid "help"
+#~ msgstr "ヘルプ"
 
 #~ msgid "light skin tone"
 #~ msgstr "薄い肌色"

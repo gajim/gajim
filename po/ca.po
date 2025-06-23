@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -121,10 +121,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "Avançat"
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -416,6 +412,10 @@ msgid "Account Wizard"
 msgstr "Comptes"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Fila del compte "
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Comptes"
 
@@ -437,6 +437,10 @@ msgstr "Comptes"
 #, fuzzy
 msgid "Account is not connected."
 msgstr "Entra a aquesta sala _automàticament quan em connecto"
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Fila del compte "
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -467,10 +471,6 @@ msgid "Activated"
 msgstr ""
 
 msgid "Active"
-msgstr "Activa"
-
-#, fuzzy
-msgid "Activity"
 msgstr "Activa"
 
 #, fuzzy
@@ -522,10 +522,6 @@ msgstr "Connectors"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "_Afegeix Contacte..."
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -612,11 +608,11 @@ msgid "Advanced"
 msgstr "Avançat"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "Editor de Configuració Avançada"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "Editor de Configuració Avançada"
 
 #, fuzzy
@@ -626,6 +622,10 @@ msgstr "Connectors"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "Connectors"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "Versió:"
 
 #, fuzzy
 msgid "Affiliation"
@@ -640,9 +640,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -785,9 +782,6 @@ msgstr "Preferències"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "_Canvia Missatge d'Estat"
@@ -898,6 +892,10 @@ msgstr "Disponible"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Disponible"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Disponible"
 
 msgid "Avatar file size too big"
@@ -1058,12 +1056,6 @@ msgstr "Certificat de client"
 msgid "Certificate chain too long"
 msgstr ""
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "El Certificat està xifrat"
-
 msgid "Certificate has expired"
 msgstr ""
 
@@ -1187,6 +1179,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Transferència de Fitxers"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Connexió"
 
@@ -1250,9 +1246,6 @@ msgstr "Sobrenom:"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "_Copia la ubicació de l'enllaç"
@@ -1268,10 +1261,6 @@ msgstr "Certificat de client"
 
 msgid "Close"
 msgstr ""
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Cerca:"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1301,9 +1290,6 @@ msgid "Command executed successfully"
 msgstr "El compte s'ha configurat correctament"
 
 msgid "Commands"
-msgstr ""
-
-msgid "Common Name (CN)"
 msgstr ""
 
 msgid "Common Name (CN): "
@@ -1503,10 +1489,6 @@ msgid "Copy Address"
 msgstr "_Copia adreça JID/Email"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "El Certificat està xifrat"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "_Copia la ubicació de l'enllaç"
 
@@ -1583,10 +1565,6 @@ msgid "Create New Account"
 msgstr "Crea nou missatge"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Grups de xat"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Grups de xat"
 
@@ -1603,6 +1581,9 @@ msgstr ""
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Personalització Temes Gajim"
@@ -1616,6 +1597,10 @@ msgstr "_No Disponible"
 
 msgid "Deactivated"
 msgstr ""
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Debug Logging"
 msgstr ""
@@ -1633,9 +1618,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "_No Disponible"
-
-msgid "Default"
-msgstr ""
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1711,9 +1693,6 @@ msgid "Destroy This Chat"
 msgstr "Grups de xat"
 
 msgid "Details"
-msgstr ""
-
-msgid "Developers"
 msgstr ""
 
 #, python-format
@@ -1842,6 +1821,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "_Canvia Missatge d'Estat"
@@ -1849,12 +1831,6 @@ msgstr "_Canvia Missatge d'Estat"
 #, fuzzy
 msgid "Download File"
 msgstr "_Canvia Missatge d'Estat"
-
-msgid "Download Update"
-msgstr ""
-
-msgid "Download and Install"
-msgstr ""
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2058,12 +2034,11 @@ msgid "Executing…"
 msgstr ""
 
 #, fuzzy
-msgid "Expires on"
-msgstr "expira"
-
-#, fuzzy
 msgid "Expires on: "
 msgstr "expira"
+
+msgid "Expiry date"
+msgstr ""
 
 #, fuzzy
 msgid "Export"
@@ -2224,6 +2199,9 @@ msgstr "Filtra:"
 msgid "Filters (active)"
 msgstr "Envia Missatge Privat"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2260,11 +2238,11 @@ msgid "Forget Group Chat"
 msgstr "Grups de xat"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Grups de xat"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Grups de xat"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2498,9 +2476,6 @@ msgstr ""
 msgid "Hello, I am $name. %s"
 msgstr ""
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2509,15 +2484,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Accions Ocupant"
 
 #, fuzzy
 msgid "Home"
-msgstr "Pàgina d'inici:"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "Pàgina d'inici:"
 
 #, fuzzy
@@ -2528,6 +2499,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr ""
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2550,6 +2524,10 @@ msgstr ""
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Copia adreça JID/Email"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Port:"
 
 msgid "Id"
 msgstr ""
@@ -2651,6 +2629,10 @@ msgstr "Avís abans d'una connexió insegura"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr "Instal·lat"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2662,11 +2644,12 @@ msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
 #, fuzzy
+msgid "Install from Archive"
+msgstr "Instal·la des d'un zip"
+
+#, fuzzy
 msgid "Installation failed"
 msgstr "Autenticació Anònima."
-
-msgid "Installed"
-msgstr "Instal·lat"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2736,13 +2719,13 @@ msgstr "Con_vida"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2752,6 +2735,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 msgid "I’m eating."
@@ -2792,10 +2778,6 @@ msgid "Join Groupchat…"
 msgstr "Uneix-te al xat en grup"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Uneix-te al xat en grup"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Uneix-te al xat en grup"
 
@@ -2815,9 +2797,6 @@ msgid "Keep Chat History"
 msgstr "Historial"
 
 msgid "Keep and manage all your chat history"
-msgstr ""
-
-msgid "Key Size"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2840,9 +2819,6 @@ msgstr ""
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -2893,9 +2869,6 @@ msgstr "Envia _Fitxer"
 msgid "Local System Time"
 msgstr ""
 
-msgid "Local Time"
-msgstr ""
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -2936,9 +2909,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Administra"
@@ -2962,6 +2932,10 @@ msgid "Manage"
 msgstr "Gestiona..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "_Modifica Compte..."
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "El Contacte ha entrat"
 
@@ -2980,6 +2954,9 @@ msgstr "Gestiona sons"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Gestiona sons"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3068,7 +3045,7 @@ msgstr "Mostra els canvis d'estat"
 msgid "Miscellaneous"
 msgstr "<b>Miscel·lània</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3225,6 +3202,10 @@ msgstr "Grups de xat"
 msgid "No Proxy"
 msgstr "Prox_y:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "Grups de xat"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3273,10 +3254,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Transferència de Fitxers"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Prox_y:"
 
 #, fuzzy
 msgid "No results"
@@ -3472,10 +3449,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Operacions d'Administració"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Operacions d'Administració"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3540,6 +3513,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "Perfil"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3655,10 +3631,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Connectors"
 
 #, fuzzy
 msgid "Play Sound"
@@ -3874,8 +3846,11 @@ msgstr "Connexió"
 msgid "Pulse: %s"
 msgstr ""
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Historial"
 
 #, fuzzy
@@ -4194,10 +4169,14 @@ msgid "Resource"
 msgstr "Recurs:"
 
 #, fuzzy
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
 "<b>NOTA:</b> Hauries de reiniciar Gajim per a que la configuració tingui "
 "efecte"
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr "requereix"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4240,13 +4219,7 @@ msgstr ""
 msgid "Roles of %s have been removed in this group chat"
 msgstr "Sobrenom:"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4259,14 +4232,6 @@ msgstr "Certificat de client"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "Certificat de client"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "Servidor MUC"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Connectors"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4369,8 +4334,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Accions Ocupant"
 
 #, fuzzy
 msgid "Searching"
@@ -4425,9 +4391,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 msgid "Selected image could not be loaded."
@@ -4512,9 +4475,6 @@ msgstr ""
 msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
-msgid "Serial Number"
-msgstr ""
-
 msgid "Serial Number: "
 msgstr ""
 
@@ -4564,6 +4524,10 @@ msgstr "_Servidor:"
 msgid "Service Not Found"
 msgstr ""
 
+#, fuzzy
+msgid "Set Trust"
+msgstr "Gestiona sons"
+
 msgid "Set configuration directory"
 msgstr ""
 
@@ -4609,6 +4573,10 @@ msgid "Share my online status"
 msgstr "Mostra els contactes desconnectats"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "_Copia la ubicació de l'enllaç"
 
@@ -4632,9 +4600,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4665,10 +4630,6 @@ msgstr "Mostra Transports"
 msgid "Show Voice Message Button"
 msgstr "Envia missatge"
 
-#, fuzzy
-msgid "Show _Features"
-msgstr "Característiques"
-
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 
@@ -4681,19 +4642,12 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Mostra una llista d'emoticones (Alt+M)"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "_Copia la ubicació de l'enllaç"
 
 msgid "Show all warnings"
 msgstr ""
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4747,9 +4701,6 @@ msgstr ""
 msgid "Show window when starting Gajim"
 msgstr ""
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 msgid "Show/Hide Window"
 msgstr ""
 
@@ -4776,9 +4727,6 @@ msgid "Size of preview images in pixels"
 msgstr ""
 
 msgid "Sleeping"
-msgstr ""
-
-msgid "Software"
 msgstr ""
 
 msgid "Something went wrong. Video feature disabled."
@@ -4894,10 +4842,6 @@ msgstr "_Canvia Missatge d'Estat"
 msgid "Status message…"
 msgstr "_Canvia Missatge d'Estat"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Estat"
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "_Canvia Missatge d'Estat"
@@ -4925,9 +4869,6 @@ msgid "Style"
 msgstr ""
 
 msgid "Subject"
-msgstr ""
-
-msgid "Subject Alt Names"
 msgstr ""
 
 msgid "Subject Alt Names: "
@@ -5071,6 +5012,9 @@ msgstr "Envia _Fitxer"
 msgid "Thanks"
 msgstr ""
 
+msgid "Thanks to all the package maintainers."
+msgstr ""
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5126,9 +5070,6 @@ msgstr "Personalització Temes Gajim"
 msgid "Themes"
 msgstr "Personalització Temes Gajim"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5143,6 +5084,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5287,6 +5231,9 @@ msgstr ""
 msgid "This will clear the devices store for your account."
 msgstr ""
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 msgid "This will remove your account from Gajim."
 msgstr ""
 
@@ -5357,6 +5304,9 @@ msgid "Trust Not Decided"
 msgstr ""
 
 msgid "Try Again"
+msgstr ""
+
+msgid "Try a different search"
 msgstr ""
 
 #, fuzzy
@@ -5440,7 +5390,7 @@ msgid "Unencrypted"
 msgstr "Entrada següent"
 
 #, fuzzy
-msgid "Uninstall Plugin"
+msgid "Uninstall"
 msgstr "Desinstal·la"
 
 msgid "Unknown"
@@ -5513,8 +5463,8 @@ msgstr "Esborra"
 msgid "Update automatically"
 msgstr "Esborra"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Transferència de Fitxers"
 
 msgid "Update plugins automatically"
@@ -5525,6 +5475,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Connectors"
 
 msgid "Updating provider list…"
 msgstr ""
@@ -5554,16 +5508,15 @@ msgstr ""
 msgid "Use Image"
 msgstr ""
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "Servidor MUC"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Avís abans d'una connexió insegura"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5627,18 +5580,6 @@ msgstr "Versió:"
 msgid "Video"
 msgstr ""
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Disponible per parlar"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Disponible per parlar"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Disponible per parlar"
-
 msgid "Video test"
 msgstr ""
 
@@ -5686,6 +5627,9 @@ msgid "Web Search URL is missing a \"%s\""
 msgstr ""
 
 msgid "Web _Search for it"
+msgstr ""
+
+msgid "WebSocket URL"
 msgstr ""
 
 msgid "Website"
@@ -5957,6 +5901,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 msgid "Your message can not be sent until you are connected."
 msgstr ""
 
@@ -5983,6 +5930,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Perfil"
@@ -6006,14 +5956,6 @@ msgstr ""
 #, fuzzy
 msgid "_Account"
 msgstr "Compte"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Comptes"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "_Afegeix Contacte..."
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6072,10 +6014,6 @@ msgid "_Create"
 msgstr ""
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "_Copia la ubicació de l'enllaç"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "Desconnectat"
 
@@ -6117,10 +6055,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Disponible per parlar"
 
-#, fuzzy
-msgid "_Help"
-msgstr "Ajuda"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6132,8 +6066,16 @@ msgstr "Nom del servidor:"
 msgid "_Hostname"
 msgstr "Nom del servidor:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "_Exporta"
+
 msgid "_Join"
 msgstr "_Entra-hi"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Uneix-te al xat en grup"
 
 #, fuzzy
 msgid "_Keyboard Shortcuts"
@@ -6147,14 +6089,6 @@ msgstr ""
 
 msgid "_Log In"
 msgstr ""
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "_Modifica Compte..."
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "_Afegeix Contacte..."
 
 #, fuzzy
 msgid "_Minimize"
@@ -6196,10 +6130,6 @@ msgstr "Afegeix aquesta sala a les adreces d'interès"
 #, fuzzy
 msgid "_Port"
 msgstr "_Port:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Preferències"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6261,19 +6191,11 @@ msgstr "Certificat de client"
 msgid "_Sign Up"
 msgstr ""
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Inicia Xat"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr ""
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "Mostra Transports"
 
 #, fuzzy
 msgid "_Type"
@@ -6292,10 +6214,6 @@ msgstr ""
 #, fuzzy
 msgid "_Username"
 msgstr "_Nom d'usuari:"
-
-#, fuzzy
-msgid "_View"
-msgstr "Veure"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6378,9 +6296,6 @@ msgstr ""
 msgid ""
 "has invited you to a group chat.\n"
 "Do you want to join?"
-msgstr ""
-
-msgid "help"
 msgstr ""
 
 msgid "is composing a message…"
@@ -6471,9 +6386,6 @@ msgstr ""
 msgid "video input"
 msgstr ""
 
-msgid "we would like to thank all the package maintainers."
-msgstr ""
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6500,6 +6412,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Canvia _Nick..."
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "Avançat"
 
 #, fuzzy, python-format
 #~ msgid "%s group chats found"
@@ -6654,6 +6570,14 @@ msgstr ""
 #~ "aturades"
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Activa"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Connectors"
 
@@ -6689,6 +6613,16 @@ msgstr ""
 #~ msgstr ""
 #~ "Cancel.la la transferència seleccionada i esborra els fitxers incomplets."
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "El Certificat està xifrat"
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Cerca:"
+
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "El Contacte ha entrat"
@@ -6696,6 +6630,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Històric de converses"
+
+#, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "El Certificat està xifrat"
 
 #, fuzzy
 #~ msgid "Copy Email Address"
@@ -6709,12 +6647,12 @@ msgstr ""
 #~ msgid "Copy Path"
 #~ msgstr "_Copia la ubicació de l'enllaç"
 
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Grups de xat"
+
 #~ msgid "Create new post"
 #~ msgstr "Crea nou missatge"
-
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -6731,6 +6669,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Edit Profile…"
 #~ msgstr "Perfil"
+
+#, fuzzy
+#~ msgid "Expires on"
+#~ msgstr "expira"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"
@@ -6769,6 +6711,10 @@ msgstr ""
 #~ msgstr "Configuració de Sala"
 
 #, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "Pàgina d'inici:"
+
+#, fuzzy
 #~ msgid "Inactive"
 #~ msgstr "Activa"
 
@@ -6805,6 +6751,10 @@ msgstr ""
 #~ msgstr "Afegeix _Notificació Especial..."
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Prox_y:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Entrada següent"
@@ -6818,8 +6768,8 @@ msgstr ""
 #~ msgstr "_Copia la ubicació de l'enllaç"
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Connectors"
+#~ msgid "Organization (O)"
+#~ msgstr "Operacions d'Administració"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -6828,6 +6778,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Events _Personals"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Connectors"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -6881,6 +6835,14 @@ msgstr ""
 #~ msgstr "SOCKS5"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "Servidor MUC"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Connectors"
+
+#, fuzzy
 #~ msgid "Select File…"
 #~ msgstr "Envia _Fitxer"
 
@@ -6899,6 +6861,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "Mostra els contactes desconnectats"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Característiques"
 
 #, fuzzy
 #~ msgid "Shows a list of file transfers between you and your contacts"
@@ -6921,6 +6887,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Estat"
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Estat"
 
 #, fuzzy
@@ -6960,8 +6930,24 @@ msgstr ""
 #~ msgstr "Envia _Fitxer"
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "Servidor MUC"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Nom d'usuari:"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Disponible per parlar"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Disponible per parlar"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -6972,8 +6958,28 @@ msgstr ""
 #~ msgstr "_Canvia Missatge d'Estat"
 
 #, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Comptes"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "_Afegeix Contacte..."
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "_Copia la ubicació de l'enllaç"
+
+#, fuzzy
 #~ msgid "_File Transfer"
 #~ msgstr "Transferència de Fitxers"
+
+#, fuzzy
+#~ msgid "_Help"
+#~ msgstr "Ajuda"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "_Afegeix Contacte..."
 
 #, fuzzy
 #~ msgid "_Modify Account…"
@@ -6988,11 +6994,27 @@ msgstr ""
 #~ msgstr "_Obre Carpeta Contenidora"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Preferències"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Notifica'm quan una transferència de fitxer ha acabat"
 
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Inicia Xat"
+
 #~ msgid "_Start Chat..."
 #~ msgstr "Inicia Xat..."
+
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "Mostra Transports"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "Veure"
 
 #~ msgid "file transfers list"
 #~ msgstr "llista de trasferència de fitxers"

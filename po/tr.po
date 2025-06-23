@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-14 18:34+0000\n"
+"POT-Creation-Date: 2025-06-22 20:57+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -122,10 +122,6 @@ msgstr ""
 msgctxt "own nickname in group chat"
 msgid "%s (You)"
 msgstr ""
-
-#, fuzzy, python-format
-msgid "%s (desynced)"
-msgstr "-e  --ed  Bir ed betiği çıktılar."
 
 #, python-format
 msgid "%s and %s are typing…"
@@ -432,6 +428,10 @@ msgid "Account Wizard"
 msgstr "Dosya boş"
 
 #, fuzzy
+msgid "Account address: "
+msgstr "Hesap sırası"
+
+#, fuzzy
 msgid "Account disabled"
 msgstr "Dosya boş"
 
@@ -454,6 +454,10 @@ msgstr "ping:  Bağlanılan sunucuya PING at."
 #, fuzzy
 msgid "Account is not connected."
 msgstr "ping:  Bağlanılan sunucuya PING at."
+
+#, fuzzy
+msgid "Account name: "
+msgstr "Hesap sırası"
 
 #, fuzzy, python-format
 msgid "Account: %s"
@@ -487,10 +491,6 @@ msgstr "Etkin çıkışta"
 
 msgid "Active"
 msgstr "Aktif"
-
-#, fuzzy
-msgid "Activity"
-msgstr "Etkin çıkışta"
 
 #, fuzzy
 msgid "Activity Feed"
@@ -541,10 +541,6 @@ msgstr "Bağlantı Kurulamıyor"
 
 msgid "Add Workspace"
 msgstr ""
-
-#, fuzzy
-msgid "Add _Contact…"
-msgstr "Kişi _ekle"
 
 msgid "Add a checkmark to received messages"
 msgstr ""
@@ -631,11 +627,11 @@ msgid "Advanced"
 msgstr "İlerlemiş"
 
 #, fuzzy
-msgid "Advanced Configuration Editor (ACE)"
+msgid "Advanced Configuration Editor"
 msgstr "İlerlemiş Ayarlama Editörü"
 
 #, fuzzy
-msgid "Advanced Configuration Editor… "
+msgid "Advanced Configuration Editor (ACE)"
 msgstr "İlerlemiş Ayarlama Editörü"
 
 #, fuzzy
@@ -645,6 +641,10 @@ msgstr "İlerlemiş aksiyonlar"
 #, fuzzy
 msgid "Advanced settings"
 msgstr "İlerlemiş aksiyonlar"
+
+#, fuzzy, python-format
+msgid "Adw Version: %s"
+msgstr "GTK+ Runtime Sürümü"
 
 #, fuzzy
 msgid "Affiliation"
@@ -659,9 +659,6 @@ msgid "Affiliations of %(nick)s to this group chat have been removed"
 msgstr ""
 
 msgid "After"
-msgstr ""
-
-msgid "Algorithm"
 msgstr ""
 
 msgid "All"
@@ -812,9 +809,6 @@ msgstr "Tercihler"
 msgid "Archiving Preferences for %s"
 msgstr ""
 
-msgid "Artists"
-msgstr ""
-
 #, fuzzy
 msgid "Ask For Status Message on…"
 msgstr "Durum ileti sor ben buysam:"
@@ -932,6 +926,10 @@ msgstr "Mevcut"
 #, fuzzy
 msgctxt "User status"
 msgid "Available"
+msgstr "Mevcut"
+
+#, fuzzy
+msgid "Available Features"
 msgstr "Mevcut"
 
 #, fuzzy
@@ -1103,12 +1101,6 @@ msgstr "<b>Bir hata oluştu:</b>"
 msgid "Certificate chain too long"
 msgstr "Sertifika zinciri çok uzun"
 
-#, fuzzy, python-format
-msgid ""
-"Certificate for \n"
-"%s"
-msgstr "%s hesapına"
-
 #, fuzzy
 msgid "Certificate has expired"
 msgstr "Bu anahtarın kullanım süresi dolmuş"
@@ -1238,6 +1230,10 @@ msgid "Check for updates periodically"
 msgstr ""
 
 #, fuzzy
+msgid "Check which features are available"
+msgstr "Hiç bir hesap bulunmiyor"
+
+#, fuzzy
 msgid "Choose Device"
 msgstr "Resim seç"
 
@@ -1304,9 +1300,6 @@ msgstr "%s grup sohbete katıldı"
 msgid "Click to change time display"
 msgstr ""
 
-msgid "Click to view Gajim's wiki page on how to install plugins in Flatpak."
-msgstr ""
-
 #, fuzzy
 msgid "Click to view location"
 msgstr "Tercihlerinizi ayarlayabileceğiniz pencereyi açar"
@@ -1323,10 +1316,6 @@ msgstr "%(nickname)s Girdi"
 #, fuzzy
 msgid "Close"
 msgstr "_Gönder & Kapat"
-
-#, fuzzy
-msgid "Close Search"
-msgstr "Ara"
 
 msgid "Close a chat by pressing the Escape key"
 msgstr ""
@@ -1359,9 +1348,6 @@ msgstr "'%s' (%d) öğesi zaten bir görüntüye eklenmiş"
 #, fuzzy
 msgid "Commands"
 msgstr "komut"
-
-msgid "Common Name (CN)"
-msgstr ""
 
 msgid "Common Name (CN): "
 msgstr ""
@@ -1568,10 +1554,6 @@ msgid "Copy Address"
 msgstr "AIM Adres:"
 
 #, fuzzy
-msgid "Copy Certificate Information"
-msgstr "Kişisel Bilgisi"
-
-#, fuzzy
 msgid "Copy Link"
 msgstr "Yer:"
 
@@ -1652,10 +1634,6 @@ msgid "Create New Account"
 msgstr "Yeni posta yarat"
 
 #, fuzzy
-msgid "Create _Group Chat…"
-msgstr "Tam-Ekrandan Çık"
-
-#, fuzzy
 msgid "Create new group chat"
 msgstr "Tam-Ekrandan Çık"
 
@@ -1673,6 +1651,9 @@ msgstr "Bu anahtarın kullanım süresi dolmuş"
 msgid "D-Bus Interface"
 msgstr ""
 
+msgid "DNS"
+msgstr ""
+
 #, fuzzy
 msgid "Dark Theme"
 msgstr "Gajim - %s"
@@ -1686,6 +1667,10 @@ msgstr "Kayıt başarısız"
 
 msgid "Deactivated"
 msgstr ""
+
+#, fuzzy
+msgid "Debug Console"
+msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "Debug Logging"
@@ -1704,9 +1689,6 @@ msgstr ""
 #, fuzzy
 msgid "Decryption failed"
 msgstr "Bağlantı Kurulamıyor"
-
-msgid "Default"
-msgstr "Öntanımlı"
 
 #, fuzzy
 msgid "Default Encryption"
@@ -1786,10 +1768,6 @@ msgstr "_Yeni Bir Grup Sohbeti"
 
 msgid "Details"
 msgstr "Ayrıntılar"
-
-#, fuzzy
-msgid "Developers"
-msgstr "Şu Anki Geliştiriciler"
 
 #, python-format
 msgid "Device \"%s\""
@@ -1923,6 +1901,9 @@ msgstr ""
 msgid "Doing so will permanently delete this Fingerprint"
 msgstr ""
 
+msgid "Domain"
+msgstr ""
+
 #, fuzzy
 msgid "Download"
 msgstr "Yükleme"
@@ -1930,14 +1911,6 @@ msgstr "Yükleme"
 #, fuzzy
 msgid "Download File"
 msgstr "Yükleme"
-
-#, fuzzy
-msgid "Download Update"
-msgstr "Yükleme"
-
-#, fuzzy
-msgid "Download and Install"
-msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy, python-format
 msgid "Download failed (%s)"
@@ -2154,10 +2127,10 @@ msgstr "Komuta _Yürüt"
 msgid "Executing…"
 msgstr "Komuta _Yürüt"
 
-msgid "Expires on"
+msgid "Expires on: "
 msgstr ""
 
-msgid "Expires on: "
+msgid "Expiry date"
 msgstr ""
 
 #, fuzzy
@@ -2324,6 +2297,9 @@ msgstr "Filtre:"
 msgid "Filters (active)"
 msgstr "Üyelik ileti _kaydet"
 
+msgid "Fingerprint"
+msgstr ""
+
 msgid "Fingerprint for this Device"
 msgstr ""
 
@@ -2360,11 +2336,11 @@ msgid "Forget Group Chat"
 msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
-msgid "Forget this Group Chat"
+msgid "Forget this Group Chat?"
 msgstr "Tam-Ekrandan Çık"
 
 #, fuzzy
-msgid "Forget this Group Chat?"
+msgid "Forget this Group Chat…"
 msgstr "Tam-Ekrandan Çık"
 
 msgid "Format error in CRL's lastUpdate field"
@@ -2605,9 +2581,6 @@ msgstr "Bildirim"
 msgid "Hello, I am $name. %s"
 msgstr "Merhaba, benim adım $name."
 
-msgid "Helps to establish calls through firewalls"
-msgstr ""
-
 msgctxt "Group chat feature"
 msgid "Hidden"
 msgstr ""
@@ -2616,15 +2589,11 @@ msgid "Hide"
 msgstr ""
 
 #, fuzzy
-msgid "Hide chat list"
+msgid "Hide Chat List"
 msgstr "Katılan"
 
 #, fuzzy
 msgid "Home"
-msgstr "<b>Ana Sayfa:</b>"
-
-#, fuzzy
-msgid "Homepage"
 msgstr "<b>Ana Sayfa:</b>"
 
 #, fuzzy
@@ -2636,6 +2605,9 @@ msgid "How far back should the chat history be synchronized?"
 msgstr "Ne yapmak istiyorsun?"
 
 msgid "How long Gajim should keep your chat history"
+msgstr ""
+
+msgid "How to install plugins with Flatpak"
 msgstr ""
 
 #, fuzzy
@@ -2659,6 +2631,10 @@ msgstr ""
 msgctxt "Profile"
 msgid "IM Address"
 msgstr "_Adres:"
+
+#, fuzzy
+msgid "IP / Port"
+msgstr "_Porta:"
 
 msgid "Id"
 msgstr "Id"
@@ -2762,6 +2738,10 @@ msgstr "Tehlikeli bağlantı"
 msgid "Insert Emoji"
 msgstr ""
 
+#, fuzzy
+msgid "Install"
+msgstr " [ %i%% ] (askıda)"
+
 msgid "Install <tt>sentry-sdk</tt> to make reporting issues easier."
 msgstr ""
 
@@ -2771,13 +2751,12 @@ msgstr ""
 msgid "Install a keyring to store passwords on your system."
 msgstr ""
 
+msgid "Install from Archive"
+msgstr ""
+
 #, fuzzy
 msgid "Installation failed"
 msgstr "Kayıt başarısız"
-
-#, fuzzy
-msgid "Installed"
-msgstr " [ %i%% ] (askıda)"
 
 msgctxt "Configuration type"
 msgid "Integer"
@@ -2848,13 +2827,13 @@ msgstr "Davet _et"
 msgid "Is a microphone plugged in and accessible?"
 msgstr ""
 
+msgid "Issue date"
+msgstr ""
+
 msgid "Issued by"
 msgstr ""
 
 msgid "Issued by\n"
-msgstr ""
-
-msgid "Issued on"
 msgstr ""
 
 msgid "Issued on: "
@@ -2864,6 +2843,9 @@ msgid "Issued to"
 msgstr ""
 
 msgid "Issued to\n"
+msgstr ""
+
+msgid "Issues detected"
 msgstr ""
 
 #, fuzzy
@@ -2909,10 +2891,6 @@ msgid "Join Groupchat…"
 msgstr "Grup Sohbete Katıl"
 
 #, fuzzy
-msgid "Join Support Chat"
-msgstr "Grup Sohbete Katıl"
-
-#, fuzzy
 msgid "Joining Group Chat…"
 msgstr "Grup Sohbete Katıl"
 
@@ -2934,9 +2912,6 @@ msgstr "Son Kullanılan:"
 msgid "Keep and manage all your chat history"
 msgstr ""
 
-msgid "Key Size"
-msgstr ""
-
 msgid "Key usage does not include certificate signing"
 msgstr ""
 
@@ -2956,9 +2931,6 @@ msgstr "etiket"
 
 #, python-format
 msgid "Language: %s"
-msgstr ""
-
-msgid "Last but not least"
 msgstr ""
 
 #, fuzzy, python-format
@@ -3012,10 +2984,6 @@ msgstr "Kodlamada"
 msgid "Local System Time"
 msgstr ""
 
-#, fuzzy
-msgid "Local Time"
-msgstr "Yerel jid:"
-
 msgctxt "Group chat description"
 msgid "Local help group"
 msgstr ""
@@ -3058,9 +3026,6 @@ msgid ""
 "from the chat window"
 msgstr ""
 
-msgid "Maintainers"
-msgstr ""
-
 #, fuzzy
 msgid "Make Admin"
 msgstr "_Yönetici"
@@ -3084,6 +3049,10 @@ msgid "Manage"
 msgstr "Yönet..."
 
 #, fuzzy
+msgid "Manage Accounts…"
+msgstr "%s hesaptan"
+
+#, fuzzy
 msgid "Manage Contact List"
 msgstr "Kişiler"
 
@@ -3102,6 +3071,9 @@ msgstr "Kişileri eşzamana getir"
 #, fuzzy
 msgid "Manage Trust"
 msgstr "Kişileri eşzamana getir"
+
+msgid "Manage and configure Gajim plugins"
+msgstr ""
 
 #, fuzzy
 msgid "Manage your Devices…"
@@ -3196,7 +3168,7 @@ msgstr "Tüm _durum değişikliklerini sistem günlüğüne kaydet"
 msgid "Miscellaneous"
 msgstr "<b>Karışık</b>"
 
-msgid "Missing dependencies for Audio/Video"
+msgid "Missing dependencies for audio support"
 msgstr ""
 
 msgid "Missing necessary encryption plugin"
@@ -3355,6 +3327,10 @@ msgstr "Şifre gerekli"
 msgid "No Proxy"
 msgstr "Prox_y:"
 
+#, fuzzy
+msgid "No Results Found"
+msgstr "<b>Telefon numara:</b>"
+
 msgid "No Sync"
 msgstr ""
 
@@ -3403,10 +3379,6 @@ msgstr ""
 #, fuzzy
 msgid "No info available"
 msgstr "Hiç bir hesap bulunmiyor"
-
-#, fuzzy
-msgid "No proxy used"
-msgstr "Prox_y:"
 
 #, fuzzy
 msgid "No results"
@@ -3607,10 +3579,6 @@ msgctxt "Profile"
 msgid "Organisation"
 msgstr "Telefondayım"
 
-#, fuzzy
-msgid "Organization (O)"
-msgstr "Telefondayım"
-
 msgid "Organization (O): "
 msgstr ""
 
@@ -3678,6 +3646,9 @@ msgstr ""
 #, fuzzy
 msgid "PNG files"
 msgstr "Tüm dosyalar"
+
+msgid "Packages"
+msgstr ""
 
 #, fuzzy, python-format
 msgid "Pango Version: %s"
@@ -3801,10 +3772,6 @@ msgstr ""
 
 msgid "Pipewire"
 msgstr ""
-
-#, fuzzy
-msgid "Pl_ugins"
-msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Play Sound"
@@ -4029,8 +3996,11 @@ msgstr "Üyelik isteği"
 msgid "Pulse: %s"
 msgstr "Dosya: %s"
 
+msgid "Purge"
+msgstr ""
+
 #, fuzzy
-msgid "Purge Chat History…"
+msgid "Purge Chat History"
 msgstr "Son Kullanılan:"
 
 #, fuzzy
@@ -4355,8 +4325,12 @@ msgstr "Öntanımlı değerlerine geri al"
 msgid "Resource"
 msgstr "Kaynak:"
 
-msgid "Restart Gajim for changes to take effect"
+msgid "Restart Gajim to finish this update"
 msgstr ""
+
+#, fuzzy
+msgid "Restart Pending"
+msgstr " (yetki gerektirir)"
 
 #, fuzzy
 msgid "Restore chat"
@@ -4401,13 +4375,7 @@ msgstr "Rol"
 msgid "Roles of %s have been removed in this group chat"
 msgstr "%s grup sohbete katıldı"
 
-msgid "SHA-1"
-msgstr ""
-
 msgid "SHA-1:"
-msgstr ""
-
-msgid "SHA-256"
 msgstr ""
 
 msgid "SHA-256:"
@@ -4420,14 +4388,6 @@ msgstr "<b>Bir hata oluştu:</b>"
 #, fuzzy
 msgid "SSL certificate error"
 msgstr "<b>Bir hata oluştu:</b>"
-
-#, fuzzy
-msgid "STUN Server"
-msgstr "STUN Sunuc:"
-
-#, fuzzy
-msgid "STUN Server Settings"
-msgstr "Bağlantı Kurulamıyor"
 
 msgid "STUN server to use when using Jingle"
 msgstr ""
@@ -4533,8 +4493,9 @@ msgid ""
 "(press Return to start search)"
 msgstr ""
 
-msgid "Search your conversation"
-msgstr ""
+#, fuzzy
+msgid "Search in chats…"
+msgstr "Katılanlar"
 
 #, fuzzy
 msgid "Searching"
@@ -4591,9 +4552,6 @@ msgid "Select playback speed"
 msgstr ""
 
 msgid "Select your audio input (e.g. microphone)"
-msgstr ""
-
-msgid "Select your video input device (e.g. webcam, screen capture)"
 msgstr ""
 
 #, fuzzy
@@ -4683,10 +4641,6 @@ msgid "Separate profile files completely (even history database and plugins)"
 msgstr ""
 
 #, fuzzy
-msgid "Serial Number"
-msgstr "GG Numara:"
-
-#, fuzzy
 msgid "Serial Number: "
 msgstr "GG Numara:"
 
@@ -4738,6 +4692,10 @@ msgid "Service Not Found"
 msgstr "Hizmet bulunamadı"
 
 #, fuzzy
+msgid "Set Trust"
+msgstr "Kişileri eşzamana getir"
+
+#, fuzzy
 msgid "Set configuration directory"
 msgstr "Hata açıklaması…"
 
@@ -4783,6 +4741,10 @@ msgid "Share my online status"
 msgstr "Durumu Değiştir"
 
 #, fuzzy
+msgid "Show Chat List"
+msgstr "Yer:"
+
+#, fuzzy
 msgid "Show Commands"
 msgstr "komut"
 
@@ -4806,9 +4768,6 @@ msgid "Show Join/Leave"
 msgstr ""
 
 msgid "Show Joined / Left"
-msgstr ""
-
-msgid "Show My Video Stream"
 msgstr ""
 
 #, fuzzy
@@ -4839,10 +4798,6 @@ msgstr "_XML Konsolu Göster"
 msgid "Show Voice Message Button"
 msgstr "Mesajı gönder"
 
-#, fuzzy
-msgid "Show _Features"
-msgstr "Özellikler:"
-
 msgid "Show a confirmation dialog before connecting unencrypted"
 msgstr ""
 
@@ -4855,9 +4810,6 @@ msgstr ""
 msgid "Show a list of emojis"
 msgstr "Gajim açılırken bağlan"
 
-msgid "Show a live preview to test your video source"
-msgstr ""
-
 #, fuzzy
 msgid "Show all reactions"
 msgstr "Bütün Bekleyen _Olayları Göster"
@@ -4865,10 +4817,6 @@ msgstr "Bütün Bekleyen _Olayları Göster"
 #, fuzzy
 msgid "Show all warnings"
 msgstr "Bütün Bekleyen _Olayları Göster"
-
-#, fuzzy
-msgid "Show chat list"
-msgstr "Yer:"
 
 #, fuzzy
 msgid "Show debug console"
@@ -4925,9 +4873,6 @@ msgstr "Gajimi her zaman kapat"
 msgid "Show window when starting Gajim"
 msgstr "Gajimi her zaman kapat"
 
-msgid "Show your own video stream in calls"
-msgstr ""
-
 #, fuzzy
 msgid "Show/Hide Window"
 msgstr "Pencereyi gizler"
@@ -4960,9 +4905,6 @@ msgstr ""
 #, fuzzy
 msgid "Sleeping"
 msgstr "Uyuyan bir kapibara."
-
-msgid "Software"
-msgstr ""
 
 msgid "Something went wrong. Video feature disabled."
 msgstr ""
@@ -5085,10 +5027,6 @@ msgstr "durum ileti"
 msgid "Status message…"
 msgstr "_Durum ileti:"
 
-#, fuzzy, python-format
-msgid "Status: %s"
-msgstr "Durum:"
-
 #, fuzzy
 msgid "Status: Away Color"
 msgstr "durum ileti"
@@ -5118,9 +5056,6 @@ msgstr "Biçem"
 
 msgid "Subject"
 msgstr "Konu"
-
-msgid "Subject Alt Names"
-msgstr ""
 
 msgid "Subject Alt Names: "
 msgstr ""
@@ -5270,6 +5205,9 @@ msgstr "_Dosya Gönder…"
 msgid "Thanks"
 msgstr "Şükreden"
 
+msgid "Thanks to all the package maintainers."
+msgstr ""
+
 msgid "The certificate does not match the expected identity of the site"
 msgstr ""
 
@@ -5330,9 +5268,6 @@ msgstr "Temalar"
 msgid "Themes"
 msgstr "Temalar"
 
-msgid "There are connectivity issues"
-msgstr ""
-
 msgid "There are devices for which you have not made a trust decision yet."
 msgstr ""
 
@@ -5347,6 +5282,9 @@ msgstr ""
 
 #, python-format
 msgid "There has been an error while trying to fetch messages: %s"
+msgstr ""
+
+msgid "There is an update available for this plugin"
 msgstr ""
 
 msgid "There is no encryption method available for the chosen encryption."
@@ -5498,6 +5436,9 @@ msgstr ""
 msgid "This will clear the devices store for your account."
 msgstr "İstemciyi hesap yöneticisi kontrolünden çıkarır."
 
+msgid "This will purge all locally stored chat history"
+msgstr ""
+
 #, fuzzy
 msgid "This will remove your account from Gajim."
 msgstr "İstemciyi hesap yöneticisi kontrolünden çıkarır."
@@ -5572,6 +5513,9 @@ msgstr ""
 #, fuzzy
 msgid "Try Again"
 msgstr "Tekrar dene ? [e/H] "
+
+msgid "Try a different search"
+msgstr ""
 
 #, fuzzy
 msgid "Trying to change password..."
@@ -5660,7 +5604,7 @@ msgid "Unencrypted"
 msgstr "Başlatılmadı"
 
 #, fuzzy
-msgid "Uninstall Plugin"
+msgid "Uninstall"
 msgstr " [ %i%% ] (askıda)"
 
 #, fuzzy
@@ -5737,8 +5681,8 @@ msgstr "Resim seç"
 msgid "Update automatically"
 msgstr "Resim seç"
 
-#, fuzzy
-msgid "Update available"
+#, fuzzy, python-format
+msgid "Update available: Version %s"
 msgstr "Hiç bir hesap bulunmiyor"
 
 msgid "Update plugins automatically"
@@ -5749,6 +5693,10 @@ msgstr ""
 
 msgid "Updates will be installed next time Gajim is started"
 msgstr ""
+
+#, fuzzy
+msgid "Updating Plugin…"
+msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 msgid "Updating provider list…"
@@ -5783,16 +5731,15 @@ msgstr ""
 msgid "Use Image"
 msgstr "Resim seç"
 
-#, fuzzy
-msgid "Use STUN Server"
-msgstr "STUN Sunuc:"
-
 msgid "Use System Keyring"
 msgstr ""
 
 #, fuzzy
 msgid "Use Unencrypted Connection"
 msgstr "Tehlikeli bağlantı"
+
+msgid "Use a profile to run multiple Gajim instances"
+msgstr ""
 
 #, fuzzy
 msgid "Use an unencrypted connection to the server"
@@ -5859,18 +5806,6 @@ msgstr "GTK+ Runtime Sürümü"
 msgid "Video"
 msgstr "Video testi"
 
-#, fuzzy
-msgid "Video Framerate"
-msgstr "Video testi"
-
-#, fuzzy
-msgid "Video Input Device"
-msgstr "Video giriş aygıtı"
-
-#, fuzzy
-msgid "Video Resolution"
-msgstr "Video testi"
-
 msgid "Video test"
 msgstr "Video testi"
 
@@ -5925,6 +5860,9 @@ msgstr ""
 #, fuzzy
 msgid "Web _Search for it"
 msgstr "Olaylamak için bir daha tuşla:"
+
+msgid "WebSocket URL"
+msgstr ""
 
 msgid "Website"
 msgstr ""
@@ -6202,6 +6140,9 @@ msgid ""
 "This may take a while…"
 msgstr ""
 
+msgid "Your connection to the server is secured by this certificate"
+msgstr ""
+
 #, fuzzy
 msgid "Your message can not be sent until you are connected."
 msgstr ""
@@ -6230,6 +6171,9 @@ msgid ""
 "of a different server."
 msgstr ""
 
+msgid "Your server offers the following features"
+msgstr ""
+
 #, fuzzy
 msgid "ZIP files"
 msgstr "Tüm dosyalar"
@@ -6254,14 +6198,6 @@ msgstr "Hesaplar"
 #, fuzzy
 msgid "_Account"
 msgstr "Hesap"
-
-#, fuzzy
-msgid "_Accounts"
-msgstr "Hesaplar"
-
-#, fuzzy
-msgid "_Add Account…"
-msgstr "Kişi _ekle"
 
 #, fuzzy
 msgid "_Add to Trusted Certificates"
@@ -6324,10 +6260,6 @@ msgid "_Create"
 msgstr "Yaratıcı"
 
 #, fuzzy
-msgid "_Debug Console"
-msgstr "_XML Konsolu Göster"
-
-#, fuzzy
 msgid "_Decline"
 msgstr "Bağlı _değil"
 
@@ -6371,10 +6303,6 @@ msgctxt "User status"
 msgid "_Free for Chat"
 msgstr "Sohbet için _Hazır"
 
-#, fuzzy
-msgid "_Help"
-msgstr "_Yardım"
-
 msgid "_Hide (Tray Icon)"
 msgstr ""
 
@@ -6386,8 +6314,16 @@ msgstr "_Bilgisayar adı:"
 msgid "_Hostname"
 msgstr "_Bilgisayar adı:"
 
+#, fuzzy
+msgid "_Import"
+msgstr "Dışa Aktar"
+
 msgid "_Join"
 msgstr "_Katıl"
+
+#, fuzzy
+msgid "_Join Support Chat"
+msgstr "Grup Sohbete Katıl"
 
 msgid "_Keyboard Shortcuts"
 msgstr ""
@@ -6401,14 +6337,6 @@ msgstr ""
 #, fuzzy
 msgid "_Log In"
 msgstr "%(nick)s durumu şimdi %(status)s"
-
-#, fuzzy
-msgid "_Manage Accounts…"
-msgstr "%s hesaptan"
-
-#, fuzzy
-msgid "_Manage Account…"
-msgstr "Kişi _ekle"
 
 #, fuzzy
 msgid "_Minimize"
@@ -6451,10 +6379,6 @@ msgstr "Yeni posta yarat"
 #, fuzzy
 msgid "_Port"
 msgstr "_Porta:"
-
-#, fuzzy
-msgid "_Preferences"
-msgstr "Tercihler"
 
 #, fuzzy
 msgid "_Privacy Policy (Online)"
@@ -6515,19 +6439,11 @@ msgstr "%(nickname)s Girdi"
 msgid "_Sign Up"
 msgstr "_Bağlan"
 
-#, fuzzy
-msgid "_Start / Join Chat…"
-msgstr "Sohbet _Başla"
-
 msgid "_Stop Sharing"
 msgstr ""
 
 msgid "_Subscribe"
 msgstr "_Üye yap"
-
-#, fuzzy
-msgid "_Toggle Menu Bar"
-msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 msgid "_Type"
@@ -6546,10 +6462,6 @@ msgstr "_Üyelikten çık"
 #, fuzzy
 msgid "_Username"
 msgstr "_Kullanıcı ismi"
-
-#, fuzzy
-msgid "_View"
-msgstr "_Görünüm"
 
 #, fuzzy
 msgid "_View Certificate"
@@ -6643,9 +6555,6 @@ msgid ""
 "Do you want to join?"
 msgstr "Lütfen göstermek istediğiniz kaynak dosyasındaki satırı seçiniz:"
 
-msgid "help"
-msgstr ""
-
 #, fuzzy
 msgid "is composing a message…"
 msgstr "ilet yazıyor…"
@@ -6737,9 +6646,6 @@ msgstr "Yer:"
 msgid "video input"
 msgstr "video girdisi"
 
-msgid "we would like to thank all the package maintainers."
-msgstr ""
-
 #, python-brace-format
 msgid "{nick} has left due to an error{reason}"
 msgstr ""
@@ -6766,6 +6672,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid " by %s"
 #~ msgstr "Takma Ad Ayarla"
+
+#, fuzzy, python-format
+#~ msgid "%s (desynced)"
+#~ msgstr "-e  --ed  Bir ed betiği çıktılar."
 
 #, fuzzy, python-format
 #~ msgid "%s asks you to share your status"
@@ -7011,6 +6921,14 @@ msgstr ""
 #~ msgstr "ping:  Bağlanılan sunucuya PING at."
 
 #, fuzzy
+#~ msgid "Activity"
+#~ msgstr "Etkin çıkışta"
+
+#, fuzzy
+#~ msgid "Add _Contact…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
 #~ msgid "Add reaction"
 #~ msgstr "Bağlantı Kurulamıyor"
 
@@ -7070,6 +6988,12 @@ msgstr ""
 #~ msgid "Cannot overwrite existing file \"%s\""
 #~ msgstr "\"%s\" mevcut dosyanın üzerine yazılamıyor"
 
+#, fuzzy, python-format
+#~ msgid ""
+#~ "Certificate for \n"
+#~ "%s"
+#~ msgstr "%s hesapına"
+
 #, fuzzy
 #~ msgid "Checking file…"
 #~ msgstr "Profil gönderiliyor…"
@@ -7085,6 +7009,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "%s size bir dosya göndermek istiyor:"
+
+#, fuzzy
+#~ msgid "Close Search"
+#~ msgstr "Ara"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7104,8 +7032,16 @@ msgstr ""
 #~ msgstr "Sohbet"
 
 #, fuzzy
+#~ msgid "Copy Certificate Information"
+#~ msgstr "Kişisel Bilgisi"
+
+#, fuzzy
 #~ msgid "Copy Path"
 #~ msgstr "Oda JID"
+
+#, fuzzy
+#~ msgid "Create _Group Chat…"
+#~ msgstr "Tam-Ekrandan Çık"
 
 #~ msgid "Create new post"
 #~ msgstr "Yeni posta yarat"
@@ -7114,9 +7050,8 @@ msgstr ""
 #~ msgid "Current Developers"
 #~ msgstr "Şu Anki Geliştiriciler"
 
-#, fuzzy
-#~ msgid "Debug Console"
-#~ msgstr "_XML Konsolu Göster"
+#~ msgid "Default"
+#~ msgstr "Öntanımlı"
 
 #, fuzzy
 #~ msgid "Delete Message"
@@ -7128,6 +7063,10 @@ msgstr ""
 
 #~ msgid "Description: "
 #~ msgstr "Açıklama: "
+
+#, fuzzy
+#~ msgid "Developers"
+#~ msgstr "Şu Anki Geliştiriciler"
 
 #, fuzzy
 #~ msgid "Dial Number"
@@ -7145,6 +7084,14 @@ msgstr ""
 #~ msgctxt "Noun"
 #~ msgid "Download"
 #~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "Download Update"
+#~ msgstr "Yükleme"
+
+#, fuzzy
+#~ msgid "Download and Install"
+#~ msgstr "Bu iletişim kutusunu bir daha _gösterme"
 
 #, fuzzy
 #~ msgid "Drop files or contacts"
@@ -7239,6 +7186,10 @@ msgstr ""
 #~ msgid "Hide this menu"
 #~ msgstr "Menüyi gizle"
 
+#, fuzzy
+#~ msgid "Homepage"
+#~ msgstr "<b>Ana Sayfa:</b>"
+
 #~ msgid "Images"
 #~ msgstr "Resimler"
 
@@ -7260,6 +7211,10 @@ msgstr ""
 #, fuzzy, python-format
 #~ msgid "Last seen %s"
 #~ msgstr "Neden"
+
+#, fuzzy
+#~ msgid "Local Time"
+#~ msgstr "Yerel jid:"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7286,6 +7241,10 @@ msgstr ""
 #~ msgstr "Bildirimler"
 
 #, fuzzy
+#~ msgid "No proxy used"
+#~ msgstr "Prox_y:"
+
+#, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Not started"
 #~ msgstr "Başlatılmadı"
@@ -7303,8 +7262,8 @@ msgstr ""
 #~ msgstr "OpenPGP:"
 
 #, fuzzy
-#~ msgid "Open Plugins…"
-#~ msgstr "Bağlantı Kurulamıyor"
+#~ msgid "Organization (O)"
+#~ msgstr "Telefondayım"
 
 #, fuzzy
 #~ msgid "Pause or resume file transfer"
@@ -7313,6 +7272,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pending Event"
 #~ msgstr "Bütün Bekleyen _Olayları Göster"
+
+#, fuzzy
+#~ msgid "Pl_ugins"
+#~ msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7390,6 +7353,14 @@ msgstr ""
 #~ msgstr "SOCKS5"
 
 #, fuzzy
+#~ msgid "STUN Server"
+#~ msgstr "STUN Sunuc:"
+
+#, fuzzy
+#~ msgid "STUN Server Settings"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
 #~ msgid "Save File as…"
 #~ msgstr "Dosya Farklı Kaydet..."
 
@@ -7425,6 +7396,10 @@ msgstr ""
 #~ msgstr "Gönderen"
 
 #, fuzzy
+#~ msgid "Serial Number"
+#~ msgstr "GG Numara:"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7435,6 +7410,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Show Offline Contacts"
 #~ msgstr "_Çevredışı Kişileri Göster"
+
+#, fuzzy
+#~ msgid "Show _Features"
+#~ msgstr "Özellikler:"
 
 #, fuzzy
 #~ msgctxt "File transfer state"
@@ -7456,6 +7435,10 @@ msgstr ""
 #, fuzzy
 #~ msgctxt "File transfer state"
 #~ msgid "Status: "
+#~ msgstr "Durum:"
+
+#, fuzzy, python-format
+#~ msgid "Status: %s"
 #~ msgstr "Durum:"
 
 #, fuzzy
@@ -7516,8 +7499,24 @@ msgstr ""
 #~ msgstr "Dosya Farklı Kaydet..."
 
 #, fuzzy
+#~ msgid "Use STUN Server"
+#~ msgstr "STUN Sunuc:"
+
+#, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Kullanıcı ismi"
+
+#, fuzzy
+#~ msgid "Video Framerate"
+#~ msgstr "Video testi"
+
+#, fuzzy
+#~ msgid "Video Input Device"
+#~ msgstr "Video giriş aygıtı"
+
+#, fuzzy
+#~ msgid "Video Resolution"
+#~ msgstr "Video testi"
 
 #, fuzzy
 #~ msgid "Video calls are not supported"
@@ -7543,8 +7542,20 @@ msgstr ""
 #~ msgid "You still have running file transfers"
 #~ msgstr "%s size bir dosya göndermek istiyor:"
 
+#, fuzzy
+#~ msgid "_Accounts"
+#~ msgstr "Hesaplar"
+
+#, fuzzy
+#~ msgid "_Add Account…"
+#~ msgstr "Kişi _ekle"
+
 #~ msgid "_Clear"
 #~ msgstr "_Temizle"
+
+#, fuzzy
+#~ msgid "_Debug Console"
+#~ msgstr "_XML Konsolu Göster"
 
 #, fuzzy
 #~ msgid "_Don’t ask again"
@@ -7559,6 +7570,14 @@ msgstr ""
 #~ msgstr "Dosya Aktarımları"
 
 #, fuzzy
+#~ msgid "_Help"
+#~ msgstr "_Yardım"
+
+#, fuzzy
+#~ msgid "_Manage Account…"
+#~ msgstr "Kişi _ekle"
+
+#, fuzzy
 #~ msgid "_Modify Account…"
 #~ msgstr "%s hesaptan"
 
@@ -7571,15 +7590,31 @@ msgstr ""
 #~ msgstr "Gmail Gelen Kutusunu _Aç"
 
 #, fuzzy
+#~ msgid "_Preferences"
+#~ msgstr "Tercihler"
+
+#, fuzzy
 #~ msgid "_Show notification when file transfer is complete"
 #~ msgstr "_Bir dosya aktarımı tamamlandığında beni bilgilendir"
+
+#, fuzzy
+#~ msgid "_Start / Join Chat…"
+#~ msgstr "Sohbet _Başla"
 
 #, fuzzy
 #~ msgid "_Start Chat..."
 #~ msgstr "Sohbet _Başla"
 
+#, fuzzy
+#~ msgid "_Toggle Menu Bar"
+#~ msgstr "_XML Konsolu Göster"
+
 #~ msgid "_Undo"
 #~ msgstr "_Geri Al"
+
+#, fuzzy
+#~ msgid "_View"
+#~ msgstr "_Görünüm"
 
 #~ msgid "file transfers list"
 #~ msgstr "dosya aktarımların listesi"
