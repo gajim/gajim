@@ -28,7 +28,7 @@ thoughts or discuss the news with your groups.
 - [Pillow](https://pypi.org/project/Pillow/) (>=9.1.0)
 - [precis_i18n](https://pypi.org/project/precis-i18n/)
 - [pycairo](https://pypi.org/project/pycairo/)
-- [PyGObject](https://pypi.org/project/PyGObject/) (>=3.42.0)
+- [PyGObject](https://pypi.org/project/PyGObject/) (>=3.52.0)
 - [Python](https://www.python.org/) (>=3.11)
 - [qrcode](https://pypi.org/project/qrcode/) (>=7.3.1)
 - [setuptools](https://pypi.org/project/setuptools/) (>=65.0.0)
