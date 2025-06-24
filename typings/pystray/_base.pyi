@@ -213,7 +213,7 @@ class MenuItem:
         self,
         text: str,
         action: typing.Any,
-        checked: bool = ...,
+        checked: typing.Any = ...,
         radio: bool = ...,
         default: bool = ...,
         visible: bool = ...,
@@ -287,7 +287,7 @@ class Menu:
 
     SEPARATOR: MenuItem = ...
 
-    def __init__(self, *items: tuple[MenuItem, ...] | tuple[typing.Any]) -> None: ...
+    def __init__(self, *items: typing.Any) -> None: ...
     @property
     def items(self) -> tuple[MenuItem, ...] | tuple[typing.Any]:
         """All menu items."""

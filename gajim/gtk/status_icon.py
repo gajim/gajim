@@ -183,7 +183,7 @@ class WindowsStatusIcon(StatusIconBackend):
 
     def _create_status_icon(self) -> pystray.Icon:
         assert pystray  # type: ignore
-        menu_items: tuple[pystray.MenuItem, ...] = (
+        menu_items: list[pystray.MenuItem] = [
             pystray.MenuItem(
                 text=_("Show/Hide Window"),
                 action=lambda: GLib.idle_add(self._on_show_hide),
@@ -192,36 +192,28 @@ class WindowsStatusIcon(StatusIconBackend):
             pystray.MenuItem(
                 _("Status"),
                 pystray.Menu(
-                    (
-                        pystray.MenuItem(
-                            text=get_uf_show("online"),
-                            action=lambda: GLib.idle_add(
-                                self._on_status_changed, "online"
-                            ),
+                    pystray.MenuItem(
+                        text=get_uf_show("online"),
+                        action=lambda: GLib.idle_add(self._on_status_changed, "online"),
+                    ),
+                    pystray.MenuItem(
+                        text=get_uf_show("away"),
+                        action=lambda: GLib.idle_add(self._on_status_changed, "away"),
+                    ),
+                    pystray.MenuItem(
+                        text=get_uf_show("xa"),
+                        action=lambda: GLib.idle_add(self._on_status_changed, "xa"),
+                    ),
+                    pystray.MenuItem(
+                        text=get_uf_show("dnd"),
+                        action=lambda: GLib.idle_add(self._on_status_changed, "dnd"),
+                    ),
+                    pystray.MenuItem(
+                        text=get_uf_show("offline"),
+                        action=lambda: GLib.idle_add(
+                            self._on_status_changed, "offline"
                         ),
-                        pystray.MenuItem(
-                            text=get_uf_show("away"),
-                            action=lambda: GLib.idle_add(
-                                self._on_status_changed, "away"
-                            ),
-                        ),
-                        pystray.MenuItem(
-                            text=get_uf_show("xa"),
-                            action=lambda: GLib.idle_add(self._on_status_changed, "xa"),
-                        ),
-                        pystray.MenuItem(
-                            text=get_uf_show("dnd"),
-                            action=lambda: GLib.idle_add(
-                                self._on_status_changed, "dnd"
-                            ),
-                        ),
-                        pystray.MenuItem(
-                            text=get_uf_show("offline"),
-                            action=lambda: GLib.idle_add(
-                                self._on_status_changed, "offline"
-                            ),
-                        ),
-                    )
+                    ),
                 ),
             ),
             pystray.MenuItem(
@@ -231,7 +223,7 @@ class WindowsStatusIcon(StatusIconBackend):
             pystray.MenuItem(
                 text=_("Mute Sounds"),
                 action=lambda: GLib.idle_add(self._on_sounds_mute),
-                checked=self._get_sound_toggle_state(""),
+                checked=self._get_sound_toggle_state,
             ),
             pystray.MenuItem(
                 text=_("Preferences"),
@@ -242,10 +234,10 @@ class WindowsStatusIcon(StatusIconBackend):
                 text=_("Quit"),
                 action=lambda: GLib.idle_add(self._on_quit),
             ),
-        )
+        ]
 
         return pystray.Icon(
-            "Gajim", icon=self._get_icon("online"), menu=pystray.Menu(menu_items)
+            "Gajim", icon=self._get_icon("online"), menu=pystray.Menu(*menu_items)
         )
 
     @staticmethod
