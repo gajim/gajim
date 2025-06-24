@@ -35,6 +35,7 @@ dependencies = [
   "precis-i18n>=1.0.0",
   "pycairo>=1.16.0",
   "PyGObject>=3.42.0",
+  "pystray; platform_system == 'Windows'",
   "qrcode>=7.3.1",
   "SQLAlchemy>=2.0.0",
   "winrt-Windows.ApplicationModel; platform_system == 'Windows'",
