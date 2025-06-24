@@ -4,8 +4,9 @@
   <object class="GtkBox" id="box">
     <property name="orientation">vertical</property>
     <child>
-      <object class="AdwViewSwitcher">
+      <object class="AdwInlineViewSwitcher">
         <property name="stack">server_info_stack</property>
+        <property name="display-mode">2</property>
       </object>
     </child>
     <child>
