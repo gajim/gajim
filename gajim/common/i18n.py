@@ -117,6 +117,7 @@ class Translation:
             self.translation = gettext.translation(DOMAIN, locale_dir)
             if hasattr(locale, 'bindtextdomain'):
                 locale.bindtextdomain(DOMAIN, locale_dir)
+                locale.textdomain(DOMAIN)
         except OSError:
             pass
 

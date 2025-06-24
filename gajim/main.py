@@ -28,6 +28,8 @@ _MIN_GLIB_VER = "2.80.0"
 _MIN_PANGO_VER = "1.50.0"
 _MIN_SQLITE_VER = "3.35.0"
 
+error_message = "Gajim needs {0} to run. Quitting… (Error: {1})"
+
 
 def check_version(dep_name: str, current_ver: str, min_ver: str) -> None:
     if V(current_ver) < V(min_ver):
@@ -58,17 +60,17 @@ def gi_require_versions() -> None:
 
 
 def _check_required_deps() -> None:
-    error_message = "Gajim needs {0} to run. Quitting… (Error: {1})"
+    try:
+        import gi
+    except ImportError as error:
+        sys.exit(error_message.format("PyGObject", error))
+
+    gi.disable_legacy_autoinit()
 
     try:
         import nbxmpp
     except ImportError as error:
         sys.exit(error_message.format("python-nbxmpp", error))
-
-    try:
-        import gi
-    except ImportError as error:
-        sys.exit(error_message.format("pygobject", error))
 
     try:
         gi_require_versions()
