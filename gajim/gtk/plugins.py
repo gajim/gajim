@@ -93,6 +93,7 @@ class Plugins(Adw.PreferencesGroup, EventHelper, SignalManager):
         )
 
     def do_unroot(self) -> None:
+        self._disconnect_all()
         app.plugin_repository.disconnect(self)
         self.unregister_events()
         Adw.PreferencesGroup.do_unroot(self)
