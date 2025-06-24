@@ -9,7 +9,7 @@ import logging
 from pathlib import Path
 
 from gi.repository import Adw
-from gi.repository import GdkPixbuf
+from gi.repository import Gdk
 from gi.repository import Gio
 from gi.repository import GLib
 from gi.repository import Gtk
@@ -361,9 +361,8 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
         image_name = f"{self._manifest.short_name}.png"
         path = configpaths.get("PLUGINS_IMAGES") / image_name
         if path.exists():
-            image.set_from_pixbuf(
-                GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
-            )
+            texture = Gdk.Texture.new_from_filename(str(path))
+            image.set_from_paintable(texture)
             return image
 
         plugin = app.plugin_manager.get_plugin(self._manifest.short_name)
@@ -372,9 +371,8 @@ class PluginRow(Adw.ExpanderRow, SignalManager):
 
         path = Path(plugin.__path__) / image_name
         if path.exists():
-            image.set_from_pixbuf(
-                GdkPixbuf.Pixbuf.new_from_file_at_size(str(path), 16, 16)
-            )
+            texture = Gdk.Texture.new_from_filename(str(path))
+            image.set_from_paintable(texture)
             return image
 
         image.add_css_class("dimmed")
