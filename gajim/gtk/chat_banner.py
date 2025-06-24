@@ -57,6 +57,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     _share_menu_button: Gtk.MenuButton = Gtk.Template.Child()
     _contact_info_button: Gtk.Button = Gtk.Template.Child()
     _toggle_roster_button: Gtk.Button = Gtk.Template.Child()
+    _toggle_roster_label: Gtk.Label = Gtk.Template.Child()
     _toggle_roster_image: Gtk.Image = Gtk.Template.Child()
     _chat_menu_button: Gtk.MenuButton = Gtk.Template.Child()
 
@@ -118,6 +119,7 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
         self._update_phone_image()
         self._update_robot_image()
         self._update_roster_button()
+        self._update_participants_count_label()
         self._update_avatar()
         self._update_name_label()
         self._update_description_label()
@@ -219,9 +221,9 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     def _on_disco_info_update(
         self, _contact: GroupchatContact, _signal_name: str
     ) -> None:
-
         self._update_name_label()
         self._update_description_label()
+        self._update_participants_count_label()
 
     def _on_account_changed(self, event: AccountEnabled) -> None:
         self._update_account_badge()
@@ -403,6 +405,15 @@ class ChatBanner(Gtk.Box, EventHelper, SignalManager):
             else "lucide-chevron-left-symbolic"
         )
         self._toggle_roster_image.set_from_icon_name(icon)
+
+    def _update_participants_count_label(self) -> None:
+        if not isinstance(self._contact, GroupchatContact):
+            return
+
+        if self._contact.participants_count is None:
+            self._toggle_roster_label.set_text("")
+        else:
+            self._toggle_roster_label.set_text(str(self._contact.participants_count))
 
     @staticmethod
     def _get_name_from_contact(contact: types.ChatContactT) -> str:

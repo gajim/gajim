@@ -777,6 +777,14 @@ class GroupchatContact(CommonContact):
         return 'public'
 
     @property
+    def participants_count(self) -> int | None:
+        disco_info = self.get_disco()
+        if disco_info is None:
+            return None
+
+        return disco_info.muc_users
+
+    @property
     def encryption_available(self) -> bool:
         disco_info = self.get_disco()
         if disco_info is None:

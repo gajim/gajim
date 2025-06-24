@@ -196,6 +196,13 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkLabel" id="_toggle_roster_label">
+                        <style>
+                          <class name="small-label"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImage" id="_toggle_roster_image">
                         <property name="icon-name">lucide-chevron-left-symbolic</property>
                       </object>
