@@ -685,9 +685,10 @@ class DialogSetting(GenericSetting):
     def show_dialog(self) -> None:
         window = self.get_root()
         assert isinstance(window, Gtk.Root)
-        self._dialog_cls(self.account, window)
+        dialog = self._dialog_cls(self.account, window)
+        dialog.window.connect("close-request", self._on_close)
 
-    def on_destroy(self, *args: Any) -> None:
+    def _on_close(self, *args: Any) -> None:
         self.setting_value.set_text(self.get_setting_value())
 
     def get_setting_value(self) -> str:
