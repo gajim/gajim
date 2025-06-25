@@ -2,10 +2,15 @@
 #
 # SPDX-License-Identifier: GPL-3.0-only
 
+from __future__ import annotations
+
 from typing import Any
+from typing import TypeVar
 
 from gi.repository import Gio
 from gi.repository import GObject
+
+_T = TypeVar("_T")
 
 
 class SignalManager:

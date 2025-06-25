@@ -22,7 +22,6 @@ from nbxmpp.task import Task
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.events import SubscribedPresenceReceived
@@ -46,6 +45,7 @@ from gajim.gtk.contact_settings import ContactSettings
 from gajim.gtk.omemo_trust_manager import OMEMOTrustManager
 from gajim.gtk.sidebar_switcher import SideBarSwitcher
 from gajim.gtk.structs import AccountJidParam
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.vcard_grid import VCardGrid
 from gajim.gtk.widgets import GajimAppWindow
 
@@ -502,7 +502,7 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.groups_treeview.set_cursor(path, column, True)
 
 
-@Gtk.Template(filename=get_ui_path("device_info.ui"))
+@Gtk.Template(string=get_ui_string("device_info.ui"))
 class DeviceInfo(Adw.PreferencesGroup):
 
     __gtype_name__ = "DeviceInfo"

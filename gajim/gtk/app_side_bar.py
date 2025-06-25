@@ -13,7 +13,6 @@ from gi.repository import Gtk
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.events import AccountDisabled
 from gajim.common.events import AccountEnabled
@@ -25,10 +24,11 @@ from gajim.gtk.chat_page import ChatPage
 from gajim.gtk.sidebar_listbox import SideBarListBox
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.status_selector import StatusSelectorPopover
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.workspace_listbox import WorkspaceListBox
 
 
-@Gtk.Template(filename=get_ui_path("app_side_bar.ui"))
+@Gtk.Template(string=get_ui_string("app_side_bar.ui"))
 class AppSideBar(Gtk.Box, EventHelper):
     __gtype_name__ = "AppSideBar"
 
@@ -233,7 +233,7 @@ class AppSideBar(Gtk.Box, EventHelper):
         self._workspace_listbox.activate_workspace_number(number)
 
 
-@Gtk.Template(filename=get_ui_path("account_popover.ui"))
+@Gtk.Template(string=get_ui_string("account_popover.ui"))
 class AccountPopover(Gtk.Popover):
     __gtype_name__ = "AccountPopover"
 
@@ -278,7 +278,7 @@ class AccountPopover(Gtk.Popover):
         self.popdown()
 
 
-@Gtk.Template(filename=get_ui_path("account_popover_row.ui"))
+@Gtk.Template(string=get_ui_string("account_popover_row.ui"))
 class AccountPopoverRow(Gtk.ListBoxRow):
     __gtype_name__ = "AccountPopoverRow"
 

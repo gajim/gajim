@@ -10,17 +10,17 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.modules.contacts import BareContact
 
 from gajim.gtk.menus import get_account_menu
 from gajim.gtk.status_message_selector import StatusMessageSelector
 from gajim.gtk.status_selector import StatusSelector
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import open_window
 
 
-@Gtk.Template(filename=get_ui_path("account_page.ui"))
+@Gtk.Template(string=get_ui_string("account_page.ui"))
 class AccountPage(Gtk.Box):
     __gtype_name__ = "AccountPage"
 

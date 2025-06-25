@@ -17,7 +17,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.configpaths import get_ui_path
 from gajim.common.i18n import _
 from gajim.common.i18n import get_default_lang
 from gajim.common.i18n import get_short_lang_code
@@ -26,6 +25,7 @@ from gajim.gtk.completion.base import BaseCompletionListItem
 from gajim.gtk.completion.base import BaseCompletionProvider
 from gajim.gtk.completion.base import BaseCompletionViewItem
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 
 log = logging.getLogger("gajim.gtk.completion.emoji")
 
@@ -179,7 +179,7 @@ class EmojiCompletionListItem(BaseCompletionListItem, GObject.Object):
         return self.props.emoji
 
 
-@Gtk.Template(filename=get_ui_path("emoji_completion_view_item.ui"))
+@Gtk.Template(string=get_ui_string("emoji_completion_view_item.ui"))
 class EmojiCompletionViewItem(
     BaseCompletionViewItem[EmojiCompletionListItem], Gtk.Stack, SignalManager
 ):

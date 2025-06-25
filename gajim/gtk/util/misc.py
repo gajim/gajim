@@ -9,6 +9,8 @@ from typing import Any
 
 import datetime
 import logging
+import sys
+import xml.etree.ElementTree as ET
 from collections.abc import Iterator
 from functools import wraps
 
@@ -21,6 +23,7 @@ from gi.repository import Pango
 
 from gajim.common import app
 from gajim.common import types
+from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -302,3 +305,16 @@ def convert_py_to_glib_datetime(dt: datetime.datetime | datetime.date) -> GLib.D
     g_dt = GLib.DateTime.new_from_iso8601(dt.isoformat())
     assert g_dt is not None
     return g_dt
+
+
+def get_ui_string(filename: str) -> bytes:
+    path = get_ui_path(filename)
+
+    if sys.platform != "win32":
+        return path.read_bytes()
+
+    tree = ET.parse(path)
+    for node in tree.findall(".//*[@translatable='yes']"):
+        node.text = _(node.text) if node.text else ""
+        del node.attrib["translatable"]
+    return ET.tostring(tree.getroot(), method="xml")

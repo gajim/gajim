@@ -18,7 +18,6 @@ from nbxmpp import JID
 
 from gajim.common import app
 from gajim.common import ged
-from gajim.common.configpaths import get_ui_path
 from gajim.common.events import RegisterActions
 from gajim.common.i18n import _
 from gajim.common.modules.contacts import BareContact
@@ -31,6 +30,7 @@ from gajim.gtk.chat_list_header import ChatListHeader
 from gajim.gtk.chat_list_stack import ChatListStack
 from gajim.gtk.chat_stack import ChatStack
 from gajim.gtk.search_view import SearchView
+from gajim.gtk.util.misc import get_ui_string
 
 if TYPE_CHECKING:
     from gajim.gtk.control import ChatControl
@@ -38,7 +38,7 @@ if TYPE_CHECKING:
 log = logging.getLogger("gajim.gtk.chat_page")
 
 
-@Gtk.Template(filename=get_ui_path("chat_paned.ui"))
+@Gtk.Template(string=get_ui_string("chat_paned.ui"))
 class ChatPage(Gtk.Paned):
     __gtype_name__ = "ChatPage"
 

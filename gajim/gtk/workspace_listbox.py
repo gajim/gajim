@@ -16,7 +16,6 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 
 from gajim.gtk.chat_list_row import ChatListRow
@@ -24,6 +23,7 @@ from gajim.gtk.menus import get_workspace_menu
 from gajim.gtk.sidebar_listbox import SideBarListBoxRow
 from gajim.gtk.structs import ChatListEntryParam
 from gajim.gtk.util.misc import get_listbox_row_count
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.misc import iterate_listbox_children
 from gajim.gtk.util.window import open_window
 from gajim.gtk.widgets import GajimPopover
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 log = logging.getLogger("gajim.gtk.workspace_listbox")
 
 
-@Gtk.Template(filename=get_ui_path("workspace_listbox.ui"))
+@Gtk.Template(string=get_ui_string("workspace_listbox.ui"))
 class WorkspaceListBox(Gtk.ListBox):
     __gtype_name__ = "WorkspaceListBox"
 

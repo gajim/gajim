@@ -11,10 +11,10 @@ from gi.repository import GObject
 from gi.repository import Gtk
 
 from gajim.common import app
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 
 
 class SideBarListBox(Gtk.ListBox):
@@ -25,7 +25,7 @@ class SideBarListBox(Gtk.ListBox):
         self.set_name("SideBarListBox")
 
 
-@Gtk.Template(filename=get_ui_path("side_bar_listbox_row.ui"))
+@Gtk.Template(string=get_ui_string("side_bar_listbox_row.ui"))
 class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
     __gtype_name__ = "SideBarListBoxRow"
 

@@ -21,7 +21,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
@@ -34,6 +33,7 @@ from gajim.plugins.manifest import PluginManifest
 from gajim.plugins.repository import PluginRepository
 
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 
 log = logging.getLogger("gajim.gtk.activity_list")
 
@@ -369,7 +369,7 @@ class ActivityListItem(Generic[E], GObject.Object):
         return f"ActivityListItem: {self.account} - {self.activity_type}"
 
 
-@Gtk.Template(filename=get_ui_path("activity_list_row.ui"))
+@Gtk.Template(string=get_ui_string("activity_list_row.ui"))
 class ActivityViewItem(Gtk.Grid, SignalManager):
     __gtype_name__ = "ActivityViewItem"
 

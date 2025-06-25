@@ -47,9 +47,8 @@ def get_plugin_dirs() -> list[Path]:
             Path(_paths['PLUGINS_USER'])]
 
 
-def get_ui_path(filename: str) -> str:
-    path = _paths['GUI'] / filename
-    return str(path)
+def get_ui_path(filename: str) -> Path:
+    return _paths['GUI'] / filename
 
 
 def get_paths(type_: PathType) -> Generator[Path, None, None]:

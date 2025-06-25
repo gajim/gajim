@@ -18,7 +18,6 @@ from packaging.version import Version
 from gajim.common import app
 from gajim.common import configpaths
 from gajim.common import ged
-from gajim.common.configpaths import get_ui_path
 from gajim.common.exceptions import PluginsystemError
 from gajim.common.ged import EventHelper
 from gajim.common.i18n import _
@@ -34,6 +33,7 @@ from gajim.gtk.alert import InformationAlertDialog
 from gajim.gtk.filechoosers import FileChooserButton
 from gajim.gtk.filechoosers import Filter
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 
 log = logging.getLogger("gajim.gtk.plugins")
@@ -233,7 +233,7 @@ class Plugins(Adw.PreferencesGroup, EventHelper, SignalManager):
             row.set_update_available(True, new_version=manifest.version)
 
 
-@Gtk.Template(filename=get_ui_path("plugin_row.ui"))
+@Gtk.Template(string=get_ui_string("plugin_row.ui"))
 class PluginRow(Adw.ExpanderRow, SignalManager):
     __gtype_name__ = "PluginRow"
 

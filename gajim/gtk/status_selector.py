@@ -11,7 +11,6 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
@@ -20,9 +19,10 @@ from gajim.common.util.status import get_uf_show
 
 from gajim.gtk.avatar import get_show_circle
 from gajim.gtk.util.misc import convert_surface_to_texture
+from gajim.gtk.util.misc import get_ui_string
 
 
-@Gtk.Template(filename=get_ui_path("status_selector.ui"))
+@Gtk.Template(string=get_ui_string("status_selector.ui"))
 class StatusSelector(Gtk.MenuButton, EventHelper):
     __gtype_name__ = "StatusSelector"
 
@@ -102,7 +102,7 @@ class StatusSelector(Gtk.MenuButton, EventHelper):
         self._label.set_text(get_uf_show(show))
 
 
-@Gtk.Template(filename=get_ui_path("status_selector_popover.ui"))
+@Gtk.Template(string=get_ui_string("status_selector_popover.ui"))
 class StatusSelectorPopover(Gtk.Popover):
     __gtype_name__ = "StatusSelectorPopover"
 
@@ -122,7 +122,7 @@ class StatusSelectorPopover(Gtk.Popover):
         self.popdown()
 
 
-@Gtk.Template(filename=get_ui_path("status_selector_popover_button.ui"))
+@Gtk.Template(string=get_ui_string("status_selector_popover_button.ui"))
 class StatusSelectorPopoverButton(Gtk.Button):
     __gtype_name__ = "StatusSelectorPopoverButton"
 

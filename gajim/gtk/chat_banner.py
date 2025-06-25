@@ -12,7 +12,6 @@ from gi.repository import Gtk
 from gajim.common import app
 from gajim.common import ged
 from gajim.common import types
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.const import SimpleClientState
 from gajim.common.const import XmppUriQuery
@@ -36,10 +35,11 @@ from gajim.gtk.menus import get_self_contact_menu
 from gajim.gtk.menus import get_singlechat_menu
 from gajim.gtk.tooltips import ContactTooltip
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import AccountBadge
 
 
-@Gtk.Template(filename=get_ui_path("chat_banner.ui"))
+@Gtk.Template(string=get_ui_string("chat_banner.ui"))
 class ChatBanner(Gtk.Box, EventHelper, SignalManager):
     __gtype_name__ = "ChatBanner"
 

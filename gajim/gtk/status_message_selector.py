@@ -13,13 +13,14 @@ from gajim.common import app
 from gajim.common import events
 from gajim.common import ged
 from gajim.common.client import Client
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import SimpleClientState
 from gajim.common.ged import EventHelper
 from gajim.common.util.text import to_one_line
 
+from gajim.gtk.util.misc import get_ui_string
 
-@Gtk.Template(filename=get_ui_path("status_message_selector.ui"))
+
+@Gtk.Template(string=get_ui_string("status_message_selector.ui"))
 class StatusMessageSelector(Gtk.Box, EventHelper):
     __gtype_name__ = "StatusMessageSelector"
 

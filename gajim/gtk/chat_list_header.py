@@ -8,13 +8,12 @@ from typing import Literal
 
 from gi.repository import Gtk
 
-from gajim.common.configpaths import get_ui_path
-
 from gajim.gtk.chat_filter import ChatFilter
 from gajim.gtk.menus import get_start_chat_button_menu
+from gajim.gtk.util.misc import get_ui_string
 
 
-@Gtk.Template(filename=get_ui_path("chat_list_header.ui"))
+@Gtk.Template(string=get_ui_string("chat_list_header.ui"))
 class ChatListHeader(Gtk.Grid):
     __gtype_name__ = "ChatListHeader"
 

@@ -26,7 +26,6 @@ from gajim.common import events
 from gajim.common import ged
 from gajim.common import types
 from gajim.common.client import Client
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import Direction
 from gajim.common.const import Display
 from gajim.common.const import SimpleClientState
@@ -68,6 +67,7 @@ from gajim.gtk.structs import ModerateAllMessagesParam
 from gajim.gtk.structs import ModerateMessageParam
 from gajim.gtk.structs import OccupantParam
 from gajim.gtk.structs import RetractMessageParam
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.util.window import get_app_window
 from gajim.gtk.util.window import open_window
 from gajim.gtk.util.window import resize_window
@@ -81,7 +81,7 @@ if app.is_display(Display.X11):
 log = logging.getLogger("gajim.gtk.main")
 
 
-@Gtk.Template(filename=get_ui_path("main.ui"))
+@Gtk.Template(string=get_ui_string("main.ui"))
 class MainWindow(Adw.ApplicationWindow, EventHelper):
     __gtype_name__ = "MainWindow"
 

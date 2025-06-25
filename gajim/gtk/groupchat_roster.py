@@ -19,7 +19,6 @@ from nbxmpp.const import Affiliation
 
 from gajim.common import app
 from gajim.common import types
-from gajim.common.configpaths import get_ui_path
 from gajim.common.const import AvatarSize
 from gajim.common.events import MUCNicknameChanged
 from gajim.common.ged import EventHelper
@@ -35,6 +34,7 @@ from gajim.gtk.menus import get_groupchat_participant_menu
 from gajim.gtk.structs import AddChatActionParams
 from gajim.gtk.tooltips import GCTooltip
 from gajim.gtk.util.classes import SignalManager
+from gajim.gtk.util.misc import get_ui_string
 from gajim.gtk.widgets import GajimPopover
 
 log = logging.getLogger("gajim.gtk.groupchat_roster")
@@ -441,7 +441,7 @@ class GroupchatContactListItem(GObject.Object):
         return f"GroupchatContactListItem: {self.props.nick}"
 
 
-@Gtk.Template(filename=get_ui_path("groupchat_contact_view_item.ui"))
+@Gtk.Template(string=get_ui_string("groupchat_contact_view_item.ui"))
 class GroupchatContactViewItem(Gtk.Grid, SignalManager):
     __gtype_name__ = "GroupchatContactViewItem"
 
@@ -566,7 +566,7 @@ class GroupchatContactViewItem(Gtk.Grid, SignalManager):
         return value
 
 
-@Gtk.Template(filename=get_ui_path("groupchat_contact_header_view_item.ui"))
+@Gtk.Template(string=get_ui_string("groupchat_contact_header_view_item.ui"))
 class GroupchatContactHeaderViewItem(Gtk.Box):
     __gtype_name__ = "GroupchatContactHeaderViewItem"
 
