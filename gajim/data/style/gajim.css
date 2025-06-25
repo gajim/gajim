@@ -650,6 +650,9 @@ button.flat.link { padding: 0; border: 0; }
 .code-widget-header button {
     padding: 0;
 }
+.code-widget .view {
+    font-size: 100%;
+}
 
 /* ReferencedMessageWidget */
 .referenced-message {
