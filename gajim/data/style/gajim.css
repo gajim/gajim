@@ -802,8 +802,9 @@ list.sidebar-switcher .sidebar-row-header {
     padding-right: 4px;
 }
 #ProfileWindow popover { padding: 6px; }
-#ProfileWindow actionbar box  {
+#ProfileWindow actionbar > revealer > box  {
     padding: 0px;
+    background-color: var(--window-bg-color);
 }
 #ProfileWindow actionbar button {
    margin-top: 12px;
