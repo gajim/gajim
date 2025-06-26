@@ -253,6 +253,7 @@ button.flat.link { padding: 0; border: 0; }
     border-right: 1px solid color-mix(in srgb, currentColor 15%, transparent);
     background: var(--window-bg-color);
     padding-bottom: 10px;
+    padding-top: 5px;
 }
 
 /* AccountPopover */

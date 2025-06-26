@@ -85,6 +85,7 @@ log = logging.getLogger("gajim.gtk.main")
 class MainWindow(Adw.ApplicationWindow, EventHelper):
     __gtype_name__ = "MainWindow"
 
+    _header_bar: Adw.HeaderBar = Gtk.Template.Child()
     _app_side_bar: AppSideBar = Gtk.Template.Child()
     _main_stack: MainStack = Gtk.Template.Child()
 
@@ -101,6 +102,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._about_dialog = AboutDialog()
 
         self._add_actions()
+        self._add_settings_actions()
         self._add_stateful_actions()
         self._connect_actions()
 
@@ -381,6 +383,11 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             act = Gio.SimpleAction.new(action, variant_type)
             act.set_enabled(enabled)
             self.add_action(act)
+
+    def _add_settings_actions(self) -> None:
+        action = app.settings.create_action("show_header_bar")
+        action.simple_bind_property(self._header_bar, "visible")
+        self.add_action(action)
 
     def _add_stateful_actions(self) -> None:
         action = Gio.SimpleAction.new_stateful(

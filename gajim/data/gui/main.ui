@@ -37,7 +37,7 @@
     <property name="content">
       <object class="AdwToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar">
+          <object class="AdwHeaderBar" id="_header_bar">
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="tooltip-text">Help</property>

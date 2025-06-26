@@ -65,6 +65,7 @@ from gajim.common.setting_values import WORKSPACE_SETTINGS
 from gajim.common.setting_values import WorkspaceSettings
 from gajim.common.storage.base import Encoder
 from gajim.common.storage.base import json_decoder
+from gajim.common.util.classes import SettingsAction
 
 SETTING_TYPE = bool | int | str | object
 
@@ -157,6 +158,18 @@ class Settings:
                     func = handler()
                     if func is None or func.__self__ is object_:
                         handlers.remove(handler)
+
+    def create_action(self, setting: BoolSettings) -> SettingsAction:
+        # Currently only boolean app settings are supported
+        value = self.get_app_setting(setting)
+        action = SettingsAction(
+            name=setting.replace("_", "-"),
+            parameter_type=GLib.VariantType("b"),
+            state=GLib.Variant("b", value),
+        )
+
+        self.bind_signal(setting, action, "change_state")
+        return action
 
     def bind_signal(self,
                     setting: str,

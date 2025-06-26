@@ -343,6 +343,13 @@ class WindowBehaviour(PreferenceBox):
                 desc=_("Show window in the taskbar"),
                 callback=self._on_show_in_taskbar,
             ),
+            Setting(
+                SettingKind.SWITCH,
+                _("Show Header Bar"),
+                SettingType.CONFIG,
+                "show_header_bar",
+                desc=_("Show the header bar"),
+            ),
         ]
 
         PreferenceBox.__init__(self, settings)

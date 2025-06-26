@@ -86,6 +86,7 @@ BoolSettings = Literal[
     'use_stun_server',
     'use_urgency_hint',
     'video_see_self',
+    'show_header_bar',
 ]
 
 IntSettings = Literal[
@@ -228,6 +229,7 @@ APP_SETTINGS: dict[str, str | int | float | bool | list[Any]] = {
     'roster_theme': 'default',
     'search_engine': 'https://duckduckgo.com/?q=%s',
     'send_on_ctrl_enter': False,
+    'show_header_bar': True,
     'show_help_start_chat': True,
     'show_in_taskbar': True,
     'show_main_window_on_startup': 'always',
