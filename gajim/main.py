@@ -65,6 +65,8 @@ def _check_required_deps() -> None:
     except ImportError as error:
         sys.exit(error_message.format("PyGObject", error))
 
+    check_version("pygobject", gi.__version__, _MIN_PYGOBJECT_VER)
+
     gi.disable_legacy_autoinit()
 
     try:
@@ -101,7 +103,6 @@ def _check_required_deps() -> None:
     from gi.repository import Pango
 
     check_version("python-nbxmpp", nbxmpp.__version__, _MIN_NBXMPP_VER)
-    check_version("pygobject", gi.__version__, _MIN_PYGOBJECT_VER)
     check_version("libcairo", cairo.cairo_version_string(), _MIN_CAIRO_VER)
     check_version("pycairo", cairo.version, _MIN_CAIRO_VER)
     check_version("gtk4", gtk_ver, _MIN_GTK_VER)
