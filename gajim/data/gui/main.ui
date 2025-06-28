@@ -38,6 +38,14 @@
       <object class="AdwToolbarView">
         <child type="top">
           <object class="AdwHeaderBar" id="_header_bar">
+            <property name="show-start-title-buttons">false</property>
+            <child type="start">
+              <object class="GtkImage">
+                <property name="icon-name">gajim</property>
+                <property name="pixel-size">24</property>
+                <property name="margin-start">14</property>
+              </object>
+            </child>
             <child type="end">
               <object class="GtkMenuButton">
                 <property name="tooltip-text">Help</property>
