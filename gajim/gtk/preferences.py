@@ -345,10 +345,10 @@ class WindowBehaviour(PreferenceBox):
             ),
             Setting(
                 SettingKind.SWITCH,
-                _("Show Header Bar"),
+                _("Show Title Bar"),
                 SettingType.CONFIG,
                 "show_header_bar",
-                desc=_("Show the header bar"),
+                desc=_("Show the window’s title bar"),
             ),
         ]
 
