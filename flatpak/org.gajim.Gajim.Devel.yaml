@@ -159,11 +159,11 @@ modules:
   - name: python3-jaraco.functools
     buildsystem: simple
     build-commands:
-      - pip3 install jaraco.functools-4.1.0-py3-none-any.whl
+      - pip3 install jaraco_functools-4.2.1-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/9f/4f/24b319316142c44283d7540e76c7b5a6dbd5db623abd86bb7b3491c21018/jaraco.functools-4.1.0-py3-none-any.whl
-        sha256: ad159f13428bc4acbf5541ad6dec511f91573b90fba04df61dafa2a1231cf649
+        url: https://files.pythonhosted.org/packages/f3/fd/179a20f832824514df39a90bb0e5372b314fea99f217f5ab942b10a8a4e8/jaraco_functools-4.2.1-py3-none-any.whl
+        sha256: 590486285803805f4b1f99c60ca9e94ed348d4added84b74c7a12885561e524e
 
   - name: python3-keyring
     buildsystem: simple
@@ -235,29 +235,29 @@ modules:
   - name: python3-urllib3
     buildsystem: simple
     build-commands:
-      - pip3 install urllib3-2.4.0-py3-none-any.whl
+      - pip3 install urllib3-2.5.0-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/6b/11/cc635220681e93a0183390e26485430ca2c7b5f9d33b15c74c2861cb8091/urllib3-2.4.0-py3-none-any.whl
-        sha256: 4e16665048960a0900c702d4a66415956a584919c03361cac9f1df5c5dd7e813
+        url: https://files.pythonhosted.org/packages/a7/c2/fe1e52489ae3122415c51f387e221dd0773709bad6c6cdaa599e8a2c5185/urllib3-2.5.0-py3-none-any.whl
+        sha256: e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc
 
   - name: python3-certifi
     buildsystem: simple
     build-commands:
-      - pip3 install certifi-2025.4.26-py3-none-any.whl
+      - pip3 install certifi-2025.6.15-py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/4a/7e/3db2bd1b1f9e95f7cddca6d6e75e2f2bd9f51b1246e546d88addca0106bd/certifi-2025.4.26-py3-none-any.whl
-        sha256: 30350364dfe371162649852c63336a15c70c6510c2ad5015b21c2345311805f3
+        url: https://files.pythonhosted.org/packages/84/ae/320161bd181fc06471eed047ecce67b693fd7515b16d495d8932db763426/certifi-2025.6.15-py3-none-any.whl
+        sha256: 2e0c7ce7cb5d8f8634ca55d2ba7e6ec2689a2fd6537d8dec1296a477a4910057
 
   - name: python3-sentry-sdk
     buildsystem: simple
     build-commands:
-      - pip3 install sentry_sdk-2.29.1-py2.py3-none-any.whl
+      - pip3 install sentry_sdk-2.32.0-py2.py3-none-any.whl
     sources:
       - type: file
-        url: https://files.pythonhosted.org/packages/f0/e5/da07b0bd832cefd52d16f2b9bbbe31624d57552602c06631686b93ccb1bd/sentry_sdk-2.29.1-py2.py3-none-any.whl
-        sha256: 90862fe0616ded4572da6c9dadb363121a1ae49a49e21c418f0634e9d10b4c19
+        url: https://files.pythonhosted.org/packages/01/a1/fc4856bd02d2097324fb7ce05b3021fb850f864b83ca765f6e37e92ff8ca/sentry_sdk-2.32.0-py2.py3-none-any.whl
+        sha256: 6cf51521b099562d7ce3606da928c473643abe99b00ce4cb5626ea735f4ec345
 
   - name: python3-typing-extensions
     buildsystem: simple
