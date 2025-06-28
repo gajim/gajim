@@ -228,20 +228,20 @@ class SubscribePage(BaseActivityPage):
         jid = JID.from_string(event.jid)
 
         deny_param = structs.AccountJidParam(account=event.account, jid=jid)
+        self._ui.subscribe_deny_button.set_action_target_value(deny_param.to_variant())
         self._ui.subscribe_deny_button.set_action_name(
             f"app.{event.account}-subscription-deny"
         )
-        self._ui.subscribe_deny_button.set_action_target_value(deny_param.to_variant())
         self._connect(self._ui.subscribe_deny_button, "clicked", self._on_click, item)
 
         accept_param = structs.SubscriptionAcceptParam(
             account=event.account, jid=jid, nickname=event.user_nick
         )
-        self._ui.subscribe_accept_button.set_action_name(
-            f"app.{event.account}-subscription-accept"
-        )
         self._ui.subscribe_accept_button.set_action_target_value(
             accept_param.to_variant()
+        )
+        self._ui.subscribe_accept_button.set_action_name(
+            f"app.{event.account}-subscription-accept"
         )
         self._connect(self._ui.subscribe_deny_button, "clicked", self._on_click, item)
 
@@ -278,11 +278,11 @@ class UnsubscribedPage(BaseActivityPage):
 
         self._ui.unsubscribed_box.set_sensitive(item.state.get("state") != "completed")
         self._ui.unsubscribed_box.set_visible(True)
-        self._ui.unsubscribed_remove_button.set_action_name(
-            f"app.{event.account}-remove-contact"
-        )
         self._ui.unsubscribed_remove_button.set_action_target_value(
             GLib.Variant("as", [event.account, str(event.jid)])
+        )
+        self._ui.unsubscribed_remove_button.set_action_name(
+            f"app.{event.account}-remove-contact"
         )
         self._connect(
             self._ui.unsubscribed_remove_button, "clicked", self._on_clicked, item

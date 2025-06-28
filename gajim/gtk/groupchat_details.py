@@ -139,8 +139,8 @@ class GroupchatDetails(GajimAppWindow):
         remove_history_button.set_halign(Gtk.Align.START)
         remove_history_button.add_css_class("destructive-action")
         params = AccountJidParam(account=self.account, jid=self._contact.jid)
-        remove_history_button.set_action_name("app.remove-history")
         remove_history_button.set_action_target_value(params.to_variant())
+        remove_history_button.set_action_name("app.remove-history")
         main_box.append(remove_history_button)
 
         scrolled_window = Gtk.ScrolledWindow()

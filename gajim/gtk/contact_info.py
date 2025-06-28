@@ -270,8 +270,8 @@ class ContactInfo(GajimAppWindow, EventHelper):
         self._ui.contact_settings_box.add(contact_settings)
 
         params = AccountJidParam(account=self.account, jid=self.contact.jid)
-        self._ui.remove_history_button.set_action_name("app.remove-history")
         self._ui.remove_history_button.set_action_target_value(params.to_variant())
+        self._ui.remove_history_button.set_action_name("app.remove-history")
 
     def _fill_groups_page(self, contact: BareContact) -> None:
         if not contact.is_in_roster or not self._client.state.is_available:
