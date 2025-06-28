@@ -122,8 +122,8 @@ class SideBarListBoxRow(Gtk.ListBoxRow, SignalManager):
         self._connect(obj, "notify::unread-count", _on_notify)
 
     def set_unread_count(self, count: int) -> None:
+        self._label.set_visible(count != 0)
         if count == 0:
-            self._label.set_visible(False)
             return
 
         if count < 1000:

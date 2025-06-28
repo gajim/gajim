@@ -111,6 +111,7 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         self._emoji_chooser: EmojiChooser | None = None
 
         self._chat_page = self._main_stack.get_chat_page()
+        self._app_side_bar.set_chat_page(self._chat_page)
 
         self.connect("notify::is-active", self._on_window_active)
         self.connect("close-request", self._on_close_request)
