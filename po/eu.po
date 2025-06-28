@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -4805,6 +4805,10 @@ msgid "Show Subject"
 msgstr "Gaia"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Trans_porteak Erakutsi"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Trans_porteak Erakutsi"
 
@@ -4885,6 +4889,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "E_rabili ikonifikazioa (aka. notification area)"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "ez erakutsi zerrenda sistemako zeregin barran."
 
 #, fuzzy
 msgid "Show window in the taskbar"

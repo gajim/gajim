@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2025-06-20 08:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -4342,6 +4342,10 @@ msgstr "Показывать изменения статуса"
 msgid "Show Subject"
 msgstr "Показывать тему"
 
+#, fuzzy
+msgid "Show Title Bar"
+msgstr "Показывать на панели задач"
+
 msgid "Show Transfers"
 msgstr "Показать передачу файлов"
 
@@ -4419,6 +4423,10 @@ msgstr "Показывать предложения для шорткодов, �
 
 msgid "Show the application's version"
 msgstr "Показать версию приложения"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Показывать окно на панели задач"
 
 msgid "Show window in the taskbar"
 msgstr "Показывать окно на панели задач"

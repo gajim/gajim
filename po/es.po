@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
-"PO-Revision-Date: 2025-06-22 17:12+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"PO-Revision-Date: 2025-06-28 08:27+0000\n"
 "Last-Translator: El gran Pirujo <boina@disroot.org>\n"
 "Language-Team: Spanish <https://translate.gajim.org/projects/gajim/master/es/"
 ">\n"
@@ -2296,7 +2296,6 @@ msgstr "Oculto"
 msgid "Hide"
 msgstr "Ocultar"
 
-#, fuzzy
 msgid "Hide Chat List"
 msgstr "Ocultar lista de chat"
 
@@ -4161,7 +4160,6 @@ msgstr "Compartir vídeo"
 msgid "Share my online status"
 msgstr "Compartir mi estado"
 
-#, fuzzy
 msgid "Show Chat List"
 msgstr "Mostrar lista de chat"
 
@@ -4200,6 +4198,9 @@ msgstr "Mostrar cambios de estado"
 
 msgid "Show Subject"
 msgstr "Mostrar asunto"
+
+msgid "Show Title Bar"
+msgstr "Mostrar barra de título"
 
 msgid "Show Transfers"
 msgstr "Mostrar transferencias"
@@ -4275,6 +4276,9 @@ msgstr "Mostrar sugerencias para atajos, p.ej. :+1:"
 
 msgid "Show the application's version"
 msgstr "Mostrar la versión de la aplicación"
+
+msgid "Show the window’s title bar"
+msgstr "Mostrar barra de título de las ventanas"
 
 msgid "Show window in the taskbar"
 msgstr "Mostrar ventana en la barra de tareas"
@@ -6803,6 +6807,9 @@ msgstr "…o soltarla aqui"
 #~ msgstr ""
 #~ "Muestra el estado del chat (p. ej. \"está escribiendo...\") junto al "
 #~ "nombre de tu contacto"
+
+#~ msgid "Show the header bar"
+#~ msgstr "Mostrar la barra de cabecera"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Mostrar tu propia transmisión de vídeo en llamadas"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -4821,6 +4821,10 @@ msgid "Show Subject"
 msgstr "Emne"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Vis Trans_porter"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Vis Trans_porter"
 
@@ -4901,6 +4905,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Vis et faneblad når der kun er en samtale?"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Ikke hvis kontaktvindue i vindueslisten."
 
 #, fuzzy
 msgid "Show window in the taskbar"

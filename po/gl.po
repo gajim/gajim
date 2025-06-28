@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -4814,6 +4814,10 @@ msgid "Show Subject"
 msgstr "Asunto"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Amosar os trans_portes"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Amosar os trans_portes"
 
@@ -4894,6 +4898,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Usar a icona na á_rea de notificación"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Non amosar a listaxe na barra de tarefas."
 
 #, fuzzy
 msgid "Show window in the taskbar"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2022-12-18 12:24+0000\n"
 "Last-Translator: Hendursaga <hendursaga@aol.com>\n"
 "Language-Team: Esperanto <https://translate.gajim.org/projects/gajim/master/"
@@ -4803,6 +4803,10 @@ msgid "Show Subject"
 msgstr "Temo"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Montri Trans_portilojn"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Montri Trans_portilojn"
 
@@ -4883,6 +4887,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Uzi pletpiktogramon"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Ne montri kontaktliston en la sistema taskostrio."
 
 #, fuzzy
 msgid "Show window in the taskbar"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -4769,6 +4769,10 @@ msgid "Show Subject"
 msgstr "Tema"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Rodyti _Pernašas"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Rodyti _Pernašas"
 
@@ -4849,6 +4853,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Naudoti piktogramą trėjuje (pranešimų panelės piktograma)"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Don't show roster in the system taskbar."
 
 #, fuzzy
 msgid "Show window in the taskbar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2025-05-01 23:12+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -4248,6 +4248,9 @@ msgstr ""
 msgid "Show Subject"
 msgstr ""
 
+msgid "Show Title Bar"
+msgstr ""
+
 #, fuzzy
 msgid "Show Transfers"
 msgstr "ن_قل الملفات"
@@ -4312,6 +4315,9 @@ msgid "Show suggestions for shortcodes, e.g. :+1:"
 msgstr ""
 
 msgid "Show the application's version"
+msgstr ""
+
+msgid "Show the window’s title bar"
 msgstr ""
 
 msgid "Show window in the taskbar"

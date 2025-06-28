@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
-"PO-Revision-Date: 2025-06-22 23:12+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"PO-Revision-Date: 2025-06-28 08:27+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -4231,6 +4231,9 @@ msgstr "Statusänderungen anzeigen"
 msgid "Show Subject"
 msgstr "Thema anzeigen"
 
+msgid "Show Title Bar"
+msgstr "Titelleiste anzeigen"
+
 msgid "Show Transfers"
 msgstr "Dateiübertragungen anzeigen"
 
@@ -4306,6 +4309,9 @@ msgstr "Zeige Empfehlungen für Shortcodes, z.B. :+1:"
 
 msgid "Show the application's version"
 msgstr "Version des Programms anzeigen"
+
+msgid "Show the window’s title bar"
+msgstr "Titelleiste des Fensters anzeigen"
 
 msgid "Show window in the taskbar"
 msgstr "Fenster in der Taskleiste anzeigen"
@@ -6865,6 +6871,9 @@ msgstr "… oder hierher ziehen"
 #~ msgstr ""
 #~ "Chatstatus des Kontakts (z.B. schreibt gerade) neben dem Namen des "
 #~ "Kontakts anzeigen"
+
+#~ msgid "Show the header bar"
+#~ msgstr "Titelleiste des Fensters anzeigen"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Deinen eigenen Videostream in Anrufen anzeigen"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -4928,6 +4928,10 @@ msgid "Show Subject"
 msgstr "נושא"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "הצג מו_בילים"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "הצג מו_בילים"
 
@@ -5008,6 +5012,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "הצג סמל אזור התראה:"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "אל תציג את הרשימה בתוך שורת המשימות של המערכת."
 
 #, fuzzy
 msgid "Show window in the taskbar"

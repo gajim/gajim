@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -4830,6 +4830,10 @@ msgid "Show Subject"
 msgstr "Tema"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Prikaži _Prijenose"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Prikaži _Prijenose"
 
@@ -4910,6 +4914,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Koristi t_ray ikonu"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Ne prikazuj listu kontakata u programskoj traci."
 
 #, fuzzy
 msgid "Show window in the taskbar"

@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
-"PO-Revision-Date: 2025-06-23 01:12+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"PO-Revision-Date: 2025-06-27 01:12+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -170,7 +170,7 @@ msgstr "%s 是一个文件但它应该是一个目录"
 
 #, python-format
 msgid "%s is already in your contact list"
-msgstr "%s 已在您的联系人列表"
+msgstr "%s 已在您的联系人列表中"
 
 #, python-format
 msgid "%s is calling"
@@ -360,13 +360,13 @@ msgid ""
 msgstr "将在群聊中突出显示的单词列表（以英文分号分隔）。"
 
 msgid "A new group chat has been created"
-msgstr "已创建新群聊"
+msgstr "新群聊已创建"
 
 msgid "A restart may be required for some settings to take effect"
 msgstr "某些设置可能需要重启才能生效"
 
 msgid "A setting not related to privacy has been changed"
-msgstr "已更改与隐私无关的设置"
+msgstr "非隐私相关的设置已更改"
 
 #, python-format
 msgid "ALSA: %s"
@@ -531,7 +531,7 @@ msgid "Add some details…"
 msgstr "添加一些详情…"
 
 msgid "Add this certificate to the list of _trusted certificates"
-msgstr "将此证书添加到可信证书列表(_T)"
+msgstr "将此证书添加到受信任的证书列表(_T)"
 
 msgid "Add to Group"
 msgstr "添加到分组"
@@ -626,10 +626,10 @@ msgstr "所有文件"
 
 #, python-format
 msgid "All hats of %s have been removed"
-msgstr "已移除 %s 的所有头衔"
+msgstr "%s 的所有头衔已被移除"
 
 msgid "All of your hats have been removed"
-msgstr "已移除您的所有头衔"
+msgstr "您的所有头衔已被移除"
 
 msgid "All other group chat participants can see your XMPP address"
 msgstr "所有其他群聊参与者都可以查看您的 XMPP 地址"
@@ -649,7 +649,7 @@ msgid "An Error Occurred"
 msgstr "出错"
 
 msgid "An entry with this XMPP Address already exists"
-msgstr "已经存在一个包含此 XMPP 地址的条目"
+msgstr "具有此 XMPP 地址的条目已存在"
 
 msgid "An error occurred"
 msgstr "出错"
@@ -2199,7 +2199,7 @@ msgid "Group Chats"
 msgstr "群聊"
 
 msgid "Group chat already exists"
-msgstr "群聊已经存在"
+msgstr "群聊已存在"
 
 msgid "Group chat can be found via search"
 msgstr "可以通过搜索找到此群聊"
@@ -2752,7 +2752,7 @@ msgid "Messages are archived on the server"
 msgstr "消息在服务器上归档"
 
 msgid "Messages from this users are blocked"
-msgstr "来自此用户的消息已被屏蔽"
+msgstr "此用户的消息已被屏蔽"
 
 msgid "Minimize"
 msgstr "最小化"
@@ -3323,7 +3323,7 @@ msgstr ""
 
 #, python-format
 msgid "Please make sure you are connected with \"%s\"."
-msgstr "请确保您已经连接到“%s”。"
+msgstr "请确保您已连接到“%s”。"
 
 msgid ""
 "Please select one of your accounts.\n"
@@ -3346,7 +3346,7 @@ msgid "Plugin Update"
 msgstr "插件更新"
 
 msgid "Plugin already exists"
-msgstr "插件已经存在"
+msgstr "插件已存在"
 
 msgid "Plugin manager"
 msgstr "插件管理器"
@@ -3361,7 +3361,7 @@ msgid "Port"
 msgstr "端口"
 
 msgid "Port must be a number between 0 and 65535"
-msgstr "端口必须为一个 0 到 65535 之间的数字"
+msgstr "端口必须是 0 到 65535 之间的数字"
 
 msgid "Post Office Box"
 msgstr "邮政信箱"
@@ -4135,6 +4135,10 @@ msgstr "显示状态更改"
 msgid "Show Subject"
 msgstr "显示主题"
 
+#, fuzzy
+msgid "Show Title Bar"
+msgstr "显示标题栏"
+
 msgid "Show Transfers"
 msgstr "显示传输"
 
@@ -4200,6 +4204,10 @@ msgstr "显示短代码建议，例如 :+1:"
 
 msgid "Show the application's version"
 msgstr "显示应用程序的版本"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "在任务栏中显示窗口"
 
 msgid "Show window in the taskbar"
 msgstr "在任务栏中显示窗口"
@@ -4584,7 +4592,7 @@ msgid "This Device"
 msgstr "此设备"
 
 msgid "This account has already been added"
-msgstr "已添加此账号"
+msgstr "此账号已被添加"
 
 msgid "This address does not seem to offer any gateway service."
 msgstr "此地址似乎未提供任何网关服务。"
@@ -4906,7 +4914,7 @@ msgid "Until Gajim is Closed"
 msgstr "直到 Gajim 关闭"
 
 msgid "Untrusted"
-msgstr "未受信任"
+msgstr "不受信任"
 
 msgid "Update"
 msgstr "更新"
@@ -5313,13 +5321,13 @@ msgid "Your XMPP address (e.g. user@example.org)"
 msgstr "您的 XMPP 地址（例如：user@example.org）"
 
 msgid "Your account has has been removed successfully."
-msgstr "已成功移除您的账号。"
+msgstr "您的账号已成功移除。"
 
 msgid "Your affiliations to this group chat have been removed"
 msgstr "您在此群聊中的从属关系已被移除"
 
 msgid "Your archiving preferences have successfully been saved."
-msgstr "已成功保存您的归档首选项。"
+msgstr "您的归档首选项已成功保存。"
 
 msgid "Your chat history database has been migrated successfully."
 msgstr "您的聊天记录数据库已成功迁移。"
@@ -5338,13 +5346,13 @@ msgid "Your message can not be sent until you are connected."
 msgstr "连接后才能发送您的消息。"
 
 msgid "Your messages have been exported successfully"
-msgstr "您的消息已经成功导出"
+msgstr "您的消息已成功导出"
 
 msgid "Your password"
 msgstr "您的密码"
 
 msgid "Your password has successfully been changed."
-msgstr "已成功更改您的密码。"
+msgstr "您的密码已成功更改。"
 
 msgid "Your public key or authentication certificate"
 msgstr "您的公钥或身份验证证书"
@@ -5382,7 +5390,7 @@ msgid "_Account"
 msgstr "账号(_A)"
 
 msgid "_Add to Trusted Certificates"
-msgstr "添加到可信证书(_A)"
+msgstr "添加到受信任的证书(_A)"
 
 msgid "_Address"
 msgstr "地址(_A)"
@@ -6665,6 +6673,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr "在聊天标签页横幅联系人名称处显示聊天状态（例如，正在输入…）"
+
+#~ msgid "Show the header bar"
+#~ msgstr "显示标题栏"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "在通话中显示您自己的视频流"

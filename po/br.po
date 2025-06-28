@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -4787,6 +4787,10 @@ msgid "Show Subject"
 msgstr "Titl"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Dorioù"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Dorioù"
 
@@ -4861,6 +4865,9 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "_Implij an arlun-gelaouiñ (trayicon)"
+
+msgid "Show the window’s title bar"
+msgstr ""
 
 msgid "Show window in the taskbar"
 msgstr ""

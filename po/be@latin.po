@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2009-08-19 23:41+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -4807,6 +4807,10 @@ msgid "Show Subject"
 msgstr "Tema"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Pakažy _transparty"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Pakažy _transparty"
 
@@ -4887,6 +4891,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Pakazvaj _ikonu ŭ poli nahadvańnia"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Nie pakazvaj śpis kantaktaŭ na paneli zadańniaŭ."
 
 #, fuzzy
 msgid "Show window in the taskbar"

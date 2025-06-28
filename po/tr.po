@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -4791,6 +4791,10 @@ msgid "Show Subject"
 msgstr "Konu"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "_XML Konsolu Göster"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "_XML Konsolu Göster"
 
@@ -4864,6 +4868,10 @@ msgstr ""
 
 msgid "Show the application's version"
 msgstr ""
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Gajimi her zaman kapat"
 
 #, fuzzy
 msgid "Show window in the taskbar"

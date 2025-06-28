@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
-"PO-Revision-Date: 2025-06-23 16:12+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"PO-Revision-Date: 2025-06-28 11:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
 "hu/>\n"
@@ -4179,6 +4179,9 @@ msgstr "Állapotváltozások jelzése"
 msgid "Show Subject"
 msgstr "Téma megjelenítése"
 
+msgid "Show Title Bar"
+msgstr "Címsor megjelenítése"
+
 msgid "Show Transfers"
 msgstr "Fájlátvitelek"
 
@@ -4251,6 +4254,9 @@ msgstr "Javaslatok megjelenítése hangulatjelkódok (pl. :+1:) beírásakor"
 
 msgid "Show the application's version"
 msgstr "Az alkalmazás verziószámának megjelenítése"
+
+msgid "Show the window’s title bar"
+msgstr "Az ablak címsorának megjelenítése"
 
 msgid "Show window in the taskbar"
 msgstr "Az ablak megjelenítése a feladatsávon"
@@ -6764,6 +6770,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Show chat state (e.g. \"is typing…\") next to your contact’s name"
 #~ msgstr ""
 #~ "A beszélgetésállapot (pl. „éppen ír…”) jelzése a beszélgetőtárs neve után"
+
+#~ msgid "Show the header bar"
+#~ msgstr "A fejlécsáv megjelenítése"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "A hívások alatt a saját képem is legyen látható"

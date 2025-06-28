@@ -12,11 +12,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
-"PO-Revision-Date: 2025-06-22 23:12+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"PO-Revision-Date: 2025-06-27 15:12+0000\n"
 "Last-Translator: Codimp <contact@lithio.fr>\n"
-"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/>"
-"\n"
+"Language-Team: French <https://translate.gajim.org/projects/gajim/master/fr/"
+">\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4241,6 +4241,10 @@ msgstr "Afficher les changements d’état"
 msgid "Show Subject"
 msgstr "Afficher le sujet"
 
+#, fuzzy
+msgid "Show Title Bar"
+msgstr "Montrer la barre de titre"
+
 msgid "Show Transfers"
 msgstr "Afficher les transferts"
 
@@ -4318,6 +4322,10 @@ msgstr "Afficher des suggestions pour les codes courts, par ex. :+1:"
 
 msgid "Show the application's version"
 msgstr "Afficher la version de l’application"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Afficher la fenêtre dans la barre des tâches"
 
 msgid "Show window in the taskbar"
 msgstr "Afficher la fenêtre dans la barre des tâches"
@@ -6874,6 +6882,9 @@ msgstr "... ou bien déposez ici"
 #~ msgstr ""
 #~ "Afficher l'état du contact (ex. \"en train d'écrire\") dans la bannière "
 #~ "de la discussion"
+
+#~ msgid "Show the header bar"
+#~ msgstr "Montre la barre de titre"
 
 #~ msgid "Show your own video stream in calls"
 #~ msgstr "Montrer votre propre flux vidéo dans les appels"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2025-06-18 03:12+0000\n"
 "Last-Translator: 翻訳者X <tairanto2@wail.ch>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -4202,6 +4202,10 @@ msgstr "状況変更を表示する"
 msgid "Show Subject"
 msgstr "題を表示する"
 
+#, fuzzy
+msgid "Show Title Bar"
+msgstr "タスクバーに表示する"
+
 msgid "Show Transfers"
 msgstr "中継先を表示"
 
@@ -4273,6 +4277,10 @@ msgstr "ショートコードのヒントを表示します。例 :+1:"
 
 msgid "Show the application's version"
 msgstr "アプリケーションのバージョンを表示"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "ウィンドウをタスクバーに表示します"
 
 msgid "Show window in the taskbar"
 msgstr "ウィンドウをタスクバーに表示します"

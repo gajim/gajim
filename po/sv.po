@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -4559,6 +4559,10 @@ msgid "Show Subject"
 msgstr "Ämne"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "Visa _transporter"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "Visa _transporter"
 
@@ -4633,6 +4637,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "Använd _aktivitetsfältet (aka. notifieringsyta)"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Visa inte kontaktlista i systemets fönsterlista."
 
 #, fuzzy
 msgid "Show window in the taskbar"

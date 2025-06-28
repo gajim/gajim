@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2025-03-09 12:48+0000\n"
 "Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -4719,6 +4719,10 @@ msgid "Show Subject"
 msgstr "主題"
 
 #, fuzzy
+msgid "Show Title Bar"
+msgstr "顯示代理(_P)"
+
+#, fuzzy
 msgid "Show Transfers"
 msgstr "顯示代理(_P)"
 
@@ -4795,6 +4799,10 @@ msgstr ""
 #, fuzzy
 msgid "Show the application's version"
 msgstr "在通知區域顯示圖示:"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "不要將聯絡人清單視窗顯示在系統的工作列中。"
 
 #, fuzzy
 msgid "Show window in the taskbar"

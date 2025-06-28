@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 20:57+0000\n"
+"POT-Creation-Date: 2025-06-28 07:33+0000\n"
 "PO-Revision-Date: 2025-06-08 09:12+0000\n"
 "Last-Translator: \"qa@@NGaZRs7ZopdfFbXX\" <fabiol@mailbox.org>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -4227,6 +4227,10 @@ msgstr "Mostra Cambiamenti di Stato"
 msgid "Show Subject"
 msgstr "Mostra Argomento"
 
+#, fuzzy
+msgid "Show Title Bar"
+msgstr "Mostra Transport"
+
 msgid "Show Transfers"
 msgstr "Mostra Transport"
 
@@ -4302,6 +4306,10 @@ msgstr "Mostra suggerimenti per i codici brevi, es. :+1:"
 
 msgid "Show the application's version"
 msgstr "Mostra la versione dell'applicazione"
+
+#, fuzzy
+msgid "Show the window’s title bar"
+msgstr "Mostra finestra nella barra delle applicazioni"
 
 msgid "Show window in the taskbar"
 msgstr "Mostra finestra nella barra delle applicazioni"
