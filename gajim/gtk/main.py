@@ -730,7 +730,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             _("Do you want to block %(name)s?") % {"name": params.resource},
             confirm_label=_("_Block"),
             callback=_on_response,
-            parent=app.window,
         )
 
     @actionmethod
@@ -749,7 +748,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             _("Do you want to unblock %(name)s?") % {"name": params.resource},
             confirm_label=_("_Unblock"),
             callback=_on_response,
-            parent=app.window,
         )
 
     @actionmethod
@@ -773,7 +771,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             confirm_label=_("_Retract"),
             appearance="destructive",
             callback=_on_response,
-            parent=app.window,
         )
 
     @actionmethod
@@ -794,7 +791,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             appearance="destructive",
             extra_widget=DialogEntry(text=_("Spam")),
             callback=_on_response,
-            parent=app.window,
         )
 
     @actionmethod
@@ -837,7 +833,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             appearance="destructive",
             extra_widget=DialogEntry(text=_("Spam")),
             callback=_on_response,
-            parent=app.window,
         )
 
     @actionmethod
@@ -859,7 +854,6 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
             confirm_label=_("_Delete"),
             appearance="destructive",
             callback=_on_response,
-            parent=app.window,
         )
 
     def _on_handle_uri(self, _action: Gio.SimpleAction, param: GLib.Variant) -> None:

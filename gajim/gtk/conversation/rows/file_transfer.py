@@ -86,7 +86,7 @@ class FileTransferRow(BaseRow):
             return
 
         if state.is_error:
-            InformationAlertDialog(_("Error"), transfer.error_text, parent=app.window)
+            InformationAlertDialog(_("Error"), transfer.error_text)
             cast(Gtk.ListBox, self.get_parent()).remove(self)
 
         if state.is_finished or state.is_cancelled:

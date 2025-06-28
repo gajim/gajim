@@ -305,7 +305,6 @@ class ChatListStack(Gtk.Stack, EventHelper):
             emit_responses=["leave", "leave_perm"],
             extra_widget=DialogCheckButton(_("_Do not ask me again")),
             callback=_leave,
-            parent=app.window,
         )
 
     def remove_chats_for_account(self, account: str) -> None:

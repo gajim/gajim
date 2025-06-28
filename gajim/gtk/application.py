@@ -876,7 +876,6 @@ class GajimApplication(Adw.Application, CoreApplication):
             confirm_label=_("_Remove"),
             appearance="destructive",
             callback=_on_response,
-            parent=app.window,
         )
 
     @staticmethod
@@ -902,5 +901,4 @@ class GajimApplication(Adw.Application, CoreApplication):
             confirm_label=_("_Remove"),
             appearance="destructive",
             callback=_on_response,
-            parent=app.window,
         )
