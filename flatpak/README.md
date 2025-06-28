@@ -79,9 +79,9 @@ cd ~/Gajim
 
 ### Install Gajim and dependencies
 
-Replace install path `~/Gajim/gajim_flatpak` with an install path of your choice.
-
-*Note: Remove `--user` if you want a system-wide installation.*
+- Replace install path `~/Gajim/gajim_flatpak` with an install path of your choice.
+- Remove `--user` if you want a system-wide installation.
+- Replace `org.gajim.Gajim.yaml` with `org.gajim.Gajim.Devel.yaml` if you want to build the current master branch
 
 ```bash
 flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
