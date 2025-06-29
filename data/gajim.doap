@@ -30,7 +30,7 @@
     <license rdf:resource="http://usefulinc.com/doap/licenses/gplv3"/>
 
     <schema:logo rdf:resource="https://gajim.org/img/gajim-logo.svg"/>
-    <schema:screenshot rdf:resource="https://gajim.org/img/news/main-window.png"/>
+    <schema:screenshot rdf:resource="https://gajim.org/img/screenshots/main-window.png"/>
 
     <programming-language>Python</programming-language>
     <os>Linux</os>
