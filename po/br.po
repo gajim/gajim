@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -914,9 +914,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 #, fuzzy
 msgid "Automatically accept all contact requests"
 msgstr "Aotren war-eeun an darempred"
@@ -1190,15 +1187,15 @@ msgstr "Darempredoù"
 msgid "Chat Type"
 msgstr "Doare"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Nevez 'zo:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Flapoù"
@@ -1398,9 +1395,6 @@ msgstr "Kevreadenn"
 msgid "Connect on startup"
 msgstr "K_evreañ en ur loc'hañ Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "O lugañ"
 
@@ -1494,10 +1488,6 @@ msgstr "Darempredoù"
 #, fuzzy
 msgid "Contact information"
 msgstr "Titouroù"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Darempredoù"
 
 msgid "Contacts"
 msgstr "Darempredoù"
@@ -1924,9 +1914,6 @@ msgstr "Stad:"
 msgid "Drop files here"
 msgstr "Kas ur restr d'un darempred"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "O tebriñ"
 
@@ -2096,9 +2083,6 @@ msgstr "Fazi en ur lenn ar restr:"
 msgid "Error: %s (mime types: %s)"
 msgstr "Fazi en ur lenn ar restr:"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Darvoud"
 
@@ -2165,6 +2149,11 @@ msgstr "Kemennadenn o _tegouezhout:"
 msgid "Export…"
 msgstr "Ezporzhiañ"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "Chomlec'h 2:"
@@ -2198,10 +2187,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Features"
-msgstr "Perzhioù ar servijerien"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Perzhioù ar servijerien"
 
 msgid "Feedback"
@@ -2432,11 +2417,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2549,10 +2529,6 @@ msgstr "Ce salon n'existe pas."
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Flapoù a-stroll"
 
 #, fuzzy
 msgid "Groups"
@@ -2808,9 +2784,6 @@ msgstr "Diwelus"
 msgid "Invite Contacts"
 msgstr "Darempredoù"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Darempredoù"
@@ -2903,9 +2876,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Nevez 'zo:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3017,11 +2987,6 @@ msgstr "échec lors de la publication de votre vCard"
 
 msgid "Look it up in _Dictionary"
 msgstr "Klask er _geriadur"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3261,9 +3226,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Morse"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3582,9 +3544,6 @@ msgstr "_Merour-ez"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3836,10 +3795,6 @@ msgstr "échec lors de la publication de votre vCard"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Bez ez eus eus ar restr-mañ dija"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "échec lors de la publication de votre vCard"
 
 msgid "Plugins"
 msgstr ""
@@ -4515,6 +4470,12 @@ msgstr "Klask"
 msgid "Secure Password Storage"
 msgstr "Enrollañ ar ger-kuzh"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4702,9 +4663,6 @@ msgstr "Kasour-ez"
 #, fuzzy
 msgid "Set status message"
 msgstr "titour stad"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5040,6 +4998,12 @@ msgstr "Titour-stad"
 msgid "Status: Online Color"
 msgstr "Titour-stad"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Goulenn evit gwelet e/he stad"
@@ -5087,13 +5051,6 @@ msgstr "Darempredoù"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Merañ servijoù ar gont %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5175,9 +5132,6 @@ msgstr "Taolennadur: %s"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Oc'h ouzhpennañ ur gelaouenn nevez evit %s"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5754,9 +5708,6 @@ msgstr "Implij ar proksioù evit treuzkas restroù"
 msgid "Use proxy auth_entication"
 msgstr "Implij an diskleriañ"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5914,9 +5865,6 @@ msgid "Workspaces"
 msgstr "Darempredoù"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7013,6 +6961,10 @@ msgstr ""
 #~ msgstr "_Koumanantiñ"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Darempredoù"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Istoradur ar gaoz"
 
@@ -7114,6 +7066,10 @@ msgstr ""
 #~ msgstr "An emc'hemennadenn evit ar stad \"Dihegerz\""
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Perzhioù ar servijerien"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Anv ar restr: %s"
 
@@ -7174,6 +7130,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Pedadenn evit ur sal-flapiñ"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Flapoù a-stroll"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Kuzhat ar meuziad-mañ"
@@ -7278,6 +7238,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "échec lors de la publication de votre vCard"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "échec lors de la publication de votre vCard"
 
 #, fuzzy
@@ -7439,6 +7403,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Goulenn koumanantiñ"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Merañ servijoù ar gont %s"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"

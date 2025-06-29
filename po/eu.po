@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2009-08-19 23:50+0200\n"
 "Last-Translator: Urtzi  <>\n"
 "Language-Team: Basque <urtzi@altza.net>\n"
@@ -917,9 +917,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1195,15 +1192,15 @@ msgstr "Kontaktua"
 msgid "Chat Type"
 msgstr "Mota"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Berriki:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Txat-ak"
@@ -1404,9 +1401,6 @@ msgstr "Konektatu"
 msgid "Connect on startup"
 msgstr "K_onektatu Gajim irikitzean"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Konektatzen"
 
@@ -1499,10 +1493,6 @@ msgstr "Kontaktua"
 #, fuzzy
 msgid "Contact information"
 msgstr "Kontaktuaren Informazioa"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Kontaktua"
 
 msgid "Contacts"
 msgstr "Kontaktua"
@@ -1930,9 +1920,6 @@ msgstr "Egoera: "
 msgid "Drop files here"
 msgstr "Fitxero bat bidali kontaktu bati"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Jaten"
 
@@ -2103,9 +2090,6 @@ msgstr "Errore mezua: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Errore mezua: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Gertaera"
 
@@ -2172,6 +2156,11 @@ msgstr "_Sarrerako mezua:"
 msgid "Export…"
 msgstr "Esportatu"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "Helbide Gehigarria:"
@@ -2205,10 +2194,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Features"
-msgstr "Zerbitzariaren Ezaugarriak:"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Zerbitzariaren Ezaugarriak:"
 
 msgid "Feedback"
@@ -2438,11 +2423,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2555,10 +2535,6 @@ msgstr "Honako gela honek ez du existitzen."
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Txat Taldeak"
 
 #, fuzzy
 msgid "Groups"
@@ -2822,9 +2798,6 @@ msgstr "Honera gonbidatu"
 msgid "Invite Contacts"
 msgstr "Kontaktua"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Kontaktua"
@@ -2917,9 +2890,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Berriki:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3034,11 +3004,6 @@ msgstr "Konexioak huts egin du"
 
 msgid "Look it up in _Dictionary"
 msgstr "Bila Ezazu _Hiztegian"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3276,9 +3241,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Inoiz"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3598,9 +3560,6 @@ msgstr "Administratzailea"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3851,10 +3810,6 @@ msgstr "Konexioak huts egin du"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Fitxero hau jadanik badago"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Konexioak huts egin du"
 
 msgid "Plugins"
 msgstr ""
@@ -4533,6 +4488,12 @@ msgstr "Bilatu"
 msgid "Secure Password Storage"
 msgstr "Gorde pasahitza"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4720,9 +4681,6 @@ msgstr "Moderatzailea"
 #, fuzzy
 msgid "Set status message"
 msgstr "egoera mezua"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5066,6 +5024,12 @@ msgstr "Egoera Mezua"
 msgid "Status: Online Color"
 msgstr "Egoera Mezua"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "niri egoera bidaltzeko"
@@ -5113,13 +5077,6 @@ msgstr "Berridatzi Kontaktua"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Zerbitzaria Aurkitua %s kontua erabiliz"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5201,9 +5158,6 @@ msgstr "GTK+ Bertsioa:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Jakinarazketa Berezia Gehitzen %s-entzat"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5784,9 +5738,6 @@ msgstr "Erabili proxy fitxero transferentzia"
 msgid "Use proxy auth_entication"
 msgstr "Erabili autentifikazioa"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5944,9 +5895,6 @@ msgid "Workspaces"
 msgstr "Berridatzi Kontaktua"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7054,6 +7002,10 @@ msgstr ""
 #~ msgstr "Harpidetza ezabat_u"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kontaktua"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Elkarrizketaren Historiala"
 
@@ -7161,6 +7113,10 @@ msgstr ""
 #~ msgstr "Automatikoki ez erabilgarriko egoera mezua"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Zerbitzariaren Ezaugarriak:"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Fitxeroaren izena: %s"
 
@@ -7221,6 +7177,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Txat Taldeko Gonbidapena"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Txat Taldeak"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Ezkutatu Menua"
@@ -7323,6 +7283,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Konexioak huts egin du"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Konexioak huts egin du"
 
 #, fuzzy
@@ -7495,6 +7459,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Harpidetza Eskaria"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Zerbitzaria Aurkitua %s kontua erabiliz"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"

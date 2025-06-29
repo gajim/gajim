@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -861,10 +861,6 @@ msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
 #, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "Stavningskontrollerar meddelanden."
-
-#, fuzzy
 msgid "Automatically accept all contact requests"
 msgstr "Auktorisera kontakt automatiskt"
 
@@ -1114,16 +1110,15 @@ msgstr "Chattlista"
 msgid "Chat Type"
 msgstr "Typ"
 
-msgid "Chat history"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
+#, fuzzy
+msgid "Chat window"
 msgstr "Chatthistorik"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-"Chatta säkert med totalsträckskryptering (E2EE) via OMEMO eller OpenPGP"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
-"Chatta säkert med totalsträckskryptering (E2EE) via OMEMO eller OpenPGP."
 
 msgid "Chats"
 msgstr "Chattar"
@@ -1322,9 +1317,6 @@ msgstr "Ansluten"
 msgid "Connect on startup"
 msgstr "A_nslut vid start av Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Ansluter"
 
@@ -1417,10 +1409,6 @@ msgstr "Kontakter"
 #, fuzzy
 msgid "Contact information"
 msgstr "Kontaktinformation"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Kontakter"
 
 msgid "Contacts"
 msgstr "Kontakter"
@@ -1818,10 +1806,6 @@ msgstr "Utkast: %s"
 msgid "Drop files here"
 msgstr "Släpp filer här"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-"Skicka enkelt bilder, videoklipp eller andra filer till vänner och grupper"
-
 msgid "Eating"
 msgstr "Äter"
 
@@ -1980,9 +1964,6 @@ msgstr "Fel: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Felmeddelande: %s"
 
-msgid "Even more features via plugins"
-msgstr "Ännu fler funktioner via plugins"
-
 msgid "Event"
 msgstr "Händelse"
 
@@ -2042,6 +2023,11 @@ msgstr "Exporterar dina meddelanden..."
 msgid "Export…"
 msgstr "Exportera"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "Utökad adress"
 
@@ -2070,9 +2056,6 @@ msgstr "Familj"
 
 msgid "Features"
 msgstr "Funktioner"
-
-msgid "Features:"
-msgstr "Funktioner:"
 
 msgid "Feedback"
 msgstr "Återkoppling"
@@ -2286,11 +2269,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2404,10 +2382,6 @@ msgstr "rummet visar nu inga otillgängliga medlemmar"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Rummet visar nu otillgängliga medlemmar"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Gruppchattar"
 
 msgid "Groups"
 msgstr "Grupper"
@@ -2662,9 +2636,6 @@ msgstr "Bjud _in"
 msgid "Invite Contacts"
 msgstr "Bjud in _kontakter"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Bjud in _kontakter"
@@ -2749,9 +2720,6 @@ msgstr "Nyss"
 
 msgid "Keep Chat History"
 msgstr "Behåll chatthistorik"
-
-msgid "Keep and manage all your chat history"
-msgstr "Behåll och hantera all din chatthistorik"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Nyckelanvändning inkluderar inte certifikatsignering"
@@ -2853,13 +2821,6 @@ msgstr "Inloggningsinställningar"
 
 msgid "Look it up in _Dictionary"
 msgstr "Kolla upp det i _Uppslagsbok"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Kolla upp saker på Wikipedia, ordböcker eller andra sökmotorer, direkt från "
-"chattfönstret"
 
 msgid "Make Admin"
 msgstr "Gör till admin"
@@ -3080,9 +3041,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Aldrig"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3385,9 +3343,6 @@ msgstr "Organisation"
 msgid "Organization (O): "
 msgstr "Organisation (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "Organisera dina chattar med arbetsytor"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Andra"
@@ -3620,10 +3575,6 @@ msgstr "Uppdateringar för tillägg"
 
 msgid "Plugin already exists"
 msgstr "Tillägget existerar redan"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Registreringen misslyckades"
 
 msgid "Plugins"
 msgstr ""
@@ -4285,6 +4236,12 @@ msgstr "Sök"
 msgid "Secure Password Storage"
 msgstr "Spara lösenord"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4474,9 +4431,6 @@ msgstr "Moderator"
 #, fuzzy
 msgid "Set status message"
 msgstr "statusmeddelande"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4816,6 +4770,12 @@ msgstr "Statusmeddelande"
 msgid "Status: Online Color"
 msgstr "Statusmeddelande"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "att skicka mig status"
@@ -4862,13 +4822,6 @@ msgstr "Byt namn på kontakt"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Söker tjänster med konto %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4950,9 +4903,6 @@ msgstr "GTK+ version:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "SSL-certifikatfel"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5534,9 +5484,6 @@ msgstr "Använd proxyservrar för filöverföringar"
 msgid "Use proxy auth_entication"
 msgstr "Använd autentiser_ing för proxyserver"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5696,9 +5643,6 @@ msgid "Workspaces"
 msgstr "Byt namn på kontakt"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -6785,6 +6729,10 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Anslut automatiskt"
 
+#, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Stavningskontrollerar meddelanden."
+
 #~ msgid "Bookmarks"
 #~ msgstr "Bokmärken"
 
@@ -6806,6 +6754,14 @@ msgstr ""
 #~ msgstr ""
 #~ "Certifikat för \n"
 #~ "%s"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr ""
+#~ "Chatta säkert med totalsträckskryptering (E2EE) via OMEMO eller OpenPGP"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr ""
+#~ "Chatta säkert med totalsträckskryptering (E2EE) via OMEMO eller OpenPGP."
 
 #~ msgid "Checking file…"
 #~ msgstr "Kontrollerar fil…"
@@ -6834,6 +6790,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Säg _upp prenumeration"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kontakter"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -6911,6 +6871,10 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Släpp filer eller kontakter"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Skicka enkelt bilder, videoklipp eller andra filer till vänner och grupper"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Redigera namn…"
 
@@ -6929,11 +6893,17 @@ msgstr ""
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Fel: kan inte öppna %s för läsning"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Ännu fler funktioner via plugins"
+
 #~ msgid "Expires on"
 #~ msgstr "Upphör att gälla"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Funktionen är inte tillgänglig på Windows"
+
+#~ msgid "Features:"
+#~ msgstr "Funktioner:"
 
 #~ msgid "File Name: "
 #~ msgstr "Filnamn: "
@@ -6995,6 +6965,10 @@ msgstr ""
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Inbjudan till Gruppchatt"
 
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Gruppchattar"
+
 #~ msgid "Hide this menu"
 #~ msgstr "Dölj denna meny"
 
@@ -7027,6 +7001,9 @@ msgstr ""
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Det är inte möjligt att skicka tomma filer"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Behåll och hantera all din chatthistorik"
+
 #~ msgid "Key Size"
 #~ msgstr "Nyckelstorlek"
 
@@ -7039,6 +7016,13 @@ msgstr ""
 
 #~ msgid "Local Time"
 #~ msgstr "Lokal tid"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Kolla upp saker på Wikipedia, ordböcker eller andra sökmotorer, direkt "
+#~ "från chattfönstret"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7092,6 +7076,9 @@ msgstr ""
 #~ msgid "Organization (O)"
 #~ msgstr "Organisation (O)"
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Organisera dina chattar med arbetsytor"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_usa/Återuppta"
 
@@ -7107,6 +7094,10 @@ msgstr ""
 
 #~ msgid "Pl_ugins"
 #~ msgstr "Ti_llägg"
+
+#, fuzzy
+#~ msgid "Plugin manager"
+#~ msgstr "Registreringen misslyckades"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7284,6 +7275,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Prenumerationsbegäran"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Söker tjänster med konto %s"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synkronisera"

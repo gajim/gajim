@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2025-06-20 08:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -849,9 +849,6 @@ msgstr "Автоматический предпросмотр отключён"
 msgid "Automatic preview disabled (file too big)"
 msgstr "Автоматический предпросмотр отключён (слишком большой файл)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Автоматическая проверка орфографии сообщений"
-
 msgid "Automatically accept all contact requests"
 msgstr "Автоматически принимать все запросы на подписку"
 
@@ -1099,18 +1096,15 @@ msgstr "Список контактов"
 msgid "Chat Type"
 msgstr "Тип"
 
-msgid "Chat history"
-msgstr "История чата"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
 msgstr ""
-"Безопасное общение в чате со сквозным шифрованием с помощью OMEMO или "
-"OpenPGP."
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
-"Безопасное общение в чате со сквозным шифрованием с помощью OMEMO или "
-"OpenPGP."
+#, fuzzy
+msgid "Chat window"
+msgstr "Окно чата с вкладками"
 
 msgid "Chats"
 msgstr "Чаты"
@@ -1294,10 +1288,6 @@ msgstr "Подключить"
 msgid "Connect on startup"
 msgstr "Подключаться при запуске"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-"Подключение к другим мессенджерам через транспорты (Facebook, IRC, ...)"
-
 msgid "Connecting"
 msgstr "Соединение"
 
@@ -1375,9 +1365,6 @@ msgstr "Список контактов"
 
 msgid "Contact information"
 msgstr "Информация о контакте"
-
-msgid "Contact list"
-msgstr "Список контактов"
 
 msgid "Contacts"
 msgstr "Контакты"
@@ -1760,9 +1747,6 @@ msgstr "Черновик: %s"
 msgid "Drop files here"
 msgstr "Перетащите файлы сюда"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr "Простая отправка изображений, видео и других файлов друзьям и группам"
-
 msgid "Eating"
 msgstr "Принимаю пищу"
 
@@ -1919,9 +1903,6 @@ msgstr "Ошибка: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Сообщение об ошибке: %s"
 
-msgid "Even more features via plugins"
-msgstr "Ещё больше возможностей при использовании подключаемых модулей"
-
 msgid "Event"
 msgstr "Событие"
 
@@ -1981,6 +1962,11 @@ msgstr "Экспортирование ваших сообщений..."
 msgid "Export…"
 msgstr "Экспорт"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "Расширенный адрес"
 
@@ -2008,9 +1994,6 @@ msgstr "Семья"
 
 msgid "Features"
 msgstr "Возможности"
-
-msgid "Features:"
-msgstr "Возможности:"
 
 msgid "Feedback"
 msgstr "Обратная связь"
@@ -2226,13 +2209,6 @@ msgstr ""
 "Отправьте этот отчет, чтобы помочь разработчикам решить обнаруженную "
 "проблему."
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajim хорошо интегрируется с другими устройствами: просто продолжайте "
-"общаться на своем мобильном устройстве."
-
 #, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim полностью синхронизирован с архивом."
@@ -2328,9 +2304,6 @@ msgstr "Теперь в групповом чате не отображаютс�
 
 msgid "Group chat now shows unavailable members"
 msgstr "Теперь в групповом чате отображаются недоступные участники"
-
-msgid "Group chat support"
-msgstr "Поддержка группового чата"
 
 msgid "Groups"
 msgstr "Группы"
@@ -2580,11 +2553,6 @@ msgstr "Пригласить"
 msgid "Invite Contacts"
 msgstr "Пригласить контакты"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-"Возможность приглашения в групповые чаты друзей, либо присоединения к их "
-"чатам"
-
 msgid "Invite to this chat"
 msgstr "Пригласить в этот чат"
 
@@ -2663,9 +2631,6 @@ msgstr "Только что"
 
 msgid "Keep Chat History"
 msgstr "Хранить историю чата"
-
-msgid "Keep and manage all your chat history"
-msgstr "Хранение и управление историей всех своих чатов"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Назначение ключа не включает подписывание сертификата"
@@ -2770,13 +2735,6 @@ msgstr "Настройки входа"
 
 msgid "Look it up in _Dictionary"
 msgstr "Искать в _словаре"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Поиск информации в Википедии, словарях или других поисковых системах "
-"непосредственно из окна чата"
 
 msgid "Make Admin"
 msgstr "Сделать админом"
@@ -2986,9 +2944,6 @@ msgstr "Требуется установка gspell"
 
 msgid "Never"
 msgstr "Никогда"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "Меньше шансов пропустить сообщение и синхронизация всех чат-клиентов"
 
 msgid "New Contact"
 msgstr "Новый контакт"
@@ -3274,9 +3229,6 @@ msgstr "Организация"
 msgid "Organization (O): "
 msgstr "Организация (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "Организация чатов в виде вкладок"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Другое"
@@ -3510,9 +3462,6 @@ msgstr "Обновления подключаемых модулей"
 
 msgid "Plugin already exists"
 msgstr "Подключаемый модуль уже существует"
-
-msgid "Plugin manager"
-msgstr "Менеджер подключаемых модулей"
 
 msgid "Plugins"
 msgstr "Модули"
@@ -4112,6 +4061,12 @@ msgstr "Поиск…"
 msgid "Secure Password Storage"
 msgstr "Безопасное хранилище паролей"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "Безопасность"
 
@@ -4270,11 +4225,6 @@ msgstr "Модерировать…"
 
 msgid "Set status message"
 msgstr "Установить сообщение о статусе"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
-"Инструменты для указания текущего занятия или мелодии, чтобы друзья могли "
-"лучше понять ваше настроение"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4578,6 +4528,12 @@ msgstr "Статус: Цвет для статуса «Отключен»"
 msgid "Status: Online Color"
 msgstr "Статус: Цвет для статуса «В сети»"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Прекратить отправку сетевого статуса?"
@@ -4622,12 +4578,6 @@ msgstr "Удаление контакта"
 
 msgid "Support"
 msgstr "Поддержка"
-
-msgid "Support for multiple accounts"
-msgstr "Поддержка нескольких учётных записей"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Поддержка обнаружения сервисов, включая узлы и поиск пользователей"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4703,9 +4653,6 @@ msgstr "Версия TLS"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "Сбой проверки TLS: %s"
-
-msgid "Tabbed chat window"
-msgstr "Окно чата с вкладками"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5254,10 +5201,6 @@ msgstr "Использовать прокси для передачи файла
 msgid "Use proxy auth_entication"
 msgstr "Использовать аут_ентификацию прокси"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-"Использование любимых смайлов и установка собственного изображения профиля"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "Использовать системное хранилище ключей для хранения паролей"
 
@@ -5406,9 +5349,6 @@ msgstr "Вкладки"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "XML-консоль для просмотра информации на уровне протокола"
 
 msgid "XMPP Address"
 msgstr "XMPP-адрес"
@@ -6435,6 +6375,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Autojoin"
 #~ msgstr "Автоприсоединение"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Автоматическая проверка орфографии сообщений"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Закладки"
 
@@ -6456,6 +6399,19 @@ msgstr "…или перетащите его сюда"
 #~ msgstr ""
 #~ "Сертификат для\n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "История чата"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr ""
+#~ "Безопасное общение в чате со сквозным шифрованием с помощью OMEMO или "
+#~ "OpenPGP."
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr ""
+#~ "Безопасное общение в чате со сквозным шифрованием с помощью OMEMO или "
+#~ "OpenPGP."
 
 #~ msgid "Checking file…"
 #~ msgstr "Проверка файла…"
@@ -6487,11 +6443,18 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Completed"
 #~ msgstr "Завершено"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr ""
+#~ "Подключение к другим мессенджерам через транспорты (Facebook, IRC, ...)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Соединение недоступно"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Контакт отменил подписку"
+
+#~ msgid "Contact list"
+#~ msgstr "Список контактов"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Беседа: Цвет ссылок"
@@ -6567,6 +6530,10 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Перетащите файлы или контакты"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Простая отправка изображений, видео и других файлов друзьям и группам"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Редактировать имя…"
 
@@ -6598,11 +6565,17 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Ошибка: не удалось открыть %s для чтения"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Ещё больше возможностей при использовании подключаемых модулей"
+
 #~ msgid "Expires on"
 #~ msgstr "Истекает"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Функция недоступна в Windows"
+
+#~ msgid "Features:"
+#~ msgstr "Возможности:"
 
 #~ msgid "File Name: "
 #~ msgstr "Имя файла: "
@@ -6646,6 +6619,13 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim не может прочитать этот файл"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajim хорошо интегрируется с другими устройствами: просто продолжайте "
+#~ "общаться на своем мобильном устройстве."
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim: Нет доступных обновлений (последняя проверка: %s)"
@@ -6658,6 +6638,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Получено приглашение в групповой чат"
+
+#~ msgid "Group chat support"
+#~ msgstr "Поддержка группового чата"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6706,6 +6689,11 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Invite New Contact"
 #~ msgstr "Пригласить новый контакт"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr ""
+#~ "Возможность приглашения в групповые чаты друзей, либо присоединения к их "
+#~ "чатам"
+
 #~ msgid "Issued on"
 #~ msgstr "Выпущено"
 
@@ -6720,6 +6708,9 @@ msgstr "…или перетащите его сюда"
 #~ "Я синхронизирую контакты из своей учетной записи «%s». Не могли бы вы "
 #~ "добавить этот адрес в свой список контактов?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Хранение и управление историей всех своих чатов"
+
 #~ msgid "Key Size"
 #~ msgstr "Размер ключа"
 
@@ -6732,6 +6723,13 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Local Time"
 #~ msgstr "Местное время"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Поиск информации в Википедии, словарях или других поисковых системах "
+#~ "непосредственно из окна чата"
 
 #~ msgid "Maintainers"
 #~ msgstr "Сопровождающие"
@@ -6759,6 +6757,10 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Удаление контакта"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr ""
+#~ "Меньше шансов пропустить сообщение и синхронизация всех чат-клиентов"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Нет подключения"
@@ -6791,6 +6793,9 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Подразделение организации (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Организация чатов в виде вкладок"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Па_уза/Продолжить"
 
@@ -6809,6 +6814,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Используйте формат гггг-мм-дд"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Менеджер подключаемых модулей"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "Подключаемые модули: Обновления отсутствуют"
@@ -6943,6 +6951,11 @@ msgstr "…или перетащите его сюда"
 #~ msgid "Serial Number"
 #~ msgstr "Серийный номер"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr ""
+#~ "Инструменты для указания текущего занятия или мелодии, чтобы друзья могли "
+#~ "лучше понять ваше настроение"
+
 #~ msgid "Show"
 #~ msgstr "Показать"
 
@@ -7018,6 +7031,12 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Subscription Request"
 #~ msgstr "Запрос подписки"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Поддержка нескольких учётных записей"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Поддержка обнаружения сервисов, включая узлы и поиск пользователей"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Переключиться на первую-девятую вкладку"
@@ -7102,6 +7121,10 @@ msgstr "…или перетащите его сюда"
 #~ "before:гггг-мм-дд\n"
 #~ "after:гггг-мм-дд"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr ""
+#~ "Использование любимых смайлов и установка собственного изображения профиля"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Имя пользователя"
@@ -7122,6 +7145,9 @@ msgstr "…или перетащите его сюда"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Зачем модерировать это сообщение?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML-консоль для просмотра информации на уровне протокола"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"

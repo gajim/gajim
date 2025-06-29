@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -957,11 +957,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-# Changed to: Spellchecking while writing.
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "בדיקת איות בעת הלחנת הודעות."
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1241,18 +1236,18 @@ msgstr "איש קשר"
 msgid "Chat Type"
 msgstr "טיפוס"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 # (שנפתחו) לאחרונה
 # (חדרים/ערוצים) אחרונים
 # (כתובות) אחרונות
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "אחרונים:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1454,9 +1449,6 @@ msgstr "מחובר"
 msgid "Connect on startup"
 msgstr "התחבר בעת ה_פעלת Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "מתחבר כעת"
 
@@ -1550,10 +1542,6 @@ msgstr "איש קשר"
 #, fuzzy
 msgid "Contact information"
 msgstr "מידע איש קשר"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "איש קשר"
 
 #, fuzzy
 msgid "Contacts"
@@ -1988,9 +1976,6 @@ msgstr "מצב: "
 msgid "Drop files here"
 msgstr "cli"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "אוכל"
 
@@ -2172,9 +2157,6 @@ msgstr "שגיאה: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "הודעת שגיאה: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "אירוע"
 
@@ -2248,6 +2230,11 @@ msgstr "הצפנת הודעות שיחה."
 msgid "Export…"
 msgstr "יצא"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>כתובת נוספת:</b>"
@@ -2281,10 +2268,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "תכונות"
-
-#, fuzzy
-msgid "Features:"
 msgstr "תכונות"
 
 msgid "Feedback"
@@ -2516,11 +2499,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2638,10 +2616,6 @@ msgstr "כרגע החדר לא מציג חברים אשר אינם זמינים"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "כרגע החדר מציג חברים אשר אינם זמינים"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "שיחות קבוצה"
 
 msgid "Groups"
 msgstr "קבוצות"
@@ -2914,9 +2888,6 @@ msgstr "ה_זמן"
 msgid "Invite Contacts"
 msgstr "הזמן _אנשי קשר"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "הזמן _אנשי קשר"
@@ -3012,9 +2983,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "אחרונים:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "שימוש מפתח לא כולל חתימת תעודה"
@@ -3129,11 +3097,6 @@ msgstr "תוספים"
 
 msgid "Look it up in _Dictionary"
 msgstr "חפש בתוך _מילון"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3374,9 +3337,6 @@ msgstr ""
 
 msgid "Never"
 msgstr "אף פעם"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3692,9 +3652,6 @@ msgstr "בחופשה"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3947,10 +3904,6 @@ msgstr "כשל תוסף"
 
 msgid "Plugin already exists"
 msgstr "תוסף כבר ישנו"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "כשל תוסף"
 
 msgid "Plugins"
 msgstr "תוספים"
@@ -4652,6 +4605,12 @@ msgstr "חיפוש"
 msgid "Secure Password Storage"
 msgstr "שמור סיסמה"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4843,9 +4802,6 @@ msgstr "אחראי"
 #, fuzzy
 msgid "Set status message"
 msgstr "cli"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5193,6 +5149,12 @@ msgstr "הודעת מצב"
 msgid "Status: Online Color"
 msgstr "הודעת מצב"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "לשלוח אלי מצב"
@@ -5242,13 +5204,6 @@ msgstr "שינוי שם איש קשר"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "מציאת שירות באמצעות חשבון ‫%s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5331,9 +5286,6 @@ msgstr "גרסא:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "אימות תעודת SSL עבור %s"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5924,9 +5876,6 @@ msgstr "השתמש בצירי (proxy) העברת קובץ"
 msgid "Use proxy auth_entication"
 msgstr "השתמש באימות _proxy"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -6088,9 +6037,6 @@ msgid "Workspaces"
 msgstr "שינוי שם איש קשר"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7182,6 +7128,11 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "ה_צטרף אוטומטית"
 
+# Changed to: Spellchecking while writing.
+#, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "בדיקת איות בעת הלחנת הודעות."
+
 #, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_סמן"
@@ -7235,6 +7186,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "הרשמה בוטלה"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "איש קשר"
 
 # direction_mark needed
 #, fuzzy
@@ -7365,6 +7320,10 @@ msgstr ""
 #~ msgstr "תכונה זו לא זמינה תחת Windows."
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "תכונות"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "שם קובץ: %s"
 
@@ -7423,6 +7382,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "הזמנת שיחת קבוצה"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "שיחות קבוצה"
 
 #~ msgid "Hide this menu"
 #~ msgstr "הסתר תפריט זה"
@@ -7551,6 +7514,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pl_ugins"
 #~ msgstr "תוספים"
+
+#, fuzzy
+#~ msgid "Plugin manager"
+#~ msgstr "כשל תוסף"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7728,6 +7695,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "בקשת הרשמה"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "מציאת שירות באמצעות חשבון ‫%s"
 
 #~ msgid "Synchronise"
 #~ msgstr "סנכרון"

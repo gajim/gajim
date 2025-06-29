@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2025-03-09 12:48+0000\n"
 "Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -855,9 +855,6 @@ msgstr "自動預覽已禁用"
 msgid "Automatic preview disabled (file too big)"
 msgstr "自動預覽已禁用（檔案過大）"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "自動檢查您的訊息的拼寫"
-
 msgid "Automatically accept all contact requests"
 msgstr "自動接受所有聯絡請求"
 
@@ -1115,15 +1112,15 @@ msgstr "聯絡人"
 msgid "Chat Type"
 msgstr "類型"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "最近:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1323,9 +1320,6 @@ msgstr "已連線"
 msgid "Connect on startup"
 msgstr "Gajim 啟動時連線(_O)"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "正在連線"
 
@@ -1418,10 +1412,6 @@ msgstr "聯絡人"
 #, fuzzy
 msgid "Contact information"
 msgstr "聯絡人資訊"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "聯絡人"
 
 msgid "Contacts"
 msgstr "聯絡人"
@@ -1848,9 +1838,6 @@ msgstr "狀態: "
 msgid "Drop files here"
 msgstr "向聯絡人傳送檔案"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "吃東西"
 
@@ -2023,9 +2010,6 @@ msgstr "錯誤: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "錯誤訊息: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "事件"
 
@@ -2093,6 +2077,11 @@ msgstr "加密聊天訊息。"
 msgid "Export…"
 msgstr "匯出"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>附加位址:</b>"
@@ -2125,10 +2114,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "特性"
-
-#, fuzzy
-msgid "Features:"
 msgstr "特性"
 
 msgid "Feedback"
@@ -2357,11 +2342,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2475,10 +2455,6 @@ msgstr "聊天室現在不顯示無法使用的成員"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "聊天室現在顯示了無法使用的成員"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "多人聊天"
 
 msgid "Groups"
 msgstr "群組"
@@ -2743,9 +2719,6 @@ msgstr "邀請(_V)"
 msgid "Invite Contacts"
 msgstr "邀請聯絡人(_C)"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "邀請聯絡人(_C)"
@@ -2838,9 +2811,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "最近:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "密鑰用途中不包含證書籤名稱"
@@ -2955,11 +2925,6 @@ msgstr "外掛程式"
 
 msgid "Look it up in _Dictionary"
 msgstr "從字典中搜尋(_D)"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3195,9 +3160,6 @@ msgstr ""
 
 msgid "Never"
 msgstr "永遠不"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3513,9 +3475,6 @@ msgstr "渡假"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3767,10 +3726,6 @@ msgstr "外掛程式失敗"
 
 msgid "Plugin already exists"
 msgstr "外掛程式已經存在"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "外掛程式失敗"
 
 msgid "Plugins"
 msgstr "外掛程式"
@@ -4450,6 +4405,12 @@ msgstr "搜尋"
 msgid "Secure Password Storage"
 msgstr "儲存密碼"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4634,9 +4595,6 @@ msgstr "主持人"
 #, fuzzy
 msgid "Set status message"
 msgstr "狀態訊息"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4978,6 +4936,12 @@ msgstr "狀態訊息"
 msgid "Status: Online Color"
 msgstr "狀態訊息"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "向我傳送狀態"
@@ -5024,13 +4988,6 @@ msgstr "重新命名聯絡人"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "正在使用帳號 %s 來發掘服務"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5112,9 +5069,6 @@ msgstr "版本:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "SSL 憑證驗證"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5694,9 +5648,6 @@ msgstr "使用檔案傳輸代理伺服器"
 msgid "Use proxy auth_entication"
 msgstr "代理伺服器需要認證"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5857,9 +5808,6 @@ msgid "Workspaces"
 msgstr "重新命名聯絡人"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -6943,6 +6891,9 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "自動聯結(_U)"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "自動檢查您的訊息的拼寫"
+
 #~ msgid "Bookmarks"
 #~ msgstr "書籤"
 
@@ -6996,6 +6947,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "已取消認證的"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "聯絡人"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7121,6 +7076,10 @@ msgstr ""
 #~ msgstr "特性在 Windows 下無法使用。"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "特性"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "檔案名稱:  %s"
 
@@ -7180,6 +7139,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "多人聊天邀請"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "多人聊天"
 
 #~ msgid "Hide this menu"
 #~ msgstr "隱藏本選單"
@@ -7302,6 +7265,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pl_ugins"
 #~ msgstr "外掛程式"
+
+#, fuzzy
+#~ msgid "Plugin manager"
+#~ msgstr "外掛程式失敗"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7480,6 +7447,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "認證請求"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "正在使用帳號 %s 來發掘服務"
 
 #~ msgid "Synchronise"
 #~ msgstr "同步"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -909,9 +909,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Automatische spellingscontrole voor je berichten"
-
 #, fuzzy
 msgid "Automatically accept all contact requests"
 msgstr "Automatisch contacten toestemming geven"
@@ -1187,16 +1184,15 @@ msgstr "Contacten"
 msgid "Chat Type"
 msgstr "Type"
 
-msgid "Chat history"
-msgstr "Gespreksgeschiedenis"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
 
 #, fuzzy
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "Chat veilig met eind-tot-eind-versleuteling via OMEMO of PGP"
-
-#, fuzzy
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "Chat veilig met eind-tot-eind-versleuteling via OMEMO of PGP"
+msgid "Chat window"
+msgstr "Gespreksvenster met tabbladen"
 
 msgid "Chats"
 msgstr "Gesprekken"
@@ -1385,10 +1381,6 @@ msgstr "Verbonden"
 msgid "Connect on startup"
 msgstr "Verbinding maken bij opstarten"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-"Maak verbinding met andere Messengers via Transporten (Facebook, IRC, …)"
-
 msgid "Connecting"
 msgstr "Bezig met verbinden"
 
@@ -1480,10 +1472,6 @@ msgstr "Contacten"
 
 msgid "Contact information"
 msgstr "Contactinformatie"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Contacten"
 
 msgid "Contacts"
 msgstr "Contacten"
@@ -1912,9 +1900,6 @@ msgstr "Status: "
 msgid "Drop files here"
 msgstr "Stuurt een bestand naar een contact"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr "Stuur foto’s, video’s of andere bestanden naar vrienden en groepen"
-
 msgid "Eating"
 msgstr "Eten"
 
@@ -2088,9 +2073,6 @@ msgstr "Fout: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Foutbericht: %s"
 
-msgid "Even more features via plugins"
-msgstr "Nog meer functies via plug-ins"
-
 msgid "Event"
 msgstr "Gebeurtenis"
 
@@ -2157,6 +2139,11 @@ msgstr "Berichten worden versleuteld."
 msgid "Export…"
 msgstr "_Exporteren"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "Extra adres"
@@ -2190,9 +2177,6 @@ msgstr ""
 
 msgid "Features"
 msgstr "Functies"
-
-msgid "Features:"
-msgstr "Functies:"
 
 msgid "Feedback"
 msgstr ""
@@ -2426,14 +2410,6 @@ msgid ""
 msgstr ""
 
 #, fuzzy
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajim integreert goed met je andere apparaten: wat je via Gajim zegt zal je "
-"ook op je mobiele apparaat kunnen zien."
-
-#, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 "\n"
@@ -2549,9 +2525,6 @@ msgstr "Groepsgesprek verbergt nu niet-beschikbare leden"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Groepsgesprek toont nu niet beschikbare leden"
-
-msgid "Group chat support"
-msgstr "Ondersteuning voor groepsgesprekken"
 
 msgid "Groups"
 msgstr "Groepen"
@@ -2815,9 +2788,6 @@ msgstr "Uit_nodigen"
 msgid "Invite Contacts"
 msgstr "_Contacten uitnodigen"
 
-msgid "Invite friends to group chats or join one"
-msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Wisselen naar het vorig tabblad"
@@ -2912,9 +2882,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Gespreksgeschiedenis"
-
-msgid "Keep and manage all your chat history"
-msgstr "Bewaar en beheer je gespreksgeschiedenis"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Sleutelgebruik bevat geen certificaatondertekening"
@@ -3029,13 +2996,6 @@ msgstr "Plug-in-instellingen"
 
 msgid "Look it up in _Dictionary"
 msgstr "Opzoeken in woor_denboek"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Zoek dingen op op Wikipedia, in woordenboeken of met andere zoekmachines, "
-"rechtstreeks vanuit het gespreksvenster"
 
 #, fuzzy
 msgid "Make Admin"
@@ -3271,9 +3231,6 @@ msgstr ""
 
 msgid "Never"
 msgstr "Nooit"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "Mis nooit een bericht, en hou al je chatcliënten gesynchroniseerd"
 
 msgid "New Contact"
 msgstr "Nieuw contact"
@@ -3588,10 +3545,6 @@ msgid "Organization (O): "
 msgstr "Organisatie (O)"
 
 #, fuzzy
-msgid "Organize your chats with workspaces"
-msgstr "Organiseer je gesprekken met tabbladen"
-
-#, fuzzy
 msgctxt "Gender"
 msgid "Other"
 msgstr "Overigen"
@@ -3837,9 +3790,6 @@ msgstr "Updates voor plug-ins"
 
 msgid "Plugin already exists"
 msgstr "Plug-in bestaat al"
-
-msgid "Plugin manager"
-msgstr "Plug-inbeheer"
 
 msgid "Plugins"
 msgstr "Plug-ins"
@@ -4511,6 +4461,12 @@ msgstr "Zoeken"
 msgid "Secure Password Storage"
 msgstr "Veilige wachtwoordopslag"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4692,12 +4648,6 @@ msgstr "Beheerder"
 #, fuzzy
 msgid "Set status message"
 msgstr "Statusbericht instellen"
-
-#, fuzzy
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
-"Stel je activiteit, deuntje en humeur in om je vrienden te tonen hoe je je "
-"voelt"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5037,6 +4987,12 @@ msgstr "Statusberichtkleur"
 msgid "Status: Online Color"
 msgstr "Statusberichtkleur"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "mij status te sturen"
@@ -5083,14 +5039,6 @@ msgstr "Contact hernoemen"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr "Ondersteuning voor meerdere accounts"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr ""
-"Ondersteuning voor dienstontdekking, inclusief knooppunten en zoeken naar "
-"gebruikers"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5171,9 +5119,6 @@ msgstr "Versie"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "SSL-certificaatverificatie voor %s"
-
-msgid "Tabbed chat window"
-msgstr "Gespreksvenster met tabbladen"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5761,9 +5706,6 @@ msgstr "Gebruik bestandsoverdrachtsproxies"
 msgid "Use proxy auth_entication"
 msgstr "Gebruik proxy-auth_enticatie"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "Gebruik je favoriete emoticons, stel je eigen avatar in"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5924,9 +5866,6 @@ msgstr "Contact hernoemen"
 
 msgid "X11"
 msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "XML-console om na te kijken wat er gebeurt in de protocollaag"
 
 #, fuzzy
 msgid "XMPP Address"
@@ -7009,6 +6948,9 @@ msgstr ""
 #~ msgid "Autojoin"
 #~ msgstr "Automatisch deelnemen"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Automatische spellingscontrole voor je berichten"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Bladwijzers"
 
@@ -7032,6 +6974,17 @@ msgstr ""
 #~ msgstr ""
 #~ "Certificaat voor account\n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "Gespreksgeschiedenis"
+
+#, fuzzy
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr "Chat veilig met eind-tot-eind-versleuteling via OMEMO of PGP"
+
+#, fuzzy
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr "Chat veilig met eind-tot-eind-versleuteling via OMEMO of PGP"
 
 #~ msgid "Checking file…"
 #~ msgstr "Bestand wordt gecontroleerd…"
@@ -7063,12 +7016,20 @@ msgstr ""
 #~ msgid "Completed"
 #~ msgstr "Afgerond"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr ""
+#~ "Maak verbinding met andere Messengers via Transporten (Facebook, IRC, …)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Verbinding niet beschikbaar"
 
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Abonnement opgezegd"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Contacten"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7149,6 +7110,9 @@ msgstr ""
 #~ msgid "Drop files or contacts"
 #~ msgstr "Stuurt een bestand naar een contact"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr "Stuur foto’s, video’s of andere bestanden naar vrienden en groepen"
+
 #, fuzzy
 #~ msgid "Edit Name…"
 #~ msgstr "Voornaam"
@@ -7183,12 +7147,18 @@ msgstr ""
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Fout: kan %s niet voor lezen openen"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Nog meer functies via plug-ins"
+
 #~ msgid "Expires on"
 #~ msgstr "Verloopt op"
 
 #, fuzzy
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Functie niet beschikbaar voor Windows"
+
+#~ msgid "Features:"
+#~ msgstr "Functies:"
 
 #, fuzzy
 #~ msgid "File Name: "
@@ -7232,6 +7202,14 @@ msgstr ""
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim kan dit bestand niet lezen"
 
+#, fuzzy
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajim integreert goed met je andere apparaten: wat je via Gajim zegt zal "
+#~ "je ook op je mobiele apparaat kunnen zien."
+
 #, fuzzy, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Geen account beschikbaar"
@@ -7247,6 +7225,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Uitnodiging voor groepsgesprek"
+
+#~ msgid "Group chat support"
+#~ msgstr "Ondersteuning voor groepsgesprekken"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Verberg dit menu"
@@ -7288,11 +7269,17 @@ msgstr ""
 #~ msgid "Invite New Contact"
 #~ msgstr "Contacten uitnodigen"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "Nodig vrienden uit in groepsgesprekken, of neem eraan deel"
+
 #~ msgid "Issued on"
 #~ msgstr "Uitgegeven op"
 
 #~ msgid "It is not possible to send empty files"
 #~ msgstr "Het is onmogelijk lege bestanden te sturen"
+
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Bewaar en beheer je gespreksgeschiedenis"
 
 #~ msgid "Last but not least"
 #~ msgstr "Tenslotte"
@@ -7304,6 +7291,13 @@ msgstr ""
 #, fuzzy
 #~ msgid "Local Time"
 #~ msgstr "Lokale JID:"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Zoek dingen op op Wikipedia, in woordenboeken of met andere zoekmachines, "
+#~ "rechtstreeks vanuit het gespreksvenster"
 
 #, fuzzy
 #~ msgid "Message Correction: Background Color"
@@ -7328,6 +7322,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Contact hernoemen"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "Mis nooit een bericht, en hou al je chatcliënten gesynchroniseerd"
 
 #, fuzzy
 #~ msgid "No Connection Available"
@@ -7369,6 +7366,10 @@ msgstr ""
 #~ msgstr "Organisatorische eenheid (OU)"
 
 #, fuzzy
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Organiseer je gesprekken met tabbladen"
+
+#, fuzzy
 #~ msgid "Pa_use/Resume"
 #~ msgstr "He_rvatten"
 
@@ -7383,6 +7384,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Pl_ugins"
 #~ msgstr "Plug-ins"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Plug-inbeheer"
 
 #, fuzzy
 #~ msgid "Plugins: No updates available"
@@ -7519,6 +7523,12 @@ msgstr ""
 #~ msgstr "Serienummer"
 
 #, fuzzy
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr ""
+#~ "Stel je activiteit, deuntje en humeur in om je vrienden te tonen hoe je "
+#~ "je voelt"
+
+#, fuzzy
 #~ msgid "Show Gajim"
 #~ msgstr "Gajim"
 
@@ -7577,6 +7587,14 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Abonneringsverzoek"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Ondersteuning voor meerdere accounts"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr ""
+#~ "Ondersteuning voor dienstontdekking, inclusief knooppunten en zoeken naar "
+#~ "gebruikers"
 
 #, fuzzy
 #~ msgid "Switch to the first - ninth workspace"
@@ -7654,6 +7672,9 @@ msgstr ""
 #~ msgid "Use STUN Server"
 #~ msgstr "STU_N-server"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "Gebruik je favoriete emoticons, stel je eigen avatar in"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Gebr_uikersnaam"
@@ -7677,6 +7698,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Wil je dit bericht voorgoed verwijderen"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML-console om na te kijken wat er gebeurt in de protocollaag"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"

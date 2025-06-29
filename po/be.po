@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -917,9 +917,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1193,15 +1190,15 @@ msgstr "Людзі"
 msgid "Chat Type"
 msgstr "Тып"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Нядаўна:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Размовы"
@@ -1402,9 +1399,6 @@ msgstr "Злучэнне"
 msgid "Connect on startup"
 msgstr "_Злучацца па старце Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Злучэнне"
 
@@ -1497,10 +1491,6 @@ msgstr "Людзі"
 #, fuzzy
 msgid "Contact information"
 msgstr "Асабістыя звесткі"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Людзі"
 
 msgid "Contacts"
 msgstr "Людзі"
@@ -1931,9 +1921,6 @@ msgstr "Стан: "
 msgid "Drop files here"
 msgstr "Адправіць файл чалавеку"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Ежа"
 
@@ -2104,9 +2091,6 @@ msgstr "Памылка: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Памылка: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Падзея"
 
@@ -2173,6 +2157,11 @@ msgstr "_Уваходнае паведамленне:"
 msgid "Export…"
 msgstr "Экспартаваць"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "Дадатковы адрас:"
@@ -2206,10 +2195,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Features"
-msgstr "Здольнасці сервера"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Здольнасці сервера"
 
 msgid "Feedback"
@@ -2439,11 +2424,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2556,10 +2536,6 @@ msgstr "Такой групавой размовы няма."
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Групавыя размовы"
 
 #, fuzzy
 msgid "Groups"
@@ -2823,9 +2799,6 @@ msgstr "За_прасіць"
 msgid "Invite Contacts"
 msgstr "Людзі"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Людзі"
@@ -2918,9 +2891,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Нядаўна:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3035,11 +3005,6 @@ msgstr "Памылка злучэння"
 
 msgid "Look it up in _Dictionary"
 msgstr "Шукаць у _слоўніку"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3277,9 +3242,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Ніколі"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3599,9 +3561,6 @@ msgstr "Адміністратар"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3852,10 +3811,6 @@ msgstr "Памылка злучэння"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Такі файл ужо ёсць"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Памылка злучэння"
 
 msgid "Plugins"
 msgstr ""
@@ -4534,6 +4489,12 @@ msgstr "Пошук"
 msgid "Secure Password Storage"
 msgstr "Захаваць пароль"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4721,9 +4682,6 @@ msgstr "Мадэратар"
 #, fuzzy
 msgid "Set status message"
 msgstr "паведамленне стану"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5067,6 +5025,12 @@ msgstr "Паведамленне аб змене стану"
 msgid "Status: Online Color"
 msgstr "Паведамленне аб змене стану"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "адпраўляць мне паведамленні аб змене стану"
@@ -5114,13 +5078,6 @@ msgstr "Змяніць імя чалавека"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Пошук сервісаў для рахунка %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5202,9 +5159,6 @@ msgstr "Версія GTK+:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Дадаць асабістае нагадванне для %s"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5782,9 +5736,6 @@ msgstr "Ужыць проксі для перадачы файлаў"
 msgid "Use proxy auth_entication"
 msgstr "Аўтарызацыя"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5942,9 +5893,6 @@ msgid "Workspaces"
 msgstr "Змяніць імя чалавека"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7049,6 +6997,10 @@ msgstr ""
 #~ msgstr "_Адпісацца"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Людзі"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Журнал размоў"
 
@@ -7156,6 +7108,10 @@ msgstr ""
 #~ msgstr "Паведамленне аб аўтаматычнай недаступнасці"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Здольнасці сервера"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Файл: %s"
 
@@ -7216,6 +7172,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Запрашэнне ў групавую размову"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Групавыя размовы"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Схаваць гэтае меню"
@@ -7320,6 +7280,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Памылка злучэння"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Памылка злучэння"
 
 #, fuzzy
@@ -7491,6 +7455,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Запыт падпіскі"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Пошук сервісаў для рахунка %s"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"

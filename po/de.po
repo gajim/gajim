@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
-"PO-Revision-Date: 2025-06-28 08:27+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"PO-Revision-Date: 2025-06-29 16:54+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
 "\n"
@@ -845,9 +845,6 @@ msgstr "Automatische Vorschau deaktiviert"
 msgid "Automatic preview disabled (file too big)"
 msgstr "Automatische Vorschau deaktiviert (Datei zu groß)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Automatische Rechtschreibprüfung für deine Nachrichten"
-
 msgid "Automatically accept all contact requests"
 msgstr "Automatisch alle Kontaktanfragen akzeptieren"
 
@@ -1089,18 +1086,17 @@ msgstr "Kontaktliste"
 msgid "Chat Type"
 msgstr "Art des Chats"
 
-msgid "Chat history"
-msgstr "Nachrichtenverlauf"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
 msgstr ""
-"Chatte sicher und verschlüsselt durch Ende-zu-Ende-Verschlüsselung per OMEMO "
-"oder OpenPGP"
+"Chatte frei: Nimm deine Chats mit, wohin du willst. Verwende einen Anbieter "
+"deiner Wahl und synchronisiere deine Chats zwischen all deinen Geräten. "
+"Gajim ist mit vielen anderen Chat-Apps kompatibel – und es ist kostenlos."
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
-"Chatte sicher und verschlüsselt durch Ende-zu-Ende-Verschlüsselung per OMEMO "
-"oder OpenPGP."
+msgid "Chat window"
+msgstr "Chatfenster"
 
 msgid "Chats"
 msgstr "Chats"
@@ -1281,10 +1277,6 @@ msgstr "Verbinden"
 msgid "Connect on startup"
 msgstr "Beim Start verbinden"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-"Verbinde dich mit anderen Messengern durch Transporte (Facebook, IRC, ...)"
-
 msgid "Connecting"
 msgstr "Verbindung wird hergestellt"
 
@@ -1360,9 +1352,6 @@ msgstr "Kontaktanfrage"
 
 msgid "Contact information"
 msgstr "Kontaktinformationen"
-
-msgid "Contact list"
-msgstr "Kontaktliste"
 
 msgid "Contacts"
 msgstr "Kontakte"
@@ -1732,11 +1721,6 @@ msgstr "Entwurf: %s"
 msgid "Drop files here"
 msgstr "Dateien hier ablegen"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-"Versende ganz einfach Fotos, Videos oder andere Dateien an Freunde und "
-"Gruppen"
-
 msgid "Eating"
 msgstr "Essen"
 
@@ -1896,9 +1880,6 @@ msgstr "Fehler: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Fehler: %s (Mime Types: %s)"
 
-msgid "Even more features via plugins"
-msgstr "Erweiterbarer Funktionsumfang durch Plugins"
-
 msgid "Event"
 msgstr "Ereignis"
 
@@ -1953,6 +1934,13 @@ msgstr "Deine Nachrichten werden exportiert..."
 msgid "Export…"
 msgstr "Exportieren…"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+"Sei du selbst: Manchmal sind Worte nicht genug. Nutze Reaktionen, Antworten, "
+"Sprachnachrichten und Status-Updates, um dich auszudrücken, wie du es willst."
+
 msgid "Extended Address"
 msgstr "Zusatzadresse"
 
@@ -1980,9 +1968,6 @@ msgstr "Familie"
 
 msgid "Features"
 msgstr "Features"
-
-msgid "Features:"
-msgstr "Features:"
 
 msgid "Feedback"
 msgstr "Rückmeldungen"
@@ -2190,13 +2175,6 @@ msgstr ""
 "Gajim hat einen Fehler festgestellt.\n"
 "Bitte hilf uns diesen Fehler zu beheben, indem du ihn meldest."
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajim vernetzt sich gut mit deinen übrigen Geräten: Einfach auf dem PC "
-"schreiben und auf dem Handy sehen, was geschrieben wurde."
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim ist vollständig mit dem Nachrichtenarchiv synchronisiert."
 
@@ -2291,9 +2269,6 @@ msgstr "Der Gruppenchat zeigt nun abwesende Teilnehmer nicht mehr an"
 
 msgid "Group chat now shows unavailable members"
 msgstr "Der Gruppenchat zeigt nun abwesende Teilnehmer an"
-
-msgid "Group chat support"
-msgstr "Unterstützung von Gruppenchats"
 
 msgid "Groups"
 msgstr "Gruppen"
@@ -2532,9 +2507,6 @@ msgstr "Einladen"
 msgid "Invite Contacts"
 msgstr "Kontakte einladen"
 
-msgid "Invite friends to group chats or join one"
-msgstr "Lade Freunde zum Gruppenchat ein oder tritt selbst einem bei"
-
 msgid "Invite to this chat"
 msgstr "Einladen zu diesem Chat"
 
@@ -2612,9 +2584,6 @@ msgstr "Gerade eben"
 
 msgid "Keep Chat History"
 msgstr "Nachrichtenverlauf behalten"
-
-msgid "Keep and manage all your chat history"
-msgstr "Behalte und verwalte deinen Nachrichtenverlauf"
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -2718,13 +2687,6 @@ msgstr "Login-Einstellungen"
 
 msgid "Look it up in _Dictionary"
 msgstr "Im Wörterbuch _suchen"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Schaue Dinge bei Wikipedia, in Wörterbüchern oder anderen Suchmaschinen nach "
-"- direkt aus dem Chatfenster"
 
 msgid "Make Admin"
 msgstr "Zum Admin machen"
@@ -2924,9 +2886,6 @@ msgstr "Benötigt libspelling"
 
 msgid "Never"
 msgstr "Niemals"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "Verpasse keine Nachrichten, halte alle deine Chat-Clients synchron"
 
 msgid "New Contact"
 msgstr "Neuer Kontakt"
@@ -3206,9 +3165,6 @@ msgstr "Organisation"
 msgid "Organization (O): "
 msgstr "Organisation (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "Ordne deine Chats mit Arbeitsbereichen"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Anderes"
@@ -3436,9 +3392,6 @@ msgstr "Plugin-Update"
 
 msgid "Plugin already exists"
 msgstr "Plugin existiert bereits"
-
-msgid "Plugin manager"
-msgstr "Plugin-Verwaltung"
 
 msgid "Plugins"
 msgstr "Plugins"
@@ -4006,6 +3959,15 @@ msgstr "Suchen…"
 msgid "Secure Password Storage"
 msgstr "Sichere Passwortverwaltung"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+"Sichere Unterhaltungen: Hochmoderne Ende-zu-Ende-Verschlüsselung für deine "
+"Unterhaltungen. Teile Nachrichten, Bilder und Dateien mit deinen Kontakten – "
+"und nur mit ihnen."
+
 msgid "Security"
 msgstr "Sicherheit"
 
@@ -4161,11 +4123,6 @@ msgstr "Datum festlegen…"
 
 msgid "Set status message"
 msgstr "Statusnachricht festlegen"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
-"Wenn du magst, teile deine Aktivität und die Musik, die du gerade hörst, mit "
-"deinen Freunden"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4460,6 +4417,16 @@ msgstr "Status: Farbe für Offline"
 msgid "Status: Online Color"
 msgstr "Status: Farbe für Online"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+"Bleib in Kontakt: Chats und Gruppen helfen dir, mit deinen Freunden und "
+"deiner Familie in Kontakt zu bleiben. Baue Gemeinschaften auf, indem du dich "
+"mit Menschen verbindest, die die gleichen Interessen haben. Nutze Gruppen, "
+"um kleine Dinge oder das nächste große Ereignis zu organisieren."
+
 msgid "Stop Sharing Online Status?"
 msgstr "Online-Status nicht mehr teilen?"
 
@@ -4499,12 +4466,6 @@ msgstr "Kontakte entfernt"
 
 msgid "Support"
 msgstr "Hilfe"
-
-msgid "Support for multiple accounts"
-msgstr "Unterstützung für mehrere Konten"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Unterstützung für Service discovery inkl. Nodes, Benutzer-Suche"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4577,9 +4538,6 @@ msgstr "TLS-Version"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "TLS-Überprüfung fehlgeschlagen: %s"
-
-msgid "Tabbed chat window"
-msgstr "Chatfenster mit Tabs"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5136,9 +5094,6 @@ msgstr "Proxies für Dateiübertragungen verwenden"
 msgid "Use proxy auth_entication"
 msgstr "Authentifizierung _verwenden"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "Benutze deine liebsten Emojis, lade dein eigenes Profilbild hoch"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "Passwortverwaltung des Systems zum Speichern von Passwörtern verwenden"
 
@@ -5282,9 +5237,6 @@ msgstr "Arbeitsbereiche"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "XML-Konsole, um zu sehen, was auf Protokollebene passiert"
 
 msgid "XMPP Address"
 msgstr "XMPP-Adresse"
@@ -6326,6 +6278,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Autojoin"
 #~ msgstr "Automatisch verbinden"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Automatische Rechtschreibprüfung für deine Nachrichten"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Gruppenchats verwalten"
 
@@ -6349,6 +6304,19 @@ msgstr "… oder hierher ziehen"
 #~ msgstr ""
 #~ "Zertifikat für \n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "Nachrichtenverlauf"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr ""
+#~ "Chatte sicher und verschlüsselt durch Ende-zu-Ende-Verschlüsselung per "
+#~ "OMEMO oder OpenPGP"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr ""
+#~ "Chatte sicher und verschlüsselt durch Ende-zu-Ende-Verschlüsselung per "
+#~ "OMEMO oder OpenPGP."
 
 #~ msgid "Checking file…"
 #~ msgstr "Überprüfe Datei…"
@@ -6379,11 +6347,18 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Completed"
 #~ msgstr "Abgeschlossen"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr ""
+#~ "Verbinde dich mit anderen Messengern durch Transporte (Facebook, IRC, ...)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Verbindung nicht verfügbar"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Kontakt teilt seinen Status nicht mehr"
+
+#~ msgid "Contact list"
+#~ msgstr "Kontaktliste"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Unterhaltung: URL-Farbe"
@@ -6458,6 +6433,11 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Dateien oder Kontakte hier ablegen"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Versende ganz einfach Fotos, Videos oder andere Dateien an Freunde und "
+#~ "Gruppen"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Namen ändern…"
 
@@ -6495,11 +6475,17 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Fehler: Kann %s kann nicht zum Lesen öffnen"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Erweiterbarer Funktionsumfang durch Plugins"
+
 #~ msgid "Expires on"
 #~ msgstr "Läuft ab am"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Funktion unter Windows nicht verfügbar"
+
+#~ msgid "Features:"
+#~ msgstr "Features:"
 
 #~ msgid "File Name: "
 #~ msgstr "Dateiname: "
@@ -6548,6 +6534,13 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim kann auf diese Datei nicht zugreifen"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajim vernetzt sich gut mit deinen übrigen Geräten: Einfach auf dem PC "
+#~ "schreiben und auf dem Handy sehen, was geschrieben wurde."
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim: Keine Updates verfügbar (letzte Überprüfung: %s)"
@@ -6560,6 +6553,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Einladung zum Gruppenchat erhalten"
+
+#~ msgid "Group chat support"
+#~ msgstr "Unterstützung von Gruppenchats"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6608,6 +6604,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Invite New Contact"
 #~ msgstr "Neuen Kontakt einladen"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "Lade Freunde zum Gruppenchat ein oder tritt selbst einem bei"
+
 #~ msgid "Issued on"
 #~ msgstr "Ausgestellt am"
 
@@ -6622,6 +6621,9 @@ msgstr "… oder hierher ziehen"
 #~ "Ich synchronisiere Kontakte von meinem Konto bei \"%s\". Könntest du "
 #~ "diese Adresse bitte deiner Kontaktliste hinzufügen?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Behalte und verwalte deinen Nachrichtenverlauf"
+
 #~ msgid "Key Size"
 #~ msgstr "Schlüssellänge"
 
@@ -6634,6 +6636,13 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Local Time"
 #~ msgstr "Lokale Zeit"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Schaue Dinge bei Wikipedia, in Wörterbüchern oder anderen Suchmaschinen "
+#~ "nach - direkt aus dem Chatfenster"
 
 #~ msgid "Maintainers"
 #~ msgstr "Maintainer"
@@ -6661,6 +6670,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Move Contact"
 #~ msgstr "Kontakt verschieben"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "Verpasse keine Nachrichten, halte alle deine Chat-Clients synchron"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Keine Verbindung verfügbar"
@@ -6693,6 +6705,9 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Organizationseinheit (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Ordne deine Chats mit Arbeitsbereichen"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pause/Fo_rtsetzen"
 
@@ -6711,6 +6726,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Bitte nutze JJJJ-MM-TT"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Plugin-Verwaltung"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "Plugins: Keine Updates verfügbar"
@@ -6846,6 +6864,11 @@ msgstr "… oder hierher ziehen"
 #~ msgid "Serial Number"
 #~ msgstr "Seriennummer"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr ""
+#~ "Wenn du magst, teile deine Aktivität und die Musik, die du gerade hörst, "
+#~ "mit deinen Freunden"
+
 #~ msgid "Show"
 #~ msgstr "Öffnen"
 
@@ -6923,6 +6946,12 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Subscription Request"
 #~ msgstr "Kontaktanfrage"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Unterstützung für mehrere Konten"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Unterstützung für Service discovery inkl. Nodes, Benutzer-Suche"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Zum ersten - neunten Arbeitsbereich wechseln"
@@ -7007,6 +7036,9 @@ msgstr "… oder hierher ziehen"
 #~ "before:\"yyyy-mm-dd\" Suchbegriff\n"
 #~ "after:\"yyyy-mm-dd\" Suchbegriff"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "Benutze deine liebsten Emojis, lade dein eigenes Profilbild hoch"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Umbenennen…"
@@ -7025,6 +7057,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Warum willst du diese Nachrichten moderieren?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML-Konsole, um zu sehen, was auf Protokollebene passiert"
 
 #~ msgid "You Have Unread Messages"
 #~ msgstr "Du hast noch ungelesene Nachrichten"

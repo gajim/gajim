@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Turkish <https://translate.gajim.org/projects/gajim/master/tr/"
@@ -913,10 +913,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1200,15 +1196,15 @@ msgstr "Kişiler"
 msgid "Chat Type"
 msgstr "Tip"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Son Kullanılan:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1409,9 +1405,6 @@ msgstr "Bağlantılı"
 msgid "Connect on startup"
 msgstr "Gajim açılırken bağlan"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Connecting"
 
@@ -1506,10 +1499,6 @@ msgstr "Kişiler"
 #, fuzzy
 msgid "Contact information"
 msgstr "Kişisel Bilgisi"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Kişiler"
 
 msgid "Contacts"
 msgstr "Kişiler"
@@ -1932,9 +1921,6 @@ msgstr "Durum:"
 msgid "Drop files here"
 msgstr "Dosyayı bir kişiye gönderir"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Yemelik"
 
@@ -2103,9 +2089,6 @@ msgstr "Hata: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Ileti alınıyor"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Olay"
 
@@ -2172,6 +2155,11 @@ msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
 msgid "Export…"
 msgstr "Dışa Aktar"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Ekstra Adres:</b>"
@@ -2205,10 +2193,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Özellikler:"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Özellikler:"
 
 msgid "Feedback"
@@ -2437,11 +2421,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2557,10 +2536,6 @@ msgstr "grup %s yok - root kullanılacak\n"
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Grup sohbetler"
 
 msgid "Groups"
 msgstr "Gruplar"
@@ -2813,9 +2788,6 @@ msgstr "Davet _et"
 msgid "Invite Contacts"
 msgstr "Kişi Davet _Et"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Kişi Davet _Et"
@@ -2908,9 +2880,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Son Kullanılan:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3019,11 +2988,6 @@ msgid "Login Settings"
 msgstr "Bağlantı Kurulamıyor"
 
 msgid "Look it up in _Dictionary"
-msgstr ""
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
 msgstr ""
 
 #, fuzzy
@@ -3261,9 +3225,6 @@ msgstr ""
 
 msgid "Never"
 msgstr "Asla"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3582,9 +3543,6 @@ msgstr "Telefondayım"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3839,10 +3797,6 @@ msgstr "Bağlantı Kurulamıyor"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Dosyası zaten var"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Bağlantı Kurulamıyor"
 
 msgid "Plugins"
 msgstr ""
@@ -4519,6 +4473,12 @@ msgstr "Ara"
 msgid "Secure Password Storage"
 msgstr "Parolayı Değiştir"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4706,9 +4666,6 @@ msgstr "Moderatör"
 #, fuzzy
 msgid "Set status message"
 msgstr "durum ileti"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5051,6 +5008,12 @@ msgstr "durum ileti"
 msgid "Status: Online Color"
 msgstr "durum ileti"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "bana mesaj göndermek için"
@@ -5097,12 +5060,6 @@ msgid "Successfully Removed Contacts"
 msgstr "Kişiyi yeniden adlandır"
 
 msgid "Support"
-msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
 msgid ""
@@ -5185,9 +5142,6 @@ msgstr "GTK+ Runtime Sürümü"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "<b>Bir hata oluştu:</b>"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5763,9 +5717,6 @@ msgstr "Dosya aktarım vekil sunucları kullan"
 msgid "Use proxy auth_entication"
 msgstr "Vergil do_ğrulama kullan"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5927,9 +5878,6 @@ msgid "Workspaces"
 msgstr "Kişiyi yeniden adlandır"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -6981,6 +6929,10 @@ msgstr ""
 #~ msgstr "Kendiliğinden Katıl"
 
 #, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "<b>Önceden hazırlanmış Durum İletleri</b>"
+
+#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Yer imi"
 
@@ -7034,6 +6986,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Üyelikten çıkarıldı"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kişiler"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7130,6 +7086,10 @@ msgstr ""
 #~ msgstr "Hiç bir hesap bulunmiyor"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Özellikler:"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Dosya adı: %s"
 
@@ -7190,6 +7150,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Grup Sohbeti Daveti"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Grup sohbetler"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Menüyi gizle"
@@ -7283,6 +7247,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Bağlantı Kurulamıyor"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Bağlantı Kurulamıyor"
 
 #, fuzzy

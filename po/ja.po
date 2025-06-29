@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2025-06-18 03:12+0000\n"
 "Last-Translator: 翻訳者X <tairanto2@wail.ch>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -828,9 +828,6 @@ msgstr "自動プレビューは無効です"
 msgid "Automatic preview disabled (file too big)"
 msgstr "自動プレビューは無効です (ファイルが大きすぎます)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "入力メッセージの自動スペルチェック"
-
 msgid "Automatically accept all contact requests"
 msgstr "相手先の申し込みを自動的に承諾します"
 
@@ -1072,14 +1069,15 @@ msgstr "チャット一覧"
 msgid "Chat Type"
 msgstr "チャットの種類"
 
-msgid "Chat history"
-msgstr "会話の履歴"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャット"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャット。"
+#, fuzzy
+msgid "Chat window"
+msgstr "タブ化チャットウィンドウ"
 
 msgid "Chats"
 msgstr "チャット"
@@ -1259,9 +1257,6 @@ msgstr "接続"
 msgid "Connect on startup"
 msgstr "起動時に接続する"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr "中継による他のメッセンジャー(Facebook, IRC, ...)への接続"
-
 msgid "Connecting"
 msgstr "接続中です"
 
@@ -1337,9 +1332,6 @@ msgstr "相手先の申し込み"
 
 msgid "Contact information"
 msgstr "相手先の情報"
-
-msgid "Contact list"
-msgstr "相手先一覧"
 
 msgid "Contacts"
 msgstr "相手先"
@@ -1707,9 +1699,6 @@ msgstr "下書き: %s"
 msgid "Drop files here"
 msgstr "ここにファイルをドロップ"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr "友人やグループへの画像・動画やその他のファイルの簡単な送信"
-
 msgid "Eating"
 msgstr "食事"
 
@@ -1859,9 +1848,6 @@ msgstr "エラー: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "エラー: %s (MIME タイプ: %s)"
 
-msgid "Even more features via plugins"
-msgstr "プラグインによる機能拡張"
-
 msgid "Event"
 msgstr "イベント"
 
@@ -1916,6 +1902,11 @@ msgstr "メッセージを書き出しています…"
 msgid "Export…"
 msgstr "書き出し…"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "建物名など"
 
@@ -1943,9 +1934,6 @@ msgstr "家族"
 
 msgid "Features"
 msgstr "特徴"
-
-msgid "Features:"
-msgstr "機能:"
 
 msgid "Feedback"
 msgstr "フィードバック"
@@ -2159,12 +2147,6 @@ msgstr ""
 "Gajimはエラーに遭遇しました。\n"
 "このレポートを送信して、この問題の修正にご協力ください。"
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajimは他のデバイスとよく連携します。モバイル端末でも会話を続けられます。"
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim は保存記録と完全に同期しています。"
 
@@ -2258,9 +2240,6 @@ msgstr "談話室はメンバー以外には見えなくなります"
 
 msgid "Group chat now shows unavailable members"
 msgstr "談話室はメンバー以外にも見えるようになります"
-
-msgid "Group chat support"
-msgstr "談話室に対応"
 
 msgid "Groups"
 msgstr "グループ"
@@ -2494,9 +2473,6 @@ msgstr "招待"
 msgid "Invite Contacts"
 msgstr "相手先を招待"
 
-msgid "Invite friends to group chats or join one"
-msgstr "談話室への招待と参加"
-
 msgid "Invite to this chat"
 msgstr "この談話室に招待"
 
@@ -2575,9 +2551,6 @@ msgstr "たった今"
 
 msgid "Keep Chat History"
 msgstr "会話の履歴を保存"
-
-msgid "Keep and manage all your chat history"
-msgstr "すべての会話履歴の保存と管理"
 
 msgid "Key usage does not include certificate signing"
 msgstr "証明書署名に鍵の使い方が含まれていません"
@@ -2678,11 +2651,6 @@ msgstr "ログイン設定"
 
 msgid "Look it up in _Dictionary"
 msgstr "辞書を引く (_D)"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr "チャットウィンドウから直接 Wikipedia や辞書その他の検索エンジンの利用"
 
 msgid "Make Admin"
 msgstr "管理人にする"
@@ -2890,9 +2858,6 @@ msgstr "libspelling がインストールされている必要があります"
 # (Mako)systrayに表示
 msgid "Never"
 msgstr "しない"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "他のクライアントと同期し、メッセージを取りこぼしません"
 
 msgid "New Contact"
 msgstr "新しい相手先"
@@ -3178,9 +3143,6 @@ msgstr "組織"
 msgid "Organization (O): "
 msgstr "組織 (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "チャットを作業空間にまとめる"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "その他"
@@ -3406,9 +3368,6 @@ msgstr "プラグインの更新"
 
 msgid "Plugin already exists"
 msgstr "プラグインは既に存在しています"
-
-msgid "Plugin manager"
-msgstr "プラグイン管理"
 
 msgid "Plugins"
 msgstr "プラグイン"
@@ -3982,6 +3941,12 @@ msgstr "検索…"
 msgid "Secure Password Storage"
 msgstr "安全なパスワード保存"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "セキュリティ"
 
@@ -4134,9 +4099,6 @@ msgstr "日付を設定…"
 
 msgid "Set status message"
 msgstr "状況メッセージを設定"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr "どんな気持ちか友人に知らせるため、動向・聴いている楽曲を設定"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "GLib デバッグのメッセージが出力されるように環境変数を設定"
@@ -4432,6 +4394,12 @@ msgstr "在席状況: 「オフライン」の色"
 msgid "Status: Online Color"
 msgstr "在席状況: 「在席」の色"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "在席状況を知らせるのをやめますか ?"
 
@@ -4473,12 +4441,6 @@ msgstr "相手先は正常に除去されました"
 
 msgid "Support"
 msgstr "サポート"
-
-msgid "Support for multiple accounts"
-msgstr "複数アカウントに対応"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr "ノードやユーザー検索などのサービス探索に対応"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4551,9 +4513,6 @@ msgstr "TLS バージョン"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "TLS の検証に失敗しました: %s"
-
-msgid "Tabbed chat window"
-msgstr "タブ化チャットウィンドウ"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5093,9 +5052,6 @@ msgstr "ファイル転送のプロキシを使う"
 msgid "Use proxy auth_entication"
 msgstr "プロキシの認証を使用する (_E)"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "お好みの絵文字の利用、プロフィール画像の設定"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "パスワード保存にシステムの鍵束を使います"
 
@@ -5239,9 +5195,6 @@ msgstr "作業空間"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "プロトコル層で何が起こったか確認できる XML コンソール"
 
 msgid "XMPP Address"
 msgstr "XMPP アドレス"
@@ -6255,6 +6208,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Autojoin"
 #~ msgstr "自動参加"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "入力メッセージの自動スペルチェック"
+
 #~ msgid "Bookmarks"
 #~ msgstr "ブックマーク"
 
@@ -6276,6 +6232,15 @@ msgstr "…またはここにドロップ"
 #~ msgstr ""
 #~ "証明書 \n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "会話の履歴"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャット"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr "OMEMO または OpenPGP での端末間暗号化による安全なチャット。"
 
 #~ msgid "Checking file…"
 #~ msgstr "ファイルをチェックしています…"
@@ -6308,11 +6273,17 @@ msgstr "…またはここにドロップ"
 #~ msgid "Completed"
 #~ msgstr "完了しました"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr "中継による他のメッセンジャー(Facebook, IRC, ...)への接続"
+
 #~ msgid "Connection not available"
 #~ msgstr "接続していません"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "在席通知の取り消し"
+
+#~ msgid "Contact list"
+#~ msgstr "相手先一覧"
 
 # (Mako) 語順が問題。コロンでごまかしてみる
 #~ msgid "Conversation: URL Color"
@@ -6385,6 +6356,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Drop files or contacts"
 #~ msgstr "ファイルまたは相手先をドロップ"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr "友人やグループへの画像・動画やその他のファイルの簡単な送信"
+
 #~ msgid "Edit Name…"
 #~ msgstr "名前を編集…"
 
@@ -6414,11 +6388,17 @@ msgstr "…またはここにドロップ"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "エラー: 読み込みモードで %s を開けません"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "プラグインによる機能拡張"
+
 #~ msgid "Expires on"
 #~ msgstr "至"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Windows ではこの機能は無効です"
+
+#~ msgid "Features:"
+#~ msgstr "機能:"
 
 #~ msgid "File Name: "
 #~ msgstr "ファイル名: "
@@ -6460,6 +6440,12 @@ msgstr "…またはここにドロップ"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim はこのファイルを読むことができません"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajimは他のデバイスとよく連携します。モバイル端末でも会話を続けられます。"
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "有効な更新はありません (最後の確認: %s)"
@@ -6472,6 +6458,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "談話室への招待を受諾"
+
+#~ msgid "Group chat support"
+#~ msgstr "談話室に対応"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6519,6 +6508,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Invite New Contact"
 #~ msgstr "新しい相手先を招待"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "談話室への招待と参加"
+
 #~ msgid "Issued on"
 #~ msgstr "自"
 
@@ -6533,6 +6525,9 @@ msgstr "…またはここにドロップ"
 #~ "私はアカウントの相手先を \"%s\" に同期しています。このアドレスをあなたの相"
 #~ "手先一覧に追加していただけますか ?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "すべての会話履歴の保存と管理"
+
 #~ msgid "Key Size"
 #~ msgstr "鍵のサイズ"
 
@@ -6545,6 +6540,12 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Local Time"
 #~ msgstr "現地時間"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "チャットウィンドウから直接 Wikipedia や辞書その他の検索エンジンの利用"
 
 #~ msgid "Maintainers"
 #~ msgstr "メンテナ"
@@ -6571,6 +6572,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Move Contact"
 #~ msgstr "相手先を移動"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "他のクライアントと同期し、メッセージを取りこぼしません"
 
 #~ msgid "No Connection Available"
 #~ msgstr "接続していません"
@@ -6603,6 +6607,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "部門 (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "チャットを作業空間にまとめる"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "一時中断/再開 (_U)"
 
@@ -6621,6 +6628,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "yyyy-mm-dd を使用してください"
+
+#~ msgid "Plugin manager"
+#~ msgstr "プラグイン管理"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "プラグイン: 利用可能な更新はありません"
@@ -6753,6 +6763,9 @@ msgstr "…またはここにドロップ"
 #~ msgid "Serial Number"
 #~ msgstr "シリアル番号"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr "どんな気持ちか友人に知らせるため、動向・聴いている楽曲を設定"
+
 #~ msgid "Show"
 #~ msgstr "表示"
 
@@ -6824,6 +6837,12 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Subscription Request"
 #~ msgstr "在席通知の申し込み"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "複数アカウントに対応"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "ノードやユーザー検索などのサービス探索に対応"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "1--9番目の作業空間へ切替"
@@ -6908,6 +6927,9 @@ msgstr "…またはここにドロップ"
 #~ "before:yyyy-mm-dd\n"
 #~ "after:yyyy-mm-dd"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "お好みの絵文字の利用、プロフィール画像の設定"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "名前を変更…"
@@ -6926,6 +6948,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "なぜこれらのメッセージを抑制したいのですか ?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "プロトコル層で何が起こったか確認できる XML コンソール"
 
 #~ msgid "You Have Unread Messages"
 #~ msgstr "未読のメッセージがあります"

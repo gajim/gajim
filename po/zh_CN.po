@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2025-06-28 12:22+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
@@ -819,9 +819,6 @@ msgstr "自动预览已禁用"
 msgid "Automatic preview disabled (file too big)"
 msgstr "自动预览已禁用（文件太大）"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "自动拼写检查您的消息"
-
 msgid "Automatically accept all contact requests"
 msgstr "自动接受所有联系人请求"
 
@@ -1060,14 +1057,15 @@ msgstr "聊天列表"
 msgid "Chat Type"
 msgstr "聊天类型"
 
-msgid "Chat history"
-msgstr "聊天记录"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天。"
+#, fuzzy
+msgid "Chat window"
+msgstr "标签页式聊天窗口"
 
 msgid "Chats"
 msgstr "聊天"
@@ -1244,9 +1242,6 @@ msgstr "连接"
 msgid "Connect on startup"
 msgstr "启动时连接"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr "通过传输连接到其他聊天软件（Facebook、IRC…）"
-
 msgid "Connecting"
 msgstr "正在连接"
 
@@ -1322,9 +1317,6 @@ msgstr "联系人请求"
 
 msgid "Contact information"
 msgstr "联系人信息"
-
-msgid "Contact list"
-msgstr "联系人列表"
 
 msgid "Contacts"
 msgstr "联系人"
@@ -1687,9 +1679,6 @@ msgstr "草稿：%s"
 msgid "Drop files here"
 msgstr "将文件拖放到此处"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr "轻松向朋友和群组发送图片、视频或其他文件"
-
 msgid "Eating"
 msgstr "用餐中"
 
@@ -1838,9 +1827,6 @@ msgstr "错误：%s"
 msgid "Error: %s (mime types: %s)"
 msgstr "错误：%s（MIME 类型：%s）"
 
-msgid "Even more features via plugins"
-msgstr "通过插件实现更多功能"
-
 msgid "Event"
 msgstr "事件"
 
@@ -1895,6 +1881,11 @@ msgstr "正在导出您的消息…"
 msgid "Export…"
 msgstr "导出…"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "扩展地址"
 
@@ -1922,9 +1913,6 @@ msgstr "家人"
 
 msgid "Features"
 msgstr "功能"
-
-msgid "Features:"
-msgstr "功能："
 
 msgid "Feedback"
 msgstr "反馈"
@@ -2130,11 +2118,6 @@ msgstr ""
 "Gajim 遇到了错误。\n"
 "请通过发送此报告来帮助我们解决此问题。"
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim 与归档完全同步。"
 
@@ -2227,9 +2210,6 @@ msgstr "群聊现在不显示已离线的成员"
 
 msgid "Group chat now shows unavailable members"
 msgstr "群聊现在会显示已离线的成员"
-
-msgid "Group chat support"
-msgstr "群聊支持"
 
 msgid "Groups"
 msgstr "分组"
@@ -2455,9 +2435,6 @@ msgstr "邀请"
 msgid "Invite Contacts"
 msgstr "邀请联系人"
 
-msgid "Invite friends to group chats or join one"
-msgstr "邀请朋友加入群聊或自己加入群聊"
-
 msgid "Invite to this chat"
 msgstr "邀请加入此聊天"
 
@@ -2535,9 +2512,6 @@ msgstr "刚刚"
 
 msgid "Keep Chat History"
 msgstr "保留聊天记录"
-
-msgid "Keep and manage all your chat history"
-msgstr "保留和管理您的所有聊天记录"
 
 msgid "Key usage does not include certificate signing"
 msgstr "密钥用途不包含证书签名"
@@ -2638,11 +2612,6 @@ msgstr "登录设置"
 
 msgid "Look it up in _Dictionary"
 msgstr "在词典中查找内容(_D)"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr "直接从聊天窗口在维基百科、词典或其他搜索引擎上查找内容"
 
 msgid "Make Admin"
 msgstr "设为管理员"
@@ -2842,9 +2811,6 @@ msgstr "需要安装 libspelling"
 
 msgid "Never"
 msgstr "从不"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "绝不错过任何消息，与您的所有的聊天客户端保持同步"
 
 msgid "New Contact"
 msgstr "新联系人"
@@ -3121,9 +3087,6 @@ msgstr "组织"
 msgid "Organization (O): "
 msgstr "组织 (O)： "
 
-msgid "Organize your chats with workspaces"
-msgstr "用工作区整理您的聊天"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "其他"
@@ -3347,9 +3310,6 @@ msgstr "插件更新"
 
 msgid "Plugin already exists"
 msgstr "插件已存在"
-
-msgid "Plugin manager"
-msgstr "插件管理器"
 
 msgid "Plugins"
 msgstr "插件"
@@ -3916,6 +3876,12 @@ msgstr "搜索…"
 msgid "Secure Password Storage"
 msgstr "安全密码存储"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "安全"
 
@@ -4068,9 +4034,6 @@ msgstr "设置日期…"
 
 msgid "Set status message"
 msgstr "设置状态消息"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr "设置活动或音乐来向朋友展示您的感受"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "设置环境变量以便打印 GLib 调试信息"
@@ -4352,6 +4315,12 @@ msgstr "状态：离线颜色"
 msgid "Status: Online Color"
 msgstr "状态：在线颜色"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "停止分享在线状态？"
 
@@ -4391,12 +4360,6 @@ msgstr "已成功移除联系人"
 
 msgid "Support"
 msgstr "支持"
-
-msgid "Support for multiple accounts"
-msgstr "支持多个账号"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr "支持服务发现，包括节点和用户搜索"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4468,9 +4431,6 @@ msgstr "TLS 版本"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "TLS 验证失败：%s"
-
-msgid "Tabbed chat window"
-msgstr "标签页式聊天窗口"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -4988,9 +4948,6 @@ msgstr "使用文件传输代理"
 msgid "Use proxy auth_entication"
 msgstr "使用代理身份验证(_E)"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "使用您喜欢的表情图标，设置您的个人资料照片"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "使用您系统的密钥环来存储密码"
 
@@ -5131,9 +5088,6 @@ msgstr "工作区"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "XML 控制台可用来查看协议层情况"
 
 msgid "XMPP Address"
 msgstr "XMPP 地址"
@@ -6151,6 +6105,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Autojoin"
 #~ msgstr "自动加入"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "自动拼写检查您的消息"
+
 #~ msgid "Bookmarks"
 #~ msgstr "书签"
 
@@ -6172,6 +6129,15 @@ msgstr "…或将其拖放到此处"
 #~ msgstr ""
 #~ "证书 \n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "聊天记录"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr "通过 OMEMO 或 OpenPGP 使用端到端加密安全聊天。"
 
 #~ msgid "Checking file…"
 #~ msgstr "正在检查文件…"
@@ -6202,11 +6168,17 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Completed"
 #~ msgstr "已完成"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr "通过传输连接到其他聊天软件（Facebook、IRC…）"
+
 #~ msgid "Connection not available"
 #~ msgstr "连接不可用"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "联系人已取消订阅"
+
+#~ msgid "Contact list"
+#~ msgstr "联系人列表"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "对话：URL 颜色"
@@ -6281,6 +6253,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Drop files or contacts"
 #~ msgstr "拖放文件或联系人"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr "轻松向朋友和群组发送图片、视频或其他文件"
+
 #~ msgid "Edit Name…"
 #~ msgstr "编辑名称…"
 
@@ -6313,11 +6288,17 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "错误：无法打开 %s 进行读取"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "通过插件实现更多功能"
+
 #~ msgid "Expires on"
 #~ msgstr "截止日期"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Windows 系统无法使用此功能"
+
+#~ msgid "Features:"
+#~ msgstr "功能："
 
 #~ msgid "File Name: "
 #~ msgstr "文件名： "
@@ -6363,6 +6344,11 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim 无法读取此文件"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr "Gajim 与您的其他设备集成良好：只需在移动设备上继续对话即可。"
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim：无可用更新（上次检查：%s）"
@@ -6375,6 +6361,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "收到的群聊邀请"
+
+#~ msgid "Group chat support"
+#~ msgstr "群聊支持"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6420,6 +6409,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Invite New Contact"
 #~ msgstr "邀请新联系人"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "邀请朋友加入群聊或自己加入群聊"
+
 #~ msgid "Issued on"
 #~ msgstr "颁发日期"
 
@@ -6433,6 +6425,9 @@ msgstr "…或将其拖放到此处"
 #~ msgstr ""
 #~ "我正在同步来自“%s”账号的联系人。可以请您将此地址添加到您的联系人列表吗？"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "保留和管理您的所有聊天记录"
+
 #~ msgid "Key Size"
 #~ msgstr "密钥长度"
 
@@ -6445,6 +6440,11 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Local Time"
 #~ msgstr "本地时间"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr "直接从聊天窗口在维基百科、词典或其他搜索引擎上查找内容"
 
 #~ msgid "Maintainers"
 #~ msgstr "维护者"
@@ -6470,6 +6470,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Move Contact"
 #~ msgstr "移动联系人"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "绝不错过任何消息，与您的所有的聊天客户端保持同步"
 
 #~ msgid "No Connection Available"
 #~ msgstr "无可用连接"
@@ -6502,6 +6505,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "组织单元 (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "用工作区整理您的聊天"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "暂停(_U)/继续"
 
@@ -6520,6 +6526,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "请使用 yyyy-mm-dd 格式"
+
+#~ msgid "Plugin manager"
+#~ msgstr "插件管理器"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "插件：无可用更新"
@@ -6648,6 +6657,9 @@ msgstr "…或将其拖放到此处"
 #~ msgid "Serial Number"
 #~ msgstr "序列号"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr "设置活动或音乐来向朋友展示您的感受"
+
 #~ msgid "Show"
 #~ msgstr "显示"
 
@@ -6722,6 +6734,12 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Subscription Request"
 #~ msgstr "订阅请求"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "支持多个账号"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "支持服务发现，包括节点和用户搜索"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "切换至第一至第九工作区"
@@ -6805,6 +6823,9 @@ msgstr "…或将其拖放到此处"
 #~ "之前：“yyyy-mm-dd”搜索词\n"
 #~ "之后：“yyyy-mm-dd”搜索词"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "使用您喜欢的表情图标，设置您的个人资料照片"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "重命名…"
@@ -6823,6 +6844,9 @@ msgstr "…或将其拖放到此处"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "为什么要撤回这些消息？"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML 控制台可用来查看协议层情况"
 
 #~ msgid "You Have Unread Messages"
 #~ msgstr "您有未读消息"

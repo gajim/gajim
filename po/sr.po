@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -927,10 +927,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "Провера правописа састављених порука."
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1208,15 +1204,15 @@ msgstr "Контакт"
 msgid "Chat Type"
 msgstr "Тип"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Недавно:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1417,9 +1413,6 @@ msgstr "На вези"
 msgid "Connect on startup"
 msgstr "По_вежи се приликом покретања Гајима"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Повезивање"
 
@@ -1512,10 +1505,6 @@ msgstr "Контакт"
 #, fuzzy
 msgid "Contact information"
 msgstr "Информације контакта"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Контакт"
 
 #, fuzzy
 msgid "Contacts"
@@ -1947,9 +1936,6 @@ msgstr "Статус: "
 msgid "Drop files here"
 msgstr "Шаље датотеку контакту"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Једем"
 
@@ -2123,9 +2109,6 @@ msgstr "Грешка: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Порука грешке: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "догађај"
 
@@ -2192,6 +2175,11 @@ msgstr "Шифрујем поруке разговора."
 msgid "Export…"
 msgstr "Извези"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Додатна адреса:</b>"
@@ -2224,10 +2212,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Могућности"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Могућности"
 
 msgid "Feedback"
@@ -2456,11 +2440,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2574,10 +2553,6 @@ msgstr "соба сада не приказује недоступне члан�
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Соба сада приказује недоступне чланове"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Групни разговори"
 
 msgid "Groups"
 msgstr "Групе"
@@ -2838,9 +2813,6 @@ msgstr "Позо_ви"
 msgid "Invite Contacts"
 msgstr "Позови контакте"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Позови контакте"
@@ -2933,9 +2905,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Недавно:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "Употреба кључа не укључује потписивање сертификата"
@@ -3049,11 +3018,6 @@ msgstr "Регистрација неуспела"
 
 msgid "Look it up in _Dictionary"
 msgstr "Потражи у Речнику"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3290,9 +3254,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "Сервер"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3610,9 +3571,6 @@ msgstr "На одмору"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3865,10 +3823,6 @@ msgstr "Регистрација неуспела"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Ова датотека већ постоји"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Регистрација неуспела"
 
 msgid "Plugins"
 msgstr ""
@@ -4549,6 +4503,12 @@ msgstr "Претрага"
 msgid "Secure Password Storage"
 msgstr "Сачувај лозинку"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4735,9 +4695,6 @@ msgstr "Модератор"
 #, fuzzy
 msgid "Set status message"
 msgstr "статусна порука"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5083,6 +5040,12 @@ msgstr "Статусна порука"
 msgid "Status: Online Color"
 msgstr "Статусна порука"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "да ми пошаље статус"
@@ -5129,13 +5092,6 @@ msgstr "Преименуј контакт"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Откривање услуга са налога %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5217,9 +5173,6 @@ msgstr "ГТК+ верзија:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Грешка SSL сертификата"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5804,9 +5757,6 @@ msgstr "Користи прокси за пренос датотека"
 msgid "Use proxy auth_entication"
 msgstr "Користи прокси пријављивање"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5966,9 +5916,6 @@ msgid "Workspaces"
 msgstr "Преименуј контакт"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7028,6 +6975,10 @@ msgstr ""
 #~ msgstr "Аутоматско повезивање"
 
 #, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Провера правописа састављених порука."
+
+#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Маркирај ову со_бу"
 
@@ -7080,6 +7031,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Укинута претплата"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Контакт"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7188,6 +7143,10 @@ msgstr ""
 #~ msgstr "Могућност није доступна под Виндоуз системом."
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Могућности"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Име датотеке: %s"
 
@@ -7247,6 +7206,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Позив на групни разговор"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Групни разговори"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Сакриј овај мени"
@@ -7351,6 +7314,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Регистрација неуспела"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Регистрација неуспела"
 
 #, fuzzy
@@ -7522,6 +7489,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Захтев за претплатом"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Откривање услуга са налога %s"
 
 #~ msgid "Synchronise"
 #~ msgstr "Синхронизуј"

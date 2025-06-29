@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-08-20 16:17+0000\n"
 "Last-Translator: OIS <mistresssilvara@hotmail.com>\n"
 "Language-Team: Occidental <https://translate.gajim.org/projects/gajim/master/"
@@ -820,9 +820,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1067,14 +1064,15 @@ msgstr "Conversationes"
 msgid "Chat Type"
 msgstr ""
 
-msgid "Chat history"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
 msgstr ""
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
+#, fuzzy
+msgid "Chat window"
+msgstr "Conversationes"
 
 msgid "Chats"
 msgstr "Conversationes"
@@ -1250,9 +1248,6 @@ msgstr "Conexer"
 msgid "Connect on startup"
 msgstr ""
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr ""
 
@@ -1334,9 +1329,6 @@ msgstr "Contactes"
 #, fuzzy
 msgid "Contact information"
 msgstr "Information"
-
-msgid "Contact list"
-msgstr ""
 
 msgid "Contacts"
 msgstr "Contactes"
@@ -1700,9 +1692,6 @@ msgstr ""
 msgid "Drop files here"
 msgstr ""
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr ""
 
@@ -1849,9 +1838,6 @@ msgstr ""
 msgid "Error: %s (mime types: %s)"
 msgstr ""
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Eveniment"
 
@@ -1910,6 +1896,11 @@ msgstr ""
 msgid "Export…"
 msgstr "Exportar"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr ""
 
@@ -1937,9 +1928,6 @@ msgstr "Familie"
 
 msgid "Features"
 msgstr "Caracteristicas"
-
-msgid "Features:"
-msgstr "Caracteristicas:"
 
 msgid "Feedback"
 msgstr ""
@@ -2143,11 +2131,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2239,9 +2222,6 @@ msgid "Group chat now does not show unavailable members"
 msgstr ""
 
 msgid "Group chat now shows unavailable members"
-msgstr ""
-
-msgid "Group chat support"
 msgstr ""
 
 msgid "Groups"
@@ -2467,9 +2447,6 @@ msgstr ""
 msgid "Invite Contacts"
 msgstr "Contactes"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 msgid "Invite to this chat"
 msgstr ""
 
@@ -2547,9 +2524,6 @@ msgid "Just now"
 msgstr ""
 
 msgid "Keep Chat History"
-msgstr ""
-
-msgid "Keep and manage all your chat history"
 msgstr ""
 
 msgid "Key usage does not include certificate signing"
@@ -2650,11 +2624,6 @@ msgid "Login Settings"
 msgstr ""
 
 msgid "Look it up in _Dictionary"
-msgstr ""
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
 msgstr ""
 
 msgid "Make Admin"
@@ -2854,9 +2823,6 @@ msgid "Needs libspelling to be installed"
 msgstr ""
 
 msgid "Never"
-msgstr ""
-
-msgid "Never miss a message, keep all your chat clients synchronized"
 msgstr ""
 
 msgid "New Contact"
@@ -3133,9 +3099,6 @@ msgstr ""
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 msgctxt "Gender"
 msgid "Other"
 msgstr ""
@@ -3352,9 +3315,6 @@ msgid "Plugin Update"
 msgstr ""
 
 msgid "Plugin already exists"
-msgstr ""
-
-msgid "Plugin manager"
 msgstr ""
 
 msgid "Plugins"
@@ -3937,6 +3897,12 @@ msgstr ""
 msgid "Secure Password Storage"
 msgstr ""
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4089,9 +4055,6 @@ msgid "Set date…"
 msgstr ""
 
 msgid "Set status message"
-msgstr ""
-
-msgid "Set your activity or tune to show your friends how you are feeling"
 msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
@@ -4376,6 +4339,12 @@ msgstr ""
 msgid "Status: Online Color"
 msgstr ""
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr ""
 
@@ -4417,12 +4386,6 @@ msgid "Successfully Removed Contacts"
 msgstr "Contactes"
 
 msgid "Support"
-msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
 msgid ""
@@ -4490,9 +4453,6 @@ msgstr ""
 
 #, python-format
 msgid "TLS verification failed: %s"
-msgstr ""
-
-msgid "Tabbed chat window"
 msgstr ""
 
 msgctxt "Group chat name"
@@ -5003,9 +4963,6 @@ msgstr ""
 msgid "Use proxy auth_entication"
 msgstr ""
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5146,9 +5103,6 @@ msgid "Workspaces"
 msgstr "Contactes"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 msgid "XMPP Address"
@@ -5856,6 +5810,9 @@ msgstr ""
 
 #~ msgid "Error!"
 #~ msgstr "Errore!"
+
+#~ msgid "Features:"
+#~ msgstr "Caracteristicas:"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"

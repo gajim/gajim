@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -930,10 +930,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "Stavekontrol af forfattede beskeder."
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1212,15 +1208,15 @@ msgstr "Kontakter"
 msgid "Chat Type"
 msgstr "Type"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "For nylig:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1421,9 +1417,6 @@ msgstr "Tilsluttet"
 msgid "Connect on startup"
 msgstr "T_ilslut når Gajim startes"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Tilslutter"
 
@@ -1516,10 +1509,6 @@ msgstr "Kontakter"
 #, fuzzy
 msgid "Contact information"
 msgstr "Kontakt Information"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Kontakter"
 
 msgid "Contacts"
 msgstr "Kontakter"
@@ -1948,9 +1937,6 @@ msgstr "Status: "
 msgid "Drop files here"
 msgstr "Send en fil til en kontakt"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Spiser"
 
@@ -2123,9 +2109,6 @@ msgstr "Fejl: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Fejl besked: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Hændelse"
 
@@ -2192,6 +2175,11 @@ msgstr "Krypterer samtale beskeder."
 msgid "Export…"
 msgstr "Eksporter"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Ekstra Adresse:</b>"
@@ -2224,10 +2212,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Egenskaber"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Egenskaber"
 
 msgid "Feedback"
@@ -2456,11 +2440,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2574,10 +2553,6 @@ msgstr "Rummet viser nu ikke; ikke tilgængelige medlemmer"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Rummet viser nu; ikke tilgængelige medlemmer"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Gruppesamtaler"
 
 msgid "Groups"
 msgstr "Grupper"
@@ -2838,9 +2813,6 @@ msgstr "In_viter"
 msgid "Invite Contacts"
 msgstr "Inviter _Kontakter"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Inviter _Kontakter"
@@ -2933,9 +2905,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "For nylig:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "Nøglebrug indeholder ikke certifikat signering"
@@ -3050,11 +3019,6 @@ msgstr "Tilslutning fejlede"
 
 msgid "Look it up in _Dictionary"
 msgstr "Slå dette op i Or_dbogen"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3291,9 +3255,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "Server"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3611,9 +3572,6 @@ msgstr "Få Ferie"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3866,10 +3824,6 @@ msgstr "Tilslutning fejlede"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Denne fil eksisterer allerede"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Tilslutning fejlede"
 
 msgid "Plugins"
 msgstr ""
@@ -4550,6 +4504,12 @@ msgstr "Søg"
 msgid "Secure Password Storage"
 msgstr "Gem adgangskode"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4736,9 +4696,6 @@ msgstr "Moderator"
 #, fuzzy
 msgid "Set status message"
 msgstr "status besked"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5084,6 +5041,12 @@ msgstr "Status Besked"
 msgid "Status: Online Color"
 msgstr "Status Besked"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "at sende mig status"
@@ -5130,13 +5093,6 @@ msgstr "Omdøb Kontakt"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Opdag Tjenester med kontoen %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5218,9 +5174,6 @@ msgstr "GTK+ Version:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "SSL certifikat fejl"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5803,9 +5756,6 @@ msgstr "Brug fil transport proxy"
 msgid "Use proxy auth_entication"
 msgstr "Brug proxy godkendelse"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5966,9 +5916,6 @@ msgid "Workspaces"
 msgstr "Omdøb Kontakt"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7035,6 +6982,10 @@ msgstr ""
 #~ msgstr "Bliv automatisk med"
 
 #, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Stavekontrol af forfattede beskeder."
+
+#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Bogmærke"
 
@@ -7086,6 +7037,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Frameldt abonnement"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kontakter"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7202,6 +7157,10 @@ msgstr ""
 #~ msgstr "Egenskab ikke tilgængelig under Windows."
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Egenskaber"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Filnavn: %s"
 
@@ -7259,6 +7218,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Gruppesamtale Invitation"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Gruppesamtaler"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Skjul denne menu"
@@ -7363,6 +7326,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Tilslutning fejlede"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Tilslutning fejlede"
 
 #, fuzzy
@@ -7537,6 +7504,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Abonnement Forespørgsel"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Opdag Tjenester med kontoen %s"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synkroniser"

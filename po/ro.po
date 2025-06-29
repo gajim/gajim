@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -845,9 +845,6 @@ msgstr "Previzualizare automată dezactivată"
 msgid "Automatic preview disabled (file too big)"
 msgstr "Previzualizare automată dezactivată (fișier prea mare)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Verificarea ortografică automată a mesajelor dumneavoastră"
-
 msgid "Automatically accept all contact requests"
 msgstr "Acceptați automat toate cererile de contact"
 
@@ -1096,14 +1093,15 @@ msgstr "Lista de chat"
 msgid "Chat Type"
 msgstr "Tip"
 
-msgid "Chat history"
-msgstr "Istoric chat"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "Conversați în siguranță cu criptare End-to-End prin OMEMO sau OpenPGP"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "Discutați în siguranță cu criptare End-to-End prin OMEMO sau OpenPGP."
+#, fuzzy
+msgid "Chat window"
+msgstr "Fereastră de chat cu file"
 
 msgid "Chats"
 msgstr "Chat-uri"
@@ -1288,11 +1286,6 @@ msgstr "Conectare"
 msgid "Connect on startup"
 msgstr "Conectare la pornire"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-"Conectați-vă la alți mesageri prin intermediul transporturilor (Facebook, "
-"IRC, ...)"
-
 msgid "Connecting"
 msgstr "Conectare"
 
@@ -1370,9 +1363,6 @@ msgstr "Lista de contacte"
 
 msgid "Contact information"
 msgstr "Informații de contact"
-
-msgid "Contact list"
-msgstr "Lista de contacte"
 
 msgid "Contacts"
 msgstr "Contacte"
@@ -1754,11 +1744,6 @@ msgstr "Schiță: %s"
 msgid "Drop files here"
 msgstr "Aruncați fișierele aici"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-"Trimiteți cu ușurință imagini, clipuri video sau alte fișiere către prieteni "
-"și grupuri"
-
 msgid "Eating"
 msgstr "Mâncând"
 
@@ -1920,9 +1905,6 @@ msgstr "Eroare: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Mesaj de eroare: %s"
 
-msgid "Even more features via plugins"
-msgstr "Chiar mai multe caracteristici prin intermediul plugin-urilor"
-
 msgid "Event"
 msgstr "Eveniment"
 
@@ -1981,6 +1963,11 @@ msgstr "Exportul mesajelor dumneavoastră..."
 msgid "Export…"
 msgstr "Exportați"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "Adresa extinsă"
 
@@ -2008,9 +1995,6 @@ msgstr "Familie"
 
 msgid "Features"
 msgstr "Funcții"
-
-msgid "Features:"
-msgstr "Funcții:"
 
 msgid "Feedback"
 msgstr "Reacții"
@@ -2224,13 +2208,6 @@ msgstr ""
 "Gajim a întâmpinat o eroare.\n"
 "Vă rugăm să ne ajutați să rezolvăm această problemă trimițând acest raport."
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajim se integrează bine cu celelalte dispozitive: pur și simplu continuați "
-"conversațiile pe dispozitivul dumneavoastră mobil."
-
 #, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim este complet sincronizat cu arhiva."
@@ -2327,9 +2304,6 @@ msgstr "Grupul de chat acum nu mai afișează membrii indisponibili"
 
 msgid "Group chat now shows unavailable members"
 msgstr "Grupul de chat afișează acum membrii indisponibili"
-
-msgid "Group chat support"
-msgstr "Suport pentru grupul de chat"
 
 msgid "Groups"
 msgstr "Grupuri"
@@ -2579,9 +2553,6 @@ msgstr "Invitați"
 msgid "Invite Contacts"
 msgstr "Invitați contacte"
 
-msgid "Invite friends to group chats or join one"
-msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
-
 msgid "Invite to this chat"
 msgstr "Invitați la acest chat"
 
@@ -2660,9 +2631,6 @@ msgstr "Chiar acum"
 
 msgid "Keep Chat History"
 msgstr "Păstrați istoricul chat-ului"
-
-msgid "Keep and manage all your chat history"
-msgstr "Păstrați și gestionați tot istoricul de chat"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Utilizarea cheilor nu include semnarea certificatelor"
@@ -2767,13 +2735,6 @@ msgstr "Setări de conectare"
 
 msgid "Look it up in _Dictionary"
 msgstr "Căutați în _Dicționar"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Căutați lucruri pe Wikipedia, dicționare sau alte motoare de căutare direct "
-"din fereastra de chat"
 
 msgid "Make Admin"
 msgstr "Faceți Admin"
@@ -2985,10 +2946,6 @@ msgstr "Necesită ca gspell să fie instalat"
 
 msgid "Never"
 msgstr "Niciodată"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
-"Nu pierdeți niciodată un mesaj, păstrați toți clienții de chat sincronizați"
 
 msgid "New Contact"
 msgstr "Contact nou"
@@ -3274,9 +3231,6 @@ msgstr "Organizație"
 msgid "Organization (O): "
 msgstr "Organizație (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "Organizați-vă chat-urile cu spații de lucru"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Altele"
@@ -3511,9 +3465,6 @@ msgstr "Actualizări Plugin"
 
 msgid "Plugin already exists"
 msgstr "Plugin-ul există deja"
-
-msgid "Plugin manager"
-msgstr "Manager de plugin-uri"
 
 msgid "Plugins"
 msgstr "Plugin-uri"
@@ -4114,6 +4065,12 @@ msgstr "Căutare…"
 msgid "Secure Password Storage"
 msgstr "Stocarea securizată a parolelor"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "Securitate"
 
@@ -4272,11 +4229,6 @@ msgstr "Moderat…"
 
 msgid "Set status message"
 msgstr "Setați mesajul de stare"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
-"Setează-ți activitatea sau melodia pentru a le arăta prietenilor tăi cum te "
-"simți"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4578,6 +4530,12 @@ msgstr "Stare: Culoare offline"
 msgid "Status: Online Color"
 msgstr "Stare: Culoare online"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Nu mai împărtășiți statutul online?"
@@ -4622,14 +4580,6 @@ msgstr "Eliminați contactul"
 
 msgid "Support"
 msgstr "Suport"
-
-msgid "Support for multiple accounts"
-msgstr "Suport pentru conturi multiple"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr ""
-"Suport pentru descoperirea serviciilor, inclusiv a nodurilor și căutarea de "
-"utilizatori"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4700,9 +4650,6 @@ msgstr "Versiunea TLS"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "Verificarea TLS a eșuat: %s"
-
-msgid "Tabbed chat window"
-msgstr "Fereastră de chat cu file"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5257,10 +5204,6 @@ msgstr "Utilizați proxy-uri de transfer de fișiere"
 msgid "Use proxy auth_entication"
 msgstr "Utilizați proxy auth_entication"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-"Folosește-ți emoticoanele preferate, setează-ți propria imagine de profil"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "Utilizați keyring-ul sistemului dumneavoastră pentru a stoca parolele"
 
@@ -5406,9 +5349,6 @@ msgstr "Spațiul de lucru"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "Consola XML pentru a vedea ce se întâmplă la nivelul protocolului"
 
 msgid "XMPP Address"
 msgstr "Adresă XMPP"
@@ -6432,6 +6372,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Autojoin"
 #~ msgstr "Alăturare automată"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Verificarea ortografică automată a mesajelor dumneavoastră"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Semne de carte"
 
@@ -6455,6 +6398,17 @@ msgstr "...sau lăsați-o aici"
 #~ msgstr ""
 #~ "Certificat pentru \n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "Istoric chat"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr ""
+#~ "Conversați în siguranță cu criptare End-to-End prin OMEMO sau OpenPGP"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr ""
+#~ "Discutați în siguranță cu criptare End-to-End prin OMEMO sau OpenPGP."
 
 #~ msgid "Checking file…"
 #~ msgstr "Verificarea fișierului…"
@@ -6487,11 +6441,19 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Completed"
 #~ msgstr "Efectuat"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr ""
+#~ "Conectați-vă la alți mesageri prin intermediul transporturilor (Facebook, "
+#~ "IRC, ...)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Conexiunea nu este disponibilă"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Contact Dezabonat"
+
+#~ msgid "Contact list"
+#~ msgstr "Lista de contacte"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Conversație: Culoare URL"
@@ -6567,6 +6529,11 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Aruncați fișiere sau contacte"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Trimiteți cu ușurință imagini, clipuri video sau alte fișiere către "
+#~ "prieteni și grupuri"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Editați numele…"
 
@@ -6600,11 +6567,17 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Eroare: nu se poate deschide %s pentru citire"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Chiar mai multe caracteristici prin intermediul plugin-urilor"
+
 #~ msgid "Expires on"
 #~ msgstr "Expiră la"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Funcția nu este valabilă pe Windows"
+
+#~ msgid "Features:"
+#~ msgstr "Funcții:"
 
 #~ msgid "File Name: "
 #~ msgstr "Numele fișierului: "
@@ -6646,6 +6619,13 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim nu poate citi acest fișier"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajim se integrează bine cu celelalte dispozitive: pur și simplu "
+#~ "continuați conversațiile pe dispozitivul dumneavoastră mobil."
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim: Nu există actualizări disponibile (ultima verificare: %s)"
@@ -6659,6 +6639,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Invitație de grup pe chat primită"
+
+#~ msgid "Group chat support"
+#~ msgstr "Suport pentru grupul de chat"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6706,6 +6689,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Invite New Contact"
 #~ msgstr "Invitați un nou contact"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "Invitați-vă prietenii la discuții de grup sau alăturați-vă la una"
+
 #~ msgid "Issued on"
 #~ msgstr "Eliberat la"
 
@@ -6720,6 +6706,9 @@ msgstr "...sau lăsați-o aici"
 #~ "Îmi sincronizez contactele din contul meu de la \"%s\". Puteți să "
 #~ "adăugați această adresă la lista de contacte?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Păstrați și gestionați tot istoricul de chat"
+
 #~ msgid "Key Size"
 #~ msgstr "Dimensiune Cheie"
 
@@ -6732,6 +6721,13 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Local Time"
 #~ msgstr "Ora locală"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Căutați lucruri pe Wikipedia, dicționare sau alte motoare de căutare "
+#~ "direct din fereastra de chat"
 
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Corectarea mesajului: Culoarea de fundal"
@@ -6753,6 +6749,11 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Eliminați contactul"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr ""
+#~ "Nu pierdeți niciodată un mesaj, păstrați toți clienții de chat "
+#~ "sincronizați"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Nici o conexiune disponibilă"
@@ -6785,6 +6786,9 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Unitatea organizațională (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Organizați-vă chat-urile cu spații de lucru"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Pa_use/Rezumat"
 
@@ -6803,6 +6807,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Vă rugăm să folosiți aaaa-ll-zz"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Manager de plugin-uri"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "Plugin-uri: Nu există actualizări disponibile"
@@ -6937,6 +6944,11 @@ msgstr "...sau lăsați-o aici"
 #~ msgid "Serial Number"
 #~ msgstr "Număr de serie"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr ""
+#~ "Setează-ți activitatea sau melodia pentru a le arăta prietenilor tăi cum "
+#~ "te simți"
+
 #~ msgid "Show"
 #~ msgstr "Afișați"
 
@@ -7012,6 +7024,14 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Subscription Request"
 #~ msgstr "Cerere de abonament"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Suport pentru conturi multiple"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr ""
+#~ "Suport pentru descoperirea serviciilor, inclusiv a nodurilor și căutarea "
+#~ "de utilizatori"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Treceți la primul - al nouălea spațiu de lucru"
@@ -7093,6 +7113,10 @@ msgstr "...sau lăsați-o aici"
 #~ "înainte de:aaaa-ll-zz\n"
 #~ "după: aaaa-ll-zz"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr ""
+#~ "Folosește-ți emoticoanele preferate, setează-ți propria imagine de profil"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Utilizator"
@@ -7113,6 +7137,9 @@ msgstr "...sau lăsați-o aici"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "De ce doriți să moderați acest mesaj?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "Consola XML pentru a vedea ce se întâmplă la nivelul protocolului"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"

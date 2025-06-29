@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2025-06-28 11:12+0000\n"
 "Last-Translator: cr04ch <cr04ch@disroot.org>\n"
 "Language-Team: Hungarian <https://translate.gajim.org/projects/gajim/master/"
@@ -819,9 +819,6 @@ msgstr "Automatikus előnézet tiltva"
 msgid "Automatic preview disabled (file too big)"
 msgstr "Automatikus előnézet tiltva (túl nagy fájl)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Az üzenetek automatikus helyesírás-ellenőrzése"
-
 msgid "Automatically accept all contact requests"
 msgstr "Mások kéréseinek automatikus elfogadása"
 
@@ -1064,18 +1061,15 @@ msgstr "Beszélgetések"
 msgid "Chat Type"
 msgstr "Típus"
 
-msgid "Chat history"
-msgstr "Előzmények"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
 msgstr ""
-"Biztonságos beszélgetés OMEMO vagy PGP által biztosított végpontok közötti "
-"titkosítással"
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
-"Biztonságos beszélgetés OMEMO vagy PGP által biztosított végpontok közötti "
-"titkosítással."
+#, fuzzy
+msgid "Chat window"
+msgstr "Beszélgetések külön lapokon"
 
 msgid "Chats"
 msgstr "Beszélgetések"
@@ -1257,11 +1251,6 @@ msgstr "Csatlakozás"
 msgid "Connect on startup"
 msgstr "Bejelentkezés induláskor"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-"Más üzenetküldőkhöz való kapcsolódás közvetített kapcsolaton át (Facebook, "
-"IRC, …)"
-
 msgid "Connecting"
 msgstr "Csatlakozás"
 
@@ -1337,9 +1326,6 @@ msgstr "Névjegyfelvételi kérelem"
 
 msgid "Contact information"
 msgstr "Információk megjelenítése"
-
-msgid "Contact list"
-msgstr "Névjegyek"
 
 msgid "Contacts"
 msgstr "Ismerősök"
@@ -1706,11 +1692,6 @@ msgstr "Piszkozat: %s"
 msgid "Drop files here"
 msgstr "Ide ejthetők a fájlok"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-"Könnyen küldhetők képek, videók vagy más fájlok a barátoknak vagy "
-"csoportoknak"
-
 msgid "Eating"
 msgstr "Étkezés"
 
@@ -1862,9 +1843,6 @@ msgstr "Hiba: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Hiba: %s (MIME-típusok: %s)"
 
-msgid "Even more features via plugins"
-msgstr "További funkciók hozzáadása bővítmények segítségével"
-
 msgid "Event"
 msgstr "Esemény"
 
@@ -1919,6 +1897,11 @@ msgstr "Az üzenetek exportálása…"
 msgid "Export…"
 msgstr "Exportálás…"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "További cím"
 
@@ -1946,9 +1929,6 @@ msgstr "Család"
 
 msgid "Features"
 msgstr "Funkciók"
-
-msgid "Features:"
-msgstr "Funkciók:"
 
 msgid "Feedback"
 msgstr "Visszajelzés"
@@ -2156,13 +2136,6 @@ msgstr ""
 "Hiba lépett fel a program futása során.\n"
 "E jelentés elküldése segíthet kijavítani a hibát."
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"A Gajim kiválóan együttműködik más eszközökkel: egy beszélgetés egyszerűen "
-"folytatható mobil eszközről is."
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr "A Gajim teljes szinkronban van az archívummal."
 
@@ -2256,9 +2229,6 @@ msgstr "A társalgóban mostantól nem láthatók a távollévő tagok"
 
 msgid "Group chat now shows unavailable members"
 msgstr "A társalgóban mostantól láthatók a távollévő tagok is"
-
-msgid "Group chat support"
-msgstr "Csoportos beszélgetések"
 
 msgid "Groups"
 msgstr "Csoportok"
@@ -2488,10 +2458,6 @@ msgstr "Meghívás"
 msgid "Invite Contacts"
 msgstr "Ismerősök meghívása"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-"A barátokat meg lehet hívni társalgókba, csatlakozni lehet társalgókhoz"
-
 msgid "Invite to this chat"
 msgstr "Meghívás a társalgóba"
 
@@ -2569,9 +2535,6 @@ msgstr "Az imént"
 
 msgid "Keep Chat History"
 msgstr "A beszélgetések mentése"
-
-msgid "Keep and manage all your chat history"
-msgstr "A beszélgetési előzmények tárolása és kezelése"
 
 msgid "Key usage does not include certificate signing"
 msgstr "A kulcshasználat nem tartalmaz tanúsítvány-aláírást"
@@ -2672,13 +2635,6 @@ msgstr "Bejelentkezési beállítások"
 
 msgid "Look it up in _Dictionary"
 msgstr "Szócikk az értelmező _szótárban"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"A beszélgetésekből közvetlenül lehet keresni a Wikipédián, szótárakban vagy "
-"más keresőkkel is"
 
 msgid "Make Admin"
 msgstr "Adminisztrátori jog adása"
@@ -2878,9 +2834,6 @@ msgstr "A libspelling szükséges hozzá"
 
 msgid "Never"
 msgstr "Soha"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr "A csevegőklienseket szinkronban tartva egy üzenet sem vész el"
 
 msgid "New Contact"
 msgstr "Új ismerős"
@@ -3159,9 +3112,6 @@ msgstr "Szervezet"
 msgid "Organization (O): "
 msgstr "Szervezet (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "A beszélgetések munkaterületekre rendszerezhetőek"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Egyéb"
@@ -3385,9 +3335,6 @@ msgstr "Bővítmények frissítése"
 
 msgid "Plugin already exists"
 msgstr "A bővítmény már létezik"
-
-msgid "Plugin manager"
-msgstr "Bővítménykezelő"
 
 msgid "Plugins"
 msgstr "Bővítmények"
@@ -3958,6 +3905,12 @@ msgstr "Keresés…"
 msgid "Secure Password Storage"
 msgstr "Biztonságos jelszótárolás"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "Biztonság"
 
@@ -4112,9 +4065,6 @@ msgstr "Dátumválasztás…"
 
 msgid "Set status message"
 msgstr "Állapotüzenet beállítása"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr "Tudatható a barátokkal az elfoglaltság, zenehallgatás vagy hangulat"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr "A GLib hibaüzenetek kiírását biztosító környezeti változó beállítása"
@@ -4405,6 +4355,12 @@ msgstr "Jelenléti állapot: „kilépett” színe"
 msgid "Status: Online Color"
 msgstr "Jelenléti állapot: „elérhető” színe"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 msgid "Stop Sharing Online Status?"
 msgstr "Jelenléti állapot közlésének tiltása"
 
@@ -4444,13 +4400,6 @@ msgstr "Sikeres névjegytörlés"
 
 msgid "Support"
 msgstr "Támogatás"
-
-msgid "Support for multiple accounts"
-msgstr "Több fiók kezelése"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr ""
-"A csomópontokat is érintő szolgáltatásfelderítés és felhasználók keresése"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4522,9 +4471,6 @@ msgstr "TLS verzió"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "A TLS-ellenőrzés sikertelen: %s"
-
-msgid "Tabbed chat window"
-msgstr "Beszélgetések külön lapokon"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5058,9 +5004,6 @@ msgstr "Fájlküldő proxy használata"
 msgid "Use proxy auth_entication"
 msgstr "Hit_elesítés szükséges"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "Választható hangulatjelkészletek, személyre szabható profilkép"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "A rendszer kulcstartójának használata a jelszavak tárolására"
 
@@ -5203,9 +5146,6 @@ msgstr "Munkaterületek"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "XML-parancssor a kommunikáció protokollszintű követéséhez"
 
 msgid "XMPP Address"
 msgstr "XMPP-cím"
@@ -6235,6 +6175,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Autojoin"
 #~ msgstr "Automatikus csatlakozás"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Az üzenetek automatikus helyesírás-ellenőrzése"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Könyvjelzők"
 
@@ -6257,6 +6200,19 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgstr ""
 #~ "Tanúsítvány ehhez a fiókhoz:\n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "Előzmények"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr ""
+#~ "Biztonságos beszélgetés OMEMO vagy PGP által biztosított végpontok "
+#~ "közötti titkosítással"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr ""
+#~ "Biztonságos beszélgetés OMEMO vagy PGP által biztosított végpontok "
+#~ "közötti titkosítással."
 
 #~ msgid "Checking file…"
 #~ msgstr "Fájlellenőrzés…"
@@ -6289,11 +6245,19 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Completed"
 #~ msgstr "Befejezve"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr ""
+#~ "Más üzenetküldőkhöz való kapcsolódás közvetített kapcsolaton át "
+#~ "(Facebook, IRC, …)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Nincs kapcsolat"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Ismerős leiratkozott"
+
+#~ msgid "Contact list"
+#~ msgstr "Névjegyek"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Beszélgetés: hivatkozás színe"
@@ -6368,6 +6332,11 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Ide ejthetők fájlok vagy névjegyek"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Könnyen küldhetők képek, videók vagy más fájlok a barátoknak vagy "
+#~ "csoportoknak"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Név módosítása…"
 
@@ -6402,11 +6371,17 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Hiba: %s nem olvasható"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "További funkciók hozzáadása bővítmények segítségével"
+
 #~ msgid "Expires on"
 #~ msgstr "Vége"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "A funkció Windows rendszeren nem érhető el"
+
+#~ msgid "Features:"
+#~ msgstr "Funkciók:"
 
 #~ msgid "File Name: "
 #~ msgstr "Fájlnév: "
@@ -6455,6 +6430,13 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "A fájl nem olvasható"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "A Gajim kiválóan együttműködik más eszközökkel: egy beszélgetés "
+#~ "egyszerűen folytatható mobil eszközről is."
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim: nincsenek frissítések (legutóbbi keresés: %s)"
@@ -6467,6 +6449,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Egy társalgóba szóló meghívó érkezett"
+
+#~ msgid "Group chat support"
+#~ msgstr "Csoportos beszélgetések"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6513,6 +6498,10 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Invite New Contact"
 #~ msgstr "Új ismerős meghívása"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr ""
+#~ "A barátokat meg lehet hívni társalgókba, csatlakozni lehet társalgókhoz"
+
 #~ msgid "Issued on"
 #~ msgstr "Kezdete"
 
@@ -6527,6 +6516,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "Szinkronizálom a(z) „%s” kiszolgálón lévő fiókom névjegyeit. Hozzáadnád "
 #~ "ezt a címet a névjegyeidhez?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "A beszélgetési előzmények tárolása és kezelése"
+
 #~ msgid "Key Size"
 #~ msgstr "Kulcsméret"
 
@@ -6539,6 +6531,13 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Local Time"
 #~ msgstr "Helyi idő"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "A beszélgetésekből közvetlenül lehet keresni a Wikipédián, szótárakban "
+#~ "vagy más keresőkkel is"
 
 #~ msgid "Maintainers"
 #~ msgstr "Karbantartók"
@@ -6565,6 +6564,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Move Contact"
 #~ msgstr "Névjegy áthelyezése"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr "A csevegőklienseket szinkronban tartva egy üzenet sem vész el"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Nincs kapcsolat"
@@ -6597,6 +6599,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Szervezeti egység (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "A beszélgetések munkaterületekre rendszerezhetőek"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "Szü_net/folytatás"
 
@@ -6615,6 +6620,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "Dátumformátum: ÉÉÉÉ-HH-NN"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Bővítménykezelő"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "Bővítmények: nincsenek frissítések"
@@ -6746,6 +6754,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ msgid "Serial Number"
 #~ msgstr "Sorozatszám"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr "Tudatható a barátokkal az elfoglaltság, zenehallgatás vagy hangulat"
+
 #~ msgid "Show"
 #~ msgstr "Megjelenítés"
 
@@ -6821,6 +6832,13 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Subscription Request"
 #~ msgstr "Feliratkozási kérelem"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Több fiók kezelése"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr ""
+#~ "A csomópontokat is érintő szolgáltatásfelderítés és felhasználók keresése"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Váltás az első … kilencedik munkaterületre"
@@ -6904,6 +6922,9 @@ msgstr "…vagy ide is ejthető egy kép"
 #~ "before:\"ÉÉÉÉ-HH-NN\" keresési kifejezés\n"
 #~ "after:\"ÉÉÉÉ-HH-NN\" keresési kifejezés"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "Választható hangulatjelkészletek, személyre szabható profilkép"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "Átnevezés…"
@@ -6922,6 +6943,9 @@ msgstr "…vagy ide is ejthető egy kép"
 
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Mi az oka az üzenetek moderálásának?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "XML-parancssor a kommunikáció protokollszintű követéséhez"
 
 #~ msgid "You Have Unread Messages"
 #~ msgstr "Olvasatlan üzenetek"

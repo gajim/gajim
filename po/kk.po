@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -836,9 +836,6 @@ msgstr "Автоматты алдын ала қарау сөндірілген"
 msgid "Automatic preview disabled (file too big)"
 msgstr "Автоматты алдын ала қарау сөндірілген (файл тым үлкен)"
 
-msgid "Automatic spell-checking for your messages"
-msgstr "Хабарларыңыздың емлені автоматты түрде тексеру"
-
 msgid "Automatically accept all contact requests"
 msgstr "Барлық байланысу сұрауларын автоматты түрде қабылдау"
 
@@ -1087,14 +1084,15 @@ msgstr "Чаттар тізімі"
 msgid "Chat Type"
 msgstr "Түрі"
 
-msgid "Chat history"
-msgstr "Чат тарихы"
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
 
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr "OMEMO немесе OpenPGP арқылы өтпелі шифрлеу арқылы қауіпсіз сөйлесу"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr "OMEMO немесе OpenPGP арқылы өтпелі шифрлеу арқылы қауіпсіз сөйлесу."
+#, fuzzy
+msgid "Chat window"
+msgstr "Беттері бар чат терезесі"
 
 msgid "Chats"
 msgstr "Чаттар"
@@ -1273,9 +1271,6 @@ msgstr "Байланысу"
 msgid "Connect on startup"
 msgstr "Іске қосылғанда байланыс орнату"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr "Көлік арқылы басқа мессенджерлерге қосылу (Facebook, IRC, ...)"
-
 msgid "Connecting"
 msgstr "Байланыс орнату"
 
@@ -1353,9 +1348,6 @@ msgstr "Контакттар тізімі"
 
 msgid "Contact information"
 msgstr "Контакт ақпараты"
-
-msgid "Contact list"
-msgstr "Контакттар тізімі"
 
 msgid "Contacts"
 msgstr "Контакттар"
@@ -1732,11 +1724,6 @@ msgstr "Шимай қағаз: %s"
 msgid "Drop files here"
 msgstr "Файлдарды осында тартып әкеліңіз"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-"Достарыңыз бен топтарыңызға суреттер, видеолар немесе басқа файлдарды оңай "
-"жіберіңіз"
-
 msgid "Eating"
 msgstr "Тамақ ішуде"
 
@@ -1896,9 +1883,6 @@ msgstr "Қате: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Қате хабарламасы: %s"
 
-msgid "Even more features via plugins"
-msgstr "Плагиндер арқылы одан да көп мүмкіндіктер"
-
 msgid "Event"
 msgstr "Оқиға"
 
@@ -1957,6 +1941,11 @@ msgstr "Хабарларыңыз экспортталуда..."
 msgid "Export…"
 msgstr "Экспорт"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 msgid "Extended Address"
 msgstr "Кеңейтілген адрес"
 
@@ -1984,9 +1973,6 @@ msgstr "Отбасы"
 
 msgid "Features"
 msgstr "Мүмкіндіктері"
-
-msgid "Features:"
-msgstr "Мүмкіндіктері:"
 
 msgid "Feedback"
 msgstr "Кері байланыс"
@@ -2201,13 +2187,6 @@ msgstr ""
 "Gajim қатеге тап болды.\n"
 "Осы есепті жіберу арқылы бізге осы мәселені шешуге көмектесіңіз."
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-"Gajim басқа құрылғылармен жақсы үйлеседі: мобильді құрылғыда сөйлесуді "
-"жалғастырыңыз."
-
 #, fuzzy
 msgid "Gajim is fully synchronized with the archive."
 msgstr "Gajim архивпен толығымен синхрондалған."
@@ -2304,9 +2283,6 @@ msgstr "Топтық чат енді қолжетімсіз қатысушыла
 
 msgid "Group chat now shows unavailable members"
 msgstr "Топтық чат енді қолжетімсіз қатысушыларды көрсетеді"
-
-msgid "Group chat support"
-msgstr "Топтық чат қолдауы"
 
 msgid "Groups"
 msgstr "Топтар"
@@ -2552,9 +2528,6 @@ msgstr "Шақыру"
 msgid "Invite Contacts"
 msgstr "Контакттарды шақыру"
 
-msgid "Invite friends to group chats or join one"
-msgstr "Достарды топтық чаттарға шақырыңыз немесе біреуіне қосылыңыз"
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Алдыңғы чатқа ауысу"
@@ -2634,9 +2607,6 @@ msgstr "Жаңа ғана"
 
 msgid "Keep Chat History"
 msgstr "Чат тарихын сақтау"
-
-msgid "Keep and manage all your chat history"
-msgstr "Барлық сөйлесу тарихын сақтау және басқару"
 
 msgid "Key usage does not include certificate signing"
 msgstr "Кілтті қолдану сертификаттарға қолтаңбаны қою қамтымайды"
@@ -2739,13 +2709,6 @@ msgstr "Кіру баптаулары"
 
 msgid "Look it up in _Dictionary"
 msgstr "_Сөздіктен іздеу"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
-"Википедия, сөздіктер немесе басқа іздеу жүйелеріндегі нәрселерді чат "
-"терезесінен тікелей іздеу"
 
 msgid "Make Admin"
 msgstr "Әкімші қылу"
@@ -2960,10 +2923,6 @@ msgstr "gspell орнатылғанын талап етеді"
 
 msgid "Never"
 msgstr "Ешқашан"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
-"Ешбір хабарды жіберіп алмаңыз, барлық сөйлесу клиенттеріңізді синхрондаңыз"
 
 msgid "New Contact"
 msgstr "Жаңа контакт"
@@ -3248,9 +3207,6 @@ msgstr "Ұйым"
 msgid "Organization (O): "
 msgstr "Ұйым (O): "
 
-msgid "Organize your chats with workspaces"
-msgstr "Чаттарыңызды жұмыс кеңістіктері арқылы ұйымдастырыңыз"
-
 msgctxt "Gender"
 msgid "Other"
 msgstr "Басқа"
@@ -3485,9 +3441,6 @@ msgstr "Плагиндер жаңартулары"
 
 msgid "Plugin already exists"
 msgstr "Плагин бар болып тұр"
-
-msgid "Plugin manager"
-msgstr "Плагиндер басқарушысы"
 
 msgid "Plugins"
 msgstr "Плагиндер"
@@ -4090,6 +4043,12 @@ msgstr "Іздеу…"
 msgid "Secure Password Storage"
 msgstr "Парольді қауіпсіз сақтау"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr "Қауіпсіздік"
 
@@ -4246,10 +4205,6 @@ msgstr "Модерацияланады"
 
 msgid "Set status message"
 msgstr "Қалып-күй хабарламасын орнату"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
-"Достарыңызға көңіл-күйіңізді көрсету үшін әрекетті немесе әуенді орнату"
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4554,6 +4509,12 @@ msgstr "Қалып-күй: \"Желіде емес\" үшін түс"
 msgid "Status: Online Color"
 msgstr "Қалып-күй: \"Желіде\" үшін түс"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Желідегі онлайн қалып-күймен бөлісуді тоқтату керек пе?"
@@ -4598,14 +4559,6 @@ msgstr "Контактты өшіру"
 
 msgid "Support"
 msgstr "Қолдау"
-
-msgid "Support for multiple accounts"
-msgstr "Бірнеше тіркелгілерге қолдау көрсету"
-
-msgid "Support for service discovery including nodes and search for users"
-msgstr ""
-"Қызметтерді табуды қолдау, соның ішінде тораптарды қолдау мен "
-"пайдаланушыларды іздеу"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -4676,9 +4629,6 @@ msgstr "TLS нұсқасы"
 #, python-format
 msgid "TLS verification failed: %s"
 msgstr "TLS тексеруі сәтсіз аяқталды: %s"
-
-msgid "Tabbed chat window"
-msgstr "Беттері бар чат терезесі"
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5225,9 +5175,6 @@ msgstr "Файлдармен алмасу үшін прокси қолдану"
 msgid "Use proxy auth_entication"
 msgstr "Прокси _аутентификациясын қолдану"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr "Таңдаулы смайликтерді пайдаланыңыз, жеке профиль суретін орнатыңыз"
-
 msgid "Use your system’s keyring to store passwords"
 msgstr "Парольдерді сақтау үшін жүйелік кілттер бауын пайдалану"
 
@@ -5378,9 +5325,6 @@ msgstr "Жұмыс кеңістіктері"
 
 msgid "X11"
 msgstr "X11"
-
-msgid "XML console to see what's happening on the protocol layer"
-msgstr "Хаттама қабатында не болып жатқанын көру үшін XML консолі"
 
 msgid "XMPP Address"
 msgstr "XMPP адресі"
@@ -6376,6 +6320,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Autojoin"
 #~ msgstr "Автокіру"
 
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Хабарларыңыздың емлені автоматты түрде тексеру"
+
 #~ msgid "Bookmarks"
 #~ msgstr "Бетбелгілер"
 
@@ -6397,6 +6344,15 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgstr ""
 #~ "Келесінің сертификаты \n"
 #~ "%s"
+
+#~ msgid "Chat history"
+#~ msgstr "Чат тарихы"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
+#~ msgstr "OMEMO немесе OpenPGP арқылы өтпелі шифрлеу арқылы қауіпсіз сөйлесу"
+
+#~ msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
+#~ msgstr "OMEMO немесе OpenPGP арқылы өтпелі шифрлеу арқылы қауіпсіз сөйлесу."
 
 #~ msgid "Checking file…"
 #~ msgstr "Файлды тексеру…"
@@ -6429,11 +6385,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Completed"
 #~ msgstr "Аяқталған"
 
+#~ msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
+#~ msgstr "Көлік арқылы басқа мессенджерлерге қосылу (Facebook, IRC, ...)"
+
 #~ msgid "Connection not available"
 #~ msgstr "Байланыс қолжетерсіз"
 
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Контакт жазылуды тоқтатты"
+
+#~ msgid "Contact list"
+#~ msgstr "Контакттар тізімі"
 
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Сөйлесу: Сілтемелер түсі"
@@ -6509,6 +6471,11 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Drop files or contacts"
 #~ msgstr "Файлдар немесе контакттарды тартып әкеліңіз"
 
+#~ msgid "Easily send pictures, videos or other files to friends and groups"
+#~ msgstr ""
+#~ "Достарыңыз бен топтарыңызға суреттер, видеолар немесе басқа файлдарды "
+#~ "оңай жіберіңіз"
+
 #~ msgid "Edit Name…"
 #~ msgstr "Атын түзету…"
 
@@ -6542,11 +6509,17 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Error: cannot open %s for reading"
 #~ msgstr "Қате: оқу үшін %s ашу мүмкін емес"
 
+#~ msgid "Even more features via plugins"
+#~ msgstr "Плагиндер арқылы одан да көп мүмкіндіктер"
+
 #~ msgid "Expires on"
 #~ msgstr "Аяқталу мерзімі"
 
 #~ msgid "Feature not available on Windows"
 #~ msgstr "Бұл мүмкіндік Windows-та қолжетімді емес"
+
+#~ msgid "Features:"
+#~ msgstr "Мүмкіндіктері:"
 
 #~ msgid "File Name: "
 #~ msgstr "Файл аты: "
@@ -6589,6 +6562,13 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Gajim can not read this file"
 #~ msgstr "Gajim файлды оқи алмайды"
 
+#~ msgid ""
+#~ "Gajim integrates well with your other devices: simply continue "
+#~ "conversations on your mobile device."
+#~ msgstr ""
+#~ "Gajim басқа құрылғылармен жақсы үйлеседі: мобильді құрылғыда сөйлесуді "
+#~ "жалғастырыңыз."
+
 #, python-format
 #~ msgid "Gajim: No updates available (last check: %s)"
 #~ msgstr "Gajim: Жаңартулар жоқ (соңғы тексеру: %s)"
@@ -6601,6 +6581,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Топтық чатқа шақыру алынды"
+
+#~ msgid "Group chat support"
+#~ msgstr "Топтық чат қолдауы"
 
 #~ msgctxt "proxy configuration"
 #~ msgid "HTTP"
@@ -6645,6 +6628,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Invite New Contact"
 #~ msgstr "Жаңа контактты шақыру"
 
+#~ msgid "Invite friends to group chats or join one"
+#~ msgstr "Достарды топтық чаттарға шақырыңыз немесе біреуіне қосылыңыз"
+
 #~ msgid "Issued on"
 #~ msgstr "Берілген күні"
 
@@ -6659,6 +6645,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ "Мен \"%s\" тіркелгімдегі контактілерімді синхрондаудамын. Осы адресті "
 #~ "сіздің контакттар тізіміне қоса аласыз ба?"
 
+#~ msgid "Keep and manage all your chat history"
+#~ msgstr "Барлық сөйлесу тарихын сақтау және басқару"
+
 #~ msgid "Key Size"
 #~ msgstr "Кілт өлшемі"
 
@@ -6671,6 +6660,13 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Local Time"
 #~ msgstr "Жергілікті уақыт"
+
+#~ msgid ""
+#~ "Lookup things on Wikipedia, dictionaries or other search engines directly "
+#~ "from the chat window"
+#~ msgstr ""
+#~ "Википедия, сөздіктер немесе басқа іздеу жүйелеріндегі нәрселерді чат "
+#~ "терезесінен тікелей іздеу"
 
 #~ msgid "Message Correction: Background Color"
 #~ msgstr "Түзетілген хабарлама: Фон түсі"
@@ -6692,6 +6688,10 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Move Contact"
 #~ msgstr "Контактты өшіру"
+
+#~ msgid "Never miss a message, keep all your chat clients synchronized"
+#~ msgstr ""
+#~ "Ешбір хабарды жіберіп алмаңыз, барлық сөйлесу клиенттеріңізді синхрондаңыз"
 
 #~ msgid "No Connection Available"
 #~ msgstr "Байланыс қолжетімді емес"
@@ -6724,6 +6724,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Organizational Unit (OU): "
 #~ msgstr "Ұйым бөлімі (OU): "
 
+#~ msgid "Organize your chats with workspaces"
+#~ msgstr "Чаттарыңызды жұмыс кеңістіктері арқылы ұйымдастырыңыз"
+
 #~ msgid "Pa_use/Resume"
 #~ msgstr "А_ялдату/Жалғастыру"
 
@@ -6742,6 +6745,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Please use yyyy-mm-dd"
 #~ msgstr "yyyy-mm-dd пішімін қолданыңыз"
+
+#~ msgid "Plugin manager"
+#~ msgstr "Плагиндер басқарушысы"
 
 #~ msgid "Plugins: No updates available"
 #~ msgstr "Плагиндер: Жаңартулар жоқ"
@@ -6874,6 +6880,10 @@ msgstr "…немесе оны осында тастаңыз"
 #~ msgid "Serial Number"
 #~ msgstr "Сериялық нөмір"
 
+#~ msgid "Set your activity or tune to show your friends how you are feeling"
+#~ msgstr ""
+#~ "Достарыңызға көңіл-күйіңізді көрсету үшін әрекетті немесе әуенді орнату"
+
 #~ msgid "Show"
 #~ msgstr "Көрсету"
 
@@ -6943,6 +6953,14 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Subscription Request"
 #~ msgstr "Жазылуға сұраным"
+
+#~ msgid "Support for multiple accounts"
+#~ msgstr "Бірнеше тіркелгілерге қолдау көрсету"
+
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr ""
+#~ "Қызметтерді табуды қолдау, соның ішінде тораптарды қолдау мен "
+#~ "пайдаланушыларды іздеу"
 
 #~ msgid "Switch to the first - ninth workspace"
 #~ msgstr "Бірінші - тоғызыншы жұмыс кеңістігіне ауысу"
@@ -7024,6 +7042,9 @@ msgstr "…немесе оны осында тастаңыз"
 #~ "before:yyyy-mm-dd\n"
 #~ "after:yyyy-mm-dd"
 
+#~ msgid "Use your favorite emoticons, set your own profile picture"
+#~ msgstr "Таңдаулы смайликтерді пайдаланыңыз, жеке профиль суретін орнатыңыз"
+
 #, fuzzy
 #~ msgid "User name…"
 #~ msgstr "_Пайдаланушы аты"
@@ -7044,6 +7065,9 @@ msgstr "…немесе оны осында тастаңыз"
 #, fuzzy
 #~ msgid "Why do you want to moderate these messages?"
 #~ msgstr "Бұл хабарламаны неліктен қайтарып алғыңыз келеді?"
+
+#~ msgid "XML console to see what's happening on the protocol layer"
+#~ msgstr "Хаттама қабатында не болып жатқанын көру үшін XML консолі"
 
 #, fuzzy
 #~ msgid "You Have Unread Messages"

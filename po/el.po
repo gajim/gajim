@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -922,9 +922,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 #, fuzzy
 msgid "Automatically accept all contact requests"
 msgstr "Αυτόματη εξουσιοδότηση επαφής"
@@ -1200,15 +1197,15 @@ msgstr "Επαφές"
 msgid "Chat Type"
 msgstr "Είδος"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Καταγραφή ιστορικού"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Συζητήσεις"
@@ -1409,9 +1406,6 @@ msgstr "Σύνδεση"
 msgid "Connect on startup"
 msgstr "Σύνδεση κατά την ε_κκίνηση του Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Συνδέεται"
 
@@ -1504,10 +1498,6 @@ msgstr "Επαφές"
 #, fuzzy
 msgid "Contact information"
 msgstr "Πληροφορίες επαφής"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Επαφές"
 
 msgid "Contacts"
 msgstr "Επαφές"
@@ -1938,9 +1928,6 @@ msgstr "Κατάσταση: "
 msgid "Drop files here"
 msgstr "Αποστολή αρχείου σε μία επαφή"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Τρώω"
 
@@ -2112,9 +2099,6 @@ msgstr "Μήνυμα σφάλματος: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Μήνυμα σφάλματος: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Γεγονός"
 
@@ -2181,6 +2165,11 @@ msgstr "_Εισερχόμενο μήνυμα:"
 msgid "Export…"
 msgstr "Εξαγωγή"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "Επιπλέον διεύθυνση:"
@@ -2214,10 +2203,6 @@ msgstr ""
 
 #, fuzzy
 msgid "Features"
-msgstr "Χαρακτηριστικά διακομιστή"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Χαρακτηριστικά διακομιστή"
 
 msgid "Feedback"
@@ -2448,11 +2433,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2565,10 +2545,6 @@ msgstr "Δεν υπάρχει τέτοια συζήτηση."
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Ομαδικές συζητήσεις"
 
 #, fuzzy
 msgid "Groups"
@@ -2828,9 +2804,6 @@ msgstr "Αδυναμία φόρτωσης"
 msgid "Invite Contacts"
 msgstr "Επαφές"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Επαφές"
@@ -2923,9 +2896,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Καταγραφή ιστορικού"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3040,11 +3010,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 msgid "Look it up in _Dictionary"
 msgstr "Εύρεση στο _Λεξικό"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3282,9 +3247,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Ποτέ"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3603,9 +3565,6 @@ msgstr "Διαχειριστής"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3856,10 +3815,6 @@ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Αυτό το αρχείο υπάρχει ήδη"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 msgid "Plugins"
 msgstr ""
@@ -4542,6 +4497,12 @@ msgstr "Αναζήτηση"
 msgid "Secure Password Storage"
 msgstr "Αποθήκευση κωδικού"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4730,9 +4691,6 @@ msgstr "Διαχειριστής"
 #, fuzzy
 msgid "Set status message"
 msgstr "μήνυμα κατάστασης"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5068,6 +5026,12 @@ msgstr "Μήνυμα κατάστασης"
 msgid "Status: Online Color"
 msgstr "Μήνυμα κατάστασης"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Αποστολή επιλεγμένου αρχείου στο \"%s\""
@@ -5115,13 +5079,6 @@ msgstr "_Μετονομασία αρχείων"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Ανακάλυψη υπηρεσιών χρησιμοποιώντας το λογαριασμό %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5203,9 +5160,6 @@ msgstr "Έκδοση GTK+:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Προσθήκη ειδικής ειδοποίησης για το %s"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5786,9 +5740,6 @@ msgstr "Χρήση μεσολαβητών μεταφοράς αρχείων"
 msgid "Use proxy auth_entication"
 msgstr "Χρήση πιστοποίησης"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5946,9 +5897,6 @@ msgid "Workspaces"
 msgstr "_Μετονομασία αρχείων"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 msgid "XMPP Address"
@@ -7067,6 +7015,10 @@ msgstr ""
 #~ msgstr "_Εγγραφή"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Επαφές"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Ιστορικό συζητήσεων"
 
@@ -7175,6 +7127,10 @@ msgstr ""
 #~ msgstr "Αυτόματο μήνυμα για κατάσταση μη διαθέσιμος"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Χαρακτηριστικά διακομιστή"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Όνομα αρχείου: %s"
 
@@ -7235,6 +7191,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Πρόσκληση ομαδικής κουβέντας"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Ομαδικές συζητήσεις"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Απόκρυψη αυτού του μενού"
@@ -7339,6 +7299,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Η δημοσιοποίηση της vCard απέτυχε"
 
 #, fuzzy
@@ -7511,6 +7475,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Αίτηση εγγραφής"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Ανακάλυψη υπηρεσιών χρησιμοποιώντας το λογαριασμό %s"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"

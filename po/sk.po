@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -923,10 +923,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "Kontrolovať pravopis vo vytvorených správach."
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1204,15 +1200,15 @@ msgstr "Kontakty"
 msgid "Chat Type"
 msgstr "Typ"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Posledné:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1413,9 +1409,6 @@ msgstr "Pripojený"
 msgid "Connect on startup"
 msgstr "Prip_ojiť sa pri štarte programu Gajim"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Pripájanie"
 
@@ -1508,10 +1501,6 @@ msgstr "Kontakty"
 #, fuzzy
 msgid "Contact information"
 msgstr "Kontaktné informácie"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Kontakty"
 
 msgid "Contacts"
 msgstr "Kontakty"
@@ -1942,9 +1931,6 @@ msgstr "Stav: "
 msgid "Drop files here"
 msgstr "Poslať súbor kontaktu"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Jem"
 
@@ -2116,9 +2102,6 @@ msgstr "Chyba: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Chybová správa: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Udalosť"
 
@@ -2185,6 +2168,11 @@ msgstr "Šifrovanie správ rozhovorov."
 msgid "Export…"
 msgstr "Exportovať"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Ďaľšia adresa:</b>"
@@ -2217,10 +2205,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Funkcie"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Funkcie"
 
 msgid "Feedback"
@@ -2449,11 +2433,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2567,10 +2546,6 @@ msgstr "Miestnosť práve zobrazuje nedostupného člena"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Miestnosť práve zobrazuje nedostupného člena"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Diskuné skupiny"
 
 msgid "Groups"
 msgstr "Skupiny"
@@ -2831,9 +2806,6 @@ msgstr "Poz_vať"
 msgid "Invite Contacts"
 msgstr "Pozvať _kontakty"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Pozvať _kontakty"
@@ -2926,9 +2898,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Posledné:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3039,11 +3008,6 @@ msgstr "Registrácia zlyhala"
 
 msgid "Look it up in _Dictionary"
 msgstr "Vyhľadať to v _slovníku"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3280,9 +3244,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "Server"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3600,9 +3561,6 @@ msgstr "Na dovolenke"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3854,10 +3812,6 @@ msgstr "Registrácia zlyhala"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "Tento súbor už existuje"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Registrácia zlyhala"
 
 msgid "Plugins"
 msgstr ""
@@ -4536,6 +4490,12 @@ msgstr "Hľadať"
 msgid "Secure Password Storage"
 msgstr "Uložiť heslo"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4722,9 +4682,6 @@ msgstr "Moderátor"
 #, fuzzy
 msgid "Set status message"
 msgstr "správa o stave"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5070,6 +5027,12 @@ msgstr "Správa o stave"
 msgid "Status: Online Color"
 msgstr "Správa o stave"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "poslať mi stav"
@@ -5116,13 +5079,6 @@ msgstr "Premenovať kontakt"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Prehliadanie služieb s použitím účtu %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5204,9 +5160,6 @@ msgstr "Verzia GTK+:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Chyba SSL certifikátu"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5791,9 +5744,6 @@ msgstr "Použiť proxy pre prenos súborov"
 msgid "Use proxy auth_entication"
 msgstr "Použiť proxy aut_entifikáciu"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5954,9 +5904,6 @@ msgid "Workspaces"
 msgstr "Premenovať kontakt"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7011,6 +6958,10 @@ msgstr ""
 #~ msgstr "Automaticky pripojiť"
 
 #, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Kontrolovať pravopis vo vytvorených správach."
+
+#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "Zálož_ky"
 
@@ -7063,6 +7014,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Nezapísaný"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Kontakty"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7171,6 +7126,10 @@ msgstr ""
 #~ msgstr "Funkcia nie je dostupná pod Windows."
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Funkcie"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Názov súboru: %s"
 
@@ -7230,6 +7189,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Pozvánka do diskusnej skupiny"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Diskuné skupiny"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Skryť toto menu"
@@ -7334,6 +7297,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Registrácia zlyhala"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Registrácia zlyhala"
 
 #, fuzzy
@@ -7507,6 +7474,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Požiadavka o zapísanie"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Prehliadanie služieb s použitím účtu %s"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synchronizovať"

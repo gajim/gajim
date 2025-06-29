@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -880,9 +880,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1149,15 +1146,15 @@ msgstr "El Contacte ha entrat"
 msgid "Chat Type"
 msgstr "_Tipus:"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Historial"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 #, fuzzy
 msgid "Chats"
@@ -1349,9 +1346,6 @@ msgstr "Connexió"
 msgid "Connect on startup"
 msgstr "C_onecta al servidor quan s'inicia"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr ""
 
@@ -1442,10 +1436,6 @@ msgstr "El Contacte ha entrat"
 #, fuzzy
 msgid "Contact information"
 msgstr "Afegeix un contacte nou"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "El Contacte ha entrat"
 
 msgid "Contacts"
 msgstr ""
@@ -1851,9 +1841,6 @@ msgstr "Estat"
 msgid "Drop files here"
 msgstr "Mostra els contactes desconnectats"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr ""
 
@@ -2010,9 +1997,6 @@ msgstr ""
 msgid "Error: %s (mime types: %s)"
 msgstr ""
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr ""
 
@@ -2078,6 +2062,11 @@ msgstr ""
 msgid "Export…"
 msgstr "_Exporta"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "_Copia adreça JID/Email"
@@ -2110,10 +2099,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Característiques"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Característiques"
 
 msgid "Feedback"
@@ -2337,11 +2322,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2453,10 +2433,6 @@ msgstr "Grups de xat"
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Grups de xat"
 
 msgid "Groups"
 msgstr ""
@@ -2705,9 +2681,6 @@ msgstr "Con_vida"
 msgid "Invite Contacts"
 msgstr "Convida _Contactes"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Convida _Contactes"
@@ -2795,9 +2768,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Historial"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -2902,11 +2872,6 @@ msgid "Login Settings"
 msgstr "Connectors"
 
 msgid "Look it up in _Dictionary"
-msgstr ""
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
 msgstr ""
 
 #, fuzzy
@@ -3137,9 +3102,6 @@ msgstr ""
 
 msgid "Never"
 msgstr "Mai"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3452,9 +3414,6 @@ msgstr "Operacions d'Administració"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 msgctxt "Gender"
 msgid "Other"
 msgstr ""
@@ -3695,9 +3654,6 @@ msgid "Plugin Update"
 msgstr "Connectors"
 
 msgid "Plugin already exists"
-msgstr ""
-
-msgid "Plugin manager"
 msgstr ""
 
 msgid "Plugins"
@@ -4360,6 +4316,12 @@ msgstr "Cerca:"
 msgid "Secure Password Storage"
 msgstr "Desa la contrasenya"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4538,9 +4500,6 @@ msgstr "Moderadors"
 #, fuzzy
 msgid "Set status message"
 msgstr "_Canvia Missatge d'Estat"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -4865,6 +4824,12 @@ msgstr "_Canvia Missatge d'Estat"
 msgid "Status: Online Color"
 msgstr "_Canvia Missatge d'Estat"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "Mostra els contactes desconnectats"
@@ -4908,12 +4873,6 @@ msgid "Successfully Removed Contacts"
 msgstr "Afegeix un contacte nou"
 
 msgid "Support"
-msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-msgid "Support for service discovery including nodes and search for users"
 msgstr ""
 
 msgid ""
@@ -4992,9 +4951,6 @@ msgstr "Versió:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Certificat de client"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5538,9 +5494,6 @@ msgstr "Fer ús de proxis per a transferència de fitxers"
 msgid "Use proxy auth_entication"
 msgstr "Fa ús d'autenticació proxy"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5691,9 +5644,6 @@ msgid "Workspaces"
 msgstr "Afegeix un contacte nou"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -6635,6 +6585,10 @@ msgstr ""
 #~ msgstr "El Contacte ha entrat"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "El Contacte ha entrat"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Històric de converses"
 
@@ -6686,6 +6640,10 @@ msgstr ""
 #~ msgstr "Transferència de Fitxers"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Característiques"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Nom:"
 
@@ -6716,6 +6674,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Configuració de Sala"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Grups de xat"
 
 #, fuzzy
 #~ msgid "Homepage"

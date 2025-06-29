@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -925,10 +925,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-#, fuzzy
-msgid "Automatic spell-checking for your messages"
-msgstr "Spellchecking of composed messages."
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1207,15 +1203,15 @@ msgstr "Contacts"
 msgid "Chat Type"
 msgstr "Type"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Recently:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Chats"
@@ -1416,9 +1412,6 @@ msgstr "Connected"
 msgid "Connect on startup"
 msgstr "C_onnect on Gajim startup"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Connecting"
 
@@ -1511,10 +1504,6 @@ msgstr "Contacts"
 #, fuzzy
 msgid "Contact information"
 msgstr "Personal Information"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Contacts"
 
 msgid "Contacts"
 msgstr "Contacts"
@@ -1945,9 +1934,6 @@ msgstr "Status: "
 msgid "Drop files here"
 msgstr "Sends file to a contact"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Eating"
 
@@ -2118,9 +2104,6 @@ msgstr "Error: %s"
 msgid "Error: %s (mime types: %s)"
 msgstr "Error message: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Event"
 
@@ -2187,6 +2170,11 @@ msgstr "Encrypting chat messages."
 msgid "Export…"
 msgstr "Export"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Extra Address:</b>"
@@ -2219,10 +2207,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Features"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Features"
 
 msgid "Feedback"
@@ -2451,11 +2435,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2569,10 +2548,6 @@ msgstr "room now does not show unavailable members"
 #, fuzzy
 msgid "Group chat now shows unavailable members"
 msgstr "Room now shows unavailable member"
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Groupchats"
 
 msgid "Groups"
 msgstr "Groups"
@@ -2832,9 +2807,6 @@ msgstr "In_vite"
 msgid "Invite Contacts"
 msgstr "Invite _Contacts"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Invite _Contacts"
@@ -2927,9 +2899,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Recently:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr "Key usage does not include certificate signing"
@@ -3044,11 +3013,6 @@ msgstr "Registration failed"
 
 msgid "Look it up in _Dictionary"
 msgstr "Look it up in _Dictionary"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3285,9 +3249,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Never"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3605,9 +3566,6 @@ msgstr "On Vacation"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3860,10 +3818,6 @@ msgstr "Registration failed"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Registration failed"
 
 msgid "Plugins"
 msgstr ""
@@ -4543,6 +4497,12 @@ msgstr "Search"
 msgid "Secure Password Storage"
 msgstr "Save password"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4729,9 +4689,6 @@ msgstr "Moderator"
 #, fuzzy
 msgid "Set status message"
 msgstr "status message"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5077,6 +5034,12 @@ msgstr "Status Message"
 msgid "Status: Online Color"
 msgstr "Status Message"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "to send me status"
@@ -5123,13 +5086,6 @@ msgstr "Rename Contact"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Service Discovery using account %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5211,9 +5167,6 @@ msgstr "GTK+ Version:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "SSL certificate error"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5797,9 +5750,6 @@ msgstr "Use file transfer proxies"
 msgid "Use proxy auth_entication"
 msgstr "Use proxy auth_entication"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5959,9 +5909,6 @@ msgid "Workspaces"
 msgstr "Rename Contact"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -7021,6 +6968,10 @@ msgstr ""
 #~ msgstr "Auto join"
 
 #, fuzzy
+#~ msgid "Automatic spell-checking for your messages"
+#~ msgstr "Spellchecking of composed messages."
+
+#, fuzzy
 #~ msgid "Bookmarks"
 #~ msgstr "_Bookmark"
 
@@ -7073,6 +7024,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Contact Unsubscribed"
 #~ msgstr "Unsubscribed"
+
+#, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Contacts"
 
 #, fuzzy
 #~ msgid "Conversation: URL Color"
@@ -7181,6 +7136,10 @@ msgstr ""
 #~ msgstr "Feature not available under Windows."
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Features"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Filename: %s"
 
@@ -7240,6 +7199,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Groupchat Invitation"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Groupchats"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Hide this menu"
@@ -7344,6 +7307,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Registration failed"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Registration failed"
 
 #, fuzzy
@@ -7519,6 +7486,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Subscription Request"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Service Discovery using account %s"
 
 #~ msgid "Synchronise"
 #~ msgstr "Synchronise"

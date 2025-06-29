@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-28 07:33+0000\n"
+"POT-Creation-Date: 2025-06-29 15:45+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -905,9 +905,6 @@ msgstr ""
 msgid "Automatic preview disabled (file too big)"
 msgstr ""
 
-msgid "Automatic spell-checking for your messages"
-msgstr ""
-
 msgid "Automatically accept all contact requests"
 msgstr ""
 
@@ -1182,15 +1179,15 @@ msgstr "Asmuo"
 msgid "Chat Type"
 msgstr "Type"
 
+msgid ""
+"Chat freely: Take your chats where you want. Use a provider of your choice "
+"and synchronize chats between all your devices. Gajim is interoperable with "
+"many other chat apps – and it's free."
+msgstr ""
+
 #, fuzzy
-msgid "Chat history"
+msgid "Chat window"
 msgstr "Nesenai:"
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP"
-msgstr ""
-
-msgid "Chat securely with End-to-End encryption via OMEMO or OpenPGP."
-msgstr ""
 
 msgid "Chats"
 msgstr "Chats"
@@ -1388,9 +1385,6 @@ msgstr "Prisijungta"
 msgid "Connect on startup"
 msgstr "_Prisijungti, kai Gajim pasileis"
 
-msgid "Connect to other Messengers via Transports (Facebook, IRC, ...)"
-msgstr ""
-
 msgid "Connecting"
 msgstr "Jungiamasi"
 
@@ -1483,10 +1477,6 @@ msgstr "Asmuo"
 #, fuzzy
 msgid "Contact information"
 msgstr "Asmens Informacija"
-
-#, fuzzy
-msgid "Contact list"
-msgstr "Asmuo"
 
 #, fuzzy
 msgid "Contacts"
@@ -1913,9 +1903,6 @@ msgstr "Status: "
 msgid "Drop files here"
 msgstr "Sends file to a contact"
 
-msgid "Easily send pictures, videos or other files to friends and groups"
-msgstr ""
-
 msgid "Eating"
 msgstr "Eating"
 
@@ -2084,9 +2071,6 @@ msgstr ""
 msgid "Error: %s (mime types: %s)"
 msgstr "Error message: %s"
 
-msgid "Even more features via plugins"
-msgstr ""
-
 msgid "Event"
 msgstr "Event"
 
@@ -2153,6 +2137,11 @@ msgstr "Šifruojamos pokalbio žinutės."
 msgid "Export…"
 msgstr "Eksportuoti"
 
+msgid ""
+"Express yourself: Sometimes words are not enough. Use reactions, replies, "
+"record voice messages, and send status updates to fully express yourself."
+msgstr ""
+
 #, fuzzy
 msgid "Extended Address"
 msgstr "<b>Papildomas adresas:</b>"
@@ -2185,10 +2174,6 @@ msgid "Family"
 msgstr ""
 
 msgid "Features"
-msgstr "Savybės"
-
-#, fuzzy
-msgid "Features:"
 msgstr "Savybės"
 
 msgid "Feedback"
@@ -2417,11 +2402,6 @@ msgid ""
 "Please help us fixing this issue by sending this report."
 msgstr ""
 
-msgid ""
-"Gajim integrates well with your other devices: simply continue conversations "
-"on your mobile device."
-msgstr ""
-
 msgid "Gajim is fully synchronized with the archive."
 msgstr ""
 
@@ -2534,10 +2514,6 @@ msgstr "Tokios grupės pokalbis %s neegzistuoja."
 
 msgid "Group chat now shows unavailable members"
 msgstr ""
-
-#, fuzzy
-msgid "Group chat support"
-msgstr "Groupchats"
 
 msgid "Groups"
 msgstr "Grupės"
@@ -2797,9 +2773,6 @@ msgstr "Pak_viesti"
 msgid "Invite Contacts"
 msgstr "Kviesti Kontaktus"
 
-msgid "Invite friends to group chats or join one"
-msgstr ""
-
 #, fuzzy
 msgid "Invite to this chat"
 msgstr "Kviesti Kontaktus"
@@ -2892,9 +2865,6 @@ msgstr ""
 #, fuzzy
 msgid "Keep Chat History"
 msgstr "Nesenai:"
-
-msgid "Keep and manage all your chat history"
-msgstr ""
 
 msgid "Key usage does not include certificate signing"
 msgstr ""
@@ -3006,11 +2976,6 @@ msgstr "Registracija nesėkminga"
 
 msgid "Look it up in _Dictionary"
 msgstr "Look it up in _Dictionary"
-
-msgid ""
-"Lookup things on Wikipedia, dictionaries or other search engines directly "
-"from the chat window"
-msgstr ""
 
 #, fuzzy
 msgid "Make Admin"
@@ -3248,9 +3213,6 @@ msgstr ""
 #, fuzzy
 msgid "Never"
 msgstr "_Niekada"
-
-msgid "Never miss a message, keep all your chat clients synchronized"
-msgstr ""
 
 #, fuzzy
 msgid "New Contact"
@@ -3569,9 +3531,6 @@ msgstr "Administrator"
 msgid "Organization (O): "
 msgstr ""
 
-msgid "Organize your chats with workspaces"
-msgstr ""
-
 #, fuzzy
 msgctxt "Gender"
 msgid "Other"
@@ -3820,10 +3779,6 @@ msgstr "Registracija nesėkminga"
 #, fuzzy
 msgid "Plugin already exists"
 msgstr "This file already exists"
-
-#, fuzzy
-msgid "Plugin manager"
-msgstr "Registracija nesėkminga"
 
 msgid "Plugins"
 msgstr ""
@@ -4498,6 +4453,12 @@ msgstr "Ieškoti"
 msgid "Secure Password Storage"
 msgstr "Save password"
 
+msgid ""
+"Secured conversations: State of the art end-to-end encryption for your "
+"conversations. Share messages, pictures, and files with your contacts – and "
+"only with them."
+msgstr ""
+
 msgid "Security"
 msgstr ""
 
@@ -4684,9 +4645,6 @@ msgstr "Moderator"
 #, fuzzy
 msgid "Set status message"
 msgstr "status message"
-
-msgid "Set your activity or tune to show your friends how you are feeling"
-msgstr ""
 
 msgid "Sets an environment variable so GLib debug messages are printed"
 msgstr ""
@@ -5030,6 +4988,12 @@ msgstr "Status Message"
 msgid "Status: Online Color"
 msgstr "Status Message"
 
+msgid ""
+"Stay in contact: Chats and groups help you keep in touch with your friends "
+"and family. Build communities by connecting to people with the same "
+"interests. Use groups to organize the little things or the next big event."
+msgstr ""
+
 #, fuzzy
 msgid "Stop Sharing Online Status?"
 msgstr "informavimui mane, apie būklę"
@@ -5076,13 +5040,6 @@ msgstr "Removes contact from roster"
 
 msgid "Support"
 msgstr ""
-
-msgid "Support for multiple accounts"
-msgstr ""
-
-#, fuzzy
-msgid "Support for service discovery including nodes and search for users"
-msgstr "Service Discovery using account %s"
 
 msgid ""
 "Sure you want to quit Gajim?\n"
@@ -5164,9 +5121,6 @@ msgstr "GTK+ Version:"
 #, fuzzy, python-format
 msgid "TLS verification failed: %s"
 msgstr "Adding Special Notification for %s"
-
-msgid "Tabbed chat window"
-msgstr ""
 
 msgctxt "Group chat name"
 msgid "Team"
@@ -5737,9 +5691,6 @@ msgstr "Naudoti failų siuntimo proksius"
 msgid "Use proxy auth_entication"
 msgstr "Naudoti proksi _autentikaciją"
 
-msgid "Use your favorite emoticons, set your own profile picture"
-msgstr ""
-
 msgid "Use your system’s keyring to store passwords"
 msgstr ""
 
@@ -5897,9 +5848,6 @@ msgid "Workspaces"
 msgstr "Removes contact from roster"
 
 msgid "X11"
-msgstr ""
-
-msgid "XML console to see what's happening on the protocol layer"
 msgstr ""
 
 #, fuzzy
@@ -6975,6 +6923,10 @@ msgstr ""
 #~ msgstr "Contact Connected"
 
 #, fuzzy
+#~ msgid "Contact list"
+#~ msgstr "Asmuo"
+
+#, fuzzy
 #~ msgid "Conversation: URL Color"
 #~ msgstr "Pokalbis su "
 
@@ -7077,6 +7029,10 @@ msgstr ""
 #~ msgstr "Automatinio nebuvimo būklės žinutė"
 
 #, fuzzy
+#~ msgid "Features:"
+#~ msgstr "Savybės"
+
+#, fuzzy
 #~ msgid "File Name: "
 #~ msgstr "Filename: %s"
 
@@ -7136,6 +7092,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Group Chat Invitation Received"
 #~ msgstr "Groupchat Invitation"
+
+#, fuzzy
+#~ msgid "Group chat support"
+#~ msgstr "Groupchats"
 
 #~ msgid "Hide this menu"
 #~ msgstr "Hide this menu"
@@ -7232,6 +7192,10 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Pl_ugins"
+#~ msgstr "Registracija nesėkminga"
+
+#, fuzzy
+#~ msgid "Plugin manager"
 #~ msgstr "Registracija nesėkminga"
 
 #, fuzzy
@@ -7390,6 +7354,10 @@ msgstr ""
 
 #~ msgid "Subscription Request"
 #~ msgstr "Sutikimo užklausimas"
+
+#, fuzzy
+#~ msgid "Support for service discovery including nodes and search for users"
+#~ msgstr "Service Discovery using account %s"
 
 #, fuzzy
 #~ msgid "Synchronize Accounts"
