@@ -7,30 +7,12 @@
   <name>@APP_NAME@</name>
   <summary>Fully-featured XMPP chat client</summary>
   <description>
-    <p>Gajim aims to be an easy to use and fully-featured XMPP client.
-    Just chat with your friends or family, easily share pictures and 
-    thoughts or discuss the news with your groups.
-    </p>
-    <p>Chat securely with End-to-End encryption via OMEMO or OpenPGP.</p>
-    <p>Gajim integrates well with your other devices: simply continue conversations on your mobile device.
-    </p>
-    <p>Features:</p>
+    <p>Gajim aims to be an easy to use and fully-featured XMPP client. Just chat with your friends or family, easily share pictures and thoughts or discuss the news with your groups.</p>
     <ul>
-      <li>Never miss a message, keep all your chat clients synchronized</li>
-      <li>Invite friends to group chats or join one</li>
-      <li>Easily send pictures, videos or other files to friends and groups</li>
-      <li>Chat securely with End-to-End encryption via OMEMO or OpenPGP</li>
-      <li>Use your favorite emoticons, set your own profile picture</li>
-      <li>Keep and manage all your chat history</li>
-      <li>Organize your chats with workspaces</li>
-      <li>Automatic spell-checking for your messages</li>
-      <li>Connect to other Messengers via Transports (Facebook, IRC, ...)</li>
-      <li>Lookup things on Wikipedia, dictionaries or other search engines directly from the chat window</li>
-      <li>Set your activity or tune to show your friends how you are feeling</li>
-      <li>Support for multiple accounts</li>
-      <li>XML console to see what's happening on the protocol layer</li>
-      <li>Support for service discovery including nodes and search for users</li>
-      <li>Even more features via plugins</li>
+      <li>Chat freely: Take your chats where you want. Use a provider of your choice and synchronize chats between all your devices. Gajim is interoperable with many other chat apps – and it's free.</li>
+      <li>Secured conversations: State of the art end-to-end encryption for your conversations. Share messages, pictures, and files with your contacts – and only with them.</li>
+      <li>Stay in contact: Chats and groups help you keep in touch with your friends and family. Build communities by connecting to people with the same interests. Use groups to organize the little things or the next big event.</li>
+      <li>Express yourself: Sometimes words are not enough. Use reactions, replies, record voice messages, and send status updates to fully express yourself.</li>
     </ul>
   </description>
   <branding>
@@ -39,24 +21,8 @@
   </branding>
   <screenshots>
     <screenshot type="default">
-      <image>https://gajim.org/img/screenshots/single-window-mode.png</image>
-      <caption>Contact list</caption>
-    </screenshot>
-    <screenshot>
-      <image>https://gajim.org/img/screenshots/tabbed-chat.png</image>
-      <caption>Tabbed chat window</caption>
-    </screenshot>
-    <screenshot>
-      <image>https://gajim.org/img/screenshots/groupchat-window.png</image>
-      <caption>Group chat support</caption>
-    </screenshot>
-    <screenshot>
-      <image>https://gajim.org/img/screenshots/history-window.png</image>
-      <caption>Chat history</caption>
-    </screenshot>
-    <screenshot>
-      <image>https://gajim.org/img/screenshots/plugins.png</image>
-      <caption>Plugin manager</caption>
+      <image>https://gajim.org/img/screenshots/main-window.png</image>
+      <caption>Chat</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
@@ -68,7 +34,7 @@
   <url type="bugtracker">https://dev.gajim.org/gajim/gajim</url>
   <url type="faq">https://dev.gajim.org/gajim/gajim/-/wikis/help/gajimfaq</url>
   <url type="help">https://dev.gajim.org/gajim/gajim/-/wikis/help/Help</url>
-  <url type="donation">https://gajim.org/development/#donations</url>
+  <url type="donation">https://gajim.org/#donate</url>
   <url type="translate">https://dev.gajim.org/gajim/gajim/-/wikis/development/devtranslate</url>
   <translation type="gettext">gajim</translation>
   <content_rating type="oars-1.1">
