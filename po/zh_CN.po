@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-06-28 07:33+0000\n"
-"PO-Revision-Date: 2025-06-27 01:12+0000\n"
+"PO-Revision-Date: 2025-06-28 12:22+0000\n"
 "Last-Translator: Footboard3754 <Footboard3754@users.noreply.translate.gajim."
 "org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.gajim.org/projects/"
@@ -4135,7 +4135,6 @@ msgstr "显示状态更改"
 msgid "Show Subject"
 msgstr "显示主题"
 
-#, fuzzy
 msgid "Show Title Bar"
 msgstr "显示标题栏"
 
@@ -4205,9 +4204,8 @@ msgstr "显示短代码建议，例如 :+1:"
 msgid "Show the application's version"
 msgstr "显示应用程序的版本"
 
-#, fuzzy
 msgid "Show the window’s title bar"
-msgstr "在任务栏中显示窗口"
+msgstr "显示窗口的标题栏"
 
 msgid "Show window in the taskbar"
 msgstr "在任务栏中显示窗口"
