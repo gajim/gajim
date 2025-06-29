@@ -1,3 +1,52 @@
+Gajim 2.3.0 (29 Jun 2025)
+
+  New
+
+  * Preferences: Add setting to hide header bar
+  * Change maximum input height from ~5 to ~12 lines
+
+  Improvements
+
+  * Server info: Use Adw.InlineViewSwitcher for tabs
+  * Search: Improve layout and styling
+  * Show account for server shutdown notification
+  * Debug console: Add shortcut Ctrl+L for clearing logs window
+  * StartChat: Add ellipsis for menu entry
+  * Remove QR code borders for better styling
+  * Chat filter: Enable searching for groups
+  * Dropdown: Ellipsize labels in the middle
+
+  Change
+
+  * Raise PyGObject version
+  * AppSideBar: Rewrite Side Bar
+  * ContactInfo: Use libadwaita widgets for device infos
+  * Menu: Remove main application menu
+  * Move Plugin dialog into Preferences
+  * Menu: Add dedicated preference button
+  * Menu: Move help menu into header bar button
+  * Menu: Remove "View" menu
+  * Menu: Remove toggle option for main menu
+  * Styles: Use libadwaita style rules and remove obsolete classes/rules
+  * CommandLine: Deprecate profile and separate commands
+  * Add libadwaita as dependency
+  * Plugins: Use Adw widgets
+  * Contact/Group chat info: Use Adw widgets
+  * Accounts/OMEMO trust manager: Use Adw widgets
+  * Preferences: Use Adw preferences widgets
+  * Settings: Make use of Adw.ActionRow; process button props for all row types
+  * Server info/Certificate dialog: Use view switcher and boxed list for server features
+  * Features: Use Adw boxed list
+  * Use Adw.AboutDialog
+  * Styles: Use Adw.StyleManager for managing light/dark mode
+
+  Bug Fixes
+
+  * Fix infinite loop when hiding the chat list
+  * Sounds: Fix problem that new sounds could not be set
+  * Preview: Catch file parsing errors (#12290)
+  * File handling: Catch file access errors (file transfer, avatars) (#12310)
+
 Gajim 2.2.0 (15 May 2025)
 
   New
