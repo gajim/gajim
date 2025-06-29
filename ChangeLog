@@ -1,3 +1,10 @@
+Gajim 2.3.1 (29 Jun 2025)
+
+  Bug Fixes
+
+  * Windows: Add back required PNG status icons for systray icon
+  * Windows: Enable automatic update check
+
 Gajim 2.3.0 (29 Jun 2025)
 
   New
