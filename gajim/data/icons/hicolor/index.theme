@@ -3,7 +3,12 @@ Name=Hicolor
 Comment=Fallback icon theme
 Hidden=true
 
-Directories=scalable/apps,scalable/categories,scalable/devices,scalable/status
+Directories=32x32/status,scalable/apps,scalable/categories,scalable/devices,scalable/status
+
+[32x32/status]
+Size=32
+Context=Status
+Type=Fixed
 
 [scalable/apps]
 Size=128
