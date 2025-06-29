@@ -517,7 +517,7 @@ button.flat.link { padding: 0; border: 0; }
     background-color: transparent;
 }
 .message-input-border {
-    border: 2px solid var(--view-bg-color);
+    border: 2px solid var(--border-color);
     border-radius: 4px;
 }
 .message-input-focus {
