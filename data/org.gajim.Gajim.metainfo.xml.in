@@ -22,7 +22,7 @@
   <screenshots>
     <screenshot type="default">
       <image>https://gajim.org/img/screenshots/main-window.png</image>
-      <caption>Chat</caption>
+      <caption>Chat window</caption>
     </screenshot>
   </screenshots>
   <launchable type="desktop-id">@APP_ID@.desktop</launchable>
