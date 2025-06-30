@@ -1,11 +1,11 @@
-**Please first check if another issue has been opened for your problem**
+**Please search for similar issues first.**
 
 ## Versions
 
   - OS: 
-  - Gajim version: 
-  - GTK version: 
-  - Python-nbxmpp version: 
+  - Gajim: 
+  - GTK: 
+  - python-nbxmpp: 
 
 ## Steps to reproduce the problem
 
@@ -14,8 +14,7 @@
   1.
 
 ## Expected behavior
-
+...
 
 ## Actual behavior
-
-
+...
