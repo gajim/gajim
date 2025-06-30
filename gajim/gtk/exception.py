@@ -56,22 +56,33 @@ _exception_in_progress = threading.Lock()
 
 ISSUE_URL = "https://dev.gajim.org/gajim/gajim/issues/new"
 
-ISSUE_TEXT = """## Versions:
+ISSUE_TEXT = """## Versions
 - OS: {}
-- GTK Version: {}
-- PyGObject Version: {}
-- GLib Version : {}
-- Adw Version: {}
-- libsoup Version: {}
-- python-nbxmpp Version: {}
-- Gajim Version: {}
+- GTK: {}
+- PyGObject: {}
+- GLib: {}
+- Adw: {}
+- libsoup: {}
+- python-nbxmpp: {}
+- Gajim: {}
 
 ## Traceback
 ```
 {}
 ```
+
 ## Steps to reproduce the problem
-..."""
+
+  1.
+  1.
+  1.
+
+## Expected behavior
+...
+
+## Actual behavior
+...
+"""
 
 
 def _hook(type_: type[BaseException], value: BaseException, tb: TracebackType) -> None:
