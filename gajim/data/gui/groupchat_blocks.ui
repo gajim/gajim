@@ -49,6 +49,7 @@
             <property name="vexpand">1</property>
             <property name="focusable">1</property>
             <property name="hscrollbar-policy">never</property>
+            <property name="has-frame">1</property>
             <child>
               <object class="GtkColumnView" id="column_view">
                 <property name="show-column-separators">true</property>
