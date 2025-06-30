@@ -323,7 +323,7 @@
                     <property name="spacing">12</property>
                     <child>
                       <object class="GtkLabel">
-                        <property name="label" translatable="yes">Choose the contact&apos;s groups</property>
+                        <property name="label" translatable="yes">Assign groups to this contact. You can filter chats by group.</property>
                         <property name="wrap">1</property>
                         <style>
                           <class name="dimmed"/>
@@ -340,6 +340,7 @@
                             <property name="height-request">250</property>
                             <property name="focusable">1</property>
                             <property name="vexpand">1</property>
+                            <property name="has-frame">1</property>
                             <property name="child">
                               <object class="GtkViewport">
                                 <property name="child">
@@ -466,6 +467,7 @@
                         <property name="height-request">70</property>
                         <property name="focusable">1</property>
                         <property name="vexpand">1</property>
+                        <property name="has-frame">1</property>
                         <property name="child">
                           <object class="GtkTextView" id="textview_annotation">
                             <property name="focusable">1</property>
