@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -724,6 +724,9 @@ msgstr ""
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr ""
 
@@ -1083,9 +1086,6 @@ msgid "Choose a group…"
 msgstr ""
 
 msgid "Choose encryption"
-msgstr ""
-
-msgid "Choose the contact's groups"
 msgstr ""
 
 msgid "Cipher Suite"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-04-18 08:12+0000\n"
 "Last-Translator: lovetox <philipp@hoerist.com>\n"
 "Language-Team: Norwegian Bokmål <https://translate.gajim.org/projects/gajim/"
@@ -823,6 +823,9 @@ msgstr "Spør før lukking av gruppesamtale fane/vindu."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Oppmerksomhetsmelding mottatt"
 
@@ -1244,10 +1247,6 @@ msgstr "Velg arkiv"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Velg kryptering"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Vis kontaktens profil (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6986,6 +6985,10 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Velg fil å sende…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Vis kontaktens profil (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

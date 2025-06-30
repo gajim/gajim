@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-09-22 06:13+0000\n"
 "Last-Translator: John Doe <imsv@linuxkompis.se>\n"
 "Language-Team: Swedish <https://translate.gajim.org/projects/gajim/master/sv/"
@@ -767,6 +767,9 @@ msgstr "Fråga innan gruppchattflik eller -fönster stängs."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Första meddelandet mottaget"
@@ -1160,10 +1163,6 @@ msgstr "Välj en grupp…"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Välj fil att skicka..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Visa kontaktens profil (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6774,6 +6773,10 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Välj fil att skicka…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Visa kontaktens profil (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

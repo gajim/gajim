@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2006-06-05 19:14+0100\n"
 "Last-Translator: Giulia Fraboulet <djoulia_at_gmail.com>\n"
 "Language-Team: \n"
@@ -822,6 +822,9 @@ msgstr "Goulenn a-raok serriñ un ivinell pe ur prenestr."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Kemennadenn gentañ"
@@ -1239,10 +1242,6 @@ msgstr "Dibabit ur skeudenn"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Dibabit ur restr da gas..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Ouzhennañ an darempred d'ar roll"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6943,6 +6942,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Dibabit ur restr da gas..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Ouzhennañ an darempred d'ar roll"
 
 #, fuzzy
 #~ msgid "Close Search"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-06-18 16:17+0000\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <https://translate.gajim.org/projects/gajim/master/kk/"
@@ -757,6 +757,9 @@ msgstr "Топ чат беті/терезесін жабу алдында сұр
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Gajim терезесі жабылған кезде шығу алдында сұрау"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Назар аудару туралы хабарлама алынды"
 
@@ -1135,9 +1138,6 @@ msgstr "Топты таңдау…"
 
 msgid "Choose encryption"
 msgstr "Шифрлеуді таңдау"
-
-msgid "Choose the contact's groups"
-msgstr "Контакт топтарын таңдау"
 
 msgid "Cipher Suite"
 msgstr "Шифрлеу жиынтығы"
@@ -6365,6 +6365,9 @@ msgstr "…немесе оны осында тастаңыз"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Жіберу үшін файлды таңдау…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Контакт топтарын таңдау"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Құрылғылар тізімін қазір тазарту керек пе?"

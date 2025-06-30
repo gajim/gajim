@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-05-01 23:12+0000\n"
 "Last-Translator: Ahmed Mohammed <iramosu@protonmail.com>\n"
 "Language-Team: Arabic <https://translate.gajim.org/projects/gajim/master/ar/"
@@ -765,6 +765,9 @@ msgstr "اسأل قبل إغلاق نافذة/لسان مجموعة الدردش
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "اسأل قبل الخروج من غاجِم حين تكون النافذة مغلقة"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "استُلِمَت رسالة الانتباه"
 
@@ -1133,9 +1136,6 @@ msgstr "اختر مجموعة…"
 
 msgid "Choose encryption"
 msgstr "اختر التعمية"
-
-msgid "Choose the contact's groups"
-msgstr "اختر مجموعات المتراسل"
 
 msgid "Cipher Suite"
 msgstr "طقم سايفر"
@@ -6049,6 +6049,9 @@ msgstr "…أو ألقِها هنا"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "اختر ملفًا للإرسال…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "اختر مجموعات المتراسل"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "أامح الأجهزة الآن؟"

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-03-09 12:48+0000\n"
 "Last-Translator: Shaw Knye-hsim <1020647955@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.gajim.org/projects/"
@@ -776,6 +776,9 @@ msgstr "關閉多人聊天標籤/視窗前詢問。"
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "當 Gajim 的窗口關閉時退出前詢問"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "收到的注意消息"
 
@@ -1165,10 +1168,6 @@ msgstr "選擇歸檔檔案"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "密碼加密"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "顯示聯絡人的側寫"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6931,6 +6930,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "選擇要傳送的檔案…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "顯示聯絡人的側寫"
 
 #, fuzzy
 #~ msgid "Close Search"

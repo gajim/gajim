@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-10-31 20:49+0100\n"
 "Last-Translator: Adrian C. <anrxc@sysphere.org>\n"
 "Language-Team: Croatian\n"
@@ -842,6 +842,9 @@ msgstr "Pitaj prije zatvaranja kartice/prozora razgovora grupe."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Prva Poruka Primljena"
@@ -1265,10 +1268,6 @@ msgstr "Odabir Slike"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Odabir Datoteke za Slanje..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Prikaži profil kontakta (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7027,6 +7026,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Odabir Datoteke za Slanje..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Prikaži profil kontakta (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

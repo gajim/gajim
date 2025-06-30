@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Catalan <https://translate.gajim.org/projects/gajim/master/ca/"
@@ -792,6 +792,9 @@ msgstr ""
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr ""
 
@@ -1198,10 +1201,6 @@ msgstr ""
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Connexió"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Mostra el perfil del contacte (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6575,6 +6574,10 @@ msgstr ""
 #~ "Certificate for \n"
 #~ "%s"
 #~ msgstr "El Certificat està xifrat"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Mostra el perfil del contacte (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

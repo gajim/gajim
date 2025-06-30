@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -834,6 +834,9 @@ msgstr "Питај пре затварања прозора/језичка гр�
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Примљена Прва Порука"
@@ -1257,10 +1260,6 @@ msgstr "Одаберите слику"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Шифровање лозинком"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Прикажи профил контакта (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7015,6 +7014,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Одаберите датотеку за слање..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Прикажи профил контакта (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

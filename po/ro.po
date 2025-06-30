@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-06-18 14:17+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://translate.gajim.org/projects/gajim/master/"
@@ -768,6 +768,9 @@ msgstr "Întrebați înainte de închiderea unei file/ferestre de chat în grup.
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Întrebați înainte de a părăsi când fereastra lui Gajim este închisă"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Atenție mesaj primit"
 
@@ -1143,9 +1146,6 @@ msgstr "Alegeți un grup…"
 
 msgid "Choose encryption"
 msgstr "Alegeți criptarea"
-
-msgid "Choose the contact's groups"
-msgstr "Alegeți grupurile de contacte"
 
 msgid "Cipher Suite"
 msgstr "Suita de cifrare"
@@ -6421,6 +6421,9 @@ msgstr "...sau lăsați-o aici"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Alegeți Fișier de trimis…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Alegeți grupurile de contacte"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Ștergeți dispozitivele acum?"

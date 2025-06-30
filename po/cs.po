@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2023-03-09 19:07+0000\n"
 "Last-Translator: ms0 <martinsiska1@email.cz>\n"
 "Language-Team: Czech <https://translate.gajim.org/projects/gajim/master/cs/"
@@ -769,6 +769,9 @@ msgstr "Ptát se před zavřením oken/záložek diskuzí."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Zeptat se před ukončením, pokud je okno aplikace Gajim zavřené"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Zpráva o pozornost přijata"
 
@@ -1142,9 +1145,6 @@ msgstr "Vyberte skupinu…"
 
 msgid "Choose encryption"
 msgstr "Zvolte šifrování"
-
-msgid "Choose the contact's groups"
-msgstr "Vyberte skupinové konverzace kontaktu"
 
 msgid "Cipher Suite"
 msgstr "Sada šifer"
@@ -6440,6 +6440,9 @@ msgstr "...nebo přetáhněte sem"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vyberte soubor k odeslání…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Vyberte skupinové konverzace kontaktu"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."

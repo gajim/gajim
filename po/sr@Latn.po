@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-10-29 23:50+0100\n"
 "Last-Translator: Branko Kokanovic <branko.kokanovic@gmail.com>\n"
 "Language-Team:  <sr@li.org>\n"
@@ -840,6 +840,9 @@ msgstr "Pitaj pre zatvaranja prozora/jezička grupnog razgovora."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Primljena Prva Poruka"
@@ -1264,10 +1267,6 @@ msgstr "Odaberite sliku"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Odaberite datoteku za slanje..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Prikaži profil kontakta (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7021,6 +7020,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Odaberite datoteku za slanje..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Prikaži profil kontakta (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

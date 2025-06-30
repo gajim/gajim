@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2022-02-11 17:45+0000\n"
 "Last-Translator: Gregory K <gk@makemagic.gr>\n"
 "Language-Team: Greek <https://translate.gajim.org/projects/gajim/master/el/"
@@ -830,6 +830,9 @@ msgstr "Ερώτηση πριν το κλείσιμο καρτέλας/παρα�
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Λήφθηκε το πρώτο μήνυμα"
@@ -1249,10 +1252,6 @@ msgstr "Επιλογή εικόνας"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Προσθέτει μια επαφή στη λίστα επαφών"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6997,6 +6996,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Επιλέξτε το αρχείο που θα σταλεί..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Προσθέτει μια επαφή στη λίστα επαφών"
 
 #, fuzzy
 #~ msgid "Close Search"

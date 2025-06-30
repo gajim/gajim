@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-06-20 08:12+0000\n"
 "Last-Translator: Alexander Smirnov <skymaverickas@gmail.com>\n"
 "Language-Team: Russian <https://translate.gajim.org/projects/gajim/master/ru/"
@@ -774,6 +774,9 @@ msgstr "Спрашивать перед закрытием окна/вкладк
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Спрашивать перед выходом, когда окно приложения закрыто"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Получено сообщение для привлечения внимания"
 
@@ -1146,9 +1149,6 @@ msgstr "Выберите группу…"
 
 msgid "Choose encryption"
 msgstr "Выберите шифрование"
-
-msgid "Choose the contact's groups"
-msgstr "Выберите группы для контакта"
 
 msgid "Cipher Suite"
 msgstr "Набор шифров"
@@ -6424,6 +6424,9 @@ msgstr "…или перетащите его сюда"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Выберите файл для отправки…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Выберите группы для контакта"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Очистить список устройств сейчас?"

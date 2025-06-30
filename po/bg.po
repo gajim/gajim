@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:43+0200\n"
 "Last-Translator: Yavor Doganov <yavor@gnu.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -836,6 +836,9 @@ msgstr "Питане преди затваряне на подпрозорец/�
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Първо получено съобщение"
@@ -1259,10 +1262,6 @@ msgstr "Избор на изображение"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Избор на файл за изпращане…"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Показване на профила на контакта (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7033,6 +7032,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Избор на файл за изпращане…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Показване на профила на контакта (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2014-06-21 16:23+0200\n"
 "Last-Translator: Isratine Citizen <genghiskhan@gmx.ca>\n"
 "Language-Team: Rahut\n"
@@ -864,6 +864,9 @@ msgstr "שאל בטרם סגירת חלון/כרטיסייה של שיחת קב�
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "התקבלה הודעת הקשב"
 
@@ -1292,10 +1295,6 @@ msgstr "בחירת ארכיון"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "הצפנת סיסמה"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "הוספת איש קשר זה לרשימה (Ctrl+D)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7170,6 +7169,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "בחירת קובץ לשליחה..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "הוספת איש קשר זה לרשימה (Ctrl+D)"
 
 #, fuzzy
 #~ msgid "Close Search"

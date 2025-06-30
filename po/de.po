@@ -16,11 +16,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-06-29 16:54+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
-"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/>"
-"\n"
+"Language-Team: German <https://translate.gajim.org/projects/gajim/master/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -770,6 +770,9 @@ msgstr "Fragen, bevor ein Gruppenchat-Tab/Fenster geschlossen wird."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Vor dem Beenden fragen, wenn Gajims Fenster geschlossen wird"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Aufmerksamkeitsnachricht empfangen"
 
@@ -1136,9 +1139,6 @@ msgstr "Wähle eine Gruppe…"
 
 msgid "Choose encryption"
 msgstr "Verschlüsselung auswählen"
-
-msgid "Choose the contact's groups"
-msgstr "Wähle die Gruppen des Kontakts"
 
 msgid "Cipher Suite"
 msgstr "Cipher Suite"
@@ -6329,6 +6329,9 @@ msgstr "… oder hierher ziehen"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Datei auswählen…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Wähle die Gruppen des Kontakts"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Geräte jetzt löschen?"

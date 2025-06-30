@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:42+0200\n"
 "Last-Translator: Ihar Hrachyshka <ihar.hrachyshka@gmail.com>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -824,6 +824,9 @@ msgstr "Пытацца пацверджання закрыцця групаво�
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Атрыманае першае паведамленне"
@@ -1242,10 +1245,6 @@ msgstr "Выберыце малюнак"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Выберыце файл..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Дадаць чалавека ў спіс"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6979,6 +6978,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Выберыце файл..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Дадаць чалавека ў спіс"
 
 #, fuzzy
 #~ msgid "Close Search"

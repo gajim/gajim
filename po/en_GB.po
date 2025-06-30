@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: English (United Kingdom) <https://translate.gajim.org/"
@@ -832,6 +832,9 @@ msgstr "Ask before closing a group chat tab/window."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "First Message Received"
@@ -1255,10 +1258,6 @@ msgstr "Choose Image"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Choose File to Send..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Show the contact's profile (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7008,6 +7007,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Choose File to Send..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Show the contact's profile (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

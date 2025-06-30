@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-06-17 02:17+0000\n"
 "Last-Translator: Forza Catro <forza4galicia@proton.me>\n"
 "Language-Team: Galician <https://translate.gajim.org/projects/gajim/master/"
@@ -835,6 +835,9 @@ msgstr "Preguntar antes de pechar unha fiestra/separador da sala de charla."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Recibiuse a primeira mensaxe"
@@ -1254,10 +1257,6 @@ msgstr "Elixir unha imaxe"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Elixa un ficheiro para enviar..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Engade o contacto á listaxe"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7004,6 +7003,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Elixa un ficheiro para enviar..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Engade o contacto á listaxe"
 
 #, fuzzy
 #~ msgid "Close Search"

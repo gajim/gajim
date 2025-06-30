@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-05-19 16:12+0000\n"
 "Last-Translator: Rui Simoes <ruisimoes@centrauto.pt>\n"
 "Language-Team: Portuguese <https://translate.gajim.org/projects/gajim/master/"
@@ -780,6 +780,9 @@ msgstr "Pergunte antes de fechar uma guia/janela de bate-papo em grupo."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Pergunte antes de sair quando a janela de Gajim estiver fechada"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Mensagem de Atenção Recebida"
 
@@ -1162,9 +1165,6 @@ msgstr "Escolha um grupo…"
 
 msgid "Choose encryption"
 msgstr "Escolha criptografia"
-
-msgid "Choose the contact's groups"
-msgstr "Escolha os grupos do contato"
 
 msgid "Cipher Suite"
 msgstr "Arquivo de Cifras"
@@ -6579,6 +6579,9 @@ msgstr "…ou solte aqui"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Escolha o Arquivo para Enviar…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Escolha os grupos do contato"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."

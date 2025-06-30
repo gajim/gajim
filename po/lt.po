@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-08-19 23:55+0200\n"
 "Last-Translator: Mantas Zimnickas <sirexas@yahoo.com>\n"
 "Language-Team: Lithuanian <>\n"
@@ -812,6 +812,9 @@ msgstr "Ask before closing a group chat tab/window."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "First Message Received"
@@ -1231,10 +1234,6 @@ msgstr "Choose Image"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Choose File to Send..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Įtraukti šį kontaktą į sąrašą (Ctrl+D)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6910,6 +6909,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Choose File to Send..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Įtraukti šį kontaktą į sąrašą (Ctrl+D)"
 
 #, fuzzy
 #~ msgid "Close Search"

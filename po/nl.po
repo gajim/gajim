@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Dutch <https://translate.gajim.org/projects/gajim/master/nl/"
@@ -820,6 +820,9 @@ msgstr ""
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Aandachtsbericht ontvangen"
 
@@ -1236,10 +1239,6 @@ msgstr "Kies avatar…"
 
 msgid "Choose encryption"
 msgstr "Kies een versleutelingstype"
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Profiel van contact weergeven (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6997,6 +6996,10 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Kies het bestand om te verzenden…"
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Profiel van contact weergeven (Ctrl+I)"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."

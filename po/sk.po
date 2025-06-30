@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2010-02-28 20:43+0100\n"
 "Last-Translator: Pavol Klačanský <pavol@klacansky.com>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -831,6 +831,9 @@ msgstr "Spýtať sa pred zatvorením okna/záložky pre diskusnú skupinu."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Prvá prijatá správa"
@@ -1253,10 +1256,6 @@ msgstr "Vybrať obrázok"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Vyberte súbor na odoslanie..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Zobraziť profil kontaktu (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6998,6 +6997,10 @@ msgstr ""
 #, fuzzy
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vyberte súbor na odoslanie..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Zobraziť profil kontaktu (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-06-08 09:12+0000\n"
 "Last-Translator: \"qa@@NGaZRs7ZopdfFbXX\" <fabiol@mailbox.org>\n"
 "Language-Team: Italian <https://translate.gajim.org/projects/gajim/master/it/"
@@ -767,6 +767,9 @@ msgstr ""
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Chiedi prima di uscire, quando la finestra di Gajim è chiusa"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Richiesta di Attenzione Ricevuta"
 
@@ -1133,9 +1136,6 @@ msgstr "Scegli un gruppo…"
 
 msgid "Choose encryption"
 msgstr "Scegli Cifratura"
-
-msgid "Choose the contact's groups"
-msgstr "Seleziona i gruppi del contatto"
 
 msgid "Cipher Suite"
 msgstr "Suite di crittografia"
@@ -6279,6 +6279,9 @@ msgstr "…o trascinalo qui"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Scegli File da Inviare…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Seleziona i gruppi del contatto"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "Eliminare i dispositivi ora?"

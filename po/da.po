@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2009-11-18 19:33+0100\n"
 "Last-Translator: Niels Felsted Thorsen <felsted@fsfe.org>\n"
 "Language-Team:  <>\n"
@@ -837,6 +837,9 @@ msgstr "Spørg før et gruppesamtale vindue/faneblad lukkes."
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 #, fuzzy
 msgid "Attention Message Received"
 msgstr "Første Besked er Modtaget"
@@ -1261,10 +1264,6 @@ msgstr "Vælg Billede"
 #, fuzzy
 msgid "Choose encryption"
 msgstr "Vælg en Fil at Sende..."
-
-#, fuzzy
-msgid "Choose the contact's groups"
-msgstr "Vis kontaktens profil (Ctrl+I)"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -7021,6 +7020,10 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Vælg en fil at sende..."
+
+#, fuzzy
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Vis kontaktens profil (Ctrl+I)"
 
 #, fuzzy
 #~ msgid "Close Search"

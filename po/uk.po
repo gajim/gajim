@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2024-11-19 21:11+0000\n"
 "Last-Translator: Daniel Brötzmann <mailtrash@posteo.de>\n"
 "Language-Team: Ukrainian <https://translate.gajim.org/projects/gajim/master/"
@@ -773,6 +773,9 @@ msgstr "Запитувати перед закриттям вкладки або
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr ""
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "Отримано повідомлення уваги"
 
@@ -1162,9 +1165,6 @@ msgstr "Вибрати групу…"
 
 msgid "Choose encryption"
 msgstr "Оберіть шифрування"
-
-msgid "Choose the contact's groups"
-msgstr "Обрати групи для контакту"
 
 msgid "Cipher Suite"
 msgstr ""
@@ -6863,6 +6863,9 @@ msgstr ""
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "Вибрати файл для надсилання…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "Обрати групи для контакту"
 
 #~ msgid ""
 #~ "Click to view Gajim's wiki page on how to install plugins in Flatpak."

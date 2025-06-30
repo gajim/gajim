@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gajim\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-29 15:45+0000\n"
+"POT-Creation-Date: 2025-06-30 20:06+0000\n"
 "PO-Revision-Date: 2025-06-18 03:12+0000\n"
 "Last-Translator: 翻訳者X <tairanto2@wail.ch>\n"
 "Language-Team: Japanese <https://translate.gajim.org/projects/gajim/master/"
@@ -752,6 +752,9 @@ msgstr "談話室のタブまたはウィンドウを閉じる前に確認を求
 msgid "Ask before quitting when Gajim’s window is closed"
 msgstr "Gajim のウィンドウを閉じる際、終了するか尋ねる"
 
+msgid "Assign groups to this contact. You can filter chats by group."
+msgstr ""
+
 msgid "Attention Message Received"
 msgstr "注目メッセージを受信した"
 
@@ -1118,9 +1121,6 @@ msgstr "グループを選択…"
 
 msgid "Choose encryption"
 msgstr "暗号化方式を選択"
-
-msgid "Choose the contact's groups"
-msgstr "相手先のグループを選択"
 
 msgid "Cipher Suite"
 msgstr "暗号スイート"
@@ -6253,6 +6253,9 @@ msgstr "…またはここにドロップ"
 
 #~ msgid "Choose File to Send…"
 #~ msgstr "転送するファイルを選択…"
+
+#~ msgid "Choose the contact's groups"
+#~ msgstr "相手先のグループを選択"
 
 #~ msgid "Clear Devices Now?"
 #~ msgstr "直ちにデバイスを消去しますか ?"
