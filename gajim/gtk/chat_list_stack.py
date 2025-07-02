@@ -214,9 +214,8 @@ class ChatListStack(Gtk.Stack, EventHelper):
     def _move_chat_to_workspace(
         self, _action: Gio.SimpleAction, params: structs.ChatListEntryParam
     ) -> None:
-
         workspace_id = params.workspace_id
-        if not workspace_id:
+        if not workspace_id or workspace_id == "add-workspace":
             workspace_id = app.window.add_workspace(switch=False)
 
         source_chatlist = self.get_chatlist(params.source_workspace_id)
