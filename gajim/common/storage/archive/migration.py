@@ -128,6 +128,22 @@ class Migration:
             for stmt in statements:
                 conn.execute(sa.text(stmt))
 
+    def _execute_multiple_with_error(
+        self,
+        statements: list[tuple[str, str] | tuple[str, None]]
+    ) -> None:
+        with self._engine.begin() as conn:
+            for stmt, error_string in statements:
+                try:
+                    conn.execute(sa.text(stmt))
+                except sa.exc.OperationalError as e:
+                    if error_string is not None:
+                        sql_error = e.orig.args[0]
+                        if error_string in sql_error:
+                            log.warning('Ignore "%s" for %s', sql_error, e.statement)
+                            continue
+                    raise
+
     def _pre_v7(self, user_version: int) -> None:
         if user_version == 0:
             # All migrations from 0.16.9 until 1.0.0
@@ -273,10 +289,11 @@ class Migration:
 
     def _v13(self) -> None:
         statements = [
-            'ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
-            'PRAGMA user_version=13',
+            ('ALTER TABLE occupant ADD COLUMN "blocked" INTEGER NOT NULL DEFAULT (0)',
+             'duplicate column'),
+            ('PRAGMA user_version=13', None)
         ]
-        self._execute_multiple(statements)
+        self._execute_multiple_with_error(statements)
 
     def _get_account_pks(self, conn: sa.Connection) -> list[int]:
         account_pks: list[int] = []
