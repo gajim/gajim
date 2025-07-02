@@ -273,10 +273,11 @@ button.flat.link { padding: 0; border: 0; }
 
 .sidebar-listbox-row {
   min-width: 63px;
+  padding: 6px 0px 6px 0px;
 }
 
-.sidebar-listbox-row {
-    padding: 6px 0px 6px 0px;
+.sidebar-listbox-row:active {
+  background: transparent;
 }
 
 .sidebar-listbox-row image {
