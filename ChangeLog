@@ -1,3 +1,16 @@
+Gajim 2.3.2 (30 Jun 2025)
+
+  Improvements
+
+  * Group chat info: Improve layout
+  * Contact info: Improve layout and wording
+  * Exceptions: Improve issue text
+
+  Bug Fixes
+
+  * Migration: Fix migration for Gajim versions < 1.8.4 (#12308)
+  * Workspaces: Fix dropping a chat on the new workspace icon (#12340)
+
 Gajim 2.3.1 (29 Jun 2025)
 
   Bug Fixes
