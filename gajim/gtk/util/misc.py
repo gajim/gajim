@@ -213,6 +213,9 @@ def allow_send_message(has_text: bool, contact: types.ChatContactT) -> bool:
         return bool(has_text and joined and not is_visitor)
 
     if isinstance(contact, GroupchatParticipant):
+        if not contact.is_available:
+            return False
+
         groupchat_contact = contact.room
         joined = groupchat_contact.is_joined
 
