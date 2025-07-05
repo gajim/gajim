@@ -78,6 +78,12 @@ if TYPE_CHECKING:
 if app.is_display(Display.X11):
     from gi.repository import GdkX11
 
+if app.is_display(Display.WIN32):
+    import gi
+
+    gi.require_version("GdkWin32", "4.0")
+    from gi.repository import GdkWin32
+
 log = logging.getLogger("gajim.gtk.main")
 
 
@@ -202,14 +208,15 @@ class MainWindow(Adw.ApplicationWindow, EventHelper):
         toplevel.set_skip_taskbar_hint(value)
 
     def set_urgency_hint(self, value: bool) -> None:
-        if not app.is_display(Display.X11):
-            return
-
         if not app.settings.get("use_urgency_hint"):
             return
 
-        toplevel = cast(GdkX11.X11Surface, self.get_surface())
-        toplevel.set_urgency_hint(value)
+        if app.is_display(Display.X11):
+            toplevel = cast(GdkX11.X11Surface, self.get_surface())
+            toplevel.set_urgency_hint(value)
+        elif app.is_display(Display.WIN32):
+            toplevel = cast(GdkWin32.Win32Surface, self.get_surface())
+            toplevel.set_urgency_hint(value)
 
     def mark_workspace_as_read(self, workspace: str) -> None:
         chat_list_stack = self._chat_page.get_chat_list_stack()
