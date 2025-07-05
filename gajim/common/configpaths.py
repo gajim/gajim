@@ -173,21 +173,24 @@ class ConfigPaths:
 
     def init(self):
 
-        root_folder = "gajim"
+        root_folder = 'gajim'
         if self.user_profile:
-            root_folder = f"gajim.{self.user_profile}"
+            root_folder = f'gajim.{self.user_profile}'
 
-        if sys.platform == "win32":
-            root_folder = root_folder.capitalize()
-
+        if sys.platform == 'win32':
             if gajim.IS_PORTABLE:
+
+                root_folder = 'UserData'
+                if self.user_profile:
+                    root_folder = f'UserData.{self.user_profile}'
+
                 application_path = Path(sys.executable).parent
                 self.config_root = self.cache_root = self.data_root = \
-                    application_path.parent / 'UserData'
+                    application_path.parent / root_folder
             else:
                 # Documents and Settings\[User Name]\Application Data\Gajim
                 self.config_root = self.cache_root = self.data_root = \
-                    Path(os.environ['APPDATA']) / root_folder
+                    Path(os.environ['APPDATA']) / root_folder.capitalize()
         else:
             self.config_root = Path(GLib.get_user_config_dir()) / root_folder
             self.cache_root = Path(GLib.get_user_cache_dir()) / root_folder
