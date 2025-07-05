@@ -202,7 +202,6 @@ class GenericSetting(Adw.ActionRow, SignalManager):
         )
         self._locked_icon.set_visible(False)
         self._locked_icon.set_tooltip_text(_("Setting is locked by the system"))
-        self._locked_icon.add_css_class("background")
         self._action_overlay = Gtk.Overlay(child=self.setting_box)
         self._action_overlay.add_overlay(self._locked_icon)
 
