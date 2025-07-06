@@ -159,7 +159,9 @@ class WindowsStatusIcon(StatusIconBackend):
     def __init__(self) -> None:
         StatusIconBackend.__init__(self)
         self._status_icon = self._create_status_icon()
-        self._status_icon.run_detached()
+
+        if app.settings.get("show_trayicon"):
+            self._status_icon.run_detached()
 
     def update_state(self, init: bool = False) -> None:
         if not init and app.window.get_total_unread_count():
