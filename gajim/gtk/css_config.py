@@ -125,6 +125,9 @@ class CSSConfig:
 
         self.apply_app_font_size()
 
+        if sys.platform == "win32":
+            self._apply_windows_css()
+
     @property
     def prefer_dark(self) -> bool:
         setting = app.settings.get("dark_theme")
@@ -201,6 +204,12 @@ class CSSConfig:
         self._app_font_size_provider.load_from_bytes(
             GLib.Bytes.new(css.encode("utf-8"))
         )
+
+    def _apply_windows_css(self) -> None:
+        """Apply extra CSS on Windows to fix issues, see:
+        https://gitlab.gnome.org/GNOME/libadwaita/-/issues/1053
+        """
+        self._load_css_from_file("windows.css", CSSPriority.APPLICATION)
 
     @staticmethod
     def _pango_to_css_weight(number: int) -> int:
