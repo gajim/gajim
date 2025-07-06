@@ -215,8 +215,6 @@ class CoreApplication(ged.EventHelper):
         ps.print_stats()
 
     def start_shutdown(self) -> None:
-        app.app.systray.shutdown()
-
         accounts_to_disconnect: dict[str, Client] = {}
 
         for client in app.get_clients():
@@ -247,7 +245,9 @@ class CoreApplication(ged.EventHelper):
         app.storage.cache.shutdown()
         app.storage.archive.shutdown()
         app.settings.shutdown()
+
         self.end_profiling()
+        app.app.systray.shutdown()
         configpaths.cleanup_temp()
         logind.shutdown()
 
