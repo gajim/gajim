@@ -17,7 +17,6 @@
 from __future__ import annotations
 
 from typing import Any
-from typing import cast
 from typing import TYPE_CHECKING
 
 import hashlib
@@ -303,59 +302,16 @@ class Linux(NotificationBackend):
 
     def __init__(self):
         NotificationBackend.__init__(self)
-        self._notifications_supported: bool = False
-        self._caps: list[str] = []
-        self._detect_dbus_caps()
-
-    def _detect_dbus_caps(self) -> None:
-        log.info("Desktop Env: %s, Flatpak: %s", app.desktop_env, app.is_flatpak())
-
-        if app.is_flatpak() or app.desktop_env == "gnome":
-            # Gnome Desktop does not use org.freedesktop.Notifications.
-            # It has its own API at org.gtk.Notifications, which is not an
-            # implementation of the freedesktop spec. There is no documentation
-            # on what it currently supports, we can assume at least what the
-            # GLib.Notification API offers (icons, actions).
-            #
-            # If the app is run as flatpak the portal API is used
-            # https://flatpak.github.io/xdg-desktop-portal/docs
-            self._caps = ["actions"]
-            self._notifications_supported = True
-            log.info("Detected notification capabilities: %s", self._caps)
-            return
-
-        def on_proxy_ready(_source: Gio.DBusProxy, res: Gio.AsyncResult) -> None:
-            try:
-                proxy = Gio.DBusProxy.new_finish(res)
-                self._caps = cast(list[str], proxy.GetCapabilities())  # pyright: ignore
-            except GLib.Error as error:
-                log.warning("Notifications D-Bus not available: %s", error)
-            else:
-                self._notifications_supported = True
-                log.info("Notifications D-Bus connected")
-                log.info("Detected notification capabilities: %s", self._caps)
-
-        log.info("Connecting to Notifications D-Bus")
-        Gio.DBusProxy.new_for_bus(
-            Gio.BusType.SESSION,
-            Gio.DBusProxyFlags.DO_NOT_CONNECT_SIGNALS,
-            None,
-            "org.freedesktop.Notifications",
-            "/org/freedesktop/Notifications",
-            "org.freedesktop.Notifications",
-            None,
-            on_proxy_ready,
-        )
 
     def _send(self, event: events.Notification) -> None:
-        if not self._notifications_supported:
-            return
-
         notification = Gio.Notification()
         notification.set_title(event.title)
 
         text = event.text
-        if "body-markup" in self._caps:
+        if "<img" in event.text:
+            # Escape text with img tags
+            # https://dev.gajim.org/gajim/gajim/-/issues/12349
+            # https://gitlab.gnome.org/GNOME/glib/-/issues/3720
             text = GLib.markup_escape_text(event.text)
 
         notification.set_body(text)
@@ -376,9 +332,6 @@ class Linux(NotificationBackend):
     ) -> None:
 
         if event.type not in self._action_types:
-            return
-
-        if "actions" not in self._caps:
             return
 
         jid = ""
@@ -433,8 +386,6 @@ class Linux(NotificationBackend):
         return _get_file_icon(icon_name, 96)
 
     def _withdraw(self, details: list[Any]) -> None:
-        if not self._notifications_supported:
-            return
         notification_id = self._make_id(details)
 
         log.info("Withdraw notification: %s", notification_id)
