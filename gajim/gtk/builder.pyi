@@ -453,12 +453,13 @@ class GroupchatManageBuilder(Builder):
     avatar_overlay: Gtk.Overlay
     avatar_button_image: Gtk.Image
     remove_avatar_button: Gtk.Button
-    muc_description_entry: Gtk.Entry
-    muc_name_entry: Gtk.Entry
-    destroy_muc_button: Gtk.Button
     manage_save_button: Gtk.Button
-    subject_textview: Gtk.TextView
+    contact_addresses_listbox: Gtk.ListBox
+    muc_name_entry_row: Adw.EntryRow
+    muc_description_entry_row: Adw.EntryRow
+    destroy_muc_button: Gtk.Button
     subject_change_button: Gtk.Button
+    subject_textview: Gtk.TextView
     avatar_selector_grid: Gtk.Grid
     avatar_cancel_button: Gtk.Button
     avatar_update_button: Gtk.Button

@@ -7,170 +7,127 @@
       <object class="GtkStackPage">
         <property name="name">manage</property>
         <property name="child">
-          <object class="GtkBox">
-            <property name="width-request">400</property>
-            <property name="halign">center</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
+          <object class="AdwClamp">
             <child>
-              <object class="GtkOverlay" id="avatar_overlay">
-                <property name="halign">center</property>
-                <property name="child">
-                  <object class="GtkImage" id="avatar_button_image">
-                    <property name="margin-end">6</property>
-                    <property name="margin-bottom">6</property>
-                    <property name="pixel-size">100</property>
-                    <property name="icon-name">missing-image</property>
-                  </object>
-                </property>
-                <child type="overlay">
-                  <object class="GtkButton" id="remove_avatar_button">
-                    <property name="visible">0</property>
-                    <property name="focusable">1</property>
-                    <property name="tooltip-text" translatable="yes">Remove your group chat avatar</property>
-                    <property name="halign">start</property>
-                    <property name="valign">end</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">user-trash-symbolic</property>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <child>
+                  <object class="GtkOverlay" id="avatar_overlay">
+                    <property name="halign">center</property>
+                    <property name="child">
+                      <object class="GtkImage" id="avatar_button_image">
+                        <property name="margin-end">6</property>
+                        <property name="margin-bottom">6</property>
+                        <property name="pixel-size">100</property>
+                        <property name="icon-name">missing-image</property>
+                      </object>
+                    </property>
+                    <child type="overlay">
+                      <object class="GtkButton" id="remove_avatar_button">
+                        <property name="visible">0</property>
+                        <property name="focusable">1</property>
+                        <property name="tooltip-text" translatable="yes">Remove your group chat avatar</property>
+                        <property name="halign">start</property>
+                        <property name="valign">end</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">user-trash-symbolic</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Public Information</property>
-                <style>
-                  <class name="title-2"/>
-                  <class name="mt-12"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkGrid">
-                <property name="halign">center</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">12</property>
                 <child>
-                  <object class="GtkEntry" id="muc_description_entry">
-                    <property name="sensitive">0</property>
-                    <property name="focusable">1</property>
-
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkEntry" id="muc_name_entry">
-                    <property name="width-request">300</property>
-                    <property name="sensitive">0</property>
-                    <property name="focusable">1</property>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Name</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Description</property>
-                    <style>
-                      <class name="dimmed"/>
-                    </style>
-                    <layout>
-                      <property name="column">0</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCenterBox">
-                <child type="start">
-                  <object class="GtkButton" id="destroy_muc_button">
-                    <property name="sensitive">0</property>
-                    <property name="focusable">1</property>
-                    <property name="tooltip-text" translatable="yes">Destroy Group Chat…</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon-name">user-trash-symbolic</property>
+                  <object class="AdwPreferencesGroup">
+                    <property name="title" translatable="yes">Public Information</property>
+                    <property name="description" translatable="yes">This information will be publicly visible.</property>
+                    <child type="header-suffix">
+                      <object class="GtkButton" id="manage_save_button">
+                        <property name="focusable">1</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes">Save</property>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child type="end">
-                  <object class="GtkButton" id="manage_save_button">
-                    <property name="label" translatable="yes">Save</property>
-                    <property name="sensitive">0</property>
-                    <property name="focusable">1</property>
+                    <child>
+                      <object class="GtkListBox" id="contact_addresses_listbox">
+                        <property name="selection-mode">none</property>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                        <child>
+                          <object class="AdwEntryRow" id="muc_name_entry_row">
+                            <property name="title" translatable="yes">Name</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwEntryRow" id="muc_description_entry_row">
+                            <property name="title" translatable="yes">Description</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwActionRow">
+                            <property name="title" translatable="yes">Destroy Group Chat</property>
+                            <property name="subtitle" translatable="yes">Permanently remove this group chat from the server</property>
+                            <child type="suffix">
+                              <object class="GtkButton" id="destroy_muc_button">
+                                <property name="sensitive">0</property>
+                                <property name="focusable">1</property>
+                                <property name="valign">center</property>
+                                <property name="label" translatable="yes">Destroy…</property>
+                                <style>
+                                  <class name="destructive-action"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                     <style>
-                      <class name="suggested-action"/>
+                      <class name="mt-12"/>
                     </style>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="margin-top">12</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="label" translatable="yes">Subject</property>
-                <style>
-                  <class name="title-2"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="vexpand">1</property>
-                <property name="height-request">100</property>
-                <property name="focusable">1</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="has-frame">1</property>
-                <property name="child">
-                  <object class="GtkTextView" id="subject_textview">
-                    <property name="focusable">1</property>
-                    <property name="wrap-mode">word-char</property>
-                    <property name="left-margin">6</property>
-                    <property name="right-margin">6</property>
-                    <property name="top-margin">6</property>
-                    <property name="bottom-margin">6</property>
+                <child>
+                  <object class="AdwPreferencesGroup">
+                    <property name="title" translatable="yes">Subject</property>
+                    <property name="description" translatable="yes">Set a subject for this chat</property>
+                    <child type="header-suffix">
+                      <object class="GtkButton" id="subject_change_button">
+                        <property name="focusable">1</property>
+                        <property name="sensitive">0</property>
+                        <property name="receives-default">1</property>
+                        <property name="valign">center</property>
+                        <property name="label" translatable="yes">Save</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkScrolledWindow">
+                        <property name="vexpand">1</property>
+                        <property name="height-request">100</property>
+                        <property name="focusable">1</property>
+                        <property name="hscrollbar-policy">never</property>
+                        <property name="has-frame">1</property>
+                        <property name="child">
+                          <object class="GtkTextView" id="subject_textview">
+                            <property name="focusable">1</property>
+                            <property name="wrap-mode">word-char</property>
+                            <property name="left-margin">6</property>
+                            <property name="right-margin">6</property>
+                            <property name="top-margin">6</property>
+                            <property name="bottom-margin">6</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="mt-12"/>
+                    </style>
                   </object>
-                </property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="subject_change_button">
-                <property name="label" translatable="yes">Ch_ange Subject</property>
-                <property name="sensitive">0</property>
-                <property name="focusable">1</property>
-                <property name="halign">end</property>
-                <property name="use-underline">1</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
+                </child>
               </object>
             </child>
           </object>
@@ -342,8 +299,5 @@
         </property>
       </object>
     </child>
-    <style>
-      <class name="p-18"/>
-    </style>
   </object>
 </interface>

@@ -4,6 +4,7 @@
 import logging
 from pathlib import Path
 
+from gi.repository import Adw
 from gi.repository import Gtk
 from nbxmpp.const import Affiliation
 from nbxmpp.errors import StanzaError
@@ -59,9 +60,11 @@ class GroupchatManage(Gtk.Box, SignalManager):
 
         self._connect(self._ui.remove_avatar_button, "clicked", self._on_remove_avatar)
         self._connect(
-            self._ui.muc_description_entry, "changed", self._on_name_desc_changed
+            self._ui.muc_description_entry_row, "changed", self._on_name_desc_changed
         )
-        self._connect(self._ui.muc_name_entry, "changed", self._on_name_desc_changed)
+        self._connect(
+            self._ui.muc_name_entry_row, "changed", self._on_name_desc_changed
+        )
         self._connect(self._ui.destroy_muc_button, "clicked", self._on_destroy_clicked)
         self._connect(
             self._ui.manage_save_button, "clicked", self._on_manage_save_clicked
@@ -167,8 +170,8 @@ class GroupchatManage(Gtk.Box, SignalManager):
         if self.disco_info is not None:
             vcard_support = self.disco_info.supports(Namespace.VCARD)
 
-            self._ui.muc_name_entry.set_text(self.disco_info.muc_name or "")
-            self._ui.muc_description_entry.set_text(
+            self._ui.muc_name_entry_row.set_text(self.disco_info.muc_name or "")
+            self._ui.muc_description_entry_row.set_text(
                 self.disco_info.muc_description or ""
             )
 
@@ -195,16 +198,16 @@ class GroupchatManage(Gtk.Box, SignalManager):
             log.info(error)
             return
 
-        self._ui.muc_name_entry.set_sensitive(True)
-        self._ui.muc_description_entry.set_sensitive(True)
+        self._ui.muc_name_entry_row.set_sensitive(True)
+        self._ui.muc_description_entry_row.set_sensitive(True)
         self._room_config_form = result.form
 
-    def _on_name_desc_changed(self, _entry: Gtk.Entry) -> None:
+    def _on_name_desc_changed(self, _entry: Adw.EntryRow) -> None:
         if self.disco_info is not None:
             disco_name = self.disco_info.muc_name or ""
             disco_desc = self.disco_info.muc_description or ""
-            name = self._ui.muc_name_entry.get_text()
-            desc = self._ui.muc_description_entry.get_text()
+            name = self._ui.muc_name_entry_row.get_text()
+            desc = self._ui.muc_description_entry_row.get_text()
 
             self._ui.manage_save_button.set_sensitive(
                 desc != disco_desc or name != disco_name
@@ -212,8 +215,8 @@ class GroupchatManage(Gtk.Box, SignalManager):
 
     def _on_manage_save_clicked(self, _button: Gtk.Button) -> None:
         if self._room_config_form is not None:
-            name = self._ui.muc_name_entry.get_text()
-            desc = self._ui.muc_description_entry.get_text()
+            name = self._ui.muc_name_entry_row.get_text()
+            desc = self._ui.muc_description_entry_row.get_text()
             try:
                 name_field = self._room_config_form["muc#roomconfig_roomname"]
                 desc_field = self._room_config_form["muc#roomconfig_roomdesc"]
